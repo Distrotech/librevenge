@@ -177,6 +177,7 @@ protected:
 	void _closePageSpan();
 
 	void _appendParagraphProperties(WPXPropertyList &propList, int justification);
+	void _appendJustification(WPXPropertyList &propList, int justification);
 	virtual void _openParagraph();
 	void _closeParagraph();
 

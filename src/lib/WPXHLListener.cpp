@@ -146,12 +146,12 @@ void WPXHLListener::_openSection()
 	_closeSection();
 
 	WPXPropertyList propList;
-	propList.insert("num-columns", WPXPropertyFactory::newIntProp(m_ps->m_numColumns));
+	propList.insert("fo:column-count", m_ps->m_numColumns);
 
 	if (m_ps->m_numColumns > 1)
-		propList.insert("margin-bottom", WPXPropertyFactory::newInchProp(1.0f));
+		propList.insert("fo:margin-bottom", 1.0f);
 	else
-		propList.insert("margin-bottom", WPXPropertyFactory::newInchProp(0.0f));
+		propList.insert("fo:margin-bottom", 0.0f);
 
 	m_listenerImpl->openSection(propList, m_ps->m_textColumns);
 
@@ -189,18 +189,18 @@ void WPXHLListener::_openPageSpan()
 	(m_pageList->size() <= (m_ps->m_nextPageSpanIndice+1)) ? isLastPageSpan = true : isLastPageSpan = false;
 	
 	WPXPropertyList propList;
-	propList.insert("libwpd:num-pages", WPXPropertyFactory::newIntProp(currentPage->getPageSpan()));
-	propList.insert("libwpd:is-last-page-span", WPXPropertyFactory::newIntProp(isLastPageSpan));
-	propList.insert("fo:page-height", WPXPropertyFactory::newInchProp(currentPage->getFormLength()));
-	propList.insert("fo:page-width", WPXPropertyFactory::newInchProp(currentPage->getFormWidth()));
+	propList.insert("libwpd:num-pages", currentPage->getPageSpan());
+	propList.insert("libwpd:is-last-page-span", isLastPageSpan);
+	propList.insert("fo:page-height", currentPage->getFormLength());
+	propList.insert("fo:page-width", currentPage->getFormWidth());
 	if (currentPage->getFormOrientation() == LANDSCAPE)
-		propList.insert("style:print-orientation", WPXPropertyFactory::newStringProp("landscape")); 
+		propList.insert("style:print-orientation", "landscape"); 
 	else
-		propList.insert("style:print-orientation", WPXPropertyFactory::newStringProp("portrait")); 
-	propList.insert("fo:margin-left", WPXPropertyFactory::newInchProp(currentPage->getMarginLeft()));
-	propList.insert("fo:margin-right", WPXPropertyFactory::newInchProp(currentPage->getMarginRight()));
-	propList.insert("fo:margin-top", WPXPropertyFactory::newInchProp(currentPage->getMarginTop()));
-	propList.insert("fo:margin-bottom", WPXPropertyFactory::newInchProp(currentPage->getMarginBottom()));
+		propList.insert("style:print-orientation", "portrait"); 
+	propList.insert("fo:margin-left", currentPage->getMarginLeft());
+	propList.insert("fo:margin-right", currentPage->getMarginRight());
+	propList.insert("fo:margin-top", currentPage->getMarginTop());
+	propList.insert("fo:margin-bottom", currentPage->getMarginBottom());
 	
 	m_listenerImpl->openPageSpan(propList);
 
@@ -224,7 +224,7 @@ void WPXHLListener::_openPageSpan()
 		if (!currentPage->getHeaderFooterSuppression((*iter).getInternalType()))
 		{
 			WPXPropertyList propList;
-			propList.insert("occurence", WPXPropertyFactory::newIntProp((*iter).getOccurence()));
+			propList.insert("occurence", (*iter).getOccurence());
 			if ((*iter).getType() == HEADER)
 				m_listenerImpl->openHeader(propList); 
 			else
@@ -309,18 +309,48 @@ void WPXHLListener::_openParagraph()
 	_openSpan();
 }
 
+void WPXHLListener::_appendJustification(WPXPropertyList &propList, int justification)
+{
+	switch (justification)
+	{
+	case WPX_PARAGRAPH_JUSTIFICATION_LEFT:
+		// doesn't require a paragraph prop - it is the default
+		propList.insert("fo:text-align", "left");
+		break;
+	case WPX_PARAGRAPH_JUSTIFICATION_CENTER:
+		propList.insert("fo:text-align", "center");
+		break;
+	case WPX_PARAGRAPH_JUSTIFICATION_RIGHT:
+		propList.insert("fo:text-align", "end");
+		break;
+	case WPX_PARAGRAPH_JUSTIFICATION_FULL:
+		propList.insert("fo:text-align", "justify");
+		break;
+	case WPX_PARAGRAPH_JUSTIFICATION_FULL_ALL_LINES:
+		propList.insert("fo:text-align", "justify");
+		propList.insert("fo:text-align-last", "justify");
+		break;
+	}
+}
 
 void WPXHLListener::_appendParagraphProperties(WPXPropertyList &propList, int justification)
 {
-	propList.insert("justification", WPXPropertyFactory::newIntProp(justification));
-	propList.insert("margin-left", WPXPropertyFactory::newInchProp(m_ps->m_paragraphMarginLeft));
-	propList.insert("margin-right", WPXPropertyFactory::newInchProp(m_ps->m_paragraphMarginRight));
-	propList.insert("margin-top", WPXPropertyFactory::newInchProp(m_ps->m_paragraphMarginTop));
-	propList.insert("margin-bottom", WPXPropertyFactory::newInchProp(m_ps->m_paragraphMarginBottom));
-	propList.insert("text-indent", WPXPropertyFactory::newInchProp(m_ps->m_paragraphTextIndent));
-	propList.insert("line-spacing", WPXPropertyFactory::newInchProp(m_ps->m_paragraphLineSpacing));
-	propList.insert("column-break", WPXPropertyFactory::newIntProp(m_ps->m_isParagraphColumnBreak));
-	propList.insert("page-break", WPXPropertyFactory::newIntProp(m_ps->m_isParagraphPageBreak));
+	_appendJustification(propList, justification);
+	if (m_ps->m_numColumns == 1 && !m_ps->m_isTableOpened)
+	{
+		// these properties are not appropriate inside multiple columns or when
+		// a table is opened.. 
+		propList.insert("fo:margin-left", m_ps->m_paragraphMarginLeft);
+		propList.insert("fo:margin-right", m_ps->m_paragraphMarginRight);
+		propList.insert("fo:text-indent", m_ps->m_paragraphTextIndent);
+	}
+	propList.insert("fo:margin-top", m_ps->m_paragraphMarginTop);
+	propList.insert("fo:margin-bottom", m_ps->m_paragraphMarginBottom);
+	propList.insert("fo:line-height", m_ps->m_paragraphLineSpacing, PERCENT);
+	if (m_ps->m_isParagraphColumnBreak)
+		propList.insert("fo:break-before", "column");
+	else if (m_ps->m_isParagraphPageBreak)
+		propList.insert("fo:break-before", "page");
 }
 
 void WPXHLListener::_closeParagraph()
@@ -331,6 +361,8 @@ void WPXHLListener::_closeParagraph()
 
 	m_ps->m_isParagraphOpened = false;
 }
+
+const float WPX_DEFAULT_SUPER_SUB_SCRIPT = 58.0f; 
 
 void WPXHLListener::_openSpan()
 {
@@ -366,12 +398,50 @@ void WPXHLListener::_openSpan()
 		fontSizeChange = 1.0f;
 		break;
 	}
+
 	WPXPropertyList propList;
-	propList.insert("text-attribute-bits", WPXPropertyFactory::newIntProp(attributeBits & 0xffffffe0));
-	propList.insert("font-name", WPXPropertyFactory::newStringProp(*(m_ps->m_fontName)));
-	propList.insert("font-size", WPXPropertyFactory::newInchProp(fontSizeChange*m_ps->m_fontSize));
-	propList.insert("color", WPXPropertyFactory::newStringProp(_colorToString(m_ps->m_fontColor)));
-	propList.insert("text-background-color", WPXPropertyFactory::newStringProp(_colorToString(m_ps->m_highlightColor)));
+ 	if (attributeBits & WPX_SUPERSCRIPT_BIT) {
+		UTF8String sSuperScript;
+		sSuperScript.sprintf("super %f%%", WPX_DEFAULT_SUPER_SUB_SCRIPT);
+		propList.insert("style:text-position", sSuperScript);
+	}
+ 	else if (attributeBits & WPX_SUBSCRIPT_BIT) {
+		UTF8String sSubScript;
+		sSubScript.sprintf("sub %f%%", WPX_DEFAULT_SUPER_SUB_SCRIPT);
+		propList.insert("style:text-position", sSubScript);
+	}
+	if (attributeBits & WPX_ITALICS_BIT)
+		propList.insert("fo:font-style", "italic");
+	if (attributeBits & WPX_BOLD_BIT)
+		propList.insert("fo:font-weight", "bold");
+	if (attributeBits & WPX_STRIKEOUT_BIT)
+		propList.insert("style:text-crossing-out", "single-line");
+	if (attributeBits & WPX_DOUBLE_UNDERLINE_BIT) 
+		propList.insert("style:text-underline", "double");
+ 	else if (attributeBits & WPX_UNDERLINE_BIT) 
+		propList.insert("style:text-underline", "single");
+	if (attributeBits & WPX_OUTLINE_BIT) 
+		propList.insert("style:text-outline", "true");
+	if (attributeBits & WPX_SMALL_CAPS_BIT) 
+		propList.insert("fo:font-variant", "small-caps");
+	if (attributeBits & WPX_BLINK_BIT) 
+		propList.insert("style:text-blinking", "true");
+	if (attributeBits & WPX_SHADOW_BIT) 
+		propList.insert("fo:text-shadow", "1pt 1pt");
+
+	if (m_ps->m_fontName)
+		propList.insert("style:font-name", m_ps->m_fontName->getUTF8());
+	propList.insert("fo:font-size", fontSizeChange*m_ps->m_fontSize, POINT);
+
+	// Here we give the priority to the redline bit over the font color. This is how WordPerfect behaves:
+	// redline overrides font color even if the color is changed when redline was already defined.
+	// When redline finishes, the color is back.
+	if (attributeBits & WPX_REDLINE_BIT)
+		propList.insert("fo:color", "#ff3333");  // #ff3333 = a nice bright red
+	else if (m_ps->m_fontColor)
+		propList.insert("fo:color", _colorToString(m_ps->m_fontColor));
+	if (m_ps->m_highlightColor)
+		propList.insert("style:text-background-color", _colorToString(m_ps->m_highlightColor));
 
 	m_listenerImpl->openSpan(propList);
 
@@ -391,10 +461,10 @@ void WPXHLListener::_openTable()
 	_closeTable();
 
 	WPXPropertyList propList;
-	propList.insert("alignment", WPXPropertyFactory::newIntProp(m_ps->m_tableDefinition.m_positionBits));
-	propList.insert("margin-left", WPXPropertyFactory::newInchProp(m_ps->m_paragraphMarginLeft));
-	propList.insert("margin-right", WPXPropertyFactory::newInchProp(m_ps->m_paragraphMarginRight));
-	propList.insert("left-offset", WPXPropertyFactory::newInchProp(m_ps->m_tableDefinition.m_leftOffset));
+	propList.insert("alignment", m_ps->m_tableDefinition.m_positionBits);
+	propList.insert("margin-left", m_ps->m_paragraphMarginLeft);
+	propList.insert("margin-right", m_ps->m_paragraphMarginRight);
+	propList.insert("left-offset", m_ps->m_tableDefinition.m_leftOffset);
 
 	m_listenerImpl->openTable(propList, m_ps->m_tableDefinition.columns);
 	m_ps->m_isTableOpened = true;
@@ -430,18 +500,18 @@ void WPXHLListener::_openTableRow(const float height, const bool isMinimumHeight
 	m_ps->m_currentTableCol = 0;
 
 	WPXPropertyList propList;
-	propList.insert("height", WPXPropertyFactory::newInchProp(height));
-	propList.insert("is-minimum-height", WPXPropertyFactory::newIntProp(isMinimumHeight));
+	propList.insert("height", height);
+	propList.insert("is-minimum-height", isMinimumHeight);
 
 	// Only the first "Header Row" in a table is the actual "Header Row"
 	// The following "Header Row" flags are ignored
 	if (isHeaderRow & !m_ps->m_wasHeaderRow)
 	{
-		propList.insert("is-header-row", WPXPropertyFactory::newIntProp(true));		
+		propList.insert("is-header-row", true);		
 		m_ps->m_wasHeaderRow = true;
 	}
 	else
-		propList.insert("is-header-row", WPXPropertyFactory::newIntProp(false));		
+		propList.insert("is-header-row", false);		
 
 	m_listenerImpl->openTableRow(propList);
 
@@ -465,17 +535,17 @@ void WPXHLListener::_openTableCell(const uint8_t colSpan, const uint8_t rowSpan,
 	_closeTableCell();
 
 	WPXPropertyList propList;
-	propList.insert("col", WPXPropertyFactory::newIntProp(m_ps->m_currentTableCol));		
-	propList.insert("row", WPXPropertyFactory::newIntProp(m_ps->m_currentTableRow));		
+	propList.insert("col", m_ps->m_currentTableCol);		
+	propList.insert("row", m_ps->m_currentTableRow);		
 
 	if (!boundFromLeft && !boundFromAbove)
 	{
-		propList.insert("col-span", WPXPropertyFactory::newIntProp(colSpan));
-		propList.insert("row-span", WPXPropertyFactory::newIntProp(rowSpan));
-		propList.insert("border-bits", WPXPropertyFactory::newIntProp(borderBits));
-		propList.insert("vertical-alignment", WPXPropertyFactory::newIntProp(cellVerticalAlignment));
-		propList.insert("color", WPXPropertyFactory::newStringProp(_mergeColorsToString(cellFgColor, cellBgColor)));
-		propList.insert("border-color", WPXPropertyFactory::newStringProp(_colorToString(cellBorderColor)));
+		propList.insert("col-span", colSpan);
+		propList.insert("row-span", rowSpan);
+		propList.insert("border-bits", borderBits);
+		propList.insert("vertical-alignment", cellVerticalAlignment);
+		propList.insert("color", _mergeColorsToString(cellFgColor, cellBgColor));
+		propList.insert("border-color", _colorToString(cellBorderColor));
 		m_listenerImpl->openTableCell(propList);
 		m_ps->m_isTableCellOpened = true;
 	}

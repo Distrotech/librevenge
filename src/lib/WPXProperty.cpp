@@ -1,5 +1,91 @@
 #include "WPXProperty.h"
 
+
+class WPXStringProperty : public WPXProperty
+{
+public:
+	WPXStringProperty(const UTF8String &str);
+	WPXStringProperty(const char * str);
+	virtual int getInt() const;
+	virtual float getFloat() const;
+	virtual UTF8String getStr() const;
+	virtual WPXProperty * clone() const;
+
+private:
+	UTF8String m_str;
+};
+
+class WPXIntProperty : public WPXProperty
+{
+public:
+	WPXIntProperty(const int val);
+	virtual int getInt() const;
+	virtual float getFloat() const;
+	virtual UTF8String getStr() const;
+	virtual WPXProperty * clone() const;
+
+private:
+	int m_val;
+};
+
+class WPXFloatProperty : public WPXProperty
+{
+public:
+	WPXFloatProperty(const float val);
+	virtual int getInt() const;
+	virtual float getFloat() const;
+
+private:
+	float m_val;
+};
+
+class WPXInchProperty : public WPXFloatProperty
+{
+public:
+	WPXInchProperty(const float val);
+	virtual UTF8String getStr() const; 
+	virtual WPXProperty * clone() const;
+};
+
+class WPXPercentProperty : public WPXFloatProperty
+{
+public:
+	WPXPercentProperty(const float val);
+	virtual UTF8String getStr() const; 
+	virtual WPXProperty * clone() const;
+};
+
+class WPXPointProperty : public WPXFloatProperty
+{
+public:
+	WPXPointProperty(const float val);
+	virtual UTF8String getStr() const; 
+	virtual WPXProperty * clone() const;
+};
+
+#if 0 
+class WPXTabProperty : public WPXProperty
+{
+public:
+	WPXTabProperty(const vector<WPXTabStop> &tabStops);
+	virtual int getInt() const;
+	virtual float getFloat() const;
+	virtual UTF8String getStr() const;
+	virtual vector<WPXTabStop> getTabStops() const;
+}
+#endif
+
+class WPXPropertyFactory
+{
+public:
+	static WPXProperty * newStringProp(const UTF8String &str) { return static_cast<WPXProperty *>(new WPXStringProperty(str)); }
+	static WPXProperty * newStringProp(const char *str) { return static_cast<WPXProperty *>(new WPXStringProperty(str)); }
+	static WPXProperty * newIntProp(const int val) { return static_cast<WPXProperty *>(new WPXIntProperty(val)); }
+	static WPXProperty * newInchProp(const float val) { return static_cast<WPXProperty *>(new WPXInchProperty(val)); }
+	static WPXProperty * newPercentProp(const float val) { return static_cast<WPXProperty *>(new WPXPercentProperty(val)); }
+	static WPXProperty * newPointProp(const float val) { return static_cast<WPXProperty *>(new WPXPointProperty(val)); }
+};
+
 WPXProperty::~WPXProperty()
 {
 }
@@ -58,31 +144,72 @@ WPXProperty * WPXIntProperty::clone() const
 	return new WPXIntProperty(m_val);
 }
 
-WPXInchProperty::WPXInchProperty(const float val) :
+WPXFloatProperty::WPXFloatProperty(const float val) :
 	m_val(val) 
 {
 }
-int WPXInchProperty::getInt() const 
+
+int WPXFloatProperty::getInt() const 
 { 
 	return (int)m_val; 
 }
 
-float WPXInchProperty::getFloat() const 
+float WPXFloatProperty::getFloat() const 
 { 
 	return m_val; 
+}
+
+WPXInchProperty::WPXInchProperty(const float val) :
+	WPXFloatProperty(val) 
+{
 }
 
 UTF8String WPXInchProperty::getStr() const 
 { 
 	UTF8String str; 
-	str.sprintf("%.04finch", m_val); 
+	str.sprintf("%.04finch", getFloat()); 
 	return str; 
 }
 
 WPXProperty * WPXInchProperty::clone() const
 {
-	return new WPXInchProperty(m_val);
+	return new WPXInchProperty(getFloat());
 }
+
+WPXPercentProperty::WPXPercentProperty(const float val) :
+	WPXFloatProperty(val) 
+{
+}
+
+UTF8String WPXPercentProperty::getStr() const
+{
+	UTF8String str; 
+	str.sprintf("%.04f%%", getFloat()*100.0f); 
+	return str; 
+}
+
+WPXProperty * WPXPercentProperty::clone() const
+{
+	return new WPXPercentProperty(getFloat());
+}
+
+WPXPointProperty::WPXPointProperty(const float val) :
+	WPXFloatProperty(val) 
+{
+}
+
+UTF8String WPXPointProperty::getStr() const
+{
+	UTF8String str; 
+	str.sprintf("%ipt", getInt()); 
+	return str; 
+}
+
+WPXProperty * WPXPointProperty::clone() const
+{
+	return new WPXPointProperty(getFloat());
+}
+
 
 WPXPropertyList::WPXPropertyList()
 {
@@ -109,6 +236,11 @@ void WPXPropertyList::insert(string name, WPXProperty *prop)
 	m_map[name] = prop; 
 }
 
+void WPXPropertyList::insert(string name, const int val)
+{ 
+	m_map[name] = WPXPropertyFactory::newIntProp(val);
+}
+
 void WPXPropertyList::insert(string name, const char *val)
 { 
 	m_map[name] = WPXPropertyFactory::newStringProp(val);
@@ -119,6 +251,15 @@ void WPXPropertyList::insert(string name, const UTF8String &val)
 	m_map[name] = WPXPropertyFactory::newStringProp(val);
 }
 
+void WPXPropertyList::insert(string name, const float val, const WPXUnit units)
+{ 
+	if (units == INCH)
+		m_map[name] = WPXPropertyFactory::newInchProp(val);
+	else if (units == PERCENT)
+		m_map[name] = WPXPropertyFactory::newPercentProp(val);
+	else
+		m_map[name] = WPXPropertyFactory::newPointProp(val);
+}
 
 void WPXPropertyList::remove(string name)
 {

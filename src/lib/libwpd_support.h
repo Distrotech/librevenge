@@ -68,8 +68,10 @@ enum WPXFormOrientation { PORTRAIT, LANDSCAPE };
 enum WPXTabAlignment { LEFT, RIGHT, CENTER, DECIMAL, BAR };
 enum WPXVerticalAlignment { TOP, MIDDLE, BOTTOM, FULL };
 enum WPXTextColumnType { NEWSPAPER, NEWSPAPER_VERTICAL_BALANCE, PARALLEL, PARALLEL_PROTECT };
+enum WPXUnit { INCH, PERCENT, POINT };
 
 enum WPDConfidence { WPD_CONFIDENCE_NONE=0, WPD_CONFIDENCE_POOR, WPD_CONFIDENCE_LIKELY, WPD_CONFIDENCE_GOOD, WPD_CONFIDENCE_EXCELLENT };
+
 
 // ATTRIBUTE bits
 #define WPX_EXTRA_LARGE_BIT 1
@@ -169,6 +171,7 @@ public:
 
 	void sprintf(const char *format, ...);
 	void append(const UTF8String &s);
+	void append(const char *s);
 	void append(const char c) { m_buf += c; }
 	void append(const uint16_t ucs2);
 	void clear() { m_buf = ""; }

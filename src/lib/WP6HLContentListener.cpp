@@ -237,31 +237,31 @@ void WP6HLContentListener::setExtendedInformation(const uint16_t type, const UTF
 	switch (type)
 	{
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_AUTHOR):
-			m_metaData.insert("author", WPXPropertyFactory::newStringProp(data));
+			m_metaData.insert("author", data);
 			break;
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_SUBJECT):
-			m_metaData.insert("subject", WPXPropertyFactory::newStringProp(data));
+			m_metaData.insert("subject", data);
 			break;
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_PUBLISHER):
-			m_metaData.insert("publisher", WPXPropertyFactory::newStringProp(data));
+			m_metaData.insert("publisher", data);
 			break;
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_CATEGORY):
-			m_metaData.insert("category", WPXPropertyFactory::newStringProp(data));
+			m_metaData.insert("category", data);
 			break;
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_KEYWORDS):
-			m_metaData.insert("keywords", WPXPropertyFactory::newStringProp(data));
+			m_metaData.insert("keywords", data);
 			break;
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_LANGUAGE):
-			m_metaData.insert("language", WPXPropertyFactory::newStringProp(data));
+			m_metaData.insert("language", data);
 			break;
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_ABSTRACT):
-			m_metaData.insert("abstract", WPXPropertyFactory::newStringProp(data));
+			m_metaData.insert("abstract", data);
 			break;
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_DESCRIPTIVE_NAME):
-			m_metaData.insert("descriptive-name", WPXPropertyFactory::newStringProp(data));
+			m_metaData.insert("descriptive-name", data);
 			break;
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_DESCRIPTIVE_TYPE):
-			m_metaData.insert("descriptive-type", WPXPropertyFactory::newStringProp(data));
+			m_metaData.insert("descriptive-type", data);
 			break;
 	}
 }
@@ -991,7 +991,7 @@ void WP6HLContentListener::noteOff(const WPXNoteType noteType)
 		m_parseState->m_numberText.clear(); // we do not need the text version of the number anymore;
 
 		WPXPropertyList propList;
-		propList.insert("number", WPXPropertyFactory::newIntProp(number));
+		propList.insert("number", number);
 
 		if (noteType == FOOTNOTE)
 			m_listenerImpl->openFootnote(propList);
@@ -1303,24 +1303,24 @@ void WP6HLContentListener::_handleListChange(const uint16_t outlineHash)
 	if (m_parseState->m_currentListLevel > oldListLevel)
 	{
 		WPXPropertyList propList;
-		propList.insert("id", WPXPropertyFactory::newIntProp(m_parseState->m_currentOutlineHash));
-		propList.insert("level", WPXPropertyFactory::newIntProp(m_parseState->m_currentListLevel));
+		propList.insert("id", m_parseState->m_currentOutlineHash);
+		propList.insert("level", m_parseState->m_currentListLevel);
 
 		if (m_parseState->m_putativeListElementHasDisplayReferenceNumber) {
 			WPXNumberingType listType = _extractWPXNumberingTypeFromBuf(m_parseState->m_numberText,
 									      outlineDefinition->getListType((m_parseState->m_currentListLevel-1)));
 			int number = _extractDisplayReferenceNumberFromBuf(m_parseState->m_numberText, listType);
 
-			propList.insert("text-before-number", WPXPropertyFactory::newStringProp(m_parseState->m_textBeforeDisplayReference));
-			propList.insert("type", WPXPropertyFactory::newIntProp(listType));
-			propList.insert("text-after-number", WPXPropertyFactory::newStringProp(m_parseState->m_textAfterDisplayReference));
-			propList.insert("starting-number", WPXPropertyFactory::newIntProp(number));
+			propList.insert("text-before-number", m_parseState->m_textBeforeDisplayReference);
+			propList.insert("type", listType);
+			propList.insert("text-after-number", m_parseState->m_textAfterDisplayReference);
+			propList.insert("starting-number", number);
 
 			m_listenerImpl->defineOrderedListLevel(propList);
 		}
 		else
 		{
-			propList.insert("bullet", WPXPropertyFactory::newStringProp(m_parseState->m_textBeforeDisplayReference));
+			propList.insert("bullet", m_parseState->m_textBeforeDisplayReference);
 			m_listenerImpl->defineUnorderedListLevel(propList);
 		}
 		for (int i=(oldListLevel+1); i<=m_parseState->m_currentListLevel; i++) {
@@ -1328,7 +1328,7 @@ void WP6HLContentListener::_handleListChange(const uint16_t outlineHash)
  			WPD_DEBUG_MSG(("Pushed level %i onto the list level stack\n", i));
 			
 			WPXPropertyList propList2;
-			propList2.insert("id", WPXPropertyFactory::newIntProp(m_parseState->m_currentOutlineHash));
+			propList2.insert("id", m_parseState->m_currentOutlineHash);
 
 			if (m_parseState->m_putativeListElementHasDisplayReferenceNumber)
 				m_listenerImpl->openOrderedListLevel(propList2);
@@ -1382,13 +1382,15 @@ void WP6HLContentListener::_handleListChange(const uint16_t outlineHash)
 void WP6HLContentListener::_openListElement()
 {
 	WPXPropertyList propList;
-	propList.insert("justification", WPXPropertyFactory::newIntProp(m_ps->m_paragraphJustification));
-	propList.insert("margin-left", WPXPropertyFactory::newInchProp(m_ps->m_paragraphMarginLeft));
-	propList.insert("margin-right", WPXPropertyFactory::newInchProp(m_ps->m_paragraphMarginRight));
-	propList.insert("margin-top", WPXPropertyFactory::newInchProp(m_ps->m_paragraphMarginTop));
-	propList.insert("margin-bottom", WPXPropertyFactory::newInchProp(m_ps->m_paragraphMarginBottom));
-	propList.insert("text-indent", WPXPropertyFactory::newInchProp(m_ps->m_paragraphTextIndent));
-	propList.insert("line-spacing", WPXPropertyFactory::newInchProp(m_ps->m_paragraphLineSpacing));
+	// WLACH_REFACTORING: TRY THIS! (with regression testing)
+	//_appendParagraphProperties(WPXPropertyList &propList, int justification);
+	_appendJustification(propList, m_ps->m_paragraphJustification);
+	propList.insert("fo:margin-left", m_ps->m_paragraphMarginLeft);
+	propList.insert("fo:margin-right", m_ps->m_paragraphMarginRight);
+	propList.insert("fo:margin-top", m_ps->m_paragraphMarginTop);
+	propList.insert("fo:margin-bottom", m_ps->m_paragraphMarginBottom);
+	propList.insert("fo:text-indent", m_ps->m_paragraphTextIndent);
+	propList.insert("fo:line-height", m_ps->m_paragraphLineSpacing, PERCENT);
 
 	WPXTabStop tmp_tabStop;
 	vector<WPXTabStop> tabStops;

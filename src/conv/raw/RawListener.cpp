@@ -90,23 +90,31 @@ void RawListenerImpl::__idprintf(const char *format, ...)
 	va_end(args);
 }
 
+UTF8String getPropString(const WPXPropertyList &propList)
+{
+	UTF8String propString;
+	WPXPropertyList::Iter i(propList);
+	if (!i.last()) 
+	{
+		UTF8String prop;
+		prop.sprintf("%s: %s", i.key().c_str(), i()->getStr().getUTF8());
+		propString.append(prop);
+		for (i; i.next(); )
+		{
+			prop.sprintf(", %s: %s", i.key().c_str(), i()->getStr().getUTF8());
+			propString.append(prop);
+		}
+	}
+
+	return propString;
+}
+
 void RawListenerImpl::setDocumentMetaData(const WPXPropertyList &propList)
 {
 	if (m_printCallgraphScore)
 		return;
 
-	__iprintf("setDocumentMetaData(");
-
-	WPXPropertyList::Iter i(propList);
-	if (!i.last()) 
-	{
-		printf("%s: %s", i.key().c_str(), i()->getStr().getUTF8());
-		for (i; i.next(); )
-		{
-			printf(", %s: %s", i.key().c_str(), i()->getStr().getUTF8());
-		}
-	}
-	printf(")\n");
+	__iprintf("setDocumentMetaData(%s)\n", getPropString(propList)());
 }
 
 void RawListenerImpl::startDocument()
@@ -165,12 +173,7 @@ void RawListenerImpl::closeFooter()
 
 void RawListenerImpl::openParagraph(const WPXPropertyList &propList, const vector<WPXTabStop> &tabStops)
 {
-	_U(("openParagraph(paragraphJustification: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, textIndent: %.4f, lineSpacing: %.4f, spacingBeforeParagraph: %.4f, spacingAfterParagraph: %.4f, isColumnBreak: %s, isPageBreak: %s, TODO: tab-stops.)\n",
-	    propList["justification"]->getInt(), propList["margin-left"]->getFloat(), propList["margin-right"]->getFloat(),
-	    propList["text-indent"]->getFloat(), propList["line-spacing"]->getFloat(), propList["margin-top"]->getFloat(),
-	    propList["margin-bottom"]->getFloat(), (propList["column-break"]->getInt() ? "true" : "false"),
-	    (propList["page-break"]->getInt() ? "true" : "false")),
-	   LC_OPEN_PARAGRAPH);
+	_U(("openParagraph(%s)\n", getPropString(propList)()), LC_OPEN_PARAGRAPH);
 }
 
 void RawListenerImpl::closeParagraph()
@@ -181,10 +184,7 @@ void RawListenerImpl::closeParagraph()
 
 void RawListenerImpl::openSpan(const WPXPropertyList &propList)
 {
-	_U(("openSpan(textAttributeBits: %u, fontName: %s, fontSize: %.4f, fontColor: %s, highlightColor: %s)\n",
-	    propList["text-attribute-bits"]->getInt(), propList["font-name"]->getStr().getUTF8(), propList["font-size"]->getFloat(),
-	    propList["color"]->getStr().getUTF8(), propList["text-background-color"]->getStr().getUTF8()), 
-	   LC_OPEN_SPAN);
+	_U(("openSpan(%s)\n", getPropString(propList)()), LC_OPEN_SPAN);
 }
 
 void RawListenerImpl::closeSpan()
@@ -197,7 +197,7 @@ void RawListenerImpl::openSection(const WPXPropertyList &propList, const vector<
 {
 	UTF8String sColumns;
 	sColumns.sprintf("");
-	if (propList["num-columns"]->getInt() > 1)
+	if (propList["fo:column-count"]->getInt() > 1)
 	{
 		for (int i=0; i<columns.size(); i++)
 		{
@@ -208,8 +208,8 @@ void RawListenerImpl::openSection(const WPXPropertyList &propList, const vector<
 	}
 	else
 		sColumns.sprintf(" SINGLE COLUMN");
-	_U(("openSection(numColumns: %u, columns:%s, spaceAfter: %.4f)\n", propList["num-columns"]->getInt(), sColumns.getUTF8(), 
-	    propList["margin-bottom"]->getFloat()),
+	_U(("openSection(numColumns: %u, columns:%s, spaceAfter: %.4f)\n", propList["fo:column-count"]->getInt(), sColumns.getUTF8(), 
+	    propList["fo:margin-bottom"]->getFloat()),
 		LC_OPEN_SECTION);
 }
 
@@ -275,10 +275,7 @@ void RawListenerImpl::closeUnorderedListLevel()
 
 void RawListenerImpl::openListElement(const WPXPropertyList &propList, const vector<WPXTabStop> &tabStops)
 {
-	_U(("openListElement(paragraphJustification: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, textIndent: %.4f, lineSpacing: %.4f, spacingBeforeParagraph: %.4f, spacingAfterParagraph: %.4f, TODO: tab-stops.)\n",
-	    propList["justification"]->getInt(), propList["margin-left"]->getFloat(), propList["margin-right"]->getFloat(),
-	    propList["text-indent"]->getFloat(), propList["line-spacing"]->getFloat(), propList["margin-top"]->getFloat(),
-	    propList["margin-bottom"]->getFloat()),
+	_U(("openListElement(%s)\n", getPropString(propList)()), 
 	   LC_OPEN_LIST_ELEMENT);
 }
 

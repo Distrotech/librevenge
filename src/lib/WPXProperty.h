@@ -15,67 +15,6 @@ public:
 	virtual WPXProperty * clone() const = 0;
 };
 
-class WPXStringProperty : public WPXProperty
-{
-public:
-	WPXStringProperty(const UTF8String &str);
-	WPXStringProperty(const char * str);
-	virtual int getInt() const;
-	virtual float getFloat() const;
-	virtual UTF8String getStr() const;
-	virtual WPXProperty * clone() const;
-
-private:
-	UTF8String m_str;
-};
-
-class WPXIntProperty : public WPXProperty
-{
-public:
-	WPXIntProperty(const int val);
-	virtual int getInt() const;
-	virtual float getFloat() const;
-	virtual UTF8String getStr() const;
-	virtual WPXProperty * clone() const;
-
-private:
-	int m_val;
-};
-
-class WPXInchProperty : public WPXProperty
-{
-public:
-	WPXInchProperty(const float val);
-	virtual int getInt() const;
-	virtual float getFloat() const;
-	virtual UTF8String getStr() const; 
-	virtual WPXProperty * clone() const;
-
-private:
-	float m_val;
-};
-
-#if 0 
-class WPXTabProperty : public WPXProperty
-{
-public:
-	WPXTabProperty(const vector<WPXTabStop> &tabStops);
-	virtual int getInt() const;
-	virtual float getFloat() const;
-	virtual UTF8String getStr() const;
-	virtual vector<WPXTabStop> getTabStops() const;
-}
-#endif
-
-class WPXPropertyFactory
-{
-public:
-	static WPXProperty * newStringProp(const UTF8String &str) { return static_cast<WPXProperty *>(new WPXStringProperty(str)); }
-	static WPXProperty * newStringProp(const char *str) { return static_cast<WPXProperty *>(new WPXStringProperty(str)); }
-	static WPXProperty * newIntProp(const int val) { return static_cast<WPXProperty *>(new WPXIntProperty(val)); }
-	static WPXProperty * newInchProp(const float val) { return static_cast<WPXProperty *>(new WPXInchProperty(val)); }
-};
-
 class WPXPropertyList
 {
 public:
@@ -84,7 +23,10 @@ public:
 	virtual ~WPXPropertyList();
 	void insert(string name, WPXProperty *prop);
 	void insert(string name, const char *val);
+	void insert(string name, const int val);
 	void insert(string name, const UTF8String &val);
+	void insert(string name, float val, const WPXUnit units = INCH); 
+
 	void remove(string name);
 	const WPXProperty * operator[](const string s) const;
 	void clear();

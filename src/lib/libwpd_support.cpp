@@ -697,6 +697,11 @@ void UTF8String::append(const UTF8String &s)
 	m_buf += s.getUTF8();
 }
 
+void UTF8String::append(const char *s)
+{
+	m_buf += s;
+}
+
 int UTF8String::getLen() const
 { 
 	return g_static_utf8_strlen(m_buf.c_str()); 
