@@ -1049,9 +1049,6 @@ void WP6HLContentListener::_handleListChange(const guint16 outlineHash)
 				m_listenerImpl->openOrderedListLevel(m_parseState->m_currentOutlineHash);
 			else 
 				m_listenerImpl->openUnorderedListLevel(m_parseState->m_currentOutlineHash);
-
- 			if (i < m_parseState->m_currentListLevel) // make sure we have list elements to hold our new levels, if our
- 				_openListElement();               // list level delta > 1
 		}
 	}
 	else if (m_parseState->m_currentListLevel < oldListLevel)
@@ -1074,9 +1071,6 @@ void WP6HLContentListener::_handleListChange(const guint16 outlineHash)
 				m_listenerImpl->closeUnorderedListLevel();
 			else
 				m_listenerImpl->closeOrderedListLevel();
-
-			if (tempListLevel > 1)
-				m_listenerImpl->closeListElement();
 		}
 	}
 	else if (m_parseState->m_currentListLevel == oldListLevel)
