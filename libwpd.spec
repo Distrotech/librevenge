@@ -1,5 +1,5 @@
 %define name libwpd
-%define version 0.4.0
+%define version 0.5.0
 %define  RELEASE 1
 %define  release     %{?CUSTOM_RELEASE} %{!?CUSTOM_RELEASE:%RELEASE}
 
