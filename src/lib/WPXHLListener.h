@@ -78,8 +78,8 @@ struct _WPXParsingState
 	bool m_isParagraphOpened;
 	bool m_isParagraphClosed;
 	bool m_isSpanOpened;
-	guint m_numDeferredParagraphBreaks;
-/*	guint m_numRemovedParagraphBreaks;
+	int m_numDeferredParagraphBreaks;
+/*	int m_numRemovedParagraphBreaks;
 
 	WPXTable *m_currentTable;
 	int m_nextTableIndice;
@@ -95,7 +95,7 @@ struct _WPXParsingState
 	int m_numPagesRemainingInSpan;
 
 	bool m_sectionAttributesChanged;
-	guint m_numColumns;
+	int m_numColumns;
 
 	float m_pageFormLength;
 	float m_pageFormWidth;

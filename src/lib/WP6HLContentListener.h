@@ -94,7 +94,7 @@ struct _WP6ParsingState
 	float m_paragraphLeftMargin;
 	float m_paragraphRightMargin;
 
-	guint m_numRemovedParagraphBreaks;
+	int m_numRemovedParagraphBreaks;
 
 	WPXTableList *m_tableList;
 	WPXTable *m_currentTable;

@@ -1,8 +1,8 @@
 CHANGES:
 
 0.7.x -> 0.8.0
-- Added conversion of spacing after paragraph and of paragraph
-  indentation done by functions of the paragraph Group
+- Added conversion of spacing after paragraph and of first
+  line indentation done by functions of the paragraph Group
   (Fridrich Strba)
 - Added text highlight conversion (Fridrich Strba)
 - Added page form and orientation conversion (Fridrich Strba)
@@ -10,11 +10,13 @@ CHANGES:
 - Remove span parameters from calls to openParagraph and openListElement
 (William Lachance)
 - Additional doxygen comments (William Lachance)
-- Conversion of Hard-Line-Breaks (Fridrich Strba)
 - Fix crash when tables occurred in embedded sub-documents (William 
 Lachance)
 
 0.7.1 -> 0.7.2
+- Added conversion of paragraph margins done by functions of the
+  paragraph group
+- Conversion of Hard-Line-Breaks (Fridrich Strba)
 - Fixed bug in WP6FixedLengthGroup handling (Fridrich Strba)
 - Added --callgraph to wpd2raw, and added all parameters to the 
   output (Marc Maurer)

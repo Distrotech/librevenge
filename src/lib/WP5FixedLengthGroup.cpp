@@ -29,7 +29,7 @@
 #include "WP5UnsupportedFixedLengthGroup.h"
 #include "libwpd_internal.h"
 
-WP5FixedLengthGroup::WP5FixedLengthGroup(guint groupID)
+WP5FixedLengthGroup::WP5FixedLengthGroup(int groupID)
 	: m_group(groupID)
 {
 }

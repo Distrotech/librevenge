@@ -590,7 +590,7 @@ UTF8String::UTF8String(const UCSString &stringBuf, bool convertToValidXML)
 	if (convertToValidXML)
 	{
 		UCSString tempUCS4;
-		for (guint i=0; i<stringBuf.getLen(); i++) {
+		for (int i=0; i<stringBuf.getLen(); i++) {
 			if (stringBuf.getUCS4()[i] == '&') {
 				tempUCS4.append("&amp;");
 			}

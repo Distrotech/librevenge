@@ -155,7 +155,7 @@ void RawListenerImpl::closeHeaderFooter(const WPXHeaderFooterType headerFooterTy
 		LC_OPEN_HEADER_FOOTER);
 }
 
-void RawListenerImpl::openParagraph(const guint8 paragraphJustification, 
+void RawListenerImpl::openParagraph(const uint8_t paragraphJustification, 
 				    const float marginLeftOffset, const float marginRightOffset, const float textIndent,
 				    const float lineSpacing, const float spacingAfterParagraph,
 				    const bool isColumnBreak, const bool isPageBreak)
@@ -173,7 +173,7 @@ void RawListenerImpl::closeParagraph()
 		LC_OPEN_PARAGRAPH);
 }
 
-void RawListenerImpl::openSpan(const guint32 textAttributeBits, const gchar *fontName, const float fontSize,
+void RawListenerImpl::openSpan(const uint32_t textAttributeBits, const gchar *fontName, const float fontSize,
 					const RGBSColor *fontColor, const RGBSColor *highlightColor)
 {
 	_U(("openSpan(textAttributeBits: %u, fontName: %s, fontSize: %.4f,  fontColor: #%02x%02x%02x s:%02x, highlightColor: #%02x%02x%02x s:%02x)\n",
@@ -260,7 +260,7 @@ void RawListenerImpl::closeUnorderedListLevel()
 		LC_OPEN_UNORDERED_LIST_LEVEL);
 }
 
-void RawListenerImpl::openListElement(const guint8 paragraphJustification, 
+void RawListenerImpl::openListElement(const uint8_t paragraphJustification, 
 				      const float marginLeftOffset, const float marginRightOffset, const float textIndent,
 				      const float lineSpacing, const float spacingAfterParagraph)
 {
@@ -301,7 +301,7 @@ void RawListenerImpl::closeEndnote()
 		LC_OPEN_ENDNOTE);
 }
 
-void RawListenerImpl::openTable(const guint8 tablePositionBits,
+void RawListenerImpl::openTable(const uint8_t tablePositionBits,
 			       const float marginLeftOffset, const float marginRightOffset,
 			       const float leftOffset, const vector < WPXColumnDefinition > &columns)
 {
@@ -322,8 +322,8 @@ void RawListenerImpl::closeTableRow()
 		LC_OPEN_TABLE_ROW);
 }
 
-void RawListenerImpl::openTableCell(const guint32 col, const guint32 row, const guint32 colSpan, const guint32 rowSpan,
-				   const guint8 borderBits,
+void RawListenerImpl::openTableCell(const uint32_t col, const uint32_t row, const uint32_t colSpan, const uint32_t rowSpan,
+				   const uint8_t borderBits,
 				   const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
 {
 	_U(("openTableCell(col: %d, row: %d, colSpan: %d, rowSpan: %d, borderBits: %d, cellFgColor: #%02x%02x%02x s:%02x, cellBgColor: #%02x%02x%02x s:%02x)\n",
@@ -341,7 +341,7 @@ void RawListenerImpl::closeTableCell()
 		LC_OPEN_TABLE_CELL);
 }
 
-void RawListenerImpl::insertCoveredTableCell(const guint32 col, const guint32 row)
+void RawListenerImpl::insertCoveredTableCell(const uint32_t col, const uint32_t row)
 {
 	__iprintf("insertCoveredTableCell(col: %d, row: %d)\n", col, row);
 }

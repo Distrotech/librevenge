@@ -359,6 +359,7 @@ void HtmlListenerImpl::_addTextAttributes(const guint32 textAttributeBits)
 		printf("<u>"); // I did not find double underline in HTML
 		m_isDoubleUnderline = true;
 	}
+	// Following are just placeholders. I do not know how to convert them into a standard html
 	if (textAttributeBits & WPX_OUTLINE_BIT)
 	{
 		m_isOutline = true;
