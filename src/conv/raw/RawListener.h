@@ -59,8 +59,8 @@ public:
 	virtual void displayNumberReferenceGroupOff(const guint8 subGroup);
 	virtual void styleGroupOn(const guint8 subGroup);
 	virtual void styleGroupOff(const guint8 subGroup);
-	virtual void footnoteEndnoteGroupOn(const guint8 subGroup, const guint16 textPID) {}
-	virtual void footnoteEndnoteGroupOff(const guint8 subGroup) {}
+	virtual void noteOn(const guint16 textPID) {}
+	virtual void noteOff(const NoteType noteType) {}
 	virtual void endDocument() {}
 		
 	virtual void startTable() {}

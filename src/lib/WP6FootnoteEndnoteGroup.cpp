@@ -41,14 +41,19 @@ void WP6FootnoteEndnoteGroup::parse(WP6LLListener *llListener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling a footnote/endnote group\n"));
 	
-	if (!(getSubGroup() % 2) || getSubGroup() == 0) 
+	switch (getSubGroup())
 	{
+	case WP6_FOOTNOTE_ENDNOTE_GROUP_FOOTNOTE_ON:
+	case WP6_FOOTNOTE_ENDNOTE_GROUP_ENDNOTE_ON:
 		if (getNumPrefixIDs() < 1)
 			throw ParseException();
-
-		llListener->footnoteEndnoteGroupOn(getSubGroup(), getPrefixIDs()[0]);
+		llListener->noteOn(getPrefixIDs()[0]);
+		break;
+	case WP6_FOOTNOTE_ENDNOTE_GROUP_FOOTNOTE_OFF:
+		llListener->noteOff(FOOTNOTE);
+		break;
+	case WP6_FOOTNOTE_ENDNOTE_GROUP_ENDNOTE_OFF:
+		llListener->noteOff(ENDNOTE);
+		break;
 	}
-	else
-		llListener->footnoteEndnoteGroupOff(getSubGroup());
-
 }

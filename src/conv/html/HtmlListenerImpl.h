@@ -75,10 +75,9 @@ public:
 
 	virtual void openFootnote(int number);
 	virtual void closeFootnote();
-#if 0
-	virtual void openEndnote();
+	virtual void openEndnote(int number);
 	virtual void closeEndnote();
-#endif
+
 	virtual void openTable();
 	virtual void openTableRow();
 	virtual void closeTableRow();

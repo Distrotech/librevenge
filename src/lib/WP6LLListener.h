@@ -52,8 +52,8 @@ public:
 	virtual void displayNumberReferenceGroupOff(const guint8 subGroup) = 0;
 	virtual void styleGroupOn(const guint8 subGroup) = 0;
 	virtual void styleGroupOff(const guint8 subGroup) = 0;
-	virtual void footnoteEndnoteGroupOn(const guint8 subGroup, const guint16 textPID) = 0;
-	virtual void footnoteEndnoteGroupOff(const guint8 subGroup) = 0;
+	virtual void noteOn(const guint16 textPID) = 0;
+	virtual void noteOff(const NoteType noteType) = 0;
 
 	void setPrefixData(WP6PrefixData *prefixData) { m_prefixData = prefixData; }
 

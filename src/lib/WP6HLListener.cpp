@@ -558,6 +558,7 @@ void WP6HLListener::displayNumberReferenceGroupOn(const guint8 subGroup, const g
 			m_parseState->m_putativeListElementHasDisplayReferenceNumber = TRUE;
 			break;
 		case WP6_DISPLAY_NUMBER_REFERENCE_GROUP_FOOTNOTE_NUMBER_ON:
+		case WP6_DISPLAY_NUMBER_REFERENCE_GROUP_ENDNOTE_NUMBER_ON:
 			m_parseState->m_styleStateSequence.setCurrentState(DISPLAY_REFERENCING);
 			break;
 		}
@@ -585,6 +586,7 @@ void WP6HLListener::displayNumberReferenceGroupOff(const guint8 subGroup)
 			}
 			break;
 		case WP6_DISPLAY_NUMBER_REFERENCE_GROUP_FOOTNOTE_NUMBER_OFF:
+		case WP6_DISPLAY_NUMBER_REFERENCE_GROUP_ENDNOTE_NUMBER_OFF:
 			m_parseState->m_styleStateSequence.setCurrentState(m_parseState->m_styleStateSequence.getPreviousState());
 			break;
 		}
@@ -660,7 +662,7 @@ void WP6HLListener::styleGroupOff(const guint8 subGroup)
 	}
 }
 
-void WP6HLListener::footnoteEndnoteGroupOn(const guint8 subGroup, const guint16 textPID)
+void WP6HLListener::noteOn(const guint16 textPID)
 {
 	if (!m_parseState->m_isUndoOn)
 	{
@@ -671,7 +673,7 @@ void WP6HLListener::footnoteEndnoteGroupOn(const guint8 subGroup, const guint16 
 	}
 }
 
-void WP6HLListener::footnoteEndnoteGroupOff(const guint8 subGroup)
+void WP6HLListener::noteOff(const NoteType noteType)
 {
 	if (!m_parseState->m_isUndoOn)
 	{
@@ -679,7 +681,10 @@ void WP6HLListener::footnoteEndnoteGroupOff(const guint8 subGroup)
 		m_parseState->m_styleStateSequence.setCurrentState(NORMAL);
 		NumberingType numberingType = _extractNumberingTypeFromBuf(m_parseState->m_numberText, ARABIC);
 		int number = _extractDisplayReferenceNumberFromBuf(m_parseState->m_numberText, numberingType);
-		m_listenerImpl->openFootnote(number);
+		if (noteType == FOOTNOTE)
+			m_listenerImpl->openFootnote(number);
+		else
+			m_listenerImpl->openEndnote(number);
 		// save our old parsing state on our "stack"
 		WP6ParsingState *oldParseState = m_parseState;
 		int textPID = oldParseState->m_noteTextPID;
@@ -688,7 +693,11 @@ void WP6HLListener::footnoteEndnoteGroupOff(const guint8 subGroup)
 		_getPrefixDataPacket(textPID)->parse(this);	
 		_flushText();
 		_closeSection();
-		m_listenerImpl->closeFootnote();		
+		if (noteType == FOOTNOTE)
+			m_listenerImpl->closeFootnote();		
+		else
+			m_listenerImpl->closeEndnote();		
+
 		// restore our old parsing state
 		delete m_parseState;
 		m_parseState = oldParseState;		
@@ -825,7 +834,7 @@ void WP6HLListener::_flushText(const gboolean forceInitialParagraph)
 		{
 			_openParagraph();
 		}
-		m_parseState->m_isParagraphOpened = TRUE; // FIXME: may 5 2003 after close/open refactoring: still needed?
+		m_parseState->m_isParagraphOpened = TRUE;
 	}
 	else if (m_parseState->m_textAttributesChanged && m_parseState->m_bodyText.getLen() > 0) 
 	{

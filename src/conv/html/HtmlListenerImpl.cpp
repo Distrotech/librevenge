@@ -181,17 +181,15 @@ void HtmlListenerImpl::closeFootnote()
 	printf("</footnote>\n");
 }
 
-#if 0
-void HtmlListenerImpl::openEndnote()
+void HtmlListenerImpl::openEndnote(int number)
 {
-	printf("<endnote>\n");
+	printf("<endnote num=\"%i\">\n", number);
 }
 
 void HtmlListenerImpl::closeEndnote()
 {
 	printf("</endnote>\n");
 }
-#endif
 
 void HtmlListenerImpl::openTable()
 {

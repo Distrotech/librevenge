@@ -78,10 +78,9 @@ class WPXHLListenerImpl
 	virtual void closeListElement() = 0;
 	virtual void openFootnote(int number) = 0;
 	virtual void closeFootnote() = 0;
-#if 0	
-	virtual void openEndnote() = 0;
+	virtual void openEndnote(int number) = 0;
 	virtual void closeEndnote() = 0;
-#endif
+
  	virtual void openTable() = 0;
  	virtual void openTableRow() = 0;
 	virtual void closeTableRow() = 0;
