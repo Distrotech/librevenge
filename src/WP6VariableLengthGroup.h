@@ -22,18 +22,31 @@
 /* "This product is not manufactured, approved, or supported by 
  * Corel Corporation or Corel Corporation Limited."
  */
- 
-#ifndef LLWP6GROUP_H
-#define LLWP6GROUP_H
 
-class LLWP6Group : LLPart
+#ifndef WP6VARIABLELENGTHGROUP_H
+#define WP6VARIABLELENGTHGROUP_H
+
+#include "WP6Part.h"
+
+class WP6VariableLengthGroup : public WP6Part
 {
- public:
- virtual void read();
- virtual void write();
- void notify();
- protected:
-
+public:
+	WP6VariableLengthGroup(FILE * stream);	
+	~WP6VariableLengthGroup();
+	
+	gboolean parse();
+	//virtual void write();
+	//void notify();
+protected:
+	virtual gboolean _parseContents() { return TRUE; }
+	
+	guint8 m_iGroup;
+	guint8 m_iSubGroup;
+	guint16 m_iSize;
+	guint8 m_iFlags;
+	guint8 m_iNumPrefixIDs;
+	guint16 **m_pPrefixIDs;
+	guint16 m_iSizeNonDeletable;
 };
 
-#endif /* LLWP6GROUP_H */
+#endif /* WP6VARIABLELENGTHGROUP_H */

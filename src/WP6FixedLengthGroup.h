@@ -23,23 +23,16 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef LLWP6VARIABLELENGTHGROUP_H
-#define LLWP6VARIABLELENGTHGROUP_H
+#ifndef WP6FIXEDLENGTHGROUP_H
+#define WP6FIXEDLENGTHGROUP_H
 
-class LLWP6VariableLengthGroup : LLWP6Group
+class WP6FixedLengthGroup : public WP6Part
 {
 public:
-	virtual void read();
-	virtual void write();
-	void notify();
+	 virtual void read();
+	 virtual void write();
+	 void notify();
 protected:
-	guint8 group;
-	guint8 sub_group;
-	guint16 size;
-	guint8 flags;
-	guint8 num_prefix_ids;
-	guint16 **prefix_ids;
-	guint16 size_non_deletable;
 };
 
-#endif /* LLWP6VARIABLELENGTHGROUP_H */
+#endif /* WP6FIXEDLENGTHGROUP_H */

@@ -26,6 +26,7 @@
 #include "WPXPart.h"
 #include "WP6Part.h"
 #include "WP6Header.h"
+#include "WP6VariableLengthGroup.h"
 #include "UT_libwpd2.h"
 
 WP6Part::WP6Part(FILE * stream)
@@ -53,14 +54,10 @@ WP6Part * WP6Part::constructPart(FILE * stream, WPXParser * parser)
 				parser->getLLListener()->insertCharacter( (guint32)readVal );
 			}
 		}
-		/*
-		else if (read_val >= 0xD0 && read_val <= 0xE2)
+		else if (readVal >= 0xD0 && readVal <= 0xE2)
 		{
-			// variable length byte groups (careful that they don't go more than E2? FIXME)
-			WPD_CHECK_INTERNAL_ERROR(wp6_parse_variable_length_group(stream, wordperfect_state, wordperfect_parse_struct, 
-							wordperfect_variable_length_functions,
-							read_val));
-		}				      
+			return new WP6VariableLengthGroup(stream);
+		}/*			      
 		else
 		{
 			for (i=0; i<WP6_NUM_FIXED_LENGTH_FUNCTIONS; i++)

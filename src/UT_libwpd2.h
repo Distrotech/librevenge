@@ -34,10 +34,10 @@
 
 #define WPD_CHECK_INTERNAL_ERROR(v) if (!v) { WPD_DEBUG_MSG(("Internal Error: %d\n", __LINE__)); return FALSE; }
 
-//#ifdef DEBUG
+#ifdef DEBUG
 #define WPD_DEBUG_MSG(M) printf M
-//#else
-//#define WPD_DEBUG_MSG(M)
-//#endif
+#else
+#define WPD_DEBUG_MSG(M)
+#endif
 
 #endif /* UT_LIBWPD2_H */

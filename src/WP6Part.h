@@ -35,6 +35,7 @@ class WP6Part : public WPXPart
 {
 public:
 	WP6Part(FILE * stream);
+	~WP6Part() {}
 	
 	static WP6Part * constructPart(FILE * stream, WPXParser * parser);
 	virtual gboolean parse() {};
