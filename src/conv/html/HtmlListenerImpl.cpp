@@ -118,17 +118,14 @@ void HtmlListenerImpl::closeHeaderFooter(const WPXHeaderFooterType headerFooterT
 	}
 }
 
-void HtmlListenerImpl::openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits,
-				     const float marginLeft, const float marginRight, const float textIndent,
-				     const gchar *fontName, const float fontSize, const RGBSColor *fontColor,
-				     const RGBSColor *highlightColor, const float lineSpacing, const float spacingAfterParagraph,
-				     const bool isColumnBreak, const bool isPageBreak)
+void HtmlListenerImpl::openParagraph(const guint8 paragraphJustification, 
+				   const float marginLeftOffset, const float marginRightOffset, const float textIndent,
+				   const float lineSpacing, const float spacingAfterParagraph,
+				   const bool isColumnBreak, const bool isPageBreak)
 {
 	printf("<p style=\"");
-	_appendTextAttributes(textAttributeBits);
 	_appendParagraphJustification(paragraphJustification);
-	printf("\" font-name=\"%s\" font-size=\"%f\">",
-		   fontName, fontSize);
+	printf("\">");
 }
 
 void HtmlListenerImpl::closeParagraph()
@@ -192,17 +189,13 @@ void HtmlListenerImpl::closeUnorderedListLevel()
 }
 
 
-void HtmlListenerImpl::openListElement(const guint8 paragraphJustification, const guint32 textAttributeBits,
+void HtmlListenerImpl::openListElement(const guint8 paragraphJustification, 
 				     const float marginLeft, const float marginRight, const float textIndent,
-				     const gchar *fontName, const float fontSize, const RGBSColor *fontColor,
-				     const RGBSColor *highlightColor, const float lineSpacing,
-				     const float spacingAfterParagraph)
+				     const float lineSpacing, const float spacingAfterParagraph)
 {
 	printf("<li style=\"");
-	_appendTextAttributes(textAttributeBits);
 	_appendParagraphJustification(paragraphJustification);
-	printf("\" font-name=\"%s\" font-size=\"%f\">",
-	       fontName, fontSize);
+	printf("\">");
 }
 
 void HtmlListenerImpl::closeListElement()

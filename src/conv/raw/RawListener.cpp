@@ -147,20 +147,14 @@ void RawListenerImpl::closeHeaderFooter(const WPXHeaderFooterType headerFooterTy
 	);
 }
 
-void RawListenerImpl::openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits,
-				   const float marginLeftOffset, const float marginRightOffset, const float textIndent,
-				   const gchar *fontName, const float fontSize, const RGBSColor *fontColor,
-				   const RGBSColor *highlightColor, const float lineSpacing, const float spacingAfterParagraph,
-				   const bool isColumnBreak, const bool isPageBreak)
+void RawListenerImpl::openParagraph(const guint8 paragraphJustification, 
+				    const float marginLeftOffset, const float marginRightOffset, const float textIndent,
+				    const float lineSpacing, const float spacingAfterParagraph,
+				    const bool isColumnBreak, const bool isPageBreak)
 {
-	UTF8String fontNameUTF8(fontName);
-	__iuprintf("openParagraph(paragraphJustification: %d, textAttributeBits: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, textIndent: %.4f, fontName: %s, fontSize: %.4f,  fontColor: #%02x%02x%02x s:%02x, highlightColor: #%02x%02x%02x s:%02x, lineSpacing: %.4f, spacingAfterParagraph: %.4f, isColumnBreak: %s, isPageBreak: %s)\n",
-		paragraphJustification, textAttributeBits,
+	__iuprintf("openParagraph(paragraphJustification: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, textIndent: %.4f, lineSpacing: %.4f, spacingAfterParagraph: %.4f, isColumnBreak: %s, isPageBreak: %s)\n",
+		paragraphJustification, 
 		marginLeftOffset, marginRightOffset, textIndent,
-		fontNameUTF8.getUTF8(), fontSize, (fontColor?fontColor->m_r:0xff), (fontColor?fontColor->m_g:0xff),
-		(fontColor?fontColor->m_b:0xff), (fontColor?fontColor->m_s:0xff), (highlightColor?highlightColor->m_r:0xff),
-		(highlightColor?highlightColor->m_g:0xff), (highlightColor?highlightColor->m_b:0xff),
-		(highlightColor?highlightColor->m_s:0xff), // saturation cannot be ever 0xff; if it is, the pointer is NULL.
 		lineSpacing, spacingAfterParagraph, (isColumnBreak ? "true" : "false"), (isPageBreak ? "true" : "false")
 	);
 }
@@ -251,19 +245,13 @@ void RawListenerImpl::closeUnorderedListLevel()
 	__idprintf("closeUnorderedListLevel()\n");
 }
 
-void RawListenerImpl::openListElement(const guint8 paragraphJustification, const guint32 textAttributeBits,
-				   const float marginLeftOffset, const float marginRightOffset, const float textIndent,
-				   const gchar *fontName, const float fontSize, const RGBSColor *fontColor,
-				   const RGBSColor *highlightColor, const float lineSpacing, const float spacingAfterParagraph)
+void RawListenerImpl::openListElement(const guint8 paragraphJustification, 
+				      const float marginLeftOffset, const float marginRightOffset, const float textIndent,
+				      const float lineSpacing, const float spacingAfterParagraph)
 {
-	UTF8String fontNameUTF8(fontName);
-	__iuprintf("openListElement(paragraphJustification: %d, textAttributeBits: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, textIndent: %.4f, fontName: %s, fontSize: %.4f, fontColor: #%02x%02x%02x s:%02x, highlightColor: #%02x%02x%02x s:%02x, lineSpacing: %.4f, spacingAfterParagraph: %.4f)\n",
-		paragraphJustification, textAttributeBits,
+	__iuprintf("openListElement(paragraphJustification: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, textIndent: %.4f, lineSpacing: %.4f, spacingAfterParagraph: %.4f)\n",
+		paragraphJustification, 
 		marginLeftOffset, marginRightOffset, textIndent,
-		fontNameUTF8.getUTF8(), fontSize, (fontColor?fontColor->m_r:0xff), (fontColor?fontColor->m_g:0xff),
-		(fontColor?fontColor->m_b:0xff), (fontColor?fontColor->m_s:0xff), (highlightColor?highlightColor->m_r:0xff),
-		(highlightColor?highlightColor->m_g:0xff), (highlightColor?highlightColor->m_b:0xff),
-	        (highlightColor?highlightColor->m_s:0xff), // saturation cannot be ever 0xff; if it is, the pointer is NULL.
 	        lineSpacing, spacingAfterParagraph
 	);
 }

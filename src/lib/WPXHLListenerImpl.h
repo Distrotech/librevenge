@@ -67,10 +67,9 @@ class WPXHLListenerImpl
 	virtual void openHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence) = 0;
 	virtual void closeHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence) = 0;
 
-	virtual void openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits,
+	virtual void openParagraph(const guint8 paragraphJustification, 
 				   const float marginLeftOffset, const float marginRightOffset, const float textIndent,
-				   const gchar *fontName, const float fontSize, const RGBSColor *fontColor,
-				   const RGBSColor *highlightColor, const float lineSpacing, const float spacingAfterParagraph,
+				   const float lineSpacing, const float spacingAfterParagraph,
 				   const bool isColumnBreak, const bool isPageBreak) = 0;
 	virtual void closeParagraph() = 0;
 	virtual void openSpan(const guint32 textAttributeBits, const gchar *fontName, const float fontSize,
@@ -102,10 +101,9 @@ class WPXHLListenerImpl
 	virtual void openUnorderedListLevel(const int listID) = 0;
 	virtual void closeOrderedListLevel() = 0;
 	virtual void closeUnorderedListLevel() = 0;
-	virtual void openListElement(const guint8 paragraphJustification, const guint32 textAttributeBits,
+	virtual void openListElement(const guint8 paragraphJustification, 
 				     const float marginLeftOffset, const float marginRightOffset, const float textIndent,
-				     const gchar *fontName, const float fontSize, const RGBSColor *fontColor,
-				     const RGBSColor *highlightColor, const float lineSpacing, const float spacingAfterParagraph) = 0;
+				     const float lineSpacing, const float spacingAfterParagraph) = 0;
 	virtual void closeListElement() = 0;
 
 	virtual void openFootnote(int number) = 0;
