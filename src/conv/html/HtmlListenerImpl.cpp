@@ -213,6 +213,7 @@ void HtmlListenerImpl::_appendParagraphJustification(guint32 paragraphJustificat
 			printf("text-align: center;");
 			break;
 		case WPX_PARAGRAPH_JUSTIFICATION_FULL:
+		case WPX_PARAGRAPH_JUSTIFICATION_FULL_ALL_LINES:
 			printf("text-align: jusitify;");
 			break;
 	}

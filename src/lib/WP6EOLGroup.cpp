@@ -151,11 +151,12 @@ void WP6EOLGroup::_readContents(GsfInput *input)
 			case WP6_EOL_GROUP_DONT_END_A_PARAGRAPH_STYLE_FOR_THIS_HARD_RETURN:
 				WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: DONT_END_A_PARAGRAPH_STYLE_FOR_THIS_HARD_RETURN\n"));
 				numBytesToSkip = WP6_EOL_GROUP_DONT_END_A_PARAGRAPH_STYLE_FOR_THIS_HARD_RETURN_SIZE;
-						break;
+				break;
 			default:
-				// unsupported: shouldn't happen! an error is likely to follow: 
+				// unsupported: shouldn't happen! an error may follow
+				// HACK: one document seems to have a completely bogus value within 
 				// pre-emptively throw a parsing exception
-				WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: UNKNOWN SUBFUNCTION (BAD BAD BAD)\n"));
+				WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: UNKNOWN SUBFUNCTION (%x) (BAD BAD BAD)\n", byte));
 				throw ParseException();
 		}			
 		

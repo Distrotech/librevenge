@@ -366,8 +366,6 @@ void WP6HLListener::justificationChange(guint8 justification)
 		switch (justification)
 		{
 		case WP6_PARAGRAPH_JUSTIFICATION_LEFT:
-			m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_LEFT;
-			break;
 		case WP6_PARAGRAPH_JUSTIFICATION_FULL:
 			m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_LEFT;
 			break;

@@ -60,6 +60,12 @@ void RawListener::undoChange(guint8 undoType, guint16 undoLevel)
 	}
 }
 
+void RawListener::justificationChange(guint8 justification)
+{
+	printf("<justification:%i>", justification);
+
+}
+
 void RawListener::insertEOL()
 {
 	if (!m_isUndoOn) {
