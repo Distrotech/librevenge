@@ -2,7 +2,7 @@ CREDITS
 
 Current maintainers and principal authors of libwpd2
 ----------------------------
-William Lachance <william.lachance@sympatico.com>	Main Author
+William Lachance <william.lachance@sympatico.ca>	Main Author
 Marc Maurer <j.m.maurer@student.utwente.nl>		Main Author
 
 
@@ -14,4 +14,5 @@ Ariya Hidayat <ariya@kde.org>				WordPerfect 6+ Extended
 Francis J Franklin <F.J.Franklin@sheffield.ac.uk>	Build libwpd as a 
 	  	   				       	shared library
 Michael Pritchett <MPritchett@attglobal.net>		MSVC Project Files
-Rui Miguel Silva Seabra <rms@1407.org>			original rpm spec
+Rui Miguel Silva Seabra <rms@1407.org>			original rpm spec,
+							build patches

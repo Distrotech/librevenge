@@ -7,4 +7,5 @@ wpd2raw_LDADD = -lwpd-1 $(LIBWPD_LIBS)
 
 wpd2raw_SOURCES =			\
 	RawListener.cpp	 	\
+	RawListener.h	 	\
 	main.cpp

@@ -79,6 +79,7 @@ src/conv/raw/Makefile
 src/conv/text/Makefile
 src/lib/Makefile
 libwpd-1.pc
+libwpd.spec
 ])
 
 case "$debug" in

@@ -7,4 +7,5 @@ wpd2html_LDADD = -lwpd-1 $(LIBWPD_LIBS)
 
 wpd2html_SOURCES =			\
 	HtmlListenerImpl.cpp	 	\
+	HtmlListenerImpl.h	 	\
 	main.cpp

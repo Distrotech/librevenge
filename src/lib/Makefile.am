@@ -77,7 +77,9 @@ libwpd_1_la_SOURCES =			\
 	WP6UnsupportedVariableLengthGroup.h \
 	WP6VariableLengthGroup.h	\
 	WPXHeader.h			\
+	WPXFileStructure.h		\
 	WPXLLListener.h			\
 	WPXHLListener.h			\
 	WPXHLListenerImpl.h		\
+	WPXPart.h			\
 	WPXParser.h 

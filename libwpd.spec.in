@@ -1,5 +1,5 @@
 %define name libwpd
-%define version 0.5.0
+%define version @VERSION@
 %define  RELEASE 1
 %define  release     %{?CUSTOM_RELEASE} %{!?CUSTOM_RELEASE:%RELEASE}
 
@@ -21,6 +21,15 @@ BuildRequires: libgsf-devel >= 1.6.0
 %description
 Library that handles Word Perfect documents.
 
+
+%package tools
+Requires: libwpd
+Summary: Tools to transform WordPerfect Documents into other formats
+Group: Applications/Publishing
+
+%description tools
+Tools to transform WordPerfect Documents into other formats.
+Currently supported: html, raw, text
 
 %package devel
 Requires: libwpd
@@ -50,12 +59,12 @@ umask 022
 %__rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/file.list.%{name}
 
 %files
-%defattr(755,root,root,755)
-%{_bindir}/wpd2html
-%{_bindir}/wpd2raw
-%{_bindir}/wpd2text
 %defattr(644,root,root,755)
-%{_libdir}/libwpd-1.a
+%{_libdir}/libwpd*
+
+%files tools
+%defattr(755,root,root,755)
+%{_bindir}/wpd2*
 
 %files devel
 %defattr(644,root,root,755)
@@ -63,5 +72,8 @@ umask 022
 %{_includedir}/libwpd-1/libwpd
 
 %changelog
+* Sat May 22 2003 Rui M. Seabra <rms@1407.org>
+- Reflect current state of build
+
 * Sat Apr 26 2003 Rui M. Seabra <rms@1407.org>
 - Create rpm spec
