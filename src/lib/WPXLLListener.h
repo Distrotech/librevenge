@@ -55,13 +55,14 @@ class WPXLLListener
 	virtual void marginChange(const uint8_t side, const uint16_t margin) = 0;
 	virtual void paragraphMarginChange(const uint8_t side, const int16_t margin) = 0;
 	virtual void indentFirstLineChange(const int16_t offset) = 0;
-	virtual void columnChange(const uint8_t numColumns) = 0;
+	virtual void columnChange(const WPXTextColumnType columnType, const uint8_t numColumns, const vector<float> &columnWidth,
+				  const vector<bool> &isFixedWidth) = 0;
 	virtual void endDocument() = 0;
 
 	virtual void defineTable(uint8_t position, uint16_t leftOffset) = 0;
 	virtual void addTableColumnDefinition(uint32_t width, uint32_t leftGutter, uint32_t rightGutter) = 0;
 	virtual void startTable() = 0;
- 	virtual void insertRow(const bool isHeaderRow, const bool isFixedHeightRow, const bool hasMinimumHeight, const uint16_t rowHeight) = 0;
+ 	virtual void insertRow(const uint16_t rowHeight, const bool isMinimumHeight, const bool isHeaderRow) = 0;
  	virtual void insertCell(const uint8_t colSpan, const uint8_t rowSpan, const bool boundFromLeft, const bool boundFromAbove,
 				const uint8_t borderBits, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
 				const RGBSColor * cellBorderColor, 

@@ -149,9 +149,9 @@ void WP6HyphenFunction::parse(WP6HLListener *listener)
 
 void WP6TableRowFunction::parse(WP6HLListener *listener)
 {
-	// use default values: if they were not default values, formater would use
-	// the multi-byte variant of this function
-	listener->insertRow(false, false, false, 0x00);
+	// use default values: if they were not default values, WordPerfect
+	// would use the multi-byte variant of this function
+	listener->insertRow(0x0000, true, false);
 	listener->insertCell(1, 1, false, false, 0x00, NULL, NULL, new RGBSColor(0x00, 0x00, 0x00, 0x64), TOP, 0x00000000);
 }
 

@@ -133,8 +133,8 @@ void HtmlListenerImpl::closeHeaderFooter(const WPXHeaderFooterType headerFooterT
 
 void HtmlListenerImpl::openParagraph(const uint8_t paragraphJustification, 
 				   const float marginLeftOffset, const float marginRightOffset, const float textIndent,
-				   const float lineSpacing, const float spacingAfterParagraph, const vector<WPXTabStop> &tabStops,
-				   const bool isColumnBreak, const bool isPageBreak)
+				   const float lineSpacing, const float spacingBeforeParagraph, const float spacingAfterParagraph,
+				   const vector<WPXTabStop> &tabStops, const bool isColumnBreak, const bool isPageBreak)
 {
 	printf("<p style=\"");
 	_appendParagraphJustification(paragraphJustification);
@@ -142,6 +142,8 @@ void HtmlListenerImpl::openParagraph(const uint8_t paragraphJustification,
 		printf(" margin-left: %.4fin;", marginLeftOffset);
 	if (marginRightOffset != 0.0f)
 		printf(" margin-right: %.4fin;", marginRightOffset);
+	if (spacingBeforeParagraph != 0.0f)
+		printf(" margin-top: /.4in;", spacingBeforeParagraph);
 	if (spacingAfterParagraph != 0.0f)
 		printf(" margin-bottom: %.4fin;", spacingAfterParagraph);
 	if (lineSpacing != 1.0f)
@@ -184,7 +186,7 @@ void HtmlListenerImpl::closeSpan()
 	}
 }
 
-void HtmlListenerImpl::openSection(const unsigned int numColumns, const float spaceBefore)
+void HtmlListenerImpl::openSection(const unsigned int numColumns, const vector<WPXColumnDefinition> &columns, const float spaceBefore)
 {
 	printf("<section columns:%i>\n", numColumns);
 }
@@ -233,8 +235,8 @@ void HtmlListenerImpl::closeUnorderedListLevel()
 
 void HtmlListenerImpl::openListElement(const uint8_t paragraphJustification, 
 				     const float marginLeft, const float marginRight, const float textIndent,
-				     const float lineSpacing, const float spacingAfterParagraph,
-				     const vector<WPXTabStop> &tabStops)
+				     const float lineSpacing, const float spacingBeforeParagraph,
+				     const float spacingAfterParagraph, const vector<WPXTabStop> &tabStops)
 {
 	printf("<li style=\"");
 	_appendParagraphJustification(paragraphJustification);
@@ -242,6 +244,8 @@ void HtmlListenerImpl::openListElement(const uint8_t paragraphJustification,
 		printf(" margin-left: %.4fin;", marginLeft);
 	if (marginRight != 0.0f)
 		printf(" margin-right: %.4fin;", marginRight);
+	if (spacingBeforeParagraph != 0.0f)
+		printf(" margin-top: /.4in;", spacingBeforeParagraph);
 	if (spacingAfterParagraph != 0.0f)
 		printf(" margin-bottom: %.4fin;", spacingAfterParagraph);
 	if (lineSpacing != 1.0f)
@@ -281,7 +285,7 @@ void HtmlListenerImpl::openTable(const uint8_t tablePositionBits, const float ma
 	printf("<tbody>\n");
 }
 
-void HtmlListenerImpl::openTableRow(const bool isHeaderRow, const bool isFixedHeightRow, const bool hasMinimumHeight, const float height)
+void HtmlListenerImpl::openTableRow(const float height, const bool isMinimumHeight, const bool isHeaderRow)
 {
 	printf("<tr>\n");
 }

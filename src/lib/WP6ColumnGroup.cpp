@@ -26,6 +26,8 @@
 #include "WP6ColumnGroup.h"
 #include "WP6LLListener.h"
 #include "libwpd_internal.h"
+#include "libwpd_support.h"
+#include "WPXFileStructure.h"
 
 WP6ColumnGroup::WP6ColumnGroup(WPXInputStream *input) :
 	WP6VariableLengthGroup(),
@@ -51,16 +53,30 @@ void WP6ColumnGroup::_readContents(WPXInputStream *input)
 			{
 				m_colType = readU8(input);
 				uint32_t tmpRowSpacing = readU32(input);
-				int32_t tmpRowSpacingIntegerPart = (int16_t)((tmpRowSpacing & 0xffff0000) >> 16);
-				float tmpRowSpacingFractionalPart = (float)((double)(tmpRowSpacing & 0xffff)/(double)0xffff);
+				int16_t tmpRowSpacingIntegerPart = (int16_t)((tmpRowSpacing & 0xffff0000) >> 16);
+				float tmpRowSpacingFractionalPart = (float)((double)(tmpRowSpacing & 0xffff)/(double)0x10000);
 				m_rowSpacing = (float)tmpRowSpacingIntegerPart + tmpRowSpacing;
 				m_numColumns = readU8(input);
-				for (int i=0; i<m_numColumns; i++)
+				uint8_t tmpDefinition;
+				uint16_t tmpWidth;
+				if (m_numColumns > 1)
 				{
-					if ((i % 2) == 0)
-						m_gap.push_back(false);
-					else
-						m_gap.push_back(true);
+					for (int i=0; i<((2*m_numColumns)-1); i++)
+					{
+						tmpDefinition = readU8(input);
+						tmpWidth = readU16(input);
+						if ((tmpDefinition & 0x01) == 0x01)
+						{
+							m_isFixedWidth.push_back(true);
+							m_columnWidth.push_back((float)((double)tmpWidth/(double)WPX_NUM_WPUS_PER_INCH));
+						}
+						else
+						{
+							m_isFixedWidth.push_back(false);
+							m_columnWidth.push_back((float)((double)tmpWidth/(double)0x10000));
+						}	
+						
+					}
 				}
 				WPD_DEBUG_MSG(("WordPerfect: Column type: %d\n", m_colType & 0x03));
 				WPD_DEBUG_MSG(("WordPerfect: Numer of columns: %d\n", m_numColumns));				
@@ -91,29 +107,28 @@ void WP6ColumnGroup::parse(WP6HLListener *listener)
 				listener->marginChange(WPX_RIGHT, m_margin);
 			}
 			break;
-		case 2: // TODO: Define Text Columns, Partially implemented.
+		case 2: // Define Text Columns
 			{
 				// number of columns = {0,1} means columns off
 				if ((m_numColumns == 0) || (m_numColumns == 1))
 				{
-					listener->columnChange(1); // the value "1" is bugus, the false bool gives you all the information you need here
+					listener->columnChange(NEWSPAPER, 1, m_columnWidth, m_isFixedWidth); // the value "1" is bugus, the false bool gives you all the information you need here
 				} 
 				else
 				{
-					// TODO: pass the column type to the listener
 					switch (m_colType & 0x03)
 					{
 						case WP6_COLUMN_TYPE_NEWSPAPER:
-							listener->columnChange(m_numColumns);
+							listener->columnChange(NEWSPAPER, m_numColumns, m_columnWidth, m_isFixedWidth);
 							break;
 						case WP6_COLUMN_TYPE_NEWSPAPER_VERTICAL_BALANCE:
-							listener->columnChange(m_numColumns);
+							listener->columnChange(NEWSPAPER_VERTICAL_BALANCE, m_numColumns, m_columnWidth, m_isFixedWidth);
 							break;
 						case WP6_COLUMN_TYPE_PARALLEL:
-							listener->columnChange(m_numColumns);
+							listener->columnChange(PARALLEL, m_numColumns, m_columnWidth, m_isFixedWidth);
 							break;
 						case WP6_COLUMN_TYPE_PARALLEL_PROTECT:
-							listener->columnChange(m_numColumns);
+							listener->columnChange(PARALLEL_PROTECT, m_numColumns, m_columnWidth, m_isFixedWidth);
 							break;
 						default: // something else we don't support, since it isn't in the docs
 							break;

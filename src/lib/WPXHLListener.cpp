@@ -66,6 +66,7 @@ _WPXParsingState::_WPXParsingState(bool sectionAttributesChanged) :
 
 	m_sectionAttributesChanged(sectionAttributesChanged),
 	m_numColumns(1),
+	m_isTextColumnWithoutParagraph(false),
 
 	m_pageFormLength(11.0f),
 	m_pageFormWidth(8.5f),
@@ -87,6 +88,7 @@ _WPXParsingState::_WPXParsingState(bool sectionAttributesChanged) :
 	m_textIndentByParagraphIndentChange(0.0f),
 	m_textIndentByTabs(0.0f),
 	m_paragraphSpacingAfter(0.0f),
+	m_paragraphSpacingBefore(0.0f),
 /*	m_currentRow(-1),
 	m_currentColumn(-1),
 
@@ -100,7 +102,6 @@ _WPXParsingState::_WPXParsingState(bool sectionAttributesChanged) :
 
 	m_alignmentCharacter('.'),
 	m_isTabPositionRelative(false)
-
 {
 }
 
@@ -141,9 +142,9 @@ void WPXHLListener::_openSection()
 {
 	_closeSection();
 	if (m_ps->m_numColumns > 1)
-		m_listenerImpl->openSection(m_ps->m_numColumns, 1.0f);
+		m_listenerImpl->openSection(m_ps->m_numColumns, m_ps->m_textColumns, 1.0f);
 	else
-		m_listenerImpl->openSection(m_ps->m_numColumns, 0.0f);
+		m_listenerImpl->openSection(m_ps->m_numColumns, m_ps->m_textColumns, 0.0f);
 
 	m_ps->m_sectionAttributesChanged = false;
 	m_ps->m_isSectionOpened = true;
@@ -227,6 +228,7 @@ void WPXHLListener::_openPageSpan()
 	m_ps->m_numPagesRemainingInSpan = (currentPage->getPageSpan() - 1);
 	m_ps->m_nextPageSpanIndice++;
 	m_ps->m_isPageSpanOpened = true;
+	_openSection();
 }
 
 void WPXHLListener::_closePageSpan()
@@ -329,7 +331,7 @@ void WPXHLListener::_closeTable()
 	}
 }
 
-void WPXHLListener::_openTableRow(const bool isHeaderRow, const bool isFixedHeightRow, const bool hasMinimumHeight, const float height)
+void WPXHLListener::_openTableRow(const float height, const bool isMinimumHeight, const bool isHeaderRow)
 {
 	_closeTableRow();
 	m_ps->m_currentTableCol = 0;
@@ -337,11 +339,11 @@ void WPXHLListener::_openTableRow(const bool isHeaderRow, const bool isFixedHeig
 	// The following "Header Row" flags are ignored
 	if (isHeaderRow & !m_ps->m_wasHeaderRow)
 	{
-		m_listenerImpl->openTableRow(true, isFixedHeightRow, hasMinimumHeight, height);
+		m_listenerImpl->openTableRow(height, isMinimumHeight, true);
 		m_ps->m_wasHeaderRow = true;
 	}
 	else
-		m_listenerImpl->openTableRow(false, isFixedHeightRow, hasMinimumHeight, height);
+		m_listenerImpl->openTableRow(height, isMinimumHeight, false);
 
 	m_ps->m_isTableRowOpened = true;
 	m_ps->m_currentTableRow++;
@@ -377,6 +379,8 @@ void WPXHLListener::_openTableCell(const uint8_t colSpan, const uint8_t rowSpan,
 
 void WPXHLListener::_closeTableCell()
 {
+	if (m_ps->m_isCellWithoutParagraph)
+		_openParagraph();
 	_closeParagraph();
 	m_ps->m_cellAttributeBits = 0x00000000;
 	if (m_ps->m_isTableCellOpened)
@@ -414,8 +418,14 @@ void WPXHLListener::insertBreak(const uint8_t breakType)
 		switch (breakType)
 		{
 		case WPX_COLUMN_BREAK:
+			if (m_ps->m_isTextColumnWithoutParagraph)
+			{
+				_openParagraph(); // handle a case where two column breaks are following each other
+				_flushText();
+			}
 			m_ps->m_numDeferredParagraphBreaks++;
 			m_ps->m_isParagraphColumnBreak = true;
+			m_ps->m_isTextColumnWithoutParagraph = true;
 			break;
 		case WPX_PAGE_BREAK:
 			m_ps->m_numDeferredParagraphBreaks++;

@@ -217,7 +217,7 @@ void WP42HLListener::_openParagraph()
 
 	m_listenerImpl->openParagraph(0,
 				      m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight, m_ps->m_paragraphTextIndent,
-				      1.0f, 0.0f, tabStops,
+				      1.0f, m_ps->m_paragraphSpacingBefore, m_ps->m_paragraphSpacingAfter, tabStops,
 				      false, false);
 
 	if (m_ps->m_numDeferredParagraphBreaks > 0)

@@ -347,6 +347,13 @@ void WP6HLContentListener::insertTab(const uint8_t tabType, const float tabPosit
 	if (!isUndoOn())
 	{
 		_flushText(); // allow the current paragraph to flush (if it's finished), in case we need to change justification
+		// open new section if section attributes changed
+		if (m_ps->m_sectionAttributesChanged)
+		{
+			_openSection();
+			m_ps->m_sectionAttributesChanged = false;
+		}
+
 		if (m_parseState->m_styleStateSequence.getCurrentState() == STYLE_BODY ||
 		    m_parseState->m_styleStateSequence.getCurrentState() == NORMAL)
 		{
@@ -360,9 +367,9 @@ void WP6HLContentListener::insertTab(const uint8_t tabType, const float tabPosit
 			// Uncomment when the TabGroup is properly implemented
 			//case WP6_TAB_GROUP_CENTER_ON_MARGINS:
 			//case WP6_TAB_GROUP_CENTER_ON_CURRENT_POSITION:
-			//case WP6_TAB_GROUP_CENTER_TAB:
+			case WP6_TAB_GROUP_CENTER_TAB:
 			//case WP6_TAB_GROUP_FLUSH_RIGHT:
-			//case WP6_TAB_GROUP_RIGHT_TAB:
+			case WP6_TAB_GROUP_RIGHT_TAB:
 			case WP6_TAB_GROUP_DECIMAL_TAB:
 				if (!m_ps->m_isParagraphOpened)
 					_openParagraph();
@@ -380,12 +387,10 @@ void WP6HLContentListener::insertTab(const uint8_t tabType, const float tabPosit
 				// Begin of code to be removed when the TabGroup is properly implemented
 				case WP6_TAB_GROUP_CENTER_ON_MARGINS:
 				case WP6_TAB_GROUP_CENTER_ON_CURRENT_POSITION:
-				case WP6_TAB_GROUP_CENTER_TAB:
 					m_parseState->m_tempParagraphJustification = WP6_PARAGRAPH_JUSTIFICATION_CENTER;
 					break;
 
 				case WP6_TAB_GROUP_FLUSH_RIGHT:
-				case WP6_TAB_GROUP_RIGHT_TAB:
 					m_parseState->m_tempParagraphJustification = WP6_PARAGRAPH_JUSTIFICATION_RIGHT;
 					break;
 				// End of code to be removed when the TabGroup is properly implemented
@@ -450,11 +455,9 @@ void WP6HLContentListener::insertTab(const uint8_t tabType, const float tabPosit
 				case WP6_TAB_GROUP_FLUSH_RIGHT:
 				case WP6_TAB_GROUP_RIGHT_TAB:
 				case WP6_TAB_GROUP_DECIMAL_TAB:
-					_flushText();
 					m_listenerImpl->insertTab();
 					break;
 				case WP6_TAB_GROUP_BAR_TAB:
-					_flushText();
 					m_listenerImpl->insertTab();
 					insertCharacter('|');  // We emulate the bar tab
 					break;
@@ -462,7 +465,6 @@ void WP6HLContentListener::insertTab(const uint8_t tabType, const float tabPosit
 				default:
 					break;
 				}
-
 			}
 		}
 	}
@@ -473,6 +475,13 @@ void WP6HLContentListener::handleLineBreak()
 	if(!isUndoOn())
 	{
 		_flushText();
+		
+		if (m_ps->m_sectionAttributesChanged)
+		{
+			_openSection();
+			m_ps->m_sectionAttributesChanged = false;
+		}
+
 		if (m_parseState->m_styleStateSequence.getCurrentState() == STYLE_BODY ||
 		    m_parseState->m_styleStateSequence.getCurrentState() == NORMAL)
 		{
@@ -712,16 +721,63 @@ void WP6HLContentListener::indentFirstLineChange(int16_t offset)
 	}
 }
 
-void WP6HLContentListener::columnChange(uint8_t numColumns)
+void WP6HLContentListener::columnChange(const WPXTextColumnType columnType, const uint8_t numColumns, const vector<float> &columnWidth,
+		const vector<bool> &isFixedWidth)
 {
 	if (!isUndoOn())
 	{
-		//_handleLineBreakElementBegin();
-
+		// In WP, the last column ends with a hard column break code.
+		// In this case, we do not really want to insert any column break
+		if (m_ps->m_isParagraphPageBreak)
+		{
+			m_ps->m_isParagraphPageBreak = false;
+			m_ps->m_isTextColumnWithoutParagraph = false;
+		}
 		_flushText();
+		float remainingSpace = m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight
+						- m_ps->m_leftMarginByPageMarginChange - m_ps->m_rightMarginByPageMarginChange;
+		// determine the space that is to be divided between columns whose width is expressed in percentage of remaining space
+		vector<WPXColumnDefinition> tmpColumnDefinition;
+		tmpColumnDefinition.clear();
+		if (numColumns > 1)
+		{
+			for (int i=0; i<columnWidth.size(); i++)
+			{
+				if (isFixedWidth[i])
+					remainingSpace -= columnWidth[i];
+			}
+			WPXColumnDefinition tmpColumn;
+			for (int i=0; i<numColumns; i++)
+			{
+				if (i == 0)
+					tmpColumn.m_leftGutter = 0.0f;
+				else if (isFixedWidth[2*i-1])
+					tmpColumn.m_leftGutter = 0.5f * columnWidth[2*i-1];
+				else
+					tmpColumn.m_leftGutter = 0.5f * remainingSpace * columnWidth[2*i-1];
+				
+				if (i >= (numColumns - 1))
+					tmpColumn.m_rightGutter = 0.0f;
+				else if (isFixedWidth[2*i+1])
+					tmpColumn.m_rightGutter = 0.5f * columnWidth[2*i+1];
+				else
+					tmpColumn.m_rightGutter = 0.5f * remainingSpace * columnWidth[2*i+1];
+
+				if (isFixedWidth[2*i])
+					tmpColumn.m_width = columnWidth[2*i];
+				else
+					tmpColumn.m_width = remainingSpace * columnWidth[2*i];
+				
+				tmpColumn.m_width += tmpColumn.m_leftGutter + tmpColumn.m_rightGutter;
+				
+				tmpColumnDefinition.push_back(tmpColumn);
+			}
+		}
 
 		m_ps->m_sectionAttributesChanged = true;
 		m_ps->m_numColumns = numColumns;
+		m_ps->m_textColumns = tmpColumnDefinition;
+		m_ps->m_isTextColumnWithoutParagraph = true;
 	}
 }
 
@@ -756,7 +812,8 @@ void WP6HLContentListener::paragraphNumberOff()
 {
 	if (!isUndoOn())
 	{
-		m_parseState->m_styleStateSequence.setCurrentState(BEGIN_AFTER_NUMBERING);
+//		m_parseState->m_styleStateSequence.setCurrentState(BEGIN_AFTER_NUMBERING);
+		m_parseState->m_styleStateSequence.setCurrentState(NORMAL);
 	}
 }
 
@@ -1045,16 +1102,13 @@ void WP6HLContentListener::startTable()
 	}
 }
 
-void WP6HLContentListener::insertRow(const bool isHeaderRow, const bool isFixedHeightRow, const bool hasMinimumHeight, const uint16_t rowHeight)
+void WP6HLContentListener::insertRow(const uint16_t rowHeight, const bool isMinimumHeight, const bool isHeaderRow)
 {
 	if (!isUndoOn())
 	{
-		if (m_ps->m_isCellWithoutParagraph)
-			_openParagraph();
-		m_ps->m_isCellWithoutParagraph = false;
 		_flushText();
-		float height = (float)((double) rowHeight / (double)WPX_NUM_WPUS_PER_INCH);
-		_openTableRow(isHeaderRow, isFixedHeightRow, hasMinimumHeight, height);
+		float rowHeightInch = (float)((double) rowHeight / (double)WPX_NUM_WPUS_PER_INCH);
+		_openTableRow(rowHeightInch, isMinimumHeight, isHeaderRow);
 	}
 }
 
@@ -1067,9 +1121,6 @@ void WP6HLContentListener::insertCell(const uint8_t colSpan, const uint8_t rowSp
 	{
 		if (m_ps->m_currentTableRow < 0) // cell without a row, invalid
 			throw ParseException();
-		// if previous cell did not have paragraph, we insert a dummy one
-		if (m_ps->m_isCellWithoutParagraph)
-			_openParagraph();
 		_flushText();
 		_openTableCell(colSpan, rowSpan, boundFromLeft, boundFromAbove,
 			       m_parseState->m_currentTable->getCell(m_ps->m_currentTableRow, m_ps->m_currentTableCol)->m_borderBits,			       
@@ -1083,9 +1134,6 @@ void WP6HLContentListener::endTable()
 {
 	if (!isUndoOn())
 	{
-		if (m_ps->m_isCellWithoutParagraph)
-			_openParagraph();
-		m_ps->m_isCellWithoutParagraph = false;
 		_flushText();
 		_closeTable();
 		// restore the justification that was there before the table.
@@ -1336,7 +1384,7 @@ void WP6HLContentListener::_openListElement()
 
 	m_listenerImpl->openListElement(m_ps->m_paragraphJustification,
 					m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight, m_ps->m_paragraphTextIndent,
-					m_ps->m_paragraphLineSpacing, m_ps->m_paragraphSpacingAfter, tabStops);
+					m_ps->m_paragraphLineSpacing, m_ps->m_paragraphSpacingBefore, m_ps->m_paragraphSpacingAfter, tabStops);
 	m_ps->m_isParagraphOpened = true; // a list element is equivalent to a paragraph
 	m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange + m_ps->m_leftMarginByParagraphMarginChange;
 	m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange + m_ps->m_rightMarginByParagraphMarginChange;
@@ -1344,7 +1392,8 @@ void WP6HLContentListener::_openListElement()
 	m_ps->m_rightMarginByTabs = 0.0f;
 	m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange;
 	m_ps->m_textIndentByTabs = 0.0f;
-	m_ps->m_isCellWithoutParagraph = false;	
+	m_ps->m_isCellWithoutParagraph = false;
+	m_ps->m_isTextColumnWithoutParagraph = false;
 
 	_openSpan();
 }
@@ -1376,8 +1425,8 @@ void WP6HLContentListener::_openParagraph()
 
 	m_listenerImpl->openParagraph(paragraphJustification,
 				      m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight, m_ps->m_paragraphTextIndent,
-				      m_ps->m_paragraphLineSpacing, m_ps->m_paragraphSpacingAfter, tabStops,  
-				      m_ps->m_isParagraphColumnBreak, m_ps->m_isParagraphPageBreak);
+				      m_ps->m_paragraphLineSpacing, m_ps->m_paragraphSpacingBefore, m_ps->m_paragraphSpacingAfter,
+				      tabStops, m_ps->m_isParagraphColumnBreak, m_ps->m_isParagraphPageBreak);
 
 	if (m_ps->m_numDeferredParagraphBreaks > 0)
 		m_ps->m_numDeferredParagraphBreaks--;
@@ -1391,7 +1440,8 @@ void WP6HLContentListener::_openParagraph()
 	m_ps->m_rightMarginByTabs = 0.0f;
 	m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange;
 	m_ps->m_textIndentByTabs = 0.0f;
-	m_ps->m_isCellWithoutParagraph = false;	
+	m_ps->m_isCellWithoutParagraph = false;
+	m_ps->m_isTextColumnWithoutParagraph = false;	
 
 	_openSpan();
 }

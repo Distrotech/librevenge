@@ -1,5 +1,6 @@
 /* libwpd
  * Copyright (C) 2004 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -301,8 +302,8 @@ void WP3HLListener::_openParagraph()
 
 	m_listenerImpl->openParagraph(0,
 				      m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight, m_ps->m_paragraphTextIndent,
-				      m_ps->m_paragraphLineSpacing, 0.0f, tabStops,
-				      m_ps->m_isParagraphColumnBreak, m_ps->m_isParagraphPageBreak);
+				      m_ps->m_paragraphLineSpacing, m_ps->m_paragraphSpacingBefore, m_ps->m_paragraphSpacingAfter,
+				      tabStops, m_ps->m_isParagraphColumnBreak, m_ps->m_isParagraphPageBreak);
 
 	if (m_ps->m_numDeferredParagraphBreaks > 0)
 		m_ps->m_numDeferredParagraphBreaks--;

@@ -15,12 +15,16 @@ CHANGES:
 - WP6: Added conversion of spacing after paragraph and of first
   line indentation done by functions of the paragraph Group
   (Fridrich Strba)
-- WP6: Added text highlight conversion (Fridrich Strba)
-- WP6: Added page form and orientation conversion (Fridrich Strba)
-- WP6: Added font colour conversion (Fridrich Strba)
+- WP6: Table cell vertical alignment conversion and colour of the
+  cell border (Fridrich Strba)
+- WP6: Conversion of text columns size (width and gutters) (Fridrich Strba)
+- WP6: Improvements in conversion of tabulators (Fridrich Strba)
+- WP6: Text highlight conversion (Fridrich Strba)
+- WP6: Page form and orientation conversion (Fridrich Strba)
+- WP6: Font colour conversion (Fridrich Strba)
 - Remove span parameters from calls to openParagraph and openListElement
   (William Lachance)
-- Additional doxygen comments (William Lachance)
+- Additional doxygen comments (William Lachance, Fridrich Strba)
 - Remove mandatory dependancy on glib/libgsf for external applications
   (William Lachance, Michael Meeks)
 

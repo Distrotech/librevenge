@@ -157,13 +157,13 @@ void RawListenerImpl::closeHeaderFooter(const WPXHeaderFooterType headerFooterTy
 
 void RawListenerImpl::openParagraph(const uint8_t paragraphJustification, 
 				    const float marginLeftOffset, const float marginRightOffset, const float textIndent,
-				    const float lineSpacing, const float spacingAfterParagraph, const vector<WPXTabStop> &tabStops,
-				    const bool isColumnBreak, const bool isPageBreak)
+				    const float lineSpacing, const float spacingBeforeParagraph, const float spacingAfterParagraph,
+				    const vector<WPXTabStop> &tabStops, const bool isColumnBreak, const bool isPageBreak)
 {
-	_U(("openParagraph(paragraphJustification: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, textIndent: %.4f, lineSpacing: %.4f, spacingAfterParagraph: %.4f, isColumnBreak: %s, isPageBreak: %s, TODO: tab-stops.)\n",
+	_U(("openParagraph(paragraphJustification: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, textIndent: %.4f, lineSpacing: %.4f, spacingBeforeParagraph: %.4f, spacingAfterParagraph: %.4f, isColumnBreak: %s, isPageBreak: %s, TODO: tab-stops.)\n",
 			paragraphJustification, 
-			marginLeftOffset, marginRightOffset, textIndent,
-			lineSpacing, spacingAfterParagraph, (isColumnBreak ? "true" : "false"), (isPageBreak ? "true" : "false")),
+			marginLeftOffset, marginRightOffset, textIndent, lineSpacing, spacingBeforeParagraph, spacingAfterParagraph,
+			(isColumnBreak ? "true" : "false"), (isPageBreak ? "true" : "false")),
 		LC_OPEN_PARAGRAPH);
 }
 
@@ -190,9 +190,22 @@ void RawListenerImpl::closeSpan()
 		LC_OPEN_SPAN);
 }
 
-void RawListenerImpl::openSection(const unsigned int numColumns, const float spaceAfter)
+void RawListenerImpl::openSection(const unsigned int numColumns, const vector<WPXColumnDefinition> &columns, const float spaceAfter)
 {
-	_U(("openSection(numColumns: %u, spaceAfter: %.4f)\n", numColumns, spaceAfter),
+	UTF8String sColumns;
+	sColumns.sprintf("");
+	if (numColumns > 1)
+	{
+		for (int i=0; i<columns.size(); i++)
+		{
+			sColumns.sprintf("%s W:%.4f|", sColumns.getUTF8(), columns[i].m_width);
+			sColumns.sprintf("%sL:%.4f|", sColumns.getUTF8(), columns[i].m_leftGutter);
+			sColumns.sprintf("%sR:%.4f", sColumns.getUTF8(), columns[i].m_rightGutter);
+		}
+	}
+	else
+		sColumns.sprintf(" SINGLE COLUMN");
+	_U(("openSection(numColumns: %u, columns:%s, spaceAfter: %.4f)\n", numColumns, sColumns.getUTF8(), spaceAfter),
 		LC_OPEN_SECTION);
 }
 
@@ -262,12 +275,12 @@ void RawListenerImpl::closeUnorderedListLevel()
 
 void RawListenerImpl::openListElement(const uint8_t paragraphJustification, 
 				      const float marginLeftOffset, const float marginRightOffset, const float textIndent,
-				      const float lineSpacing, const float spacingAfterParagraph, const vector<WPXTabStop> &tabStops)
+				      const float lineSpacing, const float spacingBeforeParagraph, const float spacingAfterParagraph, const vector<WPXTabStop> &tabStops)
 {
-	_U(("openListElement(paragraphJustification: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, textIndent: %.4f, lineSpacing: %.4f, spacingAfterParagraph: %.4f, TODO: tab-stops.)\n",
+	_U(("openListElement(paragraphJustification: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, textIndent: %.4f, lineSpacing: %.4f, spacingBeforeParagraph: %.4f, spacingAfterParagraph: %.4f, TODO: tab-stops.)\n",
 			paragraphJustification, 
 			marginLeftOffset, marginRightOffset, textIndent,
-			lineSpacing, spacingAfterParagraph),
+			lineSpacing, spacingBeforeParagraph, spacingAfterParagraph),
 		LC_OPEN_LIST_ELEMENT);
 }
 
@@ -305,15 +318,23 @@ void RawListenerImpl::openTable(const uint8_t tablePositionBits,
 			       const float marginLeftOffset, const float marginRightOffset,
 			       const float leftOffset, const vector < WPXColumnDefinition > &columns)
 {
-	_U(("openTable(tablePositionBits: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, leftOffset: %.4f, TODO: columns defs.)\n",
-			tablePositionBits, marginLeftOffset, marginRightOffset, leftOffset),
+	UTF8String sColumns;
+	sColumns.sprintf("");
+	for (int i=0; i<columns.size(); i++)
+	{
+		sColumns.sprintf("%s W:%.4f|", sColumns.getUTF8(), columns[i].m_width);
+		sColumns.sprintf("%sL:%.4f|", sColumns.getUTF8(), columns[i].m_leftGutter);
+		sColumns.sprintf("%sR:%.4f", sColumns.getUTF8(), columns[i].m_rightGutter);
+	}
+
+	_U(("openTable(tablePositionBits: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, leftOffset: %.4f, columns:%s.)\n",
+			tablePositionBits, marginLeftOffset, marginRightOffset, leftOffset, sColumns.getUTF8()),
 		LC_OPEN_TABLE);
 }
 
-void RawListenerImpl::openTableRow(const bool isHeaderRow, const bool isFixedHeightRow, const bool hasMinimumHeight, const float height)
+void RawListenerImpl::openTableRow(const float height, const bool isMinimumHeight, const bool isHeaderRow)
 {
-	_U(("openTableRow(isHeaderRow: %s, isFixedHeightRow: %s, hasMinimumHeight: %s, height: %.4f)\n", (isHeaderRow ? "true" : "false"),
-			(isFixedHeightRow ? "true" : "false"), (hasMinimumHeight ? "true" : "false"), height),
+	_U(("openTableRow(height: %.4f, isMinimumHeight: %s, isHeaderRow: %s)\n", height, (isMinimumHeight ? "true" : "false"), (isHeaderRow ? "true" : "false")),
 		LC_OPEN_TABLE_ROW);
 }
 

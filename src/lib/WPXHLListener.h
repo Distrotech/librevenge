@@ -100,13 +100,15 @@ struct _WPXParsingState
 	bool m_isCellWithoutParagraph;
 	uint32_t m_cellAttributeBits;
 	uint8_t m_paragraphJustificationBeforeTable;
-
+	
 	bool m_isPageSpanOpened;
 	int m_nextPageSpanIndice;
 	int m_numPagesRemainingInSpan;
 
 	bool m_sectionAttributesChanged;
 	int m_numColumns;
+	vector < WPXColumnDefinition > m_textColumns;
+	bool m_isTextColumnWithoutParagraph;
 
 	float m_pageFormLength;
 	float m_pageFormWidth;
@@ -128,6 +130,7 @@ struct _WPXParsingState
 	float m_textIndentByTabs; // part of the indent due to the "Back Tab"
 	
 	float m_paragraphSpacingAfter;
+	float m_paragraphSpacingBefore;
 
 /*	int32_t m_currentRow;
 	int32_t m_currentColumn;
@@ -145,8 +148,6 @@ struct _WPXParsingState
 	uint16_t m_alignmentCharacter;
 	vector<WPXTabStop> m_tabStops;
 	bool m_isTabPositionRelative;
-
-
 };
 
 class WPXHLListener : public WPXLLListener
@@ -169,6 +170,7 @@ public:
 protected:
 	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter, WPXTableList *tableList) = 0;
 	virtual void _flushText(const bool fakeText=false) = 0;
+	virtual void _openParagraph() = 0;
 
 	void _openSection();
 	void _closeSection();
@@ -184,7 +186,7 @@ protected:
 
 	void _openTable();
 	void _closeTable();
-	void _openTableRow(const bool isHeaderRow, const bool isFixedHeightRow, const bool hasMinimumHeight, const float height);
+	void _openTableRow(const float height, const bool isMinimumHeight, const bool isHeaderRow);
 	void _closeTableRow();
 	void _openTableCell(const uint8_t colSpan, const uint8_t rowSpan, const bool boundFromLeft, const bool boundFromAbove,
 				const uint8_t borderBits, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
