@@ -1,7 +1,7 @@
 CHANGES:
 
-
 0.7.x -> 0.8.0
+- Added text highlight conversion (Fridrich Strba)
 - Added page form and orientation conversion (Fridrich Strba)
 - Added font colour conversion (Fridrich Strba)
 
