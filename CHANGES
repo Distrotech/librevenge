@@ -1,5 +1,15 @@
 CHANGES:
 
+0.4.0 -> 0.5.0
+- rpm spec (Rui Miguel Silva Seabra)
+- support document metadata (William Lachance)
+- line spacing (William)
+- better font handling (William)
+- support footnotes/endnotes (William)
+- improved table handling - column sizing, offset, and alignment (Marc Maurer)
+- build libwpd as a shared library by default (Francis J Franklin)
+- many, many bugfixes (William, Marc)
+
 0.3.2 -> 0.4.0
 - support for WordPerfect 6.0 files (Marc Maurer, William Lachance)
 - lists/outlines (William)

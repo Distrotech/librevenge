@@ -11,5 +11,7 @@ contributors
 Mark Gilbert <markgilbert@hotpop.com>			One-line Compilation Fix
 Ariya Hidayat <ariya@kde.org>				WordPerfect 6+ Extended
 							Character Mappings
-Michael Pritchett <MPritchett@attglobal.net>		MSCV Project Files
+Francis J Franklin <F.J.Franklin@sheffield.ac.uk>	Build libwpd as a 
+	  	   				       	shared library
+Michael Pritchett <MPritchett@attglobal.net>		MSVC Project Files
 Rui Miguel Silva Seabra <rms@1407.org>			original rpm spec

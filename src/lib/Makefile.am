@@ -1,4 +1,4 @@
-lib_LIBRARIES = libwpd-1.a
+lib_LTLIBRARIES = libwpd-1.la
 libwpd_1_includedir = $(includedir)/libwpd-1/libwpd
 libwpd_1_include_HEADERS = libwpd.h libwpd_support.h WPXHLListener.h WPXHLListenerImpl.h WPXLLListener.h WPXParser.h WP6Parser.h \
 		  	   WP6HLListener.h WP6Header.h WP60Header.h WP61Header.h WP6LLListener.h WPXHeader.h WP6FileStructure.h \
@@ -6,7 +6,9 @@ libwpd_1_include_HEADERS = libwpd.h libwpd_support.h WPXHLListener.h WPXHLListen
 
 AM_CXXFLAGS = $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS)
 
-libwpd_1_a_SOURCES =			\
+libwpd_1_la_LIBADD  = $(LIBWPD_LIBS)
+libwpd_1_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) -export-dynamic
+libwpd_1_la_SOURCES =			\
 	libwpd_support.cpp		\
 	WP6AttributeGroup.cpp 		\
 	WP6CharacterGroup.cpp		\
