@@ -652,7 +652,7 @@ static void appendUCS4(string &buf, uint32_t ucs4)
 	g_static_unichar_to_utf8(ucs4, utf8);
 	for (int j=0; j<charLength; j++)
 		buf+=utf8[j];
-	delete utf8;
+	delete[] utf8;
 }
 
 UTF8String::UTF8String(const char *str) :
