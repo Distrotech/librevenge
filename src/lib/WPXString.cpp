@@ -1,6 +1,32 @@
+/* libwpd
+ * Copyright (C) 2004 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2005 Net Integration Technologies (http://www.net-itech.com)
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+ *
+ * For further information visit http://libwpd.sourceforge.net
+ */
+
+/* "This product is not manufactured, approved, or supported by
+ * Corel Corporation or Corel Corporation Limited."
+ */
+
 #include "WPXString.h"
 #include "libwpd_internal.h"
 
+#include <string>
 #include <stdarg.h>
 #include <string.h>
 #include <stdio.h>
@@ -27,13 +53,26 @@ static const int8_t g_static_utf8_skip_data[256] = {
       ((Char) < 0x4000000 ? 5 : 6)))))
 #define g_static_utf8_next_char(p) (char *)((p) + g_static_utf8_skip_data[*((uint8_t *)p)])
 
-
-WPXString::WPXString() 
+WPXString::~WPXString()
 {
+	delete static_cast<std::string*>(m_buf);
+}
+
+WPXString::WPXString()
+{
+	m_buf = static_cast<void *>(new std::string());
+}
+
+WPXString::WPXString(const WPXString &stringBuf)
+{
+	m_buf = static_cast<void *>(new std::string());
+	append(stringBuf);
 }
 
 WPXString::WPXString(const WPXString &stringBuf, bool escapeXML) 
 {
+	m_buf = static_cast<void *>(new std::string());
+
 	if (escapeXML)
 	{
 		int len = strlen(stringBuf.cstr()); // want to use standard strlen
@@ -46,24 +85,24 @@ WPXString::WPXString(const WPXString &stringBuf, bool escapeXML)
 			switch (*p)
 			{
 			case '&':
-				m_buf.append("&amp;");
+				append("&amp;");
 				break;
 			case '<':
-				m_buf.append("&lt;");
+				append("&lt;");
 				break;
 			case '>':
-				m_buf.append("&gt;");
+				append("&gt;");
 				break;
 			case '\'':
-				m_buf.append("&apos;");
+				append("&apos;");
 				break;
 			case '"':
-				m_buf.append("&quot;");
+				append("&quot;");
 				break;
 			default:
 				while (p != next) 
 				{		
-					m_buf+=(*p);
+					append((*p));
 					p++;
 				}
 				break;
@@ -73,32 +112,18 @@ WPXString::WPXString(const WPXString &stringBuf, bool escapeXML)
 		}
 	}
 	else
-		this->sprintf("%s", stringBuf.cstr());
+		append(stringBuf);
 }
 
-WPXString::WPXString(const char *str) :
-	m_buf(str)
+WPXString::WPXString(const char *str)
 {
-}
-
-WPXString WPXString::createFromAscii(const char *_str)
-{
-    WPXString str = WPXString(_str);
-    return str;
+	m_buf = static_cast<void *>(new std::string(str));
 }
 
 const char * WPXString::cstr() const
 {
-    return m_buf.c_str();
+    return static_cast<std::string *>(m_buf)->c_str();
 }
-
-#if 0
-void WPXString::append(const uint16_t ucs2)
-{
-	uint32_t ucs4 = (uint32_t) ucs2;
-	appendUCS4(m_buf, ucs2);
-}
-#endif
 
 #define FIRST_BUF_SIZE 128;
 #ifdef _MSC_VER
@@ -112,7 +137,7 @@ void WPXString::sprintf(const char *format, ...)
 	int bufsize = FIRST_BUF_SIZE;
 	char * buf = NULL;
 
-	for (;;)
+	while(true)
 	{
 			buf = new char[bufsize];
 			va_start(args, format);
@@ -132,38 +157,39 @@ void WPXString::sprintf(const char *format, ...)
 				break;
 	}
 
-	m_buf = buf;
+	clear();
+	append(buf);
 	delete [] buf;
 }
 
 void WPXString::append(const WPXString &s)
 {
-	m_buf += s.cstr();
+	static_cast<std::string *>(m_buf)->append(s.cstr());
 }
 
 void WPXString::append(const char *s)
 {
-	m_buf += s;
+	static_cast<std::string *>(m_buf)->append(s);
 }
 
-void WPXString::appendx(const char c)
+void WPXString::append(const char c)
 {
-    m_buf += c;
+	*(static_cast<std::string *>(m_buf)) += c;
 }
 
 void WPXString::clear()
 {
-    m_buf = "";
+	static_cast<std::string *>(m_buf)->clear();
 }
 
 int WPXString::len() const
 { 
-	return g_static_utf8_strlen(m_buf.c_str()); 
+	return g_static_utf8_strlen(cstr()); 
 }
 
 bool WPXString::operator==(const char *str)
 {
-	if (strcmp(str, m_buf.c_str()) == 0)
+	if (strcmp(str, cstr()) == 0)
 		return true;
 
 	return false;
@@ -171,22 +197,24 @@ bool WPXString::operator==(const char *str)
 
 bool WPXString::operator==(const WPXString &str)
 {
-	if (strcmp(str.cstr(), m_buf.c_str()) == 0)
+	if (strcmp(str.cstr(), cstr()) == 0)
 		return true;
 
 	return false;
 }
 
 WPXString::Iter::Iter(const WPXString &str) :
-    m_buf(str.cstr()),
-    m_pos(0),
-    m_curChar(NULL)
+	m_pos(0),
+	m_curChar(NULL)
 {
+	m_buf = static_cast<void *>(new std::string(str.cstr()));
+
 }
 
 WPXString::Iter::~Iter()
 {
-    delete [] m_curChar;
+	delete [] m_curChar;
+	delete (static_cast<std::string *>(m_buf));
 }
 
 void WPXString::Iter::rewind()
@@ -196,13 +224,14 @@ void WPXString::Iter::rewind()
 
 bool WPXString::Iter::next()
 {
-	int len = strlen(m_buf.c_str());
+	int len = static_cast<std::string *>(m_buf)->length();
 
 	if (m_pos == (-1)) 
 		m_pos++;
 	else if (m_pos < len)
 	{
-		m_pos+=(int32_t) (g_static_utf8_next_char(&m_buf.c_str()[m_pos]) - &m_buf.c_str()[m_pos]);
+		m_pos+=(int32_t) (g_static_utf8_next_char(&(static_cast<std::string *>(m_buf)->c_str()[m_pos])) - 
+				  &(static_cast<std::string *>(m_buf)->c_str()[m_pos]));
 	}
 
 	if (m_pos < len)
@@ -212,7 +241,7 @@ bool WPXString::Iter::next()
 
 bool WPXString::Iter::last()
 {
-	if (m_pos >= g_static_utf8_strlen(m_buf.c_str()))
+	if (m_pos >= g_static_utf8_strlen(static_cast<std::string *>(m_buf)->c_str()))
 		return true;
 	return false;
 }
@@ -222,10 +251,11 @@ const char * WPXString::Iter::operator()() const
 	if (m_pos == (-1)) return NULL; 
 
 	delete [] m_curChar; m_curChar = NULL;
-	int32_t charLength =(int32_t) (g_static_utf8_next_char(&m_buf.c_str()[m_pos]) - &m_buf.c_str()[m_pos]);
+	int32_t charLength =(int32_t) (g_static_utf8_next_char(&(static_cast<std::string *>(m_buf)->c_str()[m_pos])) - 
+				       &(static_cast<std::string *>(m_buf)->c_str()[m_pos]));
 	m_curChar = new char[charLength+1];
 	for (int i=0; i<charLength; i++)
-		m_curChar[i] = m_buf[m_pos+i];
+		m_curChar[i] = (*(static_cast<std::string *>(m_buf)))[m_pos+i];
 	m_curChar[charLength]='\0';
 
 	return m_curChar;

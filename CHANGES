@@ -1,7 +1,7 @@
 CHANGES:
 
 0.7.x -> 0.8.0
-- Initial WordPerfect 3.0-3.5 for Mac support (Marc Maurer)
+- Initial WordPerfect 3.0-3.5 for Mac support (Marc Maurer, Fridrich Strba)
 - WP3 and WP5: Conversion of the extended character set, of page 
   margins, page form and orientation, line spacing, paragraph
   justification (Fridrich Strba, Smokey Ardisson)
@@ -22,11 +22,14 @@ CHANGES:
 - WP6: Text highlight conversion (Fridrich Strba)
 - WP6: Page form and orientation conversion (Fridrich Strba)
 - WP6: Font colour conversion (Fridrich Strba)
+- WP6: List handling improvements (Fridrich Strba, William Lachance)
 - Remove span parameters from calls to openParagraph and openListElement
   (William Lachance)
 - Additional doxygen comments (William Lachance, Fridrich Strba)
 - Remove mandatory dependancy on glib/libgsf for external applications
   (William Lachance, Michael Meeks)
+- Internal changes to reduce API/ABI breakage between versions (William Lachance)
+- Fix many memory leaks (William Lachance)
 
 0.7.1 -> 0.7.2
 - Added conversion of paragraph margins done by functions of the

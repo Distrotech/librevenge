@@ -1,5 +1,6 @@
 /* libwpd
  * Copyright (C) 2004 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2005 Net Integration Technologies (http://www.net-itech.com)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,15 +25,15 @@
 
 #ifndef WPXSTRING_H
 #define WPXSTRING_H
-#include <string>
 
 class WPXString
 {
 public:
 	WPXString();
-	WPXString(const WPXString &, bool escapeXML = false);
+	WPXString(const WPXString &);
+	WPXString(const WPXString &, bool escapeXML);
 	WPXString(const char *str);
-	static WPXString createFromAscii(const char *_str);
+	~WPXString();
 
 	const char * cstr() const;
 	int len() const;
@@ -40,8 +41,7 @@ public:
 	void sprintf(const char *format, ...);
 	void append(const WPXString &s);
 	void append(const char *s);
-	void appendx(const char c);
-//	void append(const uint16_t ucs2);
+	void append(const char c);
 	void clear();
 	bool operator==(const char *);
 	bool operator==(const WPXString &str);
@@ -56,13 +56,12 @@ public:
 		bool last();
 		const char * operator()() const;
 	private:
-		std::string m_buf;
+		void *m_buf;
 		int m_pos;
 		mutable char *m_curChar;
 	};
 		
-
 private:
-	std::string m_buf;
+	void *m_buf;
 };
 #endif
