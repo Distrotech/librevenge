@@ -37,6 +37,7 @@ public:
 	virtual void startDocument() {}
 	virtual void insertCharacter(guint16 character);
 	virtual void insertEOL();
+	virtual void attributeChange(gboolean isOn, guint8 attribute) {}
 	virtual void endDocument() {}
 };
 

@@ -34,27 +34,29 @@
 
 WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(FILE *stream, guint8 groupID)
 {
-	switch (groupID)
-	{
+	switch (groupID) 
+		{
+
 		case WP6_TOP_SOFT_EOL:
 		case WP6_TOP_SOFT_SPACE:
 			return new WP6FixedSpaceGroup(stream);
-		
+			
+		case WP6_TOP_HARD_EOL:
 		case WP6_TOP_DORMANT_HARD_RETURN:
 			return new WP6FixedEOLGroup(stream);
-		
+			
 		case WP6_TOP_EXTENDED_CHARACTER: 
 			return new WP6ExtendedCharacterGroup(stream);
-		
+			
 		case WP6_TOP_UNDO_GROUP:
 			return new WP6UndoGroup(stream);
-		
+			
 		case WP6_TOP_ATTRIBUTE_ON:
 			return new WP6AttributeOnGroup(stream);
-		
+			
 		case WP6_TOP_ATTRIBUTE_OFF:
 			return new WP6AttributeOffGroup(stream);
-		
+			
 		// Add the remaining cases here
 		default:
 			// should not happen

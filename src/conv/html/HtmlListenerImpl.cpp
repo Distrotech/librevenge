@@ -26,7 +26,9 @@
 #include <stdio.h>
 #include "HtmlListenerImpl.h"
 
-HtmlListenerImpl::HtmlListenerImpl()
+HtmlListenerImpl::HtmlListenerImpl() :
+	m_isParagraphOpened(FALSE),
+	m_isSpanOpened(FALSE)
 {
 }
 
@@ -47,25 +49,52 @@ void HtmlListenerImpl::startDocument()
 
 void HtmlListenerImpl::endDocument()
 {
-    printf("\n");
-    printf("</body>\n");
-    printf("</html>\n");
+	if (m_isSpanOpened)
+		printf("</span>");
+	if (m_isParagraphOpened) 
+		printf("</p>\n");
+
+	printf("\n");
+	printf("</body>\n");
+	printf("</html>\n");
 }
 
-void HtmlListenerImpl::openParagraph()
+void HtmlListenerImpl::openParagraph(guint32 textAttributeBits)
 {
-	printf("<p>");
+	if (m_isParagraphOpened) {
+		if (m_isSpanOpened)
+			printf("</span>");
+		printf("</p>\n");
+	}
+	else
+		m_isParagraphOpened = TRUE;
+
+	printf("<p "); _appendTextAttributes(textAttributeBits); printf(">");
+	m_isSpanOpened = FALSE;
 }
 
-void HtmlListenerImpl::closeParagraph()
+void HtmlListenerImpl::openSpan(guint32 textAttributeBits)
 {
-	printf("</p>\n");
-}
+	if (m_isSpanOpened)
+		printf("</span>");
 
+	printf("<span "); _appendTextAttributes(textAttributeBits); printf(">");
+	m_isSpanOpened = TRUE;
+}
 
 void HtmlListenerImpl::insertText(const guint16 *textArray, const guint len)
 {
 	for (guint i=0; i<len; i++) {
 		printf("%c", textArray[i]);
 	}
+}
+
+void HtmlListenerImpl::_appendTextAttributes(guint32 textAttributeBits)
+{
+	printf("style=\"");
+	if (textAttributeBits & WPX_BOLD_BIT)
+		printf("font-weight: bold;");
+	if (textAttributeBits & WPX_ITALICS_BIT)
+		printf("font-style: italic;");
+	printf("\"");
 }

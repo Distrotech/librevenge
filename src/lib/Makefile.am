@@ -4,8 +4,7 @@ include_HEADERS = libwpd2.h WPXHLListener.h WPXLLListener.h
 AM_CXXFLAGS = $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS)
 
 libwpd2_a_SOURCES =			\
-	WP6AttributeOffGroup.cpp 	\
-	WP6AttributeOnGroup.cpp 	\
+	WP6AttributeGroup.cpp 		\
 	WP6EOLGroup.cpp			\
 	WP6ExtendedCharacterGroup.cpp 	\
 	WP6FixedEOLGroup.cpp		\
@@ -23,8 +22,7 @@ libwpd2_a_SOURCES =			\
 	libwpd2.h	        	\
 	UT_libwpd2.h	        	\
 	WP6FileStructure.h		\
-	WP6AttributeOffGroup.h 		\
-	WP6AttributeOnGroup.h 		\
+	WP6AttributeGroup.h 		\
 	WP6EOLGroup.h			\
 	WP6ExtendedCharacterGroup.h 	\
 	WP6FixedEOLGroup.h		\

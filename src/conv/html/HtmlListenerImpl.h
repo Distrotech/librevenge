@@ -28,18 +28,26 @@
 
 #include <glib.h>
 #include "WPXHLListenerImpl.h"
+#include "WPXHLListener.h"
 
 class HtmlListenerImpl : public WPXHLListenerImpl
 {
-public:
+ public:
     HtmlListenerImpl();
     virtual ~HtmlListenerImpl();
     
     virtual void startDocument();
     virtual void endDocument();
-    virtual void openParagraph();
-    virtual void closeParagraph();
+    virtual void openParagraph(guint32 textAttributeBits);
+    virtual void openSpan(guint32 textAttributeBits);
     virtual void insertText(const guint16 *textArray, const guint len);
+
+ protected:
+    void _appendTextAttributes(guint32 textAttributeBits);
+    
+ private:
+    gboolean m_isParagraphOpened;
+    gboolean m_isSpanOpened;
 };
 
 #endif /* HTMLLISTENERIMPL_H */

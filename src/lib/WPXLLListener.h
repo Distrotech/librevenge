@@ -36,6 +36,7 @@ class WPXLLListener
 	virtual void startDocument() = 0;
 	virtual void insertCharacter(guint16 character) = 0;
 	virtual void insertEOL() = 0;
+	virtual void attributeChange(gboolean isOn, guint8 attribute) = 0;
 	virtual void endDocument() = 0;
 };
 

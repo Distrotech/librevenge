@@ -33,8 +33,8 @@ class WPXHLListenerImpl
 	//virtual void insertSpan() = 0;
 	virtual void startDocument() = 0;
 	virtual void endDocument() = 0;
-	virtual void openParagraph() = 0;
-	virtual void closeParagraph() = 0;
+	virtual void openParagraph(guint32 textAttributeBits) = 0;
+	virtual void openSpan(guint32 textAttributeBits) = 0;
 	virtual void insertText(const guint16 *textArray, const guint len) = 0;
 };
 
