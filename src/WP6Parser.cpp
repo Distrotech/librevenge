@@ -45,5 +45,8 @@ gboolean WP6Parser::parse()
 		part->parse();
 		delete part;
 	}
+
+	WPD_DEBUG_MSG(("WordPerfect: Finished with document parse (position = %ld)\n",(long)ftell(m_pStream)));
+	
 	return TRUE;
 }
