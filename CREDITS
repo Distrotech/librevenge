@@ -9,5 +9,7 @@ Marc Maurer <j.m.maurer@student.utwente.nl>		Main Author
 contributors
 ------------
 Mark Gilbert <markgilbert@hotpop.com>			One-line Compilation Fix
-Ariya Hidayat <ariya@kde.org>				WordPerfect 6+ Extended Character Mappings
+Ariya Hidayat <ariya@kde.org>				WordPerfect 6+ Extended
+							Character Mappings
 Michael Pritchett <MPritchett@attglobal.net>		MSCV Project Files
+Rui Miguel Silva Seabra <rms@1407.org>			original rpm spec
