@@ -41,7 +41,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GR /GX /O2 /I "..\..\..\include\glib-2.0" /I "..\..\..\lib\glib-2.0\include" /I "..\..\..\include\libgsf-1" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD CPP /nologo /MT /W3 /GR /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -64,7 +64,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MTd /W3 /Gm /GR /GX /ZI /Od /I "..\..\..\include\glib-2.0" /I "..\..\..\lib\glib-2.0\include" /I "..\..\..\include\libgsf-1" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
+# ADD CPP /nologo /MTd /W3 /Gm /GR /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -72,7 +72,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"Debug\libwpd-1.lib"
+# ADD LIB32 /nologo /out:"Debug\lib\libwpd-1.lib"
 
 !ENDIF 
 
@@ -83,10 +83,6 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
-# Begin Source File
-
-SOURCE=..\..\src\lib\GSFStream.cpp
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\src\lib\libwpd_internal.cpp
@@ -441,16 +437,16 @@ SOURCE=..\..\src\lib\WPXPart.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WPXProperty.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WPXTable.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
-# Begin Source File
-
-SOURCE=..\..\src\lib\GSFStream.h
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\src\lib\libwpd.h
@@ -834,6 +830,10 @@ SOURCE=..\..\src\lib\WPXParser.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WPXPart.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WPXProperty.h
 # End Source File
 # Begin Source File
 

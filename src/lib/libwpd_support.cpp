@@ -647,10 +647,12 @@ UTF8String::UTF8String(const UTF8String &stringBuf, bool escapeXML)
 static void appendUCS4(string &buf, uint32_t ucs4)
 {
 	int charLength = g_static_unichar_to_utf8(ucs4, NULL);
-	char utf8[charLength];
+	char *utf8;
+	utf8 = new(char[charLength]);
 	g_static_unichar_to_utf8(ucs4, utf8);
 	for (int j=0; j<charLength; j++)
 		buf+=utf8[j];
+	delete utf8;
 }
 
 UTF8String::UTF8String(const char *str) :

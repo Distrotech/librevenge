@@ -7,3 +7,8 @@ libwpd.mak
 libwpd.ncb
 libwpd.opt
 libwpd.plg
+libwpdstream.dep
+libwpdstream.mak
+libwpdstream.ncb
+libwpdstream.opt
+libwpdstream.plg

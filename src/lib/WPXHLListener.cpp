@@ -28,6 +28,9 @@
 #include "WPXPageSpan.h"
 #include "libwpd_internal.h"
 #include "WPXProperty.h"
+#ifdef _MSC_VER
+#include <minmax.h>
+#endif
 
 _WPXParsingState::_WPXParsingState(bool sectionAttributesChanged) :
 	m_textAttributeBits(0),

@@ -3,7 +3,19 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
-Project: "libwpd2"=.\libwpd.dsp - Package Owner=<4>
+Project: "libwpd"=.\libwpd.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "libwpdstream"=.\libwpdstream.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
