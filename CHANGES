@@ -9,6 +9,7 @@ CHANGES:
 - Built-in filetype detection (William)
 - Handle corrupt token (0x00) correctly (William)
 - Code refactoring and bugfixes (William)
+- Fix bug with long documents and tables (William)
 
 0.4.0 -> 0.5.0
 - rpm spec (Rui Miguel Silva Seabra)
