@@ -29,9 +29,9 @@ if [ -f $rcfile ]; then
     basename=`basename $rcfile .rc`
     if [ -f $basename-build.stamp ]; then
 	read number <$basename-build.stamp
-	buildnumber=$[number+1]
+	buildnumber=$[number]
 	echo Build number $buildnumber
-	echo $buildnumber >$basename-build.stamp
+	rm -rf $basename-build.stamp
     else
 	echo Using zero as build number
         buildnumber=0

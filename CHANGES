@@ -1,5 +1,9 @@
 CHANGES:
 
+0.7.1 -> 0.7.2
+- Some more refactoring, sharing more code between parsers (Marc Maurer)
+- Windows versioning: add a BUILDNUMBER (Fridrich Strba)
+
 0.7.0 -> 0.7.1
 - Fixes to the multinational character map (Fridrich Strba)
 - Fix handling of sub documents, broken by me (William Lachance, Marc Maurer)
