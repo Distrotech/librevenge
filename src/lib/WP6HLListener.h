@@ -69,9 +69,6 @@ class WP6HLListener : public WP6LLListener
 	gfloat m_currentFontSize;
 	GString * m_currentFontName;
 
-	gboolean m_isSectionOpenedOnce; // must be TRUE if there is a section in the document,
-                                        // must be FALSE if the is no single section in the document
-	
 	gboolean m_isParagraphColumnBreak;
 	gboolean m_isParagraphPageBreak;
 	guint8 m_paragraphJustification;

@@ -43,8 +43,6 @@ WP6HLListener::WP6HLListener(WPXHLListenerImpl *listenerImpl) :
 	m_currentFontSize(WP6_DEFAULT_FONT_SIZE),
 	m_currentFontName(g_string_new(WP6_DEFAULT_FONT_NAME)),
 	
-	m_isSectionOpenedOnce(FALSE),
-
 	m_paragraphJustification(WPX_PARAGRAPH_JUSTIFICATION_LEFT),
 	m_paragraphJustificationChanged(FALSE),
 	m_isParagraphOpened(FALSE),
@@ -269,15 +267,6 @@ void WP6HLListener::endDocument()
 	// corner case: document contains no end of lines
 	if (!m_isParagraphOpened && !m_isParagraphClosed)
 	{
-		if (!m_isSectionOpenedOnce)
-		{
-			m_listenerImpl->openSection(m_numColumns, m_marginLeft, m_marginRight);
-			m_sectionAttributesChanged = FALSE;
-			m_isSectionOpenedOnce = TRUE;
-		}
-		m_listenerImpl->openParagraph(m_paragraphJustification, m_textAttributeBits,
-					      m_currentFontName->str, m_currentFontSize,
-					      FALSE, FALSE);
 		_flushText();       
 	}
 	else if (!m_isParagraphClosed || !m_isParagraphOpened)
@@ -318,7 +307,6 @@ void WP6HLListener::startTable()
 		{
 			m_listenerImpl->openSection(m_numColumns, m_marginLeft, m_marginRight);
 			m_sectionAttributesChanged = FALSE;
-			m_isSectionOpenedOnce = TRUE;
 		}
 			
 		m_listenerImpl->openTable();
@@ -369,7 +357,6 @@ void WP6HLListener::_flushText()
 	{
 		m_listenerImpl->openSection(m_numColumns, m_marginLeft, m_marginRight);
 		m_sectionAttributesChanged = FALSE;
-		m_isSectionOpenedOnce = TRUE;
 
 		m_listenerImpl->openParagraph(m_paragraphJustification, m_textAttributeBits,
 					      m_currentFontName->str, m_currentFontSize, 
