@@ -1,6 +1,10 @@
 CHANGES:
 
 0.7.1 -> 0.7.2
+- Handling of hard spaces and soft hyphens (Fridrich Strba)
+- Change in conversion of Deletable Hard/Soft EOL/EOC/EOP
+  and handling of some single byte functions that have their
+  equivalent in the EOL group (Fridrich Strba)
 - MSVC compiler switch (Fridrich Strba)
 - Some more refactoring, sharing more code between parsers (Marc Maurer)
 - Windows versioning: add a BUILDNUMBER (Fridrich Strba)
