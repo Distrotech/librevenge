@@ -27,7 +27,8 @@
 #include "WP42FileStructure.h"
 
 WP42HLListener::WP42HLListener(WPXHLListenerImpl *listenerImpl)
-	: m_listenerImpl(listenerImpl),
+	: WPXHLListener(),WP42LLListener(),
+	m_listenerImpl(listenerImpl),
 	m_textAttributesChanged(false),
 	m_textAttributeBits(0)
 {
