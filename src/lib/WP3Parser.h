@@ -1,6 +1,5 @@
 /* libwpd
- * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2002,2004 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2004 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,31 +21,28 @@
 /* "This product is not manufactured, approved, or supported by 
  * Corel Corporation or Corel Corporation Limited."
  */
-#include "libwpd_internal.h"
-#include "WPXStream.h"
 
-uint8_t readU8(WPXInputStream *input)
-{
-	return WPD_LE_GET_GUINT8(input->read(sizeof(uint8_t)));
-}
+#ifndef WP3PARSER_H
+#define WP3PARSER_H
 
-int8_t read8(WPXInputStream *input)
-{
-	return (int8_t)*(input->read(sizeof(int8_t)));
-}
+#include <gsf/gsf-input.h>
+#include "WPXParser.h"
 
-uint16_t readU16(WPXInputStream *input, bool bigendian)
-{
-	uint16_t val = *(uint16_t const *)input->read(sizeof(uint16_t));
-	if (bigendian)
-		return WPD_BE_GET_GUINT16(&val);
-	return WPD_LE_GET_GUINT16(&val);
-}
+class WPXHLListenerImpl;
+class WP3HLListener;
 
-uint32_t readU32(WPXInputStream *input, bool bigendian)
+class WP3Parser : public WPXParser
 {
-	uint32_t val = *(uint32_t const *)input->read(sizeof(uint32_t));
-	if (bigendian)
-		return WPD_BE_GET_GUINT32(&val);	
-	return WPD_LE_GET_GUINT32(&val);
-}
+public:
+	WP3Parser(WPXInputStream *input, WPXHeader *header);
+	~WP3Parser();
+
+	virtual void parse(WPXHLListenerImpl *listenerImpl);
+	
+	static void parseDocument(WPXInputStream *input, WP3HLListener *listener);
+
+private:
+	void parse(WPXInputStream *input, WP3HLListener *listener);
+};
+
+#endif /* WP3PARSER_H */

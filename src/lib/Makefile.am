@@ -39,6 +39,16 @@ libwpd_1_la_SOURCES =				\
 	libwpd_math.cpp				\
 	libwpd_support.cpp			\
 	GSFStream.cpp				\
+	WP3FileStructure.cpp			\
+	WP3FixedLengthGroup.cpp			\
+	WP3Header.cpp			\
+	WP3HLListener.cpp			\
+	WP3HLStylesListener.cpp			\
+	WP3Parser.cpp			\
+	WP3Part.cpp			\
+	WP3UnsupportedFixedLengthGroup.cpp \
+	WP3UnsupportedVariableLengthGroup.cpp \
+	WP3VariableLengthGroup.cpp		\
 	WP42FileStructure.cpp			\
 	WP42Heuristics.cpp			\
 	WP42HLListener.cpp			\
@@ -108,7 +118,18 @@ libwpd_1_la_SOURCES =				\
 	libwpd.h	        		\
 	libwpd_internal.h			\
 	libwpd_math.h				\
+	WP3FileStructure.h			\
 	libwpd_support.h        		\
+	WP3FixedLengthGroup.h			\
+	WP3Header.h			\
+	WP3HLListener.h			\
+	WP3HLStylesListener.h			\
+	WP3LLListener.h			\
+	WP3Parser.h			\
+	WP3Part.h			\
+	WP3VariableLengthGroup.h		\
+	WP3UnsupportedFixedLengthGroup.h \
+	WP3UnsupportedVariableLengthGroup.h	\
 	WP42FileStructure.h			\
 	WP42Heuristics.h			\
 	WP42HLListener.h			\

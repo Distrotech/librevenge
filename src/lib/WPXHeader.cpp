@@ -27,6 +27,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "WPXHeader.h"
+#include "WP3Header.h"
 #include "WP5Header.h"
 #include "WP6Header.h"
 #include "WP60Header.h"
@@ -91,6 +92,9 @@ WPXHeader * WPXHeader::constructHeader(WPXInputStream *input)
 		case 0x0a:
 			WPD_DEBUG_MSG(("WordPerect: Supported file type: \"WordPerfect Document\"\n"));
 			break;
+		case 0x2c:
+			WPD_DEBUG_MSG(("WordPerect: Supported file type: \"MAC WP 2.0 document\"\n"));
+			break; 
 		default:
 			WPD_DEBUG_MSG(("WordPerfect: Unsupported file type: %d\n", fileType));
 			return NULL;
@@ -108,6 +112,10 @@ WPXHeader * WPXHeader::constructHeader(WPXInputStream *input)
 				default: // assume this header can be parsed by a WP61 header parser
 					return new WP61Header(input, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption);
 			}
+			break;
+		case 0x03: // WP Mac 3.0-3.5
+		case 0x04: // WP Mac 3.5e
+			return new WP3Header(input, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption);
 			break;
 		default:
 			// unhandled file format

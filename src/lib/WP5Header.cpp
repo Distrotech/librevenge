@@ -25,22 +25,10 @@
 
 #include "libwpd.h"
 #include "WP5Header.h"
-//include "WP6FileStructure.h" 
 #include "libwpd_internal.h"
 
 WP5Header::WP5Header(WPXInputStream * input, uint32_t documentOffset, uint8_t productType, uint8_t fileType, uint8_t majorVersion, uint8_t minorVersion, uint16_t documentEncryption) :
 	WPXHeader(input, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption)
 {
 	// nothing to do here really...
-}
-
-void WP5Header::_readndexInformation(WPXInputStream *input)
-{
-/*	// read the Index Header (Header #0)
-	// skip the Flags = 2 and the Reserved byte = 0
-	input->seek(m_indexHeaderOffset + WP6_INDEX_HEADER_NUM_INDICES_POSITION, WPX_SEEK_SET);
-	m_numPrefixIndices = readU16(input);
-
-	// ignore the 10 reserved bytes that follow (jump to the offset of the Index Header #1, where we can resume parsing)
-	input->seek(m_indexHeaderOffset + WP6_INDEX_HEADER_INDICES_POSITION, WPX_SEEK_SET);*/
 }

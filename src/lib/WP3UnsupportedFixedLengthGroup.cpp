@@ -1,9 +1,8 @@
 /* libwpd
- * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2002,2004 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -22,31 +21,13 @@
 /* "This product is not manufactured, approved, or supported by 
  * Corel Corporation or Corel Corporation Limited."
  */
+
+#include "WP3UnsupportedFixedLengthGroup.h"
+#include "WP3LLListener.h"
 #include "libwpd_internal.h"
-#include "WPXStream.h"
 
-uint8_t readU8(WPXInputStream *input)
+WP3UnsupportedFixedLengthGroup::WP3UnsupportedFixedLengthGroup(WPXInputStream *input, uint8_t groupID)
+	: WP3FixedLengthGroup(groupID)
 {
-	return WPD_LE_GET_GUINT8(input->read(sizeof(uint8_t)));
-}
-
-int8_t read8(WPXInputStream *input)
-{
-	return (int8_t)*(input->read(sizeof(int8_t)));
-}
-
-uint16_t readU16(WPXInputStream *input, bool bigendian)
-{
-	uint16_t val = *(uint16_t const *)input->read(sizeof(uint16_t));
-	if (bigendian)
-		return WPD_BE_GET_GUINT16(&val);
-	return WPD_LE_GET_GUINT16(&val);
-}
-
-uint32_t readU32(WPXInputStream *input, bool bigendian)
-{
-	uint32_t val = *(uint32_t const *)input->read(sizeof(uint32_t));
-	if (bigendian)
-		return WPD_BE_GET_GUINT32(&val);	
-	return WPD_LE_GET_GUINT32(&val);
+	_read(input);
 }

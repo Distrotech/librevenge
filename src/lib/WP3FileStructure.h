@@ -1,6 +1,5 @@
 /* libwpd
- * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2002,2004 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2004 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,31 +21,32 @@
 /* "This product is not manufactured, approved, or supported by 
  * Corel Corporation or Corel Corporation Limited."
  */
-#include "libwpd_internal.h"
-#include "WPXStream.h"
 
-uint8_t readU8(WPXInputStream *input)
-{
-	return WPD_LE_GET_GUINT8(input->read(sizeof(uint8_t)));
-}
+#ifndef WP3FILESTRUCTURE_H
+#define WP3FILESTRUCTURE_H
 
-int8_t read8(WPXInputStream *input)
-{
-	return (int8_t)*(input->read(sizeof(int8_t)));
-}
+// size of the fixed length functiongroups 0xC0 to 0xCF
+extern int WP3_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16]; 
 
-uint16_t readU16(WPXInputStream *input, bool bigendian)
-{
-	uint16_t val = *(uint16_t const *)input->read(sizeof(uint16_t));
-	if (bigendian)
-		return WPD_BE_GET_GUINT16(&val);
-	return WPD_LE_GET_GUINT16(&val);
-}
+/*#define WP5_ATTRIBUTE_SUPERSCRIPT 0x05
+#define WP5_ATTRIBUTE_SUBSCRIPT 0x06
+#define WP5_ATTRIBUTE_OUTLINE 0x07
+#define WP5_ATTRIBUTE_ITALICS 0x08
+#define WP5_ATTRIBUTE_SHADOW 0x09
+#define WP5_ATTRIBUTE_REDLINE 0x0A
+#define WP5_ATTRIBUTE_DOUBLE_UNDERLINE 0xB
+#define WP5_ATTRIBUTE_BOLD 0x0C
+#define WP5_ATTRIBUTE_STRIKE_OUT 0x0D
+#define WP5_ATTRIBUTE_UNDERLINE 0x0E
+#define WP5_ATTRIBUTE_SMALL_CAPS 0x0F*/
 
-uint32_t readU32(WPXInputStream *input, bool bigendian)
-{
-	uint32_t val = *(uint32_t const *)input->read(sizeof(uint32_t));
-	if (bigendian)
-		return WPD_BE_GET_GUINT32(&val);	
-	return WPD_LE_GET_GUINT32(&val);
-}
+/* Main function group list  */
+
+/*#define WP5_TOP_ATTRIBUTE_ON 0xC3
+#define WP5_TOP_ATTRIBUTE_OFF 0xC4
+#define WP5_TOP_FORMAT_GROUP 0xD4*/
+
+/* Format Group */
+//#define WP5_FORMAT_GROUP_END_OF_PAGE 0x00
+
+#endif /* WP3FILESTRUCTURE_H */

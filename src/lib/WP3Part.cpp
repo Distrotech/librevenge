@@ -1,6 +1,5 @@
 /* libwpd
- * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
+  * Copyright (C) 2004 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,33 +23,33 @@
  */
 
 #include "WPXPart.h"
-#include "WP5Part.h"
-#include "WP5Header.h"
-#include "WP5VariableLengthGroup.h"
-#include "WP5FixedLengthGroup.h"
+#include "WP3Part.h"
+#include "WP3Header.h"
+#include "WP3VariableLengthGroup.h"
+#include "WP3FixedLengthGroup.h"
 #include "libwpd_internal.h"
 
 // constructPart: constructs a parseable low-level representation of part of the document
 // returns the part if it successfully creates the part, returns NULL if it can't
 // throws an exception if there is an error
-// precondition: readVal is between 0xC0 and 0xFF
-WP5Part * WP5Part::constructPart(WPXInputStream *input, uint8_t readVal)
+// precondition: readVal is between 0xC0 and 0xEF
+WP3Part * WP3Part::constructPart(WPXInputStream *input, uint8_t readVal)
 {	
-	WPD_DEBUG_MSG(("WordPerfect: ConstructPart\n"));
+	WPD_DEBUG_MSG(("WordPerfect: ConstructPart for group 0x%x\n", readVal));
 
 	if (readVal >= (uint8_t)0xC0 && readVal <= (uint8_t)0xCF)
 	{
 		// fixed length multi-byte function
 	
 		WPD_DEBUG_MSG(("WordPerfect: constructFixedLengthGroup(input, val)\n"));
-		return WP5FixedLengthGroup::constructFixedLengthGroup(input, readVal);
+		return WP3FixedLengthGroup::constructFixedLengthGroup(input, readVal);
 	}      
-	else if (readVal >= (uint8_t)0xD0 && readVal <= (uint8_t)0xFF /* strange: 0xFF should not happen, see 1st 'if' */)
+	else if (readVal >= (uint8_t)0xD0 && readVal <= (uint8_t)0xEF)
 	{
 		// variable length multi-byte function
 	
 		WPD_DEBUG_MSG(("WordPerfect: constructVariableLengthGroup(input, val)\n"));
-		return WP5VariableLengthGroup::constructVariableLengthGroup(input, readVal);
+		return WP3VariableLengthGroup::constructVariableLengthGroup(input, readVal);
 	}
 
 	WPD_DEBUG_MSG(("WordPerfect: Returning NULL from constructPart\n"));

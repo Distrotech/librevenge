@@ -1,6 +1,5 @@
 /* libwpd
- * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2004 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,24 +22,36 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP5FIXEDLENGTHGROUP_H
-#define WP5FIXEDLENGTHGROUP_H
+#include "WP3FixedLengthGroup.h"
+#include "WP3FileStructure.h"
+#include "WP3UnsupportedFixedLengthGroup.h"
+#include "libwpd_internal.h"
 
-#include "WP5Part.h"
-
-class WP5FixedLengthGroup : public WP5Part
+WP3FixedLengthGroup::WP3FixedLengthGroup(int groupID)
+	: m_group(groupID)
 {
- public:
-	WP5FixedLengthGroup::WP5FixedLengthGroup(int groupID);
-	static WP5FixedLengthGroup * WP5FixedLengthGroup::constructFixedLengthGroup(WPXInputStream *input, uint8_t groupID);
+}
 
-	const uint8_t getGroup() const { return m_group; } 
- 
- protected:
-	void _read(WPXInputStream *input);
-	virtual void _readContents(WPXInputStream *input) = 0; // we always read the contents in the case of a fixed length group
- private:
-	uint8_t m_group;	 
-};
+WP3FixedLengthGroup * WP3FixedLengthGroup::constructFixedLengthGroup(WPXInputStream *input, uint8_t groupID)
+{
+	switch (groupID) 
+	{
+		// Add the remaining cases here
+		default:
+			return new WP3UnsupportedFixedLengthGroup(input, groupID);
+	}
+}
 
-#endif /* WP5FIXEDLENGTHGROUP_H */
+void WP3FixedLengthGroup::_read(WPXInputStream *input)
+{
+	uint32_t startPosition = input->tell();
+	_readContents(input);
+	
+	if (m_group >= 0xC0 && m_group <= 0xCF) // just an extra safety check
+	{
+		int size = WP3_FIXED_LENGTH_FUNCTION_GROUP_SIZE[m_group-0xC0];
+		input->seek((startPosition + size - 1 - input->tell()), WPX_SEEK_CUR);
+	}
+	else
+		throw FileException();
+}

@@ -1,6 +1,6 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2002,2004 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -44,10 +44,31 @@
 #define WPD_DEBUG_MSG(M)
 #endif
 
+#define WPD_LE_GET_GUINT8(p) (*(uint8_t const *)(p))
+#define WPD_LE_GET_GUINT16(p)                           \
+        (uint16_t)((((uint8_t const *)(p))[0] << 0)  |    \
+                  (((uint8_t const *)(p))[1] << 8))
+#define WPD_LE_GET_GUINT32(p)                           \
+        (uint32_t)((((uint8_t const *)(p))[0] << 0)  |    \
+                  (((uint8_t const *)(p))[1] << 8)  |    \
+                  (((uint8_t const *)(p))[2] << 16) |    \
+                  (((uint8_t const *)(p))[3] << 24))
+
+#define WPD_BE_GET_GUINT8(p) (*(uint8_t const *)(p))
+#define WPD_BE_GET_GUINT16(p)                           \
+        (uint16_t)((((uint8_t const *)(p))[1] << 0)  |    \
+                  (((uint8_t const *)(p))[0] << 8))
+#define WPD_BE_GET_GUINT32(p)                           \
+        (uint32_t)((((uint8_t const *)(p))[3] << 0)  |    \
+                  (((uint8_t const *)(p))[2] << 8)  |    \
+                  (((uint8_t const *)(p))[1] << 16) |    \
+                  (((uint8_t const *)(p))[0] << 24))
+
 // add more of these as needed for byteswapping
 // (the 8-bit functions are just there to make things consistent)
 int8_t read8(WPXInputStream *input); 
 uint8_t readU8(WPXInputStream *input); 
-uint16_t readU16(WPXInputStream *input);
-uint32_t readU32(WPXInputStream *input);
+uint16_t readU16(WPXInputStream *input, bool bigendian=false);
+uint32_t readU32(WPXInputStream *input, bool bigendian=false);
+
 #endif /* LIBWPD_INTERNAL_H */
