@@ -32,10 +32,11 @@
 // constructPart: constructs a parseable low-level representation of part of the document
 // returns the part if it successfully creates the part, returns NULL if it can't
 // throws an exception if there is an error
-// precondition: readVal us between 0xC0 and 0xF8
+// precondition: readVal us between 0xC0 and 0xFF
+// TODO: check the precondition :D
 WP42Part * WP42Part::constructPart(GsfInput *input, guint8 readVal)
 {	
-	WPD_DEBUG_MSG(("WordPerfect: ConstructPart\n"));
+	WPD_DEBUG_MSG(("WordPerfect: ConstructPart(readVal: 0x0%x)\n", readVal));
 		
 	// TODO: ASSERT readVal
 	
