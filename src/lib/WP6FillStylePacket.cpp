@@ -26,7 +26,7 @@
 #include <gsf/gsf-input-memory.h>
 
 #include "WP6FillStylePacket.h"
-#include "WP6LLParser.h"
+#include "WP6Parser.h"
 #include "libwpd_internal.h"
 
 WP6FillStylePacket::WP6FillStylePacket(GsfInput *input, int id, guint32 dataOffset, guint32 dataSize) 

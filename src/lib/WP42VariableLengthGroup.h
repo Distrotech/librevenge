@@ -1,9 +1,9 @@
 /* libwpd2
- * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -23,32 +23,27 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WPXPARSER_H
-#define WPXPARSER_H
+#ifndef WP42VARIABLELENGTHGROUP_H
+#define WP42VARIABLELENGTHGROUP_H
 
-#include <gsf/gsf-input.h>
-#include "WPXHeader.h"
-#include "WPXLLListener.h"
+#include "WP42Part.h"
 
-class WPXHLListenerImpl;
-
-class WPXParser
+class WP42VariableLengthGroup : public WP42Part
 {
-public:
-	WPXParser(GsfInput * input, WPXHeader *header);
-	virtual ~WPXParser();
-
-	virtual void parse(WPXHLListenerImpl *listenerImpl) = 0;
-
-protected:
-	WPXHeader * getHeader() { return m_header; }
-	GsfInput * getInput() { return m_input; }
+ public:
+	WP42VariableLengthGroup(guint8 group); // WP42VariableLengthGroup should _never_ be constructed, only its inherited classes
+	virtual ~WP42VariableLengthGroup() {}
 	
-private:
-	GsfInput * m_input;
-	WPXLLListener * m_llListener;
+	static WP42VariableLengthGroup * constructVariableLengthGroup(GsfInput *input, guint8 group);
 
-	WPXHeader * m_header;
+ protected:
+	void _read(GsfInput *input);
+ 	virtual void _readContents(GsfInput *input) = 0;
+
+	const guint8 getGroup() const { return m_group; }
+
+ private:
+	guint8 m_group;
 };
 
-#endif /* WPXPARSER_H */
+#endif /* WP42VARIABLELENGTHGROUP_H */

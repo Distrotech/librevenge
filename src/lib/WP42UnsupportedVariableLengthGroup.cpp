@@ -1,9 +1,9 @@
 /* libwpd2
- * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -23,32 +23,16 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WPXPARSER_H
-#define WPXPARSER_H
+#include "WP42UnsupportedVariableLengthGroup.h"
+#include "libwpd_internal.h"
 
-#include <gsf/gsf-input.h>
-#include "WPXHeader.h"
-#include "WPXLLListener.h"
-
-class WPXHLListenerImpl;
-
-class WPXParser
+WP42UnsupportedVariableLengthGroup::WP42UnsupportedVariableLengthGroup(GsfInput *input, guint8 group) :
+	WP42VariableLengthGroup(group)
 {
-public:
-	WPXParser(GsfInput * input, WPXHeader *header);
-	virtual ~WPXParser();
+	_read(input);
+}
 
-	virtual void parse(WPXHLListenerImpl *listenerImpl) = 0;
-
-protected:
-	WPXHeader * getHeader() { return m_header; }
-	GsfInput * getInput() { return m_input; }
-	
-private:
-	GsfInput * m_input;
-	WPXLLListener * m_llListener;
-
-	WPXHeader * m_header;
+void WP42UnsupportedVariableLengthGroup::_readContents(GsfInput *input)
+{
+	WPD_DEBUG_MSG(("WordPerfect: Handling an unsupported variable length group\n"));
 };
-
-#endif /* WPXPARSER_H */

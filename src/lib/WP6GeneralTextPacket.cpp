@@ -26,7 +26,7 @@
 #include <gsf/gsf-input-memory.h>
 
 #include "WP6GeneralTextPacket.h"
-#include "WP6LLParser.h"
+#include "WP6Parser.h"
 #include "libwpd_internal.h"
 
 WP6GeneralTextPacket::WP6GeneralTextPacket(GsfInput *input, int id, guint32 dataOffset, guint32 dataSize) 
@@ -75,5 +75,5 @@ void WP6GeneralTextPacket::_readContents(GsfInput *input)
 void WP6GeneralTextPacket::parse(WP6LLListener *llListener) const
 {
 	gsf_input_seek(m_stream, 0, G_SEEK_SET);	
-	WP6LLParser::parseDocument(m_stream, llListener);
+	WP6Parser::parseDocument(m_stream, llListener);
 }

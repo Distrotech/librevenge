@@ -1,9 +1,9 @@
 /* libwpd2
- * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -23,17 +23,20 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP6HLPARSER_H
-#define WP6HLPARSER_H
+#ifndef WP42UNSUPPORTEDVARIABLELENGTHGROUP_H
+#define WP42UNSUPPORTEDVARIABLELENGTHGROUP_H
 
-#include "WP6LLParser.h"
+#include "WP42VariableLengthGroup.h"
 
-class WPXHLListenerImpl;
+// a pedantic and irritating class that we should only need until we completely cover wordperfect's
+// set of variable length groups (there are a finite number)
 
-class WP6HLParser : public WP6LLParser
+class WP42UnsupportedVariableLengthGroup : public WP42VariableLengthGroup
 {
 public:
-	static void parse(GsfInput *input, WPXHLListenerImpl *listenerImpl);
+	WP42UnsupportedVariableLengthGroup(GsfInput *input, guint8 group);
+
+	void _readContents(GsfInput *input);
 };
 
-#endif /* WP6HLPARSER_H */
+#endif /* WP42UNSUPPORTEDVARIABLELENGTHGROUP_H */

@@ -1,9 +1,9 @@
 /* libwpd2
- * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -23,32 +23,23 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WPXPARSER_H
-#define WPXPARSER_H
+#ifndef WP42PART_H
+#define WP42PART_H
 
-#include <gsf/gsf-input.h>
-#include "WPXHeader.h"
-#include "WPXLLListener.h"
+#include "WPXPart.h"
+#include "WPXParser.h"
+//#include "WP42FileStructure.h"
 
-class WPXHLListenerImpl;
+class WP42LLListener;
 
-class WPXParser
+class WP42Part
 {
-public:
-	WPXParser(GsfInput * input, WPXHeader *header);
-	virtual ~WPXParser();
-
-	virtual void parse(WPXHLListenerImpl *listenerImpl) = 0;
-
-protected:
-	WPXHeader * getHeader() { return m_header; }
-	GsfInput * getInput() { return m_input; }
+ public:
+	virtual ~WP42Part() {}
 	
-private:
-	GsfInput * m_input;
-	WPXLLListener * m_llListener;
-
-	WPXHeader * m_header;
+	static WP42Part * constructPart(GsfInput *input, guint8 readVal);
+	//virtual void parse(WP42LLListener *llListener) = 0;
 };
 
-#endif /* WPXPARSER_H */
+
+#endif /* WP6PART_H */

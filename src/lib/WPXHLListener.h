@@ -30,7 +30,7 @@
 
 class WPXHLListener
 {
-	// not sure if this is needed yet
+	// TODO: move the HLListenerImpl here
 };
 
 #endif /* WPXHLLISTENER_H */

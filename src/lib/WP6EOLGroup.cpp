@@ -29,7 +29,7 @@
 #include "WPXHLListener.h"
 #include "libwpd_internal.h"
 
-#include "WP6LLParser.h" // for TableException
+#include "WP6Parser.h" // for TableException
 #include "WP6FillStylePacket.h" // for the fill packet
 
 WP6EOLGroup::WP6EOLGroup(GsfInput *input) :	

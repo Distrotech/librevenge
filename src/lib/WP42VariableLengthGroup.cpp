@@ -1,9 +1,9 @@
 /* libwpd2
- * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -23,20 +23,36 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include <gsf/gsf-input.h>
-#include <stdlib.h>
-#include <string.h>
-#include "WPXParser.h"
-#include "WP6Parser.h"
+#include "WP42VariableLengthGroup.h"
+#include "WP42UnsupportedVariableLengthGroup.h"
 #include "libwpd_internal.h"
 
-WPXParser::WPXParser(GsfInput *input, WPXHeader *header) :
-	m_input(input),
-	m_header(header)
+WP42VariableLengthGroup::WP42VariableLengthGroup(guint8 group)
+	: m_group(group)
 {
 }
 
-WPXParser::~WPXParser()
+WP42VariableLengthGroup * WP42VariableLengthGroup::constructVariableLengthGroup(GsfInput *input, guint8 group)
 {
-	DELETEP(m_header);
+	switch (group)
+	{
+		default:
+			// this is an unhandled group, just skip it
+			return new WP42UnsupportedVariableLengthGroup(input, group);
+	}
+}
+
+void WP42VariableLengthGroup::_read(GsfInput *input)
+{
+	_readContents(input);
+	
+	// skip over the remaining bytes of the group, if any
+	while (!gsf_input_eof(input))
+	{
+		guint8 readNextVal;
+		readNextVal = gsf_le_read_guint8(input);
+		if (readNextVal == getGroup())
+			break;
+	}	
+	
 }

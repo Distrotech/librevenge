@@ -23,32 +23,36 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WPXPARSER_H
-#define WPXPARSER_H
+#ifndef WP6PARSER_H
+#define WP6PARSER_H
 
-#include <gsf/gsf-input.h>
-#include "WPXHeader.h"
-#include "WPXLLListener.h"
+#include "WPXParser.h"
+#include "WP6Header.h"
 
+class WP6PrefixData;
+class WP6LLListener;
 class WPXHLListenerImpl;
 
-class WPXParser
+class WP6Parser : public WPXParser
 {
 public:
-	WPXParser(GsfInput * input, WPXHeader *header);
-	virtual ~WPXParser();
+	WP6Parser(GsfInput *input, WPXHeader *header);
+	~WP6Parser();
 
-	virtual void parse(WPXHLListenerImpl *listenerImpl) = 0;
+	virtual void parse(WPXHLListenerImpl *listenerImpl);
 
-protected:
-	WPXHeader * getHeader() { return m_header; }
-	GsfInput * getInput() { return m_input; }
-	
+	static void parseDocument(GsfInput *stream, WP6LLListener *llListener);
+
 private:
-	GsfInput * m_input;
-	WPXLLListener * m_llListener;
+	GsfInput * getDocument(GsfInput *input);
+	WP6Header * getHeader(GsfInput *input);
+	WP6PrefixData * getPrefixData(GsfInput *input, WP6Header *header);
 
-	WPXHeader * m_header;
+	WPXFileType getFileType(GsfInput *input);
+	void parse(GsfInput *input, WP6Header *header, WP6LLListener *llistener);
+
+	void parsePacket(WP6PrefixData *prefixData, int type, WP6LLListener *llListener);
+	void parsePackets(WP6PrefixData *prefixData, int type, WP6LLListener *llListener);
 };
 
-#endif /* WPXPARSER_H */
+#endif /* WP6PARSER_H */

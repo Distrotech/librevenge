@@ -1,6 +1,6 @@
 /* libwpd2
- * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,33 +22,24 @@
 /* "This product is not manufactured, approved, or supported by 
  * Corel Corporation or Corel Corporation Limited."
  */
-
-#ifndef WPXPARSER_H
-#define WPXPARSER_H
-
+ 
 #include <gsf/gsf-input.h>
+#include <gsf/gsf-infile.h>
+#include <gsf/gsf-infile-msole.h>
+#include "WP5Parser.h"
 #include "WPXHeader.h"
-#include "WPXLLListener.h"
+#include "libwpd_internal.h"
+#include "WPXTable.h"
 
-class WPXHLListenerImpl;
-
-class WPXParser
+WP5Parser::WP5Parser(GsfInput *input, WPXHeader *header) :
+	WPXParser(input, header)
 {
-public:
-	WPXParser(GsfInput * input, WPXHeader *header);
-	virtual ~WPXParser();
+}
 
-	virtual void parse(WPXHLListenerImpl *listenerImpl) = 0;
+WP5Parser::~WP5Parser()
+{
+}
 
-protected:
-	WPXHeader * getHeader() { return m_header; }
-	GsfInput * getInput() { return m_input; }
-	
-private:
-	GsfInput * m_input;
-	WPXLLListener * m_llListener;
-
-	WPXHeader * m_header;
-};
-
-#endif /* WPXPARSER_H */
+void WP5Parser::parse(WPXHLListenerImpl *listenerImpl)
+{
+}

@@ -1,23 +1,29 @@
 lib_LTLIBRARIES = libwpd-1.la
 libwpd_1_includedir = $(includedir)/libwpd-1/libwpd
-libwpd_1_include_HEADERS = libwpd.h libwpd_support.h WPXHLListener.h WPXHLListenerImpl.h WPXLLListener.h \
-		           WPXParser.h WP6LLParser.h \
-		  	   WP6HLContentListener.h WP6Header.h WP6HLParser.h WP60Header.h WP61Header.h WP6LLListener.h WPXHeader.h \
-	                   WP6FileStructure.h WP6PrefixDataPacket.h WP6FontDescriptorPacket.h WP6DefaultInitialFontPacket.h
+libwpd_1_include_HEADERS = libwpd.h libwpd_support.h WPXHLListener.h WPXHLListenerImpl.h WPXLLListener.h WPXParser.h \
+					WP6HLContentListener.h WP6Header.h WP6Parser.h WP5Parser.h WP42Parser.h WP60Header.h WP61Header.h WP6LLListener.h \
+					WPXHeader.h WP6FileStructure.h WP42FileStructure.h WP6PrefixDataPacket.h WP6FontDescriptorPacket.h \
+					WP6DefaultInitialFontPacket.h WPDocument.h
 
 AM_CXXFLAGS = $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS)
 
 libwpd_1_la_LIBADD  = $(LIBWPD_LIBS)
 libwpd_1_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) -export-dynamic
 libwpd_1_la_SOURCES =			\
-	libwpd_internal.cpp		\
-	libwpd_support.cpp		\
+	libwpd_internal.cpp			\
+	libwpd_support.cpp			\
+	WP42HLListener.cpp			\
+	WP42Parser.cpp				\
+	WP42Part.cpp				\
+	WP42UnsupportedVariableLengthGroup.cpp	\
+	WP42VariableLengthGroup.cpp	\
+	WP5Parser.cpp				\
 	WP6AttributeGroup.cpp 		\
 	WP6CharacterGroup.cpp		\
-	WP6ColumnGroup.cpp		\
+	WP6ColumnGroup.cpp			\
 	WP6DefaultInitialFontPacket.cpp	\
 	WP6DisplayNumberReferenceGroup.cpp \
-	WP6EOLGroup.cpp			\
+	WP6EOLGroup.cpp				\
 	WP6ExtendedCharacterGroup.cpp 	\
 	WP6ExtendedDocumentSummaryPacket.cpp \
 	WP6FillStylePacket.cpp 		\
@@ -25,43 +31,48 @@ libwpd_1_la_SOURCES =			\
 	WP6FontDescriptorPacket.cpp	\
 	WP6FootnoteEndnoteGroup.cpp	\
 	WP6GeneralTextPacket.cpp	\
-	WP6Header.cpp			\
-	WP60Header.cpp			\
-	WP61Header.cpp			\
+	WP6Header.cpp				\
+	WP60Header.cpp				\
+	WP61Header.cpp				\
 	WP6HeaderFooterGroup.cpp 	\
 	WP6HLContentListener.cpp	\
-	WP6HLListener.cpp		\
-	WP6HLParser.cpp			\
+	WP6HLListener.cpp			\
 	WP6HLStylesListener.cpp		\
-	WP6LLListener.cpp		\
-	WP6LLParser.cpp			\
+	WP6LLListener.cpp			\
+	WP6Parser.cpp				\
 	WP6OutlineStylePacket.cpp	\
-	WP6PageGroup.cpp		\
+	WP6PageGroup.cpp			\
 	WP6ParagraphGroup.cpp		\
-	WP6Part.cpp			\
-	WP6PrefixData.cpp 		\
+	WP6Part.cpp					\
+	WP6PrefixData.cpp 			\
 	WP6PrefixIndice.cpp 		\
 	WP6PrefixDataPacket.cpp		\
 	WP6SingleByteFunction.cpp	\
-	WP6StyleGroup.cpp		\
-	WP6TabGroup.cpp 		\
-	WP6UndoGroup.cpp		\
+	WP6StyleGroup.cpp			\
+	WP6TabGroup.cpp 			\
+	WP6UndoGroup.cpp			\
 	WP6UnsupportedVariableLengthGroup.cpp \
 	WP6VariableLengthGroup.cpp 	\
-	WPXPageSpan.cpp			\
-	WPXParser.cpp			\
-	WPXHeader.cpp 			\
-	WPXTable.cpp			\
-	libwpd.h	        	\
-	libwpd_internal.h		\
+	WPXPageSpan.cpp				\
+	WPXHeader.cpp 				\
+	WPXTable.cpp				\
+	WPXParser.cpp 				\
+	WPDocument.cpp				\
+	libwpd.h	        		\
+	libwpd_internal.h			\
 	libwpd_support.h        	\
-	WP6FileStructure.h		\
+	WP42HLListener.h			\
+	WP42LLListener.h			\
+	WP42Part.h					\
+	WP42UnsupportedVariableLengthGroup.h	\
+	WP42VariableLengthGroup.h	\
+	WP6FileStructure.h			\
 	WP6AttributeGroup.h 		\
-	WP6CharacterGroup.h		\
-	WP6ColumnGroup.h		\
+	WP6CharacterGroup.h			\
+	WP6ColumnGroup.h			\
 	WP6DefaultInitialFontPacket.h	\
 	WP6DisplayNumberReferenceGroup.h \
-	WP6EOLGroup.h			\
+	WP6EOLGroup.h				\
 	WP6ExtendedCharacterGroup.h 	\
 	WP6ExtendedDocumentSummaryPacket.h \
 	WP6FillStylePacket.h		\
@@ -69,36 +80,35 @@ libwpd_1_la_SOURCES =			\
 	WP6FontDescriptorPacket.h	\
 	WP6FootnoteEndnoteGroup.h	\
 	WP6GeneralTextPacket.h		\
-	WP6Header.h 			\
-	WP60Header.h 			\
-	WP61Header.h 			\
+	WP6Header.h 				\
+	WP60Header.h 				\
+	WP61Header.h 				\
 	WP6HeaderFooterGroup.h 		\
 	WP6HLContentListener.h		\
-	WP6HLListener.h			\
-	WP6HLParser.h			\
+	WP6HLListener.h				\
 	WP6HLStylesListener.h		\
-	WP6LLListener.h			\
-	WP6LLParser.h			\
+	WP6LLListener.h				\
 	WP6OutlineStylePacket.h		\
-	WP6PageGroup.h			\
-	WP6ParagraphGroup.h		\
-	WP6Part.h 			\
-	WP6PrefixData.h	 		\
-	WP6PrefixIndice.h		\
+	WP6PageGroup.h				\
+	WP6ParagraphGroup.h			\
+	WP6Part.h 					\
+	WP6PrefixData.h	 			\
+	WP6PrefixIndice.h			\
 	WP6PrefixDataPacket.h		\
 	WP6SingleByteFunction.h		\
-	WP6StyleGroup.h			\
-	WP6TabGroup.h	 		\
-	WP6TibetanMap.h                 \
-	WP6UndoGroup.h			\
+	WP6StyleGroup.h				\
+	WP6TabGroup.h	 			\
+	WP6TibetanMap.h                 \	
+	WP6UndoGroup.h				\
 	WP6UnsupportedVariableLengthGroup.h \
 	WP6VariableLengthGroup.h	\
-	WPXHeader.h			\
-	WPXFileStructure.h		\
-	WPXLLListener.h			\
-	WPXHLListener.h			\
-	WPXHLListenerImpl.h		\
-	WPXPageSpan.h			\
-	WPXPart.h			\
-	WPXParser.h 			\
+	WPXHeader.h					\
+	WPDocument.h				\
+	WPXFileStructure.h			\
+	WPXLLListener.h				\
+	WPXHLListener.h				\
+	WPXHLListenerImpl.h			\
+	WPXPageSpan.h				\
+	WPXPart.h					\
+	WPXParser.h 				\
 	WPXTable.h

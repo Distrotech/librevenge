@@ -28,7 +28,8 @@
 #include <gsf/gsf-infile-msole.h>
 #include "WP6LLListener.h"
 #include "WP6HLStylesListener.h"
-#include "WP6LLParser.h"
+#include "WP6HLContentListener.h"
+#include "WP6Parser.h"
 #include "WPXHeader.h"
 #include "WP6Header.h"
 #include "WP60Header.h"
@@ -39,7 +40,16 @@
 #include "WP6DefaultInitialFontPacket.h"
 #include "WPXTable.h"
 
-WPXFileType WP6LLParser::getFileType(GsfInput *input)
+WP6Parser::WP6Parser(GsfInput *input, WPXHeader *header) :
+	WPXParser(input, header)
+{
+}
+
+WP6Parser::~WP6Parser()
+{
+}
+
+WPXFileType WP6Parser::getFileType(GsfInput *input)
 {
 	WPXFileType fileType = OTHER;
 	GsfInput *document = NULL;
@@ -47,7 +57,7 @@ WPXFileType WP6LLParser::getFileType(GsfInput *input)
 	
 	try
 	{
-		document =  WP6LLParser::getDocument(input);
+		document = getDocument(input);
 		if (document != NULL) {
 			isDocumentOLE = true;
 		}
@@ -76,7 +86,7 @@ WPXFileType WP6LLParser::getFileType(GsfInput *input)
 // WordPerfect document. Returns NULL if the document is not OLE or it does not contain the
 // the expected WordPerfect type.
 // NB: It is the responsibility of the application to release this input stream
-GsfInput * WP6LLParser::getDocument(GsfInput *input)
+GsfInput * WP6Parser::getDocument(GsfInput *input)
 {
 	GsfInput *document = NULL;
 
@@ -92,15 +102,13 @@ GsfInput * WP6LLParser::getDocument(GsfInput *input)
 	return document;
 }
 
-WP6Header * WP6LLParser::getHeader(GsfInput *input)
+WP6Header * WP6Parser::getHeader(GsfInput *input)
 {
 	WP6Header * header = NULL;
 	try
 	{
-		WPXHeader fileHeader(input);
-		
 		gsf_input_seek(input, 0, G_SEEK_SET);
-		switch (fileHeader.getMinorVersion())
+		switch (WPXParser::getHeader()->getMinorVersion())
 		{
 		case 0x00:
 			header = new WP60Header(input);
@@ -110,14 +118,15 @@ WP6Header * WP6LLParser::getHeader(GsfInput *input)
 	}
 	catch(FileException)
 	{
-		delete header;
+		if (header)
+			delete header;
 		throw FileException(); 
 	}
 
 	return header;
 }
 
-WP6PrefixData * WP6LLParser::getPrefixData(GsfInput *input, WP6Header *header)
+WP6PrefixData * WP6Parser::getPrefixData(GsfInput *input, WP6Header *header)
 {
 	WP6PrefixData *prefixData = NULL;
 	try
@@ -134,20 +143,20 @@ WP6PrefixData * WP6LLParser::getPrefixData(GsfInput *input, WP6Header *header)
 
 // WP6LLParser::parse() reads AND parses the main body of a wordperfect document, passing any retrieved low-level
 // information to a low-level listener
-void WP6LLParser::parse(GsfInput *input, WP6Header *header, WP6LLListener *llListener)
+void WP6Parser::parse(GsfInput *input, WP6Header *header, WP6LLListener *llListener)
 {	
 	llListener->startDocument();
 	
 	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, header->getDocumentOffset(), G_SEEK_SET));
 	
 	WPD_DEBUG_MSG(("WordPerfect: Starting document body parse (position = %ld)\n",(long)gsf_input_tell(input)));
-	WP6LLParser::parseDocument(input, llListener);
+	parseDocument(input, llListener);
 	
 	llListener->endDocument();
 }
 
 // parseDocument: parses a document body (may call itself recursively, on other streams, or itself)
-void WP6LLParser::parseDocument(GsfInput *input, WP6LLListener *llListener)
+void WP6Parser::parseDocument(GsfInput *input, WP6LLListener *llListener)
 {
 	while (!gsf_input_eof(input))
 	{
@@ -180,7 +189,7 @@ void WP6LLParser::parseDocument(GsfInput *input, WP6LLListener *llListener)
 	}
 }
 
-void WP6LLParser::parsePacket(WP6PrefixData *prefixData, int type, WP6LLListener *llListener)
+void WP6Parser::parsePacket(WP6PrefixData *prefixData, int type, WP6LLListener *llListener)
 {
 	pair< MPDP_CIter, MPDP_CIter > * typeIterPair;
 	typeIterPair = prefixData->getPrefixDataPacketsOfType(type); 
@@ -190,7 +199,7 @@ void WP6LLParser::parsePacket(WP6PrefixData *prefixData, int type, WP6LLListener
 	delete typeIterPair;
 }
 
-void WP6LLParser::parsePackets(WP6PrefixData *prefixData, int type, WP6LLListener *llListener)
+void WP6Parser::parsePackets(WP6PrefixData *prefixData, int type, WP6LLListener *llListener)
 {
 	pair< MPDP_CIter, MPDP_CIter > * typeIterPair;
 
@@ -204,4 +213,81 @@ void WP6LLParser::parsePackets(WP6PrefixData *prefixData, int type, WP6LLListene
 
 	delete typeIterPair;
 
+}
+
+// WP6Parser::parse() reads AND parses a wordperfect document, passing any retrieved low-level
+// information to a low-level listener
+void WP6Parser::parse(WPXHLListenerImpl *listenerImpl)
+{	
+	GsfInput *document = NULL;
+	WP6Header * header = NULL;
+	WP6PrefixData * prefixData = NULL;
+	vector<WPXPageSpan *> pageList;
+	vector<WPXTable *> tableList;	
+	bool isDocumentOLE = false;
+ 	
+	GsfInput *input = getInput();
+	
+	try
+ 	{
+		document = getDocument(input);
+		if (document != NULL) {
+			isDocumentOLE = true;
+		}
+		else
+			document = input;
+
+		WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(document, 0, G_SEEK_SET));			
+		
+		header = getHeader(document);
+		prefixData = getPrefixData(document, header);
+		
+		// do a "first-pass" parse of the document
+		// gather table border information, page properties (per-page)
+		WP6HLStylesListener stylesListener(&pageList, &tableList);
+		stylesListener.setPrefixData(prefixData);
+		parse(document, header, static_cast<WP6LLListener *>(&stylesListener));
+
+		// second pass: here is where we actually send the messages to the target app
+		// that are necessary to emit the body of the target document
+		WP6HLContentListener hlListener(&pageList, &tableList, listenerImpl);
+		hlListener.setPrefixData(prefixData);
+
+		// get the relevant initial prefix packets out of storage and tell them to parse
+		// themselves
+		parsePacket(prefixData, WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY, static_cast<WP6LLListener *>(&hlListener));
+		parsePacket(prefixData, WP6_INDEX_HEADER_INITIAL_FONT, static_cast<WP6LLListener *>(&hlListener));
+		parsePackets(prefixData, WP6_INDEX_HEADER_OUTLINE_STYLE, static_cast<WP6LLListener *>(&hlListener));
+
+		parse(document, header, static_cast<WP6LLListener *>(&hlListener));
+
+		// cleanup section: free the used resources
+		if (document != NULL && isDocumentOLE)
+			g_object_unref(G_OBJECT(document));
+		delete header;
+		delete prefixData;
+		for (vector<WPXPageSpan *>::iterator iter = pageList.begin(); iter != pageList.end(); iter++) {
+			delete *iter;
+		}
+		for (vector<WPXTable *>::iterator iter = tableList.begin(); iter != tableList.end(); iter++) {
+			delete *iter;
+		}
+	}
+	catch(FileException)
+	{
+		WPD_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
+		if (document != NULL && isDocumentOLE)
+			g_object_unref(G_OBJECT(document));
+		delete header;
+		delete prefixData;
+		
+		for (vector<WPXPageSpan *>::iterator iter = pageList.begin(); iter != pageList.end(); iter++) {
+			delete *iter;
+		}
+		for (vector<WPXTable *>::iterator iter = tableList.begin(); iter != tableList.end(); iter++) {
+			delete *iter;
+		}
+
+		throw FileException();
+	}
 }
