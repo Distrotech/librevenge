@@ -103,11 +103,19 @@ void WP6FontDescriptorPacket::_readContents(GsfInput *input)
 			   {
 				   if (!strcmp(fontWeightStrings[j], &m_fontName[lastTokenPosition])) 
 					   {
-						   if (lastTokenPosition > 0)
+						   if (lastTokenPosition > 0) {
 							   m_fontName[lastTokenPosition-1]='\0';
+							   tempLength1 = lastTokenPosition-1;
+						   }
 						   break;
 					   }
 			   }
+		   // also consume any whitespace at the end of the font..
+		   while ((tempLength1 - 1) > 0 && m_fontName[tempLength1-1] == ' ')
+			   {
+				   m_fontName[tempLength1-1] = '\0';
+			   }
+
 	   }
 
    //
