@@ -40,4 +40,4 @@ class WP6ParagraphGroup : public WP6VariableLengthGroup
 	guint8	m_justification;
 };
 
-#endif /* WP6COLUMNGROUP_H */
+#endif /* WP6PARAGRAPHGROUP_H */
