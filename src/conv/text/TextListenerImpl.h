@@ -1,7 +1,7 @@
  /* libwpd
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002-2003 Marc Maurer (j.m.maurer@student.utwente.nl)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -35,7 +35,7 @@ class TextListenerImpl : public WPXHLListenerImpl
 public:
 	TextListenerImpl();
 	virtual ~TextListenerImpl();
-    
+
  	virtual void setDocumentMetaData(const UCSString &author, const UCSString &subject,
 					 const UCSString &publisher, const UCSString &category,
 					 const UCSString &keywords, const UCSString &language,
@@ -46,6 +46,7 @@ public:
 	virtual void endDocument() {}
 
 	virtual void openPageSpan(const int span, const bool isLastPageSpan,
+				  const float formLength, const float formWidth, const WPXFormOrientation orientation,
 				  const float marginLeft, const float marginRight,
 				  const float marginTop, const float marginBottom) {}
 	virtual void closePageSpan() {}
@@ -56,7 +57,7 @@ public:
 	virtual void closeSection() {}
 	virtual void openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits,
 				   const float marginLeftOffset, const float marginRightOffset,
-				   const gchar *fontName, float fontSize, 
+				   const gchar *fontName, float fontSize,
 				   const float lineSpacing,
 				   bool isColumnBreak, bool isPageBreak) {}
 	virtual void closeParagraph();
@@ -67,7 +68,7 @@ public:
 	virtual void insertText(const UCSString &text);
 	virtual void insertLineBreak() {}
 
-	virtual void defineOrderedListLevel(const int listID, const guint16 listLevel, const WPXNumberingType listType, 
+	virtual void defineOrderedListLevel(const int listID, const guint16 listLevel, const WPXNumberingType listType,
 					    const UCSString &textBeforeNumber, const UCSString &textAfterNumber,
 					    const int startingNumber) {}
 	virtual void defineUnorderedListLevel(const int listID, const guint16 listLevel, const UCSString &bullet) {}
@@ -77,7 +78,7 @@ public:
 	virtual void closeUnorderedListLevel() {}
 	virtual void openListElement(const guint8 paragraphJustification, const guint32 textAttributeBits,
 				     const float marginLeftOffset, const float marginRightOffset,
-				     const gchar *fontName, const float fontSize, 
+				     const gchar *fontName, const float fontSize,
 				     const float lineSpacing) {}
 	virtual void closeListElement() {}
 
@@ -87,12 +88,12 @@ public:
 	virtual void closeEndnote() {}
 
 
-	virtual void openTable(const guint8 tablePositionBits, 
+	virtual void openTable(const guint8 tablePositionBits,
 			       const float marginLeftOffset, const float marginRightOffset,
 			       const float leftOffset, const vector < WPXColumnDefinition > &columns) {}
 	virtual void openTableRow() {}
 	virtual void closeTableRow() {}
-	virtual void openTableCell(const guint32 col, const guint32 row, const guint32 colSpan, const guint32 rowSpan, 
+	virtual void openTableCell(const guint32 col, const guint32 row, const guint32 colSpan, const guint32 rowSpan,
 				   const guint8 borderBits,
 				   const RGBSColor * cellFgColor, const RGBSColor * cellBgColor) {}
 	virtual void closeTableCell() {}

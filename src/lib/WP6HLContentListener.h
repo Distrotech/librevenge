@@ -153,17 +153,18 @@ public:
 	virtual void lineSpacingChange(const float lineSpacing);
 	virtual void justificationChange(const guint8 justification);
 	virtual void pageMarginChange(const guint8 side, const guint16 margin) {}
+	virtual void pageFormChange(const guint16 length, const guint16 width, const WPXFormOrientation orientation) {}
 	virtual void marginChange(const guint8 side, const guint16 margin);
-	virtual void columnChange(const guint8 numColumns); 
-	virtual void updateOutlineDefinition(const WP6OutlineLocation outlineLocation, const guint16 outlineHash, 
+	virtual void columnChange(const guint8 numColumns);
+	virtual void updateOutlineDefinition(const WP6OutlineLocation outlineLocation, const guint16 outlineHash,
 						const guint8 *numberingMethods, const guint8 tabBehaviourFlag);
 
 	virtual void paragraphNumberOn(const guint16 outlineHash, const guint8 level, const guint8 flag);
 	virtual void paragraphNumberOff();
 	virtual void displayNumberReferenceGroupOn(const guint8 subGroup, const guint8 level);
 	virtual void displayNumberReferenceGroupOff(const guint8 subGroup);
-	virtual void styleGroupOn(const guint8 subGroup);	
-	virtual void styleGroupOff(const guint8 subGroup);	
+	virtual void styleGroupOn(const guint8 subGroup);
+	virtual void styleGroupOff(const guint8 subGroup);
 	virtual void globalOn(const guint8 systemStyle);
 	virtual void globalOff();
 	virtual void noteOn(const guint16 textPID);

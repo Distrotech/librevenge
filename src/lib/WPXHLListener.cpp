@@ -61,14 +61,18 @@ _WPXParsingState::_WPXParsingState(bool sectionAttributesChanged) :
 
 	m_sectionAttributesChanged(sectionAttributesChanged),
 	m_numColumns(1),
-	
+
+	m_pageFormLength(11.0f),
+	m_pageFormWidth(8.5f),
+	m_pageFormOrientation(PORTRAIT),
+
 	m_pageMarginLeft(1.0f),
 	m_pageMarginRight(1.0f),
-	m_paragraphMarginLeft(0.0f), 
+	m_paragraphMarginLeft(0.0f),
 	m_paragraphMarginRight(0.0f)
 	/*m_currentRow(-1),
 	m_currentColumn(-1),
-	
+
 	m_currentListLevel(0),
 	m_putativeListElementHasParagraphNumber(false),
 	m_putativeListElementHasDisplayReferenceNumber(false),
@@ -135,29 +139,34 @@ void WPXHLListener::_openPageSpan()
 	{
 		throw ParseException();
 	}
-	
+
 	WPXPageSpan *currentPage = (*m_pageList)[m_ps->m_nextPageSpanIndice];
 	currentPage->makeConsistent(1);
 	bool isLastPageSpan;
-	(m_pageList->size() <= (m_ps->m_nextPageSpanIndice+1)) ? isLastPageSpan = true : isLastPageSpan = false;	
-	
+	(m_pageList->size() <= (m_ps->m_nextPageSpanIndice+1)) ? isLastPageSpan = true : isLastPageSpan = false;
+
 	m_listenerImpl->openPageSpan(currentPage->getPageSpan(), isLastPageSpan,
+	                 currentPage->getFormLength(), currentPage->getFormWidth(),
+	                 currentPage->getFormOrientation(),
 				     currentPage->getMarginLeft(), currentPage->getMarginRight(),
 				     currentPage->getMarginTop(), currentPage->getMarginBottom());
 
 	const vector<WPXHeaderFooter> headerFooterList = currentPage->getHeaderFooterList();
-	for (vector<WPXHeaderFooter>::const_iterator iter = headerFooterList.begin(); iter != headerFooterList.end(); iter++) 
+	for (vector<WPXHeaderFooter>::const_iterator iter = headerFooterList.begin(); iter != headerFooterList.end(); iter++)
 	{
-		if (!currentPage->getHeaderFooterSuppression((*iter).getInternalType())) 
+		if (!currentPage->getHeaderFooterSuppression((*iter).getInternalType()))
 		{
 			m_listenerImpl->openHeaderFooter((*iter).getType(), (*iter).getOccurence());
 			handleSubDocument((*iter).getTextPID());
-			m_listenerImpl->closeHeaderFooter((*iter).getType(), (*iter).getOccurence());					
-			WPD_DEBUG_MSG(("Header Footer Element: type: %i occurence: %i pid: %i\n", 
+			m_listenerImpl->closeHeaderFooter((*iter).getType(), (*iter).getOccurence());
+			WPD_DEBUG_MSG(("Header Footer Element: type: %i occurence: %i pid: %i\n",
 				       (*iter).getType(), (*iter).getOccurence(), (*iter).getTextPID()));
 		}
 	}
 
+	m_ps->m_pageFormLength = currentPage->getFormLength();
+	m_ps->m_pageFormWidth = currentPage->getFormWidth();
+	m_ps->m_pageFormOrientation = currentPage->getFormOrientation();
 	m_ps->m_pageMarginLeft = currentPage->getMarginLeft();
 	m_ps->m_pageMarginRight = currentPage->getMarginRight();
 	m_ps->m_numPagesRemainingInSpan = (currentPage->getPageSpan() - 1);

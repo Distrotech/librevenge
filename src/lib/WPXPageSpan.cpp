@@ -64,28 +64,34 @@ WPXHeaderFooter::WPXHeaderFooter(const WPXHeaderFooterType headerFooterType, con
 }
 
 WPXPageSpan::WPXPageSpan() :
-	m_marginLeft(1.0f), 
+	m_formLength(11.0f),
+	m_formWidth(8.5f),
+	m_formOrientation(PORTRAIT),
+	m_marginLeft(1.0f),
 	m_marginRight(1.0f),
-	m_marginTop(WP6_DEFAULT_PAGE_MARGIN_TOP), 
+	m_marginTop(WP6_DEFAULT_PAGE_MARGIN_TOP),
 	m_marginBottom(WP6_DEFAULT_PAGE_MARGIN_BOTTOM),
 	m_pageSpan(1)
 
 {
-	for (int i=0; i<WP6_NUM_HEADER_FOOTER_TYPES; i++) 
+	for (int i=0; i<WP6_NUM_HEADER_FOOTER_TYPES; i++)
 		m_isHeaderFooterSuppressed[i]=false;
 }
 
 // NB: this is not a literal "clone" function: it is contingent on the side margins that are passed,
 // and suppression variables are not copied
 WPXPageSpan::WPXPageSpan(WPXPageSpan &page, float paragraphMarginLeft, float paragraphMarginRight) :
-	m_marginLeft(page.getMarginLeft()+paragraphMarginLeft), 
+	m_formLength(page.getFormLength()),
+	m_formWidth(page.getFormWidth()),
+	m_formOrientation(page.getFormOrientation()),
+	m_marginLeft(page.getMarginLeft()+paragraphMarginLeft),
 	m_marginRight(page.getMarginRight()+paragraphMarginRight),
-	m_marginTop(page.getMarginTop()), 
+	m_marginTop(page.getMarginTop()),
 	m_marginBottom(page.getMarginBottom()),
 	m_pageSpan(page.getPageSpan()),
 	m_headerFooterList(page.getHeaderFooterList())
 {
-	for (int i=0; i<WP6_NUM_HEADER_FOOTER_TYPES; i++) 
+	for (int i=0; i<WP6_NUM_HEADER_FOOTER_TYPES; i++)
 		m_isHeaderFooterSuppressed[i] = false;
 }
 

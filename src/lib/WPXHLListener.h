@@ -93,12 +93,16 @@ struct _WPXParsingState
 
 	bool m_sectionAttributesChanged;
 	guint m_numColumns;
-	
+
+	float m_pageFormLength;
+	float m_pageFormWidth;
+	WPXFormOrientation m_pageFormOrientation;
+
 	float m_pageMarginLeft;
 	float m_pageMarginRight;
 	float m_paragraphMarginLeft;
 	float m_paragraphMarginRight;
-	
+
 	/*gint32 m_currentRow;
 	gint32 m_currentColumn;
 

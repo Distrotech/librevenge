@@ -79,10 +79,11 @@ void HtmlListenerImpl::endDocument()
 }
 
 void HtmlListenerImpl::openPageSpan(const int span, const bool isLastPageSpan,
+				    const float formLength, const float formWidth, const WPXFormOrientation orientation,
 				    const float marginLeft, const float marginRight,
 				    const float marginTop, const float marginBottom)
 {
-	printf("<page-span span:%i margin-left:%fin margin-right:%fin margin-top:%fin margin-bottom:%fin>\n", span, 
+	printf("<page-span span:%i margin-left:%fin margin-right:%fin margin-top:%fin margin-bottom:%fin>\n", span,
 	       marginLeft, marginRight, marginTop, marginBottom);
 }
 

@@ -42,16 +42,17 @@ class WPXLLListener
 	virtual void lineSpacingChange(const float lineSpacing) = 0;
 	virtual void justificationChange(const guint8 justification) = 0;
 	virtual void pageMarginChange(const guint8 side, const guint16 margin) = 0;
+	virtual void pageFormChange(const guint16 length, const guint16 width, const WPXFormOrientation orientation) = 0;
 	virtual void marginChange(const guint8 side, const guint16 margin) = 0;
 	virtual void columnChange(const guint8 numColumns) = 0;
 	virtual void endDocument() = 0;
-		
+
 	virtual void defineTable(guint8 position, guint16 leftOffset) = 0;
 	virtual void addTableColumnDefinition(guint32 width, guint32 leftGutter, guint32 rightGutter) = 0;
 	virtual void startTable() = 0;
  	virtual void insertRow() = 0;
- 	virtual void insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove, 
-				const guint8 borderBits, 	
+ 	virtual void insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove,
+				const guint8 borderBits,
 				const RGBSColor * cellFgColor, const RGBSColor * cellBgColor) = 0;
  	virtual void endTable() = 0;
 };

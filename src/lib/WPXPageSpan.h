@@ -52,8 +52,11 @@ class WPXPageSpan
 public:
 	WPXPageSpan();
 	WPXPageSpan(WPXPageSpan &page, float paragraphMarginLeft=0.0f, float paragraphMarginRight=0.0f);
-	
+
 	const bool getHeaderFooterSuppression(const guint8 headerFooterType) const { if (headerFooterType <= WP6_HEADER_FOOTER_GROUP_FOOTER_B) return m_isHeaderFooterSuppressed[headerFooterType]; return false; }
+	const float getFormLength() const { return m_formLength; }
+	const float getFormWidth() const { return m_formWidth; }
+	const WPXFormOrientation getFormOrientation() const { return m_formOrientation; }
 	const float getMarginLeft() const { return m_marginLeft; }
  	const float getMarginRight() const { return m_marginRight; }
  	const float getMarginTop() const { return m_marginTop; }
@@ -63,6 +66,9 @@ public:
 
 	void setHeaderFooter(const guint8 headerFooterType, const guint8 occurenceBits, const guint16 textPID);
 	void setHeadFooterSuppression(const guint8 headerFooterType, const bool suppress) { m_isHeaderFooterSuppressed[headerFooterType] = suppress; }
+	void setFormLength(const float formLength) { m_formLength = formLength; }
+	void setFormWidth(const float formWidth) { m_formWidth = formWidth; }
+	void setFormOrientation(const WPXFormOrientation formOrientation) { m_formOrientation = formOrientation; }
 	void setMarginLeft(const float marginLeft) { m_marginLeft = marginLeft; }
  	void setMarginRight(const float marginRight) { m_marginRight = marginRight; }
  	void setMarginTop(const float marginTop) { m_marginTop = marginTop; }
@@ -73,9 +79,11 @@ public:
 protected:
 	void _removeHeaderFooter(WPXHeaderFooterType type, WPXHeaderFooterOccurence occurence);
 	bool _containsHeaderFooter(WPXHeaderFooterType type, WPXHeaderFooterOccurence occurence);
-	
+
 private:
 	bool m_isHeaderFooterSuppressed[WP6_NUM_HEADER_FOOTER_TYPES];
+	float m_formLength, m_formWidth;
+	WPXFormOrientation m_formOrientation;
 	float m_marginLeft, m_marginRight;
 	float m_marginTop, m_marginBottom;
 	vector<WPXHeaderFooter> m_headerFooterList;

@@ -37,17 +37,63 @@ WP6PageGroup::WP6PageGroup(GsfInput *input) :
 void WP6PageGroup::_readContents(GsfInput *input)
 {
 	// this group can contain different kinds of data, thus we need to read
-	// the contents accordingly	
-	switch (getSubGroup())	
+	// the contents accordingly
+	switch (getSubGroup())
 	{
 	case WP6_PAGE_GROUP_TOP_MARGIN_SET:
 	case WP6_PAGE_GROUP_BOTTOM_MARGIN_SET:
 		m_margin = gsf_le_read_guint16(input);
 		WPD_DEBUG_MSG(("WordPerfect: Read page group margin size (margin: %i)\n", m_margin));
-	break;
+		break;
 	case WP6_PAGE_GROUP_SUPPRESS_PAGE_CHARACTERISTICS:
 		m_suppressedCode = gsf_le_read_guint8(input);
 		WPD_DEBUG_MSG(("WordPerfect: Read suppressed code (%i)\n", m_suppressedCode));
+		break;
+	case WP6_PAGE_GROUP_FORM:
+		guint8 tmpOrientation;
+		m_formHashTableIndex = gsf_le_read_guint8(input);
+		m_formHashValue = gsf_le_read_guint16(input);
+		m_formLength = gsf_le_read_guint16(input);
+		m_formWidth = gsf_le_read_guint16(input);
+		m_formType = gsf_le_read_guint8(input);
+		tmpOrientation = gsf_le_read_guint8(input);
+		switch (tmpOrientation)
+		{
+		case 0x01:
+			m_formOrientation = LANDSCAPE;
+			break;
+		case 0x00:
+			m_formOrientation = PORTRAIT;
+			break;
+		default:
+			m_formOrientation = PORTRAIT;
+			break;
+		}
+		m_formNameLength = gsf_le_read_guint8(input);
+
+		if (m_formNameLength == 0)
+		{
+			m_formName = new gchar[1];
+			m_formName[0]='\0';
+		}
+		else
+		{
+			m_formName = new gchar[m_formNameLength];
+			for (guint8 i=0; i<m_formNameLength; i++)
+			{
+				guint8 characterSet;
+				guint8 character;
+				int len;
+				const guint16 *chars;
+				guint16 charWord = gsf_le_read_guint16(input);
+				characterSet = (charWord & 0xFF00) >> 8;
+				character = (charWord & 0xFF);
+				len = extendedCharacterToUCS2(character, characterSet, &chars);
+				m_formName[i] = chars[0];
+			}
+		}
+		WPD_DEBUG_MSG(("WordPerfect: Read form information (length: %i), (width: %i), (orientation: %i), (form name: %s),\n",m_formLength, m_formWidth, m_formName ));
+		break;
 	default: /* something else we don't support, since it isn't in the docs */
 		break;
 	}
@@ -66,7 +112,10 @@ void WP6PageGroup::parse(WP6HLListener *listener)
 	case WP6_PAGE_GROUP_SUPPRESS_PAGE_CHARACTERISTICS:
 		listener->suppressPageCharacteristics(m_suppressedCode);
 		break;
+	case WP6_PAGE_GROUP_FORM:
+		listener->pageFormChange(m_formLength, m_formWidth, m_formOrientation);
+		break;
 	default: // something else we don't support, since it isn't in the docs
 		break;
-	}	
+	}
 }

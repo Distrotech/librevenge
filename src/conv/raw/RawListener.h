@@ -45,6 +45,7 @@ public:
 	virtual void endDocument();
 
 	virtual void openPageSpan(const int span, const bool isLastPageSpan,
+				  const float formLength, const float formWidth, const WPXFormOrientation orientation,
 				  const float marginLeft, const float marginRight,
 				  const float marginTop, const float marginBottom);
 	virtual void closePageSpan();

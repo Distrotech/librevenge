@@ -116,19 +116,19 @@ void RawListenerImpl::endDocument()
 }
 
 void RawListenerImpl::openPageSpan(const int span, const bool isLastPageSpan,
+				  const float formLength, const float formWidth, const WPXFormOrientation orientation,
 				  const float marginLeft, const float marginRight,
 				  const float marginTop, const float marginBottom)
 {
-	__iuprintf("openPageSpan(span: %d, isLastPageSpan: %s, marginLeft: %.4f, marginRight: %.4f, marginTop: %.4f, marginBottom: %.4f\n", 
-		span, (isLastPageSpan ? "true" : "false"), marginLeft, marginRight, marginTop, marginBottom
-	);
+	__iuprintf("openPageSpan(span: %d, isLastPageSpan: %s, formLength: %.4f, formWidth: %.4f, Orientation: %s, marginLeft: %.4f, marginRight: %.4f, marginTop: %.4f, marginBottom: %.4f\n",
+				span, (isLastPageSpan ? "true" : "false"), formLength, formWidth, ((orientation==LANDSCAPE) ? "landscape" : "portrait"), marginLeft, marginRight, marginTop, marginBottom);
 }
-						 
+
 void RawListenerImpl::closePageSpan()
 {
 	__idprintf("closePageSpan()\n");
 }
-	
+
 void RawListenerImpl::openHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence)
 {
 	__iuprintf("openHeaderFooter(headerFooterType: %d, headerFooterOccurence: %d)\n",
