@@ -310,9 +310,9 @@ void RawListenerImpl::openTable(const uint8_t tablePositionBits,
 		LC_OPEN_TABLE);
 }
 
-void RawListenerImpl::openTableRow()
+void RawListenerImpl::openTableRow(const bool isHeaderRow)
 {
-	_U(("openTableRow()\n"),
+	_U(("openTableRow(isHeaderRow: %s)\n", (isHeaderRow ? "true" : "false")),
 		LC_OPEN_TABLE_ROW);
 }
 

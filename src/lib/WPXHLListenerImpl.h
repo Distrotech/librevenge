@@ -144,7 +144,7 @@ class WPXHLListenerImpl
 	/**
 	Called when a new table row is opened
 	*/
- 	virtual void openTableRow() = 0;
+ 	virtual void openTableRow(bool isHeaderRow) = 0;
 	/**
 	Called when the current table row is closed
 	*/

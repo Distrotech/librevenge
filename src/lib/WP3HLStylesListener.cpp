@@ -165,7 +165,7 @@ void WP3HLStylesListener::startTable()
 	}
 }
 
-void WP3HLStylesListener::insertRow()
+void WP3HLStylesListener::insertRow(const bool isHeaderRow)
 {
 	if (!isUndoOn() && m_currentTable != NULL) 
 	{

@@ -3,15 +3,15 @@ EXTRA_DIST =			\
 
 # These may be in the builddir too
 BUILD_EXTRA_DIST = 		\
-	libwpd.rc	
+	libwpd.rc
 	
 if PLATFORM_WIN32
 no_undefined = -no-undefined
-version_info = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) -avoid-version 
 else
 no_undefined =
-version_info = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
 endif
+
+version_info = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
 
 if OS_WIN32
 install-libtool-import-lib:

@@ -96,6 +96,7 @@ struct _WPXParsingState
 	bool m_isTableRowOpened;
 	bool m_isTableColumnOpened;
 	bool m_isTableCellOpened;
+	bool m_wasHeaderRow;
 
 	bool m_isPageSpanOpened;
 	int m_nextPageSpanIndice;
@@ -180,7 +181,7 @@ protected:
 
 	void _openTable();
 	void _closeTable();
-	void _openTableRow();
+	void _openTableRow(const bool isHeaderRow);
 	void _closeTableRow();
 	void _openTableCell(const uint8_t colSpan, const uint8_t rowSpan,
 			    const bool boundFromLeft, const bool boundFromAbove,

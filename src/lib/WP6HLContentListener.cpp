@@ -1024,12 +1024,12 @@ void WP6HLContentListener::startTable()
 	}
 }
 
-void WP6HLContentListener::insertRow()
+void WP6HLContentListener::insertRow(const bool isHeaderRow)
 {
 	if (!isUndoOn())
 	{
 		_flushText();
-		_openTableRow();
+		_openTableRow(isHeaderRow);
 	}
 }
 
@@ -1046,6 +1046,7 @@ void WP6HLContentListener::insertCell(const uint8_t colSpan, const uint8_t rowSp
 				       m_ps->m_currentTableRow,
 				       m_ps->m_currentTableCol)->m_borderBits,			       
 			       cellFgColor, cellBgColor);
+		_openParagraph();
 	}
 }
 

@@ -108,7 +108,7 @@ public:
  	virtual void openTable(const uint8_t tablePositionBits,
 			       const float marginLeftOffset, const float marginRightOffset,
 			       const float leftOffset, const vector < WPXColumnDefinition > &columns);
- 	virtual void openTableRow();
+ 	virtual void openTableRow(const bool isHeaderRow);
 	virtual void closeTableRow();
  	virtual void openTableCell(const uint32_t col, const uint32_t row, const uint32_t colSpan, const uint32_t rowSpan,
 				   const uint8_t borderBits,

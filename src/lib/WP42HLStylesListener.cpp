@@ -149,7 +149,7 @@ void WP42HLStylesListener::startTable()
 	//}
 }
 
-void WP42HLStylesListener::insertRow()
+void WP42HLStylesListener::insertRow(const bool isHeaderRow)
 {
 	if (/*!isUndoOn() && */m_currentTable != NULL) 
 	{

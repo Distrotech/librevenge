@@ -45,6 +45,7 @@ public:
  	RGBSColor * m_cellBgColor;
  
 	uint8_t m_cellBorders;
+	bool m_isHeaderRow;
 	bool m_isDontEndAParagraphStyleForThisHardReturn;
 };
 

@@ -68,6 +68,23 @@ WP6SingleByteFunction * WP6SingleByteFunction::constructSingleByteFunction(WPXIn
 		case WP6_TOP_HARD_EOP:
 			return new WP6EOPFunction();
 
+		case WP6_TOP_TABLE_OFF_AT_EOC_AT_EOP:
+		case WP6_TOP_TABLE_OFF_AT_EOC:
+		case WP6_TOP_TABLE_OFF:
+			return new WP6TableOffFunction();
+
+		case WP6_TOP_TABLE_ROW_AT_HARD_EOP:
+		case WP6_TOP_TABLE_ROW_AT_HARD_EOC_AT_HARD_EOP:
+		case WP6_TOP_TABLE_ROW_AT_HARD_EOC:
+		case WP6_TOP_TABLE_ROW_AT_EOC_AT_EOP:
+		case WP6_TOP_TABLE_ROW_AT_EOC:
+		case WP6_TOP_TABLE_ROW:
+			return new WP6TableRowFunction();
+
+		case WP6_TOP_TABLE_CELL:
+			return new WP6TableCellFunction();
+
+
 		// Add the remaining cases here
 //		case WP6_TOP_DELETABLE_SOFT_EOL:
 //		case WP6_TOP_DELETABLE_SOFT_EOL_AT_EOC:
@@ -112,4 +129,23 @@ void WP6EOPFunction::parse(WP6HLListener *listener)
 void WP6HyphenFunction::parse(WP6HLListener *listener)
 {
 	listener->insertCharacter((uint16_t) '-');
+}
+
+void WP6TableRowFunction::parse(WP6HLListener *listener)
+{
+	// use default values: if they were not default values, formater would use
+	// the multi-byte variant of this function
+	listener->insertRow(false);
+	listener->insertCell(1, 1, false, false, 0x00, NULL, NULL);
+}
+
+void WP6TableCellFunction::parse(WP6HLListener *listener)
+{
+	// default values
+	listener->insertCell(1, 1, false, false, 0x00, NULL, NULL);
+}
+
+void WP6TableOffFunction::parse(WP6HLListener *listener)
+{
+	listener->endTable();
 }

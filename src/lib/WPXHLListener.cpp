@@ -55,6 +55,7 @@ _WPXParsingState::_WPXParsingState(bool sectionAttributesChanged) :
 	m_isTableOpened(false),
 	m_isTableRowOpened(false),
 	m_isTableCellOpened(false),
+	m_wasHeaderRow(false),
 
 	m_isPageSpanOpened(false),
 	m_nextPageSpanIndice(0),
@@ -285,6 +286,7 @@ void WPXHLListener::_closeTable()
 		m_ps->m_currentTableCol = (-1);
 	}
 	m_ps->m_isTableOpened = false;
+	m_ps->m_wasHeaderRow = false;
 
 	// handle case where page span is closed in the middle of a table
 	if (m_ps->m_isPageSpanBreakDeferred)
@@ -294,11 +296,19 @@ void WPXHLListener::_closeTable()
 	}
 }
 
-void WPXHLListener::_openTableRow()
+void WPXHLListener::_openTableRow(const bool isHeaderRow)
 {
 	_closeTableRow();
 	m_ps->m_currentTableCol = 0;
-	m_listenerImpl->openTableRow();
+	// Only the first "Header Row" in a table is the actual "Header Row"
+	// The following "Header Row" flags are ignored
+	if (isHeaderRow & !m_ps->m_wasHeaderRow)
+	{
+		m_listenerImpl->openTableRow(true);
+		m_ps->m_wasHeaderRow = true;
+	}
+	else
+		m_listenerImpl->openTableRow(false);
 
 	m_ps->m_isTableRowOpened = true;
 	m_ps->m_currentTableRow++;

@@ -76,4 +76,22 @@ public:
 	virtual void parse(WP6HLListener *listener);	
 };
 
+class WP6TableOffFunction : public WP6SingleByteFunction
+{
+public:
+	virtual void parse(WP6HLListener *listener);	
+};
+
+class WP6TableCellFunction : public WP6SingleByteFunction
+{
+public:
+	virtual void parse(WP6HLListener *listener);	
+};
+
+class WP6TableRowFunction : public WP6SingleByteFunction
+{
+public:
+	virtual void parse(WP6HLListener *listener);	
+};
+
 #endif /* WP6SINGLEBYTEFUNCTION_H */

@@ -280,7 +280,7 @@ void HtmlListenerImpl::openTable(const guint8 tablePositionBits, const float mar
 	printf("<tbody>\n");
 }
 
-void HtmlListenerImpl::openTableRow()
+void HtmlListenerImpl::openTableRow(const bool isHeaderRow)
 {
 	printf("<tr>\n");
 }

@@ -165,7 +165,7 @@ void WP5HLStylesListener::startTable()
 	//}
 }
 
-void WP5HLStylesListener::insertRow()
+void WP5HLStylesListener::insertRow(const bool isHeaderRow)
 {
 	if (/*!isUndoOn() && */m_currentTable != NULL) 
 	{

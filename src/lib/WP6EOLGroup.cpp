@@ -44,7 +44,8 @@ WP6EOLGroup::WP6EOLGroup(WPXInputStream *input) :
 	m_cellBgColor(NULL),
 	
 	m_cellBorders(0x00),
-
+	
+	m_isHeaderRow(false),
 	m_isDontEndAParagraphStyleForThisHardReturn(false)
 
 {
@@ -76,6 +77,10 @@ void WP6EOLGroup::_readContents(WPXInputStream *input)
 			case WP6_EOL_GROUP_ROW_INFORMATION:
 				WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: ROW_INFORMATION\n"));
 				numBytesToSkip = WP6_EOL_GROUP_ROW_INFORMATION_SIZE;
+				uint8_t rowFlags;
+				rowFlags = readU8(input);
+				if ((rowFlags & 0x04) == 0x04)
+					m_isHeaderRow = true; 
 				break;
 			case WP6_EOL_GROUP_CELL_FORMULA:
 				uint16_t embeddedSubGroupSize;
@@ -237,7 +242,7 @@ void WP6EOLGroup::parse(WP6HLListener *listener)
 		case WP6_EOL_GROUP_TABLE_ROW_AT_HARD_EOC_AT_HARD_EOP:
 		case WP6_EOL_GROUP_TABLE_ROW_AT_HARD_EOP:
 			WPD_DEBUG_MSG(("WordPerfect: EOL group: table row and cell\n"));
-			listener->insertRow();
+			listener->insertRow(m_isHeaderRow);
 			// the cellBorders variable already represent the cell border bits as well
 			listener->insertCell(m_colSpan, m_rowSpan, m_boundFromLeft, m_boundFromAbove, m_cellBorders, cellFgColor, cellBgColor);
 			break;
