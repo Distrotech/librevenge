@@ -74,7 +74,10 @@ void HtmlListenerImpl::openParagraph(guint8 paragraphJustification, guint32 text
 	else
 		m_isParagraphOpened = TRUE;
 
-	printf("<p "); _appendTextAttributes(textAttributeBits); printf(">");
+	printf("<p style=\"");
+	_appendTextAttributes(textAttributeBits);
+	_appendParagraphJusitifcation(paragraphJustification);
+	printf("\">");
 	m_isSpanOpened = FALSE;
 }
 
@@ -140,10 +143,29 @@ void HtmlListenerImpl::endTable()
 
 void HtmlListenerImpl::_appendTextAttributes(guint32 textAttributeBits)
 {
-	printf("style=\"");
+
 	if (textAttributeBits & WPX_BOLD_BIT)
 		printf("font-weight: bold;");
 	if (textAttributeBits & WPX_ITALICS_BIT)
 		printf("font-style: italic;");
-	printf("\"");
+}
+
+void HtmlListenerImpl::_appendParagraphJusitifcation(guint32 paragraphJustification)
+{
+
+	switch (paragraphJustification)
+	{
+		case WPX_PARAGRAPH_JUSTIFICATION_LEFT:
+			printf("text-align: left;");
+			break;
+		case WPX_PARAGRAPH_JUSTIFICATION_RIGHT:
+			printf("text-align: right;");
+			break;
+		case WPX_PARAGRAPH_JUSTIFICATION_CENTER:
+			printf("text-align: center;");
+			break;
+		case WPX_PARAGRAPH_JUSTIFICATION_FULL:
+			printf("text-align: jusitify;");
+			break;
+	}
 }

@@ -51,6 +51,7 @@ class HtmlListenerImpl : public WPXHLListenerImpl
  
  protected:
     void _appendTextAttributes(guint32 textAttributeBits);
+	void _appendParagraphJusitifcation(guint32 paragraphJustification);
     
  private:
     gboolean m_isSectionOpened;
