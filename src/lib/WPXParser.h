@@ -41,20 +41,20 @@ public:
 	static WPXParser * constructParser(FILE * stream);
 	virtual gboolean parse() = 0;
 
-	void registerListener(WPXLLListener * listener) { m_pLLListener = listener; }
-	void registerListener(WPXHLListener * listener) { m_pHLListener = listener; }
+	void registerListener(WPXLLListener * listener) { m_lLListener = listener; }
+	void registerListener(WPXHLListener * listener) { m_hLListener = listener; }
 
-	WPXLLListener * getLLListener() { return m_pLLListener; }
-	WPXHLListener * getHLListener() { return m_pHLListener; }
+	WPXLLListener * getLLListener() { return m_lLListener; }
+	WPXHLListener * getHLListener() { return m_hLListener; }
 		
-	WPXHeader * getHeader() { return m_pHeader; }
-	FILE * getStream() { return m_pStream; }
+	WPXHeader * getHeader() { return m_header; }
+	FILE * getStream() { return m_stream; }
 private:
-	FILE * m_pStream;
-	WPXHeader * m_pHeader;
+	FILE * m_stream;
+	WPXHeader * m_header;
 	
-	WPXLLListener * m_pLLListener;
-	WPXHLListener * m_pHLListener;
+	WPXLLListener * m_lLListener;
+	WPXHLListener * m_hLListener;
 };
 
 #endif /* WPXPARSER_H */

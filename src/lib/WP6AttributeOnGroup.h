@@ -32,9 +32,10 @@ class WP6AttributeOnGroup : public WP6FixedLengthGroup
 {
 public:
 	WP6AttributeOnGroup(WPXParser * parser);	
+	virtual gboolean parse() {}
 	
 protected:
-	gboolean _parseContents();
+	virtual gboolean _readContents(WPXParser *parser);
 };
 
 #endif /* WP6ATTRIBUTEONGROUP_H */

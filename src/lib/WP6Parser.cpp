@@ -40,14 +40,16 @@ gboolean WP6Parser::parse()
 	
 	fseek(getStream(), getHeader()->m_iDocumentOffset - ftell(getStream()), SEEK_CUR);
 	
-	WP6Part * part;
-	while (part = WP6Part::constructPart(this))
+	WP6Part * part = NULL;
+	while ((part = WP6Part::constructPart(this)))
 	{
+		WPD_DEBUG_MSG(("WordPerfect: parse\n"));
 		part->parse();
-		delete part;
+		delete(part);
+		part = NULL;
 	}
 
-	WPD_DEBUG_MSG(("WordPerfect: Finished with document parse (position = %ld)\n",(long)ftell(m_pStream)));
+	WPD_DEBUG_MSG(("WordPerfect: Finished with document parse (position = %ld)\n",(long)ftell(getStream())));
 	
 	return TRUE;
 }

@@ -23,16 +23,19 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP6EOLGROUP_H
-#define WP6EOLGROUP_H
+#ifndef WP6UNSUPPORTEDVARIABLELENGTHGROUP_H
+#define WP6UNSUPPORTEDVARIABLELENGTHGROUP_H
 
 #include "WP6VariableLengthGroup.h"
 
-class WP6EOLGroup : public WP6VariableLengthGroup
+// a pedantic and irritating class that we should only need until we completely cover wordperfect's
+// set of variable length groups (there are a finite number)
+
+class WP6UnsupportedVariableLengthGroup : public WP6VariableLengthGroup
 {
-public:
-	WP6EOLGroup(WPXParser * parser);	
-	virtual gboolean parse();
+ public:
+	WP6UnsupportedVariableLengthGroup(WPXParser * parser);	
+	virtual gboolean parse() {}
 };
 
-#endif /* WP6EOLGROUP_H */
+#endif /* WP6UNSUPPORTEDVARIABLELENGTHGROUP_H */

@@ -30,15 +30,14 @@
 
 class WP6FixedLengthGroup : public WP6Part
 {
-public:
+ public:
 	WP6FixedLengthGroup(WPXParser * parser);
 	
 	static WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(WPXParser * parser, guint8 groupID);
-	gboolean parse();
-protected:
-	virtual gboolean _parseContents() { return TRUE; }
-	
-	guint16 m_iSize; // should be set by the subclasses!
+
+ protected:
+	gboolean _read(WPXParser *parser, guint size);
+	virtual gboolean _readContents(WPXParser *parser) = 0; // we always read the contents in the case of a fixed length group
 };
 
 #endif /* WP6FIXEDLENGTHGROUP_H */

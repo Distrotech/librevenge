@@ -28,10 +28,10 @@
 WP6FixedSpaceGroup::WP6FixedSpaceGroup(WPXParser * parser)
 	: WP6FixedLengthGroup(parser)
 {
-	m_iSize = 1;
+	_read(parser, 1);
 }
 	
-gboolean WP6FixedSpaceGroup::_parseContents()
+gboolean WP6FixedSpaceGroup::parse()
 {
 	_getParser()->getLLListener()->insertCharacter((guint32) ' ');
 	

@@ -28,9 +28,10 @@
 WP6AttributeOffGroup::WP6AttributeOffGroup(WPXParser * parser)
 	: WP6FixedLengthGroup(parser)
 {
-	m_iSize = 3;
+	_read(parser, WP6_ATTRIBUTE_GROUP_SIZE);
 }
 	
-gboolean WP6AttributeOffGroup::_parseContents()
+gboolean WP6AttributeOffGroup::_readContents(WPXParser *parser)
 {
+	
 }

@@ -33,8 +33,8 @@
 
 WPXParser::WPXParser(FILE * stream, WPXHeader * header)
 {
-	m_pStream = stream;
-	m_pHeader = header;	
+	m_stream = stream;
+	m_header = header;	
 }
 
 WPXParser * WPXParser::constructParser(FILE * stream)

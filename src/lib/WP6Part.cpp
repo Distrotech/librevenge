@@ -36,6 +36,7 @@ WP6Part::WP6Part(WPXParser * parser)
 
 WP6Part * WP6Part::constructPart(WPXParser * parser)
 {	
+	WPD_DEBUG_MSG(("WordPerfect: ConstructPart\n"));
 	guint8 val;
 	while (ftell(parser->getStream()) < (long)((WP6Header *)parser->getHeader())->m_iDocumentSize)
 	{
@@ -53,18 +54,22 @@ WP6Part * WP6Part::constructPart(WPXParser * parser)
 		}
 		else if (readVal >= 0x80 && readVal <= 0xCF)
 		{
-			return WP6FixedLengthGroup::constructFixedLengthGroup(parser, val);
+			//WPD_DEBUG_MSG(("WordPerfect: constructFixedLengthGroup(parser, val)\n"));
+			//return WP6FixedLengthGroup::constructFixedLengthGroup(parser, val);
 		}
 		else if (readVal >= 0xD0 && readVal <= 0xEF)
 		{
+			WPD_DEBUG_MSG(("WordPerfect: constructVariableLengthGroup(parser, val)\n"));
 			return WP6VariableLengthGroup::constructVariableLengthGroup(parser, val);
 		}      
 		else if (readVal >= 0xF0 && readVal <= 0xFF)
 		{
+			WPD_DEBUG_MSG(("WordPerfect: constructFixedLengthGroup(parser, val)\n"));
 			return WP6FixedLengthGroup::constructFixedLengthGroup(parser, val);
 		}
 	}
 	
+	WPD_DEBUG_MSG(("WordPerfect: Returning NULL from constructPart\n"));
 	return NULL;
 
 	/*

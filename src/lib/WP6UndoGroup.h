@@ -32,9 +32,10 @@ class WP6UndoGroup : public WP6FixedLengthGroup
 {
 public:
 	WP6UndoGroup(WPXParser * parser);	
+	virtual gboolean parse() {}
 	
 protected:
-	gboolean _parseContents();
+	virtual gboolean _readContents(WPXParser *parser) {}
 };
 
 #endif /* WP6UNDOGROUP_H */

@@ -35,6 +35,8 @@
 WP6FixedLengthGroup::WP6FixedLengthGroup(WPXParser * parser)
 	: WP6Part(parser)
 {
+	// we can't call _read from here, because we need to use the child classes'
+	// virtual _readContents function, and we can't do that from a constructor
 }
 
 WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(WPXParser * parser, guint8 groupID)
@@ -67,10 +69,10 @@ WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(WPXParser *
 	}
 }
 
-gboolean WP6FixedLengthGroup::parse()
+gboolean WP6FixedLengthGroup::_read(WPXParser *parser, guint size)
 {
-	FILE * stream = _getParser()->getStream();
+	FILE * stream = parser->getStream();
 	guint32 startPosition = ftell(stream);
-	WPD_CHECK_INTERNAL_ERROR( _parseContents() );	
-	WPD_CHECK_FILE_SEEK_ERROR(fseek(stream, (startPosition + m_iSize - 1 - ftell(stream)), SEEK_CUR));
+	WPD_CHECK_INTERNAL_ERROR(_readContents(parser));
+	WPD_CHECK_FILE_SEEK_ERROR(fseek(stream, (startPosition + size - 1 - ftell(stream)), SEEK_CUR));
 }

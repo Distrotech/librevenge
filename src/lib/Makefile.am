@@ -15,6 +15,7 @@ libwpd2_a_SOURCES =			\
 	WP6Parser.cpp			\
 	WP6Part.cpp	 		\
 	WP6UndoGroup.cpp		\
+	WP6UnsupportedVariableLengthGroup.cpp \
 	WP6VariableLengthGroup.cpp 	\
 	WPXHeader.cpp 			\
 	WPXParser.cpp 			\
@@ -33,6 +34,7 @@ libwpd2_a_SOURCES =			\
 	WP6Parser.h			\
 	WP6Part.h	 		\
 	WP6UndoGroup.h			\
+	WP6UnsupportedVariableLengthGroup.h \
 	WP6VariableLengthGroup.h 	\
 	WPXHeader.h 			\
 	WPXParser.h 			\

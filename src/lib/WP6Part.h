@@ -32,12 +32,12 @@
 
 class WP6Part : public WPXPart
 {
-public:
+ public:
 	WP6Part(WPXParser * parser);
-	~WP6Part() {}
+	virtual ~WP6Part() {}
 	
 	static WP6Part * constructPart(WPXParser * parser);
-	virtual gboolean parse() {};
+	virtual gboolean parse() = 0;
 };
 
 

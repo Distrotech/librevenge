@@ -28,9 +28,10 @@
 WP6ExtendedCharacterGroup::WP6ExtendedCharacterGroup(WPXParser * parser)
 	: WP6FixedLengthGroup(parser)
 {
-	m_iSize = 4;
+	_read(parser, WP6_EXTENDED_CHARACTER_GROUP_SIZE);
 }
 	
-gboolean WP6ExtendedCharacterGroup::_parseContents()
+gboolean WP6ExtendedCharacterGroup::_readContents(WPXParser *parser)
 {
+	
 }

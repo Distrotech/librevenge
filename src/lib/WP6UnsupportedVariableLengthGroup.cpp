@@ -23,16 +23,11 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP6EOLGROUP_H
-#define WP6EOLGROUP_H
+#include "WP6UnsupportedVariableLengthGroup.h"
 
-#include "WP6VariableLengthGroup.h"
-
-class WP6EOLGroup : public WP6VariableLengthGroup
+WP6UnsupportedVariableLengthGroup::WP6UnsupportedVariableLengthGroup(WPXParser * parser)
+	: WP6VariableLengthGroup(parser)
 {
-public:
-	WP6EOLGroup(WPXParser * parser);	
-	virtual gboolean parse();
-};
-
-#endif /* WP6EOLGROUP_H */
+	WPD_DEBUG_MSG(("WordPerfect: Handling an unsupported variable length group\n"));
+	_read(parser);
+}

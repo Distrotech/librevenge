@@ -30,22 +30,31 @@
 
 class WP6VariableLengthGroup : public WP6Part
 {
-public:
-	WP6VariableLengthGroup(WPXParser * parser);	
-	~WP6VariableLengthGroup();
+ public:
+	WP6VariableLengthGroup(WPXParser * parser);
+	virtual ~WP6VariableLengthGroup();
 	
 	static WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(WPXParser * parser, guint8 groupID);
-	gboolean parse();
-protected:
-	virtual gboolean _parseContents() { return TRUE; }
-	
-	guint8 m_iGroup;
-	guint8 m_iSubGroup;
-	guint16 m_iSize;
-	guint8 m_iFlags;
-	guint8 m_iNumPrefixIDs;
-	guint16 **m_pPrefixIDs;
-	guint16 m_iSizeNonDeletable;
+
+ protected:
+	gboolean _read(WPXParser * parser);
+	virtual gboolean _readContents(WPXParser *parser) {} // we don't always need more information than that provided generically
+
+	const guint8 getGroup() const { return m_group; }
+	const guint8 getSubGroup() const { return m_subGroup; }
+	const guint8 getFlags() const { return m_flags; }
+	const guint8 getNumPrefixIDs() const { return m_numPrefixIDs; }
+	guint16 ** const getPrefixIDs() const { return m_prefixIDs; }
+	const guint16 getSizeNonDeletable() const { return m_sizeNonDeletable; }
+
+ private:
+	guint8 m_group;
+	guint8 m_subGroup;
+	guint16 m_size;
+	guint8 m_flags;
+	guint8 m_numPrefixIDs;
+	guint16 **m_prefixIDs;
+	guint16 m_sizeNonDeletable;
 };
 
 #endif /* WP6VARIABLELENGTHGROUP_H */

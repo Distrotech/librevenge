@@ -28,9 +28,10 @@
 WP6EOLGroup::WP6EOLGroup(WPXParser * parser)
 	: WP6VariableLengthGroup(parser)
 {
+	_read(parser);
 }
-	
-gboolean WP6EOLGroup::_parseContents()
+
+gboolean WP6EOLGroup::parse()
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling an EOL group\n"));
 	   
@@ -39,7 +40,7 @@ gboolean WP6EOLGroup::_parseContents()
 		//			m_paragraphStyleState != beginPart2Numbering && 
 				//	m_paragraphStyleState != end) */
 	{
-		switch(m_iSubGroup)
+		switch(getSubGroup())
 		{
 			case 0: // 0x00 (beginning of file)
 				break; // ignore

@@ -28,12 +28,16 @@
 WP6FixedEOLGroup::WP6FixedEOLGroup(WPXParser * parser)
 	: WP6FixedLengthGroup(parser)
 {
-	m_iSize = 1;
 }
 	
-gboolean WP6FixedEOLGroup::_parseContents()
+gboolean WP6FixedEOLGroup::parse()
 {
 	_getParser()->getLLListener()->insertEOL();
 	
 	return TRUE;
+}
+
+gboolean WP6FixedEOLGroup::_readContents(WPXParser *parser)
+{
+	
 }

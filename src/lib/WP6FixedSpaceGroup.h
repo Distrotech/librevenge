@@ -32,9 +32,10 @@ class WP6FixedSpaceGroup : public WP6FixedLengthGroup
 {
 public:
 	WP6FixedSpaceGroup(WPXParser * parser);	
+	virtual gboolean parse();
 	
 protected:
-	gboolean _parseContents();
+	virtual gboolean _readContents(WPXParser *parser) {}
 };
 
 #endif /* WP6FIXEDSPACEGROUP_H */

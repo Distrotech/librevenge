@@ -28,9 +28,5 @@
 WP6UndoGroup::WP6UndoGroup(WPXParser * parser)
 	: WP6FixedLengthGroup(parser)
 {
-	m_iSize = 5;
-}
-	
-gboolean WP6UndoGroup::_parseContents()
-{
+	_read(parser, WP6_UNDO_GROUP_SIZE);
 }
