@@ -1087,7 +1087,7 @@ void WP6HLListener::_closeTable()
 		m_listenerImpl->closeTable();
 		m_parseState->m_currentRow = 0;
 		m_parseState->m_currentColumn = 0;
-		m_parseState->m_numDeferredParagraphBreaks++;
+		m_parseState->m_isParagraphOpened = false;
 	}
 	m_parseState->m_isTableOpened = false;
 }
