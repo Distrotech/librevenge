@@ -74,7 +74,8 @@ WP6Parser::WP6Parser(FILE * stream, WPXLLListener *llListener/*,  WP6Header *hea
 // information to a low-level listener
 void WP6Parser::parse()
 {	
-	try {
+	try
+	{
 		WP6Header * header = new WP6Header(getStream());
 		
 		getLLListener()->startDocument();
@@ -82,30 +83,35 @@ void WP6Parser::parse()
 		WPD_CHECK_FILE_SEEK_ERROR(fseek(getStream(), header->getDocumentOffset() - ftell(getStream()), SEEK_CUR));
 	
 		while (ftell(getStream()) < (long)((WP6Header *)header)->getDocumentSize())
+		{
+			guint8 readVal;
+			WPD_CHECK_FILE_READ_ERROR(fread(&readVal, sizeof(guint8), 1, getStream()), 1);
+			
+			if (readVal <= (guint8)0x20)
 			{
-				guint8 readVal;
-				WPD_CHECK_FILE_READ_ERROR(fread(&readVal, sizeof(guint8), 1, getStream()), 1);
-				
-				if (readVal <= (guint8)0x20)
-					{
-						getLLListener()->insertCharacter( extendedInternationalCharacterMap[(readVal-1)] );
-					}
-				else if (readVal >= (guint8)0x21 && readVal <= (guint8)0x7F)
-					{
-						// normal ASCII characters
-						getLLListener()->insertCharacter( (guint16)readVal );
-					}
-				else 
-					{
-						WP6Part *part = WP6Part::constructPart(getStream(), readVal);
-						if (part != NULL) {
-							part->parse(dynamic_cast<WP6LLListener *>(getLLListener()));
-							delete(part);
-						}
-					}
+				getLLListener()->insertCharacter( extendedInternationalCharacterMap[(readVal-1)] );
 			}
+			else if (readVal >= (guint8)0x21 && readVal <= (guint8)0x7F)
+			{
+				// normal ASCII characters
+				getLLListener()->insertCharacter( (guint16)readVal );
+			}
+			else 
+			{
+				WP6Part *part = WP6Part::constructPart(getStream(), readVal);
+				if (part != NULL)
+				{
+					part->parse(dynamic_cast<WP6LLListener *>(getLLListener()));
+					delete(part);
+				}
+			}
+		}
 	}
-	catch(FileException) { WPD_DEBUG_MSG(("WordPerfect: File Seek Exception. Parse terminated prematurely.")); }
+	catch(FileException)
+	{
+		WPD_DEBUG_MSG(("WordPerfect: File Seek Exception. Parse terminated prematurely."));
+	}
+	
 	getLLListener()->endDocument();
 	WPD_DEBUG_MSG(("WordPerfect: Finished with document parse (position = %ld)\n",(long)ftell(getStream())));
 }
