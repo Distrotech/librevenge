@@ -123,11 +123,11 @@ void RawListenerImpl::endDocument()
 void RawListenerImpl::openPageSpan(const WPXPropertyList &propList)
 {
 	_U(("openPageSpan(span: %d, isLastPageSpan: %s, formLength: %.4f, formWidth: %.4f, Orientation: %s, marginLeft: %.4f, marginRight: %.4f, marginTop: %.4f, marginBottom: %.4f\n",
-	    propList["num-pages"]->getInt(), (propList["is-last-page-span"]->getInt() ? "true" : "false"), propList["page-height"]->getFloat(),
-	    propList["page-width"]->getFloat(), 
-	    (((WPXFormOrientation)propList["print-orientation"]->getInt()==LANDSCAPE) ? "landscape" : "portrait"), 
-	    propList["margin-left"]->getFloat(), propList["margin-right"]->getFloat(), 
-	    propList["margin-top"]->getFloat(), propList["margin-bottom"]->getFloat()),
+	    propList["libwpd:num-pages"]->getInt(), (propList["libwpd:is-last-page-span"]->getInt() ? "true" : "false"), 
+	    propList["fo:page-height"]->getFloat(), propList["fo:page-width"]->getFloat(), 
+	    propList["style:print-orientation"]->getStr()(), 
+	    propList["fo:margin-left"]->getFloat(), propList["fo:margin-right"]->getFloat(), 
+	    propList["fo:margin-top"]->getFloat(), propList["fo:margin-bottom"]->getFloat()),
 	   LC_OPEN_PAGE_SPAN);
 }
 

@@ -42,10 +42,10 @@ private:
 	int m_val;
 };
 
-class WPXFloatProperty : public WPXProperty
+class WPXInchProperty : public WPXProperty
 {
 public:
-	WPXFloatProperty(const float val);
+	WPXInchProperty(const float val);
 	virtual int getInt() const;
 	virtual float getFloat() const;
 	virtual UTF8String getStr() const; 
@@ -73,7 +73,7 @@ public:
 	static WPXProperty * newStringProp(const UTF8String &str) { return static_cast<WPXProperty *>(new WPXStringProperty(str)); }
 	static WPXProperty * newStringProp(const char *str) { return static_cast<WPXProperty *>(new WPXStringProperty(str)); }
 	static WPXProperty * newIntProp(const int val) { return static_cast<WPXProperty *>(new WPXIntProperty(val)); }
-	static WPXProperty * newFloatProp(const float val) { return static_cast<WPXProperty *>(new WPXFloatProperty(val)); }
+	static WPXProperty * newInchProp(const float val) { return static_cast<WPXProperty *>(new WPXInchProperty(val)); }
 };
 
 class WPXPropertyList
@@ -82,9 +82,12 @@ public:
 	WPXPropertyList();
 	WPXPropertyList(const WPXPropertyList &);
 	virtual ~WPXPropertyList();
-	void insert(string name, WPXProperty *prop) { m_map[name] = prop; }
+	void insert(string name, WPXProperty *prop);
+	void insert(string name, const char *val);
+	void insert(string name, const UTF8String &val);
 	void remove(string name);
 	const WPXProperty * operator[](const string s) const;
+	void clear();
 
 	class Iter
 	{

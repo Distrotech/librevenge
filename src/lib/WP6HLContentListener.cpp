@@ -1383,12 +1383,12 @@ void WP6HLContentListener::_openListElement()
 {
 	WPXPropertyList propList;
 	propList.insert("justification", WPXPropertyFactory::newIntProp(m_ps->m_paragraphJustification));
-	propList.insert("margin-left", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphMarginLeft));
-	propList.insert("margin-right", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphMarginRight));
-	propList.insert("margin-top", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphMarginTop));
-	propList.insert("margin-bottom", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphMarginBottom));
-	propList.insert("text-indent", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphTextIndent));
-	propList.insert("line-spacing", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphLineSpacing));
+	propList.insert("margin-left", WPXPropertyFactory::newInchProp(m_ps->m_paragraphMarginLeft));
+	propList.insert("margin-right", WPXPropertyFactory::newInchProp(m_ps->m_paragraphMarginRight));
+	propList.insert("margin-top", WPXPropertyFactory::newInchProp(m_ps->m_paragraphMarginTop));
+	propList.insert("margin-bottom", WPXPropertyFactory::newInchProp(m_ps->m_paragraphMarginBottom));
+	propList.insert("text-indent", WPXPropertyFactory::newInchProp(m_ps->m_paragraphTextIndent));
+	propList.insert("line-spacing", WPXPropertyFactory::newInchProp(m_ps->m_paragraphLineSpacing));
 
 	WPXTabStop tmp_tabStop;
 	vector<WPXTabStop> tabStops;

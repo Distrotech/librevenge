@@ -149,9 +149,9 @@ void WPXHLListener::_openSection()
 	propList.insert("num-columns", WPXPropertyFactory::newIntProp(m_ps->m_numColumns));
 
 	if (m_ps->m_numColumns > 1)
-		propList.insert("margin-bottom", WPXPropertyFactory::newFloatProp(1.0f));
+		propList.insert("margin-bottom", WPXPropertyFactory::newInchProp(1.0f));
 	else
-		propList.insert("margin-bottom", WPXPropertyFactory::newFloatProp(0.0f));
+		propList.insert("margin-bottom", WPXPropertyFactory::newInchProp(0.0f));
 
 	m_listenerImpl->openSection(propList, m_ps->m_textColumns);
 
@@ -189,15 +189,18 @@ void WPXHLListener::_openPageSpan()
 	(m_pageList->size() <= (m_ps->m_nextPageSpanIndice+1)) ? isLastPageSpan = true : isLastPageSpan = false;
 	
 	WPXPropertyList propList;
-	propList.insert("num-pages", WPXPropertyFactory::newIntProp(currentPage->getPageSpan()));
-	propList.insert("is-last-page-span", WPXPropertyFactory::newIntProp(isLastPageSpan));
-	propList.insert("page-height", WPXPropertyFactory::newFloatProp(currentPage->getFormLength()));
-	propList.insert("page-width", WPXPropertyFactory::newFloatProp(currentPage->getFormWidth()));
-	propList.insert("print-orientation", WPXPropertyFactory::newIntProp(currentPage->getFormOrientation())); 
-	propList.insert("margin-left", WPXPropertyFactory::newFloatProp(currentPage->getMarginLeft()));
-	propList.insert("margin-right", WPXPropertyFactory::newFloatProp(currentPage->getMarginRight()));
-	propList.insert("margin-top", WPXPropertyFactory::newFloatProp(currentPage->getMarginTop()));
-	propList.insert("margin-bottom", WPXPropertyFactory::newFloatProp(currentPage->getMarginBottom()));
+	propList.insert("libwpd:num-pages", WPXPropertyFactory::newIntProp(currentPage->getPageSpan()));
+	propList.insert("libwpd:is-last-page-span", WPXPropertyFactory::newIntProp(isLastPageSpan));
+	propList.insert("fo:page-height", WPXPropertyFactory::newInchProp(currentPage->getFormLength()));
+	propList.insert("fo:page-width", WPXPropertyFactory::newInchProp(currentPage->getFormWidth()));
+	if (currentPage->getFormOrientation() == LANDSCAPE)
+		propList.insert("style:print-orientation", WPXPropertyFactory::newStringProp("landscape")); 
+	else
+		propList.insert("style:print-orientation", WPXPropertyFactory::newStringProp("portrait")); 
+	propList.insert("fo:margin-left", WPXPropertyFactory::newInchProp(currentPage->getMarginLeft()));
+	propList.insert("fo:margin-right", WPXPropertyFactory::newInchProp(currentPage->getMarginRight()));
+	propList.insert("fo:margin-top", WPXPropertyFactory::newInchProp(currentPage->getMarginTop()));
+	propList.insert("fo:margin-bottom", WPXPropertyFactory::newInchProp(currentPage->getMarginBottom()));
 	
 	m_listenerImpl->openPageSpan(propList);
 
@@ -310,12 +313,12 @@ void WPXHLListener::_openParagraph()
 void WPXHLListener::_appendParagraphProperties(WPXPropertyList &propList, int justification)
 {
 	propList.insert("justification", WPXPropertyFactory::newIntProp(justification));
-	propList.insert("margin-left", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphMarginLeft));
-	propList.insert("margin-right", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphMarginRight));
-	propList.insert("margin-top", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphMarginTop));
-	propList.insert("margin-bottom", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphMarginBottom));
-	propList.insert("text-indent", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphTextIndent));
-	propList.insert("line-spacing", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphLineSpacing));
+	propList.insert("margin-left", WPXPropertyFactory::newInchProp(m_ps->m_paragraphMarginLeft));
+	propList.insert("margin-right", WPXPropertyFactory::newInchProp(m_ps->m_paragraphMarginRight));
+	propList.insert("margin-top", WPXPropertyFactory::newInchProp(m_ps->m_paragraphMarginTop));
+	propList.insert("margin-bottom", WPXPropertyFactory::newInchProp(m_ps->m_paragraphMarginBottom));
+	propList.insert("text-indent", WPXPropertyFactory::newInchProp(m_ps->m_paragraphTextIndent));
+	propList.insert("line-spacing", WPXPropertyFactory::newInchProp(m_ps->m_paragraphLineSpacing));
 	propList.insert("column-break", WPXPropertyFactory::newIntProp(m_ps->m_isParagraphColumnBreak));
 	propList.insert("page-break", WPXPropertyFactory::newIntProp(m_ps->m_isParagraphPageBreak));
 }
@@ -366,7 +369,7 @@ void WPXHLListener::_openSpan()
 	WPXPropertyList propList;
 	propList.insert("text-attribute-bits", WPXPropertyFactory::newIntProp(attributeBits & 0xffffffe0));
 	propList.insert("font-name", WPXPropertyFactory::newStringProp(*(m_ps->m_fontName)));
-	propList.insert("font-size", WPXPropertyFactory::newFloatProp(fontSizeChange*m_ps->m_fontSize));
+	propList.insert("font-size", WPXPropertyFactory::newInchProp(fontSizeChange*m_ps->m_fontSize));
 	propList.insert("color", WPXPropertyFactory::newStringProp(_colorToString(m_ps->m_fontColor)));
 	propList.insert("text-background-color", WPXPropertyFactory::newStringProp(_colorToString(m_ps->m_highlightColor)));
 
@@ -389,9 +392,9 @@ void WPXHLListener::_openTable()
 
 	WPXPropertyList propList;
 	propList.insert("alignment", WPXPropertyFactory::newIntProp(m_ps->m_tableDefinition.m_positionBits));
-	propList.insert("margin-left", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphMarginLeft));
-	propList.insert("margin-right", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphMarginRight));
-	propList.insert("left-offset", WPXPropertyFactory::newFloatProp(m_ps->m_tableDefinition.m_leftOffset));
+	propList.insert("margin-left", WPXPropertyFactory::newInchProp(m_ps->m_paragraphMarginLeft));
+	propList.insert("margin-right", WPXPropertyFactory::newInchProp(m_ps->m_paragraphMarginRight));
+	propList.insert("left-offset", WPXPropertyFactory::newInchProp(m_ps->m_tableDefinition.m_leftOffset));
 
 	m_listenerImpl->openTable(propList, m_ps->m_tableDefinition.columns);
 	m_ps->m_isTableOpened = true;
@@ -427,7 +430,7 @@ void WPXHLListener::_openTableRow(const float height, const bool isMinimumHeight
 	m_ps->m_currentTableCol = 0;
 
 	WPXPropertyList propList;
-	propList.insert("height", WPXPropertyFactory::newFloatProp(height));
+	propList.insert("height", WPXPropertyFactory::newInchProp(height));
 	propList.insert("is-minimum-height", WPXPropertyFactory::newIntProp(isMinimumHeight));
 
 	// Only the first "Header Row" in a table is the actual "Header Row"

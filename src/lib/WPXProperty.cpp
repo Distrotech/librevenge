@@ -58,30 +58,30 @@ WPXProperty * WPXIntProperty::clone() const
 	return new WPXIntProperty(m_val);
 }
 
-WPXFloatProperty::WPXFloatProperty(const float val) :
+WPXInchProperty::WPXInchProperty(const float val) :
 	m_val(val) 
 {
 }
-int WPXFloatProperty::getInt() const 
+int WPXInchProperty::getInt() const 
 { 
 	return (int)m_val; 
 }
 
-float WPXFloatProperty::getFloat() const 
+float WPXInchProperty::getFloat() const 
 { 
 	return m_val; 
 }
 
-UTF8String WPXFloatProperty::getStr() const 
+UTF8String WPXInchProperty::getStr() const 
 { 
 	UTF8String str; 
-	str.sprintf("%finch", m_val); 
+	str.sprintf("%.04finch", m_val); 
 	return str; 
 }
 
-WPXProperty * WPXFloatProperty::clone() const
+WPXProperty * WPXInchProperty::clone() const
 {
-	return new WPXFloatProperty(m_val);
+	return new WPXInchProperty(m_val);
 }
 
 WPXPropertyList::WPXPropertyList()
@@ -104,6 +104,22 @@ WPXPropertyList::~WPXPropertyList()
 	     iter++) { delete iter->second; } 
 }
 
+void WPXPropertyList::insert(string name, WPXProperty *prop)
+{ 
+	m_map[name] = prop; 
+}
+
+void WPXPropertyList::insert(string name, const char *val)
+{ 
+	m_map[name] = WPXPropertyFactory::newStringProp(val);
+}
+
+void WPXPropertyList::insert(string name, const UTF8String &val)
+{ 
+	m_map[name] = WPXPropertyFactory::newStringProp(val);
+}
+
+
 void WPXPropertyList::remove(string name)
 {
 	m_map.erase(name);
@@ -120,3 +136,11 @@ const WPXProperty * WPXPropertyList::operator[](const string s) const
 	return NULL;
 }
 
+void WPXPropertyList::clear()
+{
+	for (map<string, WPXProperty *>::iterator iter = m_map.begin();
+	     iter != m_map.end();
+	     iter++) { delete iter->second; } 
+
+	m_map.clear();
+}
