@@ -205,7 +205,7 @@ public:
 
 protected:
 	void _handleLineBreakElementBegin();
-	void _flushText(const gboolean forceInitialParagraph=FALSE);
+	void _flushText(const gboolean fakeText=FALSE);
 	void _handleListChange(const guint16 outlineHash);
 
 	void _openSection();

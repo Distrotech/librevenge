@@ -860,17 +860,18 @@ void WP6HLListener::_handleLineBreakElementBegin()
 	_flushText();
 }
 
-// _flushText
+// _flushText: Flushes text and any section, paragraph, or span properties prior to the text
+// paramaters: fakeText. Pretend there is text, even if there isn't any (useful for tabs)
 // FIXME: we need to declare a set of preconditions that must be met when this function is called
 // 
-void WP6HLListener::_flushText(const gboolean forceInitialParagraph)
+void WP6HLListener::_flushText(const gboolean fakeText)
 {		
 
 	// take us out of the list, if we definitely have text out of the list (or we have forced a break,
 	// which assumes the same condition)
 	if (m_parseState->m_styleStateSequence.getCurrentState() == NORMAL) 
 	{
-		if (m_parseState->m_currentListLevel > 0 && (m_parseState->m_numDeferredParagraphBreaks > 0 || m_parseState->m_bodyText.getLen() > 0 || forceInitialParagraph) && 
+		if (m_parseState->m_currentListLevel > 0 && (m_parseState->m_numDeferredParagraphBreaks > 0 || m_parseState->m_bodyText.getLen() > 0 || fakeText) && 
 		    m_parseState->m_styleStateSequence.getCurrentState() == NORMAL)
 		{
 			m_parseState->m_currentListLevel = 0;
@@ -880,7 +881,7 @@ void WP6HLListener::_flushText(const gboolean forceInitialParagraph)
 
 	// create a new section, and a new paragraph, if our section attributes have changed and we have inserted
 	// something into the document (or we have forced a break, which assumes the same condition)
-	if (m_parseState->m_sectionAttributesChanged && (m_parseState->m_bodyText.getLen() > 0 || m_parseState->m_numDeferredParagraphBreaks > 0 || forceInitialParagraph ))
+	if (m_parseState->m_sectionAttributesChanged && (m_parseState->m_bodyText.getLen() > 0 || m_parseState->m_numDeferredParagraphBreaks > 0 || fakeText ))
 	{
 		_openSection();
 		_openParagraph();
@@ -897,7 +898,7 @@ void WP6HLListener::_flushText(const gboolean forceInitialParagraph)
 		}
 		m_parseState->m_isParagraphOpened = TRUE;
 	}
-	else if (m_parseState->m_textAttributesChanged && m_parseState->m_bodyText.getLen() > 0) 
+	else if (m_parseState->m_textAttributesChanged && (m_parseState->m_bodyText.getLen() > 0 || fakeText)) 
 	{
 		_openSpan();
 	}

@@ -27,8 +27,9 @@
 #include "WP6FontDescriptorPacket.h"
 #include "libwpd_internal.h"
 
-char *fontWeightStrings[] = { "Regular", "Bold", "Light", "Standaard", "Standard" };
-int numFontWeightStrings = 4;
+const char *FONT_WEIGHT_STRINGS[] = { "Black", "Regular", "Normal", "Extended", "Bold", "Light", "Medium", "Extra", "Standaard", "Standard" };
+const char * USELESS_WP_POSTFIX = "-WP";
+#define countElements(a) ((sizeof(a) / sizeof(a[0])))
 
 WP6FontDescriptorPacket::WP6FontDescriptorPacket(GsfInput *input, int id, guint32 dataOffset, guint32 dataSize) 
 	: WP6PrefixDataPacket(input)
@@ -79,47 +80,62 @@ void WP6FontDescriptorPacket::_readContents(GsfInput *input)
 		   guint16 const *tempFontName = (guint16 const *)gsf_input_read(input, sizeof(guint16)*(m_fontNameLength/2), NULL);
 		   m_fontName = new gchar[m_fontNameLength];
 
-		   guint16 tempLength1=0;
+		   guint16 tempLength=0;
 		   int numTokens=0;
 		   int lastTokenPosition=0;
 		   for (guint16 i=0; i<(m_fontNameLength/2); i++) 
-			   {
-				   guint8 characterSet = (tempFontName[i] & 0xFF00) >> 8;
-				   guint8 character = (tempFontName[i] & 0xFF);
-				   guint16 ucs2Character = extendedCharacterToUCS2(character, characterSet);
-				   
-				   if (ucs2Character == 0x20) {
-					   m_fontName[tempLength1]=' ';
-					   tempLength1++;
-					   numTokens++;
-					   lastTokenPosition=tempLength1;
-				   }
-				   else if (ucs2Character != 0x00 && ucs2Character < 0x7F) {
-					   m_fontName[tempLength1]=(gchar) ucs2Character;
-					   tempLength1++;
-				   }
+		   {
+			   guint8 characterSet = (tempFontName[i] & 0xFF00) >> 8;
+			   guint8 character = (tempFontName[i] & 0xFF);
+			   guint16 ucs2Character = extendedCharacterToUCS2(character, characterSet);
+			   
+			   if (ucs2Character == 0x20) {
+				   m_fontName[tempLength]=' ';
+				   tempLength++;
+				   numTokens++;
+				   lastTokenPosition=tempLength;
 			   }
-		   m_fontName[tempLength1]='\0';
+			   else if (ucs2Character != 0x00 && ucs2Character < 0x7F) {
+				   m_fontName[tempLength]=(gchar) ucs2Character;
+				   tempLength++;
+			   }
+		   }
+		   m_fontName[tempLength]='\0';
 		   // TODO/HACK: probably should create a proper static function for doing this
 		   // consume the last token (by replacing the first char with a null-terminator) if its a weight signifier
+		   // also remove annoying -WP postfix
 		   // (NB: not all wp fonts are terminated by weight, just enough of them to make this annoying)
-		   for (int j=0; j<numFontWeightStrings; j++) 
+		   // NB: also this is O(n^2). Could be a performance hotspot.
+		   WPD_DEBUG_MSG(("WordPerfect: stripping font name (original: %s)\n", m_fontName));
+		   for (int stringPosition=(tempLength-1); stringPosition>=0; stringPosition--)
+		   {
+			   int k;
+			   for (k=0; k<countElements(FONT_WEIGHT_STRINGS); k++) 
 			   {
-				   if (!strcmp(fontWeightStrings[j], &m_fontName[lastTokenPosition])) 
-					   {
-						   if (lastTokenPosition > 0) {
-							   m_fontName[lastTokenPosition-1]='\0';
-							   tempLength1 = lastTokenPosition-1;
-						   }
-						   break;
-					   }
+				   if (!strcmp(FONT_WEIGHT_STRINGS[k], &m_fontName[stringPosition])) 
+				   {
+					   m_fontName[stringPosition-1]='\0';
+					   tempLength = stringPosition-1;
+					   break;
+				   }
 			   }
-		   // also consume any whitespace at the end of the font..
-		   while ((tempLength1 - 1) > 0 && m_fontName[tempLength1-1] == ' ')
+			   // SPECIAL CASE: eliminate the -WP postfix (if it's there), which isn't spaced out from
+			   // the rest of the font
+			   if (k==countElements(FONT_WEIGHT_STRINGS))
 			   {
-				   m_fontName[tempLength1-1] = '\0';
+				   if (!strcmp(USELESS_WP_POSTFIX, &m_fontName[stringPosition])) 
+				   {
+					   m_fontName[stringPosition]='\0';
+					   tempLength = stringPosition - 1;
+				   }
 			   }
-
+			   // also consume any whitespace at the end of the font..
+			   while ((tempLength - 1) > 0 && m_fontName[tempLength-1] == ' ')
+			   {
+				   m_fontName[tempLength-1] = '\0';
+			   }
+		   }
+		   WPD_DEBUG_MSG(("WordPerfect: stripping font name (final: %s)\n", m_fontName));
 	   }
    WPD_DEBUG_MSG(("WordPerfect: Read Font (primary family id: %i, family member id: %i, font type: %i, font source file type: %i font name length: %i, font name: %s)\n", (int) m_primaryFamilyId, (int) m_primaryFamilyMemberId, (int) m_fontType, (int) m_fontSourceFileType, (int) m_fontNameLength, m_fontName));
 
