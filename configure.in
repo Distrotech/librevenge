@@ -44,6 +44,7 @@ Makefile
 src/Makefile
 src/conv/Makefile
 src/conv/html/Makefile
+src/conv/raw/Makefile
 src/conv/text/Makefile
 src/lib/Makefile
 libwpd-1.pc

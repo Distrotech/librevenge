@@ -2,4 +2,4 @@ AUTOMAKE_OPTIONS = gnu 1.4
 
 pkgconfigdir = $(libdir)/pkgconfig
 
-SUBDIRS = html text
+SUBDIRS = html raw text
