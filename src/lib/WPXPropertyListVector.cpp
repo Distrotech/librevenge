@@ -23,7 +23,7 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WPXVector.h"
+#include "WPXPropertyListVector.h"
 #include "WPXPropertyList.h"
 #include <vector>
 

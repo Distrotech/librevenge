@@ -29,7 +29,7 @@
 #include "WPXLLListener.h"
 #include "WPXHLListenerImpl.h"
 #include "WPXTable.h"
-#include "WPXVector.h"
+#include "WPXPropertyListVector.h"
 
 class WPXPageSpan;
 

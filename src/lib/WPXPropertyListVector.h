@@ -23,8 +23,8 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WPXVECTOR_H
-#define WPXVECTOR_H
+#ifndef WPXPROPERTYLISTVECTOR_H
+#define WPXPROPERTYLISTVECTOR_H
 #include <sys/types.h>
 
 class WPXPropertyList;
@@ -79,4 +79,4 @@ private:
 	WPXPropertyListVectorImpl *m_impl;
 };
 
-#endif /* WPXVECTOR_H */
+#endif /* WPXPROPERTYLISTVECTOR_H */
