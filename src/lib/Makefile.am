@@ -5,6 +5,7 @@ AM_CXXFLAGS = $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS)
 
 libwpd2_a_SOURCES =			\
 	WP6AttributeGroup.cpp 		\
+	WP6CharacterGroup.cpp		\
 	WP6ColumnGroup.cpp		\
 	WP6EOLGroup.cpp			\
 	WP6ExtendedCharacterGroup.cpp 	\
@@ -24,6 +25,7 @@ libwpd2_a_SOURCES =			\
 	UT_libwpd2.h	        	\
 	WP6FileStructure.h		\
 	WP6AttributeGroup.h 		\
+	WP6CharacterGroup.h		\
 	WP6ColumnGroup.h		\
 	WP6EOLGroup.h			\
 	WP6ExtendedCharacterGroup.h 	\
