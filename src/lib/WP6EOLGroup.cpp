@@ -197,27 +197,27 @@ void WP6EOLGroup::parse(WP6HLListener *listener)
 		case WP6_EOL_GROUP_SOFT_EOL:
 		case WP6_EOL_GROUP_SOFT_EOC:
 		case WP6_EOL_GROUP_SOFT_EOC_AT_EOP: // 0x03 (soft EOC at EOP) 
-		case WP6_EOL_GROUP_DELETABLE_SOFT_EOL: // 0x014 (deletable soft EOL)
-		case WP6_EOL_GROUP_DELETABLE_SOFT_EOC: // 0x15 (deletable soft EOC) 
-		case WP6_EOL_GROUP_DELETABLE_SOFT_EOC_AT_EOP: // 0x16 (deleteable soft EOC at EOP)
+		case WP6_EOL_GROUP_DELETABLE_HARD_EOL: // 0x17 (deletable hard EOL)
+		case WP6_EOL_GROUP_DELETABLE_HARD_EOL_AT_EOC: // 0x18 (deletable hard EOL at EOC)
+		case WP6_EOL_GROUP_DELETABLE_HARD_EOL_AT_EOP: // 0x19 (deletable hard EOL at EOP)
+		case WP6_EOL_GROUP_DELETABLE_HARD_EOP: // deletable hard EOP
+		case WP6_EOL_GROUP_DELETABLE_HARD_EOC:
+		case WP6_EOL_GROUP_DELETABLE_HARD_EOC_AT_EOP:
 			listener->insertCharacter((guint16) ' ');
 			break;
 		case WP6_EOL_GROUP_HARD_EOL:
 		case WP6_EOL_GROUP_HARD_EOL_AT_EOC:
 		case WP6_EOL_GROUP_HARD_EOL_AT_EOP:
-		case WP6_EOL_GROUP_DELETABLE_HARD_EOL: // 0x17 (deletable hard EOL)
-		case WP6_EOL_GROUP_DELETABLE_HARD_EOL_AT_EOC: // 0x18 (deletable hard EOL at EOC)
-		case WP6_EOL_GROUP_DELETABLE_HARD_EOL_AT_EOP: // 0x19 (deletable hard EOL at EOP)
 			listener->insertEOL();
 			break;
-		case WP6_EOL_CHARACTER_HARD_END_OF_COLUMN: // 0x07 (hard end of column)
+		case WP6_EOL_GROUP_HARD_EOC: // 0x07 (hard end of column)
+		case WP6_EOL_GROUP_HARD_EOC_AT_EOP:
 			listener->insertBreak(WPX_COLUMN_BREAK);
 			break;
 		case WP6_EOL_GROUP_HARD_EOP: // hard EOP
-		case WP6_EOL_GROUP_DELETABLE_HARD_EOP: // deletable hard EOP
 			listener->insertBreak(WPX_PAGE_BREAK);
 			break;
-		case 0x0A: // Table Cell
+		case WP6_EOL_GROUP_TABLE_CELL: // Table Cell
 			WPD_DEBUG_MSG(("WordPerfect: EOL group: table cell\n"));
 			listener->insertCell(m_colSpan, m_rowSpan, m_boundFromLeft, m_boundFromAbove, m_cellBorders, cellFgColor, cellBgColor);
 			break;
@@ -237,6 +237,9 @@ void WP6EOLGroup::parse(WP6HLListener *listener)
 		case WP6_EOL_GROUP_TABLE_OFF_AT_EOC_AT_EOP:
 			listener->endTable();
 			break;
+//		case WP6_EOL_GROUP_DELETABLE_SOFT_EOL: // 0x014 (deletable soft EOL)
+//		case WP6_EOL_GROUP_DELETABLE_SOFT_EOC: // 0x15 (deletable soft EOC) 
+//		case WP6_EOL_GROUP_DELETABLE_SOFT_EOC_AT_EOP: // 0x16 (deleteable soft EOC at EOP)
 		default: // something else we don't support yet
 			break;
 	}
@@ -244,10 +247,7 @@ void WP6EOLGroup::parse(WP6HLListener *listener)
 	// search for soft page breaks and dispatch messages to that effect
 	switch(getSubGroup())
 	{
-		case WP6_EOL_GROUP_SOFT_EOC_AT_EOP: // 0x03 (soft EOC at EOP) 
-		case WP6_EOL_GROUP_DELETABLE_SOFT_EOC_AT_EOP: // 0x16 (deleteable soft EOC at EOP)		
 		case WP6_EOL_GROUP_HARD_EOL_AT_EOP:
-		case WP6_EOL_GROUP_DELETABLE_HARD_EOL_AT_EOP: // 0x19 (deletable hard EOL at EOP)
 		case WP6_EOL_GROUP_TABLE_ROW_AT_EOP:
 		case WP6_EOL_GROUP_TABLE_ROW_AT_HARD_EOC_AT_HARD_EOP:
 		case WP6_EOL_GROUP_TABLE_ROW_AT_HARD_EOP:

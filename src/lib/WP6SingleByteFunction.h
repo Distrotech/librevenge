@@ -40,7 +40,31 @@ public:
 	virtual void parse(WP6HLListener *listener);	
 };
 
+class WP6HardSpaceFunction : public WP6SingleByteFunction
+{
+public:
+	virtual void parse(WP6HLListener *listener);	
+};
+
 class WP6EOLFunction : public WP6SingleByteFunction
+{
+public:
+	virtual void parse(WP6HLListener *listener);	
+};
+
+class WP6EOCFunction : public WP6SingleByteFunction
+{
+public:
+	virtual void parse(WP6HLListener *listener);	
+};
+
+class WP6EOPFunction : public WP6SingleByteFunction
+{
+public:
+	virtual void parse(WP6HLListener *listener);	
+};
+
+class WP6SoftHyphenFunction : public WP6SingleByteFunction
 {
 public:
 	virtual void parse(WP6HLListener *listener);	
@@ -51,4 +75,5 @@ class WP6HyphenFunction : public WP6SingleByteFunction
 public:
 	virtual void parse(WP6HLListener *listener);	
 };
+
 #endif /* WP6SINGLEBYTEFUNCTION_H */

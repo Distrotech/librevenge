@@ -29,20 +29,49 @@
 
 WP6SingleByteFunction * WP6SingleByteFunction::constructSingleByteFunction(GsfInput *input, guint8 groupID)
 {
+
 	switch (groupID) 
 		{
 		case WP6_TOP_SOFT_EOL:
+		case WP6_TOP_SOFT_EOL_AT_EOC:
+		case WP6_TOP_SOFT_EOL_AT_EOC_AT_EOP:
 		case WP6_TOP_SOFT_SPACE:
+		case WP6_TOP_DELETABLE_HARD_EOP:
+		case WP6_TOP_DELETABLE_HARD_EOC:
+		case WP6_TOP_DELETABLE_HARD_EOC_AT_EOP:
+		case WP6_TOP_DELETABLE_HARD_EOL:
+		case WP6_TOP_DELETABLE_HARD_EOL_AT_EOC:
+		case WP6_TOP_DELETABLE_HARD_EOL_AT_EOC_AT_EOP:
 			return new WP6SpaceFunction();
-			
+		
+		case WP6_TOP_HARD_SPACE:
+			return new WP6HardSpaceFunction();
+
+		case WP6_TOP_SOFT_HYPHEN_IN_LINE:
+		case WP6_TOP_SOFT_HYPHEN_AT_EOL:
+			return new WP6SoftHyphenFunction();		
+	
 		case WP6_TOP_HARD_HYPHEN:
 			return new WP6HyphenFunction();
 
 		case WP6_TOP_HARD_EOL:
+		case WP6_TOP_HARD_EOL_AT_EOC:
+		case WP6_TOP_HARD_EOL_AT_EOC_AT_EOP:
 		case WP6_TOP_DORMANT_HARD_RETURN:
 			return new WP6EOLFunction();
-			
+
+		case WP6_TOP_HARD_EOC:
+		case WP6_TOP_HARD_EOC_AT_EOP:
+			return new WP6EOCFunction();
+
+		case WP6_TOP_HARD_EOP:
+			return new WP6EOPFunction();
+
 		// Add the remaining cases here
+//		case WP6_TOP_DELETABLE_SOFT_EOL:
+//		case WP6_TOP_DELETABLE_SOFT_EOL_AT_EOC:
+//		case WP6_TOP_DELETABLE_SOFT_EOL_AT_EOC_AT_EOP:
+//		case WP6_TOP_AUTO_HYPHEN:
 		default:
 			// should not happen
 			return NULL;
@@ -54,9 +83,29 @@ void WP6SpaceFunction::parse(WP6HLListener *listener)
 	listener->insertCharacter((guint16) ' ');
 }
 
+void WP6HardSpaceFunction::parse(WP6HLListener *listener)
+{
+	listener->insertCharacter((guint16) 0xa0);
+}
+
+void WP6SoftHyphenFunction::parse(WP6HLListener *listener)
+{
+	listener->insertCharacter((guint16) 0xad);
+}
+
 void WP6EOLFunction::parse(WP6HLListener *listener)
 {
 	listener->insertEOL();
+}
+
+void WP6EOCFunction::parse(WP6HLListener *listener)
+{
+	listener->insertBreak(WPX_COLUMN_BREAK);
+}
+
+void WP6EOPFunction::parse(WP6HLListener *listener)
+{
+	listener->insertBreak(WPX_PAGE_BREAK);
 }
 
 void WP6HyphenFunction::parse(WP6HLListener *listener)
