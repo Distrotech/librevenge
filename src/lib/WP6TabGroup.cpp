@@ -1,6 +1,7 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -29,22 +30,37 @@
 
 WP6TabGroup::WP6TabGroup(WPXInputStream *input) :
 	WP6VariableLengthGroup(),
-	m_position(0)
+	m_position(0),
+	m_ignoreFunction(false)
 {
 	_read(input);
 }
 
 void WP6TabGroup::_readContents(WPXInputStream *input)
 {
-	if ((getSize() >= 12)) // Minimum size of the function if the position information is present
+	if ((getFlags() & 0x40) == 0x40) // 0x40 is "ignore function" flag
+	{
+		m_ignoreFunction = true;
+	}
+	if ((getSize() >= 12) & (getSize() <= 18)) // Minimum size of the function if the position information is present
 	{
 		input->seek((getSize() - 12), WPX_SEEK_CUR);
+		m_position = readU16(input);
+	}
+	else if (getSize() > 18)
+	{
+		input->seek(6, WPX_SEEK_CUR);
 		m_position = readU16(input);
 	}
 }
 
 void WP6TabGroup::parse(WP6HLListener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling a Tab group (Tab type %i, tab position %i)\n", getSubGroup(), m_position));
-	listener->insertTab(getSubGroup(), m_position);
+	WPD_DEBUG_MSG(("WordPerfect: handling a Tab group (Tab type: %i, Tab position: %i, Ignore function: %s)\n", 
+			getSubGroup(), m_position, (m_ignoreFunction?"true":"false")));
+	if (!m_ignoreFunction)
+	{
+		WPD_DEBUG_MSG(("WordPerfect: Parsing a Tab group\n"));		
+		listener->insertTab(getSubGroup(), m_position);
+	}
 }

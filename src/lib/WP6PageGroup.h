@@ -49,8 +49,6 @@ class WP6PageGroup : public WP6VariableLengthGroup
 	guint16 m_formWidth;
 	guint8 m_formType;
 	WPXFormOrientation m_formOrientation;
-	guint8 m_formNameLength;
-	gchar* m_formName;
 
 };
 

@@ -30,15 +30,13 @@
 
 WP6PageGroup::WP6PageGroup(WPXInputStream *input) :
 	WP6VariableLengthGroup(),
-	m_margin(0),
-	m_formName(NULL)
+	m_margin(0)
 {
 	_read(input);
 }
 
 WP6PageGroup::~WP6PageGroup()
 {
-	delete [] m_formName;
 }
 
 void WP6PageGroup::_readContents(WPXInputStream *input)
@@ -76,31 +74,8 @@ void WP6PageGroup::_readContents(WPXInputStream *input)
 			m_formOrientation = PORTRAIT;
 			break;
 		}
-		m_formNameLength = readU8(input);
-
-		if (m_formNameLength == 0)
-		{
-			m_formName = new gchar[1];
-			m_formName[0]='\0';
-		}
-		else
-		{
-			m_formName = new gchar[m_formNameLength];
-			for (guint8 i=0; i<m_formNameLength; i++)
-			{
-				guint8 characterSet;
-				guint8 character;
-				int len;
-				const guint16 *chars;
-				guint16 charWord = readU16(input);
-				characterSet = (charWord & 0xFF00) >> 8;
-				character = (charWord & 0xFF);
-				len = extendedCharacterToUCS2(character, characterSet, &chars);
-				m_formName[i] = chars[0];
-			}
-		}
-		WPD_DEBUG_MSG(("WordPerfect: Read form information (length: %i), (width: %i), (form name: %s), (form orientation: %s),\n",
-						m_formLength, m_formWidth, m_formName, ((m_formOrientation==PORTRAIT)?"portrait":"landscape")));
+		WPD_DEBUG_MSG(("WordPerfect: Read form information (length: %i), (width: %i), (form orientation: %s),\n",
+						m_formLength, m_formWidth, ((m_formOrientation==PORTRAIT)?"portrait":"landscape")));
 		break;
 	default: /* something else we don't support, since it isn't in the docs */
 		break;
