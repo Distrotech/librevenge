@@ -32,8 +32,8 @@
 class RawListenerImpl : public WPXHLListenerImpl
 {
 public:
-	RawListenerImpl();
-	~RawListenerImpl() {}
+	RawListenerImpl(bool printIndentLevel);
+	~RawListenerImpl();
 
  	virtual void setDocumentMetaData(const UCSString &author, const UCSString &subject,
 					 const UCSString &publisher, const UCSString &category,
@@ -99,6 +99,9 @@ public:
 		
 private:
 	int	m_indent;
+	int m_actualIndentLevel;
+
+	bool m_printIndentLevel;
 
 	void __indentUp() { m_indent++; }
 	void __indentDown() { if (m_indent > 0) m_indent--; }

@@ -32,20 +32,47 @@
 
 int main(int argc, char *argv[])
 {
+	bool printIndentLevel = false;
+	char *file = NULL;
+	
 	if (argc < 2)
 	{
-		printf("usage: wpd2raw <WordPerfect Document>\n");
+		printf("Usage: wpd2raw [OPTION] <WordPerfect Document>\n");
 		return -1;
 	}
 	gsf_init();
 
+	if (!strcmp(argv[1], "--callgraph"))
+	{
+		if (argc == 2)
+		{
+			printf("Usage: wpd2raw [OPTION] <WordPerfect Document>\n");
+			return -1;
+		}
+			
+		printIndentLevel = true;
+		file = argv[2];
+	}
+	else if (!strcmp(argv[1], "--help"))
+	{
+		printf("Usage: wpd2raw [OPTION] <WordPerfect Document>\n");
+		printf("\n");
+		printf("Options:\n");
+		printf("--callgraph		    Display the call graph nesting level\n");
+		printf("--help              Shows this help message\n");
+		return 0;
+	}
+	else
+		file = argv[1];
+		
+	
 	GError   *err;
-	GsfInput * input = GSF_INPUT(gsf_input_stdio_new (argv[1], &err));
+	GsfInput * input = GSF_INPUT(gsf_input_stdio_new (file, &err));
 	if (input == NULL) 
 		{
 			g_return_val_if_fail (err != NULL, 1);
 			
-			g_warning ("'%s' error: %s", argv[1], err->message);
+			g_warning ("'%s' error: %s", file, err->message);
 			g_error_free (err);
 			return 1;
 		}
@@ -57,7 +84,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 	
-	RawListenerImpl listenerImpl;
+	RawListenerImpl listenerImpl(printIndentLevel);
  	try 
 	{
 		WPDocument::parse(input, static_cast<WPXHLListenerImpl *>(&listenerImpl));

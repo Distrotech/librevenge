@@ -1,6 +1,6 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2002,2004 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2002-2004 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,13 +26,23 @@
 #include <stdio.h>
 #include "RawListener.h"
 
-RawListenerImpl::RawListenerImpl() : 
-	m_indent(0)
+RawListenerImpl::RawListenerImpl(bool printIndentLevel) : 
+	m_indent(0),
+	m_actualIndentLevel(0),
+	m_printIndentLevel(printIndentLevel)
 {
+}
+
+RawListenerImpl::~RawListenerImpl()
+{
+	if (m_printIndentLevel)
+		printf("%d\n", m_actualIndentLevel);
 }
 
 void RawListenerImpl::__iprintf(const char *format, ...)
 {
+	if (m_printIndentLevel) return;
+	
 	va_list args;
 	va_start(args, format); 	
 	for (int i=0; i<m_indent; i++)
@@ -43,6 +53,8 @@ void RawListenerImpl::__iprintf(const char *format, ...)
 
 void RawListenerImpl::__iuprintf(const char *format, ...)
 {
+	if (m_printIndentLevel) return;
+		
 	va_list args;
 	va_start(args, format);
 	for (int i=0; i<m_indent; i++)
@@ -50,10 +62,14 @@ void RawListenerImpl::__iuprintf(const char *format, ...)
 	vprintf(format, args);
 	__indentUp();
 	va_end(args);
+	
+	m_actualIndentLevel++;
 }
 
 void RawListenerImpl::__idprintf(const char *format, ...)
 {
+	if (m_printIndentLevel) return;
+	
 	va_list args;
 	va_start(args, format);
 	__indentDown();
@@ -61,6 +77,8 @@ void RawListenerImpl::__idprintf(const char *format, ...)
 		printf("  ");
 	vprintf(format, args);
 	va_end(args);
+	
+	m_actualIndentLevel--;
 }
 
 void RawListenerImpl::setDocumentMetaData(const UCSString &author, const UCSString &subject,
@@ -69,7 +87,22 @@ void RawListenerImpl::setDocumentMetaData(const UCSString &author, const UCSStri
 					 const UCSString &abstract, const UCSString &descriptiveName,
 					 const UCSString &descriptiveType)
 {
-	__iprintf("setDocumentMetaData(TODO: add args)\n");
+	UTF8String authorUTF8(author);
+	UTF8String subjectUTF8(subject);
+	UTF8String publisherUTF8(publisher);
+	UTF8String categoryUTF8(category);
+	UTF8String keywordsUTF8(keywords);
+	UTF8String languageUTF8(language);
+	UTF8String abstractUTF8(abstract);
+	UTF8String descriptiveNameUTF8(descriptiveName);
+	UTF8String descriptiveTypeUTF8(descriptiveType);
+	__iprintf("setDocumentMetaData(author: %s, subject: %s, publisher: %s, category: %s, keywords: %s, language: %s, abstract: %s, descriptiveName: %s, descriptiveType: %s)\n",
+		authorUTF8.getUTF8(), subjectUTF8.getUTF8(),
+		publisherUTF8.getUTF8(), categoryUTF8.getUTF8(),
+		keywordsUTF8.getUTF8(), languageUTF8.getUTF8(),
+		abstractUTF8.getUTF8(), descriptiveNameUTF8.getUTF8(),
+		descriptiveTypeUTF8.getUTF8()
+	);
 }
 
 void RawListenerImpl::startDocument()
@@ -86,7 +119,9 @@ void RawListenerImpl::openPageSpan(const int span, const bool isLastPageSpan,
 				  const float marginLeft, const float marginRight,
 				  const float marginTop, const float marginBottom)
 {
-	__iuprintf("openPageSpan(TODO: add args)\n");
+	__iuprintf("openPageSpan(span: %d, isLastPageSpan: %s, marginLeft: %.4f, marginRight: %.4f, marginTop: %.4f, marginBottom: %.4f\n", 
+		span, (isLastPageSpan ? "true" : "false"), marginLeft, marginRight, marginTop, marginBottom
+	);
 }
 						 
 void RawListenerImpl::closePageSpan()
@@ -96,12 +131,16 @@ void RawListenerImpl::closePageSpan()
 	
 void RawListenerImpl::openHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence)
 {
-	__iuprintf("openHeaderFooter(TODO: add args)\n");
+	__iuprintf("openHeaderFooter(headerFooterType: %d, headerFooterOccurence: %d)\n",
+		headerFooterType, headerFooterOccurence
+	);
 }
 
 void RawListenerImpl::closeHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence)
 {
-	__idprintf("closeHeaderFooter(TODO: add args)\n");
+	__idprintf("closeHeaderFooter(headerFooterType: %d, headerFooterOccurence: %d)\n",
+		headerFooterType, headerFooterOccurence
+	);
 }
 
 void RawListenerImpl::openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits,
@@ -110,7 +149,14 @@ void RawListenerImpl::openParagraph(const guint8 paragraphJustification, const g
 				   const float lineSpacing, 
 				   const bool isColumnBreak, const bool isPageBreak)
 {
-	__iuprintf("openParagraph(TODO: add args)\n");
+	UTF8String fontNameUTF8(fontName);
+	__iuprintf("openParagraph(paragraphJustification: %d, textAttributeBits: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, fontName: %s, fontSize: %.4f, lineSpacing: %.4f, isColumnBreak: %s, isPageBreak: %s)\n",
+		paragraphJustification, textAttributeBits,
+		marginLeftOffset, marginRightOffset,
+		fontNameUTF8.getUTF8(), fontSize,
+		lineSpacing,
+		(isColumnBreak ? "true" : "false"), (isPageBreak ? "true" : "false")
+	);
 }
 	
 void RawListenerImpl::closeParagraph()
@@ -145,8 +191,8 @@ void RawListenerImpl::insertTab()
 
 void RawListenerImpl::insertText(const UCSString &text)
 {
-	UTF8String tempUTF8(text);
-	__iprintf("insertText(%s)\n", tempUTF8.getUTF8());
+	UTF8String textUTF8(text);
+	__iprintf("insertText(text: %s)\n", textUTF8.getUTF8());
 }
 	
 void RawListenerImpl::insertLineBreak()
@@ -158,22 +204,29 @@ void RawListenerImpl::defineOrderedListLevel(const int listID, const guint16 lis
 					    const UCSString &textBeforeNumber, const UCSString &textAfterNumber,
 					    const int startingNumber)
 {
-	__iprintf("defineOrderedListLevel(TODO: add args)\n");
+	UTF8String textBeforeNumberUTF8(textBeforeNumber);
+	UTF8String textAfterNumberUTF8(textAfterNumber);
+	__iprintf("defineOrderedListLevel(listID: %d, listLevel: %d, listType: %d, textBeforeNumber: %s, textAfterNumber: %s, startingNumber: %d)\n",
+		listID, listLevel, listType,
+		textBeforeNumberUTF8.getUTF8(), textAfterNumberUTF8.getUTF8(),
+		startingNumber
+	);
 }
 						
 void RawListenerImpl::defineUnorderedListLevel(const int listID, const guint16 listLevel, const UCSString &bullet)
 {
-	__iprintf("defineUnorderedListLevel(TODO: add args)\n");
+	UTF8String bulletUTF8(bullet);
+	__iprintf("defineUnorderedListLevel(listID: %d, listLevel: %d, bullet: %s)\n", listID, listLevel, bulletUTF8.getUTF8());
 }
 
 void RawListenerImpl::openOrderedListLevel(const int listID)
 {
-	__iuprintf("openOrderedListLevel(TODO: add args)\n");
+	__iuprintf("openOrderedListLevel(listID: %d)\n", listID);
 }
 
 void RawListenerImpl::openUnorderedListLevel(const int listID)
 {
-	__iuprintf("openUnorderedListLevel(TODO: add args)\n");
+	__iuprintf("openUnorderedListLevel(listID: %d)\n", listID);
 }
 
 void RawListenerImpl::closeOrderedListLevel()
@@ -191,7 +244,13 @@ void RawListenerImpl::openListElement(const guint8 paragraphJustification, const
 				     const gchar *fontName, const float fontSize, 
 				     const float lineSpacing)
 {
-	__iuprintf("openListElement(TODO: add args)\n");
+	UTF8String fontNameUTF8(fontName);
+	__iuprintf("openListElement(paragraphJustification: %d, textAttributeBits: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, fontName: %s, fontSize: %.4f, lineSpacing: %.4f)\n",
+		paragraphJustification, textAttributeBits,
+		marginLeftOffset, marginRightOffset,
+		fontNameUTF8.getUTF8(), fontSize,
+		lineSpacing
+	);
 }
 					 
 void RawListenerImpl::closeListElement()
@@ -241,7 +300,13 @@ void RawListenerImpl::openTableCell(const guint32 col, const guint32 row, const 
 				   const guint8 borderBits, 
 				   const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
 {
-	__iuprintf("openTableCell(TODO: add args)\n");
+	__iuprintf("openTableCell(col: %d, row: %d, colSpan: %d, rowSpan: %d, borderBits: %d, cellFgColor: #%02x%02x%02x s:%02x, cellBgColor: #%02x%02x%02x s:%02x)\n",
+		col, row, colSpan, rowSpan,
+		borderBits,
+		// TODO: if (!cellFgColor) we should output NULL, but for now just output the color #000000 s:00
+		(cellFgColor?cellFgColor->m_r:0), (cellFgColor?cellFgColor->m_g:0), (cellFgColor?cellFgColor->m_b:0), (cellFgColor?cellFgColor->m_s:0),
+		(cellBgColor?cellBgColor->m_r:0), (cellBgColor?cellBgColor->m_g:0), (cellBgColor?cellBgColor->m_b:0), (cellBgColor?cellBgColor->m_s:0)
+	);
 }
 
 void RawListenerImpl::closeTableCell()
@@ -251,6 +316,7 @@ void RawListenerImpl::closeTableCell()
 
 void RawListenerImpl::insertCoveredTableCell(const guint32 col, const guint32 row)
 {
+	__iprintf("insertCoveredTableCell(col: %d, row: %d)\n", col, row);
 }
 	
 void RawListenerImpl::closeTable()

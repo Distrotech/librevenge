@@ -2,6 +2,8 @@ CHANGES:
 
 
 0.7.1 -> 0.7.2
+- Added --callgraph to wpd2raw, and added all parameters to the 
+  output (Marc Maurer
 - Fixed a bug that prevented the conversion of full justification
   (Fridrich Strba)
 - wpd2foo tools properly detect if a file format is suported
