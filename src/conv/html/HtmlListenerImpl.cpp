@@ -98,21 +98,56 @@ void HtmlListenerImpl::openSection(guint numColumns, gfloat marginLeft, gfloat m
 	printf("<section columns:%i margin-left:%4.4fin margin-right:%4.4fin>\n", numColumns, marginLeft, marginRight);
 }
 
-void HtmlListenerImpl::insertText(const guint16 *textArray, const guint len)
+void HtmlListenerImpl::insertText(const GArray *text)
 {
 	// first convert from ucs2 to ucs4
-	gunichar *textArrayUCS4 = (gunichar *) g_malloc(sizeof(gunichar)*len);
-	for (guint i=0; i<len; i++) {
-		textArrayUCS4[i] = textArray[i];
+	gunichar *textUCS4 = (gunichar *) g_malloc(sizeof(gunichar)*text->len);
+	for (guint i=0; i<text->len; i++) {
+		textUCS4[i] = ((guint16 *)text->data)[i];
 	}
 
 	// then convert from ucs4 to utf8 and write it
-	gchar *textArrayUTF8 = g_ucs4_to_utf8(textArrayUCS4, len, NULL, NULL, NULL); // TODO: handle errors
-	printf("%s", textArrayUTF8);
+	gchar *textUTF8 = g_ucs4_to_utf8(textUCS4, text->len, NULL, NULL, NULL); // TODO: handle errors
+	printf("%s", textUTF8);
 
 	// clean up our mess
-	g_free(textArrayUCS4);
-	g_free(textArrayUTF8);
+	g_free(textUCS4);
+	g_free(textUTF8);
+}
+
+void HtmlListenerImpl::openOrderedListLevel(const gint listID)
+{
+	_closeCurrentParagraph();
+
+	printf("<ol>\n");
+}
+
+void HtmlListenerImpl::closeOrderedListLevel()
+{
+	printf("</ol>\n");
+}
+
+void HtmlListenerImpl::openUnorderedListLevel(const gint listID)
+{
+	_closeCurrentParagraph();
+
+	printf("<ul>\n");
+}
+
+void HtmlListenerImpl::closeUnorderedListLevel()
+{
+	printf("</ul>\n");
+}
+
+
+void HtmlListenerImpl::openListElement(const gint listID)
+{
+	printf("<li>");
+}
+
+void HtmlListenerImpl::closeListElement()
+{
+	printf("</li>\n");
 }
 
 void HtmlListenerImpl::openTable()

@@ -1,0 +1,120 @@
+/* libwpd2
+ * Copyright (C) 2002 William Lachance (wlach@interlog.com)
+ * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
+ *  
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+ *
+ * For further information visit http://libwpd.sourceforge.net
+ */
+
+/* "This product is not manufactured, approved, or supported by 
+ * Corel Corporation or Corel Corporation Limited."
+ */
+
+#include <stdio.h>
+#include "RawListener.h"
+#include "WP6FileStructure.h" 
+
+RawListener::RawListener() : 
+	WP6LLListener(),
+	m_isUndoOn(FALSE)
+{
+}
+
+void RawListener::insertCharacter(guint16 character)
+{
+	if (!m_isUndoOn) {
+		// first convert from ucs2 to ucs4
+		gunichar characterUCS4 = (gunichar) character;
+		
+		// then convert from ucs4 to utf8 and write it
+		gchar *characterUTF8 = g_ucs4_to_utf8(&characterUCS4, 1, NULL, NULL, NULL); // TODO: handle errors
+		printf("%s", characterUTF8);
+		
+		// clean up our mess
+		g_free(characterUTF8);
+	}
+}
+
+void RawListener::undoChange(guint8 undoType, guint16 undoLevel)
+{
+	if (undoType == WP6_UNDO_GROUP_INVALID_TEXT_START) {
+		//printf("<UNDO ON>");
+		m_isUndoOn = TRUE;
+	}
+	else if (undoType == WP6_UNDO_GROUP_INVALID_TEXT_END) {
+		//printf("<UNDO OFF>");
+		m_isUndoOn = FALSE;
+	}
+}
+
+void RawListener::insertEOL()
+{
+	if (!m_isUndoOn) {
+		printf("<EOL>\n");
+	}
+}
+
+void RawListener::updateOutlineDefinition(const WP6OutlineLocation outlineLocation, const guint16 outlineHash, 
+					  const guint8 *numberingMethods, const guint8 tabBehaviourFlag)
+{
+	if (!m_isUndoOn) {
+		printf("<UPDATE OUTLINE DEFINITION (outlineHash:%i, numbering-methods:.., tab-behaviour-flag:%i)>\n", 
+		       outlineHash, tabBehaviourFlag);
+	}	
+}
+
+void RawListener::paragraphNumberOn(const guint16 outlineHash, const guint8 level, const guint8 flag)
+{
+	if (!m_isUndoOn) {
+		printf("<PARAGRAPH NUMBER ON (outlineHash:%i, level:%i, flag:%i)>", 
+		       outlineHash, level, flag);
+	}	
+}
+
+void RawListener::paragraphNumberOff()
+{
+	if (!m_isUndoOn) {
+		printf("<PARAGRAPH NUMBER OFF>");
+	}	
+}
+
+void RawListener::displayNumberReferenceGroupOn(const guint8 subGroup, const guint8 level)
+{
+	if (!m_isUndoOn) {
+		printf("<DISPLAY NUMBER REF ON (subgroup:%i, level:%i)>", subGroup, level);
+	}	
+}
+
+void RawListener::displayNumberReferenceGroupOff(const guint8 subGroup)
+{
+	if (!m_isUndoOn) {
+		printf("<DISPLAY NUMBER REF OFF (subgroup:%i)>", subGroup);
+	}	
+}
+
+void RawListener::styleGroupOn(const guint8 subGroup)
+{
+	if (!m_isUndoOn) {
+		printf("<STYLE GROUP ON (subgroup:%i)>", subGroup);
+	}	
+}
+
+void RawListener::styleGroupOff(const guint8 subGroup)
+{
+	if (!m_isUndoOn) {
+		printf("<STYLE GROUP OFF (subgroup:%i)>", subGroup);
+	}	
+}

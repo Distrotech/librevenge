@@ -1,4 +1,4 @@
- /* libwpd2
+/* libwpd2
  * Copyright (C) 2002 William Lachance (wlach@interlog.com)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
@@ -23,17 +23,17 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef TEXTLISTENER_H
-#define TEXTLISTENER_H
+#ifndef RAWLISTENER_H
+#define RAWLISTENER_H
 
 #include <glib.h>
 #include "WP6LLListener.h"
 
-class TextListener : public WP6LLListener
+class RawListener : public WP6LLListener
 {
 public:
-	TextListener();
-	~TextListener() {}
+	RawListener();
+	~RawListener() {}
 	virtual void startDocument() {}
 	virtual void insertCharacter(guint16 character);
 	virtual void insertEOL();
@@ -45,14 +45,14 @@ public:
 	virtual void marginChange(guint8 side, guint16 margin) {}
 	virtual void columnChange(guint8 numColumns) {}
 	virtual void updateOutlineDefinition(const WP6OutlineLocation outlineLocation, const guint16 outlineHash, 
-					     const guint8 *numberingMethods, const guint8 tabBehaviourFlag) {}
+					     const guint8 *numberingMethods, const guint8 tabBehaviourFlag);
 
-	virtual void paragraphNumberOn(const guint16 outlineHash, const guint8 level, const guint8 flag) {}
-	virtual void paragraphNumberOff() {}
-	virtual void displayNumberReferenceGroupOn(const guint8 subGroup, const guint8 level) {}
-	virtual void displayNumberReferenceGroupOff(const guint8 subGroup) {}
-	virtual void styleGroupOn(const guint8 subGroup) {}
-	virtual void styleGroupOff(const guint8 subGroup) {}
+	virtual void paragraphNumberOn(const guint16 outlineHash, const guint8 level, const guint8 flag);
+	virtual void paragraphNumberOff();
+	virtual void displayNumberReferenceGroupOn(const guint8 subGroup, const guint8 level);
+	virtual void displayNumberReferenceGroupOff(const guint8 subGroup);
+	virtual void styleGroupOn(const guint8 subGroup);
+	virtual void styleGroupOff(const guint8 subGroup);
 	virtual void endDocument() {}
 		
 	virtual void startTable() {}
@@ -64,4 +64,4 @@ public:
 	gboolean m_isUndoOn;
 };
 
-#endif /* TEXTLISTENER_H */
+#endif /* RAWLISTENER_H */

@@ -45,6 +45,19 @@ void WP6CharacterGroup_FontFaceChangeSubGroup::parse(WP6LLListener *llListener, 
 	// emit an exception otherwise
 }
 
+WP6CharacterGroup_ParagraphNumberOnSubGroup::WP6CharacterGroup_ParagraphNumberOnSubGroup(GsfInput *input)
+{
+	m_outlineHash = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+	m_level = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+	m_flag = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+}
+
+void WP6CharacterGroup_ParagraphNumberOnSubGroup::parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
+{
+	llListener->paragraphNumberOn(m_outlineHash, m_level, m_flag);
+}
+
+
 WP6CharacterGroup::WP6CharacterGroup(GsfInput *input) :
 	WP6VariableLengthGroup(),
 	m_subGroupData(NULL)
@@ -64,10 +77,12 @@ void WP6CharacterGroup::_readContents(GsfInput *input)
 	// the contents accordingly
 	switch (getSubGroup())	
 	{
-	case WP_CHARACTER_GROUP_FONT_FACE_CHANGE:
-	case WP_CHARACTER_GROUP_FONT_SIZE_CHANGE:
+	case WP6_CHARACTER_GROUP_FONT_FACE_CHANGE:
+	case WP6_CHARACTER_GROUP_FONT_SIZE_CHANGE:
 		m_subGroupData = new WP6CharacterGroup_FontFaceChangeSubGroup(input);
 		break;
+	case WP6_CHARACTER_GROUP_PARAGRAPH_NUMBER_ON:
+		m_subGroupData = new WP6CharacterGroup_ParagraphNumberOnSubGroup(input);
 	default:
 		break;
 	}
@@ -79,81 +94,51 @@ void WP6CharacterGroup::parse(WP6LLListener *llListener)
 	
 	switch (getSubGroup())
 	{
-		case WP_CHARACTER_GROUP_FONT_FACE_CHANGE:
-		case WP_CHARACTER_GROUP_FONT_SIZE_CHANGE:
-			m_subGroupData->parse(llListener, getNumPrefixIDs(), getPrefixIDs());
-			break;
-			/*
-		case WP_CHARACTER_GROUP_PARAGRAPH_NUMBER_ON:
-			if (m_paragraphStyleState == beginBeforeNumbering || m_paragraphStyleState == styleBody)
-			{
-				m_bPutativeListHasParagraphNumber = true; // indicates that a paragraph style really does encapsulate a list
-				guint16 nonDeletableInfoSize;
-				guint16 outlineStyleHash;
-				guint8 flag;
-				(fread(&nonDeletableInfoSize, sizeof(guint16);
-				(fread(&m_currentOutlineHash, sizeof(guint16);
-				(fread(&m_currentListLevel, sizeof(guint8);
-				(fread(&flag, sizeof(guint8);
-				gDEBUGMSG(("WordPerfect: LISTS Paragraph Number ON (outlineStyleHash: %i, level: %i, flag: %i)\n", (int)m_currentOutlineHash, (int)m_currentListLevel, (int) flag));
-				// first, find the correct list definition
-				WordPerfectListDefinition *listDefinition = _getListDefinition(m_currentOutlineHash);
-				if( listDefinition == NULL )
-				return gERROR;
-				xxx_gDEBUGMSG(("WordPerfect: %i %i\n", listDefinition->getListID(0), listDefinition->getListID(1)));
-				X_CheckWordPerfectError(_updateDocumentListDefinition(listDefinition, m_currentListLevel));
-				if (listDefinition->isLevelNumbered(m_currentListLevel))
-				listDefinition->incrementLevelNumber(m_currentListLevel);
-				m_currentListTag = grand();
-				m_paragraphStyleState = beginNumbering;
-			}        
-			break;
-		case WP_CHARACTER_GROUP_PARAGRAPH_NUMBER_OFF:
-			gDEBUGMSG(("WordPerfect: LISTS Paragraph Number OFF\n"));
-			if (m_paragraphStyleState == beginNumbering || m_paragraphStyleState == beginDisplayReferencing)
-			{ 
-				m_paragraphStyleState = styleBody;         
-				X_CheckWordPerfectError(_appendCurrentListProperties());
-				m_numDeferredParagraphBreaks = 0; // just to make sure that the no. of deferred paragraph breaks doesn't continually go down - we only need to compensate once
-			}
-		break;*/
-		case WP6_CHARACTER_GROUP_TABLE_DEFINITION_ON:
-			WPD_DEBUG_MSG(("WordPerfect: TABLE Definition ON\n"));
-			/*guint8 numPfxID;
+	case WP6_CHARACTER_GROUP_FONT_FACE_CHANGE:
+	case WP6_CHARACTER_GROUP_FONT_SIZE_CHANGE:
+	case WP6_CHARACTER_GROUP_PARAGRAPH_NUMBER_ON:
+		m_subGroupData->parse(llListener, getNumPrefixIDs(), getPrefixIDs());
+		break;
+	case WP6_CHARACTER_GROUP_PARAGRAPH_NUMBER_OFF:
+		llListener->paragraphNumberOff();
+		break;
+	case WP6_CHARACTER_GROUP_TABLE_DEFINITION_ON:
+		WPD_DEBUG_MSG(("WordPerfect: TABLE Definition ON\n"));
+		/*guint8 numPfxID;
 			
-			// FIXME: The following prefix IDs only exist if the PFX bit is set
-			// in the flags. For now, we just assume it _is_ set.
-			(fread(&numPfxID, sizeof(numPfxID);
-			gDEBUGMSG(("WordPerfect: Number of Table PFX IDs: %d\n", numPfxID));
-			for (int i=0; i<numPfxID; i++)
-			{
-			guint16 pfxID;
-			(fread(&pfxID, sizeof(pfxID);
-			// FIXME: handle the differt prefixes
-			// For now, we just skip over them
-			}
+		// FIXME: The following prefix IDs only exist if the PFX bit is set
+		// in the flags. For now, we just assume it _is_ set.
+		(fread(&numPfxID, sizeof(numPfxID);
+		gDEBUGMSG(("WordPerfect: Number of Table PFX IDs: %d\n", numPfxID));
+		for (int i=0; i<numPfxID; i++)
+		{
+		guint16 pfxID;
+		(fread(&pfxID, sizeof(pfxID);
+		// FIXME: handle the differt prefixes
+		// For now, we just skip over them
+		}
 	
-			guint16 sizeOfNonDelData;
-			(fread(&sizeOfNonDelData, sizeof(sizeOfNonDelData);
-			// FIXME: handle all the non-deletable (style) data.
-			// For now, we just skip over it.
+		guint16 sizeOfNonDelData;
+		(fread(&sizeOfNonDelData, sizeof(sizeOfNonDelData);
+		// FIXME: handle all the non-deletable (style) data.
+		// For now, we just skip over it.
 			
-			m_iCurrentTableRow = -1;
-			m_iCurrentTableColumn = -1;
-			X_CheckDocumentError(getDoc()->appendStrux(PTX_SectionTable, NULL));*/
+		m_iCurrentTableRow = -1;
+		m_iCurrentTableColumn = -1;
+		X_CheckDocumentError(getDoc()->appendStrux(PTX_SectionTable, NULL));*/
 			
-			llListener->startTable();
-			break;
-		case WP6_CHARACTER_GROUP_TABLE_DEFINITION_OFF:
-			WPD_DEBUG_MSG(("WordPerfect: TABLE Definition OFF\n"));
-			break;
-		case WP6_CHARACTER_GROUP_TABLE_COLUMN:
-			WPD_DEBUG_MSG(("WordPerfect: Table Column\n"));
-			// FIXME: handle all the table column data.
-			// For now, we just skip over it.
-			break;
-		default: // something else we don't support yet
-			break;
+		llListener->startTable();
+		break;
+	case WP6_CHARACTER_GROUP_TABLE_DEFINITION_OFF:
+		WPD_DEBUG_MSG(("WordPerfect: TABLE Definition OFF\n"));
+		break;
+	case WP6_CHARACTER_GROUP_TABLE_COLUMN:
+		WPD_DEBUG_MSG(("WordPerfect: Table Column\n"));
+		// FIXME: handle all the table column data.
+		// For now, we just skip over it.
+		break;
+	default: // something else we don't support yet
+		break;
 	}
 }
 

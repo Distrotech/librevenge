@@ -28,14 +28,7 @@
 
 #include "WP6VariableLengthGroup.h"
 
-class WP6CharacterGroup_SubGroup
-{
-public:
-	virtual ~WP6CharacterGroup_SubGroup() {}
-	virtual void parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const = 0;
-};
-
-class WP6CharacterGroup_FontFaceChangeSubGroup : public WP6CharacterGroup_SubGroup
+class WP6CharacterGroup_FontFaceChangeSubGroup : public WP6VariableLengthGroup_SubGroup
 {
 public:
 	WP6CharacterGroup_FontFaceChangeSubGroup(GsfInput *input);
@@ -48,6 +41,19 @@ private:
 	guint16 m_matchedFontPointSize;
 };
 
+class WP6CharacterGroup_ParagraphNumberOnSubGroup : public WP6VariableLengthGroup_SubGroup
+{
+public:
+	WP6CharacterGroup_ParagraphNumberOnSubGroup(GsfInput *input);
+	virtual void parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
+
+private:
+	guint16 m_outlineHash;
+	guint8 m_level;
+	guint8 m_flag;
+};
+
+
 class WP6CharacterGroup : public WP6VariableLengthGroup
 {
  public:
@@ -57,7 +63,7 @@ class WP6CharacterGroup : public WP6VariableLengthGroup
 	virtual void parse(WP6LLListener *llListener);
 
  private:
-	WP6CharacterGroup_SubGroup *m_subGroupData;
+	WP6VariableLengthGroup_SubGroup *m_subGroupData;
 
 };
 

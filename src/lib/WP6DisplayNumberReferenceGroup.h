@@ -3,7 +3,7 @@
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -23,26 +23,20 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP6PREFIXDATA_H
-#define WP6PREFIXDATA_H
-#include <glib.h>
-#include <gsf/gsf-input.h>
-#include "WP6PrefixDataPacket.h"
+#ifndef WP6DISPLAYNUMBERREFERENCEGROUP_H
+#define WP6DISPLAYNUMBERREFERENCEGROUP_H
 
-class WP6LLListener;
+#include "WP6VariableLengthGroup.h"
 
-class WP6PrefixData
+class WP6DisplayNumberReferenceGroup : public WP6VariableLengthGroup
 {
  public:
-	WP6PrefixData(GsfInput *input, const int numPrefixIndices);
-	virtual ~WP6PrefixData();
-	const WP6PrefixDataPacket *getPrefixDataPacket(const int prefixID) const;
-	const guint16 getDefaultInitialFontPID() const { return m_defaultInitialFontPID; }
-	void parse(WP6LLListener *llListener);
-
+	WP6DisplayNumberReferenceGroup(GsfInput *input);	
+	virtual void _readContents(GsfInput *input);
+	virtual void parse(WP6LLListener *llListener);
+	
  private:
-	GHashTable *m_prefixDataPacketHash;
-	int m_defaultInitialFontPID;
+	guint8 m_levelNumberToDisplay;
 };
 
-#endif /* WP6PREFIXDATA_H */
+#endif /* WP6DISPLAYNUMBERREFERENCEGROUP_H */

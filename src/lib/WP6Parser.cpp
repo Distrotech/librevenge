@@ -109,7 +109,8 @@ void WP6Parser::parse()
 		}
 		WP6PrefixData *prefixData = new WP6PrefixData(getInput(), header->getNumPrefixIndices());
 		static_cast<WP6LLListener *>(getLLListener())->setPrefixData(prefixData);
-		
+		prefixData->parse(static_cast<WP6LLListener *>(getLLListener()));
+
 		getLLListener()->startDocument();
 		
 		WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(getInput(), fileHeader->getDocumentOffset(), G_SEEK_SET));

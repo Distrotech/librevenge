@@ -29,6 +29,7 @@
 
 WP6ParagraphGroup::WP6ParagraphGroup(GsfInput *input) :
 	WP6VariableLengthGroup(),
+	m_subGroupData(NULL),
 	m_justification(0)
 {
 	_read(input);
@@ -40,12 +41,12 @@ void WP6ParagraphGroup::_readContents(GsfInput *input)
 	{
 		case WP6_PARAGRAPH_GROUP_JUSTIFICATION:
 		{   
-			m_justification = *(const guint8 *)gsf_input_read( input,  sizeof(guint8), NULL);
+			m_justification = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
 			break;
 		}
 		case WP6_PARAGRAPH_GROUP_OUTLINE_DEFINE:
 		{
-			//TODO: Lists: Outline Define
+			m_subGroupData = new WP6ParagraphGroup_OutlineDefineSubGroup(input);
 			break;
 		}
 	}
@@ -64,8 +65,30 @@ void WP6ParagraphGroup::parse(WP6LLListener *llListener)
 		}
 		case WP6_PARAGRAPH_GROUP_OUTLINE_DEFINE:
 		{
-			//TODO: Lists: Outline Define
+			m_subGroupData->parse(llListener, getNumPrefixIDs(), getPrefixIDs());
 			break;
 		}
 	}
+}
+
+WP6ParagraphGroup_OutlineDefineSubGroup::WP6ParagraphGroup_OutlineDefineSubGroup(GsfInput *input)
+{
+	// NB: this is identical to WP6OutlineStylePacket::_readContents!!
+	m_outlineHash = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+	for (unsigned int i=0; i<WP6_NUM_LIST_LEVELS; i++)  
+		m_numberingMethods[i] = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+	m_tabBehaviourFlag = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+	
+	WPD_DEBUG_MSG(("WordPerfect: Read Outline Style Packet (, outlineHash: %i, tab behaviour flag: %i)\n", (int) m_outlineHash, (int) m_tabBehaviourFlag));
+// 	WPD_DEBUG_MSG(("WordPerfect: Read Outline Style Packet (m_paragraphStylePIDs: %i %i %i %i %i %i %i %i)\n", 
+// 		       m_paragraphStylePIDs[0], m_paragraphStylePIDs[1], m_paragraphStylePIDs[2], m_paragraphStylePIDs[3],
+// 		       m_paragraphStylePIDs[4], m_paragraphStylePIDs[5], m_paragraphStylePIDs[6], m_paragraphStylePIDs[7]));
+	WPD_DEBUG_MSG(("WordPerfect: Read Outline Style Packet (m_numberingMethods: %i %i %i %i %i %i %i %i)\n", 
+		       m_numberingMethods[0], m_numberingMethods[1], m_numberingMethods[2], m_numberingMethods[3],
+		       m_numberingMethods[4], m_numberingMethods[5], m_numberingMethods[6], m_numberingMethods[7]));
+}
+
+void WP6ParagraphGroup_OutlineDefineSubGroup::parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
+{
+	llListener->updateOutlineDefinition(paragraphGroup, m_outlineHash, m_numberingMethods, m_tabBehaviourFlag);
 }

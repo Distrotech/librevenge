@@ -28,16 +28,19 @@
 #include <gsf/gsf-input.h>
 #include <stdlib.h>
 #include <glib.h>
+//#include "WP6LLListener.h"
 
 class WP6PrefixIndice;
+class WP6LLListener;
 
 class WP6PrefixDataPacket
 {
  public:
 	WP6PrefixDataPacket(GsfInput * input, int id);	
 	virtual ~WP6PrefixDataPacket() {}
+	virtual void parse(WP6LLListener *llListener) {}
 	const int getID() const { return m_id; }
- 
+
 	static WP6PrefixDataPacket * constructPrefixDataPacket(GsfInput * input, WP6PrefixIndice *prefixIndice);
 
  protected:

@@ -23,26 +23,28 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP6PREFIXDATA_H
-#define WP6PREFIXDATA_H
-#include <glib.h>
-#include <gsf/gsf-input.h>
+#ifndef WP6OUTLINESTYLEPACKET_H
+#define WP6OUTLINESTYLEPACKET_H
 #include "WP6PrefixDataPacket.h"
+#include "WP6FileStructure.h"
+#include "WP6LLListener.h"
 
-class WP6LLListener;
-
-class WP6PrefixData
+class WP6OutlineStylePacket : public WP6PrefixDataPacket
 {
  public:
-	WP6PrefixData(GsfInput *input, const int numPrefixIndices);
-	virtual ~WP6PrefixData();
-	const WP6PrefixDataPacket *getPrefixDataPacket(const int prefixID) const;
-	const guint16 getDefaultInitialFontPID() const { return m_defaultInitialFontPID; }
-	void parse(WP6LLListener *llListener);
+	WP6OutlineStylePacket(GsfInput *input, int id, guint32 dataOffset, guint32 dataSize);
+	virtual ~WP6OutlineStylePacket();
+	virtual void _readContents(GsfInput *input);
+	virtual void parse(WP6LLListener *llListener);
 
- private:
-	GHashTable *m_prefixDataPacketHash;
-	int m_defaultInitialFontPID;
+ private:              
+      guint16 m_numPIDs;
+      guint16 m_paragraphStylePIDs[WP6_NUM_LIST_LEVELS]; // seemingly useless
+      guint16 m_nonDeletableInfoSize;
+      guint16 m_outlineHash;
+      guint8 m_numberingMethods[WP6_NUM_LIST_LEVELS];
+      guint8 m_outlineFlags;
+      guint8 m_tabBehaviourFlag;
+
 };
-
-#endif /* WP6PREFIXDATA_H */
+#endif /* WP6OUTLINESTYLEPACKET_H */

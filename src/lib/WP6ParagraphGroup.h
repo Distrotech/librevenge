@@ -28,16 +28,30 @@
 
 #include "WP6VariableLengthGroup.h"
 
+class WP6ParagraphGroup_OutlineDefineSubGroup : public WP6VariableLengthGroup_SubGroup
+{
+public:
+	WP6ParagraphGroup_OutlineDefineSubGroup(GsfInput *input);
+	virtual void parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
+
+private:
+	guint16 m_outlineHash;
+	guint8 m_numberingMethods[WP6_NUM_LIST_LEVELS];
+	guint8 m_outlineFlags;
+	guint8 m_tabBehaviourFlag;
+};
+
 class WP6ParagraphGroup : public WP6VariableLengthGroup
 {
  public:
-	WP6ParagraphGroup(GsfInput *input);	
+	WP6ParagraphGroup(GsfInput *input);
 	virtual void _readContents(GsfInput *input);
 	virtual void parse(WP6LLListener *llListener);
 	const guint8 getJustification() const { return m_justification; }
 	
  private:
-	guint8	m_justification;
+	WP6VariableLengthGroup_SubGroup *m_subGroupData;
+	guint8 m_justification; // we can't JUSTIFY creating another class to hold this piece of data
 };
 
 #endif /* WP6PARAGRAPHGROUP_H */

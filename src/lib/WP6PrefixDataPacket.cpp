@@ -27,6 +27,7 @@
 #include "WP6PrefixIndice.h"
 #include "WP6FontDescriptorPacket.h"
 #include "WP6DefaultInitialFontPacket.h"
+#include "WP6OutlineStylePacket.h"
 #include "WP6FileStructure.h" 
 #include "libwpd.h"
 #include "libwpd_internal.h"
@@ -51,7 +52,9 @@ WP6PrefixDataPacket * WP6PrefixDataPacket::constructPrefixDataPacket(GsfInput * 
 		case WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_DESCRIPTOR_POOL:
 			//return new WP6DocumentInformationDescriptorPacket(input, flags);
 		case WP6_INDEX_HEADER_OUTLINE_STYLE:
-			//return new WP6OutlineStylePacket(input, flags);
+			return new WP6OutlineStylePacket(input, prefixIndice->getID(), 
+							 prefixIndice->getDataOffset(), 
+							 prefixIndice->getDataSize());
 		default:
 			return NULL;
 	}

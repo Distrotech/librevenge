@@ -28,8 +28,10 @@
 #include "WP6PrefixDataPacket.h"
 #include "WP6FontDescriptorPacket.h"
 #include "WP6DefaultInitialFontPacket.h"
+#include "WP6LLListener.h"
 #include "libwpd_internal.h"
 
+void parsePrefixDataPacketNotify(gpointer key, gpointer value, gpointer user_data);
 void destroyPrefixDataPacketKeyNotify(gpointer data);
 void destroyPrefixDataPacketNotify(gpointer data);
 
@@ -78,7 +80,20 @@ const WP6PrefixDataPacket * WP6PrefixData::getPrefixDataPacket(const int prefixI
 	return (const WP6PrefixDataPacket *)g_hash_table_lookup(m_prefixDataPacketHash, &prefixID);
 }
 
+void WP6PrefixData::parse(WP6LLListener *llListener)
+{
+	g_hash_table_foreach(m_prefixDataPacketHash, parsePrefixDataPacketNotify, llListener);
+}
+
 // static callbacks for the hash table of prefix data packets
+
+void parsePrefixDataPacketNotify(gpointer key, gpointer value, gpointer user_data)
+{
+	WP6PrefixDataPacket *packet = (WP6PrefixDataPacket *) value;
+	WP6LLListener *llListener = (WP6LLListener *) user_data;
+
+	packet->parse(llListener);
+}
 
 void destroyPrefixDataPacketKeyNotify(gpointer data) 
 {	

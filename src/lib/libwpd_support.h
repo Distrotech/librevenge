@@ -27,6 +27,8 @@
 #define LIBWPD_SUPPORT_H
 #include <glib.h>
 
+enum WPXListType { arabic, lowercase, uppercase, lowercaseRoman, uppercaseRoman };
+
 typedef struct _RGBSColor RGBSColor;
 struct _RGBSColor
 {

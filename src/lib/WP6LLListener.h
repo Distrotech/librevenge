@@ -31,6 +31,8 @@
 class WP6DefaultInitialFontPacket;
 class WP6PrefixData;
 
+enum WP6OutlineLocation { paragraphGroup, indexHeader };
+
 class WP6LLListener : public WPXLLListener
 {
  public:
@@ -38,10 +40,18 @@ class WP6LLListener : public WPXLLListener
 	virtual ~WP6LLListener() {}
 	virtual void fontChange(const guint16 matchedFontPointSize, const guint16 fontPID) = 0;
 	virtual void undoChange(const guint8 undoType, const guint16 undoLevel) = 0;
+	virtual void updateOutlineDefinition(const WP6OutlineLocation outlineLocation, const guint16 outlineHash, 
+					     const guint8 *numberingMethods, const guint8 tabBehaviourFlag) = 0;
+	virtual void paragraphNumberOn(const guint16 outlineHash, const guint8 level, const guint8 flag) = 0;
+	virtual void paragraphNumberOff() = 0;
+	virtual void displayNumberReferenceGroupOn(const guint8 subGroup, const guint8 level) = 0;
+	virtual void displayNumberReferenceGroupOff(const guint8 subGroup) = 0;
+	virtual void styleGroupOn(const guint8 subGroup) = 0;
+	virtual void styleGroupOff(const guint8 subGroup) = 0;
 	void setPrefixData(WP6PrefixData *prefixData) { m_prefixData = prefixData; }
  protected:
-	WP6PrefixDataPacket const * _getPrefixDataPacket(const int prefixID) const;
-	WP6DefaultInitialFontPacket const * _getDefaultInitialFontPacket() const; 
+	const WP6PrefixDataPacket * _getPrefixDataPacket(const int prefixID) const;
+	const WP6DefaultInitialFontPacket * _getDefaultInitialFontPacket() const; 
 
  private:
 	WP6PrefixData *m_prefixData;

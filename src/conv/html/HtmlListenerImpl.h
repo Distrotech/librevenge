@@ -1,4 +1,4 @@
- /* libwpd2
+/* libwpd2
  * Copyright (C) 2002 William Lachance (wlach@interlog.com)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
@@ -32,41 +32,56 @@
 
 class HtmlListenerImpl : public WPXHLListenerImpl
 {
- public:
-    HtmlListenerImpl();
-    virtual ~HtmlListenerImpl();
+public:
+	HtmlListenerImpl();
+	virtual ~HtmlListenerImpl();
     
-    virtual void startDocument();
-    virtual void endDocument();
-    virtual void openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits,
-			       const gchar *fontName, gfloat fontSize, 
-			       gboolean isColumnBreak, gboolean isPageBreak);
-    virtual void openSection(const guint numColumns, gfloat marginLeft, gfloat marginRight);
-    virtual void openSpan(const guint32 textAttributeBits, const gchar *fontName, const gfloat fontSize);
-    virtual void insertText(const guint16 *textArray, const guint len);
-    virtual void insertLineBreak() {}
+	virtual void startDocument();
+	virtual void endDocument();
+	virtual void openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits,
+				   const gchar *fontName, gfloat fontSize, 
+				   gboolean isColumnBreak, gboolean isPageBreak);
+	virtual void openSection(const guint numColumns, gfloat marginLeft, gfloat marginRight);
+	virtual void openSpan(const guint32 textAttributeBits, const gchar *fontName, const gfloat fontSize);
+	virtual void insertText(const GArray *text);
+	virtual void insertLineBreak() {}
+
+	virtual void defineOrderedListLevel(const gint listID, const guint16 listLevel, const WPXListType listType, 
+					    const GArray *textBeforeNumber, const GArray *textAfterNumber, 
+					    const gint startingNum) {}
+	virtual void defineUnorderedListLevel(const gint listID, const guint16 listLevel, const GArray *bullet) {}
+	virtual void openOrderedListLevel(const gint listID);
+	virtual void openUnorderedListLevel(const gint listID);
+	virtual void closeOrderedListLevel();
+	virtual void closeUnorderedListLevel();
+	virtual void openListElement(const gint listID);
+	virtual void closeListElement();
     
-    virtual void openTable();
-    virtual void openRow();
-    virtual void openCell(const guint32 col, const guint32 row, const guint32 colSpan, const guint32 rowSpan, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
-    virtual void closeTable();
+	virtual void openTable();
+	virtual void openRow();
+	virtual void openCell(const guint32 col, const guint32 row, 
+			      const guint32 colSpan, const guint32 rowSpan, 
+			      const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
+	virtual void closeTable();
  
- protected:
-    void _appendTextAttributes(const guint32 textAttributeBits);
-    void _appendParagraphJustification(const guint32 paragraphJustification);
+protected:
+	void _appendTextAttributes(const guint32 textAttributeBits);
+	void _appendParagraphJustification(const guint32 paragraphJustification);
 
-    void _closeCurrentSpan();
-    void _closeCurrentParagraph();
-    void _closeCurrentCell();
-    void _closeCurrentRow();
+	void _closeCurrentSpan();
+	void _closeCurrentParagraph();
+	void _closeCurrentCell();
+	void _closeCurrentRow();
 
- private:
-    gboolean m_isSectionOpened;
-    gboolean m_isParagraphOpened;
-    gboolean m_isSpanOpened;
+private:
+	gboolean m_isSectionOpened;
+	gboolean m_isParagraphOpened;
+	gboolean m_isSpanOpened;
  
-    gboolean m_isRowOpened;
-    gboolean m_isCellOpened;
+	gboolean m_isRowOpened;
+	gboolean m_isCellOpened;
+
+	guint m_currentListLevel;
 };
 
 #endif /* HTMLLISTENERIMPL_H */

@@ -28,6 +28,8 @@
 #include "WP6ColumnGroup.h"
 #include "WP6EOLGroup.h"
 #include "WP6ParagraphGroup.h"
+#include "WP6DisplayNumberReferenceGroup.h"
+#include "WP6StyleGroup.h"
 #include "WP6TabGroup.h"
 #include "WP6UnsupportedVariableLengthGroup.h"
 
@@ -49,19 +51,23 @@ WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(Gs
 {
 	switch (groupID)
 	{
-		case WP6_TOP_EOL_GROUP: 
-			return new WP6EOLGroup(input);
-		case WP6_TOP_CHARACTER_GROUP:
-			return new WP6CharacterGroup(input);
-		case WP6_TOP_COLUMN_GROUP:
-			return new WP6ColumnGroup(input);
-		case WP6_TOP_PARAGRAPH_GROUP:
-			return new WP6ParagraphGroup(input);
-		case WP6_TOP_TAB_GROUP:
-			return new WP6TabGroup(input);
-		default:
-			// this is an unhandled group, just skip it
-			return new WP6UnsupportedVariableLengthGroup(input);
+	case WP6_TOP_EOL_GROUP: 
+		return new WP6EOLGroup(input);
+	case WP6_TOP_CHARACTER_GROUP:
+		return new WP6CharacterGroup(input);
+	case WP6_TOP_COLUMN_GROUP:
+		return new WP6ColumnGroup(input);
+	case WP6_TOP_PARAGRAPH_GROUP:
+		return new WP6ParagraphGroup(input);
+	case WP6_TOP_DISPLAY_NUMBER_REFERENCE_GROUP:
+		return new WP6DisplayNumberReferenceGroup(input);
+	case WP6_TOP_STYLE_GROUP:
+		return new WP6StyleGroup(input);
+	case WP6_TOP_TAB_GROUP:
+		return new WP6TabGroup(input);
+	default:
+		// this is an unhandled group, just skip it
+		return new WP6UnsupportedVariableLengthGroup(input);
 	}
 }
 

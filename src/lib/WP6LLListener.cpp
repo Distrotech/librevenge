@@ -27,7 +27,7 @@
 #include "WP6FontDescriptorPacket.h"
 #include "WP6DefaultInitialFontPacket.h"
 
-WP6PrefixDataPacket const * WP6LLListener::_getPrefixDataPacket(const int prefixID) const
+const WP6PrefixDataPacket * WP6LLListener::_getPrefixDataPacket(const int prefixID) const
 { 
 	return m_prefixData->getPrefixDataPacket(prefixID); 
 }

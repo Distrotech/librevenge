@@ -12,6 +12,7 @@ libwpd_1_a_SOURCES =			\
 	WP6CharacterGroup.cpp		\
 	WP6ColumnGroup.cpp		\
 	WP6DefaultInitialFontPacket.cpp	\
+	WP6DisplayNumberReferenceGroup.cpp \
 	WP6EOLGroup.cpp			\
 	WP6ExtendedCharacterGroup.cpp 	\
 	WP6FixedEOLGroup.cpp		\
@@ -22,12 +23,14 @@ libwpd_1_a_SOURCES =			\
 	WP61Header.cpp			\
 	WP6HLListener.cpp		\
 	WP6LLListener.cpp		\
+	WP6OutlineStylePacket.cpp	\
 	WP6ParagraphGroup.cpp		\
 	WP6Parser.cpp			\
 	WP6Part.cpp			\
 	WP6PrefixData.cpp 		\
 	WP6PrefixIndice.cpp 		\
 	WP6PrefixDataPacket.cpp		\
+	WP6StyleGroup.cpp		\
 	WP6TabGroup.cpp 		\
 	WP6UndoGroup.cpp		\
 	WP6UnsupportedVariableLengthGroup.cpp \
@@ -41,6 +44,7 @@ libwpd_1_a_SOURCES =			\
 	WP6CharacterGroup.h		\
 	WP6ColumnGroup.h		\
 	WP6DefaultInitialFontPacket.h	\
+	WP6DisplayNumberReferenceGroup.h \
 	WP6EOLGroup.h			\
 	WP6ExtendedCharacterGroup.h 	\
 	WP6FixedEOLGroup.h		\
@@ -52,12 +56,14 @@ libwpd_1_a_SOURCES =			\
 	WP61Header.h 			\
 	WP6HLListener.h			\
 	WP6LLListener.h			\
+	WP6OutlineStylePacket.h		\
 	WP6ParagraphGroup.h		\
 	WP6Parser.h			\
 	WP6Part.h 			\
 	WP6PrefixData.h	 		\
 	WP6PrefixIndice.h		\
 	WP6PrefixDataPacket.h		\
+	WP6StyleGroup.h			\
 	WP6TabGroup.h	 		\
 	WP6UndoGroup.h			\
 	WP6UnsupportedVariableLengthGroup.h \

@@ -1,9 +1,10 @@
+
 /* libwpd2
  * Copyright (C) 2002 William Lachance (wlach@interlog.com)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -23,26 +24,29 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP6PREFIXDATA_H
-#define WP6PREFIXDATA_H
-#include <glib.h>
-#include <gsf/gsf-input.h>
-#include "WP6PrefixDataPacket.h"
+#include "WP6DisplayNumberReferenceGroup.h"
+#include "WP6LLListener.h"
+#include "libwpd_internal.h"
 
-class WP6LLListener;
-
-class WP6PrefixData
+WP6DisplayNumberReferenceGroup::WP6DisplayNumberReferenceGroup(GsfInput *input) :
+	WP6VariableLengthGroup(),
+	m_levelNumberToDisplay(0)
 {
- public:
-	WP6PrefixData(GsfInput *input, const int numPrefixIndices);
-	virtual ~WP6PrefixData();
-	const WP6PrefixDataPacket *getPrefixDataPacket(const int prefixID) const;
-	const guint16 getDefaultInitialFontPID() const { return m_defaultInitialFontPID; }
-	void parse(WP6LLListener *llListener);
+	_read(input);
+}
 
- private:
-	GHashTable *m_prefixDataPacketHash;
-	int m_defaultInitialFontPID;
-};
+void WP6DisplayNumberReferenceGroup::_readContents(GsfInput *input)
+{
+	if (!(getSubGroup() % 2) || getSubGroup() == 0)
+		m_levelNumberToDisplay = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+}
 
-#endif /* WP6PREFIXDATA_H */
+void WP6DisplayNumberReferenceGroup::parse(WP6LLListener *llListener)
+{
+	WPD_DEBUG_MSG(("WordPerfect: handling an DisplayNumberReference group\n"));
+	
+	if (!(getSubGroup() % 2) || getSubGroup() == 0)
+		llListener->displayNumberReferenceGroupOn(getSubGroup(), m_levelNumberToDisplay);
+	else
+		llListener->displayNumberReferenceGroupOff(getSubGroup());
+}
