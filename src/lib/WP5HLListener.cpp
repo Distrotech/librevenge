@@ -65,6 +65,31 @@ void WP5HLListener::insertEOL()
 
 void WP5HLListener::endDocument()
 {
+	// corner case: document ends in a list element
+	/*if (m_parseState->m_styleStateSequence.getCurrentState() != NORMAL)
+	{
+		_flushText(); // flush the list text
+		m_parseState->m_styleStateSequence.setCurrentState(NORMAL);
+		_flushText(true); // flush the list exterior (forcing a line break, to make _flushText think we've exited a list)
+	}*/
+	// corner case: document contains no end of lines
+	/*else*/ if (!m_ps->m_isParagraphOpened && !m_ps->m_isParagraphClosed)
+	{
+		_flushText();       
+	}
+	// NORMAL(ish) case document ends either inside a paragraph or outside of one,
+	// but not inside an object
+	else if (!m_ps->m_isParagraphClosed || !m_ps->m_isParagraphOpened)
+	{
+		_flushText();
+	}
+	
+	// the only other possibility is a logical contradiction: a paragraph
+	// may not be opened and closed at the same time
+
+	// close the document nice and tight
+	_closeSection();
+
 	_flushText();
 	m_listenerImpl->endDocument();	
 }

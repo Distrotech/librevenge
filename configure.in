@@ -144,6 +144,8 @@ src/Makefile
 src/conv/Makefile
 src/conv/html/Makefile
 src/conv/html/wpd2html.rc
+src/conv/raw/Makefile
+src/conv/raw/wpd2raw.rc
 src/conv/text/Makefile
 src/conv/text/wpd2text.rc
 src/lib/Makefile
@@ -153,8 +155,6 @@ build/win32/Makefile
 libwpd-1.pc
 libwpd.spec
 ])
-dnl src/conv/raw/Makefile
-dnl src/conv/raw/wpd2raw.rc
 
 case "$debug" in
      "true" )

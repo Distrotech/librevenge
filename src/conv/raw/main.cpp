@@ -1,3 +1,28 @@
+/* libwpd
+ * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2002,2004 Marc Maurer (j.m.maurer@student.utwente.nl)
+ *  
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+ *
+ * For further information visit http://libwpd.sourceforge.net
+ */
+
+/* "This product is not manufactured, approved, or supported by 
+ * Corel Corporation or Corel Corporation Limited."
+ */
+
 #include <gsf/gsf-utils.h>
 #include <gsf/gsf-input-stdio.h>
 #include <stdio.h>
@@ -9,7 +34,7 @@ int main(int argc, char *argv[])
 {
 	if (argc < 2)
 	{
-		printf("usage: wpd2text <WordPerfect Document>\n");
+		printf("usage: wpd2raw <WordPerfect Document>\n");
 		return -1;
 	}
 	gsf_init();
@@ -25,32 +50,17 @@ int main(int argc, char *argv[])
 			return 1;
 		}
 
-	if (WP6LLParser::getFileType(input) != WP6_DOCUMENT)
+	if (!WPDocument::isFileFormatSupported(input, false))
 	{
-		printf("ERROR: Not a WordPerfect 6/7/8/9/10/11 Document\n");
+		printf("ERROR: Unsupported file format!\n");
 		return 1;
 	}
 	
-	RawListener listener;
-
-	GsfInput *document = NULL;
-	WP6Header * header = NULL;
-	bool isDocumentOLE = false;
-
-	try 
-	  {		
-		document =  WP6LLParser::getDocument(input);
-		if (document != NULL) {
-			isDocumentOLE = true;
-		}
-		else
-			document = input;
-
-		gsf_input_seek(document, 0, G_SEEK_SET);			
-		header = WP6LLParser::getHeader(document);
-		
-		WP6LLParser::parse(document, header, static_cast<WP6LLListener *>(&listener));
-	  } 
+	RawListenerImpl listenerImpl;
+ 	try 
+	{
+		WPDocument::parse(input, static_cast<WPXHLListenerImpl *>(&listenerImpl));
+	} 
  	catch (FileException)
 	{
  	    printf("ERROR: File Exception!\n");
@@ -71,12 +81,6 @@ int main(int argc, char *argv[])
  	    printf("ERROR: Unknown Error!\n");
  	    return 1;
 	}
-
-	gsf_shutdown();
-	if (document != NULL && isDocumentOLE)
-		g_object_unref(G_OBJECT(document));
-	delete header;
-	g_object_unref (G_OBJECT (input));
 
 	return 0;
 }

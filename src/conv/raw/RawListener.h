@@ -1,6 +1,6 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2002,2004 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,62 +23,90 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef RAWLISTENER_H
-#define RAWLISTENER_H
+#ifndef RAWLISTENERIMPL_H
+#define RAWLISTENERIMPL_H
 
 #include <glib.h>
-#include "WP6LLListener.h"
+#include "WPXHLListenerImpl.h"
 
-class RawListener : public WP6LLListener
+class RawListenerImpl : public WPXHLListenerImpl
 {
 public:
-	RawListener();
-	~RawListener() {}
-	virtual void startDocument() {}
-	virtual void insertCharacter(const guint16 character);
-	virtual void insertTab(const guint8 tabType);
-	virtual void insertEOL();
-	virtual void insertBreak(const guint8 breakType);
-	virtual void undoChange(const guint8 undoType, const guint16 undoLevel);
-	virtual void setDate(const guint16 year, const guint8 month, const guint8 day, 
-			     const guint8 hour, const guint8 minute, const guint8 second,
-			     const guint8 dayOfWeek, const guint8 timeZone, const guint8 unused);
-	virtual void setExtendedInformation(const guint16 type, const UCSString &data);
-	virtual void fontChange(const guint16 matchedFontPointSize, const guint16 fontPID) {}
-	virtual void attributeChange(const bool isOn, const guint8 attribute) {}
-	virtual void lineSpacingChange(const float lineSpacing);
-	virtual void justificationChange(const guint8 justification);
-	virtual void pageMarginChange(const guint8 side, const guint16 margin) {}
-	virtual void marginChange(const guint8 side, const guint16 margin) {}
-	virtual void columnChange(const guint8 numColumns) {}
-	virtual void updateOutlineDefinition(const WP6OutlineLocation outlineLocation, const guint16 outlineHash, 
-					     const guint8 *numberingMethods, const guint8 tabBehaviourFlag);
+	RawListenerImpl();
+	~RawListenerImpl() {}
 
-	virtual void paragraphNumberOn(const guint16 outlineHash, const guint8 level, const guint8 flag);
-	virtual void paragraphNumberOff();
-	virtual void displayNumberReferenceGroupOn(const guint8 subGroup, const guint8 level);
-	virtual void displayNumberReferenceGroupOff(const guint8 subGroup);
-	virtual void styleGroupOn(const guint8 subGroup);
-	virtual void styleGroupOff(const guint8 subGroup);
-	virtual void globalOn(const guint8 systemStyle) {}
-	virtual void globalOff() {}
-	virtual void noteOn(const guint16 textPID) {}
-	virtual void noteOff(const WPXNoteType noteType) {}
-	virtual void headerFooterGroup(const guint8 headerFooterType, const guint8 occurenceBits, const guint16 textPID) {}
-	virtual void suppressPageCharacteristics(const guint8 suppressCode);
-	virtual void endDocument() {}
+ 	virtual void setDocumentMetaData(const UCSString &author, const UCSString &subject,
+					 const UCSString &publisher, const UCSString &category,
+					 const UCSString &keywords, const UCSString &language,
+					 const UCSString &abstract, const UCSString &descriptiveName,
+					 const UCSString &descriptiveType);
+
+	virtual void startDocument();
+	virtual void endDocument();
+
+	virtual void openPageSpan(const int span, const bool isLastPageSpan,
+				  const float marginLeft, const float marginRight,
+				  const float marginTop, const float marginBottom);
+	virtual void closePageSpan();
+	virtual void openHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence);
+	virtual void closeHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence);
+
+	virtual void openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits,
+				   const float marginLeftOffset, const float marginRightOffset,
+				   const gchar *fontName, const float fontSize, 
+				   const float lineSpacing, 
+				   const bool isColumnBreak, const bool isPageBreak);
+	virtual void closeParagraph();
+	virtual void openSpan(const guint32 textAttributeBits, const gchar *fontName, const float fontSize);
+	virtual void closeSpan();
+	virtual void openSection(const unsigned int numColumns, const float spaceAfter);
+	virtual void closeSection();
+
+	virtual void insertTab();
+	virtual void insertText(const UCSString &text);
+ 	virtual void insertLineBreak();
+
+	virtual void defineOrderedListLevel(const int listID, const guint16 listLevel, const WPXNumberingType listType, 
+					    const UCSString &textBeforeNumber, const UCSString &textAfterNumber,
+					    const int startingNumber);
+	virtual void defineUnorderedListLevel(const int listID, const guint16 listLevel, const UCSString &bullet);
+	virtual void openOrderedListLevel(const int listID);
+	virtual void openUnorderedListLevel(const int listID);
+	virtual void closeOrderedListLevel();
+	virtual void closeUnorderedListLevel();
+	virtual void openListElement(const guint8 paragraphJustification, const guint32 textAttributeBits,
+				     const float marginLeftOffset, const float marginRightOffset,
+				     const gchar *fontName, const float fontSize, 
+				     const float lineSpacing);
+	virtual void closeListElement();
+	
+	virtual void openFootnote(int number);
+	virtual void closeFootnote();
+	virtual void openEndnote(int number);
+	virtual void closeEndnote();
+
+ 	virtual void openTable(const guint8 tablePositionBits, 
+			       const float marginLeftOffset, const float marginRightOffset,
+			       const float leftOffset, const vector < WPXColumnDefinition > &columns);
+ 	virtual void openTableRow();
+	virtual void closeTableRow();
+ 	virtual void openTableCell(const guint32 col, const guint32 row, const guint32 colSpan, const guint32 rowSpan, 
+				   const guint8 borderBits, 
+				   const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
+	virtual void closeTableCell();
+	virtual void insertCoveredTableCell(const guint32 col, const guint32 row);
+ 	virtual void closeTable();
 		
-	virtual void defineTable(guint8 position, guint16 leftOffset) {}
-	virtual void addTableColumnDefinition(guint32 width, guint32 leftGutter, guint32 rightGutter) {}
-	virtual void startTable() {}
- 	virtual void insertRow() {}
- 	virtual void insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove, 
-				const guint8 borderBits, 
-				const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
- 	virtual void endTable() {}
+private:
+	int	m_indent;
 
- private:
-	bool m_isUndoOn;
+	void __indentUp() { m_indent++; }
+	void __indentDown() { if (m_indent > 0) m_indent--; }
+
+	void __iprintf(const char *format, ...);
+	void __iuprintf(const char *format, ...);
+	void __idprintf(const char *format, ...);
+
 };
 
-#endif /* RAWLISTENER_H */
+#endif /* RAWLISTENERIMPL_H */
