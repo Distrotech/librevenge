@@ -1,7 +1,7 @@
 PREFIX=/opt
 
 all:
-	g++ WPXParser.cpp WPXHeader.cpp WP6Parser.cpp WP6Header.cpp WPXPart.cpp WP6Part.cpp WP6VariableLengthGroup.cpp WP6VariableLengthGroup.cpp `glib-config --cflags` -shared -o libwpd2.so
+	g++ WPXParser.cpp WPXHeader.cpp WP6Parser.cpp WP6Header.cpp WPXPart.cpp WP6Part.cpp WP6VariableLengthGroup.cpp WP6FixedLengthGroup.cpp `glib-config --cflags` -shared -o libwpd2.so
 	
 
 install:	
