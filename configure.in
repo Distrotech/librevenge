@@ -174,8 +174,8 @@ src/lib/libwpd.rc
 src/lib/libwpd-stream.rc
 build/Makefile
 build/win32/Makefile
-libwpd-1.pc
-libwpd-stream-1.pc
+libwpd-0.8.pc
+libwpd-stream-0.8.pc
 libwpd.spec
 libwpd-zip
 ])

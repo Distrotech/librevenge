@@ -10,8 +10,7 @@ AM_CXXFLAGS = $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS) -I../../lib/
 
 wpd2text_LDFLAGS = -L../../lib/
 wpd2text_DEPENDENCIES = @WPD2TEXT_WIN32_RESOURCE@ 
-wpd2text_LDADD = -lwpd-1 -lwpd-stream-1 $(LIBWPD_LIBS) @WPD2TEXT_WIN32_RESOURCE@ 
-
+wpd2text_LDADD = -lwpd-0.8 -lwpd-stream-0.8 $(LIBWPD_LIBS) @WPD2TEXT_WIN32_RESOURCE@ 
 wpd2text_SOURCES = \
 	TextListenerImpl.cpp \
 	TextListenerImpl.h \

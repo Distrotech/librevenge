@@ -1,6 +1,29 @@
-#include "WPXProperty.h"
+/* libwpd
+ * Copyright (C) 2004 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2005 Net Integration Technologies (http://www.net-itech.com)
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+ *
+ * For further information visit http://libwpd.sourceforge.net
+ */
 
-using namespace std;
+/* "This product is not manufactured, approved, or supported by
+ * Corel Corporation or Corel Corporation Limited."
+ */
+
+#include "WPXProperty.h"
 
 class WPXStringProperty : public WPXProperty
 {
@@ -78,19 +101,6 @@ public:
 	WPXTwipProperty(const float val);
 	virtual WPXString getStr() const; 
 	virtual WPXProperty * clone() const;
-};
-
-class WPXPropertyFactory
-{
-public:
-	static WPXProperty * newStringProp(const WPXString &str) { return static_cast<WPXProperty *>(new WPXStringProperty(str)); }
-	static WPXProperty * newStringProp(const char *str) { return static_cast<WPXProperty *>(new WPXStringProperty(str)); }
-	static WPXProperty * newIntProp(const int val) { return static_cast<WPXProperty *>(new WPXIntProperty(val)); }
-	static WPXProperty * newBoolProp(const bool val) { return static_cast<WPXProperty *>(new WPXBoolProperty(val)); }
-	static WPXProperty * newInchProp(const float val) { return static_cast<WPXProperty *>(new WPXInchProperty(val)); }
-	static WPXProperty * newPercentProp(const float val) { return static_cast<WPXProperty *>(new WPXPercentProperty(val)); }
-	static WPXProperty * newPointProp(const float val) { return static_cast<WPXProperty *>(new WPXPointProperty(val)); }
-	static WPXProperty * newTwipProp(const float val) { return static_cast<WPXProperty *>(new WPXTwipProperty(val)); }
 };
 
 WPXProperty::~WPXProperty()
@@ -256,125 +266,43 @@ WPXProperty * WPXTwipProperty::clone() const
 	return new WPXTwipProperty(getFloat());
 }
 
-WPXPropertyList::WPXPropertyList()
-{
-}
-
-WPXPropertyList::WPXPropertyList(const WPXPropertyList &propList)
-{
-        WPXPropertyList::Iter i(propList);
-        for (i.rewind(); i.next(); )
-	{
-		insert(i.key(), i()->clone());
-	}
-}
-
-WPXPropertyList::~WPXPropertyList()
+WPXProperty * WPXPropertyFactory::newStringProp(const WPXString &str) 
 { 
-	for (map<string, WPXProperty *>::iterator iter = m_map.begin();
-	     iter != m_map.end();
-	     iter++) { delete iter->second; } 
+	return static_cast<WPXProperty *>(new WPXStringProperty(str)); 
 }
 
-void WPXPropertyList::insert(string name, WPXProperty *prop)
+WPXProperty * WPXPropertyFactory::newStringProp(const char *str) 
 { 
-	m_map[name] = prop; 
+	return static_cast<WPXProperty *>(new WPXStringProperty(str));
 }
 
-void WPXPropertyList::insert(string name, const int val)
+WPXProperty * WPXPropertyFactory::newIntProp(const int val) 
 { 
-	m_map[name] = WPXPropertyFactory::newIntProp(val);
+	return static_cast<WPXProperty *>(new WPXIntProperty(val)); 
 }
 
-void WPXPropertyList::insert(string name, const bool val)
+WPXProperty * WPXPropertyFactory::newBoolProp(const bool val) 
 { 
-	m_map[name] = WPXPropertyFactory::newBoolProp(val);
+	return static_cast<WPXProperty *>(new WPXBoolProperty(val)); 
 }
 
-void WPXPropertyList::insert(string name, const char *val)
+WPXProperty * WPXPropertyFactory::newInchProp(const float val) 
 { 
-	m_map[name] = WPXPropertyFactory::newStringProp(val);
+	return static_cast<WPXProperty *>(new WPXInchProperty(val)); 
 }
 
-void WPXPropertyList::insert(string name, const WPXString &val)
+WPXProperty * WPXPropertyFactory::newPercentProp(const float val) 
 { 
-	m_map[name] = WPXPropertyFactory::newStringProp(val);
+	return static_cast<WPXProperty *>(new WPXPercentProperty(val)); 
 }
 
-void WPXPropertyList::insert(string name, const float val, const WPXUnit units)
+WPXProperty * WPXPropertyFactory::newPointProp(const float val) 
 { 
-	if (units == INCH)
-		m_map[name] = WPXPropertyFactory::newInchProp(val);
-	else if (units == PERCENT)
-		m_map[name] = WPXPropertyFactory::newPercentProp(val);
-	else if (units == POINT)		
-		m_map[name] = WPXPropertyFactory::newPointProp(val);
-	else
-		m_map[name] = WPXPropertyFactory::newTwipProp(val);
+	return static_cast<WPXProperty *>(new WPXPointProperty(val)); 
 }
 
-void WPXPropertyList::remove(string name)
-{
-	m_map.erase(name);
-}
-
-const WPXProperty * WPXPropertyList::operator[](const string s) const
-{
-	map<string, WPXProperty *>::iterator i;
-	i = m_map.find(s);
-	if (i != m_map.end()) {
-		return i->second;
-	}
-	
-	return NULL;
-}
-
-void WPXPropertyList::clear()
-{
-	for (map<string, WPXProperty *>::iterator iter = m_map.begin();
-	     iter != m_map.end();
-	     iter++) { delete iter->second; } 
-
-	m_map.clear();
-}
-
-WPXPropertyList::Iter::Iter(const WPXPropertyList &propList)
-{
-    m_map = &(propList.m_map);
-    i = m_map->begin();
-    m_imaginaryFirst = false;
-}
-
-void WPXPropertyList::Iter::rewind()
+WPXProperty * WPXPropertyFactory::newTwipProp(const float val) 
 { 
-    // rewind to an imaginary element that preceeds the first one
-    m_imaginaryFirst = true;
-    i = m_map->begin(); 
+	return static_cast<WPXProperty *>(new WPXTwipProperty(val)); 
 }
 
-bool WPXPropertyList::Iter::next()
-{ 
-    if (!m_imaginaryFirst) 
-        i++; 
-    if (i==m_map->end()) 
-        return false; 
-    m_imaginaryFirst = false;
-    return true; 
-}
-
-bool WPXPropertyList::Iter::last()
-{
-    if (i==m_map->end()) 
-        return true;
-    return false;
-}
-
-const WPXProperty * WPXPropertyList::Iter::operator()() const
-{
-    return i->second;
-}
-
-std::string WPXPropertyList::Iter::key()
-{
-    return i->first;
-}

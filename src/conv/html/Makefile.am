@@ -10,7 +10,7 @@ AM_CXXFLAGS = $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS) -I../../lib/
 
 wpd2html_LDFLAGS = -L../../lib/
 wpd2html_DEPENDENCIES = @WPD2HTML_WIN32_RESOURCE@
-wpd2html_LDADD = -lwpd-1 -lwpd-stream-1 $(LIBWPD_LIBS) @WPD2HTML_WIN32_RESOURCE@
+wpd2html_LDADD = -lwpd-0.8 -lwpd-stream-0.8 $(LIBWPD_LIBS) @WPD2HTML_WIN32_RESOURCE@
 
 wpd2html_SOURCES = \
 	HtmlListenerImpl.cpp	\

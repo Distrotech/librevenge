@@ -97,11 +97,11 @@ WPXString getPropString(const WPXPropertyList &propList)
 	if (!i.last()) 
 	{
 		WPXString prop;
-		prop.sprintf("%s: %s", i.key().c_str(), i()->getStr().cstr());
+		prop.sprintf("%s: %s", i.key(), i()->getStr().cstr());
 		propString.append(prop);
 		for (i; i.next(); )
 		{
-			prop.sprintf(", %s: %s", i.key().c_str(), i()->getStr().cstr());
+			prop.sprintf(", %s: %s", i.key(), i()->getStr().cstr());
 			propString.append(prop);
 		}
 	}

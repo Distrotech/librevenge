@@ -1,6 +1,30 @@
+/* libwpd
+ * Copyright (C) 2004 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2005 Net Integration Technologies (http://www.net-itech.com)
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+ *
+ * For further information visit http://libwpd.sourceforge.net
+ */
+
+/* "This product is not manufactured, approved, or supported by
+ * Corel Corporation or Corel Corporation Limited."
+ */
+
 #ifndef WPXPROPERTY_H
 #define WPXPROPERTY_H
-#include <map>
 #include "WPXString.h"
 
 enum WPXUnit { INCH, PERCENT, POINT, TWIP };
@@ -15,40 +39,16 @@ public:
 	virtual WPXProperty * clone() const = 0;
 };
 
-class WPXPropertyList
+class WPXPropertyFactory
 {
 public:
-	WPXPropertyList();
-	WPXPropertyList(const WPXPropertyList &);
-	virtual ~WPXPropertyList();
-	void insert(std::string name, WPXProperty *prop);
-	void insert(std::string name, const char *val);
-	void insert(std::string name, const int val);
-	void insert(std::string name, const bool val);
-	void insert(std::string name, const WPXString &val);
-	void insert(std::string name, float val, const WPXUnit units = INCH); 
-
-	void remove(std::string name);
-	const WPXProperty * operator[](const std::string s) const;
-	void clear();
-
-	class Iter
-	{
-	public:
-		Iter(const WPXPropertyList &propList);
-		void rewind();
-		bool next();
-		bool last();
-		const WPXProperty * operator()() const;
-		std::string key();
-	private:
-		bool m_imaginaryFirst;
-		std::map<std::string, WPXProperty *>::iterator i;
-		std::map<std::string, WPXProperty *> * m_map;
-	};
-	friend class WPXPropertyList::Iter;
-
-private:
-	mutable std::map<std::string, WPXProperty *> m_map;
+	static WPXProperty * newStringProp(const WPXString &str);
+	static WPXProperty * newStringProp(const char *str);
+	static WPXProperty * newIntProp(const int val);
+	static WPXProperty * newBoolProp(const bool val);
+	static WPXProperty * newInchProp(const float val);
+	static WPXProperty * newPercentProp(const float val);
+	static WPXProperty * newPointProp(const float val);
+	static WPXProperty * newTwipProp(const float val);
 };
 #endif /* WPXPROPERTY_H */

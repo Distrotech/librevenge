@@ -10,7 +10,7 @@ AM_CXXFLAGS = $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS) -I../../lib/
 
 wpd2raw_LDFLAGS = -L../../lib/
 wpd2raw_DEPENDENCIES = @WPD2RAW_WIN32_RESOURCE@
-wpd2raw_LDADD = -lwpd-1 -lwpd-stream-1 $(LIBWPD_LIBS) @WPD2RAW_WIN32_RESOURCE@
+wpd2raw_LDADD = -lwpd-0.8 -lwpd-stream-0.8 $(LIBWPD_LIBS) @WPD2RAW_WIN32_RESOURCE@
 
 wpd2raw_SOURCES = \
 	RawListener.cpp	 \

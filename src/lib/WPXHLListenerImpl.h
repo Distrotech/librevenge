@@ -25,7 +25,7 @@
 
 #ifndef WPXHLLISTENERIMPL_H
 #define WPXHLLISTENERIMPL_H
-#include "WPXProperty.h"
+#include "WPXPropertyList.h"
 #include <vector>
 
 /**
