@@ -96,6 +96,7 @@ public:
 				   const guint8 borderBits,
 				   const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
 	virtual void closeTableCell();
+	virtual void insertCoveredTableCell(const guint32 col, const guint32 row) {}
 	virtual void closeTable();
  
 protected:

@@ -62,7 +62,7 @@ class WPXHLListenerImpl
 	virtual void openPageSpan(const int span, const bool isLastPageSpan,
 				  const float marginLeft, const float marginRight,
 				  const float marginTop, const float marginBottom) = 0;
-	virtual void closePageSpan() {}
+	virtual void closePageSpan() = 0;
 	virtual void openHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence) = 0;
 	virtual void closeHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence) = 0;
 
@@ -129,7 +129,7 @@ class WPXHLListenerImpl
 	Called when the current table cell is closed
 	*/
 	virtual void closeTableCell() = 0;
-	virtual void insertCoveredTableCell(const guint32 col, const guint32 row) {}
+	virtual void insertCoveredTableCell(const guint32 col, const guint32 row) = 0;
 	/**
 	Called when the current table is closed
 	*/
