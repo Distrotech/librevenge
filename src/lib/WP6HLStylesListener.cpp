@@ -94,7 +94,8 @@ void WP6HLStylesListener::headerFooterGroup(const guint8 headerFooterType, const
 	{			
 		WPD_DEBUG_MSG(("WordPerfect: headerFooterGroup (headerFooterType: %i, occurenceBits: %i, textPID: %i)\n", 
 			       headerFooterType, occurenceBits, textPID));
-		m_currentPage->setHeaderFooter(headerFooterType, occurenceBits, textPID);
+		if (headerFooterType <= WP6_HEADER_FOOTER_GROUP_FOOTER_B) // ignore watermarks for now
+			m_currentPage->setHeaderFooter(headerFooterType, occurenceBits, textPID);
 	}
 }
 

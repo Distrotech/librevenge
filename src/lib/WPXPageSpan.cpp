@@ -25,9 +25,11 @@
 
 #include "WPXPageSpan.h"
 #include "libwpd_internal.h"
+#include <math.h>
 
 const float WP6_DEFAULT_PAGE_MARGIN_TOP = 1.0f;
 const float WP6_DEFAULT_PAGE_MARGIN_BOTTOM = 1.0f;
+const float PAGE_MAX_DELTA = 0.05f;
 const guint8 DUMMY_INTERNAL_HEADER_FOOTER = 16;
 
 // precondition: 0 <= headerFooterType <= 3 (i.e.: we don't handle watermarks here)
@@ -179,10 +181,10 @@ bool WPXPageSpan::_containsHeaderFooter(WPXHeaderFooterType type, WPXHeaderFoote
 
 bool operator==(const WPXPageSpan &page1, const WPXPageSpan &page2)
 {
-	if (page1.getMarginLeft() != page2.getMarginLeft() ||
-	    page1.getMarginRight() != page2.getMarginRight() ||
-	    page1.getMarginTop() != page2.getMarginTop() ||
-	    page1.getMarginBottom() != page2.getMarginBottom())
+	if (fabs(page1.getMarginLeft() - page2.getMarginLeft()) > PAGE_MAX_DELTA ||
+	    fabs(page1.getMarginRight() - page2.getMarginRight())  > PAGE_MAX_DELTA ||
+	    fabs(page1.getMarginTop() - page2.getMarginTop()) > PAGE_MAX_DELTA ||
+	    fabs(page1.getMarginBottom() - page2.getMarginBottom()) > PAGE_MAX_DELTA)
 		return false;
 
 

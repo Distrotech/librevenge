@@ -1,10 +1,10 @@
 TODO list for libwpd:
 
 Near Future:
-- Support for importing the following WordPerfect 6+ features (in
-approximate order of difficulty/time):
-	    - Headers/footers (Marc will do this)
-	    - Paragraph styles (open)
+- Handle {right, center} tabs using tab stops instead of just inserting 
+standard tabs all over the place and using our complicated justification
+code.
+- Support paragraph styles (open)
 - WordPerfect 6+ document export (Marc is planning to start work
 on this soon)
 - WordPerfect 4.x/5.x document import (open)
