@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 	gsf_init ();
 	if (argc < 2)
 	{
-		printf("USAGE: wpd2html <WordPerfect Document>\n");
+		printf("Usage: wpd2html <WordPerfect Document>\n");
 		return 1;
 	}
 	
