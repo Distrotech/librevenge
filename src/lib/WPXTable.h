@@ -74,14 +74,20 @@ class WPXTableList
 {
 public:
 	WPXTableList();
+	WPXTableList(const WPXTableList &);
+	WPXTableList & operator=(const WPXTableList & tableList);
 	virtual ~WPXTableList();
-	void addRef() { refCount++; }
-	void unRef() { refCount--; if (refCount == 0) delete this; }
-	WPXTable * operator[](size_t i) { return m_tableList[i]; }
-	void add(WPXTable *table) { m_tableList.push_back(table); }
+
+	WPXTable * operator[](size_t i) { return (*m_tableList)[i]; }
+	void add(WPXTable *table) { m_tableList->push_back(table); }
 
 private:
-	vector<WPXTable *> m_tableList; 
-	int refCount;
+	void release(); 
+	void acquire(int *refCount, vector<WPXTable *> *tableList);
+	int * getRef() const { return m_refCount; }
+	vector<WPXTable *> * get() const { return m_tableList; }
+
+	vector<WPXTable *> *m_tableList; 
+	int *m_refCount;
 };
 #endif /* _WPXTABLE_H */

@@ -32,7 +32,7 @@
 // WP6HLStylesListener: creates intermediate table and page span representations, given a
 // sequence of messages passed to it by the parser.
 
-WP6HLStylesListener::WP6HLStylesListener(vector<WPXPageSpan *> *pageList, WPXTableList *tableList) : 
+WP6HLStylesListener::WP6HLStylesListener(vector<WPXPageSpan *> *pageList, WPXTableList tableList) : 
 	WP6HLListener(pageList, NULL),
 	m_currentPage(new WPXPageSpan()),
 	m_tableList(tableList), 
@@ -139,7 +139,7 @@ void WP6HLStylesListener::headerFooterGroup(const uint8_t headerFooterType, cons
 			       headerFooterType, occurenceBits, textPID));
 		if (headerFooterType <= WP6_HEADER_FOOTER_GROUP_FOOTER_B) // ignore watermarks for now
 		{
-			WPXTableList *tableList = new WPXTableList; 
+			WPXTableList tableList; 
 			m_currentPage->setHeaderFooter(headerFooterType, occurenceBits, textPID, tableList);
 			_handleSubDocument(textPID, true, tableList);
 		}
@@ -168,7 +168,7 @@ void WP6HLStylesListener::defineTable(uint8_t position, uint16_t leftOffset)
 	{			
 		m_currentPageHasContent = true;
 		m_currentTable = new WPXTable();
-		m_tableList->add(m_currentTable);
+		m_tableList.add(m_currentTable);
 		m_isTableDefined = true;
 	}
 }
@@ -179,7 +179,7 @@ void WP6HLStylesListener::startTable()
 	{			
 		m_currentPageHasContent = true;
 		m_currentTable = new WPXTable();
-		m_tableList->add(m_currentTable);
+		m_tableList.add(m_currentTable);
 		m_isTableDefined = false;
 	}
 
@@ -219,11 +219,11 @@ void WP6HLStylesListener::noteOn(const uint16_t textPID)
 	if (!isUndoOn()) 
 	{
 		m_currentPageHasContent = true; 		
-		_handleSubDocument(textPID, false);
+		_handleSubDocument(textPID, false, m_tableList);
 	}
 }
 
-void WP6HLStylesListener::_handleSubDocument(uint16_t textPID, const bool isHeaderFooter, WPXTableList *tableList)
+void WP6HLStylesListener::_handleSubDocument(uint16_t textPID, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice)
 {
 	// We don't want to actual insert anything in the case of a sub-document, but we
 	// do want to capture whatever table-related information is within it..
@@ -231,13 +231,10 @@ void WP6HLStylesListener::_handleSubDocument(uint16_t textPID, const bool isHead
 	{
 		if (textPID)
 		{
-			WPXTableList * oldTableList = m_tableList;
 			WPXTable * oldCurrentTable = m_currentTable;
-			if (tableList)
-			{
-				m_tableList = tableList;
-				m_currentTable = NULL;
-			}
+			WPXTableList oldTableList = m_tableList;
+			m_tableList = tableList;
+
 			WP6LLListener::getPrefixDataPacket(textPID)->parse(this);
 
 			m_tableList = oldTableList;

@@ -74,7 +74,7 @@ public:
         virtual void undoChange(const uint8_t undoType, const uint16_t undoLevel);
 
 protected:
-	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter, WPXTableList *tableList) {}
+	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0) {}
 
 private:
 	void _flushText(const bool fakeText=false);

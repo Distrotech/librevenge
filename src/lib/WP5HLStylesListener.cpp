@@ -29,7 +29,7 @@
 #include "WPXFileStructure.h"
 #include "libwpd_internal.h"
 
-WP5HLStylesListener::WP5HLStylesListener(vector<WPXPageSpan *> *pageList, WPXTableList *tableList) : 
+WP5HLStylesListener::WP5HLStylesListener(vector<WPXPageSpan *> *pageList, WPXTableList tableList) : 
 	WP5HLListener(pageList, NULL),
 	m_currentPage(new WPXPageSpan()),
 	m_tableList(tableList), 
@@ -161,7 +161,7 @@ void WP5HLStylesListener::startTable()
 	//{			
 		m_currentPageHasContent = true;
 		m_currentTable = new WPXTable();
-		m_tableList->add(m_currentTable);
+		m_tableList.add(m_currentTable);
 	//}
 }
 

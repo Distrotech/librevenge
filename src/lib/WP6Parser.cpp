@@ -151,13 +151,13 @@ void WP6Parser::parse(WPXHLListenerImpl *listenerImpl)
 		
 		// do a "first-pass" parse of the document
 		// gather table border information, page properties (per-page)
-		WP6HLStylesListener stylesListener(&pageList, &tableList);
+		WP6HLStylesListener stylesListener(&pageList, tableList);
 		stylesListener.setPrefixData(prefixData);
 		parse(input, &stylesListener);
 
 		// second pass: here is where we actually send the messages to the target app
 		// that are necessary to emit the body of the target document
-		WP6HLContentListener listener(&pageList, &tableList, listenerImpl);
+		WP6HLContentListener listener(&pageList, tableList, listenerImpl);
 		listener.setPrefixData(prefixData);
 
 		// get the relevant initial prefix packets out of storage and tell them to parse

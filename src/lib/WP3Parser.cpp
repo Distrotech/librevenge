@@ -96,7 +96,7 @@ void WP3Parser::parse(WPXHLListenerImpl *listenerImpl)
  	{
 		// do a "first-pass" parse of the document
 		// gather table border information, page properties (per-page)
-		WP3HLStylesListener stylesListener(&pageList, &tableList);
+		WP3HLStylesListener stylesListener(&pageList, tableList);
 		parse(input, &stylesListener);
 
 		// second pass: here is where we actually send the messages to the target app

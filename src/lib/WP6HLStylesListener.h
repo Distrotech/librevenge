@@ -37,7 +37,7 @@
 class WP6HLStylesListener : public WP6HLListener
 {
 public:
-	WP6HLStylesListener(vector<WPXPageSpan *> *pageList, WPXTableList *tableList);
+	WP6HLStylesListener(vector<WPXPageSpan *> *pageList, WPXTableList tableList);
 
 	virtual void setDate(const uint16_t year, const uint8_t month, const uint8_t day,
 			     const uint8_t hour, const uint8_t minute, const uint8_t second,
@@ -96,7 +96,7 @@ public:
  	virtual void endTable();
 
 protected:
-	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter, WPXTableList *tableList = NULL);
+	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
 
 	virtual void _flushText(const bool fakeText=false) {}
 	virtual void _openParagraph() {}
@@ -105,7 +105,7 @@ protected:
 private:
 	WPXPageSpan *m_currentPage;
 
-	WPXTableList *m_tableList;
+	WPXTableList m_tableList;
 	WPXTable *m_currentTable;
 	float m_tempMarginLeft, m_tempMarginRight;
 	bool m_currentPageHasContent;

@@ -33,7 +33,7 @@
 class WP3HLStylesListener : public WP3HLListener
 {
 public:
-	WP3HLStylesListener(vector<WPXPageSpan *> *pageList, WPXTableList *tableList);
+	WP3HLStylesListener(vector<WPXPageSpan *> *pageList, WPXTableList tableList);
 
 	virtual void startDocument() {}
 	virtual void setAlignmentCharacter(const uint16_t character) {}
@@ -74,7 +74,7 @@ protected:
 private:
 	WPXPageSpan *m_currentPage;
 
-	WPXTableList *m_tableList;
+	WPXTableList m_tableList;
 	WPXTable *m_currentTable;
 	float m_tempMarginLeft, m_tempMarginRight;
 	bool m_currentPageHasContent;

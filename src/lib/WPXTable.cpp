@@ -166,12 +166,54 @@ vector<WPXTableCell *> * WPXTable::_getCellsRightAdjacent(int i, int j)
 }
 
 WPXTableList::WPXTableList() :
-	refCount(1)
+	m_refCount(new int),
+	m_tableList(new vector<WPXTable *>)
 {
+	(*m_refCount) = 1;
+}
+
+WPXTableList::WPXTableList(const WPXTableList &tableList) :
+	m_tableList(tableList.get())
+{
+	acquire(tableList.getRef(), tableList.get());
+}
+
+WPXTableList & WPXTableList::operator=(const WPXTableList & tableList)
+{
+	if (this != &tableList) 
+	{
+		release();
+		acquire(tableList.getRef(), tableList.get());
+	}
+	
+	return (*this);
+}
+
+void WPXTableList::acquire(int *refCount, vector<WPXTable *> *tableList)
+{ 
+	m_refCount = refCount; 
+	m_tableList = tableList; 
+	if (m_refCount) 
+		(*m_refCount)++; 
+}
+
+void WPXTableList::release()
+{
+	if (m_refCount) 
+	{ 
+		if (--(*m_refCount) == 0) 
+		{ 
+			for (vector<WPXTable *>::iterator iter = (*m_tableList).begin(); iter != (*m_tableList).end(); iter++)
+				delete (*iter);
+			delete m_tableList; 
+			delete m_refCount; 
+		} 
+		m_refCount = NULL; 
+		m_tableList = NULL; 
+	}
 }
 
 WPXTableList::~WPXTableList()
-{ 
-	for (vector<WPXTable *>::iterator iter = m_tableList.begin(); iter != m_tableList.end(); iter++)
-		delete (*iter);
+{ 	
+	release();
 }

@@ -498,7 +498,7 @@ void WPXHLListener::_closeTableCell()
 /**
 Creates an new document state. Saves the old state on a "stack".
 */
-void WPXHLListener::handleSubDocument(uint16_t textPID, const bool isHeaderFooter, WPXTableList *tableList)
+void WPXHLListener::handleSubDocument(uint16_t textPID, const bool isHeaderFooter, WPXTableList tableList)
 {
 	// save our old parsing state on our "stack"
 	WPXParsingState *oldPS = m_ps;
