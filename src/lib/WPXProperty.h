@@ -35,27 +35,12 @@ public:
 	class Iter
 	{
 	public:
-		Iter(const WPXPropertyList &propList) { m_map = &(propList.m_map); i = m_map->begin(); m_imaginaryFirst = false; }
-		void rewind() { 
-			// rewind to an imaginary element that preceeds the first one
-			m_imaginaryFirst = true;
-			i = m_map->begin(); 
-		}
-		bool next() { 
-			if (!m_imaginaryFirst) 
-				i++; 
-			if (i==m_map->end()) 
-				return false; 
-			m_imaginaryFirst = false;
-			return true; 
-		}
-		bool last() {
-			if (i==m_map->end()) 
-				return true;
-			return false;
-		}
-		const WPXProperty * operator()() const { return i->second; }
-		std::string key() { return i->first; }
+		Iter(const WPXPropertyList &propList);
+		void rewind();
+		bool next();
+		bool last();
+		const WPXProperty * operator()() const;
+		std::string key();
 	private:
 		bool m_imaginaryFirst;
 		std::map<std::string, WPXProperty *>::iterator i;

@@ -337,3 +337,44 @@ void WPXPropertyList::clear()
 
 	m_map.clear();
 }
+
+WPXPropertyList::Iter::Iter(const WPXPropertyList &propList)
+{
+    m_map = &(propList.m_map);
+    i = m_map->begin();
+    m_imaginaryFirst = false;
+}
+
+void WPXPropertyList::Iter::rewind()
+{ 
+    // rewind to an imaginary element that preceeds the first one
+    m_imaginaryFirst = true;
+    i = m_map->begin(); 
+}
+
+bool WPXPropertyList::Iter::next()
+{ 
+    if (!m_imaginaryFirst) 
+        i++; 
+    if (i==m_map->end()) 
+        return false; 
+    m_imaginaryFirst = false;
+    return true; 
+}
+
+bool WPXPropertyList::Iter::last()
+{
+    if (i==m_map->end()) 
+        return true;
+    return false;
+}
+
+const WPXProperty * WPXPropertyList::Iter::operator()() const
+{
+    return i->second;
+}
+
+std::string WPXPropertyList::Iter::key()
+{
+    return i->first;
+}

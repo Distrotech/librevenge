@@ -32,29 +32,26 @@ public:
 	WPXString();
 	WPXString(const WPXString &, bool escapeXML = false);
 	WPXString(const char *str);
-	static WPXString createFromAscii(const char *_str) { WPXString str = WPXString(_str); return str; }
+	static WPXString createFromAscii(const char *_str);
 
-	const char * cstr() const { return m_buf.c_str(); }
+	const char * cstr() const;
 	int len() const;
 
 	void sprintf(const char *format, ...);
 	void append(const WPXString &s);
 	void append(const char *s);
-	void appendx(const char c) { m_buf += c; }
+	void appendx(const char c);
 //	void append(const uint16_t ucs2);
-	void clear() { m_buf = ""; }
+	void clear();
 	bool operator==(const char *);
 	bool operator==(const WPXString &str);
 
 	class Iter
 	{
 	public:
-		Iter(const WPXString &str) :
-			m_buf(str.cstr()),
-			m_pos(0),
-			m_curChar(NULL) {}
-		virtual ~Iter() { delete [] m_curChar; }
-		void rewind() { m_pos = (-1); }
+		Iter(const WPXString &str);
+		virtual ~Iter();
+		void rewind();
 		bool next();
 		bool last();
 		const char * operator()() const;

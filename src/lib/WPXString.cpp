@@ -81,6 +81,17 @@ WPXString::WPXString(const char *str) :
 {
 }
 
+WPXString WPXString::createFromAscii(const char *_str)
+{
+    WPXString str = WPXString(_str);
+    return str;
+}
+
+const char * WPXString::cstr() const
+{
+    return m_buf.c_str();
+}
+
 #if 0
 void WPXString::append(const uint16_t ucs2)
 {
@@ -135,6 +146,16 @@ void WPXString::append(const char *s)
 	m_buf += s;
 }
 
+void WPXString::appendx(const char c)
+{
+    m_buf += c;
+}
+
+void WPXString::clear()
+{
+    m_buf = "";
+}
+
 int WPXString::len() const
 { 
 	return g_static_utf8_strlen(m_buf.c_str()); 
@@ -154,6 +175,23 @@ bool WPXString::operator==(const WPXString &str)
 		return true;
 
 	return false;
+}
+
+WPXString::Iter::Iter(const WPXString &str) :
+    m_buf(str.cstr()),
+    m_pos(0),
+    m_curChar(NULL)
+{
+}
+
+WPXString::Iter::~Iter()
+{
+    delete [] m_curChar;
+}
+
+void WPXString::Iter::rewind()
+{
+    m_pos = (-1);
 }
 
 bool WPXString::Iter::next()
