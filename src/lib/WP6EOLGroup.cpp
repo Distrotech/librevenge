@@ -26,6 +26,7 @@
 #include "WP6EOLGroup.h"
 #include "WP6LLListener.h"
 #include "WPXHLListener.h"
+#include "libwpd_internal.h"
 
 WP6EOLGroup::WP6EOLGroup(FILE *stream) :	
 	WP6VariableLengthGroup(),

@@ -25,6 +25,7 @@
 
 #include "WP6TabGroup.h"
 #include "WP6LLListener.h"
+#include "libwpd_internal.h"
 
 // use the BELL code to represent a TAB for now
 // TODO: is this the right way a TAB should be defined or should we use a WPX_CHARACTER_TAB define?

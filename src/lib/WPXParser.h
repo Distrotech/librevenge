@@ -27,7 +27,6 @@
 #define WPXPARSER_H
 
 #include <stdio.h>
-#include <glib.h>
 #include "WPXLLListener.h"
 
 class WPXParser

@@ -27,6 +27,7 @@
 #include "WP6ExtendedCharacterGroup.h"
 #include "WP6FileStructure.h"
 #include "WP6LLListener.h"
+#include "libwpd_internal.h"
 
 /* WP Extended Character -> Unicode (UCS2) Mappings by Ariya Hidayat <ariyahidayat@yahoo.de> for the
    KWord project, licensed under the LGPL */

@@ -30,6 +30,7 @@
 #include "WP6ExtendedCharacterGroup.h"
 #include "WP6UndoGroup.h"
 #include "WP6AttributeGroup.h"
+#include "libwpd_internal.h"
 
 WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(FILE *stream, guint8 groupID)
 {

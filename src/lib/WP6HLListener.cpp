@@ -253,8 +253,18 @@ void WP6HLListener::endDocument()
 void WP6HLListener::startTable()
 {
 	if (!m_isUndoOn) 
-		{			
+		{		
+			// flush everything which came before this change
+			// eliminating one paragraph break which is now implicit in
+			// a paragraph change -- UNLESS the paragraph break represents
+			// something else than its name suggests, such as a paragraph
+			// or column break (FIXME: probably should move this to a general
+			// helper function when we add more section changing messages)
+			if (!m_sectionAttributesChanged && m_numDeferredParagraphBreaks > 0 &&
+			    !m_isParagraphColumnBreak && !m_isParagraphPageBreak)
+				m_numDeferredParagraphBreaks--;					
 			_flushText();
+
 			m_listenerImpl->openTable();
 		}
 }

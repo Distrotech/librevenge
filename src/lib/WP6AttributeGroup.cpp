@@ -1,5 +1,5 @@
 /* libwpd2
- * Copyright (C) 2002 William Lachance (wlach@interlog.com)
+ * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
@@ -25,6 +25,7 @@
 
 #include "WP6AttributeGroup.h"
 #include "WP6LLListener.h"
+#include "libwpd_internal.h"
 
 WP6AttributeGroup::WP6AttributeGroup(FILE *stream)
 	: WP6FixedLengthGroup()

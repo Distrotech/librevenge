@@ -26,10 +26,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "UT_libwpd2.h"
 #include "WPXParser.h"
 #include "WP6Parser.h"
 #include "WP6FileStructure.h"
+#include "libwpd_internal.h"
 
 WPXParser::WPXParser(FILE * stream, WPXLLListener * listener) :
 	m_stream(stream),

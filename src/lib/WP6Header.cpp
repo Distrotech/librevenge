@@ -23,12 +23,11 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "UT_libwpd2.h"
+#include "libwpd.h"
 #include "WP6Header.h"
 #include "WP6PrefixPacket.h"
 #include "WP6FileStructure.h" 
+#include "libwpd_internal.h"
 
 WP6Header::WP6Header(FILE * stream)
 	:	WPXHeader(stream),

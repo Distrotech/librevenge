@@ -26,9 +26,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "UT_libwpd2.h"
 #include "WPXHeader.h"
 #include "WP6FileStructure.h"
+#include "libwpd.h"
+#include "libwpd_internal.h"
+
 
 WPXHeader::WPXHeader(FILE *stream)
 {

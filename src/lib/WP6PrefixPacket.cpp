@@ -23,12 +23,11 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "UT_libwpd2.h"
 #include "WP6PrefixPacket.h"
 #include "WP6UnsupportedPrefixPacket.h"
 #include "WP6FileStructure.h" 
+#include "libwpd.h"
+#include "libwpd_internal.h"
 
 WP6PrefixPacket::WP6PrefixPacket(FILE * stream, guint8 flags)
 	: 	m_flags(flags),

@@ -23,17 +23,12 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef LIBWPD2_H
-#define LIBWPD2_H
+#include "libwpd.h"
 
-#include "WPXParser.h"
-#include "WP6Parser.h"
-#include "WPXLLListener.h"
-#include "WPXHLListener.h"
-#include "WPXHLListenerImpl.h"
-#include "WP6HLListener.h"
-
-// MORE UGLY THAN THIS THE HEADER MESS CAN'T BECOME, grrrr...
-#include "UT_libwpd2.h"
-
-#endif /* LIBWPD2_H */
+_RGBSColor::_RGBSColor(guint8 r, guint8 g, guint8 b, guint8 s)
+	:	m_r(r),
+		m_g(g),
+		m_b(b),
+		m_s(s)
+{
+}

@@ -23,10 +23,20 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef UT_LIBWPD2_H
-#define UT_LIBWPD2_H
-
+#ifndef LIBWPD_SUPPORT_H
+#define LIBWPD_SUPPORT_H
 #include <glib.h>
+
+typedef struct _RGBSColor RGBSColor;
+struct _RGBSColor
+{
+	_RGBSColor(guint8 r, guint8 g, guint8 b, guint8 s);
+ 
+	guint8 m_r;
+	guint8 m_g;
+ 	guint8 m_b;
+	guint8 m_s; 
+};
 
 class FileException
 {
@@ -37,29 +47,4 @@ class ParseException
 {
 	// needless to say, we could flesh this class out a bit
 };
-
-class RGBSColor
-{
- public:
-	RGBSColor(guint8 r, guint8 g, guint8 b, guint8 s);
- 
-	guint8 R;
-	guint8 G;
- 	guint8 B;
-	guint8 S; 
-};
-
-/* Convenience functions/defines, should not be exported externally */
-
-#define WPD_CHECK_FILE_ERROR(v) if (v==EOF) { WPD_DEBUG_MSG(("X_CheckFileError: %d\n", __LINE__)); throw FileException(); }
-#define WPD_CHECK_FILE_SEEK_ERROR(v) if (v != 0) { WPD_DEBUG_MSG(("X_CheckFileSeekError: %d\n", __LINE__)); throw FileException(); }
-#define WPD_CHECK_FILE_READ_ERROR(v,num_elements) if (v != num_elements) {\
- WPD_DEBUG_MSG(("X_CheckFileReadElementError: %d\n", __LINE__)); throw FileException(); }
-
-#ifdef DEBUG
-#define WPD_DEBUG_MSG(M) printf M
-#else
-#define WPD_DEBUG_MSG(M)
 #endif
-
-#endif /* UT_LIBWPD2_H */

@@ -25,6 +25,7 @@
 
 #include "WP6ColumnGroup.h"
 #include "WP6LLListener.h"
+#include "libwpd_internal.h"
 
 WP6ColumnGroup::WP6ColumnGroup(FILE *stream) :
 	WP6VariableLengthGroup(),

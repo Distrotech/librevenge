@@ -24,6 +24,7 @@
  */
 
 #include "WP6UnsupportedVariableLengthGroup.h"
+#include "libwpd_internal.h"
 
 WP6UnsupportedVariableLengthGroup::WP6UnsupportedVariableLengthGroup(FILE *stream) :
 	WP6VariableLengthGroup()

@@ -27,7 +27,7 @@
 #include "WP6LLListener.h"
 #include "WP6Parser.h"
 #include "WP6Part.h"
-#include "UT_libwpd2.h"
+#include "libwpd_internal.h"
 
 static guint16 extendedInternationalCharacterMap[32] = 
 { 

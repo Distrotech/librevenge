@@ -24,13 +24,15 @@
  */
 
 #include "WP6VariableLengthGroup.h"
-
 #include "WP6CharacterGroup.h"
 #include "WP6ColumnGroup.h"
 #include "WP6EOLGroup.h"
 #include "WP6ParagraphGroup.h"
 #include "WP6TabGroup.h"
 #include "WP6UnsupportedVariableLengthGroup.h"
+
+#include "libwpd_internal.h"
+
 
 WP6VariableLengthGroup::WP6VariableLengthGroup() :
 	m_numPrefixIDs(0)

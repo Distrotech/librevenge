@@ -25,6 +25,7 @@
 
 #include "WP6CharacterGroup.h"
 #include "WP6LLListener.h"
+#include "libwpd_internal.h"
 
 WP6CharacterGroup::WP6CharacterGroup(FILE *stream) :
 	WP6VariableLengthGroup()

@@ -144,7 +144,7 @@ void HtmlListenerImpl::openCell(guint32 col, guint32 row, guint32 colSpan, guint
 		printf("style=\"");
 		// NOTE: The WordPerfect Cell Foreground Color maps onto the HTML Background Color
 		if (cellFgColor)
-			printf("background-color: rgb(%d, %d, %d);", cellFgColor->R, cellFgColor->G, cellFgColor->B);
+			printf("background-color: rgb(%d, %d, %d);", cellFgColor->m_r, cellFgColor->m_g, cellFgColor->m_b);
 		// TODO: Handle the Cell Background Color here, but I don't think HTML supports that
 		// ...
 		printf("\"");

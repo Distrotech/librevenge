@@ -23,12 +23,14 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "UT_libwpd2.h"
+#ifndef LIBWPD_H
+#define LIBWPD_H
 
-RGBSColor::RGBSColor(guint8 r, guint8 g, guint8 b, guint8 s)
-	:	R(r),
-		G(g),
-		B(b),
-		S(s)
-{
-}
+#include "libwpd_support.h"
+#include "WP6Parser.h"
+#include "WPXLLListener.h"
+#include "WPXHLListener.h"
+#include "WPXHLListenerImpl.h"
+#include "WP6HLListener.h"
+
+#endif /* LIBWPD_H */

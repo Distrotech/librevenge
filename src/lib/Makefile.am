@@ -1,11 +1,12 @@
-lib_LIBRARIES = libwpd2.a
-include_HEADERS = libwpd2.h WPXHLListener.h WPXHLListenerImpl.h WPXLLListener.h WPXParser.h WP6Parser.h \
-		  WP6HLListener.h WP6Header.h WP6LLListener.h WPXHeader.h WP6FileStructure.h UT_libwpd2.h
+lib_LIBRARIES = libwpd-1.a
+libwpd_1_includedir = $(includedir)/libwpd-1/libwpd
+libwpd_1_include_HEADERS = libwpd.h libwpd_support.h WPXHLListener.h WPXHLListenerImpl.h WPXLLListener.h WPXParser.h WP6Parser.h \
+		  WP6HLListener.h WP6Header.h WP6LLListener.h WPXHeader.h WP6FileStructure.h
 
 AM_CXXFLAGS = $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS)
 
-libwpd2_a_SOURCES =			\
-	UT_libwpd2.cpp	        	\
+libwpd_1_a_SOURCES =			\
+	libwpd_support.cpp		\
 	WP6AttributeGroup.cpp 		\
 	WP6CharacterGroup.cpp		\
 	WP6ColumnGroup.cpp		\
@@ -16,7 +17,7 @@ libwpd2_a_SOURCES =			\
 	WP6FixedSpaceGroup.cpp		\
 	WP6Header.cpp			\
 	WP6HLListener.cpp		\
-	WP6ParagraphGroup.cpp			\
+	WP6ParagraphGroup.cpp		\
 	WP6Parser.cpp			\
 	WP6Part.cpp			\
 	WP6PrefixPacket.cpp 		\
@@ -27,8 +28,8 @@ libwpd2_a_SOURCES =			\
 	WP6VariableLengthGroup.cpp 	\
 	WPXHeader.cpp 			\
 	WPXParser.cpp 			\
-	libwpd2.h	        	\
-	UT_libwpd2.h	        	\
+	libwpd.h	        	\
+	libwpd_support.h        	\
 	WP6FileStructure.h		\
 	WP6AttributeGroup.h 		\
 	WP6CharacterGroup.h		\
@@ -40,13 +41,13 @@ libwpd2_a_SOURCES =			\
 	WP6FixedSpaceGroup.h		\
 	WP6Header.h 			\
 	WP6HLListener.h			\
-	WP6ParagraphGroup.h			\
+	WP6ParagraphGroup.h		\
 	WP6Parser.h			\
 	WP6Part.h	 		\
-	WP6PrefixPacket.h	\
-	WP6TabGroup.h 		\
+	WP6PrefixPacket.h		\
+	WP6TabGroup.h	 		\
 	WP6UndoGroup.h			\
-	WP6UnsupportedPrefixPacket.h \
+	WP6UnsupportedPrefixPacket.h 	\
 	WP6UnsupportedVariableLengthGroup.h \
 	WP6VariableLengthGroup.h	\
 	WPXHeader.h			\

@@ -23,9 +23,10 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
+#ifndef _WP6HEADER_H
+#define _WP6HEADER_H
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "WPXHeader.h"
 
 class WP6Header : public WPXHeader
@@ -44,3 +45,4 @@ class WP6Header : public WPXHeader
 
  	GArray * m_prefixPacketArray;
 };
+#endif /* _WP6HEADER_H  */

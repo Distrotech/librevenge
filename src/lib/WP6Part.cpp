@@ -28,6 +28,7 @@
 #include "WP6Header.h"
 #include "WP6VariableLengthGroup.h"
 #include "WP6FixedLengthGroup.h"
+#include "libwpd_internal.h"
 
 // constructPart: constructs a parseable low-level representation of part of the document
 // returns the part if it successfully creates the part, returns NULL if it can't
