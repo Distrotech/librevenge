@@ -741,13 +741,14 @@ void WP6HLContentListener::columnChange(const WPXTextColumnType columnType, cons
 		tmpColumnDefinition.clear();
 		if (numColumns > 1)
 		{
-			for (int i=0; i<columnWidth.size(); i++)
+			int i;
+			for (i=0; i<columnWidth.size(); i++)
 			{
 				if (isFixedWidth[i])
 					remainingSpace -= columnWidth[i];
 			}
 			WPXColumnDefinition tmpColumn;
-			for (int i=0; i<numColumns; i++)
+			for (i=0; i<numColumns; i++)
 			{
 				if (i == 0)
 					tmpColumn.m_leftGutter = 0.0f;
