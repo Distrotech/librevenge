@@ -32,7 +32,7 @@ class WP6ParagraphGroup_LineSpacingSubGroup : public WP6VariableLengthGroup_SubG
 {
 public:
 	WP6ParagraphGroup_LineSpacingSubGroup(GsfInput *input);
-	virtual void parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
+	virtual ParseResult parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
 
 private:
 	float m_lineSpacing;
@@ -42,7 +42,7 @@ class WP6ParagraphGroup_JustificationModeSubGroup : public WP6VariableLengthGrou
 {
 public:
 	WP6ParagraphGroup_JustificationModeSubGroup(GsfInput *input);
-	virtual void parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
+	virtual ParseResult parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
 
 private:
 	guint8 m_justification;
@@ -52,7 +52,7 @@ class WP6ParagraphGroup_OutlineDefineSubGroup : public WP6VariableLengthGroup_Su
 {
 public:
 	WP6ParagraphGroup_OutlineDefineSubGroup(GsfInput *input);
-	virtual void parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
+	virtual ParseResult parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
 
 private:
 	guint16 m_outlineHash;
@@ -67,7 +67,7 @@ class WP6ParagraphGroup : public WP6VariableLengthGroup
 	WP6ParagraphGroup(GsfInput *input);
 	~WP6ParagraphGroup();
 	virtual void _readContents(GsfInput *input);
-	virtual void parse(WP6LLListener *llListener);
+	virtual ParseResult parse(WP6LLListener *llListener);
  private:
 	WP6VariableLengthGroup_SubGroup *m_subGroupData;
 };

@@ -37,18 +37,18 @@ class WP6SingleByteFunction : public WP6Part
 class WP6SpaceFunction : public WP6SingleByteFunction
 {
 public:
-	virtual void parse(WP6LLListener *llListener);	
+	virtual ParseResult parse(WP6LLListener *llListener);	
 };
 
 class WP6EOLFunction : public WP6SingleByteFunction
 {
 public:
-	virtual void parse(WP6LLListener *llListener);	
+	virtual ParseResult parse(WP6LLListener *llListener);	
 };
 
 class WP6HyphenFunction : public WP6SingleByteFunction
 {
 public:
-	virtual void parse(WP6LLListener *llListener);	
+	virtual ParseResult parse(WP6LLListener *llListener);	
 };
 #endif /* WP6SINGLEBYTEFUNCTION_H */

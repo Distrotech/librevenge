@@ -68,7 +68,7 @@ void WP6ColumnGroup::_readContents(GsfInput *input)
 	}
 }
 
-void WP6ColumnGroup::parse(WP6LLListener *llListener)
+ParseResult WP6ColumnGroup::parse(WP6LLListener *llListener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling an Column group\n"));
 	
@@ -117,4 +117,6 @@ void WP6ColumnGroup::parse(WP6LLListener *llListener)
 		default: // something else we don't support, since it isn't in the docs
 			break;
 	}
+	
+	return PARSE_OK;
 }

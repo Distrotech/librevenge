@@ -37,11 +37,13 @@ libwpd_1_la_SOURCES =			\
 	WP6SingleByteFunction.cpp	\
 	WP6StyleGroup.cpp		\
 	WP6TabGroup.cpp 		\
+	WP6TableListener.cpp		\
 	WP6UndoGroup.cpp		\
 	WP6UnsupportedVariableLengthGroup.cpp \
 	WP6VariableLengthGroup.cpp 	\
 	WPXHeader.cpp 			\
 	WPXParser.cpp 			\
+	WPXTable.cpp			\
 	libwpd.h	        	\
 	libwpd_internal.h		\
 	libwpd_support.h        	\
@@ -73,6 +75,7 @@ libwpd_1_la_SOURCES =			\
 	WP6SingleByteFunction.h		\
 	WP6StyleGroup.h			\
 	WP6TabGroup.h	 		\
+	WP6TableListener.h		\
 	WP6UndoGroup.h			\
 	WP6UnsupportedVariableLengthGroup.h \
 	WP6VariableLengthGroup.h	\
@@ -82,4 +85,5 @@ libwpd_1_la_SOURCES =			\
 	WPXHLListener.h			\
 	WPXHLListenerImpl.h		\
 	WPXPart.h			\
-	WPXParser.h 
+	WPXParser.h 			\
+	WPXTable.h

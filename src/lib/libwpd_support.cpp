@@ -520,6 +520,7 @@ void UCSString::append(const UCSString &stringBuf)
 }
 
 // append: appends an ascii-standard (not UTF8!!) string onto the buffer
+// FIXME: this function should really handle appending a UTF8 string onto a buffer
 void UCSString::append(const gchar *buf)
 {
 	for (int i=0; i<strlen(buf); i++)
@@ -533,9 +534,15 @@ void UCSString::clear()
 	m_stringBuf = g_array_set_size(m_stringBuf, 0);			
 }
 
-UTF8String::UTF8String(const UCSString &stringBuf, bool doConvertToValidXML)
+UTF8String::UTF8String(const UTF8String &stringBuf) :
+	m_buf(g_string_new(stringBuf.getUTF8()))
 {
-	if (doConvertToValidXML) 
+}
+
+UTF8String::UTF8String(const UCSString &stringBuf, bool convertToValidXML)
+{
+	gchar *buf;
+	if (convertToValidXML) 
 	{
 		UCSString tempUCS4;
 		for (guint i=0; i<stringBuf.getLen(); i++) {
@@ -553,8 +560,28 @@ UTF8String::UTF8String(const UCSString &stringBuf, bool doConvertToValidXML)
 			}
 		}
 
-		m_buf = g_ucs4_to_utf8((const gunichar *)tempUCS4.getUCS4(), tempUCS4.getLen(), NULL, &m_len, NULL); // TODO: handle errors
+		buf = g_ucs4_to_utf8((const gunichar *)tempUCS4.getUCS4(), tempUCS4.getLen(), NULL, NULL, NULL); // TODO: handle errors
 	}
 	else 
-		m_buf = g_ucs4_to_utf8((const gunichar *)stringBuf.getUCS4(), stringBuf.getLen(), NULL, &m_len, NULL); // TODO: handle errors
+		buf = g_ucs4_to_utf8((const gunichar *)stringBuf.getUCS4(), stringBuf.getLen(), NULL, NULL, NULL); // TODO: handle errors
+
+	m_buf = g_string_new(buf);
+	g_free(buf);
+}
+
+UTF8String::UTF8String(const gchar *format, ...) :
+	m_buf(g_string_new(NULL))
+	
+{
+	va_list args;
+	va_start (args, format);
+	
+//  	gsize len = g_printf_string_upper_bound(format, args);
+//  	if (len > 0) 
+//  	{
+	gchar *buf = g_strdup_vprintf(format, args);
+	m_buf = g_string_append(m_buf, buf);
+	g_free(buf);
+//  	}
+	va_end(args);
 }

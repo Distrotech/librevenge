@@ -30,13 +30,15 @@
 
 class WP6PrefixData;
 class WP6LLListener;
+class WPXTable;
 
 class WP6Parser : public WPXParser
 {
 public:
 	WP6Parser(GsfInput * input, WPXLLListener *llListener);		
 	virtual void parse();
-	static void parseDocument(GsfInput *stream, WP6LLListener *llListener);
+	WPXTable * parseTableDefinition();
+	static void parseDocument(GsfInput *stream, WP6LLListener *llListener, guint8 parseEndConditions = 0);
 
 protected:
 	void _parsePacket(WP6PrefixData *prefixData, int type);

@@ -50,7 +50,7 @@ void WP6ExtendedDocumentSummaryPacket::_readContents(GsfInput *input)
 	m_stream = GSF_INPUT(gsf_input_memory_new(streamData, m_dataSize, TRUE));
 }
 
-void WP6ExtendedDocumentSummaryPacket::parse(WP6LLListener *llListener) const
+ParseResult WP6ExtendedDocumentSummaryPacket::parse(WP6LLListener *llListener) const
 {
 	guint16 groupLength = 0;
 
@@ -109,4 +109,6 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6LLListener *llListener) const
 		}
 		WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(m_stream, (i+groupLength), G_SEEK_SET));
 	}
+
+	return PARSE_OK;
 }

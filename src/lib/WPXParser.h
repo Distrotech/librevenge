@@ -29,6 +29,10 @@
 #include <gsf/gsf-input.h>
 #include "WPXLLListener.h"
 
+// ParseResult: this enumeration is used to propagate messages from groups that have been parsed
+// NOT errors (use exceptions for that)
+enum ParseResult { PARSE_OK, TABLE_END };
+
 class WPXParser
 {
 public:

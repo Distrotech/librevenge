@@ -88,9 +88,10 @@ class WPXHLListenerImpl
  	virtual void openTableRow() = 0;
 	virtual void closeTableRow() = 0;
  	virtual void openTableCell(const guint32 col, const guint32 row, const guint32 colSpan, const guint32 rowSpan, 
-						const guint8 borderBits, 
-						const RGBSColor * cellFgColor, const RGBSColor * cellBgColor) = 0;
+				   const guint8 borderBits, 
+				   const RGBSColor * cellFgColor, const RGBSColor * cellBgColor) = 0;
 	virtual void closeTableCell() = 0;
+	virtual void insertCoveredTableCell(const guint32 col, const guint32 row) {}
  	virtual void closeTable() = 0;
 };
 

@@ -41,7 +41,7 @@ void WP6DisplayNumberReferenceGroup::_readContents(GsfInput *input)
 		m_levelNumberToDisplay = gsf_le_read_guint8(input);
 }
 
-void WP6DisplayNumberReferenceGroup::parse(WP6LLListener *llListener)
+ParseResult WP6DisplayNumberReferenceGroup::parse(WP6LLListener *llListener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling an DisplayNumberReference group\n"));
 	

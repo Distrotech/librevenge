@@ -38,7 +38,8 @@ void WP6UndoGroup::_readContents(GsfInput *input)
 	m_undoLevel = gsf_le_read_guint16(input);
 }
 
-void WP6UndoGroup::parse(WP6LLListener *llListener)
+ParseResult WP6UndoGroup::parse(WP6LLListener *llListener)
 {
 	llListener->undoChange(m_undoType, m_undoLevel);
+	return PARSE_OK;
 }

@@ -33,9 +33,12 @@
 #include <stack>
 #include <map>
 #include <vector>
+
 using namespace std;
 
 class WPXHLListenerImpl;
+class WP6Parser;
+class WPXTable;
 
 enum WP6StyleState { NORMAL, DOCUMENT_NOTE, DOCUMENT_NOTE_GLOBAL, 
 		     BEGIN_BEFORE_NUMBERING,
@@ -86,6 +89,7 @@ typedef struct _WP6ParsingState WP6ParsingState;
 struct _WP6ParsingState
 {
 	_WP6ParsingState(bool sectionAttributesChanged=true);
+	~_WP6ParsingState();
 	UCSString m_bodyText;
 	UCSString m_textBeforeNumber;
 	UCSString m_textBeforeDisplayReference;
@@ -111,7 +115,10 @@ struct _WP6ParsingState
 	bool m_isSpanOpened;
 	guint m_numDeferredParagraphBreaks;
 	guint m_numRemovedParagraphBreaks;
-	
+
+	WPXTable *m_currentTable;
+	int m_currentTableCol;
+	int m_currentTableRow;
 	bool m_isTableOpened;
 	bool m_isTableRowOpened;
 	bool m_isTableColumnOpened;
@@ -163,7 +170,9 @@ class WP6HLListener : public WP6LLListener
 public:
 	WP6HLListener(WPXHLListenerImpl *listenerImpl);
 	~WP6HLListener();
-
+	
+	void setParser(WP6Parser *parser) { m_parser = parser; }
+	
 	// for getting low-level messages from the parser
 	virtual void setDate(const guint16 year, const guint8 month, const guint8 day, 
 						const guint8 hour, const guint8 minute, const guint8 second,
@@ -210,6 +219,8 @@ protected:
 	void _flushText(const bool fakeText=false);
 	void _handleListChange(const guint16 outlineHash);
 
+	void _openListElement();
+
 	void _openSection();
 	void _closeSection();
 
@@ -230,9 +241,10 @@ protected:
 
 private:
 	WPXHLListenerImpl * m_listenerImpl;
+	WP6Parser * m_parser;
 
 	WP6DocumentMetaData m_metaData;
-	WP6ParsingState *m_parseState;
+	WP6ParsingState *m_parseState;	
 	WP6TableDefinition m_tableDefinition;
 
 	map<int,WP6OutlineDefinition *> m_outlineDefineHash;

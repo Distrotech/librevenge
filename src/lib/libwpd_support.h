@@ -84,10 +84,10 @@ enum WPXNoteType { FOOTNOTE, ENDNOTE };
 #define WPX_TABLE_POSITION_ABSOLUTE_FROM_LEFT_MARGIN 0x04
 
 // TABLE CELL BORDER bits
-#define WPX_TABLE_CELL_LEFT_BORDER_OFF 0x01
-#define WPX_TABLE_CELL_RIGHT_BORDER_OFF 0x02
-#define WPX_TABLE_CELL_TOP_BORDER_OFF 0x04
-#define WPX_TABLE_CELL_BOTTOM_BORDER_OFF 0x08
+const guint8 WPX_TABLE_CELL_LEFT_BORDER_OFF = 0x01;
+const guint8 WPX_TABLE_CELL_RIGHT_BORDER_OFF = 0x02;
+const guint8 WPX_TABLE_CELL_TOP_BORDER_OFF = 0x04;
+const guint8 WPX_TABLE_CELL_BOTTOM_BORDER_OFF = 0x08;
 
 // BREAK bits
 #define WPX_PAGE_BREAK 0x00
@@ -138,13 +138,15 @@ private:
 class UTF8String
 {
 public:
-	UTF8String(const UCSString &, bool doConvertToValidXML = false);
-	~UTF8String() { g_free(m_buf); }
-	const gchar * getUTF8() const { return m_buf; }
-	const int getLen() const { return m_len; }
+	UTF8String(const UTF8String &);
+	UTF8String(const UCSString &, bool convertToValidXML = false);
+	//UTF8String(const gchar *);
+	UTF8String(const gchar *format, ...);
+	~UTF8String() { g_string_free(m_buf, TRUE); }
+	const gchar * getUTF8() const { return m_buf->str; }
+	const int getLen() const { return m_buf->len; }
 private:
-	gchar *m_buf;
-	glong m_len;
+	GString *m_buf;
 };
 
 class FileException

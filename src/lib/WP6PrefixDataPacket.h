@@ -28,6 +28,7 @@
 #include <gsf/gsf-input.h>
 #include <stdlib.h>
 #include <glib.h>
+#include "WPXParser.h"
 //#include "WP6LLListener.h"
 
 class WP6PrefixIndice;
@@ -38,7 +39,7 @@ class WP6PrefixDataPacket
  public:
 	WP6PrefixDataPacket(GsfInput * input);	
 	virtual ~WP6PrefixDataPacket() {}
-	virtual void parse(WP6LLListener *llListener) const {}
+	virtual ParseResult parse(WP6LLListener *llListener) const {}
 
 	static WP6PrefixDataPacket * constructPrefixDataPacket(GsfInput * input, WP6PrefixIndice *prefixIndice);
 

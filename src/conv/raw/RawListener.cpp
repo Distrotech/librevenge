@@ -149,3 +149,11 @@ void RawListener::styleGroupOff(const guint8 subGroup)
 		printf("<STYLE GROUP OFF (subgroup:%i)>", subGroup);
 	}	
 }
+
+void RawListener::insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove, 
+			     const guint8 borderBits, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
+{
+	if (!m_isUndoOn) {
+		printf("<INSERT CELL (colSpan: %i, rowSpan: %i, borderBits: %x)>", colSpan, rowSpan, borderBits);
+	}		
+}

@@ -32,7 +32,7 @@ class WP6AttributeGroup : public WP6FixedLengthGroup
 {
  public:
 	WP6AttributeGroup(GsfInput *input);	
-	virtual void parse(WP6LLListener *llListener) = 0;
+	virtual ParseResult parse(WP6LLListener *llListener) = 0;
 	const guint8 getAttribute() const { return m_attribute; }
 	
  protected:
@@ -46,14 +46,14 @@ class WP6AttributeOnGroup : public WP6AttributeGroup
 {
  public:
 	WP6AttributeOnGroup(GsfInput *input);
-	virtual void parse(WP6LLListener *llListener);
+	virtual ParseResult parse(WP6LLListener *llListener);
 };
 
 class WP6AttributeOffGroup : public WP6AttributeGroup
 {
  public:
 	WP6AttributeOffGroup(GsfInput *input);
-	virtual void parse(WP6LLListener *llListener);
+	virtual ParseResult parse(WP6LLListener *llListener);
 };
 
 #endif /* WP6ATTRIBUTEGROUP_H */

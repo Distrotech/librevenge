@@ -28,6 +28,8 @@
 #include "WPXHLListener.h"
 #include "libwpd_internal.h"
 
+#include "WP6Parser.h" // for TableException
+
 WP6EOLGroup::WP6EOLGroup(GsfInput *input) :	
 	WP6VariableLengthGroup(),
 	m_colSpan(1),
@@ -163,7 +165,7 @@ void WP6EOLGroup::_readContents(GsfInput *input)
 	}
 }
 
-void WP6EOLGroup::parse(WP6LLListener *llListener)
+ParseResult WP6EOLGroup::parse(WP6LLListener *llListener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling an EOL group\n"));
 	   
@@ -213,9 +215,12 @@ void WP6EOLGroup::parse(WP6LLListener *llListener)
 	case WP6_EOL_GROUP_TABLE_OFF_AT_EOC:
 	case WP6_EOL_GROUP_TABLE_OFF_AT_EOC_AT_EOP:
 		llListener->endTable();
+		return TABLE_END;
 		break;
 			    
 	default: // something else we don't support yet
 		break;
 	}
+
+	return PARSE_OK;
 }

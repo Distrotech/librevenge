@@ -37,8 +37,9 @@ void WP6TabGroup::_readContents(GsfInput *input)
 {
 }
 
-void WP6TabGroup::parse(WP6LLListener *llListener)
+ParseResult WP6TabGroup::parse(WP6LLListener *llListener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling a Tab group\n"));	
 	llListener->insertTab(getSubGroup());
+	return PARSE_OK;
 }

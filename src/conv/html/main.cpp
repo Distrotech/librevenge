@@ -26,8 +26,9 @@ int main(int argc, char *argv[])
 		}
 	
 	WPXHLListenerImpl * listenerImpl = new HtmlListenerImpl();
- 	WPXLLListener * listener = new WP6HLListener(listenerImpl);
- 	WPXParser * parser = new WP6Parser(input, listener);
+ 	WP6HLListener * listener = new WP6HLListener(listenerImpl);
+ 	WP6Parser * parser = new WP6Parser(input, static_cast<WP6LLListener *>(listener));
+	listener->setParser(parser);
 	try 
 	  {
 		  parser->parse();

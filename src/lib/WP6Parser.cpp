@@ -27,6 +27,7 @@
 #include <gsf/gsf-infile.h>
 #include <gsf/gsf-infile-msole.h>
 #include "WP6LLListener.h"
+#include "WP6TableListener.h"
 #include "WP6Parser.h"
 #include "WPXHeader.h"
 #include "WP6Header.h"
@@ -36,6 +37,9 @@
 #include "WP6Part.h"
 #include "libwpd_internal.h"
 #include "WP6DefaultInitialFontPacket.h"
+#include "WPXTable.h"
+
+static const int PARSE_END_ON_TABLE_END = 1;
 
 WP6Parser::WP6Parser(GsfInput * input, WPXLLListener *llListener/*,  WP6Header *header */)
 	: WPXParser(input, llListener)
@@ -102,8 +106,22 @@ void WP6Parser::parse()
 	
 }
 
-// parseDocument: parses a document body (may call itself recursively, on other streams)
-void WP6Parser::parseDocument(GsfInput *stream, WP6LLListener *llListener)
+// parseTableDefinition: parses a table definition in the stream, returns to the stream
+// to where it was when it started, returns a table definition
+// preconditions: the input should have just passed a character group stating "table start"
+WPXTable * WP6Parser::parseTableDefinition()
+{
+	WPXTable *table = new WPXTable();
+	WP6TableListener tableListener(table);
+	gsf_off_t offset = gsf_input_tell(getInput());
+	WP6Parser::parseDocument(getInput(), &tableListener, PARSE_END_ON_TABLE_END);
+	gsf_input_seek(getInput(), offset, G_SEEK_SET);
+
+	return table;
+}
+
+// parseDocument: parses a document body (may call itself recursively, on other streams, or itself)
+void WP6Parser::parseDocument(GsfInput *stream, WP6LLListener *llListener, guint8 parseEndConditions)
 {
 	while (!gsf_input_eof(stream))
 	{
@@ -124,8 +142,11 @@ void WP6Parser::parseDocument(GsfInput *stream, WP6LLListener *llListener)
 			WP6Part *part = WP6Part::constructPart(stream, readVal);
 			if (part != NULL)
 			{
-				part->parse(llListener);
+
+				ParseResult result = part->parse(llListener);
 				delete(part);
+				if (result == TABLE_END &&parseEndConditions & PARSE_END_ON_TABLE_END)
+					return;
 			}
 		}
 		

@@ -32,7 +32,7 @@ class WP6UndoGroup : public WP6FixedLengthGroup
 {
 public:
 	WP6UndoGroup(GsfInput *input);	
-	virtual void parse(WP6LLListener *llListener);
+	virtual ParseResult parse(WP6LLListener *llListener);
 	
  protected:
 	virtual void _readContents(GsfInput *input);

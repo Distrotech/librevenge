@@ -33,9 +33,10 @@ WP6StyleGroup_GlobalOnSubGroup::WP6StyleGroup_GlobalOnSubGroup(GsfInput *input)
 	m_systemStyleNumber = gsf_le_read_guint8(input);
 }
 
-void WP6StyleGroup_GlobalOnSubGroup::parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
+ParseResult WP6StyleGroup_GlobalOnSubGroup::parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
 {
 	llListener->globalOn(m_systemStyleNumber);
+	return PARSE_OK;
 }
 
 WP6StyleGroup::WP6StyleGroup(GsfInput *input) :
@@ -64,12 +65,12 @@ void WP6StyleGroup::_readContents(GsfInput *input)
 	}
 }
 
-void WP6StyleGroup::parse(WP6LLListener *llListener)
+ParseResult WP6StyleGroup::parse(WP6LLListener *llListener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling a style group\n"));
 
 	if (getSubGroup() == WP6_STYLE_GROUP_GLOBAL_ON)
-		m_subGroupData->parse(llListener, getNumPrefixIDs(), getPrefixIDs());
+		return m_subGroupData->parse(llListener, getNumPrefixIDs(), getPrefixIDs());
 	else if (getSubGroup() == WP6_STYLE_GROUP_GLOBAL_OFF)
 		llListener->globalOff();
 	else {
@@ -78,4 +79,6 @@ void WP6StyleGroup::parse(WP6LLListener *llListener)
 		else
 			llListener->styleGroupOff(getSubGroup());
 	}
+
+	return PARSE_OK;
 }

@@ -34,6 +34,7 @@
 #include "libwpd_internal.h"
 
 #include "WP6PrefixData.h"
+#include "WPXTable.h"
 
 #define WP6_DEFAULT_FONT_SIZE 12.0f
 #define WP6_DEFAULT_FONT_NAME "Times New Roman"
@@ -201,6 +202,9 @@ _WP6ParsingState::_WP6ParsingState(bool sectionAttributesChanged) :
 	m_numDeferredParagraphBreaks(0),
 	m_numRemovedParagraphBreaks(0),
 
+	m_currentTable(NULL),
+	m_currentTableCol(0),
+	m_currentTableRow(0),
 	m_isTableOpened(false),
 	m_isTableRowOpened(false),
 	m_isTableCellOpened(false),
@@ -223,9 +227,18 @@ _WP6ParsingState::_WP6ParsingState(bool sectionAttributesChanged) :
 {
 }
 
+_WP6ParsingState::~_WP6ParsingState()
+{
+	if (m_currentTable != NULL)
+		delete m_currentTable;
+	
+	// fixme: erase current fontname
+}
+
 WP6HLListener::WP6HLListener(WPXHLListenerImpl *listenerImpl) :
 	WP6LLListener(), 
 	m_listenerImpl(listenerImpl),
+	m_parser(NULL),
 	m_parseState(new WP6ParsingState)
 {
 }
@@ -802,6 +815,10 @@ void WP6HLListener::defineTable(guint8 position, guint16 leftOffset)
 		
 		// remove all the old column information
 		m_tableDefinition.columns.clear();
+		
+		// tell the parser to build a temporary table representation for us
+		m_parseState->m_currentTable = m_parser->parseTableDefinition();
+		m_parseState->m_currentTable->makeBordersConsistent();
 	}
 }
 
@@ -835,6 +852,7 @@ void WP6HLListener::startTable()
 			m_parseState->m_sectionAttributesChanged = false;
 		}
 		_openTable();
+		m_parseState->m_currentTableRow = (-1);
 	}
 }
 
@@ -844,18 +862,24 @@ void WP6HLListener::insertRow()
 	{			
 		_flushText();
 		_openTableRow();
+		m_parseState->m_currentTableCol=0;
+		m_parseState->m_currentTableRow++;
 	}
 }
 
-void WP6HLListener::insertCell(const guint8 colSpan, const guint8 rowSpan, 
-							bool boundFromLeft, const bool boundFromAbove, 
-							const guint8 borderBits,
-							const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
+void WP6HLListener::insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove, 
+			       const guint8 borderBits, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
 {
 	if (!m_parseState->m_isUndoOn) 
 	{			
+		if (m_parseState->m_currentTableRow < 0) // cell without a row, invalid
+			throw ParseException();
 		_flushText();
-		_openTableCell(colSpan, rowSpan, boundFromLeft, boundFromAbove, borderBits, cellFgColor, cellBgColor);
+		_openTableCell(colSpan, rowSpan, boundFromLeft, boundFromAbove, 
+			       m_parseState->m_currentTable->getCell(m_parseState->m_currentTableRow, 
+								     m_parseState->m_currentTableCol)->m_borderBits, 
+			       cellFgColor, cellBgColor);
+		m_parseState->m_currentTableCol++;
 	}
 }
 
@@ -865,6 +889,8 @@ void WP6HLListener::endTable()
 	{			
 		_flushText();
 		_closeTable();
+		delete(m_parseState->m_currentTable);
+		m_parseState->m_currentTable = NULL;
 	}
 }
 
@@ -999,6 +1025,10 @@ void WP6HLListener::_handleListChange(const guint16 outlineHash)
 				m_listenerImpl->openOrderedListLevel(m_parseState->m_currentOutlineHash);
 			else 
 				m_listenerImpl->openUnorderedListLevel(m_parseState->m_currentOutlineHash);
+
+			
+			if (i < m_parseState->m_currentListLevel) // make sure we have list elements to hold our new levels, if our
+				_openListElement();               // list level delta > 1
 		}
 	}
 	else if (m_parseState->m_currentListLevel < oldListLevel)
@@ -1043,11 +1073,17 @@ void WP6HLListener::_handleListChange(const guint16 outlineHash)
 	// open a new list element, if we're still in the list
 	if (m_parseState->m_currentListLevel > 0)
 	{
-		m_listenerImpl->openListElement(m_parseState->m_paragraphJustification, m_parseState->m_textAttributeBits,
-						m_parseState->m_fontName->str, m_parseState->m_fontSize, 
-						m_parseState->m_paragraphLineSpacing);
-		m_parseState->m_isParagraphOpened = true; // a list element is equivalent to a paragraph
+		_openListElement();
 	}	
+}
+
+void WP6HLListener::_openListElement()
+{
+	m_listenerImpl->openListElement(m_parseState->m_paragraphJustification, m_parseState->m_textAttributeBits,
+					m_parseState->m_fontName->str, m_parseState->m_fontSize, 
+					m_parseState->m_paragraphLineSpacing);
+	m_parseState->m_isParagraphOpened = true; // a list element is equivalent to a paragraph
+
 }
 
 void WP6HLListener::_openSection()
@@ -1111,16 +1147,18 @@ void WP6HLListener::_openTableCell(const guint8 colSpan, const guint8 rowSpan, c
 								const guint8 borderBits,
 								const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
 {
+	_closeTableCell();
 	m_parseState->m_currentColumn++;
+	
 	if (!boundFromLeft && !boundFromAbove) 
 	{
-		_closeTableCell();
-		m_parseState->m_isParagraphOpened = false;
 		m_listenerImpl->openTableCell(m_parseState->m_currentColumn, m_parseState->m_currentRow, colSpan, rowSpan, 
 									borderBits,
 									cellFgColor, cellBgColor);
 		m_parseState->m_isTableCellOpened = true;
 	}
+	else
+		m_listenerImpl->insertCoveredTableCell(m_parseState->m_currentColumn, m_parseState->m_currentRow);
 }
 
 void WP6HLListener::_closeTableCell()

@@ -49,17 +49,20 @@ WP6SingleByteFunction * WP6SingleByteFunction::constructSingleByteFunction(GsfIn
 		}
 }
 
-void WP6SpaceFunction::parse(WP6LLListener *llListener)
+ParseResult WP6SpaceFunction::parse(WP6LLListener *llListener)
 {
 	llListener->insertCharacter((guint16) ' ');
+	return PARSE_OK;
 }
 
-void WP6EOLFunction::parse(WP6LLListener *llListener)
+ParseResult WP6EOLFunction::parse(WP6LLListener *llListener)
 {
 	llListener->insertEOL();
+	return PARSE_OK;
 }
 
-void WP6HyphenFunction::parse(WP6LLListener *llListener)
+ParseResult WP6HyphenFunction::parse(WP6LLListener *llListener)
 {
 	llListener->insertCharacter((guint16) '-');
+	return PARSE_OK;
 }

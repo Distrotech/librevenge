@@ -38,7 +38,7 @@ class WP6Part
 	virtual ~WP6Part() {}
 	
 	static WP6Part * constructPart(GsfInput *input, guint8 readVal);
-	virtual void parse(WP6LLListener *llListener) = 0;
+	virtual ParseResult parse(WP6LLListener *llListener) = 0;
 };
 
 
