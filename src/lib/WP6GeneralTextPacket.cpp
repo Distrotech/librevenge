@@ -29,7 +29,7 @@
 #include "WP6Parser.h"
 #include "libwpd_internal.h"
 
-WP6GeneralTextPacket::WP6GeneralTextPacket(GsfInput *input, int id, guint32 dataOffset, guint32 dataSize) 
+WP6GeneralTextPacket::WP6GeneralTextPacket(WPXInputStream *input, int id, guint32 dataOffset, guint32 dataSize) 
 	: WP6PrefixDataPacket(input)
 {	
 	_read(input, dataOffset, dataSize);
@@ -41,7 +41,7 @@ WP6GeneralTextPacket::~WP6GeneralTextPacket()
 	delete [] m_blockSizes;
 }
 
-void WP6GeneralTextPacket::_readContents(GsfInput *input)
+void WP6GeneralTextPacket::_readContents(WPXInputStream *input)
 {
 	guint16 m_numTextBlocks = gsf_le_read_guint16(input);
 	guint32 m_firstTextBlockOffset = gsf_le_read_guint32(input);
@@ -60,7 +60,7 @@ void WP6GeneralTextPacket::_readContents(GsfInput *input)
 	}	
 
 	// we have to use glib's allocation function because libgsf disposes of the data
-	guint8 *streamData = (guint8 *)g_malloc(sizeof(guint8)*totalSize);
+	guint8 *streamData = new guint8[totalSize];
 	int streamPos = 0;
 	for(i=0; i<m_numTextBlocks; i++) 
 	{
@@ -71,11 +71,11 @@ void WP6GeneralTextPacket::_readContents(GsfInput *input)
 		}
 	}
 
-	m_stream = GSF_INPUT(gsf_input_memory_new(streamData, totalSize, TRUE));
+	m_stream = new WPXMemoryInputStream(streamData, totalSize);
 }
 
 void WP6GeneralTextPacket::parse(WP6HLListener *listener) const
 {
-	gsf_input_seek(m_stream, 0, G_SEEK_SET);	
+	m_stream->seek(0, WPX_SEEK_SET);
 	WP6Parser::parseDocument(m_stream, listener);
 }

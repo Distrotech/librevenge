@@ -27,13 +27,13 @@
 #include "WP6LLListener.h"
 #include "libwpd_internal.h"
 
-WP6TabGroup::WP6TabGroup(GsfInput *input) :
+WP6TabGroup::WP6TabGroup(WPXInputStream *input) :
 	WP6VariableLengthGroup()
 {
 	_read(input);
 }
 
-void WP6TabGroup::_readContents(GsfInput *input)
+void WP6TabGroup::_readContents(WPXInputStream *input)
 {
 }
 

@@ -51,7 +51,7 @@ WP6VariableLengthGroup::~WP6VariableLengthGroup()
 		g_free(m_prefixIDs);
 }
 
-WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(GsfInput *input, guint8 groupID)
+WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, guint8 groupID)
 {
 	switch (groupID)
 	{
@@ -81,9 +81,9 @@ WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(Gs
 	}
 }
 
-void WP6VariableLengthGroup::_read(GsfInput *input)
+void WP6VariableLengthGroup::_read(WPXInputStream *input)
 {
-	guint32 startPosition = gsf_input_tell(input);
+	guint32 startPosition = input->tell();
 	
 	m_subGroup = gsf_le_read_guint8(input);
 	m_size = gsf_le_read_guint16(input);
@@ -113,5 +113,5 @@ void WP6VariableLengthGroup::_read(GsfInput *input)
 
 	_readContents(input);
 
-	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, (startPosition + m_size - 1 - gsf_input_tell(input)), G_SEEK_CUR));
+	input->seek((startPosition + m_size - 1 - input->tell()), WPX_SEEK_CUR);
 }

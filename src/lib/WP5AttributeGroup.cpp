@@ -26,18 +26,18 @@
 #include "WP5AttributeGroup.h"
 #include "libwpd_internal.h"
 
-WP5AttributeGroup::WP5AttributeGroup(GsfInput *input, guint8 groupID)
+WP5AttributeGroup::WP5AttributeGroup(WPXInputStream *input, guint8 groupID)
 	: WP5FixedLengthGroup(groupID)
 {
 	_read(input);
 }
 
-void WP5AttributeGroup::_readContents(GsfInput *input)
+void WP5AttributeGroup::_readContents(WPXInputStream *input)
 {
-	m_attribute = (guint8)*((const guint8 *)gsf_input_read(input, sizeof(guint8), NULL));
+	m_attribute = gsf_le_read_guint8(input);
 }
 
-WP5AttributeOnGroup::WP5AttributeOnGroup(GsfInput *input, guint8 groupID)
+WP5AttributeOnGroup::WP5AttributeOnGroup(WPXInputStream *input, guint8 groupID)
 	: WP5AttributeGroup(input, groupID)
 {
 }
@@ -47,7 +47,7 @@ void WP5AttributeOnGroup::parse(WP5HLListener *listener)
 	listener->attributeChange(true, getAttribute());
 }
 
-WP5AttributeOffGroup::WP5AttributeOffGroup(GsfInput *input, guint8 groupID)
+WP5AttributeOffGroup::WP5AttributeOffGroup(WPXInputStream *input, guint8 groupID)
 	: WP5AttributeGroup(input, groupID)
 {
 }

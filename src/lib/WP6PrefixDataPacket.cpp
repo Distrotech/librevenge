@@ -35,11 +35,11 @@
 #include "libwpd.h"
 #include "libwpd_internal.h"
 
-WP6PrefixDataPacket::WP6PrefixDataPacket(GsfInput * input)
+WP6PrefixDataPacket::WP6PrefixDataPacket(WPXInputStream * input)
 {
 }
 
-WP6PrefixDataPacket * WP6PrefixDataPacket::constructPrefixDataPacket(GsfInput * input, WP6PrefixIndice *prefixIndice)
+WP6PrefixDataPacket * WP6PrefixDataPacket::constructPrefixDataPacket(WPXInputStream * input, WP6PrefixIndice *prefixIndice)
 {	       
 	switch (prefixIndice->getType())
 	{
@@ -72,9 +72,9 @@ WP6PrefixDataPacket * WP6PrefixDataPacket::constructPrefixDataPacket(GsfInput * 
 	}
 }
 
-void WP6PrefixDataPacket::_read(GsfInput *input, guint32 dataOffset, guint32 dataSize)
+void WP6PrefixDataPacket::_read(WPXInputStream *input, guint32 dataOffset, guint32 dataSize)
 {
-	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, dataOffset, G_SEEK_SET));
+	input->seek(dataOffset, WPX_SEEK_SET);
 
 	_readContents(input);
 

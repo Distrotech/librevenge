@@ -27,11 +27,12 @@
 #define WP42HEURISTICS_H
 
 #include "libwpd_support.h"
+#include "WPXStream.h"
 
 class WP42Heuristics
 {
 public:
-	static WPDConfidence isWP42FileFormat(GsfInput *input, bool partialContent);
+	static WPDConfidence isWP42FileFormat(WPXInputStream *input, bool partialContent);
 };
 
 #endif /* WP42HEURISTICS_H */

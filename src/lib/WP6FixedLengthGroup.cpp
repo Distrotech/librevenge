@@ -37,7 +37,7 @@ WP6FixedLengthGroup::WP6FixedLengthGroup(guint8 groupID)
 {
 }
 
-WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(GsfInput *input, guint8 groupID)
+WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(WPXInputStream *input, guint8 groupID)
 {
 	switch (groupID)
 	{
@@ -65,15 +65,15 @@ WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(GsfInput *i
 	}
 }
 
-void WP6FixedLengthGroup::_read(GsfInput *input)
+void WP6FixedLengthGroup::_read(WPXInputStream *input)
 {
-	guint32 startPosition = gsf_input_tell(input);
+	guint32 startPosition = input->tell();
 	_readContents(input);
 
 	if (m_group >= 0xF0 && m_group <= 0xFF) // just an extra safety check
 	{
 		int size = WP6_FIXED_LENGTH_FUCNTION_GROUP_SIZE[m_group-0xF0];
-		WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, (startPosition + size - 1 - gsf_input_tell(input)), G_SEEK_CUR));
+		input->seek((startPosition + size - 1 - input->tell()), WPX_SEEK_CUR);
 	}
 	else
 		throw FileException();

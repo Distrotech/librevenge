@@ -68,10 +68,10 @@ public:
 	virtual void insertText(const UCSString &text);
 	virtual void insertLineBreak() {}
 
-	virtual void defineOrderedListLevel(const int listID, const guint16 listLevel, const WPXNumberingType listType,
+	virtual void defineOrderedListLevel(const int listID, const int listLevel, const WPXNumberingType listType,
 					    const UCSString &textBeforeNumber, const UCSString &textAfterNumber,
 					    const int startingNumber) {}
-	virtual void defineUnorderedListLevel(const int listID, const guint16 listLevel, const UCSString &bullet) {}
+	virtual void defineUnorderedListLevel(const int listID, const int listLevel, const UCSString &bullet) {}
 	virtual void openOrderedListLevel(const int listID);
 	virtual void openUnorderedListLevel(const int listID);
 	virtual void closeOrderedListLevel();

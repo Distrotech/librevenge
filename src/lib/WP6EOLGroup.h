@@ -31,9 +31,9 @@
 class WP6EOLGroup : public WP6VariableLengthGroup
 {
 public:
-	WP6EOLGroup(GsfInput *input);	
+	WP6EOLGroup(WPXInputStream *input);	
 	~WP6EOLGroup();
-	virtual void _readContents(GsfInput *input);
+	virtual void _readContents(WPXInputStream *input);
 	virtual void parse(WP6HLListener *listener);
 
  private:

@@ -49,7 +49,7 @@ typedef struct _WPXParsingState WPXParsingState;
 struct _WPXParsingState
 {
 	_WPXParsingState(bool sectionAttributesChanged=true);
-	~_WPXParsingState() {}
+	~_WPXParsingState();
 
 /*
 	UCSString m_bodyText;

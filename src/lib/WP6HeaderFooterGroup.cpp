@@ -27,13 +27,13 @@
 #include "WP6LLListener.h"
 #include "libwpd_internal.h"
 
-WP6HeaderFooterGroup::WP6HeaderFooterGroup(GsfInput *input) :
+WP6HeaderFooterGroup::WP6HeaderFooterGroup(WPXInputStream *input) :
 	WP6VariableLengthGroup()
 {
 	_read(input);
 }
 
-void WP6HeaderFooterGroup::_readContents(GsfInput *input)
+void WP6HeaderFooterGroup::_readContents(WPXInputStream *input)
 {
 	m_occurenceBits = gsf_le_read_guint16(input);
 }

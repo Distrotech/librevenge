@@ -29,7 +29,7 @@
 #include "WP6Parser.h"
 #include "libwpd_internal.h"
 
-WP6FillStylePacket::WP6FillStylePacket(GsfInput *input, int id, guint32 dataOffset, guint32 dataSize) 
+WP6FillStylePacket::WP6FillStylePacket(WPXInputStream *input, int id, guint32 dataOffset, guint32 dataSize) 
 	: WP6PrefixDataPacket(input)
 {	
 	_read(input, dataOffset, dataSize);
@@ -43,16 +43,16 @@ WP6FillStylePacket::~WP6FillStylePacket()
 
 const int WP6_FILL_STYLE_PACKET_SKIPABLE_DATA_AFTER_PREFIX_PACKETS = 6;
 const int WP6_FILL_STYLE_PACKET_SKIPABLE_DATA_AFTER_FILL_NAME = 3;
-void WP6FillStylePacket::_readContents(GsfInput *input)
+void WP6FillStylePacket::_readContents(WPXInputStream *input)
 {
 	/* skip a whole bunch of useless crap */
 	guint16 numChildPrefixIDs = gsf_le_read_guint16(input);
-	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, sizeof(guint16)*numChildPrefixIDs, G_SEEK_CUR));
-	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WP6_FILL_STYLE_PACKET_SKIPABLE_DATA_AFTER_PREFIX_PACKETS, G_SEEK_CUR));
+	input->seek(sizeof(guint16)*numChildPrefixIDs, WPX_SEEK_CUR);
+	input->seek(WP6_FILL_STYLE_PACKET_SKIPABLE_DATA_AFTER_PREFIX_PACKETS, WPX_SEEK_CUR);
 	gint16 fillNameLength = gsf_le_read_guint16(input);
 	if (fillNameLength > 0)
-		WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, fillNameLength*sizeof(guint8), G_SEEK_CUR));
-	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WP6_FILL_STYLE_PACKET_SKIPABLE_DATA_AFTER_FILL_NAME, G_SEEK_CUR));
+		input->seek(fillNameLength*sizeof(guint8), WPX_SEEK_CUR);
+	input->seek(WP6_FILL_STYLE_PACKET_SKIPABLE_DATA_AFTER_FILL_NAME, WPX_SEEK_CUR);
 
 	/* now we can finally grab the meat */
 	m_fgColor.m_r = gsf_le_read_guint8(input);

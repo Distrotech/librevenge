@@ -34,7 +34,7 @@
 #include "WP42FileStructure.h"
 #include "WP42HLStylesListener.h"
 
-WP42Parser::WP42Parser(GsfInput *input) :
+WP42Parser::WP42Parser(WPXInputStream *input) :
 	WPXParser(input, NULL)
 {
 }
@@ -43,13 +43,13 @@ WP42Parser::~WP42Parser()
 {
 }
 
-void WP42Parser::parse(GsfInput *input, WP42HLListener *listener)
+void WP42Parser::parse(WPXInputStream *input, WP42HLListener *listener)
 {
 	listener->startDocument();
 	
-	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, 0, G_SEEK_SET));	
+	input->seek(0, WPX_SEEK_SET);	
 	
-	WPD_DEBUG_MSG(("WordPerfect: Starting document body parse (position = %ld)\n",(long)gsf_input_tell(input)));
+	WPD_DEBUG_MSG(("WordPerfect: Starting document body parse (position = %ld)\n",(long)input->tell()));
 	
 	parseDocument(input, listener);
 	
@@ -57,9 +57,9 @@ void WP42Parser::parse(GsfInput *input, WP42HLListener *listener)
 }
 
 // parseDocument: parses a document body (may call itself recursively, on other streams, or itself)
-void WP42Parser::parseDocument(GsfInput *input, WP42HLListener *listener)
+void WP42Parser::parseDocument(WPXInputStream *input, WP42HLListener *listener)
 {
-	while (!gsf_input_eof(input))
+	while (!input->atEOS())
 	{
 		guint8 readVal;
 		readVal = gsf_le_read_guint8(input);
@@ -157,7 +157,7 @@ void WP42Parser::parseDocument(GsfInput *input, WP42HLListener *listener)
 
 void WP42Parser::parse(WPXHLListenerImpl *listenerImpl)
 {
-	GsfInput *input = getInput();
+	WPXInputStream *input = getInput();
 	vector<WPXPageSpan *> pageList;
 	vector<WPXTable *> tableList;	
 	

@@ -32,11 +32,11 @@
 class WP6ExtendedCharacterGroup : public WP6FixedLengthGroup
 {
 public:
-	WP6ExtendedCharacterGroup(GsfInput *input, guint8 groupID);	
+	WP6ExtendedCharacterGroup(WPXInputStream *input, guint8 groupID);	
 	virtual void parse(WP6HLListener *listener);
 	
  protected:
-	virtual void _readContents(GsfInput *input);
+	virtual void _readContents(WPXInputStream *input);
 
  private:
 	guint8 m_character;

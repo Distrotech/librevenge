@@ -31,7 +31,7 @@
 class WP6SingleByteFunction : public WP6Part
 {
  public:
-	static WP6SingleByteFunction * WP6SingleByteFunction::constructSingleByteFunction(GsfInput *input, guint8 groupID);
+	static WP6SingleByteFunction * WP6SingleByteFunction::constructSingleByteFunction(WPXInputStream *input, guint8 groupID);
 };
 
 class WP6SpaceFunction : public WP6SingleByteFunction

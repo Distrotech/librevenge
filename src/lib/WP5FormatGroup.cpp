@@ -27,13 +27,13 @@
 #include "WPXHLListener.h"
 #include "libwpd_internal.h"
 
-WP5FormatGroup::WP5FormatGroup(GsfInput *input) :	
+WP5FormatGroup::WP5FormatGroup(WPXInputStream *input) :	
 	WP5VariableLengthGroup()
 {
 	_read(input);
 }
 
-void WP5FormatGroup::_readContents(GsfInput *input)
+void WP5FormatGroup::_readContents(WPXInputStream *input)
 {
 	switch(getSubGroup())
 	{

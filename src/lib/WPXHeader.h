@@ -26,17 +26,17 @@
 #ifndef WPXHEADER_H
 #define WPXHEADER_H
 
-#include <gsf/gsf-input.h>
 #include <stdlib.h>
 #include <glib.h>
+#include "WPXStream.h"
 
 class WPXHeader
 {
  public:	
-	WPXHeader(GsfInput *input, guint32 documentOffset, guint8 productType, guint8 fileType, guint8 majorVersion, guint8 minorVersion, guint16 documentEncryption);
+	WPXHeader(WPXInputStream *input, guint32 documentOffset, guint8 productType, guint8 fileType, guint8 majorVersion, guint8 minorVersion, guint16 documentEncryption);
 	virtual ~WPXHeader();
 
-	static WPXHeader * constructHeader(GsfInput *input);
+	static WPXHeader * constructHeader(WPXInputStream *input);
 		
 	const guint32 getDocumentOffset() const { return m_documentOffset; }
 	const guint8 getProductType() const { return m_productType; }

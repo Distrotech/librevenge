@@ -30,7 +30,7 @@
 class WP61Header : public WP6Header
 {
  public:
-	WP61Header(GsfInput * input, guint32 documentOffset, guint8 productType, guint8 fileType, guint8 majorVersion, guint8 minorVersion, guint16 documentEncryption);
+	WP61Header(WPXInputStream * input, guint32 documentOffset, guint8 productType, guint8 fileType, guint8 majorVersion, guint8 minorVersion, guint16 documentEncryption);
 	virtual ~WP61Header();
 	
 	const guint32 getDocumentSize() const { return m_documentSize; }

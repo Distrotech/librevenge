@@ -34,7 +34,7 @@ WP5FixedLengthGroup::WP5FixedLengthGroup(guint groupID)
 {
 }
 
-WP5FixedLengthGroup * WP5FixedLengthGroup::constructFixedLengthGroup(GsfInput *input, guint8 groupID)
+WP5FixedLengthGroup * WP5FixedLengthGroup::constructFixedLengthGroup(WPXInputStream *input, guint8 groupID)
 {
 	switch (groupID) 
 	{
@@ -50,15 +50,15 @@ WP5FixedLengthGroup * WP5FixedLengthGroup::constructFixedLengthGroup(GsfInput *i
 	}
 }
 
-void WP5FixedLengthGroup::_read(GsfInput *input)
+void WP5FixedLengthGroup::_read(WPXInputStream *input)
 {
-	guint32 startPosition = gsf_input_tell(input);
+	guint32 startPosition = input->tell();
 	_readContents(input);
 	
 	if (m_group >= 0xC0 && m_group <= 0xCF) // just an extra safety check
 	{
 		int size = WP5_FIXED_LENGTH_FUCNTION_GROUP_SIZE[m_group-0xC0];
-		WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, (startPosition + size - 1 - gsf_input_tell(input)), G_SEEK_CUR));
+		input->seek((startPosition + size - 1 - input->tell()), WPX_SEEK_CUR);
 	}
 	else
 		throw FileException();

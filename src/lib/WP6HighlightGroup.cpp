@@ -28,13 +28,13 @@
 #include "WP6LLListener.h"
 #include "libwpd_internal.h"
 
-WP6HighlightGroup::WP6HighlightGroup(GsfInput *input, guint8 groupID)
+WP6HighlightGroup::WP6HighlightGroup(WPXInputStream *input, guint8 groupID)
 	: WP6FixedLengthGroup(groupID)
 {
 	_read(input);
 }
 
-void WP6HighlightGroup::_readContents(GsfInput *input)
+void WP6HighlightGroup::_readContents(WPXInputStream *input)
 {
 	m_color.m_r = gsf_le_read_guint8(input);
 	m_color.m_g = gsf_le_read_guint8(input);
@@ -42,7 +42,7 @@ void WP6HighlightGroup::_readContents(GsfInput *input)
 	m_color.m_s = gsf_le_read_guint8(input);
 }
 
-WP6HighlightOnGroup::WP6HighlightOnGroup(GsfInput *input, guint8 groupID)
+WP6HighlightOnGroup::WP6HighlightOnGroup(WPXInputStream *input, guint8 groupID)
 	: WP6HighlightGroup(input, groupID)
 {
 }
@@ -52,7 +52,7 @@ void WP6HighlightOnGroup::parse(WP6HLListener *listener)
 	listener->highlightChange(true, getColor());
 }
 
-WP6HighlightOffGroup::WP6HighlightOffGroup(GsfInput *input, guint8 groupID)
+WP6HighlightOffGroup::WP6HighlightOffGroup(WPXInputStream *input, guint8 groupID)
 	: WP6HighlightGroup(input, groupID)
 {
 }

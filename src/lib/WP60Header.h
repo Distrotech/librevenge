@@ -30,7 +30,7 @@
 class WP60Header : public WP6Header
 {
  public:
-	WP60Header(GsfInput * input, guint32 documentOffset, guint8 productType, guint8 fileType, guint8 majorVersion, guint8 minorVersion, guint16 documentEncryption);
+	WP60Header(WPXInputStream * input, guint32 documentOffset, guint8 productType, guint8 fileType, guint8 majorVersion, guint8 minorVersion, guint16 documentEncryption);
 	virtual ~WP60Header();
 		
  private:

@@ -36,15 +36,15 @@ class WP6PrefixIndice;
 class WP6PrefixDataPacket
 {
 public:
-	WP6PrefixDataPacket(GsfInput * input);	
+	WP6PrefixDataPacket(WPXInputStream * input);	
 	virtual ~WP6PrefixDataPacket() {}
 	virtual void parse(WP6HLListener *listener) const {}
 
-	static WP6PrefixDataPacket * constructPrefixDataPacket(GsfInput * input, WP6PrefixIndice *prefixIndice);
+	static WP6PrefixDataPacket * constructPrefixDataPacket(WPXInputStream * input, WP6PrefixIndice *prefixIndice);
 
 protected:
-	virtual void _readContents(GsfInput *input) = 0;
- 	void _read(GsfInput *input, guint32 dataOffset, guint32 dataSize);
+	virtual void _readContents(WPXInputStream *input) = 0;
+ 	void _read(WPXInputStream *input, guint32 dataOffset, guint32 dataSize);
 };
 
 #endif /* WP6PREFIXDATAPACKET_H */

@@ -32,13 +32,13 @@ class WP6FixedLengthGroup : public WP6Part
 {
  public:
 	WP6FixedLengthGroup(guint8 groupID);
-	static WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(GsfInput *input, guint8 groupID);
+	static WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(WPXInputStream *input, guint8 groupID);
 
  	const guint8 getGroup() const { return m_group; }
  
  protected:
-	void _read(GsfInput *input);
-	virtual void _readContents(GsfInput *input) = 0; // we always read the contents in the case of a fixed length group
+	void _read(WPXInputStream *input);
+	virtual void _readContents(WPXInputStream *input) = 0; // we always read the contents in the case of a fixed length group
  
  private:
 	 guint8 m_group;

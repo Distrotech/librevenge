@@ -37,7 +37,7 @@ class WP5Part
  public:
 	virtual ~WP5Part() {}
 	
-	static WP5Part * constructPart(GsfInput *input, guint8 readVal);
+	static WP5Part * constructPart(WPXInputStream *input, guint8 readVal);
 	virtual void parse(WP5HLListener *listener) = 0;
 };
 

@@ -23,6 +23,7 @@
 #include <gsf/gsf-input-stdio.h>
 #include <stdio.h>
 #include "HtmlListenerImpl.h"
+#include "GSFStream.h"
 
 int main(int argc, char *argv[])
 {
@@ -45,17 +46,19 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 	
-	WPDConfidence confidence = WPDocument::isFileFormatSupported(input, false);
+	GSFInputStream *gsfInput = new GSFInputStream(input);
+
+	WPDConfidence confidence = WPDocument::isFileFormatSupported(gsfInput, false);
 	if (confidence == WPD_CONFIDENCE_NONE || confidence == WPD_CONFIDENCE_POOR)
 	{
 		printf("ERROR: Unsupported file format!\n");
 		return 1;
-	}	
+	}
 
 	HtmlListenerImpl listenerImpl;
  	try 
 	{
-		WPDocument::parse(input, static_cast<WPXHLListenerImpl *>(&listenerImpl));
+		WPDocument::parse(gsfInput, static_cast<WPXHLListenerImpl *>(&listenerImpl));
 	} 
  	catch (FileException)
 	{
@@ -78,8 +81,9 @@ int main(int argc, char *argv[])
  	    return 1;
 	}
 	
-	gsf_shutdown();
+	delete gsfInput;
 	g_object_unref (G_OBJECT (input));
+	gsf_shutdown();
 
 	return 0;
 }

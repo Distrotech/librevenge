@@ -27,13 +27,13 @@
 #include "WP6LLListener.h"
 #include "libwpd_internal.h"
 
-WP6UndoGroup::WP6UndoGroup(GsfInput *input, guint8 groupID)
+WP6UndoGroup::WP6UndoGroup(WPXInputStream *input, guint8 groupID)
 	: WP6FixedLengthGroup(groupID)
 {
 	_read(input);
 }
 
-void WP6UndoGroup::_readContents(GsfInput *input)
+void WP6UndoGroup::_readContents(WPXInputStream *input)
 {
 	m_undoType = gsf_le_read_guint8(input);
 	m_undoLevel = gsf_le_read_guint16(input);

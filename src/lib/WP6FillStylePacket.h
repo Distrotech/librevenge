@@ -35,9 +35,9 @@ typedef struct _RGBSColor RGBSColor;
 class WP6FillStylePacket : public WP6PrefixDataPacket
 {
 public:
-	WP6FillStylePacket(GsfInput *input, int id, guint32 dataOffset, guint32 dataSize);
+	WP6FillStylePacket(WPXInputStream *input, int id, guint32 dataOffset, guint32 dataSize);
 	virtual ~WP6FillStylePacket();
-	virtual void _readContents(GsfInput *input);
+	virtual void _readContents(WPXInputStream *input);
 	virtual void parse(WP6HLListener *listener) const {}
 	const RGBSColor * getFgColor() const { return &m_fgColor; }
 	const RGBSColor * getBgColor() const { return &m_bgColor; }

@@ -31,11 +31,11 @@
 class WP5FormatGroup : public WP5VariableLengthGroup
 {
 public:
-	WP5FormatGroup(GsfInput *input);	
+	WP5FormatGroup(WPXInputStream *input);	
 	virtual void parse(WP5HLListener *listener);
 	
 protected:
-	virtual void _readContents(GsfInput *input);
+	virtual void _readContents(WPXInputStream *input);
 
 private:
 

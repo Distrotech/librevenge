@@ -25,8 +25,7 @@
 
 #ifndef LIBWPD_INTERNAL_H
 #define LIBWPD_INTERNAL_H
-#include <gsf/gsf-input.h>
-#include <gsf/gsf-utils.h>
+#include "WPXStream.h"
 #include <stdio.h>
 #include "libwpd_support.h"
 
@@ -47,9 +46,8 @@
 
 // add more of these as needed for byteswapping
 // (the 8-bit functions are just there to make things consistent)
-gint8 gsf_le_read_gint8(GsfInput *input); 
-guint8 gsf_le_read_guint8(GsfInput *input); 
-guint16 gsf_le_read_guint16(GsfInput *input);
-guint32 gsf_le_read_guint32(GsfInput *input);
-
+gint8 gsf_le_read_gint8(WPXInputStream *input); 
+guint8 gsf_le_read_guint8(WPXInputStream *input); 
+guint16 gsf_le_read_guint16(WPXInputStream *input);
+guint32 gsf_le_read_guint32(WPXInputStream *input);
 #endif /* LIBWPD_INTERNAL_H */

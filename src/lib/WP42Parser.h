@@ -34,15 +34,15 @@ class WPXHLListenerImpl;
 class WP42Parser : public WPXParser
 {
 public:
-	WP42Parser(GsfInput *input);
+	WP42Parser(WPXInputStream *input);
 	~WP42Parser();
 
 	virtual void parse(WPXHLListenerImpl *listenerImpl);
 
-	static void parseDocument(GsfInput *input, WP42HLListener *listener);
+	static void parseDocument(WPXInputStream *input, WP42HLListener *listener);
 
 private:
-	void parse(GsfInput *input, WP42HLListener *listener);
+	void parse(WPXInputStream *input, WP42HLListener *listener);
 };
 
 #endif /* WP42PARSER_H */

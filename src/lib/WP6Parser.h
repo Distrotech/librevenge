@@ -36,17 +36,17 @@ class WPXHLListenerImpl;
 class WP6Parser : public WPXParser
 {
 public:
-	WP6Parser(GsfInput *input, WPXHeader *header);
+	WP6Parser(WPXInputStream *input, WPXHeader *header);
 	~WP6Parser();
 
 	virtual void parse(WPXHLListenerImpl *listenerImpl);
 
-	static void parseDocument(GsfInput *stream, WP6HLListener *listener);
+	static void parseDocument(WPXInputStream *stream, WP6HLListener *listener);
 
 private:
-	WP6PrefixData * getPrefixData(GsfInput *input);
+	WP6PrefixData * getPrefixData(WPXInputStream *input);
 
-	void parse(GsfInput *stream, WP6HLListener *listener);
+	void parse(WPXInputStream *stream, WP6HLListener *listener);
 
 	void parsePacket(WP6PrefixData *prefixData, int type, WP6HLListener *listener);
 	void parsePackets(WP6PrefixData *prefixData, int type, WP6HLListener *listener);

@@ -31,7 +31,7 @@
 #include "libwpd_internal.h"
 #include "WPXTable.h"
 
-WP5Parser::WP5Parser(GsfInput *input, WPXHeader *header) :
+WP5Parser::WP5Parser(WPXInputStream *input, WPXHeader *header) :
 	WPXParser(input, header)
 {
 }
@@ -40,13 +40,13 @@ WP5Parser::~WP5Parser()
 {
 }
 
-void WP5Parser::parse(GsfInput *input, WP5HLListener *listener)
+void WP5Parser::parse(WPXInputStream *input, WP5HLListener *listener)
 {
 	listener->startDocument();
 	
-	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, getHeader()->getDocumentOffset(), G_SEEK_SET));	
+	input->seek(getHeader()->getDocumentOffset(), WPX_SEEK_SET);	
 	
-	WPD_DEBUG_MSG(("WordPerfect: Starting document body parse (position = %ld)\n",(long)gsf_input_tell(input)));
+	WPD_DEBUG_MSG(("WordPerfect: Starting document body parse (position = %ld)\n",(long)input->tell()));
 	
 	parseDocument(input, listener);
 	
@@ -54,9 +54,9 @@ void WP5Parser::parse(GsfInput *input, WP5HLListener *listener)
 }
 
 // parseDocument: parses a document body (may call itself recursively, on other streams, or itself)
-void WP5Parser::parseDocument(GsfInput *input, WP5HLListener *listener)
+void WP5Parser::parseDocument(WPXInputStream *input, WP5HLListener *listener)
 {
-	while (!gsf_input_eof(input))
+	while (!input->atEOS())
 	{
 		guint8 readVal;
 		readVal = gsf_le_read_guint8(input);
@@ -110,7 +110,7 @@ void WP5Parser::parseDocument(GsfInput *input, WP5HLListener *listener)
 
 void WP5Parser::parse(WPXHLListenerImpl *listenerImpl)
 {
-	GsfInput *input = getInput();
+	WPXInputStream *input = getInput();
 	vector<WPXPageSpan *> pageList;
 	vector<WPXTable *> tableList;	
 	

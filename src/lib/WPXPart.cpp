@@ -26,6 +26,6 @@
 #include <gsf/gsf-input.h>
 #include "WPXPart.h"
 
-WPXPart::WPXPart(GsfInput *input)
+WPXPart::WPXPart(WPXInputStream *input)
 {
 }

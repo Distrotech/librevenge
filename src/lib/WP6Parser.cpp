@@ -38,7 +38,7 @@
 #include "WP6DefaultInitialFontPacket.h"
 #include "WPXTable.h"
 
-WP6Parser::WP6Parser(GsfInput *input, WPXHeader *header) :
+WP6Parser::WP6Parser(WPXInputStream *input, WPXHeader *header) :
 	WPXParser(input, header)
 {
 }
@@ -47,7 +47,7 @@ WP6Parser::~WP6Parser()
 {
 }
 
-WP6PrefixData * WP6Parser::getPrefixData(GsfInput *input)
+WP6PrefixData * WP6Parser::getPrefixData(WPXInputStream *input)
 {
 	WP6PrefixData *prefixData = NULL;
 	try
@@ -62,13 +62,13 @@ WP6PrefixData * WP6Parser::getPrefixData(GsfInput *input)
 	}
 }
 
-void WP6Parser::parse(GsfInput *input, WP6HLListener *listener)
+void WP6Parser::parse(WPXInputStream *input, WP6HLListener *listener)
 {
 	listener->startDocument();
 	
-	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, getHeader()->getDocumentOffset(), G_SEEK_SET));	
+	input->seek(getHeader()->getDocumentOffset(), WPX_SEEK_SET);	
 	
-	WPD_DEBUG_MSG(("WordPerfect: Starting document body parse (position = %ld)\n",(long)gsf_input_tell(input)));
+	WPD_DEBUG_MSG(("WordPerfect: Starting document body parse (position = %ld)\n",(long)input->tell()));
 	
 	parseDocument(input, listener);
 	
@@ -76,9 +76,9 @@ void WP6Parser::parse(GsfInput *input, WP6HLListener *listener)
 }
 
 // parseDocument: parses a document body (may call itself recursively, on other streams, or itself)
-void WP6Parser::parseDocument(GsfInput *input, WP6HLListener *listener)
+void WP6Parser::parseDocument(WPXInputStream *input, WP6HLListener *listener)
 {
-	while (!gsf_input_eof(input))
+	while (!input->atEOS())
 	{
 		guint8 readVal;
 		readVal = gsf_le_read_guint8(input);
@@ -144,7 +144,7 @@ void WP6Parser::parse(WPXHLListenerImpl *listenerImpl)
 	vector<WPXPageSpan *> pageList;
 	vector<WPXTable *> tableList;	
  	
-	GsfInput *input = getInput();
+	WPXInputStream *input = getInput();
 	
 	try
  	{

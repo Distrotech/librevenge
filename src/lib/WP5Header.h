@@ -31,7 +31,7 @@
 class WP5Header : public WPXHeader
 {
  public:
-	WP5Header(GsfInput * input, guint32 documentOffset, guint8 productType, guint8 fileType, guint8 majorVersion, guint8 minorVersion, guint16 documentEncryption);
+	WP5Header(WPXInputStream * input, guint32 documentOffset, guint8 productType, guint8 fileType, guint8 majorVersion, guint8 minorVersion, guint16 documentEncryption);
 	virtual ~WP5Header() {};
 	
 	const guint16 getIndexHeaderOffset() const { return m_indexHeaderOffset; }
@@ -39,7 +39,7 @@ class WP5Header : public WPXHeader
 	const guint16 getDocumentEncryption() const { return m_documentEncryption; }
 
 protected:
-	void _readIndexInformation(GsfInput *input);
+	void _readIndexInformation(WPXInputStream *input);
 		
 private:
 	guint16 m_indexHeaderOffset;

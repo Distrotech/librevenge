@@ -34,11 +34,11 @@ class WP42VariableLengthGroup : public WP42Part
 	WP42VariableLengthGroup(guint8 group); // WP42VariableLengthGroup should _never_ be constructed, only its inherited classes
 	virtual ~WP42VariableLengthGroup() {}
 	
-	static WP42VariableLengthGroup * constructVariableLengthGroup(GsfInput *input, guint8 group);
+	static WP42VariableLengthGroup * constructVariableLengthGroup(WPXInputStream *input, guint8 group);
 
  protected:
-	void _read(GsfInput *input);
- 	virtual void _readContents(GsfInput *input) = 0;
+	void _read(WPXInputStream *input);
+ 	virtual void _readContents(WPXInputStream *input) = 0;
 
 	const guint8 getGroup() const { return m_group; }
 

@@ -32,12 +32,12 @@
 class WP5AttributeGroup : public WP5FixedLengthGroup
 {
  public:
-	WP5AttributeGroup(GsfInput *input, guint8 groupID);	
+	WP5AttributeGroup(WPXInputStream *input, guint8 groupID);	
 	virtual void parse(WP5HLListener *llListener) = 0;
 	const guint8 getAttribute() const { return m_attribute; }
 	
  protected:
-	virtual void _readContents(GsfInput *input);
+	virtual void _readContents(WPXInputStream *input);
 
  private:
 	guint8 m_attribute;
@@ -46,14 +46,14 @@ class WP5AttributeGroup : public WP5FixedLengthGroup
 class WP5AttributeOnGroup : public WP5AttributeGroup
 {
  public:
-	WP5AttributeOnGroup(GsfInput *input, guint8 groupID);
+	WP5AttributeOnGroup(WPXInputStream *input, guint8 groupID);
 	virtual void parse(WP5HLListener *listener);
 };
 
 class WP5AttributeOffGroup : public WP5AttributeGroup
 {
  public:
-	WP5AttributeOffGroup(GsfInput *input, guint8 groupID);
+	WP5AttributeOffGroup(WPXInputStream *input, guint8 groupID);
 	virtual void parse(WP5HLListener *listener);
 };
 

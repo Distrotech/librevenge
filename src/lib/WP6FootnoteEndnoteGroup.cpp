@@ -27,13 +27,13 @@
 #include "WP6LLListener.h"
 #include "libwpd_internal.h"
 
-WP6FootnoteEndnoteGroup::WP6FootnoteEndnoteGroup(GsfInput *input) :
+WP6FootnoteEndnoteGroup::WP6FootnoteEndnoteGroup(WPXInputStream *input) :
 	WP6VariableLengthGroup()
 {
 	_read(input);
 }
 
-void WP6FootnoteEndnoteGroup::_readContents(GsfInput *input)
+void WP6FootnoteEndnoteGroup::_readContents(WPXInputStream *input)
 {
 }
 

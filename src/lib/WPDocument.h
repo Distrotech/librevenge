@@ -26,7 +26,7 @@
 #ifndef WPDOCUMENT_H
 #define WPDOCUMENT_H
 
-#include <gsf/gsf-input.h>
+#include "WPXStream.h"
 #include "libwpd_support.h"
 
 class WPXHLListenerImpl;
@@ -39,11 +39,11 @@ WordPerfect documents.
 class WPDocument
 {
 public:
-	static WPDConfidence isFileFormatSupported(GsfInput *input, bool partialContent);
+	static WPDConfidence isFileFormatSupported(WPXInputStream *input, bool partialContent);
 
-	static void parse(GsfInput *input, WPXHLListenerImpl *listenerImpl);
-	//static void parse(GsfInput *input, WPXHLListenerImpl *listenerImpl, WPXFileType fileType);
-	//WPXFileType getFileType(GsfInput *input)
+	static void parse(WPXInputStream *input, WPXHLListenerImpl *listenerImpl);
+	//static void parse(WPXInputStream *input, WPXHLListenerImpl *listenerImpl, WPXFileType fileType);
+	//WPXFileType getFileType(WPXInputStream *input)
 };
 
 #endif /* WPDOCUMENT_H */

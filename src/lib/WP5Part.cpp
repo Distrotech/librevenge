@@ -34,7 +34,7 @@
 // returns the part if it successfully creates the part, returns NULL if it can't
 // throws an exception if there is an error
 // precondition: readVal us between 0xC0 and 0xFF
-WP5Part * WP5Part::constructPart(GsfInput *input, guint8 readVal)
+WP5Part * WP5Part::constructPart(WPXInputStream *input, guint8 readVal)
 {	
 	WPD_DEBUG_MSG(("WordPerfect: ConstructPart\n"));
 

@@ -39,11 +39,9 @@ definitions listed here.
 class WPXHLListenerImpl
 {
  public:
-	// setDocumentMeta: should be used to set all document metadata
-	// this function is guaranteed to be called before any subsequent function
-	// which deals with document elements
-	// completely optional. if your listener implementation doesn't
-	// need/support these functions, don't implement them
+	/** 
+	Called when all document metadata should be set. This is always the first callback made.
+	*/
  	virtual void setDocumentMetaData(const UCSString &author, const UCSString &subject,
 					 const UCSString &publisher, const UCSString &category,
 					 const UCSString &keywords, const UCSString &language,
@@ -51,7 +49,7 @@ class WPXHLListenerImpl
 					 const UCSString &descriptiveType) = 0;
 
 	/**
-	Called at the start of the parsing process. This is always the first callback made.
+	Called at the start of the parsing process. This is always the second callback made.
 	*/
 	virtual void startDocument() = 0;
 	 /**
@@ -84,7 +82,7 @@ class WPXHLListenerImpl
 	virtual void closeHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence) = 0;
 
 	/**
-	Called when a new page span is opened. This (or openListElement) will always be called before any text or span is placed into the document.
+	Called when a new paragraph is opened. This (or openListElement) will always be called before any text or span is placed into the document.
 	\param paragraphJustification The justification (left, center, right, full, full all lines, or reserved) encoded as an unsigned 8-bit integer
 	\param marginLeftOffset The left indentation of this paragraph, in inches
 	\param marginLeftOffset The right indentation of this paragraph, in inches
@@ -122,10 +120,10 @@ class WPXHLListenerImpl
 	*/
  	virtual void insertLineBreak() = 0;
 
-	virtual void defineOrderedListLevel(const int listID, const guint16 listLevel, const WPXNumberingType listType,
+	virtual void defineOrderedListLevel(const int listID, const int listLevel, const WPXNumberingType listType,
 					    const UCSString &textBeforeNumber, const UCSString &textAfterNumber,
 					    const int startingNumber) = 0;
-	virtual void defineUnorderedListLevel(const int listID, const guint16 listLevel, const UCSString &bullet) = 0;
+	virtual void defineUnorderedListLevel(const int listID, const int listLevel, const UCSString &bullet) = 0;
 	virtual void openOrderedListLevel(const int listID) = 0;
 	virtual void openUnorderedListLevel(const int listID) = 0;
 	virtual void closeOrderedListLevel() = 0;
@@ -144,7 +142,7 @@ class WPXHLListenerImpl
 			       const float marginLeftOffset, const float marginRightOffset,
 			       const float leftOffset, const vector < WPXColumnDefinition > &columns) = 0;
 	/**
-	Called when a new table row should be started
+	Called when a new table row is opened
 	*/
  	virtual void openTableRow() = 0;
 	/**
@@ -158,7 +156,7 @@ class WPXHLListenerImpl
 	Called when the current table cell is closed
 	*/
 	virtual void closeTableCell() = 0;
-	virtual void insertCoveredTableCell(const guint32 col, const guint32 row) = 0;
+	virtual void insertCoveredTableCell(const unsigned int col, const unsigned int row) = 0;
 	/**
 	Called when the current table is closed
 	*/

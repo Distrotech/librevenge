@@ -32,7 +32,7 @@ WP42VariableLengthGroup::WP42VariableLengthGroup(guint8 group)
 {
 }
 
-WP42VariableLengthGroup * WP42VariableLengthGroup::constructVariableLengthGroup(GsfInput *input, guint8 group)
+WP42VariableLengthGroup * WP42VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, guint8 group)
 {
 	switch (group)
 	{
@@ -42,12 +42,12 @@ WP42VariableLengthGroup * WP42VariableLengthGroup::constructVariableLengthGroup(
 	}
 }
 
-void WP42VariableLengthGroup::_read(GsfInput *input)
+void WP42VariableLengthGroup::_read(WPXInputStream *input)
 {
 	_readContents(input);
 	
 	// skip over the remaining bytes of the group, if any
-	while (!gsf_input_eof(input))
+	while (!input->atEOS())
 	{
 		guint8 readNextVal;
 		readNextVal = gsf_le_read_guint8(input);

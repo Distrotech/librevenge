@@ -31,7 +31,7 @@
 class WP6CharacterGroup_ColorSubGroup: public WP6VariableLengthGroup_SubGroup
 {
 public:
-	WP6CharacterGroup_ColorSubGroup(GsfInput *input);
+	WP6CharacterGroup_ColorSubGroup(WPXInputStream *input);
 	virtual void parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
 
 private:
@@ -43,7 +43,7 @@ private:
 class WP6CharacterGroup_CharacterShadingChangeSubGroup: public WP6VariableLengthGroup_SubGroup
 {
 public:
-	WP6CharacterGroup_CharacterShadingChangeSubGroup(GsfInput *input);
+	WP6CharacterGroup_CharacterShadingChangeSubGroup(WPXInputStream *input);
 	virtual void parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
 
 private:
@@ -53,7 +53,7 @@ private:
 class WP6CharacterGroup_FontFaceChangeSubGroup : public WP6VariableLengthGroup_SubGroup
 {
 public:
-	WP6CharacterGroup_FontFaceChangeSubGroup(GsfInput *input);
+	WP6CharacterGroup_FontFaceChangeSubGroup(WPXInputStream *input);
 	virtual void parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
 
 private:
@@ -66,7 +66,7 @@ private:
 class WP6CharacterGroup_ParagraphNumberOnSubGroup : public WP6VariableLengthGroup_SubGroup
 {
 public:
-	WP6CharacterGroup_ParagraphNumberOnSubGroup(GsfInput *input);
+	WP6CharacterGroup_ParagraphNumberOnSubGroup(WPXInputStream *input);
 	virtual void parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
 
 private:
@@ -78,7 +78,7 @@ private:
 class WP6CharacterGroup_TableDefinitionOnSubGroup : public WP6VariableLengthGroup_SubGroup
 {
 public:
-	WP6CharacterGroup_TableDefinitionOnSubGroup(GsfInput *input);
+	WP6CharacterGroup_TableDefinitionOnSubGroup(WPXInputStream *input);
 	virtual void parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
 
 private:
@@ -90,7 +90,7 @@ private:
 class WP6CharacterGroup_TableDefinitionOffSubGroup : public WP6VariableLengthGroup_SubGroup
 {
 public:
-	WP6CharacterGroup_TableDefinitionOffSubGroup(GsfInput *input);
+	WP6CharacterGroup_TableDefinitionOffSubGroup(WPXInputStream *input);
 	virtual void parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
 
 private:
@@ -100,7 +100,7 @@ private:
 class WP6CharacterGroup_TableColumnSubGroup : public WP6VariableLengthGroup_SubGroup
 {
 public:
-	WP6CharacterGroup_TableColumnSubGroup(GsfInput *input);
+	WP6CharacterGroup_TableColumnSubGroup(WPXInputStream *input);
 	virtual void parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
 
 private:
@@ -119,9 +119,9 @@ private:
 class WP6CharacterGroup : public WP6VariableLengthGroup
 {
  public:
-	WP6CharacterGroup(GsfInput *input);
+	WP6CharacterGroup(WPXInputStream *input);	
 	virtual ~WP6CharacterGroup();
-	virtual void _readContents(GsfInput *input);
+	virtual void _readContents(WPXInputStream *input);
 	virtual void parse(WP6HLListener *listener);
 
  private:

@@ -28,18 +28,20 @@
 #include "WP6PrefixDataPacket.h"
 #include "WP6FileStructure.h"
 #include "WP6HLListener.h"
+#include "WPXStream.h"
+#include "WPXMemoryStream.h"
 
 class WP6ExtendedDocumentSummaryPacket : public WP6PrefixDataPacket
 {
  public:
-	WP6ExtendedDocumentSummaryPacket(GsfInput *input, int id, guint32 dataOffset, guint32 dataSize);
+	WP6ExtendedDocumentSummaryPacket(WPXInputStream *input, int id, guint32 dataOffset, guint32 dataSize);
 	virtual ~WP6ExtendedDocumentSummaryPacket();
-	virtual void _readContents(GsfInput *input);
+	virtual void _readContents(WPXInputStream *input);
 	virtual void parse(WP6HLListener *listener) const;
 
  private:              
 	guint16 m_dataSize;
-	GsfInput *m_stream;
+	mutable WPXMemoryInputStream *m_stream;
 	
 };
 #endif /* WP6EXTENDEDDOCUMENTSUMMARYPACKET_H */

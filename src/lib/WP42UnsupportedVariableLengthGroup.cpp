@@ -26,12 +26,12 @@
 #include "WP42UnsupportedVariableLengthGroup.h"
 #include "libwpd_internal.h"
 
-WP42UnsupportedVariableLengthGroup::WP42UnsupportedVariableLengthGroup(GsfInput *input, guint8 group) :
+WP42UnsupportedVariableLengthGroup::WP42UnsupportedVariableLengthGroup(WPXInputStream *input, guint8 group) :
 	WP42VariableLengthGroup(group)
 {
 }
 
-void WP42UnsupportedVariableLengthGroup::_readContents(GsfInput *input)
+void WP42UnsupportedVariableLengthGroup::_readContents(WPXInputStream *input)
 {
 	WPD_DEBUG_MSG(("WordPerfect: Handling an unsupported variable length group\n"));
 	_read(input);

@@ -32,9 +32,9 @@
 class WP6OutlineStylePacket : public WP6PrefixDataPacket
 {
  public:
-	WP6OutlineStylePacket(GsfInput *input, int id, guint32 dataOffset, guint32 dataSize);
+	WP6OutlineStylePacket(WPXInputStream *input, int id, guint32 dataOffset, guint32 dataSize);
 	virtual ~WP6OutlineStylePacket();
-	virtual void _readContents(GsfInput *input);
+	virtual void _readContents(WPXInputStream *input);
 	virtual void parse(WP6HLListener *listener) const;
 
  private:              

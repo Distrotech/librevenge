@@ -32,7 +32,7 @@ WP5VariableLengthGroup::WP5VariableLengthGroup()
 {
 }
 
-WP5VariableLengthGroup * WP5VariableLengthGroup::constructVariableLengthGroup(GsfInput *input, guint8 group)
+WP5VariableLengthGroup * WP5VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, guint8 group)
 {
 	switch (group)
 	{
@@ -44,9 +44,9 @@ WP5VariableLengthGroup * WP5VariableLengthGroup::constructVariableLengthGroup(Gs
 	}
 }
 
-void WP5VariableLengthGroup::_read(GsfInput *input)
+void WP5VariableLengthGroup::_read(WPXInputStream *input)
 {
-	guint32 startPosition = gsf_input_tell(input);
+	guint32 startPosition = input->tell();
 
 	WPD_DEBUG_MSG(("WordPerfect: handling a variable length group\n"));	
 	
@@ -57,6 +57,6 @@ void WP5VariableLengthGroup::_read(GsfInput *input)
 	
 	_readContents(input);
 	
-	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, (startPosition + m_size - 1 - gsf_input_tell(input)), G_SEEK_CUR));
+	input->seek((startPosition + m_size - 1 - input->tell()), WPX_SEEK_CUR);
 
 }

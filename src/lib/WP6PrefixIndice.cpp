@@ -29,7 +29,7 @@
 #include "libwpd.h"
 #include "libwpd_internal.h"
 
-WP6PrefixIndice::WP6PrefixIndice(GsfInput * input, int id)
+WP6PrefixIndice::WP6PrefixIndice(WPXInputStream * input, int id)
 	: m_id(id),
 	  m_type(0),
 	  m_flags(0),
@@ -42,7 +42,7 @@ WP6PrefixIndice::WP6PrefixIndice(GsfInput * input, int id)
 	_read(input);
 }
 
-void WP6PrefixIndice::_read(GsfInput *input)
+void WP6PrefixIndice::_read(WPXInputStream *input)
 {
 	m_flags = gsf_le_read_guint8(input);
 	m_type = gsf_le_read_guint8(input);

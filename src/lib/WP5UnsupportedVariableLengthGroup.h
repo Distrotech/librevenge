@@ -34,7 +34,7 @@
 class WP5UnsupportedVariableLengthGroup : public WP5VariableLengthGroup
 {
 public:
-	WP5UnsupportedVariableLengthGroup(GsfInput *input);
+	WP5UnsupportedVariableLengthGroup(WPXInputStream *input);
 	virtual void parse(WP5HLListener *listener) {}
 };
 

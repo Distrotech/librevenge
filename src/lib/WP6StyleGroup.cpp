@@ -27,7 +27,7 @@
 #include "WP6LLListener.h"
 #include "libwpd_internal.h"
 
-WP6StyleGroup_GlobalOnSubGroup::WP6StyleGroup_GlobalOnSubGroup(GsfInput *input)
+WP6StyleGroup_GlobalOnSubGroup::WP6StyleGroup_GlobalOnSubGroup(WPXInputStream *input)
 {
 	m_hash = gsf_le_read_guint16(input);
 	m_systemStyleNumber = gsf_le_read_guint8(input);
@@ -38,7 +38,7 @@ void WP6StyleGroup_GlobalOnSubGroup::parse(WP6HLListener *listener, const guint8
 	listener->globalOn(m_systemStyleNumber);
 }
 
-WP6StyleGroup::WP6StyleGroup(GsfInput *input) :
+WP6StyleGroup::WP6StyleGroup(WPXInputStream *input) :
 	WP6VariableLengthGroup(),
 	m_subGroupData(NULL)
 {
@@ -52,7 +52,7 @@ WP6StyleGroup::~WP6StyleGroup()
 
 }
 
-void WP6StyleGroup::_readContents(GsfInput *input)
+void WP6StyleGroup::_readContents(WPXInputStream *input)
 {
 	// this group can contain different kinds of data, thus we need to read
 	// the contents accordingly

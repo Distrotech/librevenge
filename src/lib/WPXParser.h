@@ -35,17 +35,17 @@ class WPXHLListenerImpl;
 class WPXParser
 {
 public:
-	WPXParser(GsfInput * input, WPXHeader *header);
+	WPXParser(WPXInputStream * input, WPXHeader *header);
 	virtual ~WPXParser();
 
 	virtual void parse(WPXHLListenerImpl *listenerImpl) = 0;
 
 protected:
 	WPXHeader * getHeader() { return m_header; }
-	GsfInput * getInput() { return m_input; }
+	WPXInputStream * getInput() { return m_input; }
 	
 private:
-	GsfInput * m_input;
+	WPXInputStream * m_input;
 	WPXLLListener * m_llListener;
 
 	WPXHeader * m_header;

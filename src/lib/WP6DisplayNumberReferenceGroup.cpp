@@ -28,14 +28,14 @@
 #include "WP6LLListener.h"
 #include "libwpd_internal.h"
 
-WP6DisplayNumberReferenceGroup::WP6DisplayNumberReferenceGroup(GsfInput *input) :
+WP6DisplayNumberReferenceGroup::WP6DisplayNumberReferenceGroup(WPXInputStream *input) :
 	WP6VariableLengthGroup(),
 	m_levelNumberToDisplay(0)
 {
 	_read(input);
 }
 
-void WP6DisplayNumberReferenceGroup::_readContents(GsfInput *input)
+void WP6DisplayNumberReferenceGroup::_readContents(WPXInputStream *input)
 {
 	if (!(getSubGroup() % 2) || getSubGroup() == 0)
 		m_levelNumberToDisplay = gsf_le_read_guint8(input);

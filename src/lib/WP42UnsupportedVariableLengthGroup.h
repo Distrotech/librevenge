@@ -34,9 +34,9 @@
 class WP42UnsupportedVariableLengthGroup : public WP42VariableLengthGroup
 {
 public:
-	WP42UnsupportedVariableLengthGroup(GsfInput *input, guint8 group);
+	WP42UnsupportedVariableLengthGroup(WPXInputStream *input, guint8 group);
 
-	void _readContents(GsfInput *input);
+	void _readContents(WPXInputStream *input);
 };
 
 #endif /* WP42UNSUPPORTEDVARIABLELENGTHGROUP_H */

@@ -27,14 +27,20 @@
 #include "WP6LLListener.h"
 #include "libwpd_internal.h"
 
-WP6PageGroup::WP6PageGroup(GsfInput *input) :
+WP6PageGroup::WP6PageGroup(WPXInputStream *input) :
 	WP6VariableLengthGroup(),
-	m_margin(0)
+	m_margin(0),
+	m_formName(NULL)
 {
 	_read(input);
 }
 
-void WP6PageGroup::_readContents(GsfInput *input)
+WP6PageGroup::~WP6PageGroup()
+{
+	delete [] m_formName;
+}
+
+void WP6PageGroup::_readContents(WPXInputStream *input)
 {
 	// this group can contain different kinds of data, thus we need to read
 	// the contents accordingly

@@ -23,25 +23,27 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 #include "libwpd_internal.h"
+#include "WPXStream.h"
+#include <gsf/gsf-utils.h>
 
-guint8 gsf_le_read_guint8(GsfInput *input)
+guint8 gsf_le_read_guint8(WPXInputStream *input)
 {
-	return GSF_LE_GET_GUINT8(gsf_input_read(input, sizeof(guint8), NULL));
+	return GSF_LE_GET_GUINT8(input->read(sizeof(guint8)));
 }
 
-gint8 gsf_le_read_gint8(GsfInput *input)
+gint8 gsf_le_read_gint8(WPXInputStream *input)
 {
-	return (gint8)gsf_le_read_guint8(input);
+	return (gint8)input->read(sizeof(gint8));
 }
 
-guint16 gsf_le_read_guint16(GsfInput *input)
+guint16 gsf_le_read_guint16(WPXInputStream *input)
 {
-	guint16 val = *(guint16 const *)gsf_input_read(input, sizeof(guint16), NULL);
+	guint16 val = *(guint16 const *)input->read(sizeof(guint16));
 	return GSF_LE_GET_GUINT16(&val);
 }
 
-guint32 gsf_le_read_guint32(GsfInput *input)
+guint32 gsf_le_read_guint32(WPXInputStream *input)
 {
-	guint32 val = *(guint32 const *)gsf_input_read(input, sizeof(guint32), NULL);
+	guint32 val = *(guint32 const *)input->read(sizeof(guint32));
 	return GSF_LE_GET_GUINT32(&val);
 }

@@ -28,10 +28,10 @@
 #include "WP6FileStructure.h" 
 #include "libwpd_internal.h"
 
-WP6Header::WP6Header(GsfInput * input, guint32 documentOffset, guint8 productType, guint8 fileType, guint8 majorVersion, guint8 minorVersion, guint16 documentEncryption) :
+WP6Header::WP6Header(WPXInputStream * input, guint32 documentOffset, guint8 productType, guint8 fileType, guint8 majorVersion, guint8 minorVersion, guint16 documentEncryption) :
 	WPXHeader(input, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption)
 {
-	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WP6_HEADER_INDEX_HEADER_POINTER_OFFSET, G_SEEK_SET));
+	input->seek(WP6_HEADER_INDEX_HEADER_POINTER_OFFSET, WPX_SEEK_SET);
 	m_indexHeaderOffset = gsf_le_read_guint16(input);
 
 	// according to the WP6.0 specs, if the index header offset variable is less than 16, it is 16
@@ -46,13 +46,13 @@ WP6Header::WP6Header(GsfInput * input, guint32 documentOffset, guint8 productTyp
 	WPD_DEBUG_MSG(("WordPerfect: Index Header Position = 0x%x \n",(int)m_indexHeaderOffset));
 }
 
-void WP6Header::_readIndexInformation(GsfInput *input)
+void WP6Header::_readIndexInformation(WPXInputStream *input)
 {
 	// read the Index Header (Header #0)
 	// skip the Flags = 2 and the Reserved byte = 0
-	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, m_indexHeaderOffset + WP6_INDEX_HEADER_NUM_INDICES_POSITION, G_SEEK_SET));
+	input->seek(m_indexHeaderOffset + WP6_INDEX_HEADER_NUM_INDICES_POSITION, WPX_SEEK_SET);
 	m_numPrefixIndices = gsf_le_read_guint16(input);
 
 	// ignore the 10 reserved bytes that follow (jump to the offset of the Index Header #1, where we can resume parsing)
-	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, m_indexHeaderOffset + WP6_INDEX_HEADER_INDICES_POSITION, G_SEEK_SET));
+	input->seek(m_indexHeaderOffset + WP6_INDEX_HEADER_INDICES_POSITION, WPX_SEEK_SET);
 }

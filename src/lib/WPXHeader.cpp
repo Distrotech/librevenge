@@ -19,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -35,7 +35,7 @@
 #include "libwpd.h"
 #include "libwpd_internal.h"
 	
-WPXHeader::WPXHeader(GsfInput *input, guint32 documentOffset, guint8 productType, guint8 fileType, guint8 majorVersion, guint8 minorVersion, guint16 documentEncryption) :
+WPXHeader::WPXHeader(WPXInputStream *input, guint32 documentOffset, guint8 productType, guint8 fileType, guint8 majorVersion, guint8 minorVersion, guint16 documentEncryption) :
 	m_documentOffset(documentOffset),
 	m_productType(productType),
 	m_fileType(fileType),
@@ -49,13 +49,13 @@ WPXHeader::~WPXHeader()
 {
 }
 
-WPXHeader * WPXHeader::constructHeader(GsfInput *input)
+WPXHeader * WPXHeader::constructHeader(WPXInputStream *input)
 {
 	gchar fileMagic[4];
 	/* check the magic */
-	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WPX_HEADER_MAGIC_OFFSET - gsf_input_tell(input), G_SEEK_CUR));
+	input->seek(WPX_HEADER_MAGIC_OFFSET - input->tell(), WPX_SEEK_CUR);
 	for (int i=0; i<3 /* FIXME: && not EOF */; i++)
-		fileMagic[i] = GSF_LE_GET_GINT8(gsf_input_read(input, sizeof(guint8), NULL));
+		fileMagic[i] = gsf_le_read_guint8(input);
 	fileMagic[3] = '\0';
 	
 	if ( strcmp(fileMagic, "WPC") )
@@ -65,17 +65,17 @@ WPXHeader * WPXHeader::constructHeader(GsfInput *input)
 	}
 	
 	/* get the document pointer */
-	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WPX_HEADER_DOCUMENT_POINTER_OFFSET - gsf_input_tell(input), G_SEEK_CUR));
+	input->seek(WPX_HEADER_DOCUMENT_POINTER_OFFSET - input->tell(), WPX_SEEK_CUR);
 	guint32 documentOffset = gsf_le_read_guint32(input);
 
 	/* get information on product types, file types, versions */
-	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WPX_HEADER_PRODUCT_TYPE_OFFSET - gsf_input_tell(input), G_SEEK_CUR));
+	input->seek(WPX_HEADER_PRODUCT_TYPE_OFFSET - input->tell(), WPX_SEEK_CUR);
 	guint8 productType = gsf_le_read_guint8(input);
 	guint8 fileType = gsf_le_read_guint8(input);
 	guint8 majorVersion = gsf_le_read_guint8(input);
 	guint8 minorVersion = gsf_le_read_guint8(input);
 	
-	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WPX_HEADER_ENCRYPTION_OFFSET, G_SEEK_SET));
+	input->seek(WPX_HEADER_ENCRYPTION_OFFSET, WPX_SEEK_SET);
 	guint8 documentEncryption = gsf_le_read_guint16(input);		
 	
 	WPD_DEBUG_MSG(("WordPerfect: Product Type: %i File Type: %i Major Version: %i Minor Version: %i\n", 

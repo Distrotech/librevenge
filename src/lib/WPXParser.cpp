@@ -30,7 +30,7 @@
 #include "WP6Parser.h"
 #include "libwpd_internal.h"
 
-WPXParser::WPXParser(GsfInput *input, WPXHeader *header) :
+WPXParser::WPXParser(WPXInputStream *input, WPXHeader *header) :
 	m_input(input),
 	m_header(header)
 {

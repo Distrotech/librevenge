@@ -86,6 +86,13 @@ _WPXParsingState::_WPXParsingState(bool sectionAttributesChanged) :
 {
 }
 
+_WPXParsingState::~_WPXParsingState()
+{
+	g_string_free(m_fontName, TRUE);
+	DELETEP(m_fontColor);
+	DELETEP(m_highlightColor);
+}
+
 WPXHLListener::WPXHLListener(vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl) :
 	WPXLLListener(),
 	m_pageList(pageList),
@@ -97,7 +104,7 @@ WPXHLListener::WPXHLListener(vector<WPXPageSpan *> *pageList, WPXHLListenerImpl 
 
 WPXHLListener::~WPXHLListener()
 {
-	g_string_free(m_ps->m_fontName, TRUE);
+	DELETEP(m_ps);
 }
 
 void WPXHLListener::startDocument()

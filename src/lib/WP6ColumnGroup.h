@@ -31,8 +31,8 @@
 class WP6ColumnGroup : public WP6VariableLengthGroup
 {
  public:
-	WP6ColumnGroup(GsfInput *input);	
-	virtual void _readContents(GsfInput *input);
+	WP6ColumnGroup(WPXInputStream *input);	
+	virtual void _readContents(WPXInputStream *input);
 	virtual void parse(WP6HLListener *listener);
 
  private:

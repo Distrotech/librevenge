@@ -25,21 +25,21 @@
 
 #ifndef WP6PREFIXINDICE_H
 #define WP6PREFIXINDICE_H
-#include <gsf/gsf-input.h>
 #include <stdlib.h>
 #include <glib.h>
+#include "WPXStream.h"
 
 class WP6PrefixIndice
 {
  public:
-	WP6PrefixIndice(GsfInput * input, int id);	
+	WP6PrefixIndice(WPXInputStream * input, int id);	
 	const int getID() const { return m_id; }
 	const guint8 getType() const { return m_type; }
 	const guint32 getDataSize() const { return m_dataSize; }
 	const guint32 getDataOffset() const { return m_dataOffset; }
 
  protected:
- 	void _read(GsfInput *input);
+ 	void _read(WPXInputStream *input);
  
  private:
 	int m_id;

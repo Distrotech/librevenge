@@ -35,6 +35,7 @@
 #include "WP42Heuristics.h"
 #include "WP5Parser.h"
 #include "WP6Parser.h"
+#include "WPXStream.h"
 #include "libwpd_internal.h"
 
 /**
@@ -60,7 +61,7 @@ represents the full contents of a WordPerfect file, or just the first X bytes
 \return A confidence value which represents the likelyhood that the content from
 the input stream can be parsed
 */
-WPDConfidence WPDocument::isFileFormatSupported(GsfInput *input, bool partialContent)
+WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input, bool partialContent)
 {
 	WPDConfidence confidence = WPD_CONFIDENCE_NONE;
 	
@@ -68,38 +69,25 @@ WPDConfidence WPDocument::isFileFormatSupported(GsfInput *input, bool partialCon
 	
 	// by-pass the OLE stream (if it exists) and returns the (sub) stream with the
 	// WordPerfect document. 
-	GsfInput *document = NULL;
+	WPXInputStream *document = NULL;
 	bool isDocumentOLE = false;
 	
-	// BIG BIG NOTE: very unsave on partial content!!!
-	GsfInfile * ole = GSF_INFILE(gsf_infile_msole_new (input, NULL)); 
-	if (ole != NULL) 
+	// BIG BIG NOTE: very unsafe on partial content!!!
+	if (input->isOLEStream())
 	{
-		if (!partialContent)
+		document = input->getDocumentOLEStream();
+		if (document)
+			isDocumentOLE = true;
+		else 
 		{
-			document = gsf_infile_child_by_name(ole, "PerfectOffice_MAIN");
-			g_object_unref(G_OBJECT (ole));
-			if (document == NULL) // is an OLE document, but does not contain a WP document
-			{
-				g_object_unref(G_OBJECT(document));
-				return WPD_CONFIDENCE_NONE; // TODO: throw an exception instead of return?
-			}
-		}
-		else
-		{
-			// HELP! you can't get a child from partial content :-/
-			// here we go again: 
-			// TODO: dig trough the ole stream manually
-			
-			g_object_unref(G_OBJECT (ole));
-			return WPD_CONFIDENCE_LIKELY; // HACK: too high, but for now, we'll live with it
+			if (partialContent)
+				return WPD_CONFIDENCE_LIKELY; // HACK: too high, but for now, we'll live with it
+			else
+				return WPD_CONFIDENCE_NONE;
 		}
 	}
-
-	if (document == NULL)
-		document = input;
 	else
-		isDocumentOLE = true;	
+		document = input;
 	
 	try
 	{
@@ -128,18 +116,18 @@ WPDConfidence WPDocument::isFileFormatSupported(GsfInput *input, bool partialCon
 			confidence = WP42Heuristics::isWP42FileFormat(input, partialContent);
 		
 		if (document != NULL && isDocumentOLE)
-			g_object_unref(G_OBJECT(document));
+			DELETEP(document);
 		
 		return confidence;
 	}	
 	catch (FileException)
 	{
 		if (document != NULL && isDocumentOLE)
-			g_object_unref(G_OBJECT(document));
+			DELETEP(document);
 		
 		return WPD_CONFIDENCE_NONE;
 	}
-		
+
 	return WPD_CONFIDENCE_NONE;
 }
 
@@ -150,31 +138,26 @@ WPXHLListenerImpl class implementation when needed. This is often commonly calle
 \param input The input stream
 \param listenerImpl A WPXHLListener implementation
 */
-void WPDocument::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl)
+void WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerImpl)
 {
 	WPXParser *parser = NULL;
 	
 	// by-pass the OLE stream (if it exists) and returns the (sub) stream with the
 	// WordPerfect document. 
-	GsfInput *document = NULL;
+
+	WPXInputStream *document = NULL;
 	bool isDocumentOLE = false;
 	
-	GsfInfile * ole = GSF_INFILE(gsf_infile_msole_new (input, NULL));
-	if (ole != NULL) 
+	if (input->isOLEStream())
 	{
-		document = gsf_infile_child_by_name(ole, "PerfectOffice_MAIN");
-		g_object_unref(G_OBJECT (ole));
-		if (document == NULL) // is an OLE document, but does not contain a WP document
-		{
-			g_object_unref(G_OBJECT(document));
-			return; // FIXME: throw an exception instead of return
-		}
+		document = input->getDocumentOLEStream();
+		if (document)
+			isDocumentOLE = true;
+		else
+			return;
 	}
-
-	if (document == NULL)
-		document = input;
 	else
-		isDocumentOLE = true;
+		document = input;
 	
 	try
 	{
@@ -220,8 +203,8 @@ void WPDocument::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl)
 			}
 		}
 		
-		if (document != NULL && isDocumentOLE)
-			g_object_unref(G_OBJECT(document));
+		if (isDocumentOLE)
+			DELETEP(document);
 	}
 	catch (FileException)
 	{
@@ -237,7 +220,7 @@ void WPDocument::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl)
 TOTALLY BROKEN, DO NOT USE!!!
 I MEAN IT!
 
-void WPDocument::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl, WPXFileType fileType)
+void WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerImpl, WPXFileType fileType)
 {
 	WPXParser *parser = NULL;
 	WPXHeader *header = NULL;
@@ -295,7 +278,7 @@ void WPDocument::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl, WPXFile
 /*
 TOTALLY BROKEN - MIGHT BE NICE TO HAVE
 
-WPXFileType WPDocument::WPXParser::getFileType(GsfInput *input)
+WPXFileType WPDocument::WPXParser::getFileType(WPXInputStream *input)
 {
 
 }*/

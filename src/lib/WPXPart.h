@@ -32,7 +32,7 @@
 class WPXPart
 {
 public:
-	WPXPart(GsfInput *input);	
+	WPXPart(WPXInputStream *input);	
 };
 
 

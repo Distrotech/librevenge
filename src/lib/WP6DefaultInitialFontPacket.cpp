@@ -27,7 +27,7 @@
 #include "WP6DefaultInitialFontPacket.h"
 #include "libwpd_internal.h"
 
-WP6DefaultInitialFontPacket::WP6DefaultInitialFontPacket(GsfInput *input, int id, guint32 dataOffset, guint32 dataSize)
+WP6DefaultInitialFontPacket::WP6DefaultInitialFontPacket(WPXInputStream *input, int id, guint32 dataOffset, guint32 dataSize)
 	: WP6PrefixDataPacket(input)
 {
 	_read(input, dataOffset, dataSize);
@@ -38,7 +38,7 @@ void WP6DefaultInitialFontPacket::parse(WP6HLListener *listener) const
 	listener->fontChange(getPointSize(), getInitialFontDescriptorPID());
 }
 
-void WP6DefaultInitialFontPacket::_readContents(GsfInput *input)
+void WP6DefaultInitialFontPacket::_readContents(WPXInputStream *input)
 {
    m_numPrefixIDs = gsf_le_read_guint16(input);
    m_initialFontDescriptorPID = gsf_le_read_guint16(input);

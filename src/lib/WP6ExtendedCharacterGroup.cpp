@@ -29,7 +29,7 @@
 #include "WP6LLListener.h"
 #include "libwpd_internal.h"
 
-WP6ExtendedCharacterGroup::WP6ExtendedCharacterGroup(GsfInput *input, guint8 groupID) :
+WP6ExtendedCharacterGroup::WP6ExtendedCharacterGroup(WPXInputStream *input, guint8 groupID) :
 	WP6FixedLengthGroup(groupID),
 	m_character(0),
 	m_characterSet(0)
@@ -37,7 +37,7 @@ WP6ExtendedCharacterGroup::WP6ExtendedCharacterGroup(GsfInput *input, guint8 gro
 	_read(input);
 }
 
-void WP6ExtendedCharacterGroup::_readContents(GsfInput *input)
+void WP6ExtendedCharacterGroup::_readContents(WPXInputStream *input)
 {
 	m_character = gsf_le_read_guint8(input);
 	m_characterSet = gsf_le_read_guint8(input);

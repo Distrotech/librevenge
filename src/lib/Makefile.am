@@ -27,7 +27,7 @@ endif
 
 lib_LTLIBRARIES = libwpd-1.la
 libwpd_1_includedir = $(includedir)/libwpd-1/libwpd
-libwpd_1_include_HEADERS = libwpd.h libwpd_support.h WPDocument.h WPXHLListenerImpl.h
+libwpd_1_include_HEADERS = libwpd.h libwpd_support.h GSFStream.h WPXStream.h WPDocument.h WPXHLListenerImpl.h
 
 AM_CXXFLAGS = $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS)
 
@@ -38,10 +38,11 @@ libwpd_1_la_SOURCES =				\
 	libwpd_internal.cpp			\
 	libwpd_math.cpp				\
 	libwpd_support.cpp			\
+	GSFStream.cpp				\
 	WP42FileStructure.cpp			\
 	WP42Heuristics.cpp			\
 	WP42HLListener.cpp			\
-	WP42HLStylesListener.cpp			\
+	WP42HLStylesListener.cpp		\
 	WP42Parser.cpp				\
 	WP42Part.cpp				\
 	WP42UnsupportedVariableLengthGroup.cpp	\
@@ -49,7 +50,7 @@ libwpd_1_la_SOURCES =				\
 	WP5AttributeGroup.cpp 			\
 	WP5FileStructure.cpp			\
 	WP5FixedLengthGroup.cpp			\
-	WP5FormatGroup.cpp				\
+	WP5FormatGroup.cpp			\
 	WP5Header.cpp				\
 	WP5HLListener.cpp			\
 	WP5HLStylesListener.cpp			\
@@ -99,6 +100,7 @@ libwpd_1_la_SOURCES =				\
 	WPXPageSpan.cpp				\
 	WPXHeader.cpp 				\
 	WPXHLListener.cpp 			\
+	WPXMemoryStream.cpp			\
 	WPXTable.cpp				\
 	WPXParser.cpp 				\
 	WPXPart.cpp				\
@@ -174,6 +176,7 @@ libwpd_1_la_SOURCES =				\
 	WPXLLListener.h				\
 	WPXHLListener.h				\
 	WPXHLListenerImpl.h			\
+	WPXMemoryStream.h			\
 	WPXPageSpan.h				\
 	WPXParser.h 				\
 	WPXPart.h				\

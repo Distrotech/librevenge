@@ -27,14 +27,14 @@
 #include "WP6LLListener.h"
 #include "libwpd_internal.h"
 
-WP6ColumnGroup::WP6ColumnGroup(GsfInput *input) :
+WP6ColumnGroup::WP6ColumnGroup(WPXInputStream *input) :
 	WP6VariableLengthGroup(),
 	m_margin(0)
 {
 	_read(input);
 }
 
-void WP6ColumnGroup::_readContents(GsfInput *input)
+void WP6ColumnGroup::_readContents(WPXInputStream *input)
 {
 	// this group can contain different kinds of data, thus we need to read
 	// the contents accordingly	

@@ -35,15 +35,15 @@ class WP5HLListener;
 class WP5Parser : public WPXParser
 {
 public:
-	WP5Parser(GsfInput *input, WPXHeader *header);
+	WP5Parser(WPXInputStream *input, WPXHeader *header);
 	~WP5Parser();
 
 	virtual void parse(WPXHLListenerImpl *listenerImpl);
 	
-	static void parseDocument(GsfInput *input, WP5HLListener *listener);
+	static void parseDocument(WPXInputStream *input, WP5HLListener *listener);
 
 private:
-	void parse(GsfInput *input, WP5HLListener *listener);
+	void parse(WPXInputStream *input, WP5HLListener *listener);
 };
 
 #endif /* WP5PARSER_H */

@@ -206,7 +206,7 @@ void RawListenerImpl::insertLineBreak()
 	__iprintf("insertLineBreak()\n");
 }
 
-void RawListenerImpl::defineOrderedListLevel(const int listID, const guint16 listLevel, const WPXNumberingType listType,
+void RawListenerImpl::defineOrderedListLevel(const int listID, const int listLevel, const WPXNumberingType listType,
 					    const UCSString &textBeforeNumber, const UCSString &textAfterNumber,
 					    const int startingNumber)
 {
@@ -219,7 +219,7 @@ void RawListenerImpl::defineOrderedListLevel(const int listID, const guint16 lis
 	);
 }
 
-void RawListenerImpl::defineUnorderedListLevel(const int listID, const guint16 listLevel, const UCSString &bullet)
+void RawListenerImpl::defineUnorderedListLevel(const int listID, const int listLevel, const UCSString &bullet)
 {
 	UTF8String bulletUTF8(bullet);
 	__iprintf("defineUnorderedListLevel(listID: %d, listLevel: %d, bullet: %s)\n", listID, listLevel, bulletUTF8.getUTF8());

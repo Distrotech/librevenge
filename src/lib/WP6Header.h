@@ -31,14 +31,14 @@
 class WP6Header : public WPXHeader
 {
  public:
-	WP6Header(GsfInput * input, guint32 documentOffset, guint8 productType, guint8 fileType, guint8 majorVersion, guint8 minorVersion, guint16 documentEncryption);
+	WP6Header(WPXInputStream * input, guint32 documentOffset, guint8 productType, guint8 fileType, guint8 majorVersion, guint8 minorVersion, guint16 documentEncryption);
 	virtual ~WP6Header() {};
 	
 	const guint16 getIndexHeaderOffset() const { return m_indexHeaderOffset; }
 	const guint16 getNumPrefixIndices() const { return m_numPrefixIndices; }
 
 protected:
-	void _readIndexInformation(GsfInput *input);
+	void _readIndexInformation(WPXInputStream *input);
 		
 private:
 	guint16 m_indexHeaderOffset;

@@ -31,7 +31,7 @@
  * WP6CharacterGroup_ColorSubGroup
  *************************************************************************/
 
-WP6CharacterGroup_ColorSubGroup::WP6CharacterGroup_ColorSubGroup(GsfInput *input)
+WP6CharacterGroup_ColorSubGroup::WP6CharacterGroup_ColorSubGroup(WPXInputStream *input)
 {
 	m_red = gsf_le_read_guint8(input);
 	m_green = gsf_le_read_guint8(input);
@@ -48,7 +48,7 @@ void WP6CharacterGroup_ColorSubGroup::parse(WP6HLListener *listener, const guint
  * WP6CharacterGroup_CharacterShadingChangeSubGroup
  *************************************************************************/
 
-WP6CharacterGroup_CharacterShadingChangeSubGroup::WP6CharacterGroup_CharacterShadingChangeSubGroup(GsfInput *input)
+WP6CharacterGroup_CharacterShadingChangeSubGroup::WP6CharacterGroup_CharacterShadingChangeSubGroup(WPXInputStream *input)
 {
 	m_shading = gsf_le_read_guint8(input);
 	WPD_DEBUG_MSG(("WordPerfect: Character Group Character Shading Change subgroup info (shading: %i)\n", m_shading));
@@ -63,7 +63,7 @@ void WP6CharacterGroup_CharacterShadingChangeSubGroup::parse(WP6HLListener *list
  * WP6CharacterGroup_FontFaceChangeSubGroups
  *************************************************************************/
 
-WP6CharacterGroup_FontFaceChangeSubGroup::WP6CharacterGroup_FontFaceChangeSubGroup(GsfInput *input)
+WP6CharacterGroup_FontFaceChangeSubGroup::WP6CharacterGroup_FontFaceChangeSubGroup(WPXInputStream *input)
 {
 	m_oldMatchedPointSize = gsf_le_read_guint16(input);
 	m_hash = gsf_le_read_guint16(input);
@@ -84,7 +84,7 @@ void WP6CharacterGroup_FontFaceChangeSubGroup::parse(WP6HLListener *listener, co
  * WP6CharacterGroup_ParagraphNumberOnSubGroup
  *************************************************************************/
 
-WP6CharacterGroup_ParagraphNumberOnSubGroup::WP6CharacterGroup_ParagraphNumberOnSubGroup(GsfInput *input)
+WP6CharacterGroup_ParagraphNumberOnSubGroup::WP6CharacterGroup_ParagraphNumberOnSubGroup(WPXInputStream *input)
 {
 	m_outlineHash = gsf_le_read_guint16(input);
 	m_level = gsf_le_read_guint8(input);
@@ -100,7 +100,7 @@ void WP6CharacterGroup_ParagraphNumberOnSubGroup::parse(WP6HLListener *listener,
  * WP6CharacterGroup_TableDefinitionOnSubGroup
  *************************************************************************/
 
-WP6CharacterGroup_TableDefinitionOnSubGroup::WP6CharacterGroup_TableDefinitionOnSubGroup(GsfInput *input)
+WP6CharacterGroup_TableDefinitionOnSubGroup::WP6CharacterGroup_TableDefinitionOnSubGroup(WPXInputStream *input)
 {
 	m_flags = gsf_le_read_guint8(input);
 	m_position = gsf_le_read_guint8(input);
@@ -117,7 +117,7 @@ void WP6CharacterGroup_TableDefinitionOnSubGroup::parse(WP6HLListener *listener,
  * WP6CharacterGroup_TableDefinitionOffSubGroup
  *************************************************************************/
 
-WP6CharacterGroup_TableDefinitionOffSubGroup::WP6CharacterGroup_TableDefinitionOffSubGroup(GsfInput *input)
+WP6CharacterGroup_TableDefinitionOffSubGroup::WP6CharacterGroup_TableDefinitionOffSubGroup(WPXInputStream *input)
 {
 
 }
@@ -132,7 +132,7 @@ void WP6CharacterGroup_TableDefinitionOffSubGroup::parse(WP6HLListener *listener
  * WP6CharacterGroup_TableColumnSubGroup
  *************************************************************************/
 
-WP6CharacterGroup_TableColumnSubGroup::WP6CharacterGroup_TableColumnSubGroup(GsfInput *input)
+WP6CharacterGroup_TableColumnSubGroup::WP6CharacterGroup_TableColumnSubGroup(WPXInputStream *input)
 {
 	m_flags = gsf_le_read_guint8(input);
 	m_width = gsf_le_read_guint16(input);
@@ -156,7 +156,7 @@ void WP6CharacterGroup_TableColumnSubGroup::parse(WP6HLListener *listener, const
  * WP6CharacterGroup
  *************************************************************************/
 
-WP6CharacterGroup::WP6CharacterGroup(GsfInput *input) :
+WP6CharacterGroup::WP6CharacterGroup(WPXInputStream *input) :
 	WP6VariableLengthGroup(),
 	m_subGroupData(NULL)
 {
@@ -168,7 +168,7 @@ WP6CharacterGroup::~WP6CharacterGroup()
 	delete m_subGroupData;
 }
 
-void WP6CharacterGroup::_readContents(GsfInput *input)
+void WP6CharacterGroup::_readContents(WPXInputStream *input)
 {
 	// this group can contain different kinds of data, thus we need to read
 	// the contents accordingly

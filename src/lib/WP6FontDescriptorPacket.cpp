@@ -33,7 +33,7 @@ const char *FONT_WEIGHT_STRINGS[] = { "Black", "Bold", "Demi", "Extended",
 const char * USELESS_WP_POSTFIX = "-WP";
 #define countElements(a) ((sizeof(a) / sizeof(a[0])))
 
-WP6FontDescriptorPacket::WP6FontDescriptorPacket(GsfInput *input, int id, guint32 dataOffset, guint32 dataSize) 
+WP6FontDescriptorPacket::WP6FontDescriptorPacket(WPXInputStream *input, int id, guint32 dataOffset, guint32 dataSize) 
 	: WP6PrefixDataPacket(input)
 {
 	_read(input, dataOffset, dataSize);
@@ -44,7 +44,7 @@ WP6FontDescriptorPacket::~WP6FontDescriptorPacket()
 	delete [] m_fontName;
 }
 
-void WP6FontDescriptorPacket::_readContents(GsfInput *input)
+void WP6FontDescriptorPacket::_readContents(WPXInputStream *input)
 {
    // short sized characteristics
    m_characterWidth = gsf_le_read_guint16(input);

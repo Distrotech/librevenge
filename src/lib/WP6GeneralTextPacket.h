@@ -28,13 +28,14 @@
 #include "WP6PrefixDataPacket.h"
 #include "WP6FileStructure.h"
 #include "WP6LLListener.h"
+#include "WPXMemoryStream.h"
 
 class WP6GeneralTextPacket : public WP6PrefixDataPacket
 {
 public:
-	WP6GeneralTextPacket(GsfInput *input, int id, guint32 dataOffset, guint32 dataSize);
+	WP6GeneralTextPacket(WPXInputStream *input, int id, guint32 dataOffset, guint32 dataSize);
 	virtual ~WP6GeneralTextPacket();
-	virtual void _readContents(GsfInput *input);
+	virtual void _readContents(WPXInputStream *input);
 	virtual void parse(WP6HLListener *listener) const;
 
 private:              
@@ -42,7 +43,7 @@ private:
 	guint32 m_firstTextBlockOffset;
 	guint32 *m_blockSizes;
 
-	GsfInput *m_stream;
+	WPXMemoryInputStream *m_stream;
 	
 };
 #endif /* WP6GENERALTEXTPACKET_H */

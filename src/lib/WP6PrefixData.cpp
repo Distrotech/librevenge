@@ -31,7 +31,7 @@
 #include "WP6LLListener.h"
 #include "libwpd_internal.h"
 
-WP6PrefixData::WP6PrefixData(GsfInput *input, const int numPrefixIndices) :
+WP6PrefixData::WP6PrefixData(WPXInputStream *input, const int numPrefixIndices) :
 	m_defaultInitialFontPID((-1))
 {
 	guint16 i;

@@ -31,11 +31,11 @@
 class WP5UnsupportedFixedLengthGroup : public WP5FixedLengthGroup
 {
  public:
-	WP5UnsupportedFixedLengthGroup(GsfInput *input, guint8 groupID);	
+	WP5UnsupportedFixedLengthGroup(WPXInputStream *input, guint8 groupID);	
 	virtual void parse(WP5HLListener *listener) {}
 	
  protected:
-	virtual void _readContents(GsfInput *input) {}
+	virtual void _readContents(WPXInputStream *input) {}
 };
 
 #endif /* WP5UNSUPPORTEDFIXEDLENGTHGROUP_H */

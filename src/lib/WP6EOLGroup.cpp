@@ -32,7 +32,7 @@
 #include "WP6Parser.h" // for TableException
 #include "WP6FillStylePacket.h" // for the fill packet
 
-WP6EOLGroup::WP6EOLGroup(GsfInput *input) :	
+WP6EOLGroup::WP6EOLGroup(WPXInputStream *input) :	
 	WP6VariableLengthGroup(),
 	m_colSpan(1),
 	m_rowSpan(1),
@@ -53,20 +53,20 @@ WP6EOLGroup::~WP6EOLGroup()
 	DELETEP(m_cellBgColor);	
 }
 
-void WP6EOLGroup::_readContents(GsfInput *input)
+void WP6EOLGroup::_readContents(WPXInputStream *input)
 {
 	WPD_DEBUG_MSG(("WordPerfect: EOL Group: Reading Embedded Sub-Function Data\n"));
 	guint16 sizeDeletableSubFunctionData;
-	guint16 startPosition = gsf_input_tell(input);
+	guint16 startPosition = input->tell();
 	sizeDeletableSubFunctionData = gsf_le_read_guint16(input);		
 	WPD_DEBUG_MSG(("WordPerfect: EOL Group: Size of Deletable Sub-Function Data: %ld,  Size of Deletable and Non-deletable sub-function data: %ld\n", (long) sizeDeletableSubFunctionData, getSizeNonDeletable()));
-	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, sizeDeletableSubFunctionData, G_SEEK_CUR));
-	while (gsf_input_tell(input) < (startPosition + getSizeNonDeletable()))
+	input->seek(sizeDeletableSubFunctionData, WPX_SEEK_CUR);
+	while (input->tell() < (startPosition + getSizeNonDeletable()))
 	{
 		guint8 byte;
 		guint16 numBytesToSkip = 0;
 		byte = gsf_le_read_guint8(input);
-		gsf_off_t startPosition2 = gsf_input_tell(input);
+		gsf_off_t startPosition2 = input->tell();
 		switch (byte)
 		{
 			case WP6_EOL_GROUP_ROW_INFORMATION:
@@ -146,7 +146,7 @@ void WP6EOLGroup::_readContents(GsfInput *input)
 			case WP6_EOL_GROUP_CELL_PREFIX_FLAG:
 				WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_PREFIX_FLAG\n"));	
 				numBytesToSkip = WP6_EOL_GROUP_CELL_PREFIX_FLAG_SIZE;
-				m_cellBorders = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+				m_cellBorders = gsf_le_read_guint8(input);
 				break;
 			case WP6_EOL_GROUP_CELL_RECALCULATION_ERROR_NUMBER:
 				WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_RECALCULATION_ERROR_NUMBER\n"));
@@ -164,7 +164,7 @@ void WP6EOLGroup::_readContents(GsfInput *input)
 				throw ParseException();
 		}			
 		
-		WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, (startPosition2 + numBytesToSkip - 1 - gsf_input_tell(input)), G_SEEK_CUR));
+		input->seek((startPosition2 + numBytesToSkip - 1 - input->tell()), WPX_SEEK_CUR);
 	}
 }
 

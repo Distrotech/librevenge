@@ -29,13 +29,13 @@
 #include "libwpd_support.h"
 #include "libwpd_internal.h"
 
-WPDConfidence WP42Heuristics::isWP42FileFormat(GsfInput *input, bool partialContent)
+WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input, bool partialContent)
 {
 	int functionGroupCount = 0;
 	
-	gsf_input_seek(input, 0, G_SEEK_SET);
+	input->seek(0, WPX_SEEK_SET);
 	
-	while (!gsf_input_eof(input))
+	while (!input->atEOS())
 	{
 		guint8 readVal;
 		readVal = gsf_le_read_guint8(input);
@@ -64,7 +64,7 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(GsfInput *input, bool partialCont
 				
 				// skip over all the bytes in the group, and scan for the closing gate
 				guint8 readNextVal;
-				while (!gsf_input_eof(input))
+				while (!input->atEOS())
 				{
 					readNextVal = gsf_le_read_guint8(input);
 					if (readNextVal == readVal)
@@ -72,7 +72,7 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(GsfInput *input, bool partialCont
 				}
 
 				// when passed the complete file, we don't allow for open groups when we've reached EOF
-				if (!partialContent && gsf_input_eof(input) && (readNextVal != readVal))
+				if (!partialContent && input->atEOS() && (readNextVal != readVal))
 					return WPD_CONFIDENCE_NONE;
 				
 				functionGroupCount++;
@@ -82,7 +82,7 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(GsfInput *input, bool partialCont
 				// fixed length function group
 				
 				// seek to the position where the closing gate should be
-				bool res = gsf_input_seek(input, WP42_FUCNTION_GROUP_SIZE[readVal-0xC0]-2, G_SEEK_CUR);
+				bool res = input->seek(WP42_FUCNTION_GROUP_SIZE[readVal-0xC0]-2, WPX_SEEK_CUR);
 				// when passed the complete file, we should be able to do that
 				if (!partialContent && res)
 					return WPD_CONFIDENCE_NONE;

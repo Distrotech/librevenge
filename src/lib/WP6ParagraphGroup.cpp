@@ -28,7 +28,7 @@
 #include "libwpd_internal.h"
 #include "WPXFileStructure.h"
 
-WP6ParagraphGroup::WP6ParagraphGroup(GsfInput *input) :
+WP6ParagraphGroup::WP6ParagraphGroup(WPXInputStream *input) :
 	WP6VariableLengthGroup(),
 	m_subGroupData(NULL)
 {
@@ -41,7 +41,7 @@ WP6ParagraphGroup::~WP6ParagraphGroup()
 		delete(m_subGroupData);
 }
 
-void WP6ParagraphGroup::_readContents(GsfInput *input)
+void WP6ParagraphGroup::_readContents(WPXInputStream *input)
 {
 	switch (getSubGroup())
 	{
@@ -77,7 +77,7 @@ void WP6ParagraphGroup::parse(WP6HLListener *listener)
 		m_subGroupData->parse(listener, getNumPrefixIDs(), getPrefixIDs());
 }
 
-WP6ParagraphGroup_LineSpacingSubGroup::WP6ParagraphGroup_LineSpacingSubGroup(GsfInput *input)
+WP6ParagraphGroup_LineSpacingSubGroup::WP6ParagraphGroup_LineSpacingSubGroup(WPXInputStream *input)
 {
 	guint32 lineSpacing = gsf_le_read_guint32(input);
 	gint16 lineSpacingIntegerPart = (gint16)((lineSpacing & 0xFFFF0000) >> 16);
@@ -93,7 +93,7 @@ void WP6ParagraphGroup_LineSpacingSubGroup::parse(WP6HLListener *listener, const
 	listener->lineSpacingChange(m_lineSpacing);
 }
 
-WP6ParagraphGroup_IndentFirstLineSubGroup::WP6ParagraphGroup_IndentFirstLineSubGroup(GsfInput *input)
+WP6ParagraphGroup_IndentFirstLineSubGroup::WP6ParagraphGroup_IndentFirstLineSubGroup(WPXInputStream *input)
 {
 	m_firstLineOffset = (gint16)gsf_le_read_guint16(input);
 	WPD_DEBUG_MSG(("WordPerfect: indent first line: %i\n", m_firstLineOffset));
@@ -105,7 +105,7 @@ void WP6ParagraphGroup_IndentFirstLineSubGroup::parse(WP6HLListener *listener, c
 	listener->indentFirstLineChange(m_firstLineOffset);
 }
 
-WP6ParagraphGroup_LeftMarginAdjustmentSubGroup::WP6ParagraphGroup_LeftMarginAdjustmentSubGroup(GsfInput *input)
+WP6ParagraphGroup_LeftMarginAdjustmentSubGroup::WP6ParagraphGroup_LeftMarginAdjustmentSubGroup(WPXInputStream *input)
 {
 	m_leftMargin = (gint16)gsf_le_read_guint16(input);
 	WPD_DEBUG_MSG(("WordPerfect: left margin adjustment: %i\n", m_leftMargin));
@@ -117,7 +117,7 @@ void WP6ParagraphGroup_LeftMarginAdjustmentSubGroup::parse(WP6HLListener *listen
 	listener->paragraphMarginChange(WPX_LEFT, m_leftMargin);
 }
 
-WP6ParagraphGroup_RightMarginAdjustmentSubGroup::WP6ParagraphGroup_RightMarginAdjustmentSubGroup(GsfInput *input)
+WP6ParagraphGroup_RightMarginAdjustmentSubGroup::WP6ParagraphGroup_RightMarginAdjustmentSubGroup(WPXInputStream *input)
 {
 	m_rightMargin = (gint16)gsf_le_read_guint16(input);
 	WPD_DEBUG_MSG(("WordPerfect: right margin adjustment: %i\n", m_rightMargin));
@@ -129,7 +129,7 @@ void WP6ParagraphGroup_RightMarginAdjustmentSubGroup::parse(WP6HLListener *liste
 	listener->paragraphMarginChange(WPX_RIGHT, m_rightMargin);
 }
 
-WP6ParagraphGroup_JustificationModeSubGroup::WP6ParagraphGroup_JustificationModeSubGroup(GsfInput *input)
+WP6ParagraphGroup_JustificationModeSubGroup::WP6ParagraphGroup_JustificationModeSubGroup(WPXInputStream *input)
 {
 	m_justification = gsf_le_read_guint8(input);
 }
@@ -139,7 +139,7 @@ void WP6ParagraphGroup_JustificationModeSubGroup::parse(WP6HLListener *listener,
 	listener->justificationChange(m_justification);
 }
 
-WP6ParagraphGroup_SpacingAfterParagraphSubGroup::WP6ParagraphGroup_SpacingAfterParagraphSubGroup(GsfInput *input, const guint16 sizeNonDeletable)
+WP6ParagraphGroup_SpacingAfterParagraphSubGroup::WP6ParagraphGroup_SpacingAfterParagraphSubGroup(WPXInputStream *input, const guint16 sizeNonDeletable)
 {
 	m_sizeNonDeletable = sizeNonDeletable;
 	m_spacingAfterParagraphAbsolute = 0.0f;
@@ -165,7 +165,7 @@ void WP6ParagraphGroup_SpacingAfterParagraphSubGroup::parse(WP6HLListener *liste
 	listener->spacingAfterParagraphChange(m_spacingAfterParagraphRelative, m_spacingAfterParagraphAbsolute);
 }
 
-WP6ParagraphGroup_OutlineDefineSubGroup::WP6ParagraphGroup_OutlineDefineSubGroup(GsfInput *input)
+WP6ParagraphGroup_OutlineDefineSubGroup::WP6ParagraphGroup_OutlineDefineSubGroup(WPXInputStream *input)
 {
 	// NB: this is identical to WP6OutlineStylePacket::_readContents!!
 	m_outlineHash = gsf_le_read_guint16(input);

@@ -28,7 +28,7 @@
 #include "WP6ExtendedDocumentSummaryPacket.h"
 #include "libwpd_internal.h"
 
-WP6ExtendedDocumentSummaryPacket::WP6ExtendedDocumentSummaryPacket(GsfInput *input, int id, guint32 dataOffset, guint32 dataSize) 
+WP6ExtendedDocumentSummaryPacket::WP6ExtendedDocumentSummaryPacket(WPXInputStream *input, int id, guint32 dataOffset, guint32 dataSize) 
 	: WP6PrefixDataPacket(input),
 	  m_dataSize(dataSize)
 {	
@@ -37,17 +37,17 @@ WP6ExtendedDocumentSummaryPacket::WP6ExtendedDocumentSummaryPacket(GsfInput *inp
 
 WP6ExtendedDocumentSummaryPacket::~WP6ExtendedDocumentSummaryPacket()
 {
-	g_object_unref(G_OBJECT(m_stream));
+	DELETEP(m_stream);
 }
 
-void WP6ExtendedDocumentSummaryPacket::_readContents(GsfInput *input)
+void WP6ExtendedDocumentSummaryPacket::_readContents(WPXInputStream *input)
 {
 	// we have to use glib's allocation function because libgsf disposes of the data
-	guint8 *streamData = (guint8 *)g_malloc(sizeof(guint8)*m_dataSize); 
+	guint8 *streamData = new guint8[m_dataSize];
 	for(int i=0; i<m_dataSize; i++)
 		streamData[i] = gsf_le_read_guint8(input);
-                   
-	m_stream = GSF_INPUT(gsf_input_memory_new(streamData, m_dataSize, TRUE));
+	
+	m_stream = new WPXMemoryInputStream(streamData, m_dataSize);
 }
 
 void WP6ExtendedDocumentSummaryPacket::parse(WP6HLListener *listener) const
@@ -108,6 +108,6 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6HLListener *listener) const
 			} 
 			listener->setExtendedInformation(tagID, data);
 		}
-		WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(m_stream, (i+groupLength), G_SEEK_SET));
+		m_stream->seek((i+groupLength), WPX_SEEK_SET);
 	}
 }

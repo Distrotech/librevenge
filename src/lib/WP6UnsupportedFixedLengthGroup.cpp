@@ -27,7 +27,7 @@
 #include "WP6LLListener.h"
 #include "libwpd_internal.h"
 
-WP6UnsupportedFixedLengthGroup::WP6UnsupportedFixedLengthGroup(GsfInput *input, guint8 groupID)
+WP6UnsupportedFixedLengthGroup::WP6UnsupportedFixedLengthGroup(WPXInputStream *input, guint8 groupID)
 	: WP6FixedLengthGroup(groupID)
 {
 	_read(input);

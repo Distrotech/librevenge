@@ -34,7 +34,7 @@
 // throws an exception if there is an error
 // precondition: readVal us between 0xC0 and 0xFF
 // TODO: check the precondition :D
-WP42Part * WP42Part::constructPart(GsfInput *input, guint8 readVal)
+WP42Part * WP42Part::constructPart(WPXInputStream *input, guint8 readVal)
 {	
 	WPD_DEBUG_MSG(("WordPerfect: ConstructPart(readVal: 0x0%x)\n", readVal));
 		
@@ -50,7 +50,7 @@ WP42Part * WP42Part::constructPart(GsfInput *input, guint8 readVal)
 		// fixed length function group
 		
 		// for now, we just skip over the group
-		WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WP42_FUCNTION_GROUP_SIZE[readVal-0xC0]-1, G_SEEK_CUR));
+		input->seek(WP42_FUCNTION_GROUP_SIZE[readVal-0xC0]-1, WPX_SEEK_CUR);
 	}
 
 	WPD_DEBUG_MSG(("WordPerfect: Returning NULL from constructPart\n"));
