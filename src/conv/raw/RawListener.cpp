@@ -53,7 +53,11 @@ void RawListenerImpl::__iprintf(const char *format, ...)
 
 void RawListenerImpl::__iuprintf(const char *format, ...)
 {
-	if (m_printIndentLevel) return;
+	if (m_printIndentLevel) 
+	{
+		m_actualIndentLevel++;
+		return;
+	}
 
 	va_list args;
 	va_start(args, format);
@@ -62,13 +66,15 @@ void RawListenerImpl::__iuprintf(const char *format, ...)
 	vprintf(format, args);
 	__indentUp();
 	va_end(args);
-
-	m_actualIndentLevel++;
 }
 
 void RawListenerImpl::__idprintf(const char *format, ...)
 {
-	if (m_printIndentLevel) return;
+	if (m_printIndentLevel) 
+	{
+		m_actualIndentLevel--;
+		return;
+	}
 
 	va_list args;
 	va_start(args, format);
@@ -77,8 +83,6 @@ void RawListenerImpl::__idprintf(const char *format, ...)
 		printf("  ");
 	vprintf(format, args);
 	va_end(args);
-
-	m_actualIndentLevel--;
 }
 
 void RawListenerImpl::setDocumentMetaData(const UCSString &author, const UCSString &subject,
