@@ -14,11 +14,11 @@ VS_VERSION_INFO VERSIONINFO
       BLOCK "040904B0"
       BEGIN
 	VALUE "CompanyName", "The libwpd developer community"
-	VALUE "FileDescription", "libwpd"
+	VALUE "FileDescription", "libwpd-stream"
 	VALUE "FileVersion", "@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.@WPD_MICRO_VERSION@.BUILDNUMBER"
-	VALUE "InternalName", "libwpd-1"
+	VALUE "InternalName", "libwpd-stream-1"
 	VALUE "LegalCopyright", "Copyright (C) 2002-2004 William Lachance, Marc Maurer, other contributers"
-	VALUE "OriginalFilename", "libwpd-1-@LT_CURRENT_MINUS_AGE@.dll"
+	VALUE "OriginalFilename", "libwpd-stream-1-@LT_CURRENT_MINUS_AGE@.dll"
 	VALUE "ProductName", "libwpd"
 	VALUE "ProductVersion", "@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.@WPD_MICRO_VERSION@"
       END

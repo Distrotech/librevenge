@@ -1,11 +1,3 @@
-EXTRA_DIST =			\
-	makefile.mk		\
-	libwpd.rc.in
-
-# These may be in the builddir too
-BUILD_EXTRA_DIST = 		\
-	libwpd.rc
-	
 if PLATFORM_WIN32
 no_undefined = -no-undefined
 else
@@ -17,29 +9,36 @@ version_info = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
 if OS_WIN32
 install-libtool-import-lib:
 	$(INSTALL) .libs/libwpd-1.dll.a $(DESTDIR)$(libdir)
+	$(INSTALL) .libs/libwpd-stream-1.dll.a $(DESTDIR)$(libdir)
 
 uninstall-libtool-import-lib:
 	-rm $(DESTDIR)$(libdir)/libwpd-1.dll.a
+	-rm $(DESTDIR)$(libdir)/libwpd-stream-1.dll.a
 	
 else
 install-libtool-import-lib:
 uninstall-libtool-import-lib:
 endif
 
-lib_LTLIBRARIES = libwpd-1.la
+if WITH_LIBWPD_STREAM
+target_libwpd_stream = libwpd-stream-1.la
+else
+target_libwpd_stream =
+endif
+
+lib_LTLIBRARIES = libwpd-1.la $(target_libwpd_stream)
 libwpd_1_includedir = $(includedir)/libwpd-1/libwpd
-libwpd_1_include_HEADERS = libwpd.h libwpd_support.h GSFStream.h WPXStream.h WPDocument.h WPXHLListenerImpl.h
+libwpd_1_include_HEADERS = libwpd.h libwpd_support.h WPXStream.h WPDocument.h WPXHLListenerImpl.h
 
 AM_CXXFLAGS = $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS)
 
-libwpd_1_la_LIBADD  = $(LIBWPD_LIBS) @LIBWPD_WIN32_RESOURCE@
+libwpd_1_la_LIBADD  = @LIBWPD_WIN32_RESOURCE@
 libwpd_1_la_DEPENDENCIES = @LIBWPD_WIN32_RESOURCE@
 libwpd_1_la_LDFLAGS = $(version_info) -export-dynamic $(no_undefined)
 libwpd_1_la_SOURCES =				\
 	libwpd_internal.cpp			\
 	libwpd_math.cpp				\
 	libwpd_support.cpp			\
-	GSFStream.cpp				\
 	WP3AttributeGroup.cpp			\
 	WP3EndOfLinePageGroup.cpp		\
 	WP3ExtendedCharacterGroup.cpp		\
@@ -226,13 +225,46 @@ libwpd_1_la_SOURCES =				\
 	WPXProperty.h				\
 	WPXTable.h
 	
+libwpd_stream_headers = GSFStream.h
+libwpd_stream_sources = GSFStream.cpp
+
+if WITH_LIBWPD_STREAM
+
+libwpd_stream_1_includedir = $(includedir)/libwpd-1/libwpd
+libwpd_stream_1_include_HEADERS = $(libwpd_stream_headers)
+
+libwpd_stream_1_la_LIBADD  = $(LIBWPD_LIBS) @LIBWPD_STREAM_WIN32_RESOURCE@
+libwpd_stream_1_la_DEPENDENCIES = @LIBWPD_STREAM_WIN32_RESOURCE@
+libwpd_stream_1_la_LDFLAGS = $(version_info) -export-dynamic $(no_undefined)
+libwpd_stream_1_la_SOURCES = $(libwpd_stream_sources)
+
+endif
+
 if OS_WIN32
 
 @LIBWPD_WIN32_RESOURCE@ : libwpd.rc
 	$(top_srcdir)/build/win32/lt-compile-resource libwpd.rc @LIBWPD_WIN32_RESOURCE@
+	
+@LIBWPD_STREAM_WIN32_RESOURCE@ : libwpd-stream.rc
+	$(top_srcdir)/build/win32/lt-compile-resource libwpd-stream.rc @LIBWPD_STREAM_WIN32_RESOURCE@
+	
 endif
 
 
 install-data-local: install-libtool-import-lib
 
 uninstall-local: uninstall-libtool-import-lib
+
+# Include the GSFStream.* in case we build a tarball without stream
+EXTRA_DIST = \
+	$(libwpd_stream_sources)	\
+	$(libwpd_stream_headers)	\
+	makefile.mk			\
+	libwpd.rc.in			\
+	libwpd-stream.rc.in
+
+# These may be in the builddir too
+BUILD_EXTRA_DIST = 		\
+	libwpd.rc		\
+	libwpd-stream.rc
+	

@@ -17,7 +17,7 @@ VS_VERSION_INFO VERSIONINFO
 	VALUE "FileDescription", "wpd2raw"
 	VALUE "FileVersion", "@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.@WPD_MICRO_VERSION@.BUILDNUMBER"
 	VALUE "InternalName", "wpd2raw"
-	VALUE "LegalCopyright", "Copyright (C) 2002-2003 William Lachance, Marc Maurer, other contributers"
+	VALUE "LegalCopyright", "Copyright (C) 2002-2004 William Lachance, Marc Maurer, other contributers"
 	VALUE "OriginalFilename", "wpd2raw.exe"
 	VALUE "ProductName", "libwpd"
 	VALUE "ProductVersion", "@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.@WPD_MICRO_VERSION@"

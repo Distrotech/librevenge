@@ -68,9 +68,9 @@ class WPXHLListenerImpl
 	\param propList Property list for the page span. May contain:
 	\li \c num-pages The length of this span, in number of pages
 	\li \c is-last-page-span Whether this is the start of the last page span in the document
-	\li \c page-height The height of the page, in inches (portrait or landscape)
+	\li \c page-height The height of the page, in inches
 	\li \c page-width The width of the page, in inches
-	\li \c print-orientation The orientation of the page, encoded as an integer
+	\li \c print-orientation The orientation of the page (portrait or landscape), encoded as an integer
 	\li \c margin-left The left margin for each page in the span, in inches
 	\li \c margin-right The right margin for each page in the span, in inches
 	\li \c margin-top The top margin for each page in the span, in inches
@@ -270,8 +270,8 @@ class WPXHLListenerImpl
 	\li \c col-span Number of columns that the cell spans
 	\li \c row-span Number of rows that the cell spans
 	\li \c border-bits Which borders should be turned on, encoded as a bitfield
-	\li \c color Color of the cell, encoded as an integer
-	\li \c border-color Color of the border lines of the cell encoded as an integer
+	\li \c color Color of the cell
+	\li \c border-color Color of the border lines of the cell
 	\li \c vertical-alignment Vertical alignment of the content in the cell (top, middle, bottom, or full) encoded as an integer
 	*/
  	virtual void openTableCell(const WPXPropertyList &propList) = 0;

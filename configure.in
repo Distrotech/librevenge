@@ -22,9 +22,11 @@ LT_REVISION=$WPD_MICRO_VERSION
 # For 1.0.0 comment the first line and uncomment the second
 LT_AGE=0
 # LT_AGE=$WPD_MINOR_VERSION
+LT_CURRENT_MINUS_AGE=`expr $LT_CURRENT - $LT_AGE`
 AC_SUBST(LT_CURRENT)
 AC_SUBST(LT_REVISION)
 AC_SUBST(LT_AGE)
+AC_SUBST(LT_CURRENT_MINUS_AGE)
 
 AM_INIT_AUTOMAKE(libwpd, $WPD_VERSION)
 
@@ -41,16 +43,33 @@ AC_PROG_LIBTOOL
 
 AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
 
-PKG_CHECK_MODULES(LIBWPD,[
-glib-2.0 >= 2.0.0
-libgsf-1 >= 1.6.0
-])
+dnl ***********************************************************************************
+
+dnl stream
+dnl
+test_stream=true
+AC_ARG_WITH(stream,
+	[  --without-stream        Build GSFStream support],
+	if test "x$withval" = xno; then
+		test_stream=false
+	fi
+)
+
+if  test "x$test_stream" = xtrue ; then 
+    PKG_CHECK_MODULES(LIBWPD,[
+    glib-2.0 >= 2.0.0
+    libgsf-1 >= 1.6.0
+    ])
+fi
+
+AM_CONDITIONAL(WITH_LIBWPD_STREAM, $test_stream )
 
 AC_MSG_CHECKING([for native Win32])
 case "$host" in
   *-*-mingw*)
     native_win32=yes
     LIBWPD_WIN32_RESOURCE=libwpd-win32res.lo
+    LIBWPD_STREAM_WIN32_RESOURCE=libwpd-stream-win32res.lo
     WPD2HTML_WIN32_RESOURCE=wpd2html-win32res.lo
     WPD2TEXT_WIN32_RESOURCE=wpd2text-win32res.lo
     WPD2RAW_WIN32_RESOURCE=wpd2raw-win32res.lo
@@ -58,6 +77,7 @@ case "$host" in
   *)
     native_win32=no
     LIBWPD_WIN32_RESOURCE=
+    LIBWPD_STREAM_WIN32_RESOURCE=
     WPD2HTML_WIN32_RESOURCE=
     WPD2TEXT_WIN32_RESOURCE=
     WPD2RAW_WIN32_RESOURCE=
@@ -66,6 +86,7 @@ esac
 AC_MSG_RESULT([$native_win32])
 AM_CONDITIONAL(OS_WIN32, test "$native_win32" = yes)
 AC_SUBST(LIBWPD_WIN32_RESOURCE)
+AC_SUBST(LIBWPD_STREAM_WIN32_RESOURCE)
 AC_SUBST(WPD2HTML_WIN32_RESOURCE)
 AC_SUBST(WPD2TEXT_WIN32_RESOURCE)
 AC_SUBST(WPD2RAW_WIN32_RESOURCE)
@@ -150,9 +171,11 @@ src/conv/text/Makefile
 src/conv/text/wpd2text.rc
 src/lib/Makefile
 src/lib/libwpd.rc
+src/lib/libwpd-stream.rc
 build/Makefile
 build/win32/Makefile
 libwpd-1.pc
+libwpd-stream-1.pc
 libwpd.spec
 ])
 

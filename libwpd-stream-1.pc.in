@@ -3,8 +3,9 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
                                                                        
-Name: libwpd-1
+Name: libwpd-stream-1
 Description: A library for reading and writing Corel WordPerfect(tm) documents
 Version: @VERSION@
-Libs: -L${libdir} -lwpd-1
+Requires: glib-2.0 libgsf-1
+Libs: -L${libdir} -lwpd-stream-1
 Cflags: -I${includedir}/libwpd-1

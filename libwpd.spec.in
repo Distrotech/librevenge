@@ -21,7 +21,7 @@ BuildRequires: libgsf-devel >= 1.6.0
 %description
 Library that handles Word Perfect documents.
 
-
+%if %{!?_without_stream:1}%{?_without_stream:0}
 %package tools
 Requires: libwpd
 Summary: Tools to transform WordPerfect Documents into other formats
@@ -29,8 +29,8 @@ Group: Applications/Publishing
 
 %description tools
 Tools to transform WordPerfect Documents into other formats.
-Currently supported: html, text
-##Currently supported: html, raw, text
+Currently supported: html, raw, text
+%endif
 
 %package devel
 Requires: libwpd
@@ -47,6 +47,7 @@ Includes and definitions for developing with libwpd.
 
 %build
 ./configure --prefix=%{_prefix} --exec-prefix=%{_prefix} \
+	%{?_without_stream:--without-stream} \
 	%{?_with_debug:--enable-debug}  \
 
 %__make
@@ -61,18 +62,26 @@ umask 022
 
 %files
 %defattr(644,root,root,755)
-%{_libdir}/libwpd*
+%{_libdir}/libwpd*-1.so.*
 
+%if %{!?_without_stream:1}%{?_without_stream:0}
 %files tools
 %defattr(755,root,root,755)
 %{_bindir}/wpd2*
+%endif
 
 %files devel
 %defattr(644,root,root,755)
-%{_libdir}/pkgconfig/libwpd-1.pc
+%{_libdir}/libwpd*-1.so
+%{_libdir}/libwpd*-1.*a
+%{_libdir}/pkgconfig/libwpd*-1.pc
 %{_includedir}/libwpd-1/libwpd
 
 %changelog
+* Wed Sep 29 2004 Fridrich Strba <fridrich.strba@bluewin.ch>
+- Move files between libwpd and libwpd-devel packages
+- Reflect the separation of libwpd-1 and libwpd-stream-1
+
 * Sat May 22 2003 Rui M. Seabra <rms@1407.org>
 - Reflect current state of build
 
