@@ -40,6 +40,7 @@ public:
 	WPXLLListener * getLLListener() { return m_llListener; }
 
 	GsfInput * getInput() { return m_input; }
+	void setInput(GsfInput *input) { m_input = input; }
 
 private:
 	GsfInput * m_input;

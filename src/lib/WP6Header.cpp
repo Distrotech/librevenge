@@ -38,7 +38,7 @@ WP6Header::WP6Header(GsfInput * input)
 	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WP6_HEADER_INDEX_HEADER_POINTER_OFFSET - gsf_input_tell(input), G_SEEK_CUR));
 	m_indexHeaderOffset = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
 	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WP6_HEADER_DOCUMENT_SIZE_OFFSET - gsf_input_tell(input), G_SEEK_CUR));
-	m_documentSize = *(const guint16 *)gsf_input_read(input, sizeof(guint32), NULL);
+	m_documentSize = *(const guint32 *)gsf_input_read(input, sizeof(guint32), NULL);
 
 	WPD_DEBUG_MSG(("WordPerfect: Index Header Position = %i \n",(int)m_indexHeaderOffset));
 	WPD_DEBUG_MSG(("WordPerfect: Document Pointer = %i \n",(int)getDocumentOffset()));

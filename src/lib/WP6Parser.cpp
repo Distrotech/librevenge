@@ -24,6 +24,8 @@
  */
  
 #include <gsf/gsf-input.h>
+#include <gsf/gsf-infile.h>
+#include <gsf/gsf-infile-msole.h>
 #include "WP6LLListener.h"
 #include "WP6Parser.h"
 #include "WP6Header.h"
@@ -78,6 +80,19 @@ void WP6Parser::parse()
 {	
 	try
 	{
+		GsfInfile * ole = gsf_infile_msole_new (getInput(), NULL);
+		if (ole != NULL) 
+			{
+				setInput(gsf_infile_child_by_name (ole, "PerfectOffice_MAIN"));
+				g_object_unref(G_OBJECT (ole));
+				if (getInput() == NULL) 
+					{
+						throw FileException();
+					} 
+			}
+		else
+			WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(getInput(), 0, G_SEEK_SET));
+		
 		WP6Header * header = new WP6Header(getInput());
 		WP6PrefixData *prefixData = new WP6PrefixData(getInput(), header->getNumPrefixIndices());
 		static_cast<WP6LLListener *>(getLLListener())->setPrefixData(prefixData);
@@ -123,4 +138,5 @@ void WP6Parser::parse()
 		WPD_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
 		throw FileException();
 	}
+	
 }

@@ -41,6 +41,7 @@ int main(int argc, char *argv[])
 	gsf_shutdown();
  	delete parser;
  	delete listener;
+	g_object_unref (G_OBJECT (input));
 	
 	return 0;
 }
