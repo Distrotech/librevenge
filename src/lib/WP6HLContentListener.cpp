@@ -390,7 +390,7 @@ void WP6HLContentListener::insertTab(const uint8_t tabType, const float tabPosit
 			switch ((tabType & 0xF8) >> 3)
 			{
 			case WP6_TAB_GROUP_TABLE_TAB:
-			case WP6_TAB_GROUP_LEFT_TAB:
+			// case WP6_TAB_GROUP_LEFT_TAB:
 			case WP6_TAB_GROUP_BAR_TAB:
 			// Uncomment when the TabGroup is properly implemented
 			//case WP6_TAB_GROUP_CENTER_ON_MARGINS:
@@ -425,6 +425,15 @@ void WP6HLContentListener::insertTab(const uint8_t tabType, const float tabPosit
 					m_ps->m_tempParagraphJustification = WP6_PARAGRAPH_JUSTIFICATION_RIGHT;
 					break;
 				// End of code to be removed when the TabGroup is properly implemented
+
+				case WP6_TAB_GROUP_LEFT_TAB: // converted as first line indent
+					if (tabPosition >= (float)((double)0xFFFE/(double)WPX_NUM_WPUS_PER_INCH))
+						// fall-back solution if we are not able to read the tabPosition
+						m_ps->m_textIndentByTabs += 0.5f;
+					else
+						m_ps->m_textIndentByTabs = tabPosition - m_ps->m_paragraphMarginLeft
+							- m_ps->m_pageMarginLeft - m_ps->m_textIndentByParagraphIndentChange;
+					break;
 
 				case WP6_TAB_GROUP_BACK_TAB: // converted as hanging indent
 					if (tabPosition >= (float)((double)0xFFFE/(double)WPX_NUM_WPUS_PER_INCH))
@@ -922,7 +931,7 @@ void WP6HLContentListener::styleGroupOn(const uint8_t subGroup)
 		{
 		case WP6_STYLE_GROUP_PARASTYLE_BEGIN_ON_PART1:
 			WPD_DEBUG_MSG(("WordPerfect: Handling para style begin 1 (ON)\n"));
- 			//_flushText();
+ 			_flushText();
 
 			m_parseState->m_styleStateSequence.setCurrentState(BEGIN_BEFORE_NUMBERING);
 			m_parseState->m_putativeListElementHasParagraphNumber = false;
