@@ -1,0 +1,31 @@
+#include <winver.h>
+
+VS_VERSION_INFO VERSIONINFO
+  FILEVERSION @WPD_MAJOR_VERSION@,@WPD_MINOR_VERSION@,@WPD_MICRO_VERSION@,BUILDNUMBER
+  PRODUCTVERSION @WPD_MAJOR_VERSION@,@WPD_MINOR_VERSION@,@WPD_MICRO_VERSION@,0
+  FILEFLAGSMASK 0
+  FILEFLAGS 0
+  FILEOS VOS__WINDOWS32
+  FILETYPE VFT_APP
+  FILESUBTYPE VFT2_UNKNOWN
+  BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+      BLOCK "040904B0"
+      BEGIN
+	VALUE "CompanyName", "The libwpd developer community"
+	VALUE "FileDescription", "wpd2text"
+	VALUE "FileVersion", "@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.@WPD_MICRO_VERSION@.BUILDNUMBER"
+	VALUE "InternalName", "wpd2text"
+	VALUE "LegalCopyright", "Copyright (C) 2002-2003 William Lachance, Marc Maurer, other contributers"
+	VALUE "OriginalFilename", "wpd2text.exe"
+	VALUE "ProductName", "libwpd"
+	VALUE "ProductVersion", "@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.@WPD_MICRO_VERSION@"
+      END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+      VALUE "Translation", 0x409, 1200
+    END
+  END
+

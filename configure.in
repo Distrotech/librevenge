@@ -51,15 +51,24 @@ case "$host" in
   *-*-mingw*)
     native_win32=yes
     LIBWPD_WIN32_RESOURCE=libwpd-win32res.lo
+    WPD2HTML_WIN32_RESOURCE=wpd2html-win32res.lo
+    WPD2TEXT_WIN32_RESOURCE=wpd2text-win32res.lo
+    WPD2RAW_WIN32_RESOURCE=wpd2raw-win32res.lo
     ;;
   *)
     native_win32=no
     LIBWPD_WIN32_RESOURCE=
+    WPD2HTML_WIN32_RESOURCE=
+    WPD2TEXT_WIN32_RESOURCE=
+    WPD2RAW_WIN32_RESOURCE=
     ;;
 esac
 AC_MSG_RESULT([$native_win32])
 AM_CONDITIONAL(OS_WIN32, test "$native_win32" = yes)
 AC_SUBST(LIBWPD_WIN32_RESOURCE)
+AC_SUBST(WPD2HTML_WIN32_RESOURCE)
+AC_SUBST(WPD2TEXT_WIN32_RESOURCE)
+AC_SUBST(WPD2RAW_WIN32_RESOURCE)
 
 AC_MSG_CHECKING([for Win32 platform in general])
 case "$host" in
@@ -134,7 +143,9 @@ Makefile
 src/Makefile
 src/conv/Makefile
 src/conv/html/Makefile
+src/conv/html/wpd2html.rc
 src/conv/text/Makefile
+src/conv/text/wpd2text.rc
 src/lib/Makefile
 src/lib/libwpd.rc
 build/Makefile
@@ -143,6 +154,7 @@ libwpd-1.pc
 libwpd.spec
 ])
 dnl src/conv/raw/Makefile
+dnl src/conv/raw/wpd2raw.rc
 
 case "$debug" in
      "true" )
