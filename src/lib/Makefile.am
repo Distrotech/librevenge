@@ -39,6 +39,7 @@ libwpd_1_la_SOURCES =				\
 	libwpd_math.cpp				\
 	libwpd_support.cpp			\
 	GSFStream.cpp				\
+	WP3EndOfLinePageGroup.cpp	\
 	WP3FileStructure.cpp			\
 	WP3FixedLengthGroup.cpp			\
 	WP3Header.cpp			\
@@ -118,8 +119,9 @@ libwpd_1_la_SOURCES =				\
 	libwpd.h	        		\
 	libwpd_internal.h			\
 	libwpd_math.h				\
-	WP3FileStructure.h			\
 	libwpd_support.h        		\
+	WP3EndOfLinePageGroup.h	\
+	WP3FileStructure.h			\
 	WP3FixedLengthGroup.h			\
 	WP3Header.h			\
 	WP3HLListener.h			\

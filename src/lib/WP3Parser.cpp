@@ -71,12 +71,23 @@ void WP3Parser::parseDocument(WPXInputStream *input, WP3HLListener *listener)
 		}
 		else if (readVal >= (uint8_t)0x20 && readVal <= (uint8_t)0x7E)
 		{
-			printf("%c", readVal);
 			listener->insertCharacter( readVal );
 		}
 		else if (readVal >= (uint8_t)0x80 && readVal <= (uint8_t)0xBF)
 		{
 			// single byte functions
+			switch (readVal)
+			{
+				case 0x80: // condensed hard return
+					listener->insertEOL();		
+					break;
+				case 0x81: // condensed hard page
+					listener->insertBreak(WPX_PAGE_BREAK);
+					break;
+				default:
+					// unsupported or undocumented token, ignore
+					break;				
+			}
 		}			
 		else 
 		{

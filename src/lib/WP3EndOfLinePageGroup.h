@@ -22,19 +22,20 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP3FILESTRUCTURE_H
-#define WP3FILESTRUCTURE_H
+#ifndef WP3ENDOFLINEPAGEGROUP_H
+#define WP3ENDOFLINEPAGEGROUP_H
 
-// size of the fixed length functiongroups 0xC0 to 0xCF
-extern int WP3_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16]; 
+#include "WP3VariableLengthGroup.h"
+#include "WP3FileStructure.h"
 
-/* Main function group list  */
+class WP3EndOfLinePageGroup : public WP3VariableLengthGroup
+{
+public:
+	WP3EndOfLinePageGroup(WPXInputStream *input);	
+	virtual void parse(WP3HLListener *listener);
+	
+protected:
+	virtual void _readContents(WPXInputStream *input);
+};
 
-#define WP3_INDENT_GROUP 0xC2
-#define WP3_ATTRIBUTE_GROUP 0xC3
-
-#define WP3_WINDOW_GROUP 0xDA
-#define WP3_STYLE_GROUP 0xDB
-#define WP3_END_OF_LINE_PAGE_GROUP 0xDC
-
-#endif /* WP3FILESTRUCTURE_H */
+#endif /* WP3ENDOFLINEPAGEGROUP_H */

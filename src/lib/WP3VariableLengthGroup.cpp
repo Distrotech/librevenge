@@ -22,8 +22,10 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
+#include "WP3FileStructure.h"
 #include "WP3VariableLengthGroup.h"
 #include "WP3UnsupportedVariableLengthGroup.h"
+#include "WP3EndOfLinePageGroup.h"
 #include "libwpd_internal.h"
 
 WP3VariableLengthGroup::WP3VariableLengthGroup()
@@ -34,6 +36,8 @@ WP3VariableLengthGroup * WP3VariableLengthGroup::constructVariableLengthGroup(WP
 {
 	switch (group)
 	{
+		case WP3_END_OF_LINE_PAGE_GROUP:
+			return new WP3EndOfLinePageGroup(input);
 		default:
 			// this is an unhandled group, just skip it
 			return new WP3UnsupportedVariableLengthGroup(input);
