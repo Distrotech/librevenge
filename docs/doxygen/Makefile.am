@@ -11,10 +11,14 @@ install-data-am:
 uninstall-am:
 	-rm -rf $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/html
 	
-endif
-
 all:
 	doxygen doxygen.cfg
+
+else
+
+all:
+
+endif
 
 distclean-local: clean-local
 
