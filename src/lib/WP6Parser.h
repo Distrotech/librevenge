@@ -33,7 +33,7 @@ class WP6Parser : public WPXParser
 {
  public:
 	WP6Parser(FILE * stream, WPXLLListener *llListener);		
-	virtual gboolean parse();
+	virtual void parse();
 };
 
 #endif /* WP6PARSER_H */

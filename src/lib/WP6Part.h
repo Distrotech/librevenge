@@ -38,7 +38,7 @@ class WP6Part
 	virtual ~WP6Part() {}
 	
 	static WP6Part * constructPart(FILE *stream, guint8 readVal);
-	virtual gboolean parse(WP6LLListener *llListener) = 0;
+	virtual void parse(WP6LLListener *llListener) = 0;
 };
 
 

@@ -32,10 +32,10 @@ class WP6UndoGroup : public WP6FixedLengthGroup
 {
 public:
 	WP6UndoGroup(FILE *stream);	
-	virtual gboolean parse(WP6LLListener *llListener) {}
+	virtual void parse(WP6LLListener *llListener) {}
 	
 protected:
-	virtual gboolean _readContents(FILE *stream) {}
+	virtual void _readContents(FILE *stream) {}
 };
 
 #endif /* WP6UNDOGROUP_H */

@@ -34,7 +34,6 @@ class WPXPart
 {
 public:
 	WPXPart(FILE *stream);	
-	virtual gboolean parse() = 0;
 };
 
 

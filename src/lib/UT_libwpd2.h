@@ -38,8 +38,6 @@ class FileException
 #define WPD_CHECK_FILE_READ_ERROR(v,num_elements) if (v != num_elements) {\
  WPD_DEBUG_MSG(("X_CheckFileReadElementError: %d\n", __LINE__)); throw FileException(); }
 
-#define WPD_CHECK_INTERNAL_ERROR(v) if (!v) { WPD_DEBUG_MSG(("Internal Error: %d\n", __LINE__)); return FALSE; }
-
 #ifdef DEBUG
 #define WPD_DEBUG_MSG(M) printf M
 #else

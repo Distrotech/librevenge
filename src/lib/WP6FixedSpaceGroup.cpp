@@ -31,9 +31,7 @@ WP6FixedSpaceGroup::WP6FixedSpaceGroup(FILE *stream)
 	_read(stream, 1);
 }
 	
-gboolean WP6FixedSpaceGroup::parse(WP6LLListener *llListener)
+void WP6FixedSpaceGroup::parse(WP6LLListener *llListener)
 {
 	llListener->insertCharacter((guint16) ' ');
-	
-	return TRUE;
 }

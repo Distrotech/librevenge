@@ -30,7 +30,7 @@ WP6ExtendedCharacterGroup::WP6ExtendedCharacterGroup(FILE *stream)
 	_read(stream, WP6_EXTENDED_CHARACTER_GROUP_SIZE);
 }
 	
-gboolean WP6ExtendedCharacterGroup::_readContents(FILE *stream)
+void WP6ExtendedCharacterGroup::_readContents(FILE *stream)
 {
 	
 }

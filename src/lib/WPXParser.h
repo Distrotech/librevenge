@@ -36,7 +36,7 @@ public:
 	WPXParser(FILE * stream, WPXLLListener * listener);
 	virtual ~WPXParser() {}
 	
-	virtual gboolean parse() = 0;
+	virtual void parse() = 0;
 
 	WPXLLListener * getLLListener() { return m_llListener; }
 

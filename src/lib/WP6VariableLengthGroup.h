@@ -37,8 +37,8 @@ class WP6VariableLengthGroup : public WP6Part
 	static WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(FILE *stream, guint8 groupID);
 
  protected:
-	gboolean _read(FILE *stream);
-	virtual gboolean _readContents(FILE *stream) {} // we don't always need more information than that provided generically
+	void _read(FILE *stream);
+	virtual void _readContents(FILE *stream) {} // we don't always need more information than that provided generically
 
 	const guint8 getGroup() const { return m_group; }
 	const guint8 getSubGroup() const { return m_subGroup; }

@@ -36,7 +36,7 @@ WP6Parser::WP6Parser(FILE * stream, WPXLLListener *llListener/*,  WP6Header *hea
 
 // WP6Parser::parse() reads AND parses a wordperfect document, passing any retrieved low-level
 // information to a low-level listener
-gboolean WP6Parser::parse()
+void WP6Parser::parse()
 {	
 	try {
 		WP6Header * header = new WP6Header(getStream());
@@ -72,6 +72,4 @@ gboolean WP6Parser::parse()
 	catch(FileException) { WPD_DEBUG_MSG(("WordPerfect: File Seek Exception. Parse terminated prematurely.")); }
 	getLLListener()->endDocument();
 	WPD_DEBUG_MSG(("WordPerfect: Finished with document parse (position = %ld)\n",(long)ftell(getStream())));
-	
-	return TRUE;
 }

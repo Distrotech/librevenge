@@ -30,14 +30,12 @@ WP6FixedEOLGroup::WP6FixedEOLGroup(FILE *stream)
 {
 }
 	
-gboolean WP6FixedEOLGroup::parse(WP6LLListener *llListener)
+void WP6FixedEOLGroup::parse(WP6LLListener *llListener)
 {
 	llListener->insertEOL();
-	
-	return TRUE;
 }
 
-gboolean WP6FixedEOLGroup::_readContents(FILE *stream)
+void WP6FixedEOLGroup::_readContents(FILE *stream)
 {
 	
 }

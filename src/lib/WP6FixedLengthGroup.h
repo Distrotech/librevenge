@@ -34,8 +34,8 @@ class WP6FixedLengthGroup : public WP6Part
 	static WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(FILE *stream, guint8 groupID);
 
  protected:
-	gboolean _read(FILE *stream, guint size);
-	virtual gboolean _readContents(FILE *stream) = 0; // we always read the contents in the case of a fixed length group
+	void _read(FILE *stream, guint size);
+	virtual void _readContents(FILE *stream) = 0; // we always read the contents in the case of a fixed length group
 };
 
 #endif /* WP6FIXEDLENGTHGROUP_H */

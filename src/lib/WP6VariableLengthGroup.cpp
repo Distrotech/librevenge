@@ -54,7 +54,7 @@ WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(FI
 	}
 }
 
-gboolean WP6VariableLengthGroup::_read(FILE *stream)
+void WP6VariableLengthGroup::_read(FILE *stream)
 {
 	guint32 startPosition = ftell(stream);
 
@@ -85,10 +85,8 @@ gboolean WP6VariableLengthGroup::_read(FILE *stream)
 	WPD_CHECK_FILE_READ_ERROR(fread(&m_sizeNonDeletable, sizeof(guint16), 1, stream), 1);	
 	WPD_DEBUG_MSG(("WordPerfect: Read variable group header (start_position: %i, sub_group: %i, size: %i, flags: %i, num_prefix_ids: %i, size_non_deletable: %i)\n", startPosition, m_subGroup, m_size, m_flags, m_numPrefixIDs, m_sizeNonDeletable));
 
-	WPD_CHECK_INTERNAL_ERROR(_readContents(stream));
+	_readContents(stream);
 
 	WPD_CHECK_FILE_SEEK_ERROR(fseek(stream, (startPosition + m_size - 1 - ftell(stream)), SEEK_CUR));
-	
-	return TRUE;
 }
 

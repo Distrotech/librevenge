@@ -63,9 +63,9 @@ WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(FILE *strea
 	}
 }
 
-gboolean WP6FixedLengthGroup::_read(FILE *stream, guint size)
+void WP6FixedLengthGroup::_read(FILE *stream, guint size)
 {
 	guint32 startPosition = ftell(stream);
-	WPD_CHECK_INTERNAL_ERROR(_readContents(stream));
+	_readContents(stream);
 	WPD_CHECK_FILE_SEEK_ERROR(fseek(stream, (startPosition + size - 1 - ftell(stream)), SEEK_CUR));
 }

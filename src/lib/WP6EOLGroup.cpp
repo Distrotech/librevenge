@@ -32,7 +32,7 @@ WP6EOLGroup::WP6EOLGroup(FILE *stream) :
 	_read(stream);
 }
 
-gboolean WP6EOLGroup::parse(WP6LLListener *llListener)
+void WP6EOLGroup::parse(WP6LLListener *llListener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling an EOL group\n"));
 	   
@@ -188,6 +188,4 @@ gboolean WP6EOLGroup::parse(WP6LLListener *llListener)
 				break;
 		}
 	}
-   	
-	return TRUE;
 }

@@ -32,10 +32,10 @@ class WP6ExtendedCharacterGroup : public WP6FixedLengthGroup
 {
 public:
 	WP6ExtendedCharacterGroup(FILE *stream);	
-	virtual gboolean parse(WP6LLListener *llListener) {}
+	virtual void parse(WP6LLListener *llListener) {}
 	
 protected:
-	virtual gboolean _readContents(FILE *stream);
+	virtual void _readContents(FILE *stream);
 };
 
 #endif /* WP6EXTENDEDCHARACTERGROUP_H */

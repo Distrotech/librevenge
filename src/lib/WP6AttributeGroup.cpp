@@ -32,18 +32,16 @@ WP6AttributeGroup::WP6AttributeGroup(FILE *stream)
 	_read(stream, WP6_ATTRIBUTE_GROUP_SIZE);
 }
 
-gboolean WP6AttributeGroup::_readContents(FILE *stream)
+void WP6AttributeGroup::_readContents(FILE *stream)
 {
 	WPD_CHECK_FILE_READ_ERROR(fread(&m_attribute, sizeof(guint8), 1, stream), 1);
-
-	return TRUE;
 }
 
 WP6AttributeOnGroup::WP6AttributeOnGroup(FILE *stream) : WP6AttributeGroup(stream)
 {
 }
 
-gboolean WP6AttributeOnGroup::parse(WP6LLListener *llListener)
+void WP6AttributeOnGroup::parse(WP6LLListener *llListener)
 {
 	// FIXME: handle flags
 	llListener->attributeChange(TRUE, getAttribute());
@@ -53,7 +51,7 @@ WP6AttributeOffGroup::WP6AttributeOffGroup(FILE *stream) : WP6AttributeGroup(str
 {
 }
 
-gboolean WP6AttributeOffGroup::parse(WP6LLListener *llListener)
+void WP6AttributeOffGroup::parse(WP6LLListener *llListener)
 {
 	// FIXME: handle flags
 	llListener->attributeChange(FALSE, getAttribute());
