@@ -88,11 +88,12 @@ struct _WP6ParsingState
 	float m_paragraphLineSpacing;
 	float m_paragraphSpacingAfterRelative;
 	float m_paragraphSpacingAfterAbsolute;
+	float m_paragraphSpacingBefore;
 	float m_leftMargin;
 	float m_rightMargin;
-        float m_firstLineOffset;
-        float m_paragraphLeftMargin;
-        float m_paragraphRightMargin;
+	float m_firstLineOffset;
+	float m_paragraphLeftMargin;
+	float m_paragraphRightMargin;
 
 
 	guint m_numRemovedParagraphBreaks;
