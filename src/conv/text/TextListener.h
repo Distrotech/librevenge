@@ -47,7 +47,7 @@ public:
 		
 	virtual void startTable() {}
  	virtual void insertRow() {}
- 	virtual void insertCell() {}
+ 	virtual void insertCell(guint8 colSpan, guint8 rowSpan, gboolean boundFromLeft, gboolean boundFromAbove) {}
  	virtual void endTable() {}
 
  private:

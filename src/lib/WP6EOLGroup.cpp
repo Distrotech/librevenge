@@ -27,10 +27,112 @@
 #include "WP6LLListener.h"
 #include "WPXHLListener.h"
 
-WP6EOLGroup::WP6EOLGroup(FILE *stream) :
-	WP6VariableLengthGroup()
+WP6EOLGroup::WP6EOLGroup(FILE *stream) :	
+	WP6VariableLengthGroup(),
+	m_colSpan(1),
+	m_rowSpan(1),
+	m_boundFromLeft(FALSE),
+	m_boundFromAbove(FALSE)
 {
 	_read(stream);
+
+}
+
+void WP6EOLGroup::_readContents(FILE *stream)
+{
+	WPD_DEBUG_MSG(("WordPerfect: EOL Group: Reading Embedded Sub-Function Data\n"));
+	guint16 sizeDeletableSubFunctionData;
+	guint16 startPosition = ftell(stream);
+	WPD_CHECK_FILE_READ_ERROR(fread(&sizeDeletableSubFunctionData, sizeof(guint16), 1, stream), 1);	
+	WPD_DEBUG_MSG(("WordPerfect: EOL Group: Size of Deletable Sub-Function Data: %ld,  Size of Deletable and Non-deletable sub-function data: %ld\n", (long) sizeDeletableSubFunctionData, getSizeNonDeletable()));
+	WPD_CHECK_FILE_SEEK_ERROR(fseek(stream, sizeDeletableSubFunctionData, SEEK_CUR));
+	while (ftell(stream) < (startPosition + getSizeNonDeletable()))
+		{
+			guint8 byte;
+			guint16 numBytesToSkip = 0;
+			WPD_CHECK_FILE_READ_ERROR(fread(&byte, sizeof(guint8), 1, stream), 1);
+			guint16 startPosition2 = ftell(stream);
+			switch (byte)
+				{
+				case WP6_EOL_GROUP_ROW_INFORMATION:
+					WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: ROW_INFORMATION\n"));
+					numBytesToSkip = WP6_EOL_GROUP_ROW_INFORMATION_SIZE;
+					break;
+				case WP6_EOL_GROUP_CELL_FORMULA:
+					guint16 embeddedSubGroupSize;
+					WPD_CHECK_FILE_READ_ERROR(fread(&embeddedSubGroupSize, sizeof(guint16), 1, stream), 1);
+					WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_FORMULA (length: %ld)\n", 
+						       (long) embeddedSubGroupSize));
+					numBytesToSkip = embeddedSubGroupSize;
+					break;
+				case WP6_EOL_GROUP_TOP_GUTTER_SPACING:
+					WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: TOP_GUTTER_SPACING\n"));
+					numBytesToSkip = WP6_EOL_GROUP_TOP_GUTTER_SPACING_SIZE;
+					break;
+				case WP6_EOL_GROUP_BOTTOM_GUTTER_SPACING:
+					WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: BOTTOM_GUTTER_SPACING\n"));
+					numBytesToSkip = WP6_EOL_GROUP_BOTTOM_GUTTER_SPACING_SIZE;
+					break;
+				case WP6_EOL_GROUP_CELL_INFORMATION:
+					WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_INFORMATION\n"));
+					numBytesToSkip = WP6_EOL_GROUP_CELL_INFORMATION_SIZE;
+					break;
+				case WP6_EOL_GROUP_CELL_SPANNING_INFORMATION:
+					WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_SPANNING_INFORMATION\n"));
+					numBytesToSkip = WP6_EOL_GROUP_CELL_SPANNING_INFORMATION_SIZE;
+					guint8 numCellsSpannedHorizontally;
+					guint8 numCellsSpannedVertically;
+					WPD_CHECK_FILE_READ_ERROR(fread(&numCellsSpannedHorizontally, sizeof(guint8), 1, stream), 1);
+					WPD_CHECK_FILE_READ_ERROR(fread(&numCellsSpannedVertically, sizeof(guint8), 1, stream), 1);
+					WPD_DEBUG_MSG(("WordPerfect: num cells spanned (h:%ld, v:%ld)\n", 
+						       numCellsSpannedHorizontally, numCellsSpannedVertically));
+					if (numCellsSpannedHorizontally >= 128)
+						m_boundFromLeft = TRUE;
+					else
+						m_colSpan = numCellsSpannedHorizontally;
+					if (numCellsSpannedVertically >= 128)
+						m_boundFromAbove = TRUE;
+					else
+						m_rowSpan = numCellsSpannedVertically;
+					break;
+				case WP6_EOL_GROUP_CELL_FILL_COLORS:
+					WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_FILL_COLORS\n"));
+					numBytesToSkip = WP6_EOL_GROUP_CELL_FILL_COLORS_SIZE;
+					break;
+				case WP6_EOL_GROUP_CELL_LINE_COLOR:
+					WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_LINE_COLOR\n"));
+					numBytesToSkip = WP6_EOL_GROUP_CELL_LINE_COLOR_SIZE;
+					break;
+				case WP6_EOL_GROUP_CELL_NUMBER_TYPE:
+					WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_NUMBER_TYPE\n"));		
+					numBytesToSkip = WP6_EOL_GROUP_CELL_NUMBER_TYPE_SIZE;
+					break;
+				case WP6_EOL_GROUP_CELL_FLOATING_POINT_NUMBER:
+					WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_FLOATING_POINT_NUMBER\n"));	
+					numBytesToSkip = WP6_EOL_GROUP_CELL_FLOATING_POINT_NUMBER_SIZE;
+					break;
+				case WP6_EOL_GROUP_CELL_PREFIX_FLAG:
+					WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_PREFIX_FLAG\n"));	
+					numBytesToSkip = WP6_EOL_GROUP_CELL_PREFIX_FLAG_SIZE;
+					break;
+				case WP6_EOL_GROUP_CELL_RECALCULATION_ERROR_NUMBER:
+					WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_RECALCULATION_ERROR_NUMBER\n"));
+					numBytesToSkip = WP6_EOL_GROUP_CELL_RECALCULATION_ERROR_NUMBER_SIZE;
+					break;
+				case WP6_EOL_GROUP_DONT_END_A_PARAGRAPH_STYLE_FOR_THIS_HARD_RETURN:
+					WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: DONT_END_A_PARAGRAPH_STYLE_FOR_THIS_HARD_RETURN\n"));
+					numBytesToSkip = WP6_EOL_GROUP_DONT_END_A_PARAGRAPH_STYLE_FOR_THIS_HARD_RETURN_SIZE;
+							break;
+				default:
+					// unsupported: shouldn't happen! an error is likely to follow: 
+					// pre-emptively throw a parsing exception
+					WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: UNKNOWN SUBFUNCTION (BAD BAD BAD)\n"));
+					throw ParseException();
+				}			
+			
+			WPD_CHECK_FILE_SEEK_ERROR(fseek(stream, (startPosition2 + numBytesToSkip - 1 - ftell(stream)), SEEK_CUR));
+		}
+
 }
 
 void WP6EOLGroup::parse(WP6LLListener *llListener)
@@ -70,11 +172,13 @@ void WP6EOLGroup::parse(WP6LLListener *llListener)
 				llListener->insertBreak(WPX_PAGE_BREAK);
 				break;
 			case 0x0A: // Table Cell
-				llListener->insertCell();
+				WPD_DEBUG_MSG(("WordPerfect: EOL group: table cell\n"));
+				llListener->insertCell(m_colSpan, m_rowSpan, m_boundFromLeft, m_boundFromAbove);
 				break;
 			case 0x0B: // Table Row and Cell
+				WPD_DEBUG_MSG(("WordPerfect: EOL group: table row and cell\n"));
 				llListener->insertRow();
-				llListener->insertCell();
+				llListener->insertCell(m_colSpan, m_rowSpan, m_boundFromLeft, m_boundFromAbove);
 				break;
 			case 0x11: // Table Off
 				llListener->endTable();

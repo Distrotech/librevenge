@@ -31,6 +31,11 @@ class FileException
 	// needless to say, we could flesh this class out a bit
 };
 
+class ParseException
+{
+	// needless to say, we could flesh this class out a bit
+};
+
 /* Convenience functions/defines, should not be exported externally */
 
 #define WPD_CHECK_FILE_ERROR(v) if (v==EOF) { WPD_DEBUG_MSG(("X_CheckFileError: %d\n", __LINE__)); throw FileException(); }

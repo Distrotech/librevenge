@@ -45,8 +45,8 @@ WP6HLListener::WP6HLListener(WPXHLListenerImpl *listenerImpl) :
 	m_numColumns(1),
 	m_marginLeft(1.0f),
 	m_marginRight(1.0f),
-	m_curRow(-1),
-	m_curCol(-1),
+	m_currentRow(-1),
+	m_currentColumn(-1),
 	
 	m_isUndoOn(FALSE)
 {
@@ -235,33 +235,47 @@ void WP6HLListener::endDocument()
 
 void WP6HLListener::startTable()
 {
-	_flushText();
-	m_listenerImpl->startTable();
+	if (!m_isUndoOn) 
+		{			
+			_flushText();
+			m_listenerImpl->openTable();
+		}
 }
 
 void WP6HLListener::insertRow()
 {
-	_flushText();
-	m_curRow++;
-	m_curCol = -1;
-	m_listenerImpl->insertRow();
+	if (!m_isUndoOn) 
+		{			
+			_flushText();
+			m_currentRow++;
+			m_currentColumn = -1;
+			m_listenerImpl->openRow();
+		}
 }
 
-void WP6HLListener::insertCell()
+void WP6HLListener::insertCell(guint8 colSpan, guint8 rowSpan, gboolean boundFromLeft, gboolean boundFromAbove)
 {
-	_flushText();
-	m_curCol++;
-	m_listenerImpl->insertCell(m_curRow, m_curCol, 1, 1);
-	m_numDeferredParagraphBreaks++;
+	if (!m_isUndoOn) 
+		{			
+			_flushText();
+			m_currentColumn++;
+			if (!boundFromLeft && !boundFromAbove) {
+				m_listenerImpl->openCell(m_currentColumn, m_currentRow, colSpan, rowSpan);
+				m_numDeferredParagraphBreaks++;
+			}
+		}
 }
 
 void WP6HLListener::endTable()
 {
-	_flushText();
-	m_listenerImpl->endTable();
-	m_curRow = 0;
-	m_curCol = 0;
-	m_numDeferredParagraphBreaks++;
+	if (!m_isUndoOn) 
+		{			
+			_flushText();
+			m_listenerImpl->closeTable();
+			m_currentRow = 0;
+			m_currentColumn = 0;
+			m_numDeferredParagraphBreaks++;
+		}
 }
 
 void WP6HLListener::_flushText()

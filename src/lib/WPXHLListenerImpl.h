@@ -39,10 +39,10 @@ class WPXHLListenerImpl
 	virtual void insertText(const guint16 *textArray, const guint len) = 0;
  	virtual void insertBreak(guint8 breakType) = 0;
  
- 	virtual void startTable() = 0;
- 	virtual void insertRow() = 0;
- 	virtual void insertCell(guint32 numRow, guint numColumn, guint32 rowSpan, guint32 colSpan) = 0;
- 	virtual void endTable() = 0;
+ 	virtual void openTable() = 0;
+ 	virtual void openRow() = 0;
+ 	virtual void openCell(guint32 col, guint row, guint32 colSpan, guint32 rowSpan) = 0;
+ 	virtual void closeTable() = 0;
 };
 
 #endif /* WPXHLLISTENERIMPL_H */

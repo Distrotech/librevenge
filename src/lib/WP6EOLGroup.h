@@ -32,7 +32,12 @@ class WP6EOLGroup : public WP6VariableLengthGroup
 {
 public:
 	WP6EOLGroup(FILE *stream);	
+	virtual void _readContents(FILE *stream);
 	virtual void parse(WP6LLListener *llListener);
+
+ private:
+	guint8 m_colSpan, m_rowSpan;
+	gboolean m_boundFromLeft, m_boundFromAbove;
 };
 
 #endif /* WP6EOLGROUP_H */

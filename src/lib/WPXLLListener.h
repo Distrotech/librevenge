@@ -45,7 +45,7 @@ class WPXLLListener
 		
 	virtual void startTable() = 0;
  	virtual void insertRow() = 0;
- 	virtual void insertCell() = 0;
+ 	virtual void insertCell(guint8 colSpan, guint8 rowSpan, gboolean boundFromLeft, gboolean boundFromAbove) = 0;
  	virtual void endTable() = 0;
 };
 

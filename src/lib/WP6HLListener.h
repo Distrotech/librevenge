@@ -51,7 +51,7 @@ class WP6HLListener : public WP6LLListener
  
 	virtual void startTable();
  	virtual void insertRow();
- 	virtual void insertCell();
+ 	virtual void insertCell(guint8 colSpan, guint8 rowSpan, gboolean boundFromLeft, gboolean boundFromAbove);
  	virtual void endTable(); 
 
  protected:
@@ -78,8 +78,8 @@ class WP6HLListener : public WP6LLListener
 	gfloat m_marginLeft;
 	gfloat m_marginRight;
 	
-	gint32 m_curRow;
-	gint32 m_curCol;
+	gint32 m_currentRow;
+	gint32 m_currentColumn;
 	
 	gboolean m_isUndoOn;
 };
