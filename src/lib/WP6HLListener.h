@@ -85,7 +85,7 @@ private:
 typedef struct _WP6ParsingState WP6ParsingState;
 struct _WP6ParsingState
 {
-	_WP6ParsingState();
+	_WP6ParsingState(gboolean sectionAttributesChanged=TRUE);
 	UCSString m_bodyText;
 	UCSString m_textBeforeNumber;
 	UCSString m_textBeforeDisplayReference;
@@ -197,7 +197,7 @@ public:
 	virtual void endDocument();
  
  	virtual void defineTable(guint8 position, guint16 leftOffset);
-	virtual void addTableColumnDefintion(guint32 width, guint32 leftGutter, guint32 rightGutter);
+	virtual void addTableColumnDefinition(guint32 width, guint32 leftGutter, guint32 rightGutter);
 	virtual void startTable();
  	virtual void insertRow();
  	virtual void insertCell(const guint8 colSpan, const guint8 rowSpan, const gboolean boundFromLeft, const gboolean boundFromAbove, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);

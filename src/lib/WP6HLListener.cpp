@@ -181,7 +181,7 @@ void WP6OutlineDefinition::_updateNumberingMethods(const WP6OutlineLocation outl
 
 }
 
-_WP6ParsingState::_WP6ParsingState() :
+_WP6ParsingState::_WP6ParsingState(gboolean sectionAttributesChanged) :
 	m_textAttributeBits(0),
 	m_textAttributesChanged(FALSE),
 	m_fontSize(WP6_DEFAULT_FONT_SIZE),
@@ -205,7 +205,7 @@ _WP6ParsingState::_WP6ParsingState() :
 	m_isTableRowOpened(FALSE),
 	m_isTableCellOpened(FALSE),
 
-	m_sectionAttributesChanged(TRUE),
+	m_sectionAttributesChanged(sectionAttributesChanged),
 	m_numColumns(1),
 	m_marginLeft(1.0f),
 	m_marginRight(1.0f),
@@ -706,7 +706,7 @@ void WP6HLListener::noteOff(const NoteType noteType)
 		// save our old parsing state on our "stack"
 		WP6ParsingState *oldParseState = m_parseState;
 		int textPID = oldParseState->m_noteTextPID;
-		m_parseState = new WP6ParsingState;
+		m_parseState = new WP6ParsingState(FALSE); // don't open a new section unless we must inside this type of sub-document
 
 		_getPrefixDataPacket(textPID)->parse(this);	
 		_flushText();
@@ -786,7 +786,7 @@ void WP6HLListener::defineTable(guint8 position, guint16 leftOffset)
 	m_tableDefinition.columns.clear();
 }
 
-void WP6HLListener::addTableColumnDefintion(guint32 width, guint32 leftGutter, guint32 rightGutter)
+void WP6HLListener::addTableColumnDefinition(guint32 width, guint32 leftGutter, guint32 rightGutter)
 {
 	// define the new column
 	WPXColumnDefinition colDef;

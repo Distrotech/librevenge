@@ -118,7 +118,7 @@ WP6CharacterGroup_TableColumnSubGroup::WP6CharacterGroup_TableColumnSubGroup(Gsf
 
 void WP6CharacterGroup_TableColumnSubGroup::parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
 {
-	llListener->addTableColumnDefintion(m_width, m_leftGutter, m_rigthGutter);
+	llListener->addTableColumnDefinition(m_width, m_leftGutter, m_rigthGutter);
 }
 
 /*************************************************************************
