@@ -243,6 +243,8 @@ void HtmlListenerImpl::openListElement(const guint8 paragraphJustification,
 		printf(" margin-right: %.4fin;", marginRight);
 	if (spacingAfterParagraph != 0.0f)
 		printf(" margin-bottom: %.4fin;", spacingAfterParagraph);
+	if (lineSpacing != 1.0f)
+		printf(" line-height: %.2f%%;", lineSpacing*100.0f);
 	printf("\">");
 }
 
