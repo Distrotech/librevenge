@@ -29,6 +29,7 @@
 #include "WP6ColumnGroup.h"
 #include "WP6EOLGroup.h"
 #include "WP6ParagraphGroup.h"
+#include "WP6TabGroup.h"
 #include "WP6UnsupportedVariableLengthGroup.h"
 
 WP6VariableLengthGroup::WP6VariableLengthGroup() :
@@ -54,6 +55,8 @@ WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(FI
 			return new WP6ColumnGroup(stream);
 		case WP6_TOP_PARAGRAPH_GROUP:
 			return new WP6ParagraphGroup(stream);
+		case WP6_TOP_TAB_GROUP:
+			return new WP6TabGroup(stream);
 		default:
 			// this is an unhandled group, just skip it
 			return new WP6UnsupportedVariableLengthGroup(stream);

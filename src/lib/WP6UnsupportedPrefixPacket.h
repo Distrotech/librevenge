@@ -23,24 +23,24 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
+#ifndef WP6UNSUPPORTEDPREFIXPACKET_H
+#define WP6UNSUPPORTEDPREFIXPACKET_H
+
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "WPXHeader.h"
+#include "WP6PrefixPacket.h"
 
-class WP6Header : public WPXHeader
+class WP6UnsupportedPrefixPacket : public WP6PrefixPacket
 {
  public:
-	WP6Header(FILE * stream);
-	
-	const guint16 getIndexHeaderOffset() const { return m_indexHeaderOffset; }
-	const guint32 getDocumentSize() const { return m_documentSize; }
-	const guint16 getDocumentEncryption() const { return m_documentEncryption; }
-		
+	WP6UnsupportedPrefixPacket(FILE * stream, guint8 flags);
+ 
+ protected:
+	virtual void _readContents(FILE *stream);
+ 
  private:
-	guint16 m_indexHeaderOffset;
-	guint32 m_documentSize;
-	guint16 m_documentEncryption;
 
- 	GArray * m_prefixPacketArray;
 };
+
+#endif /* WP6UNSUPPORTEDPREFIXPACKET_H */

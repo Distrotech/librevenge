@@ -25,22 +25,14 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "WP6UnsupportedPrefixPacket.h"
 
-#include "WPXHeader.h"
-
-class WP6Header : public WPXHeader
+WP6UnsupportedPrefixPacket::WP6UnsupportedPrefixPacket(FILE * stream, guint8 flags)
+	: WP6PrefixPacket(stream, flags)
 {
- public:
-	WP6Header(FILE * stream);
-	
-	const guint16 getIndexHeaderOffset() const { return m_indexHeaderOffset; }
-	const guint32 getDocumentSize() const { return m_documentSize; }
-	const guint16 getDocumentEncryption() const { return m_documentEncryption; }
-		
- private:
-	guint16 m_indexHeaderOffset;
-	guint32 m_documentSize;
-	guint16 m_documentEncryption;
+	_read(stream);
+}
 
- 	GArray * m_prefixPacketArray;
-};
+void WP6UnsupportedPrefixPacket::_readContents(FILE *stream)
+{
+}

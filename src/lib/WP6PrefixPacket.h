@@ -23,24 +23,31 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
+#ifndef WP6PREFIXPACKET_H
+#define WP6PREFIXPACKET_H
+
 #include <stdio.h>
 #include <stdlib.h>
+#include <glib.h>
 
-#include "WPXHeader.h"
-
-class WP6Header : public WPXHeader
+class WP6PrefixPacket
 {
  public:
-	WP6Header(FILE * stream);
-	
-	const guint16 getIndexHeaderOffset() const { return m_indexHeaderOffset; }
-	const guint32 getDocumentSize() const { return m_documentSize; }
-	const guint16 getDocumentEncryption() const { return m_documentEncryption; }
-		
+	WP6PrefixPacket(FILE * stream, guint8 flags);
+	static WP6PrefixPacket * constructPrefixPacket(FILE * stream);
+ 
+ protected:
+ 	virtual void _read(FILE *stream);
+	virtual void _readContents(FILE *stream) {} // we don't always need more information than that provided generically
+ 
  private:
-	guint16 m_indexHeaderOffset;
-	guint32 m_documentSize;
-	guint16 m_documentEncryption;
-
- 	GArray * m_prefixPacketArray;
+ 	guint8 m_flags;
+ 	guint16	m_useCount;
+ 	guint16 m_hideCount;
+ 	guint32 m_dataSize;
+ 	guint32 m_dataOffset;
+ 
+ 	bool m_hasChildren;
 };
+
+#endif /* WP6PREFIXPACKET_H */

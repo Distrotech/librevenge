@@ -56,5 +56,4 @@ class WP6AttributeOffGroup : public WP6AttributeGroup
 	virtual void parse(WP6LLListener *llListener);
 };
 
-
 #endif /* WP6ATTRIBUTEGROUP_H */

@@ -27,14 +27,15 @@
 #include <stdlib.h>
 #include "UT_libwpd2.h"
 #include "WP6Header.h"
+#include "WP6PrefixPacket.h"
 #include "WP6FileStructure.h" 
 
 WP6Header::WP6Header(FILE * stream)
-	: WPXHeader(stream)
+	:	WPXHeader(stream),
+		m_prefixPacketArray(g_array_new(TRUE, FALSE, sizeof(void *)))
 {
 	guint16 documentEncrypted;
 
-	/* offsets */
 	WPD_CHECK_FILE_SEEK_ERROR(fseek(stream, WP6_HEADER_ENCRYPTION_OFFSET - ftell(stream), SEEK_CUR));
 	WPD_CHECK_FILE_READ_ERROR(fread(&m_documentEncryption, sizeof(guint16), 1, stream), 1);
 	WPD_CHECK_FILE_SEEK_ERROR(fseek(stream, WP6_HEADER_INDEX_HEADER_POINTER_OFFSET - ftell(stream), SEEK_CUR));
@@ -47,15 +48,30 @@ WP6Header::WP6Header(FILE * stream)
 	WPD_DEBUG_MSG(("WordPerfect: Document End Position = %i \n",(int)m_documentSize));
 	WPD_DEBUG_MSG(("WordPerfect: Document Encryption = %i \n",(int)m_documentEncryption));
 
+	// TODO:
+	
 	/* we do not handle encrypted documents */
-	//if (m_documentEncryption != 0)
-	//  return FALSE;
+	/*if (m_documentEncryption != 0)
+	  return FALSE;*/
 	
 	/* sanity check */
-	//if (documentOffset > m_iDocumentSize)
-//	  return FALSE;
+	/*if (documentOffset > m_iDocumentSize)
+	  return FALSE;*/
+
+
+	// read the Index Header (Header #0)
+	// skip the Flags = 2 and the Reserved byte = 0
+	guint16 numIndices;
+	WPD_CHECK_FILE_SEEK_ERROR(fseek(stream, m_indexHeaderOffset + WP6_INDEX_HEADER_NUM_INDICES_POSITION, SEEK_SET));
+	WPD_CHECK_FILE_READ_ERROR(fread(&numIndices, sizeof(guint16), 1, stream), 1);
+	WPD_DEBUG_MSG(("WordPerfect: Number of Index Headers = %d \n",numIndices));
+
+	// ignore the 10 reserved bytes that follow and jump to the offset of the Index Header #1
+	WPD_CHECK_FILE_SEEK_ERROR(fseek(stream, m_indexHeaderOffset + WP6_INDEX_HEADER_INDICES_POSITION, SEEK_SET));
 	
-	//return TRUE;
-
-
+	for (guint32 i=1; i<numIndices; i++)
+	{
+		WP6PrefixPacket * packet = WP6PrefixPacket::constructPrefixPacket(stream);
+		g_array_append_val(m_prefixPacketArray, packet);
+	}
 }
