@@ -26,13 +26,33 @@
 #ifndef RAWLISTENERIMPL_H
 #define RAWLISTENERIMPL_H
 
+#include <stack>
 #include <glib.h>
 #include "WPXHLListenerImpl.h"
+
+using namespace std;
+
+enum ListenerCallback {
+	LC_START_DOCUMENT = 0,
+	LC_OPEN_PAGE_SPAN,
+	LC_OPEN_HEADER_FOOTER,
+	LC_OPEN_PARAGRAPH,
+	LC_OPEN_SPAN,
+	LC_OPEN_SECTION,
+	LC_OPEN_ORDERED_LIST_LEVEL,
+	LC_OPEN_UNORDERED_LIST_LEVEL,
+	LC_OPEN_LIST_ELEMENT,
+	LC_OPEN_FOOTNOTE,
+	LC_OPEN_ENDNOTE,
+	LC_OPEN_TABLE,
+	LC_OPEN_TABLE_ROW,
+	LC_OPEN_TABLE_CELL
+};
 
 class RawListenerImpl : public WPXHLListenerImpl
 {
 public:
-	RawListenerImpl(bool printIndentLevel);
+	RawListenerImpl(bool printCallgraphScore);
 	~RawListenerImpl();
 
  	virtual void setDocumentMetaData(const UCSString &author, const UCSString &subject,
@@ -45,7 +65,6 @@ public:
 	virtual void endDocument();
 
 	virtual void openPageSpan(const int span, const bool isLastPageSpan,
-				  const float formLength, const float formWidth, const WPXFormOrientation orientation,
 				  const float marginLeft, const float marginRight,
 				  const float marginTop, const float marginBottom);
 	virtual void closePageSpan();
@@ -53,12 +72,12 @@ public:
 	virtual void closeHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence);
 
 	virtual void openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits,
-				   const float marginLeftOffset, const float marginRightOffset, const float textIndent,
-				   const gchar *fontName, const float fontSize, const RGBSColor *fontColor,
-				   const float lineSpacing,
+				   const float marginLeftOffset, const float marginRightOffset,
+				   const gchar *fontName, const float fontSize, 
+				   const float lineSpacing, 
 				   const bool isColumnBreak, const bool isPageBreak);
 	virtual void closeParagraph();
-	virtual void openSpan(const guint32 textAttributeBits, const gchar *fontName, const float fontSize, const RGBSColor *fontColor);
+	virtual void openSpan(const guint32 textAttributeBits, const gchar *fontName, const float fontSize);
 	virtual void closeSpan();
 	virtual void openSection(const unsigned int numColumns, const float spaceAfter);
 	virtual void closeSection();
@@ -76,8 +95,8 @@ public:
 	virtual void closeOrderedListLevel();
 	virtual void closeUnorderedListLevel();
 	virtual void openListElement(const guint8 paragraphJustification, const guint32 textAttributeBits,
-				   const float marginLeftOffset, const float marginRightOffset, const float textIndent,
-				   const gchar *fontName, const float fontSize, const RGBSColor *fontColor,
+				     const float marginLeftOffset, const float marginRightOffset,
+				     const gchar *fontName, const float fontSize, 
 				     const float lineSpacing);
 	virtual void closeListElement();
 
@@ -100,9 +119,9 @@ public:
 
 private:
 	int	m_indent;
-	int m_actualIndentLevel;
-
-	bool m_printIndentLevel;
+	int m_callbackMisses;
+	bool m_printCallgraphScore;
+	stack<ListenerCallback> m_callStack;
 
 	void __indentUp() { m_indent++; }
 	void __indentDown() { if (m_indent > 0) m_indent--; }

@@ -27,7 +27,6 @@
 #include <gsf/gsf-input-stdio.h>
 #include <stdio.h>
 #include "libwpd.h"
-#include "WP6HLContentListener.h"
 #include "RawListener.h"
 
 int main(int argc, char *argv[])
@@ -69,13 +68,13 @@ int main(int argc, char *argv[])
 	GError   *err;
 	GsfInput * input = GSF_INPUT(gsf_input_stdio_new (file, &err));
 	if (input == NULL) 
-		{
-			g_return_val_if_fail (err != NULL, 1);
-			
-			g_warning ("'%s' error: %s", file, err->message);
-			g_error_free (err);
-			return 1;
-		}
+	{
+		g_return_val_if_fail (err != NULL, 1);
+		
+		g_warning ("'%s' error: %s", file, err->message);
+		g_error_free (err);
+		return 1;
+	}
 
 	WPDConfidence confidence = WPDocument::isFileFormatSupported(input, false);
 	if (confidence == WPD_CONFIDENCE_NONE || confidence == WPD_CONFIDENCE_POOR)
@@ -109,6 +108,9 @@ int main(int argc, char *argv[])
  	    printf("ERROR: Unknown Error!\n");
  	    return 1;
 	}
+
+	g_object_unref (G_OBJECT (input));
+	gsf_shutdown();
 
 	return 0;
 }
