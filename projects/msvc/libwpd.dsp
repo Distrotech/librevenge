@@ -110,6 +110,10 @@ SOURCE=..\..\src\lib\WP42HLListener.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP42HLStylesListener.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP42Parser.cpp
 # End Source File
 # Begin Source File
@@ -143,6 +147,10 @@ SOURCE=..\..\src\lib\WP5Header.cpp
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP5HLListener.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5HLStylesListener.cpp
 # End Source File
 # Begin Source File
 
@@ -374,6 +382,10 @@ SOURCE=..\..\src\lib\WP42HLListener.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP42HLStylesListener.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP42LLListener.h
 # End Source File
 # Begin Source File
@@ -411,6 +423,10 @@ SOURCE=..\..\src\lib\WP5Header.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP5HLListener.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5HLStylesListener.h
 # End Source File
 # Begin Source File
 
