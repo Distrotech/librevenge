@@ -26,64 +26,17 @@
 #include "WP5HLListener.h"
 #include "WP5FileStructure.h"
 
-_WP5ParsingState::_WP5ParsingState(bool sectionAttributesChanged) :
-	m_textAttributeBits(0),
-	m_textAttributesChanged(false),
-	//m_fontSize(WP6_DEFAULT_FONT_SIZE),
-	//fontName(g_string_new(WP5_DEFAULT_FONT_NAME)),
-	
-	m_isParagraphColumnBreak(false),
-	m_isParagraphPageBreak(false),
-	m_paragraphLineSpacing(1.0f),
-	m_paragraphJustification(WPX_PARAGRAPH_JUSTIFICATION_LEFT),
-	m_tempParagraphJustification(0),
-
-	m_isSectionOpened(false),
-
-	m_isParagraphOpened(false),
-	m_isParagraphClosed(false),
-	m_isSpanOpened(false),
-	m_numDeferredParagraphBreaks(0),
-	m_numRemovedParagraphBreaks(0)
-
-	/*m_currentTable(NULL),
-	m_nextTableIndice(0),
-	m_currentTableCol(0),
-	m_currentTableRow(0),
-	m_isTableOpened(false),
-	m_isTableRowOpened(false),
-	m_isTableCellOpened(false),
-	
-	m_isPageSpanOpened(false),
-	m_nextPageSpanIndice(0),
-	m_numPagesRemainingInSpan(0),
-
-	m_sectionAttributesChanged(sectionAttributesChanged),
-	m_numColumns(1),
-	m_marginLeft(0.0f), 
-	m_marginRight(0.0f),
-	m_pageMarginLeft(1.0f),
-	m_pageMarginRight(1.0f),
-	m_currentRow(-1),
-	m_currentColumn(-1),
-	
-	m_currentListLevel(0),
-	m_putativeListElementHasParagraphNumber(false),
-	m_putativeListElementHasDisplayReferenceNumber(false),
-
-	m_noteTextPID(0),
-	m_inSubDocument(false)*/
+_WP5ParsingState::_WP5ParsingState()
 {
 }
 
 _WP5ParsingState::~_WP5ParsingState()
 {	
-	// fixme: erase current fontname
 }
 
-WP5HLListener::WP5HLListener(WPXHLListenerImpl *listenerImpl)
-	: WPXHLListener(),WP5LLListener(),
-	m_listenerImpl(listenerImpl),
+WP5HLListener::WP5HLListener(vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl) :
+	WPXHLListener(pageList, listenerImpl),
+	WP5LLListener(),
 	m_parseState(new WP5ParsingState)
 {
 	m_textBuffer.clear();
@@ -92,21 +45,6 @@ WP5HLListener::WP5HLListener(WPXHLListenerImpl *listenerImpl)
 /****************************************
  public 'HLListenerImpl' functions
 *****************************************/
-
-void WP5HLListener::startDocument()
-{
-	m_listenerImpl->startDocument();	
-	// FIXME: use the actual values, instead of making up some
-	m_listenerImpl->openPageSpan(0, true,
-				  1.0, 1.0,
-				  1.0, 1.0);
-	m_listenerImpl->openSection(1, 0.0f);
-	m_listenerImpl->openParagraph(0, 0, 0, 0,
-					"Times New Roman", 12.0f,
-					1.0f,
-					false, false);
-	m_listenerImpl->openSpan(0, "Times New Roman", 12.0f);	
-}
 
 void WP5HLListener::insertCharacter(const guint16 character)
 {
@@ -185,68 +123,53 @@ void WP5HLListener::attributeChange(const bool isOn, const guint8 attribute)
 	}
 	
 	if (isOn) 
-		m_parseState->m_textAttributeBits |= textAttributeBit;
+		m_ps->m_textAttributeBits |= textAttributeBit;
 	else
-		m_parseState->m_textAttributeBits ^= textAttributeBit;
+		m_ps->m_textAttributeBits ^= textAttributeBit;
 
-	m_parseState->m_textAttributesChanged = true;
+	m_ps->m_textAttributesChanged = true;
 }
 
 /****************************************
  private functions
 *****************************************/
-/*
+
 void WP5HLListener::_openParagraph()
 {
 	_closeParagraph();
-	guint8 paragraphJustification;
+	/*guint8 paragraphJustification;
 	(m_parseState->m_tempParagraphJustification != 0) ? paragraphJustification = m_parseState->m_tempParagraphJustification :
 		paragraphJustification = m_parseState->m_paragraphJustification;
 	m_parseState->m_tempParagraphJustification = 0;
-	
-	m_listenerImpl->openParagraph(paragraphJustification, m_parseState->m_textAttributeBits,
-				      m_parseState->m_marginLeft, m_parseState->m_marginRight,
-				      m_parseState->m_fontName->str, m_parseState->m_fontSize, 
-				      m_parseState->m_paragraphLineSpacing, 
-				      m_parseState->m_isParagraphColumnBreak, m_parseState->m_isParagraphPageBreak);
-	if (m_parseState->m_numDeferredParagraphBreaks > 0) 
-		m_parseState->m_numDeferredParagraphBreaks--;
+	*/
+	m_listenerImpl->openParagraph(0, m_ps->m_textAttributeBits,
+				      m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight,
+				      m_ps->m_fontName->str, m_ps->m_fontSize, 
+				      1.0f, 
+				      false, false);
+	//if (m_parseState->m_numDeferredParagraphBreaks > 0) 
+	//	m_parseState->m_numDeferredParagraphBreaks--;
 
-	m_parseState->m_isParagraphColumnBreak = false; 
-	m_parseState->m_isParagraphPageBreak = false;
-	m_parseState->m_isParagraphOpened = true;
-}
-
-void WP5HLListener::_closeParagraph()
-{
-	_closeSpan();
-	if (m_parseState->m_isParagraphOpened)
-		m_listenerImpl->closeParagraph();	
-
-	m_parseState->m_isParagraphOpened = false;
-}
-*/
-void WP5HLListener::_openSpan()
-{
-	_closeSpan();
-	m_listenerImpl->openSpan(m_parseState->m_textAttributeBits, "Times New Roman", 12.0f);
-	m_parseState->m_isSpanOpened = true;
-}
-
-void WP5HLListener::_closeSpan()
-{
-	if (m_parseState->m_isSpanOpened)
-		m_listenerImpl->closeSpan();
-
-	m_parseState->m_isSpanOpened = false;
+	//m_parseState->m_isParagraphColumnBreak = false; 
+	//m_parseState->m_isParagraphPageBreak = false;
+	m_ps->m_isParagraphOpened = true;
 }
 
 void WP5HLListener::_flushText()
 {
-	if (m_parseState->m_textAttributesChanged && m_textBuffer.getLen())
+	// create a new section, and a new paragraph, if our section attributes have changed and we have inserted
+	// something into the document (or we have forced a break, which assumes the same condition)
+	if (m_ps->m_sectionAttributesChanged && (m_textBuffer.getLen() > 0 /*|| m_parseState->m_numDeferredParagraphBreaks > 0 || fakeText*/))
+	{
+		_openSection();
+		//if (fakeText)
+			_openParagraph();
+	}	
+	
+	if (m_ps->m_textAttributesChanged && m_textBuffer.getLen())
 	{
 		_openSpan();
-		m_parseState->m_textAttributesChanged = false;
+		m_ps->m_textAttributesChanged = false;
 	}
 	
 	if (m_textBuffer.getLen())

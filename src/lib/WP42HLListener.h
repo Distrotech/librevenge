@@ -33,9 +33,8 @@
 class WP42HLListener : public WPXHLListener, public WP42LLListener
 {
 public:
-	WP42HLListener(WPXHLListenerImpl *listenerImpl);
+	WP42HLListener(vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl);
 
-	virtual void startDocument();
 	virtual void insertCharacter(const guint16 character);
 	virtual void insertTab(const guint8 tabType);
 	virtual void insertEOL();
@@ -57,16 +56,13 @@ public:
 				const RGBSColor * cellFgColor, const RGBSColor * cellBgColor) {};
  	virtual void endTable() {};
 
+protected:
+	virtual void _handleSubDocument(guint16 textPID) {}
+		
 private:
 	void _flushText();
-	void _openSpan();
-
-	WPXHLListenerImpl *m_listenerImpl;
 
 	UCSString m_textBuffer;
-
-	bool m_textAttributesChanged;
-	guint32 m_textAttributeBits;
 };
 
 #endif /* WP42HLLISTENER_H */

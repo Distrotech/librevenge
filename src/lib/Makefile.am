@@ -41,6 +41,7 @@ libwpd_1_la_SOURCES =				\
 	WP42FileStructure.cpp			\
 	WP42Heuristics.cpp			\
 	WP42HLListener.cpp			\
+	WP42HLStylesListener.cpp			\
 	WP42Parser.cpp				\
 	WP42Part.cpp				\
 	WP42UnsupportedVariableLengthGroup.cpp	\
@@ -50,6 +51,7 @@ libwpd_1_la_SOURCES =				\
 	WP5FixedLengthGroup.cpp			\
 	WP5Header.cpp				\
 	WP5HLListener.cpp			\
+	WP5HLStylesListener.cpp			\
 	WP5Parser.cpp				\
 	WP5Part.cpp				\
 	WP5UnsupportedFixedLengthGroup.cpp	\
@@ -94,6 +96,7 @@ libwpd_1_la_SOURCES =				\
 	WP6VariableLengthGroup.cpp 		\
 	WPXPageSpan.cpp				\
 	WPXHeader.cpp 				\
+	WPXHLListener.cpp 			\
 	WPXTable.cpp				\
 	WPXParser.cpp 				\
 	WPXPart.cpp				\
@@ -105,6 +108,7 @@ libwpd_1_la_SOURCES =				\
 	WP42FileStructure.h			\
 	WP42Heuristics.h			\
 	WP42HLListener.h			\
+	WP42HLStylesListener.h			\
 	WP42LLListener.h			\
 	WP42Part.h				\
 	WP42Parser.h				\
@@ -115,6 +119,7 @@ libwpd_1_la_SOURCES =				\
 	WP5FixedLengthGroup.h			\
 	WP5Header.h				\
 	WP5HLListener.h				\
+	WP5HLStylesListener.h			\
 	WP5LLListener.h				\
 	WP5Part.h				\
 	WP5Parser.h				\
@@ -179,5 +184,4 @@ endif
 
 install-data-local: install-libtool-import-lib
 
-uninstall-local: uninstall-libtool-import-lib 	
-
+uninstall-local: uninstall-libtool-import-lib

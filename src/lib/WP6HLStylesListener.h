@@ -26,8 +26,9 @@
 // WP6HLStylesListener: creates an intermediate table representation, given a
 // sequence of messages passed to it by the parser.
 
-#ifndef WP6TABLELISTENER_H
-#define WP6TABLELISTENER_H
+#ifndef WP6HLSTYLESLISTENER_H
+#define WP6HLSTYLESLISTENER_H
+
 #include "WP6HLListener.h"
 #include <vector>
 #include "WPXPageSpan.h"
@@ -79,8 +80,13 @@ public:
 				const guint8 borderBits, 
 				const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
  	virtual void endTable() {}
+		
+protected:
+	virtual void _handleSubDocument(guint16 textPID) {}
+
+	virtual void _openPageSpan() { /* FIXME: REMOVE ME WHEN IMPLEMENTED IN WPXHLListener */ };	
+		
 private:
-	vector<WPXPageSpan *> *m_pageList;
 	WPXPageSpan *m_currentPage;
 
 	vector<WPXTable *> *m_tableList;
@@ -88,4 +94,5 @@ private:
 	float m_tempMarginLeft, m_tempMarginRight;
 	bool m_currentPageHasContent;
 };
-#endif /* WP6TABLELISTENER_H */
+
+#endif /* WP6HLSTYLESLISTENER_H */

@@ -1,6 +1,6 @@
 /* libwpd
  * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2004 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,17 +23,14 @@
  * Corel Corporation or Corel Corporation Limited."
  */
  
-#include "WP6HLStylesListener.h"
+#include "WP42HLStylesListener.h"
 #include "WPXTable.h"
-#include "WP6FileStructure.h"
+#include "WP42FileStructure.h"
 #include "WPXFileStructure.h"
 #include "libwpd_internal.h"
 
-// WP6HLStylesListener: creates intermediate table and page span representations, given a
-// sequence of messages passed to it by the parser.
-
-WP6HLStylesListener::WP6HLStylesListener(vector<WPXPageSpan *> *pageList, vector<WPXTable *> *tableList) : 
-	WP6HLListener(pageList, NULL),
+WP42HLStylesListener::WP42HLStylesListener(vector<WPXPageSpan *> *pageList, vector<WPXTable *> *tableList) : 
+	WP42HLListener(pageList, NULL),
 	m_currentPage(new WPXPageSpan()),
 	m_tableList(tableList), 
 	m_currentPageHasContent(false),
@@ -42,16 +39,16 @@ WP6HLStylesListener::WP6HLStylesListener(vector<WPXPageSpan *> *pageList, vector
 {
 }
 
-void WP6HLStylesListener::endDocument()
+void WP42HLStylesListener::endDocument()
 {	
 	insertBreak(WPX_SOFT_PAGE_BREAK); // pretend we just had a soft page break (for the last page)
 	delete(m_currentPage); // and delete the non-existent page that was allocated as a result (scandalous waste!)
 }
 
-void WP6HLStylesListener::insertBreak(const guint8 breakType)
+void WP42HLStylesListener::insertBreak(const guint8 breakType)
 {
-	if (!isUndoOn())
-	{	
+	//if (!isUndoOn())
+	//{	
 		switch (breakType) 
 		{
 		case WPX_PAGE_BREAK:
@@ -72,10 +69,10 @@ void WP6HLStylesListener::insertBreak(const guint8 breakType)
 			m_currentPageHasContent = false;
 			break;
 		}
-	}
+	//}
 }
-
-void WP6HLStylesListener::pageMarginChange(const guint8 side, const guint16 margin)
+/*
+void WP42HLStylesListener::pageMarginChange(const guint8 side, const guint16 margin)
 {
 	if (!isUndoOn()) 
 	{
@@ -92,7 +89,7 @@ void WP6HLStylesListener::pageMarginChange(const guint8 side, const guint16 marg
 	}
 }
 
-void WP6HLStylesListener::marginChange(const guint8 side, const guint16 margin)
+void WP42HLStylesListener::marginChange(const guint8 side, const guint16 margin)
 {
 	if (!isUndoOn()) 
 	{		
@@ -115,7 +112,7 @@ void WP6HLStylesListener::marginChange(const guint8 side, const guint16 margin)
 
 }
 
-void WP6HLStylesListener::headerFooterGroup(const guint8 headerFooterType, const guint8 occurenceBits, const guint16 textPID)
+void WP42HLStylesListener::headerFooterGroup(const guint8 headerFooterType, const guint8 occurenceBits, const guint16 textPID)
 {
 	if (!isUndoOn()) 
 	{			
@@ -126,7 +123,7 @@ void WP6HLStylesListener::headerFooterGroup(const guint8 headerFooterType, const
 	}
 }
 
-void WP6HLStylesListener::suppressPageCharacteristics(const guint8 suppressCode)
+void WP42HLStylesListener::suppressPageCharacteristics(const guint8 suppressCode)
 {
 	if (!isUndoOn()) 
 	{			
@@ -141,31 +138,31 @@ void WP6HLStylesListener::suppressPageCharacteristics(const guint8 suppressCode)
 			m_currentPage->setHeadFooterSuppression(WP6_HEADER_FOOTER_GROUP_FOOTER_B, true);			
 	}
 }
-
-void WP6HLStylesListener::startTable()
+*/
+void WP42HLStylesListener::startTable()
 {
-	if (!isUndoOn()) 
-	{			
+	//if (!isUndoOn()) 
+	//{			
 		m_currentPageHasContent = true;
 		m_currentTable = new WPXTable();
 		m_tableList->push_back(m_currentTable);
-	}
+	//}
 }
 
-void WP6HLStylesListener::insertRow()
+void WP42HLStylesListener::insertRow()
 {
-	if (!isUndoOn() && m_currentTable != NULL) 
+	if (/*!isUndoOn() && */m_currentTable != NULL) 
 	{
 		m_currentPageHasContent = true;
 		m_currentTable->insertRow();
 	}
 }
 
-void WP6HLStylesListener::insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove, 
+void WP42HLStylesListener::insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove, 
 				  const guint8 borderBits, 
 				  const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
 {
-	if (!isUndoOn() && m_currentTable != NULL)
+	if (/*!isUndoOn() &&*/ m_currentTable != NULL)
 	{
 		m_currentPageHasContent = true;
 		m_currentTable->insertCell(colSpan, rowSpan, boundFromLeft, boundFromAbove, borderBits);

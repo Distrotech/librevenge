@@ -37,7 +37,7 @@
 class WP6HLListener : public WPXHLListener, public WP6LLListener
 {
 public:
-	WP6HLListener();
+	WP6HLListener(vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl);
 		
 	// for getting low-level messages from the parser
 	virtual void undoChange(const guint8 undoType, const guint16 undoLevel);

@@ -27,6 +27,7 @@
 #define WP42PARSER_H
 
 #include "WPXParser.h"
+#include "WP42HLListener.h"
 
 class WPXHLListenerImpl;
 
@@ -38,8 +39,10 @@ public:
 
 	virtual void parse(WPXHLListenerImpl *listenerImpl);
 
-private:
+	static void parseDocument(GsfInput *input, WP42HLListener *listener);
 
+private:
+	void parse(GsfInput *input, WP42HLListener *listener);
 };
 
 #endif /* WP42PARSER_H */

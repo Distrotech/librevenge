@@ -26,11 +26,9 @@
 #include "WP42HLListener.h"
 #include "WP42FileStructure.h"
 
-WP42HLListener::WP42HLListener(WPXHLListenerImpl *listenerImpl)
-	: WPXHLListener(),WP42LLListener(),
-	m_listenerImpl(listenerImpl),
-	m_textAttributesChanged(false),
-	m_textAttributeBits(0)
+WP42HLListener::WP42HLListener(vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl) : 
+	WPXHLListener(pageList, listenerImpl),
+	WP42LLListener()
 {
 	m_textBuffer.clear();
 }
@@ -38,21 +36,6 @@ WP42HLListener::WP42HLListener(WPXHLListenerImpl *listenerImpl)
 /****************************************
  public 'HLListenerImpl' functions
 *****************************************/
-
-void WP42HLListener::startDocument()
-{
-	m_listenerImpl->startDocument();	
-	// FIXME: use the actual values, instead of making up some
-	m_listenerImpl->openPageSpan(0, true,
-				  1.0, 1.0,
-				  1.0, 1.0);
-	m_listenerImpl->openSection(1, 0.0f);
-	m_listenerImpl->openParagraph(0, 0, 0, 0,
-					"Times New Roman", 12.0f,
-					1.0f,
-					false, false);
-	m_listenerImpl->openSpan(0, "Times New Roman", 12.0f);	
-}
 
 void WP42HLListener::insertCharacter(const guint16 character)
 {
@@ -131,28 +114,36 @@ void WP42HLListener::attributeChange(const bool isOn, const guint8 attribute)
 	}
 	
 	if (isOn) 
-		m_textAttributeBits |= textAttributeBit;
+		m_ps->m_textAttributeBits |= textAttributeBit;
 	else
-		m_textAttributeBits ^= textAttributeBit;
+		m_ps->m_textAttributeBits ^= textAttributeBit;
 
-	m_textAttributesChanged = true;
+	m_ps->m_textAttributesChanged = true;
 }
 
 /****************************************
  private functions
 *****************************************/
 
-void WP42HLListener::_openSpan()
-{
-	m_listenerImpl->openSpan(m_textAttributeBits, "Times New Roman", 12.0f);
-}
-
 void WP42HLListener::_flushText()
 {
-	if (m_textAttributesChanged && m_textBuffer.getLen())
+	// create a new section, and a new paragraph, if our section attributes have changed and we have inserted
+	// something into the document (or we have forced a break, which assumes the same condition)
+	if (m_ps->m_sectionAttributesChanged && (m_textBuffer.getLen() > 0/* || m_parseState->m_numDeferredParagraphBreaks > 0 || fakeText*/))
+	{
+		_openSection();
+		//if (fakeText)
+			//_openParagraph();
+		m_listenerImpl->openParagraph(0, 0, 0, 0,
+					"Times New Roman", 12.0f,
+					1.0f,
+					false, false);
+	}
+	
+	if (m_ps->m_textAttributesChanged && m_textBuffer.getLen())
 	{
 		_openSpan();
-		m_textAttributesChanged = false;
+		m_ps->m_textAttributesChanged = false;
 	}
 	
 	if (m_textBuffer.getLen())

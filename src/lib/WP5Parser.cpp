@@ -27,6 +27,7 @@
 #include "WPXHeader.h"
 #include "WP5Part.h"
 #include "WP5HLListener.h"
+#include "WP5HLStylesListener.h"
 #include "libwpd_internal.h"
 #include "WPXTable.h"
 
@@ -108,15 +109,44 @@ void WP5Parser::parseDocument(GsfInput *input, WP5HLListener *listener)
 void WP5Parser::parse(WPXHLListenerImpl *listenerImpl)
 {
 	GsfInput *input = getInput();
+	vector<WPXPageSpan *> pageList;
+	vector<WPXTable *> tableList;	
 	
 	try
  	{
-		WP5HLListener hlListener(listenerImpl);
-		parse(input, &hlListener);
+		// do a "first-pass" parse of the document
+		// gather table border information, page properties (per-page)
+		WP5HLStylesListener stylesListener(&pageList, &tableList);
+		parse(input, &stylesListener);
+
+		// second pass: here is where we actually send the messages to the target app
+		// that are necessary to emit the body of the target document
+		WP5HLListener listener(&pageList, listenerImpl); // FIXME: SHOULD BE CONTENT_LISTENER, AND SHOULD BE PASSED TABLE DATA!
+		parse(input, &listener);
+		
+		// cleanup section: free the used resources
+		for (vector<WPXPageSpan *>::iterator iterSpan = pageList.begin(); iterSpan != pageList.end(); iterSpan++)
+		{
+			delete *iterSpan;
+		}	
+		for (vector<WPXTable *>::iterator iterTable = tableList.begin(); iterTable != tableList.end(); iterTable++)
+		{
+			delete *iterTable;
+		}
 	}
 	catch(FileException)
 	{
 		WPD_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
+
+		for (vector<WPXPageSpan *>::iterator iterSpan = pageList.begin(); iterSpan != pageList.end(); iterSpan++)
+		{
+			delete *iterSpan;
+		}
+		for (vector<WPXTable *>::iterator iterTable = tableList.begin(); iterTable != tableList.end(); iterTable++)
+		{
+			delete *iterTable;
+		}		
+
 		throw FileException();
 	}	
 }

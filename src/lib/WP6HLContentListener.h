@@ -38,7 +38,6 @@ using namespace std;
 
 class WPXHLListenerImpl;
 class WP6LLParser;
-class WPXPageSpan;
 class WPXTable;
 
 enum WP6StyleState { NORMAL, DOCUMENT_NOTE, DOCUMENT_NOTE_GLOBAL, 
@@ -47,20 +46,6 @@ enum WP6StyleState { NORMAL, DOCUMENT_NOTE, DOCUMENT_NOTE_GLOBAL,
 		     DISPLAY_REFERENCING, 
 		     BEGIN_NUMBERING_AFTER_DISPLAY_REFERENCING,
 		     BEGIN_AFTER_NUMBERING, STYLE_BODY, STYLE_END };
-
-typedef struct _WP6DocumentMetaData WP6DocumentMetaData;
-struct _WP6DocumentMetaData
-{
-	UCSString m_author;
-	UCSString m_subject;
-	UCSString m_publisher; 
-	UCSString m_category;
-	UCSString m_keywords; 
-	UCSString m_language;
-	UCSString m_abstract; 
-	UCSString m_descriptiveName;
-	UCSString m_descriptiveType;
-};
 
 typedef struct _WP6TableDefinition WP6TableDefinition;
 struct _WP6TableDefinition
@@ -89,7 +74,7 @@ private:
 typedef struct _WP6ParsingState WP6ParsingState;
 struct _WP6ParsingState
 {
-	_WP6ParsingState(bool sectionAttributesChanged=true);
+	_WP6ParsingState();
 	~_WP6ParsingState();
 	UCSString m_bodyText;
 	UCSString m_textBeforeNumber;
@@ -98,22 +83,12 @@ struct _WP6ParsingState
 	UCSString m_textAfterDisplayReference;
 	UCSString m_textAfterNumber;
 
-	guint32 m_textAttributeBits;
-	bool m_textAttributesChanged;
-	float m_fontSize;
-	GString * m_fontName;
-
 	bool m_isParagraphColumnBreak;
 	bool m_isParagraphPageBreak;
 	guint8 m_paragraphJustification;
-	guint8 m_tempParagraphJustification;
+	guint8 m_tempParagraphJustification; // TODO: wouldn't a better name be m_tabParagraphJustification ? - MARCM
 	float m_paragraphLineSpacing;
 
-	bool m_isSectionOpened;
-
-	bool m_isParagraphOpened;
-	bool m_isParagraphClosed;
-	bool m_isSpanOpened;
 	guint m_numDeferredParagraphBreaks;
 	guint m_numRemovedParagraphBreaks;
 
@@ -125,20 +100,6 @@ struct _WP6ParsingState
 	bool m_isTableRowOpened;
 	bool m_isTableColumnOpened;
 	bool m_isTableCellOpened;
-
-	bool m_isPageSpanOpened;
-	int m_nextPageSpanIndice;
-	int m_numPagesRemainingInSpan;
-
-	bool m_sectionAttributesChanged;
-	guint m_numColumns;
-	bool m_isLeftMarginSet;
-	bool m_isRightMarginSet;
-	float m_pageMarginLeft;
-	float m_pageMarginRight;
-	float m_marginLeft;
-	float m_marginRight;
-	
 	gint32 m_currentRow;
 	gint32 m_currentColumn;
 
@@ -151,7 +112,6 @@ struct _WP6ParsingState
 	bool m_putativeListElementHasDisplayReferenceNumber;
 
 	int m_noteTextPID;
-	bool m_inSubDocument;
 };
 
 struct _WP6ListLevel
@@ -188,7 +148,6 @@ public:
 						const guint8 hour, const guint8 minute, const guint8 second,
 						const guint8 dayOfWeek, const guint8 timeZone, const guint8 unused) {}
 	virtual void setExtendedInformation(const guint16 type, const UCSString &data);
-	virtual void startDocument();
 	virtual void insertCharacter(const guint16 character);
 	virtual void insertTab(const guint8 tabType);
 	virtual void insertEOL();
@@ -228,18 +187,14 @@ public:
 
 
 protected:
-	void _handleSubDocument(guint16 textPID);
+	virtual void _handleSubDocument(guint16 textPID);
+
 	//void _handleLineBreakElementBegin();
 	void _paragraphNumberOn(const guint16 outlineHash, const guint8 level);
 	void _flushText(const bool fakeText=false);
 	void _handleListChange(const guint16 outlineHash);
 	    
 	void _openListElement();
-
-	void _openPageSpan();
-
-	void _openSection();
-	void _closeSection();
 
 	void _openTable();
 	void _closeTable();
@@ -252,20 +207,12 @@ protected:
 	void _closeTableCell();
 
 	void _openParagraph();
-	void _closeParagraph();
-	void _openSpan();
-	void _closeSpan();
 
 private:
-	WPXHLListenerImpl * m_listenerImpl;
-
-	WP6DocumentMetaData m_metaData;
 	WP6ParsingState *m_parseState;	
 
 	WP6TableDefinition m_tableDefinition;
 	vector<WPXTable *> *m_tableList;
-
-	vector <WPXPageSpan *> *m_pageList;
 
 	map<int,WP6OutlineDefinition *> m_outlineDefineHash;
 };

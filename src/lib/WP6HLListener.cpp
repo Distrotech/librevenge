@@ -30,8 +30,8 @@
 #include "WPXFileStructure.h"
 #include "libwpd_internal.h"
 
-WP6HLListener::WP6HLListener() :
-	WPXHLListener(),
+WP6HLListener::WP6HLListener(vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl) :
+	WPXHLListener(pageList, listenerImpl),
 	WP6LLListener(), 
 	m_isUndoOn(false)
 {

@@ -31,6 +31,11 @@
 
 class WPXHLListenerImpl;
 
+/**
+This class provides all the functions an application would need to parse 
+WordPerfect documents.
+*/
+
 class WPDocument
 {
 public:

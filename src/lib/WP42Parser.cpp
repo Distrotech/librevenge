@@ -26,13 +26,13 @@
 #include <gsf/gsf-input.h>
 #include <gsf/gsf-infile.h>
 #include <gsf/gsf-infile-msole.h>
-#include "WP42HLListener.h"
 #include "WP42Parser.h"
 #include "WP42Part.h"
 #include "WPXHeader.h"
 #include "libwpd_internal.h"
 #include "WPXTable.h"
 #include "WP42FileStructure.h"
+#include "WP42HLStylesListener.h"
 
 WP42Parser::WP42Parser(GsfInput *input) :
 	WPXParser(input, NULL)
@@ -43,15 +43,22 @@ WP42Parser::~WP42Parser()
 {
 }
 
-void WP42Parser::parse(WPXHLListenerImpl *listenerImpl)
+void WP42Parser::parse(GsfInput *input, WP42HLListener *listener)
 {
-	WP42HLListener hlListener(listenerImpl);
-	hlListener.startDocument();
+	listener->startDocument();
+	
+	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, 0, G_SEEK_SET));	
+	
+	WPD_DEBUG_MSG(("WordPerfect: Starting document body parse (position = %ld)\n",(long)gsf_input_tell(input)));
+	
+	parseDocument(input, listener);
+	
+	listener->endDocument();		
+}
 
-	GsfInput *input = getInput();
-	
-	gsf_input_seek(input, 0, G_SEEK_SET);
-	
+// parseDocument: parses a document body (may call itself recursively, on other streams, or itself)
+void WP42Parser::parseDocument(GsfInput *input, WP42HLListener *listener)
+{
 	while (!gsf_input_eof(input))
 	{
 		guint8 readVal;
@@ -62,17 +69,17 @@ void WP42Parser::parse(WPXHLListenerImpl *listenerImpl)
 			switch (readVal)
 			{
 				case 0x09: // tab
-					hlListener.insertTab(0);
+					listener->insertTab(0);
 					break;
 				case 0x0A: // hard new line
-					hlListener.insertEOL();
+					listener->insertEOL();
 					break;
 				case 0x0B: // soft new page
 					break;
 				case 0x0C: // hard new page
 					break;
 				case 0x0D: // soft new line
-					hlListener.insertEOL();
+					listener->insertEOL();
 					break;
 				default:
 					// unsupported or undocumented token, ignore
@@ -82,7 +89,7 @@ void WP42Parser::parse(WPXHLListenerImpl *listenerImpl)
 		else if (readVal >= (guint8)0x20 && readVal <= (guint8)0x7F)
 		{
 			// normal ASCII characters
-			hlListener.insertCharacter( readVal );
+			listener->insertCharacter( readVal );
 		}
 		else if (readVal >= (guint8)0x80 && readVal <= (guint8)0xBF)
 		{
@@ -90,43 +97,43 @@ void WP42Parser::parse(WPXHLListenerImpl *listenerImpl)
 			switch (readVal)
 			{				
 				case 0x92:
-					hlListener.attributeChange(true, WP42_ATTRIBUTE_STRIKE_OUT);
+					listener->attributeChange(true, WP42_ATTRIBUTE_STRIKE_OUT);
 					break;
 				case 0x93:
-					hlListener.attributeChange(false, WP42_ATTRIBUTE_STRIKE_OUT);
+					listener->attributeChange(false, WP42_ATTRIBUTE_STRIKE_OUT);
 					break;				
 				case 0x94:
-					hlListener.attributeChange(true, WP42_ATTRIBUTE_UNDERLINE);
+					listener->attributeChange(true, WP42_ATTRIBUTE_UNDERLINE);
 					break;
 				case 0x95:
-					hlListener.attributeChange(false, WP42_ATTRIBUTE_UNDERLINE);
+					listener->attributeChange(false, WP42_ATTRIBUTE_UNDERLINE);
 					break;	
 
 				case 0x90:
-					hlListener.attributeChange(true, WP42_ATTRIBUTE_REDLINE);
+					listener->attributeChange(true, WP42_ATTRIBUTE_REDLINE);
 					break;
 				case 0x91:
-					hlListener.attributeChange(false, WP42_ATTRIBUTE_REDLINE);
+					listener->attributeChange(false, WP42_ATTRIBUTE_REDLINE);
 					break;
 
 				case 0x9C:
-					hlListener.attributeChange(false, WP42_ATTRIBUTE_BOLD);
+					listener->attributeChange(false, WP42_ATTRIBUTE_BOLD);
 					break;
 				case 0x9D:
-					hlListener.attributeChange(true, WP42_ATTRIBUTE_BOLD);
+					listener->attributeChange(true, WP42_ATTRIBUTE_BOLD);
 					break;
 				
 				case 0xB2:
-					hlListener.attributeChange(true, WP42_ATTRIBUTE_ITALICS);
+					listener->attributeChange(true, WP42_ATTRIBUTE_ITALICS);
 					break;
 				case 0xB3:
-					hlListener.attributeChange(false, WP42_ATTRIBUTE_ITALICS);
+					listener->attributeChange(false, WP42_ATTRIBUTE_ITALICS);
 					break;
 				case 0xB4:
-					hlListener.attributeChange(true, WP42_ATTRIBUTE_SHADOW);
+					listener->attributeChange(true, WP42_ATTRIBUTE_SHADOW);
 					break;
 				case 0xB5:
-					hlListener.attributeChange(false, WP42_ATTRIBUTE_SHADOW);
+					listener->attributeChange(false, WP42_ATTRIBUTE_SHADOW);
 					break;
 			
 				default:
@@ -143,7 +150,51 @@ void WP42Parser::parse(WPXHLListenerImpl *listenerImpl)
 				delete(part);
 			}
 		}
-	}	
+	}
+}
+
+void WP42Parser::parse(WPXHLListenerImpl *listenerImpl)
+{
+	GsfInput *input = getInput();
+	vector<WPXPageSpan *> pageList;
+	vector<WPXTable *> tableList;	
 	
-	hlListener.endDocument();
+	try
+ 	{
+		// do a "first-pass" parse of the document
+		// gather table border information, page properties (per-page)
+		WP42HLStylesListener stylesListener(&pageList, &tableList);
+		parse(input, &stylesListener);
+
+		// second pass: here is where we actually send the messages to the target app
+		// that are necessary to emit the body of the target document
+		WP42HLListener listener(&pageList, listenerImpl); // FIXME: SHOULD BE CONTENT_LISTENER, AND SHOULD BE PASSED TABLE DATA!
+		parse(input, &listener);
+		
+		// cleanup section: free the used resources
+		for (vector<WPXPageSpan *>::iterator iterSpan = pageList.begin(); iterSpan != pageList.end(); iterSpan++)
+		{
+			delete *iterSpan;
+		}	
+		for (vector<WPXTable *>::iterator iterTable = tableList.begin(); iterTable != tableList.end(); iterTable++)
+		{
+			delete *iterTable;
+		}
+	}
+	catch(FileException)
+	{
+		WPD_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
+
+		for (vector<WPXPageSpan *>::iterator iterSpan = pageList.begin(); iterSpan != pageList.end(); iterSpan++)
+		{
+			delete *iterSpan;
+		}
+		for (vector<WPXTable *>::iterator iterTable = tableList.begin(); iterTable != tableList.end(); iterTable++)
+		{
+			delete *iterTable;
+		}		
+
+		throw FileException();
+	}		
+	
 }

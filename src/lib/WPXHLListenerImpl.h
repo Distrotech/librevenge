@@ -30,6 +30,12 @@
 #include <vector>
 using namespace std;
 
+/**
+Pure virtual class containing all the callback functions that can be made by
+the parser. An application using this library should implement all the function
+definitions listed here.
+*/
+
 class WPXHLListenerImpl
 {
  public:
@@ -44,7 +50,13 @@ class WPXHLListenerImpl
 					 const UCSString &abstract, const UCSString &descriptiveName,
 					 const UCSString &descriptiveType) {}
 
+	/**
+	Called at the start of the parsing process. This is always the first callback made.
+	*/
 	virtual void startDocument() = 0;
+	 /**
+	Called at the end of the parsing process. This is always the last callback made.
+	 */
 	virtual void endDocument() = 0;
 
 	virtual void openPageSpan(const int span, const bool isLastPageSpan,
@@ -65,8 +77,19 @@ class WPXHLListenerImpl
 	virtual void openSection(const unsigned int numColumns, const float spaceAfter) = 0;
 	virtual void closeSection() = 0;
 
+	/**
+	Called when a TAB character should be inserted
+	*/
 	virtual void insertTab() = 0;
+	/**
+	Called when a string of text should be inserted. The textbuffer contains only
+    characters which all have the same set of properties.
+	\param text A textbuffer in the UCS encoding
+	*/
 	virtual void insertText(const UCSString &text) = 0;
+	/**
+	Called when a line break should be inserted
+	*/
  	virtual void insertLineBreak() = 0;
 
 	virtual void defineOrderedListLevel(const int listID, const guint16 listLevel, const WPXNumberingType listType, 
@@ -91,13 +114,25 @@ class WPXHLListenerImpl
  	virtual void openTable(const guint8 tablePositionBits, 
 			       const float marginLeftOffset, const float marginRightOffset,
 			       const float leftOffset, const vector < WPXColumnDefinition > &columns) = 0;
+	/**
+	Called when a new table row should be started
+	*/
  	virtual void openTableRow() = 0;
+	/**
+	Called when the current table row is closed
+	*/
 	virtual void closeTableRow() = 0;
  	virtual void openTableCell(const guint32 col, const guint32 row, const guint32 colSpan, const guint32 rowSpan, 
 				   const guint8 borderBits, 
 				   const RGBSColor * cellFgColor, const RGBSColor * cellBgColor) = 0;
+	/**
+	Called when the current table cell is closed
+	*/
 	virtual void closeTableCell() = 0;
 	virtual void insertCoveredTableCell(const guint32 col, const guint32 row) {}
+	/**
+	Called when the current table is closed
+	*/
  	virtual void closeTable() = 0;
 };
 

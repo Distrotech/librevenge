@@ -12,6 +12,8 @@ CHANGES:
   between the different high level listeners (Marc Maurer)
 - Updated MSVC6 project files, we have a win32 lib again, yay! (Marc Maurer)
 - Reduce the number of installed header files (Marc Maurer)
+- Add mingw build system (Fridrich Strba)
+- Fix rpm build system with respect to "make dist" (Rui Miguel Seabra)
 
 0.6.5 -> 0.6.6
 - Add an encryption exception thrown for encrypted documents to allow

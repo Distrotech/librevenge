@@ -37,6 +37,29 @@
 #include "WP6Parser.h"
 #include "libwpd_internal.h"
 
+/**
+\mainpage libwpd documentation
+This document contains both the libwpd API specification and the normal libwpd
+documentation.
+\section api_docs libwpd API documentation
+The external libwpd API is provided by the WPDocument class. This class, combined 
+with the WPXHLListenerImpl class, are the only two classes that will be of interest
+for the application programmer using libwpd.
+\section lib_docs libwpd documentation
+If you are interrested in the structure of libwpd itself, this whole document 
+would be a good starting point for exploring the interals of libwpd. Mind that
+this document is a work-in-progress, and will most likely not cover libwpd for
+the full 100%.
+*/
+
+/**
+Analyzes the content of an input stream to see if it can be parsed
+\param input The input stream
+\param partialContent A boolean which states if the content from the input stream
+represents the full contents of a WordPerfect file, or just the first X bytes
+\return A confidence value which represents the likelyhood that the content from
+the input stream can be parsed
+*/
 WPDConfidence WPDocument::isFileFormatSupported(GsfInput *input, bool partialContent)
 {
 	WPDConfidence confidence = WPD_CONFIDENCE_NONE;
@@ -123,6 +146,13 @@ WPDConfidence WPDocument::isFileFormatSupported(GsfInput *input, bool partialCon
 	return WPD_CONFIDENCE_NONE;
 }
 
+/**
+Parses the input stream content. It will make callbacks to the functions provided by a 
+WPXHLListenerImpl class implementation when needed. This is often commonly called the 
+'main parsing routine'.
+\param input The input stream
+\param listenerImpl A WPXHLListener implementation
+*/
 void WPDocument::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl)
 {
 	WPXParser *parser = NULL;

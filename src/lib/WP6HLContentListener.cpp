@@ -35,7 +35,6 @@
 
 #include "WP6PrefixData.h"
 #include "WPXTable.h"
-#include "WPXPageSpan.h"
 
 #define WP6_DEFAULT_FONT_SIZE 12.0f
 #define WP6_DEFAULT_FONT_NAME "Times New Roman"
@@ -60,7 +59,7 @@ int _extractNumericValueFromRoman(const gchar romanChar)
 	return 1;
 }
 
-// _extractDisplayReferenceNumberFromBuf: given a number string in UCS2 represented
+// _extractDisplayReferenceNumberFromBuf: given a nuWP6_DEFAULT_FONT_SIZEmber string in UCS2 represented
 // as letters, numbers, or roman numerals.. return an integer value representing its number
 // HACK: this function is really cheesey
 // NOTE: if the input is not valid, the output is unspecified
@@ -183,23 +182,13 @@ void WP6OutlineDefinition::_updateNumberingMethods(const WP6OutlineLocation outl
 
 }
 
-_WP6ParsingState::_WP6ParsingState(bool sectionAttributesChanged) :
-	m_textAttributeBits(0),
-	m_textAttributesChanged(false),
-	m_fontSize(WP6_DEFAULT_FONT_SIZE),
-	m_fontName(g_string_new(WP6_DEFAULT_FONT_NAME)),
-	
+_WP6ParsingState::_WP6ParsingState() :
 	m_isParagraphColumnBreak(false),
 	m_isParagraphPageBreak(false),
 	m_paragraphLineSpacing(1.0f),
 	m_paragraphJustification(WPX_PARAGRAPH_JUSTIFICATION_LEFT),
 	m_tempParagraphJustification(0),
 
-	m_isSectionOpened(false),
-
-	m_isParagraphOpened(false),
-	m_isParagraphClosed(false),
-	m_isSpanOpened(false),
 	m_numDeferredParagraphBreaks(0),
 	m_numRemovedParagraphBreaks(0),
 
@@ -210,17 +199,7 @@ _WP6ParsingState::_WP6ParsingState(bool sectionAttributesChanged) :
 	m_isTableOpened(false),
 	m_isTableRowOpened(false),
 	m_isTableCellOpened(false),
-	
-	m_isPageSpanOpened(false),
-	m_nextPageSpanIndice(0),
-	m_numPagesRemainingInSpan(0),
 
-	m_sectionAttributesChanged(sectionAttributesChanged),
-	m_numColumns(1),
-	m_marginLeft(0.0f), 
-	m_marginRight(0.0f),
-	m_pageMarginLeft(1.0f),
-	m_pageMarginRight(1.0f),
 	m_currentRow(-1),
 	m_currentColumn(-1),
 	
@@ -228,8 +207,7 @@ _WP6ParsingState::_WP6ParsingState(bool sectionAttributesChanged) :
 	m_putativeListElementHasParagraphNumber(false),
 	m_putativeListElementHasDisplayReferenceNumber(false),
 
-	m_noteTextPID(0),
-	m_inSubDocument(false)
+	m_noteTextPID(0)
 {
 }
 
@@ -239,19 +217,17 @@ _WP6ParsingState::~_WP6ParsingState()
 }
 
 WP6HLContentListener::WP6HLContentListener(vector<WPXPageSpan *> *pageList, vector<WPXTable *> *tableList, WPXHLListenerImpl *listenerImpl) :
-	WP6HLListener(), 
-	m_listenerImpl(listenerImpl),
+	WP6HLListener(pageList, listenerImpl), 
 	m_parseState(new WP6ParsingState),
-	m_tableList(tableList),
-	m_pageList(pageList)
+	m_tableList(tableList)
 {
 }
 
 WP6HLContentListener::~WP6HLContentListener()
 {
-	g_string_free(m_parseState->m_fontName, TRUE);
 	typedef map<int, WP6OutlineDefinition *>::iterator Iter;
-	for (Iter outline = m_outlineDefineHash.begin(); outline != m_outlineDefineHash.end(); outline++) {
+	for (Iter outline = m_outlineDefineHash.begin(); outline != m_outlineDefineHash.end(); outline++) 
+	{
 		delete(outline->second);
 	}
 	delete m_parseState;
@@ -261,33 +237,33 @@ void WP6HLContentListener::setExtendedInformation(const guint16 type, const UCSS
 {
 	switch (type)
 	{		
-	case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_AUTHOR):
-		m_metaData.m_author.append(data);
-		break;
-	case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_SUBJECT):
-		m_metaData.m_subject.append(data);
-		break;
-	case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_PUBLISHER):
-		m_metaData.m_publisher.append(data);
-		break;
-	case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_CATEGORY):
-		m_metaData.m_category.append(data);
-		break;
-	case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_KEYWORDS):
-		m_metaData.m_keywords.append(data);
-		break;
-	case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_LANGUAGE):
-		m_metaData.m_language.append(data);
-		break;
-	case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_ABSTRACT):
-		m_metaData.m_abstract.append(data);
-		break;
-	case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_DESCRIPTIVE_NAME):
-		m_metaData.m_descriptiveName.append(data);
-		break;
-	case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_DESCRIPTIVE_TYPE):
-		m_metaData.m_descriptiveType.append(data);
-		break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_AUTHOR):
+			m_metaData.m_author.append(data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_SUBJECT):
+			m_metaData.m_subject.append(data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_PUBLISHER):
+			m_metaData.m_publisher.append(data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_CATEGORY):
+			m_metaData.m_category.append(data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_KEYWORDS):
+			m_metaData.m_keywords.append(data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_LANGUAGE):
+			m_metaData.m_language.append(data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_ABSTRACT):
+			m_metaData.m_abstract.append(data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_DESCRIPTIVE_NAME):
+			m_metaData.m_descriptiveName.append(data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_DESCRIPTIVE_TYPE):
+			m_metaData.m_descriptiveType.append(data);
+			break;
 	}
 }
 
@@ -335,7 +311,7 @@ void WP6HLContentListener::insertTab(const guint8 tabType)
 			// Special tabs that justify text to the right or center: only use them
 			// if we haven't started a new paragraph (this feature is a WordPerfect special)
 			// and only use them temporarily
-			if (!m_parseState->m_isParagraphOpened)
+			if (!m_ps->m_isParagraphOpened)
 			{
 
 				switch ((tabType & 0xF8) >> 3)
@@ -393,8 +369,8 @@ void WP6HLContentListener::insertBreak(const guint8 breakType)
 		{
 		case WPX_PAGE_BREAK:
 		case WPX_SOFT_PAGE_BREAK:
-			if (m_parseState->m_numPagesRemainingInSpan > 0)
-				m_parseState->m_numPagesRemainingInSpan--;
+			if (m_ps->m_numPagesRemainingInSpan > 0)
+				m_ps->m_numPagesRemainingInSpan--;
 			else
 			{
 				_openPageSpan();
@@ -405,18 +381,6 @@ void WP6HLContentListener::insertBreak(const guint8 breakType)
 	}
 }
 
-void WP6HLContentListener::startDocument()
-{
-	m_listenerImpl->setDocumentMetaData(m_metaData.m_author, m_metaData.m_subject,
-					    m_metaData.m_publisher, m_metaData.m_category,
-					    m_metaData.m_keywords, m_metaData.m_language,
-					    m_metaData.m_abstract, m_metaData.m_descriptiveName,
-					    m_metaData.m_descriptiveType);
-
-	m_listenerImpl->startDocument();	
-	_openPageSpan();
-}
-
 void WP6HLContentListener::fontChange(const guint16 matchedFontPointSize, const guint16 fontPID)
 {	
 	if (!isUndoOn())
@@ -424,12 +388,12 @@ void WP6HLContentListener::fontChange(const guint16 matchedFontPointSize, const 
 		// flush everything which came before this change
 		_flushText();
 
-		m_parseState->m_fontSize = rint((double)((((float)matchedFontPointSize)/100.0f)*2.0f));
+		m_ps->m_fontSize = rint((double)((((float)matchedFontPointSize)/100.0f)*2.0f));
 		const WP6FontDescriptorPacket *fontDescriptorPacket = NULL;
 		if (fontDescriptorPacket = dynamic_cast<const WP6FontDescriptorPacket *>(WP6LLListener::getPrefixDataPacket(fontPID))) {
-			g_string_printf(m_parseState->m_fontName, "%s", fontDescriptorPacket->getFontName());
+			g_string_printf(m_ps->m_fontName, "%s", fontDescriptorPacket->getFontName());
 		}
-		m_parseState->m_textAttributesChanged = true;
+		m_ps->m_textAttributesChanged = true;
 	}
 }
 
@@ -484,11 +448,11 @@ void WP6HLContentListener::attributeChange(const bool isOn, const guint8 attribu
 		}
 		
 		if (isOn) 
-			m_parseState->m_textAttributeBits |= textAttributeBit;
+			m_ps->m_textAttributeBits |= textAttributeBit;
 		else
-			m_parseState->m_textAttributeBits ^= textAttributeBit;
+			m_ps->m_textAttributeBits ^= textAttributeBit;
 		
-		m_parseState->m_textAttributesChanged = true;
+		m_ps->m_textAttributesChanged = true;
 	}
 }
 
@@ -538,14 +502,14 @@ void WP6HLContentListener::marginChange(guint8 side, guint16 margin)
 		switch(side)
 		{
 		case WP6_COLUMN_GROUP_LEFT_MARGIN_SET:
-			//if (m_parseState->m_marginLeft != marginInch) // FIXMEFIXME: remove this
-			//	m_parseState->m_sectionAttributesChanged = true;
-			m_parseState->m_marginLeft = marginInch - m_parseState->m_pageMarginLeft;
+			//if (m_ps->m_paragraphMarginLeft != marginInch) // FIXMEFIXME: remove this
+			//	m_ps->m_sectionAttributesChanged = true;
+			m_ps->m_paragraphMarginLeft = marginInch - m_ps->m_pageMarginLeft;
 			break;
 		case WP6_COLUMN_GROUP_RIGHT_MARGIN_SET:
-			//if (m_parseState->m_marginRight != marginInch)
-			//	m_parseState->m_sectionAttributesChanged = true;
-			m_parseState->m_marginRight = marginInch - m_parseState->m_pageMarginRight;
+			//if (m_ps->m_paragraphMarginRight != marginInch)
+			//	m_ps->m_sectionAttributesChanged = true;
+			m_ps->m_paragraphMarginRight = marginInch - m_ps->m_pageMarginRight;
 			break;
 		}
 
@@ -560,8 +524,8 @@ void WP6HLContentListener::columnChange(guint8 numColumns)
 
 		_flushText();
 
-		m_parseState->m_sectionAttributesChanged = true;
-		m_parseState->m_numColumns = numColumns;
+		m_ps->m_sectionAttributesChanged = true;
+		m_ps->m_numColumns = numColumns;
 	}
 }
 
@@ -709,10 +673,10 @@ void WP6HLContentListener::styleGroupOff(const guint8 subGroup)
 			m_parseState->m_styleStateSequence.setCurrentState(STYLE_BODY);      
 			if (m_parseState->m_putativeListElementHasParagraphNumber) 
 			{
-				if (m_parseState->m_sectionAttributesChanged) 
+				if (m_ps->m_sectionAttributesChanged) 
 				{
 					_openSection();
-					m_parseState->m_sectionAttributesChanged = false;
+					m_ps->m_sectionAttributesChanged = false;
 				}
 				
 				_handleListChange(m_parseState->m_currentOutlineHash);
@@ -793,13 +757,13 @@ void WP6HLContentListener::endDocument()
 		_flushText(true); // flush the list exterior (forcing a line break, to make _flushText think we've exited a list)
 	}
 	// corner case: document contains no end of lines
-	else if (!m_parseState->m_isParagraphOpened && !m_parseState->m_isParagraphClosed)
+	else if (!m_ps->m_isParagraphOpened && !m_ps->m_isParagraphClosed)
 	{
 		_flushText();       
 	}
 	// NORMAL(ish) case document ends either inside a paragraph or outside of one,
 	// but not inside an object
-	else if (!m_parseState->m_isParagraphClosed || !m_parseState->m_isParagraphOpened)
+	else if (!m_ps->m_isParagraphClosed || !m_ps->m_isParagraphOpened)
 	{
 		_flushText();
 	}
@@ -838,7 +802,7 @@ void WP6HLContentListener::defineTable(guint8 position, guint16 leftOffset)
 			break;
 		}
 		// Note: WordPerfect has an offset from the left edge of the page. We translate it to the offset from the left margin
-		m_tableDefinition.m_leftOffset = (float)((double)leftOffset / (double)WPX_NUM_WPUS_PER_INCH) - m_parseState->m_marginLeft;
+		m_tableDefinition.m_leftOffset = (float)((double)leftOffset / (double)WPX_NUM_WPUS_PER_INCH) - m_ps->m_paragraphMarginLeft;
 		
 		// remove all the old column information
 		m_tableDefinition.columns.clear();
@@ -873,10 +837,10 @@ void WP6HLContentListener::startTable()
 		// handle corner case where we have a new section, but immediately start with a table
 		// FIXME: this isn't a very satisfying solution, and might need to be generalized
 		// as we add more table-like structures into the document
-		if (m_parseState->m_sectionAttributesChanged) 
+		if (m_ps->m_sectionAttributesChanged) 
 		{
 			_openSection();
-			m_parseState->m_sectionAttributesChanged = false;
+			m_ps->m_sectionAttributesChanged = false;
 		}
 		_openTable();
 		m_parseState->m_currentTableRow = (-1);
@@ -928,7 +892,7 @@ void WP6HLContentListener::_handleSubDocument(guint16 textPID)
 {
 	// save our old parsing state on our "stack"
 	WP6ParsingState *oldParseState = m_parseState;
-	m_parseState = new WP6ParsingState(false); // false: don't open a new section unless we must inside this type of sub-document
+	m_parseState = new WP6ParsingState();
 	if (textPID)
 		WP6LLListener::getPrefixDataPacket(textPID)->parse(this);	
 	else
@@ -950,7 +914,7 @@ void WP6HLContentListener::_handleSubDocument(guint16 textPID)
 // and an XMLish format is rather ugly by definition.
 // void WP6HLContentListener::_handleLineBreakElementBegin() 
 // {
-// 	if (!m_parseState->m_sectionAttributesChanged && 
+// 	if (!m_ps->m_sectionAttributesChanged && 
 // 	    m_parseState->m_numDeferredParagraphBreaks > 0 &&
 // 	    !m_parseState->m_isParagraphColumnBreak && !m_parseState->m_isParagraphPageBreak) 
 // 		m_parseState->m_numDeferredParagraphBreaks--;					
@@ -982,13 +946,13 @@ void WP6HLContentListener::_flushText(const bool fakeText)
 			m_parseState->m_currentListLevel = 0;
 			_handleListChange(m_parseState->m_currentOutlineHash);
 			m_parseState->m_numDeferredParagraphBreaks--; // we have an implicit break here, when we close the list
-			m_parseState->m_isParagraphOpened = false;
+			m_ps->m_isParagraphOpened = false;
 		}
 	}
 
 	// create a new section, and a new paragraph, if our section attributes have changed and we have inserted
 	// something into the document (or we have forced a break, which assumes the same condition)
-	if (m_parseState->m_sectionAttributesChanged && (m_parseState->m_bodyText.getLen() > 0 || m_parseState->m_numDeferredParagraphBreaks > 0 || fakeText))
+	if (m_ps->m_sectionAttributesChanged && (m_parseState->m_bodyText.getLen() > 0 || m_parseState->m_numDeferredParagraphBreaks > 0 || fakeText))
 	{
 		_openSection();
 		if (fakeText)
@@ -1000,7 +964,7 @@ void WP6HLContentListener::_flushText(const bool fakeText)
 						   m_parseState->m_styleStateSequence.getCurrentState() == STYLE_END) &&
 						  !m_parseState->m_putativeListElementHasParagraphNumber)))
 	{
-		if (!m_parseState->m_isParagraphOpened)
+		if (!m_ps->m_isParagraphOpened)
 			m_parseState->m_numDeferredParagraphBreaks++;
 
 		while (m_parseState->m_numDeferredParagraphBreaks > 1) 
@@ -1008,7 +972,7 @@ void WP6HLContentListener::_flushText(const bool fakeText)
 		_closeParagraph(); 
 		m_parseState->m_numDeferredParagraphBreaks = 0; // compensate for this by requiring a paragraph to be opened
 	}
-	else if (m_parseState->m_textAttributesChanged && (m_parseState->m_bodyText.getLen() > 0 || fakeText) && m_parseState->m_isParagraphOpened) 
+	else if (m_ps->m_textAttributesChanged && (m_parseState->m_bodyText.getLen() > 0 || fakeText) && m_ps->m_isParagraphOpened) 
 	{
 		_openSpan();
 	}
@@ -1016,7 +980,7 @@ void WP6HLContentListener::_flushText(const bool fakeText)
 	if (m_parseState->m_bodyText.getLen() || (m_parseState->m_textBeforeNumber.getLen() && 
 						  !m_parseState->m_putativeListElementHasParagraphNumber)) 
 	{
-		if (!m_parseState->m_isParagraphOpened)
+		if (!m_ps->m_isParagraphOpened)
 			_openParagraph();
 
 		if (m_parseState->m_textBeforeNumber.getLen() && 
@@ -1032,7 +996,7 @@ void WP6HLContentListener::_flushText(const bool fakeText)
 		}
 	}
 
-	m_parseState->m_textAttributesChanged = false;
+	m_ps->m_textAttributesChanged = false;
 }
 
 void WP6HLContentListener::_handleListChange(const guint16 outlineHash)
@@ -1128,74 +1092,19 @@ void WP6HLContentListener::_handleListChange(const guint16 outlineHash)
 
 void WP6HLContentListener::_openListElement()
 {
-	m_listenerImpl->openListElement(m_parseState->m_paragraphJustification, m_parseState->m_textAttributeBits,
-					m_parseState->m_marginLeft, m_parseState->m_marginRight,
-					m_parseState->m_fontName->str, m_parseState->m_fontSize, 
+	m_listenerImpl->openListElement(m_parseState->m_paragraphJustification, m_ps->m_textAttributeBits,
+					m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight,
+					m_ps->m_fontName->str, m_ps->m_fontSize, 
 					m_parseState->m_paragraphLineSpacing);
-	m_parseState->m_isParagraphOpened = true; // a list element is equivalent to a paragraph
+	m_ps->m_isParagraphOpened = true; // a list element is equivalent to a paragraph
 
-}
-
-void WP6HLContentListener::_openPageSpan()
-{
-	if (m_parseState->m_isPageSpanOpened)
-		m_listenerImpl->closePageSpan();
-
-	WPXPageSpan *currentPage = (*m_pageList)[m_parseState->m_nextPageSpanIndice];
-	currentPage->makeConsistent(1);
-	bool isLastPageSpan;
-	(m_pageList->size() <= (m_parseState->m_nextPageSpanIndice+1)) ? isLastPageSpan = true : isLastPageSpan = false;	
-	
-	m_listenerImpl->openPageSpan(currentPage->getPageSpan(), isLastPageSpan,
-				     currentPage->getMarginLeft(), currentPage->getMarginRight(),
-				     currentPage->getMarginTop(), currentPage->getMarginBottom());
-
-	const vector<WPXHeaderFooter> headerFooterList = currentPage->getHeaderFooterList();
-	for (vector<WPXHeaderFooter>::const_iterator iter = headerFooterList.begin(); iter != headerFooterList.end(); iter++) 
-	{
-		if (!currentPage->getHeaderFooterSuppression((*iter).getInternalType())) 
-		{
-			m_listenerImpl->openHeaderFooter((*iter).getType(), (*iter).getOccurence());
-			_handleSubDocument((*iter).getTextPID());
-			m_listenerImpl->closeHeaderFooter((*iter).getType(), (*iter).getOccurence());					
-			WPD_DEBUG_MSG(("Header Footer Element: type: %i occurence: %i pid: %i\n", 
-				       (*iter).getType(), (*iter).getOccurence(), (*iter).getTextPID()));
-		}
-	}
-
-	m_parseState->m_pageMarginLeft = currentPage->getMarginLeft();
-	m_parseState->m_pageMarginRight = currentPage->getMarginRight();
-	m_parseState->m_numPagesRemainingInSpan = (currentPage->getPageSpan() - 1);
-	m_parseState->m_nextPageSpanIndice++;
-	m_parseState->m_isPageSpanOpened = true;
-}
-
-void WP6HLContentListener::_openSection()
-{
-	_closeSection();
-	if (m_parseState->m_numColumns > 1)
-		m_listenerImpl->openSection(m_parseState->m_numColumns, 1.0f);	
-	else 
-		m_listenerImpl->openSection(m_parseState->m_numColumns, 0.0f);
-
-	m_parseState->m_sectionAttributesChanged = false;
-	m_parseState->m_isSectionOpened = true;
-}
-
-void WP6HLContentListener::_closeSection()
-{
-	_closeParagraph();
-	if (m_parseState->m_isSectionOpened)
-		m_listenerImpl->closeSection();
-
-	m_parseState->m_isSectionOpened = false;
 }
 
 void WP6HLContentListener::_openTable()
 {
 	_closeTable();
 	
-	m_listenerImpl->openTable(m_tableDefinition.m_positionBits, m_parseState->m_marginLeft, m_parseState->m_marginRight,
+	m_listenerImpl->openTable(m_tableDefinition.m_positionBits, m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight,
 				  m_tableDefinition.m_leftOffset, m_tableDefinition.columns);
 	m_parseState->m_isTableOpened = true;
 }
@@ -1266,9 +1175,9 @@ void WP6HLContentListener::_openParagraph()
 		paragraphJustification = m_parseState->m_paragraphJustification;
 	m_parseState->m_tempParagraphJustification = 0;
 	
-	m_listenerImpl->openParagraph(paragraphJustification, m_parseState->m_textAttributeBits,
-				      m_parseState->m_marginLeft, m_parseState->m_marginRight,
-				      m_parseState->m_fontName->str, m_parseState->m_fontSize, 
+	m_listenerImpl->openParagraph(paragraphJustification, m_ps->m_textAttributeBits,
+				      m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight,
+				      m_ps->m_fontName->str, m_ps->m_fontSize, 
 				      m_parseState->m_paragraphLineSpacing, 
 				      m_parseState->m_isParagraphColumnBreak, m_parseState->m_isParagraphPageBreak);
 	if (m_parseState->m_numDeferredParagraphBreaks > 0) 
@@ -1276,32 +1185,5 @@ void WP6HLContentListener::_openParagraph()
 
 	m_parseState->m_isParagraphColumnBreak = false; 
 	m_parseState->m_isParagraphPageBreak = false;
-	m_parseState->m_isParagraphOpened = true;
-}
-
-void WP6HLContentListener::_closeParagraph()
-{
-	_closeSpan();
-	if (m_parseState->m_isParagraphOpened)
-		m_listenerImpl->closeParagraph();	
-
-	m_parseState->m_isParagraphOpened = false;
-}
-
-void WP6HLContentListener::_openSpan()
-{
-	_closeSpan();
-	m_listenerImpl->openSpan(m_parseState->m_textAttributeBits, 
-				 m_parseState->m_fontName->str, 
-				 m_parseState->m_fontSize);	
-
-	m_parseState->m_isSpanOpened = true;
-}
-
-void WP6HLContentListener::_closeSpan()
-{
-	if (m_parseState->m_isSpanOpened)
-		m_listenerImpl->closeSpan();
-
-	m_parseState->m_isSpanOpened = false;
+	m_ps->m_isParagraphOpened = true;
 }

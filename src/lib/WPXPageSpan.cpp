@@ -53,7 +53,6 @@ const WPXHeaderFooterOccurence _convertHeaderFooterOccurence(const guint8 occure
 
 }
 
-
 WPXHeaderFooter::WPXHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence occurence, 
 				 const guint8 internalType, const guint16 textPID) :
 	m_internalType(internalType),
@@ -63,16 +62,6 @@ WPXHeaderFooter::WPXHeaderFooter(const WPXHeaderFooterType headerFooterType, con
 	m_occurence = occurence;
 
 }
-
-// precondition: 0 <= headerFooterType <= 3 (i.e.: we don't handle watermarks here)
-// WPXHeaderFooter::WPXHeaderFooter(const guint8 headerFooterType, const guint8 occurenceBits, const guint16 textPID) :
-// 	m_internalType(headerFooterType),
-// 	m_textPID(textPID)
-// {
-// 	m_type = _convertHeaderFooterType(headerFooterType);
-// 	m_occurence = _convertHeaderFooterOccurence(occurenceBits);
-
-// }
 
 WPXPageSpan::WPXPageSpan() :
 	m_marginLeft(1.0f), 

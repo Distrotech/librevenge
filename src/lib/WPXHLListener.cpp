@@ -1,6 +1,6 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2002-2003 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,5 +24,187 @@
  */
 
 #include "WPXHLListener.h"
+#include "WPXPageSpan.h"
+#include "libwpd_internal.h"
 
-// not sure if this is desirable yet
+_WPXParsingState::_WPXParsingState(bool sectionAttributesChanged) :
+	m_textAttributeBits(0),
+	m_textAttributesChanged(false),
+	m_fontSize(12.0f/*WP6_DEFAULT_FONT_SIZE*/), // FIXME ME!!!!!!!!!!!!!!!!!!! HELP WP6_DEFAULT_FONT_SIZE
+	m_fontName(g_string_new(/*WP6_DEFAULT_FONT_NAME*/"Times New Roman")), // EN PAS DEFAULT FONT AAN VOOR WP5/6/etc
+	
+/*	m_isParagraphColumnBreak(false),
+	m_isParagraphPageBreak(false),
+	m_paragraphLineSpacing(1.0f),
+	m_paragraphJustification(WPX_PARAGRAPH_JUSTIFICATION_LEFT),
+	m_tempParagraphJustification(0),
+*/
+	m_isSectionOpened(false),
+
+	m_isParagraphOpened(false),
+	m_isParagraphClosed(false),
+	m_isSpanOpened(false),
+/*	m_numDeferredParagraphBreaks(0),
+	m_numRemovedParagraphBreaks(0),
+
+	m_currentTable(NULL),
+	m_nextTableIndice(0),
+	m_currentTableCol(0),
+	m_currentTableRow(0),
+	m_isTableOpened(false),
+	m_isTableRowOpened(false),
+	m_isTableCellOpened(false),
+	*/
+	m_isPageSpanOpened(false),
+	m_nextPageSpanIndice(0),
+	m_numPagesRemainingInSpan(0),
+
+	m_sectionAttributesChanged(sectionAttributesChanged),
+	m_numColumns(1),
+	
+	m_pageMarginLeft(1.0f),
+	m_pageMarginRight(1.0f),
+	m_paragraphMarginLeft(0.0f), 
+	m_paragraphMarginRight(0.0f)/*,
+	m_currentRow(-1),
+	m_currentColumn(-1),
+	
+	m_currentListLevel(0),
+	m_putativeListElementHasParagraphNumber(false),
+	m_putativeListElementHasDisplayReferenceNumber(false),
+
+	m_noteTextPID(0),
+	m_inSubDocument(false)*/
+{
+}
+
+WPXHLListener::WPXHLListener(vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl) :
+	WPXLLListener(),
+	m_pageList(pageList),
+	m_listenerImpl(listenerImpl),
+	m_ps(new WPXParsingState)
+{
+}
+
+WPXHLListener::~WPXHLListener()
+{
+	g_string_free(m_ps->m_fontName, TRUE);
+}
+
+void WPXHLListener::startDocument()
+{
+	m_listenerImpl->setDocumentMetaData(m_metaData.m_author, m_metaData.m_subject,
+					    m_metaData.m_publisher, m_metaData.m_category,
+					    m_metaData.m_keywords, m_metaData.m_language,
+					    m_metaData.m_abstract, m_metaData.m_descriptiveName,
+					    m_metaData.m_descriptiveType);
+
+	m_listenerImpl->startDocument();	
+	_openPageSpan();
+}
+
+void WPXHLListener::_openSection()
+{
+	_closeSection();
+	if (m_ps->m_numColumns > 1)
+		m_listenerImpl->openSection(m_ps->m_numColumns, 1.0f);	
+	else 
+		m_listenerImpl->openSection(m_ps->m_numColumns, 0.0f);
+
+	m_ps->m_sectionAttributesChanged = false;
+	m_ps->m_isSectionOpened = true;
+}
+
+void WPXHLListener::_closeSection()
+{
+	_closeParagraph();
+	if (m_ps->m_isSectionOpened)
+		m_listenerImpl->closeSection();
+
+	m_ps->m_isSectionOpened = false;
+}
+
+void WPXHLListener::_openPageSpan()
+{
+	if (m_ps->m_isPageSpanOpened)
+		m_listenerImpl->closePageSpan();
+
+	if ( !m_pageList ||
+	     (m_pageList && m_ps->m_nextPageSpanIndice > (int)m_pageList->size() - 1)
+	   )
+	{
+		throw ParseException();
+	}
+	
+	WPXPageSpan *currentPage = (*m_pageList)[m_ps->m_nextPageSpanIndice];
+	currentPage->makeConsistent(1);
+	bool isLastPageSpan;
+	(m_pageList->size() <= (m_ps->m_nextPageSpanIndice+1)) ? isLastPageSpan = true : isLastPageSpan = false;	
+	
+	m_listenerImpl->openPageSpan(currentPage->getPageSpan(), isLastPageSpan,
+				     currentPage->getMarginLeft(), currentPage->getMarginRight(),
+				     currentPage->getMarginTop(), currentPage->getMarginBottom());
+
+	const vector<WPXHeaderFooter> headerFooterList = currentPage->getHeaderFooterList();
+	for (vector<WPXHeaderFooter>::const_iterator iter = headerFooterList.begin(); iter != headerFooterList.end(); iter++) 
+	{
+		if (!currentPage->getHeaderFooterSuppression((*iter).getInternalType())) 
+		{
+			m_listenerImpl->openHeaderFooter((*iter).getType(), (*iter).getOccurence());
+			__handleSubDocument((*iter).getTextPID());
+			m_listenerImpl->closeHeaderFooter((*iter).getType(), (*iter).getOccurence());					
+			WPD_DEBUG_MSG(("Header Footer Element: type: %i occurence: %i pid: %i\n", 
+				       (*iter).getType(), (*iter).getOccurence(), (*iter).getTextPID()));
+		}
+	}
+
+	m_ps->m_pageMarginLeft = currentPage->getMarginLeft();
+	m_ps->m_pageMarginRight = currentPage->getMarginRight();
+	m_ps->m_numPagesRemainingInSpan = (currentPage->getPageSpan() - 1);
+	m_ps->m_nextPageSpanIndice++;
+	m_ps->m_isPageSpanOpened = true;
+}
+
+void WPXHLListener::_closeParagraph()
+{
+	_closeSpan();
+	if (m_ps->m_isParagraphOpened)
+		m_listenerImpl->closeParagraph();	
+
+	m_ps->m_isParagraphOpened = false;
+}
+
+void WPXHLListener::_openSpan()
+{
+	_closeSpan();
+	m_listenerImpl->openSpan(m_ps->m_textAttributeBits, 
+				 m_ps->m_fontName->str, 
+				 m_ps->m_fontSize);	
+
+	m_ps->m_isSpanOpened = true;
+}
+
+void WPXHLListener::_closeSpan()
+{
+	if (m_ps->m_isSpanOpened)
+		m_listenerImpl->closeSpan();
+
+	m_ps->m_isSpanOpened = false;
+}
+
+
+/**
+Creates an new document state. Saves the old state on a "stack".
+*/
+void WPXHLListener::__handleSubDocument(guint16 textPID)
+{
+	// save our old parsing state on our "stack"
+	WPXParsingState *oldPS = m_ps;
+	m_ps = new WPXParsingState(false); // false: don't open a new section unless we must inside this type of sub-document
+	
+	_handleSubDocument(textPID);
+
+	// restore our old parsing state
+	delete m_ps;
+	m_ps = oldPS;		
+}
