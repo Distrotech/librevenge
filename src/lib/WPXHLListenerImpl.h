@@ -145,7 +145,7 @@ class WPXHLListenerImpl
 	\li \c margin-bottom  Extra space to add after the section, in inches 
 	\param columns List of definitions of each column: left gutter, right gutter, and width (includes the gutters). Empty if num-columns is equal to 1.
 	*/
-	virtual void openSection(const WPXPropertyList &propList, const vector <WPXColumnDefinition> &columns) = 0;
+	virtual void openSection(const WPXPropertyList &propList, const vector <WPXPropertyList> &columns) = 0;
 	/**
 	Called when a section is closed
 	*/
@@ -249,7 +249,7 @@ class WPXHLListenerImpl
 	\li \c left-offset The offset of the table from the left margin
 	\param columns Column definitions for the table
 	*/
- 	virtual void openTable(const WPXPropertyList &propList, const vector < WPXColumnDefinition > &columns) = 0;
+ 	virtual void openTable(const WPXPropertyList &propList, const vector <WPXPropertyList> &columns) = 0;
 	/**
 	Called when a new table row is opened
 	\param propList Defines a set of properties for the table row. May contain:

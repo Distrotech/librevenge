@@ -1,5 +1,6 @@
 /* libwpd
- * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2002-2004 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2004 Net Integration Technologies (http://www.net-itech.com)
  * Copyright (C) 2002-2003 Marc Maurer (j.m.maurer@student.utwente.nl)
  * Copyright (C) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
@@ -146,14 +147,27 @@ void WPXHLListener::_openSection()
 	_closeSection();
 
 	WPXPropertyList propList;
-	propList.insert("fo:column-count", m_ps->m_numColumns);
 
 	if (m_ps->m_numColumns > 1)
+	{
 		propList.insert("fo:margin-bottom", 1.0f);
+		propList.insert("text:dont-balance-text-columns", false);
+	}
 	else
 		propList.insert("fo:margin-bottom", 0.0f);
 
-	m_listenerImpl->openSection(propList, m_ps->m_textColumns);
+	vector<WPXPropertyList> columns;
+ 	typedef vector<WPXColumnDefinition>::const_iterator CDVIter;
+ 	for (CDVIter iter = m_ps->m_textColumns.begin(); iter != m_ps->m_textColumns.end(); iter++)
+	{
+		WPXPropertyList column;
+		// The "style:rel-width" is expressed in twips (1440 twips per inch) and includes the left and right Gutter
+		column.insert("style:rel-width", (*iter).m_width * 1440.0f, TWIP);
+		column.insert("fo:margin-left", (*iter).m_leftGutter);
+		column.insert("fo:margin-right", (*iter).m_rightGutter);
+		columns.push_back(column);
+	}
+	m_listenerImpl->openSection(propList, columns);
 
 	m_ps->m_sectionAttributesChanged = false;
 	m_ps->m_isSectionOpened = true;
@@ -230,7 +244,7 @@ void WPXHLListener::_openPageSpan()
 			else
 				m_listenerImpl->openFooter(propList); 
 
-			handleSubDocument((*iter).getTextPID(), true, (*iter).getTableList());
+			handleSubDocument((*iter).getTextPID(), true, (*iter).getTableList(), 0);
 			if ((*iter).getType() == HEADER)
 				m_listenerImpl->closeHeader();
 			else
@@ -540,14 +554,20 @@ void WPXHLListener::_openTable()
 	}
 
  	float tableWidth = 0.0f;
+	vector<WPXPropertyList> columns;
  	typedef vector<WPXColumnDefinition>::const_iterator CDVIter;
  	for (CDVIter iter = m_ps->m_tableDefinition.columns.begin(); iter != m_ps->m_tableDefinition.columns.end(); iter++)
  	{
+		WPXPropertyList column;
+		// The "style:rel-width" is expressed in twips (1440 twips per inch) and includes the left and right Gutter
+		column.insert("style:column-width", (*iter).m_width);
+		columns.push_back(column);
+
  		tableWidth += (*iter).m_width;
  	}
 	propList.insert("style:width", tableWidth);
 
-	m_listenerImpl->openTable(propList, m_ps->m_tableDefinition.columns);
+	m_listenerImpl->openTable(propList, columns);
 	m_ps->m_isTableOpened = true;
 
 	m_ps->m_currentTableRow = (-1);
@@ -702,7 +722,7 @@ void WPXHLListener::_closeTableCell()
 /**
 Creates an new document state. Saves the old state on a "stack".
 */
-void WPXHLListener::handleSubDocument(uint16_t textPID, const bool isHeaderFooter, WPXTableList tableList)
+void WPXHLListener::handleSubDocument(uint16_t textPID, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice)
 {
 	// save our old parsing state on our "stack"
 	WPXParsingState *oldPS = m_ps;
@@ -712,7 +732,7 @@ void WPXHLListener::handleSubDocument(uint16_t textPID, const bool isHeaderFoote
 	m_ps->m_pageMarginLeft = oldPS->m_pageMarginLeft;
 	m_ps->m_pageMarginRight = oldPS->m_pageMarginRight;
 	// END: copy page properties into the new parsing state
-	_handleSubDocument(textPID, isHeaderFooter, tableList);
+	_handleSubDocument(textPID, isHeaderFooter, tableList, nextTableIndice);
 
 	// restore our old parsing state
 	delete m_ps;

@@ -231,14 +231,22 @@ void WP6HLStylesListener::_handleSubDocument(uint16_t textPID, const bool isHead
 	{
 		if (textPID)
 		{
-			WPXTable * oldCurrentTable = m_currentTable;
-			WPXTableList oldTableList = m_tableList;
-			m_tableList = tableList;
+			if (isHeaderFooter) 
+			{
+				WPXTable * oldCurrentTable = m_currentTable;
+				WPXTableList oldTableList = m_tableList;
+				m_tableList = tableList;
+				
+				WP6LLListener::getPrefixDataPacket(textPID)->parse(this);
 
-			WP6LLListener::getPrefixDataPacket(textPID)->parse(this);
+				m_tableList = oldTableList;
+				m_currentTable = oldCurrentTable;
+			}
+			else
+			{
+				WP6LLListener::getPrefixDataPacket(textPID)->parse(this);
+			}
 
-			m_tableList = oldTableList;
-			m_currentTable = oldCurrentTable;
 		}
 	}
 }

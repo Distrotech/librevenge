@@ -71,7 +71,7 @@ public:
 	virtual void closeParagraph();
 	virtual void openSpan(const WPXPropertyList &propList);
 	virtual void closeSpan();
-	virtual void openSection(const WPXPropertyList &propList, const vector<WPXColumnDefinition> &columns);
+	virtual void openSection(const WPXPropertyList &propList, const vector<WPXPropertyList> &columns);
 	virtual void closeSection();
 
 	virtual void insertTab();
@@ -92,7 +92,7 @@ public:
 	virtual void openEndnote(const WPXPropertyList &propList);
 	virtual void closeEndnote();
 
- 	virtual void openTable(const WPXPropertyList &propList, const vector < WPXColumnDefinition > &columns);
+ 	virtual void openTable(const WPXPropertyList &propList, const vector <WPXPropertyList> &columns);
  	virtual void openTableRow(const WPXPropertyList &propList);
 	virtual void closeTableRow();
  	virtual void openTableCell(const WPXPropertyList &propList);

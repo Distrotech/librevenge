@@ -68,7 +68,7 @@ enum WPXFormOrientation { PORTRAIT, LANDSCAPE };
 enum WPXTabAlignment { LEFT, RIGHT, CENTER, DECIMAL, BAR };
 enum WPXVerticalAlignment { TOP, MIDDLE, BOTTOM, FULL };
 enum WPXTextColumnType { NEWSPAPER, NEWSPAPER_VERTICAL_BALANCE, PARALLEL, PARALLEL_PROTECT };
-enum WPXUnit { INCH, PERCENT, POINT };
+enum WPXUnit { INCH, PERCENT, POINT, TWIP };
 
 const float WPX_DEFAULT_LIST_INDENT = 0.2f; // default list indent per level
 

@@ -1026,7 +1026,7 @@ void WP6HLContentListener::noteOff(const WPXNoteType noteType)
 			m_listenerImpl->openEndnote(propList);
 
 		uint16_t textPID = m_parseState->m_noteTextPID;
-		handleSubDocument(textPID, false, m_parseState->m_tableList);
+		handleSubDocument(textPID, false, m_parseState->m_tableList, m_parseState->m_nextTableIndice);
 
 		if (noteType == FOOTNOTE)
 			m_listenerImpl->closeFootnote();
@@ -1043,6 +1043,7 @@ void WP6HLContentListener::endDocument()
 		_flushText(); // flush the list text
 		m_parseState->m_styleStateSequence.setCurrentState(NORMAL);
 		_flushText(true); // flush the list exterior (forcing a line break, to make _flushText think we've exited a list)
+
 	}
 	// corner case: document contains no end of lines
 	else if (!m_ps->m_isParagraphOpened && !m_ps->m_isParagraphClosed)
@@ -1157,7 +1158,7 @@ void WP6HLContentListener::insertCell(const uint8_t colSpan, const uint8_t rowSp
 			throw ParseException();
 		_flushText();
 		_openTableCell(colSpan, rowSpan, boundFromLeft, boundFromAbove,
-			       m_parseState->m_currentTable->getCell(m_ps->m_currentTableRow, m_ps->m_currentTableCol)->m_borderBits,			       
+			       m_parseState->m_currentTable->getCell(m_ps->m_currentTableRow, m_ps->m_currentTableCol)->m_borderBits,       
 			       cellFgColor, cellBgColor, cellBorderColor, cellVerticalAlignment);
 		m_ps->m_isCellWithoutParagraph = true;
 		m_ps->m_cellAttributeBits = cellAttributes;
@@ -1184,7 +1185,7 @@ void WP6HLContentListener::_handleSubDocument(uint16_t textPID, const bool isHea
 {
 	// save our old parsing state on our "stack"
 	WP6ParsingState *oldParseState = m_parseState;
-
+	
 	m_parseState = new WP6ParsingState(tableList, nextTableIndice);
 
 	if (isHeaderFooter)

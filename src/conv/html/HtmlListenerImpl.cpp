@@ -148,16 +148,6 @@ void HtmlListenerImpl::closeSpan()
 	}
 }
 
-void HtmlListenerImpl::openSection(const WPXPropertyList &propList, const vector< WPXColumnDefinition> &columns)
-{
-	printf("<section columns:%i>\n", propList["num-columns"]->getInt());
-}
-
-void HtmlListenerImpl::closeSection()
-{
-	printf("\n</section>\n");
-}
-
 void HtmlListenerImpl::insertTab()
 {
 	printf("%c", UCS_TAB);
@@ -237,7 +227,7 @@ void HtmlListenerImpl::closeEndnote()
 	printf("</endnote>\n");
 }
 
-void HtmlListenerImpl::openTable(const WPXPropertyList &propList, const vector < WPXColumnDefinition > &columns)
+void HtmlListenerImpl::openTable(const WPXPropertyList &propList, const vector <WPXPropertyList> &columns)
 {
 	printf("<table border=\"1\">\n");
 	printf("<tbody>\n");

@@ -24,6 +24,7 @@ public:
 	void insert(string name, WPXProperty *prop);
 	void insert(string name, const char *val);
 	void insert(string name, const int val);
+	void insert(string name, const bool val);
 	void insert(string name, const UTF8String &val);
 	void insert(string name, float val, const WPXUnit units = INCH); 
 

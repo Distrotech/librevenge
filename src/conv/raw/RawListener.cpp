@@ -215,23 +215,9 @@ void RawListenerImpl::closeSpan()
 	_D(("closeSpan()\n"), LC_OPEN_SPAN);
 }
 
-void RawListenerImpl::openSection(const WPXPropertyList &propList, const vector<WPXColumnDefinition> &columns)
+void RawListenerImpl::openSection(const WPXPropertyList &propList, const vector<WPXPropertyList> &columns)
 {
-	UTF8String sColumns;
-	sColumns.sprintf("");
-	if (propList["fo:column-count"]->getInt() > 1)
-	{
-		for (int i=0; i<columns.size(); i++)
-		{
-			sColumns.sprintf("%s W:%.4f|", sColumns.cstr(), columns[i].m_width);
-			sColumns.sprintf("%sL:%.4f|", sColumns.cstr(), columns[i].m_leftGutter);
-			sColumns.sprintf("%sR:%.4f", sColumns.cstr(), columns[i].m_rightGutter);
-		}
-	}
-	else
-		sColumns.sprintf(" SINGLE COLUMN");
-	_U(("openSection(numColumns: %u, columns:%s, spaceAfter: %.4f)\n", propList["fo:column-count"]->getInt(), sColumns.cstr(), 
-	    propList["fo:margin-bottom"]->getFloat()), LC_OPEN_SECTION);
+	_U(("openSection(%s, columns: %s)\n", getPropString(propList).cstr(), getPropString(columns).cstr()), LC_OPEN_SECTION);
 }
 
 void RawListenerImpl::closeSection()
@@ -321,20 +307,9 @@ void RawListenerImpl::closeEndnote()
 	_D(("closeEndnote()\n"), LC_OPEN_ENDNOTE);
 }
 
-void RawListenerImpl::openTable(const WPXPropertyList &propList, const vector < WPXColumnDefinition > &columns)
+void RawListenerImpl::openTable(const WPXPropertyList &propList, const vector <WPXPropertyList> &columns)
 {
-	UTF8String sColumns;
-	sColumns.sprintf("");
-	for (int i=0; i<columns.size(); i++)
-	{
-		sColumns.sprintf("%s W:%.4f|", sColumns.cstr(), columns[i].m_width);
-		sColumns.sprintf("%sL:%.4f|", sColumns.cstr(), columns[i].m_leftGutter);
-		sColumns.sprintf("%sR:%.4f", sColumns.cstr(), columns[i].m_rightGutter);
-	}
-
-	_U(("openTable(%s, columns:%s.)\n",
-	    getPropString(propList).cstr(), sColumns.cstr()),
-	   LC_OPEN_TABLE);
+	_U(("openTable(%s, columns: %s)\n", getPropString(propList).cstr(), getPropString(columns).cstr()), LC_OPEN_TABLE);
 }
 
 void RawListenerImpl::openTableRow(const WPXPropertyList &propList)

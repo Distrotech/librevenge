@@ -156,7 +156,7 @@ public:
 	WPXHLListener::~WPXHLListener();
 
 	void startDocument();
-	void handleSubDocument(uint16_t textPID, const bool isHeaderFooter, WPXTableList tableList);
+	void handleSubDocument(uint16_t textPID, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice);
 	virtual void insertBreak(const uint8_t breakType);
 	virtual void lineSpacingChange(const float lineSpacing);
 	virtual void justificationChange(const uint8_t justification);
@@ -167,7 +167,7 @@ public:
 	vector <WPXPageSpan *> *m_pageList;
 
 protected:
-	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0) = 0;
+	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice) = 0;
 	virtual void _flushText(const bool fakeText=false) = 0;
 
 	void _openSection();
