@@ -176,7 +176,7 @@ void WPDocument::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl)
 					break;
 			}
 	
-			//DELETEP(parser); // deletes the header as well
+			DELETEP(parser); // deletes the header as well
 		}
 		else
 		{

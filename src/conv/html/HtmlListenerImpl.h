@@ -52,7 +52,7 @@ public:
 	virtual void openHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence);
 	virtual void closeHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence);
 
-	virtual void openSection(const guint numColumns);
+	virtual void openSection(const unsigned int numColumns, const float spaceAfter);
 	virtual void closeSection();
 	virtual void openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits,
 				   const float marginLeftOffset, const float marginRightOffset,

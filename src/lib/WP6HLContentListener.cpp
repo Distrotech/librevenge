@@ -530,7 +530,7 @@ void WP6HLContentListener::marginChange(guint8 side, guint16 margin)
 {
 	if (!isUndoOn())
 	{
-		_handleLineBreakElementBegin();
+		//_handleLineBreakElementBegin();
 		
 		float marginInch = (float)(((double)margin + (double)WP6_NUM_EXTRA_WPU) / (double)WPX_NUM_WPUS_PER_INCH);
 		bool marginChanged = false;
@@ -538,13 +538,13 @@ void WP6HLContentListener::marginChange(guint8 side, guint16 margin)
 		switch(side)
 		{
 		case WP6_COLUMN_GROUP_LEFT_MARGIN_SET:
-			if (m_parseState->m_marginLeft != marginInch) // FIXMEFIXME: remove this
-				m_parseState->m_sectionAttributesChanged = true;
+			//if (m_parseState->m_marginLeft != marginInch) // FIXMEFIXME: remove this
+			//	m_parseState->m_sectionAttributesChanged = true;
 			m_parseState->m_marginLeft = marginInch - m_parseState->m_pageMarginLeft;
 			break;
 		case WP6_COLUMN_GROUP_RIGHT_MARGIN_SET:
-			if (m_parseState->m_marginRight != marginInch)
-				m_parseState->m_sectionAttributesChanged = true;
+			//if (m_parseState->m_marginRight != marginInch)
+			//	m_parseState->m_sectionAttributesChanged = true;
 			m_parseState->m_marginRight = marginInch - m_parseState->m_pageMarginRight;
 			break;
 		}
@@ -556,12 +556,12 @@ void WP6HLContentListener::columnChange(guint8 numColumns)
 {
 	if (!isUndoOn())
 	{
-		_handleLineBreakElementBegin();
-		
+		//_handleLineBreakElementBegin();
+
 		_flushText();
-		
-		m_parseState->m_numColumns = numColumns;
+
 		m_parseState->m_sectionAttributesChanged = true;
+		m_parseState->m_numColumns = numColumns;
 	}
 }
 
@@ -868,7 +868,7 @@ void WP6HLContentListener::startTable()
 {
 	if (!isUndoOn()) 
 	{		
-		_handleLineBreakElementBegin();
+		//_handleLineBreakElementBegin();
 
 		// handle corner case where we have a new section, but immediately start with a table
 		// FIXME: this isn't a very satisfying solution, and might need to be generalized
@@ -945,17 +945,17 @@ void WP6HLContentListener::_handleSubDocument(guint16 textPID)
 // _handleLineBreakElementBegin: flush everything which came before this change
 // eliminating one paragraph break which is now implicit in this change -- 
 // UNLESS the paragraph break represents something else than its name suggests, 
-// such as a paragraph or column break 
+// such as a paragraph or column break OR the paragraph break exists by itself
 // NB: I know this method is ugly. Sorry kids, the translation between WordPerfect
 // and an XMLish format is rather ugly by definition.
-void WP6HLContentListener::_handleLineBreakElementBegin() 
-{
-	if (!m_parseState->m_sectionAttributesChanged && 
-	    m_parseState->m_numDeferredParagraphBreaks > 0 &&
-	    !m_parseState->m_isParagraphColumnBreak && !m_parseState->m_isParagraphPageBreak) 
-		m_parseState->m_numDeferredParagraphBreaks--;					
-	_flushText();
-}
+// void WP6HLContentListener::_handleLineBreakElementBegin() 
+// {
+// 	if (!m_parseState->m_sectionAttributesChanged && 
+// 	    m_parseState->m_numDeferredParagraphBreaks > 0 &&
+// 	    !m_parseState->m_isParagraphColumnBreak && !m_parseState->m_isParagraphPageBreak) 
+// 		m_parseState->m_numDeferredParagraphBreaks--;					
+// 	_flushText();
+// }
 
 void WP6HLContentListener::_paragraphNumberOn(const guint16 outlineHash, const guint8 level)
 {
@@ -1173,7 +1173,11 @@ void WP6HLContentListener::_openPageSpan()
 void WP6HLContentListener::_openSection()
 {
 	_closeSection();
-	m_listenerImpl->openSection(m_parseState->m_numColumns);	
+	if (m_parseState->m_numColumns > 1)
+		m_listenerImpl->openSection(m_parseState->m_numColumns, 1.0f);	
+	else 
+		m_listenerImpl->openSection(m_parseState->m_numColumns, 0.0f);
+
 	m_parseState->m_sectionAttributesChanged = false;
 	m_parseState->m_isSectionOpened = true;
 }
@@ -1205,7 +1209,6 @@ void WP6HLContentListener::_closeTable()
 		m_listenerImpl->closeTable();
 		m_parseState->m_currentRow = 0;
 		m_parseState->m_currentColumn = 0;
-		m_parseState->m_isParagraphOpened = false;
 	}
 	m_parseState->m_isTableOpened = false;
 }

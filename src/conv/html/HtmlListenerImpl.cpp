@@ -146,7 +146,7 @@ void HtmlListenerImpl::closeSpan()
 	printf("</span>");
 }
 
-void HtmlListenerImpl::openSection(guint numColumns)
+void HtmlListenerImpl::openSection(const unsigned int numColumns, const float spaceBefore)
 {
 	printf("<section columns:%i>\n", numColumns);
 }

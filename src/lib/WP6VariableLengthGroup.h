@@ -47,7 +47,6 @@ class WP6VariableLengthGroup : public WP6Part
 	void _read(GsfInput *input);
 	virtual void _readContents(GsfInput *input) {} // we don't always need more information than that provided generically
 
-	const guint8 getGroup() const { return m_group; }
 	const guint8 getSubGroup() const { return m_subGroup; }
 	const guint8 getFlags() const { return m_flags; }
 	const guint8 getNumPrefixIDs() const { return m_numPrefixIDs; }
@@ -55,7 +54,6 @@ class WP6VariableLengthGroup : public WP6Part
 	const guint16 getSizeNonDeletable() const { return m_sizeNonDeletable; }
 
  private:
-	guint8 m_group;
 	guint8 m_subGroup;
 	guint16 m_size;
 	guint8 m_flags;

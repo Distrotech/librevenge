@@ -62,7 +62,7 @@ class WPXHLListenerImpl
 	virtual void closeParagraph() = 0;
 	virtual void openSpan(const guint32 textAttributeBits, const gchar *fontName, const float fontSize) = 0;
 	virtual void closeSpan() = 0;
-	virtual void openSection(const guint numColumns) = 0;
+	virtual void openSection(const unsigned int numColumns, const float spaceAfter) = 0;
 	virtual void closeSection() = 0;
 
 	virtual void insertTab() = 0;

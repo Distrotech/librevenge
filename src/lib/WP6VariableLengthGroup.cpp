@@ -84,8 +84,6 @@ WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(Gs
 void WP6VariableLengthGroup::_read(GsfInput *input)
 {
 	guint32 startPosition = gsf_input_tell(input);
-
-	WPD_DEBUG_MSG(("WordPerfect: handling a variable length group (group id: 0x%x)\n", m_group));
 	
 	m_subGroup = gsf_le_read_guint8(input);
 	m_size = gsf_le_read_guint16(input);

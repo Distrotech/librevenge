@@ -176,15 +176,19 @@ void WP6EOLGroup::parse(WP6LLListener *llListener)
 	const RGBSColor * cellFgColor = m_cellFgColor;
 	const RGBSColor * cellBgColor = m_cellBgColor;
 	
-	for (int i=0; i<getNumPrefixIDs(); i++)
+	if (!cellFgColor && !cellBgColor)
 	{
-		if (const WP6FillStylePacket *fsPacket = dynamic_cast<const WP6FillStylePacket *>(llListener->getPrefixDataPacket(getPrefixIDs()[i]))) 
+		for (int i=0; i<getNumPrefixIDs(); i++)
 		{
-			cellFgColor = fsPacket->getFgColor();
-			cellBgColor = fsPacket->getBgColor();
+			if (const WP6FillStylePacket *fsPacket = dynamic_cast<const WP6FillStylePacket *>(llListener->getPrefixDataPacket(getPrefixIDs()[i]))) 
+			{
+				
+				cellFgColor = fsPacket->getFgColor();
+				cellBgColor = fsPacket->getBgColor();
+			}
 		}
 	}
-	   
+
 	// main search + dispatch for messages
 	switch(getSubGroup())
 	{

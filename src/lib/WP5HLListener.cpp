@@ -45,7 +45,7 @@ void WP5HLListener::startDocument()
 	m_listenerImpl->openPageSpan(0, true,
 				  1.0, 1.0,
 				  1.0, 1.0);
-	m_listenerImpl->openSection(1);
+	m_listenerImpl->openSection(1, 0.0f);
 	m_listenerImpl->openParagraph(0, 0, 0, 0,
 					"Times New Roman", 12.0f,
 					1.0f,
