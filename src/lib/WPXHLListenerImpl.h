@@ -1,5 +1,5 @@
 /* libwpd2
- * Copyright (C) 2002 William Lachance (wlach@interlog.com)
+ * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
@@ -42,15 +42,15 @@ class WPXHLListenerImpl
 	virtual void insertText(const UCSString &text) = 0;
  	virtual void insertLineBreak() = 0;
 
-	virtual void defineOrderedListLevel(const gint listID, const guint16 listLevel, const WPXListType listType, 
-					    const UCSString &textBeforeNumber, const UCSString &textAfterNumber, 
-					    const gint startingNum) = 0;
+	virtual void defineOrderedListLevel(const gint listID, const guint16 listLevel, const OrderedListType listType, 
+					    const UCSString &textBeforeNumber, const UCSString &textAfterNumber,
+					    const gint startingNumber) = 0;
 	virtual void defineUnorderedListLevel(const gint listID, const guint16 listLevel, const UCSString &bullet) = 0;
 	virtual void openOrderedListLevel(const gint listID) = 0;
 	virtual void openUnorderedListLevel(const gint listID) = 0;
 	virtual void closeOrderedListLevel() = 0;
 	virtual void closeUnorderedListLevel() = 0;
-	virtual void openListElement(const gint listID) = 0;
+	virtual void openListElement() = 0;
 	virtual void closeListElement() = 0;
  
  	virtual void openTable() = 0;

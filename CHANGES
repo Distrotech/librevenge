@@ -1,5 +1,13 @@
 CHANGES:
 
+0.3.2 -> 0.4.0
+- support for WordPerfect 6.0 files (Marc Maurer)
+- lists/outlines (William Lachance)
+- hyphens (a bit of a hack; but it'll do for now) (William)
+- make libwpd use the STL (William)
+- add an internal Unicode string class (William)
+- many bugfixes (William, Marc)
+
 0.3.1 -> 0.3.2
 - small typo fix to wpd2html
 - huge bug in the build system: we require libgsf-1

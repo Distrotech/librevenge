@@ -1,5 +1,5 @@
 /* libwpd2
- * Copyright (C) 2002 William Lachance (wlach@interlog.com)
+ * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
  * 
  * This library is free software; you can redistribute it and/or
@@ -58,31 +58,18 @@ private:
 class WP6OutlineDefinition
 {
  public:
+	WP6OutlineDefinition();
 	WP6OutlineDefinition(const WP6OutlineLocation outlineLocation, const guint8 *numberingMethods, 
 			  const guint8 tabBehaviourFlag);
 	void update(const guint8 *numberingMethods, const guint8 tabBehaviourFlag);
 
-	//void setListID(int level, UT_uint32 id) { m_listIDs[level] = id; }
-	//UT_uint32 getListID(int level) { return m_listIDs[level]; }
-	//UT_uint16 getListNumber(int level) { return m_currentListNumbers[level]; }
-	WPXListType getListType(int level) { return m_listTypes[level]; }
-	//bool isLevelNumbered(int level) { return m_bIsNumberedList[level]; }
-	//UT_String getListDelim(int level) { return m_listDelim[level]; }
-                    
-	//void setListRightDelimText(int level, UT_String rightDelimText) { UT_String_sprintf(m_listDelim[level], "%%L%s", rightDelimText.c_str()); }
-	//void resetListIDsAndNumbers() { for (unsigned int i=0; i<WP_NUM_LIST_LEVELS; i++) { m_listIDs[i]=0; m_currentListNumbers[i]=0; } }
-	//void updateListTypes(UT_uint16 *numberingMethods); // update list types based on information from a wordperfect outlining group
-	//void incrementLevelNumber(int level) { m_currentListNumbers[level]++; }
+	OrderedListType getListType(int level) { return m_listTypes[level]; }
+
 protected:
 	void _updateNumberingMethods(const WP6OutlineLocation outlineLocation, const guint8 *numberingMethods);
                  
-private:
-	
-	//UT_uint32 m_listIDs[WP6_NUM_LIST_LEVELS];
-	WPXListType m_listTypes[WP6_NUM_LIST_LEVELS];
-	//bool m_bIsNumberedList[WP6_NUM_LIST_LEVELS];
-	//UT_uint16 m_currentListNumbers[WP6_NUM_LIST_LEVELS];
-	//UT_String m_listDelim[WP6_NUM_LIST_LEVELS];
+private:	
+	OrderedListType m_listTypes[WP6_NUM_LIST_LEVELS];
 };
 
 class WP6HLListener : public WP6LLListener
@@ -159,7 +146,6 @@ class WP6HLListener : public WP6LLListener
 	gint32 m_currentRow;
 	gint32 m_currentColumn;
 
-	//GHashTable *m_outlineDefineHash;
 	map<int,WP6OutlineDefinition *> m_outlineDefineHash;
 	stack<int> m_listLevelStack;
 	guint16 m_currentOutlineHash; // probably should replace Hash with Key in these sorts of cases
@@ -168,7 +154,6 @@ class WP6HLListener : public WP6LLListener
 	WP6ParagraphStyleStateSequence m_paragraphStyleStateSequence;
 	gboolean m_isPutativeListElementHasParagraphNumber;
 	gboolean m_isPutativeListElementHasDisplayReferenceNumber;
-	//gboolean m_isInListElement; // for handling an absolutely obscene case where the document only has one list element.
 
 	gboolean m_isUndoOn;
 };

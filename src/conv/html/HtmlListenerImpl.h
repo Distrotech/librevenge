@@ -1,5 +1,5 @@
 /* libwpd2
- * Copyright (C) 2002 William Lachance (wlach@interlog.com)
+ * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
@@ -46,15 +46,15 @@ public:
 	virtual void insertText(const UCSString &text);
 	virtual void insertLineBreak() {}
 
-	virtual void defineOrderedListLevel(const gint listID, const guint16 listLevel, const WPXListType listType, 
-					    const UCSString &textBeforeNumber, const UCSString &textAfterNumber, 
-					    const gint startingNum) {}
+	virtual void defineOrderedListLevel(const gint listID, const guint16 listLevel, const OrderedListType listType, 
+					    const UCSString &textBeforeNumber, const UCSString &textAfterNumber,
+					    const gint startingNumber) {}
 	virtual void defineUnorderedListLevel(const gint listID, const guint16 listLevel, const UCSString &bullet) {}
 	virtual void openOrderedListLevel(const gint listID);
 	virtual void openUnorderedListLevel(const gint listID);
 	virtual void closeOrderedListLevel();
 	virtual void closeUnorderedListLevel();
-	virtual void openListElement(const gint listID);
+	virtual void openListElement();
 	virtual void closeListElement();
     
 	virtual void openTable();

@@ -1,5 +1,5 @@
 /* libwpd2
- * Copyright (C) 2003 William Lachance (wlach@interlog.com)
+ * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
  * Copyright (C) 2002 Ariya Hidayat <ariyahidayat@yahoo.de>
  *  

@@ -1,5 +1,5 @@
 /* libwpd2
- * Copyright (C) 2002 William Lachance (wlach@interlog.com)
+ * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
@@ -27,7 +27,7 @@
 #define LIBWPD_SUPPORT_H
 #include <glib.h>
 
-enum WPXListType { arabic, lowercase, uppercase, lowercaseRoman, uppercaseRoman };
+enum OrderedListType { ARABIC, LOWERCASE, UPPERCASE, LOWERCASE_ROMAN, UPPERCASE_ROMAN };
 
 typedef struct _RGBSColor RGBSColor;
 struct _RGBSColor

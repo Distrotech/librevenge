@@ -1,5 +1,5 @@
 /* libwpd2
- * Copyright (C) 2002 William Lachance (wlach@interlog.com)
+ * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
@@ -36,19 +36,7 @@
 #define WP6_DEFAULT_FONT_SIZE 12.0f
 #define WP6_DEFAULT_FONT_NAME "Times New Roman"
 
-void destroyOutlineDefinitionNotify(gpointer data)
-{
-	WP6OutlineDefinition *temp = (WP6OutlineDefinition *)data;
-	delete(temp);
-}
-
-void destroyOutlineKeyNotify(gpointer data)
-{
-	int *temp = (int *)data;
-	delete(temp);
-}
-
-static int _extractNumericValueFromRoman(char romanChar)
+static gint _extractNumericValueFromRoman(gchar romanChar)
 {
 	switch (romanChar)
 	{
@@ -71,16 +59,16 @@ static int _extractNumericValueFromRoman(char romanChar)
 // as letters, numbers, or roman numerals.. return an integer value representing its number
 // HACK: this function is really cheesey
 // NOTE: if the input is not valid, the output is unspecified
-static int _extractDisplayReferenceNumberFromBuf(const UCSString &buf, const WPXListType listType)
+static gint _extractDisplayReferenceNumberFromBuf(const UCSString &buf, const OrderedListType listType)
 {
-	if (listType == lowercaseRoman || listType == uppercaseRoman)
+	if (listType == LOWERCASE_ROMAN || listType == UPPERCASE_ROMAN)
 	{
-		int currentSum = 0;
-		int lastMark = 0;
-		int currentMark = 0;
+		gint currentSum = 0;
+		gint lastMark = 0;
+		gint currentMark = 0;
 		for (int i=0; i<buf.getLen(); i++)
 		{
-			int currentMark = _extractNumericValueFromRoman(buf.getUCS4()[i]);
+			gint currentMark = _extractNumericValueFromRoman(buf.getUCS4()[i]);
 			if (lastMark < currentMark) {
 				currentSum = currentMark - lastMark;
 			}
@@ -89,20 +77,20 @@ static int _extractDisplayReferenceNumberFromBuf(const UCSString &buf, const WPX
 			lastMark = currentMark;
 		}
 	} 
-	else if (listType == lowercase || listType == uppercase)
+	else if (listType == LOWERCASE || listType == UPPERCASE)
 	{
 		// FIXME: what happens to a lettered list that goes past z? ah
 		// the sweet mysteries of life
 		if (buf.getLen()==0)
 			throw ParseException();
-		int c = buf.getUCS4()[0];
-		if (listType==lowercase)
+		guint32 c = buf.getUCS4()[0];
+		if (listType==LOWERCASE)
 			c = toupper(c);
 		return (c - 64);
 	}
-	else if (listType == arabic)
+	else if (listType == ARABIC)
 	{
-		int currentSum = 0;
+		gint currentSum = 0;
 		for (int i=0; i<buf.getLen(); i++)
 		{
 			currentSum *= 10;
@@ -114,28 +102,38 @@ static int _extractDisplayReferenceNumberFromBuf(const UCSString &buf, const WPX
 	return 1;
 }
 
-static WPXListType _extractListTypeFromBuf(const UCSString &buf, const WPXListType putativeListType)
+static OrderedListType _extractListTypeFromBuf(const UCSString &buf, const OrderedListType putativeListType)
 {
+
 	for (int i=0; i<buf.getLen(); i++)
 	{
 		if ((buf.getUCS4()[i] == 'I' || buf.getUCS4()[i] == 'V' || buf.getUCS4()[i] == 'X') && 
-		    (putativeListType == lowercaseRoman || putativeListType == uppercaseRoman))
-			return uppercaseRoman;
+		    (putativeListType == LOWERCASE_ROMAN || putativeListType == UPPERCASE_ROMAN))
+			return UPPERCASE_ROMAN;
 		else if ((buf.getUCS4()[i] == 'i' || buf.getUCS4()[i] == 'v' || buf.getUCS4()[i] == 'x') && 
-		    (putativeListType == lowercaseRoman || putativeListType == uppercaseRoman))
-			return lowercaseRoman;
+		    (putativeListType == LOWERCASE_ROMAN || putativeListType == UPPERCASE_ROMAN))
+			return LOWERCASE_ROMAN;
 		else if (buf.getUCS4()[i] >= 'A' && buf.getUCS4()[i] <= 'Z')
-			return uppercase;
+			return UPPERCASE;
 		else if (buf.getUCS4()[i] >= 'a' && buf.getUCS4()[i] <= 'z')
-			return lowercase;		
+			return LOWERCASE;		
 	}
 
-	return arabic;
+	return ARABIC;
 }
 
 WP6OutlineDefinition::WP6OutlineDefinition(const WP6OutlineLocation outlineLocation, const guint8 *numberingMethods, const guint8 tabBehaviourFlag)
 {
 	_updateNumberingMethods(outlineLocation, numberingMethods);
+}
+
+WP6OutlineDefinition::WP6OutlineDefinition()
+{	
+	guint8 numberingMethods[WP6_NUM_LIST_LEVELS];
+	for (int i=0; i<WP6_NUM_LIST_LEVELS; i++)
+		numberingMethods[i] = WP6_INDEX_HEADER_OUTLINE_STYLE_ARABIC_NUMBERING;
+
+	_updateNumberingMethods(paragraphGroup, numberingMethods);
 }
 
 // update: updates a partially made list definition (usual case where this is used: an
@@ -154,24 +152,24 @@ void WP6OutlineDefinition::_updateNumberingMethods(const WP6OutlineLocation outl
 		switch (numberingMethods[i])
 		{
 		case WP6_INDEX_HEADER_OUTLINE_STYLE_ARABIC_NUMBERING:
-			m_listTypes[i] = arabic; 
+			m_listTypes[i] = ARABIC; 
 			break;
 		case WP6_INDEX_HEADER_OUTLINE_STYLE_LOWERCASE_NUMBERING:
-			m_listTypes[i] = lowercase; 
+			m_listTypes[i] = LOWERCASE; 
 			break;
 		case WP6_INDEX_HEADER_OUTLINE_STYLE_UPPERCASE_NUMBERING:
-			m_listTypes[i] = uppercase; 
+			m_listTypes[i] = UPPERCASE; 
 			break;
 		case WP6_INDEX_HEADER_OUTLINE_STYLE_LOWERCASE_ROMAN_NUMBERING:
-			m_listTypes[i] = lowercaseRoman;
+			m_listTypes[i] = LOWERCASE_ROMAN;
 			break;
 		case WP6_INDEX_HEADER_OUTLINE_STYLE_UPPERCASE_ROMAN_NUMBERING:
-			m_listTypes[i] = uppercaseRoman;
+			m_listTypes[i] = UPPERCASE_ROMAN;
 			break;
 			//case WP6_INDEX_HEADER_OUTLINE_STYLE_LEADING_ZERO_ARABIC_NUMBERING:
 			//break;
 		default:
-			m_listTypes[i] = arabic;
+			m_listTypes[i] = ARABIC;
 		}
 	}
 	WPD_DEBUG_MSG(("WordPerfect: Updated List Types: (%i %i %i %i %i %i %i %i)\n", 
@@ -563,8 +561,9 @@ void WP6HLListener::styleGroupOff(const guint8 subGroup)
 					m_listenerImpl->openSection(m_numColumns, m_marginLeft, m_marginRight);
 					m_sectionAttributesChanged = FALSE;
 				}
+				
 				_handleListChange(m_currentOutlineHash);
-				m_listenerImpl->openListElement(m_currentOutlineHash);			
+				m_listenerImpl->openListElement();
 			}
 			else {
 				m_numDeferredParagraphBreaks+=m_numRemovedParagraphBreaks;
@@ -741,8 +740,10 @@ void WP6HLListener::_flushText()
 		m_textBeforeNumber.clear();	
 	}
 
-	m_listenerImpl->insertText(m_bodyText);
-	m_bodyText.clear();
+	if (m_bodyText.getLen()) {
+		m_listenerImpl->insertText(m_bodyText);
+		m_bodyText.clear();
+	}
 
 	m_textAttributesChanged = FALSE;
 	m_paragraphJustificationChanged = FALSE;
@@ -750,9 +751,16 @@ void WP6HLListener::_flushText()
 
 void WP6HLListener::_handleListChange(const guint16 outlineHash)
 {
+	WP6OutlineDefinition *outlineDefinition;
 	if (m_outlineDefineHash.find(outlineHash) == m_outlineDefineHash.end())
-		throw ParseException();
-	WP6OutlineDefinition *listDefinition = m_outlineDefineHash.find(outlineHash)->second;
+	{
+		// handle odd case where an outline define hash is not defined prior to being referenced by
+		// a list
+		outlineDefinition = new WP6OutlineDefinition();
+		m_outlineDefineHash[outlineHash] = outlineDefinition;
+	}
+	else
+		outlineDefinition = m_outlineDefineHash.find(outlineHash)->second;
 	
 	int oldListLevel;
 	(m_listLevelStack.empty()) ? oldListLevel = 0 : oldListLevel = m_listLevelStack.top();
@@ -760,12 +768,11 @@ void WP6HLListener::_handleListChange(const guint16 outlineHash)
 	if (m_currentListLevel > oldListLevel)
 	{
 		if (m_isPutativeListElementHasDisplayReferenceNumber) {
-			WPXListType listType = _extractListTypeFromBuf(m_numberText, listDefinition->getListType((m_currentListLevel-1)));
-			int startNum = _extractDisplayReferenceNumberFromBuf(m_numberText, listType);
-
+			OrderedListType listType = _extractListTypeFromBuf(m_numberText, outlineDefinition->getListType((m_currentListLevel-1)));
+			gint number = _extractDisplayReferenceNumberFromBuf(m_numberText, listType);
 			m_listenerImpl->defineOrderedListLevel(m_currentOutlineHash, m_currentListLevel, listType, 
 							       m_textBeforeDisplayReference, m_textAfterDisplayReference,
-							       startNum);
+							       number);
 		}
 		else
 			m_listenerImpl->defineUnorderedListLevel(m_currentOutlineHash, m_currentListLevel, m_textBeforeDisplayReference);
