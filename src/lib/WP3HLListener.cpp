@@ -151,6 +151,21 @@ void WP3HLListener::attributeChange(const bool isOn, const uint8_t attribute)
 			case WP3_ATTRIBUTE_DOUBLE_UNDERLINE:
 				textAttributeBit = WPX_DOUBLE_UNDERLINE_BIT;
 				break;
+			case WP3_ATTRIBUTE_EXTRA_LARGE:
+				textAttributeBit = WPX_EXTRA_LARGE_BIT;
+				break;
+			case WP3_ATTRIBUTE_VERY_LARGE:
+				textAttributeBit = WPX_VERY_LARGE_BIT;
+				break;
+			case WP3_ATTRIBUTE_LARGE:
+				textAttributeBit = WPX_LARGE_BIT;
+				break;
+			case WP3_ATTRIBUTE_SMALL_PRINT:
+				textAttributeBit = WPX_SMALL_PRINT_BIT;
+				break;
+			case WP3_ATTRIBUTE_FINE_PRINT:
+				textAttributeBit = WPX_FINE_PRINT_BIT;
+				break;		
 			case WP3_ATTRIBUTE_SMALL_CAPS:
 				textAttributeBit = WPX_SMALL_CAPS_BIT;
 				break;

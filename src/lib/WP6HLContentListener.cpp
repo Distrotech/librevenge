@@ -442,7 +442,6 @@ void WP6HLContentListener::insertTab(const uint8_t tabType, const float tabPosit
 				{
 				case WP6_TAB_GROUP_TABLE_TAB:
 				case WP6_TAB_GROUP_LEFT_TAB:
-				case WP6_TAB_GROUP_BAR_TAB:
 				case WP6_TAB_GROUP_LEFT_INDENT:
 				case WP6_TAB_GROUP_LEFT_RIGHT_INDENT:
 				case WP6_TAB_GROUP_CENTER_ON_MARGINS:
@@ -453,6 +452,11 @@ void WP6HLContentListener::insertTab(const uint8_t tabType, const float tabPosit
 				case WP6_TAB_GROUP_DECIMAL_TAB:
 					_flushText();
 					m_listenerImpl->insertTab();
+					break;
+				case WP6_TAB_GROUP_BAR_TAB:
+					_flushText();
+					m_listenerImpl->insertTab();
+					insertCharacter('|');  // We emulate the bar tab
 					break;
 				
 				default:
@@ -561,6 +565,21 @@ void WP6HLContentListener::attributeChange(const bool isOn, const uint8_t attrib
 		// FIXME: handle all the possible attribute bits
 		switch (attribute)
 		{
+		case WP6_ATTRIBUTE_EXTRA_LARGE:
+			textAttributeBit = WPX_EXTRA_LARGE_BIT;
+			break;
+		case WP6_ATTRIBUTE_VERY_LARGE:
+			textAttributeBit = WPX_VERY_LARGE_BIT;
+			break;
+		case WP6_ATTRIBUTE_LARGE:
+			textAttributeBit = WPX_LARGE_BIT;
+			break;
+		case WP6_ATTRIBUTE_SMALL_PRINT:
+			textAttributeBit = WPX_SMALL_PRINT_BIT;
+			break;
+		case WP6_ATTRIBUTE_FINE_PRINT:
+			textAttributeBit = WPX_FINE_PRINT_BIT;
+			break;		
 		case WP6_ATTRIBUTE_SUBSCRIPT:
 			textAttributeBit = WPX_SUBSCRIPT_BIT;
 			break;

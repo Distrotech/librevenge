@@ -57,8 +57,11 @@ extern int WP3_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16];
 #define WP3_ATTRIBUTE_SUBSCRIPT 10
 #define WP3_ATTRIBUTE_SUPERSCRIPT 11
 #define WP3_ATTRIBUTE_DOUBLE_UNDERLINE 12
-/* here should come the attributes extra large
- * to fine that we are not converting for the while */
+#define WP3_ATTRIBUTE_EXTRA_LARGE 13
+#define WP3_ATTRIBUTE_VERY_LARGE 14
+#define WP3_ATTRIBUTE_LARGE 15
+#define WP3_ATTRIBUTE_SMALL_PRINT 16
+#define WP3_ATTRIBUTE_FINE_PRINT 17
 #define WP3_ATTRIBUTE_SMALL_CAPS 18
 
 /* Page Format Group */
