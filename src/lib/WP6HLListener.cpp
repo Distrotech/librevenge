@@ -40,10 +40,11 @@ WP6HLListener::WP6HLListener(WPXHLListenerImpl *listenerImpl) :
 	m_textArray(g_array_new(TRUE, FALSE, sizeof(guint16))),
 	m_textAttributeBits(0),
 	m_textAttributesChanged(FALSE),
-
 	m_currentFontSize(WP6_DEFAULT_FONT_SIZE),
 	m_currentFontName(g_string_new(WP6_DEFAULT_FONT_NAME)),
 	
+	m_isSectionOpenedOnce(FALSE),
+
 	m_paragraphJustification(WPX_PARAGRAPH_JUSTIFICATION_LEFT),
 	m_paragraphJustificationChanged(FALSE),
 	m_isParagraphOpened(FALSE),
@@ -106,12 +107,12 @@ void WP6HLListener::insertBreak(guint8 breakType)
 
 void WP6HLListener::startDocument()
 {
+	m_listenerImpl->startDocument();
+
 	const WP6DefaultInitialFontPacket * defaultInitialFontPacket = NULL;
 	if (defaultInitialFontPacket = _getDefaultInitialFontPacket()) {		
 		fontChange(defaultInitialFontPacket->getPointSize(), defaultInitialFontPacket->getInitialFontDescriptorPID());	
 	}
-
-	m_listenerImpl->startDocument();
 }
 
 void WP6HLListener::undoChange(const guint8 undoType, const guint16 undoLevel)
@@ -268,6 +269,12 @@ void WP6HLListener::endDocument()
 	// corner case: document contains no end of lines
 	if (!m_isParagraphOpened && !m_isParagraphClosed)
 	{
+		if (!m_isSectionOpenedOnce)
+		{
+			m_listenerImpl->openSection(m_numColumns, m_marginLeft, m_marginRight);
+			m_sectionAttributesChanged = FALSE;
+			m_isSectionOpenedOnce = TRUE;
+		}
 		m_listenerImpl->openParagraph(m_paragraphJustification, m_textAttributeBits,
 					      m_currentFontName->str, m_currentFontSize,
 					      FALSE, FALSE);
@@ -311,6 +318,7 @@ void WP6HLListener::startTable()
 		{
 			m_listenerImpl->openSection(m_numColumns, m_marginLeft, m_marginRight);
 			m_sectionAttributesChanged = FALSE;
+			m_isSectionOpenedOnce = TRUE;
 		}
 			
 		m_listenerImpl->openTable();
@@ -356,16 +364,18 @@ void WP6HLListener::endTable()
 }
 
 void WP6HLListener::_flushText()
-{		
+{	
 	if (m_sectionAttributesChanged && m_textArray->len > 0)
 	{
 		m_listenerImpl->openSection(m_numColumns, m_marginLeft, m_marginRight);
+		m_sectionAttributesChanged = FALSE;
+		m_isSectionOpenedOnce = TRUE;
+
 		m_listenerImpl->openParagraph(m_paragraphJustification, m_textAttributeBits,
 					      m_currentFontName->str, m_currentFontSize, 
 					      m_isParagraphColumnBreak, m_isParagraphPageBreak);
 		m_isParagraphColumnBreak = FALSE; m_isParagraphPageBreak = FALSE;
 		m_isParagraphOpened = TRUE;
-		m_sectionAttributesChanged = FALSE;
 		if (m_numDeferredParagraphBreaks > 0)
 			m_numDeferredParagraphBreaks--;
 	}
@@ -385,9 +395,11 @@ void WP6HLListener::_flushText()
 	else if (m_textAttributesChanged && m_textArray->len > 0)
 		m_listenerImpl->openSpan(m_textAttributeBits, m_currentFontName->str, m_currentFontSize);
 
-	m_listenerImpl->insertText((guint16 *)m_textArray->data, m_textArray->len);
-	
-	m_textArray = g_array_set_size(m_textArray, 0);	
+	if (m_textArray->len > 0)
+	{
+		m_listenerImpl->insertText((guint16 *)m_textArray->data, m_textArray->len);
+		m_textArray = g_array_set_size(m_textArray, 0);	
+	}
 
 	m_textAttributesChanged = FALSE;
 	m_paragraphJustificationChanged = FALSE;
