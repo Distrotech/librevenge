@@ -35,8 +35,8 @@ public:
     HtmlListener();
     ~HtmlListener();
 
-    void insertCharacter(guint32 value);
-    void insertEOL();
+    virtual void insertCharacter(guint32 value) const;
+    virtual void insertEOL() const;
 };
 
 #endif /* HTMLLISTENER_H */

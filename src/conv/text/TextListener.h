@@ -32,7 +32,8 @@
 class TextListener : public WPXLLListener
 {
 public:
-	void insertCharacter(guint32 value);
+	virtual void insertCharacter(guint32 value) const;
+	virtual void insertEOL() const {}
 };
 
 #endif /* TEXTLISTENER_H */
