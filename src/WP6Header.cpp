@@ -1,0 +1,63 @@
+/* libwpd2
+ * Copyright (C) 2002 William Lachance (wlach@interlog.com)
+ * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
+ *  
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+ *
+ * For further information visit http://libwpd.sourceforge.net
+ */
+
+/* "This product is not manufactured, approved, or supported by 
+ * Corel Corporation or Corel Corporation Limited."
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "UT_libwpd2.h"
+#include "WP6Header.h"
+#include "WP6FileStructure.h" 
+
+WP6Header::WP6Header(FILE * stream, guint32 documentOffset, guint8 productType, guint8 fileType, guint8 majorVersion, guint8 minorVersion)
+	: WPXHeader(stream, documentOffset, productType, fileType, majorVersion, minorVersion)
+{
+}
+
+gboolean WP6Header::parse()
+{
+	guint16 documentEncrypted;
+
+	/* offsets */
+	WPD_CHECK_FILE_SEEK_ERROR(fseek(m_pStream, WP6_HEADER_ENCRYPTION_OFFSET - ftell(m_pStream), SEEK_CUR));
+	WPD_CHECK_FILE_READ_ERROR(fread(&m_iDocumentEncryption, sizeof(guint16), 1, m_pStream), 1);
+	WPD_CHECK_FILE_SEEK_ERROR(fseek(m_pStream, WP6_HEADER_INDEX_HEADER_POINTER_OFFSET - ftell(m_pStream), SEEK_CUR));
+	WPD_CHECK_FILE_READ_ERROR(fread(&m_iIndexHeaderOffset, sizeof(guint16), 1, m_pStream), 1);
+	WPD_CHECK_FILE_SEEK_ERROR(fseek(m_pStream, WP6_HEADER_DOCUMENT_SIZE_OFFSET - ftell(m_pStream), SEEK_CUR));
+	WPD_CHECK_FILE_READ_ERROR(fread(&m_iDocumentSize, sizeof(guint32), 1, m_pStream), 1);
+
+	WPD_DEBUG_MSG(("WordPerfect: Index Header Position = %i \n",(int)m_iIndexHeaderOffset));
+	WPD_DEBUG_MSG(("WordPerfect: Document Pointer = %i \n",(int)m_iDocumentOffset));
+	WPD_DEBUG_MSG(("WordPerfect: Document End Position = %i \n",(int)m_iDocumentSize));
+	WPD_DEBUG_MSG(("WordPerfect: Document Encryption = %i \n",(int)m_iDocumentEncryption));
+
+	/* we do not handle encrypted documents */
+	if (m_iDocumentEncryption != 0)
+	  return FALSE;
+	
+	/* sanity check */
+	//if (documentOffset > m_iDocumentSize)
+//	  return FALSE;
+	
+	return TRUE;
+}
