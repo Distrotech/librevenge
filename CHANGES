@@ -1,0 +1,8 @@
+CHANGES:
+
+0.2.0 -> 0.3.0:
+- font face/size changes
+- convert library to use libgsf
+- handle WordPerfect documents with an OLE header (side effect of
+conversion to libgsf)
+- many bugfixes (memory leaks, general problems)

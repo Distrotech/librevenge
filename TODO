@@ -1,0 +1,24 @@
+TODO list for libwpd:
+
+Near Future:
+- Support for importing the following WordPerfect 6+ features (in
+approximate order of difficulty/time):
+	    - More table properties (open)
+	    - Lists/Outlining (William will do this)
+	    - Headers/Footers (open)
+	    - Footnotes/Endnotes (open)
+- WordPerfect 6+ document export (Marc is planning to start work
+on this soon)
+- WordPerfect 4.x/5.x document import (open)
+
+Future:
+- Support for importing the following WordPerfect 6+ features (in
+approximate order of difficulty/time):
+	    - Styles (open)
+	    - Embedded Objects (need to link up with external libraries to
+	      handle WPG graphics, Quattro Pro spreadsheets, etc.: 
+	      complicated, but do-able)
+
+Features that the primary maintainers won't implement:
+- WordPerfect 4.x/5.x document export (can't do regression testing
+without original DOS-based programs, it's an obsolete format, ..)

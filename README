@@ -3,10 +3,10 @@ INSTALLATION:
 Installation on Unix/Linux should be simple. Simply execute the following 
 sequence of commands:
 
-./autogen.sh ; ./configure ; make ; su -c 'make install'
+./configure ; make ; su -c 'make install'
 
 Note that this assumes that you have development versions of glib (>=
-2.0.0).
+2.0.0) and libgsf (>= 1.6.0).
 
 LINKS:
 

@@ -223,7 +223,7 @@ void WP6HLListener::marginChange(guint8 side, guint16 margin)
 
 		_flushText();
 		
-		float marginInch = ((float)margin) / (float)WPX_NUM_WPUS_PER_INCH;
+		float marginInch = (float)(((double)margin) / (double)WPX_NUM_WPUS_PER_INCH);
 
 		switch(side)
 		{
