@@ -27,7 +27,8 @@
 #define WPDOCUMENT_H
 
 #include "WPXStream.h"
-#include "libwpd_support.h"
+
+enum WPDConfidence { WPD_CONFIDENCE_NONE=0, WPD_CONFIDENCE_POOR, WPD_CONFIDENCE_LIKELY, WPD_CONFIDENCE_GOOD, WPD_CONFIDENCE_EXCELLENT };
 
 class WPXHLListenerImpl;
 

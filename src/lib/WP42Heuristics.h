@@ -26,7 +26,7 @@
 #ifndef WP42HEURISTICS_H
 #define WP42HEURISTICS_H
 
-#include "libwpd_support.h"
+#include "WPDocument.h"
 #include "WPXStream.h"
 
 class WP42Heuristics
