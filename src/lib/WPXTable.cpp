@@ -51,7 +51,7 @@ WPXTable::~WPXTable()
 
 void WPXTable::insertRow()
 {
-	m_tableRows.push_back(new vector<WPXTableCell *>);
+ 	m_tableRows.push_back(new vector<WPXTableCell *>);
 }
 
 void WPXTable::insertCell(guint8 colSpan, guint8 rowSpan, bool boundFromLeft, bool boundFromAbove, guint8 borderBits)
@@ -160,4 +160,15 @@ vector<WPXTableCell *> * WPXTable::_getCellsRightAdjacent(int i, int j)
 	}
 
 	return cellsRightAdjacent;
+}
+
+WPXTableList::WPXTableList() :
+	refCount(1)
+{
+}
+
+WPXTableList::~WPXTableList()
+{ 
+	for (vector<WPXTable *>::iterator iter = m_tableList.begin(); iter != m_tableList.end(); iter++)
+		delete (*iter);
 }

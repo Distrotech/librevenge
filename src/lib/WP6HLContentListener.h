@@ -39,6 +39,7 @@ using namespace std;
 class WPXHLListenerImpl;
 class WP6LLParser;
 class WPXTable;
+class WPXTableList;
 
 enum WP6StyleState { NORMAL, DOCUMENT_NOTE, DOCUMENT_NOTE_GLOBAL, 
 		     BEGIN_BEFORE_NUMBERING,
@@ -74,7 +75,7 @@ private:
 typedef struct _WP6ParsingState WP6ParsingState;
 struct _WP6ParsingState
 {
-	_WP6ParsingState();
+	_WP6ParsingState(WPXTableList * tableList, int nextTableIndice = 0);
 	~_WP6ParsingState();
 	UCSString m_bodyText;
 	UCSString m_textBeforeNumber;
@@ -93,6 +94,7 @@ struct _WP6ParsingState
 
 	guint m_numRemovedParagraphBreaks;
 
+	WPXTableList *m_tableList;
 	WPXTable *m_currentTable;
 	int m_nextTableIndice;
 	int m_currentTableCol;
@@ -101,8 +103,6 @@ struct _WP6ParsingState
 	bool m_isTableRowOpened;
 	bool m_isTableColumnOpened;
 	bool m_isTableCellOpened;
-	gint32 m_currentRow;
-	gint32 m_currentColumn;
 
 	stack<int> m_listLevelStack;
 	guint16 m_currentOutlineHash; // probably should replace Hash with Key in these sorts of cases
@@ -141,7 +141,7 @@ private:
 class WP6HLContentListener : public WP6HLListener
 {
 public:
-	WP6HLContentListener(vector<WPXPageSpan *> *pageList, vector<WPXTable *> *tableList, WPXHLListenerImpl *listenerImpl);
+	WP6HLContentListener(vector<WPXPageSpan *> *pageList, WPXTableList *tableList, WPXHLListenerImpl *listenerImpl);
 	virtual ~WP6HLContentListener();
 		
 	// for getting low-level messages from the parser
@@ -189,7 +189,7 @@ public:
 
 
 protected:
-	virtual void _handleSubDocument(guint16 textPID, const bool isHeaderFooter);
+	virtual void _handleSubDocument(guint16 textPID, const bool isHeaderFooter, WPXTableList *tableList);
 
 	//void _handleLineBreakElementBegin();
 	void _paragraphNumberOn(const guint16 outlineHash, const guint8 level);
@@ -214,7 +214,6 @@ private:
 	WP6ParsingState *m_parseState;	
 
 	WP6TableDefinition m_tableDefinition;
-	vector<WPXTable *> *m_tableList;
 
 	map<int,WP6OutlineDefinition *> m_outlineDefineHash;
 };

@@ -54,53 +54,78 @@ const WPXHeaderFooterOccurence _convertHeaderFooterOccurence(const guint8 occure
 }
 
 WPXHeaderFooter::WPXHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence occurence, 
-				 const guint8 internalType, const guint16 textPID) :
+				 const guint8 internalType, const guint16 textPID, WPXTableList *tableList) :
 	m_internalType(internalType),
-	m_textPID(textPID)
+	m_textPID(textPID),
+	m_type(headerFooterType),
+	m_occurence(occurence),
+	m_tableList(tableList)
 {
-	m_type = headerFooterType;
-	m_occurence = occurence;
+}
 
+WPXHeaderFooter::WPXHeaderFooter(const WPXHeaderFooter &headerFooter) :
+	m_type(headerFooter.getType()),
+	m_occurence(headerFooter.getOccurence()),
+	m_internalType(headerFooter.getInternalType()),
+	m_textPID(headerFooter.getTextPID())
+{
+	WPXTableList *tableList = headerFooter.getTableList();
+	if (tableList)
+	{
+		m_tableList = tableList;
+		m_tableList->addRef();
+	}
+	else
+		m_tableList = NULL;
+}
+
+WPXHeaderFooter::~WPXHeaderFooter()
+{
 }
 
 WPXPageSpan::WPXPageSpan() :
-	m_formLength(11.0f),
-	m_formWidth(8.5f),
-	m_formOrientation(PORTRAIT),
-	m_marginLeft(1.0f),
+	m_marginLeft(1.0f), 
 	m_marginRight(1.0f),
-	m_marginTop(WP6_DEFAULT_PAGE_MARGIN_TOP),
+	m_marginTop(WP6_DEFAULT_PAGE_MARGIN_TOP), 
 	m_marginBottom(WP6_DEFAULT_PAGE_MARGIN_BOTTOM),
 	m_pageSpan(1)
 
 {
-	for (int i=0; i<WP6_NUM_HEADER_FOOTER_TYPES; i++)
+	for (int i=0; i<WP6_NUM_HEADER_FOOTER_TYPES; i++) 
 		m_isHeaderFooterSuppressed[i]=false;
 }
 
 // NB: this is not a literal "clone" function: it is contingent on the side margins that are passed,
 // and suppression variables are not copied
 WPXPageSpan::WPXPageSpan(WPXPageSpan &page, float paragraphMarginLeft, float paragraphMarginRight) :
-	m_formLength(page.getFormLength()),
-	m_formWidth(page.getFormWidth()),
-	m_formOrientation(page.getFormOrientation()),
-	m_marginLeft(page.getMarginLeft()+paragraphMarginLeft),
+	m_marginLeft(page.getMarginLeft()+paragraphMarginLeft), 
 	m_marginRight(page.getMarginRight()+paragraphMarginRight),
-	m_marginTop(page.getMarginTop()),
+	m_marginTop(page.getMarginTop()), 
 	m_marginBottom(page.getMarginBottom()),
 	m_pageSpan(page.getPageSpan()),
 	m_headerFooterList(page.getHeaderFooterList())
 {
-	for (int i=0; i<WP6_NUM_HEADER_FOOTER_TYPES; i++)
+	for (int i=0; i<WP6_NUM_HEADER_FOOTER_TYPES; i++) 
 		m_isHeaderFooterSuppressed[i] = false;
 }
 
+WPXPageSpan::~WPXPageSpan()
+{
+	// we unref the table lists here (instead of in WPXHeaderFooter) because the items in the vector 
+	// are randomly alloc'd and dealloc'd
+	for (vector<WPXHeaderFooter>::iterator iter = m_headerFooterList.begin(); iter != m_headerFooterList.end(); iter++)
+	{
+		if ((*iter).getTableList())
+			(*iter).getTableList()->unRef();
+	}
+}
 
-void WPXPageSpan::setHeaderFooter(const guint8 headerFooterType, const guint8 occurenceBits, const guint16 textPID)
+void WPXPageSpan::setHeaderFooter(const guint8 headerFooterType, const guint8 occurenceBits, 
+				  const guint16 textPID, WPXTableList *tableList)
 {
         WPXHeaderFooterType wpxType = _convertHeaderFooterType(headerFooterType);
 	WPXHeaderFooterOccurence wpxOccurence = _convertHeaderFooterOccurence(occurenceBits);
-	WPXHeaderFooter headerFooter(wpxType, wpxOccurence, headerFooterType, textPID);
+	WPXHeaderFooter headerFooter(wpxType, wpxOccurence, headerFooterType, textPID, tableList);
 	switch (wpxOccurence) 
 	{
 	case ALL:
@@ -122,13 +147,13 @@ void WPXPageSpan::setHeaderFooter(const guint8 headerFooterType, const guint8 oc
 	if (containsHFLeft && !containsHFRight)
 	{
 		WPD_DEBUG_MSG(("Inserting dummy header right\n"));
-		WPXHeaderFooter dummyHeader(wpxType, EVEN, DUMMY_INTERNAL_HEADER_FOOTER, 0);
+		WPXHeaderFooter dummyHeader(wpxType, EVEN, DUMMY_INTERNAL_HEADER_FOOTER, 0, NULL);
 		m_headerFooterList.push_back(dummyHeader);
 	}
 	else if (!containsHFLeft && containsHFRight)
 	{
 		WPD_DEBUG_MSG(("Inserting dummy header left\n"));
-		WPXHeaderFooter dummyHeader(wpxType, ODD, DUMMY_INTERNAL_HEADER_FOOTER, 0);
+		WPXHeaderFooter dummyHeader(wpxType, ODD, DUMMY_INTERNAL_HEADER_FOOTER, 0, NULL);
 		m_headerFooterList.push_back(dummyHeader);
 	}
 }

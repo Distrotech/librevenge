@@ -29,20 +29,27 @@
 #include "WP6FileStructure.h"
 #include <vector>
 
+#include "WPXTable.h"
+
 // intermediate page representation class: for internal use only (by the high-level content/styles listeners). should not be exported.
 
 class WPXHeaderFooter
 {
 public:
 	WPXHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence occurence, 
-			const guint8 internalType, const guint16 textPID);
+			const guint8 internalType, const guint16 textPID, WPXTableList *tableList);
+	WPXHeaderFooter(const WPXHeaderFooter &);
+	virtual ~WPXHeaderFooter();
 	const WPXHeaderFooterType getType() const { return m_type; }
 	const WPXHeaderFooterOccurence getOccurence() const { return m_occurence; }
 	const guint16 getTextPID() const { return m_textPID; }
 	const guint8 getInternalType() const { return m_internalType; }
+	WPXTableList * getTableList() const { return m_tableList; }
+
 private:
 	WPXHeaderFooterType m_type;
 	WPXHeaderFooterOccurence m_occurence;
+	mutable WPXTableList *m_tableList; // FIXME: it would be nice if we could get rid of the mutable keyword..
 	guint8 m_internalType; // for suppression
 	guint16 m_textPID; // for the actual text
 };
@@ -52,11 +59,9 @@ class WPXPageSpan
 public:
 	WPXPageSpan();
 	WPXPageSpan(WPXPageSpan &page, float paragraphMarginLeft=0.0f, float paragraphMarginRight=0.0f);
-
+	virtual ~WPXPageSpan();
+	
 	const bool getHeaderFooterSuppression(const guint8 headerFooterType) const { if (headerFooterType <= WP6_HEADER_FOOTER_GROUP_FOOTER_B) return m_isHeaderFooterSuppressed[headerFooterType]; return false; }
-	const float getFormLength() const { return m_formLength; }
-	const float getFormWidth() const { return m_formWidth; }
-	const WPXFormOrientation getFormOrientation() const { return m_formOrientation; }
 	const float getMarginLeft() const { return m_marginLeft; }
  	const float getMarginRight() const { return m_marginRight; }
  	const float getMarginTop() const { return m_marginTop; }
@@ -64,11 +69,8 @@ public:
 	const int getPageSpan() const { return m_pageSpan; }
 	const vector<WPXHeaderFooter> & getHeaderFooterList() const { return m_headerFooterList; }
 
-	void setHeaderFooter(const guint8 headerFooterType, const guint8 occurenceBits, const guint16 textPID);
+	void setHeaderFooter(const guint8 headerFooterType, const guint8 occurenceBits, const guint16 textPID, WPXTableList *tableList);
 	void setHeadFooterSuppression(const guint8 headerFooterType, const bool suppress) { m_isHeaderFooterSuppressed[headerFooterType] = suppress; }
-	void setFormLength(const float formLength) { m_formLength = formLength; }
-	void setFormWidth(const float formWidth) { m_formWidth = formWidth; }
-	void setFormOrientation(const WPXFormOrientation formOrientation) { m_formOrientation = formOrientation; }
 	void setMarginLeft(const float marginLeft) { m_marginLeft = marginLeft; }
  	void setMarginRight(const float marginRight) { m_marginRight = marginRight; }
  	void setMarginTop(const float marginTop) { m_marginTop = marginTop; }
@@ -79,11 +81,9 @@ public:
 protected:
 	void _removeHeaderFooter(WPXHeaderFooterType type, WPXHeaderFooterOccurence occurence);
 	bool _containsHeaderFooter(WPXHeaderFooterType type, WPXHeaderFooterOccurence occurence);
-
+	
 private:
 	bool m_isHeaderFooterSuppressed[WP6_NUM_HEADER_FOOTER_TYPES];
-	float m_formLength, m_formWidth;
-	WPXFormOrientation m_formOrientation;
 	float m_marginLeft, m_marginRight;
 	float m_marginTop, m_marginBottom;
 	vector<WPXHeaderFooter> m_headerFooterList;

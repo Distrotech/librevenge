@@ -183,7 +183,7 @@ void WP6OutlineDefinition::_updateNumberingMethods(const WP6OutlineLocation outl
 
 }
 
-_WP6ParsingState::_WP6ParsingState() :
+_WP6ParsingState::_WP6ParsingState(WPXTableList * tableList, int nextTableIndice) :
 	m_paragraphLineSpacing(1.0f),
 	m_paragraphJustification(WPX_PARAGRAPH_JUSTIFICATION_LEFT),
 	m_tempParagraphJustification(0),
@@ -194,17 +194,15 @@ _WP6ParsingState::_WP6ParsingState() :
 
 	m_numRemovedParagraphBreaks(0),
 
+	m_tableList(tableList),
 	m_currentTable(NULL),
-	m_nextTableIndice(0),
+	m_nextTableIndice(nextTableIndice),
 	m_currentTableCol(0),
 	m_currentTableRow(0),
 	m_isTableOpened(false),
 	m_isTableRowOpened(false),
 	m_isTableCellOpened(false),
 
-	m_currentRow(-1),
-	m_currentColumn(-1),
-	
 	m_currentListLevel(0),
 	m_putativeListElementHasParagraphNumber(false),
 	m_putativeListElementHasDisplayReferenceNumber(false),
@@ -218,10 +216,9 @@ _WP6ParsingState::~_WP6ParsingState()
 	// fixme: erase current fontname
 }
 
-WP6HLContentListener::WP6HLContentListener(vector<WPXPageSpan *> *pageList, vector<WPXTable *> *tableList, WPXHLListenerImpl *listenerImpl) :
+WP6HLContentListener::WP6HLContentListener(vector<WPXPageSpan *> *pageList, WPXTableList  *tableList, WPXHLListenerImpl *listenerImpl) :
 	WP6HLListener(pageList, listenerImpl), 
-	m_parseState(new WP6ParsingState),
-	m_tableList(tableList)
+	m_parseState(new WP6ParsingState(tableList))
 {
 }
 
@@ -754,7 +751,7 @@ void WP6HLContentListener::noteOff(const WPXNoteType noteType)
 			m_listenerImpl->openEndnote(number);
 
 		guint16 textPID = m_parseState->m_noteTextPID;
-		handleSubDocument(textPID, false);
+		handleSubDocument(textPID, false, NULL);
 
 		if (noteType == FOOTNOTE)
 			m_listenerImpl->closeFootnote();		
@@ -825,7 +822,7 @@ void WP6HLContentListener::defineTable(guint8 position, guint16 leftOffset)
 		m_tableDefinition.columns.clear();
 		
 		// pull a table definition off of our stack
-		m_parseState->m_currentTable = (*m_tableList)[m_parseState->m_nextTableIndice++];
+		m_parseState->m_currentTable = (*(m_parseState->m_tableList))[m_parseState->m_nextTableIndice++];
 		m_parseState->m_currentTable->makeBordersConsistent();
 	}
 }
@@ -905,11 +902,15 @@ void WP6HLContentListener::endTable()
 // sends its text to the hll implementation and naively inserts it into the document
 // if textPID=0: Simply creates a blank paragraph
 // once finished, restores document state to what it was before
-void WP6HLContentListener::_handleSubDocument(guint16 textPID, const bool isHeaderFooter)
+void WP6HLContentListener::_handleSubDocument(guint16 textPID, const bool isHeaderFooter, WPXTableList *tableList)
 {
 	// save our old parsing state on our "stack"
 	WP6ParsingState *oldParseState = m_parseState;
-	m_parseState = new WP6ParsingState();
+	if (tableList) 
+		m_parseState = new WP6ParsingState(tableList);
+	else
+		m_parseState = new WP6ParsingState(oldParseState->m_tableList, oldParseState->m_nextTableIndice);
+
 	if (isHeaderFooter)
 	{
 		// is it is Header or Footer, assume that the initial page margins are of 1 inch.
@@ -917,10 +918,12 @@ void WP6HLContentListener::_handleSubDocument(guint16 textPID, const bool isHead
 		marginChange(WP6_COLUMN_GROUP_LEFT_MARGIN_SET, WPX_NUM_WPUS_PER_INCH);
 		marginChange(WP6_COLUMN_GROUP_RIGHT_MARGIN_SET, WPX_NUM_WPUS_PER_INCH);
 	}
+
 	if (textPID)
 		WP6LLListener::getPrefixDataPacket(textPID)->parse(this);	
 	else
 		_openParagraph();
+
 	_flushText();
 	_closeSection();	
 
@@ -1145,8 +1148,6 @@ void WP6HLContentListener::_closeTable()
 	if (m_parseState->m_isTableOpened)
 	{ 
 		m_listenerImpl->closeTable();
-		m_parseState->m_currentRow = 0;
-		m_parseState->m_currentColumn = 0;
 	}
 	m_parseState->m_isTableOpened = false;
 }
@@ -1154,8 +1155,6 @@ void WP6HLContentListener::_closeTable()
 void WP6HLContentListener::_openTableRow()
 {
 	_closeTableRow();
-	m_parseState->m_currentRow++;
-	m_parseState->m_currentColumn = -1;
 	m_listenerImpl->openTableRow();
 	m_parseState->m_isTableRowOpened = true;
 }
@@ -1174,17 +1173,16 @@ void WP6HLContentListener::_openTableCell(const guint8 colSpan, const guint8 row
 								const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
 {
 	_closeTableCell();
-	m_parseState->m_currentColumn++;
 	
 	if (!boundFromLeft && !boundFromAbove) 
 	{
-		m_listenerImpl->openTableCell(m_parseState->m_currentColumn, m_parseState->m_currentRow, colSpan, rowSpan, 
-									borderBits,
-									cellFgColor, cellBgColor);
+		m_listenerImpl->openTableCell(m_parseState->m_currentTableCol, m_parseState->m_currentTableRow, colSpan, rowSpan, 
+					      borderBits,
+					      cellFgColor, cellBgColor);
 		m_parseState->m_isTableCellOpened = true;
 	}
 	else
-		m_listenerImpl->insertCoveredTableCell(m_parseState->m_currentColumn, m_parseState->m_currentRow);
+		m_listenerImpl->insertCoveredTableCell(m_parseState->m_currentTableCol, m_parseState->m_currentTableRow);
 }
 
 void WP6HLContentListener::_closeTableCell()

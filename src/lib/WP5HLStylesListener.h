@@ -34,7 +34,7 @@
 class WP5HLStylesListener : public WP5HLListener
 {
 public:
-	WP5HLStylesListener(vector<WPXPageSpan *> *pageList, vector<WPXTable *> *tableList);
+	WP5HLStylesListener(vector<WPXPageSpan *> *pageList, WPXTableList  *tableList);
 
 	virtual void startDocument() {}
 	virtual void insertCharacter(const guint16 character) {}
@@ -66,7 +66,7 @@ protected:
 private:
 	WPXPageSpan *m_currentPage;
 
-	vector<WPXTable *> *m_tableList;
+	WPXTableList  *m_tableList;
 	WPXTable *m_currentTable;
 	float m_tempMarginLeft, m_tempMarginRight;
 	bool m_currentPageHasContent;

@@ -1,3 +1,4 @@
+
 /* libwpd
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002-2003 Marc Maurer (j.m.maurer@student.utwente.nl)
@@ -90,6 +91,7 @@ WPXHLListener::WPXHLListener(vector<WPXPageSpan *> *pageList, WPXHLListenerImpl 
 WPXHLListener::~WPXHLListener()
 {
 	g_string_free(m_ps->m_fontName, TRUE);
+	DELETEP(m_ps);
 }
 
 void WPXHLListener::startDocument()
@@ -151,7 +153,7 @@ void WPXHLListener::_openPageSpan()
 		if (!currentPage->getHeaderFooterSuppression((*iter).getInternalType())) 
 		{
 			m_listenerImpl->openHeaderFooter((*iter).getType(), (*iter).getOccurence());
-			handleSubDocument((*iter).getTextPID(), true);
+			handleSubDocument((*iter).getTextPID(), true, (*iter).getTableList());
 			m_listenerImpl->closeHeaderFooter((*iter).getType(), (*iter).getOccurence());					
 			WPD_DEBUG_MSG(("Header Footer Element: type: %i occurence: %i pid: %i\n", 
 				       (*iter).getType(), (*iter).getOccurence(), (*iter).getTextPID()));
@@ -204,7 +206,7 @@ void WPXHLListener::_closeSpan()
 /**
 Creates an new document state. Saves the old state on a "stack".
 */
-void WPXHLListener::handleSubDocument(guint16 textPID, const bool isHeaderFooter)
+void WPXHLListener::handleSubDocument(guint16 textPID, const bool isHeaderFooter, WPXTableList *tableList)
 {
 	// save our old parsing state on our "stack"
 	WPXParsingState *oldPS = m_ps;
@@ -215,11 +217,11 @@ void WPXHLListener::handleSubDocument(guint16 textPID, const bool isHeaderFooter
 	m_ps->m_pageMarginRight = oldPS->m_pageMarginRight;
 	// END: copy page properties into the new parsing state
 	
-	_handleSubDocument(textPID, isHeaderFooter);
+	_handleSubDocument(textPID, isHeaderFooter, tableList);
 
 	// restore our old parsing state
 	delete m_ps;
-	m_ps = oldPS;		
+	m_ps = oldPS;
 }
 
 void WPXHLListener::insertBreak(const guint8 breakType)

@@ -34,7 +34,7 @@
 class WP42HLStylesListener : public WP42HLListener
 {
 public:
-	WP42HLStylesListener(vector<WPXPageSpan *> *pageList, vector<WPXTable *> *tableList);
+	WP42HLStylesListener(vector<WPXPageSpan *> *pageList, WPXTableList  *tableList);
 
 	virtual void startDocument() {}
 	virtual void insertCharacter(const guint16 character) {}
@@ -45,30 +45,29 @@ public:
 	virtual void lineSpacingChange(const float lineSpacing) {}
 	virtual void justificationChange(const guint8 justification) {}
 	virtual void pageMarginChange(const guint8 side, const guint16 margin) {}
-	virtual void pageFormChange(const guint16 length, const guint16 width, const WPXFormOrientation orientation) {}
 	virtual void marginChange(const guint8 side, const guint16 margin) {}
 	virtual void columnChange(const guint8 numColumns) {}
 	virtual void endDocument();
-
+		
 	virtual void defineTable(guint8 position, guint16 leftOffset){}
 	virtual void addTableColumnDefinition(guint32 width, guint32 leftGutter, guint32 rightGutter){}
 	virtual void startTable();
  	virtual void insertRow();
- 	virtual void insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove,
-				const guint8 borderBits,
+ 	virtual void insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove, 
+				const guint8 borderBits, 	
 				const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
  	virtual void endTable() {}
 
-
+	
 protected:
-	virtual void _handleSubDocument(guint16 textPID) {}
-
-	virtual void _openPageSpan() { /* FIXME: REMOVE ME WHEN IMPLEMENTED IN WPXHLListener */ };
-
+	virtual void _handleSubDocument(guint16 textPID, WPXTableList *tableList) {}
+	
+	virtual void _openPageSpan() { /* FIXME: REMOVE ME WHEN IMPLEMENTED IN WPXHLListener */ };	
+		
 private:
 	WPXPageSpan *m_currentPage;
 
-	vector<WPXTable *> *m_tableList;
+	WPXTableList  *m_tableList;
 	WPXTable *m_currentTable;
 	float m_tempMarginLeft, m_tempMarginRight;
 	bool m_currentPageHasContent;

@@ -65,4 +65,20 @@ public:
 private:
 	vector< vector<WPXTableCell *> * > m_tableRows;
 };
+
+class WPXTableList
+{
+public:
+	WPXTableList();
+	virtual ~WPXTableList();
+	void addRef() { refCount++; }
+	void unRef() { refCount--; if (refCount == 0) delete this; }
+	WPXTable * operator[](size_t i) { return m_tableList[i]; }
+	void add(WPXTable *table) { m_tableList.push_back(table); }
+	size_t size() const { return m_tableList.size(); }
+
+private:
+	vector<WPXTable *> m_tableList; 
+	int refCount;
+};
 #endif /* _WPXTABLE_H */
