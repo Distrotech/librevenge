@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002-2003 Marc Maurer (j.m.maurer@student.utwente.nl)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -32,7 +32,8 @@ _WPXParsingState::_WPXParsingState(bool sectionAttributesChanged) :
 	m_textAttributesChanged(false),
 	m_fontSize(12.0f/*WP6_DEFAULT_FONT_SIZE*/), // FIXME ME!!!!!!!!!!!!!!!!!!! HELP WP6_DEFAULT_FONT_SIZE
 	m_fontName(g_string_new(/*WP6_DEFAULT_FONT_NAME*/"Times New Roman")), // EN PAS DEFAULT FONT AAN VOOR WP5/6/etc
-	
+	m_fontColor(new RGBSColor(0xff,0xff,0xff,0xff)), //Set default to black. Maybe once it will change, but for the while...
+
 	m_isParagraphColumnBreak(false),
 	m_isParagraphPageBreak(false),
 /*	m_paragraphLineSpacing(1.0f),
@@ -69,7 +70,8 @@ _WPXParsingState::_WPXParsingState(bool sectionAttributesChanged) :
 	m_pageMarginLeft(1.0f),
 	m_pageMarginRight(1.0f),
 	m_paragraphMarginLeft(0.0f),
-	m_paragraphMarginRight(0.0f)
+	m_paragraphMarginRight(0.0f),
+	m_paragraphTextIndent(0.0f)
 	/*m_currentRow(-1),
 	m_currentColumn(-1),
 
@@ -104,7 +106,7 @@ void WPXHLListener::startDocument()
 					    m_metaData.m_abstract, m_metaData.m_descriptiveName,
 					    m_metaData.m_descriptiveType);
 
-	m_listenerImpl->startDocument();	
+	m_listenerImpl->startDocument();
 	_openPageSpan();
 }
 
@@ -112,8 +114,8 @@ void WPXHLListener::_openSection()
 {
 	_closeSection();
 	if (m_ps->m_numColumns > 1)
-		m_listenerImpl->openSection(m_ps->m_numColumns, 1.0f);	
-	else 
+		m_listenerImpl->openSection(m_ps->m_numColumns, 1.0f);
+	else
 		m_listenerImpl->openSection(m_ps->m_numColumns, 0.0f);
 
 	m_ps->m_sectionAttributesChanged = false;
@@ -187,7 +189,7 @@ void WPXHLListener::_closeParagraph()
 {
 	_closeSpan();
 	if (m_ps->m_isParagraphOpened)
-		m_listenerImpl->closeParagraph();	
+		m_listenerImpl->closeParagraph();
 
 	m_ps->m_isParagraphOpened = false;
 }
@@ -195,9 +197,9 @@ void WPXHLListener::_closeParagraph()
 void WPXHLListener::_openSpan()
 {
 	_closeSpan();
-	m_listenerImpl->openSpan(m_ps->m_textAttributeBits, 
-				 m_ps->m_fontName->str, 
-				 m_ps->m_fontSize);	
+	m_listenerImpl->openSpan(m_ps->m_textAttributeBits,
+				 m_ps->m_fontName->str,
+				 m_ps->m_fontSize, m_ps->m_fontColor);
 
 	m_ps->m_isSpanOpened = true;
 }
@@ -218,20 +220,20 @@ void WPXHLListener::handleSubDocument(guint16 textPID)
 	// save our old parsing state on our "stack"
 	WPXParsingState *oldPS = m_ps;
 	m_ps = new WPXParsingState(false); // false: don't open a new section unless we must inside this type of sub-document
-	
+
 	_handleSubDocument(textPID);
 
 	// restore our old parsing state
 	delete m_ps;
-	m_ps = oldPS;		
+	m_ps = oldPS;
 }
 
 void WPXHLListener::insertBreak(const guint8 breakType)
 {
 	if (!isUndoOn())
-	{	
+	{
 		_flushText();
-		switch (breakType) 
+		switch (breakType)
 		{
 		case WPX_COLUMN_BREAK:
 			m_ps->m_numDeferredParagraphBreaks++;

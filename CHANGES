@@ -1,6 +1,10 @@
 CHANGES:
 
 
+0.7.x -> 0.8.0
+- Added page form and orientation conversion (Fridrich Strba)
+- Added font colour conversion (Fridrich Strba)
+
 0.7.1 -> 0.7.2
 - Added --callgraph to wpd2raw, and added all parameters to the 
   output (Marc Maurer

@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -38,13 +38,15 @@ class WP6LLListener
 public:
 	WP6LLListener() : m_prefixData(NULL) {}
 	virtual ~WP6LLListener() {}
-	virtual void setDate(const guint16 year, const guint8 month, const guint8 day, 
+	virtual void setDate(const guint16 year, const guint8 month, const guint8 day,
 			     const guint8 hour, const guint8 minute, const guint8 second,
 			     const guint8 dayOfWeek, const guint8 timeZone, const guint8 unused) = 0;
 	virtual void setExtendedInformation(const guint16 type, const UCSString &data) = 0;
+	virtual void characterColorChange(const guint8 red, const guint8 green, const guint8 blue) = 0;
+	virtual void characterShadingChange(const guint8 shading) = 0;
 	virtual void fontChange(const guint16 matchedFontPointSize, const guint16 fontPID) = 0;
 	virtual void undoChange(const guint8 undoType, const guint16 undoLevel) = 0;
-	virtual void updateOutlineDefinition(const WP6OutlineLocation outlineLocation, const guint16 outlineHash, 
+	virtual void updateOutlineDefinition(const WP6OutlineLocation outlineLocation, const guint16 outlineHash,
 					     const guint8 *numberingMethods, const guint8 tabBehaviourFlag) = 0;
 	virtual void paragraphNumberOn(const guint16 outlineHash, const guint8 level, const guint8 flag) = 0;
 	virtual void paragraphNumberOff() = 0;

@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -27,7 +27,7 @@
 #include "HtmlListenerImpl.h"
 
 // use the BELL code to represent a TAB for now
-#define UCS_TAB 0x0009 
+#define UCS_TAB 0x0009
 
 HtmlListenerImpl::HtmlListenerImpl()
 {
@@ -118,16 +118,17 @@ void HtmlListenerImpl::closeHeaderFooter(const WPXHeaderFooterType headerFooterT
 	}
 }
 
-void HtmlListenerImpl::openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits, 
-				     const float marginLeft, const float marginRight,
-				     const gchar *fontName, const float fontSize,
+void HtmlListenerImpl::openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits,
+				     const float marginLeft, const float marginRight, const float textIndent,
+				     const gchar *fontName, const float fontSize, const RGBSColor *fontColor,
 				     const float lineSpacing,
 				     const bool isColumnBreak, const bool isPageBreak)
 {
 	printf("<p style=\"");
 	_appendTextAttributes(textAttributeBits);
 	_appendParagraphJustification(paragraphJustification);
-	printf("\" font-name=\"%s\" font-size=\"%f\">", fontName, fontSize);
+	printf("\" font-name=\"%s\" font-size=\"%f\">",
+		   fontName, fontSize);
 }
 
 void HtmlListenerImpl::closeParagraph()
@@ -135,11 +136,13 @@ void HtmlListenerImpl::closeParagraph()
 	printf("</p>\n");
 }
 
-void HtmlListenerImpl::openSpan(guint32 textAttributeBits, const gchar *fontName, const float fontSize)
+void HtmlListenerImpl::openSpan(guint32 textAttributeBits, const gchar *fontName, const float fontSize,
+					const RGBSColor *fontColor)
 {
-	printf("<span style=\""); 
+	printf("<span style=\"");
 	_appendTextAttributes(textAttributeBits);
-	printf("\" font-name=\"%s\" font-size=\"%f\">", fontName, fontSize);
+	printf("\" font-name=\"%s\" font-size=\"%f\">",
+	       fontName, fontSize);
 }
 
 void HtmlListenerImpl::closeSpan()
@@ -190,14 +193,15 @@ void HtmlListenerImpl::closeUnorderedListLevel()
 
 
 void HtmlListenerImpl::openListElement(const guint8 paragraphJustification, const guint32 textAttributeBits,
-				       const float marginLeftOffset, const float marginRightOffset,
-				       const gchar *fontName, const float fontSize, 
+				     const float marginLeft, const float marginRight, const float textIndent,
+				     const gchar *fontName, const float fontSize, const RGBSColor *fontColor,
 				       const float lineSpacing)
 {
 	printf("<li style=\"");
 	_appendTextAttributes(textAttributeBits);
 	_appendParagraphJustification(paragraphJustification);
-	printf("\" font-name=\"%s\" font-size=\"%f\">", fontName, fontSize);
+	printf("\" font-name=\"%s\" font-size=\"%f\">",
+	       fontName, fontSize);
 }
 
 void HtmlListenerImpl::closeListElement()
@@ -242,12 +246,12 @@ void HtmlListenerImpl::closeTableRow()
 	printf("</tr>\n");
 }
 
-void HtmlListenerImpl::openTableCell(const guint32 col, const guint32 row, const guint32 colSpan, const guint32 rowSpan, 
+void HtmlListenerImpl::openTableCell(const guint32 col, const guint32 row, const guint32 colSpan, const guint32 rowSpan,
 						const guint8 borderBits,
 						const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
 {
 	printf("<td ");
-	
+
 	if (cellFgColor || cellBgColor)
 	{
 		printf("style=\"");
@@ -269,7 +273,7 @@ void HtmlListenerImpl::closeTableCell()
 }
 
 void HtmlListenerImpl::closeTable()
-{	
+{
 	printf("</tbody>\n");
 	printf("</table>\n");
 }

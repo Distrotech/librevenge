@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -31,7 +31,7 @@ _WP5ParsingState::_WP5ParsingState()
 }
 
 _WP5ParsingState::~_WP5ParsingState()
-{	
+{
 }
 
 WP5HLListener::WP5HLListener(vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl) :
@@ -60,7 +60,7 @@ void WP5HLListener::insertTab(const guint8 tabType)
 void WP5HLListener::insertEOL()
 {
 	_flushText();
-	m_ps->m_numDeferredParagraphBreaks++;	
+	m_ps->m_numDeferredParagraphBreaks++;
 }
 
 void WP5HLListener::endDocument()
@@ -75,7 +75,7 @@ void WP5HLListener::endDocument()
 	// corner case: document contains no end of lines
 	/*else*/ if (!m_ps->m_isParagraphOpened && !m_ps->m_isParagraphClosed)
 	{
-		_flushText();       
+		_flushText();
 	}
 	// NORMAL(ish) case document ends either inside a paragraph or outside of one,
 	// but not inside an object
@@ -83,7 +83,7 @@ void WP5HLListener::endDocument()
 	{
 		_flushText();
 	}
-	
+
 	// the only other possibility is a logical contradiction: a paragraph
 	// may not be opened and closed at the same time
 
@@ -100,12 +100,12 @@ void WP5HLListener::endDocument()
 
 void WP5HLListener::attributeChange(const bool isOn, const guint8 attribute)
 {
-	
+
 	// flush everything which came before this change
 	_flushText();
-	
+
 	guint32 textAttributeBit = 0;
-	
+
 	// FIXME: handle all the possible attribute bits
 	switch (attribute)
 	{
@@ -129,7 +129,7 @@ void WP5HLListener::attributeChange(const bool isOn, const guint8 attribute)
 			break;
 		case WP5_ATTRIBUTE_DOUBLE_UNDERLINE:
 			textAttributeBit = WPX_DOUBLE_UNDERLINE_BIT;
-			break;		
+			break;
 		case WP5_ATTRIBUTE_BOLD:
 			textAttributeBit = WPX_BOLD_BIT;
 			break;
@@ -140,8 +140,8 @@ void WP5HLListener::attributeChange(const bool isOn, const guint8 attribute)
 			textAttributeBit = WPX_UNDERLINE_BIT;
 			break;
 	}
-	
-	if (isOn) 
+
+	if (isOn)
 		m_ps->m_textAttributeBits |= textAttributeBit;
 	else
 		m_ps->m_textAttributeBits ^= textAttributeBit;
@@ -162,8 +162,8 @@ void WP5HLListener::_flushText(const bool fakeText)
 		_openSection();
 		//if (fakeText)
 			_openParagraph();
-	}	
-	
+	}
+
 	if (m_ps->m_numDeferredParagraphBreaks > 0)
 	{
 		if (!m_ps->m_isParagraphOpened //&&
@@ -171,9 +171,9 @@ void WP5HLListener::_flushText(const bool fakeText)
 		)
 			m_ps->m_numDeferredParagraphBreaks++;
 
-		while (m_ps->m_numDeferredParagraphBreaks > 1) 
-			_openParagraph(); 			
-		_closeParagraph(); 
+		while (m_ps->m_numDeferredParagraphBreaks > 1)
+			_openParagraph();
+		_closeParagraph();
 		m_ps->m_numDeferredParagraphBreaks = 0; // compensate for this by requiring a paragraph to be opened
 	}
 	else if (m_ps->m_textAttributesChanged && m_textBuffer.getLen())
@@ -181,7 +181,7 @@ void WP5HLListener::_flushText(const bool fakeText)
 		_openSpan();
 		m_ps->m_textAttributesChanged = false;
 	}
-	
+
 	if (m_textBuffer.getLen())
 	{
 		if (!m_ps->m_isParagraphOpened)
@@ -189,7 +189,7 @@ void WP5HLListener::_flushText(const bool fakeText)
 			_openParagraph();
 			_openSpan();
 		}
-		
+
 		m_listenerImpl->insertText(m_textBuffer);
 		m_textBuffer.clear();
 	}
@@ -204,14 +204,14 @@ void WP5HLListener::_openParagraph()
 	m_parseState->m_tempParagraphJustification = 0;
 	*/
 	m_listenerImpl->openParagraph(0, m_ps->m_textAttributeBits,
-				      m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight,
-				      m_ps->m_fontName->str, m_ps->m_fontSize, 
-				      1.0f, 
+				      m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight, m_ps->m_paragraphTextIndent,
+				      m_ps->m_fontName->str, m_ps->m_fontSize, m_ps->m_fontColor,
+				      1.0f,
 				      m_ps->m_isParagraphColumnBreak, m_ps->m_isParagraphPageBreak);
-	if (m_ps->m_numDeferredParagraphBreaks > 0) 
+	if (m_ps->m_numDeferredParagraphBreaks > 0)
 		m_ps->m_numDeferredParagraphBreaks--;
 
-	m_ps->m_isParagraphColumnBreak = false; 
+	m_ps->m_isParagraphColumnBreak = false;
 	m_ps->m_isParagraphPageBreak = false;
 	m_ps->m_isParagraphOpened = true;
 }

@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -36,20 +36,20 @@
 // throws an exception if there is an error
 // precondition: readVal us between 0x80 and 0xFF
 WP6Part * WP6Part::constructPart(GsfInput *input, guint8 readVal)
-{	
+{
 	WPD_DEBUG_MSG(("WordPerfect: ConstructPart\n"));
-		
-	if (readVal >= (guint8)0x80 && readVal <= (guint8)0xCF)
+
+	if ((readVal >= (guint8)0x80) && (readVal <= (guint8)0xCF))
 	{
 		WPD_DEBUG_MSG(("WordPerfect: constructFixedLengthGroup(input, val)\n"));
 		return WP6SingleByteFunction::constructSingleByteFunction(input, readVal);
 	}
-	else if (readVal >= (guint8)0xD0 && readVal <= (guint8)0xEF)
+	else if ((readVal >= (guint8)0xD0) && (readVal <= (guint8)0xEF))
 	{
 		WPD_DEBUG_MSG(("WordPerfect: constructVariableLengthGroup(input, val)\n"));
 		return WP6VariableLengthGroup::constructVariableLengthGroup(input, readVal);
-	}      
-	else if (readVal >= (guint8)0xF0 && readVal <= (guint8)0xFF)
+	}
+	else if ((readVal >= (guint8)0xF0) && (readVal <= (guint8)0xFF))
 	{
 		WPD_DEBUG_MSG(("WordPerfect: constructFixedLengthGroup(input, val)\n"));
 		return WP6FixedLengthGroup::constructFixedLengthGroup(input, readVal);

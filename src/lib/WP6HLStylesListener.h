@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -39,7 +39,7 @@ class WP6HLStylesListener : public WP6HLListener
 public:
 	WP6HLStylesListener(vector<WPXPageSpan *> *pageList, vector<WPXTable *> *tableList);
 
-	virtual void setDate(const guint16 year, const guint8 month, const guint8 day, 
+	virtual void setDate(const guint16 year, const guint8 month, const guint8 day,
 			     const guint8 hour, const guint8 minute, const guint8 second,
 			     const guint8 dayOfWeek, const guint8 timeZone, const guint8 unused) {}
 	virtual void setExtendedInformation(const guint16 type, const UCSString &data) {}
@@ -48,6 +48,8 @@ public:
 	virtual void insertTab(const guint8 tabType) { if (!isUndoOn()) m_currentPageHasContent = true; }
 	virtual void insertEOL() { if (!isUndoOn()) m_currentPageHasContent = true; }
  	virtual void insertBreak(const guint8 breakType);
+	virtual void characterColorChange(const guint8 red, const guint8 green, const guint8 blue) {}
+	virtual void characterShadingChange(const guint8 shading) {}
 	virtual void fontChange(const guint16 matchedFontPointSize, const guint16 fontPID) {}
 	virtual void attributeChange(const bool isOn, const guint8 attribute) {}
 	virtual void lineSpacingChange(const float lineSpacing) {}
@@ -72,21 +74,21 @@ public:
 	virtual void headerFooterGroup(const guint8 headerFooterType, const guint8 occurenceBits, const guint16 textPID);
 	virtual void suppressPageCharacteristics(const guint8 suppressCode);
 	virtual void endDocument();
- 
+
  	virtual void defineTable(guint8 position, guint16 leftOffset) {}
 	virtual void addTableColumnDefinition(guint32 width, guint32 leftGutter, guint32 rightGutter) {}
 	virtual void startTable();
  	virtual void insertRow();
- 	virtual void insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove, 
-				const guint8 borderBits, 
+ 	virtual void insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove,
+				const guint8 borderBits,
 				const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
  	virtual void endTable() {}
-		
+
 protected:
 	virtual void _handleSubDocument(guint16 textPID) {}
 	virtual void _flushText(const bool fakeText=false) {}
-	virtual void _openPageSpan() { /* FIXME: REMOVE ME WHEN IMPLEMENTED IN WPXHLListener */ };	
-		
+	virtual void _openPageSpan() { /* FIXME: REMOVE ME WHEN IMPLEMENTED IN WPXHLListener */ };
+
 private:
 	WPXPageSpan *m_currentPage;
 

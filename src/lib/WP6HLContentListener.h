@@ -1,31 +1,31 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Library General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Library General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
- * 
+ *
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
- 
+
 #ifndef WP6HLCONTENTLISTENER_H
 #define WP6HLCONTENTLISTENER_H
- 
+
 #include "WP6HLListener.h"
 #include "WPXHLListener.h"
 #include "WP6FileStructure.h"
@@ -40,10 +40,10 @@ class WPXHLListenerImpl;
 class WP6LLParser;
 class WPXTable;
 
-enum WP6StyleState { NORMAL, DOCUMENT_NOTE, DOCUMENT_NOTE_GLOBAL, 
+enum WP6StyleState { NORMAL, DOCUMENT_NOTE, DOCUMENT_NOTE_GLOBAL,
 		     BEGIN_BEFORE_NUMBERING,
-		     BEGIN_NUMBERING_BEFORE_DISPLAY_REFERENCING, 
-		     DISPLAY_REFERENCING, 
+		     BEGIN_NUMBERING_BEFORE_DISPLAY_REFERENCING,
+		     DISPLAY_REFERENCING,
 		     BEGIN_NUMBERING_AFTER_DISPLAY_REFERENCING,
 		     BEGIN_AFTER_NUMBERING, STYLE_BODY, STYLE_END };
 
@@ -64,7 +64,7 @@ public:
 	const WP6StyleState getCurrentState() const { return m_stateSequence[0]; /*currentState;*/ }
 	const WP6StyleState getPreviousState() const { return m_stateSequence[1]; /*m_previousState;*/ }
 	void clear() { m_stateSequence.clear(); for (int i=0; i<STATE_MEMORY; i++) m_stateSequence.push_back(NORMAL); }
-	
+
 private:
 	vector<WP6StyleState> m_stateSequence;
 	WP6StyleState m_currentState;
@@ -109,6 +109,7 @@ struct _WP6ParsingState
 	bool m_putativeListElementHasDisplayReferenceNumber;
 
 	int m_noteTextPID;
+
 };
 
 struct _WP6ListLevel
@@ -121,7 +122,7 @@ class WP6OutlineDefinition
 {
  public:
 	WP6OutlineDefinition();
-	WP6OutlineDefinition(const WP6OutlineLocation outlineLocation, const guint8 *numberingMethods, 
+	WP6OutlineDefinition(const WP6OutlineLocation outlineLocation, const guint8 *numberingMethods,
 			  const guint8 tabBehaviourFlag);
 	void update(const guint8 *numberingMethods, const guint8 tabBehaviourFlag);
 
@@ -129,8 +130,8 @@ class WP6OutlineDefinition
 
 protected:
 	void _updateNumberingMethods(const WP6OutlineLocation outlineLocation, const guint8 *numberingMethods);
-                 
-private:	
+
+private:
 	WPXNumberingType m_listTypes[WP6_NUM_LIST_LEVELS];
 };
 
@@ -139,15 +140,17 @@ class WP6HLContentListener : public WP6HLListener
 public:
 	WP6HLContentListener(vector<WPXPageSpan *> *pageList, vector<WPXTable *> *tableList, WPXHLListenerImpl *listenerImpl);
 	virtual ~WP6HLContentListener();
-		
+
 	// for getting low-level messages from the parser
-	virtual void setDate(const guint16 year, const guint8 month, const guint8 day, 
+	virtual void setDate(const guint16 year, const guint8 month, const guint8 day,
 						const guint8 hour, const guint8 minute, const guint8 second,
 						const guint8 dayOfWeek, const guint8 timeZone, const guint8 unused) {}
 	virtual void setExtendedInformation(const guint16 type, const UCSString &data);
 	virtual void insertCharacter(const guint16 character);
 	virtual void insertTab(const guint8 tabType);
 	virtual void insertEOL();
+	virtual void characterColorChange(const guint8 red, const guint8 green, const guint8 blue);
+	virtual void characterShadingChange(const guint8 shading);
 	virtual void fontChange(const guint16 matchedFontPointSize, const guint16 fontPID);
  	virtual void attributeChange(const bool isOn, const guint8 attribute);
 	virtual void lineSpacingChange(const float lineSpacing);
@@ -172,15 +175,15 @@ public:
 	virtual void headerFooterGroup(const guint8 headerFooterType, const guint8 occurenceBits, const guint16 textPID) {}
 	virtual void suppressPageCharacteristics(const guint8 suppressCode) {}
 	virtual void endDocument();
- 
+
  	virtual void defineTable(guint8 position, guint16 leftOffset);
 	virtual void addTableColumnDefinition(guint32 width, guint32 leftGutter, guint32 rightGutter);
 	virtual void startTable();
  	virtual void insertRow();
- 	virtual void insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove, 
-						const guint8 borderBits, 
+ 	virtual void insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove,
+						const guint8 borderBits,
 						const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
- 	virtual void endTable(); 
+ 	virtual void endTable();
 
 
 protected:
@@ -190,23 +193,23 @@ protected:
 	void _paragraphNumberOn(const guint16 outlineHash, const guint8 level);
 	void _flushText(const bool fakeText=false);
 	void _handleListChange(const guint16 outlineHash);
-	    
+
 	void _openListElement();
 
 	void _openTable();
 	void _closeTable();
 	void _openTableRow();
 	void _closeTableRow();
-	void _openTableCell(const guint8 colSpan, const guint8 rowSpan, 
+	void _openTableCell(const guint8 colSpan, const guint8 rowSpan,
 			    const bool boundFromLeft, const bool boundFromAbove,
-				const guint8 borderBits, 
+				const guint8 borderBits,
 			    const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
 	void _closeTableCell();
 
 	void _openParagraph();
 
 private:
-	WP6ParsingState *m_parseState;	
+	WP6ParsingState *m_parseState;
 
 	WP6TableDefinition m_tableDefinition;
 	vector<WPXTable *> *m_tableList;

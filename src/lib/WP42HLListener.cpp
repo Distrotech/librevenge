@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2003-2004 Marc Maurer (j.m.maurer@student.utwente.nl)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,14 +19,14 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
 #include "WP42HLListener.h"
 #include "WP42FileStructure.h"
 
-WP42HLListener::WP42HLListener(vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl) : 
+WP42HLListener::WP42HLListener(vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl) :
 	WPXHLListener(pageList, listenerImpl),
 	WP42LLListener()
 {
@@ -66,7 +66,7 @@ void WP42HLListener::endDocument()
 	// corner case: document contains no end of lines
 	/*else*/ if (!m_ps->m_isParagraphOpened && !m_ps->m_isParagraphClosed)
 	{
-		_flushText();       
+		_flushText();
 	}
 	// NORMAL(ish) case document ends either inside a paragraph or outside of one,
 	// but not inside an object
@@ -74,7 +74,7 @@ void WP42HLListener::endDocument()
 	{
 		_flushText();
 	}
-	
+
 	// the only other possibility is a logical contradiction: a paragraph
 	// may not be opened and closed at the same time
 
@@ -91,12 +91,12 @@ void WP42HLListener::endDocument()
 
 void WP42HLListener::attributeChange(const bool isOn, const guint8 attribute)
 {
-	
+
 	// flush everything which came before this change
 	_flushText();
-	
+
 	guint32 textAttributeBit = 0;
-	
+
 	// FIXME: handle all the possible attribute bits
 	switch (attribute)
 	{
@@ -131,8 +131,8 @@ void WP42HLListener::attributeChange(const bool isOn, const guint8 attribute)
 		textAttributeBit = WPX_UNDERLINE_BIT;
 		break;
 	}
-	
-	if (isOn) 
+
+	if (isOn)
 		m_ps->m_textAttributeBits |= textAttributeBit;
 	else
 		m_ps->m_textAttributeBits ^= textAttributeBit;
@@ -157,7 +157,7 @@ void WP42HLListener::_flushText(const bool fakeText)
 		//if (fakeText)
 			_openParagraph();
 	}
-	
+
 	if (m_ps->m_numDeferredParagraphBreaks > 0)
 	{
 		if (!m_ps->m_isParagraphOpened //&&
@@ -165,9 +165,9 @@ void WP42HLListener::_flushText(const bool fakeText)
 		)
 			m_ps->m_numDeferredParagraphBreaks++;
 
-		while (m_ps->m_numDeferredParagraphBreaks > 1) 
-			_openParagraph(); 			
-		_closeParagraph(); 
+		while (m_ps->m_numDeferredParagraphBreaks > 1)
+			_openParagraph();
+		_closeParagraph();
 		m_ps->m_numDeferredParagraphBreaks = 0; // compensate for this by requiring a paragraph to be opened
 	}
 	else if (m_ps->m_textAttributesChanged && m_textBuffer.getLen())
@@ -175,7 +175,7 @@ void WP42HLListener::_flushText(const bool fakeText)
 		_openSpan();
 		m_ps->m_textAttributesChanged = false;
 	}
-	
+
 	if (m_textBuffer.getLen())
 	{
 		if (!m_ps->m_isParagraphOpened)
@@ -183,7 +183,7 @@ void WP42HLListener::_flushText(const bool fakeText)
 			_openParagraph();
 			_openSpan();
 		}
-		
+
 		m_listenerImpl->insertText(m_textBuffer);
 		m_textBuffer.clear();
 	}
@@ -199,13 +199,13 @@ void WP42HLListener::_openParagraph()
 	(m_parseState->m_tempParagraphJustification != 0) ? paragraphJustification = m_parseState->m_tempParagraphJustification :
 		paragraphJustification = m_parseState->m_paragraphJustification;
 	m_parseState->m_tempParagraphJustification = 0;*/
-	
+
 	m_listenerImpl->openParagraph(0, m_ps->m_textAttributeBits,
-				      m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight,
-				      m_ps->m_fontName->str, m_ps->m_fontSize, 
-				      1.0f, 
+				      m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight, m_ps->m_paragraphTextIndent,
+				      m_ps->m_fontName->str, m_ps->m_fontSize, m_ps->m_fontColor,
+				      1.0f,
 				      false, false);
-	if (m_ps->m_numDeferredParagraphBreaks > 0) 
+	if (m_ps->m_numDeferredParagraphBreaks > 0)
 		m_ps->m_numDeferredParagraphBreaks--;
 
 	m_ps->m_isParagraphOpened = true;

@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -19,13 +19,45 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
 #include "WP6CharacterGroup.h"
 #include "WP6LLListener.h"
 #include "libwpd_internal.h"
+
+/*************************************************************************
+ * WP6CharacterGroup_ColorSubGroup
+ *************************************************************************/
+
+WP6CharacterGroup_ColorSubGroup::WP6CharacterGroup_ColorSubGroup(GsfInput *input)
+{
+	m_red = gsf_le_read_guint8(input);
+	m_green = gsf_le_read_guint8(input);
+	m_blue = gsf_le_read_guint8(input);
+	WPD_DEBUG_MSG(("WordPerfect: Character Group Color subgroup info (red: %i, green: %i, blue: %i)\n", m_red, m_green, m_blue));
+}
+
+void WP6CharacterGroup_ColorSubGroup::parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
+{
+	listener->characterColorChange(m_red, m_green, m_blue);
+}
+
+/*************************************************************************
+ * WP6CharacterGroup_CharacterShadingChangeSubGroup
+ *************************************************************************/
+
+WP6CharacterGroup_CharacterShadingChangeSubGroup::WP6CharacterGroup_CharacterShadingChangeSubGroup(GsfInput *input)
+{
+	m_shading = gsf_le_read_guint8(input);
+	WPD_DEBUG_MSG(("WordPerfect: Character Group Character Shading Change subgroup info (shading: %i)\n", m_shading));
+}
+
+void WP6CharacterGroup_CharacterShadingChangeSubGroup::parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
+{
+	listener->characterShadingChange(m_shading);
+}
 
 /*************************************************************************
  * WP6CharacterGroup_FontFaceChangeSubGroups
@@ -87,7 +119,7 @@ void WP6CharacterGroup_TableDefinitionOnSubGroup::parse(WP6HLListener *listener,
 
 WP6CharacterGroup_TableDefinitionOffSubGroup::WP6CharacterGroup_TableDefinitionOffSubGroup(GsfInput *input)
 {
-	
+
 }
 
 void WP6CharacterGroup_TableDefinitionOffSubGroup::parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
@@ -104,7 +136,7 @@ WP6CharacterGroup_TableColumnSubGroup::WP6CharacterGroup_TableColumnSubGroup(Gsf
 {
 	m_flags = gsf_le_read_guint8(input);
 	m_width = gsf_le_read_guint16(input);
-	
+
 	m_leftGutter = gsf_le_read_guint16(input);
 	m_rigthGutter = gsf_le_read_guint16(input);
 	m_attribWord1 = gsf_le_read_guint16(input);
@@ -140,11 +172,17 @@ void WP6CharacterGroup::_readContents(GsfInput *input)
 {
 	// this group can contain different kinds of data, thus we need to read
 	// the contents accordingly
-	switch (getSubGroup())	
+	switch (getSubGroup())
 	{
 		case WP6_CHARACTER_GROUP_FONT_FACE_CHANGE:
 		case WP6_CHARACTER_GROUP_FONT_SIZE_CHANGE:
 			m_subGroupData = new WP6CharacterGroup_FontFaceChangeSubGroup(input);
+			break;
+		case WP6_CHARACTER_GROUP_COLOR:
+			m_subGroupData = new WP6CharacterGroup_ColorSubGroup(input);
+			break;
+		case WP6_CHARACTER_GROUP_CHARACTER_SHADING_CHANGE:
+			m_subGroupData = new WP6CharacterGroup_CharacterShadingChangeSubGroup(input);
 			break;
 		case WP6_CHARACTER_GROUP_PARAGRAPH_NUMBER_ON:
 			m_subGroupData = new WP6CharacterGroup_ParagraphNumberOnSubGroup(input);
@@ -154,7 +192,7 @@ void WP6CharacterGroup::_readContents(GsfInput *input)
 			break;
 		case WP6_CHARACTER_GROUP_TABLE_DEFINITION_OFF:
 			m_subGroupData = new WP6CharacterGroup_TableDefinitionOffSubGroup(input);
-			break;	
+			break;
 		case WP6_CHARACTER_GROUP_TABLE_COLUMN:
 			m_subGroupData = new WP6CharacterGroup_TableColumnSubGroup(input);
 			break;
@@ -166,11 +204,13 @@ void WP6CharacterGroup::_readContents(GsfInput *input)
 void WP6CharacterGroup::parse(WP6HLListener *listener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling a Character group\n"));
-	
+
 	switch (getSubGroup())
 	{
 		case WP6_CHARACTER_GROUP_FONT_FACE_CHANGE:
 		case WP6_CHARACTER_GROUP_FONT_SIZE_CHANGE:
+		case WP6_CHARACTER_GROUP_COLOR:
+		case WP6_CHARACTER_GROUP_CHARACTER_SHADING_CHANGE:
 		case WP6_CHARACTER_GROUP_PARAGRAPH_NUMBER_ON:
 			m_subGroupData->parse(listener, getNumPrefixIDs(), getPrefixIDs());
 			break;

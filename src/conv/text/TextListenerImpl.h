@@ -56,12 +56,13 @@ public:
 	virtual void openSection(const unsigned int numColumns, const float spaceAfter) {}
 	virtual void closeSection() {}
 	virtual void openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits,
-				   const float marginLeftOffset, const float marginRightOffset,
-				   const gchar *fontName, float fontSize,
+				   const float marginLeftOffset, const float marginRightOffset, const float textIndent,
+				   const gchar *fontName, const float fontSize, const RGBSColor *fontColor,
 				   const float lineSpacing,
 				   bool isColumnBreak, bool isPageBreak) {}
 	virtual void closeParagraph();
-	virtual void openSpan(const guint32 textAttributeBits, const gchar *fontName, const float fontSize) {}
+	virtual void openSpan(const guint32 textAttributeBits, const gchar *fontName, const float fontSize,
+				   const RGBSColor *fontColor) {}
 	virtual void closeSpan() {}
 
 	virtual void insertTab();
@@ -77,9 +78,9 @@ public:
 	virtual void closeOrderedListLevel() {}
 	virtual void closeUnorderedListLevel() {}
 	virtual void openListElement(const guint8 paragraphJustification, const guint32 textAttributeBits,
-				     const float marginLeftOffset, const float marginRightOffset,
-				     const gchar *fontName, const float fontSize,
-				     const float lineSpacing) {}
+				   const float marginLeftOffset, const float marginRightOffset, const float textIndent,
+				   const gchar *fontName, const float fontSize, const RGBSColor *fontColor,
+			       const float lineSpacing) {}
 	virtual void closeListElement() {}
 
 	virtual void openFootnote(int number) {}

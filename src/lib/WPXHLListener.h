@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,13 +19,13 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
- 
+
 #ifndef WPXHLLISTENER_H
 #define WPXHLLISTENER_H
- 
+
 #include "WPXLLListener.h"
 #include "WPXHLListenerImpl.h"
 
@@ -36,11 +36,11 @@ struct _WPXDocumentMetaData
 {
 	UCSString m_author;
 	UCSString m_subject;
-	UCSString m_publisher; 
+	UCSString m_publisher;
 	UCSString m_category;
-	UCSString m_keywords; 
+	UCSString m_keywords;
 	UCSString m_language;
-	UCSString m_abstract; 
+	UCSString m_abstract;
 	UCSString m_descriptiveName;
 	UCSString m_descriptiveType;
 };
@@ -50,7 +50,7 @@ struct _WPXParsingState
 {
 	_WPXParsingState(bool sectionAttributesChanged=true);
 	~_WPXParsingState() {}
-	
+
 /*
 	UCSString m_bodyText;
 	UCSString m_textBeforeNumber;
@@ -62,7 +62,8 @@ struct _WPXParsingState
 	guint32 m_textAttributeBits;
 	bool m_textAttributesChanged;
 	float m_fontSize;
-	GString * m_fontName;
+	GString *m_fontName;
+	RGBSColor *m_fontColor;
 
 	bool m_isParagraphColumnBreak;
 	bool m_isParagraphPageBreak;
@@ -102,6 +103,7 @@ struct _WPXParsingState
 	float m_pageMarginRight;
 	float m_paragraphMarginLeft;
 	float m_paragraphMarginRight;
+	float m_paragraphTextIndent;
 
 	/*gint32 m_currentRow;
 	gint32 m_currentColumn;
@@ -115,15 +117,15 @@ struct _WPXParsingState
 	bool m_putativeListElementHasDisplayReferenceNumber;
 
 	int m_noteTextPID;
-	
-	*/	
+
+	*/
 
 };
 
 class WPXHLListener : public WPXLLListener
 {
 public:
-	WPXHLListener(vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl);	
+	WPXHLListener(vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl);
 	WPXHLListener::~WPXHLListener();
 
 	void startDocument();

@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -27,6 +27,28 @@
 #define WP6CHARACTERGROUP_H
 
 #include "WP6VariableLengthGroup.h"
+
+class WP6CharacterGroup_ColorSubGroup: public WP6VariableLengthGroup_SubGroup
+{
+public:
+	WP6CharacterGroup_ColorSubGroup(GsfInput *input);
+	virtual void parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
+
+private:
+	guint8 m_red;
+	guint8 m_green;
+	guint8 m_blue;
+};
+
+class WP6CharacterGroup_CharacterShadingChangeSubGroup: public WP6VariableLengthGroup_SubGroup
+{
+public:
+	WP6CharacterGroup_CharacterShadingChangeSubGroup(GsfInput *input);
+	virtual void parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
+
+private:
+	guint8 m_shading;
+};
 
 class WP6CharacterGroup_FontFaceChangeSubGroup : public WP6VariableLengthGroup_SubGroup
 {
@@ -97,7 +119,7 @@ private:
 class WP6CharacterGroup : public WP6VariableLengthGroup
 {
  public:
-	WP6CharacterGroup(GsfInput *input);	
+	WP6CharacterGroup(GsfInput *input);
 	virtual ~WP6CharacterGroup();
 	virtual void _readContents(GsfInput *input);
 	virtual void parse(WP6HLListener *listener);
