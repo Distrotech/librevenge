@@ -37,7 +37,7 @@ WP6GeneralTextPacket::WP6GeneralTextPacket(WPXInputStream *input, int id, guint3
 
 WP6GeneralTextPacket::~WP6GeneralTextPacket()
 {
-	g_object_unref(G_OBJECT(m_stream));
+	delete m_stream;
 	delete [] m_blockSizes;
 }
 
