@@ -43,7 +43,7 @@ void WP6DisplayNumberReferenceGroup::_readContents(WPXInputStream *input)
 
 void WP6DisplayNumberReferenceGroup::parse(WP6HLListener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling an DisplayNumberReference group\n"));
+	WPD_DEBUG_MSG(("WordPerfect: handling a DisplayNumberReference group\n"));
 	
 	if (!(getSubGroup() % 2) || getSubGroup() == 0)
 		listener->displayNumberReferenceGroupOn(getSubGroup(), m_levelNumberToDisplay);

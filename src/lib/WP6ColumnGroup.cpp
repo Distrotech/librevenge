@@ -70,7 +70,7 @@ void WP6ColumnGroup::_readContents(WPXInputStream *input)
 
 void WP6ColumnGroup::parse(WP6HLListener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling an Column group\n"));
+	WPD_DEBUG_MSG(("WordPerfect: handling a Column group\n"));
 	
 	switch (getSubGroup())
 	{

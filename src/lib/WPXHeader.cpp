@@ -78,7 +78,7 @@ WPXHeader * WPXHeader::constructHeader(WPXInputStream *input)
 	uint8_t minorVersion = readU8(input);
 	
 	input->seek(WPX_HEADER_ENCRYPTION_OFFSET, WPX_SEEK_SET);
-	uint8_t documentEncryption = readU16(input);		
+	uint8_t documentEncryption = (uint8_t)readU16(input);		
 	
 	WPD_DEBUG_MSG(("WordPerfect: Product Type: %i File Type: %i Major Version: %i Minor Version: %i\n", 
 					productType, fileType, 

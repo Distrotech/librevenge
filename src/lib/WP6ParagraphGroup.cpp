@@ -75,7 +75,7 @@ void WP6ParagraphGroup::_readContents(WPXInputStream *input)
 
 void WP6ParagraphGroup::parse(WP6HLListener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling an Paragraph group\n"));
+	WPD_DEBUG_MSG(("WordPerfect: handling a Paragraph group\n"));
 
 	if (m_subGroupData)
 		m_subGroupData->parse(listener, getNumPrefixIDs(), getPrefixIDs());
@@ -203,7 +203,6 @@ WP6ParagraphGroup_TabSetSubGroup::WP6ParagraphGroup_TabSetSubGroup(WPXInputStrea
 			}
 			tmp_repetitionCount = 0;
 		}
-		WPD_DEBUG_MSG(("\n"));
 	}
 }
 

@@ -35,12 +35,12 @@ WP6HeaderFooterGroup::WP6HeaderFooterGroup(WPXInputStream *input) :
 
 void WP6HeaderFooterGroup::_readContents(WPXInputStream *input)
 {
-	m_occurenceBits = readU16(input);
+	m_occurenceBits = readU8(input);
 }
 
 void WP6HeaderFooterGroup::parse(WP6HLListener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling an HeaderFooter group\n"));
+	WPD_DEBUG_MSG(("WordPerfect: handling a HeaderFooter group\n"));
 
 	if (getNumPrefixIDs() > 0) // FIXME: perhaps we should throw an exception if this isn't true..
 	{
