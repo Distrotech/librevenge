@@ -40,7 +40,7 @@ WP3HLStylesListener::WP3HLStylesListener(vector<WPXPageSpan *> *pageList, WPXTab
 
 void WP3HLStylesListener::endDocument()
 {	
-	insertBreak(WPX_SOFT_PAGE_BREAK); // pretend we just had a soft page break (for the last page)
+	insertBreak(WPX_PAGE_BREAK); // pretend we just had a soft page break (for the last page)
 	delete(m_currentPage); // and delete the non-existent page that was allocated as a result (scandalous waste!)
 }
 
@@ -70,18 +70,18 @@ void WP3HLStylesListener::insertBreak(const uint8_t breakType)
 		}
 	}
 }
-/*
+
 void WP3HLStylesListener::pageMarginChange(const uint8_t side, const uint16_t margin)
 {
 	if (!isUndoOn()) 
 	{
-		float marginInch = (float)(((double)margin + (double)WP6_NUM_EXTRA_WPU) / (double)WPX_NUM_WPUS_PER_INCH);
+		float marginInch = (float)((double)margin / (double)WPX_NUM_WPUS_PER_INCH);
 		switch(side)
 		{
-			case WP6_PAGE_GROUP_TOP_MARGIN_SET:
+			case WPX_TOP:
 				m_currentPage->setMarginTop(marginInch);
 				break;
-			case WP6_PAGE_GROUP_BOTTOM_MARGIN_SET:
+			case WPX_BOTTOM:
 				m_currentPage->setMarginBottom(marginInch);
 				break;
 		}
@@ -92,15 +92,15 @@ void WP3HLStylesListener::marginChange(const uint8_t side, const uint16_t margin
 {
 	if (!isUndoOn()) 
 	{		
-		float marginInch = (float)(((double)margin + (double)WP6_NUM_EXTRA_WPU) / (double)WPX_NUM_WPUS_PER_INCH);
+		float marginInch = (float)((double)margin / (double)WPX_NUM_WPUS_PER_INCH);
 		switch(side)
 		{
-			case WP6_COLUMN_GROUP_LEFT_MARGIN_SET:
+			case WPX_LEFT:
 				if (!m_currentPageHasContent)
 					m_currentPage->setMarginLeft(marginInch);
 				m_tempMarginLeft = marginInch;
 				break;
-			case WP6_COLUMN_GROUP_RIGHT_MARGIN_SET:
+			case WPX_RIGHT:
 				if (!m_currentPageHasContent)
 					m_currentPage->setMarginRight(marginInch);
 				m_tempMarginRight = marginInch;
@@ -111,6 +111,23 @@ void WP3HLStylesListener::marginChange(const uint8_t side, const uint16_t margin
 
 }
 
+void WP3HLStylesListener::pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool isPersistent)
+{
+	if (!isUndoOn())
+	{
+		// TODO: handle the isPersistent information
+		float lengthInch = (float)((double)length / (double)WPX_NUM_WPUS_PER_INCH);
+		float widthInch = (float)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
+		if (!m_currentPageHasContent)
+		{
+			m_currentPage->setFormLength(lengthInch);
+			m_currentPage->setFormWidth(widthInch);
+			m_currentPage->setFormOrientation(orientation);
+		}
+	}
+}
+
+/*
 void WP3HLStylesListener::headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, const uint16_t textPID)
 {
 	if (!isUndoOn()) 

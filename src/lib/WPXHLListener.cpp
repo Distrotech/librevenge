@@ -38,10 +38,10 @@ _WPXParsingState::_WPXParsingState(bool sectionAttributesChanged) :
 
 	m_isParagraphColumnBreak(false),
 	m_isParagraphPageBreak(false),
-/*	m_paragraphLineSpacing(1.0f),
+	m_paragraphLineSpacing(1.0f),
 	m_paragraphJustification(WPX_PARAGRAPH_JUSTIFICATION_LEFT),
-	m_tempParagraphJustification(0),
-*/
+//	m_tempParagraphJustification(0),
+
 	m_isSectionOpened(false),
 	m_isPageSpanBreakDeferred(false),
 
@@ -69,9 +69,19 @@ _WPXParsingState::_WPXParsingState(bool sectionAttributesChanged) :
 
 	m_pageMarginLeft(1.0f),
 	m_pageMarginRight(1.0f),
+
 	m_paragraphMarginLeft(0.0f),
 	m_paragraphMarginRight(0.0f),
+	m_leftMarginByPageMarginChange(0.0f),
+	m_rightMarginByPageMarginChange(0.0f),
+	m_leftMarginByParagraphMarginChange(0.0f),
+	m_rightMarginByParagraphMarginChange(0.0f),
+	m_leftMarginByTabs(0.0f),
+	m_rightMarginByTabs(0.0f),
+
 	m_paragraphTextIndent(0.0f),
+	m_textIndentByParagraphIndentChange(0.0f),
+	m_textIndentByTabs(0.0f),
 	m_paragraphSpacingAfter(0.0f),
 /*	m_currentRow(-1),
 	m_currentColumn(-1),
@@ -188,6 +198,12 @@ void WPXHLListener::_openPageSpan()
 	m_ps->m_pageFormOrientation = currentPage->getFormOrientation();
 	m_ps->m_pageMarginLeft = currentPage->getMarginLeft();
 	m_ps->m_pageMarginRight = currentPage->getMarginRight();
+
+	m_ps->m_leftMarginByPageMarginChange = 0.0f;
+	m_ps->m_rightMarginByPageMarginChange = 0.0f;
+	m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByParagraphMarginChange;
+	m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByParagraphMarginChange;
+
 	m_ps->m_numPagesRemainingInSpan = (currentPage->getPageSpan() - 1);
 	m_ps->m_nextPageSpanIndice++;
 	m_ps->m_isPageSpanOpened = true;
@@ -364,3 +380,43 @@ void WPXHLListener::insertBreak(const uint8_t breakType)
 		}
 	}
 }
+
+void WPXHLListener::lineSpacingChange(const float lineSpacing)
+{
+	if (!isUndoOn())
+	{
+		m_ps->m_paragraphLineSpacing = lineSpacing;
+	}
+}
+
+void WPXHLListener::justificationChange(const uint8_t justification)
+{
+	if (!isUndoOn())
+	{
+		// could be done simply by:
+		// m_ps->m_paragraphJustification = justification;
+		switch (justification)
+		{
+		case 0x00:
+			m_ps->m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_LEFT;
+			break;
+		case 0x01:
+			m_ps->m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_FULL;
+			break;
+		case 0x02:
+			m_ps->m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_CENTER;
+			break;
+		case 0x03:
+			m_ps->m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_RIGHT;
+			break;
+		case 0x04:
+			m_ps->m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_FULL_ALL_LINES;
+			break;
+		case 0x05:
+			m_ps->m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_DECIMAL_ALIGNED;
+			break;
+		}
+	}
+}
+
+

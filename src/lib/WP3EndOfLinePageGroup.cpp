@@ -83,12 +83,15 @@ void WP3EndOfLinePageGroup::parse(WP3HLListener *listener)
 			listener->insertEOL();
 			break;
 		case 0x03: // Hard End of Line/Soft End of Page/Column
+			listener->insertEOL();
 			break;
 		case 0x04: // Temporary End of Line
+			listener->insertEOL();
 			break;
 		case 0x05: // Temporary End of Page/Column
 			break;
 		case 0x06: // Dormant Hard Return
+			listener->insertEOL();
 			break;
 		case 0x07: // Hard End of Page
 			break;
@@ -97,16 +100,22 @@ void WP3EndOfLinePageGroup::parse(WP3HLListener *listener)
 		case 0x09: // Hard End of Column/Soft End of Page
 			break;
 		case 0x0A: // Hard End of Line (Hard EOC not in columns)
+			listener->insertEOL();
 			break;
 		case 0x0B: // Hard EOL/Soft EOP (Hard EOC/soft EOP not columns)
+			listener->insertEOL();
 			break;
 		case 0x0C: // Hard Hyphen at End of Line
+			listener->insertCharacter((uint16_t) '-');
 			break;
 		case 0x0D: // Hard Hyphen at End of Page/Column
+			listener->insertCharacter((uint16_t) '-');
 			break;
 		case 0x0E: // Soft Hyphen at End of Line
+			listener->insertCharacter((uint16_t) 0xad);
 			break;
 		case 0x0F: // Soft Hyphen at End of Page/Column
+			listener->insertCharacter((uint16_t) 0xad);
 			break;
 		case 0x10: // Auto Hyphen at End of Line
 			break;

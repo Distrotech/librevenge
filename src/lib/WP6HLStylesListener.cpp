@@ -93,7 +93,7 @@ void WP6HLStylesListener::pageMarginChange(const uint8_t side, const uint16_t ma
 	}
 }
 
-void WP6HLStylesListener::pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation)
+void WP6HLStylesListener::pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool isPersistent)
 {
 	if (!isUndoOn())
 	{

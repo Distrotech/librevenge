@@ -648,7 +648,11 @@ void UTF8String::sprintf(const char *format, ...)
 	va_start (args, format);
 
 	char *buf = new char[STRING_BUF_SIZE];
+#ifdef _MSC_VER // MSVC uses _vsnprintf instead of vsnprintf
+	int num_needed = _vsnprintf(buf, STRING_BUF_SIZE, format, args);
+#else /* !_MSC_VER */
 	int num_needed = vsnprintf(buf, STRING_BUF_SIZE, format, args);
+#endif /* _MSC_VER */
 	if (num_needed >= STRING_BUF_SIZE)
 	{
 		delete [] buf;

@@ -40,9 +40,13 @@ class WP5PageFormatGroup : public WP5VariableLengthGroup
 	// variables needed for subgroup 1 (Left/Right Margin Set)
 	uint16_t m_leftMargin;
 	uint16_t m_rightMargin;
+	// variable needed for subgroup 2 (Spacing Set)
+	float m_lineSpacing;
 	// variables needed for subgroup 5 (Top/Bottom Margin Set)
 	uint16_t m_topMargin;
 	uint16_t m_bottomMargin;
+	// variables needed for subgroup 6 (Justification)
+	uint8_t m_justification;
 	// variables needed for subgroup 11 (Form)
 	uint16_t m_formLength;
 	uint16_t m_formWidth;

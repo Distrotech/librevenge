@@ -77,10 +77,10 @@ struct _WPXParsingState
 
 	bool m_isParagraphColumnBreak;
 	bool m_isParagraphPageBreak;
-/*	uint8_t m_paragraphJustification;
-	uint8_t m_tempParagraphJustification;
+	uint8_t m_paragraphJustification;
+/*	uint8_t m_tempParagraphJustification;*/
 	float m_paragraphLineSpacing;
-*/
+
 	bool m_isSectionOpened;
 	bool m_isPageSpanBreakDeferred;
 
@@ -110,10 +110,19 @@ struct _WPXParsingState
 
 	float m_pageMarginLeft;
 	float m_pageMarginRight;
+	float m_paragraphMarginLeft;  // resulting paragraph margin that is one of the paragraph
+	float m_paragraphMarginRight; // properties
+	float m_leftMarginByPageMarginChange;  // part of the margin due to the PAGE margin change
+	float m_rightMarginByPageMarginChange; // inside a page that already has content.
+	float m_leftMarginByParagraphMarginChange;  // part of the margin due to the PARAGRAPH
+	float m_rightMarginByParagraphMarginChange; // margin change (in WP6)
+	float m_leftMarginByTabs;  // part of the margin due to the LEFT or LEFT/RIGHT Indent; the
+	float m_rightMarginByTabs; // only part of the margin that is reset at the end of a paragraph
 
-	float m_paragraphMarginLeft;
-	float m_paragraphMarginRight;
-	float m_paragraphTextIndent;
+	float m_paragraphTextIndent; // resulting first line indent that is one of the paragraph properties
+	float m_textIndentByParagraphIndentChange; // part of the indent due to the PARAGRAPH indent (WP6???)
+	float m_textIndentByTabs; // part of the indent due to the "Back Tab"
+	
 	float m_paragraphSpacingAfter;
 
 /*	int32_t m_currentRow;
@@ -145,6 +154,8 @@ public:
 	void startDocument();
 	void handleSubDocument(uint16_t textPID, const bool isHeaderFooter, WPXTableList *tableList);
 	virtual void insertBreak(const uint8_t breakType);
+	virtual void lineSpacingChange(const float lineSpacing);
+	virtual void justificationChange(const uint8_t justification);
 
 	WPXParsingState *m_ps; // parse state
 	WPXHLListenerImpl * m_listenerImpl;

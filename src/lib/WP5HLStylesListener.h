@@ -50,7 +50,7 @@ public:
 	virtual void spacingAfterParagraphChange(const float spacingRelative, const float spacingAbsolute) {}
 	virtual void justificationChange(const uint8_t justification) {}
 	virtual void pageMarginChange(const uint8_t side, const uint16_t margin);
-	virtual void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation);
+	virtual void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool isPersistent);
 	virtual void marginChange(const uint8_t side, const uint16_t margin);
 	virtual void paragraphMarginChange(const uint8_t side, const int16_t margin) {}
 	virtual void indentFirstLineChange(const int16_t offset) {}

@@ -1,6 +1,7 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,31 +24,31 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP6PAGEGROUP_H
-#define WP6PAGEGROUP_H
+#ifndef WP3PAGEFORMATGROUP_H
+#define WP3PAGEFORMATGROUP_H
 
-#include "WP6VariableLengthGroup.h"
+#include "WP3VariableLengthGroup.h"
 
-class WP6PageGroup : public WP6VariableLengthGroup
+class WP3PageFormatGroup : public WP3VariableLengthGroup
 {
  public:
-	WP6PageGroup(WPXInputStream *input);	
-	virtual ~WP6PageGroup();
+	WP3PageFormatGroup(WPXInputStream *input);	
+	virtual ~WP3PageFormatGroup();
 	virtual void _readContents(WPXInputStream *input);
-	virtual void parse(WP6HLListener *listener);
+	virtual void parse(WP3HLListener *listener);
 
  private:
-	// variables needed for subgroup 0 and 1 (Left/Right Margin Set)
-	uint16_t m_margin;
-	uint8_t m_marginType;
-	// variables needed for subgroup 2 (suppress page characteristics)
-	uint8_t m_suppressedCode;
-	// variables needed for subgroup 0x11 (Form)
-	uint16_t m_formLength;
-	uint16_t m_formWidth;
-	uint8_t m_formType;
-	WPXFormOrientation m_formOrientation;
+	// variables needed for subgroup 1 (Horizontal Margins)
+	uint32_t m_leftMargin;
+	uint32_t m_rightMargin;
+	// variable needed for subgroup 2 (Line Spacing)
+	float m_lineSpacing;
+	// variables needed for subgroup 5 (Vertical Margins)
+	uint32_t m_topMargin;
+	uint32_t m_bottomMargin;
+	// variable needed for subgroup 6 (Justification Mode)
+	uint8_t m_justification;
 
 };
 
-#endif /* WP6PAGEGROUP_H */
+#endif /* WP3PAGEFORMATGROUP_H */

@@ -24,6 +24,7 @@
 
 #include "WP3HLListener.h"
 #include "WP3FileStructure.h"
+#include "WPXFileStructure.h"
 
 _WP3ParsingState::_WP3ParsingState()
 {
@@ -176,6 +177,31 @@ void WP3HLListener::undoChange(const uint8_t undoType, const uint16_t undoLevel)
 		m_isUndoOn = true;
 }
 
+void WP3HLListener::marginChange(uint8_t side, uint16_t margin)
+{
+	if (!isUndoOn())
+	{
+		float marginInch = (float)((double)margin/ (double)WPX_NUM_WPUS_PER_INCH);
+		bool marginChanged = false;
+
+		switch(side)
+		{
+		case WPX_LEFT:
+			m_ps->m_leftMarginByPageMarginChange = marginInch - m_ps->m_pageMarginLeft;
+			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
+						+ m_ps->m_leftMarginByParagraphMarginChange
+						+ m_ps->m_leftMarginByTabs;
+			break;
+		case WPX_RIGHT:
+			m_ps->m_rightMarginByPageMarginChange = marginInch - m_ps->m_pageMarginRight;
+			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
+						+ m_ps->m_rightMarginByParagraphMarginChange
+						+ m_ps->m_rightMarginByTabs;
+			break;
+		}
+	}
+}
+
 
 /****************************************
  private functions
@@ -234,7 +260,7 @@ void WP3HLListener::_openParagraph()
 
 	m_listenerImpl->openParagraph(0,
 				      m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight, m_ps->m_paragraphTextIndent,
-				      1.0f, 0.0f,
+				      m_ps->m_paragraphLineSpacing, 0.0f,
 				      m_ps->m_isParagraphColumnBreak, m_ps->m_isParagraphPageBreak);
 
 	if (m_ps->m_numDeferredParagraphBreaks > 0)
@@ -243,6 +269,12 @@ void WP3HLListener::_openParagraph()
 	m_ps->m_isParagraphColumnBreak = false;
 	m_ps->m_isParagraphPageBreak = false;
 	m_ps->m_isParagraphOpened = true;
+	m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange + m_ps->m_leftMarginByParagraphMarginChange;
+	m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange + m_ps->m_rightMarginByParagraphMarginChange;
+	m_ps->m_leftMarginByTabs = 0.0f;
+	m_ps->m_rightMarginByTabs = 0.0f;
+	m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange;
+	m_ps->m_textIndentByTabs = 0.0f;	
 
 	_openSpan();
 }

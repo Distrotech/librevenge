@@ -33,6 +33,11 @@ WP5SingleByteFunction * WP5SingleByteFunction::constructSingleByteFunction(WPXIn
 
 	switch (groupID) 
 	{
+	case 0x8c: // combination hard return/soft page
+	case 0x90: // deletable return at EOL
+	case 0x99: // dormant hard return
+		return new WP5EOLFunction();
+		
 	case 0x93: // invisible return in line
 	case 0x94: // invisible return EOL
 	case 0x95: // invisible return EOP
@@ -55,6 +60,11 @@ WP5SingleByteFunction * WP5SingleByteFunction::constructSingleByteFunction(WPXIn
 		// should not happen
 		return NULL;
 		}
+}
+
+void WP5EOLFunction::parse(WP5HLListener *listener)
+{
+	listener->insertEOL();
 }
 
 void WP5SpaceFunction::parse(WP5HLListener *listener)

@@ -47,6 +47,8 @@ libwpd_1_la_SOURCES =				\
 	WP3Header.cpp				\
 	WP3HLListener.cpp			\
 	WP3HLStylesListener.cpp			\
+	WP3MiscellaneousGroup.cpp		\
+	WP3PageFormatGroup.cpp			\
 	WP3Parser.cpp				\
 	WP3Part.cpp				\
 	WP3SingleByteFunction.cpp		\
@@ -136,6 +138,8 @@ libwpd_1_la_SOURCES =				\
 	WP3HLListener.h				\
 	WP3HLStylesListener.h			\
 	WP3LLListener.h				\
+	WP3MiscellaneousGroup.h			\
+	WP3PageFormatGroup.h			\
 	WP3Parser.h				\
 	WP3Part.h				\
 	WP3SingleByteFunction.h			\

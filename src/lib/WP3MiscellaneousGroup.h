@@ -1,6 +1,7 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,31 +24,26 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP6PAGEGROUP_H
-#define WP6PAGEGROUP_H
+#ifndef WP3MISCELLANEOUSGROUP_H
+#define WP3MISCELLANEOUSGROUP_H
 
-#include "WP6VariableLengthGroup.h"
+#include "WP3VariableLengthGroup.h"
+#include "libwpd_support.h"
 
-class WP6PageGroup : public WP6VariableLengthGroup
+class WP3MiscellaneousGroup : public WP3VariableLengthGroup
 {
  public:
-	WP6PageGroup(WPXInputStream *input);	
-	virtual ~WP6PageGroup();
+	WP3MiscellaneousGroup(WPXInputStream *input);	
+	virtual ~WP3MiscellaneousGroup();
 	virtual void _readContents(WPXInputStream *input);
-	virtual void parse(WP6HLListener *listener);
+	virtual void parse(WP3HLListener *listener);
 
  private:
-	// variables needed for subgroup 0 and 1 (Left/Right Margin Set)
-	uint16_t m_margin;
-	uint8_t m_marginType;
-	// variables needed for subgroup 2 (suppress page characteristics)
-	uint8_t m_suppressedCode;
-	// variables needed for subgroup 0x11 (Form)
-	uint16_t m_formLength;
-	uint16_t m_formWidth;
-	uint8_t m_formType;
-	WPXFormOrientation m_formOrientation;
-
+	// variables needed for subgroup 4 (Page Size Override)
+	uint16_t m_pageWidth;
+	uint16_t m_pageHeight;
+	WPXFormOrientation m_pageOrientation;
+	bool m_isPersistent;
 };
 
-#endif /* WP6PAGEGROUP_H */
+#endif /* WP3MISCELLANEOUSGROUP_H */

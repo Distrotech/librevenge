@@ -122,3 +122,24 @@ That's all folks! For more information, ask questions at the mailing list
 libwpd-devel@list.sourceforge.net. Remember that Uncle Google can also be of big
 help especially when the problem is not with libwpd, but with one of its 
 dependencies.
+
+Mac OSX
+=======
+
+Compilation on Mac OSX requires following fix in order not to have errors concerning
+unresolved symbols at runtime
+
+1.  perl -pi -e 's,need_relink=yes,need_relink=no,g' ltmain.sh
+
+2. ALL IN ONE LINE !!!
+
+    perl -pi -e 's,\$CC -r -keep_private_externs -nostdlib -o \$\{lib\}-master.o 
+    \$libobjs \&\& \$CC,\$nonopt -r -keep_private_externs -nostdlib -o 
+    \$\{lib\}-master.o \$libobjs \&\& \$nonopt,g' configure
+  
+3.  ./configure --with-pic [all other options]
+
+     make ; su; make install
+     
+The above-mentioned fix is from the libwpd-1.info file of Justin F. Hallet who
+maintains the libwpd-1* packages for Fink project (http://fink.sourceforge.net).

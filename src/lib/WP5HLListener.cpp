@@ -166,15 +166,21 @@ void WP5HLListener::marginChange(uint8_t side, uint16_t margin)
 		switch(side)
 		{
 		case WPX_LEFT:
-			m_ps->m_paragraphMarginLeft = marginInch - m_ps->m_pageMarginLeft;
+			m_ps->m_leftMarginByPageMarginChange = marginInch - m_ps->m_pageMarginLeft;
+			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
+						+ m_ps->m_leftMarginByParagraphMarginChange
+						+ m_ps->m_leftMarginByTabs;
 			break;
 		case WPX_RIGHT:
-			m_ps->m_paragraphMarginRight = marginInch - m_ps->m_pageMarginRight;
+			m_ps->m_rightMarginByPageMarginChange = marginInch - m_ps->m_pageMarginRight;
+			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
+						+ m_ps->m_rightMarginByParagraphMarginChange
+						+ m_ps->m_rightMarginByTabs;
 			break;
 		}
-
 	//}
 }
+
 
 /****************************************
  private functions
@@ -184,7 +190,7 @@ void WP5HLListener::_flushText(const bool fakeText)
 {
 	// create a new section, and a new paragraph, if our section attributes have changed and we have inserted
 	// something into the document (or we have forced a break, which assumes the same condition)
-	if (m_ps->m_sectionAttributesChanged && (m_textBuffer.getLen() > 0 || m_ps->m_numDeferredParagraphBreaks > 0 /*|| fakeText*/))
+	if (m_ps->m_sectionAttributesChanged && (m_textBuffer.getLen() > 0 || m_ps->m_numDeferredParagraphBreaks > 0/* || fakeText*/))
 	{
 		_openSection();
 		//if (fakeText)
@@ -231,9 +237,9 @@ void WP5HLListener::_openParagraph()
 	m_parseState->m_tempParagraphJustification = 0;
 	*/
 
-	m_listenerImpl->openParagraph(0,
+	m_listenerImpl->openParagraph(m_ps->m_paragraphJustification,
 				      m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight, m_ps->m_paragraphTextIndent,
-				      1.0f, 0.0f,
+				      m_ps->m_paragraphLineSpacing, 0.0f,
 				      m_ps->m_isParagraphColumnBreak, m_ps->m_isParagraphPageBreak);
 
 	if (m_ps->m_numDeferredParagraphBreaks > 0)
@@ -242,6 +248,12 @@ void WP5HLListener::_openParagraph()
 	m_ps->m_isParagraphColumnBreak = false;
 	m_ps->m_isParagraphPageBreak = false;
 	m_ps->m_isParagraphOpened = true;
+	m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange + m_ps->m_leftMarginByParagraphMarginChange;
+	m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange + m_ps->m_rightMarginByParagraphMarginChange;
+	m_ps->m_leftMarginByTabs = 0.0f;
+	m_ps->m_rightMarginByTabs = 0.0f;
+	m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange;
+	m_ps->m_textIndentByTabs = 0.0f;	
 
 	_openSpan();
 }

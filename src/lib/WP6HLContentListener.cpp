@@ -187,16 +187,9 @@ void WP6OutlineDefinition::_updateNumberingMethods(const WP6OutlineLocation outl
 }
 
 _WP6ParsingState::_WP6ParsingState(WPXTableList * tableList, int nextTableIndice) :
-	m_paragraphLineSpacing(1.0f),
 	m_paragraphSpacingAfterAbsolute(0.0f),
 	m_paragraphSpacingAfterRelative(1.0f),
-	m_paragraphJustification(WPX_PARAGRAPH_JUSTIFICATION_LEFT),
 	m_tempParagraphJustification(0),
-	m_leftMargin(0.0f),
-	m_rightMargin(0.0f),
-	m_firstLineOffset(0.0f),
-	m_paragraphLeftMargin(0.0f),
-	m_paragraphRightMargin(0.0f),
 
 	m_numRemovedParagraphBreaks(0),
 
@@ -530,14 +523,6 @@ void WP6HLContentListener::attributeChange(const bool isOn, const uint8_t attrib
 	}
 }
 
-void WP6HLContentListener::lineSpacingChange(const float lineSpacing)
-{
-	if (!isUndoOn())
-	{
-		m_parseState->m_paragraphLineSpacing = lineSpacing;
-	}
-}
-
 void WP6HLContentListener::spacingAfterParagraphChange(const float spacingRelative, const float spacingAbsolute)
 {
 	if (!isUndoOn())
@@ -554,62 +539,26 @@ void WP6HLContentListener::spacingAfterParagraphChange(const float spacingRelati
 	}
 }
 
-void WP6HLContentListener::justificationChange(const uint8_t justification)
-{
-	if (!isUndoOn())
-	{
-		switch (justification)
-		{
-		case WP6_PARAGRAPH_JUSTIFICATION_LEFT:
-			m_parseState->m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_LEFT;
-			break;
-		case WP6_PARAGRAPH_JUSTIFICATION_FULL:
-			m_parseState->m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_FULL;
-			break;
-		case WP6_PARAGRAPH_JUSTIFICATION_CENTER:
-			m_parseState->m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_CENTER;
-			break;
-		case WP6_PARAGRAPH_JUSTIFICATION_RIGHT:
-			m_parseState->m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_RIGHT;
-			break;
-		case WP6_PARAGRAPH_JUSTIFICATION_FULL_ALL_LINES:
-			m_parseState->m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_FULL_ALL_LINES;
-			break;
-		case WP6_PARAGRAPH_JUSTIFICATION_RESERVED:
-			m_parseState->m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_RESERVED;
-			break;
-		}
-	}
-}
-
 void WP6HLContentListener::marginChange(uint8_t side, uint16_t margin)
 {
 	if (!isUndoOn())
 	{
-		//_handleLineBreakElementBegin();
-
 		float marginInch = (float)((double)margin/ (double)WPX_NUM_WPUS_PER_INCH);
 		bool marginChanged = false;
 
 		switch(side)
 		{
 		case WPX_LEFT:
-			//if (m_ps->m_paragraphMarginLeft != marginInch) // FIXMEFIXME: remove this
-			//	m_ps->m_sectionAttributesChanged = true;
-	  	     /* Following hack is there because the paragraph and column margins are independent in WP6.
-			* A code of column margin is not canceling a code of paragraph margin and vice-versa. That is
-			* Why we keep two independent variables for current column and paragraph margins in parseState
-			* and compute the resulting m_ps->m_paragraphMarginFoo from the two each time we pass through
-			* one of marginChange or paragraphMarginChange. This will allow us also to be able to handle
-			* margin changes done by Tabs which do not last but for one paragraph. (Fridrich) */
-			m_parseState->m_leftMargin = marginInch - m_ps->m_pageMarginLeft;
-			m_ps->m_paragraphMarginLeft = m_parseState->m_leftMargin + m_parseState->m_paragraphLeftMargin;
+			m_ps->m_leftMarginByPageMarginChange = marginInch - m_ps->m_pageMarginLeft;
+			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
+						+ m_ps->m_leftMarginByParagraphMarginChange
+						+ m_ps->m_leftMarginByTabs;
 			break;
 		case WPX_RIGHT:
-			//if (m_ps->m_paragraphMarginRight != marginInch)
-			//	m_ps->m_sectionAttributesChanged = true;
-			m_parseState->m_rightMargin = marginInch - m_ps->m_pageMarginRight;
-			m_ps->m_paragraphMarginRight = m_parseState->m_rightMargin + m_parseState->m_paragraphRightMargin;
+			m_ps->m_rightMarginByPageMarginChange = marginInch - m_ps->m_pageMarginRight;
+			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
+						+ m_ps->m_rightMarginByParagraphMarginChange
+						+ m_ps->m_rightMarginByTabs;
 			break;
 		}
 
@@ -627,13 +576,17 @@ void WP6HLContentListener::paragraphMarginChange(uint8_t side, int16_t margin)
 			// This is necessary in case we have Margin Set and Left or LeftRight indentation
 			// by Tabs in the same time. The Left or LeftRight indentation applies to the
 			// current paragraph only. Margin Set applies untill an new Margin Set code.
-			m_parseState->m_paragraphLeftMargin = marginInch;
+			m_ps->m_leftMarginByParagraphMarginChange = marginInch;
 			// Add this margin to the column margin set by "marginChange" function.
-			m_ps->m_paragraphMarginLeft = m_parseState->m_paragraphLeftMargin + m_parseState->m_leftMargin;
+			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
+						+ m_ps->m_leftMarginByParagraphMarginChange
+						+ m_ps->m_leftMarginByTabs;
 			break;
 		case WPX_RIGHT:
-			m_parseState->m_paragraphRightMargin = marginInch;
-			m_ps->m_paragraphMarginRight = m_parseState->m_paragraphRightMargin + m_parseState->m_rightMargin;
+			m_ps->m_rightMarginByParagraphMarginChange = marginInch;
+			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
+						+ m_ps->m_rightMarginByParagraphMarginChange
+						+ m_ps->m_rightMarginByTabs;
 			break;
 		default:
 			break;
@@ -646,11 +599,12 @@ void WP6HLContentListener::indentFirstLineChange(int16_t offset)
 	if (!isUndoOn())
 	{
 		float offsetInch = (float)((double)offset / (double)WPX_NUM_WPUS_PER_INCH);
-		m_ps->m_paragraphTextIndent = offsetInch;
+		m_ps->m_textIndentByParagraphIndentChange = offsetInch;
 		// This is necessary in case we have Indent First Line and Hard Back Tab
 		// in the same time. The Hard Back Tab applies to the current paragraph
 		// only. Indent First Line applies untill an new Indent First Line code.
-		m_parseState->m_firstLineOffset = m_ps->m_paragraphTextIndent;
+		m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange
+					+ m_ps->m_textIndentByTabs;
 	}
 }
 
@@ -1248,9 +1202,9 @@ void WP6HLContentListener::_handleListChange(const uint16_t outlineHash)
 
 void WP6HLContentListener::_openListElement()
 {
-	m_listenerImpl->openListElement(m_parseState->m_paragraphJustification,
+	m_listenerImpl->openListElement(m_ps->m_paragraphJustification,
 					m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight, m_ps->m_paragraphTextIndent,
-					m_parseState->m_paragraphLineSpacing, m_ps->m_paragraphSpacingAfter);
+					m_ps->m_paragraphLineSpacing, m_ps->m_paragraphSpacingAfter);
 	m_ps->m_isParagraphOpened = true; // a list element is equivalent to a paragraph
 
 	_openSpan();
@@ -1261,12 +1215,12 @@ void WP6HLContentListener::_openParagraph()
 	_closeParagraph();
 	uint8_t paragraphJustification;
 	(m_parseState->m_tempParagraphJustification != 0) ? paragraphJustification = m_parseState->m_tempParagraphJustification :
-		paragraphJustification = m_parseState->m_paragraphJustification;
+		paragraphJustification = m_ps->m_paragraphJustification;
 	m_parseState->m_tempParagraphJustification = 0;
 
 	m_listenerImpl->openParagraph(paragraphJustification,
 				      m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight, m_ps->m_paragraphTextIndent,
-				      m_parseState->m_paragraphLineSpacing, m_ps->m_paragraphSpacingAfter,
+				      m_ps->m_paragraphLineSpacing, m_ps->m_paragraphSpacingAfter,
 				      m_ps->m_isParagraphColumnBreak, m_ps->m_isParagraphPageBreak);
 
 	if (m_ps->m_numDeferredParagraphBreaks > 0)
@@ -1275,8 +1229,12 @@ void WP6HLContentListener::_openParagraph()
 	m_ps->m_isParagraphColumnBreak = false;
 	m_ps->m_isParagraphPageBreak = false;
 	m_ps->m_isParagraphOpened = true;
+	m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange + m_ps->m_leftMarginByParagraphMarginChange;
+	m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange + m_ps->m_rightMarginByParagraphMarginChange;
+	m_ps->m_leftMarginByTabs = 0.0f;
+	m_ps->m_rightMarginByTabs = 0.0f;
+	m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange;
+	m_ps->m_textIndentByTabs = 0.0f;	
 
 	_openSpan();
-	m_ps->m_paragraphMarginLeft = m_parseState->m_leftMargin + m_parseState->m_paragraphLeftMargin;
-	m_ps->m_paragraphMarginRight = m_parseState->m_rightMargin + m_parseState->m_paragraphRightMargin;
 }

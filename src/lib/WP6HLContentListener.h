@@ -75,16 +75,9 @@ struct _WP6ParsingState
 	UCSString m_textAfterDisplayReference;
 	UCSString m_textAfterNumber;
 
-	uint8_t m_paragraphJustification;
-	uint8_t m_tempParagraphJustification; // TODO: wouldn't a better name be m_tabParagraphJustification ? - MARCM
-	float m_paragraphLineSpacing;
+	uint8_t m_tempParagraphJustification; // TODO: remove this one after the tabs are properly implemented
 	float m_paragraphSpacingAfterRelative;
 	float m_paragraphSpacingAfterAbsolute;
-	float m_leftMargin;
-	float m_rightMargin;
-	float m_firstLineOffset;
-	float m_paragraphLeftMargin;
-	float m_paragraphRightMargin;
 
 	int m_numRemovedParagraphBreaks;
 
@@ -156,11 +149,9 @@ public:
 	virtual void highlightChange(const bool isOn, const RGBSColor color);
 	virtual void fontChange(const uint16_t matchedFontPointSize, const uint16_t fontPID);
  	virtual void attributeChange(const bool isOn, const uint8_t attribute);
-	virtual void lineSpacingChange(const float lineSpacing);
 	virtual void spacingAfterParagraphChange(const float spacingRelative, const float spacingAbsolute);
-	virtual void justificationChange(const uint8_t justification);
 	virtual void pageMarginChange(const uint8_t side, const uint16_t margin) {}
-	virtual void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation) {}
+	virtual void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool isPersistent) {}
 	virtual void marginChange(const uint8_t side, const uint16_t margin);
 	virtual void paragraphMarginChange(const uint8_t side, const int16_t margin);
 	virtual void indentFirstLineChange(const int16_t offset);

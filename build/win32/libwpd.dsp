@@ -101,6 +101,74 @@ SOURCE=..\..\src\lib\libwpd_support.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP3AttributeGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3EndOfLinePageGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3ExtendedCharacterGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3FileStructure.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3FixedLengthGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3Header.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3HLListener.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3HLStylesListener.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3MiscellaneousGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3PageFormatGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3Parser.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3Part.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3SingleByteFunction.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3UndoGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3UnsupportedFixedLengthGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3UnsupportedVariableLengthGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3VariableLengthGroup.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP42FileStructure.cpp
 # End Source File
 # Begin Source File
@@ -137,6 +205,10 @@ SOURCE=..\..\src\lib\WP5AttributeGroup.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP5ExtendedCharacterGroup.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP5FileStructure.cpp
 # End Source File
 # Begin Source File
@@ -161,11 +233,19 @@ SOURCE=..\..\src\lib\WP5HLStylesListener.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP5PageFormatGroup.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP5Parser.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP5Part.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5SingleByteFunction.cpp
 # End Source File
 # Begin Source File
 
@@ -389,6 +469,78 @@ SOURCE=..\..\src\lib\libwpd_support.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP3AttributeGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3EndOfLinePageGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3ExtendedCharacterGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3FileStructure.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3FixedLengthGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3Header.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3HLListener.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3HLStylesListener.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3LLListener.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3MiscellaneousGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3PageFormatGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3Parser.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3Part.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3SingleByteFunction.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3UndoGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3UnsupportedFixedLengthGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3UnsupportedVariableLengthGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3VariableLengthGroup.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP42FileStructure.h
 # End Source File
 # Begin Source File
@@ -429,6 +581,10 @@ SOURCE=..\..\src\lib\WP5AttributeGroup.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP5ExtendedCharacterGroup.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP5FileStructure.h
 # End Source File
 # Begin Source File
@@ -457,11 +613,19 @@ SOURCE=..\..\src\lib\WP5LLListener.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP5PageFormatGroup.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP5Parser.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP5Part.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5SingleByteFunction.h
 # End Source File
 # Begin Source File
 

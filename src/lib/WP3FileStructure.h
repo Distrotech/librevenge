@@ -1,5 +1,6 @@
 /* libwpd
  * Copyright (C) 2004 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -37,6 +38,9 @@ extern int WP3_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16];
 
 #define WP3_UNDO_GROUP 0xCD
 
+#define WP3_PAGE_FORMAT_GROUP 0xD0
+
+#define WP3_MISCELLANEOUS_GROUP 0xD9
 #define WP3_WINDOW_GROUP 0xDA
 #define WP3_STYLE_GROUP 0xDB
 #define WP3_END_OF_LINE_PAGE_GROUP 0xDC
@@ -57,5 +61,14 @@ extern int WP3_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16];
  * to fine that we are not converting for the while */
 #define WP3_ATTRIBUTE_SMALL_CAPS 18
 
+/* Page Format Group */
+#define WP3_PAGE_FORMAT_GROUP_HORIZONTAL_MARGINS 0x02
+#define WP3_PAGE_FORMAT_GROUP_LINE_SPACING 0x03
+#define WP3_PAGE_FORMAT_GROUP_VERTICAL_MARGINS 0x05
+#define WP3_PAGE_FORMAT_GROUP_JUSTIFICATION_MODE 0x06
+
+/* Miscellaneous Group */
+
+#define WP3_MISCELLANEOUS_GROUP_PAGE_SIZE_OVERRIDE 0x04
 
 #endif /* WP3FILESTRUCTURE_H */

@@ -56,8 +56,8 @@ void WP6PageGroup::_readContents(WPXInputStream *input)
 		break;
 	case WP6_PAGE_GROUP_FORM:
 		uint8_t tmpOrientation;
-		m_formHashTableIndex = readU8(input);
-		m_formHashValue = readU16(input);
+		// skip Hash values that we do not use (2+1 bytes)
+		input->seek(3, WPX_SEEK_CUR);
 		m_formLength = readU16(input);
 		m_formWidth = readU16(input);
 		m_formType = readU8(input);
@@ -98,7 +98,7 @@ void WP6PageGroup::parse(WP6HLListener *listener)
 		listener->suppressPageCharacteristics(m_suppressedCode);
 		break;
 	case WP6_PAGE_GROUP_FORM:
-		listener->pageFormChange(m_formLength, m_formWidth, m_formOrientation);
+		listener->pageFormChange(m_formLength, m_formWidth, m_formOrientation, true);
 		break;
 	default: // something else we don't support, since it isn't in the docs
 		break;

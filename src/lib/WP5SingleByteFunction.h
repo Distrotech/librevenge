@@ -35,6 +35,12 @@ class WP5SingleByteFunction : public WP5Part
 	static WP5SingleByteFunction * WP5SingleByteFunction::constructSingleByteFunction(WPXInputStream *input, uint8_t groupID);
 };
 
+class WP5EOLFunction : public WP5SingleByteFunction
+{
+public:
+	virtual void parse(WP5HLListener *listener);	
+};
+
 class WP5SpaceFunction : public WP5SingleByteFunction
 {
 public:
