@@ -402,7 +402,7 @@ void WP6HLContentListener::fontChange(const guint16 matchedFontPointSize, const 
 		m_ps->m_fontSize = rint((double)((((float)matchedFontPointSize)/100.0f)*2.0f));
 		// We compute the real space after paragraph in inches using the size of the font and relative spacing.
 		// We have to recompute this every change of fontSize.
-		m_ps->m_paragraphSpacingAfter = 
+		m_ps->m_paragraphSpacingAfter =
 			(float)(((m_parseState->m_paragraphSpacingAfterRelative - 1.0f)*m_ps->m_fontSize)/72.0f) +
 			m_parseState->m_paragraphSpacingAfterAbsolute;
 		const WP6FontDescriptorPacket *fontDescriptorPacket = NULL;
@@ -480,6 +480,14 @@ void WP6HLContentListener::lineSpacingChange(const float lineSpacing)
 	}
 }
 
+void WP6HLContentListener::spacingBeforeParagraphChange(const gint16 spacing)
+{
+	if (!isUndoOn())
+	{
+		m_ps->m_paragraphSpacingBefore = (float)((double)spacing/ (double)WPX_NUM_WPUS_PER_INCH);
+	}
+}
+
 void WP6HLContentListener::spacingAfterParagraphChange(const float spacingRelative, const float spacingAbsolute)
 {
 	if (!isUndoOn())
@@ -489,7 +497,7 @@ void WP6HLContentListener::spacingAfterParagraphChange(const float spacingRelati
 		// We compute the real space after paragraph in inches using the size of the font and relative spacing.
 		// We have to recompute this every change of fontSize. That is why we keep the two components in
 		// m_parsingState and the following formula is to be found in the fontChange(...) function as well.
-		m_ps->m_paragraphSpacingAfter = 
+		m_ps->m_paragraphSpacingAfter =
 			(float)(((m_parseState->m_paragraphSpacingAfterRelative - 1.0f)*m_ps->m_fontSize)/72.0f) +
 			m_parseState->m_paragraphSpacingAfterAbsolute;
 		// Variable spacingAfterParagraphRelative already contains the height of the space in inches
@@ -543,7 +551,7 @@ void WP6HLContentListener::marginChange(guint8 side, guint16 margin)
 			* Why we keep two independent variables for current column and paragraph margins in parseState
 			* and compute the resulting m_ps->m_paragraphMarginFoo from the two each time we pass through
 			* one of marginChange or paragraphMarginChange. This will allow us also to be able to handle
-			* margin changes done by Tabs which do not last but for one paragraph. (Fridrich) */ 
+			* margin changes done by Tabs which do not last but for one paragraph. (Fridrich) */
 			m_parseState->m_leftMargin = marginInch - m_ps->m_pageMarginLeft;
 			m_ps->m_paragraphMarginLeft = m_parseState->m_leftMargin + m_parseState->m_paragraphLeftMargin;
 			break;
@@ -568,7 +576,7 @@ void WP6HLContentListener::paragraphMarginChange(guint8 side, gint16 margin)
 		case WPX_LEFT:
 			// This is necessary in case we have Margin Set and Left or LeftRight indentation
 			// by Tabs in the same time. The Left or LeftRight indentation applies to the
-			// current paragraph only. Margin Set applies untill an new Margin Set code. 
+			// current paragraph only. Margin Set applies untill an new Margin Set code.
 			m_parseState->m_paragraphLeftMargin = marginInch;
 			// Add this margin to the column margin set by "marginChange" function.
 			m_ps->m_paragraphMarginLeft = m_parseState->m_paragraphLeftMargin + m_parseState->m_leftMargin;
@@ -591,7 +599,7 @@ void WP6HLContentListener::indentFirstLineChange(gint16 offset)
 		m_ps->m_paragraphTextIndent = offsetInch;
 		// This is necessary in case we have Indent First Line and Hard Back Tab
 		// in the same time. The Hard Back Tab applies to the current paragraph
-		// only. Indent First Line applies untill an new Indent First Line code. 
+		// only. Indent First Line applies untill an new Indent First Line code.
 		m_parseState->m_firstLineOffset = m_ps->m_paragraphTextIndent;
 	}
 }
@@ -1186,9 +1194,9 @@ void WP6HLContentListener::_handleListChange(const guint16 outlineHash)
 
 void WP6HLContentListener::_openListElement()
 {
-	m_listenerImpl->openListElement(m_parseState->m_paragraphJustification, 
+	m_listenerImpl->openListElement(m_parseState->m_paragraphJustification,
 					m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight, m_ps->m_paragraphTextIndent,
-					m_parseState->m_paragraphLineSpacing, m_ps->m_paragraphSpacingAfter);
+					m_parseState->m_paragraphLineSpacing, m_ps->m_paragraphSpacingBefore, m_ps->m_paragraphSpacingAfter);
 	m_ps->m_isParagraphOpened = true; // a list element is equivalent to a paragraph
 
 	_openSpan();
@@ -1268,13 +1276,13 @@ void WP6HLContentListener::_openParagraph()
 	(m_parseState->m_tempParagraphJustification != 0) ? paragraphJustification = m_parseState->m_tempParagraphJustification :
 		paragraphJustification = m_parseState->m_paragraphJustification;
 	m_parseState->m_tempParagraphJustification = 0;
-	
-	m_listenerImpl->openParagraph(paragraphJustification, 
+
+	m_listenerImpl->openParagraph(paragraphJustification,
 				      m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight, m_ps->m_paragraphTextIndent,
-				      m_parseState->m_paragraphLineSpacing, m_ps->m_paragraphSpacingAfter,
+				      m_parseState->m_paragraphLineSpacing, m_ps->m_paragraphSpacingBefore, m_ps->m_paragraphSpacingAfter,
 				      m_ps->m_isParagraphColumnBreak, m_ps->m_isParagraphPageBreak);
 
-	if (m_ps->m_numDeferredParagraphBreaks > 0) 
+	if (m_ps->m_numDeferredParagraphBreaks > 0)
 		m_ps->m_numDeferredParagraphBreaks--;
 
 	m_ps->m_isParagraphColumnBreak = false;

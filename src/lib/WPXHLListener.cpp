@@ -73,7 +73,8 @@ _WPXParsingState::_WPXParsingState(bool sectionAttributesChanged) :
 	m_paragraphMarginLeft(0.0f),
 	m_paragraphMarginRight(0.0f),
 	m_paragraphTextIndent(0.0f),
-	m_paragraphSpacingAfter(0.0f)
+	m_paragraphSpacingAfter(0.0f),
+	m_paragraphSpacingBefore(0.0f)
 	/*m_currentRow(-1),
 	m_currentColumn(-1),
 

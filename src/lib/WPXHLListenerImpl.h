@@ -64,9 +64,9 @@ class WPXHLListenerImpl
 	the document.
 	\param span The length of this span, in number of pages
 	\param isLastPageSpan true if this is the start of the last page span in the document
-	\param formLength The height of the page, in inches (portrait or landscape)
+	\param formLength The height of the page, in inches
 	\param formWidth The width of the page, in inches
-	\param orientation The orientation of the page 
+	\param orientation The orientation of the page (portrait or landscape)
 	\param marginLeft The left margin for each page in the span, in inches
 	\param marginRight The right margin for each page in the span, in inches
 	\param marginTop The top margin for each page in the span, in inches
@@ -84,18 +84,20 @@ class WPXHLListenerImpl
 	virtual void closeHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence) = 0;
 
 	/**
-	Called when a new page span is opened. This (or openListElement) will always be called before any text or span is placed into the document.
+	Called when a new paragraph is opened. This (or openListElement) will always be called before any text or span is placed into the document.
 	\param paragraphJustification The justification (left, center, right, full, full all lines, or reserved) encoded as an unsigned 8-bit integer
 	\param marginLeftOffset The left indentation of this paragraph, in inches
 	\param marginLeftOffset The right indentation of this paragraph, in inches
+	\param textIndent The left indentation of first line, in inches
 	\param lineSpacing The amount of spacing between lines, in number of lines (1.0 is single spacing)
 	\param spacingAfterParagraph The amount of extra spacing to be placed after the paragraph, in inches
+	\param spacingBeforeParagraph The amount of extra spacing to be placed before the paragraph, in inches
 	\param isColumnBreak Whether this paragraph should be placed in a new column
 	\param isPageBreak Whether this paragraph should start a new page
 	*/
-	virtual void openParagraph(const guint8 paragraphJustification, 
+	virtual void openParagraph(const guint8 paragraphJustification,
 				   const float marginLeftOffset, const float marginRightOffset, const float textIndent,
-				   const float lineSpacing, const float spacingAfterParagraph,
+				   const float lineSpacing, const float spacingBeforeParagraph, const float spacingAfterParagraph,
 				   const bool isColumnBreak, const bool isPageBreak) = 0;
 	/**
 	Called when a paragraph is closed.
@@ -130,9 +132,9 @@ class WPXHLListenerImpl
 	virtual void openUnorderedListLevel(const int listID) = 0;
 	virtual void closeOrderedListLevel() = 0;
 	virtual void closeUnorderedListLevel() = 0;
-	virtual void openListElement(const guint8 paragraphJustification, 
+	virtual void openListElement(const guint8 paragraphJustification,
 				     const float marginLeftOffset, const float marginRightOffset, const float textIndent,
-				     const float lineSpacing, const float spacingAfterParagraph) = 0;
+				     const float lineSpacing, const float spacingBeforeParagraph, const float spacingAfterParagraph) = 0;
 	virtual void closeListElement() = 0;
 
 	virtual void openFootnote(int number) = 0;

@@ -118,9 +118,9 @@ void HtmlListenerImpl::closeHeaderFooter(const WPXHeaderFooterType headerFooterT
 	}
 }
 
-void HtmlListenerImpl::openParagraph(const guint8 paragraphJustification, 
+void HtmlListenerImpl::openParagraph(const guint8 paragraphJustification,
 				   const float marginLeftOffset, const float marginRightOffset, const float textIndent,
-				   const float lineSpacing, const float spacingAfterParagraph,
+				   const float lineSpacing, const float spacingBeforeParagraph, const float spacingAfterParagraph,
 				   const bool isColumnBreak, const bool isPageBreak)
 {
 	printf("<p style=\"");
@@ -189,9 +189,9 @@ void HtmlListenerImpl::closeUnorderedListLevel()
 }
 
 
-void HtmlListenerImpl::openListElement(const guint8 paragraphJustification, 
+void HtmlListenerImpl::openListElement(const guint8 paragraphJustification,
 				     const float marginLeft, const float marginRight, const float textIndent,
-				     const float lineSpacing, const float spacingAfterParagraph)
+				     const float lineSpacing, const float spacingBeforeParagraph, const float spacingAfterParagraph)
 {
 	printf("<li style=\"");
 	_appendParagraphJustification(paragraphJustification);

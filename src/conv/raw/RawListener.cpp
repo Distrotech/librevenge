@@ -53,7 +53,7 @@ void RawListenerImpl::__iprintf(const char *format, ...)
 
 void RawListenerImpl::__iuprintf(const char *format, ...)
 {
-	if (m_printIndentLevel) 
+	if (m_printIndentLevel)
 	{
 		m_actualIndentLevel++;
 		return;
@@ -70,7 +70,7 @@ void RawListenerImpl::__iuprintf(const char *format, ...)
 
 void RawListenerImpl::__idprintf(const char *format, ...)
 {
-	if (m_printIndentLevel) 
+	if (m_printIndentLevel)
 	{
 		m_actualIndentLevel--;
 		return;
@@ -147,15 +147,15 @@ void RawListenerImpl::closeHeaderFooter(const WPXHeaderFooterType headerFooterTy
 	);
 }
 
-void RawListenerImpl::openParagraph(const guint8 paragraphJustification, 
+void RawListenerImpl::openParagraph(const guint8 paragraphJustification,
 				    const float marginLeftOffset, const float marginRightOffset, const float textIndent,
-				    const float lineSpacing, const float spacingAfterParagraph,
+				    const float lineSpacing, const float spacingBeforeParagraph, const float spacingAfterParagraph,
 				    const bool isColumnBreak, const bool isPageBreak)
 {
-	__iuprintf("openParagraph(paragraphJustification: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, textIndent: %.4f, lineSpacing: %.4f, spacingAfterParagraph: %.4f, isColumnBreak: %s, isPageBreak: %s)\n",
-		paragraphJustification, 
+	__iuprintf("openParagraph(paragraphJustification: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, textIndent: %.4f, lineSpacing: %.4f, spacingBeforeParagraph: %.4f, spacingAfterParagraph: %.4f, isColumnBreak: %s, isPageBreak: %s)\n",
+		paragraphJustification,
 		marginLeftOffset, marginRightOffset, textIndent,
-		lineSpacing, spacingAfterParagraph, (isColumnBreak ? "true" : "false"), (isPageBreak ? "true" : "false")
+		lineSpacing, spacingBeforeParagraph, spacingAfterParagraph, (isColumnBreak ? "true" : "false"), (isPageBreak ? "true" : "false")
 	);
 }
 
@@ -245,14 +245,14 @@ void RawListenerImpl::closeUnorderedListLevel()
 	__idprintf("closeUnorderedListLevel()\n");
 }
 
-void RawListenerImpl::openListElement(const guint8 paragraphJustification, 
+void RawListenerImpl::openListElement(const guint8 paragraphJustification,
 				      const float marginLeftOffset, const float marginRightOffset, const float textIndent,
-				      const float lineSpacing, const float spacingAfterParagraph)
+				      const float lineSpacing, const float spacingBeforeParagraph, const float spacingAfterParagraph)
 {
-	__iuprintf("openListElement(paragraphJustification: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, textIndent: %.4f, lineSpacing: %.4f, spacingAfterParagraph: %.4f)\n",
-		paragraphJustification, 
+	__iuprintf("openListElement(paragraphJustification: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, textIndent: %.4f, lineSpacing: %.4f, spacingBeforeParagraph: %.4f, spacingAfterParagraph: %.4f)\n",
+		paragraphJustification,
 		marginLeftOffset, marginRightOffset, textIndent,
-	        lineSpacing, spacingAfterParagraph
+	        lineSpacing, spacingBeforeParagraph, spacingAfterParagraph
 	);
 }
 

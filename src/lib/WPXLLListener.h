@@ -40,6 +40,7 @@ class WPXLLListener
  	virtual void insertBreak(const guint8 breakType) = 0;
 	virtual void attributeChange(const bool isOn, const guint8 attribute) = 0;
 	virtual void lineSpacingChange(const float lineSpacing) = 0;
+	virtual void spacingBeforeParagraphChange(const gint16 spacing) = 0;
 	virtual void spacingAfterParagraphChange(const float spacingRelative, const float spacingAbsolute) = 0;
 	virtual void justificationChange(const guint8 justification) = 0;
 	virtual void pageMarginChange(const guint8 side, const guint16 margin) = 0;

@@ -44,6 +44,7 @@ public:
  	virtual void highlightChante(const bool isOn, const RGBSColor color) {}
 	virtual void attributeChange(const bool isOn, const guint8 attribute) {}
 	virtual void lineSpacingChange(const float lineSpacing) {}
+	virtual void spacingBeforeParagraphChange(const gint16 spacing) {}
 	virtual void spacingAfterParagraphChange(const float spacingRelative, const float spacingAbsolute) {}
 	virtual void justificationChange(const guint8 justification) {}
 	virtual void pageMarginChange(const guint8 side, const guint16 margin) {}
