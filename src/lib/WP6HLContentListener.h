@@ -90,9 +90,9 @@ struct _WP6ParsingState
 	float m_paragraphSpacingAfterAbsolute;
 	float m_leftMargin;
 	float m_rightMargin;
-	float m_firstLineOffset;
-	float m_paragraphLeftMargin;
-	float m_paragraphRightMargin;
+        float m_firstLineOffset;
+        float m_paragraphLeftMargin;
+        float m_paragraphRightMargin;
 
 
 	guint m_numRemovedParagraphBreaks;
@@ -163,7 +163,6 @@ public:
 	virtual void fontChange(const guint16 matchedFontPointSize, const guint16 fontPID);
  	virtual void attributeChange(const bool isOn, const guint8 attribute);
 	virtual void lineSpacingChange(const float lineSpacing);
-	virtual void spacingBeforeParagraphChange(const gint16 spacing);
 	virtual void spacingAfterParagraphChange(const float spacingRelative, const float spacingAbsolute);
 	virtual void justificationChange(const guint8 justification);
 	virtual void pageMarginChange(const guint8 side, const guint16 margin) {}

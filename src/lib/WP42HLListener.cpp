@@ -200,12 +200,12 @@ void WP42HLListener::_openParagraph()
 		paragraphJustification = m_parseState->m_paragraphJustification;
 	m_parseState->m_tempParagraphJustification = 0;*/
 
-	m_listenerImpl->openParagraph(0,
+	m_listenerImpl->openParagraph(0, 
 				      m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight, m_ps->m_paragraphTextIndent,
-				      1.0f, 0.0f, 0.0f,
+				      1.0f, 0.0f,
 				      false, false);
 
-	if (m_ps->m_numDeferredParagraphBreaks > 0)
+	if (m_ps->m_numDeferredParagraphBreaks > 0) 
 		m_ps->m_numDeferredParagraphBreaks--;
 
 	m_ps->m_isParagraphOpened = true;

@@ -1,8 +1,8 @@
 CHANGES:
 
 0.7.x -> 0.8.0
-- Added conversion of spacing before and after paragraph, as well as
-  of paragraph indentation done by functions of the paragraph Group
+- Added conversion of spacing after paragraph and of paragraph
+  indentation done by functions of the paragraph Group
   (Fridrich Strba)
 - Added text highlight conversion (Fridrich Strba)
 - Added page form and orientation conversion (Fridrich Strba)

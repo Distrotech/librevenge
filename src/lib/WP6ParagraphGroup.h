@@ -48,16 +48,6 @@ private:
 	guint8 m_justification;
 };
 
-class WP6ParagraphGroup_SetLeadingAdjustmentSubGroup : public WP6VariableLengthGroup_SubGroup
-{
-public:
-	WP6ParagraphGroup_SetLeadingAdjustmentSubGroup(GsfInput *input);
-	virtual void parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
-
-private:
-	gint16 m_leadingAdjustment;
-};
-
 class WP6ParagraphGroup_SpacingAfterParagraphSubGroup : public WP6VariableLengthGroup_SubGroup
 {
 public:

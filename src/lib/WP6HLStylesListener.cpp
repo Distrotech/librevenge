@@ -107,18 +107,6 @@ void WP6HLStylesListener::pageFormChange(const guint16 length, const guint16 wid
 	}
 }
 
-void WP6HLStylesListener::spacingBeforeParagraphChange(const gint16 spacing)
-{
-	if (!isUndoOn())
-	{
-		if (!m_currentPageHasContent)
-		{
-			m_ps->m_tempParagraphSpacingBefore = (float)((double)spacing/ (double)WPX_NUM_WPUS_PER_INCH);
-			m_ps->m_paragraphSpacingBefore = m_ps->m_tempParagraphSpacingBefore;
-		}
-	}
-}
-
 void WP6HLStylesListener::marginChange(const guint8 side, const guint16 margin)
 {
 	if (!isUndoOn())

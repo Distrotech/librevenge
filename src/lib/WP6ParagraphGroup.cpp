@@ -51,9 +51,6 @@ void WP6ParagraphGroup::_readContents(GsfInput *input)
 	case WP6_PARAGRAPH_GROUP_JUSTIFICATION:
 		m_subGroupData = new WP6ParagraphGroup_JustificationModeSubGroup(input);
 		break;
-	case WP6_PARAGRAPH_GROUP_SET_LEADING_ADJUSTMENT:
-		m_subGroupData = new WP6ParagraphGroup_SetLeadingAdjustmentSubGroup(input);
-		break;
 	case WP6_PARAGRAPH_GROUP_SPACING_AFTER_PARAGRAPH:
 		m_subGroupData = new WP6ParagraphGroup_SpacingAfterParagraphSubGroup(input, getSizeNonDeletable());
 		break;
@@ -141,19 +138,6 @@ void WP6ParagraphGroup_JustificationModeSubGroup::parse(WP6HLListener *listener,
 {
 	listener->justificationChange(m_justification);
 }
-
-WP6ParagraphGroup_SetLeadingAdjustmentSubGroup::WP6ParagraphGroup_SetLeadingAdjustmentSubGroup(GsfInput *input)
-{
-	m_leadingAdjustment = (gint16)gsf_le_read_guint16(input);
-	WPD_DEBUG_MSG(("WordPerfect: leading adjustment:  %i\n", m_leadingAdjustment));
-}
-
-void WP6ParagraphGroup_SetLeadingAdjustmentSubGroup::parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
-{
-	WPD_DEBUG_MSG(("WordPerfect: parsing a change of leading adjustment of: %i\n", m_leadingAdjustment));
-	listener->spacingBeforeParagraphChange(m_leadingAdjustment);
-}
-
 
 WP6ParagraphGroup_SpacingAfterParagraphSubGroup::WP6ParagraphGroup_SpacingAfterParagraphSubGroup(GsfInput *input, const guint16 sizeNonDeletable)
 {

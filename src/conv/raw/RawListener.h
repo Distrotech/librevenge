@@ -52,9 +52,9 @@ public:
 	virtual void openHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence);
 	virtual void closeHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence);
 
-	virtual void openParagraph(const guint8 paragraphJustification,
+	virtual void openParagraph(const guint8 paragraphJustification, 
 				   const float marginLeftOffset, const float marginRightOffset, const float textIndent,
-				   const float lineSpacing, const float spacingBeforeParagraph, const float spacingAfterParagraph,
+				   const float lineSpacing, const float spacingAfterParagraph,
 				   const bool isColumnBreak, const bool isPageBreak);
 	virtual void closeParagraph();
 	virtual void openSpan(const guint32 textAttributeBits, const gchar *fontName, const float fontSize,
@@ -75,9 +75,9 @@ public:
 	virtual void openUnorderedListLevel(const int listID);
 	virtual void closeOrderedListLevel();
 	virtual void closeUnorderedListLevel();
-	virtual void openListElement(const guint8 paragraphJustification,
+	virtual void openListElement(const guint8 paragraphJustification, 
 				     const float marginLeftOffset, const float marginRightOffset, const float textIndent,
-				     const float lineSpacing, const float spacingBeforeParagraph, const float spacingAfterParagraph);
+				     const float lineSpacing, const float spacingAfterParagraph);
 	virtual void closeListElement();
 
 	virtual void openFootnote(int number);
