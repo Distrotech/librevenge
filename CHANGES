@@ -1,6 +1,6 @@
 CHANGES:
 
-0.6.2 -> ?
+0.6.2 -> 0.6.3
 - More robust importing of numbered lists (William Lachance)
 - Support more types of table cell colouring/shading (William)
 
