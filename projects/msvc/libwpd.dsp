@@ -8,12 +8,12 @@ CFG=libwpd2 - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "libwpd2.mak".
+!MESSAGE NMAKE /f "libwpd.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "libwpd2.mak" CFG="libwpd2 - Win32 Debug"
+!MESSAGE NMAKE /f "libwpd.mak" CFG="libwpd2 - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
@@ -46,7 +46,7 @@ RSC=rc.exe
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo /o"Release/libwpd.bsc"
+# ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:"Release\lib\libwpd-1.lib"
@@ -70,7 +70,7 @@ LIB32=link.exe -lib
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo /o"Debug/libwpd.bsc"
+# ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:"Debug\libwpd-1.lib"
@@ -126,7 +126,43 @@ SOURCE=..\..\src\lib\WP42VariableLengthGroup.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP5AttributeGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5FileStructure.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5FixedLengthGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5Header.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5HLListener.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP5Parser.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5Part.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5UnsupportedFixedLengthGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5UnsupportedVariableLengthGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5VariableLengthGroup.cpp
 # End Source File
 # Begin Source File
 
@@ -167,6 +203,10 @@ SOURCE=..\..\src\lib\WP6ExtendedCharacterGroup.cpp
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP6ExtendedDocumentSummaryPacket.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP6FileStructure.cpp
 # End Source File
 # Begin Source File
 
@@ -262,6 +302,10 @@ SOURCE=..\..\src\lib\WP6UndoGroup.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP6UnsupportedFixedLengthGroup.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP6UnsupportedVariableLengthGroup.cpp
 # End Source File
 # Begin Source File
@@ -303,13 +347,6 @@ SOURCE=..\..\src\lib\WPXTable.cpp
 # Begin Source File
 
 SOURCE=..\..\src\lib\libwpd.h
-
-!IF  "$(CFG)" == "libwpd2 - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "libwpd2 - Win32 Debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
@@ -357,7 +394,47 @@ SOURCE=..\..\src\lib\WP42VariableLengthGroup.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP5AttributeGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5FileStructure.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5FixedLengthGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5Header.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5HLListener.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5LLListener.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP5Parser.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5Part.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5UnsupportedFixedLengthGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5UnsupportedVariableLengthGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5VariableLengthGroup.h
 # End Source File
 # Begin Source File
 
@@ -498,6 +575,10 @@ SOURCE=..\..\src\lib\WP6TibetanMap.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP6UndoGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP6UnsupportedFixedLengthGroup.h
 # End Source File
 # Begin Source File
 
