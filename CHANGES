@@ -1,6 +1,8 @@
 CHANGES:
 
 0.7.1 -> 0.7.2
+- wpd2foo tools properly detect if a file format is suported
+  or not (Marc Maurer)
 - Handle unsupported file types other than WordPerfect documents
   (like Macintosh WP2.0 documents) more gracefull (Marc Maurer)
 - Added Box Drawing character set mapping (Fridrich Strba)
