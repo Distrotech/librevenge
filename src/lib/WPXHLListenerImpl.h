@@ -48,7 +48,7 @@ class WPXHLListenerImpl
 					 const UCSString &publisher, const UCSString &category,
 					 const UCSString &keywords, const UCSString &language,
 					 const UCSString &abstract, const UCSString &descriptiveName,
-					 const UCSString &descriptiveType) {}
+					 const UCSString &descriptiveType) = 0;
 
 	/**
 	Called at the start of the parsing process. This is always the first callback made.
