@@ -28,6 +28,7 @@
 #include "WP6PrefixDataPacket.h"
 #include "WP6FontDescriptorPacket.h"
 #include "WP6DefaultInitialFontPacket.h"
+#include "libwpd_internal.h"
 
 void destroyPrefixDataPacketKeyNotify(gpointer data);
 void destroyPrefixDataPacketNotify(gpointer data);
@@ -41,9 +42,14 @@ WP6PrefixData::WP6PrefixData(GsfInput *input, const int numPrefixIndices) :
 {
 	WP6PrefixIndice ** prefixIndiceArray = new (WP6PrefixIndice *)[(numPrefixIndices-1)];
 	for (guint16 i=1; i<numPrefixIndices; i++)
+	{
+		WPD_DEBUG_MSG(("WordPerfect: constructing prefix indice 0x%x\n", i));
 		prefixIndiceArray[(i-1)] = new WP6PrefixIndice(input, i);
+	}
+	
 	for (guint16 i=1; i<numPrefixIndices; i++) 
 		{
+			WPD_DEBUG_MSG(("WordPerfect: constructing prefix packet 0x%x\n", i));
 			WP6PrefixDataPacket *prefixDataPacket = WP6PrefixDataPacket::constructPrefixDataPacket(input, prefixIndiceArray[(i-1)]);
 			if (prefixDataPacket) {
 				gint *key = new gint;

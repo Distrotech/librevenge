@@ -1,7 +1,7 @@
 lib_LIBRARIES = libwpd-1.a
 libwpd_1_includedir = $(includedir)/libwpd-1/libwpd
 libwpd_1_include_HEADERS = libwpd.h libwpd_support.h WPXHLListener.h WPXHLListenerImpl.h WPXLLListener.h WPXParser.h WP6Parser.h \
-		  	   WP6HLListener.h WP6Header.h WP6LLListener.h WPXHeader.h WP6FileStructure.h WP6PrefixDataPacket.h \
+		  	   WP6HLListener.h WP6Header.h WP60Header.h WP61Header.h WP6LLListener.h WPXHeader.h WP6FileStructure.h WP6PrefixDataPacket.h \
 			   WP6FontDescriptorPacket.h WP6DefaultInitialFontPacket.h
 
 AM_CXXFLAGS = $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS)
@@ -18,7 +18,8 @@ libwpd_1_a_SOURCES =			\
 	WP6FixedLengthGroup.cpp		\
 	WP6FixedSpaceGroup.cpp		\
 	WP6FontDescriptorPacket.cpp	\
-	WP6Header.cpp			\
+	WP60Header.cpp			\
+	WP61Header.cpp			\
 	WP6HLListener.cpp		\
 	WP6LLListener.cpp		\
 	WP6ParagraphGroup.cpp		\
@@ -47,6 +48,8 @@ libwpd_1_a_SOURCES =			\
 	WP6FixedSpaceGroup.h		\
 	WP6FontDescriptorPacket.h	\
 	WP6Header.h 			\
+	WP60Header.h 			\
+	WP61Header.h 			\
 	WP6HLListener.h			\
 	WP6LLListener.h			\
 	WP6ParagraphGroup.h		\

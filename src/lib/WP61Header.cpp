@@ -24,12 +24,12 @@
  */
 
 #include "libwpd.h"
-#include "WP6Header.h"
+#include "WP61Header.h"
 #include "WP6FileStructure.h" 
 #include "libwpd_internal.h"
 
-WP6Header::WP6Header(GsfInput * input)
-	:	WPXHeader(input)
+WP61Header::WP61Header(GsfInput * input)
+	:	WP6Header(input)
 {
 	guint16 documentEncrypted;
 
@@ -40,10 +40,9 @@ WP6Header::WP6Header(GsfInput * input)
 	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WP6_HEADER_DOCUMENT_SIZE_OFFSET - gsf_input_tell(input), G_SEEK_CUR));
 	m_documentSize = *(const guint32 *)gsf_input_read(input, sizeof(guint32), NULL);
 
-	WPD_DEBUG_MSG(("WordPerfect: Index Header Position = %i \n",(int)m_indexHeaderOffset));
-	WPD_DEBUG_MSG(("WordPerfect: Document Pointer = %i \n",(int)getDocumentOffset()));
-	WPD_DEBUG_MSG(("WordPerfect: Document End Position = %i \n",(int)m_documentSize));
-	WPD_DEBUG_MSG(("WordPerfect: Document Encryption = %i \n",(int)m_documentEncryption));
+	WPD_DEBUG_MSG(("WordPerfect: Index Header Position = 0x%x \n",(int)m_indexHeaderOffset));
+	WPD_DEBUG_MSG(("WordPerfect: Document End Position = 0x%x \n",(int)m_documentSize));
+	WPD_DEBUG_MSG(("WordPerfect: Document Encryption = 0x%x \n",(int)m_documentEncryption));
 
 	// TODO:
 	
@@ -61,13 +60,12 @@ WP6Header::WP6Header(GsfInput * input)
 	guint16 numIndices;
 	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, m_indexHeaderOffset + WP6_INDEX_HEADER_NUM_INDICES_POSITION, G_SEEK_SET));
 	m_numPrefixIndices = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
-	WPD_DEBUG_MSG(("WordPerfect: Number of Index Headers = %d \n",numIndices));
 
 	// ignore the 10 reserved bytes that follow (jump to the offset of the Index Header #1, where we can resume parsing)
 	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, m_indexHeaderOffset + WP6_INDEX_HEADER_INDICES_POSITION, G_SEEK_SET));
 }
 
-WP6Header::~WP6Header()
+WP61Header::~WP61Header()
 {
 
 }

@@ -28,7 +28,10 @@
 #include <gsf/gsf-infile-msole.h>
 #include "WP6LLListener.h"
 #include "WP6Parser.h"
+#include "WPXHeader.h"
 #include "WP6Header.h"
+#include "WP60Header.h"
+#include "WP61Header.h"
 #include "WP6PrefixData.h"
 #include "WP6Part.h"
 #include "libwpd_internal.h"
@@ -93,16 +96,26 @@ void WP6Parser::parse()
 		else
 			WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(getInput(), 0, G_SEEK_SET));
 		
-		WP6Header * header = new WP6Header(getInput());
+		WPXHeader * fileHeader = new WPXHeader(getInput());
+		WP6Header * header = NULL;
+		switch (fileHeader->getMinorVersion())
+		{
+			case 0x00:
+				header = new WP60Header(getInput());
+				break;
+			default: // assume this header can be parsed by a WP61 header parser
+				header = new WP61Header(getInput());
+				break;
+		}
 		WP6PrefixData *prefixData = new WP6PrefixData(getInput(), header->getNumPrefixIndices());
 		static_cast<WP6LLListener *>(getLLListener())->setPrefixData(prefixData);
 		
 		getLLListener()->startDocument();
 		
-		WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(getInput(), header->getDocumentOffset(), G_SEEK_SET));
+		WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(getInput(), fileHeader->getDocumentOffset(), G_SEEK_SET));
 	
 		WPD_DEBUG_MSG(("WordPerfect: Starting document body parse (position = %ld)\n",(long)gsf_input_tell(getInput())));
-		while (gsf_input_tell(getInput()) < (long)((WP6Header *)header)->getDocumentSize())
+		while (!gsf_input_eof(getInput()))
 		{
 			guint8 readVal;
 			readVal = *(const guint8 *)gsf_input_read(getInput(), sizeof(guint8), NULL);
