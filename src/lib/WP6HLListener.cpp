@@ -34,15 +34,20 @@ WP6HLListener::WP6HLListener(WPXHLListenerImpl *listenerImpl) :
 	m_textArray(g_array_new(TRUE, FALSE, sizeof(guint16))),
 	m_textAttributeBits(0),
 	m_textAttributesChanged(FALSE),
+	
+	m_paragraphJustification(WPX_PARAGRAPH_JUSTIFICATION_LEFT),
+	m_paragraphJustificationChanged(FALSE),
 	m_isParagraphOpened(FALSE),
 	m_isParagraphClosed(FALSE),
 	m_numDeferredParagraphBreaks(0),
+	
 	m_sectionAttributesChanged(TRUE),
 	m_numColumns(1),
 	m_marginLeft(1.0f),
 	m_marginRight(1.0f),
 	m_curRow(-1),
 	m_curCol(-1),
+	
 	m_isUndoOn(FALSE)
 {
 }
@@ -131,6 +136,36 @@ void WP6HLListener::attributeChange(gboolean isOn, guint8 attribute)
 	}
 }
 
+void WP6HLListener::justificationChange(guint8 justification)
+{
+	if (!m_isUndoOn)
+	{
+		switch (justification)
+		{
+			case WP6_PARAGRAPH_JUSTIFICATION_LEFT:
+				m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_LEFT;
+				break;
+			case WP6_PARAGRAPH_JUSTIFICATION_FULL:
+				m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_LEFT;
+				break;
+			case WP6_PARAGRAPH_JUSTIFICATION_CENTER:
+				m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_CENTER;
+				break;
+			case WP6_PARAGRAPH_JUSTIFICATION_RIGHT:
+				m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_RIGHT;
+				break;
+			case WP6_PARAGRAPH_JUSTIFICATION_FULL_ALL_LINES:
+				m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_FULL_ALL_LINES;
+				break;
+			case WP6_PARAGRAPH_JUSTIFICATION_RESERVED:
+				m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_RESERVED;
+				break;
+		}
+		
+		m_paragraphJustificationChanged = TRUE;
+	}
+}
+
 void WP6HLListener::marginChange(guint8 side, guint16 margin)
 {
 	if (!m_isUndoOn)
@@ -184,7 +219,7 @@ void WP6HLListener::endDocument()
 	// corner case: document contains no end of lines
 	if (!m_isParagraphOpened && !m_isParagraphClosed)
 	{
-		m_listenerImpl->openParagraph(m_textAttributeBits);
+		m_listenerImpl->openParagraph(m_paragraphJustification, m_textAttributeBits);
 		_flushText();       
 	}
 	else if (!m_isParagraphClosed || !m_isParagraphOpened)
@@ -234,7 +269,7 @@ void WP6HLListener::_flushText()
 	if (m_sectionAttributesChanged && m_textArray->len > 0)
 	{
 		m_listenerImpl->openSection(m_numColumns, m_marginLeft, m_marginRight);
-		m_listenerImpl->openParagraph(m_textAttributeBits);
+		m_listenerImpl->openParagraph(m_paragraphJustification, m_textAttributeBits);
 		m_isParagraphOpened = TRUE;
 		m_sectionAttributesChanged = FALSE;
 		if (m_numDeferredParagraphBreaks > 0)
@@ -245,7 +280,7 @@ void WP6HLListener::_flushText()
 	{
 		while (m_numDeferredParagraphBreaks > 0)
 		{
-			m_listenerImpl->openParagraph(m_textAttributeBits);
+			m_listenerImpl->openParagraph(m_paragraphJustification, m_textAttributeBits);
 			m_numDeferredParagraphBreaks--;
 		}
 		m_isParagraphOpened = TRUE;
@@ -258,4 +293,5 @@ void WP6HLListener::_flushText()
 	m_textArray = g_array_set_size(m_textArray, 0);	
 
 	m_textAttributesChanged = FALSE;
+	m_paragraphJustificationChanged = FALSE;
 }

@@ -44,6 +44,7 @@ class WP6HLListener : public WP6LLListener
  	virtual void insertBreak(guint8 breakType); 
 	virtual void undoChange(guint8 undoType, guint16 undoLevel);
 	virtual void attributeChange(gboolean isOn, guint8 attribute);
+	virtual void justificationChange(guint8 justification);
 	virtual void marginChange(guint8 side, guint16 margin);
 	virtual void columnChange(guint8 numColumns); 
 	virtual void endDocument();
@@ -64,6 +65,8 @@ class WP6HLListener : public WP6LLListener
 	guint32 m_textAttributeBits;
 	gboolean m_textAttributesChanged;
 	
+	guint8 m_paragraphJustification;
+ 	gboolean m_paragraphJustificationChanged;
 	gboolean m_isParagraphOpened;
 	gboolean m_isParagraphClosed;
 	guint m_numDeferredParagraphBreaks;
@@ -77,7 +80,7 @@ class WP6HLListener : public WP6LLListener
 	
 	gint32 m_curRow;
 	gint32 m_curCol;
-
+	
 	gboolean m_isUndoOn;
 };
 

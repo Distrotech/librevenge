@@ -1,4 +1,4 @@
- /* libwpd2
+/* libwpd2
  * Copyright (C) 2002 William Lachance (wlach@interlog.com)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
@@ -23,35 +23,21 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef TEXTLISTENER_H
-#define TEXTLISTENER_H
+#ifndef WP6PARAGRAPHGROUP_H
+#define WP6PARAGRAPHGROUP_H
 
-#include <glib.h>
-#include "WP6LLListener.h"
+#include "WP6VariableLengthGroup.h"
 
-class TextListener : public WP6LLListener
+class WP6ParagraphGroup : public WP6VariableLengthGroup
 {
-public:
-	TextListener();
-	~TextListener() {}
-	virtual void startDocument() {}
-	virtual void insertCharacter(guint16 character);
-	virtual void insertEOL();
-	virtual void insertBreak(guint8 breakType) {}
-	virtual void undoChange(guint8 undoType, guint16 undoLevel);
-	virtual void attributeChange(gboolean isOn, guint8 attribute) {}
-	virtual void justificationChange(guint8 justification) {}
-	virtual void marginChange(guint8 side, guint16 margin) {}
-	virtual void columnChange(guint8 numColumns) {}
-	virtual void endDocument() {}
-		
-	virtual void startTable() {}
- 	virtual void insertRow() {}
- 	virtual void insertCell() {}
- 	virtual void endTable() {}
-
+ public:
+	WP6ParagraphGroup(FILE *stream);	
+	virtual void _readContents(FILE *stream);
+	virtual void parse(WP6LLListener *llListener);
+	const guint8 getJustification() const { return m_justification; }
+	
  private:
-	gboolean m_isUndoOn;
+	guint8	m_justification;
 };
 
-#endif /* TEXTLISTENER_H */
+#endif /* WP6COLUMNGROUP_H */

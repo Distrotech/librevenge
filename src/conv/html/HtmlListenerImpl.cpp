@@ -64,7 +64,7 @@ void HtmlListenerImpl::endDocument()
 	printf("</html>\n");
 }
 
-void HtmlListenerImpl::openParagraph(guint32 textAttributeBits)
+void HtmlListenerImpl::openParagraph(guint8 paragraphJustification, guint32 textAttributeBits)
 {
 	if (m_isParagraphOpened) {
 		if (m_isSpanOpened)

@@ -14,6 +14,7 @@ libwpd2_a_SOURCES =			\
 	WP6FixedSpaceGroup.cpp		\
 	WP6Header.cpp			\
 	WP6HLListener.cpp		\
+	WP6ParagraphGroup.cpp			\
 	WP6Parser.cpp			\
 	WP6Part.cpp			\
 	WP6UndoGroup.cpp		\
@@ -34,6 +35,7 @@ libwpd2_a_SOURCES =			\
 	WP6FixedSpaceGroup.h		\
 	WP6Header.h 			\
 	WP6HLListener.h			\
+	WP6ParagraphGroup.h			\
 	WP6Parser.h			\
 	WP6Part.h	 		\
 	WP6UndoGroup.h			\
