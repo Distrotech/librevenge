@@ -84,6 +84,10 @@ WPXProperty * WPXFloatProperty::clone() const
 	return new WPXFloatProperty(m_val);
 }
 
+WPXPropertyList::WPXPropertyList()
+{
+}
+
 WPXPropertyList::WPXPropertyList(const WPXPropertyList &propList)
 {
         WPXPropertyList::Iter i(propList);

@@ -8,12 +8,10 @@ version_info = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
 
 if OS_WIN32
 install-libtool-import-lib:
-	$(INSTALL) .libs/libwpd-1.dll.a $(DESTDIR)$(libdir)
-	$(INSTALL) .libs/libwpd-stream-1.dll.a $(DESTDIR)$(libdir)
+	$(INSTALL) .libs/libwpd*-1.dll.a $(DESTDIR)$(libdir)
 
 uninstall-libtool-import-lib:
-	-rm $(DESTDIR)$(libdir)/libwpd-1.dll.a
-	-rm $(DESTDIR)$(libdir)/libwpd-stream-1.dll.a
+	-rm $(DESTDIR)$(libdir)/libwpd*-1.dll.a
 
 else
 install-libtool-import-lib:

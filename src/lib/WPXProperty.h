@@ -79,7 +79,7 @@ public:
 class WPXPropertyList
 {
 public:
-	WPXPropertyList() {}
+	WPXPropertyList();
 	WPXPropertyList(const WPXPropertyList &);
 	virtual ~WPXPropertyList();
 	void insert(string name, WPXProperty *prop) { m_map[name] = prop; }
