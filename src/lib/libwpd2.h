@@ -27,4 +27,5 @@
 #include "WP6Parser.h"
 #include "WPXLLListener.h"
 #include "WPXHLListener.h"
+#include "WPXHLListenerImpl.h"
 #include "WP6HLListener.h"
