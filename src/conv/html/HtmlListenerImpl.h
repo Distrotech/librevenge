@@ -50,7 +50,7 @@ public:
 	virtual void closeSection();
 	virtual void openParagraph(const WPXPropertyList &propList, const vector<WPXTabStop> &tabStops);
 	virtual void closeParagraph();
-	virtual void openSpan(const WPXPropertyList &propList, const RGBSColor *fontColor, const RGBSColor *highlightColor);
+	virtual void openSpan(const WPXPropertyList &propList);
 	virtual void closeSpan();
 
 	virtual void insertTab();
@@ -75,8 +75,7 @@ public:
 	virtual void openTable(const WPXPropertyList &propList, const vector < WPXColumnDefinition > &columns);
 	virtual void openTableRow(const WPXPropertyList &propList);
 	virtual void closeTableRow();
-	virtual void openTableCell(const WPXPropertyList &propList, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
-				   const RGBSColor * cellBorderColor);
+	virtual void openTableCell(const WPXPropertyList &propList);
 	virtual void closeTableCell();
 	virtual void insertCoveredTableCell(const WPXPropertyList &propList) {}
 	virtual void closeTable();
@@ -85,7 +84,7 @@ protected:
 	void _addTextAttributes(const int textAttributeBits);
 	void _removeTextAttributes();
 	void _appendParagraphJustification(const int justification);
-	RGBSColor _convertRGBStoRGB(const RGBSColor color);
+	int _rgbsToRGB(const int rgbsColor);
 
 private:
 	unsigned int m_currentListLevel;

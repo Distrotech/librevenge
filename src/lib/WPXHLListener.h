@@ -195,6 +195,9 @@ protected:
 
 	bool isUndoOn() { return m_isUndoOn; }
 	bool m_isUndoOn;
+	
+private:
+	int _rgbsColorToInt(const RGBSColor * color);
 };
 
 #endif /* WPXHLLISTENER_H */

@@ -67,7 +67,7 @@ public:
 
 	virtual void openParagraph(const WPXPropertyList &propList, const vector<WPXTabStop> &tabStops);
 	virtual void closeParagraph();
-	virtual void openSpan(const WPXPropertyList &propList, const RGBSColor *fontColor, const RGBSColor *highlightColor);
+	virtual void openSpan(const WPXPropertyList &propList);
 	virtual void closeSpan();
 	virtual void openSection(const WPXPropertyList &propList, const vector<WPXColumnDefinition> &columns);
 	virtual void closeSection();
@@ -93,14 +93,13 @@ public:
  	virtual void openTable(const WPXPropertyList &propList, const vector < WPXColumnDefinition > &columns);
  	virtual void openTableRow(const WPXPropertyList &propList);
 	virtual void closeTableRow();
- 	virtual void openTableCell(const WPXPropertyList &propList, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
-				   const RGBSColor * cellBorderColor);
+ 	virtual void openTableCell(const WPXPropertyList &propList);
 	virtual void closeTableCell();
 	virtual void insertCoveredTableCell(const WPXPropertyList &propList);
  	virtual void closeTable();
 
 private:
-	int	m_indent;
+	int m_indent;
 	int m_callbackMisses;
 	bool m_printCallgraphScore;
 	stack<ListenerCallback> m_callStack;

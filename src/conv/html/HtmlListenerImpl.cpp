@@ -147,19 +147,17 @@ void HtmlListenerImpl::closeParagraph()
 	printf("</p>\n");
 }
 
-void HtmlListenerImpl::openSpan(const WPXPropertyList &propList, const RGBSColor *fontColor, const RGBSColor *highlightColor)
+void HtmlListenerImpl::openSpan(const WPXPropertyList &propList)
 {
 	printf("<span style=\"font-family: \'%s\'\">", propList["font-name"]->getStr().getUTF8());
 	printf("<span style=\"font-size: %.1fpt\">", propList["font-size"]->getFloat());
 	if (propList["text-attribute-bits"]->getInt() & WPX_REDLINE_BIT)
 		printf("<span style=\"color: #ff3333\">");
 	else
-		printf("<span style=\"color: #%.2x%.2x%.2x\">", _convertRGBStoRGB(*fontColor).m_r,
-			_convertRGBStoRGB(*fontColor).m_g, _convertRGBStoRGB(*fontColor).m_b);
-	if (highlightColor != NULL)
+		printf("<span style=\"color: #%.6x\">", _rgbsToRGB(propList["font-color"]->getInt()));
+	if ((propList["highlight-color"]->getInt() & 0x000000ff) != 0xff)
 	{
-		printf("<span style=\"background-color: #%.2x%.2x%.2x\">", _convertRGBStoRGB(*highlightColor).m_r,
-		_convertRGBStoRGB(*highlightColor).m_g, _convertRGBStoRGB(*highlightColor).m_b);
+		printf("<span style=\"background-color: #%.6x\">", _rgbsToRGB(propList["highlight-color"]->getInt()));
 		m_isHighlightColor = true;
 	}
 	_addTextAttributes(propList["text-attribute-bits"]->getInt());
@@ -281,21 +279,20 @@ void HtmlListenerImpl::closeTableRow()
 	printf("</tr>\n");
 }
 
-void HtmlListenerImpl::openTableCell(const WPXPropertyList &propList, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
-				     const RGBSColor * cellBorderColor)
+void HtmlListenerImpl::openTableCell(const WPXPropertyList &propList)
 {
 	printf("<td ");
 
-	if (cellFgColor || cellBgColor)
+/*	if (((proplist["foreground-color"]->getInt()) && 0x000000ff) != 0xff) || ((proplist["background-color"]->getInt()) && 0x000000ff) != 0xff))
 	{
 		printf("style=\"");
 		// NOTE: The WordPerfect Cell Foreground Color maps onto the HTML Background Color
 		if (cellFgColor)
-			printf("background-color: rgb(%d, %d, %d);", cellFgColor->m_r, cellFgColor->m_g, cellFgColor->m_b);
+			printf("background-color: #%.6x;", cellFgColor->m_r, cellFgColor->m_g, cellFgColor->m_b);
 		// TODO: Handle the Cell Background Color here, but I don't think HTML supports that
 		// ...
 		printf("\"");
-	}
+	}*/
 	printf(" rowspan=\"%ld\" colspan=\"%ld\"", propList["row-span"]->getInt(), propList["col-span"]->getInt());
 
 	printf(">\n");
@@ -443,12 +440,17 @@ void HtmlListenerImpl::_appendParagraphJustification(const int justification)
 	}
 }
 
-RGBSColor HtmlListenerImpl::_convertRGBStoRGB(const RGBSColor color)
+int HtmlListenerImpl::_rgbsToRGB(const int rgbsColor)
 {
-	float shading = (float)((float)color.m_s/100.0f); //convert the percents to float between 0 and 1
+	int tmpRGBColor;
+	tmpRGBColor = 0x00000000;
+	float shading = ((float)(rgbsColor & 0x000000ff)/100.0f); //convert the percents to float between 0 and 1
 	// Mix shading amount of given color with (1-shading) of White (#ffffff)
-	int red = (int)0xFF + (int)((float)color.m_r*shading) - (int)((float)0xFF*shading);
-	int green = (int)0xFF + (int)((float)color.m_g*shading) - (int)((float)0xFF*shading);
-	int blue = (int)0xFF + (int)((float)color.m_b*shading) - (int)((float)0xFF*shading);
-	return RGBSColor(red, green, blue, 0x64);
+	int red = (int)0xFF + (int)(((float)((rgbsColor & 0xff000000) >> 24))*shading) - (int)((float)0xFF*shading);
+	tmpRGBColor = red;
+	int green = (int)0xFF + (int)(((float)((rgbsColor & 0x00ff0000) >> 16))*shading) - (int)((float)0xFF*shading);
+	tmpRGBColor = (tmpRGBColor << 8) + green;
+	int blue = (int)0xFF + (int)(((float)((rgbsColor & 0x0000ff00) >> 8))*shading) - (int)((float)0xFF*shading);
+	tmpRGBColor = (tmpRGBColor << 8) + blue;
+	return tmpRGBColor;
 } 

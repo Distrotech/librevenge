@@ -167,14 +167,12 @@ void RawListenerImpl::closeParagraph()
 		LC_OPEN_PARAGRAPH);
 }
 
-void RawListenerImpl::openSpan(const WPXPropertyList &propList, const RGBSColor *fontColor, const RGBSColor *highlightColor)
+void RawListenerImpl::openSpan(const WPXPropertyList &propList)
 {
-	_U(("openSpan(textAttributeBits: %u, fontName: %s, fontSize: %.4f,  fontColor: #%02x%02x%02x s:%02x, highlightColor: #%02x%02x%02x s:%02x)\n",
+	_U(("openSpan(textAttributeBits: %u, fontName: %s, fontSize: %.4f,  fontColor: #%.6x s:%.2x, highlightColor: #%.6x s:%.2x)\n",
 	    propList["text-attribute-bits"]->getInt(), propList["font-name"]->getStr().getUTF8(), propList["font-size"]->getFloat(),
-	    (fontColor?fontColor->m_r:0xff), (fontColor?fontColor->m_g:0xff),
-	    (fontColor?fontColor->m_b:0xff), (fontColor?fontColor->m_s:0xff), (highlightColor?highlightColor->m_r:0xff),
-	    (highlightColor?highlightColor->m_g:0xff), (highlightColor?highlightColor->m_b:0xff),
-	    (highlightColor?highlightColor->m_s:0xff)), // saturation cannot be ever 0xff; if it is, the pointer is NULL
+	    ((propList["font-color"]->getInt() & 0xffffff00) >> 8), (propList["font-color"]->getInt() & 0x000000ff), 
+	    ((propList["highlight-color"]->getInt() & 0xffffff00) >> 8), (propList["highlight-color"]->getInt() & 0x000000ff)), 
 	   LC_OPEN_SPAN);
 }
 
@@ -334,8 +332,7 @@ void RawListenerImpl::closeTableRow()
 		LC_OPEN_TABLE_ROW);
 }
 
-void RawListenerImpl::openTableCell(const WPXPropertyList &propList, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
-				    const RGBSColor * cellBorderColor)
+void RawListenerImpl::openTableCell(const WPXPropertyList &propList)
 {
 	UTF8String sCellVerticalAlignment;
 	switch ((WPXVerticalAlignment)propList["vertical-alignment"]->getInt())
@@ -356,13 +353,11 @@ void RawListenerImpl::openTableCell(const WPXPropertyList &propList, const RGBSC
 		break;
 	}
 			
-	_U(("openTableCell(col: %d, row: %d, colSpan: %d, rowSpan: %d, borderBits: %d, cellFgColor: #%02x%02x%02x s:%02x, cellBgColor: #%02x%02x%02x s:%02x, cellBorderColor: #%02x%02x%02x s:%02x, cellVerticalAlignment %s)\n",
-	    propList["col"]->getInt(), propList["row"]->getInt(), propList["col-span"]->getInt(), propList["row-span"]->getInt(),
-	    propList["border-bits"]->getInt(),
-	    // The saturation cannot ever be more that 0x64. It it is, cellFgColor or cellBgColor is NULL
-	    (cellFgColor?cellFgColor->m_r:0xff), (cellFgColor?cellFgColor->m_g:0xff), (cellFgColor?cellFgColor->m_b:0xff), (cellFgColor?cellFgColor->m_s:0xff),
-	    (cellBgColor?cellBgColor->m_r:0xff), (cellBgColor?cellBgColor->m_g:0xff), (cellBgColor?cellBgColor->m_b:0xff), (cellBgColor?cellBgColor->m_s:0xff),
-	    cellBorderColor->m_r, cellBorderColor->m_g, cellBorderColor->m_b, cellBorderColor->m_s,
+	_U(("openTableCell(col: %d, row: %d, colSpan: %d, rowSpan: %d, borderBits: %d, cellFgColor: #%.6x s:%.2x, cellBgColor: #%.6x s:%.2x, cellBorderColor: #%.6x s:%.2x, cellVerticalAlignment %s)\n",
+	    propList["col"]->getInt(), propList["row"]->getInt(), propList["col-span"]->getInt(), propList["row-span"]->getInt(), propList["border-bits"]->getInt(),
+    	    ((propList["foreground-color"]->getInt() & 0xffffff00) >> 8), (propList["foreground-color"]->getInt() & 0x000000ff), 
+	    ((propList["background-color"]->getInt() & 0xffffff00) >> 8), (propList["background-color"]->getInt() & 0x000000ff), 
+	    ((propList["border-color"]->getInt() & 0xffffff00) >> 8), (propList["border-color"]->getInt() & 0x000000ff), 
 	    sCellVerticalAlignment.getUTF8()),
 	   LC_OPEN_TABLE_CELL);
 }

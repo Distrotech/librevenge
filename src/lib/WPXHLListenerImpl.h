@@ -102,8 +102,7 @@ class WPXHLListenerImpl
 	\param fontColor The color of the font used in the span
 	\param highlightColor The color of highlight (the pointer is empty if there is no highlight)
 	*/
-	virtual void openSpan(const WPXPropertyList &propList, 
-			      const RGBSColor *fontColor, const RGBSColor *highlightColor) = 0;
+	virtual void openSpan(const WPXPropertyList &propList) = 0;
 	/**
 	Called when a text span is closed
 	*/
@@ -173,8 +172,7 @@ class WPXHLListenerImpl
 	\param cellBorderColor Color of the border lines of the cell
 	\param cellVerticalAlignment Vertical alignment of the content in the cell (top, middle, bottom, or full)
 	*/
- 	virtual void openTableCell(const WPXPropertyList &propList, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
-				   const RGBSColor * cellBorderColor) = 0;
+ 	virtual void openTableCell(const WPXPropertyList &propList) = 0;
 	/**
 	Called when the current table cell is closed
 	*/

@@ -357,8 +357,10 @@ void WPXHLListener::_openSpan()
 	propList.insert("text-attribute-bits", WPXPropertyFactory::newIntProp(attributeBits & 0xffffffe0));
 	propList.insert("font-name", WPXPropertyFactory::newStringProp(*(m_ps->m_fontName)));
 	propList.insert("font-size", WPXPropertyFactory::newFloatProp(fontSizeChange*m_ps->m_fontSize));
+	propList.insert("font-color", WPXPropertyFactory::newIntProp(_rgbsColorToInt(m_ps->m_fontColor)));
+	propList.insert("highlight-color", WPXPropertyFactory::newIntProp(_rgbsColorToInt(m_ps->m_highlightColor)));
 
-	m_listenerImpl->openSpan(propList, m_ps->m_fontColor, m_ps->m_highlightColor);
+	m_listenerImpl->openSpan(propList);
 
 	m_ps->m_isSpanOpened = true;
 }
@@ -458,8 +460,11 @@ void WPXHLListener::_openTableCell(const uint8_t colSpan, const uint8_t rowSpan,
 		propList.insert("col-span", WPXPropertyFactory::newIntProp(colSpan));		
 		propList.insert("row-span", WPXPropertyFactory::newIntProp(rowSpan));		
 		propList.insert("border-bits", WPXPropertyFactory::newIntProp(borderBits));		
-		propList.insert("vertical-alignment", WPXPropertyFactory::newIntProp(cellVerticalAlignment));		
-		m_listenerImpl->openTableCell(propList, cellFgColor, cellBgColor, cellBorderColor);
+		propList.insert("vertical-alignment", WPXPropertyFactory::newIntProp(cellVerticalAlignment));
+		propList.insert("foreground-color", WPXPropertyFactory::newIntProp(_rgbsColorToInt(cellFgColor)));
+		propList.insert("background-color", WPXPropertyFactory::newIntProp(_rgbsColorToInt(cellBgColor)));
+		propList.insert("border-color", WPXPropertyFactory::newIntProp(_rgbsColorToInt(cellBorderColor)));
+		m_listenerImpl->openTableCell(propList);
 		m_ps->m_isTableCellOpened = true;
 	}
 	else
@@ -580,5 +585,22 @@ void WPXHLListener::justificationChange(const uint8_t justification)
 		}
 	}
 }
+
+int WPXHLListener::_rgbsColorToInt(const RGBSColor * color)
+{
+	int tmpIntColor;
+	tmpIntColor = 0x00000000;
+	if (color)
+	{
+		tmpIntColor = color->m_r;
+		tmpIntColor = (tmpIntColor << 8) + color->m_g;
+		tmpIntColor = (tmpIntColor << 8) + color->m_b;
+		tmpIntColor = (tmpIntColor << 8) + color->m_s;
+	}
+	else
+		tmpIntColor = 0xffffffff;
+	return tmpIntColor;
+}
+
 
 
