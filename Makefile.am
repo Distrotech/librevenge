@@ -8,5 +8,4 @@ EXTRA_DIST = \
 	autogen.sh	\
 	libwpd.spec	\
 	libwpd.spec.in	\
-	makefile.mk	\
 	CHANGES

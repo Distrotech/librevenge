@@ -9,6 +9,9 @@ CHANGES:
 - WP6: Respect paragraph and span properties defined in a Table Cell;
   conversion of header row; conversion of table-related single-byte
   functions (Fridrich Strba)
+- WP6: Conversion of Tab Set function and of table row height, as well
+  as conversion of "font size change" text attributes (bits 0-4)
+  (Fridrich Strba)
 - WP6: Added conversion of spacing after paragraph and of first
   line indentation done by functions of the paragraph Group
   (Fridrich Strba)

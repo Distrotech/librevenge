@@ -1,4 +1,5 @@
 EXTRA_DIST =			\
+	makefile.mk		\
 	libwpd.rc.in
 
 # These may be in the builddir too
