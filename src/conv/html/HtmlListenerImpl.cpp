@@ -86,7 +86,9 @@ void HtmlListenerImpl::openSpan(guint32 textAttributeBits)
 	if (m_isSpanOpened)
 		printf("</span>");
 
-	printf("<span "); _appendTextAttributes(textAttributeBits); printf(">");
+	printf("<span style=\""); 
+	_appendTextAttributes(textAttributeBits);
+	printf("\">");
 	m_isSpanOpened = TRUE;
 }
 
