@@ -27,8 +27,7 @@
 #define WPDOCUMENT_H
 
 #include <gsf/gsf-input.h>
-#include "WPXHeader.h"
-#include "WPXLLListener.h"
+#include "libwpd_support.h"
 
 class WPXHLListenerImpl;
 

@@ -1,9 +1,6 @@
 lib_LTLIBRARIES = libwpd-1.la
 libwpd_1_includedir = $(includedir)/libwpd-1/libwpd
-libwpd_1_include_HEADERS = libwpd.h libwpd_support.h WPXHLListener.h WPXHLListenerImpl.h WPXLLListener.h WPXParser.h \
-					WP6HLContentListener.h WP6Header.h WP6Parser.h WP5Parser.h WP42Parser.h WP60Header.h WP61Header.h WP6LLListener.h \
-					WPXHeader.h WP6FileStructure.h WP5FileStructure.h WP42FileStructure.h WP6PrefixDataPacket.h WP6FontDescriptorPacket.h \
-					WP6DefaultInitialFontPacket.h WPDocument.h
+libwpd_1_include_HEADERS = libwpd.h libwpd_support.h WPDocument.h WPXHLListenerImpl.h
 
 AM_CXXFLAGS = $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS)
 

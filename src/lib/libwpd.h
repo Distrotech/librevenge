@@ -28,7 +28,6 @@
 
 #include "libwpd_support.h"
 #include "WPXHLListenerImpl.h"
-#include "WPXParser.h"
 #include "WPDocument.h"
 
 #endif /* LIBWPD_H */

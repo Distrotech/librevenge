@@ -29,6 +29,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "WPDocument.h"
+#include "WPXHeader.h"
 #include "WPXParser.h"
 #include "WP42Parser.h"
 #include "WP42Heuristics.h"
