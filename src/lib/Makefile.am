@@ -8,14 +8,14 @@ libwpd2_a_SOURCES =			\
 	WP6ColumnGroup.cpp		\
 	WP6EOLGroup.cpp			\
 	WP6ExtendedCharacterGroup.cpp 	\
-	WP6FixedEOLGroup.cpp			\
-	WP6FixedLengthGroup.cpp			\
-	WP6FixedSpaceGroup.cpp			\
-	WP6Header.cpp					\
-	WP6HLListener.cpp				\
-	WP6Parser.cpp					\
-	WP6Part.cpp						\
-	WP6UndoGroup.cpp				\
+	WP6FixedEOLGroup.cpp		\
+	WP6FixedLengthGroup.cpp		\
+	WP6FixedSpaceGroup.cpp		\
+	WP6Header.cpp			\
+	WP6HLListener.cpp		\
+	WP6Parser.cpp			\
+	WP6Part.cpp			\
+	WP6UndoGroup.cpp		\
 	WP6UnsupportedVariableLengthGroup.cpp \
 	WP6VariableLengthGroup.cpp 	\
 	WPXHeader.cpp 			\
@@ -35,27 +35,10 @@ libwpd2_a_SOURCES =			\
 	WP6Parser.h			\
 	WP6Part.h	 		\
 	WP6UndoGroup.h			\
-	WP6VariableLengthGroup.cpp 		\
-	WPXHeader.cpp					\
-	WPXParser.cpp					\
-	libwpd2.h						\
-	UT_libwpd2.h					\
-	WP6FileStructure.h				\
-	WP6AttributeGroup.h				\
-	WP6EOLGroup.h					\
-	WP6ExtendedCharacterGroup.h		\
-	WP6FixedEOLGroup.h				\
-	WP6FixedLengthGroup.h			\
-	WP6FixedSpaceGroup.h			\
-	WP6Header.h						\
-	WP6HLListener.h					\
-	WP6Parser.h						\
-	WP6Part.h						\
-	WP6UndoGroup.h					\
 	WP6UnsupportedVariableLengthGroup.h \
-	WP6VariableLengthGroup.h		\
-	WPXHeader.h						\
-	WPXLLListener.h					\
-	WPXHLListener.h					\
-	WPXHLListenerImpl.h				\
+	WP6VariableLengthGroup.h	\
+	WPXHeader.h			\
+	WPXLLListener.h			\
+	WPXHLListener.h			\
+	WPXHLListenerImpl.h		\
 	WPXParser.h 			
