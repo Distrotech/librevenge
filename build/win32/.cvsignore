@@ -1,2 +1,9 @@
 Makefile
 Makefile.in
+Debug
+Release
+libwpd.dep
+libwpd.mak
+libwpd.ncb
+libwpd.opt
+libwpd.plg
