@@ -85,7 +85,8 @@ class WPXHLListenerImpl
 	Called when a new paragraph is opened. This (or openListElement) will always be called before any text or span is placed into the document.
 	\param paragraphJustification The justification (left, center, right, full, full all lines, or reserved) encoded as an unsigned 8-bit integer
 	\param marginLeftOffset The left indentation of this paragraph, in inches
-	\param marginLeftOffset The right indentation of this paragraph, in inches
+	\param marginRightOffset The right indentation of this paragraph, in inches
+	\param textIndent The indentation of first line, in inches (difference relative to marginLeftOffset)
 	\param lineSpacing The amount of spacing between lines, in number of lines (1.0 is single spacing)
 	\param spacingAfterParagraph The amount of extra spacing to be placed after the paragraph, in inches
 	\param isColumnBreak Whether this paragraph should be placed in a new column
