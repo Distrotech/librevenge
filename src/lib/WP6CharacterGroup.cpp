@@ -125,7 +125,7 @@ void WP6CharacterGroup_SetDotLeaderCharactersSubGroup::parse(WP6HLListener *list
 	len = extendedCharacterToUCS2(m_character, m_characterSet, &chars);
 	WPD_DEBUG_MSG(("WordPerfect: Parsing Set Dot Leader Characters (leader character: 0x%.4x), (number of spaces: %i)\n",
 			chars[0], m_numberOfSpaces));
-	listener->setDotLeaderCharacters(chars[0], m_numberOfSpaces);
+	listener->setLeaderCharacter(chars[0], m_numberOfSpaces);
 }
 
 /*************************************************************************

@@ -189,11 +189,14 @@ WP6ParagraphGroup_TabSetSubGroup::WP6ParagraphGroup_TabSetSubGroup(WPXInputStrea
 		guint16 tmp_tabPosition = readU16(input);
 		if (tmp_repetitionCount == 0)
 		{
-			tmp_tabStop.m_position = (float)((double)tmp_tabPosition/(double)WPX_NUM_WPUS_PER_INCH) -
-							m_tabAdjustValue;
-			_addTabStop(tmp_tabStop);
-			_addLeaderMethod(tmp_usePreWP9LeaderMethod);
-			m_numberOfTabStops++;
+			if (tmp_tabPosition != 0xFFFF)
+			{
+				tmp_tabStop.m_position = (float)((double)tmp_tabPosition/(double)WPX_NUM_WPUS_PER_INCH) -
+								m_tabAdjustValue;
+				_addTabStop(tmp_tabStop);
+				_addLeaderMethod(tmp_usePreWP9LeaderMethod);
+				m_numberOfTabStops++;
+			}
 		}
 		else
 		{

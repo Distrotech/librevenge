@@ -38,7 +38,7 @@ public:
 
 	virtual void startDocument() {}
 	virtual void setAlignmentCharacter(const guint16 character) {}
-	virtual void setDotLeaderCharacters(const guint16 character, const guint8 numberOfSpaces) {}
+	virtual void setLeaderCharacter(const guint16 character, const guint8 numberOfSpaces) {}
 	virtual void defineTabStops(const bool isRelative, const int numberOfTabStops,
 			const WPXTabStop *tabStops, const bool *usePreWP9LeaderMethod) {}
 	virtual void insertCharacter(const guint16 character) {}
