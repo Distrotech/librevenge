@@ -80,6 +80,7 @@ int _extractDisplayReferenceNumberFromBuf(const UCSString &buf, const WPXNumberi
 				currentSum+=currentMark;
 			lastMark = currentMark;
 		}
+		return currentSum;
 	} 
 	else if (listType == LOWERCASE || listType == UPPERCASE)
 	{
@@ -698,6 +699,7 @@ void WP6HLContentListener::noteOff(const WPXNoteType noteType)
 		m_parseState->m_styleStateSequence.setCurrentState(NORMAL);
 		WPXNumberingType numberingType = _extractWPXNumberingTypeFromBuf(m_parseState->m_numberText, ARABIC);
 		int number = _extractDisplayReferenceNumberFromBuf(m_parseState->m_numberText, numberingType);
+		m_parseState->m_numberText.clear(); //Now, we do not need the text version of the number anymore;
 		if (noteType == FOOTNOTE)
 			m_listenerImpl->openFootnote(number);
 		else
