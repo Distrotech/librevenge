@@ -57,7 +57,7 @@ void WP5FixedLengthGroup::_read(WPXInputStream *input)
 	
 	if (m_group >= 0xC0 && m_group <= 0xCF) // just an extra safety check
 	{
-		int size = WP5_FIXED_LENGTH_FUCNTION_GROUP_SIZE[m_group-0xC0];
+		int size = WP5_FIXED_LENGTH_FUNCTION_GROUP_SIZE[m_group-0xC0];
 		input->seek((startPosition + size - 1 - input->tell()), WPX_SEEK_CUR);
 	}
 	else

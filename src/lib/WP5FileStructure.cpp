@@ -26,7 +26,7 @@
 #include "WP5FileStructure.h"
 
 // size of the fixed length functiongroups 0xC0 to 0xCF
-int WP5_FIXED_LENGTH_FUCNTION_GROUP_SIZE[16] = 
+int WP5_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16] = 
 {
 	4,	// 0xC0
 	9,

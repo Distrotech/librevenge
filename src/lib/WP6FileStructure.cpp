@@ -24,7 +24,7 @@
  */
 
 // size of the fixed length functiongroups 0xF0 to 0xFF
-int WP6_FIXED_LENGTH_FUCNTION_GROUP_SIZE[16] =
+int WP6_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16] =
 {
 	4,	// 0xF0
 	5,	// 0xF1

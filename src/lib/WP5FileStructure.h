@@ -27,7 +27,7 @@
 #define WP5FILESTRUCTURE_H
 
 // size of the fixed length functiongroups 0xC0 to 0xCF
-extern int WP5_FIXED_LENGTH_FUCNTION_GROUP_SIZE[16]; 
+extern int WP5_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16]; 
 
 #define WP5_ATTRIBUTE_SUPERSCRIPT 0x05
 #define WP5_ATTRIBUTE_SUBSCRIPT 0x06

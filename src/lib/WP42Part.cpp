@@ -40,7 +40,7 @@ WP42Part * WP42Part::constructPart(WPXInputStream *input, guint8 readVal)
 		
 	// TODO: ASSERT readVal
 	
-	if (WP42_FUCNTION_GROUP_SIZE[readVal-0xC0] == -1)
+	if (WP42_FUNCTION_GROUP_SIZE[readVal-0xC0] == -1)
 	{
 		WPD_DEBUG_MSG(("WordPerfect: constructVariableLengthGroup(input, val)\n"));
 		return WP42VariableLengthGroup::constructVariableLengthGroup(input, readVal);
@@ -50,7 +50,7 @@ WP42Part * WP42Part::constructPart(WPXInputStream *input, guint8 readVal)
 		// fixed length function group
 		
 		// for now, we just skip over the group
-		input->seek(WP42_FUCNTION_GROUP_SIZE[readVal-0xC0]-1, WPX_SEEK_CUR);
+		input->seek(WP42_FUNCTION_GROUP_SIZE[readVal-0xC0]-1, WPX_SEEK_CUR);
 	}
 
 	WPD_DEBUG_MSG(("WordPerfect: Returning NULL from constructPart\n"));
