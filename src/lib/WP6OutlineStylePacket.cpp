@@ -39,12 +39,14 @@ WP6OutlineStylePacket::~WP6OutlineStylePacket()
 
 void WP6OutlineStylePacket::_readContents(GsfInput *input)
 {
+	unsigned int i;
+
 	m_numPIDs = gsf_le_read_guint16(input);
-	for (unsigned int i=0; i<WP6_NUM_LIST_LEVELS; i++) 
+	for (i=0; i<WP6_NUM_LIST_LEVELS; i++) 
 		m_paragraphStylePIDs[i] = gsf_le_read_guint16(input); // seemingly useless
 	m_outlineFlags = gsf_le_read_guint8(input);
 	m_outlineHash = gsf_le_read_guint16(input);
-	for (unsigned int i=0; i<WP6_NUM_LIST_LEVELS; i++)  
+	for (i=0; i<WP6_NUM_LIST_LEVELS; i++)  
 		m_numberingMethods[i] = gsf_le_read_guint8(input);
 	m_tabBehaviourFlag = gsf_le_read_guint8(input);
 	

@@ -169,11 +169,11 @@ void WP6Parser::parse(WPXHLListenerImpl *listenerImpl)
 
 		// cleanup section: free the used resources
 		delete prefixData;
-		for (vector<WPXPageSpan *>::iterator iter = pageList.begin(); iter != pageList.end(); iter++) {
-			delete *iter;
+		for (vector<WPXPageSpan *>::iterator iterSpan = pageList.begin(); iterSpan != pageList.end(); iterSpan++) {
+			delete *iterSpan;
 		}
-		for (vector<WPXTable *>::iterator iter = tableList.begin(); iter != tableList.end(); iter++) {
-			delete *iter;
+		for (vector<WPXTable *>::iterator iterTable = tableList.begin(); iterTable != tableList.end(); iterTable++) {
+			delete *iterTable;
 		}
 	}
 	catch(FileException)
@@ -182,11 +182,11 @@ void WP6Parser::parse(WPXHLListenerImpl *listenerImpl)
 
 		delete prefixData;
 		
-		for (vector<WPXPageSpan *>::iterator iter = pageList.begin(); iter != pageList.end(); iter++) {
-			delete *iter;
+		for (vector<WPXPageSpan *>::iterator iterSpan = pageList.begin(); iterSpan != pageList.end(); iterSpan++) {
+			delete *iterSpan;
 		}
-		for (vector<WPXTable *>::iterator iter = tableList.begin(); iter != tableList.end(); iter++) {
-			delete *iter;
+		for (vector<WPXTable *>::iterator iterTable = tableList.begin(); iterTable != tableList.end(); iterTable++) {
+			delete *iterTable;
 		}
 
 		throw FileException();

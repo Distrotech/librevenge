@@ -51,7 +51,9 @@ void WP6GeneralTextPacket::_readContents(GsfInput *input)
 	
 	m_blockSizes = new guint32[m_numTextBlocks];
 	int totalSize = 0;
-	for(int i=0; i<m_numTextBlocks; i++)
+	int i;
+
+	for(i=0; i<m_numTextBlocks; i++)
 	{
 		m_blockSizes[i] = gsf_le_read_guint32(input);
 		totalSize += m_blockSizes[i];
@@ -60,7 +62,7 @@ void WP6GeneralTextPacket::_readContents(GsfInput *input)
 	// we have to use glib's allocation function because libgsf disposes of the data
 	guint8 *streamData = (guint8 *)g_malloc(sizeof(guint8)*totalSize);
 	int streamPos = 0;
-	for(int i=0; i<m_numTextBlocks; i++) 
+	for(i=0; i<m_numTextBlocks; i++) 
 	{
 		for (int j=0; j<m_blockSizes[i]; j++)
 		{

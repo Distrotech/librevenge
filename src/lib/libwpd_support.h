@@ -155,7 +155,7 @@ public:
 	const int getLen() const { return m_buf->len; }
 
 	void sprintf(const gchar *format, ...);
-	UTF8String & operator=(const UTF8String &);
+	//UTF8String & operator=(const UTF8String &);
 
 private:
 	GString *m_buf;

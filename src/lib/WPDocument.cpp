@@ -208,6 +208,12 @@ void WPDocument::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl)
 	}
 }
 
+/*void WPDocument::parse(GsfInput *input, WPXLLListener *llistener)
+{
+	// TODO: implement me
+}*/
+
+
 /*
 
 TOTALLY BROKEN, DO NOT USE!!!
@@ -268,43 +274,9 @@ void WPDocument::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl, WPXFile
 
 
 /*
-
 TOTALLY BROKEN - MIGHT BE NICE TO HAVE
 
 WPXFileType WPDocument::WPXParser::getFileType(GsfInput *input)
 {
-	WPXFileType fileType = OTHER;
-	GsfInput *document = NULL;
-	bool isDocumentOLE = false;
-	
-	try
-	{
-		document = getDocument(input);
-		if (document != NULL) {
-			isDocumentOLE = true;
-		}
-		else
-			document = input;
-		
-		gsf_input_seek(document, 0, G_SEEK_SET);			
-		WPXHeader fileHeader(document);
 
-		if (fileHeader.getFileType() ==  WP6_DOCUMENT_FILE_TYPE &&
-		    fileHeader.getMajorVersion() == WP6_EXPECTED_MAJOR_VERSION)
-			fileType = WP6_DOCUMENT;
-	}
-	catch (FileException)
-	{
-		// no action required: no memory allocated
-	}
-
-	if (document != NULL && isDocumentOLE)
-		g_object_unref(G_OBJECT(document));
-
-	return fileType;
-}*/
-
-/*void WPDocument::parse(GsfInput *input, WPXLLListener *llistener)
-{
-	// TODO: implement me
 }*/

@@ -23,8 +23,8 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include <math.h>
 #include <ctype.h>
+#include "libwpd_math.h"
 #include "WP6HLContentListener.h"
 #include "WPXHLListenerImpl.h"
 #include "WP6FileStructure.h"

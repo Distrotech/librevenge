@@ -13,6 +13,7 @@ Ariya Hidayat <ariya@kde.org>				WordPerfect 6+ Extended
 							Character Mappings
 Francis J Franklin <F.J.Franklin@sheffield.ac.uk>	Build libwpd as a 
 	  	   				       	shared library
+David Mandelin <mandelin@cs.wisc.edu>			rint() function for Win32/MSVC
 Ted Lemon <mellon@fugue.com>				Tibetan Extended
 							Character Mappings
 Michael Pritchett <MPritchett@attglobal.net>		MSVC Project Files

@@ -26,7 +26,6 @@
 #include <gsf/gsf-input.h>
 #include "WPXPart.h"
 
-WPXPart::WPXPart(WPXParser * parser)
+WPXPart::WPXPart(GsfInput *input)
 {
-	m_pParser = parser;
 }

@@ -68,7 +68,7 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6LLListener *llListener) const
 			guint8 character = (wpChar & 0xFF);
 			guint8 characterSet = (wpChar & 0xFF00) >> 8;
 			const guint16 *chars;
-			int len, j;
+			int len;
 			len = extendedCharacterToUCS2(character,
 						      characterSet, &chars);
 			for (i = 0; i < len; i++)
@@ -99,7 +99,7 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6LLListener *llListener) const
 			guint8 character = (wpChar & 0xFF);
 			guint8 characterSet = (wpChar & 0xFF00) >> 8;
 			const guint16 *chars;
-			int len, j;
+			int len;
 			len = extendedCharacterToUCS2(character,
 						      characterSet, &chars);
 			for (i = 0; i < len; i++)

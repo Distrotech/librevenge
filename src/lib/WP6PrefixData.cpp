@@ -34,14 +34,16 @@
 WP6PrefixData::WP6PrefixData(GsfInput *input, const int numPrefixIndices) :
 	m_defaultInitialFontPID((-1))
 {
-	WP6PrefixIndice ** prefixIndiceArray = new (WP6PrefixIndice *)[(numPrefixIndices-1)];
-	for (guint16 i=1; i<numPrefixIndices; i++)
+	guint16 i;
+
+	WP6PrefixIndice ** prefixIndiceArray = new WP6PrefixIndice *[(numPrefixIndices-1)];
+	for (i=1; i<numPrefixIndices; i++)
 	{
 		WPD_DEBUG_MSG(("WordPerfect: constructing prefix indice 0x%x\n", i));
 		prefixIndiceArray[(i-1)] = new WP6PrefixIndice(input, i);
 	}
 	
-	for (guint16 i=1; i<numPrefixIndices; i++) 
+	for (i=1; i<numPrefixIndices; i++) 
 		{
 			WPD_DEBUG_MSG(("WordPerfect: constructing prefix packet 0x%x\n", i));
 			WP6PrefixDataPacket *prefixDataPacket = WP6PrefixDataPacket::constructPrefixDataPacket(input, prefixIndiceArray[(i-1)]);
@@ -54,7 +56,7 @@ WP6PrefixData::WP6PrefixData(GsfInput *input, const int numPrefixIndices) :
 			
 	}
 
-	for (guint16 i=1; i<numPrefixIndices; i++)
+	for (i=1; i<numPrefixIndices; i++)
 		delete(prefixIndiceArray[(i-1)]);
 
 	delete[] prefixIndiceArray;

@@ -69,14 +69,18 @@ void WP6StyleGroup::parse(WP6LLListener *llListener)
 	WPD_DEBUG_MSG(("WordPerfect: handling a style group\n"));
 
 	if (getSubGroup() == WP6_STYLE_GROUP_GLOBAL_ON)
-		return m_subGroupData->parse(llListener, getNumPrefixIDs(), getPrefixIDs());
+	{
+		m_subGroupData->parse(llListener, getNumPrefixIDs(), getPrefixIDs());
+	}
 	else if (getSubGroup() == WP6_STYLE_GROUP_GLOBAL_OFF)
+	{
 		llListener->globalOff();
-	else {
+	}
+	else
+	{
 		if (!(getSubGroup() % 2) || getSubGroup() == 0)
 			llListener->styleGroupOn(getSubGroup());
 		else
 			llListener->styleGroupOff(getSubGroup());
 	}
-
 }

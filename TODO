@@ -7,7 +7,7 @@ code.
 - Support paragraph styles (open)
 - WordPerfect 6+ document export (Marc is planning to start work
 on this soon)
-- WordPerfect 4.x/5.x document import (open)
+- Support more features from WordPerfect 4.x/5.x documents (open)
 
 Future:
 - Support for importing the following WordPerfect 6+ features (in

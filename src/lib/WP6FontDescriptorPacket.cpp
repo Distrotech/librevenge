@@ -89,7 +89,7 @@ void WP6FontDescriptorPacket::_readContents(GsfInput *input)
 		   {
 			   guint8 characterSet = (tempFontName[i] & 0xFF00) >> 8;
 			   guint8 character = (tempFontName[i] & 0xFF);
-			   int len, i;
+			   int len;
 			   const guint16 *chars;
 			   
 			   len = extendedCharacterToUCS2(character, characterSet, &chars);

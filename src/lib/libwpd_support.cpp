@@ -615,9 +615,11 @@ void UTF8String::sprintf(const gchar *format, ...)
 	va_end(args);
 }
 
+/*
 UTF8String & UTF8String::operator=(const UTF8String &str)
 {
 	// FIXME FIXME FIXME (IMPORTANT): Protect against the case of
 	// self assignment (x=x)
 	m_buf = g_string_assign(m_buf, str.getUTF8());
 }
+*/

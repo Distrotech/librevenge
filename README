@@ -1,5 +1,8 @@
 INSTALLATION:
 
+Unix/Linux
+==========
+
 Installation on Unix/Linux should be simple. Simply execute the following 
 sequence of commands:
 
@@ -10,4 +13,11 @@ Note that this assumes that you have development versions of glib (>=
 
 LINKS:
 
-glib is available at http://www.gtk.org
+glib is available at ftp://ftp.gnome.org/pub/gnome/sources/glib/
+libgsf is available at ftp://ftp.gnome.org/pub/gnome/sources/libgsf/
+
+Windows
+=======
+
+TODO: Write me!
+
