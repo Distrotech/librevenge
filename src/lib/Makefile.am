@@ -14,7 +14,7 @@ install-libtool-import-lib:
 uninstall-libtool-import-lib:
 	-rm $(DESTDIR)$(libdir)/libwpd-1.dll.a
 	-rm $(DESTDIR)$(libdir)/libwpd-stream-1.dll.a
-	
+
 else
 install-libtool-import-lib:
 uninstall-libtool-import-lib:
@@ -29,6 +29,7 @@ endif
 lib_LTLIBRARIES = libwpd-1.la $(target_libwpd_stream)
 libwpd_1_includedir = $(includedir)/libwpd-1/libwpd
 libwpd_1_include_HEADERS = libwpd.h libwpd_support.h WPXStream.h WPXProperty.h WPDocument.h WPXHLListenerImpl.h
+
 
 AM_CXXFLAGS = $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS)
 
@@ -224,7 +225,7 @@ libwpd_1_la_SOURCES =				\
 	WPXPart.h				\
 	WPXProperty.h				\
 	WPXTable.h
-	
+
 libwpd_stream_headers = GSFStream.h
 libwpd_stream_sources = GSFStream.cpp
 
@@ -244,10 +245,9 @@ if OS_WIN32
 
 @LIBWPD_WIN32_RESOURCE@ : libwpd.rc
 	$(top_srcdir)/build/win32/lt-compile-resource libwpd.rc @LIBWPD_WIN32_RESOURCE@
-	
+
 @LIBWPD_STREAM_WIN32_RESOURCE@ : libwpd-stream.rc
 	$(top_srcdir)/build/win32/lt-compile-resource libwpd-stream.rc @LIBWPD_STREAM_WIN32_RESOURCE@
-	
 endif
 
 
@@ -267,4 +267,3 @@ EXTRA_DIST = \
 BUILD_EXTRA_DIST = 		\
 	libwpd.rc		\
 	libwpd-stream.rc
-	

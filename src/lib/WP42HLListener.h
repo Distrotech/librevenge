@@ -72,7 +72,7 @@ protected:
 private:
 	void _flushText(const bool fakeText=false);
 
-	UCSString m_textBuffer;
+	UTF8String m_textBuffer;
 };
 
 #endif /* WP42HLLISTENER_H */

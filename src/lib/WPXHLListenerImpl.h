@@ -159,7 +159,7 @@ class WPXHLListenerImpl
 	Called when a string of text should be inserted
 	\param text A textbuffer encoded in UCS4
 	*/
-	virtual void insertText(const UCSString &text) = 0;
+	virtual void insertText(const UTF8String &text) = 0;
 	/**
 	Called when a line break should be inserted
 	*/

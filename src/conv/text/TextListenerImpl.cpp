@@ -47,10 +47,9 @@ void TextListenerImpl::insertTab()
 	printf("%c", UCS_TAB);
 }
 
-void TextListenerImpl::insertText(const UCSString &text)
+void TextListenerImpl::insertText(const UTF8String &text)
 {
-	UTF8String tempUTF8(text);
-	printf("%s", tempUTF8.getUTF8());
+	printf("%s", text.getUTF8());
 }
 
 void TextListenerImpl::insertLineBreak()

@@ -168,7 +168,7 @@ void HtmlListenerImpl::insertLineBreak()
 	printf("<br>\n");
 }
 
-void HtmlListenerImpl::insertText(const UCSString &text)
+void HtmlListenerImpl::insertText(const UTF8String &text)
 {
 	UTF8String tempUTF8(text, true);
 	printf("%s", tempUTF8.getUTF8());

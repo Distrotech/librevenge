@@ -155,42 +155,46 @@ struct _WPXTabStop
 	uint8_t m_leaderNumSpaces;
 };
 
-// UCSString: minimal string class, basically an object-oriented wrapper around
-// glib's UCS4 string (so we don't have to pull in yet more dependencies)
-class UCSString
-{
-public:
-	UCSString();
-	UCSString(const UCSString &);
-	~UCSString();
-	// UCS2 conversion not needed (yet)
-	// const uint16_t * getUCS2();
-	void append(uint32_t);
-	void append(const UCSString &);
-	void append(const char *);
-	void clear();
-
-	const uint32_t * getUCS4() const { return m_data; }
-	const int getLen() const         { return m_length; }
-
-private:
-	uint32_t *m_data;
-	uint32_t  m_length; // in chars.
-};
-
 class UTF8String
 {
 public:
 	UTF8String();
-	UTF8String(const UTF8String &);
-	UTF8String(const UCSString &, bool convertToXML = false);
+	UTF8String(const UTF8String &, bool escapeXML = false);
 	UTF8String(const char *str);
+	static UTF8String createFromAscii(const char *_str) { UTF8String str = UTF8String(_str); return str; }
 
 	const char * getUTF8() const { return m_buf.c_str(); }
-	operator const char *() const { return getUTF8(); }
-	const int getLen() const;
+	const char * operator()() const { return getUTF8(); }
+	int getLen() const;
 
 	void sprintf(const char *format, ...);
+	void append(const UTF8String &s);
+	void append(const char c) { m_buf += c; }
+	void append(const uint16_t ucs2);
+	void clear() { m_buf = ""; }
+
+	class Iter
+	{
+	public:
+		Iter(const UTF8String &str) :
+			m_buf(str.getUTF8()),
+			m_pos(0),
+			m_curChar(NULL) {}
+		virtual ~Iter() { delete m_curChar; }
+		void rewind() { m_pos = (-1); }
+		bool next();
+		bool last() {
+			if (m_pos >= m_buf.length())
+				return true;
+			return false;
+		}
+		const char * operator()() const;
+	private:
+		string m_buf;
+		int m_pos;
+		mutable char *m_curChar;
+	};
+		
 
 private:
 	string m_buf;

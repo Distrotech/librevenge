@@ -66,16 +66,17 @@ int _extractNumericValueFromRoman(const char romanChar)
 // as letters, numbers, or roman numerals.. return an integer value representing its number
 // HACK: this function is really cheesey
 // NOTE: if the input is not valid, the output is unspecified
-int _extractDisplayReferenceNumberFromBuf(const UCSString &buf, const WPXNumberingType listType)
+int _extractDisplayReferenceNumberFromBuf(const UTF8String &buf, const WPXNumberingType listType)
 {
 	if (listType == LOWERCASE_ROMAN || listType == UPPERCASE_ROMAN)
 	{
 		int currentSum = 0;
 		int lastMark = 0;
 		int currentMark = 0;
-		for (int i=0; i<buf.getLen(); i++)
+		UTF8String::Iter i(buf);
+		for (i.rewind(); i.next();)
 		{
-			int currentMark = _extractNumericValueFromRoman(buf.getUCS4()[i]);
+			int currentMark = _extractNumericValueFromRoman(*(i()));
 			if (lastMark < currentMark) {
 				currentSum = currentMark - lastMark;
 			}
@@ -91,7 +92,7 @@ int _extractDisplayReferenceNumberFromBuf(const UCSString &buf, const WPXNumberi
 		// the sweet mysteries of life
 		if (buf.getLen()==0)
 			throw ParseException();
-		uint32_t c = buf.getUCS4()[0];
+		char c = buf.getUTF8()[0];
 		if (listType==LOWERCASE)
 			c = toupper(c);
 		return (c - 64);
@@ -99,10 +100,11 @@ int _extractDisplayReferenceNumberFromBuf(const UCSString &buf, const WPXNumberi
 	else if (listType == ARABIC)
 	{
 		int currentSum = 0;
-		for (int i=0; i<buf.getLen(); i++)
+		UTF8String::Iter i(buf);
+		for (i.rewind(); i.next();)
 		{
 			currentSum *= 10;
-			currentSum+=(buf.getUCS4()[i]-48);
+			currentSum+=(*(i())-48);
 		}
 		return currentSum;
 	}
@@ -110,20 +112,20 @@ int _extractDisplayReferenceNumberFromBuf(const UCSString &buf, const WPXNumberi
 	return 1;
 }
 
-WPXNumberingType _extractWPXNumberingTypeFromBuf(const UCSString &buf, const WPXNumberingType putativeWPXNumberingType)
+WPXNumberingType _extractWPXNumberingTypeFromBuf(const UTF8String &buf, const WPXNumberingType putativeWPXNumberingType)
 {
-
-	for (int i=0; i<buf.getLen(); i++)
+	UTF8String::Iter i(buf);
+	for (i.rewind(); i.next();)
 	{
-		if ((buf.getUCS4()[i] == 'I' || buf.getUCS4()[i] == 'V' || buf.getUCS4()[i] == 'X') &&
+		if ((*(i()) == 'I' || *(i()) == 'V' || *(i()) == 'X') &&
 		    (putativeWPXNumberingType == LOWERCASE_ROMAN || putativeWPXNumberingType == UPPERCASE_ROMAN))
 			return UPPERCASE_ROMAN;
-		else if ((buf.getUCS4()[i] == 'i' || buf.getUCS4()[i] == 'v' || buf.getUCS4()[i] == 'x') &&
+		else if ((*(i()) == 'i' || *(i()) == 'v' || *(i()) == 'x') &&
 		    (putativeWPXNumberingType == LOWERCASE_ROMAN || putativeWPXNumberingType == UPPERCASE_ROMAN))
 			return LOWERCASE_ROMAN;
-		else if (buf.getUCS4()[i] >= 'A' && buf.getUCS4()[i] <= 'Z')
+		else if (*(i()) >= 'A' && *(i()) <= 'Z')
 			return UPPERCASE;
-		else if (buf.getUCS4()[i] >= 'a' && buf.getUCS4()[i] <= 'z')
+		else if (*(i()) >= 'a' && *(i()) <= 'z')
 			return LOWERCASE;
 	}
 
@@ -230,7 +232,7 @@ WP6HLContentListener::~WP6HLContentListener()
 	delete m_parseState;
 }
 
-void WP6HLContentListener::setExtendedInformation(const uint16_t type, const UCSString &data)
+void WP6HLContentListener::setExtendedInformation(const uint16_t type, const UTF8String &data)
 {
 	switch (type)
 	{

@@ -42,7 +42,7 @@ public:
 	virtual void setDate(const uint16_t year, const uint8_t month, const uint8_t day,
 			     const uint8_t hour, const uint8_t minute, const uint8_t second,
 			     const uint8_t dayOfWeek, const uint8_t timeZone, const uint8_t unused) {}
-	virtual void setExtendedInformation(const uint16_t type, const UCSString &data) {}
+	virtual void setExtendedInformation(const uint16_t type, const UTF8String &data) {}
 	virtual void startDocument() {}
 	virtual void setAlignmentCharacter(const uint16_t character) {}
 	virtual void setLeaderCharacter(const uint16_t character, const uint8_t numberOfSpaces) {}

@@ -56,7 +56,7 @@ public:
 	virtual void closeSpan() {}
 
 	virtual void insertTab();
-	virtual void insertText(const UCSString &text);
+	virtual void insertText(const UTF8String &text);
 	virtual void insertLineBreak();
 
 	virtual void defineOrderedListLevel(const WPXPropertyList &propList) {}

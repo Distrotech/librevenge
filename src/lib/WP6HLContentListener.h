@@ -68,12 +68,12 @@ struct _WP6ParsingState
 {
 	_WP6ParsingState(WPXTableList * tableList, int nextTableIndice = 0);
 	~_WP6ParsingState();
-	UCSString m_bodyText;
-	UCSString m_textBeforeNumber;
-	UCSString m_textBeforeDisplayReference;
-	UCSString m_numberText;
-	UCSString m_textAfterDisplayReference;
-	UCSString m_textAfterNumber;
+	UTF8String m_bodyText;
+	UTF8String m_textBeforeNumber;
+	UTF8String m_textBeforeDisplayReference;
+	UTF8String m_numberText;
+	UTF8String m_textAfterDisplayReference;
+	UTF8String m_textAfterNumber;
 
 	uint8_t m_tempParagraphJustification; // TODO: remove this one after the tabs are properly implemented
 	float m_paragraphMarginBottomRelative;
@@ -135,7 +135,7 @@ public:
 	virtual void setDate(const uint16_t year, const uint8_t month, const uint8_t day,
 						const uint8_t hour, const uint8_t minute, const uint8_t second,
 						const uint8_t dayOfWeek, const uint8_t timeZone, const uint8_t unused) {}
-	virtual void setExtendedInformation(const uint16_t type, const UCSString &data);
+	virtual void setExtendedInformation(const uint16_t type, const UTF8String &data);
 	virtual void setAlignmentCharacter(const uint16_t character);
 	virtual void setLeaderCharacter(const uint16_t character, const uint8_t numSpaces);
 	virtual void defineTabStops(const bool isRelative, const vector<WPXTabStop> &tabStops, 

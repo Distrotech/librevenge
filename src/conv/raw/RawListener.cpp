@@ -224,7 +224,7 @@ void RawListenerImpl::insertTab()
 	__iprintf("insertTab()\n");
 }
 
-void RawListenerImpl::insertText(const UCSString &text)
+void RawListenerImpl::insertText(const UTF8String &text)
 {
 	UTF8String textUTF8(text);
 	__iprintf("insertText(text: %s)\n", textUTF8.getUTF8());

@@ -35,15 +35,15 @@ class WPXPageSpan;
 typedef struct _WPXDocumentMetaData WPXDocumentMetaData;
 struct _WPXDocumentMetaData
 {
-	UCSString m_author;
-	UCSString m_subject;
-	UCSString m_publisher;
-	UCSString m_category;
-	UCSString m_keywords;
-	UCSString m_language;
-	UCSString m_abstract;
-	UCSString m_descriptiveName;
-	UCSString m_descriptiveType;
+	UTF8String m_author;
+	UTF8String m_subject;
+	UTF8String m_publisher;
+	UTF8String m_category;
+	UTF8String m_keywords;
+	UTF8String m_language;
+	UTF8String m_abstract;
+	UTF8String m_descriptiveName;
+	UTF8String m_descriptiveType;
 };
 
 typedef struct _WPXTableDefinition WPXTableDefinition;
@@ -61,12 +61,12 @@ struct _WPXParsingState
 	~_WPXParsingState();
 
 /*
-	UCSString m_bodyText;
-	UCSString m_textBeforeNumber;
-	UCSString m_textBeforeDisplayReference;
-	UCSString m_numberText;
-	UCSString m_textAfterDisplayReference;
-	UCSString m_textAfterNumber;
+	UTF8String m_bodyText;
+	UTF8String m_textBeforeNumber;
+	UTF8String m_textBeforeDisplayReference;
+	UTF8String m_numberText;
+	UTF8String m_textAfterDisplayReference;
+	UTF8String m_textAfterNumber;
 */
 	uint32_t m_textAttributeBits;
 	bool m_textAttributesChanged;

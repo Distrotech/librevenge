@@ -59,7 +59,7 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6HLListener *listener) const
 		uint16_t tagID = readU16(m_stream);
 		uint16_t flags = readU16(m_stream);
 
-		UCSString name;
+		UTF8String name;
 		for (uint16_t wpChar = readU16(m_stream);
 		     wpChar != 0; 
 		     wpChar = readU16(m_stream))
@@ -90,7 +90,7 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6HLListener *listener) const
 		}
 		else
 		{
-			UCSString data;
+			UTF8String data;
 			for (uint16_t wpChar = readU16(m_stream);
 			     wpChar != 0; 
 			     wpChar = readU16(m_stream))

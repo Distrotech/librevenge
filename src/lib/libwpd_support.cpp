@@ -25,6 +25,7 @@
  */
 
 #include "libwpd.h"
+#include "libwpd_internal.h"
 #include <stdarg.h>
 #include <string.h>
 #include <stdio.h>
@@ -572,109 +573,99 @@ _WPXColumnDefinition::_WPXColumnDefinition()
 {
 }
 
-UCSString::UCSString() :
-		m_data(NULL),
-		m_length(0)
-{
-}
-
-UCSString::UCSString(const UCSString &stringBuf) :
-		m_data(NULL),
-		m_length(0)
-{
-	append(stringBuf);
-}
-
-UCSString::~UCSString()
-{
-	if(m_data)
-		free(m_data);
-}
-
-void UCSString::append(uint32_t c)
-{
-	m_data = (uint32_t *)realloc(m_data, (m_length + 1) * 4);
-	m_data[m_length] = c;
-	m_length++;
-}
-
-void UCSString::append(const UCSString &stringBuf)
-{
-	m_data = (uint32_t *)realloc(m_data, (m_length + stringBuf.m_length) * 4);
-	memcpy(&m_data[m_length], stringBuf.m_data,
-		   stringBuf.m_length * 4);
-	m_length += stringBuf.m_length;
-}
-
-// append: appends an ascii-standard (not UTF8!!) string onto the buffer
-// FIXME: this function should really handle appending a UTF8 string onto a buffer
-void UCSString::append(const char *buf)
-{
-	int len = strlen(buf);
-	for (int i=0; i<len; i++)
-		append((uint32_t)buf[i]);
-}
-
-void UCSString::clear()
-{
-	free(m_data);
-	m_data = NULL;
-	m_length = 0;
-}
-
 char *
 g_static_ucs4_to_utf8 (const uint32_t *str,
 		       long           len,              
 		       long          *items_read,       
 		       long          *items_written);
-int
-g_static_utf8_strlen (const char *p);
+int g_static_utf8_strlen (const char *p);
+int g_static_unichar_to_utf8 (uint32_t c,  char *outbuf);
+
+static const int8_t g_static_utf8_skip_data[256] = {
+  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+  2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+  3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,5,5,6,6,1,1
+};
+#define UTF8_LENGTH(Char)              \
+  ((Char) < 0x80 ? 1 :                 \
+   ((Char) < 0x800 ? 2 :               \
+    ((Char) < 0x10000 ? 3 :            \
+     ((Char) < 0x200000 ? 4 :          \
+      ((Char) < 0x4000000 ? 5 : 6)))))
+#define g_static_utf8_next_char(p) (char *)((p) + g_static_utf8_skip_data[*(uint8_t *)(p)])
 
 
-UTF8String::UTF8String()
+UTF8String::UTF8String() 
 {
 }
 
-UTF8String::UTF8String(const UTF8String &stringBuf) :
-	m_buf(stringBuf.getUTF8())
+UTF8String::UTF8String(const UTF8String &stringBuf, bool escapeXML) 
 {
-}
-
-UTF8String::UTF8String(const UCSString &stringBuf, bool convertToXML)
-{
-	if (convertToXML)
+	if (escapeXML)
 	{
-		UCSString tempUCS4;
-		for (int i=0; i<stringBuf.getLen(); i++) {
-			if (stringBuf.getUCS4()[i] == '&') {
-				tempUCS4.append("&amp;");
-			}
-			else if (stringBuf.getUCS4()[i] == (uint16_t)'<') {
-				tempUCS4.append("&lt;");
-			}
-			else if (stringBuf.getUCS4()[i] == (uint16_t)'>') {
-				tempUCS4.append("&gt;");
-			}
-			else {
-				tempUCS4.append(stringBuf.getUCS4()[i]);
-			}
-		}
+		int length = g_static_utf8_strlen(stringBuf.getUTF8());
+		const char *p = stringBuf.getUTF8();
+		const char *end = p + length;
+		while (p != end)
+		{
+			const char *next = g_static_utf8_next_char(p);
 
-		char *tmpBuf = g_static_ucs4_to_utf8((const uint32_t *)tempUCS4.getUCS4(), tempUCS4.getLen(), NULL, NULL);
-		m_buf = tmpBuf;
-		delete [] tmpBuf;
-		return;
+			switch (*p)
+			{
+			case '&':
+				m_buf.append("&amp;");
+				break;
+			case '<':
+				m_buf.append("&lt;");
+				break;
+			case '>':
+				m_buf.append("&gt;");
+				break;
+			case '\'':
+				m_buf.append("&apos;");
+				break;				
+			case '"':
+				m_buf.append("&quot;");
+				break;
+			default:
+				while (p != next) 
+				{					
+					m_buf+=(*p);
+					p++;
+				}
+				break;
+			}
+
+			p = next;
+		}
 	}
-	
-	char *tmpBuf = g_static_ucs4_to_utf8((const uint32_t *)stringBuf.getUCS4(), stringBuf.getLen(), NULL, NULL);
-	m_buf = tmpBuf;
-	delete [] tmpBuf;
+	else
+		this->sprintf("%s", stringBuf.getUTF8());
+}
+
+static void appendUCS4(string &buf, uint32_t ucs4)
+{
+	int charLength = g_static_unichar_to_utf8(ucs4, NULL);
+	char utf8[charLength];
+	g_static_unichar_to_utf8(ucs4, utf8);
+	for (int j=0; j<charLength; j++)
+		buf+=utf8[j];
 }
 
 UTF8String::UTF8String(const char *str) :
 	m_buf(str)
-
 {
+}
+
+void UTF8String::append(const uint16_t ucs2)
+{
+	uint32_t ucs4 = (uint32_t) ucs2;
+	appendUCS4(m_buf, ucs2);
 }
 
 const int STRING_BUF_SIZE = 128;
@@ -703,9 +694,38 @@ void UTF8String::sprintf(const char *format, ...)
 	va_end(args);
 }
 
-const int UTF8String::getLen() const
+void UTF8String::append(const UTF8String &s)
+{
+	m_buf += s.getUTF8();
+}
+
+int UTF8String::getLen() const
 { 
 	return g_static_utf8_strlen(m_buf.c_str()); 
+}
+
+bool UTF8String::Iter::next()
+{
+	 if (m_pos == (-1))
+		 m_pos++;
+	 else if (m_pos < m_buf.length())
+	 {
+		 m_pos+=(int32_t) (g_static_utf8_next_char(&m_buf.c_str()[m_pos]) - &m_buf.c_str()[m_pos]);
+	 }
+}
+
+const char * UTF8String::Iter::operator()() const
+{ 
+	if (m_pos == (-1)) return NULL; 
+
+	DELETEP(m_curChar);
+	int32_t charLength =(int32_t) (g_static_utf8_next_char(&m_buf.c_str()[m_pos]) - &m_buf.c_str()[m_pos]);
+	m_curChar = new char[charLength+1];
+	for (int i=0; i<charLength; i++)
+		m_curChar[i] = m_buf[m_pos+i];
+	m_curChar[charLength]='\0';
+
+	return m_curChar;
 }
 
 /**
@@ -773,26 +793,6 @@ g_static_unichar_to_utf8 (uint32_t c,
     
 	return len;
 }
-
-
-static const int8_t g_static_utf8_skip_data[256] = {
-  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-  2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
-  3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,5,5,6,6,1,1
-};
-
-#define UTF8_LENGTH(Char)              \
-  ((Char) < 0x80 ? 1 :                 \
-   ((Char) < 0x800 ? 2 :               \
-    ((Char) < 0x10000 ? 3 :            \
-     ((Char) < 0x200000 ? 4 :          \
-      ((Char) < 0x4000000 ? 5 : 6)))))
-#define g_static_utf8_next_char(p) (char *)((p) + g_static_utf8_skip_data[*(uint8_t *)(p)])
 
 /**
  * g_static_ucs4_to_utf8:
