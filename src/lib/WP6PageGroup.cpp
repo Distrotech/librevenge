@@ -40,15 +40,16 @@ void WP6PageGroup::_readContents(GsfInput *input)
 	// the contents accordingly	
 	switch (getSubGroup())	
 	{
-		case 0: // Top Margin Set
-		case 1: // Bottom Margin Set
-			{
-				m_margin = gsf_le_read_guint16(input);
-				WPD_DEBUG_MSG(("WordPerfect: Read page group margin size (margin: %i)\n", m_margin));
-			}
-			break;
-		default: /* something else we don't support, since it isn't in the docs */
-			break;
+	case WP6_PAGE_GROUP_TOP_MARGIN_SET:
+	case WP6_PAGE_GROUP_BOTTOM_MARGIN_SET:
+		m_margin = gsf_le_read_guint16(input);
+		WPD_DEBUG_MSG(("WordPerfect: Read page group margin size (margin: %i)\n", m_margin));
+	break;
+	case WP6_PAGE_GROUP_SUPPRESS_PAGE_CHARACTERISTICS:
+		m_suppressedCode = gsf_le_read_guint8(input);
+		WPD_DEBUG_MSG(("WordPerfect: Read suppressed code (%i)\n", m_suppressedCode));
+	default: /* something else we don't support, since it isn't in the docs */
+		break;
 	}
 }
 
@@ -58,14 +59,15 @@ ParseResult WP6PageGroup::parse(WP6LLListener *llListener)
 	
 	switch (getSubGroup())
 	{
-		case 0: // Top Margin Set
-		case 1: // Bottom Margin Set
-			{						
-				llListener->pageMarginChange(getSubGroup(), m_margin);
-			}
-			break;
-		default: // something else we don't support, since it isn't in the docs
-			break;
+	case WP6_PAGE_GROUP_TOP_MARGIN_SET:
+	case WP6_PAGE_GROUP_BOTTOM_MARGIN_SET:
+		llListener->pageMarginChange(getSubGroup(), m_margin);
+		break;
+	case WP6_PAGE_GROUP_SUPPRESS_PAGE_CHARACTERISTICS:
+		llListener->suppressPageCharacteristics(m_suppressedCode);
+		break;
+	default: // something else we don't support, since it isn't in the docs
+		break;
 	}
 	
 	return PARSE_OK;

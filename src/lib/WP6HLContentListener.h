@@ -38,7 +38,7 @@ using namespace std;
 
 class WPXHLListenerImpl;
 class WP6LLParser;
-class WPXPage;
+class WPXPageSpan;
 class WPXTable;
 
 enum WP6StyleState { NORMAL, DOCUMENT_NOTE, DOCUMENT_NOTE_GLOBAL, 
@@ -126,6 +126,7 @@ struct _WP6ParsingState
 	bool m_isTableColumnOpened;
 	bool m_isTableCellOpened;
 
+	bool m_isPageSpanOpened;
 	int m_nextPageIndice;
 	int m_numPagesRemainingInSpan;
 
@@ -171,7 +172,7 @@ private:
 class WP6HLContentListener : public WP6HLListener
 {
 public:
-	WP6HLContentListener(vector<WPXPage *> *pageList, vector<WPXTable *> *tableList, WPXHLListenerImpl *listenerImpl);
+	WP6HLContentListener(vector<WPXPageSpan *> *pageList, vector<WPXTable *> *tableList, WPXHLListenerImpl *listenerImpl);
 	virtual ~WP6HLContentListener();
 		
 	// for getting low-level messages from the parser
@@ -204,7 +205,8 @@ public:
 	virtual void globalOff();
 	virtual void noteOn(const guint16 textPID);
 	virtual void noteOff(const WPXNoteType noteType);
-	virtual void headerFooterGroup(const WPXHeaderFooterType headerFooterType, const guint8 occurenceBits, const guint16 textPID);
+	virtual void headerFooterGroup(const guint8 headerFooterType, const guint8 occurenceBits, const guint16 textPID) {}
+	virtual void suppressPageCharacteristics(const guint8 suppressCode) {}
 	virtual void endDocument();
  
  	virtual void defineTable(guint8 position, guint16 leftOffset);
@@ -221,8 +223,11 @@ protected:
 	void _handleLineBreakElementBegin();
 	void _flushText(const bool fakeText=false);
 	void _handleListChange(const guint16 outlineHash);
+	    
 
 	void _openListElement();
+
+	void _openPageSpan();
 
 	void _openSection();
 	void _closeSection();
@@ -251,7 +256,7 @@ private:
 	WP6TableDefinition m_tableDefinition;
 	vector<WPXTable *> *m_tableList;
 
-	vector <WPXPage *> *m_pageList;
+	vector <WPXPageSpan *> *m_pageList;
 
 	map<int,WP6OutlineDefinition *> m_outlineDefineHash;
 };

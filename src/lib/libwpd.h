@@ -28,7 +28,7 @@
 
 #include "libwpd_support.h"
 #include "WPXLLListener.h"
-#include "WPXPage.h"
+#include "WP6LLListener.h"
 #include "WPXHLListenerImpl.h"
 #include "WP6LLParser.h"
 #include "WP6HLParser.h"

@@ -51,8 +51,8 @@ class WPXHLListenerImpl
 				  const float marginLeft, const float marginRight,
 				  const float marginTop, const float marginBottom) = 0;
 	virtual void closePageSpan() {}
-	virtual void openHeaderFooter(const WPXHeaderFooterType headerFooterType) = 0;
-	virtual void closeHeaderFooter(const WPXHeaderFooterType headerFooterType) = 0;
+	virtual void openHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence) = 0;
+	virtual void closeHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence) = 0;
 
 	virtual void openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits,
 				   const gchar *fontName, const float fontSize, 

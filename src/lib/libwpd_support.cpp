@@ -575,23 +575,30 @@ UTF8String::UTF8String(const UCSString &stringBuf, bool convertToValidXML)
 	g_free(buf);
 }
 
-UTF8String::UTF8String(const gchar *format, ...) :
-	m_buf(g_string_new(NULL))
+// UTF8String::UTF8String(const gchar *format, ...) :
+// 	m_buf(g_string_new(NULL))
+	
+// {
+// 	va_list args;
+// 	va_start (args, format);
+	
+// //  	gsize len = g_printf_string_upper_bound(format, args);
+// //  	if (len > 0) 
+// //  	{
+// 	gchar *buf = NULL;
+// 	buf = g_strdup_vprintf(format, args);
+// 	m_buf = g_string_append(m_buf, buf);
+// 	g_free(buf);
+// //  	}
+// 	va_end(args);
+// }
+
+UTF8String::UTF8String(const gchar *str) :
+	m_buf(g_string_new(str))
 	
 {
-	va_list args;
-	va_start (args, format);
-	
-//  	gsize len = g_printf_string_upper_bound(format, args);
-//  	if (len > 0) 
-//  	{
-	gchar *buf = NULL;
-	buf = g_strdup_vprintf(format, args);
-	m_buf = g_string_append(m_buf, buf);
-	g_free(buf);
-//  	}
-	va_end(args);
 }
+
 
 void UTF8String::sprintf(const gchar *format, ...)
 {

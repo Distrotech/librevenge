@@ -46,7 +46,8 @@ int extendedCharacterToUCS2(guint8 character, guint8 characterSet,
 
 enum WPXNumberingType { ARABIC, LOWERCASE, UPPERCASE, LOWERCASE_ROMAN, UPPERCASE_ROMAN };
 enum WPXNoteType { FOOTNOTE, ENDNOTE };
-enum WPXHeaderFooterType { HEADER_A, HEADER_B, FOOTER_A, FOOTER_B, WATERMARK_A, WATERMARK_B };
+enum WPXHeaderFooterType { HEADER, FOOTER };
+enum WPXHeaderFooterOccurence { ODD, EVEN, ALL };
 
 // ATTRIBUTE bits
 #define WPX_EXTRALARGE_BIT 1
@@ -143,7 +144,8 @@ public:
 	UTF8String(const UTF8String &);
 	UTF8String(const UCSString &, bool convertToValidXML = false);
 	//UTF8String(const gchar *);
-	UTF8String(const gchar *format, ...);
+	UTF8String(const gchar *str);
+	//UTF8String(const gchar *format, ...);
 	~UTF8String() { g_string_free(m_buf, TRUE); }
 
 	const gchar * getUTF8() const { return m_buf->str; }
@@ -154,6 +156,11 @@ public:
 
 private:
 	GString *m_buf;
+};
+
+class VersionException
+{
+	// needless to say, we could flesh this class out a bit
 };
 
 class FileException

@@ -38,7 +38,7 @@ void WP6HLParser::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl)
 	GsfInput *document = NULL;
 	WP6Header * header = NULL;
 	WP6PrefixData * prefixData = NULL;
-	vector<WPXPage *> pageList;
+	vector<WPXPageSpan *> pageList;
 	vector<WPXTable *> tableList;	
 	bool isDocumentOLE = false;
  	
@@ -57,7 +57,7 @@ void WP6HLParser::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl)
 		prefixData = WP6LLParser::getPrefixData(document, header);
 		
 		// do a "first-pass" parse of the document
-		// gather table border information, (TODO) page properties (per-page)
+		// gather table border information, page properties (per-page)
 		WP6HLStylesListener stylesListener(&pageList, &tableList);
 		stylesListener.setPrefixData(prefixData);
 		WP6LLParser::parse(input, header, static_cast<WP6LLListener *>(&stylesListener));
@@ -79,7 +79,7 @@ void WP6HLParser::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl)
 			g_object_unref(G_OBJECT(document));
 		delete header;
 		delete prefixData;
-		for (vector<WPXPage *>::iterator iter = pageList.begin(); iter != pageList.end(); iter++) {
+		for (vector<WPXPageSpan *>::iterator iter = pageList.begin(); iter != pageList.end(); iter++) {
 			delete *iter;
 		}
 		for (vector<WPXTable *>::iterator iter = tableList.begin(); iter != tableList.end(); iter++) {
@@ -91,11 +91,15 @@ void WP6HLParser::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl)
 		WPD_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
 		if (document != NULL && isDocumentOLE)
 			g_object_unref(G_OBJECT(document));
-		if (header != NULL)
-			delete header;
-		if (prefixData != NULL)
-			delete prefixData;
-		// FIXME: iterate through page and table lists, destroy all of them
+		delete header;
+		delete prefixData;
+		
+		for (vector<WPXPageSpan *>::iterator iter = pageList.begin(); iter != pageList.end(); iter++) {
+			delete *iter;
+		}
+		for (vector<WPXTable *>::iterator iter = tableList.begin(); iter != tableList.end(); iter++) {
+			delete *iter;
+		}
 
 		throw FileException();
 	}

@@ -39,6 +39,9 @@ class WP6PageGroup : public WP6VariableLengthGroup
 	// variables needed for subgroup 0 and 1 (Left/Right Margin Set)
 	guint16 m_margin;
 	guint8 m_marginType;
+	// variables needed for subgroup 2 (suppress page characteristics)
+	guint8 m_suppressedCode;
+	
 };
 
 #endif /* WP6PAGEGROUP_H */

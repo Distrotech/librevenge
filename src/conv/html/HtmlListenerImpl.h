@@ -49,8 +49,8 @@ public:
 				  const float marginLeft, const float marginRight,
 				  const float marginTop, const float marginBottom);
 	virtual void closePageSpan();
-	virtual void openHeaderFooter(const WPXHeaderFooterType headerFooterType);
-	virtual void closeHeaderFooter(const WPXHeaderFooterType headerFooterType);
+	virtual void openHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence);
+	virtual void closeHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence);
 
 	virtual void openSection(const guint numColumns, float marginLeft, float marginRight);
 	virtual void closeSection();

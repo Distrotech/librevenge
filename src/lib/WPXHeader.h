@@ -34,7 +34,7 @@ class WPXHeader
 {
  public:	
 	WPXHeader(GsfInput *input);
-	WPXHeader(WPXHeader &);
+	//WPXHeader(WPXHeader &);
 	~WPXHeader() {};
 
 	const guint32 getDocumentOffset() const { return m_documentOffset; }

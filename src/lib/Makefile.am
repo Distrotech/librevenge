@@ -1,6 +1,6 @@
 lib_LTLIBRARIES = libwpd-1.la
 libwpd_1_includedir = $(includedir)/libwpd-1/libwpd
-libwpd_1_include_HEADERS = libwpd.h libwpd_support.h WPXHLListener.h WPXHLListenerImpl.h WPXLLListener.h WPXPage.h \
+libwpd_1_include_HEADERS = libwpd.h libwpd_support.h WPXHLListener.h WPXHLListenerImpl.h WPXLLListener.h \
 		           WPXParser.h WP6LLParser.h \
 		  	   WP6HLContentListener.h WP6Header.h WP6HLParser.h WP60Header.h WP61Header.h WP6LLListener.h WPXHeader.h \
 	                   WP6FileStructure.h WP6PrefixDataPacket.h WP6FontDescriptorPacket.h WP6DefaultInitialFontPacket.h
@@ -24,6 +24,7 @@ libwpd_1_la_SOURCES =			\
 	WP6FontDescriptorPacket.cpp	\
 	WP6FootnoteEndnoteGroup.cpp	\
 	WP6GeneralTextPacket.cpp	\
+	WP6Header.cpp			\
 	WP60Header.cpp			\
 	WP61Header.cpp			\
 	WP6HeaderFooterGroup.cpp 	\
@@ -46,7 +47,7 @@ libwpd_1_la_SOURCES =			\
 	WP6UndoGroup.cpp		\
 	WP6UnsupportedVariableLengthGroup.cpp \
 	WP6VariableLengthGroup.cpp 	\
-	WPXPage.cpp			\
+	WPXPageSpan.cpp			\
 	WPXHeader.cpp 			\
 	WPXTable.cpp			\
 	libwpd.h	        	\
@@ -93,7 +94,7 @@ libwpd_1_la_SOURCES =			\
 	WPXLLListener.h			\
 	WPXHLListener.h			\
 	WPXHLListenerImpl.h		\
-	WPXPage.h			\
+	WPXPageSpan.h			\
 	WPXPart.h			\
 	WPXParser.h 			\
 	WPXTable.h

@@ -91,28 +91,28 @@ void HtmlListenerImpl::closePageSpan()
 	printf("</page-span>\n");
 }
 
-void HtmlListenerImpl::openHeaderFooter(const WPXHeaderFooterType headerFooterType)
+void HtmlListenerImpl::openHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence)
 {
 	switch (headerFooterType)
 	{
-	case HEADER_A:
-		printf("<header a>\n");
+	case HEADER:
+		printf("<header>\n");
 		break;
-	case FOOTER_A:
-		printf("<footer a>\n");
+	case FOOTER:
+		printf("<footer>\n");
 		break;
 	}
 }
 
-void HtmlListenerImpl::closeHeaderFooter(const WPXHeaderFooterType headerFooterType)
+void HtmlListenerImpl::closeHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence)
 {
 	switch (headerFooterType)
 	{
-	case HEADER_A:
-		printf("</header a>\n");
+	case HEADER:
+		printf("</header>\n");
 		break;
-	case FOOTER_A:
-		printf("</footer a>\n");
+	case FOOTER:
+		printf("</footer>\n");
 		break;
 	}
 }

@@ -2,13 +2,14 @@
 #include "WPXTable.h"
 #include "WP6FileStructure.h"
 #include "WPXFileStructure.h"
+#include "libwpd_internal.h"
 
-// WP6HLStylesListener: creates an intermediate table representation, given a
+// WP6HLStylesListener: creates intermediate table and page span representations, given a
 // sequence of messages passed to it by the parser.
 
-WP6HLStylesListener::WP6HLStylesListener(vector<WPXPage *> *pageList, vector<WPXTable *> *tableList) : 
+WP6HLStylesListener::WP6HLStylesListener(vector<WPXPageSpan *> *pageList, vector<WPXTable *> *tableList) : 
 	m_pageList(pageList),
-	m_currentPage(new WPXPage()),
+	m_currentPage(new WPXPageSpan()),
 	m_tableList(tableList), 
 	m_currentPageHasContent(false)
 {
@@ -38,7 +39,7 @@ void WP6HLStylesListener::insertBreak(const guint8 breakType)
 			{
 				m_pageList->push_back(m_currentPage);
 			}
-			m_currentPage = new WPXPage(*(m_pageList->back()));
+			m_currentPage = new WPXPageSpan(*(m_pageList->back()));
 			break;
 		}
 	}
@@ -85,6 +86,32 @@ void WP6HLStylesListener::marginChange(const guint8 side, const guint16 margin)
 		*/
 	}
 
+}
+
+void WP6HLStylesListener::headerFooterGroup(const guint8 headerFooterType, const guint8 occurenceBits, const guint16 textPID)
+{
+	if (!isUndoOn()) 
+	{			
+		WPD_DEBUG_MSG(("WordPerfect: headerFooterGroup (headerFooterType: %i, occurenceBits: %i, textPID: %i)\n", 
+			       headerFooterType, occurenceBits, textPID));
+		m_currentPage->setHeaderFooter(headerFooterType, occurenceBits, textPID);
+	}
+}
+
+void WP6HLStylesListener::suppressPageCharacteristics(const guint8 suppressCode)
+{
+	if (!isUndoOn()) 
+	{			
+		WPD_DEBUG_MSG(("WordPerfect: suppressPageCharacteristics (suppressCode: %u)\n", suppressCode));
+		if (suppressCode & WP6_PAGE_GROUP_SUPPRESS_HEADER_A)
+			m_currentPage->setHeadFooterSuppression(WP6_HEADER_FOOTER_GROUP_HEADER_A, true);
+		if (suppressCode & WP6_PAGE_GROUP_SUPPRESS_HEADER_B)
+			m_currentPage->setHeadFooterSuppression(WP6_HEADER_FOOTER_GROUP_HEADER_B, true);
+		if (suppressCode & WP6_PAGE_GROUP_SUPPRESS_FOOTER_A)
+			m_currentPage->setHeadFooterSuppression(WP6_HEADER_FOOTER_GROUP_FOOTER_A, true);
+		if (suppressCode & WP6_PAGE_GROUP_SUPPRESS_FOOTER_B)
+			m_currentPage->setHeadFooterSuppression(WP6_HEADER_FOOTER_GROUP_FOOTER_B, true);			
+	}
 }
 
 void WP6HLStylesListener::startTable()

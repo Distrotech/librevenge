@@ -41,32 +41,10 @@ void WP6HeaderFooterGroup::_readContents(GsfInput *input)
 ParseResult WP6HeaderFooterGroup::parse(WP6LLListener *llListener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling an HeaderFooter group\n"));
-	WPXHeaderFooterType type;
-	switch (getSubGroup())
-	{
-	case WP6_HEADER_FOOTER_GROUP_HEADER_A:
-		type = HEADER_A;
-		break;
-	case WP6_HEADER_FOOTER_GROUP_HEADER_B:
-		type = HEADER_B;
-		break;
-	case WP6_HEADER_FOOTER_GROUP_FOOTER_A:
-		type = FOOTER_A;
-		break;
-	case WP6_HEADER_FOOTER_GROUP_FOOTER_B:
-		type = FOOTER_B;
-		break;
-	case WP6_HEADER_FOOTER_GROUP_WATERMARK_A:
-		type = WATERMARK_A;
-		break;
-	case WP6_HEADER_FOOTER_GROUP_WATERMARK_B:
-		type = WATERMARK_B;
-		break;
-	}
 
-	if (getNumPrefixIDs() > 0) // FIXME: perhaps we should throw an exception at some point if this isn't true..
+	if (getNumPrefixIDs() > 0) // FIXME: perhaps we should throw an exception if this isn't true..
 	{
-		//llListener->headerFooterGroup(type, m_occurenceBits, getPrefixIDs()[0]);
+		llListener->headerFooterGroup(getSubGroup(), m_occurenceBits, getPrefixIDs()[0]);
 	}
 	
 	return PARSE_OK;

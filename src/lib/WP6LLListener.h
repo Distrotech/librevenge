@@ -56,7 +56,8 @@ public:
 	virtual void globalOff() = 0;
 	virtual void noteOn(const guint16 textPID) = 0;
 	virtual void noteOff(const WPXNoteType noteType) = 0;
-	virtual void headerFooterGroup(const WPXHeaderFooterType headerFooterType, const guint8 occurenceBits, const guint16 textPID) = 0;
+	virtual void headerFooterGroup(const guint8 headerFooterType, const guint8 occurenceBits, const guint16 textPID) = 0;
+	virtual void suppressPageCharacteristics(const guint8 suppressCode) = 0;
 
 	void setPrefixData(WP6PrefixData *prefixData) { m_prefixData = prefixData; }
 

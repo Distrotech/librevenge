@@ -63,18 +63,18 @@ WPXHeader::WPXHeader(GsfInput *input)
 					m_majorVersion, m_minorVersion));		
 }
 
-WPXHeader::WPXHeader(WPXHeader & header)
-{
-	/* get the document pointer */
-	m_documentOffset = header.getDocumentOffset();
+// WPXHeader::WPXHeader(WPXHeader & header)
+// {
+// 	/* get the document pointer */
+// 	m_documentOffset = header.getDocumentOffset();
 
-	/* get information on product types, file types, versions */
-	m_productType = header.getProductType();
-	m_fileType = header.getFileType();
-	m_majorVersion = header.getMajorVersion();
-	m_minorVersion = header.getMinorVersion();
+// 	/* get information on product types, file types, versions */
+// 	m_productType = header.getProductType();
+// 	m_fileType = header.getFileType();
+// 	m_majorVersion = header.getMajorVersion();
+// 	m_minorVersion = header.getMinorVersion();
 	
-	WPD_DEBUG_MSG(("WordPerfect: Product Type: %i File Type: %i Major Version: %i Minor Version: %i\n", 
-					m_productType, m_fileType, 
-					m_majorVersion, m_minorVersion));		
-}
+// 	WPD_DEBUG_MSG(("WordPerfect: Product Type: %i File Type: %i Major Version: %i Minor Version: %i\n", 
+// 					m_productType, m_fileType, 
+// 					m_majorVersion, m_minorVersion));		
+// }

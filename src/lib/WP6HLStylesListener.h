@@ -30,13 +30,13 @@
 #define WP6TABLELISTENER_H
 #include "WP6HLListener.h"
 #include <vector>
-#include "WPXPage.h"
+#include "WPXPageSpan.h"
 #include "WPXTable.h"
 
 class WP6HLStylesListener : public WP6HLListener
 {
 public:
-	WP6HLStylesListener(vector<WPXPage *> *pageList, vector<WPXTable *> *tableList);
+	WP6HLStylesListener(vector<WPXPageSpan *> *pageList, vector<WPXTable *> *tableList);
 
 	virtual void setDate(const guint16 year, const guint8 month, const guint8 day, 
 			     const guint8 hour, const guint8 minute, const guint8 second,
@@ -67,7 +67,8 @@ public:
 	virtual void globalOff() {}
 	virtual void noteOn(const guint16 textPID) {}
 	virtual void noteOff(const WPXNoteType noteType) {}
-	virtual void headerFooterGroup(const WPXHeaderFooterType headerFooterType, const guint8 occurenceBits, const guint16 textPID) {}
+	virtual void headerFooterGroup(const guint8 headerFooterType, const guint8 occurenceBits, const guint16 textPID);
+	virtual void suppressPageCharacteristics(const guint8 suppressCode);
 	virtual void endDocument();
  
  	virtual void defineTable(guint8 position, guint16 leftOffset) {}
@@ -79,8 +80,8 @@ public:
 				const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
  	virtual void endTable() {}
 private:
-	vector<WPXPage *> *m_pageList;
-	WPXPage *m_currentPage;
+	vector<WPXPageSpan *> *m_pageList;
+	WPXPageSpan *m_currentPage;
 
 	vector<WPXTable *> *m_tableList;
 	WPXTable *m_currentTable;

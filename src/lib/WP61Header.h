@@ -30,7 +30,7 @@
 class WP61Header : public WP6Header
 {
  public:
-	WP61Header(GsfInput * input, WPXHeader &header);
+	WP61Header(GsfInput * input);
 	virtual ~WP61Header();
 	
 	const guint32 getDocumentSize() const { return m_documentSize; }

@@ -28,35 +28,15 @@
 #include "WP6FileStructure.h" 
 #include "libwpd_internal.h"
 
-WP61Header::WP61Header(GsfInput * input, WPXHeader &header)
-	:	WP6Header(input, header)
+WP61Header::WP61Header(GsfInput * input)
+	:	WP6Header(input)
 {
-	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WP6_HEADER_ENCRYPTION_OFFSET, G_SEEK_SET));
-	m_documentEncryption = gsf_le_read_guint16(input);
-	WPD_DEBUG_MSG(("WordPerfect: Document Encryption = 0x%x \n",(int)m_documentEncryption));
-	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WP6_HEADER_INDEX_HEADER_POINTER_OFFSET, G_SEEK_SET));
-	m_indexHeaderOffset = gsf_le_read_guint16(input);
 	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WP6_HEADER_DOCUMENT_SIZE_OFFSET, G_SEEK_SET));
 	m_documentSize = gsf_le_read_guint32(input);
 
-	WPD_DEBUG_MSG(("WordPerfect: Index Header Position = 0x%x \n",(int)m_indexHeaderOffset));
 	WPD_DEBUG_MSG(("WordPerfect: Document End Position = 0x%x \n",(int)m_documentSize));
-	WPD_DEBUG_MSG(("WordPerfect: Document Encryption = 0x%x \n",(int)m_documentEncryption));
 
-	// TODO:
-	
-	/* we do not handle encrypted documents */
-	if (m_documentEncryption != 0)
-		throw ParseException();
-	
-	// read the Index Header (Header #0)
-	// skip the Flags = 2 and the Reserved byte = 0
-	guint16 numIndices;
-	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, m_indexHeaderOffset + WP6_INDEX_HEADER_NUM_INDICES_POSITION, G_SEEK_SET));
-	m_numPrefixIndices = gsf_le_read_guint16(input);
-
-	// ignore the 10 reserved bytes that follow (jump to the offset of the Index Header #1, where we can resume parsing)
-	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, m_indexHeaderOffset + WP6_INDEX_HEADER_INDICES_POSITION, G_SEEK_SET));
+	_readIndexInformation(input);
 }
 
 WP61Header::~WP61Header()

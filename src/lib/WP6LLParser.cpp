@@ -65,18 +65,18 @@ WP6Header * WP6LLParser::getHeader(GsfInput *input)
 	{
 		WPXHeader fileHeader(input);
 		
+		gsf_input_seek(input, 0, G_SEEK_SET);
 		switch (fileHeader.getMinorVersion())
 		{
 		case 0x00:
-			header = new WP60Header(input, fileHeader);
+			header = new WP60Header(input);
 		default: // assume this header can be parsed by a WP61 header parser
-			header = new WP61Header(input, fileHeader);
+			header = new WP61Header(input);
 		}
 	}
 	catch(FileException)
 	{
-		if (header)
-			delete header;
+		delete header;
 		throw FileException(); 
 	}
 
@@ -93,8 +93,7 @@ WP6PrefixData * WP6LLParser::getPrefixData(GsfInput *input, WP6Header *header)
 	}
 	catch(FileException)
 	{
-		if (prefixData)
-			delete prefixData;
+		delete prefixData;
 		throw FileException();
 	}
 }

@@ -35,7 +35,7 @@
 
 #include "WP6PrefixData.h"
 #include "WPXTable.h"
-#include "WPXPage.h"
+#include "WPXPageSpan.h"
 
 #define WP6_DEFAULT_FONT_SIZE 12.0f
 #define WP6_DEFAULT_FONT_NAME "Times New Roman"
@@ -211,6 +211,7 @@ _WP6ParsingState::_WP6ParsingState(bool sectionAttributesChanged) :
 	m_isTableRowOpened(false),
 	m_isTableCellOpened(false),
 	
+	m_isPageSpanOpened(false),
 	m_nextPageIndice(0),
 	m_numPagesRemainingInSpan(0),
 
@@ -235,7 +236,7 @@ _WP6ParsingState::~_WP6ParsingState()
 	// fixme: erase current fontname
 }
 
-WP6HLContentListener::WP6HLContentListener(vector<WPXPage *> *pageList, vector<WPXTable *> *tableList, WPXHLListenerImpl *listenerImpl) :
+WP6HLContentListener::WP6HLContentListener(vector<WPXPageSpan *> *pageList, vector<WPXTable *> *tableList, WPXHLListenerImpl *listenerImpl) :
 	WP6HLListener(), 
 	m_listenerImpl(listenerImpl),
 	m_parseState(new WP6ParsingState),
@@ -394,17 +395,7 @@ void WP6HLContentListener::insertBreak(const guint8 breakType)
 				m_parseState->m_numPagesRemainingInSpan--;
 			else
 			{
-				m_listenerImpl->closePageSpan();
-				WPXPage *currentPage = (*m_pageList)[m_parseState->m_nextPageIndice];
-				bool isLastPageSpan;
-				(m_pageList->size() > m_parseState->m_nextPageIndice) ? isLastPageSpan = true : isLastPageSpan = false;
-				m_listenerImpl->openPageSpan(currentPage->getPageSpan(), isLastPageSpan,
-							     currentPage->getMarginLeft(), currentPage->getMarginRight(),
-							     currentPage->getMarginTop(), currentPage->getMarginBottom());
-				
-				m_parseState->m_numPagesRemainingInSpan = (currentPage->getPageSpan() - 1);
-				m_parseState->m_nextPageIndice++;
-				
+				_openPageSpan();
 			}
 		default:
 			break;
@@ -420,17 +411,8 @@ void WP6HLContentListener::startDocument()
 					    m_metaData.m_abstract, m_metaData.m_descriptiveName,
 					    m_metaData.m_descriptiveType);
 
-	m_listenerImpl->startDocument();
-	
-	WPXPage *currentPage = (*m_pageList)[0];
-	bool isLastPageSpan;
-	(m_pageList->size() > 1) ? isLastPageSpan = true : isLastPageSpan = false;
-	m_listenerImpl->openPageSpan(currentPage->getPageSpan(), isLastPageSpan,
-				     currentPage->getMarginLeft(), currentPage->getMarginRight(),
-				     currentPage->getMarginTop(), currentPage->getMarginBottom());
-
-	m_parseState->m_numPagesRemainingInSpan = (currentPage->getPageSpan() - 1);
-	m_parseState->m_nextPageIndice++;
+	m_listenerImpl->startDocument();	
+	_openPageSpan();
 }
 
 void WP6HLContentListener::fontChange(const guint16 matchedFontPointSize, const guint16 fontPID)
@@ -775,14 +757,6 @@ void WP6HLContentListener::noteOff(const WPXNoteType noteType)
 	}
 }
 
-void WP6HLContentListener::headerFooterGroup(const WPXHeaderFooterType headerFooterType, const guint8 occurenceBits, const guint16 textPID)
-
-{
-// 	m_listenerImpl->openHeaderFooter(headerFooterType);		
-// 	_handleSubDocument(textPID);
-// 	m_listenerImpl->closeHeaderFooter(headerFooterType);
-}
-
 void WP6HLContentListener::endDocument()
 {
 	// corner case: document ends in a list element
@@ -919,15 +893,20 @@ void WP6HLContentListener::endTable()
 	}
 }
 
-// _handleSubDocument: Parses a wordperfect text packet (e.g.: a footnote or a header), and naively 
-// sends its text to the hll implementation
+// _handleSubDocument: Creates an empty set of document state (saving the old one on a "stack")
+// if textPID>0: Parses a wordperfect text packet (e.g.: a footnote or a header), and naively 
+// sends its text to the hll implementation and naively inserts it into the document
+// if textPID=0: Simply creates a blank paragraph
+// once finished, restores document state to what it was before
 void WP6HLContentListener::_handleSubDocument(guint16 textPID)
 {
 	// save our old parsing state on our "stack"
 	WP6ParsingState *oldParseState = m_parseState;
-	m_parseState = new WP6ParsingState(false); // don't open a new section unless we must inside this type of sub-document
-	
-	_getPrefixDataPacket(textPID)->parse(this);	
+	m_parseState = new WP6ParsingState(false); // false: don't open a new section unless we must inside this type of sub-document
+	if (textPID)
+		_getPrefixDataPacket(textPID)->parse(this);	
+	else
+		_openParagraph();
 	_flushText();
 	_closeSection();	
 
@@ -1127,6 +1106,38 @@ void WP6HLContentListener::_openListElement()
 					m_parseState->m_paragraphLineSpacing);
 	m_parseState->m_isParagraphOpened = true; // a list element is equivalent to a paragraph
 
+}
+
+void WP6HLContentListener::_openPageSpan()
+{
+	if (m_parseState->m_isPageSpanOpened)
+		m_listenerImpl->closePageSpan();
+
+	WPXPageSpan *currentPage = (*m_pageList)[m_parseState->m_nextPageIndice];
+	currentPage->makeConsistent(1);
+	bool isLastPageSpan;
+	(m_pageList->size() > m_parseState->m_nextPageIndice) ? isLastPageSpan = true : isLastPageSpan = false;	
+	
+	m_listenerImpl->openPageSpan(currentPage->getPageSpan(), isLastPageSpan,
+				     currentPage->getMarginLeft(), currentPage->getMarginRight(),
+				     currentPage->getMarginTop(), currentPage->getMarginBottom());
+
+	const vector<WPXHeaderFooter> headerFooterList = currentPage->getHeaderFooterList();
+	for (vector<WPXHeaderFooter>::const_iterator iter = headerFooterList.begin(); iter != headerFooterList.end(); iter++) 
+	{
+		if (!currentPage->getHeaderFooterSuppression((*iter).getInternalType())) 
+		{
+			m_listenerImpl->openHeaderFooter((*iter).getType(), (*iter).getOccurence());
+			_handleSubDocument((*iter).getTextPID());
+			m_listenerImpl->closeHeaderFooter((*iter).getType(), (*iter).getOccurence());					
+			WPD_DEBUG_MSG(("Header Footer Element: type: %i occurence: %i pid: %i\n", 
+				       (*iter).getType(), (*iter).getOccurence(), (*iter).getTextPID()));
+		}
+	}
+
+	m_parseState->m_numPagesRemainingInSpan = (currentPage->getPageSpan() - 1);
+	m_parseState->m_nextPageIndice++;
+	m_parseState->m_isPageSpanOpened = true;
 }
 
 void WP6HLContentListener::_openSection()

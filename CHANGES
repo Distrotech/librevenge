@@ -5,6 +5,8 @@ CHANGES:
 - Border-less table support (William Lachance)
 - Support for some odd types of tables (William)
 - Top/bottom margin change support (William)
+- Header/footer support (William)
+- Refactored fileheader support (William)
 
 0.4.0 -> 0.5.0
 - rpm spec (Rui Miguel Silva Seabra)

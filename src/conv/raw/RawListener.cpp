@@ -166,6 +166,13 @@ void RawListener::styleGroupOff(const guint8 subGroup)
 	}	
 }
 
+void RawListener::suppressPageCharacteristics(const guint8 suppressCode)
+{
+	if (!m_isUndoOn) {
+		printf("<SUPPRESS PAGE CHARACTERISTICS (suppressCode: %i)>", suppressCode);
+	}	
+}
+
 void RawListener::insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove, 
 			     const guint8 borderBits, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
 {

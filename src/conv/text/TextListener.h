@@ -64,7 +64,8 @@ public:
 	virtual void globalOff() {}
 	virtual void noteOn(const guint16 textPID) {}
 	virtual void noteOff(const WPXNoteType noteType) {}
-	virtual void headerFooterGroup(const WPXHeaderFooterType headerFooterType, const guint8 occurenceBits, const guint16 textPID) {}
+	virtual void headerFooterGroup(const guint8 headerFooterType, const guint8 occurenceBits, const guint16 textPID) {}
+	virtual void suppressPageCharacteristics(const guint8 suppressCode) {}
 	virtual void endDocument() {}
 		
 	virtual void defineTable(guint8 position, guint16 leftOffset) {}
