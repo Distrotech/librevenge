@@ -171,10 +171,6 @@ void WP3HLListener::undoChange(const uint8_t undoType, const uint16_t undoLevel)
                 m_isUndoOn = true;
         else if (undoType == 0x01) // end invalid text
                 m_isUndoOn = false;
-	else if (undoType == 0x02) // begin valid text
-		m_isUndoOn = false;
-	else if (undoType == 0x03) // end valid text
-		m_isUndoOn = true;
 }
 
 void WP3HLListener::marginChange(uint8_t side, uint16_t margin)
