@@ -1,6 +1,7 @@
 CHANGES:
 
 0.7.1 -> 0.7.2
+- MSVC compiler switch (Fridrich Strba)
 - Some more refactoring, sharing more code between parsers (Marc Maurer)
 - Windows versioning: add a BUILDNUMBER (Fridrich Strba)
 
