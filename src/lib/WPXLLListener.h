@@ -32,6 +32,7 @@ class WPXLLListener
 {
 public:
 	virtual void insertCharacter(guint32 value) { };
+	virtual void insertEOL() { };
 };
 
 #endif /* WPXLLLISTENER_H */

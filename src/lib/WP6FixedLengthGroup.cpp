@@ -26,6 +26,7 @@
 #include "WP6FixedLengthGroup.h"
 
 #include "WP6FixedSpaceGroup.h"
+#include "WP6FixedEOLGroup.h"
 #include "WP6ExtendedCharacterGroup.h"
 #include "WP6UndoGroup.h"
 #include "WP6AttributeOnGroup.h"
@@ -43,6 +44,9 @@ WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(WPXParser *
 		case WP6_TOP_SOFT_EOL:
 		case WP6_TOP_SOFT_SPACE:
 			return new WP6FixedSpaceGroup(parser);
+		
+		case WP6_TOP_DORMANT_HARD_RETURN:
+			return new WP6FixedEOLGroup(parser);
 		
 		case WP6_TOP_EXTENDED_CHARACTER: 
 			return new WP6ExtendedCharacterGroup(parser);

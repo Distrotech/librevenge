@@ -48,3 +48,8 @@ void HtmlListener::insertCharacter(guint32 value)
 {
     printf("%c", (char)value);
 }
+
+void HtmlListener::insertEOL()
+{
+    printf("<br>\n");
+}

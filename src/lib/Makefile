@@ -10,6 +10,7 @@ all:
 		WP6Part.cpp \
 		WP6FixedLengthGroup.cpp \
 		WP6FixedSpaceGroup.cpp \
+		WP6FixedEOLGroup.cpp \
 		WP6ExtendedCharacterGroup.cpp \
 		WP6UndoGroup.cpp \
 		WP6AttributeOnGroup.cpp \

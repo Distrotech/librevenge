@@ -56,8 +56,8 @@ gboolean WP6EOLGroup::_parseContents()
 			case 6: // 0x06 (hard EOL at EOP)
 			case 23: // 0x17 (deletable hard EOL)
 			case 24: // 0x18 (deletable hard EOL at EOC)
-			case 25: // 0x19 (deletable hard EOL at EOP)	
-				// !WPD_CHECK_INTERNAL_ERROR(wp6_hard_eol_insert(wordperfect_state, wordperfect_parse_struct));
+			case 25: // 0x19 (deletable hard EOL at EOP)
+				_getParser()->getLLListener()->insertEOL();
 				break;
 			case WP6_EOL_CHARACTER_HARD_END_OF_COLUMN: // 0x07 (hard end of column)
 // !				{

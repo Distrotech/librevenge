@@ -1,4 +1,4 @@
- /* libwpd2
+/* libwpd2
  * Copyright (C) 2002 William Lachance (wlach@interlog.com)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
@@ -23,20 +23,17 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef HTMLLISTENER_H
-#define HTMLLISTENER_H
+#include "WP6FixedEOLGroup.h"
 
-#include "libwpd2/libwpd2.h"
-#include "glib.h"
-
-class HtmlListener : public WPXLLListener
+WP6FixedEOLGroup::WP6FixedEOLGroup(WPXParser * parser)
+	: WP6FixedLengthGroup(parser)
 {
-public:
-    HtmlListener();
-    ~HtmlListener();
-
-    void insertCharacter(guint32 value);
-    void insertEOL();
-};
-
-#endif /* HTMLLISTENER_H */
+	m_iSize = 1;
+}
+	
+gboolean WP6FixedEOLGroup::_parseContents()
+{
+	_getParser()->getLLListener()->insertEOL();
+	
+	return TRUE;
+}
