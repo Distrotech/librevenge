@@ -1,6 +1,8 @@
 CHANGES:
 
 0.7.1 -> 0.7.2
+- Fixed a bug that prevented the conversion of full justification
+  (Fridrich Strba)
 - wpd2foo tools properly detect if a file format is suported
   or not (Marc Maurer)
 - Handle unsupported file types other than WordPerfect documents
