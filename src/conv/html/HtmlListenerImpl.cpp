@@ -59,7 +59,7 @@ void HtmlListenerImpl::openParagraph()
 
 void HtmlListenerImpl::closeParagraph()
 {
-	printf("</p>\n\n");
+	printf("</p>\n");
 }
 
 
