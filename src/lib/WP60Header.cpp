@@ -36,7 +36,7 @@ WP60Header::WP60Header(GsfInput * input)
 	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WP6_HEADER_ENCRYPTION_OFFSET, G_SEEK_SET));
 	m_documentEncryption = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);	
 	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WP6_HEADER_INDEX_HEADER_POINTER_OFFSET, G_SEEK_SET));
-	guint16 m_indexHeaderOffset = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+	m_indexHeaderOffset = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
 
 	// according to the WP6.0 specs, if the index header offset variable is less than 16, it is 16
 	if (m_indexHeaderOffset < 16)
