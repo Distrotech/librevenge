@@ -51,7 +51,7 @@ void WP5HLListener::insertCharacter(const guint16 character)
 	m_textBuffer.append(character);
 }
 
-void WP5HLListener::insertTab(const guint8 tabType, const guint16 tabPosition)
+void WP5HLListener::insertTab(const guint8 tabType, const float tabPosition)
 {
 	_flushText();
 	m_listenerImpl->insertTab();

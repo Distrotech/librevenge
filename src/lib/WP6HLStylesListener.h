@@ -46,8 +46,9 @@ public:
 	virtual void startDocument() {}
 	virtual void setAlignmentCharacter(const guint16 character) {}
 	virtual void setDotLeaderCharacters(const guint16 character, const guint8 numberOfSpaces) {}
+	virtual void defineTabStops(const int numberOfTabStops, const WPXTabStop *tabStops, const bool *usePreWP9LeaderMethods) {}
 	virtual void insertCharacter(const guint16 character) { if (!isUndoOn()) m_currentPageHasContent = true; }
-	virtual void insertTab(const guint8 tabType, const guint16 tabPosition) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	virtual void insertTab(const guint8 tabType, const float tabPosition) { if (!isUndoOn()) m_currentPageHasContent = true; }
 	virtual void handleLineBreak()  { if (!isUndoOn()) m_currentPageHasContent = true; }
 	virtual void insertEOL() { if (!isUndoOn()) m_currentPageHasContent = true; }
  	virtual void insertBreak(const guint8 breakType);

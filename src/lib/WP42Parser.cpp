@@ -69,7 +69,7 @@ void WP42Parser::parseDocument(WPXInputStream *input, WP42HLListener *listener)
 			switch (readVal)
 			{
 				case 0x09: // tab
-					listener->insertTab(0, 0);
+					listener->insertTab(0, 0.0f);
 					break;
 				case 0x0A: // hard new line
 					listener->insertEOL();

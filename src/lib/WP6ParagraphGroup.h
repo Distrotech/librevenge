@@ -27,6 +27,7 @@
 #define WP6PARAGRAPHGROUP_H
 
 #include "WP6VariableLengthGroup.h"
+// #include <vector>
 
 class WP6ParagraphGroup_LineSpacingSubGroup : public WP6VariableLengthGroup_SubGroup
 {
@@ -58,6 +59,23 @@ private:
 	float m_spacingAfterParagraphAbsolute;
 	float m_spacingAfterParagraphRelative;
 	guint16 m_sizeNonDeletable;
+};
+
+class WP6ParagraphGroup_TabSetSubGroup : public WP6VariableLengthGroup_SubGroup
+{
+public:
+	WP6ParagraphGroup_TabSetSubGroup(WPXInputStream *input);
+	~WP6ParagraphGroup_TabSetSubGroup();
+	virtual void parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
+
+private:
+	bool m_isRelative;
+	float m_tabAdjustValue;
+	int m_numberOfTabStops;
+	bool *m_usePreWP9LeaderMethod;
+	WPXTabStop *m_tabStops;
+	void _addTabStop(WPXTabStop tabStop);
+	void _addLeaderMethod(bool usePreWP9LeaderMethod);
 };
 
 class WP6ParagraphGroup_IndentFirstLineSubGroup : public WP6VariableLengthGroup_SubGroup

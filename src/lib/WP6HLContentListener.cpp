@@ -324,7 +324,7 @@ void WP6HLContentListener::insertCharacter(const guint16 character)
 	}
 }
 
-void WP6HLContentListener::insertTab(const guint8 tabType, const guint16 tabPosition)
+void WP6HLContentListener::insertTab(const guint8 tabType, const float tabPosition)
 {
 	if (!isUndoOn())
 	{
