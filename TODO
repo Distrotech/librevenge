@@ -4,9 +4,8 @@ Near Future:
 - Support for importing the following WordPerfect 6+ features (in
 approximate order of difficulty/time):
 	    - More table properties (open)
-	    - Lists/Outlining (William will do this)
-	    - Headers/Footers (open)
-	    - Footnotes/Endnotes (open)
+	    - Headers/Footers (William will do this)
+	    - Footnotes/Endnotes (Marc will do this)
 - WordPerfect 6+ document export (Marc is planning to start work
 on this soon)
 - WordPerfect 4.x/5.x document import (open)
