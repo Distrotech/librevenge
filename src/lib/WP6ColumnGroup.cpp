@@ -43,18 +43,18 @@ void WP6ColumnGroup::_readContents(GsfInput *input)
 		case 0: // Left Margin Set
 		case 1: // Right Margin Set
 			{
-				m_margin = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+				m_margin = gsf_le_read_guint16(input);
 				WPD_DEBUG_MSG(("WordPerfect: Read column group margin size (margin: %i)\n", m_margin));
 			}
 			break;
 		case 2:
 			{
-				m_colType = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+				m_colType = gsf_le_read_guint8(input);
 				for (int i=0; i<4; i++) 
 					{
-						m_rowSpacing[i] = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+						m_rowSpacing[i] = gsf_le_read_guint8(input);
 					}
-				m_numColumns = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+				m_numColumns = gsf_le_read_guint8(input);
 				WPD_DEBUG_MSG(("WordPerfect: Column type: %d\n", m_colType & 0x03));
 				WPD_DEBUG_MSG(("WordPerfect: Numer of columns: %d\n", m_numColumns));				
 			}

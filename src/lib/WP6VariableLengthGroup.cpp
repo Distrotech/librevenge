@@ -80,20 +80,20 @@ void WP6VariableLengthGroup::_read(GsfInput *input)
 
 	WPD_DEBUG_MSG(("WordPerfect: handling a variable length group\n"));
 	
-	m_subGroup = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-	m_size = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
-	m_flags = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+	m_subGroup = gsf_le_read_guint8(input);
+	m_size = gsf_le_read_guint16(input);
+	m_flags = gsf_le_read_guint8(input);
 
 	if (m_flags & WP6_VARIABLE_GROUP_PREFIX_ID_BIT)
 	{
-		m_numPrefixIDs = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+		m_numPrefixIDs = gsf_le_read_guint8(input);
 		
 		if (m_numPrefixIDs > 0)
 		{
 			m_prefixIDs = (guint16 *) g_malloc(sizeof(guint16) * m_numPrefixIDs);
 			for (guint32 i = 0; i < m_numPrefixIDs; i++)
 			{
-				m_prefixIDs[i] = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);		
+				m_prefixIDs[i] = gsf_le_read_guint16(input);		
 			}
 		}	
 	}	
@@ -102,7 +102,7 @@ void WP6VariableLengthGroup::_read(GsfInput *input)
 		m_numPrefixIDs = 0;
 	}
 		
-	m_sizeNonDeletable = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);	
+	m_sizeNonDeletable = gsf_le_read_guint16(input);	
 	WPD_DEBUG_MSG(("WordPerfect: Read variable group header (start_position: %i, sub_group: %i, size: %i, flags: %i, num_prefix_ids: %i, size_non_deletable: %i)\n", startPosition, m_subGroup, m_size, m_flags, m_numPrefixIDs, m_sizeNonDeletable));
 
 	_readContents(input);

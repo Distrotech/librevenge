@@ -66,7 +66,7 @@ void WP6ParagraphGroup::parse(WP6LLListener *llListener)
 
 WP6ParagraphGroup_LineSpacingSubGroup::WP6ParagraphGroup_LineSpacingSubGroup(GsfInput *input)
 {
-	guint32 lineSpacing = *(const guint32 *)gsf_input_read(input, sizeof(guint32), NULL);
+	guint32 lineSpacing = gsf_le_read_guint32(input);
 	gint16 lineSpacingIntegerPart = (gint16)((lineSpacing & 0xFFFF0000) >> 16);
 	float lineSpacingFractionalPart = (float)(lineSpacing & 0xFFFF)/(float)0xFFFF;
 	WPD_DEBUG_MSG(("WordPerfect: line spacing integer part: %i fractional part: %f (original value: %i)\n", 
@@ -82,7 +82,7 @@ void WP6ParagraphGroup_LineSpacingSubGroup::parse(WP6LLListener *llListener, con
 
 WP6ParagraphGroup_JustificationModeSubGroup::WP6ParagraphGroup_JustificationModeSubGroup(GsfInput *input)
 {
-	m_justification = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+	m_justification = gsf_le_read_guint8(input);
 }
 
 void WP6ParagraphGroup_JustificationModeSubGroup::parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
@@ -93,10 +93,10 @@ void WP6ParagraphGroup_JustificationModeSubGroup::parse(WP6LLListener *llListene
 WP6ParagraphGroup_OutlineDefineSubGroup::WP6ParagraphGroup_OutlineDefineSubGroup(GsfInput *input)
 {
 	// NB: this is identical to WP6OutlineStylePacket::_readContents!!
-	m_outlineHash = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+	m_outlineHash = gsf_le_read_guint16(input);
 	for (unsigned int i=0; i<WP6_NUM_LIST_LEVELS; i++)  
-		m_numberingMethods[i] = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-	m_tabBehaviourFlag = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+		m_numberingMethods[i] = gsf_le_read_guint8(input);
+	m_tabBehaviourFlag = gsf_le_read_guint8(input);
 	
 	WPD_DEBUG_MSG(("WordPerfect: Read Outline Style Packet (, outlineHash: %i, tab behaviour flag: %i)\n", (int) m_outlineHash, (int) m_tabBehaviourFlag));
 // 	WPD_DEBUG_MSG(("WordPerfect: Read Outline Style Packet (m_paragraphStylePIDs: %i %i %i %i %i %i %i %i)\n", 

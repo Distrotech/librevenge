@@ -38,7 +38,7 @@ WPXHeader::WPXHeader(GsfInput *input)
 	/* check the magic */
 	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WP6_HEADER_MAGIC_OFFSET - gsf_input_tell(input), G_SEEK_CUR));
 	for (int i=0; i<3; i++)
-		fileMagic[i] = *(const gchar *)gsf_input_read(input, sizeof(guint8), NULL);
+		fileMagic[i] = GSF_LE_GET_GINT8(gsf_input_read(input, sizeof(guint8), NULL));
 	fileMagic[3] = '\0';
 	
 	if ( strcmp(fileMagic, "WPC") )
@@ -49,14 +49,14 @@ WPXHeader::WPXHeader(GsfInput *input)
 	
 	/* get the document pointer */
 	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WP6_HEADER_DOCUMENT_POINTER_OFFSET - gsf_input_tell(input), G_SEEK_CUR));
-	m_documentOffset = *(const guint32 *)gsf_input_read(input, sizeof(guint32), NULL);
+	m_documentOffset = gsf_le_read_guint32(input);
 
 	/* get information on product types, file types, versions */
 	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WP6_HEADER_PRODUCT_TYPE_OFFSET - gsf_input_tell(input), G_SEEK_CUR));
-	m_productType = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-	m_fileType = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-	m_majorVersion = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-	m_minorVersion = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+	m_productType = gsf_le_read_guint8(input);
+	m_fileType = gsf_le_read_guint8(input);
+	m_majorVersion = gsf_le_read_guint8(input);
+	m_minorVersion = gsf_le_read_guint8(input);
 	
 	WPD_DEBUG_MSG(("WordPerfect: Product Type: %i File Type: %i Major Version: %i Minor Version: %i\n", 
 					m_productType, m_fileType, 

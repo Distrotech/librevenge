@@ -34,9 +34,9 @@ WP60Header::WP60Header(GsfInput * input)
 	guint16 documentEncrypted;
 
 	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WP6_HEADER_ENCRYPTION_OFFSET, G_SEEK_SET));
-	m_documentEncryption = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);	
+	m_documentEncryption = gsf_le_read_guint16(input);	
 	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WP6_HEADER_INDEX_HEADER_POINTER_OFFSET, G_SEEK_SET));
-	m_indexHeaderOffset = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+	m_indexHeaderOffset = gsf_le_read_guint16(input);
 
 	// according to the WP6.0 specs, if the index header offset variable is less than 16, it is 16
 	if (m_indexHeaderOffset < 16)
@@ -59,7 +59,7 @@ WP60Header::WP60Header(GsfInput * input)
 	// skip the Flags = 2 and the Reserved byte = 0
 	guint16 numIndices;
 	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, m_indexHeaderOffset + WP6_INDEX_HEADER_NUM_INDICES_POSITION, G_SEEK_SET));
-	m_numPrefixIndices = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+	m_numPrefixIndices = gsf_le_read_guint16(input);
 
 	// ignore the 10 reserved bytes that follow (jump to the offset of the Index Header #1, where we can resume parsing)
 	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, m_indexHeaderOffset + WP6_INDEX_HEADER_INDICES_POSITION, G_SEEK_SET));

@@ -38,8 +38,8 @@ WP6ExtendedCharacterGroup::WP6ExtendedCharacterGroup(GsfInput *input) :
 
 void WP6ExtendedCharacterGroup::_readContents(GsfInput *input)
 {
-	m_character = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-	m_characterSet = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+	m_character = gsf_le_read_guint8(input);
+	m_characterSet = gsf_le_read_guint8(input);
 }
 
 void WP6ExtendedCharacterGroup::parse(WP6LLListener *llListener)

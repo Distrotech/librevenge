@@ -38,7 +38,7 @@ WP6DisplayNumberReferenceGroup::WP6DisplayNumberReferenceGroup(GsfInput *input) 
 void WP6DisplayNumberReferenceGroup::_readContents(GsfInput *input)
 {
 	if (!(getSubGroup() % 2) || getSubGroup() == 0)
-		m_levelNumberToDisplay = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+		m_levelNumberToDisplay = gsf_le_read_guint8(input);
 }
 
 void WP6DisplayNumberReferenceGroup::parse(WP6LLListener *llListener)

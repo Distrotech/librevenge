@@ -34,8 +34,8 @@ WP6UndoGroup::WP6UndoGroup(GsfInput *input)
 
 void WP6UndoGroup::_readContents(GsfInput *input)
 {
-	m_undoType = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-	m_undoLevel = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+	m_undoType = gsf_le_read_guint8(input);
+	m_undoLevel = gsf_le_read_guint16(input);
 }
 
 void WP6UndoGroup::parse(WP6LLListener *llListener)

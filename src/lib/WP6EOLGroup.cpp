@@ -54,14 +54,14 @@ void WP6EOLGroup::_readContents(GsfInput *input)
 	WPD_DEBUG_MSG(("WordPerfect: EOL Group: Reading Embedded Sub-Function Data\n"));
 	guint16 sizeDeletableSubFunctionData;
 	guint16 startPosition = gsf_input_tell(input);
-	sizeDeletableSubFunctionData = *(const guint16 *)gsf_input_read( input, sizeof(guint16), NULL);	
+	sizeDeletableSubFunctionData = gsf_le_read_guint16(input);	
 	WPD_DEBUG_MSG(("WordPerfect: EOL Group: Size of Deletable Sub-Function Data: %ld,  Size of Deletable and Non-deletable sub-function data: %ld\n", (long) sizeDeletableSubFunctionData, getSizeNonDeletable()));
 	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, sizeDeletableSubFunctionData, G_SEEK_CUR));
 	while (gsf_input_tell(input) < (startPosition + getSizeNonDeletable()))
 	{
 		guint8 byte;
 		guint16 numBytesToSkip = 0;
-		byte = *(const guint8 *)gsf_input_read(input,  sizeof(guint8), NULL);
+		byte = gsf_le_read_guint8(input);
 		guint16 startPosition2 = gsf_input_tell(input);
 		switch (byte)
 		{
@@ -71,7 +71,7 @@ void WP6EOLGroup::_readContents(GsfInput *input)
 				break;
 			case WP6_EOL_GROUP_CELL_FORMULA:
 				guint16 embeddedSubGroupSize;
-				embeddedSubGroupSize = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+				embeddedSubGroupSize = gsf_le_read_guint16(input);
 				WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_FORMULA (length: %ld)\n", 
 						   (long) embeddedSubGroupSize));
 				numBytesToSkip = embeddedSubGroupSize;
@@ -93,12 +93,8 @@ void WP6EOLGroup::_readContents(GsfInput *input)
 				numBytesToSkip = WP6_EOL_GROUP_CELL_SPANNING_INFORMATION_SIZE;
 				guint8 numCellsSpannedHorizontally;
 				guint8 numCellsSpannedVertically;
-				numCellsSpannedHorizontally = *(const guint8 *)gsf_input_read(input, 
-											      sizeof(guint8), 
-											      NULL);
-				numCellsSpannedVertically = *(const guint8 *)gsf_input_read(input, 
-											    sizeof(guint8), 
-											    NULL);
+				numCellsSpannedHorizontally = gsf_le_read_guint8(input);
+				numCellsSpannedVertically = gsf_le_read_guint8(input);
 				WPD_DEBUG_MSG(("WordPerfect: num cells spanned (h:%ld, v:%ld)\n", 
 						   numCellsSpannedHorizontally, numCellsSpannedVertically));
 				if (numCellsSpannedHorizontally >= 128)
@@ -116,14 +112,14 @@ void WP6EOLGroup::_readContents(GsfInput *input)
 				guint8 fR, fG, fB, fS;
 				guint8 bR, bG, bB, bS;
 			
-				fR = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-				fG = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-				fB = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-				fS = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-				bR = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-				bG = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-				bB = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-				bS = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+				fR = gsf_le_read_guint8(input);
+				fG = gsf_le_read_guint8(input);
+				fB = gsf_le_read_guint8(input);
+				fS = gsf_le_read_guint8(input);
+				bR = gsf_le_read_guint8(input);
+				bG = gsf_le_read_guint8(input);
+				bB = gsf_le_read_guint8(input);
+				bS = gsf_le_read_guint8(input);
 			
 				m_cellFgColor = new RGBSColor(fR,fG,fB,fS);
 				m_cellBgColor = new RGBSColor(bR,bG,bB,bS);

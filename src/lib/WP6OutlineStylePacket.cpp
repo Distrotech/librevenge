@@ -39,14 +39,14 @@ WP6OutlineStylePacket::~WP6OutlineStylePacket()
 
 void WP6OutlineStylePacket::_readContents(GsfInput *input)
 {
-	m_numPIDs = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+	m_numPIDs = gsf_le_read_guint16(input);
 	for (unsigned int i=0; i<WP6_NUM_LIST_LEVELS; i++) 
-		m_paragraphStylePIDs[i] = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL); // seemingly useless
-	m_outlineFlags = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-	m_outlineHash = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+		m_paragraphStylePIDs[i] = gsf_le_read_guint16(input); // seemingly useless
+	m_outlineFlags = gsf_le_read_guint8(input);
+	m_outlineHash = gsf_le_read_guint16(input);
 	for (unsigned int i=0; i<WP6_NUM_LIST_LEVELS; i++)  
-		m_numberingMethods[i] = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-	m_tabBehaviourFlag = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+		m_numberingMethods[i] = gsf_le_read_guint8(input);
+	m_tabBehaviourFlag = gsf_le_read_guint8(input);
 	
 	WPD_DEBUG_MSG(("WordPerfect: Read Outline Style Packet (numPrefixIDs: %i, outlineStylePID: %i, outlineHash: %i, outlineFlags: %i, tab behaviour flag: %i)\n", (int) m_numPIDs, (int) m_outlineHash, (int) m_outlineFlags, (int) m_tabBehaviourFlag));
 	WPD_DEBUG_MSG(("WordPerfect: Read Outline Style Packet (m_paragraphStylePIDs: %i %i %i %i %i %i %i %i)\n", 

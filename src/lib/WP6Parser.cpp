@@ -46,8 +46,8 @@ WP6Parser::WP6Parser(GsfInput * input, WPXLLListener *llListener/*,  WP6Header *
 // information to a low-level listener
 void WP6Parser::parse()
 {	
-	try
-	{
+ 	try
+ 	{
 		GsfInfile * ole = GSF_INFILE(gsf_infile_msole_new (getInput(), NULL));
 		if (ole != NULL) 
 			{
@@ -108,7 +108,7 @@ void WP6Parser::parseDocument(GsfInput *stream, WP6LLListener *llListener)
 	while (!gsf_input_eof(stream))
 	{
 		guint8 readVal;
-		readVal = *(const guint8 *)gsf_input_read(stream, sizeof(guint8), NULL);
+		readVal = gsf_le_read_guint8(stream);
 		
 		if (readVal <= (guint8)0x20)
 		{

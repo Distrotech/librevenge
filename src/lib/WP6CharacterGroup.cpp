@@ -33,10 +33,10 @@
 
 WP6CharacterGroup_FontFaceChangeSubGroup::WP6CharacterGroup_FontFaceChangeSubGroup(GsfInput *input)
 {
-	m_oldMatchedPointSize = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
-	m_hash = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
-	m_matchedFontIndex = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
-	m_matchedFontPointSize = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+	m_oldMatchedPointSize = gsf_le_read_guint16(input);
+	m_hash = gsf_le_read_guint16(input);
+	m_matchedFontIndex = gsf_le_read_guint16(input);
+	m_matchedFontPointSize = gsf_le_read_guint16(input);
 	WPD_DEBUG_MSG(("WordPerfect: Character Group Font Face Change subgroup info (old matched point size: %i, hash: %i, matched font index: %i, matched font point size: %i\n", m_oldMatchedPointSize, m_hash, m_matchedFontIndex, m_matchedFontPointSize));
 }
 
@@ -55,9 +55,9 @@ void WP6CharacterGroup_FontFaceChangeSubGroup::parse(WP6LLListener *llListener, 
 
 WP6CharacterGroup_ParagraphNumberOnSubGroup::WP6CharacterGroup_ParagraphNumberOnSubGroup(GsfInput *input)
 {
-	m_outlineHash = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
-	m_level = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-	m_flag = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+	m_outlineHash = gsf_le_read_guint16(input);
+	m_level = gsf_le_read_guint8(input);
+	m_flag = gsf_le_read_guint8(input);
 }
 
 void WP6CharacterGroup_ParagraphNumberOnSubGroup::parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
@@ -71,9 +71,9 @@ void WP6CharacterGroup_ParagraphNumberOnSubGroup::parse(WP6LLListener *llListene
 
 WP6CharacterGroup_TableDefinitionOnSubGroup::WP6CharacterGroup_TableDefinitionOnSubGroup(GsfInput *input)
 {
-	m_flags = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-	m_position = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-	m_leftOffset = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+	m_flags = gsf_le_read_guint8(input);
+	m_position = gsf_le_read_guint8(input);
+	m_leftOffset = gsf_le_read_guint16(input);
 	// TODO: add the remaining table properties here
 }
 
@@ -103,17 +103,17 @@ void WP6CharacterGroup_TableDefinitionOffSubGroup::parse(WP6LLListener *llListen
 
 WP6CharacterGroup_TableColumnSubGroup::WP6CharacterGroup_TableColumnSubGroup(GsfInput *input)
 {
-	m_flags = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-	m_width = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+	m_flags = gsf_le_read_guint8(input);
+	m_width = gsf_le_read_guint16(input);
 	
-	m_leftGutter = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
-	m_rigthGutter = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
-	m_attribWord1 = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
-	m_attribWord2 = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
-	m_alignment = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-	m_absPosFromRight = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
-	m_numberType = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
-	m_currencyIndex = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+	m_leftGutter = gsf_le_read_guint16(input);
+	m_rigthGutter = gsf_le_read_guint16(input);
+	m_attribWord1 = gsf_le_read_guint16(input);
+	m_attribWord2 = gsf_le_read_guint16(input);
+	m_alignment = gsf_le_read_guint8(input);
+	m_absPosFromRight = gsf_le_read_guint16(input);
+	m_numberType = gsf_le_read_guint16(input);
+	m_currencyIndex = gsf_le_read_guint8(input);
 }
 
 void WP6CharacterGroup_TableColumnSubGroup::parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const

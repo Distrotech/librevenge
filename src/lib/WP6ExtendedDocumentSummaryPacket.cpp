@@ -45,9 +45,9 @@ void WP6ExtendedDocumentSummaryPacket::_readContents(GsfInput *input)
 	// we have to use glib's allocation function because libgsf disposes of the data
 	guint8 *streamData = (guint8 *)g_malloc(sizeof(guint8)*m_dataSize); 
 	for(int i=0; i<m_dataSize; i++)
-		streamData[i] = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+		streamData[i] = gsf_le_read_guint8(input);
                    
-	m_stream = gsf_input_memory_new(streamData, m_dataSize, TRUE);
+	m_stream = GSF_INPUT(gsf_input_memory_new(streamData, m_dataSize, TRUE));
 }
 
 void WP6ExtendedDocumentSummaryPacket::parse(WP6LLListener *llListener) const
@@ -56,42 +56,40 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6LLListener *llListener) const
 
 	for (int i=0; i < m_dataSize; i+=groupLength)
 	{
-		groupLength = *(const guint16 *)gsf_input_read(m_stream, sizeof(guint16), NULL);
-		guint16 tagID = *(const guint16 *)gsf_input_read(m_stream, sizeof(guint16), NULL);
-		guint16 flags = *(const guint16 *)gsf_input_read(m_stream, sizeof(guint16), NULL);
+		groupLength = gsf_le_read_guint16(m_stream);
+		guint16 tagID = gsf_le_read_guint16(m_stream);
+		guint16 flags = gsf_le_read_guint16(m_stream);
 
 		UCSString name;
-		for (guint16 wpChar = *(const guint16 *)gsf_input_read(m_stream, sizeof(guint16), NULL);
+		for (guint16 wpChar = gsf_le_read_guint16(m_stream);
 		     wpChar != 0; 
-		     wpChar = *(const guint16 *)gsf_input_read(m_stream, sizeof(guint16), NULL))
+		     wpChar = gsf_le_read_guint16(m_stream))
 		{
-			guint8 character;
-			guint8 characterSet;
-			memcpy(&character, &wpChar, sizeof(guint8));
-			memcpy(&characterSet, (&wpChar + 1), sizeof(guint8));
+			guint8 character = (wpChar & 0xFF);
+			guint8 characterSet = (wpChar & 0xFF00) >> 8;
 			name.append(extendedCharacterToUCS2(character, characterSet));
 		} 
 		
 		if (tagID == WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_CREATION_DATE ||
 		    tagID == WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_DATE_COMPLETED)
 		{
-			guint16 year = *(const guint16 *)gsf_input_read(m_stream, sizeof(guint16), NULL);
-			guint8 month = *(const guint8 *)gsf_input_read(m_stream, sizeof(guint8), NULL);
-			guint8 day = *(const guint8 *)gsf_input_read(m_stream, sizeof(guint8), NULL);
-			guint8 hour = *(const guint8 *)gsf_input_read(m_stream, sizeof(guint8), NULL);
-			guint8 minute = *(const guint8 *)gsf_input_read(m_stream, sizeof(guint8), NULL);
-			guint8 second = *(const guint8 *)gsf_input_read(m_stream, sizeof(guint8), NULL);
-			guint8 dayOfWeek = *(const guint8 *)gsf_input_read(m_stream, sizeof(guint8), NULL);
-			guint8 timeZone = *(const guint8 *)gsf_input_read(m_stream, sizeof(guint8), NULL);
-			guint8 unused = *(const guint8 *)gsf_input_read(m_stream, sizeof(guint8), NULL);
+			guint16 year = gsf_le_read_guint16(m_stream);
+			guint8 month = gsf_le_read_guint8(m_stream);
+			guint8 day = gsf_le_read_guint8(m_stream);
+			guint8 hour = gsf_le_read_guint8(m_stream);
+			guint8 minute = gsf_le_read_guint8(m_stream);
+			guint8 second = gsf_le_read_guint8(m_stream);
+			guint8 dayOfWeek = gsf_le_read_guint8(m_stream);
+			guint8 timeZone = gsf_le_read_guint8(m_stream);
+			guint8 unused = gsf_le_read_guint8(m_stream);
 			llListener->setDate(year, month, day, hour, minute, second, dayOfWeek, timeZone, unused);
 		}
 		else
 		{
 			UCSString data;
-			for (guint16 wpChar = *(const guint16 *)gsf_input_read(m_stream, sizeof(guint16), NULL);
+			for (guint16 wpChar = gsf_le_read_guint16(m_stream);
 			     wpChar != 0; 
-			     wpChar = *(const guint16 *)gsf_input_read(m_stream, sizeof(guint16), NULL))
+			     wpChar = gsf_le_read_guint16(m_stream))
 			{				
 			guint8 character = (wpChar & 0xFF);
 			guint8 characterSet = (wpChar & 0xFF00) >> 8;

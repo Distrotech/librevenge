@@ -9,6 +9,7 @@ AM_CXXFLAGS = $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS)
 libwpd_1_la_LIBADD  = $(LIBWPD_LIBS)
 libwpd_1_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) -export-dynamic
 libwpd_1_la_SOURCES =			\
+	libwpd_internal.cpp		\
 	libwpd_support.cpp		\
 	WP6AttributeGroup.cpp 		\
 	WP6CharacterGroup.cpp		\
@@ -42,6 +43,7 @@ libwpd_1_la_SOURCES =			\
 	WPXHeader.cpp 			\
 	WPXParser.cpp 			\
 	libwpd.h	        	\
+	libwpd_internal.h		\
 	libwpd_support.h        	\
 	WP6FileStructure.h		\
 	WP6AttributeGroup.h 		\

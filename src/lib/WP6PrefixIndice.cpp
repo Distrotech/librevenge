@@ -44,13 +44,13 @@ WP6PrefixIndice::WP6PrefixIndice(GsfInput * input, int id)
 
 void WP6PrefixIndice::_read(GsfInput *input)
 {
-	m_flags = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-	m_type = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+	m_flags = gsf_le_read_guint8(input);
+	m_type = gsf_le_read_guint8(input);
 
-	m_useCount = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
-	m_hideCount = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
-	m_dataSize = *(const guint32 *)gsf_input_read(input, sizeof(guint32), NULL);
-	m_dataOffset = *(const guint32 *)gsf_input_read(input, sizeof(guint32), NULL);
+	m_useCount = gsf_le_read_guint16(input);
+	m_hideCount = gsf_le_read_guint16(input);
+	m_dataSize = gsf_le_read_guint32(input);
+	m_dataOffset = gsf_le_read_guint32(input);
 
 	WPD_DEBUG_MSG(("Prefix Packet (type: %i, data size: %i, data offset: %i)\n", m_type, m_dataSize, m_dataOffset));
 	

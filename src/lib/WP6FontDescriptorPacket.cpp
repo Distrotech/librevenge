@@ -47,26 +47,26 @@ WP6FontDescriptorPacket::~WP6FontDescriptorPacket()
 void WP6FontDescriptorPacket::_readContents(GsfInput *input)
 {
    // short sized characteristics
-   m_characterWidth = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
-   m_ascenderHeight = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
-   m_xHeight = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
-   m_descenderHeight = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
-   m_italicsAdjust = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+   m_characterWidth = gsf_le_read_guint16(input);
+   m_ascenderHeight = gsf_le_read_guint16(input);
+   m_xHeight = gsf_le_read_guint16(input);
+   m_descenderHeight = gsf_le_read_guint16(input);
+   m_italicsAdjust = gsf_le_read_guint16(input);
    // byte sized characteristics
-   m_primaryFamilyMemberId = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-   m_primaryFamilyId = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-   m_scriptingSystem = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-   m_primaryCharacterSet = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-   m_width = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-   m_weight = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-   m_attributes = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-   m_generalCharacteristics = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-   m_classification = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-   m_fill = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-   m_fontType = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-   m_fontSourceFileType = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+   m_primaryFamilyMemberId = gsf_le_read_guint8(input);
+   m_primaryFamilyId = gsf_le_read_guint8(input);
+   m_scriptingSystem = gsf_le_read_guint8(input);
+   m_primaryCharacterSet = gsf_le_read_guint8(input);
+   m_width = gsf_le_read_guint8(input);
+   m_weight = gsf_le_read_guint8(input);
+   m_attributes = gsf_le_read_guint8(input);
+   m_generalCharacteristics = gsf_le_read_guint8(input);
+   m_classification = gsf_le_read_guint8(input);
+   m_fill = gsf_le_read_guint8(input);
+   m_fontType = gsf_le_read_guint8(input);
+   m_fontSourceFileType = gsf_le_read_guint8(input);
 
-   m_fontNameLength = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL); 
+   m_fontNameLength = gsf_le_read_guint16(input); 
 
    // TODO: re-do sanity checking
    //if(m_fontNameLength < WP_FONT_NAME_MAX_LENGTH)

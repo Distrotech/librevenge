@@ -43,8 +43,8 @@ WP6GeneralTextPacket::~WP6GeneralTextPacket()
 
 void WP6GeneralTextPacket::_readContents(GsfInput *input)
 {
-	guint16 m_numTextBlocks = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
-	guint32 m_firstTextBlockOffset = *(const guint32 *)gsf_input_read(input, sizeof(guint32), NULL);
+	guint16 m_numTextBlocks = gsf_le_read_guint16(input);
+	guint32 m_firstTextBlockOffset = gsf_le_read_guint32(input);
 
 	if (m_numTextBlocks < 1)
 		throw ParseException();
@@ -53,7 +53,7 @@ void WP6GeneralTextPacket::_readContents(GsfInput *input)
 	int totalSize = 0;
 	for(int i=0; i<m_numTextBlocks; i++)
 	{
-		m_blockSizes[i] = *(const guint32 *)gsf_input_read(input, sizeof(guint32), NULL);
+		m_blockSizes[i] = gsf_le_read_guint32(input);
 		totalSize += m_blockSizes[i];
 	}	
 
@@ -64,12 +64,12 @@ void WP6GeneralTextPacket::_readContents(GsfInput *input)
 	{
 		for (int j=0; j<m_blockSizes[i]; j++)
 		{
-			streamData[streamPos] = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+			streamData[streamPos] = gsf_le_read_guint8(input);
 			streamPos++;
 		}
 	}
 
-	m_stream = gsf_input_memory_new(streamData, totalSize, TRUE);
+	m_stream = GSF_INPUT(gsf_input_memory_new(streamData, totalSize, TRUE));
 }
 
 void WP6GeneralTextPacket::parse(WP6LLListener *llListener) const

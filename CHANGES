@@ -2,12 +2,14 @@ CHANGES:
 
 0.4.0 -> 0.5.0
 - rpm spec (Rui Miguel Silva Seabra)
-- support document metadata (William Lachance)
+- document metadata (William Lachance)
 - line spacing (William)
 - better font handling (William)
-- support footnotes/endnotes (William)
+- footnotes/endnotes (William)
 - improved table handling - column sizing, offset, and alignment (Marc Maurer)
-- build libwpd as a shared library by default (Francis J Franklin)
+- build libwpd as a shared library (Francis J Franklin)
+- add support for tab-based justification (William)
+- byteswap on file reads to support big-endian architectures (William)
 - many, many bugfixes (William, Marc)
 
 0.3.2 -> 0.4.0
