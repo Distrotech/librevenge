@@ -74,34 +74,6 @@ void WP42Parser::parse(WPXHLListenerImpl *listenerImpl)
 				case 0x0D: // soft new line
 					hlListener.insertEOL();
 					break;
-				
-				case 0x92:
-					hlListener.attributeChange(WP42_ATTRIBUTE_STRIKE_OUT, true);
-					break;
-				case 0x93:
-					hlListener.attributeChange(WP42_ATTRIBUTE_STRIKE_OUT, false);
-					break;				
-				case 0x94:
-					hlListener.attributeChange(WP42_ATTRIBUTE_UNDERLINE, true);
-					break;
-				case 0x95:
-					hlListener.attributeChange(WP42_ATTRIBUTE_UNDERLINE, false);
-					break;	
-				
-				case 0x9C:
-					hlListener.attributeChange(WP42_ATTRIBUTE_BOLD, false);
-					break;
-				case 0x9D:
-					hlListener.attributeChange(WP42_ATTRIBUTE_BOLD, true);
-					break;
-				
-				case 0xB2:
-					hlListener.attributeChange(WP42_ATTRIBUTE_ITALICS, true);
-					break;
-				case 0xB3:
-					hlListener.attributeChange(WP42_ATTRIBUTE_ITALICS, false);
-					break;
-				
 				default:
 					// unsupported or undocumented token, ignore
 					break;
@@ -115,6 +87,38 @@ void WP42Parser::parse(WPXHLListenerImpl *listenerImpl)
 		else if (readVal >= (guint8)0x80 && readVal <= (guint8)0xBF)
 		{
 			// single character function codes
+			switch (readVal)
+			{				
+				case 0x92:
+					hlListener.attributeChange(true, WP42_ATTRIBUTE_STRIKE_OUT);
+					break;
+				case 0x93:
+					hlListener.attributeChange(false, WP42_ATTRIBUTE_STRIKE_OUT);
+					break;				
+				case 0x94:
+					hlListener.attributeChange(true, WP42_ATTRIBUTE_UNDERLINE);
+					break;
+				case 0x95:
+					hlListener.attributeChange(false, WP42_ATTRIBUTE_UNDERLINE);
+					break;	
+				
+				case 0x9C:
+					hlListener.attributeChange(false, WP42_ATTRIBUTE_BOLD);
+					break;
+				case 0x9D:
+					hlListener.attributeChange(true, WP42_ATTRIBUTE_BOLD);
+					break;
+				
+				case 0xB2:
+					hlListener.attributeChange(true, WP42_ATTRIBUTE_ITALICS);
+					break;
+				case 0xB3:
+					hlListener.attributeChange(false, WP42_ATTRIBUTE_ITALICS);
+					break;
+				default:
+					// unsupported or undocumented token, ignore
+					break;
+			}
 		}
 		else 
 		{

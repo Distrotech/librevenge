@@ -88,6 +88,7 @@ void WP42HLListener::endDocument()
 
 void WP42HLListener::attributeChange(const bool isOn, const guint8 attribute)
 {
+	
 	// flush everything which came before this change
 	_flushText();
 	
@@ -138,7 +139,7 @@ void WP42HLListener::attributeChange(const bool isOn, const guint8 attribute)
 		m_textAttributeBits |= textAttributeBit;
 	else
 		m_textAttributeBits ^= textAttributeBit;
-	
+
 	m_textAttributesChanged = true;
 }
 
@@ -148,12 +149,12 @@ void WP42HLListener::attributeChange(const bool isOn, const guint8 attribute)
 
 void WP42HLListener::_openSpan()
 {
-	m_listenerImpl->openSpan(m_textAttributeBits, "Times New Roman", 12.0f);	
+	m_listenerImpl->openSpan(m_textAttributeBits, "Times New Roman", 12.0f);
 }
 
 void WP42HLListener::_flushText()
 {
-	if (m_textAttributesChanged)
+	if (m_textAttributesChanged && m_textBuffer.getLen())
 	{
 		_openSpan();
 		m_textAttributesChanged = false;

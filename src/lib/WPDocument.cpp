@@ -34,6 +34,44 @@
 #include "WP6Parser.h"
 #include "libwpd_internal.h"
 
+WPDConfidence WPDocument::isFileFormatSupported(GsfInput *input, bool partialContent)
+{
+	WPXHeader *header = NULL;	
+	
+	try
+	{
+		// NOTE: even when passed partial content, we for now just assume that
+		// we can extract the header from it. We could also read the major version
+		// and the preceding -1 WPC stuff manually.
+		header = new WPXHeader(input);
+		int majorVersion = header->getMajorVersion();
+		DELETEP(header);
+		
+		switch (majorVersion)
+		{
+			case 0x00: // WP5 
+				return WPD_CONFIDENCE_POOR;
+				break;
+			case 0x01: // ???
+				return WPD_CONFIDENCE_NONE;
+				break;
+			case 0x02: // WP6
+				return WPD_CONFIDENCE_EXCELLENT;
+				break;
+			default:
+				// unhandled file format
+				return WPD_CONFIDENCE_NONE;
+				break;
+		}
+	}	
+	catch (NoFileHeaderException)
+	{
+		return WP42Heuristics::isWP42FileFormat(input, partialContent);
+	}
+		
+	return WPD_CONFIDENCE_NONE;
+}
+
 void WPDocument::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl)
 {
 	WPXParser *parser = NULL;
@@ -52,6 +90,7 @@ void WPDocument::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl)
 				break;
 			case 0x01: // ???
 				WPD_DEBUG_MSG(("WordPerfect: Unsupported file format.\n"));
+				// NOTE: WHEN WE KNOW WHICH PARSER TO INSTANIATE, UPDATE ::isFileFormatSupported AS WELL!
 				break;
 			case 0x02: // WP6
 				WPD_DEBUG_MSG(("WordPerfect: Using the WP6 parser.\n"));

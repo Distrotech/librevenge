@@ -44,11 +44,13 @@ extern const guint16 *tibetanMap1[];
 int extendedCharacterToUCS2(guint8 character, guint8 characterSet,
 			    const guint16 **chars);
 
-enum WPXFileType { WP6_DOCUMENT, OTHER };
+enum WPXFileType { WP6_DOCUMENT, WP5_DOCUMENT, WP42_DOCUMENT, OTHER };
 enum WPXNumberingType { ARABIC, LOWERCASE, UPPERCASE, LOWERCASE_ROMAN, UPPERCASE_ROMAN };
 enum WPXNoteType { FOOTNOTE, ENDNOTE };
 enum WPXHeaderFooterType { HEADER, FOOTER };
 enum WPXHeaderFooterOccurence { ODD, EVEN, ALL };
+
+enum WPDConfidence { WPD_CONFIDENCE_NONE=0, WPD_CONFIDENCE_POOR, WPD_CONDIFENCE_LIKELY, WPD_CONFIDENCE_GOOD, WPD_CONFIDENCE_EXCELLENT};
 
 // ATTRIBUTE bits
 #define WPX_EXTRALARGE_BIT 1
@@ -178,11 +180,5 @@ class ParseException
 {
 	// needless to say, we could flesh this class out a bit
 };
-
-// File format support heuristics
-#define WPD_CONFIDENCE_NONE 0
-#define WPD_CONFIDENCE_POOR 1
-#define WPD_CONFIDENCE_GOOD 2
-#define WPD_CONFIDENCE_EXCELLENT 3
 
 #endif
