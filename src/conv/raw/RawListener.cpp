@@ -123,9 +123,9 @@ void RawListenerImpl::endDocument()
 void RawListenerImpl::openPageSpan(const WPXPropertyList &propList)
 {
 	_U(("openPageSpan(span: %d, isLastPageSpan: %s, formLength: %.4f, formWidth: %.4f, Orientation: %s, marginLeft: %.4f, marginRight: %.4f, marginTop: %.4f, marginBottom: %.4f\n",
-	    propList["span"]->getInt(), (propList["is-last-page-span"]->getInt() ? "true" : "false"), propList["form-length"]->getFloat(),
-	    propList["form-width"]->getFloat(), 
-	    (((WPXFormOrientation)propList["form-orientation"]->getInt()==LANDSCAPE) ? "landscape" : "portrait"), 
+	    propList["num-pages"]->getInt(), (propList["is-last-page-span"]->getInt() ? "true" : "false"), propList["page-height"]->getFloat(),
+	    propList["page-width"]->getFloat(), 
+	    (((WPXFormOrientation)propList["print-orientation"]->getInt()==LANDSCAPE) ? "landscape" : "portrait"), 
 	    propList["margin-left"]->getFloat(), propList["margin-right"]->getFloat(), 
 	    propList["margin-top"]->getFloat(), propList["margin-bottom"]->getFloat()),
 	   LC_OPEN_PAGE_SPAN);
@@ -169,17 +169,16 @@ void RawListenerImpl::closeParagraph()
 
 void RawListenerImpl::openSpan(const WPXPropertyList &propList)
 {
-	_U(("openSpan(textAttributeBits: %u, fontName: %s, fontSize: %.4f,  fontColor: #%.6x s:%.2x, highlightColor: #%.6x s:%.2x)\n",
+	_U(("openSpan(textAttributeBits: %u, fontName: %s, fontSize: %.4f, fontColor: %s, highlightColor: %s)\n",
 	    propList["text-attribute-bits"]->getInt(), propList["font-name"]->getStr().getUTF8(), propList["font-size"]->getFloat(),
-	    ((propList["font-color"]->getInt() & 0xffffff00) >> 8), (propList["font-color"]->getInt() & 0x000000ff), 
-	    ((propList["highlight-color"]->getInt() & 0xffffff00) >> 8), (propList["highlight-color"]->getInt() & 0x000000ff)), 
+	    propList["color"]->getString(), propList["text-background-color"]->getString()), 
 	   LC_OPEN_SPAN);
 }
 
 void RawListenerImpl::closeSpan()
 {
 	_D(("closeSpan()\n"),
-		LC_OPEN_SPAN);
+	   LC_OPEN_SPAN);
 }
 
 void RawListenerImpl::openSection(const WPXPropertyList &propList, const vector<WPXColumnDefinition> &columns)
@@ -313,7 +312,7 @@ void RawListenerImpl::openTable(const WPXPropertyList &propList, const vector < 
 	}
 
 	_U(("openTable(tablePositionBits: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, leftOffset: %.4f, columns:%s.)\n",
-	    propList["position-bits"]->getInt(), propList["margin-left"]->getFloat(), propList["margin-right"]->getFloat(), 
+	    propList["alignment"]->getInt(), propList["margin-left"]->getFloat(), propList["margin-right"]->getFloat(), 
 	    propList["left-offset"]->getFloat(), sColumns.getUTF8()),
 	   LC_OPEN_TABLE);
 }

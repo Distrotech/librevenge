@@ -186,11 +186,11 @@ void WPXHLListener::_openPageSpan()
 	(m_pageList->size() <= (m_ps->m_nextPageSpanIndice+1)) ? isLastPageSpan = true : isLastPageSpan = false;
 	
 	WPXPropertyList propList;
-	propList.insert("span", WPXPropertyFactory::newIntProp(currentPage->getPageSpan()));
+	propList.insert("num-pages", WPXPropertyFactory::newIntProp(currentPage->getPageSpan()));
 	propList.insert("is-last-page-span", WPXPropertyFactory::newIntProp(isLastPageSpan));
-	propList.insert("form-length", WPXPropertyFactory::newFloatProp(currentPage->getFormLength()));
-	propList.insert("form-width", WPXPropertyFactory::newFloatProp(currentPage->getFormWidth()));
-	propList.insert("form-orientation", WPXPropertyFactory::newIntProp(currentPage->getFormOrientation())); 
+	propList.insert("page-height", WPXPropertyFactory::newFloatProp(currentPage->getFormLength()));
+	propList.insert("page-width", WPXPropertyFactory::newFloatProp(currentPage->getFormWidth()));
+	propList.insert("print-orientation", WPXPropertyFactory::newIntProp(currentPage->getFormOrientation())); 
 	propList.insert("margin-left", WPXPropertyFactory::newFloatProp(currentPage->getMarginLeft()));
 	propList.insert("margin-right", WPXPropertyFactory::newFloatProp(currentPage->getMarginRight()));
 	propList.insert("margin-top", WPXPropertyFactory::newFloatProp(currentPage->getMarginTop()));
@@ -357,8 +357,8 @@ void WPXHLListener::_openSpan()
 	propList.insert("text-attribute-bits", WPXPropertyFactory::newIntProp(attributeBits & 0xffffffe0));
 	propList.insert("font-name", WPXPropertyFactory::newStringProp(*(m_ps->m_fontName)));
 	propList.insert("font-size", WPXPropertyFactory::newFloatProp(fontSizeChange*m_ps->m_fontSize));
-	propList.insert("font-color", WPXPropertyFactory::newIntProp(_rgbsColorToInt(m_ps->m_fontColor)));
-	propList.insert("highlight-color", WPXPropertyFactory::newIntProp(_rgbsColorToInt(m_ps->m_highlightColor)));
+	propList.insert("color", WPXPropertyFactory::newStringProp(_rgbsColorToString(m_ps->m_fontColor)));
+	propList.insert("text-background-color", WPXPropertyFactory::newStringProp(_rgbsColorToString(m_ps->m_highlightColor)));
 
 	m_listenerImpl->openSpan(propList);
 
@@ -378,7 +378,7 @@ void WPXHLListener::_openTable()
 	_closeTable();
 
 	WPXPropertyList propList;
-	propList.insert("position-bits", WPXPropertyFactory::newIntProp(m_ps->m_tableDefinition.m_positionBits));
+	propList.insert("alignment", WPXPropertyFactory::newIntProp(m_ps->m_tableDefinition.m_positionBits));
 	propList.insert("margin-left", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphMarginLeft));
 	propList.insert("margin-right", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphMarginRight));
 	propList.insert("left-offset", WPXPropertyFactory::newFloatProp(m_ps->m_tableDefinition.m_leftOffset));
@@ -600,6 +600,20 @@ int WPXHLListener::_rgbsColorToInt(const RGBSColor * color)
 	else
 		tmpIntColor = 0xffffffff;
 	return tmpIntColor;
+}
+
+UTF8String WPXHLListener::_rgbsColorToString(const RGBSColor * color)
+{
+	UTF8String tmpString;
+
+	float fontShading = (float)((float)color.m_s/100.0f); //convert the percents to float between 0 and 1
+	// Mix fontShading amount of given color with (1-fontShading) of White (#ffffff)
+	int fontRed = (int)0xFF + (int)((float)color.m_r*fontShading) - (int)((float)0xFF*fontShading);
+	int fontGreen = (int)0xFF + (int)((float)color.m_g*fontShading) - (int)((float)0xFF*fontShading);
+	int fontBlue = (int)0xFF + (int)((float)color.m_b*fontShading) - (int)((float)0xFF*fontShading);
+	tmpString.sprintf("#%.2x%.2x%.2x", fontRed, fontGreen, fontBlue);
+
+	return tmpString;
 }
 
 
