@@ -52,6 +52,7 @@ void WP6ExtendedDocumentSummaryPacket::_readContents(GsfInput *input)
 
 void WP6ExtendedDocumentSummaryPacket::parse(WP6LLListener *llListener) const
 {
+	int k=0;
 	guint16 groupLength = 0;
 
 	for (int i=0; i < m_dataSize; i+=groupLength)
@@ -71,8 +72,8 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6LLListener *llListener) const
 			int len;
 			len = extendedCharacterToUCS2(character,
 						      characterSet, &chars);
-			for (i = 0; i < len; i++)
-				name.append(chars[i]);
+			for (int j = 0; j < len; j++)
+				name.append(chars[j]);
 		} 
 		
 		if (tagID == WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_CREATION_DATE ||
@@ -102,8 +103,8 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6LLListener *llListener) const
 			int len;
 			len = extendedCharacterToUCS2(character,
 						      characterSet, &chars);
-			for (i = 0; i < len; i++)
-				data.append(chars[i]);
+			for (int j = 0; j < len; j++)
+				data.append(chars[j]);
 			} 
 			llListener->setExtendedInformation(tagID, data);
 		}
