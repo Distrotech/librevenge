@@ -23,9 +23,9 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
+#include <math.h>
 #include "WPXPageSpan.h"
 #include "libwpd_internal.h"
-#include <math.h>
 
 const float WP6_DEFAULT_PAGE_MARGIN_TOP = 1.0f;
 const float WP6_DEFAULT_PAGE_MARGIN_BOTTOM = 1.0f;

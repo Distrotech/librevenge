@@ -24,6 +24,7 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
+#include <math.h>
 #include "WP3MiscellaneousGroup.h"
 #include "WP3FileStructure.h"
 #include "WP3LLListener.h"

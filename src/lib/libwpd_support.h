@@ -28,9 +28,10 @@
 #include <string>
 using namespace std;
 
-#ifndef _MSC_VER
+#if defined (__GNUC__) || defined (GCC)
 #include <stdint.h>
-#else
+#endif
+#ifdef _MSC_VER
 typedef signed char int8_t;
 typedef unsigned char uint8_t;
 typedef signed short int16_t;
