@@ -47,6 +47,11 @@ class WP6HLListener : public WP6LLListener
 	virtual void marginChange(guint8 side, guint16 margin);
 	virtual void columnChange(guint8 numColumns); 
 	virtual void endDocument();
+ 
+	virtual void startTable();
+ 	virtual void insertRow();
+ 	virtual void insertCell();
+ 	virtual void endTable(); 
 
  protected:
 	void _flushText();
@@ -55,20 +60,23 @@ class WP6HLListener : public WP6LLListener
 	WPXHLListenerImpl * m_listenerImpl;
 
 	GArray *m_textArray;
-
+	
 	guint32 m_textAttributeBits;
 	gboolean m_textAttributesChanged;
-
+	
 	gboolean m_isParagraphOpened;
 	gboolean m_isParagraphClosed;
 	guint m_numDeferredParagraphBreaks;
-
+	
 	gboolean m_sectionAttributesChanged;
 	guint m_numColumns;
 	gboolean m_isLeftMarginSet;
 	gboolean m_isRightMarginSet;
 	gfloat m_marginLeft;
 	gfloat m_marginRight;
+	
+	gint32 m_curRow;
+	gint32 m_curCol;
 
 	gboolean m_isUndoOn;
 };

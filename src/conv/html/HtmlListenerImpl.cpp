@@ -29,7 +29,9 @@
 HtmlListenerImpl::HtmlListenerImpl() :
 	m_isSectionOpened(FALSE),
 	m_isParagraphOpened(FALSE),
-	m_isSpanOpened(FALSE)
+	m_isSpanOpened(FALSE),
+ 	m_isRowOpened(FALSE),
+ 	m_isCellOpened(FALSE)
 {
 }
 
@@ -106,6 +108,34 @@ void HtmlListenerImpl::insertText(const guint16 *textArray, const guint len)
 	for (guint i=0; i<len; i++) {
 		printf("%c", textArray[i]);
 	}
+}
+
+void HtmlListenerImpl::startTable()
+{
+	printf("<table>\n");
+	printf("<tbody>\n");
+}
+
+void HtmlListenerImpl::insertRow()
+{
+	if (m_isRowOpened)
+		printf("</tr>\n");
+	printf("<tr>\n");
+}
+
+void HtmlListenerImpl::insertCell(guint32 numRow, guint numColumn, guint32 rowSpan, guint32 colSpan)
+{
+	if (m_isCellOpened)
+		printf("</td>\n");
+	printf("<td>\n");
+}
+
+void HtmlListenerImpl::endTable()
+{
+	printf("</tbody>\n");
+	printf("</table>\n");
+	m_isRowOpened = FALSE;
+	m_isCellOpened = FALSE;
 }
 
 void HtmlListenerImpl::_appendTextAttributes(guint32 textAttributeBits)

@@ -41,6 +41,8 @@ WP6HLListener::WP6HLListener(WPXHLListenerImpl *listenerImpl) :
 	m_numColumns(1),
 	m_marginLeft(1.0f),
 	m_marginRight(1.0f),
+	m_curRow(-1),
+	m_curCol(-1),
 	m_isUndoOn(FALSE)
 {
 }
@@ -194,6 +196,37 @@ void WP6HLListener::endDocument()
 	// may not be opened and closed at the same time
 
 	m_listenerImpl->endDocument();
+}
+
+void WP6HLListener::startTable()
+{
+	_flushText();
+	m_listenerImpl->startTable();
+}
+
+void WP6HLListener::insertRow()
+{
+	_flushText();
+	m_curRow++;
+	m_curCol = -1;
+	m_listenerImpl->insertRow();
+}
+
+void WP6HLListener::insertCell()
+{
+	_flushText();
+	m_curCol++;
+	m_listenerImpl->insertCell(m_curRow, m_curCol, 1, 1);
+	m_numDeferredParagraphBreaks++;
+}
+
+void WP6HLListener::endTable()
+{
+	_flushText();
+	m_listenerImpl->endTable();
+	m_curRow = 0;
+	m_curCol = 0;
+	m_numDeferredParagraphBreaks++;
 }
 
 void WP6HLListener::_flushText()

@@ -120,7 +120,8 @@ void WP6EOLGroup::parse(WP6LLListener *llListener)
 					{			     
 						m_cellExists = false;			     
 					}
-				       */			     
+				       */
+					llListener->insertCell();
 				}
 				break;
 			case 0x0B: // Table Row and Cell
@@ -167,12 +168,14 @@ void WP6EOLGroup::parse(WP6LLListener *llListener)
 						m_cellExists = false;			     
 					}
 					*/
+					llListener->insertRow();
+					llListener->insertCell();
 				}
 				break;
 			case 0x11: // Table Off
-				/*
-				UT_DEBUGMSG(("WordPerfect: TABLE OFF\n"));
-				if (m_iCurrentTableColumn != -1 && m_cellExists)
+				
+				WPD_DEBUG_MSG(("WordPerfect: TABLE OFF\n"));
+				/*if (m_iCurrentTableColumn != -1 && m_cellExists)
 				{
 					X_CheckWordPerfectError(_handleHardEndOfLine());
 					X_CheckWordPerfectError(_flushText()); // make sure the hard end of line goes through
@@ -180,6 +183,7 @@ void WP6EOLGroup::parse(WP6LLListener *llListener)
 				}
 				X_CheckDocumentError(getDoc()->appendStrux(PTX_EndTable, NULL));
 				*/
+				llListener->endTable();
 				break;
 			    
 			default: // something else we don't support yet

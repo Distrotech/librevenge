@@ -43,7 +43,7 @@ void WP6CharacterGroup::_readContents(FILE *stream)
 
 void WP6CharacterGroup::parse(WP6LLListener *llListener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling an Character group\n"));
+	WPD_DEBUG_MSG(("WordPerfect: handling a Character group\n"));
 	
 	switch (getSubGroup())
 	{
@@ -110,6 +110,8 @@ void WP6CharacterGroup::parse(WP6LLListener *llListener)
 			m_iCurrentTableRow = -1;
 			m_iCurrentTableColumn = -1;
 			X_CheckDocumentError(getDoc()->appendStrux(PTX_SectionTable, NULL));*/
+			
+			llListener->startTable();
 			break;
 		case WP6_CHARACTER_GROUP_TABLE_DEFINITION_OFF:
 			WPD_DEBUG_MSG(("WordPerfect: TABLE Definition OFF\n"));

@@ -43,6 +43,11 @@ class HtmlListenerImpl : public WPXHLListenerImpl
     virtual void openSpan(guint32 textAttributeBits);
     virtual void insertText(const guint16 *textArray, const guint len);
  	virtual void insertBreak(guint8 breakType) {}
+		
+	virtual void startTable();
+ 	virtual void insertRow();
+ 	virtual void insertCell(guint32 numRow, guint numColumn, guint32 rowSpan, guint32 colSpan);
+ 	virtual void endTable();
  
  protected:
     void _appendTextAttributes(guint32 textAttributeBits);
@@ -51,6 +56,9 @@ class HtmlListenerImpl : public WPXHLListenerImpl
     gboolean m_isSectionOpened;
     gboolean m_isParagraphOpened;
     gboolean m_isSpanOpened;
+ 
+ 	gboolean m_isRowOpened;
+ 	gboolean m_isCellOpened;
 };
 
 #endif /* HTMLLISTENERIMPL_H */

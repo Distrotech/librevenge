@@ -41,6 +41,11 @@ class WPXLLListener
 	virtual void marginChange(guint8 side, guint16 margin) = 0;
 	virtual void columnChange(guint8 numColumns) = 0;
 	virtual void endDocument() = 0;
+		
+	virtual void startTable() = 0;
+ 	virtual void insertRow() = 0;
+ 	virtual void insertCell() = 0;
+ 	virtual void endTable() = 0;
 };
 
 #endif /* WPXLLLISTENER_H */

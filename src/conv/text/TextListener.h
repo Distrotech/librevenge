@@ -43,6 +43,11 @@ public:
 	virtual void marginChange(guint8 side, guint16 margin) {}
 	virtual void columnChange(guint8 numColumns) {}
 	virtual void endDocument() {}
+		
+	virtual void startTable() {}
+ 	virtual void insertRow() {}
+ 	virtual void insertCell() {}
+ 	virtual void endTable() {}
 
  private:
 	gboolean m_isUndoOn;
