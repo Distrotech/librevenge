@@ -37,7 +37,7 @@
 #include "WP6PrefixData.h"
 #include "WPXTable.h"
 
-#ifdef _MSC_VER
+#ifdef WIN32
 #include <assert.h>
 #endif
 
