@@ -1308,6 +1308,9 @@ void WP6HLContentListener::_flushText(const bool fakeText)
 	m_ps->m_textAttributesChanged = false;
 }
 
+// FIXME: This code mostly works, but was created more or less by trial and error and does not derive from
+// a good mental model of how lists actually work. Developing such a model is complicated (given that the
+// WordPerfect developers never had one) but we should at least try.
 void WP6HLContentListener::_handleListChange(const uint16_t outlineHash)
 {
 	WP6OutlineDefinition *outlineDefinition;
@@ -1381,6 +1384,7 @@ void WP6HLContentListener::_handleListChange(const uint16_t outlineHash)
 			int tempListLevel = m_parseState->m_listLevelStack.top();
 			m_parseState->m_listLevelStack.pop();
  			WPD_DEBUG_MSG(("Popped level %i off the list level stack\n", tempListLevel));
+
 			// we are assuming that whether or not the current element has a paragraph
 			// number or not is representative of the entire list. I think this
 			// assumption holds for all wordperfect files, but it's not correct
@@ -1390,6 +1394,11 @@ void WP6HLContentListener::_handleListChange(const uint16_t outlineHash)
 				m_listenerImpl->closeUnorderedListLevel();
 			else
 				m_listenerImpl->closeOrderedListLevel();
+
+			// if we are in a sub-level (beyond 1), and we still haven't reached the current list level, 
+			// then that implies that we opened an element that needs to be closed..
+			if (!m_parseState->m_listLevelStack.empty())
+				m_listenerImpl->closeListElement();
 		}
 	}
 	else if (m_parseState->m_currentListLevel == oldListLevel)
