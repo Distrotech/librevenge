@@ -44,12 +44,9 @@ public:
 	static void parseDocument(GsfInput *stream, WP6LLListener *llListener);
 
 private:
-	GsfInput * getDocument(GsfInput *input);
-	WP6Header * getHeader(GsfInput *input);
-	WP6PrefixData * getPrefixData(GsfInput *input, WP6Header *header);
+	WP6PrefixData * getPrefixData(GsfInput *input);
 
-	WPXFileType getFileType(GsfInput *input);
-	void parse(GsfInput *input, WP6Header *header, WP6LLListener *llistener);
+	void parse(GsfInput *stream, WP6LLListener *llListener);
 
 	void parsePacket(WP6PrefixData *prefixData, int type, WP6LLListener *llListener);
 	void parsePackets(WP6PrefixData *prefixData, int type, WP6LLListener *llListener);

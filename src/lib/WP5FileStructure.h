@@ -1,6 +1,6 @@
-/* libwpd2
- * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
+/* libwpd
+ * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,25 +23,17 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef _WP6HEADER_H
-#define _WP6HEADER_H
+#ifndef WP5FILESTRUCTURE_H
+#define WP5FILESTRUCTURE_H
 
-#include "WPXHeader.h"
+// size of the fixed length functiongroups 0xC0 to 0xCF
+extern int WP5_FIXED_LENGTH_FUCNTION_GROUP_SIZE[16]; 
 
-class WP6Header : public WPXHeader
-{
- public:
-	WP6Header(GsfInput * input, guint32 documentOffset, guint8 productType, guint8 fileType, guint8 majorVersion, guint8 minorVersion, guint16 documentEncryption);
-	virtual ~WP6Header() {};
-	
-	const guint16 getIndexHeaderOffset() const { return m_indexHeaderOffset; }
-	const guint16 getNumPrefixIndices() const { return m_numPrefixIndices; }
+#define WP5_ATTRIBUTE_BOLD 0
+#define WP5_ATTRIBUTE_ITALICS 1
+#define WP5_ATTRIBUTE_UNDERLINE 2
+#define WP5_ATTRIBUTE_STRIKE_OUT 3
+#define WP5_ATTRIBUTE_SHADOW 4
+#define WP5_ATTRIBUTE_REDLINE 5
 
-protected:
-	void _readIndexInformation(GsfInput *input);
-		
-private:
-	guint16 m_indexHeaderOffset;
-	guint16 m_numPrefixIndices;
-};
-#endif /* _WP6HEADER_H  */
+#endif /* WP5FILESTRUCTURE_H */

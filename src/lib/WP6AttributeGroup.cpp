@@ -27,10 +27,10 @@
 #include "WP6LLListener.h"
 #include "libwpd_internal.h"
 
-WP6AttributeGroup::WP6AttributeGroup(GsfInput *input)
-	: WP6FixedLengthGroup()
+WP6AttributeGroup::WP6AttributeGroup(GsfInput *input, guint8 groupID)
+	: WP6FixedLengthGroup(groupID)
 {
-	_read(input, WP6_ATTRIBUTE_GROUP_SIZE);
+	_read(input);
 }
 
 void WP6AttributeGroup::_readContents(GsfInput *input)
@@ -38,7 +38,8 @@ void WP6AttributeGroup::_readContents(GsfInput *input)
 	m_attribute = (guint8)*((const guint8 *)gsf_input_read(input, sizeof(guint8), NULL));
 }
 
-WP6AttributeOnGroup::WP6AttributeOnGroup(GsfInput *input) : WP6AttributeGroup(input)
+WP6AttributeOnGroup::WP6AttributeOnGroup(GsfInput *input, guint8 groupID)
+	: WP6AttributeGroup(input, groupID)
 {
 }
 
@@ -48,7 +49,8 @@ void WP6AttributeOnGroup::parse(WP6LLListener *llListener)
 	llListener->attributeChange(true, getAttribute());
 }
 
-WP6AttributeOffGroup::WP6AttributeOffGroup(GsfInput *input) : WP6AttributeGroup(input)
+WP6AttributeOffGroup::WP6AttributeOffGroup(GsfInput *input, guint8 groupID)
+	: WP6AttributeGroup(input, groupID)
 {
 }
 

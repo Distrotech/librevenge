@@ -28,8 +28,8 @@
 #include "WP6FileStructure.h" 
 #include "libwpd_internal.h"
 
-WP61Header::WP61Header(GsfInput * input)
-	:	WP6Header(input)
+WP61Header::WP61Header(GsfInput * input, guint32 documentOffset,  guint8 productType, guint8 fileType, guint8 majorVersion, guint8 minorVersion, guint16 documentEncryption)
+	:	WP6Header(input, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption)
 {
 	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WP6_HEADER_DOCUMENT_SIZE_OFFSET, G_SEEK_SET));
 	m_documentSize = gsf_le_read_guint32(input);

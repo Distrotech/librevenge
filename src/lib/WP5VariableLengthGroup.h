@@ -1,9 +1,9 @@
 /* libwpd2
- * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -23,25 +23,29 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef _WP6HEADER_H
-#define _WP6HEADER_H
+#ifndef WP5VARIABLELENGTHGROUP_H
+#define WP5VARIABLELENGTHGROUP_H
 
-#include "WPXHeader.h"
+#include "WP5Part.h"
 
-class WP6Header : public WPXHeader
+class WP5VariableLengthGroup : public WP5Part
 {
  public:
-	WP6Header(GsfInput * input, guint32 documentOffset, guint8 productType, guint8 fileType, guint8 majorVersion, guint8 minorVersion, guint16 documentEncryption);
-	virtual ~WP6Header() {};
+	WP5VariableLengthGroup(guint8 group); // WP5VariableLengthGroup should _never_ be constructed, only its inherited classes
+	virtual ~WP5VariableLengthGroup() {}
 	
-	const guint16 getIndexHeaderOffset() const { return m_indexHeaderOffset; }
-	const guint16 getNumPrefixIndices() const { return m_numPrefixIndices; }
+	static WP5VariableLengthGroup * constructVariableLengthGroup(GsfInput *input, guint8 group);
 
-protected:
-	void _readIndexInformation(GsfInput *input);
-		
-private:
-	guint16 m_indexHeaderOffset;
-	guint16 m_numPrefixIndices;
+ protected:
+	void _read(GsfInput *input);
+ 	virtual void _readContents(GsfInput *input) = 0;
+
+	const guint8 getGroup() const { return m_group; }
+
+ private:
+	guint8 m_group;
+	guint8 m_subGroup;
+	guint16 m_size; 
 };
-#endif /* _WP6HEADER_H  */
+
+#endif /* WP5VARIABLELENGTHGROUP_H */

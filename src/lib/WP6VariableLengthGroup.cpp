@@ -40,7 +40,8 @@
 
 
 WP6VariableLengthGroup::WP6VariableLengthGroup() :
-	m_numPrefixIDs(0)
+	m_numPrefixIDs(0),
+	m_prefixIDs(NULL)
 {
 }
 
@@ -84,7 +85,7 @@ void WP6VariableLengthGroup::_read(GsfInput *input)
 {
 	guint32 startPosition = gsf_input_tell(input);
 
-	WPD_DEBUG_MSG(("WordPerfect: handling a variable length group\n"));
+	WPD_DEBUG_MSG(("WordPerfect: handling a variable length group (group id: 0x%x)\n", m_group));
 	
 	m_subGroup = gsf_le_read_guint8(input);
 	m_size = gsf_le_read_guint16(input);
@@ -106,6 +107,7 @@ void WP6VariableLengthGroup::_read(GsfInput *input)
 	else
 	{
 		m_numPrefixIDs = 0;
+		m_prefixIDs = NULL;
 	}
 		
 	m_sizeNonDeletable = gsf_le_read_guint16(input);	
@@ -115,4 +117,3 @@ void WP6VariableLengthGroup::_read(GsfInput *input)
 
 	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, (startPosition + m_size - 1 - gsf_input_tell(input)), G_SEEK_CUR));
 }
-

@@ -28,11 +28,9 @@
 #include "WP6FileStructure.h" 
 #include "libwpd_internal.h"
 
-WP6Header::WP6Header(GsfInput * input) :
-	WPXHeader(input)
+WP6Header::WP6Header(GsfInput * input, guint32 documentOffset, guint8 productType, guint8 fileType, guint8 majorVersion, guint8 minorVersion, guint16 documentEncryption) :
+	WPXHeader(input, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption)
 {
-	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WP6_HEADER_ENCRYPTION_OFFSET, G_SEEK_SET));
-	m_documentEncryption = gsf_le_read_guint16(input);	
 	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WP6_HEADER_INDEX_HEADER_POINTER_OFFSET, G_SEEK_SET));
 	m_indexHeaderOffset = gsf_le_read_guint16(input);
 
@@ -42,10 +40,9 @@ WP6Header::WP6Header(GsfInput * input) :
 		m_indexHeaderOffset = 16;
 
 	// FIXME: we do not handle encrypted documents
-	if (m_documentEncryption != 0)
+	if (getDocumentEncryption() != 0)
 		throw ParseException();
 
-	WPD_DEBUG_MSG(("WordPerfect: Document Encryption = 0x%x \n",(int)m_documentEncryption));
 	WPD_DEBUG_MSG(("WordPerfect: Index Header Position = 0x%x \n",(int)m_indexHeaderOffset));
 }
 

@@ -1,6 +1,6 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2002-2003 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,6 +26,9 @@
 #ifndef WP6FILESTRUCTURE_H
 #define WP6FILESTRUCTURE_H
 
+// size of the fixed length functiongroups 0xF0 to 0xFF
+extern int WP6_FIXED_LENGTH_FUCNTION_GROUP_SIZE[16]; 
+
 /* standard sizes */
 #define WP6_NUM_LIST_LEVELS 8
 
@@ -33,14 +36,6 @@
 #define WP6_NUM_EXTRA_WPU 19
 
 /* header defines */
-
-#define WP6_HEADER_MAGIC_OFFSET 1
-#define WP6_HEADER_DOCUMENT_POINTER_OFFSET 4
-#define WP6_HEADER_PRODUCT_TYPE_OFFSET 8
-#define WP6_HEADER_FILE_TYPE_OFFSET 9
-#define WP6_HEADER_MAJOR_VERSION_OFFSET 10
-#define WP6_HEADER_MINOR_VERSION_OFFSET 11
-#define WP6_HEADER_ENCRYPTION_OFFSET 12
 #define WP6_HEADER_DOCUMENT_SIZE_OFFSET 20
 #define WP6_HEADER_INDEX_HEADER_POINTER_OFFSET 14
 
@@ -266,7 +261,6 @@
 #define WP6_COLUMN_TYPE_PARALLEL_PROTECT 0x03
 
 /* Attribute Group */
-#define WP6_ATTRIBUTE_GROUP_SIZE 3
 #define WP6_ATTRIBUTE_SUPERSCRIPT 5
 #define WP6_ATTRIBUTE_SUBSCRIPT 6
 #define WP6_ATTRIBUTE_OUTLINE 7
@@ -289,8 +283,6 @@
 #define WP6_TAB_GROUP_RIGHT_TAB 0x12
 
 /* Extended Character */
-#define WP6_EXTENDED_CHARACTER_GROUP_SIZE 4
-
 #define WP6_MULTINATIONAL_CHARACTER_SET 1
 #define WP6_PHONETIC_SYMBOL_CHARACTER_SET 2
 #define WP6_TYPOGRAPHIC_SYMBOL_CHARACTER_SET 4
@@ -315,7 +307,6 @@
 #define WP6_NUM_JAPANESE_CHARACTERS 63
 
 /* Undo Group */
-#define WP6_UNDO_GROUP_SIZE 5
 #define WP6_UNDO_GROUP_INVALID_TEXT_START 0
 #define WP6_UNDO_GROUP_INVALID_TEXT_END 1
 #define WP6_UNDO_GROUP_VALID_TEXT_START 2

@@ -27,34 +27,47 @@
 #include "WP6ExtendedCharacterGroup.h"
 #include "WP6UndoGroup.h"
 #include "WP6AttributeGroup.h"
+#include "WP6UnsupportedFixedLengthGroup.h"
+#include "WP6FileStructure.h"
 #include "libwpd_internal.h"
+
+WP6FixedLengthGroup::WP6FixedLengthGroup(guint8 groupID)
+	: m_group(groupID)
+{
+}
 
 WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(GsfInput *input, guint8 groupID)
 {
 	switch (groupID) 
-		{
+	{
 		case WP6_TOP_EXTENDED_CHARACTER: 
-			return new WP6ExtendedCharacterGroup(input);
+			return new WP6ExtendedCharacterGroup(input, groupID);
 			
 		case WP6_TOP_UNDO_GROUP:
-			return new WP6UndoGroup(input);
+			return new WP6UndoGroup(input, groupID);
 			
 		case WP6_TOP_ATTRIBUTE_ON:
-			return new WP6AttributeOnGroup(input);
+			return new WP6AttributeOnGroup(input, groupID);
 			
 		case WP6_TOP_ATTRIBUTE_OFF:
-			return new WP6AttributeOffGroup(input);
+			return new WP6AttributeOffGroup(input, groupID);
 			
 		// Add the remaining cases here
 		default:
-			// should not happen
-			return NULL;
+			return new WP6UnsupportedFixedLengthGroup(input, groupID);
 	}
 }
 
-void WP6FixedLengthGroup::_read(GsfInput *input, guint size)
+void WP6FixedLengthGroup::_read(GsfInput *input)
 {
 	guint32 startPosition = gsf_input_tell(input);
 	_readContents(input);
-	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, (startPosition + size - 1 - gsf_input_tell(input)), G_SEEK_CUR));
+	
+	if (m_group >= 0xF0 && m_group <= 0xFF) // just an extra safety check
+	{
+		int size = WP6_FIXED_LENGTH_FUCNTION_GROUP_SIZE[m_group-0xF0];
+		WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, (startPosition + size - 1 - gsf_input_tell(input)), G_SEEK_CUR));
+	}
+	else
+		throw FileException();
 }

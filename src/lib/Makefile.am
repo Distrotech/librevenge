@@ -2,7 +2,7 @@ lib_LTLIBRARIES = libwpd-1.la
 libwpd_1_includedir = $(includedir)/libwpd-1/libwpd
 libwpd_1_include_HEADERS = libwpd.h libwpd_support.h WPXHLListener.h WPXHLListenerImpl.h WPXLLListener.h WPXParser.h \
 					WP6HLContentListener.h WP6Header.h WP6Parser.h WP5Parser.h WP42Parser.h WP60Header.h WP61Header.h WP6LLListener.h \
-					WPXHeader.h WP6FileStructure.h WP42FileStructure.h WP6PrefixDataPacket.h WP6FontDescriptorPacket.h \
+					WPXHeader.h WP6FileStructure.h WP5FileStructure.h WP42FileStructure.h WP6PrefixDataPacket.h WP6FontDescriptorPacket.h \
 					WP6DefaultInitialFontPacket.h WPDocument.h
 
 AM_CXXFLAGS = $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS)
@@ -19,7 +19,15 @@ libwpd_1_la_SOURCES =			\
 	WP42Part.cpp				\
 	WP42UnsupportedVariableLengthGroup.cpp	\
 	WP42VariableLengthGroup.cpp	\
+	WP5FileStructure.cpp		\
+	WP5FixedLengthGroup.cpp		\
+	WP5Header.cpp				\
+	WP5HLListener.cpp			\
 	WP5Parser.cpp				\
+	WP5Part.cpp					\
+	WP5UnsupportedFixedLengthGroup.cpp	\
+	WP5UnsupportedVariableLengthGroup.cpp	\
+	WP5VariableLengthGroup.cpp	\
 	WP6AttributeGroup.cpp 		\
 	WP6CharacterGroup.cpp		\
 	WP6ColumnGroup.cpp			\
@@ -28,6 +36,7 @@ libwpd_1_la_SOURCES =			\
 	WP6EOLGroup.cpp				\
 	WP6ExtendedCharacterGroup.cpp 	\
 	WP6ExtendedDocumentSummaryPacket.cpp \
+	WP6FileStructure.cpp		\
 	WP6FillStylePacket.cpp 		\
 	WP6FixedLengthGroup.cpp		\
 	WP6FontDescriptorPacket.cpp	\
@@ -53,6 +62,7 @@ libwpd_1_la_SOURCES =			\
 	WP6StyleGroup.cpp			\
 	WP6TabGroup.cpp 			\
 	WP6UndoGroup.cpp			\
+	WP6UnsupportedFixedLengthGroup.cpp \
 	WP6UnsupportedVariableLengthGroup.cpp \
 	WP6VariableLengthGroup.cpp 	\
 	WPXPageSpan.cpp				\
@@ -69,6 +79,14 @@ libwpd_1_la_SOURCES =			\
 	WP42Part.h					\
 	WP42UnsupportedVariableLengthGroup.h	\
 	WP42VariableLengthGroup.h	\
+	WP5FixedLengthGroup.h		\
+	WP5Header.h					\
+	WP5HLListener.h				\
+	WP5LLListener.h				\
+	WP5Part.h					\
+	WP5UnsupportedFixedLengthGroup.h	\
+	WP5UnsupportedVariableLengthGroup.h	\
+	WP5VariableLengthGroup.h	\
 	WP6FileStructure.h			\
 	WP6AttributeGroup.h 		\
 	WP6CharacterGroup.h			\
@@ -101,8 +119,9 @@ libwpd_1_la_SOURCES =			\
 	WP6SingleByteFunction.h		\
 	WP6StyleGroup.h				\
 	WP6TabGroup.h	 			\
-	WP6TibetanMap.h                 \	
+	WP6TibetanMap.h				\
 	WP6UndoGroup.h				\
+	WP6UnsupportedFixedLengthGroup.h \
 	WP6UnsupportedVariableLengthGroup.h \
 	WP6VariableLengthGroup.h	\
 	WPXHeader.h					\
@@ -112,6 +131,5 @@ libwpd_1_la_SOURCES =			\
 	WPXHLListener.h				\
 	WPXHLListenerImpl.h			\
 	WPXPageSpan.h				\
-	WPXPart.h					\
 	WPXParser.h 				\
 	WPXTable.h

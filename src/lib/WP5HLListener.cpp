@@ -23,10 +23,10 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WP42HLListener.h"
-#include "WP42FileStructure.h"
+#include "WP5HLListener.h"
+//include "WP5FileStructure.h"
 
-WP42HLListener::WP42HLListener(WPXHLListenerImpl *listenerImpl)
+WP5HLListener::WP5HLListener(WPXHLListenerImpl *listenerImpl)
 	: m_listenerImpl(listenerImpl),
 	m_textAttributesChanged(false),
 	m_textAttributeBits(0)
@@ -38,7 +38,7 @@ WP42HLListener::WP42HLListener(WPXHLListenerImpl *listenerImpl)
  public 'HLListenerImpl' functions
 *****************************************/
 
-void WP42HLListener::startDocument()
+void WP5HLListener::startDocument()
 {
 	m_listenerImpl->startDocument();	
 	// FIXME: use the actual values, instead of making up some
@@ -53,18 +53,18 @@ void WP42HLListener::startDocument()
 	m_listenerImpl->openSpan(0, "Times New Roman", 12.0f);	
 }
 
-void WP42HLListener::insertCharacter(const guint16 character)
+void WP5HLListener::insertCharacter(const guint16 character)
 {
 	m_textBuffer.append(character);
 }
 
-void WP42HLListener::insertTab(const guint8 tabType)
+void WP5HLListener::insertTab(const guint8 tabType)
 {
 	_flushText();
 	m_listenerImpl->insertTab();
 }
 
-void WP42HLListener::insertEOL()
+void WP5HLListener::insertEOL()
 {
 	_flushText();
 	m_listenerImpl->insertLineBreak();
@@ -75,7 +75,7 @@ void WP42HLListener::insertEOL()
 	_openSpan();	
 }
 
-void WP42HLListener::endDocument()
+void WP5HLListener::endDocument()
 {
 	_flushText();
 	m_listenerImpl->endDocument();	
@@ -86,7 +86,7 @@ void WP42HLListener::endDocument()
  public 'parser' functions
 *****************************************/
 
-void WP42HLListener::attributeChange(const bool isOn, const guint8 attribute)
+void WP5HLListener::attributeChange(const bool isOn, const guint8 attribute)
 {
 	
 	// flush everything which came before this change
@@ -105,7 +105,7 @@ void WP42HLListener::attributeChange(const bool isOn, const guint8 attribute)
 		break;
 	case WP42_ATTRIBUTE_OUTLINE:
 		textAttributeBit = WPX_OUTLINE_BIT;
-		break;*/
+		break;
 	case WP42_ATTRIBUTE_ITALICS:
 		textAttributeBit = WPX_ITALICS_BIT;
 		break;
@@ -115,9 +115,9 @@ void WP42HLListener::attributeChange(const bool isOn, const guint8 attribute)
 	case WP42_ATTRIBUTE_REDLINE:
 		textAttributeBit = WPX_REDLINE_BIT;
 		break;
-	/*case WP42_ATTRIBUTE_DOUBLE_UNDERLINE:
+	case WP42_ATTRIBUTE_DOUBLE_UNDERLINE:
 		textAttributeBit = WPX_DOUBLE_UNDERLINE_BIT;
-		break;			*/
+		break;		
 	case WP42_ATTRIBUTE_BOLD:
 		textAttributeBit = WPX_BOLD_BIT;
 		break;
@@ -126,7 +126,7 @@ void WP42HLListener::attributeChange(const bool isOn, const guint8 attribute)
 		break;
 	case WP42_ATTRIBUTE_UNDERLINE:
 		textAttributeBit = WPX_UNDERLINE_BIT;
-		break;
+		break;*/
 	}
 	
 	if (isOn) 
@@ -141,12 +141,12 @@ void WP42HLListener::attributeChange(const bool isOn, const guint8 attribute)
  private functions
 *****************************************/
 
-void WP42HLListener::_openSpan()
+void WP5HLListener::_openSpan()
 {
 	m_listenerImpl->openSpan(m_textAttributeBits, "Times New Roman", 12.0f);
 }
 
-void WP42HLListener::_flushText()
+void WP5HLListener::_flushText()
 {
 	if (m_textAttributesChanged && m_textBuffer.getLen())
 	{

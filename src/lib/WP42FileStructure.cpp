@@ -25,7 +25,7 @@
 
 #include "WP42FileStructure.h"
 
-// size of the functiongroups 0xC0 and 0xF8
+// size of the functiongroups 0xC0 to 0xF8
 // -1 means the size is variable
 int WP42_FUCNTION_GROUP_SIZE[57] = 
 {

@@ -27,9 +27,10 @@
 #include "WP6LLListener.h"
 #include "libwpd_internal.h"
 
-WP6UndoGroup::WP6UndoGroup(GsfInput *input)
+WP6UndoGroup::WP6UndoGroup(GsfInput *input, guint8 groupID)
+	: WP6FixedLengthGroup(groupID)
 {
-	_read(input, WP6_UNDO_GROUP_SIZE);
+	_read(input);
 }
 
 void WP6UndoGroup::_readContents(GsfInput *input)

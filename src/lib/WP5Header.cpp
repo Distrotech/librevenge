@@ -1,4 +1,4 @@
-/* libwpd
+/* libwpd2
  * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
@@ -23,17 +23,24 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP42FILESTRUCTURE_H
-#define WP42FILESTRUCTURE_H
+#include "libwpd.h"
+#include "WP5Header.h"
+//include "WP6FileStructure.h" 
+#include "libwpd_internal.h"
 
-// size of the functiongroups 0xC0 to 0xF8
-extern int WP42_FUCNTION_GROUP_SIZE[57]; 
+WP5Header::WP5Header(GsfInput * input, guint32 documentOffset, guint8 productType, guint8 fileType, guint8 majorVersion, guint8 minorVersion, guint16 documentEncryption) :
+	WPXHeader(input, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption)
+{
+	// nothing to do here really...
+}
 
-#define WP42_ATTRIBUTE_BOLD 0
-#define WP42_ATTRIBUTE_ITALICS 1
-#define WP42_ATTRIBUTE_UNDERLINE 2
-#define WP42_ATTRIBUTE_STRIKE_OUT 3
-#define WP42_ATTRIBUTE_SHADOW 4
-#define WP42_ATTRIBUTE_REDLINE 5
+void WP5Header::_readIndexInformation(GsfInput *input)
+{
+/*	// read the Index Header (Header #0)
+	// skip the Flags = 2 and the Reserved byte = 0
+	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, m_indexHeaderOffset + WP6_INDEX_HEADER_NUM_INDICES_POSITION, G_SEEK_SET));
+	m_numPrefixIndices = gsf_le_read_guint16(input);
 
-#endif /* WP42FILESTRUCTURE_H */
+	// ignore the 10 reserved bytes that follow (jump to the offset of the Index Header #1, where we can resume parsing)
+	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, m_indexHeaderOffset + WP6_INDEX_HEADER_INDICES_POSITION, G_SEEK_SET));*/
+}

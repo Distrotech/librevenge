@@ -101,7 +101,14 @@ void WP42Parser::parse(WPXHLListenerImpl *listenerImpl)
 				case 0x95:
 					hlListener.attributeChange(false, WP42_ATTRIBUTE_UNDERLINE);
 					break;	
-				
+
+				case 0x90:
+					hlListener.attributeChange(true, WP42_ATTRIBUTE_REDLINE);
+					break;
+				case 0x91:
+					hlListener.attributeChange(false, WP42_ATTRIBUTE_REDLINE);
+					break;
+
 				case 0x9C:
 					hlListener.attributeChange(false, WP42_ATTRIBUTE_BOLD);
 					break;
@@ -115,6 +122,13 @@ void WP42Parser::parse(WPXHLListenerImpl *listenerImpl)
 				case 0xB3:
 					hlListener.attributeChange(false, WP42_ATTRIBUTE_ITALICS);
 					break;
+				case 0xB4:
+					hlListener.attributeChange(true, WP42_ATTRIBUTE_SHADOW);
+					break;
+				case 0xB5:
+					hlListener.attributeChange(false, WP42_ATTRIBUTE_SHADOW);
+					break;
+			
 				default:
 					// unsupported or undocumented token, ignore
 					break;

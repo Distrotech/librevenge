@@ -26,10 +26,11 @@
 #ifndef WP5PARSER_H
 #define WP5PARSER_H
 
+#include <gsf/gsf-input.h>
 #include "WPXParser.h"
-//#include "WP5Header.h"
 
 class WPXHLListenerImpl;
+class WP5LLListener;
 
 class WP5Parser : public WPXParser
 {
@@ -38,9 +39,11 @@ public:
 	~WP5Parser();
 
 	virtual void parse(WPXHLListenerImpl *listenerImpl);
+	
+	static void parseDocument(GsfInput *input, WP5LLListener *llListener);
 
 private:
-
+	void parse(GsfInput *input, WP5LLListener *llListener);
 };
 
 #endif /* WP5PARSER_H */

@@ -1,6 +1,6 @@
 /* libwpd2
- * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,35 +24,33 @@
  */
 
 #include "WPXPart.h"
-#include "WP6Part.h"
-#include "WP6Header.h"
-#include "WP6VariableLengthGroup.h"
-#include "WP6FixedLengthGroup.h"
-#include "WP6SingleByteFunction.h"
+#include "WP5Part.h"
+#include "WP5Header.h"
+#include "WP5VariableLengthGroup.h"
+#include "WP5FixedLengthGroup.h"
 #include "libwpd_internal.h"
 
 // constructPart: constructs a parseable low-level representation of part of the document
 // returns the part if it successfully creates the part, returns NULL if it can't
 // throws an exception if there is an error
-// precondition: readVal us between 0x80 and 0xFF
-WP6Part * WP6Part::constructPart(GsfInput *input, guint8 readVal)
+// precondition: readVal us between 0xC0 and 0xFF
+WP5Part * WP5Part::constructPart(GsfInput *input, guint8 readVal)
 {	
 	WPD_DEBUG_MSG(("WordPerfect: ConstructPart\n"));
-		
-	if (readVal >= (guint8)0x80 && readVal <= (guint8)0xCF)
+
+	if (readVal >= (guint8)0xC0 && readVal <= (guint8)0xCF)
 	{
+		// fixed length multi-byte function
+	
 		WPD_DEBUG_MSG(("WordPerfect: constructFixedLengthGroup(input, val)\n"));
-		return WP6SingleByteFunction::constructSingleByteFunction(input, readVal);
-	}
-	else if (readVal >= (guint8)0xD0 && readVal <= (guint8)0xEF)
-	{
-		WPD_DEBUG_MSG(("WordPerfect: constructVariableLengthGroup(input, val)\n"));
-		return WP6VariableLengthGroup::constructVariableLengthGroup(input, readVal);
+		return WP5FixedLengthGroup::constructFixedLengthGroup(input, readVal);
 	}      
-	else if (readVal >= (guint8)0xF0 && readVal <= (guint8)0xFF)
+	else if (readVal >= (guint8)0xD0 && readVal <= (guint8)0xFF /* strange: 0xFF should not happen, see 1st 'if' */)
 	{
-		WPD_DEBUG_MSG(("WordPerfect: constructFixedLengthGroup(input, val)\n"));
-		return WP6FixedLengthGroup::constructFixedLengthGroup(input, readVal);
+		// variable length multi-byte function
+	
+		WPD_DEBUG_MSG(("WordPerfect: constructVariableLengthGroup(input, val)\n"));
+		return WP5VariableLengthGroup::constructVariableLengthGroup(input, readVal);
 	}
 
 	WPD_DEBUG_MSG(("WordPerfect: Returning NULL from constructPart\n"));

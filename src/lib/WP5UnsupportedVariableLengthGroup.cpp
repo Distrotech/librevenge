@@ -1,9 +1,9 @@
 /* libwpd2
- * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -23,25 +23,16 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef _WP6HEADER_H
-#define _WP6HEADER_H
+#include "WP5UnsupportedVariableLengthGroup.h"
+#include "libwpd_internal.h"
 
-#include "WPXHeader.h"
-
-class WP6Header : public WPXHeader
+WP5UnsupportedVariableLengthGroup::WP5UnsupportedVariableLengthGroup(GsfInput *input, guint8 group) :
+	WP5VariableLengthGroup(group)
 {
- public:
-	WP6Header(GsfInput * input, guint32 documentOffset, guint8 productType, guint8 fileType, guint8 majorVersion, guint8 minorVersion, guint16 documentEncryption);
-	virtual ~WP6Header() {};
-	
-	const guint16 getIndexHeaderOffset() const { return m_indexHeaderOffset; }
-	const guint16 getNumPrefixIndices() const { return m_numPrefixIndices; }
+	_read(input);
+}
 
-protected:
-	void _readIndexInformation(GsfInput *input);
-		
-private:
-	guint16 m_indexHeaderOffset;
-	guint16 m_numPrefixIndices;
+void WP5UnsupportedVariableLengthGroup::_readContents(GsfInput *input)
+{
+	WPD_DEBUG_MSG(("WordPerfect: Handling an unsupported variable length group\n"));
 };
-#endif /* _WP6HEADER_H  */

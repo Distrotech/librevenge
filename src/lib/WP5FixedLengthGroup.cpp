@@ -1,9 +1,9 @@
-/* libwpd
+/* libwpd2
  * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -23,17 +23,37 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP42FILESTRUCTURE_H
-#define WP42FILESTRUCTURE_H
+#include "WP5FixedLengthGroup.h"
+#include "WP5FileStructure.h"
+#include "libwpd_internal.h"
 
-// size of the functiongroups 0xC0 to 0xF8
-extern int WP42_FUCNTION_GROUP_SIZE[57]; 
+WP5FixedLengthGroup::WP5FixedLengthGroup(guint groupID)
+	: m_group(groupID)
+{
+}
 
-#define WP42_ATTRIBUTE_BOLD 0
-#define WP42_ATTRIBUTE_ITALICS 1
-#define WP42_ATTRIBUTE_UNDERLINE 2
-#define WP42_ATTRIBUTE_STRIKE_OUT 3
-#define WP42_ATTRIBUTE_SHADOW 4
-#define WP42_ATTRIBUTE_REDLINE 5
+WP5FixedLengthGroup * WP5FixedLengthGroup::constructFixedLengthGroup(GsfInput *input, guint8 groupID)
+{
+	switch (groupID) 
+	{
+			
+		// Add the remaining cases here
+		default:
+			// should not happen
+			return NULL;
+	}
+}
 
-#endif /* WP42FILESTRUCTURE_H */
+void WP5FixedLengthGroup::_read(GsfInput *input)
+{
+	guint32 startPosition = gsf_input_tell(input);
+	_readContents(input);
+	
+	if (m_group >= 0xC0 && m_group <= 0xCF) // just an extra safety check
+	{
+		int size = WP5_FIXED_LENGTH_FUCNTION_GROUP_SIZE[m_group-0xC0];
+		WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, (startPosition + size - 1 - gsf_input_tell(input)), G_SEEK_CUR));
+	}
+	else
+		throw FileException();
+}

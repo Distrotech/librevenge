@@ -38,7 +38,8 @@ public:
 	static WPDConfidence isFileFormatSupported(GsfInput *input, bool partialContent);
 
 	static void parse(GsfInput *input, WPXHLListenerImpl *listenerImpl);
-	static void parse(GsfInput *input, WPXHLListenerImpl *listenerImpl, WPXFileType fileType);
+	//static void parse(GsfInput *input, WPXHLListenerImpl *listenerImpl, WPXFileType fileType);
+	// WPXFileType getFileType(GsfInput *input)
 	//static void parse(GsfInput *input, WPXLLListener *llistener);
 };
 

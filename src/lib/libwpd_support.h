@@ -171,11 +171,6 @@ class FileException
 	// needless to say, we could flesh this class out a bit
 };
 
-class NoFileHeaderException
-{
-	// needless to say, we could flesh this class out a bit
-};
-
 class ParseException
 {
 	// needless to say, we could flesh this class out a bit

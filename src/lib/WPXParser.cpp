@@ -38,4 +38,5 @@ WPXParser::WPXParser(GsfInput *input, WPXHeader *header) :
 
 WPXParser::~WPXParser()
 {
+	DELETEP(m_header);
 }

@@ -43,30 +43,34 @@ WPDConfidence WPDocument::isFileFormatSupported(GsfInput *input, bool partialCon
 		// NOTE: even when passed partial content, we for now just assume that
 		// we can extract the header from it. We could also read the major version
 		// and the preceding -1 WPC stuff manually.
-		header = new WPXHeader(input);
-		int majorVersion = header->getMajorVersion();
-		DELETEP(header);
-		
-		switch (majorVersion)
+		header = WPXHeader::constructHeader(input);
+		if (header)
 		{
-			case 0x00: // WP5 
-				return WPD_CONFIDENCE_POOR;
-				break;
-			case 0x01: // ???
-				return WPD_CONFIDENCE_NONE;
-				break;
-			case 0x02: // WP6
-				return WPD_CONFIDENCE_EXCELLENT;
-				break;
-			default:
-				// unhandled file format
-				return WPD_CONFIDENCE_NONE;
-				break;
+			switch (header->getMajorVersion())
+			{
+				case 0x00: // WP5 
+					return WPD_CONFIDENCE_EXCELLENT;
+					break;
+				case 0x01: // ???
+					return WPD_CONFIDENCE_NONE;
+					break;
+				case 0x02: // WP6
+					return WPD_CONFIDENCE_EXCELLENT;
+					break;
+				default:
+					// unhandled file format
+					return WPD_CONFIDENCE_NONE;
+					break;
+			}
+			
+			DELETEP(header);
 		}
+		else
+			return WP42Heuristics::isWP42FileFormat(input, partialContent);
 	}	
-	catch (NoFileHeaderException)
+	catch (FileException)
 	{
-		return WP42Heuristics::isWP42FileFormat(input, partialContent);
+		return WPD_CONFIDENCE_NONE;
 	}
 		
 	return WPD_CONFIDENCE_NONE;
@@ -75,62 +79,65 @@ WPDConfidence WPDocument::isFileFormatSupported(GsfInput *input, bool partialCon
 void WPDocument::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl)
 {
 	WPXParser *parser = NULL;
-	WPXHeader *header = NULL;
 	
 	try
 	{
-		header = new WPXHeader(input);
+		WPXHeader *header = WPXHeader::constructHeader(input);
 		
-		switch (header->getMajorVersion())
+		if (header)
 		{
-			case 0x00: // WP5 
-				WPD_DEBUG_MSG(("WordPerfect: Using the WP5 parser.\n"));
-				parser = new WP5Parser(input, header);
-				parser->parse(listenerImpl);
-				DELETEP(parser);
-				break;
-			case 0x01: // ???
-				WPD_DEBUG_MSG(("WordPerfect: Unsupported file format.\n"));
-				// NOTE: WHEN WE KNOW WHICH PARSER TO INSTANIATE, UPDATE ::isFileFormatSupported AS WELL!
-				break;
-			case 0x02: // WP6
-				WPD_DEBUG_MSG(("WordPerfect: Using the WP6 parser.\n"));
-				parser = new WP6Parser(input, header);
-				parser->parse(listenerImpl);
-				DELETEP(parser);
-				break;
-			default:
-				// unhandled file format
-				WPD_DEBUG_MSG(("WordPerfect: Unsupported file format.\n"));
-				break;
+			switch (header->getMajorVersion())
+			{
+				case 0x00: // WP5 
+					WPD_DEBUG_MSG(("WordPerfect: Using the WP5 parser.\n"));
+					parser = new WP5Parser(input, header);
+					parser->parse(listenerImpl);
+					break;
+				case 0x01: // ???
+					WPD_DEBUG_MSG(("WordPerfect: Unsupported file format.\n"));
+					// NOTE: WHEN WE KNOW WHICH PARSER TO INSTANIATE, UPDATE ::isFileFormatSupported AS WELL!
+					break;
+				case 0x02: // WP6
+					WPD_DEBUG_MSG(("WordPerfect: Using the WP6 parser.\n"));
+					parser = new WP6Parser(input, header);
+					parser->parse(listenerImpl);
+					break;
+				default:
+					// unhandled file format
+					WPD_DEBUG_MSG(("WordPerfect: Unsupported file format.\n"));
+					break;
+			}
+	
+			//DELETEP(parser); // deletes the header as well
 		}
-
-		DELETEP(header);	
-	}
-	catch (NoFileHeaderException)
-	{
-		// WP file formats prior to version 5.x do not contain a generic 
-		// header which can be used to determine which parser to instanciate. 
-		// Use heuristics to determine with some certainty if we are dealing with
-		// a file in the WP4.2 format.		
-		int confidence = WP42Heuristics::isWP42FileFormat(input, false /* FIXME: allow for partial content */);
-
-		if (confidence == WPD_CONFIDENCE_GOOD || confidence == WPD_CONFIDENCE_EXCELLENT)
+		else
 		{
-			WPD_DEBUG_MSG(("WordPerfect: Mostly likely the file format is WP4.2.\n\n"));
-			WPD_DEBUG_MSG(("WordPerfect: Using the WP4.2 parser.\n\n"));
-			WP42Parser *parser = new WP42Parser(input);
-			parser->parse(listenerImpl);
-			DELETEP(parser);
+			// WP file formats prior to version 5.x do not contain a generic 
+			// header which can be used to determine which parser to instanciate. 
+			// Use heuristics to determine with some certainty if we are dealing with
+			// a file in the WP4.2 format.		
+			int confidence = WP42Heuristics::isWP42FileFormat(input, false /* FIXME: allow for partial content */);
+	
+			if (confidence == WPD_CONFIDENCE_GOOD || confidence == WPD_CONFIDENCE_EXCELLENT)
+			{
+				WPD_DEBUG_MSG(("WordPerfect: Mostly likely the file format is WP4.2.\n\n"));
+				WPD_DEBUG_MSG(("WordPerfect: Using the WP4.2 parser.\n\n"));
+				WP42Parser *parser = new WP42Parser(input);
+				parser->parse(listenerImpl);
+				DELETEP(parser);
+			}
 		}
 	}
 	catch (FileException)
 	{
 		DELETEP(parser);
-		DELETEP(header);
 		throw FileException(); 
 	}
 }
+
+/*
+
+TOTALLY BROKEN, DO NOT USE!!!
 
 void WPDocument::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl, WPXFileType fileType)
 {
@@ -183,6 +190,46 @@ void WPDocument::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl, WPXFile
 		throw FileException(); 
 	}
 }
+
+*/
+
+
+/*
+
+TOTALLY BROKEN - MIGHT BE NICE TO HAVE
+
+WPXFileType WPDocument::WPXParser::getFileType(GsfInput *input)
+{
+	WPXFileType fileType = OTHER;
+	GsfInput *document = NULL;
+	bool isDocumentOLE = false;
+	
+	try
+	{
+		document = getDocument(input);
+		if (document != NULL) {
+			isDocumentOLE = true;
+		}
+		else
+			document = input;
+		
+		gsf_input_seek(document, 0, G_SEEK_SET);			
+		WPXHeader fileHeader(document);
+
+		if (fileHeader.getFileType() ==  WP6_DOCUMENT_FILE_TYPE &&
+		    fileHeader.getMajorVersion() == WP6_EXPECTED_MAJOR_VERSION)
+			fileType = WP6_DOCUMENT;
+	}
+	catch (FileException)
+	{
+		// no action required: no memory allocated
+	}
+
+	if (document != NULL && isDocumentOLE)
+		g_object_unref(G_OBJECT(document));
+
+	return fileType;
+}*/
 
 /*void WPDocument::parse(GsfInput *input, WPXLLListener *llistener)
 {

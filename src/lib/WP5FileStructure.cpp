@@ -1,6 +1,6 @@
 /* libwpd2
- * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,25 +23,25 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef _WP6HEADER_H
-#define _WP6HEADER_H
+#include "WP5FileStructure.h"
 
-#include "WPXHeader.h"
-
-class WP6Header : public WPXHeader
+// size of the fixed length functiongroups 0xC0 to 0xCF
+int WP5_FIXED_LENGTH_FUCNTION_GROUP_SIZE[16] = 
 {
- public:
-	WP6Header(GsfInput * input, guint32 documentOffset, guint8 productType, guint8 fileType, guint8 majorVersion, guint8 minorVersion, guint16 documentEncryption);
-	virtual ~WP6Header() {};
-	
-	const guint16 getIndexHeaderOffset() const { return m_indexHeaderOffset; }
-	const guint16 getNumPrefixIndices() const { return m_numPrefixIndices; }
-
-protected:
-	void _readIndexInformation(GsfInput *input);
-		
-private:
-	guint16 m_indexHeaderOffset;
-	guint16 m_numPrefixIndices;
+	4,	// 0xC0
+	9,
+	11,	
+	3,	
+	3,	
+	5,	
+	6,	
+	7,	
+	4,	
+	5,	
+	6,	
+	6,	
+	8,	
+	10,	
+	10,	
+	12	// 0xCF
 };
-#endif /* _WP6HEADER_H  */

@@ -1,6 +1,6 @@
 /* libwpd2
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2002-2003 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -33,15 +33,17 @@
 class WPXHeader
 {
  public:	
-	WPXHeader(GsfInput *input);
-	//WPXHeader(WPXHeader &);
-	~WPXHeader() {};
+	WPXHeader(GsfInput *input, guint32 documentOffset, guint8 productType, guint8 fileType, guint8 majorVersion, guint8 minorVersion, guint16 documentEncryption);
+	~WPXHeader();
 
+	static WPXHeader * constructHeader(GsfInput *input);
+		
 	const guint32 getDocumentOffset() const { return m_documentOffset; }
 	const guint8 getProductType() const { return m_productType; }
 	const guint8 getFileType() const { return m_fileType; }
 	const guint8 getMajorVersion() const { return m_majorVersion; }
 	const guint8 getMinorVersion() const { return m_minorVersion; }
+	const guint16 getDocumentEncryption() const { return m_documentEncryption; }
 
  private:	
 	guint32 m_documentOffset;
@@ -49,7 +51,7 @@ class WPXHeader
 	guint8 m_fileType;
 	guint8 m_majorVersion;
 	guint8 m_minorVersion;
-		
+ 	guint16 m_documentEncryption;		
 };
 
 #endif /* WPXHEADER_H */
