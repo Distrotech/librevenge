@@ -22,7 +22,7 @@ Extensive installation instructions can be found in the INSTALL file.
 Windows - Microsoft(tm) Visual Studio/C++
 =========================================
 
-A workspace for MSVC6 can be found in the ./projects/msvc/ directory.
+A workspace for MSVC6 can be found in the ./build/win32/ directory.
 This workspace contains a projects file to compile a release version or 
 a debug version of libwpd. 
 
