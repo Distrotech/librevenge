@@ -1,6 +1,6 @@
 /* libwpd2
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2002-2003 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,51 +24,31 @@
  */
 
 #include <stdio.h>
-#include "TextListener.h"
-#include "WP6FileStructure.h" 
+#include "TextListenerImpl.h"
 
 // use the BELL code to represent a TAB for now
 #define UCS_TAB 0x0009 
 
-TextListener::TextListener() : 
-	WP6LLListener(),
-	m_isUndoOn(false)
+TextListenerImpl::TextListenerImpl()
 {
 }
 
-void TextListener::insertCharacter(const guint16 character)
+TextListenerImpl::~TextListenerImpl()
 {
-	if (!m_isUndoOn) {
-		// first convert from ucs2 to ucs4
-		gunichar characterUCS4 = (gunichar) character;
-		
-		// then convert from ucs4 to utf8 and write it
-		gchar *characterUTF8 = g_ucs4_to_utf8(&characterUCS4, 1, NULL, NULL, NULL); // TODO: handle errors
-		printf("%s", characterUTF8);
-		
-		// clean up our mess
-		g_free(characterUTF8);
-	}
 }
 
-void TextListener::undoChange(const guint8 undoType, const guint16 undoLevel)
+void TextListenerImpl::closeParagraph()
 {
-	if (undoType == WP6_UNDO_GROUP_INVALID_TEXT_START)
-		m_isUndoOn = true;
-	else if (undoType == WP6_UNDO_GROUP_INVALID_TEXT_END)
-		m_isUndoOn = false;
+	printf("\n");
 }
 
-void TextListener::insertTab(const guint8 tabType)
+void TextListenerImpl::insertTab()
 {
-	if (!m_isUndoOn) {
-		printf("%c", UCS_TAB);
-	}
+	printf("%c", UCS_TAB);
 }
 
-void TextListener::insertEOL()
+void TextListenerImpl::insertText(const UCSString &text)
 {
-	if (!m_isUndoOn) {
-		printf("\n");
-	}
+	UTF8String tempUTF8(text);
+	printf("%s", tempUTF8.getUTF8());
 }

@@ -27,7 +27,7 @@
 #include <gsf/gsf-input-stdio.h>
 #include <stdio.h>
 #include "libwpd.h"
-#include "TextListener.h"
+#include "TextListenerImpl.h"
 
 int main(int argc, char *argv[])
 {
@@ -55,16 +55,15 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 	
-	TextListener listener;
-
-	try 
-	{		
-		// WPDocument::parse(document, header, &listener);
-	} 
-	catch (FileException)
+	TextListenerImpl listenerImpl;
+ 	try 
 	{
-		printf("ERROR: File Exception!\n");
-		return 1;
+		WPDocument::parse(input, static_cast<WPXHLListenerImpl *>(&listenerImpl));
+	} 
+ 	catch (FileException)
+	{
+ 	    printf("ERROR: File Exception!\n");
+ 	    return 1;
 	}
 
 	gsf_shutdown();

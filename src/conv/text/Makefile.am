@@ -6,6 +6,6 @@ wpd2text_LDFLAGS = -L../../lib/
 wpd2text_LDADD = -lwpd-1 $(LIBWPD_LIBS)
 
 wpd2text_SOURCES =			\
-	TextListener.cpp	 	\
-	TextListener.h		 	\
+	TextListenerImpl.cpp	 	\
+	TextListenerImpl.h	 	\
 	main.cpp
