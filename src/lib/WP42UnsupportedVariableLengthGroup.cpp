@@ -29,10 +29,10 @@
 WP42UnsupportedVariableLengthGroup::WP42UnsupportedVariableLengthGroup(GsfInput *input, guint8 group) :
 	WP42VariableLengthGroup(group)
 {
-	_read(input);
 }
 
 void WP42UnsupportedVariableLengthGroup::_readContents(GsfInput *input)
 {
 	WPD_DEBUG_MSG(("WordPerfect: Handling an unsupported variable length group\n"));
+	_read(input);
 };
