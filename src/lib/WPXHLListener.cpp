@@ -33,9 +33,9 @@ _WPXParsingState::_WPXParsingState(bool sectionAttributesChanged) :
 	m_fontSize(12.0f/*WP6_DEFAULT_FONT_SIZE*/), // FIXME ME!!!!!!!!!!!!!!!!!!! HELP WP6_DEFAULT_FONT_SIZE
 	m_fontName(g_string_new(/*WP6_DEFAULT_FONT_NAME*/"Times New Roman")), // EN PAS DEFAULT FONT AAN VOOR WP5/6/etc
 	
-/*	m_isParagraphColumnBreak(false),
+	m_isParagraphColumnBreak(false),
 	m_isParagraphPageBreak(false),
-	m_paragraphLineSpacing(1.0f),
+/*	m_paragraphLineSpacing(1.0f),
 	m_paragraphJustification(WPX_PARAGRAPH_JUSTIFICATION_LEFT),
 	m_tempParagraphJustification(0),
 */
@@ -150,7 +150,7 @@ void WPXHLListener::_openPageSpan()
 		if (!currentPage->getHeaderFooterSuppression((*iter).getInternalType())) 
 		{
 			m_listenerImpl->openHeaderFooter((*iter).getType(), (*iter).getOccurence());
-			__handleSubDocument((*iter).getTextPID());
+			handleSubDocument((*iter).getTextPID());
 			m_listenerImpl->closeHeaderFooter((*iter).getType(), (*iter).getOccurence());					
 			WPD_DEBUG_MSG(("Header Footer Element: type: %i occurence: %i pid: %i\n", 
 				       (*iter).getType(), (*iter).getOccurence(), (*iter).getTextPID()));
@@ -200,11 +200,10 @@ void WPXHLListener::_closeSpan()
 	m_ps->m_isSpanOpened = false;
 }
 
-
 /**
 Creates an new document state. Saves the old state on a "stack".
 */
-void WPXHLListener::__handleSubDocument(guint16 textPID)
+void WPXHLListener::handleSubDocument(guint16 textPID)
 {
 	// save our old parsing state on our "stack"
 	WPXParsingState *oldPS = m_ps;

@@ -183,8 +183,6 @@ void WP6OutlineDefinition::_updateNumberingMethods(const WP6OutlineLocation outl
 }
 
 _WP6ParsingState::_WP6ParsingState() :
-	m_isParagraphColumnBreak(false),
-	m_isParagraphPageBreak(false),
 	m_paragraphLineSpacing(1.0f),
 	m_paragraphJustification(WPX_PARAGRAPH_JUSTIFICATION_LEFT),
 	m_tempParagraphJustification(0),
@@ -356,11 +354,11 @@ void WP6HLContentListener::insertBreak(const guint8 breakType)
 		{
 		case WPX_COLUMN_BREAK:
 			m_ps->m_numDeferredParagraphBreaks++;
-			m_parseState->m_isParagraphColumnBreak = true;
+			m_ps->m_isParagraphColumnBreak = true;
 			break;
 		case WPX_PAGE_BREAK:
 			m_ps->m_numDeferredParagraphBreaks++;
-			m_parseState->m_isParagraphPageBreak = true;
+			m_ps->m_isParagraphPageBreak = true;
 			break;
 			// TODO: (.. line break?)
 		}
@@ -737,7 +735,7 @@ void WP6HLContentListener::noteOff(const WPXNoteType noteType)
 			m_listenerImpl->openEndnote(number);
 
 		guint16 textPID = m_parseState->m_noteTextPID;
-		_handleSubDocument(textPID);
+		handleSubDocument(textPID);
 
 		if (noteType == FOOTNOTE)
 			m_listenerImpl->closeFootnote();		
@@ -916,7 +914,7 @@ void WP6HLContentListener::_handleSubDocument(guint16 textPID)
 // {
 // 	if (!m_ps->m_sectionAttributesChanged && 
 // 	    m_ps->m_numDeferredParagraphBreaks > 0 &&
-// 	    !m_parseState->m_isParagraphColumnBreak && !m_parseState->m_isParagraphPageBreak) 
+// 	    !m_ps->m_isParagraphColumnBreak && !m_ps->m_isParagraphPageBreak) 
 // 		m_ps->m_numDeferredParagraphBreaks--;					
 // 	_flushText();
 // }
@@ -1184,11 +1182,11 @@ void WP6HLContentListener::_openParagraph()
 				      m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight,
 				      m_ps->m_fontName->str, m_ps->m_fontSize, 
 				      m_parseState->m_paragraphLineSpacing, 
-				      m_parseState->m_isParagraphColumnBreak, m_parseState->m_isParagraphPageBreak);
+				      m_ps->m_isParagraphColumnBreak, m_ps->m_isParagraphPageBreak);
 	if (m_ps->m_numDeferredParagraphBreaks > 0) 
 		m_ps->m_numDeferredParagraphBreaks--;
 
-	m_parseState->m_isParagraphColumnBreak = false; 
-	m_parseState->m_isParagraphPageBreak = false;
+	m_ps->m_isParagraphColumnBreak = false; 
+	m_ps->m_isParagraphPageBreak = false;
 	m_ps->m_isParagraphOpened = true;
 }
