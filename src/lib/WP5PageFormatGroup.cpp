@@ -65,13 +65,13 @@ void WP5PageFormatGroup::_readContents(WPXInputStream *input)
 		break;
 	case WP5_TOP_PAGE_FORMAT_GROUP_FORM:
 		uint8_t tmpOrientation;
-		// skip to the effective values (146 - 4)
-		input->seek(142, WPX_SEEK_CUR);
-		m_formLength = readU16(input); // New effective length
-		m_formWidth = readU16(input); // New effective width
-		// skipp to the orientation value (193 - 150)
-		input->seek(42, WPX_SEEK_CUR);
-		tmpOrientation = readU8(input);
+		// skip to the new DESIRED values (99 - 4)
+		input->seek(95, WPX_SEEK_CUR);
+		m_formLength = readU16(input); // New DESIRED length
+		m_formWidth = readU16(input); // New DESIRED width
+		// skipp to the orientation value (193 - 103)
+		input->seek(90, WPX_SEEK_CUR);
+		tmpOrientation = readU8(input); // New EFFECTIVE orientation
 		switch (tmpOrientation)
 		{
 		case 0x01:
