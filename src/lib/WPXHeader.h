@@ -1,4 +1,4 @@
-/* libwpd2
+/* libwpd
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002-2003 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  

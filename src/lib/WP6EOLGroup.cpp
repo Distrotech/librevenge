@@ -1,4 +1,4 @@
-/* libwpd2
+/* libwpd
  * Copyright (C) 2003 Net Integration Technologies
  * Copyright (C) 2002-2003 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
