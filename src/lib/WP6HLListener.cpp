@@ -375,7 +375,7 @@ void WP6HLListener::undoChange(const guint8 undoType, const guint16 undoLevel)
 }
 
 void WP6HLListener::fontChange(const guint16 matchedFontPointSize, const guint16 fontPID)
-{
+{	
 	if (!m_parseState->m_isUndoOn)
 	{
 		// flush everything which came before this change
@@ -728,13 +728,9 @@ void WP6HLListener::endDocument()
 	// corner case: document ends in a list element
 	if (m_parseState->m_styleStateSequence.getCurrentState() != NORMAL)
 	{
-		_flushText();
-		m_parseState->m_currentListLevel = 0;
-		if (m_parseState->m_putativeListElementHasParagraphNumber) 
-			_handleListChange(m_parseState->m_currentOutlineHash);
+		_flushText(); // flush the list text
 		m_parseState->m_styleStateSequence.setCurrentState(NORMAL);
-		_flushText();
-
+		_flushText(TRUE); // flush the list exterior (forcing a line break, to make _flushText think we've exited a list)
 	}
 	// corner case: document contains no end of lines
 	else if (!m_parseState->m_isParagraphOpened && !m_parseState->m_isParagraphClosed)
@@ -876,15 +872,18 @@ void WP6HLListener::_flushText(const gboolean fakeText)
 		{
 			m_parseState->m_currentListLevel = 0;
 			_handleListChange(m_parseState->m_currentOutlineHash);
+			m_parseState->m_numDeferredParagraphBreaks--; // we have an implicit break here, when we close the list
+			m_parseState->m_isParagraphOpened = FALSE;
 		}
 	}
 
 	// create a new section, and a new paragraph, if our section attributes have changed and we have inserted
 	// something into the document (or we have forced a break, which assumes the same condition)
-	if (m_parseState->m_sectionAttributesChanged && (m_parseState->m_bodyText.getLen() > 0 || m_parseState->m_numDeferredParagraphBreaks > 0 || fakeText ))
+	if (m_parseState->m_sectionAttributesChanged && (m_parseState->m_bodyText.getLen() > 0 || m_parseState->m_numDeferredParagraphBreaks > 0 || fakeText))
 	{
 		_openSection();
-		_openParagraph();
+		if (fakeText)
+			_openParagraph();
 	}
 
 	if (m_parseState->m_numDeferredParagraphBreaks > 0 && (m_parseState->m_styleStateSequence.getCurrentState() == NORMAL || 
@@ -892,26 +891,36 @@ void WP6HLListener::_flushText(const gboolean fakeText)
 						   m_parseState->m_styleStateSequence.getCurrentState() == STYLE_END) &&
 						  !m_parseState->m_putativeListElementHasParagraphNumber)))
 	{
-		while (m_parseState->m_numDeferredParagraphBreaks > 0)
-		{
-			_openParagraph();
-		}
-		m_parseState->m_isParagraphOpened = TRUE;
+		if (!m_parseState->m_isParagraphOpened)
+			m_parseState->m_numDeferredParagraphBreaks++;
+
+		while (m_parseState->m_numDeferredParagraphBreaks > 1) 
+			_openParagraph(); 			
+		_closeParagraph(); 
+		m_parseState->m_numDeferredParagraphBreaks = 0; // compensate for this by requiring a paragraph to be opened
 	}
-	else if (m_parseState->m_textAttributesChanged && (m_parseState->m_bodyText.getLen() > 0 || fakeText)) 
+	else if (m_parseState->m_textAttributesChanged && (m_parseState->m_bodyText.getLen() > 0 || fakeText) && m_parseState->m_isParagraphOpened) 
 	{
 		_openSpan();
 	}
-	if (!m_parseState->m_putativeListElementHasParagraphNumber && !m_parseState->m_sectionAttributesChanged) // conditional to handle section flush coming just before a style definition
 
-	{		
-		m_listenerImpl->insertText(m_parseState->m_textBeforeNumber);
-		m_parseState->m_textBeforeNumber.clear();	
-	}
+	if (m_parseState->m_bodyText.getLen() || (m_parseState->m_textBeforeNumber.getLen() && 
+						  !m_parseState->m_putativeListElementHasParagraphNumber)) 
+	{
+		if (!m_parseState->m_isParagraphOpened)
+			_openParagraph();
 
-	if (m_parseState->m_bodyText.getLen()) {
-		m_listenerImpl->insertText(m_parseState->m_bodyText);
-		m_parseState->m_bodyText.clear();
+		if (m_parseState->m_textBeforeNumber.getLen() && 
+		    !m_parseState->m_putativeListElementHasParagraphNumber)
+		{
+			m_listenerImpl->insertText(m_parseState->m_textBeforeNumber);
+			m_parseState->m_textBeforeNumber.clear();	
+		}
+		if (m_parseState->m_bodyText.getLen()) 
+		{
+			m_listenerImpl->insertText(m_parseState->m_bodyText);
+			m_parseState->m_bodyText.clear();
+		}
 	}
 
 	m_parseState->m_textAttributesChanged = FALSE;
@@ -933,6 +942,11 @@ void WP6HLListener::_handleListChange(const guint16 outlineHash)
 	
 	int oldListLevel;
 	(m_parseState->m_listLevelStack.empty()) ? oldListLevel = 0 : oldListLevel = m_parseState->m_listLevelStack.top();
+	if (oldListLevel == 0) 
+	{
+		_closeParagraph();
+	}
+
 
 	if (m_parseState->m_currentListLevel > oldListLevel)
 	{
@@ -954,7 +968,7 @@ void WP6HLListener::_handleListChange(const guint16 outlineHash)
 		for (gint i=(oldListLevel+1); i<=m_parseState->m_currentListLevel; i++) {
 			m_parseState->m_listLevelStack.push(i);
  			WPD_DEBUG_MSG(("Pushed level %i onto the list level stack\n", i));
-			_closeParagraph();
+			// WL: commented out on may 21 in an attempt to refactor paragraph breaking code
 			if (m_parseState->m_putativeListElementHasDisplayReferenceNumber) 			
 				m_listenerImpl->openOrderedListLevel(m_parseState->m_currentOutlineHash);
 			else 
@@ -1006,6 +1020,7 @@ void WP6HLListener::_handleListChange(const guint16 outlineHash)
 		m_listenerImpl->openListElement(m_parseState->m_paragraphJustification, m_parseState->m_textAttributeBits,
 						m_parseState->m_fontName->str, m_parseState->m_fontSize, 
 						m_parseState->m_paragraphLineSpacing);
+		m_parseState->m_isParagraphOpened = TRUE; // a list element is equivalent to a paragraph
 	}	
 }
 
@@ -1072,7 +1087,7 @@ void WP6HLListener::_openTableCell(const guint8 colSpan, const guint8 rowSpan, c
 		if (!boundFromLeft && !boundFromAbove) 
 		{
 			_closeTableCell();
-			m_parseState->m_numDeferredParagraphBreaks++;
+			m_parseState->m_isParagraphOpened = FALSE;
 			m_listenerImpl->openTableCell(m_parseState->m_currentColumn, m_parseState->m_currentRow, 
 						      colSpan, rowSpan, cellFgColor, cellBgColor);
 			m_parseState->m_isTableCellOpened = TRUE;
@@ -1108,8 +1123,7 @@ void WP6HLListener::_closeParagraph()
 {
 	_closeSpan();
 	if (m_parseState->m_isParagraphOpened)
-		m_listenerImpl->closeParagraph();
-	
+		m_listenerImpl->closeParagraph();	
 
 	m_parseState->m_isParagraphOpened = FALSE;
 }
