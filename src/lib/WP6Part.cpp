@@ -53,7 +53,7 @@ WP6Part * WP6Part::constructPart(WPXParser * parser)
 		}
 		else if (readVal >= 0x80 && readVal <= 0xCF)
 		{
-			// Single-Byte Functions
+			return WP6FixedLengthGroup::constructFixedLengthGroup(parser, val);
 		}
 		else if (readVal >= 0xD0 && readVal <= 0xEF)
 		{
