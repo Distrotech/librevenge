@@ -23,41 +23,23 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include <stdio.h>
-#include "HtmlListenerImpl.h"
+#ifndef HTMLLISTENERIMPL_H
+#define HTMLLISTENERIMPL_H
 
-HtmlListenerImpl::HtmlListenerImpl()
+#include <glib.h>
+#include "WPXHLListenerImpl.h"
+
+class HtmlListenerImpl : public WPXHLListenerImpl
 {
-    printf("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\" \"http://www.w3.org/TR/REC-html40/loose.dtd\">\n");
-    printf("<html>\n");
-    printf("<head>\n");
-    printf("<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" >\n");
-    printf("</head>\n");
-    printf("<body>\n");
-}
+public:
+    HtmlListenerImpl();
+    virtual ~HtmlListenerImpl();
+    
+    virtual void startDocument();
+    virtual void endDocument();
+    virtual void openParagraph();
+    virtual void closeParagraph();
+    virtual void insertText(const guint16 *textArray, const guint len);
+};
 
-HtmlListenerImpl::~HtmlListenerImpl()
-{
-    printf("\n");
-    printf("</body>\n");
-    printf("</html>\n");
-}
-
-
-void HtmlListenerImpl::paragraphOpen()
-{
-	printf("<p>");
-}
-
-void HtmlListenerImpl::paragraphClose()
-{
-	printf("</p>");
-}
-
-
-void HtmlListenerImpl::insertText(const guint16 *textArray, const guint len)
-{
-	for (guint i=0; i<len; i++) {
-		printf("%c", textArray[i]);
-	}
-}
+#endif /* HTMLLISTENERIMPL_H */
