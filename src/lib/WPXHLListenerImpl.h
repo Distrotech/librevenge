@@ -26,7 +26,7 @@
 #ifndef WPXHLLISTENERIMPL_H
 #define WPXHLLISTENERIMPL_H
 #include "WPXPropertyList.h"
-#include "WPXVector.h"
+#include "WPXPropertyListVector.h"
 
 /**
 Pure virtual class containing all the callback functions that can be made by
