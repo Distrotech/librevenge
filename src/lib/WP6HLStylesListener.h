@@ -31,6 +31,7 @@
 
 #include "WP6HLListener.h"
 #include <vector>
+#include <set>
 #include "WPXPageSpan.h"
 #include "WPXTable.h"
 
@@ -111,7 +112,7 @@ private:
 	float m_tempMarginLeft, m_tempMarginRight;
 	bool m_currentPageHasContent;
 	bool m_isTableDefined;
-	int m_subDocumentTextPID;
+	std::set <int> m_subDocumentTextPIDs;
 };
 
 #endif /* WP6HLSTYLESLISTENER_H */

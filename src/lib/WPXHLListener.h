@@ -30,6 +30,7 @@
 #include "WPXHLListenerImpl.h"
 #include "WPXTable.h"
 #include "WPXPropertyListVector.h"
+#include <set>
 
 class WPXPageSpan;
 
@@ -149,7 +150,7 @@ struct _WPXParsingState
 	std::vector<WPXTabStop> m_tabStops;
 	bool m_isTabPositionRelative;
 
-	int m_subDocumentTextPID;
+	std::set <int> m_subDocumentTextPIDs;
 };
 
 class WPXHLListener : public WPXLLListener
