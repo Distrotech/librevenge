@@ -13,13 +13,21 @@ int main(int argc, char *argv[])
 	FILE * stream = fopen(argv[1], "r");
 	if (!stream)
 	{
-	    printf("Unable to open file!\n");
+	    printf("ERROR: Unable to open file!\n");
 	    return -1;
 	}
 	
 	WPXLLListener * listener = new TextListener();
 	WPXParser * parser = new WP6Parser(stream, listener);
-	parser->parse();
+	try 
+	  {
+		  parser->parse();
+	  } 
+	catch (FileException)
+	  {
+	    printf("ERROR: File Exception!\n");
+	    return -1;
+	  }
 	delete parser;
 	delete listener;
 	

@@ -109,7 +109,8 @@ void WP6Parser::parse()
 	}
 	catch(FileException)
 	{
-		WPD_DEBUG_MSG(("WordPerfect: File Seek Exception. Parse terminated prematurely."));
+		WPD_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
+		throw FileException();
 	}
 	
 	getLLListener()->endDocument();
