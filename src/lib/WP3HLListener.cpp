@@ -198,6 +198,21 @@ void WP3HLListener::marginChange(uint8_t side, uint16_t margin)
 	}
 }
 
+void WP3HLListener::indentFirstLineChange(int16_t offset)
+{
+	if (!isUndoOn())
+	{
+		float offsetInch = (float)((double)offset / (double)WPX_NUM_WPUS_PER_INCH);
+		m_ps->m_textIndentByParagraphIndentChange = offsetInch;
+		// This is necessary in case we have Indent First Line and Hard Back Tab
+		// in the same time. The Hard Back Tab applies to the current paragraph
+		// only. Indent First Line applies untill an new Indent First Line code.
+		m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange
+					+ m_ps->m_textIndentByTabs;
+	}
+}
+
+
 
 /****************************************
  private functions

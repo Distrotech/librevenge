@@ -38,16 +38,18 @@ class WP3PageFormatGroup : public WP3VariableLengthGroup
 	virtual void parse(WP3HLListener *listener);
 
  private:
-	// variables needed for subgroup 1 (Horizontal Margins)
+	// variables needed for subgroup 0x01 (Horizontal Margins)
 	uint32_t m_leftMargin;
 	uint32_t m_rightMargin;
-	// variable needed for subgroup 2 (Line Spacing)
+	// variable needed for subgroup 0x02 (Line Spacing)
 	float m_lineSpacing;
-	// variables needed for subgroup 5 (Vertical Margins)
+	// variables needed for subgroup 0x05 (Vertical Margins)
 	uint32_t m_topMargin;
 	uint32_t m_bottomMargin;
-	// variable needed for subgroup 6 (Justification Mode)
+	// variable needed for subgroup 0x06 (Justification Mode)
 	uint8_t m_justification;
+	// variable needed for subgroup 0x0C (Indent At Beginning of Line)
+	uint32_t m_indent;
 
 };
 

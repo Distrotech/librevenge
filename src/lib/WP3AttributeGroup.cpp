@@ -28,7 +28,9 @@
 #include "libwpd_internal.h"
 
 WP3AttributeGroup::WP3AttributeGroup(WPXInputStream *input, uint8_t groupID)
-	: WP3FixedLengthGroup(groupID)
+	: WP3FixedLengthGroup(groupID),
+	m_attribute(0),
+	m_state(0)
 {
 	_read(input);
 }
@@ -42,7 +44,8 @@ void WP3AttributeGroup::_readContents(WPXInputStream *input)
 void WP3AttributeGroup::parse(WP3HLListener *listener)
 {
 	// FIXME: handle flags
-	bool tmpState = ((m_state && 0x01) == 0x01);
+	bool tmpState;
+	tmpState = ((m_state & 0x01) == 0x01);
 	listener->attributeChange(tmpState, m_attribute);
 }
 

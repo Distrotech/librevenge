@@ -29,11 +29,12 @@
 #include "WP3LLListener.h"
 #include "WPXFileStructure.h"
 #include "libwpd_internal.h"
+#include "libwpd_math.h"
 
 WP3MiscellaneousGroup::WP3MiscellaneousGroup(WPXInputStream *input) :
 	WP3VariableLengthGroup(),
-	m_pageWidth(8.5f),
-	m_pageHeight(11.0f),
+	m_pageWidth(0),
+	m_pageHeight(0),
 	m_pageOrientation(PORTRAIT),
 	m_isPersistent(true)
 {
@@ -79,10 +80,10 @@ void WP3MiscellaneousGroup::_readContents(WPXInputStream *input)
 		{
 			int16_t pageWidthIntegerPart = (int16_t)((tmpPageWidth & 0xFFFF0000) >> 16);
 			float pageWidthFractionalPart = (float)(tmpPageWidth & 0xFFFF)/(float)0xFFFF;
-			m_pageWidth = (uint16_t)((((float)pageWidthIntegerPart + pageWidthFractionalPart)*50)/3);
+			m_pageWidth = (uint16_t)rint((((float)pageWidthIntegerPart + pageWidthFractionalPart)*50)/3);
 			int16_t pageHeightIntegerPart = (int16_t)((tmpPageHeight & 0xFFFF0000) >> 16);
 			float pageHeightFractionalPart = (float)(tmpPageHeight & 0xFFFF)/(float)0xFFFF;
-			m_pageHeight = (uint16_t)((((float)pageHeightIntegerPart + pageHeightFractionalPart)*50)/3);
+			m_pageHeight = (uint16_t)rint((((float)pageHeightIntegerPart + pageHeightFractionalPart)*50)/3);
 		}
 		break;
 		
