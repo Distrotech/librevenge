@@ -48,7 +48,7 @@ void WP5VariableLengthGroup::_read(GsfInput *input)
 {
 	guint32 startPosition = gsf_input_tell(input);
 
-	WPD_DEBUG_MSG(("WordPerfect: handling a variable length group (group id: 0x%x)\n", m_group));	
+	WPD_DEBUG_MSG(("WordPerfect: handling a variable length group\n"));	
 	
 	m_subGroup = gsf_le_read_guint8(input);
 	m_size = gsf_le_read_guint16(input) + 4; // the length is the number of data bytes minus 4 (ie. the function codes)
