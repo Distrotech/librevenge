@@ -33,6 +33,7 @@
 using namespace std;
 
 class WP6LLListener;
+typedef map<int, WP6PrefixDataPacket *> DPH;	
 typedef multimap<int, WP6PrefixDataPacket *> MPDP;
 typedef MPDP::const_iterator MPDP_CIter;
 typedef MPDP::iterator MPDP_Iter;
@@ -48,7 +49,7 @@ class WP6PrefixData
 	const guint16 getDefaultInitialFontPID() const { return m_defaultInitialFontPID; }
 
  private:
-	map<int, WP6PrefixDataPacket *> m_prefixDataPacketHash;
+	DPH m_prefixDataPacketHash;
 	MPDP m_prefixDataPacketTypeHash;
 	int m_defaultInitialFontPID;
 };

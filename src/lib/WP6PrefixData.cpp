@@ -33,7 +33,6 @@
 
 WP6PrefixData::WP6PrefixData(GsfInput *input, const int numPrefixIndices) :
 	m_defaultInitialFontPID((-1))
-
 {
 	WP6PrefixIndice ** prefixIndiceArray = new (WP6PrefixIndice *)[(numPrefixIndices-1)];
 	for (guint16 i=1; i<numPrefixIndices; i++)
@@ -64,15 +63,19 @@ WP6PrefixData::WP6PrefixData(GsfInput *input, const int numPrefixIndices) :
 
 WP6PrefixData::~WP6PrefixData()
 {
-	typedef map<int, WP6PrefixDataPacket *>::iterator Iter;
-	for (Iter packet = m_prefixDataPacketHash.begin(); packet!=m_prefixDataPacketHash.end(); packet++) {
-		delete(packet->second);
+	DPH::iterator pos;
+	for (pos = m_prefixDataPacketHash.begin(); pos!=m_prefixDataPacketHash.end(); pos++) {
+		delete(pos->second);
 	}
 }
 
 const WP6PrefixDataPacket * WP6PrefixData::getPrefixDataPacket(const int prefixID) const
 {
-	return static_cast<const WP6PrefixDataPacket *>(m_prefixDataPacketHash.find(prefixID)->second);
+	DPH::const_iterator pos = m_prefixDataPacketHash.find(prefixID);
+	if (pos != m_prefixDataPacketHash.end())
+		return static_cast<const WP6PrefixDataPacket *>(pos->second);
+	else
+		return NULL;
 }
 
 pair<MPDP_CIter, MPDP_CIter> * WP6PrefixData::getPrefixDataPacketsOfType(const int type) const
@@ -85,4 +88,3 @@ pair<MPDP_CIter, MPDP_CIter> * WP6PrefixData::getPrefixDataPacketsOfType(const i
 
  	return typePair;
 }
-
