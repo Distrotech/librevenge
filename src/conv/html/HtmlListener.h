@@ -26,8 +26,8 @@
 #ifndef HTMLLISTENER_H
 #define HTMLLISTENER_H
 
-#include "libwpd2/libwpd2.h"
-#include "glib.h"
+#include "libwpd2.h"
+#include <glib.h>
 
 class HtmlListener : public WPXLLListener
 {

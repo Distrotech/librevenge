@@ -1,7 +1,7 @@
 lib_LIBRARIES = libwpd2.a
 include_HEADERS = libwpd2.h WPXHLListener.h WPXLLListener.h
 
-AM_CXXFLAGS = $(LIBWPD_CFLAGS) $(DEBUG_CFLAGS)
+AM_CXXFLAGS = $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS)
 
 libwpd2_a_SOURCES =			\
 	WP6AttributeOffGroup.cpp 	\

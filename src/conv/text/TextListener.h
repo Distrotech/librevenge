@@ -26,8 +26,8 @@
 #ifndef TEXTLISTENER_H
 #define TEXTLISTENER_H
 
-#include "libwpd2/libwpd2.h"
-#include "glib.h"
+#include "libwpd2.h"
+#include <glib.h>
 
 class TextListener : public WPXLLListener
 {

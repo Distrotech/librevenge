@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "libwpd2/libwpd2.h"
+#include "libwpd2.h"
 #include "TextListener.h"
 
 int main(int argc, char *argv[])
