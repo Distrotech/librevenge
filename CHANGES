@@ -1,6 +1,6 @@
 CHANGES:
 
-0.6.5 -> 0.7.0
+0.6.6 -> 0.7.0
 - Basic WP4.2 file format support (Marc Maurer)
 - Basic WP5 file format support (Marc Maurer)
 - Cleanup header handling mess (Marc Maurer)
@@ -8,6 +8,10 @@ CHANGES:
 - Several fixes to make libwpd compile on Win32/MSVC (Marc Maurer)
 - Make the wpd2text converter use the high level parsing framework
   to support WP4 and WP5 documents as well (Marc Maurer)
+
+0.6.5 -> 0.6.6
+- Add an encryption exception thrown for encrypted documents to allow
+  for more verbose error detection (Marc Maurer)
 
 0.6.4 -> 0.6.5
 - Fix parsing error that caused libwpd to hang on various documents (Marc Maurer)

@@ -64,6 +64,21 @@ int main(int argc, char *argv[])
 	{
  	    printf("ERROR: File Exception!\n");
  	    return 1;
+	}	
+ 	catch (ParseException)
+	{
+ 	    printf("ERROR: Parse Exception!\n");
+ 	    return 1;
+	}
+	catch (UnsupportedEncryptionException)
+	{
+ 	    printf("ERROR: File is password protected!\n");
+ 	    return 1;
+	}	
+ 	catch (...)
+	{
+ 	    printf("ERROR: Unknown Error!\n");
+ 	    return 1;
 	}
 
 	gsf_shutdown();

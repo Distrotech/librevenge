@@ -41,7 +41,7 @@ WP6Header::WP6Header(GsfInput * input, guint32 documentOffset, guint8 productTyp
 
 	// FIXME: we do not handle encrypted documents
 	if (getDocumentEncryption() != 0)
-		throw ParseException();
+		throw UnsupportedEncryptionException();
 
 	WPD_DEBUG_MSG(("WordPerfect: Index Header Position = 0x%x \n",(int)m_indexHeaderOffset));
 }

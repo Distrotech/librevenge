@@ -50,11 +50,26 @@ int main(int argc, char *argv[])
 		
 		WP6LLParser::parse(document, header, static_cast<WP6LLListener *>(&listener));
 	  } 
-	catch (FileException)
-	  {
-	    printf("ERROR: File Exception!\n");
-	    return 1;
-	  }
+ 	catch (FileException)
+	{
+ 	    printf("ERROR: File Exception!\n");
+ 	    return 1;
+	}	
+ 	catch (ParseException)
+	{
+ 	    printf("ERROR: Parse Exception!\n");
+ 	    return 1;
+	}
+	catch (UnsupportedEncryptionException)
+	{
+ 	    printf("ERROR: File is password protected!\n");
+ 	    return 1;
+	}	
+ 	catch (...)
+	{
+ 	    printf("ERROR: Unknown Error!\n");
+ 	    return 1;
+	}
 
 	gsf_shutdown();
 	if (document != NULL && isDocumentOLE)

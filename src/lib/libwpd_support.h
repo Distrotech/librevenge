@@ -176,4 +176,9 @@ class ParseException
 	// needless to say, we could flesh this class out a bit
 };
 
+class UnsupportedEncryptionException
+{
+	// needless to say, we could flesh this class out a bit
+};
+
 #endif
