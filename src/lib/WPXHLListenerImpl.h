@@ -90,8 +90,8 @@ class WPXHLListenerImpl
 	\param marginLeftOffset The right indentation of this paragraph, in inches
 	\param textIndent The left indentation of first line, in inches
 	\param lineSpacing The amount of spacing between lines, in number of lines (1.0 is single spacing)
+        \param spacingBeforeParagraph The amount of extra spacing to be placed before the paragraph, in inches
 	\param spacingAfterParagraph The amount of extra spacing to be placed after the paragraph, in inches
-	\param spacingBeforeParagraph The amount of extra spacing to be placed before the paragraph, in inches
 	\param isColumnBreak Whether this paragraph should be placed in a new column
 	\param isPageBreak Whether this paragraph should start a new page
 	*/
