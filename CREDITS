@@ -19,7 +19,7 @@ Ted Lemon <mellon@fugue.com>				Tibetan Extended
 Michael Pritchett <MPritchett@attglobal.net>		MSVC Project Files
 Rui Miguel Silva Seabra <rms@1407.org>			original rpm spec,
 							build patches
-
+Fridrich Strba <fridrich.strba@bluewin.ch>		MingW build system
 
 Thanks
 ------

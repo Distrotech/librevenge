@@ -16,8 +16,12 @@ LINKS:
 glib is available at ftp://ftp.gnome.org/pub/gnome/sources/glib/
 libgsf is available at ftp://ftp.gnome.org/pub/gnome/sources/libgsf/
 
-Windows
-=======
+Windows - Microsoft(tm) Visual Studio/C++
+=========================================
 
 TODO: Write me!
 
+Windows - MingW
+===============
+
+TODO: Write me!
