@@ -33,6 +33,7 @@
 class WPXMapImpl
 {
 public:
+	virtual ~WPXMapImpl() {}
 	virtual void insert(const char *name, WPXProperty *property) = 0;
 	virtual const WPXProperty * operator[](const char *name) const = 0;
 	virtual void remove(const char *name) = 0;
