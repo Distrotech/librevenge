@@ -265,7 +265,7 @@ void WPDocument::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl)
 		if (document != NULL && isDocumentOLE)
 			g_object_unref(G_OBJECT(document));
 		
-		throw Exception();		
+		throw GenericException();		
 	}
 }
 
