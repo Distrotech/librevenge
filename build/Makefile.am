@@ -1,2 +1,3 @@
-SUBDIRS = \
-	win32
+AUTOMAKE_OPTIONS = gnu 1.4
+
+SUBDIRS = win32
