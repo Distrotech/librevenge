@@ -1,5 +1,8 @@
 CHANGES:
 
+0.6.0 -> 0.6.1
+- Change format of lists output to to not embed list levels inside list elements (William Lachance)
+
 0.5.0 -> 0.6.0
 - Tibetan extended character support (Ted Lemon)
 - Border-less table cell support (William Lachance)
