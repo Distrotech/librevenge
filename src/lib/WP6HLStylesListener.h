@@ -46,6 +46,7 @@ public:
 	virtual void startDocument() {}
 	virtual void insertCharacter(const guint16 character) { if (!isUndoOn()) m_currentPageHasContent = true; }
 	virtual void insertTab(const guint8 tabType) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	virtual void handleLineBreak()  { if (!isUndoOn()) m_currentPageHasContent = true; }
 	virtual void insertEOL() { if (!isUndoOn()) m_currentPageHasContent = true; }
  	virtual void insertBreak(const guint8 breakType);
 	virtual void characterColorChange(const guint8 red, const guint8 green, const guint8 blue) {}

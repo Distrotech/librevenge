@@ -45,6 +45,7 @@ public:
  	RGBSColor * m_cellBgColor;
  
 	guint8 m_cellBorders;
+	bool m_isDontEndAParagraphStyleForThisHardReturn;
 };
 
 #endif /* WP6EOLGROUP_H */

@@ -36,6 +36,7 @@ class WPXLLListener
 	virtual void startDocument() = 0;
 	virtual void insertCharacter(const guint16 character) = 0;
 	virtual void insertTab(const guint8 tabType) = 0;
+	virtual void handleLineBreak() = 0;
 	virtual void insertEOL() = 0;
  	virtual void insertBreak(const guint8 breakType) = 0;
 	virtual void attributeChange(const bool isOn, const guint8 attribute) = 0;

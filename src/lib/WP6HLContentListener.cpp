@@ -343,6 +343,21 @@ void WP6HLContentListener::insertTab(const guint8 tabType)
 	}
 }
 
+void WP6HLContentListener::handleLineBreak()
+{
+	if(!isUndoOn())
+	{
+		_flushText();
+		if (m_parseState->m_styleStateSequence.getCurrentState() == STYLE_BODY ||
+		    m_parseState->m_styleStateSequence.getCurrentState() == NORMAL)
+		{
+			if (!m_ps->m_isParagraphOpened)
+				_openParagraph();
+			m_listenerImpl->insertLineBreak();
+		}
+	}
+}
+
 void WP6HLContentListener::insertEOL()
 {
 	if (!isUndoOn())

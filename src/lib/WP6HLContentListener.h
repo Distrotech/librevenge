@@ -156,6 +156,7 @@ public:
 	virtual void setExtendedInformation(const guint16 type, const UCSString &data);
 	virtual void insertCharacter(const guint16 character);
 	virtual void insertTab(const guint8 tabType);
+	virtual void handleLineBreak();
 	virtual void insertEOL();
 	virtual void characterColorChange(const guint8 red, const guint8 green, const guint8 blue);
 	virtual void characterShadingChange(const guint8 shading);
