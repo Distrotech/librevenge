@@ -76,9 +76,9 @@ class WPXHLListenerImpl
 				     const gchar *fontName, const gfloat fontSize, 
 				     const float lineSpacing) = 0;
 	virtual void closeListElement() = 0;
-#if 0	
-	virtual void openFootnote() = 0;
+	virtual void openFootnote(int number) = 0;
 	virtual void closeFootnote() = 0;
+#if 0	
 	virtual void openEndnote() = 0;
 	virtual void closeEndnote() = 0;
 #endif

@@ -37,11 +37,11 @@ using namespace std;
 
 class WPXHLListenerImpl;
 
-enum WP6StyleState { normal, documentNote, beginBeforeNumbering,
-			      beginNumberingBeforeDisplayReferencing, 
-			      displayReferencing, 
-			      beginNumberingAfterDisplayReferencing,
-			      beginAfterNumbering, styleBody, styleEnd };
+enum WP6StyleState { NORMAL, DOCUMENT_NOTE, BEGIN_BEFORE_NUMBERING,
+			      BEGIN_NUMBERING_BEFORE_DISPLAY_REFERENCING, 
+			      DISPLAY_REFERENCING, 
+			      BEGIN_NUMBERING_AFTER_DISPLAY_REFERENCING,
+			      BEGIN_AFTER_NUMBERING, STYLE_BODY, STYLE_END };
 
 typedef struct _WP6DocumentMetaData WP6DocumentMetaData;
 struct _WP6DocumentMetaData
@@ -65,7 +65,7 @@ public:
 	void setCurrentState(WP6StyleState state) { for (int i=(STATE_MEMORY-1); i>0; i--) m_stateSequence[i] = m_stateSequence[i-1]; m_stateSequence[0]=state; }
 	const WP6StyleState getCurrentState() const { return m_stateSequence[0]; /*currentState;*/ }
 	const WP6StyleState getPreviousState() const { return m_stateSequence[1]; /*m_previousState;*/ }
-	void clear() { m_stateSequence.clear(); for (int i=0; i<STATE_MEMORY; i++) m_stateSequence.push_back(normal); }
+	void clear() { m_stateSequence.clear(); for (int i=0; i<STATE_MEMORY; i++) m_stateSequence.push_back(NORMAL); }
 	
 private:
 	vector<WP6StyleState> m_stateSequence;
@@ -83,7 +83,7 @@ struct _WP6ParsingState
 	UCSString m_numberText;
 	UCSString m_textAfterDisplayReference;
 	UCSString m_textAfterNumber;
-	
+
 	guint32 m_textAttributeBits;
 	gboolean m_textAttributesChanged;
 	gfloat m_fontSize;
@@ -192,7 +192,7 @@ public:
 
 protected:
 	void _handleLineBreakElementBegin();
-	void _flushText();
+	void _flushText(const gboolean forceInitialParagraph=FALSE);
 	void _handleListChange(const guint16 outlineHash);
 
 	void _openSection();

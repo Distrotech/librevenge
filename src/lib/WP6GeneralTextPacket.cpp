@@ -38,6 +38,7 @@ WP6GeneralTextPacket::WP6GeneralTextPacket(GsfInput *input, int id, guint32 data
 WP6GeneralTextPacket::~WP6GeneralTextPacket()
 {
 	g_object_unref(G_OBJECT(m_stream));
+	delete [] m_blockSizes;
 }
 
 void WP6GeneralTextPacket::_readContents(GsfInput *input)

@@ -72,9 +72,10 @@ public:
 				     const gchar *fontName, const gfloat fontSize, 
 				     const float lineSpacing);
 	virtual void closeListElement();
-#if 0
-	virtual void openFootnote();
+
+	virtual void openFootnote(int number);
 	virtual void closeFootnote();
+#if 0
 	virtual void openEndnote();
 	virtual void closeEndnote();
 #endif

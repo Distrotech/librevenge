@@ -171,10 +171,9 @@ void HtmlListenerImpl::closeListElement()
 	printf("</li>\n");
 }
 
-#if 0
-void HtmlListenerImpl::openFootnote()
+void HtmlListenerImpl::openFootnote(int number)
 {
-	printf("<footnote>\n");
+	printf("<footnote num=\"%i\">\n", number);
 }
 
 void HtmlListenerImpl::closeFootnote()
@@ -182,6 +181,7 @@ void HtmlListenerImpl::closeFootnote()
 	printf("</footnote>\n");
 }
 
+#if 0
 void HtmlListenerImpl::openEndnote()
 {
 	printf("<endnote>\n");
