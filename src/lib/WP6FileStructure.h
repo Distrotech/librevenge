@@ -29,6 +29,9 @@
 /* standard sizes */
 #define WP6_NUM_LIST_LEVELS 8
 
+/* Misc. Junk */
+#define WP6_NUM_EXTRA_WPU 19
+
 /* header defines */
 
 #define WP6_HEADER_MAGIC_OFFSET 1

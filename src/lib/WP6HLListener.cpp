@@ -395,7 +395,7 @@ void WP6HLListener::marginChange(guint8 side, guint16 margin)
 	{
 		_handleLineBreakElementBegin();
 		
-		float marginInch = (float)(((double)margin) / (double)WPX_NUM_WPUS_PER_INCH);
+		float marginInch = (float)(((double)margin + (double)WP6_NUM_EXTRA_WPU) / (double)WPX_NUM_WPUS_PER_INCH);
 
 		switch(side)
 		{
@@ -700,7 +700,7 @@ void WP6HLListener::_flushText()
 		}
 	}
 
-	if (m_sectionAttributesChanged && m_bodyText.getLen() > 0)
+	if (m_sectionAttributesChanged && (m_bodyText.getLen() > 0 || m_numDeferredParagraphBreaks > 0))
 	{
 		m_listenerImpl->openSection(m_numColumns, m_marginLeft, m_marginRight);
 		m_sectionAttributesChanged = FALSE;

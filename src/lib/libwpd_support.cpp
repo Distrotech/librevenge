@@ -48,11 +48,6 @@ UCSString::~UCSString()
 	g_array_free(m_stringBuf, TRUE);
 }
 
-gchar * UCSString::getUTF8() const
-{
-	return g_ucs4_to_utf8((const gunichar *)m_stringBuf->data, m_stringBuf->len, NULL, NULL, NULL); // TODO: handle errors
-}
-
 void UCSString::append(guint32 c)
 {
 	g_array_append_val(m_stringBuf, c);
@@ -75,4 +70,30 @@ void UCSString::append(const gchar *buf)
 void UCSString::clear()
 {
 	m_stringBuf = g_array_set_size(m_stringBuf, 0);			
+}
+
+UTF8String::UTF8String(const UCSString &stringBuf, gboolean doConvertToValidXML)
+{
+	if (doConvertToValidXML) 
+	{
+		UCSString tempUCS4;
+		for (guint i=0; i<stringBuf.getLen(); i++) {
+			if (stringBuf.getUCS4()[i] == '&') {
+				tempUCS4.append("&amp;");
+			}
+			else if (stringBuf.getUCS4()[i] == (guint16)'<') {
+				tempUCS4.append("&lt;");
+			}
+			else if (stringBuf.getUCS4()[i] == (guint16)'>') {
+				tempUCS4.append("&gt;");
+			}
+			else {
+				tempUCS4.append(stringBuf.getUCS4()[i]);
+			}
+		}
+
+		m_buf = g_ucs4_to_utf8((const gunichar *)tempUCS4.getUCS4(), tempUCS4.getLen(), NULL, &m_len, NULL); // TODO: handle errors
+	}
+	else 
+		m_buf = g_ucs4_to_utf8((const gunichar *)stringBuf.getUCS4(), stringBuf.getLen(), NULL, &m_len, NULL); // TODO: handle errors
 }

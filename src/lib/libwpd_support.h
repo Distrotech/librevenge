@@ -55,12 +55,23 @@ public:
 	void append(const gchar *);
 	void clear();
 
-	gchar * getUTF8() const;
 	const guint32 * getUCS4() const { return (guint32 *)m_stringBuf->data; }
 	const int getLen() const { return m_stringBuf->len; }
 
 private:
 	GArray *m_stringBuf;
+};
+
+class UTF8String
+{
+public:
+	UTF8String(const UCSString &, gboolean doConvertToValidXML = FALSE);
+	~UTF8String() { g_free(m_buf); }
+	const gchar * getUTF8() const { return m_buf; }
+	const int getLen() const { return m_len; }
+private:
+	gchar *m_buf;
+	glong m_len;
 };
 
 class FileException

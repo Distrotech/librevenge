@@ -100,9 +100,8 @@ void HtmlListenerImpl::openSection(guint numColumns, gfloat marginLeft, gfloat m
 
 void HtmlListenerImpl::insertText(const UCSString &text)
 {
-	gchar *textUTF8 = text.getUTF8();
-	printf("%s", textUTF8);
-	g_free(textUTF8);
+	UTF8String tempUTF8(text);
+	printf("%s", tempUTF8.getUTF8());
 }
 
 void HtmlListenerImpl::openOrderedListLevel(const gint listID)
