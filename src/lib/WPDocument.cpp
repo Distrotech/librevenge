@@ -115,6 +115,7 @@ WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input, bool part
 		else
 			confidence = WP42Heuristics::isWP42FileFormat(input, partialContent);
 		
+		// dispose of the reference to the ole input stream, if we allocated one
 		if (document != NULL && isDocumentOLE)
 			DELETEP(document);
 		
@@ -122,6 +123,7 @@ WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input, bool part
 	}	
 	catch (FileException)
 	{
+		// dispose of the reference to the ole input stream, if we allocated one
 		if (document != NULL && isDocumentOLE)
 			DELETEP(document);
 		
@@ -205,9 +207,18 @@ void WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerImpl)
 	}
 	catch (FileException)
 	{
+		// dispose of the reference to the ole input stream, if we allocated one
+		if (document != NULL && isDocumentOLE)
+			DELETEP(document);
+
 		DELETEP(parser);
 		throw FileException(); 
 	}
+
+	// dispose of the reference to the ole input stream, if we allocated one
+	if (document != NULL && isDocumentOLE)
+		DELETEP(document);
+
 }
 
 /*

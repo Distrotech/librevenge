@@ -17,6 +17,7 @@ GSFInputStream::~GSFInputStream()
 {
 	if (m_ole)
 		g_object_unref(G_OBJECT(m_ole));
+
 	g_object_unref(G_OBJECT(m_input));
 }
 
@@ -62,8 +63,11 @@ WPXInputStream * GSFInputStream::getDocumentOLEStream()
 	if (m_ole)
 	{
 		GsfInput *document = gsf_infile_child_by_name(m_ole, "PerfectOffice_MAIN");
-		if (document)
+		if (document) 
+		{
 			documentStream = new GSFInputStream(document);
+			g_object_unref(G_OBJECT (document)); // the only reference should be encapsulated within the new stream
+		}
 	}
 
 	return documentStream;	
