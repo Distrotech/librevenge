@@ -27,6 +27,10 @@
 #include "WP6LLListener.h"
 #include "libwpd_internal.h"
 
+/*************************************************************************
+ * WP6CharacterGroup_FontFaceChangeSubGroups
+ *************************************************************************/
+
 WP6CharacterGroup_FontFaceChangeSubGroup::WP6CharacterGroup_FontFaceChangeSubGroup(GsfInput *input)
 {
 	m_oldMatchedPointSize = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
@@ -45,6 +49,10 @@ void WP6CharacterGroup_FontFaceChangeSubGroup::parse(WP6LLListener *llListener, 
 	// emit an exception otherwise
 }
 
+/*************************************************************************
+ * WP6CharacterGroup_ParagraphNumberOnSubGroup
+ *************************************************************************/
+
 WP6CharacterGroup_ParagraphNumberOnSubGroup::WP6CharacterGroup_ParagraphNumberOnSubGroup(GsfInput *input)
 {
 	m_outlineHash = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
@@ -57,6 +65,65 @@ void WP6CharacterGroup_ParagraphNumberOnSubGroup::parse(WP6LLListener *llListene
 	llListener->paragraphNumberOn(m_outlineHash, m_level, m_flag);
 }
 
+/*************************************************************************
+ * WP6CharacterGroup_TableDefinitionOnSubGroup
+ *************************************************************************/
+
+WP6CharacterGroup_TableDefinitionOnSubGroup::WP6CharacterGroup_TableDefinitionOnSubGroup(GsfInput *input)
+{
+	m_flags = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+	m_position = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+	m_leftOffset = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+	// TODO: add the remaining table properties here
+}
+
+void WP6CharacterGroup_TableDefinitionOnSubGroup::parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
+{
+	llListener->defineTable(m_position, m_leftOffset);
+}
+
+/*************************************************************************
+ * WP6CharacterGroup_TableDefinitionOffSubGroup
+ *************************************************************************/
+
+WP6CharacterGroup_TableDefinitionOffSubGroup::WP6CharacterGroup_TableDefinitionOffSubGroup(GsfInput *input)
+{
+	
+}
+
+void WP6CharacterGroup_TableDefinitionOffSubGroup::parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
+{
+	// the table is degined now; start the table
+	llListener->startTable();
+}
+
+/*************************************************************************
+ * WP6CharacterGroup_TableColumnSubGroup
+ *************************************************************************/
+
+WP6CharacterGroup_TableColumnSubGroup::WP6CharacterGroup_TableColumnSubGroup(GsfInput *input)
+{
+	m_flags = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+	m_width = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+	
+	m_leftGutter = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+	m_rigthGutter = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+	m_attribWord1 = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+	m_attribWord2 = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+	m_alignment = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+	m_absPosFromRight = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+	m_numberType = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+	m_currencyIndex = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+}
+
+void WP6CharacterGroup_TableColumnSubGroup::parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
+{
+	llListener->addTableColumnDefintion(m_width, m_leftGutter, m_rigthGutter);
+}
+
+/*************************************************************************
+ * WP6CharacterGroup
+ *************************************************************************/
 
 WP6CharacterGroup::WP6CharacterGroup(GsfInput *input) :
 	WP6VariableLengthGroup(),
@@ -83,6 +150,16 @@ void WP6CharacterGroup::_readContents(GsfInput *input)
 		break;
 	case WP6_CHARACTER_GROUP_PARAGRAPH_NUMBER_ON:
 		m_subGroupData = new WP6CharacterGroup_ParagraphNumberOnSubGroup(input);
+		break;
+	case WP6_CHARACTER_GROUP_TABLE_DEFINITION_ON:
+		m_subGroupData = new WP6CharacterGroup_TableDefinitionOnSubGroup(input);
+		break;
+	case WP6_CHARACTER_GROUP_TABLE_DEFINITION_OFF:
+		m_subGroupData = new WP6CharacterGroup_TableDefinitionOffSubGroup(input);
+		break;	
+	case WP6_CHARACTER_GROUP_TABLE_COLUMN:
+		m_subGroupData = new WP6CharacterGroup_TableColumnSubGroup(input);
+		break;
 	default:
 		break;
 	}
@@ -104,15 +181,15 @@ void WP6CharacterGroup::parse(WP6LLListener *llListener)
 		break;
 	case WP6_CHARACTER_GROUP_TABLE_DEFINITION_ON:
 		WPD_DEBUG_MSG(("WordPerfect: TABLE Definition ON\n"));
-		llListener->startTable();
+		m_subGroupData->parse(llListener, getNumPrefixIDs(), getPrefixIDs());
 		break;
 	case WP6_CHARACTER_GROUP_TABLE_DEFINITION_OFF:
 		WPD_DEBUG_MSG(("WordPerfect: TABLE Definition OFF\n"));
+		m_subGroupData->parse(llListener, getNumPrefixIDs(), getPrefixIDs());
 		break;
 	case WP6_CHARACTER_GROUP_TABLE_COLUMN:
 		WPD_DEBUG_MSG(("WordPerfect: Table Column\n"));
-		// FIXME: handle all the table column data.
-		// For now, we just skip over it.
+		m_subGroupData->parse(llListener, getNumPrefixIDs(), getPrefixIDs());
 		break;
 	default: // something else we don't support yet
 		break;

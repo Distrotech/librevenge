@@ -53,6 +53,46 @@ private:
 	guint8 m_flag;
 };
 
+class WP6CharacterGroup_TableDefinitionOnSubGroup : public WP6VariableLengthGroup_SubGroup
+{
+public:
+	WP6CharacterGroup_TableDefinitionOnSubGroup(GsfInput *input);
+	virtual void parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
+
+private:
+	guint8 m_flags;
+	guint8 m_position;
+	guint16 m_leftOffset;
+};
+
+class WP6CharacterGroup_TableDefinitionOffSubGroup : public WP6VariableLengthGroup_SubGroup
+{
+public:
+	WP6CharacterGroup_TableDefinitionOffSubGroup(GsfInput *input);
+	virtual void parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
+
+private:
+
+};
+
+class WP6CharacterGroup_TableColumnSubGroup : public WP6VariableLengthGroup_SubGroup
+{
+public:
+	WP6CharacterGroup_TableColumnSubGroup(GsfInput *input);
+	virtual void parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
+
+private:
+	guint8 m_flags;
+	guint16 m_width;
+	guint16 m_leftGutter;
+	guint16 m_rigthGutter;
+	guint16 m_attribWord1;
+	guint16 m_attribWord2;
+	guint8 m_alignment;
+	guint16 m_absPosFromRight;
+	guint16 m_numberType;
+	guint8 m_currencyIndex;
+};
 
 class WP6CharacterGroup : public WP6VariableLengthGroup
 {

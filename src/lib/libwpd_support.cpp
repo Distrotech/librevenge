@@ -412,6 +412,13 @@ _RGBSColor::_RGBSColor()
 {
 }
 
+_WPXColumnDefinition::_WPXColumnDefinition()
+	:	m_width(0),
+		m_leftGutter(0),
+		m_rightGutter(0)
+{
+}
+
 UCSString::UCSString() : m_stringBuf(g_array_new(TRUE, FALSE, sizeof(guint32)))
 {
 }

@@ -58,6 +58,14 @@ struct _WP6DocumentMetaData
 	UCSString m_descriptiveType;
 };
 
+typedef struct _WP6TableDefinition WP6TableDefinition;
+struct _WP6TableDefinition
+{
+	guint8 m_positionBits;
+	gfloat m_leftOffset;
+	vector < WPXColumnDefinition > columns;
+};
+
 const int STATE_MEMORY = 3;
 class WP6StyleStateSequence
 {
@@ -169,7 +177,7 @@ public:
 	virtual void undoChange(const guint8 undoType, const guint16 undoLevel);
 	virtual void fontChange(const guint16 matchedFontPointSize, const guint16 fontPID);
 	virtual void attributeChange(const gboolean isOn, const guint8 attribute);
-	virtual void lineSpacingChange(const float lineSpacing);
+	virtual void lineSpacingChange(const gfloat lineSpacing);
 	virtual void justificationChange(const guint8 justification);
 	virtual void marginChange(const guint8 side, const guint16 margin);
 	virtual void columnChange(const guint8 numColumns); 
@@ -188,6 +196,8 @@ public:
 	virtual void noteOff(const NoteType noteType);
 	virtual void endDocument();
  
+ 	virtual void defineTable(guint8 position, guint16 leftOffset);
+	virtual void addTableColumnDefintion(guint32 width, guint32 leftGutter, guint32 rightGutter);
 	virtual void startTable();
  	virtual void insertRow();
  	virtual void insertCell(const guint8 colSpan, const guint8 rowSpan, const gboolean boundFromLeft, const gboolean boundFromAbove, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
@@ -220,7 +230,8 @@ private:
 
 	WP6DocumentMetaData m_metaData;
 	WP6ParsingState *m_parseState;
-	
+	WP6TableDefinition m_tableDefinition;
+
 	map<int,WP6OutlineDefinition *> m_outlineDefineHash;
 };
 

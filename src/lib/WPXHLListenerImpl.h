@@ -27,6 +27,8 @@
 #define WPXHLLISTENERIMPL_H
 #include "libwpd.h"
 #include <glib.h>
+#include <vector>
+using namespace std;
 
 class WPXHLListenerImpl
 {
@@ -52,7 +54,7 @@ class WPXHLListenerImpl
 
 	virtual void openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits,
 				   const gchar *fontName, const gfloat fontSize, 
-				   const float lineSpacing, 
+				   const gfloat lineSpacing, 
 				   const gboolean isColumnBreak, const gboolean isPageBreak) = 0;
 	virtual void closeParagraph() = 0;
 	virtual void openSpan(const guint32 textAttributeBits, const gchar *fontName, const gfloat fontSize) = 0;
@@ -76,12 +78,13 @@ class WPXHLListenerImpl
 				     const gchar *fontName, const gfloat fontSize, 
 				     const float lineSpacing) = 0;
 	virtual void closeListElement() = 0;
+	
 	virtual void openFootnote(int number) = 0;
 	virtual void closeFootnote() = 0;
 	virtual void openEndnote(int number) = 0;
 	virtual void closeEndnote() = 0;
 
- 	virtual void openTable() = 0;
+ 	virtual void openTable(const guint8 tablePositionBits, const gfloat leftOffset, const vector < WPXColumnDefinition > columns) = 0;
  	virtual void openTableRow() = 0;
 	virtual void closeTableRow() = 0;
  	virtual void openTableCell(const guint32 col, const guint32 row, const guint32 colSpan, const guint32 rowSpan, 

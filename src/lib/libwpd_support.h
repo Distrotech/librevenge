@@ -56,6 +56,15 @@ struct _RGBSColor
 	guint8 m_s; 
 };
 
+typedef struct _WPXColumnDefinition WPXColumnDefinition;
+struct _WPXColumnDefinition
+{
+	_WPXColumnDefinition(); // initializes all values to 0
+	gfloat m_width;
+	gfloat m_leftGutter;
+	gfloat m_rightGutter;
+};
+
 // UCSString: minimal string class, basically an object-oriented wrapper around glib's UCS4 string
 // (so we don't have to pull in yet more dependencies)
 class UCSString

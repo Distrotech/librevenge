@@ -431,7 +431,7 @@ void WP6HLListener::attributeChange(const gboolean isOn, const guint8 attribute)
 	}
 }
 
-void WP6HLListener::lineSpacingChange(const float lineSpacing)
+void WP6HLListener::lineSpacingChange(const gfloat lineSpacing)
 {
 	if (!m_parseState->m_isUndoOn)
 	{
@@ -473,7 +473,7 @@ void WP6HLListener::marginChange(guint8 side, guint16 margin)
 	{
 		_handleLineBreakElementBegin();
 		
-		float marginInch = (float)(((double)margin + (double)WP6_NUM_EXTRA_WPU) / (double)WPX_NUM_WPUS_PER_INCH);
+		gfloat marginInch = (gfloat)(((double)margin + (double)WP6_NUM_EXTRA_WPU) / (double)WPX_NUM_WPUS_PER_INCH);
 
 		switch(side)
 		{
@@ -756,6 +756,48 @@ void WP6HLListener::endDocument()
 	m_listenerImpl->endDocument();
 }
 
+void WP6HLListener::defineTable(guint8 position, guint16 leftOffset)
+{
+	switch (position & 0x07)
+	{
+		case 0:
+			m_tableDefinition.m_positionBits = WPX_TABLE_POSITION_ALIGN_WITH_LEFT_MARGIN;
+			break;
+		case 1:
+			m_tableDefinition.m_positionBits = WPX_TABLE_POSITION_ALIGN_WITH_RIGHT_MARGIN;
+			break;
+		case 2:
+			m_tableDefinition.m_positionBits = WPX_TABLE_POSITION_CENTER_BETWEEN_MARGINS;
+			break;
+		case 3:
+			m_tableDefinition.m_positionBits = WPX_TABLE_POSITION_FULL;
+			break;
+		case 4:
+			m_tableDefinition.m_positionBits = WPX_TABLE_POSITION_ABSOLUTE_FROM_LEFT_MARGIN;
+			break;
+		default:
+			// should not happen
+			break;
+	}
+	// Note: WordPerfect has an offset from the left edge of the page. We translate it to the offset from the left margin
+	m_tableDefinition.m_leftOffset = (gfloat)((double)leftOffset / (double)WPX_NUM_WPUS_PER_INCH) - m_parseState->m_marginLeft;
+	
+	// remove all the old column information
+	m_tableDefinition.columns.clear();
+}
+
+void WP6HLListener::addTableColumnDefintion(guint32 width, guint32 leftGutter, guint32 rightGutter)
+{
+	// define the new column
+	WPXColumnDefinition colDef;
+	colDef.m_width = (gfloat)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
+	colDef.m_leftGutter = (gfloat)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
+	colDef.m_rightGutter = (gfloat)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
+	
+	// add the new column definition to our table definition
+	m_tableDefinition.columns.push_back(colDef);
+}
+
 void WP6HLListener::startTable()
 {
 	if (!m_parseState->m_isUndoOn) 
@@ -770,7 +812,6 @@ void WP6HLListener::startTable()
 			_openSection();
 			m_parseState->m_sectionAttributesChanged = FALSE;
 		}
-		
 		_openTable();
 	}
 }
@@ -784,7 +825,9 @@ void WP6HLListener::insertRow()
 	}
 }
 
-void WP6HLListener::insertCell(const guint8 colSpan, const guint8 rowSpan, const gboolean boundFromLeft, const gboolean boundFromAbove, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
+void WP6HLListener::insertCell(const guint8 colSpan, const guint8 rowSpan, 
+							gboolean boundFromLeft, const gboolean boundFromAbove, 
+							const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
 {
 	if (!m_parseState->m_isUndoOn) 
 	{			
@@ -986,7 +1029,7 @@ void WP6HLListener::_openTable()
 {
 	_closeTable();
 	
-	m_listenerImpl->openTable();
+	m_listenerImpl->openTable(m_tableDefinition.m_positionBits, m_tableDefinition.m_leftOffset, m_tableDefinition.columns);
 	m_parseState->m_isTableOpened = TRUE;
 }
 

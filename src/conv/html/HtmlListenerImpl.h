@@ -78,7 +78,7 @@ public:
 	virtual void openEndnote(int number);
 	virtual void closeEndnote();
 
-	virtual void openTable();
+	virtual void openTable(const guint8 tablePositionBits, const gfloat leftOffset, const vector < WPXColumnDefinition > columns);
 	virtual void openTableRow();
 	virtual void closeTableRow();
 	virtual void openTableCell(const guint32 col, const guint32 row, 
