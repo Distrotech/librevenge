@@ -47,6 +47,7 @@ public:
 	WPXHLListener * getHLListener() { return m_pHLListener; }
 		
 	WPXHeader * getHeader() { return m_pHeader; }
+	FILE * getStream() { return m_pStream; }
 protected:
 	FILE * m_pStream;
 	WPXHeader * m_pHeader;

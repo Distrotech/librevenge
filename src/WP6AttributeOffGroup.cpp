@@ -25,8 +25,8 @@
 
 #include "WP6AttributeOffGroup.h"
 
-WP6AttributeOffGroup::WP6AttributeOffGroup(FILE * stream)
-	: WP6FixedLengthGroup(stream)
+WP6AttributeOffGroup::WP6AttributeOffGroup(WPXParser * parser)
+	: WP6FixedLengthGroup(parser)
 {
 	m_iSize = 3;
 }

@@ -25,8 +25,8 @@
 
 #include "WP6UndoGroup.h"
 
-WP6UndoGroup::WP6UndoGroup(FILE * stream)
-	: WP6FixedLengthGroup(stream)
+WP6UndoGroup::WP6UndoGroup(WPXParser * parser)
+	: WP6FixedLengthGroup(parser)
 {
 	m_iSize = 5;
 }

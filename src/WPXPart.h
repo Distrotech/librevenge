@@ -26,18 +26,20 @@
 #ifndef WPXPART_H
 #define WPXPART_H
 
-#include <stdio.h>
+#include "WPXParser.h"
 #include "UT_libwpd2.h"
 #include "glib.h"
 
 class WPXPart
 {
 public:
-	WPXPart(FILE * stream);
+	WPXPart(WPXParser * parser);
 	
 	virtual gboolean parse() {};
 protected:
-	FILE * m_pStream;
+	WPXParser * _getParser() { return m_pParser; }
+private:
+	WPXParser * m_pParser;
 };
 
 

@@ -31,7 +31,7 @@
 class WP6ExtendedCharacterGroup : public WP6FixedLengthGroup
 {
 public:
-	WP6ExtendedCharacterGroup(FILE * stream);	
+	WP6ExtendedCharacterGroup(WPXParser * parser);	
 	
 protected:
 	gboolean _parseContents();

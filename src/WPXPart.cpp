@@ -26,7 +26,7 @@
 #include <stdio.h>
 #include "WPXPart.h"
 
-WPXPart::WPXPart(FILE * stream)
+WPXPart::WPXPart(WPXParser * parser)
 {
-	m_pStream = stream;
+	m_pParser = parser;
 }

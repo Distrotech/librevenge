@@ -31,7 +31,7 @@
 class WP6VariableLengthGroup : public WP6Part
 {
 public:
-	WP6VariableLengthGroup(FILE * stream);	
+	WP6VariableLengthGroup(WPXParser * parser);	
 	~WP6VariableLengthGroup();
 	
 	gboolean parse();

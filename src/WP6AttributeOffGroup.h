@@ -31,7 +31,7 @@
 class WP6AttributeOffGroup : public WP6FixedLengthGroup
 {
 public:
-	WP6AttributeOffGroup(FILE * stream);	
+	WP6AttributeOffGroup(WPXParser * parser);	
 	
 protected:
 	gboolean _parseContents();

@@ -41,7 +41,7 @@ gboolean WP6Parser::parse()
 	fseek(m_pStream, m_pHeader->m_iDocumentOffset - ftell(m_pStream), SEEK_CUR);
 	
 	WP6Part * part;
-	while (part = WP6Part::constructPart(m_pStream, this))
+	while (part = WP6Part::constructPart(this))
 	{
 		part->parse();
 		delete part;

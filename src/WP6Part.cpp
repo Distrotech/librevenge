@@ -29,17 +29,17 @@
 #include "WP6VariableLengthGroup.h"
 #include "WP6FixedLengthGroup.h"
 
-WP6Part::WP6Part(FILE * stream)
-	: WPXPart(stream)
+WP6Part::WP6Part(WPXParser * parser)
+	: WPXPart(parser)
 {
 }
 
-WP6Part * WP6Part::constructPart(FILE * stream, WPXParser * parser)
-{
+WP6Part * WP6Part::constructPart(WPXParser * parser)
+{	
 	guint8 val;
-	while (ftell(stream) < (long)((WP6Header *)parser->getHeader())->m_iDocumentSize)
+	while (ftell(parser->getStream()) < (long)((WP6Header *)parser->getHeader())->m_iDocumentSize)
 	{
-		WPD_CHECK_FILE_READ_ERROR(fread(&val, sizeof(guint8), 1, stream), 1);
+		WPD_CHECK_FILE_READ_ERROR(fread(&val, sizeof(guint8), 1, parser->getStream()), 1);
 		guint32 readVal = val; // convert to a 32 bit int, otherwise gcc3.2 will start whining about comparisions always being true
 		
 		if (readVal >= 0x00 && readVal <= 0x20)
@@ -58,12 +58,12 @@ WP6Part * WP6Part::constructPart(FILE * stream, WPXParser * parser)
 		else if (readVal >= 0xD0 && readVal <= 0xEF)
 		{
 			// TODO: recognize which variable length group we need to instantiate
-			return new WP6VariableLengthGroup(stream);
+			return new WP6VariableLengthGroup(parser);
 		}      
 		else if (readVal >= 0xF0 && readVal <= 0xFF)
 		{
 			// TODO: recognize which fixed length group we need to instantiate
-			return WP6FixedLengthGroup::constructFixedLengthGroup(stream, val);
+			return WP6FixedLengthGroup::constructFixedLengthGroup(parser, val);
 		}
 	}
 	

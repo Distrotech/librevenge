@@ -31,9 +31,9 @@
 class WP6FixedLengthGroup : public WP6Part
 {
 public:
-	WP6FixedLengthGroup(FILE * stream);	
+	WP6FixedLengthGroup(WPXParser * parser);
 	
-	static WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(FILE * stream, guint8 groupID);
+	static WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(WPXParser * parser, guint8 groupID);
 	gboolean parse();
 protected:
 	virtual gboolean _parseContents() { return TRUE; }

@@ -26,8 +26,8 @@
 #include "WP6VariableLengthGroup.h"
 #include "WP6FileStructure.h"
 
-WP6VariableLengthGroup::WP6VariableLengthGroup(FILE * stream)
-	: WP6Part(stream)
+WP6VariableLengthGroup::WP6VariableLengthGroup(WPXParser * parser)
+	: WP6Part(parser)
 {
 }
 
@@ -39,24 +39,25 @@ WP6VariableLengthGroup::~WP6VariableLengthGroup()
 
 gboolean WP6VariableLengthGroup::parse()
 {
-	guint32 startPosition = ftell(m_pStream);
+	FILE * stream = _getParser()->getStream();
+	guint32 startPosition = ftell(stream);
 
 	WPD_DEBUG_MSG(("WordPerfect: handling a variable length group\n"));
 	
-	WPD_CHECK_FILE_READ_ERROR(fread(&m_iSubGroup, sizeof(guint8), 1, m_pStream), 1);
-	WPD_CHECK_FILE_READ_ERROR(fread(&m_iSize, sizeof(guint16), 1, m_pStream), 1);
-	WPD_CHECK_FILE_READ_ERROR(fread(&m_iFlags, sizeof(guint8), 1, m_pStream), 1);
+	WPD_CHECK_FILE_READ_ERROR(fread(&m_iSubGroup, sizeof(guint8), 1, stream), 1);
+	WPD_CHECK_FILE_READ_ERROR(fread(&m_iSize, sizeof(guint16), 1, stream), 1);
+	WPD_CHECK_FILE_READ_ERROR(fread(&m_iFlags, sizeof(guint8), 1, stream), 1);
 
 	if (m_iFlags & WP6_VARIABLE_GROUP_PREFIX_ID_BIT)
 	{
-		WPD_CHECK_FILE_READ_ERROR(fread(&m_iNumPrefixIDs, sizeof(guint8), 1, m_pStream), 1);
+		WPD_CHECK_FILE_READ_ERROR(fread(&m_iNumPrefixIDs, sizeof(guint8), 1, stream), 1);
 		
 		if (m_iNumPrefixIDs > 0)
 		{
 			m_pPrefixIDs = (guint16 **) g_malloc(sizeof(guint16) * m_iNumPrefixIDs);
 			for (guint32 i = 0; i < m_iNumPrefixIDs; i++)
 			{
-				WPD_CHECK_FILE_READ_ERROR(fread(&m_pPrefixIDs[i], sizeof(guint16), 1, m_pStream), 1);		
+				WPD_CHECK_FILE_READ_ERROR(fread(&m_pPrefixIDs[i], sizeof(guint16), 1, stream), 1);		
 			}
 		}	
 	}	
@@ -65,12 +66,12 @@ gboolean WP6VariableLengthGroup::parse()
 		m_iNumPrefixIDs = 0;
 	}
 		
-	WPD_CHECK_FILE_READ_ERROR(fread(&m_iSizeNonDeletable, sizeof(guint16), 1, m_pStream), 1);	
+	WPD_CHECK_FILE_READ_ERROR(fread(&m_iSizeNonDeletable, sizeof(guint16), 1, stream), 1);	
 	WPD_DEBUG_MSG(("WordPerfect: Read variable group header (start_position: %i, sub_group: %i, size: %i, flags: %i, num_prefix_ids: %i, size_non_deletable: %i)\n", startPosition, m_iSubGroup, m_iSize, m_iFlags, m_iNumPrefixIDs, m_iSizeNonDeletable));
 
 	WPD_CHECK_INTERNAL_ERROR( _parseContents() );
 
-	WPD_CHECK_FILE_SEEK_ERROR(fseek(m_pStream, (startPosition + m_iSize - 1 - ftell(m_pStream)), SEEK_CUR));
+	WPD_CHECK_FILE_SEEK_ERROR(fseek(stream, (startPosition + m_iSize - 1 - ftell(stream)), SEEK_CUR));
 	
 	return TRUE;
 }

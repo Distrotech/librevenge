@@ -30,26 +30,26 @@
 #include "WP6AttributeOnGroup.h"
 #include "WP6AttributeOffGroup.h"
 
-WP6FixedLengthGroup::WP6FixedLengthGroup(FILE * stream)
-	: WP6Part(stream)
+WP6FixedLengthGroup::WP6FixedLengthGroup(WPXParser * parser)
+	: WP6Part(parser)
 {
 }
 
-WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(FILE * stream, guint8 groupID)
+WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(WPXParser * parser, guint8 groupID)
 {
 	switch (groupID)
 	{
 		case WP6_TOP_EXTENDED_CHARACTER: 
-			return new WP6ExtendedCharacterGroup(stream);
+			return new WP6ExtendedCharacterGroup(parser);
 		
 		case WP6_TOP_UNDO_GROUP:
-			return new WP6UndoGroup(stream);
+			return new WP6UndoGroup(parser);
 		
 		case WP6_TOP_ATTRIBUTE_ON:
-			return new WP6AttributeOnGroup(stream);
+			return new WP6AttributeOnGroup(parser);
 		
 		case WP6_TOP_ATTRIBUTE_OFF:
-			return new WP6AttributeOffGroup(stream);
+			return new WP6AttributeOffGroup(parser);
 		
 		// Add the remaining cases here
 		default:
@@ -60,9 +60,8 @@ WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(FILE * stre
 
 gboolean WP6FixedLengthGroup::parse()
 {
-	guint32 startPosition = ftell(m_pStream);
-	
-	WPD_CHECK_INTERNAL_ERROR( _parseContents() );
-	
-	WPD_CHECK_FILE_SEEK_ERROR(fseek(m_pStream, (startPosition + m_iSize - 1 - ftell(m_pStream)), SEEK_CUR));
+	FILE * stream = _getParser()->getStream();
+	guint32 startPosition = ftell(stream);
+	WPD_CHECK_INTERNAL_ERROR( _parseContents() );	
+	WPD_CHECK_FILE_SEEK_ERROR(fseek(stream, (startPosition + m_iSize - 1 - ftell(stream)), SEEK_CUR));
 }

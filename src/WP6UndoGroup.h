@@ -31,7 +31,7 @@
 class WP6UndoGroup : public WP6FixedLengthGroup
 {
 public:
-	WP6UndoGroup(FILE * stream);	
+	WP6UndoGroup(WPXParser * parser);	
 	
 protected:
 	gboolean _parseContents();

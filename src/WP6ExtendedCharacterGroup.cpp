@@ -25,8 +25,8 @@
 
 #include "WP6ExtendedCharacterGroup.h"
 
-WP6ExtendedCharacterGroup::WP6ExtendedCharacterGroup(FILE * stream)
-	: WP6FixedLengthGroup(stream)
+WP6ExtendedCharacterGroup::WP6ExtendedCharacterGroup(WPXParser * parser)
+	: WP6FixedLengthGroup(parser)
 {
 	m_iSize = 4;
 }

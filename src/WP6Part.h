@@ -26,7 +26,6 @@
 #ifndef WP6PART_H
 #define WP6PART_H
 
-#include <stdio.h>
 #include "WPXPart.h"
 #include "WPXParser.h"
 #include "glib.h"
@@ -34,10 +33,10 @@
 class WP6Part : public WPXPart
 {
 public:
-	WP6Part(FILE * stream);
+	WP6Part(WPXParser * parser);
 	~WP6Part() {}
 	
-	static WP6Part * constructPart(FILE * stream, WPXParser * parser);
+	static WP6Part * constructPart(WPXParser * parser);
 	virtual gboolean parse() {};
 };
 
