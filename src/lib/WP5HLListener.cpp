@@ -42,6 +42,12 @@ WP5HLListener::WP5HLListener(vector<WPXPageSpan *> *pageList, WPXHLListenerImpl 
 	m_textBuffer.clear();
 }
 
+WP5HLListener::~WP5HLListener() 
+{
+	delete m_parseState;
+}
+
+
 /****************************************
  public 'HLListenerImpl' functions
 *****************************************/

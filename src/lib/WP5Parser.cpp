@@ -112,7 +112,7 @@ void WP5Parser::parse(WPXHLListenerImpl *listenerImpl)
 {
 	WPXInputStream *input = getInput();
 	vector<WPXPageSpan *> pageList;
-	vector<WPXTable *> tableList;	
+	WPXTableList tableList;	
 	
 	try
  	{
@@ -131,10 +131,6 @@ void WP5Parser::parse(WPXHLListenerImpl *listenerImpl)
 		{
 			delete *iterSpan;
 		}	
-		for (vector<WPXTable *>::iterator iterTable = tableList.begin(); iterTable != tableList.end(); iterTable++)
-		{
-			delete *iterTable;
-		}
 	}
 	catch(FileException)
 	{
@@ -144,10 +140,6 @@ void WP5Parser::parse(WPXHLListenerImpl *listenerImpl)
 		{
 			delete *iterSpan;
 		}
-		for (vector<WPXTable *>::iterator iterTable = tableList.begin(); iterTable != tableList.end(); iterTable++)
-		{
-			delete *iterTable;
-		}		
 
 		throw FileException();
 	}	

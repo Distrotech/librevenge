@@ -26,6 +26,9 @@
 #include "WPXTable.h"
 #include "libwpd_support.h"
 
+typedef vector<WPXTableCell *>::iterator VTCIter;
+typedef vector< vector<WPXTableCell *> * >::iterator VVTCIter;
+
 _WPXTableCell::_WPXTableCell(uint8_t colSpan, uint8_t rowSpan, bool boundFromAbove, bool boundFromLeft, uint8_t borderBits) :
 	m_colSpan(colSpan),
 	m_rowSpan(rowSpan),
@@ -160,4 +163,15 @@ vector<WPXTableCell *> * WPXTable::_getCellsRightAdjacent(int i, int j)
 	}
 
 	return cellsRightAdjacent;
+}
+
+WPXTableList::WPXTableList() :
+	refCount(1)
+{
+}
+
+WPXTableList::~WPXTableList()
+{ 
+	for (vector<WPXTable *>::iterator iter = m_tableList.begin(); iter != m_tableList.end(); iter++)
+		delete (*iter);
 }

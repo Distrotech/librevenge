@@ -34,7 +34,7 @@
 class WP42HLStylesListener : public WP42HLListener
 {
 public:
-	WP42HLStylesListener(vector<WPXPageSpan *> *pageList, vector<WPXTable *> *tableList);
+	WP42HLStylesListener(vector<WPXPageSpan *> *pageList, WPXTableList *tableList);
 
 	virtual void startDocument() {}
 	virtual void setAlignmentCharacter(const uint16_t character) {}
@@ -69,14 +69,14 @@ public:
 
 
 protected:
-	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter, vector<WPXTable *> *tableList) {}
+	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter, WPXTableList *tableList) {}
 
 	virtual void _openPageSpan() { /* FIXME: REMOVE ME WHEN IMPLEMENTED IN WPXHLListener */ };
 
 private:
 	WPXPageSpan *m_currentPage;
 
-	vector<WPXTable *> *m_tableList;
+	WPXTableList *m_tableList;
 	WPXTable *m_currentTable;
 	float m_tempMarginLeft, m_tempMarginRight;
 	bool m_currentPageHasContent;

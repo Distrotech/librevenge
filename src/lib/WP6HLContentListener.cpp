@@ -186,7 +186,7 @@ void WP6OutlineDefinition::_updateNumberingMethods(const WP6OutlineLocation outl
 
 }
 
-_WP6ParsingState::_WP6ParsingState(vector<WPXTable *> * tableList, int nextTableIndice) :
+_WP6ParsingState::_WP6ParsingState(WPXTableList * tableList, int nextTableIndice) :
 	m_paragraphLineSpacing(1.0f),
 	m_paragraphSpacingAfterAbsolute(0.0f),
 	m_paragraphSpacingAfterRelative(1.0f),
@@ -229,7 +229,7 @@ _WP6ParsingState::~_WP6ParsingState()
 	// FIXME: erase current fontname
 }
 
-WP6HLContentListener::WP6HLContentListener(vector<WPXPageSpan *> *pageList, vector<WPXTable *> *tableList, WPXHLListenerImpl *listenerImpl) :
+WP6HLContentListener::WP6HLContentListener(vector<WPXPageSpan *> *pageList, WPXTableList *tableList, WPXHLListenerImpl *listenerImpl) :
 	WP6HLListener(pageList, listenerImpl),
 	m_parseState(new WP6ParsingState(tableList))
 {
@@ -1037,7 +1037,7 @@ void WP6HLContentListener::endTable()
 // sends its text to the hll implementation and naively inserts it into the document
 // if textPID=0: Simply creates a blank paragraph
 // once finished, restores document state to what it was before
-void WP6HLContentListener::_handleSubDocument(uint16_t textPID, const bool isHeaderFooter, vector<WPXTable *> *tableList)
+void WP6HLContentListener::_handleSubDocument(uint16_t textPID, const bool isHeaderFooter, WPXTableList *tableList)
 {
 	// save our old parsing state on our "stack"
 	WP6ParsingState *oldParseState = m_parseState;

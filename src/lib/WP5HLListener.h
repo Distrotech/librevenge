@@ -42,6 +42,7 @@ class WP5HLListener : public WPXHLListener, public WP5LLListener
 {
 public:
 	WP5HLListener(vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl);
+	virtual ~WP5HLListener();
 
 	virtual void setAlignmentCharacter(const uint16_t character) {};
 	virtual void setLeaderCharacter(const uint16_t character, const uint8_t numberOfSpaces) {};
@@ -73,7 +74,7 @@ public:
  	virtual void endTable() {};
 
 protected:
-	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter, vector<WPXTable *> *tableList) {}
+	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter, WPXTableList *tableList) {}
 
 private:
 	void _openParagraph();

@@ -54,13 +54,35 @@ const WPXHeaderFooterOccurence _convertHeaderFooterOccurence(const uint8_t occur
 }
 
 WPXHeaderFooter::WPXHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence occurence, 
-				 const uint8_t internalType, const uint16_t textPID, vector<WPXTable *> *tableList) :
+				 const uint8_t internalType, const uint16_t textPID, WPXTableList *tableList) :
 	m_type(headerFooterType),
 	m_occurence(occurence),
 	m_internalType(internalType),
 	m_textPID(textPID),
 	m_tableList(tableList)
 {
+}
+
+WPXHeaderFooter::WPXHeaderFooter(const WPXHeaderFooter &headerFooter) :
+	m_type(headerFooter.getType()),
+	m_occurence(headerFooter.getOccurence()),
+	m_internalType(headerFooter.getInternalType()),
+	m_textPID(headerFooter.getTextPID())
+{
+	WPXTableList *tableList = headerFooter.getTableList();
+	if (tableList)
+	{
+		m_tableList = tableList;
+		m_tableList->addRef();
+	}
+	else
+		m_tableList = NULL;
+}
+
+WPXHeaderFooter::~WPXHeaderFooter()
+{
+	if (m_tableList)
+		m_tableList->unRef();
 }
 
 WPXPageSpan::WPXPageSpan() :
@@ -96,7 +118,7 @@ WPXPageSpan::WPXPageSpan(WPXPageSpan &page, float paragraphMarginLeft, float par
 
 
 void WPXPageSpan::setHeaderFooter(const uint8_t headerFooterType, const uint8_t occurenceBits, 
-				  const uint16_t textPID, vector<WPXTable *> *tableList)
+				  const uint16_t textPID, WPXTableList *tableList)
 {
         WPXHeaderFooterType wpxType = _convertHeaderFooterType(headerFooterType);
 	WPXHeaderFooterOccurence wpxOccurence = _convertHeaderFooterOccurence(occurenceBits);

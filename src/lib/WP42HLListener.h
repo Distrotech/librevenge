@@ -65,7 +65,7 @@ public:
  	virtual void endTable() {};
 
 protected:
-	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter, vector<WPXTable *> *tableList) {}
+	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter, WPXTableList *tableList) {}
 
 	void _openParagraph();
 private:

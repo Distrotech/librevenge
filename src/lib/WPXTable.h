@@ -53,6 +53,7 @@ struct _WPXTableCell
 class WPXTable
 {
 public:
+	WPXTable() {}
 	~WPXTable();
 	void insertRow();
 	void insertCell(uint8_t colSpan, uint8_t rowSpan, bool boundFromLeft, bool boundFromAbove, uint8_t borderBits);
@@ -62,7 +63,25 @@ public:
 				      int adjacencyBitCell, int adjacencyBitBoundCells);
 	vector<WPXTableCell *> * _getCellsBottomAdjacent(int i, int j);
 	vector<WPXTableCell *> * _getCellsRightAdjacent(int i, int j);
+
+	const vector< vector<WPXTableCell *> * > * getTableRows() const { return &m_tableRows; } // ugly, but whatever
+
 private:
 	vector< vector<WPXTableCell *> * > m_tableRows;
+};
+
+class WPXTableList
+{
+public:
+	WPXTableList();
+	virtual ~WPXTableList();
+	void addRef() { refCount++; }
+	void unRef() { refCount--; if (refCount == 0) delete this; }
+	WPXTable * operator[](size_t i) { return m_tableList[i]; }
+	void add(WPXTable *table) { m_tableList.push_back(table); }
+
+private:
+	vector<WPXTable *> m_tableList; 
+	int refCount;
 };
 #endif /* _WPXTABLE_H */
