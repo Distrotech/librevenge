@@ -69,7 +69,7 @@ public:
 
 
 protected:
-	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter) {}
+	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter, vector<WPXTable *> *tableList) {}
 
 	virtual void _openPageSpan() { /* FIXME: REMOVE ME WHEN IMPLEMENTED IN WPXHLListener */ };
 

@@ -74,7 +74,7 @@ private:
 typedef struct _WP6ParsingState WP6ParsingState;
 struct _WP6ParsingState
 {
-	_WP6ParsingState();
+	_WP6ParsingState(vector<WPXTable *> * tableList, int nextTableIndice = 0);
 	~_WP6ParsingState();
 	UCSString m_bodyText;
 	UCSString m_textBeforeNumber;
@@ -96,6 +96,7 @@ struct _WP6ParsingState
 
 	guint m_numRemovedParagraphBreaks;
 
+	vector<WPXTable *> *m_tableList;
 	WPXTable *m_currentTable;
 	int m_nextTableIndice;
 	int m_currentTableCol;
@@ -208,7 +209,7 @@ public:
 
 
 protected:
-	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter);
+	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter, vector<WPXTable *> *tableList);
 
 	//void _handleLineBreakElementBegin();
 	void _paragraphNumberOn(const uint16_t outlineHash, const uint8_t level);
@@ -233,7 +234,6 @@ private:
 	WP6ParsingState *m_parseState;
 
 	WP6TableDefinition m_tableDefinition;
-	vector<WPXTable *> *m_tableList;
 
 	map<int,WP6OutlineDefinition *> m_outlineDefineHash;
 };

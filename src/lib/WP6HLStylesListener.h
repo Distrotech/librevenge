@@ -94,7 +94,8 @@ public:
  	virtual void endTable();
 
 protected:
-	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter);
+	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter, vector<WPXTable *> *tableList = NULL);
+
 	virtual void _flushText(const bool fakeText=false) {}
 	virtual void _openPageSpan() { /* FIXME: REMOVE ME WHEN IMPLEMENTED IN WPXHLListener */ };
 

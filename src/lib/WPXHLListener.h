@@ -28,6 +28,7 @@
 
 #include "WPXLLListener.h"
 #include "WPXHLListenerImpl.h"
+#include "WPXTable.h"
 
 class WPXPageSpan;
 
@@ -135,7 +136,7 @@ public:
 	WPXHLListener::~WPXHLListener();
 
 	void startDocument();
-	void handleSubDocument(uint16_t textPID, const bool isHeaderFooter);
+	void handleSubDocument(uint16_t textPID, const bool isHeaderFooter, vector<WPXTable *> *tableList);
 	virtual void insertBreak(const uint8_t breakType);
 
 	WPXParsingState *m_ps; // parse state
@@ -144,7 +145,7 @@ public:
 	vector <WPXPageSpan *> *m_pageList;
 
 protected:
-	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter) = 0;
+	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter, vector<WPXTable *> *tableList) = 0;
 	virtual void _flushText(const bool fakeText=false) = 0;
 
 	void _openSection();

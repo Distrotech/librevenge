@@ -28,6 +28,7 @@
 #include "libwpd.h"
 #include "WP6FileStructure.h"
 #include <vector>
+#include "WPXTable.h"
 
 // intermediate page representation class: for internal use only (by the high-level content/styles listeners). should not be exported.
 
@@ -35,16 +36,19 @@ class WPXHeaderFooter
 {
 public:
 	WPXHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence occurence, 
-			const uint8_t internalType, const uint16_t textPID);
+			const uint8_t internalType, const uint16_t textPID, vector<WPXTable *> *tableList);
 	const WPXHeaderFooterType getType() const { return m_type; }
 	const WPXHeaderFooterOccurence getOccurence() const { return m_occurence; }
 	const uint16_t getTextPID() const { return m_textPID; }
 	const uint8_t getInternalType() const { return m_internalType; }
+	vector<WPXTable *> * getTableList() const { return m_tableList; }
+
 private:
 	WPXHeaderFooterType m_type;
 	WPXHeaderFooterOccurence m_occurence;
 	uint8_t m_internalType; // for suppression
 	uint16_t m_textPID; // for the actual text
+	mutable vector<WPXTable *> *m_tableList; // FIXME: it would be nice if we could get rid of this..
 };
 
 class WPXPageSpan
@@ -64,7 +68,8 @@ public:
 	const int getPageSpan() const { return m_pageSpan; }
 	const vector<WPXHeaderFooter> & getHeaderFooterList() const { return m_headerFooterList; }
 
-	void setHeaderFooter(const uint8_t headerFooterType, const uint8_t occurenceBits, const uint16_t textPID);
+	void setHeaderFooter(const uint8_t headerFooterType, const uint8_t occurenceBits, 
+			     const uint16_t textPID, vector<WPXTable *> *tableList);
 	void setHeadFooterSuppression(const uint8_t headerFooterType, const bool suppress) { m_isHeaderFooterSuppressed[headerFooterType] = suppress; }
 	void setFormLength(const float formLength) { m_formLength = formLength; }
 	void setFormWidth(const float formWidth) { m_formWidth = formWidth; }

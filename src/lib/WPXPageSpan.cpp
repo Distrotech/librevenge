@@ -54,13 +54,13 @@ const WPXHeaderFooterOccurence _convertHeaderFooterOccurence(const uint8_t occur
 }
 
 WPXHeaderFooter::WPXHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence occurence, 
-				 const uint8_t internalType, const uint16_t textPID) :
+				 const uint8_t internalType, const uint16_t textPID, vector<WPXTable *> *tableList) :
+	m_type(headerFooterType),
+	m_occurence(occurence),
 	m_internalType(internalType),
-	m_textPID(textPID)
+	m_textPID(textPID),
+	m_tableList(tableList)
 {
-	m_type = headerFooterType;
-	m_occurence = occurence;
-
 }
 
 WPXPageSpan::WPXPageSpan() :
@@ -72,7 +72,6 @@ WPXPageSpan::WPXPageSpan() :
 	m_marginTop(WP6_DEFAULT_PAGE_MARGIN_TOP),
 	m_marginBottom(WP6_DEFAULT_PAGE_MARGIN_BOTTOM),
 	m_pageSpan(1)
-
 {
 	for (int i=0; i<WP6_NUM_HEADER_FOOTER_TYPES; i++)
 		m_isHeaderFooterSuppressed[i]=false;
@@ -96,11 +95,12 @@ WPXPageSpan::WPXPageSpan(WPXPageSpan &page, float paragraphMarginLeft, float par
 }
 
 
-void WPXPageSpan::setHeaderFooter(const uint8_t headerFooterType, const uint8_t occurenceBits, const uint16_t textPID)
+void WPXPageSpan::setHeaderFooter(const uint8_t headerFooterType, const uint8_t occurenceBits, 
+				  const uint16_t textPID, vector<WPXTable *> *tableList)
 {
         WPXHeaderFooterType wpxType = _convertHeaderFooterType(headerFooterType);
 	WPXHeaderFooterOccurence wpxOccurence = _convertHeaderFooterOccurence(occurenceBits);
-	WPXHeaderFooter headerFooter(wpxType, wpxOccurence, headerFooterType, textPID);
+	WPXHeaderFooter headerFooter(wpxType, wpxOccurence, headerFooterType, textPID, tableList);
 	switch (wpxOccurence) 
 	{
 	case ALL:
@@ -122,13 +122,13 @@ void WPXPageSpan::setHeaderFooter(const uint8_t headerFooterType, const uint8_t 
 	if (containsHFLeft && !containsHFRight)
 	{
 		WPD_DEBUG_MSG(("Inserting dummy header right\n"));
-		WPXHeaderFooter dummyHeader(wpxType, EVEN, DUMMY_INTERNAL_HEADER_FOOTER, 0);
+		WPXHeaderFooter dummyHeader(wpxType, EVEN, DUMMY_INTERNAL_HEADER_FOOTER, 0, NULL);
 		m_headerFooterList.push_back(dummyHeader);
 	}
 	else if (!containsHFLeft && containsHFRight)
 	{
 		WPD_DEBUG_MSG(("Inserting dummy header left\n"));
-		WPXHeaderFooter dummyHeader(wpxType, ODD, DUMMY_INTERNAL_HEADER_FOOTER, 0);
+		WPXHeaderFooter dummyHeader(wpxType, ODD, DUMMY_INTERNAL_HEADER_FOOTER, 0, NULL);
 		m_headerFooterList.push_back(dummyHeader);
 	}
 }

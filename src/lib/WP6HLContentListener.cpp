@@ -186,7 +186,7 @@ void WP6OutlineDefinition::_updateNumberingMethods(const WP6OutlineLocation outl
 
 }
 
-_WP6ParsingState::_WP6ParsingState() :
+_WP6ParsingState::_WP6ParsingState(vector<WPXTable *> * tableList, int nextTableIndice) :
 	m_paragraphLineSpacing(1.0f),
 	m_paragraphSpacingAfterAbsolute(0.0f),
 	m_paragraphSpacingAfterRelative(1.0f),
@@ -200,8 +200,9 @@ _WP6ParsingState::_WP6ParsingState() :
 
 	m_numRemovedParagraphBreaks(0),
 
+	m_tableList(tableList),
 	m_currentTable(NULL),
-	m_nextTableIndice(0),
+	m_nextTableIndice(nextTableIndice),
 	m_currentTableCol(0),
 	m_currentTableRow(0),
 	m_isTableOpened(false),
@@ -230,8 +231,7 @@ _WP6ParsingState::~_WP6ParsingState()
 
 WP6HLContentListener::WP6HLContentListener(vector<WPXPageSpan *> *pageList, vector<WPXTable *> *tableList, WPXHLListenerImpl *listenerImpl) :
 	WP6HLListener(pageList, listenerImpl),
-	m_parseState(new WP6ParsingState),
-	m_tableList(tableList)
+	m_parseState(new WP6ParsingState(tableList))
 {
 }
 
@@ -885,7 +885,7 @@ void WP6HLContentListener::noteOff(const WPXNoteType noteType)
 			m_listenerImpl->openEndnote(number);
 
 		uint16_t textPID = m_parseState->m_noteTextPID;
-		handleSubDocument(textPID, false);
+		handleSubDocument(textPID, false, NULL);
 
 		if (noteType == FOOTNOTE)
 			m_listenerImpl->closeFootnote();
@@ -956,7 +956,7 @@ void WP6HLContentListener::defineTable(uint8_t position, uint16_t leftOffset)
 		m_tableDefinition.columns.clear();
 
 		// pull a table definition off of our stack
-		m_parseState->m_currentTable = (*m_tableList)[m_parseState->m_nextTableIndice++];
+		m_parseState->m_currentTable = (*(m_parseState->m_tableList))[m_parseState->m_nextTableIndice++];
 		m_parseState->m_currentTable->makeBordersConsistent();
 	}
 }
@@ -1037,11 +1037,15 @@ void WP6HLContentListener::endTable()
 // sends its text to the hll implementation and naively inserts it into the document
 // if textPID=0: Simply creates a blank paragraph
 // once finished, restores document state to what it was before
-void WP6HLContentListener::_handleSubDocument(uint16_t textPID, const bool isHeaderFooter)
+void WP6HLContentListener::_handleSubDocument(uint16_t textPID, const bool isHeaderFooter, vector<WPXTable *> *tableList)
 {
 	// save our old parsing state on our "stack"
 	WP6ParsingState *oldParseState = m_parseState;
-	m_parseState = new WP6ParsingState();
+	if (tableList)
+		m_parseState = new WP6ParsingState(tableList);
+	else
+		m_parseState = new WP6ParsingState(oldParseState->m_tableList, oldParseState->m_nextTableIndice);
+
 	if (isHeaderFooter)
 	{
 		// is it is Header or Footer, assume that the initial page margins are of 1 inch.
@@ -1049,6 +1053,9 @@ void WP6HLContentListener::_handleSubDocument(uint16_t textPID, const bool isHea
 		marginChange(WP6_COLUMN_GROUP_LEFT_MARGIN_SET, WPX_NUM_WPUS_PER_INCH);
 		marginChange(WP6_COLUMN_GROUP_RIGHT_MARGIN_SET, WPX_NUM_WPUS_PER_INCH);
 	}
+	if (tableList)
+		m_parseState->m_tableList = tableList;
+
 	if (textPID)
 		WP6LLListener::getPrefixDataPacket(textPID)->parse(this);
 	else

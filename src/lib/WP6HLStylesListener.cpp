@@ -138,9 +138,11 @@ void WP6HLStylesListener::headerFooterGroup(const uint8_t headerFooterType, cons
 		WPD_DEBUG_MSG(("WordPerfect: headerFooterGroup (headerFooterType: %i, occurenceBits: %i, textPID: %i)\n", 
 			       headerFooterType, occurenceBits, textPID));
 		if (headerFooterType <= WP6_HEADER_FOOTER_GROUP_FOOTER_B) // ignore watermarks for now
-			m_currentPage->setHeaderFooter(headerFooterType, occurenceBits, textPID);
-
-		_handleSubDocument(textPID, true);
+		{
+			vector<WPXTable *> *tableList = new vector<WPXTable *>; 
+			m_currentPage->setHeaderFooter(headerFooterType, occurenceBits, textPID, tableList);
+			_handleSubDocument(textPID, true, tableList);
+		}
 	}
 }
 
@@ -221,15 +223,25 @@ void WP6HLStylesListener::noteOn(const uint16_t textPID)
 	}
 }
 
-void WP6HLStylesListener::_handleSubDocument(uint16_t textPID, const bool isHeaderFooter)
+void WP6HLStylesListener::_handleSubDocument(uint16_t textPID, const bool isHeaderFooter, vector<WPXTable *> *tableList)
 {
 	// We don't want to actual insert anything in the case of a sub-document, but we
 	// do want to capture whatever table-related information is within it..
 	if (!isUndoOn()) 
 	{
-		// FIXME: save (some of?) our old parsing state on our "stack"
 		if (textPID)
+		{
+			vector<WPXTable *> * oldTableList = m_tableList;
+			WPXTable * oldCurrentTable = m_currentTable;
+			if (tableList)
+			{
+				m_tableList = tableList;
+				m_currentTable = NULL;
+			}
 			WP6LLListener::getPrefixDataPacket(textPID)->parse(this);
-		// FIXME: restore (some of?) our old parsing state on our "stack"
+
+			m_tableList = oldTableList;
+			m_currentTable = oldCurrentTable;
+		}
 	}
 }
