@@ -441,15 +441,15 @@ SOURCE=..\..\src\lib\WPXPropertyList.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WPXPropertyListVector.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WPXString.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\lib\WPXTable.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\lib\WPXVector.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -849,6 +849,10 @@ SOURCE=..\..\src\lib\WPXPropertyList.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WPXPropertyListVector.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WPXStream.h
 # End Source File
 # Begin Source File
@@ -858,10 +862,6 @@ SOURCE=..\..\src\lib\WPXString.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WPXTable.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\lib\WPXVector.h
 # End Source File
 # End Group
 # End Target
