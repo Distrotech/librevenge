@@ -357,8 +357,8 @@ void WPXHLListener::_openSpan()
 	propList.insert("text-attribute-bits", WPXPropertyFactory::newIntProp(attributeBits & 0xffffffe0));
 	propList.insert("font-name", WPXPropertyFactory::newStringProp(*(m_ps->m_fontName)));
 	propList.insert("font-size", WPXPropertyFactory::newFloatProp(fontSizeChange*m_ps->m_fontSize));
-	propList.insert("color", WPXPropertyFactory::newStringProp(_rgbsColorToString(m_ps->m_fontColor)));
-	propList.insert("text-background-color", WPXPropertyFactory::newStringProp(_rgbsColorToString(m_ps->m_highlightColor)));
+	propList.insert("color", WPXPropertyFactory::newStringProp(_colorToString(m_ps->m_fontColor)));
+	propList.insert("text-background-color", WPXPropertyFactory::newStringProp(_colorToString(m_ps->m_highlightColor)));
 
 	m_listenerImpl->openSpan(propList);
 
@@ -457,13 +457,12 @@ void WPXHLListener::_openTableCell(const uint8_t colSpan, const uint8_t rowSpan,
 
 	if (!boundFromLeft && !boundFromAbove)
 	{
-		propList.insert("col-span", WPXPropertyFactory::newIntProp(colSpan));		
-		propList.insert("row-span", WPXPropertyFactory::newIntProp(rowSpan));		
-		propList.insert("border-bits", WPXPropertyFactory::newIntProp(borderBits));		
+		propList.insert("col-span", WPXPropertyFactory::newIntProp(colSpan));
+		propList.insert("row-span", WPXPropertyFactory::newIntProp(rowSpan));
+		propList.insert("border-bits", WPXPropertyFactory::newIntProp(borderBits));
 		propList.insert("vertical-alignment", WPXPropertyFactory::newIntProp(cellVerticalAlignment));
-		propList.insert("foreground-color", WPXPropertyFactory::newIntProp(_rgbsColorToInt(cellFgColor)));
-		propList.insert("background-color", WPXPropertyFactory::newIntProp(_rgbsColorToInt(cellBgColor)));
-		propList.insert("border-color", WPXPropertyFactory::newIntProp(_rgbsColorToInt(cellBorderColor)));
+		propList.insert("color", WPXPropertyFactory::newStringProp(_mergeColorsToString(cellFgColor, cellBgColor)));
+		propList.insert("border-color", WPXPropertyFactory::newStringProp(_colorToString(cellBorderColor)));
 		m_listenerImpl->openTableCell(propList);
 		m_ps->m_isTableCellOpened = true;
 	}
@@ -586,35 +585,59 @@ void WPXHLListener::justificationChange(const uint8_t justification)
 	}
 }
 
-int WPXHLListener::_rgbsColorToInt(const RGBSColor * color)
-{
-	int tmpIntColor;
-	tmpIntColor = 0x00000000;
-	if (color)
-	{
-		tmpIntColor = color->m_r;
-		tmpIntColor = (tmpIntColor << 8) + color->m_g;
-		tmpIntColor = (tmpIntColor << 8) + color->m_b;
-		tmpIntColor = (tmpIntColor << 8) + color->m_s;
-	}
-	else
-		tmpIntColor = 0xffffffff;
-	return tmpIntColor;
-}
-
-UTF8String WPXHLListener::_rgbsColorToString(const RGBSColor * color)
+UTF8String WPXHLListener::_colorToString(const RGBSColor * color)
 {
 	UTF8String tmpString;
 
-	float fontShading = (float)((float)color.m_s/100.0f); //convert the percents to float between 0 and 1
-	// Mix fontShading amount of given color with (1-fontShading) of White (#ffffff)
-	int fontRed = (int)0xFF + (int)((float)color.m_r*fontShading) - (int)((float)0xFF*fontShading);
-	int fontGreen = (int)0xFF + (int)((float)color.m_g*fontShading) - (int)((float)0xFF*fontShading);
-	int fontBlue = (int)0xFF + (int)((float)color.m_b*fontShading) - (int)((float)0xFF*fontShading);
-	tmpString.sprintf("#%.2x%.2x%.2x", fontRed, fontGreen, fontBlue);
+	if (color) 
+	{
+		float fontShading = (float)((float)color->m_s/100.0f); //convert the percents to float between 0 and 1
+		// Mix fontShading amount of given color with (1-fontShading) of White (#ffffff)
+		int fontRed = (int)0xFF + (int)((float)color->m_r*fontShading) - (int)((float)0xFF*fontShading);
+		int fontGreen = (int)0xFF + (int)((float)color->m_g*fontShading) - (int)((float)0xFF*fontShading);
+		int fontBlue = (int)0xFF + (int)((float)color->m_b*fontShading) - (int)((float)0xFF*fontShading);
+		tmpString.sprintf("#%.2x%.2x%.2x", fontRed, fontGreen, fontBlue);
+	}
+	else
+		tmpString.sprintf("#%.2x%.2x%.2x", 0xFF, 0xFF, 0xFF); // default to white: we really shouldn't be calling this function in that case though
 
 	return tmpString;
 }
 
+UTF8String WPXHLListener::_mergeColorsToString(const RGBSColor *fgColor, const RGBSColor *bgColor)
+{
+	UTF8String tmpColor;
+	RGBSColor tmpFgColor, tmpBgColor;
 
+	if (fgColor != NULL) {
+		tmpFgColor.m_r = fgColor->m_r;
+		tmpFgColor.m_g = fgColor->m_g;
+		tmpFgColor.m_b = fgColor->m_b;
+		tmpFgColor.m_s = fgColor->m_s;
+	}
+	else {
+		tmpFgColor.m_r = tmpFgColor.m_g = tmpFgColor.m_b = 0xFF;
+		tmpFgColor.m_s = 0x64; // 100%
+	}
+	if (bgColor != NULL) {
+		tmpBgColor.m_r = bgColor->m_r;
+		tmpBgColor.m_g = bgColor->m_g;
+		tmpBgColor.m_b = bgColor->m_b;
+		tmpBgColor.m_s = bgColor->m_s;
+	}
+	else {
+		tmpBgColor.m_r = tmpBgColor.m_g = tmpBgColor.m_b = 0xFF;
+		tmpBgColor.m_s = 0x64; // 100%
+	}
 
+	float fgAmount = (float)tmpFgColor.m_s/100.0f;
+	float bgAmount = max(((float)tmpBgColor.m_s-(float)tmpFgColor.m_s)/100.0f, 0.0f);
+
+	int bgRed = min((int)(((float)tmpFgColor.m_r*fgAmount)+((float)tmpBgColor.m_r*bgAmount)), 255);
+	int bgGreen = min((int)(((float)tmpFgColor.m_g*fgAmount)+((float)tmpBgColor.m_g*bgAmount)), 255);
+	int bgBlue = min((int)(((float)tmpFgColor.m_b*fgAmount)+((float)tmpBgColor.m_b*bgAmount)), 255);
+
+	tmpColor.sprintf("#%.2x%.2x%.2x", bgRed, bgGreen, bgBlue);
+
+	return tmpColor;
+}

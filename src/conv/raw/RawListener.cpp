@@ -171,7 +171,7 @@ void RawListenerImpl::openSpan(const WPXPropertyList &propList)
 {
 	_U(("openSpan(textAttributeBits: %u, fontName: %s, fontSize: %.4f, fontColor: %s, highlightColor: %s)\n",
 	    propList["text-attribute-bits"]->getInt(), propList["font-name"]->getStr().getUTF8(), propList["font-size"]->getFloat(),
-	    propList["color"]->getString(), propList["text-background-color"]->getString()), 
+	    propList["color"]->getStr().getUTF8(), propList["text-background-color"]->getStr().getUTF8()), 
 	   LC_OPEN_SPAN);
 }
 
@@ -352,11 +352,9 @@ void RawListenerImpl::openTableCell(const WPXPropertyList &propList)
 		break;
 	}
 			
-	_U(("openTableCell(col: %d, row: %d, colSpan: %d, rowSpan: %d, borderBits: %d, cellFgColor: #%.6x s:%.2x, cellBgColor: #%.6x s:%.2x, cellBorderColor: #%.6x s:%.2x, cellVerticalAlignment %s)\n",
+	_U(("openTableCell(col: %d, row: %d, colSpan: %d, rowSpan: %d, borderBits: %d, cellColor: %s, cellBorderColor: %s, cellVerticalAlignment %s)\n",
 	    propList["col"]->getInt(), propList["row"]->getInt(), propList["col-span"]->getInt(), propList["row-span"]->getInt(), propList["border-bits"]->getInt(),
-    	    ((propList["foreground-color"]->getInt() & 0xffffff00) >> 8), (propList["foreground-color"]->getInt() & 0x000000ff), 
-	    ((propList["background-color"]->getInt() & 0xffffff00) >> 8), (propList["background-color"]->getInt() & 0x000000ff), 
-	    ((propList["border-color"]->getInt() & 0xffffff00) >> 8), (propList["border-color"]->getInt() & 0x000000ff), 
+    	    propList["color"]->getStr().getUTF8(), propList["border-color"]->getStr().getUTF8(),
 	    sCellVerticalAlignment.getUTF8()),
 	   LC_OPEN_TABLE_CELL);
 }

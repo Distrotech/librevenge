@@ -70,7 +70,7 @@ class WPXHLListenerImpl
 	\li \c is-last-page-span Whether this is the start of the last page span in the document
 	\li \c page-height The height of the page, in inches (portrait or landscape)
 	\li \c page-width The width of the page, in inches
-	\li \c orientation The orientation of the page, encoded as an integer
+	\li \c print-orientation The orientation of the page, encoded as an integer
 	\li \c margin-left The left margin for each page in the span, in inches
 	\li \c margin-right The right margin for each page in the span, in inches
 	\li \c margin-top The top margin for each page in the span, in inches

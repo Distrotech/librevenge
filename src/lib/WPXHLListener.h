@@ -197,7 +197,8 @@ protected:
 	bool m_isUndoOn;
 	
 private:
-	int _rgbsColorToInt(const RGBSColor * color);
+	UTF8String _colorToString(const RGBSColor * color);
+	UTF8String _mergeColorsToString(const RGBSColor *fgColor, const RGBSColor *bgColor);
 };
 
 #endif /* WPXHLLISTENER_H */

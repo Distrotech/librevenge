@@ -21,6 +21,8 @@ public:
 		m_str(str) {}
 	WPXStringProperty(const UCSString &str) :
 		m_str(str) {}
+	WPXStringProperty(const char * str) :
+		m_str(str) {}
 	virtual ~WPXStringProperty() {}
 	virtual int getInt() const { return 0; }
 	virtual float getFloat() const { return 0.0f; }
@@ -63,6 +65,7 @@ class WPXPropertyFactory
 public:
 	static WPXProperty * newStringProp(const UTF8String &str) { return static_cast<WPXProperty *>(new WPXStringProperty(str)); }
 	static WPXProperty * newStringProp(const UCSString &str) { return static_cast<WPXProperty *>(new WPXStringProperty(str)); }
+	static WPXProperty * newStringProp(const char *str) { return static_cast<WPXProperty *>(new WPXStringProperty(str)); }
 	static WPXProperty * newIntProp(const int val) { return static_cast<WPXProperty *>(new WPXIntProperty(val)); }
 	static WPXProperty * newFloatProp(const float val) { return static_cast<WPXProperty *>(new WPXFloatProperty(val)); }
 };
