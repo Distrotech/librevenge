@@ -70,7 +70,7 @@ class WPXHLListenerImpl
 	virtual void openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits,
 				   const float marginLeftOffset, const float marginRightOffset, const float textIndent,
 				   const gchar *fontName, const float fontSize, const RGBSColor *fontColor,
-				   const RGBSColor *highlightColor, const float lineSpacing,
+				   const RGBSColor *highlightColor, const float lineSpacing, const float spacingAfterParagraph,
 				   const bool isColumnBreak, const bool isPageBreak) = 0;
 	virtual void closeParagraph() = 0;
 	virtual void openSpan(const guint32 textAttributeBits, const gchar *fontName, const float fontSize,
@@ -105,7 +105,7 @@ class WPXHLListenerImpl
 	virtual void openListElement(const guint8 paragraphJustification, const guint32 textAttributeBits,
 				     const float marginLeftOffset, const float marginRightOffset, const float textIndent,
 				     const gchar *fontName, const float fontSize, const RGBSColor *fontColor,
-				     const RGBSColor *highlightColor, const float lineSpacing) = 0;
+				     const RGBSColor *highlightColor, const float lineSpacing, const float spacingAfterParagraph) = 0;
 	virtual void closeListElement() = 0;
 
 	virtual void openFootnote(int number) = 0;

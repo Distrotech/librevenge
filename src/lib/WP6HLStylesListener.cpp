@@ -79,7 +79,7 @@ void WP6HLStylesListener::pageMarginChange(const guint8 side, const guint16 marg
 {
 	if (!isUndoOn()) 
 	{
-		float marginInch = (float)(((double)margin + (double)WP6_NUM_EXTRA_WPU) / (double)WPX_NUM_WPUS_PER_INCH);
+		float marginInch = (float)((double)margin / (double)WPX_NUM_WPUS_PER_INCH);
 		switch(side)
 		{
 			case WP6_PAGE_GROUP_TOP_MARGIN_SET:
@@ -111,7 +111,7 @@ void WP6HLStylesListener::marginChange(const guint8 side, const guint16 margin)
 {
 	if (!isUndoOn())
 	{
-		float marginInch = (float)(((double)margin + (double)WP6_NUM_EXTRA_WPU) / (double)WPX_NUM_WPUS_PER_INCH);
+		float marginInch = (float)((double)margin / (double)WPX_NUM_WPUS_PER_INCH);
 		switch(side)
 		{
 			case WP6_COLUMN_GROUP_LEFT_MARGIN_SET:

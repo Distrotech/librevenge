@@ -102,9 +102,11 @@ struct _WPXParsingState
 
 	float m_pageMarginLeft;
 	float m_pageMarginRight;
+
 	float m_paragraphMarginLeft;
 	float m_paragraphMarginRight;
 	float m_paragraphTextIndent;
+	float m_paragraphSpacingAfter;
 
 	/*gint32 m_currentRow;
 	gint32 m_currentColumn;

@@ -206,7 +206,7 @@ void WP5HLListener::_openParagraph()
 	m_listenerImpl->openParagraph(0, m_ps->m_textAttributeBits,
 				      m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight, m_ps->m_paragraphTextIndent,
 				      m_ps->m_fontName->str, m_ps->m_fontSize, m_ps->m_fontColor, m_ps->m_highlightColor,
-				      1.0f,
+				      1.0f, 0.0f,
 				      m_ps->m_isParagraphColumnBreak, m_ps->m_isParagraphPageBreak);
 	if (m_ps->m_numDeferredParagraphBreaks > 0)
 		m_ps->m_numDeferredParagraphBreaks--;

@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2004 Marc Maurer (j.m.maurer@student.utwente.nl)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -43,10 +43,13 @@ public:
  	virtual void insertBreak(const guint8 breakType);
 	virtual void attributeChange(const bool isOn, const guint8 attribute) {}
 	virtual void lineSpacingChange(const float lineSpacing) {}
+	virtual void spacingAfterParagraphChange(const float spacingRelative, const float spacingAbsolute) {}
 	virtual void justificationChange(const guint8 justification) {}
 	virtual void pageMarginChange(const guint8 side, const guint16 margin) {}
 	virtual void pageFormChange(const guint16 length, const guint16 width, const WPXFormOrientation orientation) {}
 	virtual void marginChange(const guint8 side, const guint16 margin) {}
+	virtual void paragraphMarginChange(const guint8 side, const gint16 margin) {}
+	virtual void indentFirstLineChange(const gint16 offset) {}
 	virtual void columnChange(const guint8 numColumns) {}
 	virtual void endDocument();
 

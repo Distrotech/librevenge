@@ -55,7 +55,7 @@ public:
 	virtual void openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits,
 				   const float marginLeftOffset, const float marginRightOffset, const float textIndent,
 				   const gchar *fontName, const float fontSize, const RGBSColor *fontColor,
-				   const RGBSColor *highlightColor, const float lineSpacing,
+				   const RGBSColor *highlightColor, const float lineSpacing, const float spacingAfterParagraph,
 				   const bool isColumnBreak, const bool isPageBreak);
 	virtual void closeParagraph();
 	virtual void openSpan(const guint32 textAttributeBits, const gchar *fontName, const float fontSize,
@@ -79,7 +79,7 @@ public:
 	virtual void openListElement(const guint8 paragraphJustification, const guint32 textAttributeBits,
 				   const float marginLeftOffset, const float marginRightOffset, const float textIndent,
 				   const gchar *fontName, const float fontSize, const RGBSColor *fontColor,
-				   const RGBSColor *highlightColor, const float lineSpacing);
+				   const RGBSColor *highlightColor, const float lineSpacing, const float spacingAfterParagraph);
 	virtual void closeListElement();
 
 	virtual void openFootnote(int number);

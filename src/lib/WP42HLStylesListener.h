@@ -44,10 +44,13 @@ public:
  	virtual void highlightChante(const bool isOn, const RGBSColor color) {}
 	virtual void attributeChange(const bool isOn, const guint8 attribute) {}
 	virtual void lineSpacingChange(const float lineSpacing) {}
+	virtual void spacingAfterParagraphChange(const float spacingRelative, const float spacingAbsolute) {}
 	virtual void justificationChange(const guint8 justification) {}
 	virtual void pageMarginChange(const guint8 side, const guint16 margin) {}
 	virtual void pageFormChange(const guint16 length, const guint16 width, const WPXFormOrientation orientation) {}
 	virtual void marginChange(const guint8 side, const guint16 margin) {}
+	virtual void paragraphMarginChange(const guint8 side, const gint16 margin) {}
+	virtual void indentFirstLineChange(const gint16 offset) {}
 	virtual void columnChange(const guint8 numColumns) {}
 	virtual void endDocument();
 

@@ -86,6 +86,14 @@ struct _WP6ParsingState
 	guint8 m_paragraphJustification;
 	guint8 m_tempParagraphJustification; // TODO: wouldn't a better name be m_tabParagraphJustification ? - MARCM
 	float m_paragraphLineSpacing;
+	float m_paragraphSpacingAfterRelative;
+	float m_paragraphSpacingAfterAbsolute;
+	float m_leftMargin;
+	float m_rightMargin;
+        float m_firstLineOffset;
+        float m_paragraphLeftMargin;
+        float m_paragraphRightMargin;
+
 
 	guint m_numRemovedParagraphBreaks;
 
@@ -155,10 +163,13 @@ public:
 	virtual void fontChange(const guint16 matchedFontPointSize, const guint16 fontPID);
  	virtual void attributeChange(const bool isOn, const guint8 attribute);
 	virtual void lineSpacingChange(const float lineSpacing);
+	virtual void spacingAfterParagraphChange(const float spacingRelative, const float spacingAbsolute);
 	virtual void justificationChange(const guint8 justification);
 	virtual void pageMarginChange(const guint8 side, const guint16 margin) {}
 	virtual void pageFormChange(const guint16 length, const guint16 width, const WPXFormOrientation orientation) {}
 	virtual void marginChange(const guint8 side, const guint16 margin);
+	virtual void paragraphMarginChange(const guint8 side, const gint16 margin);
+	virtual void indentFirstLineChange(const gint16 offset);
 	virtual void columnChange(const guint8 numColumns);
 	virtual void updateOutlineDefinition(const WP6OutlineLocation outlineLocation, const guint16 outlineHash,
 						const guint8 *numberingMethods, const guint8 tabBehaviourFlag);
