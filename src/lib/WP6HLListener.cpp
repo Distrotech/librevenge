@@ -287,69 +287,72 @@ void WP6HLListener::endDocument()
 void WP6HLListener::startTable()
 {
 	if (!m_isUndoOn) 
-		{		
-			// flush everything which came before this change
-			// eliminating one paragraph break which is now implicit in
-			// a paragraph change -- UNLESS the paragraph break represents
-			// something else than its name suggests, such as a paragraph
-			// or column break (FIXME: probably should move this to a general
-			// helper function when we add more section changing messages)
-			if (!m_sectionAttributesChanged && m_numDeferredParagraphBreaks > 0 &&
-			    !m_isParagraphColumnBreak && !m_isParagraphPageBreak)
-				m_numDeferredParagraphBreaks--;					
-			_flushText();
+	{		
+		// flush everything which came before this change
+		// eliminating one paragraph break which is now implicit in
+		// a paragraph change -- UNLESS the paragraph break represents
+		// something else than its name suggests, such as a paragraph
+		// or column break (FIXME: probably should move this to a general
+		// helper function when we add more section changing messages)
+		if (!m_sectionAttributesChanged && m_numDeferredParagraphBreaks > 0 &&
+			!m_isParagraphColumnBreak && !m_isParagraphPageBreak)
+			m_numDeferredParagraphBreaks--;					
+		_flushText();
 
-			// HACK: handle corner case of tables without an end element by starting
-			// a new table?
-			if (m_isTableOpened)
-				m_listenerImpl->closeTable();
+		// HACK: handle corner case of tables without an end element by starting
+		// a new table?
+		if (m_isTableOpened)
+			m_listenerImpl->closeTable();
 
-			// handle corner case where we have a new section, but immediately start with a table
-			// FIXME: this isn't a very satisfying solution, and might need to be generalized
-			// as we add more table-like structures into the document
-			if (m_sectionAttributesChanged) 
-				m_listenerImpl->openSection(m_numColumns, m_marginLeft, m_marginRight);
-				
-			m_listenerImpl->openTable();
-			m_isTableOpened = TRUE;
+		// handle corner case where we have a new section, but immediately start with a table
+		// FIXME: this isn't a very satisfying solution, and might need to be generalized
+		// as we add more table-like structures into the document
+		if (m_sectionAttributesChanged)
+		{
+			m_listenerImpl->openSection(m_numColumns, m_marginLeft, m_marginRight);
+			m_sectionAttributesChanged = FALSE;
 		}
+			
+		m_listenerImpl->openTable();
+		m_isTableOpened = TRUE;
+	}
 }
 
 void WP6HLListener::insertRow()
 {
 	if (!m_isUndoOn) 
-		{			
-			_flushText();
-			m_currentRow++;
-			m_currentColumn = -1;
-			m_listenerImpl->openRow();
-		}
+	{			
+		_flushText();
+		m_currentRow++;
+		m_currentColumn = -1;
+		m_listenerImpl->openRow();
+	}
 }
 
 void WP6HLListener::insertCell(guint8 colSpan, guint8 rowSpan, gboolean boundFromLeft, gboolean boundFromAbove, RGBSColor * cellFgColor, RGBSColor * cellBgColor)
 {
 	if (!m_isUndoOn) 
-		{			
-			_flushText();
-			m_currentColumn++;
-			if (!boundFromLeft && !boundFromAbove) {
-				m_listenerImpl->openCell(m_currentColumn, m_currentRow, colSpan, rowSpan, cellFgColor, cellBgColor);
-				m_numDeferredParagraphBreaks++;
-			}
+	{			
+		_flushText();
+		m_currentColumn++;
+		if (!boundFromLeft && !boundFromAbove) {
+			m_listenerImpl->openCell(m_currentColumn, m_currentRow, colSpan, rowSpan, cellFgColor, cellBgColor);
+			m_numDeferredParagraphBreaks++;
 		}
+	}
 }
 
 void WP6HLListener::endTable()
 {
 	if (!m_isUndoOn) 
-		{			
-			_flushText();
-			m_listenerImpl->closeTable();
-			m_currentRow = 0;
-			m_currentColumn = 0;
-			m_numDeferredParagraphBreaks++;
-			m_isTableOpened = FALSE;
-		}
+	{			
+		_flushText();
+		m_listenerImpl->closeTable();
+		m_currentRow = 0;
+		m_currentColumn = 0;
+		m_numDeferredParagraphBreaks++;
+		m_isTableOpened = FALSE;
+	}
 }
 
 void WP6HLListener::_flushText()
