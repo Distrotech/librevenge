@@ -85,7 +85,7 @@ void WP6ColumnGroup::parse(WP6LLListener *llListener)
 				// number of columns = {0,1} means columns off
 				if ((m_numColumns == 0) || (m_numColumns == 1))
 				{
-					llListener->columnChange(1); // the value "1" is bugus, the FALSE boolean gives you all the information you need here
+					llListener->columnChange(1); // the value "1" is bugus, the false bool gives you all the information you need here
 				} 
 				else
 				{

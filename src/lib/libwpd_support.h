@@ -60,9 +60,9 @@ typedef struct _WPXColumnDefinition WPXColumnDefinition;
 struct _WPXColumnDefinition
 {
 	_WPXColumnDefinition(); // initializes all values to 0
-	gfloat m_width;
-	gfloat m_leftGutter;
-	gfloat m_rightGutter;
+	float m_width;
+	float m_leftGutter;
+	float m_rightGutter;
 };
 
 // UCSString: minimal string class, basically an object-oriented wrapper around glib's UCS4 string
@@ -90,7 +90,7 @@ private:
 class UTF8String
 {
 public:
-	UTF8String(const UCSString &, gboolean doConvertToValidXML = FALSE);
+	UTF8String(const UCSString &, bool doConvertToValidXML = false);
 	~UTF8String() { g_free(m_buf); }
 	const gchar * getUTF8() const { return m_buf; }
 	const int getLen() const { return m_len; }

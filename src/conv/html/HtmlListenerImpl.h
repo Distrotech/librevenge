@@ -46,30 +46,30 @@ public:
 ;
 	virtual void startDocument();
 	virtual void endDocument();
-	virtual void openSection(const guint numColumns, gfloat marginLeft, gfloat marginRight);
+	virtual void openSection(const guint numColumns, float marginLeft, float marginRight);
 	virtual void closeSection();
 	virtual void openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits,
-				   const gchar *fontName, gfloat fontSize, 
+				   const gchar *fontName, float fontSize, 
 				   const float lineSpacing,
-				   gboolean isColumnBreak, gboolean isPageBreak);
+				   bool isColumnBreak, bool isPageBreak);
 	virtual void closeParagraph();
-	virtual void openSpan(const guint32 textAttributeBits, const gchar *fontName, const gfloat fontSize);
+	virtual void openSpan(const guint32 textAttributeBits, const gchar *fontName, const float fontSize);
 	virtual void closeSpan();
 
 	virtual void insertTab();
 	virtual void insertText(const UCSString &text);
 	virtual void insertLineBreak() {}
 
-	virtual void defineOrderedListLevel(const gint listID, const guint16 listLevel, const NumberingType listType, 
+	virtual void defineOrderedListLevel(const int listID, const guint16 listLevel, const NumberingType listType, 
 					    const UCSString &textBeforeNumber, const UCSString &textAfterNumber,
-					    const gint startingNumber) {}
-	virtual void defineUnorderedListLevel(const gint listID, const guint16 listLevel, const UCSString &bullet) {}
-	virtual void openOrderedListLevel(const gint listID);
-	virtual void openUnorderedListLevel(const gint listID);
+					    const int startingNumber) {}
+	virtual void defineUnorderedListLevel(const int listID, const guint16 listLevel, const UCSString &bullet) {}
+	virtual void openOrderedListLevel(const int listID);
+	virtual void openUnorderedListLevel(const int listID);
 	virtual void closeOrderedListLevel();
 	virtual void closeUnorderedListLevel();
 	virtual void openListElement(const guint8 paragraphJustification, const guint32 textAttributeBits,
-				     const gchar *fontName, const gfloat fontSize, 
+				     const gchar *fontName, const float fontSize, 
 				     const float lineSpacing);
 	virtual void closeListElement();
 
@@ -78,7 +78,7 @@ public:
 	virtual void openEndnote(int number);
 	virtual void closeEndnote();
 
-	virtual void openTable(const guint8 tablePositionBits, const gfloat leftOffset, const vector < WPXColumnDefinition > &columns);
+	virtual void openTable(const guint8 tablePositionBits, const float leftOffset, const vector < WPXColumnDefinition > &columns);
 	virtual void openTableRow();
 	virtual void closeTableRow();
 	virtual void openTableCell(const guint32 col, const guint32 row, 

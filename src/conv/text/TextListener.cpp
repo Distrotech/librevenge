@@ -32,7 +32,7 @@
 
 TextListener::TextListener() : 
 	WP6LLListener(),
-	m_isUndoOn(FALSE)
+	m_isUndoOn(false)
 {
 }
 
@@ -54,12 +54,12 @@ void TextListener::insertCharacter(const guint16 character)
 void TextListener::undoChange(const guint8 undoType, const guint16 undoLevel)
 {
 	if (undoType == WP6_UNDO_GROUP_INVALID_TEXT_START)
-		m_isUndoOn = TRUE;
+		m_isUndoOn = true;
 	else if (undoType == WP6_UNDO_GROUP_INVALID_TEXT_END)
-		m_isUndoOn = FALSE;
+		m_isUndoOn = false;
 }
 
-void TextListener::insertTab()
+void TextListener::insertTab(const guint8 tabType)
 {
 	if (!m_isUndoOn) {
 		printf("%c", UCS_TAB);

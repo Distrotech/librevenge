@@ -29,7 +29,7 @@
 
 RawListener::RawListener() : 
 	WP6LLListener(),
-	m_isUndoOn(FALSE)
+	m_isUndoOn(false)
 {
 }
 
@@ -52,11 +52,11 @@ void RawListener::undoChange(const guint8 undoType, const guint16 undoLevel)
 {
 	if (undoType == WP6_UNDO_GROUP_INVALID_TEXT_START) {
 		//printf("<UNDO ON>");
-		m_isUndoOn = TRUE;
+		m_isUndoOn = true;
 	}
 	else if (undoType == WP6_UNDO_GROUP_INVALID_TEXT_END) {
 		//printf("<UNDO OFF>");
-		m_isUndoOn = FALSE;
+		m_isUndoOn = false;
 	}
 }
 
@@ -72,10 +72,10 @@ void RawListener::justificationChange(const guint8 justification)
 
 }
 
-void RawListener::insertTab()
+void RawListener::insertTab(const guint8 tabType)
 {
 	if (!m_isUndoOn) {
-		printf("<TAB>");
+		printf("<TAB: %i>", tabType);
 	}
 }
 

@@ -37,7 +37,7 @@ WP6PrefixIndice::WP6PrefixIndice(GsfInput * input, int id)
 	  m_hideCount(0),
 	  m_dataSize(0),
 	  m_dataOffset(0),
-	  m_hasChildren(FALSE)
+	  m_hasChildren(false)
 {
 	_read(input);
 }

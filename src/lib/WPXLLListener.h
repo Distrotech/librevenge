@@ -35,10 +35,10 @@ class WPXLLListener
 	virtual ~WPXLLListener() {}
 	virtual void startDocument() = 0;
 	virtual void insertCharacter(const guint16 character) = 0;
-	virtual void insertTab() = 0;
+	virtual void insertTab(const guint8 tabType) = 0;
 	virtual void insertEOL() = 0;
  	virtual void insertBreak(const guint8 breakType) = 0;
-	virtual void attributeChange(const gboolean isOn, const guint8 attribute) = 0;
+	virtual void attributeChange(const bool isOn, const guint8 attribute) = 0;
 	virtual void lineSpacingChange(const float lineSpacing) = 0;
 	virtual void justificationChange(const guint8 justification) = 0;
 	virtual void marginChange(const guint8 side, const guint16 margin) = 0;
@@ -49,7 +49,7 @@ class WPXLLListener
 	virtual void addTableColumnDefinition(guint32 width, guint32 leftGutter, guint32 rightGutter) = 0;
 	virtual void startTable() = 0;
  	virtual void insertRow() = 0;
- 	virtual void insertCell(const guint8 colSpan, const guint8 rowSpan, const gboolean boundFromLeft, const gboolean boundFromAbove, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor) = 0;
+ 	virtual void insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor) = 0;
  	virtual void endTable() = 0;
 };
 

@@ -87,9 +87,9 @@ void HtmlListenerImpl::endDocument()
 }
 
 void HtmlListenerImpl::openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits, 
-				     const gchar *fontName, const gfloat fontSize,
+				     const gchar *fontName, const float fontSize,
 				     const float lineSpacing,
-				     const gboolean isColumnBreak, const gboolean isPageBreak)
+				     const bool isColumnBreak, const bool isPageBreak)
 {
 	printf("<p style=\"");
 	_appendTextAttributes(textAttributeBits);
@@ -102,7 +102,7 @@ void HtmlListenerImpl::closeParagraph()
 	printf("</p>\n");
 }
 
-void HtmlListenerImpl::openSpan(guint32 textAttributeBits, const gchar *fontName, const gfloat fontSize)
+void HtmlListenerImpl::openSpan(guint32 textAttributeBits, const gchar *fontName, const float fontSize)
 {
 	printf("<span style=\""); 
 	_appendTextAttributes(textAttributeBits);
@@ -114,7 +114,7 @@ void HtmlListenerImpl::closeSpan()
 	printf("</span>");
 }
 
-void HtmlListenerImpl::openSection(guint numColumns, gfloat marginLeft, gfloat marginRight)
+void HtmlListenerImpl::openSection(guint numColumns, float marginLeft, float marginRight)
 {
 	printf("<section columns:%i margin-left:%4.4fin margin-right:%4.4fin>\n", numColumns, marginLeft, marginRight);
 }
@@ -135,7 +135,7 @@ void HtmlListenerImpl::insertText(const UCSString &text)
 	printf("%s", tempUTF8.getUTF8());
 }
 
-void HtmlListenerImpl::openOrderedListLevel(const gint listID)
+void HtmlListenerImpl::openOrderedListLevel(const int listID)
 {
 	printf("<ol>\n");
 }
@@ -145,7 +145,7 @@ void HtmlListenerImpl::closeOrderedListLevel()
 	printf("</ol>\n");
 }
 
-void HtmlListenerImpl::openUnorderedListLevel(const gint listID)
+void HtmlListenerImpl::openUnorderedListLevel(const int listID)
 {
 	printf("<ul>\n");
 }
@@ -157,7 +157,7 @@ void HtmlListenerImpl::closeUnorderedListLevel()
 
 
 void HtmlListenerImpl::openListElement(const guint8 paragraphJustification, const guint32 textAttributeBits,
-				       const gchar *fontName, const gfloat fontSize, 
+				       const gchar *fontName, const float fontSize, 
 				       const float lineSpacing)
 {
 	printf("<li style=\"");
@@ -191,7 +191,7 @@ void HtmlListenerImpl::closeEndnote()
 	printf("</endnote>\n");
 }
 
-void HtmlListenerImpl::openTable(const guint8 tablePositionBits, const gfloat leftOffset, const vector < WPXColumnDefinition > &columns)
+void HtmlListenerImpl::openTable(const guint8 tablePositionBits, const float leftOffset, const vector < WPXColumnDefinition > &columns)
 {
 	printf("<table border=\"1\">\n");
 	printf("<tbody>\n");

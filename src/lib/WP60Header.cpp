@@ -49,11 +49,11 @@ WP60Header::WP60Header(GsfInput * input)
 	
 	/* we do not handle encrypted documents */
 	/*if (m_documentEncryption != 0)
-	  return FALSE;*/
+	  return false;*/
 	
 	/* sanity check */
 	/*if (documentOffset > m_iDocumentSize)
-	  return FALSE;*/
+	  return false;*/
 
 	// read the Index Header (Header #0)
 	// skip the Flags = 2 and the Reserved byte = 0

@@ -457,7 +457,7 @@ void UCSString::clear()
 	m_stringBuf = g_array_set_size(m_stringBuf, 0);			
 }
 
-UTF8String::UTF8String(const UCSString &stringBuf, gboolean doConvertToValidXML)
+UTF8String::UTF8String(const UCSString &stringBuf, bool doConvertToValidXML)
 {
 	if (doConvertToValidXML) 
 	{

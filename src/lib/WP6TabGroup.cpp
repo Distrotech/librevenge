@@ -39,51 +39,6 @@ void WP6TabGroup::_readContents(GsfInput *input)
 
 void WP6TabGroup::parse(WP6LLListener *llListener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling a Tab group\n"));
-	
-	guint8 tabDefinition = getSubGroup();
-	
-	// hack: we don't insert a tab stop if the tab actually represents alignment
-	// we simply emulate what a justification change (in the paragraph group)
-	// would do 
-	switch ((tabDefinition & 0xC0) >> 6)
-	{
-	case WP6_TAB_GROUP_JUSTIFICATION_CENTER:
-		llListener->justificationChange(WP6_PARAGRAPH_JUSTIFICATION_CENTER);
-		return;
-	case WP6_TAB_GROUP_JUSTIFICATION_RIGHT:
-		llListener->justificationChange(WP6_PARAGRAPH_JUSTIFICATION_RIGHT);
-		return;
-	default:
-		break;
-	}
-
-	// TODO: soft type (tab, align, centerm and so forth), (uses tab set definition type)
-	if (tabDefinition & 0x01) { }
-	// TODO: dot leader 
-	if (tabDefinition & 0x02) { }
-	// TODO: generic search (only used in search code, ignore bits 0 and 1 when comparing)
-	if (tabDefinition & 0x04) { }    
-	
-
-	switch ((tabDefinition & 0xF8) >> 3)
-	{
-	case  0: // 00000b = back tab
-	case  1: // 00001b = table tab
-	case  2: // 00010b = left tab
-	case  4: // 00100b = bar tab
-	case  6: // 00110b = left indent
-	case  7: // 00111b = left/right indent
-	case  8: // 01000b = center on margins
-	case  9: // 01001b = center on current position
-	case 10: // 01010b = center tab
-	case 16: // 10000b = flush right
-	case 18: // 10010b = right tab
-	case 26: // 11010b = decimal tab
-		// TODO: fix stupid default implementation of adding just a TAB char without looking what it actually should be
-		llListener->insertTab();		
-		break;
-	default: // something else shouldn't be possible according to the documentation
-		break;
-	}
+	WPD_DEBUG_MSG(("WordPerfect: handling a Tab group\n"));	
+	llListener->insertTab(getSubGroup());
 }

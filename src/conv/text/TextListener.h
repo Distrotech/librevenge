@@ -36,7 +36,7 @@ public:
 	~TextListener() {}
 	virtual void startDocument() {}
 	virtual void insertCharacter(const guint16 character);
-	virtual void insertTab();
+	virtual void insertTab(const guint8 tabType);
 	virtual void insertEOL();
 	virtual void insertBreak(const guint8 breakType) {}
 	virtual void undoChange(const guint8 undoType, const guint16 undoLevel);
@@ -45,7 +45,7 @@ public:
 			     const guint8 dayOfWeek, const guint8 timeZone, const guint8 unused) {}
 	virtual void setExtendedInformation(const guint16 type, const UCSString &data) {}
 	virtual void fontChange(const guint16 matchedFontPointSize, const guint16 fontPID) {}
-	virtual void attributeChange(const gboolean isOn, const guint8 attribute) {}
+	virtual void attributeChange(const bool isOn, const guint8 attribute) {}
 	virtual void lineSpacingChange(const float lineSpacing) {}
 	virtual void justificationChange(const guint8 justification) {}
 	virtual void marginChange(const guint8 side, const guint16 margin) {}
@@ -69,11 +69,11 @@ public:
 	virtual void addTableColumnDefinition(guint32 width, guint32 leftGutter, guint32 rightGutter) {};
 	virtual void startTable() {}
  	virtual void insertRow() {}
- 	virtual void insertCell(const guint8 colSpan, const guint8 rowSpan, const gboolean boundFromLeft, const gboolean boundFromAbove, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor) {}
+ 	virtual void insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor) {}
  	virtual void endTable() {}
 
  private:
-	gboolean m_isUndoOn;
+	bool m_isUndoOn;
 };
 
 #endif /* TEXTLISTENER_H */

@@ -32,8 +32,8 @@ WP6EOLGroup::WP6EOLGroup(GsfInput *input) :
 	WP6VariableLengthGroup(),
 	m_colSpan(1),
 	m_rowSpan(1),
-	m_boundFromLeft(FALSE),
-	m_boundFromAbove(FALSE),
+	m_boundFromLeft(false),
+	m_boundFromAbove(false),
 	
 	m_cellFgColor(NULL),
 	m_cellBgColor(NULL)
@@ -98,11 +98,11 @@ void WP6EOLGroup::_readContents(GsfInput *input)
 				WPD_DEBUG_MSG(("WordPerfect: num cells spanned (h:%ld, v:%ld)\n", 
 						   numCellsSpannedHorizontally, numCellsSpannedVertically));
 				if (numCellsSpannedHorizontally >= 128)
-					m_boundFromLeft = TRUE;
+					m_boundFromLeft = true;
 				else
 					m_colSpan = numCellsSpannedHorizontally;
 				if (numCellsSpannedVertically >= 128)
-					m_boundFromAbove = TRUE;
+					m_boundFromAbove = true;
 				else
 					m_rowSpan = numCellsSpannedVertically;
 				break;

@@ -53,29 +53,29 @@ class WPXHLListenerImpl
 	virtual void endDocument() = 0;
 
 	virtual void openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits,
-				   const gchar *fontName, const gfloat fontSize, 
-				   const gfloat lineSpacing, 
-				   const gboolean isColumnBreak, const gboolean isPageBreak) = 0;
+				   const gchar *fontName, const float fontSize, 
+				   const float lineSpacing, 
+				   const bool isColumnBreak, const bool isPageBreak) = 0;
 	virtual void closeParagraph() = 0;
-	virtual void openSpan(const guint32 textAttributeBits, const gchar *fontName, const gfloat fontSize) = 0;
+	virtual void openSpan(const guint32 textAttributeBits, const gchar *fontName, const float fontSize) = 0;
 	virtual void closeSpan() = 0;
-	virtual void openSection(const guint numColumns, const gfloat marginLeft, const gfloat marginRight) = 0;
+	virtual void openSection(const guint numColumns, const float marginLeft, const float marginRight) = 0;
 	virtual void closeSection() = 0;
 
 	virtual void insertTab() = 0;
 	virtual void insertText(const UCSString &text) = 0;
  	virtual void insertLineBreak() = 0;
 
-	virtual void defineOrderedListLevel(const gint listID, const guint16 listLevel, const NumberingType listType, 
+	virtual void defineOrderedListLevel(const int listID, const guint16 listLevel, const NumberingType listType, 
 					    const UCSString &textBeforeNumber, const UCSString &textAfterNumber,
-					    const gint startingNumber) = 0;
-	virtual void defineUnorderedListLevel(const gint listID, const guint16 listLevel, const UCSString &bullet) = 0;
-	virtual void openOrderedListLevel(const gint listID) = 0;
-	virtual void openUnorderedListLevel(const gint listID) = 0;
+					    const int startingNumber) = 0;
+	virtual void defineUnorderedListLevel(const int listID, const guint16 listLevel, const UCSString &bullet) = 0;
+	virtual void openOrderedListLevel(const int listID) = 0;
+	virtual void openUnorderedListLevel(const int listID) = 0;
 	virtual void closeOrderedListLevel() = 0;
 	virtual void closeUnorderedListLevel() = 0;
 	virtual void openListElement(const guint8 paragraphJustification, const guint32 textAttributeBits,
-				     const gchar *fontName, const gfloat fontSize, 
+				     const gchar *fontName, const float fontSize, 
 				     const float lineSpacing) = 0;
 	virtual void closeListElement() = 0;
 	
@@ -84,7 +84,7 @@ class WPXHLListenerImpl
 	virtual void openEndnote(int number) = 0;
 	virtual void closeEndnote() = 0;
 
- 	virtual void openTable(const guint8 tablePositionBits, const gfloat leftOffset, const vector < WPXColumnDefinition > &columns) = 0;
+ 	virtual void openTable(const guint8 tablePositionBits, const float leftOffset, const vector < WPXColumnDefinition > &columns) = 0;
  	virtual void openTableRow() = 0;
 	virtual void closeTableRow() = 0;
  	virtual void openTableCell(const guint32 col, const guint32 row, const guint32 colSpan, const guint32 rowSpan, 

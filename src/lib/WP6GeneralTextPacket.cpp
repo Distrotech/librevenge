@@ -69,7 +69,7 @@ void WP6GeneralTextPacket::_readContents(GsfInput *input)
 		}
 	}
 
-	m_stream = GSF_INPUT(gsf_input_memory_new(streamData, totalSize, TRUE));
+	m_stream = GSF_INPUT(gsf_input_memory_new(streamData, totalSize, true));
 }
 
 void WP6GeneralTextPacket::parse(WP6LLListener *llListener) const

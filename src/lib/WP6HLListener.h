@@ -62,7 +62,7 @@ typedef struct _WP6TableDefinition WP6TableDefinition;
 struct _WP6TableDefinition
 {
 	guint8 m_positionBits;
-	gfloat m_leftOffset;
+	float m_leftOffset;
 	vector < WPXColumnDefinition > columns;
 };
 
@@ -85,7 +85,7 @@ private:
 typedef struct _WP6ParsingState WP6ParsingState;
 struct _WP6ParsingState
 {
-	_WP6ParsingState(gboolean sectionAttributesChanged=TRUE);
+	_WP6ParsingState(bool sectionAttributesChanged=true);
 	UCSString m_bodyText;
 	UCSString m_textBeforeNumber;
 	UCSString m_textBeforeDisplayReference;
@@ -94,35 +94,36 @@ struct _WP6ParsingState
 	UCSString m_textAfterNumber;
 
 	guint32 m_textAttributeBits;
-	gboolean m_textAttributesChanged;
-	gfloat m_fontSize;
+	bool m_textAttributesChanged;
+	float m_fontSize;
 	GString * m_fontName;
 
-	gboolean m_isParagraphColumnBreak;
-	gboolean m_isParagraphPageBreak;
+	bool m_isParagraphColumnBreak;
+	bool m_isParagraphPageBreak;
 	guint8 m_paragraphJustification;
+	guint8 m_tempParagraphJustification;
 	float m_paragraphLineSpacing;
- 	gboolean m_paragraphJustificationChanged;
+ 	bool m_paragraphJustificationChanged;
 
-	gboolean m_isSectionOpened;
+	bool m_isSectionOpened;
 
-	gboolean m_isParagraphOpened;
-	gboolean m_isParagraphClosed;
-	gboolean m_isSpanOpened;
+	bool m_isParagraphOpened;
+	bool m_isParagraphClosed;
+	bool m_isSpanOpened;
 	guint m_numDeferredParagraphBreaks;
 	guint m_numRemovedParagraphBreaks;
 	
-	gboolean m_isTableOpened;
-	gboolean m_isTableRowOpened;
-	gboolean m_isTableColumnOpened;
-	gboolean m_isTableCellOpened;
+	bool m_isTableOpened;
+	bool m_isTableRowOpened;
+	bool m_isTableColumnOpened;
+	bool m_isTableCellOpened;
 
-	gboolean m_sectionAttributesChanged;
+	bool m_sectionAttributesChanged;
 	guint m_numColumns;
-	gboolean m_isLeftMarginSet;
-	gboolean m_isRightMarginSet;
-	gfloat m_marginLeft;
-	gfloat m_marginRight;
+	bool m_isLeftMarginSet;
+	bool m_isRightMarginSet;
+	float m_marginLeft;
+	float m_marginRight;
 	
 	gint32 m_currentRow;
 	gint32 m_currentColumn;
@@ -132,13 +133,13 @@ struct _WP6ParsingState
 	guint8 m_oldListLevel;
 	guint8 m_currentListLevel;
 	WP6StyleStateSequence m_styleStateSequence;
-	gboolean m_putativeListElementHasParagraphNumber;
-	gboolean m_putativeListElementHasDisplayReferenceNumber;
+	bool m_putativeListElementHasParagraphNumber;
+	bool m_putativeListElementHasDisplayReferenceNumber;
 
 	int m_noteTextPID;
-	gboolean m_inSubDocument;
+	bool m_inSubDocument;
 
-	gboolean m_isUndoOn;
+	bool m_isUndoOn;
 };
 
 class WP6OutlineDefinition
@@ -171,13 +172,13 @@ public:
 	virtual void setExtendedInformation(const guint16 type, const UCSString &data);
 	virtual void startDocument();
 	virtual void insertCharacter(const guint16 character);
-	virtual void insertTab();
+	virtual void insertTab(const guint8 tabType);
 	virtual void insertEOL();
  	virtual void insertBreak(const guint8 breakType); 
 	virtual void undoChange(const guint8 undoType, const guint16 undoLevel);
 	virtual void fontChange(const guint16 matchedFontPointSize, const guint16 fontPID);
-	virtual void attributeChange(const gboolean isOn, const guint8 attribute);
-	virtual void lineSpacingChange(const gfloat lineSpacing);
+	virtual void attributeChange(const bool isOn, const guint8 attribute);
+	virtual void lineSpacingChange(const float lineSpacing);
 	virtual void justificationChange(const guint8 justification);
 	virtual void marginChange(const guint8 side, const guint16 margin);
 	virtual void columnChange(const guint8 numColumns); 
@@ -200,12 +201,12 @@ public:
 	virtual void addTableColumnDefinition(guint32 width, guint32 leftGutter, guint32 rightGutter);
 	virtual void startTable();
  	virtual void insertRow();
- 	virtual void insertCell(const guint8 colSpan, const guint8 rowSpan, const gboolean boundFromLeft, const gboolean boundFromAbove, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
+ 	virtual void insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
  	virtual void endTable(); 
 
 protected:
 	void _handleLineBreakElementBegin();
-	void _flushText(const gboolean fakeText=FALSE);
+	void _flushText(const bool fakeText=false);
 	void _handleListChange(const guint16 outlineHash);
 
 	void _openSection();
@@ -216,7 +217,7 @@ protected:
 	void _openTableRow();
 	void _closeTableRow();
 	void _openTableCell(const guint8 colSpan, const guint8 rowSpan, 
-			    const gboolean boundFromLeft, const gboolean boundFromAbove, 
+			    const bool boundFromLeft, const bool boundFromAbove, 
 			    const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
 	void _closeTableCell();
 
