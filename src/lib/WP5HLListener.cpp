@@ -82,7 +82,8 @@ _WP5ParsingState::~_WP5ParsingState()
 }
 
 WP5HLListener::WP5HLListener(WPXHLListenerImpl *listenerImpl)
-	: m_listenerImpl(listenerImpl),
+	: WPXHLListener(),WP5LLListener(),
+	m_listenerImpl(listenerImpl),
 	m_parseState(new WP5ParsingState)
 {
 	m_textBuffer.clear();

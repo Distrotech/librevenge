@@ -26,13 +26,14 @@
 #ifndef WP5ATTRIBUTEGROUP_H
 #define WP5ATTRIBUTEGROUP_H
 
+#include "WP5HLListener.h"
 #include "WP5FixedLengthGroup.h"
 
 class WP5AttributeGroup : public WP5FixedLengthGroup
 {
  public:
 	WP5AttributeGroup(GsfInput *input, guint8 groupID);	
-	virtual void parse(WP5LLListener *llListener) = 0;
+	virtual void parse(WP5HLListener *llListener) = 0;
 	const guint8 getAttribute() const { return m_attribute; }
 	
  protected:
@@ -46,14 +47,14 @@ class WP5AttributeOnGroup : public WP5AttributeGroup
 {
  public:
 	WP5AttributeOnGroup(GsfInput *input, guint8 groupID);
-	virtual void parse(WP5LLListener *llListener);
+	virtual void parse(WP5HLListener *listener);
 };
 
 class WP5AttributeOffGroup : public WP5AttributeGroup
 {
  public:
 	WP5AttributeOffGroup(GsfInput *input, guint8 groupID);
-	virtual void parse(WP5LLListener *llListener);
+	virtual void parse(WP5HLListener *listener);
 };
 
 #endif /* WP5ATTRIBUTEGROUP_H */

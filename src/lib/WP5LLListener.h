@@ -28,10 +28,10 @@
 
 #include "WPXLLListener.h"
 
-class WP5LLListener : public WPXLLListener
+class WP5LLListener
 {
 public:
-	WP5LLListener() : WPXLLListener() {}
+	WP5LLListener() {}
 	virtual ~WP5LLListener() {}
 
 protected:

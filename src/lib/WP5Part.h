@@ -28,6 +28,7 @@
 
 #include "WPXPart.h"
 #include "WPXParser.h"
+#include "WP5HLListener.h"
 
 class WP5LLListener;
 
@@ -37,7 +38,7 @@ class WP5Part
 	virtual ~WP5Part() {}
 	
 	static WP5Part * constructPart(GsfInput *input, guint8 readVal);
-	virtual void parse(WP5LLListener *llListener) = 0;
+	virtual void parse(WP5HLListener *listener) = 0;
 };
 
 #endif /* WP5PART_H */

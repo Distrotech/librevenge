@@ -32,7 +32,7 @@ class WP5UnsupportedFixedLengthGroup : public WP5FixedLengthGroup
 {
  public:
 	WP5UnsupportedFixedLengthGroup(GsfInput *input, guint8 groupID);	
-	virtual void parse(WP5LLListener *llListener) {}
+	virtual void parse(WP5HLListener *listener) {}
 	
  protected:
 	virtual void _readContents(GsfInput *input) {}

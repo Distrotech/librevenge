@@ -24,7 +24,6 @@
  */
 
 #include "WP5AttributeGroup.h"
-#include "WP5LLListener.h"
 #include "libwpd_internal.h"
 
 WP5AttributeGroup::WP5AttributeGroup(GsfInput *input, guint8 groupID)
@@ -43,9 +42,9 @@ WP5AttributeOnGroup::WP5AttributeOnGroup(GsfInput *input, guint8 groupID)
 {
 }
 
-void WP5AttributeOnGroup::parse(WP5LLListener *llListener)
+void WP5AttributeOnGroup::parse(WP5HLListener *listener)
 {
-	llListener->attributeChange(true, getAttribute());
+	listener->attributeChange(true, getAttribute());
 }
 
 WP5AttributeOffGroup::WP5AttributeOffGroup(GsfInput *input, guint8 groupID)
@@ -53,7 +52,7 @@ WP5AttributeOffGroup::WP5AttributeOffGroup(GsfInput *input, guint8 groupID)
 {
 }
 
-void WP5AttributeOffGroup::parse(WP5LLListener *llListener)
+void WP5AttributeOffGroup::parse(WP5HLListener *listener)
 {
-	llListener->attributeChange(false, getAttribute());
+	listener->attributeChange(false, getAttribute());
 }

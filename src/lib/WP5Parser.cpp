@@ -39,21 +39,21 @@ WP5Parser::~WP5Parser()
 {
 }
 
-void WP5Parser::parse(GsfInput *input, WP5LLListener *llListener)
+void WP5Parser::parse(GsfInput *input, WP5HLListener *listener)
 {
-	llListener->startDocument();
+	listener->startDocument();
 	
 	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, getHeader()->getDocumentOffset(), G_SEEK_SET));	
 	
 	WPD_DEBUG_MSG(("WordPerfect: Starting document body parse (position = %ld)\n",(long)gsf_input_tell(input)));
 	
-	parseDocument(input, llListener);
+	parseDocument(input, listener);
 	
-	llListener->endDocument();		
+	listener->endDocument();		
 }
 
 // parseDocument: parses a document body (may call itself recursively, on other streams, or itself)
-void WP5Parser::parseDocument(GsfInput *input, WP5LLListener *llListener)
+void WP5Parser::parseDocument(GsfInput *input, WP5HLListener *listener)
 {
 	while (!gsf_input_eof(input))
 	{
@@ -71,14 +71,14 @@ void WP5Parser::parseDocument(GsfInput *input, WP5LLListener *llListener)
 			switch (readVal)
 			{
 				case 0x0A: // hard new line
-					llListener->insertEOL();
+					listener->insertEOL();
 					break;
 				case 0x0B: // soft new page
 					break;
 				case 0x0C: // hard new page
 					break;
 				case 0x0D: // soft new line
-					llListener->insertEOL();
+					listener->insertEOL();
 					break;
 				default:
 					// unsupported or undocumented token, ignore
@@ -87,7 +87,7 @@ void WP5Parser::parseDocument(GsfInput *input, WP5LLListener *llListener)
 		}
 		else if (readVal >= (guint8)0x20 && readVal <= (guint8)0x7E)
 		{
-			llListener->insertCharacter( readVal );
+			listener->insertCharacter( readVal );
 		}
 		else if (readVal >= (guint8)0x80 && readVal <= (guint8)0xBF)
 		{
@@ -98,7 +98,7 @@ void WP5Parser::parseDocument(GsfInput *input, WP5LLListener *llListener)
 			WP5Part *part = WP5Part::constructPart(input, readVal);
 			if (part != NULL)
 			{
-				part->parse(llListener);
+				part->parse(listener);
 				DELETEP(part);
 			}
 		}	
@@ -112,7 +112,7 @@ void WP5Parser::parse(WPXHLListenerImpl *listenerImpl)
 	try
  	{
 		WP5HLListener hlListener(listenerImpl);
-		parse(input, static_cast<WP5LLListener *>(&hlListener));
+		parse(input, &hlListener);
 	}
 	catch(FileException)
 	{

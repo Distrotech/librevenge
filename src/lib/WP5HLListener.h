@@ -99,7 +99,7 @@ struct _WP5ParsingState
 };
 
 
-class WP5HLListener : public WP5LLListener
+class WP5HLListener : public WPXHLListener,WP5LLListener
 {
 public:
 	WP5HLListener(WPXHLListenerImpl *listenerImpl);
