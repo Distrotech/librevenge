@@ -192,7 +192,6 @@ _WP6ParsingState::_WP6ParsingState(bool sectionAttributesChanged) :
 	m_paragraphLineSpacing(1.0f),
 	m_paragraphJustification(WPX_PARAGRAPH_JUSTIFICATION_LEFT),
 	m_tempParagraphJustification(0),
-	m_paragraphJustificationChanged(false),
 
 	m_isSectionOpened(false),
 
@@ -485,8 +484,6 @@ void WP6HLListener::justificationChange(const guint8 justification)
 			m_parseState->m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_RESERVED;
 			break;
 		}
-		
-		m_parseState->m_paragraphJustificationChanged = true;
 	}
 }
 
@@ -953,7 +950,6 @@ void WP6HLListener::_flushText(const bool fakeText)
 	}
 
 	m_parseState->m_textAttributesChanged = false;
-	m_parseState->m_paragraphJustificationChanged = false;
 }
 
 void WP6HLListener::_handleListChange(const guint16 outlineHash)

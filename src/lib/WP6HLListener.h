@@ -103,7 +103,6 @@ struct _WP6ParsingState
 	guint8 m_paragraphJustification;
 	guint8 m_tempParagraphJustification;
 	float m_paragraphLineSpacing;
- 	bool m_paragraphJustificationChanged;
 
 	bool m_isSectionOpened;
 
