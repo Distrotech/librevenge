@@ -37,10 +37,10 @@ public:
 	virtual ~HtmlListenerImpl();
     
  	virtual void setDocumentMetaData(const UCSString &author, const UCSString &subject,
-						const UCSString &publisher, const UCSString &category,
-						const UCSString &keywords, const UCSString &language,
-						const UCSString &abstract, const UCSString &descriptiveName,
-						const UCSString &descriptiveType);
+					 const UCSString &publisher, const UCSString &category,
+					 const UCSString &keywords, const UCSString &language,
+					 const UCSString &abstract, const UCSString &descriptiveName,
+					 const UCSString &descriptiveType);
 
 	virtual void startDocument();
 	virtual void endDocument();
@@ -52,9 +52,10 @@ public:
 	virtual void openHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence);
 	virtual void closeHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence);
 
-	virtual void openSection(const guint numColumns, float marginLeft, float marginRight);
+	virtual void openSection(const guint numColumns);
 	virtual void closeSection();
 	virtual void openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits,
+				   const float marginLeftOffset, const float marginRightOffset,
 				   const gchar *fontName, float fontSize, 
 				   const float lineSpacing,
 				   bool isColumnBreak, bool isPageBreak);
@@ -75,8 +76,9 @@ public:
 	virtual void closeOrderedListLevel();
 	virtual void closeUnorderedListLevel();
 	virtual void openListElement(const guint8 paragraphJustification, const guint32 textAttributeBits,
-						const gchar *fontName, const float fontSize, 
-						const float lineSpacing);
+				     const float marginLeftOffset, const float marginRightOffset,
+				     const gchar *fontName, const float fontSize, 
+				     const float lineSpacing);
 	virtual void closeListElement();
 
 	virtual void openFootnote(int number);
@@ -85,12 +87,14 @@ public:
 	virtual void closeEndnote();
 
 
-	virtual void openTable(const guint8 tablePositionBits, const float leftOffset, const vector < WPXColumnDefinition > &columns);
+	virtual void openTable(const guint8 tablePositionBits, 
+			       const float marginLeftOffset, const float marginRightOffset,
+			       const float leftOffset, const vector < WPXColumnDefinition > &columns);
 	virtual void openTableRow();
 	virtual void closeTableRow();
 	virtual void openTableCell(const guint32 col, const guint32 row, const guint32 colSpan, const guint32 rowSpan, 
-						const guint8 borderBits,
-						const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
+				   const guint8 borderBits,
+				   const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
 	virtual void closeTableCell();
 	virtual void closeTable();
  

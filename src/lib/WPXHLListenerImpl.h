@@ -55,13 +55,14 @@ class WPXHLListenerImpl
 	virtual void closeHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence) = 0;
 
 	virtual void openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits,
+				   const float marginLeftOffset, const float marginRightOffset,
 				   const gchar *fontName, const float fontSize, 
 				   const float lineSpacing, 
 				   const bool isColumnBreak, const bool isPageBreak) = 0;
 	virtual void closeParagraph() = 0;
 	virtual void openSpan(const guint32 textAttributeBits, const gchar *fontName, const float fontSize) = 0;
 	virtual void closeSpan() = 0;
-	virtual void openSection(const guint numColumns, const float marginLeft, const float marginRight) = 0;
+	virtual void openSection(const guint numColumns) = 0;
 	virtual void closeSection() = 0;
 
 	virtual void insertTab() = 0;
@@ -77,6 +78,7 @@ class WPXHLListenerImpl
 	virtual void closeOrderedListLevel() = 0;
 	virtual void closeUnorderedListLevel() = 0;
 	virtual void openListElement(const guint8 paragraphJustification, const guint32 textAttributeBits,
+				     const float marginLeftOffset, const float marginRightOffset,
 				     const gchar *fontName, const float fontSize, 
 				     const float lineSpacing) = 0;
 	virtual void closeListElement() = 0;
@@ -86,7 +88,9 @@ class WPXHLListenerImpl
 	virtual void openEndnote(int number) = 0;
 	virtual void closeEndnote() = 0;
 
- 	virtual void openTable(const guint8 tablePositionBits, const float leftOffset, const vector < WPXColumnDefinition > &columns) = 0;
+ 	virtual void openTable(const guint8 tablePositionBits, 
+			       const float marginLeftOffset, const float marginRightOffset,
+			       const float leftOffset, const vector < WPXColumnDefinition > &columns) = 0;
  	virtual void openTableRow() = 0;
 	virtual void closeTableRow() = 0;
  	virtual void openTableCell(const guint32 col, const guint32 row, const guint32 colSpan, const guint32 rowSpan, 

@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
 		gsf_input_seek(document, 0, G_SEEK_SET);			
 		header = WP6LLParser::getHeader(document);
 		
-		WP6LLParser::parse(input, header, static_cast<WP6LLListener *>(&listener));
+		WP6LLParser::parse(document, header, static_cast<WP6LLListener *>(&listener));
 	  } 
 	catch (FileException)
 	  {

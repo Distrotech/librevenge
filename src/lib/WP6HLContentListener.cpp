@@ -217,8 +217,10 @@ _WP6ParsingState::_WP6ParsingState(bool sectionAttributesChanged) :
 
 	m_sectionAttributesChanged(sectionAttributesChanged),
 	m_numColumns(1),
-	m_marginLeft(1.0f),
-	m_marginRight(1.0f),
+	m_marginLeft(0.0f), 
+	m_marginRight(0.0f),
+	m_pageMarginLeft(1.0f),
+	m_pageMarginRight(1.0f),
 	m_currentRow(-1),
 	m_currentColumn(-1),
 	
@@ -518,14 +520,14 @@ void WP6HLContentListener::marginChange(guint8 side, guint16 margin)
 		switch(side)
 		{
 		case WP6_COLUMN_GROUP_LEFT_MARGIN_SET:
-			if (m_parseState->m_marginLeft != marginInch)
+			if (m_parseState->m_marginLeft != marginInch) // FIXMEFIXME: remove this
 				m_parseState->m_sectionAttributesChanged = true;
-			m_parseState->m_marginLeft = marginInch;
+			m_parseState->m_marginLeft = marginInch - m_parseState->m_pageMarginLeft;
 			break;
 		case WP6_COLUMN_GROUP_RIGHT_MARGIN_SET:
 			if (m_parseState->m_marginRight != marginInch)
 				m_parseState->m_sectionAttributesChanged = true;
-			m_parseState->m_marginRight = marginInch;
+			m_parseState->m_marginRight = marginInch - m_parseState->m_pageMarginRight;
 			break;
 		}
 
@@ -1048,9 +1050,8 @@ void WP6HLContentListener::_handleListChange(const guint16 outlineHash)
 			else 
 				m_listenerImpl->openUnorderedListLevel(m_parseState->m_currentOutlineHash);
 
-			
-			if (i < m_parseState->m_currentListLevel) // make sure we have list elements to hold our new levels, if our
-				_openListElement();               // list level delta > 1
+ 			if (i < m_parseState->m_currentListLevel) // make sure we have list elements to hold our new levels, if our
+ 				_openListElement();               // list level delta > 1
 		}
 	}
 	else if (m_parseState->m_currentListLevel < oldListLevel)
@@ -1102,6 +1103,7 @@ void WP6HLContentListener::_handleListChange(const guint16 outlineHash)
 void WP6HLContentListener::_openListElement()
 {
 	m_listenerImpl->openListElement(m_parseState->m_paragraphJustification, m_parseState->m_textAttributeBits,
+					m_parseState->m_marginLeft, m_parseState->m_marginRight,
 					m_parseState->m_fontName->str, m_parseState->m_fontSize, 
 					m_parseState->m_paragraphLineSpacing);
 	m_parseState->m_isParagraphOpened = true; // a list element is equivalent to a paragraph
@@ -1135,6 +1137,8 @@ void WP6HLContentListener::_openPageSpan()
 		}
 	}
 
+	m_parseState->m_pageMarginLeft = currentPage->getMarginLeft();
+	m_parseState->m_pageMarginRight = currentPage->getMarginRight();
 	m_parseState->m_numPagesRemainingInSpan = (currentPage->getPageSpan() - 1);
 	m_parseState->m_nextPageSpanIndice++;
 	m_parseState->m_isPageSpanOpened = true;
@@ -1143,7 +1147,7 @@ void WP6HLContentListener::_openPageSpan()
 void WP6HLContentListener::_openSection()
 {
 	_closeSection();
-	m_listenerImpl->openSection(m_parseState->m_numColumns, m_parseState->m_marginLeft, m_parseState->m_marginRight);	
+	m_listenerImpl->openSection(m_parseState->m_numColumns);	
 	m_parseState->m_sectionAttributesChanged = false;
 	m_parseState->m_isSectionOpened = true;
 }
@@ -1161,7 +1165,8 @@ void WP6HLContentListener::_openTable()
 {
 	_closeTable();
 	
-	m_listenerImpl->openTable(m_tableDefinition.m_positionBits, m_tableDefinition.m_leftOffset, m_tableDefinition.columns);
+	m_listenerImpl->openTable(m_tableDefinition.m_positionBits, m_parseState->m_marginLeft, m_parseState->m_marginRight,
+				  m_tableDefinition.m_leftOffset, m_tableDefinition.columns);
 	m_parseState->m_isTableOpened = true;
 }
 
@@ -1233,6 +1238,7 @@ void WP6HLContentListener::_openParagraph()
 	m_parseState->m_tempParagraphJustification = 0;
 	
 	m_listenerImpl->openParagraph(paragraphJustification, m_parseState->m_textAttributeBits,
+				      m_parseState->m_marginLeft, m_parseState->m_marginRight,
 				      m_parseState->m_fontName->str, m_parseState->m_fontSize, 
 				      m_parseState->m_paragraphLineSpacing, 
 				      m_parseState->m_isParagraphColumnBreak, m_parseState->m_isParagraphPageBreak);

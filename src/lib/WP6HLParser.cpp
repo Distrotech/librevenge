@@ -60,7 +60,7 @@ void WP6HLParser::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl)
 		// gather table border information, page properties (per-page)
 		WP6HLStylesListener stylesListener(&pageList, &tableList);
 		stylesListener.setPrefixData(prefixData);
-		WP6LLParser::parse(input, header, static_cast<WP6LLListener *>(&stylesListener));
+		WP6LLParser::parse(document, header, static_cast<WP6LLListener *>(&stylesListener));
 
 		// second pass: here is where we actually send the messages to the target app
 		// that are necessary to emit the body of the target document
@@ -73,7 +73,7 @@ void WP6HLParser::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl)
 		WP6LLParser::parsePacket(prefixData, WP6_INDEX_HEADER_INITIAL_FONT, static_cast<WP6LLListener *>(&hlListener));
 		WP6LLParser::parsePackets(prefixData, WP6_INDEX_HEADER_OUTLINE_STYLE, static_cast<WP6LLListener *>(&hlListener));
 
-		WP6LLParser::parse(input, header, static_cast<WP6LLListener *>(&hlListener));
+		WP6LLParser::parse(document, header, static_cast<WP6LLListener *>(&hlListener));
 
 		if (document != NULL && isDocumentOLE)
 			g_object_unref(G_OBJECT(document));

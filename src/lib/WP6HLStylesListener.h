@@ -43,9 +43,9 @@ public:
 			     const guint8 dayOfWeek, const guint8 timeZone, const guint8 unused) {}
 	virtual void setExtendedInformation(const guint16 type, const UCSString &data) {}
 	virtual void startDocument() {}
-	virtual void insertCharacter(const guint16 character) {}
-	virtual void insertTab(const guint8 tabType) {}
-	virtual void insertEOL() {}
+	virtual void insertCharacter(const guint16 character) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	virtual void insertTab(const guint8 tabType) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	virtual void insertEOL() { if (!isUndoOn()) m_currentPageHasContent = true; }
  	virtual void insertBreak(const guint8 breakType);
 	virtual void fontChange(const guint16 matchedFontPointSize, const guint16 fontPID) {}
 	virtual void attributeChange(const bool isOn, const guint8 attribute) {}
@@ -58,15 +58,15 @@ public:
 					     const guint8 *numberingMethods, const guint8 tabBehaviourFlag) {}
 
 	virtual void paragraphNumberOn(const guint16 outlineHash, const guint8 level, const guint8 flag) {}
-	virtual void paragraphNumberOff() {}
+	virtual void paragraphNumberOff() { if (!isUndoOn()) m_currentPageHasContent = true; }
 	virtual void displayNumberReferenceGroupOn(const guint8 subGroup, const guint8 level) {}
-	virtual void displayNumberReferenceGroupOff(const guint8 subGroup) {}
-	virtual void styleGroupOn(const guint8 subGroup) {}	
+	virtual void displayNumberReferenceGroupOff(const guint8 subGroup) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	void styleGroupOn(const guint8 subGroup) {}	
 	virtual void styleGroupOff(const guint8 subGroup) {}	
 	virtual void globalOn(const guint8 systemStyle) {}
 	virtual void globalOff() {}
 	virtual void noteOn(const guint16 textPID) {}
-	virtual void noteOff(const WPXNoteType noteType) {}
+	virtual void noteOff(const WPXNoteType noteType) { if (!isUndoOn()) m_currentPageHasContent = true; }
 	virtual void headerFooterGroup(const guint8 headerFooterType, const guint8 occurenceBits, const guint16 textPID);
 	virtual void suppressPageCharacteristics(const guint8 suppressCode);
 	virtual void endDocument();
@@ -85,7 +85,7 @@ private:
 
 	vector<WPXTable *> *m_tableList;
 	WPXTable *m_currentTable;
-	//float m_tempMarginLeft, m_tempMarginRight;
+	float m_tempMarginLeft, m_tempMarginRight;
 	bool m_currentPageHasContent;
 };
 #endif /* WP6TABLELISTENER_H */

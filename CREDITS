@@ -6,7 +6,7 @@ William Lachance <william.lachance@sympatico.ca>	Main Author
 Marc Maurer <j.m.maurer@student.utwente.nl>		Main Author
 
 
-contributors
+Contributors
 ------------
 Mark Gilbert <markgilbert@hotpop.com>			One-line Compilation Fix
 Ariya Hidayat <ariya@kde.org>				WordPerfect 6+ Extended
@@ -18,3 +18,7 @@ Ted Lemon <mellon@fugue.com>				Tibetan Extended
 Michael Pritchett <MPritchett@attglobal.net>		MSVC Project Files
 Rui Miguel Silva Seabra <rms@1407.org>			original rpm spec,
 							build patches
+Thanks
+------
+
+Net Integration Technologies http://www.net-itech.com	

@@ -118,6 +118,7 @@ void HtmlListenerImpl::closeHeaderFooter(const WPXHeaderFooterType headerFooterT
 }
 
 void HtmlListenerImpl::openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits, 
+				     const float marginLeft, const float marginRight,
 				     const gchar *fontName, const float fontSize,
 				     const float lineSpacing,
 				     const bool isColumnBreak, const bool isPageBreak)
@@ -145,9 +146,9 @@ void HtmlListenerImpl::closeSpan()
 	printf("</span>");
 }
 
-void HtmlListenerImpl::openSection(guint numColumns, float marginLeft, float marginRight)
+void HtmlListenerImpl::openSection(guint numColumns)
 {
-	printf("<section columns:%i margin-left:%4.4fin margin-right:%4.4fin>\n", numColumns, marginLeft, marginRight);
+	printf("<section columns:%i>\n", numColumns);
 }
 
 void HtmlListenerImpl::closeSection()
@@ -188,6 +189,7 @@ void HtmlListenerImpl::closeUnorderedListLevel()
 
 
 void HtmlListenerImpl::openListElement(const guint8 paragraphJustification, const guint32 textAttributeBits,
+				       const float marginLeftOffset, const float marginRightOffset,
 				       const gchar *fontName, const float fontSize, 
 				       const float lineSpacing)
 {
@@ -222,7 +224,8 @@ void HtmlListenerImpl::closeEndnote()
 	printf("</endnote>\n");
 }
 
-void HtmlListenerImpl::openTable(const guint8 tablePositionBits, const float leftOffset, const vector < WPXColumnDefinition > &columns)
+void HtmlListenerImpl::openTable(const guint8 tablePositionBits, const float marginLeftOffset, const float marginRightOffset,
+				 const float leftOffset, const vector < WPXColumnDefinition > &columns)
 {
 	printf("<table border=\"1\">\n");
 	printf("<tbody>\n");

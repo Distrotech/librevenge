@@ -131,8 +131,7 @@ vector<WPXTableCell *> * WPXTable::_getCellsBottomAdjacent(int i, int j)
 		    (j1 < (j + (*m_tableRows[i])[j]->m_colSpan)))
 		{
 			cellsBottomAdjacent->push_back((*m_tableRows[bottomAdjacentRow])[j1]);
-		}
-		
+		}		
 	}
 
 	return cellsBottomAdjacent;
@@ -148,12 +147,15 @@ vector<WPXTableCell *> * WPXTable::_getCellsRightAdjacent(int i, int j)
 	
 	for(int i1=0; i1<m_tableRows.size(); i1++)
 	{
-		if (!(*m_tableRows[i1])[rightAdjacentCol]->m_boundFromAbove &&
-		    !(*m_tableRows[i1])[rightAdjacentCol]->m_boundFromLeft &&
-		    ((i1 + (*m_tableRows[i1])[rightAdjacentCol]->m_rowSpan) > i) &&
-		    (i1 < (i + (*m_tableRows[i])[j]->m_rowSpan)))
-		{
-			cellsRightAdjacent->push_back((*m_tableRows[i1])[rightAdjacentCol]);
+		if ((*m_tableRows[i1]).size() > rightAdjacentCol) // ignore cases where the right adjacent column 
+		{                                                 // pushes us beyond table borders (FIXME: good idea?)
+			if (!(*m_tableRows[i1])[rightAdjacentCol]->m_boundFromAbove &&
+			    !(*m_tableRows[i1])[rightAdjacentCol]->m_boundFromLeft &&
+			    ((i1 + (*m_tableRows[i1])[rightAdjacentCol]->m_rowSpan) > i) &&
+			    (i1 < (i + (*m_tableRows[i])[j]->m_rowSpan)))
+			{
+				cellsRightAdjacent->push_back((*m_tableRows[i1])[rightAdjacentCol]);
+			}
 		}
 	}
 

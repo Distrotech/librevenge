@@ -75,8 +75,8 @@ WPXHeaderFooter::WPXHeaderFooter(const WPXHeaderFooterType headerFooterType, con
 // }
 
 WPXPageSpan::WPXPageSpan() :
-	m_marginLeft(0.0f), 
-	m_marginRight(0.0f),
+	m_marginLeft(1.0f), 
+	m_marginRight(1.0f),
 	m_marginTop(WP6_DEFAULT_PAGE_MARGIN_TOP), 
 	m_marginBottom(WP6_DEFAULT_PAGE_MARGIN_BOTTOM),
 	m_pageSpan(1)

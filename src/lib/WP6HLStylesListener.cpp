@@ -11,7 +11,9 @@ WP6HLStylesListener::WP6HLStylesListener(vector<WPXPageSpan *> *pageList, vector
 	m_pageList(pageList),
 	m_currentPage(new WPXPageSpan()),
 	m_tableList(tableList), 
-	m_currentPageHasContent(false)
+	m_currentPageHasContent(false),
+	m_tempMarginLeft(1.0f),
+	m_tempMarginRight(1.0f)
 {
 }
 
@@ -40,6 +42,9 @@ void WP6HLStylesListener::insertBreak(const guint8 breakType)
 				m_pageList->push_back(m_currentPage);
 			}
 			m_currentPage = new WPXPageSpan(*(m_pageList->back()));
+			m_currentPage->setMarginLeft(m_tempMarginLeft);
+			m_currentPage->setMarginRight(m_tempMarginRight);
+			m_currentPageHasContent = false;
 			break;
 		}
 	}
@@ -65,25 +70,22 @@ void WP6HLStylesListener::pageMarginChange(const guint8 side, const guint16 marg
 void WP6HLStylesListener::marginChange(const guint8 side, const guint16 margin)
 {
 	if (!isUndoOn()) 
-	{
-		/*
+	{		
 		float marginInch = (float)(((double)margin + (double)WP6_NUM_EXTRA_WPU) / (double)WPX_NUM_WPUS_PER_INCH);
 		switch(side)
 		{
 		case WP6_COLUMN_GROUP_LEFT_MARGIN_SET:
 			if (!m_currentPageHasContent)
 				m_currentPage->setMarginLeft(marginInch);
-			else
-				m_tempMarginLeft = marginInch;
+			m_tempMarginLeft = marginInch;
 			break;
 		case WP6_COLUMN_GROUP_RIGHT_MARGIN_SET:
 			if (!m_currentPageHasContent)
 				m_currentPage->setMarginRight(marginInch);
-			else
-				m_tempMarginRight = marginInch;
+			m_tempMarginRight = marginInch;
 			break;
 		}
-		*/
+		
 	}
 
 }
@@ -119,6 +121,7 @@ void WP6HLStylesListener::startTable()
 {
 	if (!isUndoOn()) 
 	{			
+		m_currentPageHasContent = true;
 		m_currentTable = new WPXTable();
 		m_tableList->push_back(m_currentTable);
 	}
@@ -126,8 +129,11 @@ void WP6HLStylesListener::startTable()
 
 void WP6HLStylesListener::insertRow()
 {
-	if (!isUndoOn() && m_currentTable != NULL)
+	if (!isUndoOn() && m_currentTable != NULL) 
+	{
+		m_currentPageHasContent = true;
 		m_currentTable->insertRow();
+	}
 }
 
 void WP6HLStylesListener::insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove, 
@@ -135,6 +141,9 @@ void WP6HLStylesListener::insertCell(const guint8 colSpan, const guint8 rowSpan,
 				  const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
 {
 	if (!isUndoOn() && m_currentTable != NULL)
+	{
+		m_currentPageHasContent = true;
 		m_currentTable->insertCell(colSpan, rowSpan, boundFromLeft, boundFromAbove, borderBits);
+	}
 }
 

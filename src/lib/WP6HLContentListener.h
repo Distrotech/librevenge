@@ -134,6 +134,8 @@ struct _WP6ParsingState
 	guint m_numColumns;
 	bool m_isLeftMarginSet;
 	bool m_isRightMarginSet;
+	float m_pageMarginLeft;
+	float m_pageMarginRight;
 	float m_marginLeft;
 	float m_marginRight;
 	
@@ -150,6 +152,12 @@ struct _WP6ParsingState
 
 	int m_noteTextPID;
 	bool m_inSubDocument;
+};
+
+struct _WP6ListLevel
+{
+	int m_level;
+	bool m_isListElementOpenAtLevel;
 };
 
 class WP6OutlineDefinition

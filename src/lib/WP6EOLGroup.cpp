@@ -1,5 +1,6 @@
 /* libwpd2
- * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2003 Net Integration Technologies
+ * Copyright (C) 2002-2003 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
@@ -66,7 +67,7 @@ void WP6EOLGroup::_readContents(GsfInput *input)
 		guint8 byte;
 		guint16 numBytesToSkip = 0;
 		byte = gsf_le_read_guint8(input);
-		guint16 startPosition2 = gsf_input_tell(input);
+		gsf_off_t startPosition2 = gsf_input_tell(input);
 		switch (byte)
 		{
 			case WP6_EOL_GROUP_ROW_INFORMATION:
