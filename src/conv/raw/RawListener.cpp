@@ -154,7 +154,7 @@ void RawListenerImpl::openParagraph(const guint8 paragraphJustification, const g
 		paragraphJustification, textAttributeBits,
 		marginLeftOffset, marginRightOffset, textIndent,
 		fontNameUTF8.getUTF8(), fontSize, (fontColor?fontColor->m_r:0x00), (fontColor?fontColor->m_g:0x00),
-		(fontColor?fontColor->m_b:0x00), (fontColor?fontColor->m_s:0xff), lineSpacing,
+		(fontColor?fontColor->m_b:0x00), (fontColor?fontColor->m_s:0x00), lineSpacing,
 		(isColumnBreak ? "true" : "false"), (isPageBreak ? "true" : "false")
 	);
 }
@@ -168,7 +168,7 @@ void RawListenerImpl::openSpan(const guint32 textAttributeBits, const gchar *fon
 {
 	__iuprintf("openSpan(textAttributeBits: %u, fontName: %s, fontSize: %.4f,  fontColor: #%02x%02x%02x s:%02x)\n",
 			   textAttributeBits, fontName, fontSize, (fontColor?fontColor->m_r:0x00), (fontColor?fontColor->m_g:0x00),
-			   (fontColor?fontColor->m_b:0x00), (fontColor?fontColor->m_s:0xff)
+			   (fontColor?fontColor->m_b:0x00), (fontColor?fontColor->m_s:0x00)
 	);
 }
 
@@ -252,7 +252,7 @@ void RawListenerImpl::openListElement(const guint8 paragraphJustification, const
 		paragraphJustification, textAttributeBits,
 		marginLeftOffset, marginRightOffset, textIndent,
 		fontNameUTF8.getUTF8(), fontSize, (fontColor?fontColor->m_r:0x00), (fontColor?fontColor->m_g:0x00),
-		(fontColor?fontColor->m_b:0x00), (fontColor?fontColor->m_s:0xff), lineSpacing
+		(fontColor?fontColor->m_b:0x00), (fontColor?fontColor->m_s:0x00), lineSpacing
 	);
 }
 
