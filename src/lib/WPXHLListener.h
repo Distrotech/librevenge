@@ -64,9 +64,9 @@ struct _WPXParsingState
 	float m_fontSize;
 	GString * m_fontName;
 
-/*	bool m_isParagraphColumnBreak;
+	bool m_isParagraphColumnBreak;
 	bool m_isParagraphPageBreak;
-	guint8 m_paragraphJustification;
+/*	guint8 m_paragraphJustification;
 	guint8 m_tempParagraphJustification;
 	float m_paragraphLineSpacing;
 */
@@ -123,11 +123,11 @@ public:
 	WPXHLListener::~WPXHLListener();
 
 	void startDocument();
+	void handleSubDocument(guint16 textPID);
 
 	WPXParsingState *m_ps; // parse state
 	WPXHLListenerImpl * m_listenerImpl;
 	WPXDocumentMetaData m_metaData;
-
 	vector <WPXPageSpan *> *m_pageList;
 
 protected:
@@ -144,10 +144,6 @@ protected:
 
 	void _openSpan();
 	void _closeSpan();
-
-private:
-	void __handleSubDocument(guint16 textPID);
-	
 };
 
 #endif /* WPXHLLISTENER_H */
