@@ -195,7 +195,7 @@ class ParseException
 	// needless to say, we could flesh this class out a bit
 };
 
-class Exception
+class GenericException
 {
 	// needless to say, we could flesh this class out a bit
 };

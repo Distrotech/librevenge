@@ -37,6 +37,10 @@
 #include "WP6PrefixData.h"
 #include "WPXTable.h"
 
+#ifdef _MSC_VER
+#include <assert.h>
+#endif
+
 #define WP6_DEFAULT_FONT_SIZE 12.0f
 #define WP6_DEFAULT_FONT_NAME "Times New Roman"
 

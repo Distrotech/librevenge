@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2003-2004 Marc Maurer (j.m.maurer@student.utwente.nl)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -43,11 +43,11 @@
 This document contains both the libwpd API specification and the normal libwpd
 documentation.
 \section api_docs libwpd API documentation
-The external libwpd API is provided by the WPDocument class. This class, combined 
+The external libwpd API is provided by the WPDocument class. This class, combined
 with the WPXHLListenerImpl class, are the only two classes that will be of interest
 for the application programmer using libwpd.
 \section lib_docs libwpd documentation
-If you are interrested in the structure of libwpd itself, this whole document 
+If you are interrested in the structure of libwpd itself, this whole document
 would be a good starting point for exploring the interals of libwpd. Mind that
 this document is a work-in-progress, and will most likely not cover libwpd for
 the full 100%.
@@ -64,23 +64,23 @@ the input stream can be parsed
 WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input, bool partialContent)
 {
 	WPDConfidence confidence = WPD_CONFIDENCE_NONE;
-	
-	WPXHeader *header = NULL;	
-	
+
+	WPXHeader *header = NULL;
+
 	WPD_DEBUG_MSG(("WPDocument::isFileFormatSupported()\n"));
-	
+
 	// by-pass the OLE stream (if it exists) and returns the (sub) stream with the
-	// WordPerfect document. 
+	// WordPerfect document.
 	WPXInputStream *document = NULL;
 	bool isDocumentOLE = false;
-	
+
 	// BIG BIG NOTE: very unsafe on partial content!!!
 	if (input->isOLEStream())
 	{
 		document = input->getDocumentOLEStream();
 		if (document)
 			isDocumentOLE = true;
-		else 
+		else
 		{
 			if (partialContent)
 				return WPD_CONFIDENCE_LIKELY; // HACK: too high, but for now, we'll live with it
@@ -90,7 +90,7 @@ WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input, bool part
 	}
 	else
 		document = input;
-	
+
 	try
 	{
 		// NOTE: even when passed partial content, we for now just assume that
@@ -101,7 +101,7 @@ WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input, bool part
 		{
 			switch (header->getMajorVersion())
 			{
-				case 0x00: // WP5 
+				case 0x00: // WP5
 					confidence = WPD_CONFIDENCE_EXCELLENT;
 					break;
 				case 0x02: // WP6
@@ -116,40 +116,40 @@ WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input, bool part
 		}
 		else
 			confidence = WP42Heuristics::isWP42FileFormat(input, partialContent);
-		
+
 		// dispose of the reference to the ole input stream, if we allocated one
 		if (document != NULL && isDocumentOLE)
 			DELETEP(document);
-		
+
 		return confidence;
-	}	
+	}
 	catch (FileException)
 	{
 		WPD_DEBUG_MSG(("File Exception trapped\n"));
-		
+
 		// dispose of the reference to the ole input stream, if we allocated one
 		if (document != NULL && isDocumentOLE)
 			DELETEP(document);
-		
+
 		return WPD_CONFIDENCE_NONE;
 	}
 	catch (...)
 	{
 		WPD_DEBUG_MSG(("Unknown Exception trapped\n"));
-		
+
 		// dispose of the reference to the ole input stream, if we allocated one
 		if (document != NULL && isDocumentOLE)
 			DELETEP(document);
 
 		return WPD_CONFIDENCE_NONE;
 	}
-		
+
 	return WPD_CONFIDENCE_NONE;
 }
 
 /**
-Parses the input stream content. It will make callbacks to the functions provided by a 
-WPXHLListenerImpl class implementation when needed. This is often commonly called the 
+Parses the input stream content. It will make callbacks to the functions provided by a
+WPXHLListenerImpl class implementation when needed. This is often commonly called the
 'main parsing routine'.
 \param input The input stream
 \param listenerImpl A WPXHLListener implementation
@@ -157,13 +157,13 @@ WPXHLListenerImpl class implementation when needed. This is often commonly calle
 void WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerImpl)
 {
 	WPXParser *parser = NULL;
-	
+
 	// by-pass the OLE stream (if it exists) and returns the (sub) stream with the
-	// WordPerfect document. 
+	// WordPerfect document.
 
 	WPXInputStream *document = NULL;
 	bool isDocumentOLE = false;
-	
+
 	WPD_DEBUG_MSG(("WPDocument::parse()\n"));
 	if (input->isOLEStream())
 	{
@@ -175,16 +175,16 @@ void WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerImpl)
 	}
 	else
 		document = input;
-	
+
 	try
 	{
 		WPXHeader *header = WPXHeader::constructHeader(document);
-		
+
 		if (header)
 		{
 			switch (header->getMajorVersion())
 			{
-				case 0x00: // WP5 
+				case 0x00: // WP5
 					WPD_DEBUG_MSG(("WordPerfect: Using the WP5 parser.\n"));
 					parser = new WP5Parser(document, header);
 					parser->parse(listenerImpl);
@@ -199,17 +199,17 @@ void WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerImpl)
 					WPD_DEBUG_MSG(("WordPerfect: Unsupported file format.\n"));
 					break;
 			}
-	
+
 			DELETEP(parser); // deletes the header as well
 		}
 		else
 		{
-			// WP file formats prior to version 5.x do not contain a generic 
-			// header which can be used to determine which parser to instanciate. 
+			// WP file formats prior to version 5.x do not contain a generic
+			// header which can be used to determine which parser to instanciate.
 			// Use heuristics to determine with some certainty if we are dealing with
-			// a file in the WP4.2 format.		
+			// a file in the WP4.2 format.
 			int confidence = WP42Heuristics::isWP42FileFormat(document, false /* FIXME: allow for partial content */);
-	
+
 			if (confidence == WPD_CONFIDENCE_GOOD || confidence == WPD_CONFIDENCE_EXCELLENT)
 			{
 				WPD_DEBUG_MSG(("WordPerfect: Mostly likely the file format is WP4.2.\n\n"));
@@ -222,7 +222,7 @@ void WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerImpl)
 				throw FileException();
 		}
 	}
-	
+
 	/* TODO: fix code dumplication below */
 	catch (FileException)
 	{
@@ -232,27 +232,27 @@ void WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerImpl)
 		if (document != NULL && isDocumentOLE)
 			DELETEP(document);
 
-		throw FileException(); 
+		throw FileException();
 	}
 	catch (ParseException)
 	{
 		WPD_DEBUG_MSG(("Parse Exception trapped\n"));
-		
+
 		DELETEP(parser);
 		if (document != NULL && isDocumentOLE)
 			g_object_unref(G_OBJECT(document));
 
-		throw FileException(); 		
+		throw FileException();
 	}
 	catch (...)
 	{
 		WPD_DEBUG_MSG(("Unknown Exception trapped\n"));
-		
+
 		DELETEP(parser);
 		if (document != NULL && isDocumentOLE)
 			g_object_unref(G_OBJECT(document));
-		
-		throw Exception();		
+
+		throw GenericException();
 	}
 
 	DELETEP(parser);
@@ -269,7 +269,7 @@ void WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerImpl, W
 {
 	WPXParser *parser = NULL;
 	WPXHeader *header = NULL;
-	
+
 	try
 	{
 		switch (fileType)
@@ -293,7 +293,7 @@ void WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerImpl, W
 				header = new WPXHeader(input);
 				parser = new WP6Parser(input, header);
 				parser->parse(listenerImpl);
-				DELETEP(parser);			
+				DELETEP(parser);
 				DELETEP(header);
 				break;
 			default:
@@ -306,14 +306,14 @@ void WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerImpl, W
 	{
 		// should not happen
 		DELETEP(parser);
-		DELETEP(header);		
+		DELETEP(header);
 		throw NoFileHeaderException();
 	}
 	catch (FileException)
 	{
 		DELETEP(parser);
 		DELETEP(header);
-		throw FileException(); 
+		throw FileException();
 	}
 }
 
