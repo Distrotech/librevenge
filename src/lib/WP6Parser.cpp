@@ -86,31 +86,7 @@ void WP6Parser::parse()
 		WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(getInput(), fileHeader->getDocumentOffset(), G_SEEK_SET));
 	
 		WPD_DEBUG_MSG(("WordPerfect: Starting document body parse (position = %ld)\n",(long)gsf_input_tell(getInput())));
-		while (!gsf_input_eof(getInput()))
-		{
-			guint8 readVal;
-			readVal = *(const guint8 *)gsf_input_read(getInput(), sizeof(guint8), NULL);
-			
-			if (readVal <= (guint8)0x20)
-			{
-				getLLListener()->insertCharacter( extendedInternationalCharacterMap[(readVal-1)] );
-			}
-			else if (readVal >= (guint8)0x21 && readVal <= (guint8)0x7F)
-			{
-				// normal ASCII characters
-				getLLListener()->insertCharacter( (guint16)readVal );
-			}
-			else 
-			{
-				WP6Part *part = WP6Part::constructPart(getInput(), readVal);
-				if (part != NULL)
-				{
-					part->parse(dynamic_cast<WP6LLListener *>(getLLListener()));
-					delete(part);
-				}
-			}
-
-		}
+		WP6Parser::parseDocument(getInput(), static_cast<WP6LLListener *>(getLLListener()));
 
 		getLLListener()->endDocument();
 		WPD_DEBUG_MSG(("WordPerfect: Finished with document parse (position = %ld)\n",(long)gsf_input_tell(getInput())));
@@ -124,6 +100,36 @@ void WP6Parser::parse()
 		throw FileException();
 	}
 	
+}
+
+// parseDocument: parses a document body (may call itself recursively, on other streams)
+void WP6Parser::parseDocument(GsfInput *stream, WP6LLListener *llListener)
+{
+	while (!gsf_input_eof(stream))
+	{
+		guint8 readVal;
+		readVal = *(const guint8 *)gsf_input_read(stream, sizeof(guint8), NULL);
+		
+		if (readVal <= (guint8)0x20)
+		{
+			llListener->insertCharacter( extendedInternationalCharacterMap[(readVal-1)] );
+		}
+		else if (readVal >= (guint8)0x21 && readVal <= (guint8)0x7F)
+		{
+			// normal ASCII characters
+			llListener->insertCharacter( (guint16)readVal );
+		}
+		else 
+		{
+			WP6Part *part = WP6Part::constructPart(stream, readVal);
+			if (part != NULL)
+			{
+				part->parse(llListener);
+				delete(part);
+			}
+		}
+		
+	}
 }
 
 void WP6Parser::_parsePacket(WP6PrefixData *prefixData, int type)

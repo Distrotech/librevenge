@@ -33,7 +33,7 @@ RawListener::RawListener() :
 {
 }
 
-void RawListener::insertCharacter(guint16 character)
+void RawListener::insertCharacter(const guint16 character)
 {
 	if (!m_isUndoOn) {
 		// first convert from ucs2 to ucs4
@@ -48,7 +48,7 @@ void RawListener::insertCharacter(guint16 character)
 	}
 }
 
-void RawListener::undoChange(guint8 undoType, guint16 undoLevel)
+void RawListener::undoChange(const guint8 undoType, const guint16 undoLevel)
 {
 	if (undoType == WP6_UNDO_GROUP_INVALID_TEXT_START) {
 		//printf("<UNDO ON>");
@@ -60,10 +60,23 @@ void RawListener::undoChange(guint8 undoType, guint16 undoLevel)
 	}
 }
 
-void RawListener::justificationChange(guint8 justification)
+void RawListener::lineSpacingChange(const float lineSpacing)
+{
+	printf("<line-spacing:%i>", lineSpacing);
+
+}
+
+void RawListener::justificationChange(const guint8 justification)
 {
 	printf("<justification:%i>", justification);
 
+}
+
+void RawListener::insertTab()
+{
+	if (!m_isUndoOn) {
+		printf("<TAB>");
+	}
 }
 
 void RawListener::insertEOL()

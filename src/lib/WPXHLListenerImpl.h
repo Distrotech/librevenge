@@ -52,14 +52,19 @@ class WPXHLListenerImpl
 
 	virtual void openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits,
 				   const gchar *fontName, const gfloat fontSize, 
+				   const float lineSpacing, 
 				   const gboolean isColumnBreak, const gboolean isPageBreak) = 0;
+	virtual void closeParagraph() = 0;
 	virtual void openSpan(const guint32 textAttributeBits, const gchar *fontName, const gfloat fontSize) = 0;
+	virtual void closeSpan() = 0;
 	virtual void openSection(const guint numColumns, const gfloat marginLeft, const gfloat marginRight) = 0;
+	virtual void closeSection() = 0;
 
+	virtual void insertTab() = 0;
 	virtual void insertText(const UCSString &text) = 0;
  	virtual void insertLineBreak() = 0;
 
-	virtual void defineOrderedListLevel(const gint listID, const guint16 listLevel, const OrderedListType listType, 
+	virtual void defineOrderedListLevel(const gint listID, const guint16 listLevel, const NumberingType listType, 
 					    const UCSString &textBeforeNumber, const UCSString &textAfterNumber,
 					    const gint startingNumber) = 0;
 	virtual void defineUnorderedListLevel(const gint listID, const guint16 listLevel, const UCSString &bullet) = 0;
@@ -67,13 +72,22 @@ class WPXHLListenerImpl
 	virtual void openUnorderedListLevel(const gint listID) = 0;
 	virtual void closeOrderedListLevel() = 0;
 	virtual void closeUnorderedListLevel() = 0;
-	virtual void openListElement() = 0;
+	virtual void openListElement(const guint8 paragraphJustification, const guint32 textAttributeBits,
+				     const gchar *fontName, const gfloat fontSize, 
+				     const float lineSpacing) = 0;
 	virtual void closeListElement() = 0;
- 
+#if 0	
+	virtual void openFootnote() = 0;
+	virtual void closeFootnote() = 0;
+	virtual void openEndnote() = 0;
+	virtual void closeEndnote() = 0;
+#endif
  	virtual void openTable() = 0;
- 	virtual void openRow() = 0;
- 	virtual void openCell(const guint32 col, const guint32 row, const guint32 colSpan, const guint32 rowSpan, 
-			      const RGBSColor * cellFgColor, const RGBSColor * cellBgColor) = 0;
+ 	virtual void openTableRow() = 0;
+	virtual void closeTableRow() = 0;
+ 	virtual void openTableCell(const guint32 col, const guint32 row, const guint32 colSpan, const guint32 rowSpan, 
+				   const RGBSColor * cellFgColor, const RGBSColor * cellBgColor) = 0;
+	virtual void closeTableCell() = 0;
  	virtual void closeTable() = 0;
 };
 

@@ -27,13 +27,16 @@
 #include "TextListener.h"
 #include "WP6FileStructure.h" 
 
+// use the BELL code to represent a TAB for now
+#define UCS_TAB 0x0009 
+
 TextListener::TextListener() : 
 	WP6LLListener(),
 	m_isUndoOn(FALSE)
 {
 }
 
-void TextListener::insertCharacter(guint16 character)
+void TextListener::insertCharacter(const guint16 character)
 {
 	if (!m_isUndoOn) {
 		// first convert from ucs2 to ucs4
@@ -48,12 +51,19 @@ void TextListener::insertCharacter(guint16 character)
 	}
 }
 
-void TextListener::undoChange(guint8 undoType, guint16 undoLevel)
+void TextListener::undoChange(const guint8 undoType, const guint16 undoLevel)
 {
 	if (undoType == WP6_UNDO_GROUP_INVALID_TEXT_START)
 		m_isUndoOn = TRUE;
 	else if (undoType == WP6_UNDO_GROUP_INVALID_TEXT_END)
 		m_isUndoOn = FALSE;
+}
+
+void TextListener::insertTab()
+{
+	if (!m_isUndoOn) {
+		printf("%c", UCS_TAB);
+	}
 }
 
 void TextListener::insertEOL()

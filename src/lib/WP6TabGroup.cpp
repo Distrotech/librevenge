@@ -27,10 +27,6 @@
 #include "WP6LLListener.h"
 #include "libwpd_internal.h"
 
-// use the BELL code to represent a TAB for now
-// TODO: is this the right way a TAB should be defined or should we use a WPX_CHARACTER_TAB define?
-#define UCS_TAB 0x0009 
-
 WP6TabGroup::WP6TabGroup(GsfInput *input) :
 	WP6VariableLengthGroup()
 {
@@ -69,7 +65,7 @@ void WP6TabGroup::parse(WP6LLListener *llListener)
 		case 18: // 10010b = right tab
 		case 26: // 11010b = decimal tab
 			// TODO: fix stupid default implementation of adding just a TAB char without looking what it actually should be
-			llListener->insertCharacter(UCS_TAB);		
+			llListener->insertTab();		
 			break;
 		default: // something else shouldn't be possible according to the documentation
 			break;

@@ -35,19 +35,21 @@ public:
 	TextListener();
 	~TextListener() {}
 	virtual void startDocument() {}
-	virtual void insertCharacter(guint16 character);
+	virtual void insertCharacter(const guint16 character);
+	virtual void insertTab();
 	virtual void insertEOL();
-	virtual void insertBreak(guint8 breakType) {}
-	virtual void undoChange(guint8 undoType, guint16 undoLevel);
+	virtual void insertBreak(const guint8 breakType) {}
+	virtual void undoChange(const guint8 undoType, const guint16 undoLevel);
 	virtual void setDate(const guint16 year, const guint8 month, const guint8 day, 
 			     const guint8 hour, const guint8 minute, const guint8 second,
 			     const guint8 dayOfWeek, const guint8 timeZone, const guint8 unused) {}
 	virtual void setExtendedInformation(const guint16 type, const UCSString &data) {}
-	virtual void fontChange(guint16 matchedFontPointSize, guint16 fontPID) {}
-	virtual void attributeChange(gboolean isOn, guint8 attribute) {}
-	virtual void justificationChange(guint8 justification) {}
-	virtual void marginChange(guint8 side, guint16 margin) {}
-	virtual void columnChange(guint8 numColumns) {}
+	virtual void fontChange(const guint16 matchedFontPointSize, const guint16 fontPID) {}
+	virtual void attributeChange(const gboolean isOn, const guint8 attribute) {}
+	virtual void lineSpacingChange(const float lineSpacing) {}
+	virtual void justificationChange(const guint8 justification) {}
+	virtual void marginChange(const guint8 side, const guint16 margin) {}
+	virtual void columnChange(const guint8 numColumns) {}
 	virtual void updateOutlineDefinition(const WP6OutlineLocation outlineLocation, const guint16 outlineHash, 
 					     const guint8 *numberingMethods, const guint8 tabBehaviourFlag) {}
 
@@ -57,11 +59,13 @@ public:
 	virtual void displayNumberReferenceGroupOff(const guint8 subGroup) {}
 	virtual void styleGroupOn(const guint8 subGroup) {}
 	virtual void styleGroupOff(const guint8 subGroup) {}
+	virtual void footnoteEndnoteGroupOn(const guint8 subGroup, const guint16 textPID) {}
+	virtual void footnoteEndnoteGroupOff(const guint8 subGroup) {}
 	virtual void endDocument() {}
 		
 	virtual void startTable() {}
  	virtual void insertRow() {}
- 	virtual void insertCell(guint8 colSpan, guint8 rowSpan, gboolean boundFromLeft, gboolean boundFromAbove, RGBSColor * cellFgColor, RGBSColor * cellBgColor) {}
+ 	virtual void insertCell(const guint8 colSpan, const guint8 rowSpan, const gboolean boundFromLeft, const gboolean boundFromAbove, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor) {}
  	virtual void endTable() {}
 
  private:

@@ -29,8 +29,7 @@
 
 WP6ParagraphGroup::WP6ParagraphGroup(GsfInput *input) :
 	WP6VariableLengthGroup(),
-	m_subGroupData(NULL),
-	m_justification(0)
+	m_subGroupData(NULL)
 {
 	_read(input);
 }
@@ -45,16 +44,15 @@ void WP6ParagraphGroup::_readContents(GsfInput *input)
 {
 	switch (getSubGroup())
 	{
-		case WP6_PARAGRAPH_GROUP_JUSTIFICATION:
-		{   
-			m_justification = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
-			break;
-		}
-		case WP6_PARAGRAPH_GROUP_OUTLINE_DEFINE:
-		{
-			m_subGroupData = new WP6ParagraphGroup_OutlineDefineSubGroup(input);
-			break;
-		}
+	case WP6_PARAGRAPH_GROUP_LINE_SPACING:
+		m_subGroupData = new WP6ParagraphGroup_LineSpacingSubGroup(input);
+		break;
+	case WP6_PARAGRAPH_GROUP_JUSTIFICATION:
+		m_subGroupData = new WP6ParagraphGroup_JustificationModeSubGroup(input);
+		break;
+	case WP6_PARAGRAPH_GROUP_OUTLINE_DEFINE:
+		m_subGroupData = new WP6ParagraphGroup_OutlineDefineSubGroup(input);
+		break;
 	}
 }
 
@@ -62,19 +60,34 @@ void WP6ParagraphGroup::parse(WP6LLListener *llListener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling an Paragraph group\n"));
 	
-	switch (getSubGroup())
-	{
-		case WP6_PARAGRAPH_GROUP_JUSTIFICATION:
-		{   
-			llListener->justificationChange(getJustification());
-			break;
-		}
-		case WP6_PARAGRAPH_GROUP_OUTLINE_DEFINE:
-		{
-			m_subGroupData->parse(llListener, getNumPrefixIDs(), getPrefixIDs());
-			break;
-		}
-	}
+	if (m_subGroupData)
+		m_subGroupData->parse(llListener, getNumPrefixIDs(), getPrefixIDs());
+}
+
+WP6ParagraphGroup_LineSpacingSubGroup::WP6ParagraphGroup_LineSpacingSubGroup(GsfInput *input)
+{
+	guint32 lineSpacing = *(const guint32 *)gsf_input_read(input, sizeof(guint32), NULL);
+	gint16 lineSpacingIntegerPart = (gint16)((lineSpacing & 0xFFFF0000) >> 16);
+	float lineSpacingFractionalPart = (float)(lineSpacing & 0xFFFF)/(float)0xFFFF;
+	WPD_DEBUG_MSG(("WordPerfect: line spacing integer part: %i fractional part: %f (original value: %i)\n", 
+		       lineSpacingIntegerPart, lineSpacingFractionalPart, lineSpacing));
+	m_lineSpacing = lineSpacingIntegerPart + lineSpacingFractionalPart;
+}
+
+void WP6ParagraphGroup_LineSpacingSubGroup::parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
+{
+	WPD_DEBUG_MSG(("WordPerfect: parsing a line spacing change of: %f\n", m_lineSpacing));
+	llListener->lineSpacingChange(m_lineSpacing);
+}
+
+WP6ParagraphGroup_JustificationModeSubGroup::WP6ParagraphGroup_JustificationModeSubGroup(GsfInput *input)
+{
+	m_justification = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+}
+
+void WP6ParagraphGroup_JustificationModeSubGroup::parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
+{
+	llListener->justificationChange(m_justification);
 }
 
 WP6ParagraphGroup_OutlineDefineSubGroup::WP6ParagraphGroup_OutlineDefineSubGroup(GsfInput *input)

@@ -50,7 +50,7 @@ void WP6ExtendedDocumentSummaryPacket::_readContents(GsfInput *input)
 	m_stream = gsf_input_memory_new(streamData, m_dataSize, TRUE);
 }
 
-void WP6ExtendedDocumentSummaryPacket::parse(WP6LLListener *llListener)
+void WP6ExtendedDocumentSummaryPacket::parse(WP6LLListener *llListener) const
 {
 	guint16 groupLength = 0;
 

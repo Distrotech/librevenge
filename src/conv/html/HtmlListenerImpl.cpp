@@ -26,12 +26,10 @@
 #include <stdio.h>
 #include "HtmlListenerImpl.h"
 
-HtmlListenerImpl::HtmlListenerImpl() :
-	m_isSectionOpened(FALSE),
-	m_isParagraphOpened(FALSE),
-	m_isSpanOpened(FALSE),
- 	m_isRowOpened(FALSE),
- 	m_isCellOpened(FALSE)
+// use the BELL code to represent a TAB for now
+#define UCS_TAB 0x0009 
+
+HtmlListenerImpl::HtmlListenerImpl()
 {
 }
 
@@ -83,11 +81,6 @@ void HtmlListenerImpl::startDocument()
 
 void HtmlListenerImpl::endDocument()
 {
-	_closeCurrentParagraph();
-
-	if (m_isSectionOpened)
-		printf("</section>\n");
-
 	printf("\n");
 	printf("</body>\n");
 	printf("</html>\n");
@@ -95,38 +88,45 @@ void HtmlListenerImpl::endDocument()
 
 void HtmlListenerImpl::openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits, 
 				     const gchar *fontName, const gfloat fontSize,
+				     const float lineSpacing,
 				     const gboolean isColumnBreak, const gboolean isPageBreak)
 {
-	_closeCurrentParagraph();
-
 	printf("<p style=\"");
 	_appendTextAttributes(textAttributeBits);
 	_appendParagraphJustification(paragraphJustification);
 	printf("\" font-name=\"%s\" font-size=\"%f\">", fontName, fontSize);
+}
 
-	m_isParagraphOpened = TRUE;
+void HtmlListenerImpl::closeParagraph()
+{
+	printf("</p>\n");
 }
 
 void HtmlListenerImpl::openSpan(guint32 textAttributeBits, const gchar *fontName, const gfloat fontSize)
 {
-	_closeCurrentSpan();
-
 	printf("<span style=\""); 
 	_appendTextAttributes(textAttributeBits);
 	printf("\" font-name=\"%s\" font-size=\"%f\">", fontName, fontSize);
-	m_isSpanOpened = TRUE;
+}
+
+void HtmlListenerImpl::closeSpan()
+{
+	printf("</span>");
 }
 
 void HtmlListenerImpl::openSection(guint numColumns, gfloat marginLeft, gfloat marginRight)
 {
-	_closeCurrentParagraph();
-
-	if (m_isSectionOpened)
-		printf("\n</section>\n");
-
-	m_isSectionOpened = TRUE;
-
 	printf("<section columns:%i margin-left:%4.4fin margin-right:%4.4fin>\n", numColumns, marginLeft, marginRight);
+}
+
+void HtmlListenerImpl::closeSection()
+{
+	printf("\n</section>\n");
+}
+
+void HtmlListenerImpl::insertTab()
+{
+	printf("%c", UCS_TAB);
 }
 
 void HtmlListenerImpl::insertText(const UCSString &text)
@@ -137,8 +137,6 @@ void HtmlListenerImpl::insertText(const UCSString &text)
 
 void HtmlListenerImpl::openOrderedListLevel(const gint listID)
 {
-	_closeCurrentParagraph();
-
 	printf("<ol>\n");
 }
 
@@ -149,8 +147,6 @@ void HtmlListenerImpl::closeOrderedListLevel()
 
 void HtmlListenerImpl::openUnorderedListLevel(const gint listID)
 {
-	_closeCurrentParagraph();
-
 	printf("<ul>\n");
 }
 
@@ -160,9 +156,14 @@ void HtmlListenerImpl::closeUnorderedListLevel()
 }
 
 
-void HtmlListenerImpl::openListElement()
+void HtmlListenerImpl::openListElement(const guint8 paragraphJustification, const guint32 textAttributeBits,
+				       const gchar *fontName, const gfloat fontSize, 
+				       const float lineSpacing)
 {
-	printf("<li>");
+	printf("<li style=\"");
+	_appendTextAttributes(textAttributeBits);
+	_appendParagraphJustification(paragraphJustification);
+	printf("\" font-name=\"%s\" font-size=\"%f\">", fontName, fontSize);
 }
 
 void HtmlListenerImpl::closeListElement()
@@ -170,30 +171,47 @@ void HtmlListenerImpl::closeListElement()
 	printf("</li>\n");
 }
 
+#if 0
+void HtmlListenerImpl::openFootnote()
+{
+	printf("<footnote>\n");
+}
+
+void HtmlListenerImpl::closeFootnote()
+{
+	printf("</footnote>\n");
+}
+
+void HtmlListenerImpl::openEndnote()
+{
+	printf("<endnote>\n");
+}
+
+void HtmlListenerImpl::closeEndnote()
+{
+	printf("</endnote>\n");
+}
+#endif
+
 void HtmlListenerImpl::openTable()
 {
-	_closeCurrentParagraph();
-
 	printf("<table border=\"1\">\n");
 	printf("<tbody>\n");
 }
 
-void HtmlListenerImpl::openRow()
+void HtmlListenerImpl::openTableRow()
 {
-	_closeCurrentParagraph();
-	_closeCurrentCell();
-	_closeCurrentRow();
-
 	printf("<tr>\n");
-
-	m_isRowOpened = TRUE;
 }
 
-void HtmlListenerImpl::openCell(const guint32 col, const guint32 row, const guint32 colSpan, const guint32 rowSpan, 
+void HtmlListenerImpl::closeTableRow()
+{
+	printf("</tr>\n");
+}
+
+void HtmlListenerImpl::openTableCell(const guint32 col, const guint32 row, const guint32 colSpan, const guint32 rowSpan, 
 				const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
 {
-	_closeCurrentParagraph();	
-	_closeCurrentCell();
 	printf("<td ");
 	
 	if (cellFgColor || cellBgColor)
@@ -209,20 +227,20 @@ void HtmlListenerImpl::openCell(const guint32 col, const guint32 row, const guin
 	printf(" rowspan=\"%ld\" colspan=\"%ld\"", rowSpan, colSpan);
 
 	printf(">\n");
-	m_isCellOpened = TRUE;
+}
+
+void HtmlListenerImpl::closeTableCell()
+{
+	printf("</td>\n");
 }
 
 void HtmlListenerImpl::closeTable()
-{
-	_closeCurrentParagraph();
-	_closeCurrentCell();
-	_closeCurrentRow();
-	
+{	
 	printf("</tbody>\n");
 	printf("</table>\n");
 }
 
-void HtmlListenerImpl::_appendTextAttributes(guint32 textAttributeBits)
+void HtmlListenerImpl::_appendTextAttributes(const guint32 textAttributeBits)
 {
 	if (textAttributeBits & WPX_BOLD_BIT)
 		printf("font-weight: bold;");
@@ -230,7 +248,7 @@ void HtmlListenerImpl::_appendTextAttributes(guint32 textAttributeBits)
 		printf("font-style: italic;");
 }
 
-void HtmlListenerImpl::_appendParagraphJustification(guint32 paragraphJustification)
+void HtmlListenerImpl::_appendParagraphJustification(const guint32 paragraphJustification)
 {
 	switch (paragraphJustification)
 	{
@@ -248,37 +266,4 @@ void HtmlListenerImpl::_appendParagraphJustification(guint32 paragraphJustificat
 			printf("text-align: jusitify;");
 			break;
 	}
-}
-
-void HtmlListenerImpl::_closeCurrentSpan()
-{
-	if (m_isSpanOpened)
-		printf("</span>");
-
-	m_isSpanOpened = FALSE;
-}
-
-void HtmlListenerImpl::_closeCurrentParagraph()
-{
-	_closeCurrentSpan();
-	if (m_isParagraphOpened)
-		printf("</p>");
-
-	m_isParagraphOpened = FALSE;
-}
-
-void HtmlListenerImpl::_closeCurrentCell()
-{
-	if (m_isCellOpened)
-		printf("</td>\n");
-
-	m_isCellOpened = FALSE;
-}
-
-void HtmlListenerImpl::_closeCurrentRow()
-{
-	if (m_isRowOpened)
-		printf("</tr>\n");
-
-	m_isRowOpened = FALSE;
 }

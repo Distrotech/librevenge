@@ -42,7 +42,7 @@ extern guint16 japaneseMap[];
 
 guint16 extendedCharacterToUCS2(guint8 character, guint8 characterSet);
 
-enum OrderedListType { ARABIC, LOWERCASE, UPPERCASE, LOWERCASE_ROMAN, UPPERCASE_ROMAN };
+enum NumberingType { ARABIC, LOWERCASE, UPPERCASE, LOWERCASE_ROMAN, UPPERCASE_ROMAN };
 
 typedef struct _RGBSColor RGBSColor;
 struct _RGBSColor

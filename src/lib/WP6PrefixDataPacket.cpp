@@ -25,6 +25,7 @@
 
 #include "WP6PrefixDataPacket.h"
 #include "WP6PrefixIndice.h"
+#include "WP6GeneralTextPacket.h"
 #include "WP6FontDescriptorPacket.h"
 #include "WP6DefaultInitialFontPacket.h"
 #include "WP6ExtendedDocumentSummaryPacket.h"
@@ -41,24 +42,28 @@ WP6PrefixDataPacket * WP6PrefixDataPacket::constructPrefixDataPacket(GsfInput * 
 {	       
 	switch (prefixIndice->getType())
 	{
-		case WP6_INDEX_HEADER_INITIAL_FONT:			
-			return new WP6DefaultInitialFontPacket(input, prefixIndice->getID(), 
-							   prefixIndice->getDataOffset(), 
-							   prefixIndice->getDataSize());
-		case WP6_INDEX_HEADER_DESIRED_FONT_DESCRIPTOR_POOL:
-			return new WP6FontDescriptorPacket(input, prefixIndice->getID(), 
-							   prefixIndice->getDataOffset(), 
-							   prefixIndice->getDataSize());
-		case WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY:
-			return new WP6ExtendedDocumentSummaryPacket(input, prefixIndice->getID(), 
-								    prefixIndice->getDataOffset(), 
-								    prefixIndice->getDataSize());
-		case WP6_INDEX_HEADER_OUTLINE_STYLE:
-			return new WP6OutlineStylePacket(input, prefixIndice->getID(), 
-							 prefixIndice->getDataOffset(), 
-							 prefixIndice->getDataSize());
-		default:
-			return NULL;
+	case WP6_INDEX_HEADER_INITIAL_FONT:			
+		return new WP6DefaultInitialFontPacket(input, prefixIndice->getID(), 
+						       prefixIndice->getDataOffset(), 
+						       prefixIndice->getDataSize());
+	case WP6_INDEX_HEADER_GENERAL_WORDPERFECT_TEXT:
+		return new WP6GeneralTextPacket(input, prefixIndice->getID(), 
+						prefixIndice->getDataOffset(), 
+						prefixIndice->getDataSize());
+	case WP6_INDEX_HEADER_DESIRED_FONT_DESCRIPTOR_POOL:
+		return new WP6FontDescriptorPacket(input, prefixIndice->getID(), 
+						   prefixIndice->getDataOffset(), 
+						   prefixIndice->getDataSize());
+	case WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY:
+		return new WP6ExtendedDocumentSummaryPacket(input, prefixIndice->getID(), 
+							    prefixIndice->getDataOffset(), 
+							    prefixIndice->getDataSize());
+	case WP6_INDEX_HEADER_OUTLINE_STYLE:
+		return new WP6OutlineStylePacket(input, prefixIndice->getID(), 
+						 prefixIndice->getDataOffset(), 
+						 prefixIndice->getDataSize());
+	default:
+		return NULL;
 	}
 }
 

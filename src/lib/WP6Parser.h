@@ -29,12 +29,15 @@
 #include "WPXParser.h"
 
 class WP6PrefixData;
+class WP6LLListener;
 
 class WP6Parser : public WPXParser
 {
 public:
 	WP6Parser(GsfInput * input, WPXLLListener *llListener);		
 	virtual void parse();
+	static void parseDocument(GsfInput *stream, WP6LLListener *llListener);
+
 protected:
 	void _parsePacket(WP6PrefixData *prefixData, int type);
 	void _parsePackets(WP6PrefixData *prefixData, int type);

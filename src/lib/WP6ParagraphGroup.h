@@ -28,6 +28,26 @@
 
 #include "WP6VariableLengthGroup.h"
 
+class WP6ParagraphGroup_LineSpacingSubGroup : public WP6VariableLengthGroup_SubGroup
+{
+public:
+	WP6ParagraphGroup_LineSpacingSubGroup(GsfInput *input);
+	virtual void parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
+
+private:
+	float m_lineSpacing;
+};
+
+class WP6ParagraphGroup_JustificationModeSubGroup : public WP6VariableLengthGroup_SubGroup
+{
+public:
+	WP6ParagraphGroup_JustificationModeSubGroup(GsfInput *input);
+	virtual void parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
+
+private:
+	guint8 m_justification;
+};
+
 class WP6ParagraphGroup_OutlineDefineSubGroup : public WP6VariableLengthGroup_SubGroup
 {
 public:
@@ -48,11 +68,8 @@ class WP6ParagraphGroup : public WP6VariableLengthGroup
 	~WP6ParagraphGroup();
 	virtual void _readContents(GsfInput *input);
 	virtual void parse(WP6LLListener *llListener);
-	const guint8 getJustification() const { return m_justification; }
-	
  private:
 	WP6VariableLengthGroup_SubGroup *m_subGroupData;
-	guint8 m_justification; // we can't JUSTIFY creating another class to hold this piece of data
 };
 
 #endif /* WP6PARAGRAPHGROUP_H */

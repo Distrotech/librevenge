@@ -23,28 +23,26 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP6OUTLINESTYLEPACKET_H
-#define WP6OUTLINESTYLEPACKET_H
+#ifndef WP6GENERALTEXTPACKET_H
+#define WP6GENERALTEXTPACKET_H
 #include "WP6PrefixDataPacket.h"
 #include "WP6FileStructure.h"
 #include "WP6LLListener.h"
 
-class WP6OutlineStylePacket : public WP6PrefixDataPacket
+class WP6GeneralTextPacket : public WP6PrefixDataPacket
 {
- public:
-	WP6OutlineStylePacket(GsfInput *input, int id, guint32 dataOffset, guint32 dataSize);
-	virtual ~WP6OutlineStylePacket();
+public:
+	WP6GeneralTextPacket(GsfInput *input, int id, guint32 dataOffset, guint32 dataSize);
+	virtual ~WP6GeneralTextPacket();
 	virtual void _readContents(GsfInput *input);
 	virtual void parse(WP6LLListener *llListener) const;
 
- private:              
-      guint16 m_numPIDs;
-      guint16 m_paragraphStylePIDs[WP6_NUM_LIST_LEVELS]; // seemingly useless
-      guint16 m_nonDeletableInfoSize;
-      guint16 m_outlineHash;
-      guint8 m_numberingMethods[WP6_NUM_LIST_LEVELS];
-      guint8 m_outlineFlags;
-      guint8 m_tabBehaviourFlag;
+private:              
+	guint16 m_numTextBlocks;
+	guint32 m_firstTextBlockOffset;
+	guint32 *m_blockSizes;
 
+	GsfInput *m_stream;
+	
 };
-#endif /* WP6OUTLINESTYLEPACKET_H */
+#endif /* WP6GENERALTEXTPACKET_H */

@@ -46,15 +46,21 @@ public:
 ;
 	virtual void startDocument();
 	virtual void endDocument();
+	virtual void openSection(const guint numColumns, gfloat marginLeft, gfloat marginRight);
+	virtual void closeSection();
 	virtual void openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits,
 				   const gchar *fontName, gfloat fontSize, 
+				   const float lineSpacing,
 				   gboolean isColumnBreak, gboolean isPageBreak);
-	virtual void openSection(const guint numColumns, gfloat marginLeft, gfloat marginRight);
+	virtual void closeParagraph();
 	virtual void openSpan(const guint32 textAttributeBits, const gchar *fontName, const gfloat fontSize);
+	virtual void closeSpan();
+
+	virtual void insertTab();
 	virtual void insertText(const UCSString &text);
 	virtual void insertLineBreak() {}
 
-	virtual void defineOrderedListLevel(const gint listID, const guint16 listLevel, const OrderedListType listType, 
+	virtual void defineOrderedListLevel(const gint listID, const guint16 listLevel, const NumberingType listType, 
 					    const UCSString &textBeforeNumber, const UCSString &textAfterNumber,
 					    const gint startingNumber) {}
 	virtual void defineUnorderedListLevel(const gint listID, const guint16 listLevel, const UCSString &bullet) {}
@@ -62,33 +68,30 @@ public:
 	virtual void openUnorderedListLevel(const gint listID);
 	virtual void closeOrderedListLevel();
 	virtual void closeUnorderedListLevel();
-	virtual void openListElement();
+	virtual void openListElement(const guint8 paragraphJustification, const guint32 textAttributeBits,
+				     const gchar *fontName, const gfloat fontSize, 
+				     const float lineSpacing);
 	virtual void closeListElement();
-    
+#if 0
+	virtual void openFootnote();
+	virtual void closeFootnote();
+	virtual void openEndnote();
+	virtual void closeEndnote();
+#endif
 	virtual void openTable();
-	virtual void openRow();
-	virtual void openCell(const guint32 col, const guint32 row, 
-			      const guint32 colSpan, const guint32 rowSpan, 
-			      const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
+	virtual void openTableRow();
+	virtual void closeTableRow();
+	virtual void openTableCell(const guint32 col, const guint32 row, 
+				   const guint32 colSpan, const guint32 rowSpan, 
+				   const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
+	virtual void closeTableCell();
 	virtual void closeTable();
  
 protected:
 	void _appendTextAttributes(const guint32 textAttributeBits);
 	void _appendParagraphJustification(const guint32 paragraphJustification);
 
-	void _closeCurrentSpan();
-	void _closeCurrentParagraph();
-	void _closeCurrentCell();
-	void _closeCurrentRow();
-
 private:
-	gboolean m_isSectionOpened;
-	gboolean m_isParagraphOpened;
-	gboolean m_isSpanOpened;
- 
-	gboolean m_isRowOpened;
-	gboolean m_isCellOpened;
-
 	guint m_currentListLevel;
 };
 

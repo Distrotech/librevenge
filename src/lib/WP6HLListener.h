@@ -32,15 +32,16 @@
 
 #include <stack>
 #include <map>
+#include <vector>
 using namespace std;
 
 class WPXHLListenerImpl;
 
-enum WP6ParagraphStyleState { notInStyle, beginBeforeNumbering,
+enum WP6StyleState { normal, documentNote, beginBeforeNumbering,
 			      beginNumberingBeforeDisplayReferencing, 
-			      beginDisplayReferencing, 
+			      displayReferencing, 
 			      beginNumberingAfterDisplayReferencing,
-			      beginAfterNumbering, styleBody, end };
+			      beginAfterNumbering, styleBody, styleEnd };
 
 typedef struct _WP6DocumentMetaData WP6DocumentMetaData;
 struct _WP6DocumentMetaData
@@ -56,105 +57,56 @@ struct _WP6DocumentMetaData
 	UCSString m_descriptiveType;
 };
 
-class WP6ParagraphStyleStateSequence
+const int STATE_MEMORY = 3;
+class WP6StyleStateSequence
 {
 public:
-	WP6ParagraphStyleStateSequence() { m_currentState = m_previousState = notInStyle; }
-	void setCurrentState(WP6ParagraphStyleState state) { m_previousState = m_currentState; m_currentState = state; }
-	const WP6ParagraphStyleState getCurrentState() const { return m_currentState; }
-	const WP6ParagraphStyleState getPreviousState() const { return m_previousState; }
+	WP6StyleStateSequence() { clear(); }
+	void setCurrentState(WP6StyleState state) { for (int i=(STATE_MEMORY-1); i>0; i--) m_stateSequence[i] = m_stateSequence[i-1]; m_stateSequence[0]=state; }
+	const WP6StyleState getCurrentState() const { return m_stateSequence[0]; /*currentState;*/ }
+	const WP6StyleState getPreviousState() const { return m_stateSequence[1]; /*m_previousState;*/ }
+	void clear() { m_stateSequence.clear(); for (int i=0; i<STATE_MEMORY; i++) m_stateSequence.push_back(normal); }
+	
 private:
-	WP6ParagraphStyleState m_currentState;
-	WP6ParagraphStyleState m_previousState;
-
+	vector<WP6StyleState> m_stateSequence;
+	WP6StyleState m_currentState;
+	WP6StyleState m_previousState;
 };
 
-class WP6OutlineDefinition
+typedef struct _WP6ParsingState WP6ParsingState;
+struct _WP6ParsingState
 {
- public:
-	WP6OutlineDefinition();
-	WP6OutlineDefinition(const WP6OutlineLocation outlineLocation, const guint8 *numberingMethods, 
-			  const guint8 tabBehaviourFlag);
-	void update(const guint8 *numberingMethods, const guint8 tabBehaviourFlag);
-
-	OrderedListType getListType(int level) { return m_listTypes[level]; }
-
-protected:
-	void _updateNumberingMethods(const WP6OutlineLocation outlineLocation, const guint8 *numberingMethods);
-                 
-private:	
-	OrderedListType m_listTypes[WP6_NUM_LIST_LEVELS];
-};
-
-class WP6HLListener : public WP6LLListener
-{
- public:
-	WP6HLListener(WPXHLListenerImpl *listenerImpl);
-	~WP6HLListener();
-
-	// for getting low-level messages from the parser
-	virtual void setDate(const guint16 year, const guint8 month, const guint8 day, 
-			     const guint8 hour, const guint8 minute, const guint8 second,
-			     const guint8 dayOfWeek, const guint8 timeZone, const guint8 unused) {}
-	virtual void setExtendedInformation(const guint16 type, const UCSString &data);
-	virtual void startDocument();
-	virtual void insertCharacter(guint16 character);
-	virtual void insertEOL();
- 	virtual void insertBreak(guint8 breakType); 
-	virtual void undoChange(const guint8 undoType, const guint16 undoLevel);
-	virtual void fontChange(const guint16 matchedFontPointSize, const guint16 fontPID);
-	virtual void attributeChange(gboolean isOn, guint8 attribute);
-	virtual void justificationChange(guint8 justification);
-	virtual void marginChange(guint8 side, guint16 margin);
-	virtual void columnChange(guint8 numColumns); 
-	virtual void updateOutlineDefinition(const WP6OutlineLocation outlineLocation, const guint16 outlineHash, 
-					     const guint8 *numberingMethods, const guint8 tabBehaviourFlag);
-
-	virtual void paragraphNumberOn(const guint16 outlineHash, const guint8 level, const guint8 flag);
-	virtual void paragraphNumberOff();
-	virtual void displayNumberReferenceGroupOn(const guint8 subGroup, const guint8 level);
-	virtual void displayNumberReferenceGroupOff(const guint8 subGroup);
-	virtual void styleGroupOn(const guint8 subGroup);	
-	virtual void styleGroupOff(const guint8 subGroup);	
-	virtual void endDocument();
- 
-	virtual void startTable();
- 	virtual void insertRow();
- 	virtual void insertCell(guint8 colSpan, guint8 rowSpan, gboolean boundFromLeft, gboolean boundFromAbove, RGBSColor * cellFgColor, RGBSColor * cellBgColor);
- 	virtual void endTable(); 
-
- protected:
-	void _handleLineBreakElementBegin();
-	void _flushText();
-	void _handleListChange(const guint16 outlineHash);
- private:
-	WPXHLListenerImpl * m_listenerImpl;
-
-	WP6DocumentMetaData m_metaData;
-
+	_WP6ParsingState();
 	UCSString m_bodyText;
 	UCSString m_textBeforeNumber;
 	UCSString m_textBeforeDisplayReference;
 	UCSString m_numberText;
 	UCSString m_textAfterDisplayReference;
 	UCSString m_textAfterNumber;
-
+	
 	guint32 m_textAttributeBits;
 	gboolean m_textAttributesChanged;
-
-	gfloat m_currentFontSize;
-	GString * m_currentFontName;
+	gfloat m_fontSize;
+	GString * m_fontName;
 
 	gboolean m_isParagraphColumnBreak;
 	gboolean m_isParagraphPageBreak;
 	guint8 m_paragraphJustification;
+	float m_paragraphLineSpacing;
  	gboolean m_paragraphJustificationChanged;
+
+	gboolean m_isSectionOpened;
+
 	gboolean m_isParagraphOpened;
 	gboolean m_isParagraphClosed;
+	gboolean m_isSpanOpened;
 	guint m_numDeferredParagraphBreaks;
 	guint m_numRemovedParagraphBreaks;
 	
 	gboolean m_isTableOpened;
+	gboolean m_isTableRowOpened;
+	gboolean m_isTableColumnOpened;
+	gboolean m_isTableCellOpened;
 
 	gboolean m_sectionAttributesChanged;
 	guint m_numColumns;
@@ -166,16 +118,107 @@ class WP6HLListener : public WP6LLListener
 	gint32 m_currentRow;
 	gint32 m_currentColumn;
 
-	map<int,WP6OutlineDefinition *> m_outlineDefineHash;
 	stack<int> m_listLevelStack;
 	guint16 m_currentOutlineHash; // probably should replace Hash with Key in these sorts of cases
 	guint8 m_oldListLevel;
 	guint8 m_currentListLevel;
-	WP6ParagraphStyleStateSequence m_paragraphStyleStateSequence;
-	gboolean m_isPutativeListElementHasParagraphNumber;
-	gboolean m_isPutativeListElementHasDisplayReferenceNumber;
+	WP6StyleStateSequence m_styleStateSequence;
+	gboolean m_putativeListElementHasParagraphNumber;
+	gboolean m_putativeListElementHasDisplayReferenceNumber;
+
+	int m_noteTextPID;
+	gboolean m_inSubDocument;
 
 	gboolean m_isUndoOn;
+};
+
+class WP6OutlineDefinition
+{
+ public:
+	WP6OutlineDefinition();
+	WP6OutlineDefinition(const WP6OutlineLocation outlineLocation, const guint8 *numberingMethods, 
+			  const guint8 tabBehaviourFlag);
+	void update(const guint8 *numberingMethods, const guint8 tabBehaviourFlag);
+
+	NumberingType getListType(int level) { return m_listTypes[level]; }
+
+protected:
+	void _updateNumberingMethods(const WP6OutlineLocation outlineLocation, const guint8 *numberingMethods);
+                 
+private:	
+	NumberingType m_listTypes[WP6_NUM_LIST_LEVELS];
+};
+
+class WP6HLListener : public WP6LLListener
+{
+public:
+	WP6HLListener(WPXHLListenerImpl *listenerImpl);
+	~WP6HLListener();
+
+	// for getting low-level messages from the parser
+	virtual void setDate(const guint16 year, const guint8 month, const guint8 day, 
+			     const guint8 hour, const guint8 minute, const guint8 second,
+			     const guint8 dayOfWeek, const guint8 timeZone, const guint8 unused) {}
+	virtual void setExtendedInformation(const guint16 type, const UCSString &data);
+	virtual void startDocument();
+	virtual void insertCharacter(const guint16 character);
+	virtual void insertTab();
+	virtual void insertEOL();
+ 	virtual void insertBreak(const guint8 breakType); 
+	virtual void undoChange(const guint8 undoType, const guint16 undoLevel);
+	virtual void fontChange(const guint16 matchedFontPointSize, const guint16 fontPID);
+	virtual void attributeChange(const gboolean isOn, const guint8 attribute);
+	virtual void lineSpacingChange(const float lineSpacing);
+	virtual void justificationChange(const guint8 justification);
+	virtual void marginChange(const guint8 side, const guint16 margin);
+	virtual void columnChange(const guint8 numColumns); 
+	virtual void updateOutlineDefinition(const WP6OutlineLocation outlineLocation, const guint16 outlineHash, 
+					     const guint8 *numberingMethods, const guint8 tabBehaviourFlag);
+
+	virtual void paragraphNumberOn(const guint16 outlineHash, const guint8 level, const guint8 flag);
+	virtual void paragraphNumberOff();
+	virtual void displayNumberReferenceGroupOn(const guint8 subGroup, const guint8 level);
+	virtual void displayNumberReferenceGroupOff(const guint8 subGroup);
+	virtual void styleGroupOn(const guint8 subGroup);	
+	virtual void styleGroupOff(const guint8 subGroup);	
+	virtual void footnoteEndnoteGroupOn(const guint8 subGroup, const guint16 textPID);
+	virtual void footnoteEndnoteGroupOff(const guint8 subGroup);
+	virtual void endDocument();
+ 
+	virtual void startTable();
+ 	virtual void insertRow();
+ 	virtual void insertCell(const guint8 colSpan, const guint8 rowSpan, const gboolean boundFromLeft, const gboolean boundFromAbove, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
+ 	virtual void endTable(); 
+
+protected:
+	void _handleLineBreakElementBegin();
+	void _flushText();
+	void _handleListChange(const guint16 outlineHash);
+
+	void _openSection();
+	void _closeSection();
+
+	void _openTable();
+	void _closeTable();
+	void _openTableRow();
+	void _closeTableRow();
+	void _openTableCell(const guint8 colSpan, const guint8 rowSpan, 
+			    const gboolean boundFromLeft, const gboolean boundFromAbove, 
+			    const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
+	void _closeTableCell();
+
+	void _openParagraph();
+	void _closeParagraph();
+	void _openSpan();
+	void _closeSpan();
+
+private:
+	WPXHLListenerImpl * m_listenerImpl;
+
+	WP6DocumentMetaData m_metaData;
+	WP6ParsingState *m_parseState;
+	
+	map<int,WP6OutlineDefinition *> m_outlineDefineHash;
 };
 
 #endif /* WP6HLLISTENER_H */

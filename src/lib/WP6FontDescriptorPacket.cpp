@@ -27,8 +27,8 @@
 #include "WP6FontDescriptorPacket.h"
 #include "libwpd_internal.h"
 
-static char *fontWeightStrings[] = { "Regular", "Bold", "Standaard", "Standard" };
-static int numFontWeightStrings = 4;
+char *fontWeightStrings[] = { "Regular", "Bold", "Light", "Standaard", "Standard" };
+int numFontWeightStrings = 4;
 
 WP6FontDescriptorPacket::WP6FontDescriptorPacket(GsfInput *input, int id, guint32 dataOffset, guint32 dataSize) 
 	: WP6PrefixDataPacket(input)

@@ -38,7 +38,7 @@ class WP6PrefixDataPacket
  public:
 	WP6PrefixDataPacket(GsfInput * input);	
 	virtual ~WP6PrefixDataPacket() {}
-	virtual void parse(WP6LLListener *llListener) {}
+	virtual void parse(WP6LLListener *llListener) const {}
 
 	static WP6PrefixDataPacket * constructPrefixDataPacket(GsfInput * input, WP6PrefixIndice *prefixIndice);
 

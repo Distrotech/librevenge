@@ -3,7 +3,7 @@
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -23,28 +23,17 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP6OUTLINESTYLEPACKET_H
-#define WP6OUTLINESTYLEPACKET_H
-#include "WP6PrefixDataPacket.h"
-#include "WP6FileStructure.h"
-#include "WP6LLListener.h"
+#ifndef WP6FOONOTEENDNOTEGROUP_H
+#define WP6FOONOTEENDNOTEGROUP_H
 
-class WP6OutlineStylePacket : public WP6PrefixDataPacket
+#include "WP6VariableLengthGroup.h"
+
+class WP6FootnoteEndnoteGroup : public WP6VariableLengthGroup
 {
  public:
-	WP6OutlineStylePacket(GsfInput *input, int id, guint32 dataOffset, guint32 dataSize);
-	virtual ~WP6OutlineStylePacket();
+	WP6FootnoteEndnoteGroup(GsfInput *input);	
 	virtual void _readContents(GsfInput *input);
-	virtual void parse(WP6LLListener *llListener) const;
-
- private:              
-      guint16 m_numPIDs;
-      guint16 m_paragraphStylePIDs[WP6_NUM_LIST_LEVELS]; // seemingly useless
-      guint16 m_nonDeletableInfoSize;
-      guint16 m_outlineHash;
-      guint8 m_numberingMethods[WP6_NUM_LIST_LEVELS];
-      guint8 m_outlineFlags;
-      guint8 m_tabBehaviourFlag;
-
+	virtual void parse(WP6LLListener *llListener);
 };
-#endif /* WP6OUTLINESTYLEPACKET_H */
+
+#endif /* WP6FOONOTEENDNOTEGROUP_H */
