@@ -28,7 +28,6 @@
  
 #include "WP6LLListener.h"
 #include "WPXHLListener.h"
-#include "UT_libwpd2.h"
 
 class WPXHLListenerImpl;
 
