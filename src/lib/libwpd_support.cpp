@@ -404,6 +404,14 @@ _RGBSColor::_RGBSColor(guint8 r, guint8 g, guint8 b, guint8 s)
 {
 }
 
+_RGBSColor::_RGBSColor()
+	:	m_r(0),
+		m_g(0),
+		m_b(0),
+		m_s(0)
+{
+}
+
 UCSString::UCSString() : m_stringBuf(g_array_new(TRUE, FALSE, sizeof(guint32)))
 {
 }

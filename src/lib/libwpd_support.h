@@ -47,8 +47,8 @@ enum OrderedListType { ARABIC, LOWERCASE, UPPERCASE, LOWERCASE_ROMAN, UPPERCASE_
 typedef struct _RGBSColor RGBSColor;
 struct _RGBSColor
 {
-	_RGBSColor(guint8 r, guint8 g, guint8 b, guint8 s);
- 
+	_RGBSColor(guint8 r, guint8 g, guint8 b, guint8 s);	
+	_RGBSColor(); // initializes all values to 0
 	guint8 m_r;
 	guint8 m_g;
  	guint8 m_b;

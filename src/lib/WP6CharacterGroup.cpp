@@ -104,29 +104,6 @@ void WP6CharacterGroup::parse(WP6LLListener *llListener)
 		break;
 	case WP6_CHARACTER_GROUP_TABLE_DEFINITION_ON:
 		WPD_DEBUG_MSG(("WordPerfect: TABLE Definition ON\n"));
-		/*guint8 numPfxID;
-			
-		// FIXME: The following prefix IDs only exist if the PFX bit is set
-		// in the flags. For now, we just assume it _is_ set.
-		(fread(&numPfxID, sizeof(numPfxID);
-		gDEBUGMSG(("WordPerfect: Number of Table PFX IDs: %d\n", numPfxID));
-		for (int i=0; i<numPfxID; i++)
-		{
-		guint16 pfxID;
-		(fread(&pfxID, sizeof(pfxID);
-		// FIXME: handle the differt prefixes
-		// For now, we just skip over them
-		}
-	
-		guint16 sizeOfNonDelData;
-		(fread(&sizeOfNonDelData, sizeof(sizeOfNonDelData);
-		// FIXME: handle all the non-deletable (style) data.
-		// For now, we just skip over it.
-			
-		m_iCurrentTableRow = -1;
-		m_iCurrentTableColumn = -1;
-		X_CheckDocumentError(getDoc()->appendStrux(PTX_SectionTable, NULL));*/
-			
 		llListener->startTable();
 		break;
 	case WP6_CHARACTER_GROUP_TABLE_DEFINITION_OFF:
@@ -141,5 +118,3 @@ void WP6CharacterGroup::parse(WP6LLListener *llListener)
 		break;
 	}
 }
-
-// WP6CharacterGroup * WP6CharacterGroup::constructWP6CharacterGroup
