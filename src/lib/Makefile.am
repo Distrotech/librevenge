@@ -48,6 +48,7 @@ libwpd_1_la_SOURCES =			\
 	WP6UnsupportedVariableLengthGroup.cpp \
 	WP6VariableLengthGroup.cpp 	\
 	WPXPageSpan.cpp			\
+	WPXParser.cpp			\
 	WPXHeader.cpp 			\
 	WPXTable.cpp			\
 	libwpd.h	        	\
@@ -86,6 +87,7 @@ libwpd_1_la_SOURCES =			\
 	WP6SingleByteFunction.h		\
 	WP6StyleGroup.h			\
 	WP6TabGroup.h	 		\
+	WP6TibetanMap.h                 \
 	WP6UndoGroup.h			\
 	WP6UnsupportedVariableLengthGroup.h \
 	WP6VariableLengthGroup.h	\
