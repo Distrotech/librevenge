@@ -350,31 +350,113 @@ void WP6HLContentListener::insertTab(const uint8_t tabType, const float tabPosit
 		if (m_parseState->m_styleStateSequence.getCurrentState() == STYLE_BODY ||
 		    m_parseState->m_styleStateSequence.getCurrentState() == NORMAL)
 		{
-			// Special tabs that justify text to the right or center: only use them
-			// if we haven't started a new paragraph (this feature is a WordPerfect special)
-			// and only use them temporarily
+
+			// First of all, open paragraph for tabs that always are converted as tabs
+			switch ((tabType & 0xF8) >> 3)
+			{
+			case WP6_TAB_GROUP_TABLE_TAB:
+			case WP6_TAB_GROUP_LEFT_TAB:
+			case WP6_TAB_GROUP_BAR_TAB:
+			// Uncomment when the TabGroup is properly implemented
+			//case WP6_TAB_GROUP_CENTER_ON_MARGINS:
+			//case WP6_TAB_GROUP_CENTER_ON_CURRENT_POSITION:
+			//case WP6_TAB_GROUP_CENTER_TAB:
+			//case WP6_TAB_GROUP_FLUSH_RIGHT:
+			//case WP6_TAB_GROUP_RIGHT_TAB:
+			case WP6_TAB_GROUP_DECIMAL_TAB:
+				if (!m_ps->m_isParagraphOpened)
+					_openParagraph();
+				break;
+			
+			default:
+				break;
+			}
+			
+			// Following tabs are converted as formating if the paragraph is not opened
 			if (!m_ps->m_isParagraphOpened)
 			{
-
 				switch ((tabType & 0xF8) >> 3)
 				{
+				// Begin of code to be removed when the TabGroup is properly implemented
 				case WP6_TAB_GROUP_CENTER_ON_MARGINS:
 				case WP6_TAB_GROUP_CENTER_ON_CURRENT_POSITION:
 				case WP6_TAB_GROUP_CENTER_TAB:
 					m_parseState->m_tempParagraphJustification = WP6_PARAGRAPH_JUSTIFICATION_CENTER;
-					return;
+					break;
+
 				case WP6_TAB_GROUP_FLUSH_RIGHT:
 				case WP6_TAB_GROUP_RIGHT_TAB:
 					m_parseState->m_tempParagraphJustification = WP6_PARAGRAPH_JUSTIFICATION_RIGHT;
-					return;
+					break;
+				// End of code to be removed when the TabGroup is properly implemented
+
+				case WP6_TAB_GROUP_BACK_TAB: // converted as hanging indent
+					if (tabPosition >= (float)((double)0xFFFE/(double)WPX_NUM_WPUS_PER_INCH))
+						// fall-back solution if we are not able to read the tabPosition
+						m_ps->m_textIndentByTabs += 0.5f;
+					else
+						m_ps->m_textIndentByTabs = m_ps->m_paragraphMarginLeft - tabPosition
+							- m_ps->m_textIndentByParagraphIndentChange;
+					m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange
+						+ m_ps->m_textIndentByTabs;
+					break;
+
+				case WP6_TAB_GROUP_LEFT_INDENT:  // converted as left paragraph margin offset
+					if (tabPosition >= (float)((double)0xFFFE/(double)WPX_NUM_WPUS_PER_INCH))
+						// fall-back solution if we are not able to read the tabPosition
+						m_ps->m_leftMarginByTabs += 0.5f;
+					else
+						m_ps->m_leftMarginByTabs = tabPosition - m_ps->m_pageMarginLeft
+							- m_ps->m_leftMarginByPageMarginChange - m_ps->m_leftMarginByParagraphMarginChange;
+					m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
+						+ m_ps->m_leftMarginByParagraphMarginChange + m_ps->m_leftMarginByTabs;
+					break;
+
+				case WP6_TAB_GROUP_LEFT_RIGHT_INDENT: // converted as left and right paragraph margin offset
+					if (tabPosition >= (float)((double)0xFFFE/(double)WPX_NUM_WPUS_PER_INCH))
+						// fall-back solution if we are not able to read the tabPosition
+						m_ps->m_leftMarginByTabs += 0.5f;
+					else
+						m_ps->m_leftMarginByTabs = tabPosition - m_ps->m_pageMarginLeft
+							- m_ps->m_leftMarginByPageMarginChange - m_ps->m_leftMarginByParagraphMarginChange;
+					// L/R Indent is symetrical from the effective paragraph margins and position indicates only
+					// the distance from the left edge
+					m_ps->m_rightMarginByTabs = m_ps->m_leftMarginByTabs;
+					m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
+						+ m_ps->m_leftMarginByParagraphMarginChange + m_ps->m_leftMarginByTabs;
+					m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
+						+ m_ps->m_rightMarginByParagraphMarginChange + m_ps->m_rightMarginByTabs;
+					break;	
+				
 				default:
 					break;
 				}
 			}
-			// otherwise insert a normal tab -- it's the best we can do (and the right thing in most cases)
-			_flushText(true); // force an initial paragraph break, because we are inserting some data, _flushText
-			                  // just doesn't know about it
-			m_listenerImpl->insertTab();
+			else
+			{
+				// insert tab if paragraph is opened and the tab is not a BackTab
+				switch ((tabType & 0xF8) >> 3)
+				{
+				case WP6_TAB_GROUP_TABLE_TAB:
+				case WP6_TAB_GROUP_LEFT_TAB:
+				case WP6_TAB_GROUP_BAR_TAB:
+				case WP6_TAB_GROUP_LEFT_INDENT:
+				case WP6_TAB_GROUP_LEFT_RIGHT_INDENT:
+				case WP6_TAB_GROUP_CENTER_ON_MARGINS:
+				case WP6_TAB_GROUP_CENTER_ON_CURRENT_POSITION:
+				case WP6_TAB_GROUP_CENTER_TAB:
+				case WP6_TAB_GROUP_FLUSH_RIGHT:
+				case WP6_TAB_GROUP_RIGHT_TAB:
+				case WP6_TAB_GROUP_DECIMAL_TAB:
+					_flushText();
+					m_listenerImpl->insertTab();
+					break;
+				
+				default:
+					break;
+				}
+
+			}
 		}
 	}
 }

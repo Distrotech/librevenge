@@ -64,13 +64,13 @@ void WP3MiscellaneousGroup::_readContents(WPXInputStream *input)
 		tmpPageHeight = readU32(input, true);
 		
 		// determine whether the orientation lasts only one page or is persistent
-		if ((tmpPageOrientation && 0x8000) == 0x0000)
+		if ((tmpPageOrientation & 0x8000) == 0x0000)
 			m_isPersistent = false;
 		else 
 			m_isPersistent = true;
 		
 		// determine whether it is portrait or landscape
-		if ((tmpPageOrientation && 0x0001) == 0x0000)
+		if ((tmpPageOrientation & 0x0001) == 0x0000)
 			m_pageOrientation = PORTRAIT;
 		else
 			m_pageOrientation = LANDSCAPE;

@@ -39,7 +39,7 @@ WP6TabGroup::WP6TabGroup(WPXInputStream *input) :
 
 void WP6TabGroup::_readContents(WPXInputStream *input)
 {
-	uint16_t tempPosition = 0;
+	uint16_t tempPosition = 0xFFFF;
 	if ((getFlags() & 0x40) == 0x40) // 0x40 is "ignore function" flag
 	{
 		m_ignoreFunction = true;
@@ -48,14 +48,13 @@ void WP6TabGroup::_readContents(WPXInputStream *input)
 	{
 		input->seek((getSize() - 12), WPX_SEEK_CUR);
 		tempPosition = readU16(input);
-		m_position = (float)((double)tempPosition/(double)WPX_NUM_WPUS_PER_INCH);
 	}
 	else if (getSize() > 18)
 	{
 		input->seek(6, WPX_SEEK_CUR);
 		tempPosition = readU16(input);
-		m_position = (float)((double)tempPosition/(double)WPX_NUM_WPUS_PER_INCH);
 	}
+	m_position = (float)((double)tempPosition/(double)WPX_NUM_WPUS_PER_INCH);
 }
 
 void WP6TabGroup::parse(WP6HLListener *listener)

@@ -158,6 +158,10 @@ void WPXHLListener::_openPageSpan()
 {
 	_closePageSpan();
 
+	// Hack to be sure that the paragraph margins are consistent even if the page margin changes
+	m_ps->m_leftMarginByPageMarginChange += m_ps->m_pageMarginLeft;
+	m_ps->m_rightMarginByPageMarginChange += m_ps->m_pageMarginRight;
+	
 	if ( !m_pageList ||
 	     (m_pageList && m_ps->m_nextPageSpanIndice > (int)m_pageList->size() - 1)
 	   )
@@ -180,6 +184,16 @@ void WPXHLListener::_openPageSpan()
 	m_ps->m_pageMarginLeft = currentPage->getMarginLeft();
 	m_ps->m_pageMarginRight = currentPage->getMarginRight();
 
+	// Hack to be sure that the paragraph margins are consistent even if the page margin changes
+	// Compute new values
+	m_ps->m_leftMarginByPageMarginChange -= m_ps->m_pageMarginLeft;
+	m_ps->m_rightMarginByPageMarginChange -= m_ps->m_pageMarginRight;
+
+	m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange + m_ps->m_leftMarginByParagraphMarginChange
+			+ m_ps->m_leftMarginByTabs;
+	m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange + m_ps->m_rightMarginByParagraphMarginChange
+			+ m_ps->m_rightMarginByTabs;
+
 	vector<WPXHeaderFooter> headerFooterList = currentPage->getHeaderFooterList();
 	for (vector<WPXHeaderFooter>::iterator iter = headerFooterList.begin(); iter != headerFooterList.end(); iter++)
 	{
@@ -193,16 +207,18 @@ void WPXHLListener::_openPageSpan()
 		}
 	}
 
+	/* Some of this would maybe not be necessary, but it does not do any harm 
+	 * and apparently solves some troubles */
 	m_ps->m_pageFormLength = currentPage->getFormLength();
 	m_ps->m_pageFormWidth = currentPage->getFormWidth();
 	m_ps->m_pageFormOrientation = currentPage->getFormOrientation();
 	m_ps->m_pageMarginLeft = currentPage->getMarginLeft();
 	m_ps->m_pageMarginRight = currentPage->getMarginRight();
 
-	m_ps->m_leftMarginByPageMarginChange = 0.0f;
-	m_ps->m_rightMarginByPageMarginChange = 0.0f;
-	m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByParagraphMarginChange;
-	m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByParagraphMarginChange;
+	m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange + m_ps->m_leftMarginByParagraphMarginChange
+			+ m_ps->m_leftMarginByTabs;
+	m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange + m_ps->m_rightMarginByParagraphMarginChange
+			+ m_ps->m_rightMarginByTabs;
 
 	m_ps->m_numPagesRemainingInSpan = (currentPage->getPageSpan() - 1);
 	m_ps->m_nextPageSpanIndice++;

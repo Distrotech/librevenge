@@ -116,11 +116,11 @@ void WP5HLListener::attributeChange(const bool isOn, const uint8_t attribute)
 	// FIXME: handle all the possible attribute bits
 	switch (attribute)
 	{
-		case WP5_ATTRIBUTE_SUBSCRIPT:
-			textAttributeBit = WPX_SUBSCRIPT_BIT;
-			break;
 		case WP5_ATTRIBUTE_SUPERSCRIPT:
 			textAttributeBit = WPX_SUPERSCRIPT_BIT;
+			break;
+		case WP5_ATTRIBUTE_SUBSCRIPT:
+			textAttributeBit = WPX_SUBSCRIPT_BIT;
 			break;
 		case WP5_ATTRIBUTE_OUTLINE:
 			textAttributeBit = WPX_OUTLINE_BIT;
@@ -145,6 +145,9 @@ void WP5HLListener::attributeChange(const bool isOn, const uint8_t attribute)
 			break;
 		case WP5_ATTRIBUTE_UNDERLINE:
 			textAttributeBit = WPX_UNDERLINE_BIT;
+			break;
+		case WP5_ATTRIBUTE_SMALL_CAPS:
+			textAttributeBit = WPX_SMALL_CAPS_BIT;
 			break;
 	}
 
