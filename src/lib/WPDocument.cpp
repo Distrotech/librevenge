@@ -100,16 +100,10 @@ WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input, bool part
 			switch (header->getMajorVersion())
 			{
 				case 0x00: // WP5
-					confidence = WPD_CONFIDENCE_EXCELLENT;
-					break;
 				case 0x02: // WP6
-					confidence = WPD_CONFIDENCE_EXCELLENT;
-					break;
 				case 0x03: // WP Mac 3.0-3.5
-					confidence = WPD_CONFIDENCE_EXCELLENT;
-					break;
 				case 0x04: // WP Mac 3.5e
-					confidence = WPD_CONFIDENCE_NONE; // We currently don't have a parser for this, since we don't have the file format documentation
+					confidence = WPD_CONFIDENCE_EXCELLENT;
 					break;
 				default:
 					// unhandled file format
@@ -201,13 +195,11 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerIm
 					parser->parse(listenerImpl);
 					break;
 				case 0x03: // WP Mac 3.0-3.5
+				case 0x04: // WP Mac 3.5e
 					WPD_DEBUG_MSG(("WordPerfect: Using the WP3 parser.\n"));
 					parser = new WP3Parser(document, header);
 					parser->parse(listenerImpl);
 					break;
-				case 0x04: // WP Mac 3.5e
-					WPD_DEBUG_MSG(("WordPerfect: WP Mac 3.5e documents are currently unsupported since we have no file format documentation.\n"));
-					break;				
 				default:
 					// unhandled file format
 					WPD_DEBUG_MSG(("WordPerfect: Unsupported file format.\n"));
