@@ -114,9 +114,6 @@ WPDConfidence WPDocument::isFileFormatSupported(GsfInput *input, bool partialCon
 				case 0x00: // WP5 
 					confidence = WPD_CONFIDENCE_EXCELLENT;
 					break;
-				case 0x01: // ???
-					confidence = WPD_CONFIDENCE_NONE;
-					break;
 				case 0x02: // WP6
 					confidence = WPD_CONFIDENCE_EXCELLENT;
 					break;
@@ -191,10 +188,6 @@ void WPDocument::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl)
 					WPD_DEBUG_MSG(("WordPerfect: Using the WP5 parser.\n"));
 					parser = new WP5Parser(document, header);
 					parser->parse(listenerImpl);
-					break;
-				case 0x01: // ???
-					WPD_DEBUG_MSG(("WordPerfect: Unsupported file format.\n"));
-					// NOTE: WHEN WE KNOW WHICH PARSER TO INSTANIATE, UPDATE ::isFileFormatSupported AS WELL!
 					break;
 				case 0x02: // WP6
 					WPD_DEBUG_MSG(("WordPerfect: Using the WP6 parser.\n"));

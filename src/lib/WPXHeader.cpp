@@ -83,13 +83,21 @@ WPXHeader * WPXHeader::constructHeader(GsfInput *input)
 					majorVersion, minorVersion));	
 	WPD_DEBUG_MSG(("WordPerfect: Document Encryption = 0x%x \n",(int)documentEncryption));		
 
+
+	switch (fileType)
+	{
+		case 0x10:
+			WPD_DEBUG_MSG(("WordPerect: Supported file type: \"WordPerfect Document\"\n"));
+			break;
+		default:
+			WPD_DEBUG_MSG(("WordPerfect: Unsupported file type: %d\n", fileType));
+			return NULL;
+	}
+	
 	switch (majorVersion)
 	{
 		case 0x00: // WP5 
 			return new WP5Header(input, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption);
-		case 0x01: // ???
-			WPD_DEBUG_MSG(("WordPerfect: Unsupported file format.\n"));
-			return NULL;
 		case 0x02: // WP6
 			switch (minorVersion)
 			{
@@ -101,7 +109,7 @@ WPXHeader * WPXHeader::constructHeader(GsfInput *input)
 			break;
 		default:
 			// unhandled file format
-			WPD_DEBUG_MSG(("WordPerfect: Unsupported file format.\n"));
+			WPD_DEBUG_MSG(("WordPerfect: Unsupported major number: %d\n", majorVersion));
 			return NULL;
 	}
 
