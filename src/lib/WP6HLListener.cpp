@@ -666,6 +666,7 @@ void WP6HLListener::noteOn(const guint16 textPID)
 {
 	if (!m_parseState->m_isUndoOn)
 	{
+		_flushText();
 		m_parseState->m_styleStateSequence.setCurrentState(DOCUMENT_NOTE);
 		// save a reference to the text PID, we want to parse 
 		// the packet after we're through with the footnote ref.
@@ -677,7 +678,6 @@ void WP6HLListener::noteOff(const NoteType noteType)
 {
 	if (!m_parseState->m_isUndoOn)
 	{
-		_flushText();
 		m_parseState->m_styleStateSequence.setCurrentState(NORMAL);
 		NumberingType numberingType = _extractNumberingTypeFromBuf(m_parseState->m_numberText, ARABIC);
 		int number = _extractDisplayReferenceNumberFromBuf(m_parseState->m_numberText, numberingType);
@@ -794,7 +794,7 @@ void WP6HLListener::_handleLineBreakElementBegin()
 {
 	if (!m_parseState->m_sectionAttributesChanged && 
 	    m_parseState->m_numDeferredParagraphBreaks > 0 &&
-	    !m_parseState->m_isParagraphColumnBreak && !m_parseState->m_isParagraphPageBreak)
+	    !m_parseState->m_isParagraphColumnBreak && !m_parseState->m_isParagraphPageBreak) 
 		m_parseState->m_numDeferredParagraphBreaks--;					
 	_flushText();
 }
@@ -1034,8 +1034,8 @@ void WP6HLListener::_openParagraph()
 				      m_parseState->m_fontName->str, m_parseState->m_fontSize, 
 				      m_parseState->m_paragraphLineSpacing, 
 				      m_parseState->m_isParagraphColumnBreak, m_parseState->m_isParagraphPageBreak);
-	if (m_parseState->m_numDeferredParagraphBreaks > 0)
-		m_parseState->m_numDeferredParagraphBreaks--;	
+	if (m_parseState->m_numDeferredParagraphBreaks > 0) 
+		m_parseState->m_numDeferredParagraphBreaks--;
 
 	m_parseState->m_isParagraphColumnBreak = FALSE; 
 	m_parseState->m_isParagraphPageBreak = FALSE;
@@ -1047,6 +1047,7 @@ void WP6HLListener::_closeParagraph()
 	_closeSpan();
 	if (m_parseState->m_isParagraphOpened)
 		m_listenerImpl->closeParagraph();
+	
 
 	m_parseState->m_isParagraphOpened = FALSE;
 }
