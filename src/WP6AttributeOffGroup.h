@@ -23,22 +23,18 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP6FIXEDLENGTHGROUP_H
-#define WP6FIXEDLENGTHGROUP_H
+#ifndef WP6ATTRIBUTEOFFGROUP_H
+#define WP6ATTRIBUTEOFFGROUP_H
 
-#include "WP6Part.h"
+#include "WP6FixedLengthGroup.h"
 
-class WP6FixedLengthGroup : public WP6Part
+class WP6AttributeOffGroup : public WP6FixedLengthGroup
 {
 public:
-	WP6FixedLengthGroup(FILE * stream);	
+	WP6AttributeOffGroup(FILE * stream);	
 	
-	static WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(FILE * stream, guint8 groupID);
-	gboolean parse();
 protected:
-	virtual gboolean _parseContents() { return TRUE; }
-	
-	guint16 m_iSize; // should be set by the subclasses!
+	gboolean _parseContents();
 };
 
-#endif /* WP6FIXEDLENGTHGROUP_H */
+#endif /* WP6ATTRIBUTEOFFGROUP_H */

@@ -23,44 +23,14 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WP6FixedLengthGroup.h"
-#include "WP6FileStructure.h"
 #include "WP6AttributeOnGroup.h"
-#include "WP6AttributeOffGroup.h"
 
-WP6FixedLengthGroup::WP6FixedLengthGroup(FILE * stream)
-	: WP6Part(stream)
+WP6AttributeOnGroup::WP6AttributeOnGroup(FILE * stream)
+	: WP6FixedLengthGroup(stream)
 {
+	m_iSize = 3;
 }
-
-WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(FILE * stream, guint8 groupID)
+	
+gboolean WP6AttributeOnGroup::_parseContents()
 {
-#define WP6_TOP_EXTENDED_CHARACTER 0xF0
-#define WP6_TOP_UNDO_GROUP 0xF1
-#define WP6_TOP_ATTRIBUTE_ON 0xF2
-#define WP6_TOP_ATTRIBUTE_OFF 0xF3	
-	
-	switch (groupID)
-	{
-		case WP6_TOP_EXTENDED_CHARACTER: 
-			return new WP6FixedLengthGroup(stream);
-		case WP6_TOP_UNDO_GROUP:
-			return new WP6FixedLengthGroup(stream);
-		case WP6_TOP_ATTRIBUTE_ON:
-			return new WP6AttributeOnGroup(stream);
-		case WP6_TOP_ATTRIBUTE_OFF:
-			return new WP6AttributeOffGroup(stream);
-		default:
-			// should not happen
-			return new WP6FixedLengthGroup(stream);
-	}
-}
-
-gboolean WP6FixedLengthGroup::parse()
-{
-	guint32 startPosition = ftell(m_pStream);
-	
-	WPD_CHECK_INTERNAL_ERROR( _parseContents() );
-	
-	WPD_CHECK_FILE_SEEK_ERROR(fseek(m_pStream, (startPosition + m_iSize - 1 - ftell(m_pStream)), SEEK_CUR));
 }

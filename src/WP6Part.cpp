@@ -28,7 +28,6 @@
 #include "WP6Header.h"
 #include "WP6VariableLengthGroup.h"
 #include "WP6FixedLengthGroup.h"
-#include "UT_libwpd2.h"
 
 WP6Part::WP6Part(FILE * stream)
 	: WPXPart(stream)
@@ -37,34 +36,35 @@ WP6Part::WP6Part(FILE * stream)
 
 WP6Part * WP6Part::constructPart(FILE * stream, WPXParser * parser)
 {
-	guint8 readVal;
-
+	guint8 val;
 	while (ftell(stream) < (long)((WP6Header *)parser->getHeader())->m_iDocumentSize)
 	{
-		WPD_CHECK_FILE_READ_ERROR(fread(&readVal, sizeof(guint8), 1, stream), 1);
-		if (readVal > 0 && readVal < 127)
-		{	     
-			if (readVal < 32)
-			{
-				// International Characters
-				//WPD_CHECK_INTERNAL_ERROR(wp6_handle_character_insert(wp_internationalCharacterMapping[(read_val-1)]));
-			}
-			else
-			{
-				// normal ASCII characters
-				parser->getLLListener()->insertCharacter( (guint32)readVal );
-			}
+		WPD_CHECK_FILE_READ_ERROR(fread(&val, sizeof(guint8), 1, stream), 1);
+		guint32 readVal = val; // convert to a 32 bit int, otherwise gcc3.2 will start whining about comparisions always being true
+		
+		if (readVal >= 0x00 && readVal <= 0x20)
+		{
+			// Default Extended International Characters
 		}
-		else if (readVal >= 0xD0 && readVal <= 0xE2)
+		else if (readVal >= 0x21 && readVal <= 0x7F)
+		{
+			// normal ASCII characters
+			parser->getLLListener()->insertCharacter( (guint32)readVal );
+		}
+		else if (readVal >= 0x80 && readVal <= 0xCF)
+		{
+			// Single-Byte Functions
+		}
+		else if (readVal >= 0xD0 && readVal <= 0xEF)
 		{
 			// TODO: recognize which variable length group we need to instantiate
 			return new WP6VariableLengthGroup(stream);
-		}	      
-		else
+		}      
+		else if (readVal >= 0xF0 && readVal <= 0xFF)
 		{
 			// TODO: recognize which fixed length group we need to instantiate
-			return new WP6FixedLengthGroup(stream);
-		}	
+			return WP6FixedLengthGroup::constructFixedLengthGroup(stream, val);
+		}
 	}
 	
 	return NULL;
