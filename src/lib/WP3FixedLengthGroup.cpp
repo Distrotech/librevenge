@@ -25,6 +25,7 @@
 #include "WP3FixedLengthGroup.h"
 #include "WP3FileStructure.h"
 #include "WP3UnsupportedFixedLengthGroup.h"
+#include "WP3ExtendedCharacterGroup.h"
 #include "libwpd_internal.h"
 
 WP3FixedLengthGroup::WP3FixedLengthGroup(int groupID)
@@ -36,6 +37,8 @@ WP3FixedLengthGroup * WP3FixedLengthGroup::constructFixedLengthGroup(WPXInputStr
 {
 	switch (groupID) 
 	{
+		case WP3_EXTENDED_CHARACTER_GROUP:
+			return new WP3ExtendedCharacterGroup(input, groupID);
 		// Add the remaining cases here
 		default:
 			return new WP3UnsupportedFixedLengthGroup(input, groupID);

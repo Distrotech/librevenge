@@ -1,8 +1,10 @@
 /* libwpd
- * Copyright (C) 2004 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -22,21 +24,25 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP3FILESTRUCTURE_H
-#define WP3FILESTRUCTURE_H
+#ifndef WP3EXTENDEDCHARACTERGROUP_H
+#define WP3EXTENDEDCHARACTERGROUP_H
 
-// size of the fixed length functiongroups 0xC0 to 0xCF
-extern int WP3_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16]; 
+#include "WP3FixedLengthGroup.h"
+#include "WP3FileStructure.h"
 
-/* Main function group list  */
+class WP3ExtendedCharacterGroup : public WP3FixedLengthGroup
+{
+public:
+	WP3ExtendedCharacterGroup(WPXInputStream *input, uint8_t groupID);	
+	virtual void parse(WP3HLListener *listener);
+	
+ protected:
+	virtual void _readContents(WPXInputStream *input);
 
-#define WP3_EXTENDED_CHARACTER_GROUP 0xC0
+ private:
+	uint8_t m_macCharacter;
+	uint8_t m_characterSet;
+	uint8_t m_character;
+};
 
-#define WP3_INDENT_GROUP 0xC2
-#define WP3_ATTRIBUTE_GROUP 0xC3
-
-#define WP3_WINDOW_GROUP 0xDA
-#define WP3_STYLE_GROUP 0xDB
-#define WP3_END_OF_LINE_PAGE_GROUP 0xDC
-
-#endif /* WP3FILESTRUCTURE_H */
+#endif /* WP3EXTENDEDCHARACTERGROUP_H */

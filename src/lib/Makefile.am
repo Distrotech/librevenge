@@ -39,16 +39,18 @@ libwpd_1_la_SOURCES =				\
 	libwpd_math.cpp				\
 	libwpd_support.cpp			\
 	GSFStream.cpp				\
-	WP3EndOfLinePageGroup.cpp	\
+	WP3EndOfLinePageGroup.cpp		\
+	WP3ExtendedCharacterGroup.cpp		\
 	WP3FileStructure.cpp			\
 	WP3FixedLengthGroup.cpp			\
-	WP3Header.cpp			\
+	WP3Header.cpp				\
 	WP3HLListener.cpp			\
 	WP3HLStylesListener.cpp			\
-	WP3Parser.cpp			\
-	WP3Part.cpp			\
-	WP3UnsupportedFixedLengthGroup.cpp \
-	WP3UnsupportedVariableLengthGroup.cpp \
+	WP3Parser.cpp				\
+	WP3Part.cpp				\
+	WP3SingleByteFunction.cpp		\
+	WP3UnsupportedFixedLengthGroup.cpp 	\
+	WP3UnsupportedVariableLengthGroup.cpp 	\
 	WP3VariableLengthGroup.cpp		\
 	WP42FileStructure.cpp			\
 	WP42Heuristics.cpp			\
@@ -120,17 +122,19 @@ libwpd_1_la_SOURCES =				\
 	libwpd_internal.h			\
 	libwpd_math.h				\
 	libwpd_support.h        		\
-	WP3EndOfLinePageGroup.h	\
+	WP3EndOfLinePageGroup.h			\
+	WP3ExtendedCharacterGroup.h		\
 	WP3FileStructure.h			\
 	WP3FixedLengthGroup.h			\
-	WP3Header.h			\
-	WP3HLListener.h			\
+	WP3Header.h				\
+	WP3HLListener.h				\
 	WP3HLStylesListener.h			\
-	WP3LLListener.h			\
-	WP3Parser.h			\
-	WP3Part.h			\
+	WP3LLListener.h				\
+	WP3Parser.h				\
+	WP3Part.h				\
+	WP3SingleByteFunction.h			\
 	WP3VariableLengthGroup.h		\
-	WP3UnsupportedFixedLengthGroup.h \
+	WP3UnsupportedFixedLengthGroup.h 	\
 	WP3UnsupportedVariableLengthGroup.h	\
 	WP42FileStructure.h			\
 	WP42Heuristics.h			\

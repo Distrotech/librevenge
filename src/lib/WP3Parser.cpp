@@ -1,5 +1,6 @@
 /* libwpd
  * Copyright (C) 2004 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -73,22 +74,6 @@ void WP3Parser::parseDocument(WPXInputStream *input, WP3HLListener *listener)
 		{
 			listener->insertCharacter( readVal );
 		}
-		else if (readVal >= (uint8_t)0x80 && readVal <= (uint8_t)0xBF)
-		{
-			// single byte functions
-			switch (readVal)
-			{
-				case 0x80: // condensed hard return
-					listener->insertEOL();		
-					break;
-				case 0x81: // condensed hard page
-					listener->insertBreak(WPX_PAGE_BREAK);
-					break;
-				default:
-					// unsupported or undocumented token, ignore
-					break;				
-			}
-		}			
 		else 
 		{
 			WP3Part *part = WP3Part::constructPart(input, readVal);
