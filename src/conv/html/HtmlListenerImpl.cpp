@@ -71,7 +71,7 @@ void HtmlListenerImpl::openParagraph(const guint8 paragraphJustification, const 
 	printf("<p style=\"");
 	_appendTextAttributes(textAttributeBits);
 	_appendParagraphJustification(paragraphJustification);
-	printf("\" font-name=\"%s\" font-size\"%f\">", fontName, fontSize);
+	printf("\" font-name=\"%s\" font-size=\"%f\">", fontName, fontSize);
 
 	m_isParagraphOpened = TRUE;
 }
@@ -82,7 +82,7 @@ void HtmlListenerImpl::openSpan(guint32 textAttributeBits, const gchar *fontName
 
 	printf("<span style=\""); 
 	_appendTextAttributes(textAttributeBits);
-	printf("\" font-name=\"%s\" font-size\"%f\">", fontName, fontSize);
+	printf("\" font-name=\"%s\" font-size=\"%f\">", fontName, fontSize);
 	m_isSpanOpened = TRUE;
 }
 
