@@ -819,7 +819,7 @@ void WP6HLContentListener::noteOff(const WPXNoteType noteType)
 			m_listenerImpl->openEndnote(number);
 
 		guint16 textPID = m_parseState->m_noteTextPID;
-		handleSubDocument(textPID);
+		handleSubDocument(textPID, false);
 
 		if (noteType == FOOTNOTE)
 			m_listenerImpl->closeFootnote();
@@ -970,11 +970,18 @@ void WP6HLContentListener::endTable()
 // sends its text to the hll implementation and naively inserts it into the document
 // if textPID=0: Simply creates a blank paragraph
 // once finished, restores document state to what it was before
-void WP6HLContentListener::_handleSubDocument(guint16 textPID)
+void WP6HLContentListener::_handleSubDocument(guint16 textPID, const bool isHeaderFooter)
 {
 	// save our old parsing state on our "stack"
 	WP6ParsingState *oldParseState = m_parseState;
 	m_parseState = new WP6ParsingState();
+	if (isHeaderFooter)
+	{
+		// is it is Header or Footer, assume that the initial page margins are of 1 inch.
+		// This is a behaviour that I observed with WP10 -- Fridrich
+		marginChange(WP6_COLUMN_GROUP_LEFT_MARGIN_SET, WPX_NUM_WPUS_PER_INCH);
+		marginChange(WP6_COLUMN_GROUP_RIGHT_MARGIN_SET, WPX_NUM_WPUS_PER_INCH);
+	}
 	if (textPID)
 		WP6LLListener::getPrefixDataPacket(textPID)->parse(this);
 	else

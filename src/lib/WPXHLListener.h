@@ -132,7 +132,7 @@ public:
 	WPXHLListener::~WPXHLListener();
 
 	void startDocument();
-	void handleSubDocument(guint16 textPID);
+	void handleSubDocument(guint16 textPID, const bool isHeaderFooter);
 	virtual void insertBreak(const guint8 breakType);
 
 	WPXParsingState *m_ps; // parse state
@@ -141,7 +141,7 @@ public:
 	vector <WPXPageSpan *> *m_pageList;
 
 protected:
-	virtual void _handleSubDocument(guint16 textPID) = 0;
+	virtual void _handleSubDocument(guint16 textPID, const bool isHeaderFooter) = 0;
 	virtual void _flushText(const bool fakeText=false) = 0;
 
 	void _openSection();

@@ -155,13 +155,17 @@ void WPXHLListener::_openPageSpan()
 				     currentPage->getMarginLeft(), currentPage->getMarginRight(),
 				     currentPage->getMarginTop(), currentPage->getMarginBottom());
 
+	m_ps->m_pageFormWidth = currentPage->getFormWidth();
+	m_ps->m_pageMarginLeft = currentPage->getMarginLeft();
+	m_ps->m_pageMarginRight = currentPage->getMarginRight();
+
 	const vector<WPXHeaderFooter> headerFooterList = currentPage->getHeaderFooterList();
 	for (vector<WPXHeaderFooter>::const_iterator iter = headerFooterList.begin(); iter != headerFooterList.end(); iter++)
 	{
 		if (!currentPage->getHeaderFooterSuppression((*iter).getInternalType()))
 		{
 			m_listenerImpl->openHeaderFooter((*iter).getType(), (*iter).getOccurence());
-			handleSubDocument((*iter).getTextPID());
+			handleSubDocument((*iter).getTextPID(), true);
 			m_listenerImpl->closeHeaderFooter((*iter).getType(), (*iter).getOccurence());
 			WPD_DEBUG_MSG(("Header Footer Element: type: %i occurence: %i pid: %i\n",
 				       (*iter).getType(), (*iter).getOccurence(), (*iter).getTextPID()));
@@ -217,7 +221,7 @@ void WPXHLListener::_closeSpan()
 /**
 Creates an new document state. Saves the old state on a "stack".
 */
-void WPXHLListener::handleSubDocument(guint16 textPID)
+void WPXHLListener::handleSubDocument(guint16 textPID, const bool isHeaderFooter)
 {
 	// save our old parsing state on our "stack"
 	WPXParsingState *oldPS = m_ps;
@@ -227,7 +231,7 @@ void WPXHLListener::handleSubDocument(guint16 textPID)
 	m_ps->m_pageMarginLeft = oldPS->m_pageMarginLeft;
 	m_ps->m_pageMarginRight = oldPS->m_pageMarginRight;
 	// END: copy page properties into the new parsing state
-	_handleSubDocument(textPID);
+	_handleSubDocument(textPID, isHeaderFooter);
 
 	// restore our old parsing state
 	delete m_ps;

@@ -199,7 +199,7 @@ public:
 
 
 protected:
-	virtual void _handleSubDocument(guint16 textPID);
+	virtual void _handleSubDocument(guint16 textPID, const bool isHeaderFooter);
 
 	//void _handleLineBreakElementBegin();
 	void _paragraphNumberOn(const guint16 outlineHash, const guint8 level);

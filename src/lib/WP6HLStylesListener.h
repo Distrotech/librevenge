@@ -89,7 +89,7 @@ public:
  	virtual void endTable() {}
 
 protected:
-	virtual void _handleSubDocument(guint16 textPID) {}
+	virtual void _handleSubDocument(guint16 textPID, const bool isHeaderFooter) {}
 	virtual void _flushText(const bool fakeText=false) {}
 	virtual void _openPageSpan() { /* FIXME: REMOVE ME WHEN IMPLEMENTED IN WPXHLListener */ };
 
