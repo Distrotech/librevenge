@@ -191,7 +191,7 @@ protected:
 	void _flushText(const bool fakeText=false);
 	void _handleListChange(const uint16_t outlineHash);
 
-	void _openListElement();
+	void _flushList();
 
 private:
 	WP6ParsingState *m_parseState;

@@ -19,7 +19,6 @@ CFLAGSCXX+=-frtti
 SLOFILES= \
 	$(SLO)$/libwpd_internal.obj			\
 	$(SLO)$/libwpd_math.obj				\
-	$(SLO)$/libwpd_support.obj			\
 	$(SLO)$/WP3AttributeGroup.obj			\
 	$(SLO)$/WP3EndOfLinePageGroup.obj		\
 	$(SLO)$/WP3ExtendedCharacterGroup.obj		\
@@ -106,6 +105,7 @@ SLOFILES= \
 	$(SLO)$/WPXParser.obj 				\
 	$(SLO)$/WPXPart.obj				\
 	$(SLO)$/WPXProperty.obj				\
+	$(SLO)$/WPXString.obj				\
 	$(SLO)$/WPDocument.obj
 
 LIB1ARCHIV=$(LB)$/libwpdlib.a

@@ -101,6 +101,7 @@ protected:
 	virtual void _flushText(const bool fakeText=false) {}
 	virtual void _openParagraph() {}
 	virtual void _openPageSpan() { /* FIXME: REMOVE ME WHEN IMPLEMENTED IN WPXHLListener */ };
+	virtual void _flushList() {}
 
 private:
 	WPXPageSpan *m_currentPage;

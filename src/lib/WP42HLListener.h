@@ -71,6 +71,7 @@ protected:
 
 private:
 	void _flushText(const bool fakeText=false);
+	void _flushList() {};
 
 	WPXString m_textBuffer;
 };

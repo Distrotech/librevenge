@@ -78,7 +78,7 @@ struct _WPXParsingState
 	bool m_isParagraphColumnBreak;
 	bool m_isParagraphPageBreak;
 	uint8_t m_paragraphJustification;
-	uint8_t m_tempParagraphJustification; // TODO: remove this one after the tabs are properly implementedb
+	uint8_t m_tempParagraphJustification; // TODO: remove this one after the tabs are properly implemented
 	float m_paragraphLineSpacing;
 
 	bool m_isSectionOpened;
@@ -86,6 +86,8 @@ struct _WPXParsingState
 
 	bool m_isParagraphOpened;
 	bool m_isParagraphClosed;
+	bool m_isListElementOpened;
+	bool m_isListElementClosed;
 	bool m_isSpanOpened;
 	int m_numDeferredParagraphBreaks;
 
@@ -169,6 +171,7 @@ public:
 protected:
 	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice) = 0;
 	virtual void _flushText(const bool fakeText=false) = 0;
+	virtual void _flushList() = 0;
 
 	void _openSection();
 	void _closeSection();
@@ -180,8 +183,11 @@ protected:
 	void _getTabStops(vector<WPXPropertyList> &tabStops);
 	void _appendJustification(WPXPropertyList &propList, int justification);
 	virtual void _openParagraph();
-	virtual void _resetParagraphState();
+	virtual void _resetParagraphState(const bool isListElement=false);
 	void _closeParagraph();
+
+	void _openListElement();
+	void _closeListElement();	
 
 	void _openSpan();
 	void _closeSpan();

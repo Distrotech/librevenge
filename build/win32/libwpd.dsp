@@ -93,10 +93,6 @@ SOURCE=..\..\src\lib\libwpd_math.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\libwpd_support.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\lib\WP3AttributeGroup.cpp
 # End Source File
 # Begin Source File
@@ -441,6 +437,10 @@ SOURCE=..\..\src\lib\WPXProperty.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WPXString.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WPXTable.cpp
 # End Source File
 # End Group
@@ -461,7 +461,7 @@ SOURCE=..\..\src\lib\libwpd_math.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\libwpd_support.h
+SOURCE=..\..\src\lib\libwpd_types.h
 # End Source File
 # Begin Source File
 
@@ -838,6 +838,10 @@ SOURCE=..\..\src\lib\WPXProperty.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WPXStream.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WPXString.h
 # End Source File
 # Begin Source File
 

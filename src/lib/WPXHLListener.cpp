@@ -52,6 +52,8 @@ _WPXParsingState::_WPXParsingState(bool sectionAttributesChanged) :
 
 	m_isParagraphOpened(false),
 	m_isParagraphClosed(false),
+	m_isListElementOpened(false),
+	m_isListElementClosed(false),
 	m_isSpanOpened(false),
 	m_numDeferredParagraphBreaks(0),
 
@@ -298,7 +300,10 @@ void WPXHLListener::_closePageSpan()
 
 void WPXHLListener::_openParagraph()
 {
-	_closeParagraph();
+	if (m_ps->m_isListElementOpened)
+		_flushList(); // If we are in a list, we should discontinue it
+	else
+		_closeParagraph();
 
 	vector<WPXPropertyList> tabStops;
 	_getTabStops(tabStops);
@@ -318,11 +323,20 @@ void WPXHLListener::_openParagraph()
 	_openSpan();
 }
 
-void WPXHLListener::_resetParagraphState()
+void WPXHLListener::_resetParagraphState(const bool isListElement)
 {
 	m_ps->m_isParagraphColumnBreak = false;
 	m_ps->m_isParagraphPageBreak = false;
-	m_ps->m_isParagraphOpened = true;
+	if (isListElement)
+	{
+		m_ps->m_isListElementOpened = true;
+		m_ps->m_isParagraphOpened = false;
+	}
+	else
+	{
+		m_ps->m_isListElementOpened = false;
+		m_ps->m_isParagraphOpened = true;
+	}
 	m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange + m_ps->m_leftMarginByParagraphMarginChange;
 	m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange + m_ps->m_rightMarginByParagraphMarginChange;
 	m_ps->m_leftMarginByTabs = 0.0f;
@@ -438,6 +452,31 @@ void WPXHLListener::_closeParagraph()
 		m_listenerImpl->closeParagraph();
 
 	m_ps->m_isParagraphOpened = false;
+}
+
+void WPXHLListener::_openListElement()
+{
+	_closeParagraph();
+	_closeListElement();
+	WPXPropertyList propList;
+	_appendParagraphProperties(propList);
+
+	vector<WPXPropertyList> tabStops;
+	_getTabStops(tabStops);
+
+	m_listenerImpl->openListElement(propList, tabStops);
+	_resetParagraphState(true);
+
+	_openSpan();
+}
+
+void WPXHLListener::_closeListElement()
+{
+	_closeSpan();
+	if (m_ps->m_isListElementOpened)
+		m_listenerImpl->closeListElement();
+
+	m_ps->m_isListElementOpened = false;
 }
 
 const float WPX_DEFAULT_SUPER_SUB_SCRIPT = 58.0f; 

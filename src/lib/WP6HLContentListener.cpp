@@ -399,8 +399,11 @@ void WP6HLContentListener::insertTab(const uint8_t tabType, const float tabPosit
 			//case WP6_TAB_GROUP_FLUSH_RIGHT:
 			case WP6_TAB_GROUP_RIGHT_TAB:
 			case WP6_TAB_GROUP_DECIMAL_TAB:
-				if (!m_ps->m_isParagraphOpened)
-					_openParagraph();
+				if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
+					if (m_parseState->m_currentListLevel == 0)
+						_openParagraph();
+					else
+						_openListElement();
 				break;
 			
 			default:
@@ -408,7 +411,7 @@ void WP6HLContentListener::insertTab(const uint8_t tabType, const float tabPosit
 			}
 			
 			// Following tabs are converted as formating if the paragraph is not opened
-			if (!m_ps->m_isParagraphOpened)
+			if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
 			{
 				switch ((tabType & 0xF8) >> 3)
 				{
@@ -1251,6 +1254,7 @@ void WP6HLContentListener::_flushText(const bool fakeText)
 			_handleListChange(m_parseState->m_currentOutlineHash);
 			m_ps->m_numDeferredParagraphBreaks--; // we have an implicit break here, when we close the list
 			m_ps->m_isParagraphOpened = false;
+			m_ps->m_isListElementOpened = false;
 		}
 	}
 
@@ -1268,7 +1272,7 @@ void WP6HLContentListener::_flushText(const bool fakeText)
 						   m_parseState->m_styleStateSequence.getCurrentState() == STYLE_END) &&
 						  !m_parseState->m_putativeListElementHasParagraphNumber)))
 	{
-		if (!m_ps->m_isParagraphOpened &&
+		if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened &&
 			!(m_ps->m_isTableOpened && !m_ps->m_isTableCellOpened) // don't allow paragraphs to be opened when we have already opened a table, but no cell yet. - MARCM (is it really correct, or should this be fixed elsewhere??)
 		)
 			m_ps->m_numDeferredParagraphBreaks++;
@@ -1278,7 +1282,7 @@ void WP6HLContentListener::_flushText(const bool fakeText)
 		_closeParagraph();
 		m_ps->m_numDeferredParagraphBreaks = 0; // compensate for this by requiring a paragraph to be opened
 	}
-	else if (m_ps->m_textAttributesChanged && (m_parseState->m_bodyText.len() > 0 || fakeText) && m_ps->m_isParagraphOpened)
+	else if (m_ps->m_textAttributesChanged && (m_parseState->m_bodyText.len() > 0 || fakeText) && (m_ps->m_isParagraphOpened || m_ps->m_isListElementOpened))
 	{
 		_openSpan();
 	}
@@ -1286,9 +1290,12 @@ void WP6HLContentListener::_flushText(const bool fakeText)
 	if (m_parseState->m_bodyText.len() || (m_parseState->m_textBeforeNumber.len() &&
 						  !m_parseState->m_putativeListElementHasParagraphNumber))
 	{
-		if (!m_ps->m_isParagraphOpened)
+		if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
 		{
-			_openParagraph();
+			if (m_parseState->m_currentListLevel == 0)
+				_openParagraph();
+			else
+				_openListElement();
 			_openSpan();
 		}
 
@@ -1365,8 +1372,9 @@ void WP6HLContentListener::_handleListChange(const uint16_t outlineHash)
 			WPXPropertyList propList2;
 			propList2.insert("libwpd:id", m_parseState->m_currentOutlineHash);
 
-			// Tricky: we define list sublevels _inside_ of list elements
-			_closeSpan();
+  			// Fridrich: we should not define list sublevels _inside_ of list elements;
+			// so we just close the element to prevent call graph failure
+ 			_closeListElement();
 			if (m_parseState->m_putativeListElementHasDisplayReferenceNumber)
 				m_listenerImpl->openOrderedListLevel(propList2);
 			else
@@ -1375,8 +1383,7 @@ void WP6HLContentListener::_handleListChange(const uint16_t outlineHash)
 	}
 	else if (m_parseState->m_currentListLevel < oldListLevel)
 	{
-		_closeSpan(); // close any span which was opened in this list element
-		m_listenerImpl->closeListElement(); // close the current element, which must exist
+		_closeListElement(); // close the current element, which must exist
 		// now keep on closing levels until we reach the current list level, or the list
 		// level stack is empty (signalling that we are out of a list)
 		while (!m_parseState->m_listLevelStack.empty() && m_parseState->m_listLevelStack.top() > m_parseState->m_currentListLevel)
@@ -1398,15 +1405,14 @@ void WP6HLContentListener::_handleListChange(const uint16_t outlineHash)
 			// if we are in a sub-level (beyond 1), and we still haven't reached the current list level, 
 			// then that implies that we opened an element that needs to be closed..
 			if (!m_parseState->m_listLevelStack.empty())
-				m_listenerImpl->closeListElement();
+				_closeListElement();
 		}
 	}
 	else if (m_parseState->m_currentListLevel == oldListLevel)
 	{
 		// keep the last element on the stack, as it's replaced by this element
 		// (a NULL operation)
-		_closeSpan();
-		m_listenerImpl->closeListElement(); // but close it
+		_closeListElement(); // but close it
 	}
 
 	m_parseState->m_textBeforeNumber.clear();
@@ -1422,16 +1428,9 @@ void WP6HLContentListener::_handleListChange(const uint16_t outlineHash)
 	}
 }
 
-void WP6HLContentListener::_openListElement()
+void WP6HLContentListener::_flushList()
 {
-	WPXPropertyList propList;
-	_appendParagraphProperties(propList);
-
-	vector<WPXPropertyList> tabStops;
-	_getTabStops(tabStops);
-
-	m_listenerImpl->openListElement(propList, tabStops);
-	_resetParagraphState();
-
-	_openSpan();
+	_closeListElement();
+	m_parseState->m_currentListLevel = 0;
+	_handleListChange(m_parseState->m_currentOutlineHash);
 }
