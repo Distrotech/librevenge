@@ -66,10 +66,12 @@ public:
 	virtual void endDocument() {}
 		
 	virtual void defineTable(guint8 position, guint16 leftOffset) {}
-	virtual void addTableColumnDefinition(guint32 width, guint32 leftGutter, guint32 rightGutter) {};
+	virtual void addTableColumnDefinition(guint32 width, guint32 leftGutter, guint32 rightGutter) {}
 	virtual void startTable() {}
  	virtual void insertRow() {}
- 	virtual void insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor) {}
+ 	virtual void insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove, 
+							const guint8 borderBits, 
+							const RGBSColor * cellFgColor, const RGBSColor * cellBgColor) {}
  	virtual void endTable() {}
 
  private:

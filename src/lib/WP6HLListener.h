@@ -166,8 +166,8 @@ public:
 
 	// for getting low-level messages from the parser
 	virtual void setDate(const guint16 year, const guint8 month, const guint8 day, 
-			     const guint8 hour, const guint8 minute, const guint8 second,
-			     const guint8 dayOfWeek, const guint8 timeZone, const guint8 unused) {}
+						const guint8 hour, const guint8 minute, const guint8 second,
+						const guint8 dayOfWeek, const guint8 timeZone, const guint8 unused) {}
 	virtual void setExtendedInformation(const guint16 type, const UCSString &data);
 	virtual void startDocument();
 	virtual void insertCharacter(const guint16 character);
@@ -182,7 +182,7 @@ public:
 	virtual void marginChange(const guint8 side, const guint16 margin);
 	virtual void columnChange(const guint8 numColumns); 
 	virtual void updateOutlineDefinition(const WP6OutlineLocation outlineLocation, const guint16 outlineHash, 
-					     const guint8 *numberingMethods, const guint8 tabBehaviourFlag);
+						const guint8 *numberingMethods, const guint8 tabBehaviourFlag);
 
 	virtual void paragraphNumberOn(const guint16 outlineHash, const guint8 level, const guint8 flag);
 	virtual void paragraphNumberOff();
@@ -200,7 +200,9 @@ public:
 	virtual void addTableColumnDefinition(guint32 width, guint32 leftGutter, guint32 rightGutter);
 	virtual void startTable();
  	virtual void insertRow();
- 	virtual void insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
+ 	virtual void insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove, 
+						const guint8 borderBits, 
+						const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
  	virtual void endTable(); 
 
 protected:
@@ -216,7 +218,8 @@ protected:
 	void _openTableRow();
 	void _closeTableRow();
 	void _openTableCell(const guint8 colSpan, const guint8 rowSpan, 
-			    const bool boundFromLeft, const bool boundFromAbove, 
+			    const bool boundFromLeft, const bool boundFromAbove,
+				const guint8 borderBits, 
 			    const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
 	void _closeTableCell();
 

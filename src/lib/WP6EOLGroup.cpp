@@ -36,7 +36,9 @@ WP6EOLGroup::WP6EOLGroup(GsfInput *input) :
 	m_boundFromAbove(false),
 	
 	m_cellFgColor(NULL),
-	m_cellBgColor(NULL)
+	m_cellBgColor(NULL),
+	
+	m_cellBorders(0x00)
 {
 	_read(input);
 }
@@ -139,6 +141,7 @@ void WP6EOLGroup::_readContents(GsfInput *input)
 			case WP6_EOL_GROUP_CELL_PREFIX_FLAG:
 				WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_PREFIX_FLAG\n"));	
 				numBytesToSkip = WP6_EOL_GROUP_CELL_PREFIX_FLAG_SIZE;
+				m_cellBorders = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
 				break;
 			case WP6_EOL_GROUP_CELL_RECALCULATION_ERROR_NUMBER:
 				WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_RECALCULATION_ERROR_NUMBER\n"));
@@ -193,7 +196,7 @@ void WP6EOLGroup::parse(WP6LLListener *llListener)
 		break;
 	case 0x0A: // Table Cell
 		WPD_DEBUG_MSG(("WordPerfect: EOL group: table cell\n"));
-		llListener->insertCell(m_colSpan, m_rowSpan, m_boundFromLeft, m_boundFromAbove, m_cellFgColor, m_cellBgColor);
+		llListener->insertCell(m_colSpan, m_rowSpan, m_boundFromLeft, m_boundFromAbove, m_cellBorders, m_cellFgColor, m_cellBgColor);
 		break;
 	case WP6_EOL_GROUP_TABLE_ROW_AND_CELL:
 	case WP6_EOL_GROUP_TABLE_ROW_AT_EOC:
@@ -203,7 +206,8 @@ void WP6EOLGroup::parse(WP6LLListener *llListener)
 	case WP6_EOL_GROUP_TABLE_ROW_AT_HARD_EOP:
 		WPD_DEBUG_MSG(("WordPerfect: EOL group: table row and cell\n"));
 		llListener->insertRow();
-		llListener->insertCell(m_colSpan, m_rowSpan, m_boundFromLeft, m_boundFromAbove, m_cellFgColor, m_cellBgColor);
+		// the cellBorders variable already represent the cell border bits as well
+		llListener->insertCell(m_colSpan, m_rowSpan, m_boundFromLeft, m_boundFromAbove, m_cellBorders, m_cellFgColor, m_cellBgColor);
 		break;
 	case WP6_EOL_GROUP_TABLE_OFF:
 	case WP6_EOL_GROUP_TABLE_OFF_AT_EOC:

@@ -208,7 +208,8 @@ void HtmlListenerImpl::closeTableRow()
 }
 
 void HtmlListenerImpl::openTableCell(const guint32 col, const guint32 row, const guint32 colSpan, const guint32 rowSpan, 
-				const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
+						const guint8 borderBits,
+						const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
 {
 	printf("<td ");
 	

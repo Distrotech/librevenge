@@ -849,12 +849,13 @@ void WP6HLListener::insertRow()
 
 void WP6HLListener::insertCell(const guint8 colSpan, const guint8 rowSpan, 
 							bool boundFromLeft, const bool boundFromAbove, 
+							const guint8 borderBits,
 							const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
 {
 	if (!m_parseState->m_isUndoOn) 
 	{			
 		_flushText();
-		_openTableCell(colSpan, rowSpan, boundFromLeft, boundFromAbove, cellFgColor, cellBgColor);
+		_openTableCell(colSpan, rowSpan, boundFromLeft, boundFromAbove, borderBits, cellFgColor, cellBgColor);
 	}
 }
 
@@ -1106,17 +1107,20 @@ void WP6HLListener::_closeTableRow()
 	m_parseState->m_isTableRowOpened = false;
 }
 
-void WP6HLListener::_openTableCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
+void WP6HLListener::_openTableCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove, 
+								const guint8 borderBits,
+								const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
 {
-		m_parseState->m_currentColumn++;
-		if (!boundFromLeft && !boundFromAbove) 
-		{
-			_closeTableCell();
-			m_parseState->m_isParagraphOpened = false;
-			m_listenerImpl->openTableCell(m_parseState->m_currentColumn, m_parseState->m_currentRow, 
-						      colSpan, rowSpan, cellFgColor, cellBgColor);
-			m_parseState->m_isTableCellOpened = true;
-		}
+	m_parseState->m_currentColumn++;
+	if (!boundFromLeft && !boundFromAbove) 
+	{
+		_closeTableCell();
+		m_parseState->m_isParagraphOpened = false;
+		m_listenerImpl->openTableCell(m_parseState->m_currentColumn, m_parseState->m_currentRow, colSpan, rowSpan, 
+									borderBits,
+									cellFgColor, cellBgColor);
+		m_parseState->m_isTableCellOpened = true;
+	}
 }
 
 void WP6HLListener::_closeTableCell()

@@ -43,6 +43,8 @@ public:
 	// cell forground and background color
  	RGBSColor * m_cellFgColor;
  	RGBSColor * m_cellBgColor;
+ 
+	guint8 m_cellBorders;
 };
 
 #endif /* WP6EOLGROUP_H */

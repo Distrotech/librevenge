@@ -39,19 +39,19 @@ public:
 	virtual void startHeader();
 	virtual void endHeader();
  	virtual void setDocumentMetaData(const UCSString &author, const UCSString &subject,
- 					 const UCSString &publisher, const UCSString &category,
- 					 const UCSString &keywords, const UCSString &language,
- 					 const UCSString &abstract, const UCSString &descriptiveName,
-					 const UCSString &descriptiveType)
-;
+						const UCSString &publisher, const UCSString &category,
+						const UCSString &keywords, const UCSString &language,
+						const UCSString &abstract, const UCSString &descriptiveName,
+						const UCSString &descriptiveType);
+
 	virtual void startDocument();
 	virtual void endDocument();
 	virtual void openSection(const guint numColumns, float marginLeft, float marginRight);
 	virtual void closeSection();
 	virtual void openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits,
-				   const gchar *fontName, float fontSize, 
-				   const float lineSpacing,
-				   bool isColumnBreak, bool isPageBreak);
+						const gchar *fontName, float fontSize, 
+						const float lineSpacing,
+						bool isColumnBreak, bool isPageBreak);
 	virtual void closeParagraph();
 	virtual void openSpan(const guint32 textAttributeBits, const gchar *fontName, const float fontSize);
 	virtual void closeSpan();
@@ -69,8 +69,8 @@ public:
 	virtual void closeOrderedListLevel();
 	virtual void closeUnorderedListLevel();
 	virtual void openListElement(const guint8 paragraphJustification, const guint32 textAttributeBits,
-				     const gchar *fontName, const float fontSize, 
-				     const float lineSpacing);
+						const gchar *fontName, const float fontSize, 
+						const float lineSpacing);
 	virtual void closeListElement();
 
 	virtual void openFootnote(int number);
@@ -81,9 +81,9 @@ public:
 	virtual void openTable(const guint8 tablePositionBits, const float leftOffset, const vector < WPXColumnDefinition > &columns);
 	virtual void openTableRow();
 	virtual void closeTableRow();
-	virtual void openTableCell(const guint32 col, const guint32 row, 
-				   const guint32 colSpan, const guint32 rowSpan, 
-				   const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
+	virtual void openTableCell(const guint32 col, const guint32 row, const guint32 colSpan, const guint32 rowSpan, 
+						const guint8 borderBits,
+						const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
 	virtual void closeTableCell();
 	virtual void closeTable();
  

@@ -44,10 +44,10 @@ class WPXHLListenerImpl
 	// completely optional. if your listener implementation doesn't 
 	// need/support these functions, don't implement them
  	virtual void setDocumentMetaData(const UCSString &author, const UCSString &subject,
- 					 const UCSString &publisher, const UCSString &category,
- 					 const UCSString &keywords, const UCSString &language,
- 					 const UCSString &abstract, const UCSString &descriptiveName,
-					 const UCSString &descriptiveType) {}
+							const UCSString &publisher, const UCSString &category,
+						const UCSString &keywords, const UCSString &language,
+						const UCSString &abstract, const UCSString &descriptiveName,
+						const UCSString &descriptiveType) {}
 
 	virtual void startDocument() = 0;
 	virtual void endDocument() = 0;
@@ -88,7 +88,8 @@ class WPXHLListenerImpl
  	virtual void openTableRow() = 0;
 	virtual void closeTableRow() = 0;
  	virtual void openTableCell(const guint32 col, const guint32 row, const guint32 colSpan, const guint32 rowSpan, 
-				   const RGBSColor * cellFgColor, const RGBSColor * cellBgColor) = 0;
+						const guint8 borderBits, 
+						const RGBSColor * cellFgColor, const RGBSColor * cellBgColor) = 0;
 	virtual void closeTableCell() = 0;
  	virtual void closeTable() = 0;
 };

@@ -49,7 +49,9 @@ class WPXLLListener
 	virtual void addTableColumnDefinition(guint32 width, guint32 leftGutter, guint32 rightGutter) = 0;
 	virtual void startTable() = 0;
  	virtual void insertRow() = 0;
- 	virtual void insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor) = 0;
+ 	virtual void insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove, 
+							const guint8 borderBits, 	
+							const RGBSColor * cellFgColor, const RGBSColor * cellBgColor) = 0;
  	virtual void endTable() = 0;
 };
 
