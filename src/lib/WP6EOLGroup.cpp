@@ -67,27 +67,14 @@ void WP6EOLGroup::parse(WP6LLListener *llListener)
 				break;
 			case 9: // hard EOP
 			case 28: // deletable hard EOP
-				{ 
-					/*
-					if (wordperfect_state->text_buf->len > 0)
-					{			
-					WPD_CHECK_INTERNAL_ERROR(wp6_flush_text(wordperfect_state, wordperfect_parse_struct));
-					}
-					UT_UCS4Char ucs = UCS_FF;
-					X_CheckDocumentError(getDoc()->appendSpan(&ucs,1));
-					*/
-				}
+				llListener->insertBreak(WPX_PAGE_BREAK);
 				break;
 			case 0x0A: // Table Cell
-				{
-					llListener->insertCell();
-				}
+				llListener->insertCell();
 				break;
 			case 0x0B: // Table Row and Cell
-				{
-					llListener->insertRow();
-					llListener->insertCell();
-				}
+				llListener->insertRow();
+				llListener->insertCell();
 				break;
 			case 0x11: // Table Off
 				llListener->endTable();

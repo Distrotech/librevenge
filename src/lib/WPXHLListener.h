@@ -50,9 +50,9 @@
 
 // BREAK bits
 // TODO: I wouldn't have a clue what defines we need, so I figured we need at least the following ones:
-#define WPX_SECTION_BREAK 1
-#define WPX_COLUMN_BREAK 2
-//#define WPX_???_BREAK 3
+#define WPX_PAGE_BREAK 1
+#define WPX_SECTION_BREAK 2
+#define WPX_COLUMN_BREAK 3
 
 class WPXHLListener
 {
