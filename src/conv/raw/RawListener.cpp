@@ -69,6 +69,7 @@ void RawListenerImpl::setDocumentMetaData(const UCSString &author, const UCSStri
 					 const UCSString &abstract, const UCSString &descriptiveName,
 					 const UCSString &descriptiveType)
 {
+	__iprintf("setDocumentMetaData(TODO: add args)\n");
 }
 
 void RawListenerImpl::startDocument()
@@ -144,6 +145,8 @@ void RawListenerImpl::insertTab()
 
 void RawListenerImpl::insertText(const UCSString &text)
 {
+	UTF8String tempUTF8(text);
+	__iprintf("insertText(%s)\n", tempUTF8.getUTF8());
 }
 	
 void RawListenerImpl::insertLineBreak()
@@ -155,26 +158,32 @@ void RawListenerImpl::defineOrderedListLevel(const int listID, const guint16 lis
 					    const UCSString &textBeforeNumber, const UCSString &textAfterNumber,
 					    const int startingNumber)
 {
+	__iprintf("defineOrderedListLevel(TODO: add args)\n");
 }
 						
 void RawListenerImpl::defineUnorderedListLevel(const int listID, const guint16 listLevel, const UCSString &bullet)
 {
+	__iprintf("defineUnorderedListLevel(TODO: add args)\n");
 }
 
 void RawListenerImpl::openOrderedListLevel(const int listID)
 {
+	__iuprintf("openOrderedListLevel(TODO: add args)\n");
 }
 
 void RawListenerImpl::openUnorderedListLevel(const int listID)
 {
+	__iuprintf("openUnorderedListLevel(TODO: add args)\n");
 }
 
 void RawListenerImpl::closeOrderedListLevel()
 {
+	__idprintf("closeOrderedListLevel()\n");
 }
 
 void RawListenerImpl::closeUnorderedListLevel()
 {
+	__idprintf("closeUnorderedListLevel()\n");
 }
 
 void RawListenerImpl::openListElement(const guint8 paragraphJustification, const guint32 textAttributeBits,
@@ -182,10 +191,12 @@ void RawListenerImpl::openListElement(const guint8 paragraphJustification, const
 				     const gchar *fontName, const float fontSize, 
 				     const float lineSpacing)
 {
+	__iuprintf("openListElement(TODO: add args)\n");
 }
 					 
 void RawListenerImpl::closeListElement()
 {
+	__idprintf("closeListElement()\n");
 }
 	
 void RawListenerImpl::openFootnote(int number)
@@ -212,24 +223,30 @@ void RawListenerImpl::openTable(const guint8 tablePositionBits,
 			       const float marginLeftOffset, const float marginRightOffset,
 			       const float leftOffset, const vector < WPXColumnDefinition > &columns)
 {
+	__iuprintf("openTable(tablePositionBits: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, leftOffset: %.4f, TODO: columns defs.)\n",
+		tablePositionBits, marginLeftOffset, marginRightOffset, leftOffset);	
 }
 				   
 void RawListenerImpl::openTableRow()
 {
+	__iuprintf("openTableRow()\n");
 }
 
 void RawListenerImpl::closeTableRow()
 {
+	__idprintf("closeTableRow()\n");
 }
 
 void RawListenerImpl::openTableCell(const guint32 col, const guint32 row, const guint32 colSpan, const guint32 rowSpan, 
 				   const guint8 borderBits, 
 				   const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
 {
+	__iuprintf("openTableCell(TODO: add args)\n");
 }
 
 void RawListenerImpl::closeTableCell()
 {
+	__idprintf("closeTableCell()\n");
 }
 
 void RawListenerImpl::insertCoveredTableCell(const guint32 col, const guint32 row)
@@ -238,154 +255,5 @@ void RawListenerImpl::insertCoveredTableCell(const guint32 col, const guint32 ro
 	
 void RawListenerImpl::closeTable()
 {
+	__idprintf("closeTable()\n");
 }
-
-/*
-void RawListener::insertCharacter(const guint16 character)
-{
-	if (!m_isUndoOn) {
-		// first convert from ucs2 to ucs4
-		gunichar characterUCS4 = (gunichar) character;
-		
-		// then convert from ucs4 to utf8 and write it
-		gchar *characterUTF8 = g_ucs4_to_utf8(&characterUCS4, 1, NULL, NULL, NULL); // TODO: handle errors
-		printf("%s", characterUTF8);
-		
-		// clean up our mess
-		g_free(characterUTF8);
-	}
-}
-
-void RawListener::undoChange(const guint8 undoType, const guint16 undoLevel)
-{
-	if (undoType == WP6_UNDO_GROUP_INVALID_TEXT_START) {
-		//printf("<UNDO ON>");
-		m_isUndoOn = true;
-	}
-	else if (undoType == WP6_UNDO_GROUP_INVALID_TEXT_END) {
-		//printf("<UNDO OFF>");
-		m_isUndoOn = false;
-	}
-}
-
-void RawListener::lineSpacingChange(const float lineSpacing)
-{
-	printf("<line-spacing:%i>", lineSpacing);
-
-}
-
-void RawListener::justificationChange(const guint8 justification)
-{
-	printf("<justification:%i>", justification);
-
-}
-
-void RawListener::insertTab(const guint8 tabType)
-{
-	if (!m_isUndoOn) {
-		printf("<TAB: %i>", tabType);
-	}
-}
-
-void RawListener::insertEOL()
-{
-	if (!m_isUndoOn) {
-		printf("<EOL>\n");
-	}
-}
-
-void RawListener::insertBreak(const guint8 breakType)
-{
-	switch(breakType)
-	{
-	case WPX_PAGE_BREAK:
-		printf("\n<HARD PAGE BREAK>\n");
-		break;
-	case WPX_SOFT_PAGE_BREAK:
-		printf("\n<SOFT PAGE BREAK>\n");
-		break;
-	case WPX_COLUMN_BREAK:
-		printf("\n<COLUMN BREAK>\n");
-		break;
-	}
-}
-
-void RawListener::setDate(const guint16 year, const guint8 month, const guint8 day, 
-			  const guint8 hour, const guint8 minute, const guint8 second,
-			  const guint8 dayOfWeek, const guint8 timeZone, const guint8 unused)
-{
-	printf("<DATE SET year: %i month: %i day: %i hour: %i minute: %i second: %i dayOfWeek: %i timeZone: %i unused: %i>\n");
-}
-void RawListener::setExtendedInformation(const guint16 type, const UCSString &data)
-{
-	UTF8String tempUTF8(data);
-	printf("<EXTENDED INFO type: %i data: %s>\n", type, tempUTF8.getUTF8());
-	
-}
-void RawListener::updateOutlineDefinition(const WP6OutlineLocation outlineLocation, const guint16 outlineHash, 
-					  const guint8 *numberingMethods, const guint8 tabBehaviourFlag)
-{
-	if (!m_isUndoOn) {
-		printf("<UPDATE OUTLINE DEFINITION (outlineHash:%i, numbering-methods:.., tab-behaviour-flag:%i)>\n", 
-		       outlineHash, tabBehaviourFlag);
-	}	
-}
-
-void RawListener::paragraphNumberOn(const guint16 outlineHash, const guint8 level, const guint8 flag)
-{
-	if (!m_isUndoOn) {
-		printf("<PARAGRAPH NUMBER ON (outlineHash:%i, level:%i, flag:%i)>", 
-		       outlineHash, level, flag);
-	}	
-}
-
-void RawListener::paragraphNumberOff()
-{
-	if (!m_isUndoOn) {
-		printf("<PARAGRAPH NUMBER OFF>");
-	}	
-}
-
-void RawListener::displayNumberReferenceGroupOn(const guint8 subGroup, const guint8 level)
-{
-	if (!m_isUndoOn) {
-		printf("<DISPLAY NUMBER REF ON (subgroup:%i, level:%i)>", subGroup, level);
-	}	
-}
-
-void RawListener::displayNumberReferenceGroupOff(const guint8 subGroup)
-{
-	if (!m_isUndoOn) {
-		printf("<DISPLAY NUMBER REF OFF (subgroup:%i)>", subGroup);
-	}	
-}
-
-void RawListener::styleGroupOn(const guint8 subGroup)
-{
-	if (!m_isUndoOn) {
-		printf("<STYLE GROUP ON (subgroup:%i)>", subGroup);
-	}	
-}
-
-void RawListener::styleGroupOff(const guint8 subGroup)
-{
-	if (!m_isUndoOn) {
-		printf("<STYLE GROUP OFF (subgroup:%i)>", subGroup);
-	}	
-}
-
-void RawListener::suppressPageCharacteristics(const guint8 suppressCode)
-{
-	if (!m_isUndoOn) {
-		printf("<SUPPRESS PAGE CHARACTERISTICS (suppressCode: %i)>", suppressCode);
-	}	
-}
-
-void RawListener::insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove, 
-			     const guint8 borderBits, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
-{
-	if (!m_isUndoOn) {
-		printf("<INSERT CELL (colSpan: %i, rowSpan: %i, borderBits: %x)>", colSpan, rowSpan, borderBits);
-	}		
-}
-*/
