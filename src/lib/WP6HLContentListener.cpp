@@ -964,7 +964,9 @@ void WP6HLContentListener::_flushText(const bool fakeText)
 						   m_parseState->m_styleStateSequence.getCurrentState() == STYLE_END) &&
 						  !m_parseState->m_putativeListElementHasParagraphNumber)))
 	{
-		if (!m_ps->m_isParagraphOpened)
+		if (!m_ps->m_isParagraphOpened &&
+			!(m_parseState->m_isTableOpened && !m_parseState->m_isTableCellOpened) // don't allow paragraphs to be opened when we have already opened a table, but no cell yet. - MARCM (is it really correct, or should this be fixed elsewhere??)
+		)
 			m_parseState->m_numDeferredParagraphBreaks++;
 
 		while (m_parseState->m_numDeferredParagraphBreaks > 1) 
@@ -981,7 +983,10 @@ void WP6HLContentListener::_flushText(const bool fakeText)
 						  !m_parseState->m_putativeListElementHasParagraphNumber)) 
 	{
 		if (!m_ps->m_isParagraphOpened)
+		{
 			_openParagraph();
+			_openSpan();
+		}
 
 		if (m_parseState->m_textBeforeNumber.getLen() && 
 		    !m_parseState->m_putativeListElementHasParagraphNumber)
