@@ -226,13 +226,14 @@ public:
 						const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
  	virtual void endTable(); 
 
+
 protected:
 	void _handleSubDocument(guint16 textPID);
 	void _handleLineBreakElementBegin();
+	void _paragraphNumberOn(const guint16 outlineHash, const guint8 level);
 	void _flushText(const bool fakeText=false);
 	void _handleListChange(const guint16 outlineHash);
 	    
-
 	void _openListElement();
 
 	void _openPageSpan();

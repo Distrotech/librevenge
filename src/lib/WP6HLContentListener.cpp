@@ -588,10 +588,7 @@ void WP6HLContentListener::paragraphNumberOn(const guint16 outlineHash, const gu
 {
 	if (!isUndoOn())
 	{
-		m_parseState->m_styleStateSequence.setCurrentState(BEGIN_NUMBERING_BEFORE_DISPLAY_REFERENCING);
-		m_parseState->m_putativeListElementHasParagraphNumber = true;
-		m_parseState->m_currentOutlineHash = outlineHash;
-		m_parseState->m_currentListLevel = (level + 1);
+		_paragraphNumberOn(outlineHash, (level + 1));
 	}
 }
 
@@ -610,10 +607,18 @@ void WP6HLContentListener::displayNumberReferenceGroupOn(const guint8 subGroup, 
 		switch (subGroup)
 		{
 		case WP6_DISPLAY_NUMBER_REFERENCE_GROUP_PARAGRAPH_NUMBER_ON:
-			// ..
+		case WP6_DISPLAY_NUMBER_REFERENCE_GROUP_USER_DEFINED_ON:
+			// HACKISH: if we are in a paragraph style sequence we will pretend that paragraph numbering was
+			// just turned on even though it didn't happen		 
+			if (m_parseState->m_styleStateSequence.getCurrentState() == BEGIN_BEFORE_NUMBERING)
+			{
+				WPD_DEBUG_MSG(("WordPerfect: Virtual paragraph numbering used since no paragraph number\n"));
+				(m_parseState->m_currentListLevel == 0) ? _paragraphNumberOn(0, 1) : 
+					_paragraphNumberOn(0, m_parseState->m_currentListLevel);
+			}
 			m_parseState->m_styleStateSequence.setCurrentState(DISPLAY_REFERENCING);
-			// HACK: this is the >1st element in a sequence of display reference numbers, pretend it was
-			// the first and remove all memory of what came before in the style sequence
+			// HACK: this is the >1st element in a sequence of display reference numbers (e.g.: we could have 
+			// 1.1.1), pretend it was the first and remove all memory of what came before in the style sequence
 			if (m_parseState->m_putativeListElementHasDisplayReferenceNumber) {
 				m_parseState->m_numberText.clear();
 				m_parseState->m_textAfterDisplayReference.clear();	
@@ -635,8 +640,9 @@ void WP6HLContentListener::displayNumberReferenceGroupOff(const guint8 subGroup)
 		switch (subGroup)
 		{
 		case WP6_DISPLAY_NUMBER_REFERENCE_GROUP_PARAGRAPH_NUMBER_OFF:
+		case WP6_DISPLAY_NUMBER_REFERENCE_GROUP_USER_DEFINED_OFF:
 			if (m_parseState->m_styleStateSequence.getPreviousState() == BEGIN_NUMBERING_BEFORE_DISPLAY_REFERENCING)
-			    m_parseState->m_styleStateSequence.setCurrentState(BEGIN_NUMBERING_AFTER_DISPLAY_REFERENCING);
+				m_parseState->m_styleStateSequence.setCurrentState(BEGIN_NUMBERING_AFTER_DISPLAY_REFERENCING);
 			else {
 				m_parseState->m_styleStateSequence.setCurrentState(m_parseState->m_styleStateSequence.getPreviousState());				
 				// dump all our information into the before numbering block, if the display reference
@@ -664,7 +670,7 @@ void WP6HLContentListener::styleGroupOn(const guint8 subGroup)
 		{
 		case WP6_STYLE_GROUP_PARASTYLE_BEGIN_ON_PART1:
 			WPD_DEBUG_MSG(("WordPerfect: Handling para style begin 1 (ON)\n"));
-			//_flushText();
+ 			//_flushText();
 
 			m_parseState->m_styleStateSequence.setCurrentState(BEGIN_BEFORE_NUMBERING);
 			m_parseState->m_putativeListElementHasParagraphNumber = false;
@@ -949,6 +955,14 @@ void WP6HLContentListener::_handleLineBreakElementBegin()
 	    !m_parseState->m_isParagraphColumnBreak && !m_parseState->m_isParagraphPageBreak) 
 		m_parseState->m_numDeferredParagraphBreaks--;					
 	_flushText();
+}
+
+void WP6HLContentListener::_paragraphNumberOn(const guint16 outlineHash, const guint8 level)
+{
+	m_parseState->m_styleStateSequence.setCurrentState(BEGIN_NUMBERING_BEFORE_DISPLAY_REFERENCING);
+	m_parseState->m_putativeListElementHasParagraphNumber = true;
+	m_parseState->m_currentOutlineHash = outlineHash;
+	m_parseState->m_currentListLevel = level;
 }
 
 // _flushText: Flushes text and any section, paragraph, or span properties prior to the text
