@@ -33,7 +33,9 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input, bool parti
 {
 	int functionGroupCount = 0;
 	
+	WPD_DEBUG_MSG(("WP42Heuristics::isWP42FileFormat()\n"));
 	input->seek(0, WPX_SEEK_SET);
+	WPD_DEBUG_MSG(("WP42Heuristics::isWP42FileFormat()\n"));
 	
 	while (!input->atEOS())
 	{
@@ -97,12 +99,12 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input, bool parti
 		}
 	}	
 
-	// when we get here, the document is in a format that we could import properly.
-	
-	// if we didn't entcounter a single WP4.2 function group) then be a bit more carefull.
-	// this would be the case when passed a plaintext file for example
+	/* When we get here, the document is in a format that we *could* import properly.
+	However, if we didn't entcounter a single WP4.2 function group) we need to be more carefull:
+	this would be the case when passed a plaintext file for example, which libwpd is not
+	supposed to handle. */
 	if (!functionGroupCount)
-		return WPD_CONFIDENCE_LIKELY;
+		return WPD_CONFIDENCE_POOR;
 	
 	return WPD_CONFIDENCE_EXCELLENT;
 }

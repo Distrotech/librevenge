@@ -67,6 +67,8 @@ WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input, bool part
 	
 	WPXHeader *header = NULL;	
 	
+	WPD_DEBUG_MSG(("WPDocument::isFileFormatSupported()\n"));
+	
 	// by-pass the OLE stream (if it exists) and returns the (sub) stream with the
 	// WordPerfect document. 
 	WPXInputStream *document = NULL;
@@ -123,13 +125,25 @@ WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input, bool part
 	}	
 	catch (FileException)
 	{
+		WPD_DEBUG_MSG(("File Exception trapped\n"));
+		
 		// dispose of the reference to the ole input stream, if we allocated one
 		if (document != NULL && isDocumentOLE)
 			DELETEP(document);
 		
 		return WPD_CONFIDENCE_NONE;
 	}
+	catch (...)
+	{
+		WPD_DEBUG_MSG(("Unknown Exception trapped\n"));
+		
+		// dispose of the reference to the ole input stream, if we allocated one
+		if (document != NULL && isDocumentOLE)
+			DELETEP(document);
 
+		return WPD_CONFIDENCE_NONE;
+	}
+		
 	return WPD_CONFIDENCE_NONE;
 }
 
@@ -150,6 +164,7 @@ void WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerImpl)
 	WPXInputStream *document = NULL;
 	bool isDocumentOLE = false;
 	
+	WPD_DEBUG_MSG(("WPDocument::parse()\n"));
 	if (input->isOLEStream())
 	{
 		document = input->getDocumentOLEStream();
@@ -203,22 +218,46 @@ void WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerImpl)
 				parser->parse(listenerImpl);
 				DELETEP(parser);
 			}
+			else
+				throw FileException();
 		}
 	}
+	
+	/* TODO: fix code dumplication below */
 	catch (FileException)
 	{
-		// dispose of the reference to the ole input stream, if we allocated one
+		WPD_DEBUG_MSG(("File Exception trapped\n"));
+
+		DELETEP(parser);
 		if (document != NULL && isDocumentOLE)
 			DELETEP(document);
 
-		DELETEP(parser);
 		throw FileException(); 
 	}
+	catch (ParseException)
+	{
+		WPD_DEBUG_MSG(("Parse Exception trapped\n"));
+		
+		DELETEP(parser);
+		if (document != NULL && isDocumentOLE)
+			g_object_unref(G_OBJECT(document));
 
-	// dispose of the reference to the ole input stream, if we allocated one
+		throw FileException(); 		
+	}
+	catch (...)
+	{
+		WPD_DEBUG_MSG(("Unknown Exception trapped\n"));
+		
+		DELETEP(parser);
+		if (document != NULL && isDocumentOLE)
+			g_object_unref(G_OBJECT(document));
+		
+		throw Exception();		
+	}
+
+	DELETEP(parser);
 	if (document != NULL && isDocumentOLE)
 		DELETEP(document);
-
 }
 
 /*

@@ -51,6 +51,8 @@ WPXHeader::~WPXHeader()
 
 WPXHeader * WPXHeader::constructHeader(WPXInputStream *input)
 {
+	WPD_DEBUG_MSG(("WPXHeader::constructHeader()\n"));
+	
 	gchar fileMagic[4];
 	/* check the magic */
 	input->seek(WPX_HEADER_MAGIC_OFFSET - input->tell(), WPX_SEEK_CUR);
