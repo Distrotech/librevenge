@@ -33,15 +33,16 @@ WP60Header::WP60Header(GsfInput * input)
 {
 	guint16 documentEncrypted;
 
-	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WP6_HEADER_ENCRYPTION_OFFSET - gsf_input_tell(input), G_SEEK_CUR));
-	m_documentEncryption = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
-	
-	// I _think_ the next 4 bytes indicate the index header offset, which ssems to be 0 always,
-	// but I can't find any documentation on it, yet
-	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WP6_HEADER_INDEX_HEADER_POINTER_OFFSET - gsf_input_tell(input), G_SEEK_CUR));
-	m_indexHeaderOffset = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WP6_HEADER_ENCRYPTION_OFFSET, G_SEEK_SET));
+	m_documentEncryption = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);	
+	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WP6_HEADER_INDEX_HEADER_POINTER_OFFSET, G_SEEK_SET));
+	guint16 m_indexHeaderOffset = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
 
-	WPD_DEBUG_MSG(("WordPerfect: Index Header Position = 0x%x \n",(int)m_indexHeaderOffset));
+	// according to the WP6.0 specs, if the index header offset variable is less than 16, it is 16
+	if (m_indexHeaderOffset < 16)
+		m_indexHeaderOffset = 16;
+
+	WPD_DEBUG_MSG(("WordPerfect: Index Header Position = 0x%x (%i)\n",(int)m_indexHeaderOffset));
 	WPD_DEBUG_MSG(("WordPerfect: Document Encryption = 0x%x \n",(int)m_documentEncryption));
 
 	// TODO:
@@ -54,11 +55,10 @@ WP60Header::WP60Header(GsfInput * input)
 	/*if (documentOffset > m_iDocumentSize)
 	  return FALSE;*/
 
-
 	// read the Index Header (Header #0)
 	// skip the Flags = 2 and the Reserved byte = 0
 	guint16 numIndices;
-	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, /*m_indexHeaderOffset == 0 +*/ WP6_INDEX_HEADER_NUM_INDICES_POSITION, G_SEEK_CUR));
+	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, m_indexHeaderOffset + WP6_INDEX_HEADER_NUM_INDICES_POSITION, G_SEEK_SET));
 	m_numPrefixIndices = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
 
 	// ignore the 10 reserved bytes that follow (jump to the offset of the Index Header #1, where we can resume parsing)

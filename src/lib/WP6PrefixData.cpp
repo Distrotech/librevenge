@@ -91,25 +91,3 @@ void WP6PrefixData::parse(WP6LLListener *llListener)
 	//g_hash_table_foreach(m_prefixDataPacketHash, parsePrefixDataPacketNotify, llListener);
 }
 
-// static callbacks for the hash table of prefix data packets
-
-void parsePrefixDataPacketNotify(gpointer key, gpointer value, gpointer user_data)
-{
-	WP6PrefixDataPacket *packet = (WP6PrefixDataPacket *) value;
-	WP6LLListener *llListener = (WP6LLListener *) user_data;
-
-	packet->parse(llListener);
-}
-
-void destroyPrefixDataPacketKeyNotify(gpointer data) 
-{	
-	gint * key = (gint *)data;
-	delete(key);
-}
-
-void destroyPrefixDataPacketNotify(gpointer data) 
-{
-	WP6PrefixDataPacket * prefixDataPacket = (WP6PrefixDataPacket *)data;
-	delete(prefixDataPacket);
-}
-
