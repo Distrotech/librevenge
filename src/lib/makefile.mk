@@ -2,9 +2,16 @@ PRJ=..$/..$/..$/..$/..$/..
 
 PRJNAME=wpdsrc
 TARGET=wpdsrc
-ENABLE_EXCEPTIONS=true
+ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
+
+.IF "$(GUI)"=="WNT"
+CFLAGS+=-GR
+.ENDIF
+.IF "$(COM)"=="GCC"
+CFLAGSCXX+=-frtti
+.ENDIF
 
 SLOFILES= \
 	$(SLO)$/libwpd_internal.obj			\
