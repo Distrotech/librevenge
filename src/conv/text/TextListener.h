@@ -26,14 +26,18 @@
 #ifndef TEXTLISTENER_H
 #define TEXTLISTENER_H
 
-#include "libwpd2.h"
 #include <glib.h>
+#include "WP6LLListener.h"
 
-class TextListener : public WPXLLListener
+class TextListener : public WP6LLListener
 {
 public:
-	virtual void insertCharacter(guint32 value);
-	virtual void insertEOL() {}
+	TextListener() : WP6LLListener() {}
+	~TextListener() {}
+	virtual void startDocument() {}
+	virtual void insertCharacter(guint16 character);
+	virtual void insertEOL();
+	virtual void endDocument() {}
 };
 
 #endif /* TEXTLISTENER_H */

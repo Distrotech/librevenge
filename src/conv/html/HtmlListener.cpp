@@ -24,9 +24,9 @@
  */
 
 #include <stdio.h>
-#include "HtmlListener.h"
+#include "HtmlListenerImpl.h"
 
-HtmlListener::HtmlListener()
+HtmlListenerImpl::HtmlListenerImpl()
 {
     printf("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\" \"http://www.w3.org/TR/REC-html40/loose.dtd\">\n");
     printf("<html>\n");
@@ -36,7 +36,7 @@ HtmlListener::HtmlListener()
     printf("<body>\n");
 }
 
-HtmlListener::~HtmlListener()
+HtmlListenerImpl::~HtmlListenerImpl()
 {
     printf("\n");
     printf("</body>\n");
@@ -44,12 +44,20 @@ HtmlListener::~HtmlListener()
 }
 
 
-void HtmlListener::insertCharacter(guint32 value)
+void HtmlListenerImpl::paragraphOpen()
 {
-    printf("%c", (char)value);
+	printf("<p>");
 }
 
-void HtmlListener::insertEOL()
+void HtmlListenerImpl::paragraphClose()
 {
-    printf("<br>\n");
+	printf("</p>");
+}
+
+
+void HtmlListenerImpl::insertText(const guint16 *textArray, const guint len)
+{
+	for (guint i=0; i<len; i++) {
+		printf("%c", textArray[i]);
+	}
 }

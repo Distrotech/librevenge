@@ -24,14 +24,15 @@
  */
 
 #include "WP6EOLGroup.h"
+#include "WP6LLListener.h"
 
-WP6EOLGroup::WP6EOLGroup(WPXParser * parser)
-	: WP6VariableLengthGroup(parser)
+WP6EOLGroup::WP6EOLGroup(FILE *stream) :
+	WP6VariableLengthGroup()
 {
-	_read(parser);
+	_read(stream);
 }
 
-gboolean WP6EOLGroup::parse()
+gboolean WP6EOLGroup::parse(WP6LLListener *llListener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling an EOL group\n"));
 	   
@@ -50,7 +51,7 @@ gboolean WP6EOLGroup::parse()
 			case 20: // 0x014 (deletable soft EOL)
 			case 21: // 0x15 (deletable soft EOC) 
 			case 22: // 0x16 (deleteable soft EOC at EOP)
-				_getParser()->getLLListener()->insertCharacter((guint32) ' ');
+				llListener->insertCharacter((guint16) ' ');
 				break;
 			case 4: // 0x04 (hard end-of-line)
 			case 5: // 0x05 (hard EOL at EOC) 
@@ -58,7 +59,7 @@ gboolean WP6EOLGroup::parse()
 			case 23: // 0x17 (deletable hard EOL)
 			case 24: // 0x18 (deletable hard EOL at EOC)
 			case 25: // 0x19 (deletable hard EOL at EOP)
-				_getParser()->getLLListener()->insertEOL();
+				llListener->insertEOL();
 				break;
 			case WP6_EOL_CHARACTER_HARD_END_OF_COLUMN: // 0x07 (hard end of column)
 // !				{

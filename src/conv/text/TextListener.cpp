@@ -26,7 +26,12 @@
 #include <stdio.h>
 #include "TextListener.h"
 
-void TextListener::insertCharacter(guint32 value)
+void TextListener::insertCharacter(guint16 character)
 {
-	printf("%c", (char)value);
+	printf("%c", (char)character);
+}
+
+void TextListener::insertEOL()
+{
+	printf("\n");
 }

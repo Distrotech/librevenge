@@ -31,21 +31,8 @@
 #include "WP6Parser.h"
 #include "WP6FileStructure.h"
 
-WPXParser::WPXParser(FILE * stream)
+WPXParser::WPXParser(FILE * stream, WPXLLListener * listener) :
+	m_stream(stream),
+	m_llListener(listener)
 {
-	m_stream = stream;
-}
-
-WPXParser * WPXParser::constructParser(FILE * stream)
-{
-	if (!stream)
-	{
-		WPD_DEBUG_MSG(("WordPerfect: Stream is NULL!\n"));
-		return NULL;
-	}
-
-	// we will add this functionality back in.. eventually
-	//WPXHeader *header = WPXHeader::constructHeader(stream);
-
-	return new WP6Parser(stream);
 }

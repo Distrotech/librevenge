@@ -30,14 +30,15 @@
 #include "WPXParser.h"
 #include "WP6FileStructure.h"
 
-class WP6Part : public WPXPart
+class WP6LLListener;
+
+class WP6Part
 {
  public:
-	WP6Part(WPXParser * parser);
 	virtual ~WP6Part() {}
 	
-	static WP6Part * constructPart(WPXParser * parser, guint8 readVal);
-	virtual gboolean parse() = 0;
+	static WP6Part * constructPart(FILE *stream, guint8 readVal);
+	virtual gboolean parse(WP6LLListener *llListener) = 0;
 };
 
 

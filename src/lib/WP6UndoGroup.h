@@ -31,11 +31,11 @@
 class WP6UndoGroup : public WP6FixedLengthGroup
 {
 public:
-	WP6UndoGroup(WPXParser * parser);	
-	virtual gboolean parse() {}
+	WP6UndoGroup(FILE *stream);	
+	virtual gboolean parse(WP6LLListener *llListener) {}
 	
 protected:
-	virtual gboolean _readContents(WPXParser *parser) {}
+	virtual gboolean _readContents(FILE *stream) {}
 };
 
 #endif /* WP6UNDOGROUP_H */

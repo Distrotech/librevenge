@@ -24,20 +24,20 @@
  */
 
 #include "WP6FixedEOLGroup.h"
+#include "WP6LLListener.h"
 
-WP6FixedEOLGroup::WP6FixedEOLGroup(WPXParser * parser)
-	: WP6FixedLengthGroup(parser)
+WP6FixedEOLGroup::WP6FixedEOLGroup(FILE *stream)
 {
 }
 	
-gboolean WP6FixedEOLGroup::parse()
+gboolean WP6FixedEOLGroup::parse(WP6LLListener *llListener)
 {
-	_getParser()->getLLListener()->insertEOL();
+	llListener->insertEOL();
 	
 	return TRUE;
 }
 
-gboolean WP6FixedEOLGroup::_readContents(WPXParser *parser)
+gboolean WP6FixedEOLGroup::_readContents(FILE *stream)
 {
 	
 }

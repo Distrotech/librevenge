@@ -31,11 +31,11 @@
 class WP6AttributeOnGroup : public WP6FixedLengthGroup
 {
 public:
-	WP6AttributeOnGroup(WPXParser * parser);	
-	virtual gboolean parse() {}
+	WP6AttributeOnGroup(FILE *stream);	
+	virtual gboolean parse(WP6LLListener *llListener) {}
 	
 protected:
-	virtual gboolean _readContents(WPXParser *parser);
+	virtual gboolean _readContents(FILE *stream);
 };
 
 #endif /* WP6ATTRIBUTEONGROUP_H */

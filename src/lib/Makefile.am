@@ -12,6 +12,7 @@ libwpd2_a_SOURCES =			\
 	WP6FixedLengthGroup.cpp		\
 	WP6FixedSpaceGroup.cpp		\
 	WP6Header.cpp 			\
+	WP6HLListener.cpp		\
 	WP6Parser.cpp			\
 	WP6Part.cpp	 		\
 	WP6UndoGroup.cpp		\
@@ -19,7 +20,6 @@ libwpd2_a_SOURCES =			\
 	WP6VariableLengthGroup.cpp 	\
 	WPXHeader.cpp 			\
 	WPXParser.cpp 			\
-	WPXPart.cpp			\
 	libwpd2.h	        	\
 	UT_libwpd2.h	        	\
 	WP6FileStructure.h		\
@@ -31,11 +31,13 @@ libwpd2_a_SOURCES =			\
 	WP6FixedLengthGroup.h		\
 	WP6FixedSpaceGroup.h		\
 	WP6Header.h 			\
+	WP6HLListener.h			\
 	WP6Parser.h			\
 	WP6Part.h	 		\
 	WP6UndoGroup.h			\
 	WP6UnsupportedVariableLengthGroup.h \
 	WP6VariableLengthGroup.h 	\
 	WPXHeader.h 			\
-	WPXParser.h 			\
-	WPXPart.h			
+	WPXLLListener.h			\
+	WPXHLListener.h			\
+	WPXParser.h 			

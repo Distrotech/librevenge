@@ -23,28 +23,15 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WPXPARSER_H
-#define WPXPARSER_H
-
-#include <stdio.h>
-#include <glib.h>
+#ifndef WP6LLLISTENER_H
+#define WP6LLLISTENER_H
 #include "WPXLLListener.h"
 
-class WPXParser
+class WP6LLListener : public WPXLLListener
 {
-public:
-	WPXParser(FILE * stream, WPXLLListener * listener);
-	virtual ~WPXParser() {}
-	
-	virtual gboolean parse() = 0;
-
-	WPXLLListener * getLLListener() { return m_llListener; }
-
-	FILE * getStream() { return m_stream; }
-
-private:
-	FILE * m_stream;
-	WPXLLListener * m_llListener;
+ public:
+	WP6LLListener() : WPXLLListener() {}
+	virtual ~WP6LLListener() {}
 };
 
-#endif /* WPXPARSER_H */
+#endif /* WP6LLLISTENER_H */

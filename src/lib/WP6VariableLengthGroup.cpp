@@ -28,10 +28,11 @@
 #include "WP6EOLGroup.h"
 #include "WP6UnsupportedVariableLengthGroup.h"
 
-WP6VariableLengthGroup::WP6VariableLengthGroup(WPXParser * parser)
-	: WP6Part(parser)
+WP6VariableLengthGroup::WP6VariableLengthGroup() :
+	m_numPrefixIDs(0)
 {
 }
+	
 
 WP6VariableLengthGroup::~WP6VariableLengthGroup()
 {
@@ -39,23 +40,22 @@ WP6VariableLengthGroup::~WP6VariableLengthGroup()
 		g_free(m_prefixIDs);
 }
 
-WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(WPXParser * parser, guint8 groupID)
+WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(FILE *stream, guint8 groupID)
 {
 	switch (groupID)
 	{
 		case WP6_TOP_EOL_GROUP: 
-			return new WP6EOLGroup(parser);
+			return new WP6EOLGroup(stream);
 
 		// Add the remaining cases here
 		default:
 			// this is an unhandled group, just skip it
-			return new WP6UnsupportedVariableLengthGroup(parser);
+			return new WP6UnsupportedVariableLengthGroup(stream);
 	}
 }
 
-gboolean WP6VariableLengthGroup::_read(WPXParser * parser)
+gboolean WP6VariableLengthGroup::_read(FILE *stream)
 {
-	FILE * stream = _getParser()->getStream();
 	guint32 startPosition = ftell(stream);
 
 	WPD_DEBUG_MSG(("WordPerfect: handling a variable length group\n"));
@@ -70,7 +70,7 @@ gboolean WP6VariableLengthGroup::_read(WPXParser * parser)
 		
 		if (m_numPrefixIDs > 0)
 		{
-			m_prefixIDs = (guint16 **) g_malloc(sizeof(guint16) * m_numPrefixIDs);
+			m_prefixIDs = (guint16 *) g_malloc(sizeof(guint16) * m_numPrefixIDs);
 			for (guint32 i = 0; i < m_numPrefixIDs; i++)
 			{
 				WPD_CHECK_FILE_READ_ERROR(fread(&m_prefixIDs[i], sizeof(guint16), 1, stream), 1);		
@@ -85,7 +85,7 @@ gboolean WP6VariableLengthGroup::_read(WPXParser * parser)
 	WPD_CHECK_FILE_READ_ERROR(fread(&m_sizeNonDeletable, sizeof(guint16), 1, stream), 1);	
 	WPD_DEBUG_MSG(("WordPerfect: Read variable group header (start_position: %i, sub_group: %i, size: %i, flags: %i, num_prefix_ids: %i, size_non_deletable: %i)\n", startPosition, m_subGroup, m_size, m_flags, m_numPrefixIDs, m_sizeNonDeletable));
 
-	WPD_CHECK_INTERNAL_ERROR(_readContents(parser));
+	WPD_CHECK_INTERNAL_ERROR(_readContents(stream));
 
 	WPD_CHECK_FILE_SEEK_ERROR(fseek(stream, (startPosition + m_size - 1 - ftell(stream)), SEEK_CUR));
 	

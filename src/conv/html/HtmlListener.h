@@ -27,9 +27,10 @@
 #define HTMLLISTENER_H
 
 #include "libwpd2.h"
+#include "WP6LLListener.h"
 #include <glib.h>
 
-class HtmlListener : public WPXLLListener
+class HtmlListener : public WPXHLListenerImpl
 {
 public:
     HtmlListener();

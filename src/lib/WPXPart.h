@@ -33,13 +33,8 @@
 class WPXPart
 {
 public:
-	WPXPart(WPXParser * parser);
-	
-	virtual gboolean parse() {};
-protected:
-	WPXParser * _getParser() { return m_pParser; }
-private:
-	WPXParser * m_pParser;
+	WPXPart(FILE *stream);	
+	virtual gboolean parse() = 0;
 };
 
 

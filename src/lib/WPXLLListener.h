@@ -26,13 +26,17 @@
 #ifndef WPXLLLISTENER_H
 #define WPXLLLISTENER_H
 
-#include <glib.h>
+#include "glib.h"
 
 class WPXLLListener
 {
-public:
-	virtual void insertCharacter(guint32 value) = 0;
+ public:
+	WPXLLListener() {}
+	virtual ~WPXLLListener() {}
+	virtual void startDocument() = 0;
+	virtual void insertCharacter(guint16 character) = 0;
 	virtual void insertEOL() = 0;
+	virtual void endDocument() = 0;
 };
 
 #endif /* WPXLLLISTENER_H */

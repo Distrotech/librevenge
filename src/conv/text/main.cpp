@@ -17,9 +17,8 @@ int main(int argc, char *argv[])
 	    return -1;
 	}
 	
-	TextListener * listener = new TextListener();
-	WPXParser * parser = WPXParser::constructParser(stream);
-	parser->registerListener(listener);
+	WPXLLListener * listener = new TextListener();
+	WPXParser * parser = new WP6Parser(stream, listener);
 	parser->parse();
 	delete parser;
 	delete listener;

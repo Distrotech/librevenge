@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "libwpd2.h"
-#include "HtmlListener.h"
+#include "HtmlListenerImpl.h"
 
 int main(int argc, char *argv[])
 {
@@ -17,12 +17,11 @@ int main(int argc, char *argv[])
 	    return -1;
 	}
 	
-	HtmlListener * listener = new HtmlListener();
-	WPXParser * parser = WPXParser::constructParser(stream);
-	parser->registerListener(listener);
-	parser->parse();
-	delete parser;
-	delete listener;
+ 	WPXLLListener * listener = new WP6HLListener(new HtmlListenerImpl());
+ 	WPXParser * parser = new WP6Parser(stream, listener);
+ 	parser->parse();
+ 	delete parser;
+ 	delete listener;
 	
 	return 0;
 }

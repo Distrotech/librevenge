@@ -31,11 +31,11 @@
 class WP6FixedSpaceGroup : public WP6FixedLengthGroup
 {
 public:
-	WP6FixedSpaceGroup(WPXParser * parser);	
-	virtual gboolean parse();
+	WP6FixedSpaceGroup(FILE *stream);	
+	virtual gboolean parse(WP6LLListener *llListener);
 	
 protected:
-	virtual gboolean _readContents(WPXParser *parser) {}
+	virtual gboolean _readContents(FILE *stream) {}
 };
 
 #endif /* WP6FIXEDSPACEGROUP_H */

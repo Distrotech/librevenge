@@ -24,12 +24,13 @@
  */
  
 #include <stdio.h>
+#include "WP6LLListener.h"
 #include "WP6Parser.h"
 #include "WP6Part.h"
 #include "UT_libwpd2.h"
 
-WP6Parser::WP6Parser(FILE * stream/*,  WP6Header *header */)
-	: WPXParser(stream)
+WP6Parser::WP6Parser(FILE * stream, WPXLLListener *llListener/*,  WP6Header *header */)
+	: WPXParser(stream, llListener)
 {
 }
 
@@ -39,6 +40,8 @@ gboolean WP6Parser::parse()
 {	
 	try {
 		WP6Header * header = new WP6Header(getStream());
+		
+		getLLListener()->startDocument();
 		
 		WPD_CHECK_FILE_SEEK_ERROR(fseek(getStream(), header->getDocumentOffset() - ftell(getStream()), SEEK_CUR));
 	
@@ -54,19 +57,20 @@ gboolean WP6Parser::parse()
 				else if (readVal >= (guint8)0x21 && readVal <= (guint8)0x7F)
 					{
 						// normal ASCII characters
-						getLLListener()->insertCharacter( (guint32)readVal );
+						getLLListener()->insertCharacter( (guint16)readVal );
 					}
 				else 
 					{
-						WP6Part *part = WP6Part::constructPart(this, readVal);
+						WP6Part *part = WP6Part::constructPart(getStream(), readVal);
 						if (part != NULL) {
-							part->parse();
+							part->parse(dynamic_cast<WP6LLListener *>(getLLListener()));
 							delete(part);
 						}
 					}
 			}
 	}
 	catch(FileException) { WPD_DEBUG_MSG(("WordPerfect: File Seek Exception. Parse terminated prematurely.")); }
+	getLLListener()->endDocument();
 	WPD_DEBUG_MSG(("WordPerfect: Finished with document parse (position = %ld)\n",(long)ftell(getStream())));
 	
 	return TRUE;

@@ -25,9 +25,9 @@
 
 #include "WP6UnsupportedVariableLengthGroup.h"
 
-WP6UnsupportedVariableLengthGroup::WP6UnsupportedVariableLengthGroup(WPXParser * parser)
-	: WP6VariableLengthGroup(parser)
+WP6UnsupportedVariableLengthGroup::WP6UnsupportedVariableLengthGroup(FILE *stream) :
+	WP6VariableLengthGroup()
 {
 	WPD_DEBUG_MSG(("WordPerfect: Handling an unsupported variable length group\n"));
-	_read(parser);
+	_read(stream);
 }

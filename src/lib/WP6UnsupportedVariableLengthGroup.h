@@ -34,8 +34,8 @@
 class WP6UnsupportedVariableLengthGroup : public WP6VariableLengthGroup
 {
  public:
-	WP6UnsupportedVariableLengthGroup(WPXParser * parser);	
-	virtual gboolean parse() {}
+	WP6UnsupportedVariableLengthGroup(FILE *stream);	
+	virtual gboolean parse(WP6LLListener *llListener) {}
 };
 
 #endif /* WP6UNSUPPORTEDVARIABLELENGTHGROUP_H */

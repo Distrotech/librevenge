@@ -25,13 +25,13 @@
 
 #include "WP6AttributeOffGroup.h"
 
-WP6AttributeOffGroup::WP6AttributeOffGroup(WPXParser * parser)
-	: WP6FixedLengthGroup(parser)
+WP6AttributeOffGroup::WP6AttributeOffGroup(FILE *stream)
+	: WP6FixedLengthGroup()
 {
-	_read(parser, WP6_ATTRIBUTE_GROUP_SIZE);
+	_read(stream, WP6_ATTRIBUTE_GROUP_SIZE);
 }
 	
-gboolean WP6AttributeOffGroup::_readContents(WPXParser *parser)
+gboolean WP6AttributeOffGroup::_readContents(FILE *stream)
 {
 	
 }

@@ -26,9 +26,11 @@
 #ifndef WPXHLLISTENER_H
 #define WPXHLLISTENER_H
  
+#include "WPXLLListener.h"
+
 class WPXHLListener
 {
-	
+	// not sure if this is needed yet
 };
 
 #endif /* WPXHLLISTENER_H */

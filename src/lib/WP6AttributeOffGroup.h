@@ -27,15 +27,16 @@
 #define WP6ATTRIBUTEOFFGROUP_H
 
 #include "WP6FixedLengthGroup.h"
+#include "WP6LLListener.h"
 
 class WP6AttributeOffGroup : public WP6FixedLengthGroup
 {
 public:
-	WP6AttributeOffGroup(WPXParser * parser);	
-	virtual gboolean parse() {}
+	WP6AttributeOffGroup(FILE *stream);	
+	virtual gboolean parse(WP6LLListener *llListener) {}
 	
 protected:
-	virtual gboolean _readContents(WPXParser *parser);
+	virtual gboolean _readContents(FILE *stream);
 };
 
 #endif /* WP6ATTRIBUTEOFFGROUP_H */

@@ -31,11 +31,11 @@
 class WP6ExtendedCharacterGroup : public WP6FixedLengthGroup
 {
 public:
-	WP6ExtendedCharacterGroup(WPXParser * parser);	
-	virtual gboolean parse() {}
+	WP6ExtendedCharacterGroup(FILE *stream);	
+	virtual gboolean parse(WP6LLListener *llListener) {}
 	
 protected:
-	virtual gboolean _readContents(WPXParser *parser);
+	virtual gboolean _readContents(FILE *stream);
 };
 
 #endif /* WP6EXTENDEDCHARACTERGROUP_H */

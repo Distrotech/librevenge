@@ -31,13 +31,11 @@
 class WP6FixedLengthGroup : public WP6Part
 {
  public:
-	WP6FixedLengthGroup(WPXParser * parser);
-	
-	static WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(WPXParser * parser, guint8 groupID);
+	static WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(FILE *stream, guint8 groupID);
 
  protected:
-	gboolean _read(WPXParser *parser, guint size);
-	virtual gboolean _readContents(WPXParser *parser) = 0; // we always read the contents in the case of a fixed length group
+	gboolean _read(FILE *stream, guint size);
+	virtual gboolean _readContents(FILE *stream) = 0; // we always read the contents in the case of a fixed length group
 };
 
 #endif /* WP6FIXEDLENGTHGROUP_H */

@@ -29,23 +29,18 @@
 #include "WP6Header.h"
 #include "WP6FileStructure.h" 
 
-// placeholders until we can get exceptions worked out
-#define WPD_CHECK_FILE_SEEK_ERROR2(v) if (v != 0) { WPD_DEBUG_MSG(("X_CheckFileSeekError: %d\n", __LINE__)); }
-#define WPD_CHECK_FILE_READ_ERROR2(v,num_elements) if (v != num_elements) { WPD_DEBUG_MSG(("X_CheckFileReadElementError: %d\n", __LINE__));  }
-
-
 WP6Header::WP6Header(FILE * stream)
 	: WPXHeader(stream)
 {
 	guint16 documentEncrypted;
 
 	/* offsets */
-	WPD_CHECK_FILE_SEEK_ERROR2(fseek(stream, WP6_HEADER_ENCRYPTION_OFFSET - ftell(stream), SEEK_CUR));
-	WPD_CHECK_FILE_READ_ERROR2(fread(&m_documentEncryption, sizeof(guint16), 1, stream), 1);
-	WPD_CHECK_FILE_SEEK_ERROR2(fseek(stream, WP6_HEADER_INDEX_HEADER_POINTER_OFFSET - ftell(stream), SEEK_CUR));
-	WPD_CHECK_FILE_READ_ERROR2(fread(&m_indexHeaderOffset, sizeof(guint16), 1, stream), 1);
-	WPD_CHECK_FILE_SEEK_ERROR2(fseek(stream, WP6_HEADER_DOCUMENT_SIZE_OFFSET - ftell(stream), SEEK_CUR));
-	WPD_CHECK_FILE_READ_ERROR2(fread(&m_documentSize, sizeof(guint32), 1, stream), 1);
+	WPD_CHECK_FILE_SEEK_ERROR(fseek(stream, WP6_HEADER_ENCRYPTION_OFFSET - ftell(stream), SEEK_CUR));
+	WPD_CHECK_FILE_READ_ERROR(fread(&m_documentEncryption, sizeof(guint16), 1, stream), 1);
+	WPD_CHECK_FILE_SEEK_ERROR(fseek(stream, WP6_HEADER_INDEX_HEADER_POINTER_OFFSET - ftell(stream), SEEK_CUR));
+	WPD_CHECK_FILE_READ_ERROR(fread(&m_indexHeaderOffset, sizeof(guint16), 1, stream), 1);
+	WPD_CHECK_FILE_SEEK_ERROR(fseek(stream, WP6_HEADER_DOCUMENT_SIZE_OFFSET - ftell(stream), SEEK_CUR));
+	WPD_CHECK_FILE_READ_ERROR(fread(&m_documentSize, sizeof(guint32), 1, stream), 1);
 
 	WPD_DEBUG_MSG(("WordPerfect: Index Header Position = %i \n",(int)m_indexHeaderOffset));
 	WPD_DEBUG_MSG(("WordPerfect: Document Pointer = %i \n",(int)getDocumentOffset()));

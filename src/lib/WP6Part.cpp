@@ -29,33 +29,28 @@
 #include "WP6VariableLengthGroup.h"
 #include "WP6FixedLengthGroup.h"
 
-WP6Part::WP6Part(WPXParser * parser)
-	: WPXPart(parser)
-{
-}
-
 // constructPart: constructs a parseable low-level representation of part of the document
 // returns the part if it successfully creates the part, returns NULL if it can't
 // throws an exception if there is an error
 // precondition: readVal us between 0x80 and 0xFF
-WP6Part * WP6Part::constructPart(WPXParser * parser, guint8 readVal)
+WP6Part * WP6Part::constructPart(FILE *stream, guint8 readVal)
 {	
 	WPD_DEBUG_MSG(("WordPerfect: ConstructPart\n"));
 		
 	if (readVal >= (guint8)0x80 && readVal <= (guint8)0xCF)
 		{
-			WPD_DEBUG_MSG(("WordPerfect: constructFixedLengthGroup(parser, val)\n"));
-			return WP6FixedLengthGroup::constructFixedLengthGroup(parser, readVal);
+			WPD_DEBUG_MSG(("WordPerfect: constructFixedLengthGroup(stream, val)\n"));
+			return WP6FixedLengthGroup::constructFixedLengthGroup(stream, readVal);
 		}
 	else if (readVal >= (guint8)0xD0 && readVal <= (guint8)0xEF)
 		{
-			WPD_DEBUG_MSG(("WordPerfect: constructVariableLengthGroup(parser, val)\n"));
-			return WP6VariableLengthGroup::constructVariableLengthGroup(parser, readVal);
+			WPD_DEBUG_MSG(("WordPerfect: constructVariableLengthGroup(stream, val)\n"));
+			return WP6VariableLengthGroup::constructVariableLengthGroup(stream, readVal);
 		}      
 	else if (readVal >= (guint8)0xF0 && readVal <= (guint8)0xFF)
 		{
-			WPD_DEBUG_MSG(("WordPerfect: constructFixedLengthGroup(parser, val)\n"));
-			return WP6FixedLengthGroup::constructFixedLengthGroup(parser, readVal);
+			WPD_DEBUG_MSG(("WordPerfect: constructFixedLengthGroup(stream, val)\n"));
+			return WP6FixedLengthGroup::constructFixedLengthGroup(stream, readVal);
 		}
 
 	WPD_DEBUG_MSG(("WordPerfect: Returning NULL from constructPart\n"));

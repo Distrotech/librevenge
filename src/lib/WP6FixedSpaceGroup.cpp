@@ -24,16 +24,16 @@
  */
 
 #include "WP6FixedSpaceGroup.h"
+#include "WP6LLListener.h"
 
-WP6FixedSpaceGroup::WP6FixedSpaceGroup(WPXParser * parser)
-	: WP6FixedLengthGroup(parser)
+WP6FixedSpaceGroup::WP6FixedSpaceGroup(FILE *stream)
 {
-	_read(parser, 1);
+	_read(stream, 1);
 }
 	
-gboolean WP6FixedSpaceGroup::parse()
+gboolean WP6FixedSpaceGroup::parse(WP6LLListener *llListener)
 {
-	_getParser()->getLLListener()->insertCharacter((guint32) ' ');
+	llListener->insertCharacter((guint16) ' ');
 	
 	return TRUE;
 }

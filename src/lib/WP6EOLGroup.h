@@ -31,8 +31,8 @@
 class WP6EOLGroup : public WP6VariableLengthGroup
 {
 public:
-	WP6EOLGroup(WPXParser * parser);	
-	virtual gboolean parse();
+	WP6EOLGroup(FILE *stream);	
+	virtual gboolean parse(WP6LLListener *llListener);
 };
 
 #endif /* WP6EOLGROUP_H */

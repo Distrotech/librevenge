@@ -32,35 +32,28 @@
 #include "WP6AttributeOnGroup.h"
 #include "WP6AttributeOffGroup.h"
 
-WP6FixedLengthGroup::WP6FixedLengthGroup(WPXParser * parser)
-	: WP6Part(parser)
-{
-	// we can't call _read from here, because we need to use the child classes'
-	// virtual _readContents function, and we can't do that from a constructor
-}
-
-WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(WPXParser * parser, guint8 groupID)
+WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(FILE *stream, guint8 groupID)
 {
 	switch (groupID)
 	{
 		case WP6_TOP_SOFT_EOL:
 		case WP6_TOP_SOFT_SPACE:
-			return new WP6FixedSpaceGroup(parser);
+			return new WP6FixedSpaceGroup(stream);
 		
 		case WP6_TOP_DORMANT_HARD_RETURN:
-			return new WP6FixedEOLGroup(parser);
+			return new WP6FixedEOLGroup(stream);
 		
 		case WP6_TOP_EXTENDED_CHARACTER: 
-			return new WP6ExtendedCharacterGroup(parser);
+			return new WP6ExtendedCharacterGroup(stream);
 		
 		case WP6_TOP_UNDO_GROUP:
-			return new WP6UndoGroup(parser);
+			return new WP6UndoGroup(stream);
 		
 		case WP6_TOP_ATTRIBUTE_ON:
-			return new WP6AttributeOnGroup(parser);
+			return new WP6AttributeOnGroup(stream);
 		
 		case WP6_TOP_ATTRIBUTE_OFF:
-			return new WP6AttributeOffGroup(parser);
+			return new WP6AttributeOffGroup(stream);
 		
 		// Add the remaining cases here
 		default:
@@ -69,10 +62,9 @@ WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(WPXParser *
 	}
 }
 
-gboolean WP6FixedLengthGroup::_read(WPXParser *parser, guint size)
+gboolean WP6FixedLengthGroup::_read(FILE *stream, guint size)
 {
-	FILE * stream = parser->getStream();
 	guint32 startPosition = ftell(stream);
-	WPD_CHECK_INTERNAL_ERROR(_readContents(parser));
+	WPD_CHECK_INTERNAL_ERROR(_readContents(stream));
 	WPD_CHECK_FILE_SEEK_ERROR(fseek(stream, (startPosition + size - 1 - ftell(stream)), SEEK_CUR));
 }

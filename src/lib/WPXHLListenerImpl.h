@@ -22,29 +22,20 @@
 /* "This product is not manufactured, approved, or supported by 
  * Corel Corporation or Corel Corporation Limited."
  */
-
-#ifndef WPXPARSER_H
-#define WPXPARSER_H
-
-#include <stdio.h>
+ 
+#ifndef WPXHLLISTENERIMPL_H
+#define WPXHLLISTENERIMPL_H
 #include <glib.h>
-#include "WPXLLListener.h"
 
-class WPXParser
+class WPXHLListenerImpl
 {
-public:
-	WPXParser(FILE * stream, WPXLLListener * listener);
-	virtual ~WPXParser() {}
-	
-	virtual gboolean parse() = 0;
-
-	WPXLLListener * getLLListener() { return m_llListener; }
-
-	FILE * getStream() { return m_stream; }
-
-private:
-	FILE * m_stream;
-	WPXLLListener * m_llListener;
+ public:
+	//virtual void insertSpan() = 0;
+	virtual void startDocument() = 0;
+	virtual void endDocument() = 0;
+	virtual void openParagraph() = 0;
+	virtual void closeParagraph() = 0;
+	virtual void insertText(const guint16 *textArray, const guint len) = 0;
 };
 
-#endif /* WPXPARSER_H */
+#endif /* WPXHLLISTENERIMPL_H */

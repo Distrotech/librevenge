@@ -24,5 +24,7 @@
  */
 
 #include "WPXParser.h"
+#include "WP6Parser.h"
 #include "WPXLLListener.h"
 #include "WPXHLListener.h"
+#include "WP6HLListener.h"

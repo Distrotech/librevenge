@@ -32,12 +32,8 @@
 class WP6Parser : public WPXParser
 {
  public:
-	WP6Parser(FILE * stream);
-		
-	gboolean parse();
-
- private:
-	//WP6Header *m_header;
+	WP6Parser(FILE * stream, WPXLLListener *llListener);		
+	virtual gboolean parse();
 };
 
 #endif /* WP6PARSER_H */

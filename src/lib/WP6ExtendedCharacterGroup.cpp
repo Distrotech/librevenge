@@ -25,13 +25,12 @@
 
 #include "WP6ExtendedCharacterGroup.h"
 
-WP6ExtendedCharacterGroup::WP6ExtendedCharacterGroup(WPXParser * parser)
-	: WP6FixedLengthGroup(parser)
+WP6ExtendedCharacterGroup::WP6ExtendedCharacterGroup(FILE *stream)
 {
-	_read(parser, WP6_EXTENDED_CHARACTER_GROUP_SIZE);
+	_read(stream, WP6_EXTENDED_CHARACTER_GROUP_SIZE);
 }
 	
-gboolean WP6ExtendedCharacterGroup::_readContents(WPXParser *parser)
+gboolean WP6ExtendedCharacterGroup::_readContents(FILE *stream)
 {
 	
 }
