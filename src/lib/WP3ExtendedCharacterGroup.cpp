@@ -29,6 +29,7 @@
 #include "WP3FileStructure.h"
 #include "WP3LLListener.h"
 #include "libwpd_internal.h"
+#include "libwpd_support.h"
 
 WP3ExtendedCharacterGroup::WP3ExtendedCharacterGroup(WPXInputStream *input, uint8_t groupID) :
 	WP3FixedLengthGroup(groupID),
@@ -48,8 +49,14 @@ void WP3ExtendedCharacterGroup::_readContents(WPXInputStream *input)
 
 void WP3ExtendedCharacterGroup::parse(WP3HLListener *listener)
 {
-	// We do not convert pure Macintosh character for the while
-	if ((m_characterSet != 0xFF) || ((m_character != 0xFE) & (m_character != 0xFF)))
+	// We are finding the map first in the macRoman character set
+	// and only if we cannot find it, we use the WP character set
+	// map. It seems to be the behaviour of WordPerfect 3.x for Mac.
+	if ((m_macCharacter >= 0x20) && (m_macCharacter <= 0xFF))
+	{
+		listener->insertCharacter(macintoshCharacterMap[m_macCharacter - 0x20]);
+	}
+	else if ((m_characterSet != 0xFF) || ((m_character != 0xFE) && (m_character != 0xFF)))
 	{
 		const uint16_t *chars;
 		int len = extendedCharacterToUCS2(m_character,

@@ -41,6 +41,7 @@ typedef unsigned int uint32_t;
 
 extern const uint16_t asciiMap[];
 extern const uint16_t extendedInternationalCharacterMap[];
+extern const uint16_t macintoshCharacterMap[];
 extern const uint16_t multinationalMap[];
 extern const uint16_t phoneticMap[];
 extern const uint16_t boxdrawingMap[];
