@@ -35,64 +35,83 @@ WP6ColumnGroup::WP6ColumnGroup(FILE *stream) :
 
 void WP6ColumnGroup::_readContents(FILE *stream)
 {
-	WPD_CHECK_FILE_READ_ERROR(fread(&m_margin, sizeof(guint16), 1, stream), 1);
-	WPD_DEBUG_MSG(("WordPerfect: Read column group margin size (margin: %i)\n", m_margin));
-
+	// this group can contain different kinds of data, thus we need to read
+	// the contents accordingly	
+	switch (getSubGroup())	
+	{
+		case 0: // Left Margin Set
+		case 1: // Right Margin Set
+			{
+				WPD_CHECK_FILE_READ_ERROR(fread(&m_margin, sizeof(guint16), 1, stream), 1);
+				WPD_DEBUG_MSG(("WordPerfect: Read column group margin size (margin: %i)\n", m_margin));
+			}
+			break;
+		case 2:
+			{
+				WPD_CHECK_FILE_READ_ERROR(fread(&m_colType, sizeof(guint8), 1, stream), 1);
+				if (fread(&m_rowSpacing[0], sizeof(guint8), 4, stream) != 4*sizeof(guint8))
+					/*return FALSE*/; // TODO: Throw exception of something
+				WPD_CHECK_FILE_READ_ERROR(fread(&m_numColumns, sizeof(guint8), 1, stream), 1);
+				WPD_DEBUG_MSG(("WordPerfect: Column type: %d\n", m_colType & 0x03));
+				WPD_DEBUG_MSG(("WordPerfect: Numer of columns: %d\n", m_numColumns));				
+			}
+			break;
+		case 3: /* TODO: Column Border */
+			{
+			}
+			break;
+		default: /* something else we don't support, since it isn't in the docs */
+			break;
+	}
 }
 
 void WP6ColumnGroup::parse(WP6LLListener *llListener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling an Column group\n"));
 	
-	switch (getSubGroup()) {
-	case 0: // Left Margin Set
-	case 1: // Right Margin Set
-		{						
-			llListener->marginChange(getSubGroup(), m_margin);
-		}
-		break;
-#if 0
-	case 2: /* TODO: Define Text Columns, Partially implemented. */
-			  {
-				  guint8 col_type;
-				  guint8 number_of_columns;
-				  guint8 row_spacing[4]; // a WP SPacing type variable, which is 4 bytes
-				  
-				  WPD_CHECK_FILE_READ_ERROR(stream->wpd_callback_get_bytes(&col_type, sizeof(guint8), 1, stream), 1);
-				  if (stream->wpd_callback_get_bytes(&row_spacing[0], sizeof(guint8), 4, stream) != 4*sizeof(guint8))
-				    return FALSE;
-				  WPD_CHECK_FILE_READ_ERROR(stream->wpd_callback_get_bytes(&number_of_columns, sizeof(guint8), 1, stream), 1);
-				  
-				  WPD_DEBUG_MSG(("WordPerfect: Column type: %d\n", col_type & 0x03));
-				  WPD_DEBUG_MSG(("WordPerfect: Column number: %d\n", number_of_columns));
-				  
-				  // number of columns = {0,1} means columns off
-				  WPD_CHECK_INTERNAL_ERROR(wp6_flush_text(wordperfect_state, wordperfect_parse_struct));
-				  if ((number_of_columns == 0) || (number_of_columns == 1)) {
-					  wordperfect_parse_struct->wpd_callback_columns_off(wordperfect_parse_struct);
-				  } 
-				  else {
-					  switch (col_type & 0x03) {
-					   case WP6_COLUMN_TYPE_NEWSPAPER:
-						  wordperfect_parse_struct->wpd_callback_columns_on(wordperfect_parse_struct, newspaper, number_of_columns);
-						  break;
-					   case WP6_COLUMN_TYPE_NEWSPAPER_VERTICAL_BALANCE:
-						  wordperfect_parse_struct->wpd_callback_columns_on(wordperfect_parse_struct, newspaper_vertical_balance, number_of_columns);
-						  break;
-					   case WP6_COLUMN_TYPE_PARALLEL:
-						  wordperfect_parse_struct->wpd_callback_columns_on(wordperfect_parse_struct, parallel, number_of_columns);
-						  break;
-					   case WP6_COLUMN_TYPE_PARALLEL_PROTECT:
-						  wordperfect_parse_struct->wpd_callback_columns_on(wordperfect_parse_struct, parallel_protect, number_of_columns);
-						  break;
-					    }
-				  }
-			  }
+	switch (getSubGroup())
+	{
+		case 0: // Left Margin Set
+		case 1: // Right Margin Set
+			{						
+				llListener->marginChange(getSubGroup(), m_margin);
+			}
 			break;
-		 case 3: /* TODO: Column Border */
+		case 2: // TODO: Define Text Columns, Partially implemented.
+			{
+				// number of columns = {0,1} means columns off
+				if ((m_numColumns == 0) || (m_numColumns == 1))
+				{
+					llListener->columnChange(1); // the value "1" is bugus, the FALSE boolean gives you all the information you need here
+				} 
+				else
+				{
+					// TODO: pass the column type to the listener
+					switch (m_colType & 0x03)
+					{
+						case WP6_COLUMN_TYPE_NEWSPAPER:
+							llListener->columnChange(m_numColumns);
+							break;
+						case WP6_COLUMN_TYPE_NEWSPAPER_VERTICAL_BALANCE:
+							llListener->columnChange(m_numColumns);
+							break;
+						case WP6_COLUMN_TYPE_PARALLEL:
+							llListener->columnChange(m_numColumns);
+							break;
+						case WP6_COLUMN_TYPE_PARALLEL_PROTECT:
+							llListener->columnChange(m_numColumns);
+							break;
+						default: // something else we don't support, since it isn't in the docs
+							break;
+					}
+				}
+			}
 			break;
-#endif
-	default: /* something else we don't support, since it isn't in the docs */
-		break;
+		case 3: // TODO: Column Border
+			{
+			}
+			break;
+		default: // something else we don't support, since it isn't in the docs
+			break;
 	}
 }

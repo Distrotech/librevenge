@@ -36,8 +36,10 @@ class WPXLLListener
 	virtual void startDocument() = 0;
 	virtual void insertCharacter(guint16 character) = 0;
 	virtual void insertEOL() = 0;
+ 	virtual void insertBreak(guint8 breakType) = 0;
 	virtual void attributeChange(gboolean isOn, guint8 attribute) = 0;
 	virtual void marginChange(guint8 side, guint16 margin) = 0;
+	virtual void columnChange(guint8 numColumns) = 0;
 	virtual void endDocument() = 0;
 };
 

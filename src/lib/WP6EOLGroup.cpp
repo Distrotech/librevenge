@@ -25,6 +25,7 @@
 
 #include "WP6EOLGroup.h"
 #include "WP6LLListener.h"
+#include "WPXHLListener.h"
 
 WP6EOLGroup::WP6EOLGroup(FILE *stream) :
 	WP6VariableLengthGroup()
@@ -62,10 +63,7 @@ void WP6EOLGroup::parse(WP6LLListener *llListener)
 				llListener->insertEOL();
 				break;
 			case WP6_EOL_CHARACTER_HARD_END_OF_COLUMN: // 0x07 (hard end of column)
-// !				{
-// !					WPD_CHECK_INTERNAL_ERROR(wp6_flush_text(wordperfect_state, wordperfect_parse_struct));
-// !					wordperfect_parse_struct->wpd_callback_insert_eol_character(wordperfect_parse_struct, hard_end_of_column);
-// !				}
+				llListener->insertBreak(WPX_COLUMN_BREAK);
 				break;
 			case 9: // hard EOP
 			case 28: // deletable hard EOP

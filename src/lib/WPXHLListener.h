@@ -28,6 +28,7 @@
  
 #include "WPXLLListener.h"
 
+// ATTRIBUTE bits
 #define WPX_EXTRALARGE_BIT 1
 #define WPX_VERYLARGE_BIT 2
 #define WPX_LARGE_BIT 4
@@ -46,6 +47,12 @@
 #define WPX_SMALLCAPS_BIT 32768
 #define WPX_BLINK_BIT 65536
 #define WPX_REVERSEVIDEO_BIT 131072
+
+// BREAK bits
+// TODO: I wouldn't have a clue what defines we need, so I figured we need at least the following ones:
+#define WPX_SECTION_BREAK 1
+#define WPX_COLUMN_BREAK 2
+//#define WPX_???_BREAK 3
 
 class WPXHLListener
 {

@@ -37,6 +37,7 @@ class WPXHLListenerImpl
 	virtual void openSpan(guint32 textAttributeBits) = 0;
 	virtual void openSection(guint numColumns, gfloat marginLeft, gfloat marginRight) = 0;
 	virtual void insertText(const guint16 *textArray, const guint len) = 0;
+ 	virtual void insertBreak(guint8 breakType) = 0;
 };
 
 #endif /* WPXHLLISTENERIMPL_H */
