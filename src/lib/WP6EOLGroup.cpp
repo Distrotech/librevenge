@@ -80,109 +80,16 @@ void WP6EOLGroup::parse(WP6LLListener *llListener)
 				break;
 			case 0x0A: // Table Cell
 				{
-					/*
-					UT_DEBUGMSG(("WordPerfect: Table Cell\n"));
-					
-					// check if a previous cell exists which should be closed first
-					if (m_iCurrentTableColumn != -1 && m_cellExists)
-					{
-						X_CheckWordPerfectError(_handleHardEndOfLine());
-						X_CheckWordPerfectError(_flushText()); // make sure the hard end of line goes through
-						X_CheckDocumentError(getDoc()->appendStrux(PTX_EndCell, NULL));
-					}
-				      
-					m_iCurrentTableColumn++;
-				      
-					int rowSpan = 1;
-					int colSpan = 1;
-					bool boundAbove = false;
-					bool boundBeside = false;
-					X_CheckWordPerfectError(_getCellSpans(startPosition, size, rowSpan, colSpan, boundAbove, boundBeside));
-					
-					if (!boundAbove && !boundBeside)
-					{
-						m_cellExists = true;
-						UT_String propBuffer;
-						UT_String_sprintf(propBuffer, "left-attach:%d; right-attach:%d; top-attach:%d; bot-attach:%d", m_iCurrentTableColumn, m_iCurrentTableColumn+colSpan, m_iCurrentTableRow, m_iCurrentTableRow+rowSpan);
-						UT_DEBUGMSG(("WordPerfect: Inserting a Cell definition: %s\n", propBuffer.c_str()));
-						* 
-						m_iCurrentTableColumn+=(colSpan-1);
-						* 
-						XML_Char* pProps = "props";
-						const XML_Char* propsArray[3];
-						propsArray[0] = pProps;
-						propsArray[1] = propBuffer.c_str();
-						propsArray[2] = NULL;
-						* 
-						X_CheckDocumentError(getDoc()->appendStrux(PTX_SectionCell, propsArray));
-					}
-					else
-					{			     
-						m_cellExists = false;			     
-					}
-				       */
 					llListener->insertCell();
 				}
 				break;
 			case 0x0B: // Table Row and Cell
 				{
-					/*
-					UT_DEBUGMSG(("WordPerfect: Table Row and Cell\n"));
-					
-					// check if a previous cell exists which should be closed first
-					if (m_iCurrentTableColumn != -1 && m_cellExists)
-					{
-						X_CheckWordPerfectError(_handleHardEndOfLine());
-						X_CheckWordPerfectError(_flushText()); // make sure the hard end of line goes through
-						X_CheckDocumentError(getDoc()->appendStrux(PTX_EndCell, NULL));
-					}
-					m_iCurrentTableRow++;
-					
-					m_iCurrentTableColumn = 0;
-					
-					int rowSpan = 1;
-					int colSpan = 1;
-					bool boundAbove = false;
-					bool boundBeside = false;
-					X_CheckWordPerfectError(_getCellSpans(startPosition, size, rowSpan, colSpan, boundAbove, boundBeside));
-					
-					if (!boundAbove && !boundBeside)
-					{		
-						m_cellExists = true;
-						UT_String propBuffer;
-						UT_String_sprintf(propBuffer, "left-attach:%d; right-attach:%d; top-attach:%d; bot-attach:%d", m_iCurrentTableColumn, m_iCurrentTableColumn+colSpan, m_iCurrentTableRow, m_iCurrentTableRow+rowSpan);
-						UT_DEBUGMSG(("WordPerfect: Inserting a Cell definition: %s\n", propBuffer.c_str()));
-						
-						m_iCurrentTableColumn+=(colSpan-1);
-						
-						XML_Char* pProps = "props";
-						const XML_Char* propsArray[3];
-						propsArray[0] = pProps;
-						propsArray[1] = propBuffer.c_str();
-						propsArray[2] = NULL;
-						
-						X_CheckDocumentError(getDoc()->appendStrux(PTX_SectionCell, propsArray));
-					}
-					else
-					{			     
-						m_cellExists = false;			     
-					}
-					*/
 					llListener->insertRow();
 					llListener->insertCell();
 				}
 				break;
 			case 0x11: // Table Off
-				
-				WPD_DEBUG_MSG(("WordPerfect: TABLE OFF\n"));
-				/*if (m_iCurrentTableColumn != -1 && m_cellExists)
-				{
-					X_CheckWordPerfectError(_handleHardEndOfLine());
-					X_CheckWordPerfectError(_flushText()); // make sure the hard end of line goes through
-					X_CheckDocumentError(getDoc()->appendStrux(PTX_EndCell, NULL));
-				}
-				X_CheckDocumentError(getDoc()->appendStrux(PTX_EndTable, NULL));
-				*/
 				llListener->endTable();
 				break;
 			    
