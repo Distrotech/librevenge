@@ -24,7 +24,8 @@
  */
 
 #include "WP6VariableLengthGroup.h"
-#include "WP6FileStructure.h"
+
+#include "WP6EOLGroup.h"
 
 WP6VariableLengthGroup::WP6VariableLengthGroup(WPXParser * parser)
 	: WP6Part(parser)
@@ -35,6 +36,20 @@ WP6VariableLengthGroup::~WP6VariableLengthGroup()
 {
 	if (m_iNumPrefixIDs > 0) 
 		g_free(m_pPrefixIDs);
+}
+
+WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(WPXParser * parser, guint8 groupID)
+{
+	switch (groupID)
+	{
+		case WP6_TOP_EOL_GROUP: 
+			return new WP6EOLGroup(parser); //new WP6EOLGroup(parser);
+
+		// Add the remaining cases here
+		default:
+			// this is an unhandled group, just skip it
+			return new WP6VariableLengthGroup(parser);
+	}
 }
 
 gboolean WP6VariableLengthGroup::parse()

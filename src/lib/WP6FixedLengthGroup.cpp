@@ -24,7 +24,7 @@
  */
 
 #include "WP6FixedLengthGroup.h"
-#include "WP6FileStructure.h"
+
 #include "WP6ExtendedCharacterGroup.h"
 #include "WP6UndoGroup.h"
 #include "WP6AttributeOnGroup.h"

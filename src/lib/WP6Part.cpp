@@ -57,12 +57,10 @@ WP6Part * WP6Part::constructPart(WPXParser * parser)
 		}
 		else if (readVal >= 0xD0 && readVal <= 0xEF)
 		{
-			// TODO: recognize which variable length group we need to instantiate
-			return new WP6VariableLengthGroup(parser);
+			return WP6VariableLengthGroup::constructVariableLengthGroup(parser, val);
 		}      
 		else if (readVal >= 0xF0 && readVal <= 0xFF)
 		{
-			// TODO: recognize which fixed length group we need to instantiate
 			return WP6FixedLengthGroup::constructFixedLengthGroup(parser, val);
 		}
 	}

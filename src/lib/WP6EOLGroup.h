@@ -23,23 +23,18 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP6PART_H
-#define WP6PART_H
+#ifndef WP6EOLGROUP_H
+#define WP6EOLGROUP_H
 
-#include "WPXPart.h"
-#include "WPXParser.h"
-#include "WP6FileStructure.h"
-#include "glib.h"
+#include "WP6VariableLengthGroup.h"
 
-class WP6Part : public WPXPart
+class WP6EOLGroup : public WP6VariableLengthGroup
 {
 public:
-	WP6Part(WPXParser * parser);
-	~WP6Part() {}
+	WP6EOLGroup(WPXParser * parser);	
 	
-	static WP6Part * constructPart(WPXParser * parser);
-	virtual gboolean parse() {};
+protected:
+	gboolean _parseContents();
 };
 
-
-#endif /* WP6PART_H */
+#endif /* WP6EOLGROUP_H */

@@ -34,6 +34,7 @@ public:
 	WP6VariableLengthGroup(WPXParser * parser);	
 	~WP6VariableLengthGroup();
 	
+	static WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(WPXParser * parser, guint8 groupID);
 	gboolean parse();
 protected:
 	virtual gboolean _parseContents() { return TRUE; }
