@@ -61,10 +61,10 @@ void WP42Parser::parseDocument(WPXInputStream *input, WP42HLListener *listener)
 {
 	while (!input->atEOS())
 	{
-		guint8 readVal;
+		uint8_t readVal;
 		readVal = readU8(input);
 
-		if (readVal < (guint8)0x20)
+		if (readVal < (uint8_t)0x20)
 		{
 			switch (readVal)
 			{
@@ -88,12 +88,12 @@ void WP42Parser::parseDocument(WPXInputStream *input, WP42HLListener *listener)
 					break;
 			}
 		}
-		else if (readVal >= (guint8)0x20 && readVal <= (guint8)0x7F)
+		else if (readVal >= (uint8_t)0x20 && readVal <= (uint8_t)0x7F)
 		{
 			// normal ASCII characters
 			listener->insertCharacter( readVal );
 		}
-		else if (readVal >= (guint8)0x80 && readVal <= (guint8)0xBF)
+		else if (readVal >= (uint8_t)0x80 && readVal <= (uint8_t)0xBF)
 		{
 			// single character function codes
 			switch (readVal)

@@ -28,7 +28,6 @@
 #include <stdio.h>
 #include "libwpd.h"
 #include "GSFStream.h"
-#include "WP6HLContentListener.h"
 #include "RawListener.h"
 
 int main(int argc, char *argv[])

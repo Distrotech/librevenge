@@ -34,18 +34,18 @@
 // returns the part if it successfully creates the part, returns NULL if it can't
 // throws an exception if there is an error
 // precondition: readVal us between 0xC0 and 0xFF
-WP5Part * WP5Part::constructPart(WPXInputStream *input, guint8 readVal)
+WP5Part * WP5Part::constructPart(WPXInputStream *input, uint8_t readVal)
 {	
 	WPD_DEBUG_MSG(("WordPerfect: ConstructPart\n"));
 
-	if (readVal >= (guint8)0xC0 && readVal <= (guint8)0xCF)
+	if (readVal >= (uint8_t)0xC0 && readVal <= (uint8_t)0xCF)
 	{
 		// fixed length multi-byte function
 	
 		WPD_DEBUG_MSG(("WordPerfect: constructFixedLengthGroup(input, val)\n"));
 		return WP5FixedLengthGroup::constructFixedLengthGroup(input, readVal);
 	}      
-	else if (readVal >= (guint8)0xD0 && readVal <= (guint8)0xFF /* strange: 0xFF should not happen, see 1st 'if' */)
+	else if (readVal >= (uint8_t)0xD0 && readVal <= (uint8_t)0xFF /* strange: 0xFF should not happen, see 1st 'if' */)
 	{
 		// variable length multi-byte function
 	

@@ -32,7 +32,7 @@ class WP6VariableLengthGroup_SubGroup
 {
 public:
 	virtual ~WP6VariableLengthGroup_SubGroup() {}
-	virtual void parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const = 0;
+	virtual void parse(WP6HLListener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const = 0;
 };
 
 class WP6VariableLengthGroup : public WP6Part
@@ -41,26 +41,26 @@ class WP6VariableLengthGroup : public WP6Part
 	WP6VariableLengthGroup(); // WP6VariableLengthGroup should _never_ be constructed, only its inherited classes
 	virtual ~WP6VariableLengthGroup();
 
-	static WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, guint8 groupID);
+	static WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, uint8_t groupID);
 
  protected:
 	void _read(WPXInputStream *input);
 	virtual void _readContents(WPXInputStream *input) {} // we don't always need more information than that provided generically
 
-	const guint8 getSubGroup() const { return m_subGroup; }
-	const guint16 getSize() const { return m_size; }
-	const guint8 getFlags() const { return m_flags; }
-	const guint8 getNumPrefixIDs() const { return m_numPrefixIDs; }
-	guint16 * const getPrefixIDs() const { return m_prefixIDs; }
-	const guint16 getSizeNonDeletable() const { return m_sizeNonDeletable; }
+	const uint8_t getSubGroup() const { return m_subGroup; }
+	const uint16_t getSize() const { return m_size; }
+	const uint8_t getFlags() const { return m_flags; }
+	const uint8_t getNumPrefixIDs() const { return m_numPrefixIDs; }
+	uint16_t * const getPrefixIDs() const { return m_prefixIDs; }
+	const uint16_t getSizeNonDeletable() const { return m_sizeNonDeletable; }
 
  private:
-	guint8 m_subGroup;
-	guint16 m_size;
-	guint8 m_flags;
-	guint8 m_numPrefixIDs;
-	guint16 *m_prefixIDs;
-	guint16 m_sizeNonDeletable;
+	uint8_t m_subGroup;
+	uint16_t m_size;
+	uint8_t m_flags;
+	uint8_t m_numPrefixIDs;
+	uint16_t *m_prefixIDs;
+	uint16_t m_sizeNonDeletable;
 };
 
 #endif /* WP6VARIABLELENGTHGROUP_H */

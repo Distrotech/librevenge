@@ -59,7 +59,7 @@ struct _WPXParsingState
 	UCSString m_textAfterDisplayReference;
 	UCSString m_textAfterNumber;
 */
-	guint32 m_textAttributeBits;
+	uint32_t m_textAttributeBits;
 	bool m_textAttributesChanged;
 	float m_fontSize;
 	GString *m_fontName;
@@ -68,8 +68,8 @@ struct _WPXParsingState
 
 	bool m_isParagraphColumnBreak;
 	bool m_isParagraphPageBreak;
-/*	guint8 m_paragraphJustification;
-	guint8 m_tempParagraphJustification;
+/*	uint8_t m_paragraphJustification;
+	uint8_t m_tempParagraphJustification;
 	float m_paragraphLineSpacing;
 */
 	bool m_isSectionOpened;
@@ -108,20 +108,20 @@ struct _WPXParsingState
 	float m_paragraphTextIndent;
 	float m_paragraphSpacingAfter;
 
-/*	gint32 m_currentRow;
-	gint32 m_currentColumn;
+/*	int32_t m_currentRow;
+	int32_t m_currentColumn;
 
 	stack<int> m_listLevelStack;
-	guint16 m_currentOutlineHash; // probably should replace Hash with Key in these sorts of cases
-	guint8 m_oldListLevel;
-	guint8 m_currentListLevel;
+	uint16_t m_currentOutlineHash; // probably should replace Hash with Key in these sorts of cases
+	uint8_t m_oldListLevel;
+	uint8_t m_currentListLevel;
 	WP6StyleStateSequence m_styleStateSequence;
 	bool m_putativeListElementHasParagraphNumber;
 	bool m_putativeListElementHasDisplayReferenceNumber;
 
 	int m_noteTextPID;
 */
-	guint16 m_alignmentCharacter;
+	uint16_t m_alignmentCharacter;
 	vector<WPXTabStop> m_tabStops;
 	bool m_isTabPositionRelative;
 
@@ -135,8 +135,8 @@ public:
 	WPXHLListener::~WPXHLListener();
 
 	void startDocument();
-	void handleSubDocument(guint16 textPID, const bool isHeaderFooter);
-	virtual void insertBreak(const guint8 breakType);
+	void handleSubDocument(uint16_t textPID, const bool isHeaderFooter);
+	virtual void insertBreak(const uint8_t breakType);
 
 	WPXParsingState *m_ps; // parse state
 	WPXHLListenerImpl * m_listenerImpl;
@@ -144,7 +144,7 @@ public:
 	vector <WPXPageSpan *> *m_pageList;
 
 protected:
-	virtual void _handleSubDocument(guint16 textPID, const bool isHeaderFooter) = 0;
+	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter) = 0;
 	virtual void _flushText(const bool fakeText=false) = 0;
 
 	void _openSection();

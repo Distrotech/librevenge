@@ -30,15 +30,15 @@
 class WP6DefaultInitialFontPacket : public WP6PrefixDataPacket
 {
  public:
-	WP6DefaultInitialFontPacket(WPXInputStream *input, int id, guint32 dataOffset, guint32 dataSize);
+	WP6DefaultInitialFontPacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize);
 	virtual void _readContents(WPXInputStream *input);
-	const guint16 getInitialFontDescriptorPID() const { return m_initialFontDescriptorPID; }
-	const guint16 getPointSize() const { return m_pointSize; }
+	const uint16_t getInitialFontDescriptorPID() const { return m_initialFontDescriptorPID; }
+	const uint16_t getPointSize() const { return m_pointSize; }
 	virtual void parse(WP6HLListener *listener) const;
 	
  private:
-	guint16 m_numPrefixIDs;
-	guint16 m_initialFontDescriptorPID;
-	guint16 m_pointSize;
+	uint16_t m_numPrefixIDs;
+	uint16_t m_initialFontDescriptorPID;
+	uint16_t m_pointSize;
 };
 #endif

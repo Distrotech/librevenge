@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include "HtmlListenerImpl.h"
 #include "GSFStream.h"
+#include "WPDocument.h"
 
 int main(int argc, char *argv[])
 {

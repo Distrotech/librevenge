@@ -36,7 +36,7 @@ WP6HLListener::WP6HLListener(vector<WPXPageSpan *> *pageList, WPXHLListenerImpl 
 {
 }
 
-void WP6HLListener::undoChange(const guint8 undoType, const guint16 undoLevel)
+void WP6HLListener::undoChange(const uint8_t undoType, const uint16_t undoLevel)
 {
 	if (undoType == WP6_UNDO_GROUP_INVALID_TEXT_START)
 		m_isUndoOn = true;

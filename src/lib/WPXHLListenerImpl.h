@@ -25,8 +25,7 @@
 
 #ifndef WPXHLLISTENERIMPL_H
 #define WPXHLLISTENERIMPL_H
-#include "libwpd.h"
-#include <glib.h>
+#include "libwpd_support.h"
 #include <vector>
 using namespace std;
 
@@ -92,7 +91,7 @@ class WPXHLListenerImpl
 	\param isColumnBreak Whether this paragraph should be placed in a new column
 	\param isPageBreak Whether this paragraph should start a new page
 	*/
-	virtual void openParagraph(const guint8 paragraphJustification, 
+	virtual void openParagraph(const uint8_t paragraphJustification, 
 				   const float marginLeftOffset, const float marginRightOffset, const float textIndent,
 				   const float lineSpacing, const float spacingAfterParagraph,
 				   const bool isColumnBreak, const bool isPageBreak) = 0;
@@ -100,7 +99,7 @@ class WPXHLListenerImpl
 	Called when a paragraph is closed.
 	*/
 	virtual void closeParagraph() = 0;
-	virtual void openSpan(const guint32 textAttributeBits, const gchar *fontName, const float fontSize,
+	virtual void openSpan(const uint32_t textAttributeBits, const char *fontName, const float fontSize,
 			      const RGBSColor *fontColor, const RGBSColor *highlightColor) = 0;
 	virtual void closeSpan() = 0;
 	virtual void openSection(const unsigned int numColumns, const float spaceAfter) = 0;
@@ -129,7 +128,7 @@ class WPXHLListenerImpl
 	virtual void openUnorderedListLevel(const int listID) = 0;
 	virtual void closeOrderedListLevel() = 0;
 	virtual void closeUnorderedListLevel() = 0;
-	virtual void openListElement(const guint8 paragraphJustification, 
+	virtual void openListElement(const uint8_t paragraphJustification, 
 				     const float marginLeftOffset, const float marginRightOffset, const float textIndent,
 				     const float lineSpacing, const float spacingAfterParagraph) = 0;
 	virtual void closeListElement() = 0;
@@ -139,7 +138,7 @@ class WPXHLListenerImpl
 	virtual void openEndnote(int number) = 0;
 	virtual void closeEndnote() = 0;
 
- 	virtual void openTable(const guint8 tablePositionBits,
+ 	virtual void openTable(const uint8_t tablePositionBits,
 			       const float marginLeftOffset, const float marginRightOffset,
 			       const float leftOffset, const vector < WPXColumnDefinition > &columns) = 0;
 	/**
@@ -150,8 +149,8 @@ class WPXHLListenerImpl
 	Called when the current table row is closed
 	*/
 	virtual void closeTableRow() = 0;
- 	virtual void openTableCell(const guint32 col, const guint32 row, const guint32 colSpan, const guint32 rowSpan,
-				   const guint8 borderBits,
+ 	virtual void openTableCell(const uint32_t col, const uint32_t row, const uint32_t colSpan, const uint32_t rowSpan,
+				   const uint8_t borderBits,
 				   const RGBSColor * cellFgColor, const RGBSColor * cellBgColor) = 0;
 	/**
 	Called when the current table cell is closed

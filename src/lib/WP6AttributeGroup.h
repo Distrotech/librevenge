@@ -31,28 +31,28 @@
 class WP6AttributeGroup : public WP6FixedLengthGroup
 {
  public:
-	WP6AttributeGroup(WPXInputStream *input, guint8 groupID);	
+	WP6AttributeGroup(WPXInputStream *input, uint8_t groupID);	
 	virtual void parse(WP6HLListener *listener) = 0;
-	const guint8 getAttribute() const { return m_attribute; }
+	const uint8_t getAttribute() const { return m_attribute; }
 	
  protected:
 	virtual void _readContents(WPXInputStream *input);
 
  private:
-	guint8 m_attribute;
+	uint8_t m_attribute;
 };
 
 class WP6AttributeOnGroup : public WP6AttributeGroup
 {
  public:
-	WP6AttributeOnGroup(WPXInputStream *input, guint8 groupID);
+	WP6AttributeOnGroup(WPXInputStream *input, uint8_t groupID);
 	virtual void parse(WP6HLListener *listener);
 };
 
 class WP6AttributeOffGroup : public WP6AttributeGroup
 {
  public:
-	WP6AttributeOffGroup(WPXInputStream *input, guint8 groupID);
+	WP6AttributeOffGroup(WPXInputStream *input, uint8_t groupID);
 	virtual void parse(WP6HLListener *listener);
 };
 

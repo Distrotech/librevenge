@@ -37,12 +37,12 @@ class WP6ColumnGroup : public WP6VariableLengthGroup
 
  private:
 	// variables needed for subgroup 0 and 1 (Left/Right Margin Set)
-	guint16 m_margin;
+	uint16_t m_margin;
  
  	// variables used for subgroup 2 (Columns)
-	guint8 m_colType;
-	guint8 m_numColumns;
-	guint8 m_rowSpacing[4]; // a WP SPacing type variable, which is 4 bytes
+	uint8_t m_colType;
+	uint8_t m_numColumns;
+	uint8_t m_rowSpacing[4]; // a WP SPacing type variable, which is 4 bytes
 };
 
 #endif /* WP6COLUMNGROUP_H */

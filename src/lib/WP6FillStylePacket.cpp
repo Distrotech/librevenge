@@ -29,7 +29,7 @@
 #include "WP6Parser.h"
 #include "libwpd_internal.h"
 
-WP6FillStylePacket::WP6FillStylePacket(WPXInputStream *input, int id, guint32 dataOffset, guint32 dataSize) 
+WP6FillStylePacket::WP6FillStylePacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize) 
 	: WP6PrefixDataPacket(input)
 {	
 	_read(input, dataOffset, dataSize);
@@ -46,12 +46,12 @@ const int WP6_FILL_STYLE_PACKET_SKIPABLE_DATA_AFTER_FILL_NAME = 3;
 void WP6FillStylePacket::_readContents(WPXInputStream *input)
 {
 	/* skip a whole bunch of useless crap */
-	guint16 numChildPrefixIDs = readU16(input);
-	input->seek(sizeof(guint16)*numChildPrefixIDs, WPX_SEEK_CUR);
+	uint16_t numChildPrefixIDs = readU16(input);
+	input->seek(sizeof(uint16_t)*numChildPrefixIDs, WPX_SEEK_CUR);
 	input->seek(WP6_FILL_STYLE_PACKET_SKIPABLE_DATA_AFTER_PREFIX_PACKETS, WPX_SEEK_CUR);
-	gint16 fillNameLength = readU16(input);
+	int16_t fillNameLength = readU16(input);
 	if (fillNameLength > 0)
-		input->seek(fillNameLength*sizeof(guint8), WPX_SEEK_CUR);
+		input->seek(fillNameLength*sizeof(uint8_t), WPX_SEEK_CUR);
 	input->seek(WP6_FILL_STYLE_PACKET_SKIPABLE_DATA_AFTER_FILL_NAME, WPX_SEEK_CUR);
 
 	/* now we can finally grab the meat */

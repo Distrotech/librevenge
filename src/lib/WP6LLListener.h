@@ -38,29 +38,29 @@ class WP6LLListener
 public:
 	WP6LLListener() : m_prefixData(NULL) {}
 	virtual ~WP6LLListener() {}
-	virtual void setDate(const guint16 year, const guint8 month, const guint8 day,
-			     const guint8 hour, const guint8 minute, const guint8 second,
-			     const guint8 dayOfWeek, const guint8 timeZone, const guint8 unused) = 0;
-	virtual void setExtendedInformation(const guint16 type, const UCSString &data) = 0;
-	virtual void characterColorChange(const guint8 red, const guint8 green, const guint8 blue) = 0;
-	virtual void characterShadingChange(const guint8 shading) = 0;
+	virtual void setDate(const uint16_t year, const uint8_t month, const uint8_t day,
+			     const uint8_t hour, const uint8_t minute, const uint8_t second,
+			     const uint8_t dayOfWeek, const uint8_t timeZone, const uint8_t unused) = 0;
+	virtual void setExtendedInformation(const uint16_t type, const UCSString &data) = 0;
+	virtual void characterColorChange(const uint8_t red, const uint8_t green, const uint8_t blue) = 0;
+	virtual void characterShadingChange(const uint8_t shading) = 0;
 	virtual void highlightChange(const bool isOn, const RGBSColor color) = 0;
-	virtual void fontChange(const guint16 matchedFontPointSize, const guint16 fontPID) = 0;
-	virtual void undoChange(const guint8 undoType, const guint16 undoLevel) = 0;
-	virtual void updateOutlineDefinition(const WP6OutlineLocation outlineLocation, const guint16 outlineHash,
-					     const guint8 *numberingMethods, const guint8 tabBehaviourFlag) = 0;
-	virtual void paragraphNumberOn(const guint16 outlineHash, const guint8 level, const guint8 flag) = 0;
+	virtual void fontChange(const uint16_t matchedFontPointSize, const uint16_t fontPID) = 0;
+	virtual void undoChange(const uint8_t undoType, const uint16_t undoLevel) = 0;
+	virtual void updateOutlineDefinition(const WP6OutlineLocation outlineLocation, const uint16_t outlineHash,
+					     const uint8_t *numberingMethods, const uint8_t tabBehaviourFlag) = 0;
+	virtual void paragraphNumberOn(const uint16_t outlineHash, const uint8_t level, const uint8_t flag) = 0;
 	virtual void paragraphNumberOff() = 0;
-	virtual void displayNumberReferenceGroupOn(const guint8 subGroup, const guint8 level) = 0;
-	virtual void displayNumberReferenceGroupOff(const guint8 subGroup) = 0;
-	virtual void styleGroupOn(const guint8 subGroup) = 0;
-	virtual void styleGroupOff(const guint8 subGroup) = 0;
-	virtual void globalOn(const guint8 systemStyle) = 0;
+	virtual void displayNumberReferenceGroupOn(const uint8_t subGroup, const uint8_t level) = 0;
+	virtual void displayNumberReferenceGroupOff(const uint8_t subGroup) = 0;
+	virtual void styleGroupOn(const uint8_t subGroup) = 0;
+	virtual void styleGroupOff(const uint8_t subGroup) = 0;
+	virtual void globalOn(const uint8_t systemStyle) = 0;
 	virtual void globalOff() = 0;
-	virtual void noteOn(const guint16 textPID) = 0;
+	virtual void noteOn(const uint16_t textPID) = 0;
 	virtual void noteOff(const WPXNoteType noteType) = 0;
-	virtual void headerFooterGroup(const guint8 headerFooterType, const guint8 occurenceBits, const guint16 textPID) = 0;
-	virtual void suppressPageCharacteristics(const guint8 suppressCode) = 0;
+	virtual void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, const uint16_t textPID) = 0;
+	virtual void suppressPageCharacteristics(const uint8_t suppressCode) = 0;
 
 	void setPrefixData(WP6PrefixData *prefixData) { m_prefixData = prefixData; }
 	const WP6PrefixDataPacket * getPrefixDataPacket(const int prefixID) const;

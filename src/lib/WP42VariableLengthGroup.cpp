@@ -27,12 +27,12 @@
 #include "WP42UnsupportedVariableLengthGroup.h"
 #include "libwpd_internal.h"
 
-WP42VariableLengthGroup::WP42VariableLengthGroup(guint8 group)
+WP42VariableLengthGroup::WP42VariableLengthGroup(uint8_t group)
 	: m_group(group)
 {
 }
 
-WP42VariableLengthGroup * WP42VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, guint8 group)
+WP42VariableLengthGroup * WP42VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, uint8_t group)
 {
 	switch (group)
 	{
@@ -49,7 +49,7 @@ void WP42VariableLengthGroup::_read(WPXInputStream *input)
 	// skip over the remaining bytes of the group, if any
 	while (!input->atEOS())
 	{
-		guint8 readNextVal;
+		uint8_t readNextVal;
 		readNextVal = readU8(input);
 		if (readNextVal == getGroup())
 			break;

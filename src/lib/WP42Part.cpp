@@ -34,7 +34,7 @@
 // throws an exception if there is an error
 // precondition: readVal us between 0xC0 and 0xFF
 // TODO: check the precondition :D
-WP42Part * WP42Part::constructPart(WPXInputStream *input, guint8 readVal)
+WP42Part * WP42Part::constructPart(WPXInputStream *input, uint8_t readVal)
 {	
 	WPD_DEBUG_MSG(("WordPerfect: ConstructPart(readVal: 0x0%x)\n", readVal));
 		

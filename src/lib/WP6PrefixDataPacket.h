@@ -44,7 +44,7 @@ public:
 
 protected:
 	virtual void _readContents(WPXInputStream *input) = 0;
- 	void _read(WPXInputStream *input, guint32 dataOffset, guint32 dataSize);
+ 	void _read(WPXInputStream *input, uint32_t dataOffset, uint32_t dataSize);
 };
 
 #endif /* WP6PREFIXDATAPACKET_H */

@@ -35,7 +35,7 @@
 #include "libwpd.h"
 #include "libwpd_internal.h"
 	
-WPXHeader::WPXHeader(WPXInputStream *input, guint32 documentOffset, guint8 productType, guint8 fileType, guint8 majorVersion, guint8 minorVersion, guint16 documentEncryption) :
+WPXHeader::WPXHeader(WPXInputStream *input, uint32_t documentOffset, uint8_t productType, uint8_t fileType, uint8_t majorVersion, uint8_t minorVersion, uint16_t documentEncryption) :
 	m_documentOffset(documentOffset),
 	m_productType(productType),
 	m_fileType(fileType),
@@ -53,7 +53,7 @@ WPXHeader * WPXHeader::constructHeader(WPXInputStream *input)
 {
 	WPD_DEBUG_MSG(("WPXHeader::constructHeader()\n"));
 	
-	gchar fileMagic[4];
+	char fileMagic[4];
 	/* check the magic */
 	input->seek(WPX_HEADER_MAGIC_OFFSET - input->tell(), WPX_SEEK_CUR);
 	for (int i=0; i<3 /* FIXME: && not EOF */; i++)
@@ -68,17 +68,17 @@ WPXHeader * WPXHeader::constructHeader(WPXInputStream *input)
 	
 	/* get the document pointer */
 	input->seek(WPX_HEADER_DOCUMENT_POINTER_OFFSET - input->tell(), WPX_SEEK_CUR);
-	guint32 documentOffset = readU32(input);
+	uint32_t documentOffset = readU32(input);
 
 	/* get information on product types, file types, versions */
 	input->seek(WPX_HEADER_PRODUCT_TYPE_OFFSET - input->tell(), WPX_SEEK_CUR);
-	guint8 productType = readU8(input);
-	guint8 fileType = readU8(input);
-	guint8 majorVersion = readU8(input);
-	guint8 minorVersion = readU8(input);
+	uint8_t productType = readU8(input);
+	uint8_t fileType = readU8(input);
+	uint8_t majorVersion = readU8(input);
+	uint8_t minorVersion = readU8(input);
 	
 	input->seek(WPX_HEADER_ENCRYPTION_OFFSET, WPX_SEEK_SET);
-	guint8 documentEncryption = readU16(input);		
+	uint8_t documentEncryption = readU16(input);		
 	
 	WPD_DEBUG_MSG(("WordPerfect: Product Type: %i File Type: %i Major Version: %i Minor Version: %i\n", 
 					productType, fileType, 

@@ -34,21 +34,21 @@ class WP6PrefixIndice
  public:
 	WP6PrefixIndice(WPXInputStream * input, int id);	
 	const int getID() const { return m_id; }
-	const guint8 getType() const { return m_type; }
-	const guint32 getDataSize() const { return m_dataSize; }
-	const guint32 getDataOffset() const { return m_dataOffset; }
+	const uint8_t getType() const { return m_type; }
+	const uint32_t getDataSize() const { return m_dataSize; }
+	const uint32_t getDataOffset() const { return m_dataOffset; }
 
  protected:
  	void _read(WPXInputStream *input);
  
  private:
 	int m_id;
-	guint8 m_type;
- 	guint8 m_flags;
- 	guint16	m_useCount;
- 	guint16 m_hideCount;
- 	guint32 m_dataSize;
- 	guint32 m_dataOffset;
+	uint8_t m_type;
+ 	uint8_t m_flags;
+ 	uint16_t	m_useCount;
+ 	uint16_t m_hideCount;
+ 	uint32_t m_dataSize;
+ 	uint32_t m_dataOffset;
  
  	bool m_hasChildren;
 };

@@ -31,15 +31,15 @@
 class WP6UndoGroup : public WP6FixedLengthGroup
 {
 public:
-	WP6UndoGroup(WPXInputStream *input, guint8 groupID);	
+	WP6UndoGroup(WPXInputStream *input, uint8_t groupID);	
 	virtual void parse(WP6HLListener *listener);
 	
  protected:
 	virtual void _readContents(WPXInputStream *input);
 
  private:
-	guint8 m_undoType;
-	guint16 m_undoLevel;
+	uint8_t m_undoType;
+	uint16_t m_undoLevel;
 
 };
 #endif /* WP6UNDOGROUP_H */

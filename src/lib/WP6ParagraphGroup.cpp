@@ -83,15 +83,15 @@ void WP6ParagraphGroup::parse(WP6HLListener *listener)
 
 WP6ParagraphGroup_LineSpacingSubGroup::WP6ParagraphGroup_LineSpacingSubGroup(WPXInputStream *input)
 {
-	guint32 lineSpacing = readU32(input);
-	gint16 lineSpacingIntegerPart = (gint16)((lineSpacing & 0xFFFF0000) >> 16);
+	uint32_t lineSpacing = readU32(input);
+	int16_t lineSpacingIntegerPart = (int16_t)((lineSpacing & 0xFFFF0000) >> 16);
 	float lineSpacingFractionalPart = (float)(lineSpacing & 0xFFFF)/(float)0xFFFF;
 	WPD_DEBUG_MSG(("WordPerfect: line spacing integer part: %i fractional part: %f (original value: %i)\n",
 		       lineSpacingIntegerPart, lineSpacingFractionalPart, lineSpacing));
 	m_lineSpacing = lineSpacingIntegerPart + lineSpacingFractionalPart;
 }
 
-void WP6ParagraphGroup_LineSpacingSubGroup::parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
+void WP6ParagraphGroup_LineSpacingSubGroup::parse(WP6HLListener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const
 {
 	WPD_DEBUG_MSG(("WordPerfect: parsing a line spacing change of: %f\n", m_lineSpacing));
 	listener->lineSpacingChange(m_lineSpacing);
@@ -101,8 +101,8 @@ WP6ParagraphGroup_TabSetSubGroup::WP6ParagraphGroup_TabSetSubGroup(WPXInputStrea
 	m_isRelative(false),
 	m_tabAdjustValue(0.0f)
 {
-	guint8 tmp_definition = readU8(input);
-	guint16 tmp_tabAdjustValue = readU16(input);
+	uint8_t tmp_definition = readU8(input);
+	uint16_t tmp_tabAdjustValue = readU16(input);
 	if (tmp_definition == 0)
 	{
 		m_isRelative = false;
@@ -113,11 +113,11 @@ WP6ParagraphGroup_TabSetSubGroup::WP6ParagraphGroup_TabSetSubGroup(WPXInputStrea
 		m_isRelative = true;
 		m_tabAdjustValue = (float)((double)tmp_tabAdjustValue/(double)WPX_NUM_WPUS_PER_INCH);
 	}
-	guint8 tmp_repetitionCount = 0;
+	uint8_t tmp_repetitionCount = 0;
 	WPXTabStop tmp_tabStop;
-	guint8 tmp_numTabStops = readU8(input);
+	uint8_t tmp_numTabStops = readU8(input);
 	bool tmp_usePreWP9LeaderMethod;
-	guint8 tmp_tabType;
+	uint8_t tmp_tabType;
 	int i;
 	for (i = 0; i < tmp_numTabStops; i++)
 	{
@@ -182,7 +182,7 @@ WP6ParagraphGroup_TabSetSubGroup::WP6ParagraphGroup_TabSetSubGroup(WPXInputStrea
 				}
 			}
 		}
-		guint16 tmp_tabPosition = readU16(input);
+		uint16_t tmp_tabPosition = readU16(input);
 		if (tmp_repetitionCount == 0)
 		{
 			if (tmp_tabPosition != 0xFFFF)
@@ -211,7 +211,7 @@ WP6ParagraphGroup_TabSetSubGroup::~WP6ParagraphGroup_TabSetSubGroup()
 {
 }
 
-void WP6ParagraphGroup_TabSetSubGroup::parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
+void WP6ParagraphGroup_TabSetSubGroup::parse(WP6HLListener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const
 {
 	WPD_DEBUG_MSG(("Parsing Tab Set (isRelative: %s, positions: ", (m_isRelative?"true":"false")));
 	for(vector<WPXTabStop>::const_iterator i = m_tabStops.begin(); i != m_tabStops.end(); i++)
@@ -224,11 +224,11 @@ void WP6ParagraphGroup_TabSetSubGroup::parse(WP6HLListener *listener, const guin
 
 WP6ParagraphGroup_IndentFirstLineSubGroup::WP6ParagraphGroup_IndentFirstLineSubGroup(WPXInputStream *input)
 {
-	m_firstLineOffset = (gint16)readU16(input);
+	m_firstLineOffset = (int16_t)readU16(input);
 	WPD_DEBUG_MSG(("WordPerfect: indent first line: %i\n", m_firstLineOffset));
 }
 
-void WP6ParagraphGroup_IndentFirstLineSubGroup::parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
+void WP6ParagraphGroup_IndentFirstLineSubGroup::parse(WP6HLListener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const
 {
 	WPD_DEBUG_MSG(("WordPerfect: parsing first line indent change of: %i\n", m_firstLineOffset));
 	listener->indentFirstLineChange(m_firstLineOffset);
@@ -236,11 +236,11 @@ void WP6ParagraphGroup_IndentFirstLineSubGroup::parse(WP6HLListener *listener, c
 
 WP6ParagraphGroup_LeftMarginAdjustmentSubGroup::WP6ParagraphGroup_LeftMarginAdjustmentSubGroup(WPXInputStream *input)
 {
-	m_leftMargin = (gint16)readU16(input);
+	m_leftMargin = (int16_t)readU16(input);
 	WPD_DEBUG_MSG(("WordPerfect: left margin adjustment: %i\n", m_leftMargin));
 }
 
-void WP6ParagraphGroup_LeftMarginAdjustmentSubGroup::parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
+void WP6ParagraphGroup_LeftMarginAdjustmentSubGroup::parse(WP6HLListener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const
 {
 	WPD_DEBUG_MSG(("WordPerfect: parsing left margin adjustment change of: %i\n", m_leftMargin));
 	listener->paragraphMarginChange(WPX_LEFT, m_leftMargin);
@@ -248,11 +248,11 @@ void WP6ParagraphGroup_LeftMarginAdjustmentSubGroup::parse(WP6HLListener *listen
 
 WP6ParagraphGroup_RightMarginAdjustmentSubGroup::WP6ParagraphGroup_RightMarginAdjustmentSubGroup(WPXInputStream *input)
 {
-	m_rightMargin = (gint16)readU16(input);
+	m_rightMargin = (int16_t)readU16(input);
 	WPD_DEBUG_MSG(("WordPerfect: right margin adjustment: %i\n", m_rightMargin));
 }
 
-void WP6ParagraphGroup_RightMarginAdjustmentSubGroup::parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
+void WP6ParagraphGroup_RightMarginAdjustmentSubGroup::parse(WP6HLListener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const
 {
 	WPD_DEBUG_MSG(("WordPerfect: parsing right margin adjustment change of: %i\n", m_rightMargin));
 	listener->paragraphMarginChange(WPX_RIGHT, m_rightMargin);
@@ -263,31 +263,31 @@ WP6ParagraphGroup_JustificationModeSubGroup::WP6ParagraphGroup_JustificationMode
 	m_justification = readU8(input);
 }
 
-void WP6ParagraphGroup_JustificationModeSubGroup::parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
+void WP6ParagraphGroup_JustificationModeSubGroup::parse(WP6HLListener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const
 {
 	listener->justificationChange(m_justification);
 }
 
-WP6ParagraphGroup_SpacingAfterParagraphSubGroup::WP6ParagraphGroup_SpacingAfterParagraphSubGroup(WPXInputStream *input, const guint16 sizeNonDeletable)
+WP6ParagraphGroup_SpacingAfterParagraphSubGroup::WP6ParagraphGroup_SpacingAfterParagraphSubGroup(WPXInputStream *input, const uint16_t sizeNonDeletable)
 {
 	m_sizeNonDeletable = sizeNonDeletable;
 	m_spacingAfterParagraphAbsolute = 0.0f;
 	m_spacingAfterParagraphRelative = 1.0f;
-	guint32 spacingAfterRelative = readU32(input);
-	gint16 spacingAfterIntegerPart = (gint16)((spacingAfterRelative & 0xFFFF0000) >> 16);
+	uint32_t spacingAfterRelative = readU32(input);
+	int16_t spacingAfterIntegerPart = (int16_t)((spacingAfterRelative & 0xFFFF0000) >> 16);
 	float spacingAfterFractionalPart = (float)(spacingAfterRelative & 0xFFFF)/(float)0xFFFF;
 	WPD_DEBUG_MSG(("WordPerfect: spacing after paragraph relative integer part: %i fractional part: %f (original value: %i)\n",
 				spacingAfterIntegerPart, spacingAfterFractionalPart, spacingAfterRelative));
 	m_spacingAfterParagraphRelative = spacingAfterIntegerPart + spacingAfterFractionalPart;
-	if (m_sizeNonDeletable == (guint16)0x06) // Let us use the optional information that is in WPUs
+	if (m_sizeNonDeletable == (uint16_t)0x06) // Let us use the optional information that is in WPUs
 	{
-		guint16 spacingAfterAbsolute = readU16(input);
+		uint16_t spacingAfterAbsolute = readU16(input);
 		m_spacingAfterParagraphAbsolute = (float)((double)spacingAfterAbsolute / (double)WPX_NUM_WPUS_PER_INCH);
 		WPD_DEBUG_MSG(("WordPerfect: spacing after paragraph absolute: %i\n", spacingAfterAbsolute));
 	}
 }
 
-void WP6ParagraphGroup_SpacingAfterParagraphSubGroup::parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
+void WP6ParagraphGroup_SpacingAfterParagraphSubGroup::parse(WP6HLListener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const
 {
 	WPD_DEBUG_MSG(("WordPerfect: parsing a change of spacing after paragraph: relative %f, absolute %f\n",
 			m_spacingAfterParagraphRelative, m_spacingAfterParagraphAbsolute));
@@ -311,7 +311,7 @@ WP6ParagraphGroup_OutlineDefineSubGroup::WP6ParagraphGroup_OutlineDefineSubGroup
 		       m_numberingMethods[4], m_numberingMethods[5], m_numberingMethods[6], m_numberingMethods[7]));
 }
 
-void WP6ParagraphGroup_OutlineDefineSubGroup::parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
+void WP6ParagraphGroup_OutlineDefineSubGroup::parse(WP6HLListener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const
 {
 	listener->updateOutlineDefinition(paragraphGroup, m_outlineHash, m_numberingMethods, m_tabBehaviourFlag);
 }

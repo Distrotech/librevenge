@@ -30,33 +30,33 @@
 class WP6FontDescriptorPacket : public WP6PrefixDataPacket
 {
  public:
-	WP6FontDescriptorPacket(WPXInputStream *input, int id, guint32 dataOffset, guint32 dataSize);
+	WP6FontDescriptorPacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize);
 	virtual ~WP6FontDescriptorPacket();
 	virtual void _readContents(WPXInputStream *input);
-	const gchar *getFontName() const { return m_fontName; }
+	const char *getFontName() const { return m_fontName; }
 
  private:
-	guint16 m_characterWidth;
-	guint16 m_ascenderHeight;
-	guint16 m_xHeight;
-	guint16 m_descenderHeight;
-	guint16 m_italicsAdjust;
-	guint8 m_primaryFamilyId; // family id's are supposed to be one unified element, but I split them up to ease parsing
-	guint8 m_primaryFamilyMemberId;
+	uint16_t m_characterWidth;
+	uint16_t m_ascenderHeight;
+	uint16_t m_xHeight;
+	uint16_t m_descenderHeight;
+	uint16_t m_italicsAdjust;
+	uint8_t m_primaryFamilyId; // family id's are supposed to be one unified element, but I split them up to ease parsing
+	uint8_t m_primaryFamilyMemberId;
 	
-	guint8 m_scriptingSystem;
-	guint8 m_primaryCharacterSet;
-	guint8 m_width;
-	guint8 m_weight; 
-	guint8 m_attributes;
-	guint8 m_generalCharacteristics;
-	guint8 m_classification;
-	guint8 m_fill; // fill byte
-	guint8 m_fontType;
-	guint8 m_fontSourceFileType;
+	uint8_t m_scriptingSystem;
+	uint8_t m_primaryCharacterSet;
+	uint8_t m_width;
+	uint8_t m_weight; 
+	uint8_t m_attributes;
+	uint8_t m_generalCharacteristics;
+	uint8_t m_classification;
+	uint8_t m_fill; // fill byte
+	uint8_t m_fontType;
+	uint8_t m_fontSourceFileType;
 
-	guint16 m_fontNameLength;
+	uint16_t m_fontNameLength;
 
-	gchar *m_fontName; 
+	char *m_fontName; 
 };
 #endif

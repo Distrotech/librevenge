@@ -234,7 +234,7 @@ void WPXHLListener::_closeSpan()
 /**
 Creates an new document state. Saves the old state on a "stack".
 */
-void WPXHLListener::handleSubDocument(guint16 textPID, const bool isHeaderFooter)
+void WPXHLListener::handleSubDocument(uint16_t textPID, const bool isHeaderFooter)
 {
 	// save our old parsing state on our "stack"
 	WPXParsingState *oldPS = m_ps;
@@ -251,7 +251,7 @@ void WPXHLListener::handleSubDocument(guint16 textPID, const bool isHeaderFooter
 	m_ps = oldPS;
 }
 
-void WPXHLListener::insertBreak(const guint8 breakType)
+void WPXHLListener::insertBreak(const uint8_t breakType)
 {
 	if (!isUndoOn())
 	{

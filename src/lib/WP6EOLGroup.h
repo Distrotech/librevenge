@@ -37,14 +37,14 @@ public:
 	virtual void parse(WP6HLListener *listener);
 
  private:
-	guint8 m_colSpan, m_rowSpan;
+	uint8_t m_colSpan, m_rowSpan;
 	bool m_boundFromLeft, m_boundFromAbove;
 
 	// cell forground and background color
  	RGBSColor * m_cellFgColor;
  	RGBSColor * m_cellBgColor;
  
-	guint8 m_cellBorders;
+	uint8_t m_cellBorders;
 	bool m_isDontEndAParagraphStyleForThisHardReturn;
 };
 

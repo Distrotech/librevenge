@@ -36,7 +36,7 @@ class WP6DisplayNumberReferenceGroup : public WP6VariableLengthGroup
 	virtual void parse(WP6HLListener *listener);
 	
  private:
-	guint8 m_levelNumberToDisplay;
+	uint8_t m_levelNumberToDisplay;
 };
 
 #endif /* WP6DISPLAYNUMBERREFERENCEGROUP_H */

@@ -39,18 +39,18 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input, bool parti
 	
 	while (!input->atEOS())
 	{
-		guint8 readVal;
+		uint8_t readVal;
 		readVal = readU8(input);
 		
-		if (readVal < (guint8)0x20)
+		if (readVal < (uint8_t)0x20)
 		{
 			// line breaks et al, skip
 		}
-		else if (readVal >= (guint8)0x20 && readVal <= (guint8)0x7F)
+		else if (readVal >= (uint8_t)0x20 && readVal <= (uint8_t)0x7F)
 		{
 			// normal ASCII characters, skip			
 		}
-		else if (readVal >= (guint8)0x80 && readVal <= (guint8)0xBF)
+		else if (readVal >= (uint8_t)0x80 && readVal <= (uint8_t)0xBF)
 		{
 			// single character function codes, skip
 		}
@@ -65,7 +65,7 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input, bool parti
 				// variable length function group
 				
 				// skip over all the bytes in the group, and scan for the closing gate
-				guint8 readNextVal;
+				uint8_t readNextVal;
 				while (!input->atEOS())
 				{
 					readNextVal = readU8(input);
@@ -90,7 +90,7 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input, bool parti
 					return WPD_CONFIDENCE_NONE;
 				
 				// read the closing gate
-				guint8 readNextVal = readU8(input);
+				uint8_t readNextVal = readU8(input);
 				if (readNextVal != readVal)
 					return WPD_CONFIDENCE_NONE;
 				

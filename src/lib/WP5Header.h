@@ -31,19 +31,19 @@
 class WP5Header : public WPXHeader
 {
  public:
-	WP5Header(WPXInputStream * input, guint32 documentOffset, guint8 productType, guint8 fileType, guint8 majorVersion, guint8 minorVersion, guint16 documentEncryption);
+	WP5Header(WPXInputStream * input, uint32_t documentOffset, uint8_t productType, uint8_t fileType, uint8_t majorVersion, uint8_t minorVersion, uint16_t documentEncryption);
 	virtual ~WP5Header() {};
 	
-	const guint16 getIndexHeaderOffset() const { return m_indexHeaderOffset; }
-	const guint16 getNumPrefixIndices() const { return m_numPrefixIndices; }
-	const guint16 getDocumentEncryption() const { return m_documentEncryption; }
+	const uint16_t getIndexHeaderOffset() const { return m_indexHeaderOffset; }
+	const uint16_t getNumPrefixIndices() const { return m_numPrefixIndices; }
+	const uint16_t getDocumentEncryption() const { return m_documentEncryption; }
 
 protected:
 	void _readndexInformation(WPXInputStream *input);
 		
 private:
-	guint16 m_indexHeaderOffset;
-	guint16 m_numPrefixIndices;
-	guint16 m_documentEncryption;
+	uint16_t m_indexHeaderOffset;
+	uint16_t m_numPrefixIndices;
+	uint16_t m_documentEncryption;
 };
 #endif /* _WP5HEADER_H  */

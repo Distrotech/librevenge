@@ -37,33 +37,33 @@ class WPXLLListener
 	WPXLLListener() {}
 	virtual ~WPXLLListener() {}
 	virtual void startDocument() = 0;
-	virtual void setAlignmentCharacter(const guint16 character) = 0;
-	virtual void setLeaderCharacter(const guint16 character, const guint8 numberOfSpaces) = 0;
+	virtual void setAlignmentCharacter(const uint16_t character) = 0;
+	virtual void setLeaderCharacter(const uint16_t character, const uint8_t numberOfSpaces) = 0;
 	virtual void defineTabStops(const bool isRelative, const vector<WPXTabStop> &tabStops, 
 				    const vector<bool> &usePreWP9LeaderMethods) = 0;
-	virtual void insertCharacter(const guint16 character) = 0;
-	virtual void insertTab(const guint8 tabType, const float tabPosition) = 0;
+	virtual void insertCharacter(const uint16_t character) = 0;
+	virtual void insertTab(const uint8_t tabType, const float tabPosition) = 0;
 	virtual void handleLineBreak() = 0;
 	virtual void insertEOL() = 0;
- 	virtual void insertBreak(const guint8 breakType) = 0;
-	virtual void attributeChange(const bool isOn, const guint8 attribute) = 0;
+ 	virtual void insertBreak(const uint8_t breakType) = 0;
+	virtual void attributeChange(const bool isOn, const uint8_t attribute) = 0;
 	virtual void lineSpacingChange(const float lineSpacing) = 0;
 	virtual void spacingAfterParagraphChange(const float spacingRelative, const float spacingAbsolute) = 0;
-	virtual void justificationChange(const guint8 justification) = 0;
-	virtual void pageMarginChange(const guint8 side, const guint16 margin) = 0;
-	virtual void pageFormChange(const guint16 length, const guint16 width, const WPXFormOrientation orientation) = 0;
-	virtual void marginChange(const guint8 side, const guint16 margin) = 0;
-	virtual void paragraphMarginChange(const guint8 side, const gint16 margin) = 0;
-	virtual void indentFirstLineChange(const gint16 offset) = 0;
-	virtual void columnChange(const guint8 numColumns) = 0;
+	virtual void justificationChange(const uint8_t justification) = 0;
+	virtual void pageMarginChange(const uint8_t side, const uint16_t margin) = 0;
+	virtual void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation) = 0;
+	virtual void marginChange(const uint8_t side, const uint16_t margin) = 0;
+	virtual void paragraphMarginChange(const uint8_t side, const int16_t margin) = 0;
+	virtual void indentFirstLineChange(const int16_t offset) = 0;
+	virtual void columnChange(const uint8_t numColumns) = 0;
 	virtual void endDocument() = 0;
 
-	virtual void defineTable(guint8 position, guint16 leftOffset) = 0;
-	virtual void addTableColumnDefinition(guint32 width, guint32 leftGutter, guint32 rightGutter) = 0;
+	virtual void defineTable(uint8_t position, uint16_t leftOffset) = 0;
+	virtual void addTableColumnDefinition(uint32_t width, uint32_t leftGutter, uint32_t rightGutter) = 0;
 	virtual void startTable() = 0;
  	virtual void insertRow() = 0;
- 	virtual void insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove,
-				const guint8 borderBits,
+ 	virtual void insertCell(const uint8_t colSpan, const uint8_t rowSpan, const bool boundFromLeft, const bool boundFromAbove,
+				const uint8_t borderBits,
 				const RGBSColor * cellFgColor, const RGBSColor * cellBgColor) = 0;
  	virtual void endTable() = 0;
 };

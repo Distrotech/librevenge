@@ -34,13 +34,13 @@
 class WP6ExtendedDocumentSummaryPacket : public WP6PrefixDataPacket
 {
  public:
-	WP6ExtendedDocumentSummaryPacket(WPXInputStream *input, int id, guint32 dataOffset, guint32 dataSize);
+	WP6ExtendedDocumentSummaryPacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize);
 	virtual ~WP6ExtendedDocumentSummaryPacket();
 	virtual void _readContents(WPXInputStream *input);
 	virtual void parse(WP6HLListener *listener) const;
 
  private:              
-	guint16 m_dataSize;
+	uint16_t m_dataSize;
 	mutable WPXMemoryInputStream *m_stream;
 	
 };

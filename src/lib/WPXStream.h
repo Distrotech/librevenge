@@ -1,6 +1,6 @@
 #ifndef WPXSTREAM_H
 #define WPXSTREAM_H
-#include <glib.h>
+#include "libwpd_support.h"
 
 enum WPX_SEEK_TYPE
 {
@@ -18,7 +18,7 @@ public:
 	virtual bool isOLEStream() = 0;
 	virtual WPXInputStream * getDocumentOLEStream() = 0;
 
-	const virtual guint8 *read(size_t numBytes) = 0;
+	const virtual uint8_t *read(size_t numBytes) = 0;
 	virtual int seek(long offset, WPX_SEEK_TYPE seekType) = 0;
 	virtual long tell() = 0;
 	virtual bool atEOS() = 0;

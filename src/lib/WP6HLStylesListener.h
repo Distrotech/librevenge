@@ -39,62 +39,62 @@ class WP6HLStylesListener : public WP6HLListener
 public:
 	WP6HLStylesListener(vector<WPXPageSpan *> *pageList, vector<WPXTable *> *tableList);
 
-	virtual void setDate(const guint16 year, const guint8 month, const guint8 day,
-			     const guint8 hour, const guint8 minute, const guint8 second,
-			     const guint8 dayOfWeek, const guint8 timeZone, const guint8 unused) {}
-	virtual void setExtendedInformation(const guint16 type, const UCSString &data) {}
+	virtual void setDate(const uint16_t year, const uint8_t month, const uint8_t day,
+			     const uint8_t hour, const uint8_t minute, const uint8_t second,
+			     const uint8_t dayOfWeek, const uint8_t timeZone, const uint8_t unused) {}
+	virtual void setExtendedInformation(const uint16_t type, const UCSString &data) {}
 	virtual void startDocument() {}
-	virtual void setAlignmentCharacter(const guint16 character) {}
-	virtual void setLeaderCharacter(const guint16 character, const guint8 numberOfSpaces) {}
+	virtual void setAlignmentCharacter(const uint16_t character) {}
+	virtual void setLeaderCharacter(const uint16_t character, const uint8_t numberOfSpaces) {}
 	virtual void defineTabStops(const bool isRelative, const vector<WPXTabStop> &tabStops, 
 				    const vector<bool> &usePreWP9LeaderMethods) {}
-	virtual void insertCharacter(const guint16 character) { if (!isUndoOn()) m_currentPageHasContent = true; }
-	virtual void insertTab(const guint8 tabType, const float tabPosition) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	virtual void insertCharacter(const uint16_t character) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	virtual void insertTab(const uint8_t tabType, const float tabPosition) { if (!isUndoOn()) m_currentPageHasContent = true; }
 	virtual void handleLineBreak()  { if (!isUndoOn()) m_currentPageHasContent = true; }
 	virtual void insertEOL() { if (!isUndoOn()) m_currentPageHasContent = true; }
- 	virtual void insertBreak(const guint8 breakType);
-	virtual void characterColorChange(const guint8 red, const guint8 green, const guint8 blue) {}
-	virtual void characterShadingChange(const guint8 shading) {}
+ 	virtual void insertBreak(const uint8_t breakType);
+	virtual void characterColorChange(const uint8_t red, const uint8_t green, const uint8_t blue) {}
+	virtual void characterShadingChange(const uint8_t shading) {}
 	virtual void highlightChange(const bool isOn, const RGBSColor color) {}
-	virtual void fontChange(const guint16 matchedFontPointSize, const guint16 fontPID) {}
-	virtual void attributeChange(const bool isOn, const guint8 attribute) {}
+	virtual void fontChange(const uint16_t matchedFontPointSize, const uint16_t fontPID) {}
+	virtual void attributeChange(const bool isOn, const uint8_t attribute) {}
 	virtual void lineSpacingChange(const float lineSpacing) {}
 	virtual void spacingAfterParagraphChange(const float spacingRelative, const float spacingAbsolute) {}
-	virtual void justificationChange(const guint8 justification) {}
-	virtual void pageMarginChange(const guint8 side, const guint16 margin);
-	virtual void pageFormChange(const guint16 length, const guint16 width, const WPXFormOrientation orientation);
-	virtual void marginChange(const guint8 side, const guint16 margin);
-	virtual void paragraphMarginChange(const guint8 side, const gint16 margin) {}
-	virtual void indentFirstLineChange(const gint16 offset) {}
-	virtual void columnChange(const guint8 numColumns) {}
-	virtual void updateOutlineDefinition(const WP6OutlineLocation outlineLocation, const guint16 outlineHash,
-					     const guint8 *numberingMethods, const guint8 tabBehaviourFlag) {}
+	virtual void justificationChange(const uint8_t justification) {}
+	virtual void pageMarginChange(const uint8_t side, const uint16_t margin);
+	virtual void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation);
+	virtual void marginChange(const uint8_t side, const uint16_t margin);
+	virtual void paragraphMarginChange(const uint8_t side, const int16_t margin) {}
+	virtual void indentFirstLineChange(const int16_t offset) {}
+	virtual void columnChange(const uint8_t numColumns) {}
+	virtual void updateOutlineDefinition(const WP6OutlineLocation outlineLocation, const uint16_t outlineHash,
+					     const uint8_t *numberingMethods, const uint8_t tabBehaviourFlag) {}
 
-	virtual void paragraphNumberOn(const guint16 outlineHash, const guint8 level, const guint8 flag) {}
+	virtual void paragraphNumberOn(const uint16_t outlineHash, const uint8_t level, const uint8_t flag) {}
 	virtual void paragraphNumberOff() { if (!isUndoOn()) m_currentPageHasContent = true; }
-	virtual void displayNumberReferenceGroupOn(const guint8 subGroup, const guint8 level) {}
-	virtual void displayNumberReferenceGroupOff(const guint8 subGroup) { if (!isUndoOn()) m_currentPageHasContent = true; }
-	void styleGroupOn(const guint8 subGroup) {}
-	virtual void styleGroupOff(const guint8 subGroup) {}
-	virtual void globalOn(const guint8 systemStyle) {}
+	virtual void displayNumberReferenceGroupOn(const uint8_t subGroup, const uint8_t level) {}
+	virtual void displayNumberReferenceGroupOff(const uint8_t subGroup) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	void styleGroupOn(const uint8_t subGroup) {}
+	virtual void styleGroupOff(const uint8_t subGroup) {}
+	virtual void globalOn(const uint8_t systemStyle) {}
 	virtual void globalOff() {}
-	virtual void noteOn(const guint16 textPID);
+	virtual void noteOn(const uint16_t textPID);
 	virtual void noteOff(const WPXNoteType noteType) {}
-	virtual void headerFooterGroup(const guint8 headerFooterType, const guint8 occurenceBits, const guint16 textPID);
-	virtual void suppressPageCharacteristics(const guint8 suppressCode);
+	virtual void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, const uint16_t textPID);
+	virtual void suppressPageCharacteristics(const uint8_t suppressCode);
 	virtual void endDocument();
 
- 	virtual void defineTable(guint8 position, guint16 leftOffset);
-	virtual void addTableColumnDefinition(guint32 width, guint32 leftGutter, guint32 rightGutter) {}
+ 	virtual void defineTable(uint8_t position, uint16_t leftOffset);
+	virtual void addTableColumnDefinition(uint32_t width, uint32_t leftGutter, uint32_t rightGutter) {}
 	virtual void startTable();
  	virtual void insertRow();
- 	virtual void insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove,
-				const guint8 borderBits,
+ 	virtual void insertCell(const uint8_t colSpan, const uint8_t rowSpan, const bool boundFromLeft, const bool boundFromAbove,
+				const uint8_t borderBits,
 				const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
  	virtual void endTable();
 
 protected:
-	virtual void _handleSubDocument(guint16 textPID, const bool isHeaderFooter);
+	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter);
 	virtual void _flushText(const bool fakeText=false) {}
 	virtual void _openPageSpan() { /* FIXME: REMOVE ME WHEN IMPLEMENTED IN WPXHLListener */ };
 

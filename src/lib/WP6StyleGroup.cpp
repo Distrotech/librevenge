@@ -33,7 +33,7 @@ WP6StyleGroup_GlobalOnSubGroup::WP6StyleGroup_GlobalOnSubGroup(WPXInputStream *i
 	m_systemStyleNumber = readU8(input);
 }
 
-void WP6StyleGroup_GlobalOnSubGroup::parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
+void WP6StyleGroup_GlobalOnSubGroup::parse(WP6HLListener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const
 {
 	listener->globalOn(m_systemStyleNumber);
 }

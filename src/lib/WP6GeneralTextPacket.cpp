@@ -29,7 +29,7 @@
 #include "WP6Parser.h"
 #include "libwpd_internal.h"
 
-WP6GeneralTextPacket::WP6GeneralTextPacket(WPXInputStream *input, int id, guint32 dataOffset, guint32 dataSize) 
+WP6GeneralTextPacket::WP6GeneralTextPacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize) 
 	: WP6PrefixDataPacket(input)
 {	
 	_read(input, dataOffset, dataSize);
@@ -43,13 +43,13 @@ WP6GeneralTextPacket::~WP6GeneralTextPacket()
 
 void WP6GeneralTextPacket::_readContents(WPXInputStream *input)
 {
-	guint16 m_numTextBlocks = readU16(input);
-	guint32 m_firstTextBlockOffset = readU32(input);
+	uint16_t m_numTextBlocks = readU16(input);
+	uint32_t m_firstTextBlockOffset = readU32(input);
 
 	if (m_numTextBlocks < 1)
 		throw ParseException();
 	
-	m_blockSizes = new guint32[m_numTextBlocks];
+	m_blockSizes = new uint32_t[m_numTextBlocks];
 	int totalSize = 0;
 	int i;
 
@@ -60,7 +60,7 @@ void WP6GeneralTextPacket::_readContents(WPXInputStream *input)
 	}	
 
 	// we have to use glib's allocation function because libgsf disposes of the data
-	guint8 *streamData = new guint8[totalSize];
+	uint8_t *streamData = new uint8_t[totalSize];
 	int streamPos = 0;
 	for(i=0; i<m_numTextBlocks; i++) 
 	{

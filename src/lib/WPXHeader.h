@@ -33,25 +33,25 @@
 class WPXHeader
 {
  public:	
-	WPXHeader(WPXInputStream *input, guint32 documentOffset, guint8 productType, guint8 fileType, guint8 majorVersion, guint8 minorVersion, guint16 documentEncryption);
+	WPXHeader(WPXInputStream *input, uint32_t documentOffset, uint8_t productType, uint8_t fileType, uint8_t majorVersion, uint8_t minorVersion, uint16_t documentEncryption);
 	virtual ~WPXHeader();
 
 	static WPXHeader * constructHeader(WPXInputStream *input);
 		
-	const guint32 getDocumentOffset() const { return m_documentOffset; }
-	const guint8 getProductType() const { return m_productType; }
-	const guint8 getFileType() const { return m_fileType; }
-	const guint8 getMajorVersion() const { return m_majorVersion; }
-	const guint8 getMinorVersion() const { return m_minorVersion; }
-	const guint16 getDocumentEncryption() const { return m_documentEncryption; }
+	const uint32_t getDocumentOffset() const { return m_documentOffset; }
+	const uint8_t getProductType() const { return m_productType; }
+	const uint8_t getFileType() const { return m_fileType; }
+	const uint8_t getMajorVersion() const { return m_majorVersion; }
+	const uint8_t getMinorVersion() const { return m_minorVersion; }
+	const uint16_t getDocumentEncryption() const { return m_documentEncryption; }
 
  private:	
-	guint32 m_documentOffset;
-	guint8 m_productType;
-	guint8 m_fileType;
-	guint8 m_majorVersion;
-	guint8 m_minorVersion;
- 	guint16 m_documentEncryption;		
+	uint32_t m_documentOffset;
+	uint8_t m_productType;
+	uint8_t m_fileType;
+	uint8_t m_majorVersion;
+	uint8_t m_minorVersion;
+ 	uint16_t m_documentEncryption;		
 };
 
 #endif /* WPXHEADER_H */

@@ -31,19 +31,19 @@
 class WP42VariableLengthGroup : public WP42Part
 {
  public:
-	WP42VariableLengthGroup(guint8 group); // WP42VariableLengthGroup should _never_ be constructed, only its inherited classes
+	WP42VariableLengthGroup(uint8_t group); // WP42VariableLengthGroup should _never_ be constructed, only its inherited classes
 	virtual ~WP42VariableLengthGroup() {}
 	
-	static WP42VariableLengthGroup * constructVariableLengthGroup(WPXInputStream *input, guint8 group);
+	static WP42VariableLengthGroup * constructVariableLengthGroup(WPXInputStream *input, uint8_t group);
 
  protected:
 	void _read(WPXInputStream *input);
  	virtual void _readContents(WPXInputStream *input) = 0;
 
-	const guint8 getGroup() const { return m_group; }
+	const uint8_t getGroup() const { return m_group; }
 
  private:
-	guint8 m_group;
+	uint8_t m_group;
 };
 
 #endif /* WP42VARIABLELENGTHGROUP_H */

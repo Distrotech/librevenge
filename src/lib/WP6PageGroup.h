@@ -38,16 +38,16 @@ class WP6PageGroup : public WP6VariableLengthGroup
 
  private:
 	// variables needed for subgroup 0 and 1 (Left/Right Margin Set)
-	guint16 m_margin;
-	guint8 m_marginType;
+	uint16_t m_margin;
+	uint8_t m_marginType;
 	// variables needed for subgroup 2 (suppress page characteristics)
-	guint8 m_suppressedCode;
+	uint8_t m_suppressedCode;
 	// variables needed for subgroup 0x11 (Form)
-	guint8 m_formHashTableIndex;
-	guint16 m_formHashValue;
-	guint16 m_formLength;
-	guint16 m_formWidth;
-	guint8 m_formType;
+	uint8_t m_formHashTableIndex;
+	uint16_t m_formHashValue;
+	uint16_t m_formLength;
+	uint16_t m_formWidth;
+	uint8_t m_formType;
 	WPXFormOrientation m_formOrientation;
 
 };

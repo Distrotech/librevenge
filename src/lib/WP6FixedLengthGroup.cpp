@@ -32,12 +32,12 @@
 #include "WP6FileStructure.h"
 #include "libwpd_internal.h"
 
-WP6FixedLengthGroup::WP6FixedLengthGroup(guint8 groupID)
+WP6FixedLengthGroup::WP6FixedLengthGroup(uint8_t groupID)
 	: m_group(groupID)
 {
 }
 
-WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(WPXInputStream *input, guint8 groupID)
+WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(WPXInputStream *input, uint8_t groupID)
 {
 	switch (groupID)
 	{
@@ -67,7 +67,7 @@ WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(WPXInputStr
 
 void WP6FixedLengthGroup::_read(WPXInputStream *input)
 {
-	guint32 startPosition = input->tell();
+	uint32_t startPosition = input->tell();
 	_readContents(input);
 
 	if (m_group >= 0xF0 && m_group <= 0xFF) // just an extra safety check

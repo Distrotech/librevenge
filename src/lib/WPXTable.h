@@ -35,7 +35,7 @@
 #ifndef _WPXTABLE_H
 #define _WPXTABLE_H
 #include <vector>
-#include <glib.h>
+#include "libwpd_support.h"
 
 using namespace std;
 
@@ -43,11 +43,11 @@ typedef struct _WPXTableCell WPXTableCell;
 
 struct _WPXTableCell
 {
-	_WPXTableCell(guint8 colSpan, guint8 rowSpan, bool boundFromLeft, bool boundFromAbove, guint8 borderBits);
-	guint8 m_colSpan;
-	guint8 m_rowSpan;
+	_WPXTableCell(uint8_t colSpan, uint8_t rowSpan, bool boundFromLeft, bool boundFromAbove, uint8_t borderBits);
+	uint8_t m_colSpan;
+	uint8_t m_rowSpan;
 	bool m_boundFromLeft, m_boundFromAbove;
-	guint8 m_borderBits;
+	uint8_t m_borderBits;
 };
 
 class WPXTable
@@ -55,7 +55,7 @@ class WPXTable
 public:
 	~WPXTable();
 	void insertRow();
-	void insertCell(guint8 colSpan, guint8 rowSpan, bool boundFromLeft, bool boundFromAbove, guint8 borderBits);
+	void insertCell(uint8_t colSpan, uint8_t rowSpan, bool boundFromLeft, bool boundFromAbove, uint8_t borderBits);
 	const WPXTableCell * getCell(int i, int j) { return (*m_tableRows[i])[j]; }
 	void makeBordersConsistent();
 	void _makeCellBordersConsistent(WPXTableCell *cell, vector<WPXTableCell *> *adjacentCells, 

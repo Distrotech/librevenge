@@ -80,21 +80,21 @@ void WP6Parser::parseDocument(WPXInputStream *input, WP6HLListener *listener)
 {
 	while (!input->atEOS())
 	{
-		guint8 readVal;
+		uint8_t readVal;
 		readVal = readU8(input);
 		
-		if (readVal == (guint8)0x00)
+		if (readVal == (uint8_t)0x00)
 		{
 			// do nothing: this token is meaningless and is likely just corruption
 		}
-		else if (readVal <= (guint8)0x20)
+		else if (readVal <= (uint8_t)0x20)
 		{
 			listener->insertCharacter( extendedInternationalCharacterMap[(readVal-1)] );
 		}
-		else if (readVal >= (guint8)0x21 && readVal <= (guint8)0x7F)
+		else if (readVal >= (uint8_t)0x21 && readVal <= (uint8_t)0x7F)
 		{
 			// normal ASCII characters
-			listener->insertCharacter( (guint16)readVal );
+			listener->insertCharacter( (uint16_t)readVal );
 		}
 		else 
 		{

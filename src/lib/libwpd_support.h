@@ -27,23 +27,34 @@
 #define LIBWPD_SUPPORT_H
 #include <glib.h>
 
-extern const guint16 asciiMap[];
-extern const guint16 extendedInternationalCharacterMap[];
-extern const guint16 multinationalMap[];
-extern const guint16 phoneticMap[];
-extern const guint16 boxdrawingMap[];
-extern const guint16 typographicMap[];
-extern const guint16 iconicMap[];
-extern const guint16 mathMap[];
-extern const guint16 mathextMap[];
-extern const guint16 greekMap[];
-extern const guint16 hebrewMap[];
-extern const guint16 cyrillicMap[];
-extern const guint16 japaneseMap[];
-extern const guint16 *tibetanMap1[];
+#ifndef WIN32
+#include <stdint.h>
+#else
+typedef signed char int8_t;
+typedef unsigned char uint8_t;
+typedef signed short int8_t;
+typedef unsigned short uint8_t;
+typedef signed int int32_t;
+typedef unsigned int uint32_t;
+#endif
 
-int extendedCharacterToUCS2(guint8 character, guint8 characterSet,
-			    const guint16 **chars);
+extern const uint16_t asciiMap[];
+extern const uint16_t extendedInternationalCharacterMap[];
+extern const uint16_t multinationalMap[];
+extern const uint16_t phoneticMap[];
+extern const uint16_t boxdrawingMap[];
+extern const uint16_t typographicMap[];
+extern const uint16_t iconicMap[];
+extern const uint16_t mathMap[];
+extern const uint16_t mathextMap[];
+extern const uint16_t greekMap[];
+extern const uint16_t hebrewMap[];
+extern const uint16_t cyrillicMap[];
+extern const uint16_t japaneseMap[];
+extern const uint16_t *tibetanMap1[];
+
+int extendedCharacterToUCS2(uint8_t character, uint8_t characterSet,
+			    const uint16_t **chars);
 
 enum WPXFileType { WP6_DOCUMENT, WP5_DOCUMENT, WP42_DOCUMENT, OTHER };
 enum WPXNumberingType { ARABIC, LOWERCASE, UPPERCASE, LOWERCASE_ROMAN, UPPERCASE_ROMAN };
@@ -91,10 +102,10 @@ enum WPDConfidence { WPD_CONFIDENCE_NONE=0, WPD_CONFIDENCE_POOR, WPD_CONFIDENCE_
 #define WPX_TABLE_POSITION_ABSOLUTE_FROM_LEFT_MARGIN 0x04
 
 // TABLE CELL BORDER bits
-const guint8 WPX_TABLE_CELL_LEFT_BORDER_OFF = 0x01;
-const guint8 WPX_TABLE_CELL_RIGHT_BORDER_OFF = 0x02;
-const guint8 WPX_TABLE_CELL_TOP_BORDER_OFF = 0x04;
-const guint8 WPX_TABLE_CELL_BOTTOM_BORDER_OFF = 0x08;
+const uint8_t WPX_TABLE_CELL_LEFT_BORDER_OFF = 0x01;
+const uint8_t WPX_TABLE_CELL_RIGHT_BORDER_OFF = 0x02;
+const uint8_t WPX_TABLE_CELL_TOP_BORDER_OFF = 0x04;
+const uint8_t WPX_TABLE_CELL_BOTTOM_BORDER_OFF = 0x08;
 
 // BREAK bits
 #define WPX_PAGE_BREAK 0x00
@@ -109,12 +120,12 @@ const guint8 WPX_TABLE_CELL_BOTTOM_BORDER_OFF = 0x08;
 typedef struct _RGBSColor RGBSColor;
 struct _RGBSColor
 {
-	_RGBSColor(guint8 r, guint8 g, guint8 b, guint8 s);
+	_RGBSColor(uint8_t r, uint8_t g, uint8_t b, uint8_t s);
 	_RGBSColor(); // initializes all values to 0
-	guint8 m_r;
-	guint8 m_g;
- 	guint8 m_b;
-	guint8 m_s;
+	uint8_t m_r;
+	uint8_t m_g;
+ 	uint8_t m_b;
+	uint8_t m_s;
 };
 
 typedef struct _WPXColumnDefinition WPXColumnDefinition;
@@ -129,12 +140,12 @@ struct _WPXColumnDefinition
 typedef struct _WPXTabStop WPXTabStop;
 struct _WPXTabStop
 {
-	_WPXTabStop(float position, WPXTabAlignment alignment, guint16 leaderCharacter, guint8 leaderNumSpaces);
+	_WPXTabStop(float position, WPXTabAlignment alignment, uint16_t leaderCharacter, uint8_t leaderNumSpaces);
 	_WPXTabStop();
 	float m_position;
 	WPXTabAlignment m_alignment;
-	guint16 m_leaderCharacter;
-	guint8 m_leaderNumSpaces;
+	uint16_t m_leaderCharacter;
+	uint8_t m_leaderNumSpaces;
 };
 
 // UCSString: minimal string class, basically an object-oriented wrapper around glib's UCS4 string
@@ -146,13 +157,13 @@ public:
 	UCSString(const UCSString &);
 	~UCSString();
 	// UCS2 conversion not needed (yet)
-	// const guint16 * getUCS2();
-	void append(guint32);
+	// const uint16_t * getUCS2();
+	void append(uint32_t);
 	void append(const UCSString &);
-	void append(const gchar *);
+	void append(const char *);
 	void clear();
 
-	const guint32 * getUCS4() const { return (guint32 *)m_stringBuf->data; }
+	const uint32_t * getUCS4() const { return (uint32_t *)m_stringBuf->data; }
 	const int getLen() const { return m_stringBuf->len; }
 
 private:
@@ -165,15 +176,15 @@ public:
 	UTF8String();
 	UTF8String(const UTF8String &);
 	UTF8String(const UCSString &, bool convertToValidXML = false);
-	//UTF8String(const gchar *);
-	UTF8String(const gchar *str);
-	//UTF8String(const gchar *format, ...);
+	//UTF8String(const char *);
+	UTF8String(const char *str);
+	//UTF8String(const char *format, ...);
 	~UTF8String() { g_string_free(m_buf, TRUE); }
 
-	const gchar * getUTF8() const { return m_buf->str; }
+	const char * getUTF8() const { return m_buf->str; }
 	const int getLen() const { return m_buf->len; }
 
-	void sprintf(const gchar *format, ...);
+	void sprintf(const char *format, ...);
 	//UTF8String & operator=(const UTF8String &);
 
 private:

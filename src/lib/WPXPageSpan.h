@@ -35,16 +35,16 @@ class WPXHeaderFooter
 {
 public:
 	WPXHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence occurence, 
-			const guint8 internalType, const guint16 textPID);
+			const uint8_t internalType, const uint16_t textPID);
 	const WPXHeaderFooterType getType() const { return m_type; }
 	const WPXHeaderFooterOccurence getOccurence() const { return m_occurence; }
-	const guint16 getTextPID() const { return m_textPID; }
-	const guint8 getInternalType() const { return m_internalType; }
+	const uint16_t getTextPID() const { return m_textPID; }
+	const uint8_t getInternalType() const { return m_internalType; }
 private:
 	WPXHeaderFooterType m_type;
 	WPXHeaderFooterOccurence m_occurence;
-	guint8 m_internalType; // for suppression
-	guint16 m_textPID; // for the actual text
+	uint8_t m_internalType; // for suppression
+	uint16_t m_textPID; // for the actual text
 };
 
 class WPXPageSpan
@@ -53,7 +53,7 @@ public:
 	WPXPageSpan();
 	WPXPageSpan(WPXPageSpan &page, float paragraphMarginLeft=0.0f, float paragraphMarginRight=0.0f);
 
-	const bool getHeaderFooterSuppression(const guint8 headerFooterType) const { if (headerFooterType <= WP6_HEADER_FOOTER_GROUP_FOOTER_B) return m_isHeaderFooterSuppressed[headerFooterType]; return false; }
+	const bool getHeaderFooterSuppression(const uint8_t headerFooterType) const { if (headerFooterType <= WP6_HEADER_FOOTER_GROUP_FOOTER_B) return m_isHeaderFooterSuppressed[headerFooterType]; return false; }
 	const float getFormLength() const { return m_formLength; }
 	const float getFormWidth() const { return m_formWidth; }
 	const WPXFormOrientation getFormOrientation() const { return m_formOrientation; }
@@ -64,8 +64,8 @@ public:
 	const int getPageSpan() const { return m_pageSpan; }
 	const vector<WPXHeaderFooter> & getHeaderFooterList() const { return m_headerFooterList; }
 
-	void setHeaderFooter(const guint8 headerFooterType, const guint8 occurenceBits, const guint16 textPID);
-	void setHeadFooterSuppression(const guint8 headerFooterType, const bool suppress) { m_isHeaderFooterSuppressed[headerFooterType] = suppress; }
+	void setHeaderFooter(const uint8_t headerFooterType, const uint8_t occurenceBits, const uint16_t textPID);
+	void setHeadFooterSuppression(const uint8_t headerFooterType, const bool suppress) { m_isHeaderFooterSuppressed[headerFooterType] = suppress; }
 	void setFormLength(const float formLength) { m_formLength = formLength; }
 	void setFormWidth(const float formWidth) { m_formWidth = formWidth; }
 	void setFormOrientation(const WPXFormOrientation formOrientation) { m_formOrientation = formOrientation; }

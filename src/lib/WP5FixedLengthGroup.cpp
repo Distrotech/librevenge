@@ -34,7 +34,7 @@ WP5FixedLengthGroup::WP5FixedLengthGroup(guint groupID)
 {
 }
 
-WP5FixedLengthGroup * WP5FixedLengthGroup::constructFixedLengthGroup(WPXInputStream *input, guint8 groupID)
+WP5FixedLengthGroup * WP5FixedLengthGroup::constructFixedLengthGroup(WPXInputStream *input, uint8_t groupID)
 {
 	switch (groupID) 
 	{
@@ -52,7 +52,7 @@ WP5FixedLengthGroup * WP5FixedLengthGroup::constructFixedLengthGroup(WPXInputStr
 
 void WP5FixedLengthGroup::_read(WPXInputStream *input)
 {
-	guint32 startPosition = input->tell();
+	uint32_t startPosition = input->tell();
 	_readContents(input);
 	
 	if (m_group >= 0xC0 && m_group <= 0xCF) // just an extra safety check

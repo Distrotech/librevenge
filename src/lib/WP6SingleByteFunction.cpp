@@ -28,7 +28,7 @@
 #include "WP6LLListener.h"
 #include "libwpd_internal.h"
 
-WP6SingleByteFunction * WP6SingleByteFunction::constructSingleByteFunction(WPXInputStream *input, guint8 groupID)
+WP6SingleByteFunction * WP6SingleByteFunction::constructSingleByteFunction(WPXInputStream *input, uint8_t groupID)
 {
 
 	switch (groupID) 
@@ -81,17 +81,17 @@ WP6SingleByteFunction * WP6SingleByteFunction::constructSingleByteFunction(WPXIn
 
 void WP6SpaceFunction::parse(WP6HLListener *listener)
 {
-	listener->insertCharacter((guint16) ' ');
+	listener->insertCharacter((uint16_t) ' ');
 }
 
 void WP6HardSpaceFunction::parse(WP6HLListener *listener)
 {
-	listener->insertCharacter((guint16) 0xa0);
+	listener->insertCharacter((uint16_t) 0xa0);
 }
 
 void WP6SoftHyphenFunction::parse(WP6HLListener *listener)
 {
-	listener->insertCharacter((guint16) 0xad);
+	listener->insertCharacter((uint16_t) 0xad);
 }
 
 void WP6EOLFunction::parse(WP6HLListener *listener)
@@ -111,5 +111,5 @@ void WP6EOPFunction::parse(WP6HLListener *listener)
 
 void WP6HyphenFunction::parse(WP6HLListener *listener)
 {
-	listener->insertCharacter((guint16) '-');
+	listener->insertCharacter((uint16_t) '-');
 }

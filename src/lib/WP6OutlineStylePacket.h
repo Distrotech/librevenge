@@ -32,19 +32,19 @@
 class WP6OutlineStylePacket : public WP6PrefixDataPacket
 {
  public:
-	WP6OutlineStylePacket(WPXInputStream *input, int id, guint32 dataOffset, guint32 dataSize);
+	WP6OutlineStylePacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize);
 	virtual ~WP6OutlineStylePacket();
 	virtual void _readContents(WPXInputStream *input);
 	virtual void parse(WP6HLListener *listener) const;
 
  private:              
-      guint16 m_numPIDs;
-      guint16 m_paragraphStylePIDs[WP6_NUM_LIST_LEVELS]; // seemingly useless
-      guint16 m_nonDeletableInfoSize;
-      guint16 m_outlineHash;
-      guint8 m_numberingMethods[WP6_NUM_LIST_LEVELS];
-      guint8 m_outlineFlags;
-      guint8 m_tabBehaviourFlag;
+      uint16_t m_numPIDs;
+      uint16_t m_paragraphStylePIDs[WP6_NUM_LIST_LEVELS]; // seemingly useless
+      uint16_t m_nonDeletableInfoSize;
+      uint16_t m_outlineHash;
+      uint8_t m_numberingMethods[WP6_NUM_LIST_LEVELS];
+      uint8_t m_outlineFlags;
+      uint8_t m_tabBehaviourFlag;
 
 };
 #endif /* WP6OUTLINESTYLEPACKET_H */

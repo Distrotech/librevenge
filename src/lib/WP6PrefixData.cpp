@@ -34,7 +34,7 @@
 WP6PrefixData::WP6PrefixData(WPXInputStream *input, const int numPrefixIndices) :
 	m_defaultInitialFontPID((-1))
 {
-	guint16 i;
+	uint16_t i;
 
 	WP6PrefixIndice ** prefixIndiceArray = new WP6PrefixIndice *[(numPrefixIndices-1)];
 	for (i=1; i<numPrefixIndices; i++)

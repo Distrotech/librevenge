@@ -35,7 +35,7 @@ public:
 	virtual void _readContents(WPXInputStream *input);
 	virtual void parse(WP6HLListener *listener);
 private:
-	guint8 m_occurenceBits;
+	uint8_t m_occurenceBits;
 	
 };
 

@@ -26,7 +26,7 @@
 #include "WP42UnsupportedVariableLengthGroup.h"
 #include "libwpd_internal.h"
 
-WP42UnsupportedVariableLengthGroup::WP42UnsupportedVariableLengthGroup(WPXInputStream *input, guint8 group) :
+WP42UnsupportedVariableLengthGroup::WP42UnsupportedVariableLengthGroup(WPXInputStream *input, uint8_t group) :
 	WP42VariableLengthGroup(group)
 {
 }

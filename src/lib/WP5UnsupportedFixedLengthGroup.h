@@ -31,7 +31,7 @@
 class WP5UnsupportedFixedLengthGroup : public WP5FixedLengthGroup
 {
  public:
-	WP5UnsupportedFixedLengthGroup(WPXInputStream *input, guint8 groupID);	
+	WP5UnsupportedFixedLengthGroup(WPXInputStream *input, uint8_t groupID);	
 	virtual void parse(WP5HLListener *listener) {}
 	
  protected:

@@ -49,7 +49,7 @@ void WP6HLStylesListener::endDocument()
 	delete(m_currentPage); // and delete the non-existent page that was allocated as a result (scandalous waste!)
 }
 
-void WP6HLStylesListener::insertBreak(const guint8 breakType)
+void WP6HLStylesListener::insertBreak(const uint8_t breakType)
 {
 	if (!isUndoOn())
 	{	
@@ -76,7 +76,7 @@ void WP6HLStylesListener::insertBreak(const guint8 breakType)
 	}
 }
 
-void WP6HLStylesListener::pageMarginChange(const guint8 side, const guint16 margin)
+void WP6HLStylesListener::pageMarginChange(const uint8_t side, const uint16_t margin)
 {
 	if (!isUndoOn()) 
 	{
@@ -93,7 +93,7 @@ void WP6HLStylesListener::pageMarginChange(const guint8 side, const guint16 marg
 	}
 }
 
-void WP6HLStylesListener::pageFormChange(const guint16 length, const guint16 width, const WPXFormOrientation orientation)
+void WP6HLStylesListener::pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation)
 {
 	if (!isUndoOn())
 	{
@@ -108,7 +108,7 @@ void WP6HLStylesListener::pageFormChange(const guint16 length, const guint16 wid
 	}
 }
 
-void WP6HLStylesListener::marginChange(const guint8 side, const guint16 margin)
+void WP6HLStylesListener::marginChange(const uint8_t side, const uint16_t margin)
 {
 	if (!isUndoOn())
 	{
@@ -131,7 +131,7 @@ void WP6HLStylesListener::marginChange(const guint8 side, const guint16 margin)
 
 }
 
-void WP6HLStylesListener::headerFooterGroup(const guint8 headerFooterType, const guint8 occurenceBits, const guint16 textPID)
+void WP6HLStylesListener::headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, const uint16_t textPID)
 {
 	if (!isUndoOn()) 
 	{			
@@ -144,7 +144,7 @@ void WP6HLStylesListener::headerFooterGroup(const guint8 headerFooterType, const
 	}
 }
 
-void WP6HLStylesListener::suppressPageCharacteristics(const guint8 suppressCode)
+void WP6HLStylesListener::suppressPageCharacteristics(const uint8_t suppressCode)
 {
 	if (!isUndoOn()) 
 	{			
@@ -160,7 +160,7 @@ void WP6HLStylesListener::suppressPageCharacteristics(const guint8 suppressCode)
 	}
 }
 
-void WP6HLStylesListener::defineTable(guint8 position, guint16 leftOffset)
+void WP6HLStylesListener::defineTable(uint8_t position, uint16_t leftOffset)
 {
 	if (!isUndoOn()) 
 	{			
@@ -200,9 +200,9 @@ void WP6HLStylesListener::insertRow()
 	}
 }
 
-void WP6HLStylesListener::insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove, 
+void WP6HLStylesListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan, const bool boundFromLeft, const bool boundFromAbove, 
 
-				  const guint8 borderBits, 
+				  const uint8_t borderBits, 
 				  const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
 {
 	if (!isUndoOn() && m_currentTable != NULL)
@@ -212,7 +212,7 @@ void WP6HLStylesListener::insertCell(const guint8 colSpan, const guint8 rowSpan,
 	}
 }
 
-void WP6HLStylesListener::noteOn(const guint16 textPID)
+void WP6HLStylesListener::noteOn(const uint16_t textPID)
 {
 	if (!isUndoOn()) 
 	{
@@ -221,7 +221,7 @@ void WP6HLStylesListener::noteOn(const guint16 textPID)
 	}
 }
 
-void WP6HLStylesListener::_handleSubDocument(guint16 textPID, const bool isHeaderFooter)
+void WP6HLStylesListener::_handleSubDocument(uint16_t textPID, const bool isHeaderFooter)
 {
 	// We don't want to actual insert anything in the case of a sub-document, but we
 	// do want to capture whatever table-related information is within it..

@@ -51,7 +51,7 @@ WP6VariableLengthGroup::~WP6VariableLengthGroup()
 		g_free(m_prefixIDs);
 }
 
-WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, guint8 groupID)
+WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, uint8_t groupID)
 {
 	switch (groupID)
 	{
@@ -83,7 +83,7 @@ WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(WP
 
 void WP6VariableLengthGroup::_read(WPXInputStream *input)
 {
-	guint32 startPosition = input->tell();
+	uint32_t startPosition = input->tell();
 	
 	m_subGroup = readU8(input);
 	m_size = readU16(input);
@@ -95,8 +95,8 @@ void WP6VariableLengthGroup::_read(WPXInputStream *input)
 		
 		if (m_numPrefixIDs > 0)
 		{
-			m_prefixIDs = (guint16 *) g_malloc(sizeof(guint16) * m_numPrefixIDs);
-			for (guint32 i = 0; i < m_numPrefixIDs; i++)
+			m_prefixIDs = (uint16_t *) g_malloc(sizeof(uint16_t) * m_numPrefixIDs);
+			for (uint32_t i = 0; i < m_numPrefixIDs; i++)
 			{
 				m_prefixIDs[i] = readU16(input);		
 			}

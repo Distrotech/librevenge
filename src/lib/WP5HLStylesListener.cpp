@@ -45,7 +45,7 @@ void WP5HLStylesListener::endDocument()
 	delete(m_currentPage); // and delete the non-existent page that was allocated as a result (scandalous waste!)
 }
 
-void WP5HLStylesListener::insertBreak(const guint8 breakType)
+void WP5HLStylesListener::insertBreak(const uint8_t breakType)
 {
 	//if (!isUndoOn())
 	//{	
@@ -72,7 +72,7 @@ void WP5HLStylesListener::insertBreak(const guint8 breakType)
 	//}
 }
 /*
-void WP5HLStylesListener::pageMarginChange(const guint8 side, const guint16 margin)
+void WP5HLStylesListener::pageMarginChange(const uint8_t side, const uint16_t margin)
 {
 	if (!isUndoOn()) 
 	{
@@ -89,7 +89,7 @@ void WP5HLStylesListener::pageMarginChange(const guint8 side, const guint16 marg
 	}
 }
 
-void WP5HLStylesListener::marginChange(const guint8 side, const guint16 margin)
+void WP5HLStylesListener::marginChange(const uint8_t side, const uint16_t margin)
 {
 	if (!isUndoOn()) 
 	{		
@@ -112,7 +112,7 @@ void WP5HLStylesListener::marginChange(const guint8 side, const guint16 margin)
 
 }
 
-void WP5HLStylesListener::headerFooterGroup(const guint8 headerFooterType, const guint8 occurenceBits, const guint16 textPID)
+void WP5HLStylesListener::headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, const uint16_t textPID)
 {
 	if (!isUndoOn()) 
 	{			
@@ -123,7 +123,7 @@ void WP5HLStylesListener::headerFooterGroup(const guint8 headerFooterType, const
 	}
 }
 
-void WP5HLStylesListener::suppressPageCharacteristics(const guint8 suppressCode)
+void WP5HLStylesListener::suppressPageCharacteristics(const uint8_t suppressCode)
 {
 	if (!isUndoOn()) 
 	{			
@@ -158,8 +158,8 @@ void WP5HLStylesListener::insertRow()
 	}
 }
 
-void WP5HLStylesListener::insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove, 
-				  const guint8 borderBits, 
+void WP5HLStylesListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan, const bool boundFromLeft, const bool boundFromAbove, 
+				  const uint8_t borderBits, 
 				  const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
 {
 	if (/*!isUndoOn() &&*/ m_currentTable != NULL)

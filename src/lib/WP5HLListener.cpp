@@ -46,12 +46,12 @@ WP5HLListener::WP5HLListener(vector<WPXPageSpan *> *pageList, WPXHLListenerImpl 
  public 'HLListenerImpl' functions
 *****************************************/
 
-void WP5HLListener::insertCharacter(const guint16 character)
+void WP5HLListener::insertCharacter(const uint16_t character)
 {
 	m_textBuffer.append(character);
 }
 
-void WP5HLListener::insertTab(const guint8 tabType, const float tabPosition)
+void WP5HLListener::insertTab(const uint8_t tabType, const float tabPosition)
 {
 	_flushText();
 	m_listenerImpl->insertTab();
@@ -98,13 +98,13 @@ void WP5HLListener::endDocument()
  public 'parser' functions
 *****************************************/
 
-void WP5HLListener::attributeChange(const bool isOn, const guint8 attribute)
+void WP5HLListener::attributeChange(const bool isOn, const uint8_t attribute)
 {
 
 	// flush everything which came before this change
 	_flushText();
 
-	guint32 textAttributeBit = 0;
+	uint32_t textAttributeBit = 0;
 
 	// FIXME: handle all the possible attribute bits
 	switch (attribute)
@@ -198,7 +198,7 @@ void WP5HLListener::_flushText(const bool fakeText)
 void WP5HLListener::_openParagraph()
 {
 	_closeParagraph();
-	/*guint8 paragraphJustification;
+	/*uint8_t paragraphJustification;
 	(m_parseState->m_tempParagraphJustification != 0) ? paragraphJustification = m_parseState->m_tempParagraphJustification :
 		paragraphJustification = m_parseState->m_paragraphJustification;
 	m_parseState->m_tempParagraphJustification = 0;

@@ -33,7 +33,7 @@ const char *FONT_WEIGHT_STRINGS[] = { "Bold", "Demi", "Extended", "Extra",
 const char * USELESS_WP_POSTFIX = "-WP";
 #define countElements(a) ((sizeof(a) / sizeof(a[0])))
 
-WP6FontDescriptorPacket::WP6FontDescriptorPacket(WPXInputStream *input, int id, guint32 dataOffset, guint32 dataSize) 
+WP6FontDescriptorPacket::WP6FontDescriptorPacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize) 
 	: WP6PrefixDataPacket(input)
 {
 	_read(input, dataOffset, dataSize);
@@ -73,24 +73,24 @@ void WP6FontDescriptorPacket::_readContents(WPXInputStream *input)
    //{	
    if (m_fontNameLength == 0) 
 	   {
-		   m_fontName = new gchar[1];
+		   m_fontName = new char[1];
 		   m_fontName[0]='\0';
 	   }
    
    else 
 	   {
-		   m_fontName = new gchar[m_fontNameLength];
+		   m_fontName = new char[m_fontNameLength];
 
-		   guint16 tempLength=0;
+		   uint16_t tempLength=0;
 		   int numTokens=0;
 		   int lastTokenPosition=0;
-		   for (guint16 i=0; i<(m_fontNameLength/2); i++) 
+		   for (uint16_t i=0; i<(m_fontNameLength/2); i++) 
 		   {
-			   guint8 characterSet;
-			   guint8 character;
+			   uint8_t characterSet;
+			   uint8_t character;
 			   int len;
-			   const guint16 *chars;
-			   guint16 charWord = readU16(input);
+			   const uint16_t *chars;
+			   uint16_t charWord = readU16(input);
 
 			   characterSet = (charWord & 0xFF00) >> 8;
 			   character = (charWord & 0xFF);
@@ -110,7 +110,7 @@ void WP6FontDescriptorPacket::_readContents(WPXInputStream *input)
 				   lastTokenPosition=tempLength;
 			   }
 			   else if (chars[0] != 0x00 && chars[0] < 0x7F) {
-				   m_fontName[tempLength]=(gchar) chars[0];
+				   m_fontName[tempLength]=(char) chars[0];
 				   tempLength++;
 			   }
 		   }

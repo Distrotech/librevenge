@@ -32,7 +32,7 @@
 class WP6HighlightGroup : public WP6FixedLengthGroup
 {
  public:
-	WP6HighlightGroup(WPXInputStream *input, guint8 groupID);
+	WP6HighlightGroup(WPXInputStream *input, uint8_t groupID);
 	virtual void parse(WP6HLListener *listener) = 0;
 	const RGBSColor getColor() const { return m_color; }
 
@@ -46,14 +46,14 @@ class WP6HighlightGroup : public WP6FixedLengthGroup
 class WP6HighlightOnGroup : public WP6HighlightGroup
 {
  public:
-	WP6HighlightOnGroup(WPXInputStream *input, guint8 groupID);
+	WP6HighlightOnGroup(WPXInputStream *input, uint8_t groupID);
 	virtual void parse(WP6HLListener *listener);
 };
 
 class WP6HighlightOffGroup : public WP6HighlightGroup
 {
  public:
-	WP6HighlightOffGroup(WPXInputStream *input, guint8 groupID);
+	WP6HighlightOffGroup(WPXInputStream *input, uint8_t groupID);
 	virtual void parse(WP6HLListener *listener);
 };
 

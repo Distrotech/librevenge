@@ -30,10 +30,10 @@
 const float WP6_DEFAULT_PAGE_MARGIN_TOP = 1.0f;
 const float WP6_DEFAULT_PAGE_MARGIN_BOTTOM = 1.0f;
 const float PAGE_MAX_DELTA = 0.05f;
-const guint8 DUMMY_INTERNAL_HEADER_FOOTER = 16;
+const uint8_t DUMMY_INTERNAL_HEADER_FOOTER = 16;
 
 // precondition: 0 <= headerFooterType <= 3 (i.e.: we don't handle watermarks here)
-const WPXHeaderFooterType _convertHeaderFooterType(const guint8 headerFooterType)
+const WPXHeaderFooterType _convertHeaderFooterType(const uint8_t headerFooterType)
 {       
 	WPXHeaderFooterType wpxType;
 
@@ -42,7 +42,7 @@ const WPXHeaderFooterType _convertHeaderFooterType(const guint8 headerFooterType
 	return wpxType;
 }
 
-const WPXHeaderFooterOccurence _convertHeaderFooterOccurence(const guint8 occurenceBits)
+const WPXHeaderFooterOccurence _convertHeaderFooterOccurence(const uint8_t occurenceBits)
 {
 	if (occurenceBits & WP6_HEADER_FOOTER_GROUP_EVEN_BIT && occurenceBits & WP6_HEADER_FOOTER_GROUP_ODD_BIT)
 		return ALL;
@@ -54,7 +54,7 @@ const WPXHeaderFooterOccurence _convertHeaderFooterOccurence(const guint8 occure
 }
 
 WPXHeaderFooter::WPXHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence occurence, 
-				 const guint8 internalType, const guint16 textPID) :
+				 const uint8_t internalType, const uint16_t textPID) :
 	m_internalType(internalType),
 	m_textPID(textPID)
 {
@@ -96,7 +96,7 @@ WPXPageSpan::WPXPageSpan(WPXPageSpan &page, float paragraphMarginLeft, float par
 }
 
 
-void WPXPageSpan::setHeaderFooter(const guint8 headerFooterType, const guint8 occurenceBits, const guint16 textPID)
+void WPXPageSpan::setHeaderFooter(const uint8_t headerFooterType, const uint8_t occurenceBits, const uint16_t textPID)
 {
         WPXHeaderFooterType wpxType = _convertHeaderFooterType(headerFooterType);
 	WPXHeaderFooterOccurence wpxOccurence = _convertHeaderFooterOccurence(occurenceBits);

@@ -32,28 +32,28 @@
 class WP5AttributeGroup : public WP5FixedLengthGroup
 {
  public:
-	WP5AttributeGroup(WPXInputStream *input, guint8 groupID);	
+	WP5AttributeGroup(WPXInputStream *input, uint8_t groupID);	
 	virtual void parse(WP5HLListener *llListener) = 0;
-	const guint8 getAttribute() const { return m_attribute; }
+	const uint8_t getAttribute() const { return m_attribute; }
 	
  protected:
 	virtual void _readContents(WPXInputStream *input);
 
  private:
-	guint8 m_attribute;
+	uint8_t m_attribute;
 };
 
 class WP5AttributeOnGroup : public WP5AttributeGroup
 {
  public:
-	WP5AttributeOnGroup(WPXInputStream *input, guint8 groupID);
+	WP5AttributeOnGroup(WPXInputStream *input, uint8_t groupID);
 	virtual void parse(WP5HLListener *listener);
 };
 
 class WP5AttributeOffGroup : public WP5AttributeGroup
 {
  public:
-	WP5AttributeOffGroup(WPXInputStream *input, guint8 groupID);
+	WP5AttributeOffGroup(WPXInputStream *input, uint8_t groupID);
 	virtual void parse(WP5HLListener *listener);
 };
 

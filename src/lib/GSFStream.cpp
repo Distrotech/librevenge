@@ -21,7 +21,7 @@ GSFInputStream::~GSFInputStream()
 	g_object_unref(G_OBJECT(m_input));
 }
 
-const guint8 * GSFInputStream::read(size_t numBytes)
+const uint8_t * GSFInputStream::read(size_t numBytes)
 {
 	return gsf_input_read(m_input, numBytes, NULL);
 }

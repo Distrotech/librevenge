@@ -27,7 +27,7 @@
 #include "libwpd.h"
 #include <string.h>
 
-const guint16 asciiMap[] =
+const uint16_t asciiMap[] =
 {
 	  0,   1,   2,   3,   4,   5,   6,   7,
 	  8,   9,  10,  11,  12,  13,  14,  15,
@@ -63,7 +63,7 @@ const guint16 asciiMap[] =
 	248, 249, 250, 251, 252, 253, 254, 255,
 };
 
-const guint16 extendedInternationalCharacterMap[] =
+const uint16_t extendedInternationalCharacterMap[] =
 {
   229, // lower case 'a' with a small circle
   197, // upper case 'a' with a small circle
@@ -103,7 +103,7 @@ const guint16 extendedInternationalCharacterMap[] =
    KWord project, licensed under the LGPL */
 
 /* WP multinational characters (charset 1) */
-const guint16 multinationalMap[] = {
+const uint16_t multinationalMap[] = {
   0x0300, 0x00b7, 0x0303, 0x0302, 0x0335, 0x0338, 0x0301, 0x0308,
   0x0304, 0x0313, 0x0315, 0x02bc, 0x0326, 0x0315, 0x030a, 0x0307,
   0x030b, 0x0327, 0x0328, 0x030c, 0x0337, 0x0305, 0x0306, 0x00df,
@@ -138,7 +138,7 @@ const guint16 multinationalMap[] = {
 };
 
 /* WP phonetic symbol (charset 2) */
-const guint16 phoneticMap[] = {
+const uint16_t phoneticMap[] = {
   0x02b9, 0x02ba, 0x02bb, 0xf813, 0x02bd, 0x02bc, 0xf814, 0x02be,
   0x02bf, 0x0310, 0x02d0, 0x02d1, 0x0306, 0x032e, 0x0329, 0x02c8,
   0x02cc, 0x02c9, 0x02ca, 0x02cb, 0x02cd, 0x02ce, 0x02cf, 0x02c6,
@@ -161,7 +161,7 @@ const guint16 phoneticMap[] = {
 };
 
 /* WP box drawing symbol (charset 3) */
-const guint16 boxdrawingMap[] = {
+const uint16_t boxdrawingMap[] = {
   0x2591, 0x2592, 0x2593, 0x2588, 0x258c, 0x2580, 0x2590, 0x2584,
   0x2500, 0x2502, 0x250c, 0x2510, 0x2518, 0x2514, 0x251c, 0x252c,
   0x2524, 0x2534, 0x253c, 0x2550, 0x2551, 0x2554, 0x2557, 0x255d,
@@ -176,7 +176,7 @@ const guint16 boxdrawingMap[] = {
 };
 
 /* WP typographic symbol (charset 4) */
-const guint16 typographicMap[] = {
+const uint16_t typographicMap[] = {
   0x25cf, 0x25cb, 0x25a0, 0x2022, 0xf817, 0x00b6, 0x00a7, 0x00a1,
   0x00bf, 0x00ab, 0x00bb, 0x00a3, 0x00a5, 0x20a7, 0x0192, 0x00aa,
   0x00ba, 0x00bd, 0x00bc, 0x00a2, 0x00b2, 0x207f, 0x00ae, 0x00a9,
@@ -193,7 +193,7 @@ const guint16 typographicMap[] = {
 };
 
 /* WP iconic symbol (charset 5) */
-const guint16 iconicMap[] = {
+const uint16_t iconicMap[] = {
   0x2661, 0x2662, 0x2667, 0x2664, 0x2642, 0x2640, 0x263c, 0x263a,
   0x263b, 0x266a, 0x266c, 0x25ac, 0x2302, 0x203c, 0x221a, 0x21a8,
   0x2310, 0x2319, 0x25d8, 0x25d9, 0x21b5, 0x2104, 0x261c, 0x2007,
@@ -229,7 +229,7 @@ const guint16 iconicMap[] = {
 };
 
 /* WP math/scientific (charset 6) */
-const guint16 mathMap[] = {
+const uint16_t mathMap[] = {
   0x2212, 0x00b1, 0x2264, 0x2265, 0x221d, 0x01c0, 0x2215, 0x2216,
   0x00f7, 0x2223, 0x2329, 0x232a, 0x223c, 0x2248, 0x2261, 0x2208,
   0x2229, 0x2225, 0x2211, 0x221e, 0x00ac, 0x2192, 0x2190, 0x2191,
@@ -263,7 +263,7 @@ const guint16 mathMap[] = {
 };
 
 /* WP math/scientific extended (charset 7) */
-const guint16 mathextMap[] = {
+const uint16_t mathextMap[] = {
   0x2320, 0x2321, 0xf702, 0xf703, 0x221a, 0xf705, 0xf706, 0xf707,
   0xf708, 0xf709, 0xf70a, 0xf70b, 0xf70c, 0xf70d, 0xf70e, 0xf70f,
   0xf710, 0xf711, 0xf712, 0xf713, 0xf714, 0xf715, 0xf716, 0xf717,
@@ -292,7 +292,7 @@ const guint16 mathextMap[] = {
 };
 
 /* WP greek (charset 8) */
-const guint16 greekMap[] = {
+const uint16_t greekMap[] = {
   0x0391, 0x03b1, 0x0392, 0x03b2, 0x0392, 0x03d0, 0x0393, 0x03b3,
   0x0394, 0x03b4, 0x0395, 0x03b5, 0x0396, 0x03b6, 0x0397, 0x03b7,
   0x0398, 0x03b8, 0x0399, 0x03b9, 0x039a, 0x03ba, 0x039b, 0x03bb,
@@ -324,7 +324,7 @@ const guint16 greekMap[] = {
 };
 
 /* WP hebrew (charset 9) */
-const guint16 hebrewMap[] = {
+const uint16_t hebrewMap[] = {
   0x05d0, 0x05d1, 0x05d2, 0x05d3, 0x05d4, 0x05d5, 0x05d6, 0x05d7,
   0x05d8, 0x05d9, 0x05da, 0x05db, 0x05dc, 0x05dd, 0x05de, 0x05df,
   0x05e0, 0x05e1, 0x05e2, 0x05e3, 0x05e4, 0x05e5, 0x05e6, 0x05e7,
@@ -344,7 +344,7 @@ const guint16 hebrewMap[] = {
 };
 
 /* WP cyrillic (charset 10) */
-const guint16 cyrillicMap[] = {
+const uint16_t cyrillicMap[] = {
   0x0410, 0x0430, 0x0411, 0x0431, 0x0412, 0x0432, 0x0413, 0x0433,
   0x0414, 0x0434, 0x0415, 0x0435, 0x0401, 0x0451, 0x0416, 0x0436,
   0x0417, 0x0437, 0x0418, 0x0438, 0x0419, 0x0439, 0x041a, 0x043a,
@@ -380,7 +380,7 @@ const guint16 cyrillicMap[] = {
 };
 
 /* WP japanese (charset 11) */
-const guint16 japaneseMap[] = {
+const uint16_t japaneseMap[] = {
   0xff61, 0xff62, 0xff63, 0xff64, 0xff65, 0xff66, 0xff67, 0xff68,
   0xff69, 0xff6a, 0xff6b, 0xff6c, 0xff6d, 0xff6e, 0xff6f, 0xff70,
   0xff71, 0xff72, 0xff73, 0xff74, 0xff75, 0xff76, 0xff77, 0xff78,
@@ -400,8 +400,8 @@ const guint16 japaneseMap[] = {
 #include "WP6TibetanMap.h"
 #include "WP6FileStructure.h"
 
-int extendedCharacterToUCS2(guint8 character,
-			    guint8 characterSet, const guint16 **chars)
+int extendedCharacterToUCS2(uint8_t character,
+			    uint8_t characterSet, const uint16_t **chars)
 {
 	int i;
 
@@ -496,7 +496,7 @@ int extendedCharacterToUCS2(guint8 character,
 	return 1;
 }
 
-_RGBSColor::_RGBSColor(guint8 r, guint8 g, guint8 b, guint8 s)
+_RGBSColor::_RGBSColor(uint8_t r, uint8_t g, uint8_t b, uint8_t s)
 	:	m_r(r),
 		m_g(g),
 		m_b(b),
@@ -512,7 +512,7 @@ _RGBSColor::_RGBSColor()
 {
 }
 
-_WPXTabStop::_WPXTabStop(float position, WPXTabAlignment alignment, guint16 leaderCharacter, guint8 leaderNumSpaces)
+_WPXTabStop::_WPXTabStop(float position, WPXTabAlignment alignment, uint16_t leaderCharacter, uint8_t leaderNumSpaces)
 	:	m_position(position),
 		m_alignment(alignment),
 		m_leaderCharacter(leaderCharacter),
@@ -535,11 +535,11 @@ _WPXColumnDefinition::_WPXColumnDefinition()
 {
 }
 
-UCSString::UCSString() : m_stringBuf(g_array_new(TRUE, FALSE, sizeof(guint32)))
+UCSString::UCSString() : m_stringBuf(g_array_new(TRUE, FALSE, sizeof(uint32_t)))
 {
 }
 
-UCSString::UCSString(const UCSString &stringBuf) : m_stringBuf(g_array_new(TRUE, FALSE, sizeof(guint32)))
+UCSString::UCSString(const UCSString &stringBuf) : m_stringBuf(g_array_new(TRUE, FALSE, sizeof(uint32_t)))
 {
 	g_array_insert_vals(m_stringBuf, 0, stringBuf.getUCS4(), stringBuf.getLen());
 }
@@ -549,7 +549,7 @@ UCSString::~UCSString()
 	g_array_free(m_stringBuf, TRUE);
 }
 
-void UCSString::append(guint32 c)
+void UCSString::append(uint32_t c)
 {
 	g_array_append_val(m_stringBuf, c);
 }
@@ -561,11 +561,11 @@ void UCSString::append(const UCSString &stringBuf)
 
 // append: appends an ascii-standard (not UTF8!!) string onto the buffer
 // FIXME: this function should really handle appending a UTF8 string onto a buffer
-void UCSString::append(const gchar *buf)
+void UCSString::append(const char *buf)
 {
 	for (int i=0; i<strlen(buf); i++)
 	{
-		append((guint32)buf[i]);
+		append((uint32_t)buf[i]);
 	}
 }
 
@@ -586,7 +586,7 @@ UTF8String::UTF8String(const UTF8String &stringBuf) :
 
 UTF8String::UTF8String(const UCSString &stringBuf, bool convertToValidXML)
 {
-	gchar *buf;
+	char *buf;
 	if (convertToValidXML)
 	{
 		UCSString tempUCS4;
@@ -594,10 +594,10 @@ UTF8String::UTF8String(const UCSString &stringBuf, bool convertToValidXML)
 			if (stringBuf.getUCS4()[i] == '&') {
 				tempUCS4.append("&amp;");
 			}
-			else if (stringBuf.getUCS4()[i] == (guint16)'<') {
+			else if (stringBuf.getUCS4()[i] == (uint16_t)'<') {
 				tempUCS4.append("&lt;");
 			}
-			else if (stringBuf.getUCS4()[i] == (guint16)'>') {
+			else if (stringBuf.getUCS4()[i] == (uint16_t)'>') {
 				tempUCS4.append("&gt;");
 			}
 			else {
@@ -614,7 +614,7 @@ UTF8String::UTF8String(const UCSString &stringBuf, bool convertToValidXML)
 	g_free(buf);
 }
 
-// UTF8String::UTF8String(const gchar *format, ...) :
+// UTF8String::UTF8String(const char *format, ...) :
 // 	m_buf(g_string_new(NULL))
 
 // {
@@ -624,7 +624,7 @@ UTF8String::UTF8String(const UCSString &stringBuf, bool convertToValidXML)
 // //  	gsize len = g_printf_string_upper_bound(format, args);
 // //  	if (len > 0)
 // //  	{
-// 	gchar *buf = NULL;
+// 	char *buf = NULL;
 // 	buf = g_strdup_vprintf(format, args);
 // 	m_buf = g_string_append(m_buf, buf);
 // 	g_free(buf);
@@ -632,21 +632,21 @@ UTF8String::UTF8String(const UCSString &stringBuf, bool convertToValidXML)
 // 	va_end(args);
 // }
 
-UTF8String::UTF8String(const gchar *str) :
+UTF8String::UTF8String(const char *str) :
 	m_buf(g_string_new(str))
 
 {
 }
 
 
-void UTF8String::sprintf(const gchar *format, ...)
+void UTF8String::sprintf(const char *format, ...)
 {
 	va_list args;
 	va_start (args, format);
 
 	m_buf = g_string_truncate(m_buf, 0);
 
-	gchar *buf = NULL;
+	char *buf = NULL;
 	buf = g_strdup_vprintf(format, args);
 	m_buf = g_string_append(m_buf, buf);
 	g_free(buf);

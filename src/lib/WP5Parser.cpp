@@ -58,14 +58,14 @@ void WP5Parser::parseDocument(WPXInputStream *input, WP5HLListener *listener)
 {
 	while (!input->atEOS())
 	{
-		guint8 readVal;
+		uint8_t readVal;
 		readVal = readU8(input);
 		
 		if (readVal == 0 || readVal == 0x7F || readVal == 0xFF)
 		{
 			// do nothing: this token is meaningless and is likely just corruption
 		}
-		else if (readVal >= (guint8)0x01 && readVal <= (guint8)0x1F)
+		else if (readVal >= (uint8_t)0x01 && readVal <= (uint8_t)0x1F)
 		{
 			// control characters
 			
@@ -88,11 +88,11 @@ void WP5Parser::parseDocument(WPXInputStream *input, WP5HLListener *listener)
 					break;
 			}
 		}
-		else if (readVal >= (guint8)0x20 && readVal <= (guint8)0x7E)
+		else if (readVal >= (uint8_t)0x20 && readVal <= (uint8_t)0x7E)
 		{
 			listener->insertCharacter( readVal );
 		}
-		else if (readVal >= (guint8)0x80 && readVal <= (guint8)0xBF)
+		else if (readVal >= (uint8_t)0x80 && readVal <= (uint8_t)0xBF)
 		{
 			// single byte functions
 		}			

@@ -72,7 +72,7 @@ WP6PrefixDataPacket * WP6PrefixDataPacket::constructPrefixDataPacket(WPXInputStr
 	}
 }
 
-void WP6PrefixDataPacket::_read(WPXInputStream *input, guint32 dataOffset, guint32 dataSize)
+void WP6PrefixDataPacket::_read(WPXInputStream *input, uint32_t dataOffset, uint32_t dataSize)
 {
 	input->seek(dataOffset, WPX_SEEK_SET);
 

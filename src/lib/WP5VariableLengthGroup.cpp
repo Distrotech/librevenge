@@ -32,7 +32,7 @@ WP5VariableLengthGroup::WP5VariableLengthGroup()
 {
 }
 
-WP5VariableLengthGroup * WP5VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, guint8 group)
+WP5VariableLengthGroup * WP5VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, uint8_t group)
 {
 	switch (group)
 	{
@@ -46,7 +46,7 @@ WP5VariableLengthGroup * WP5VariableLengthGroup::constructVariableLengthGroup(WP
 
 void WP5VariableLengthGroup::_read(WPXInputStream *input)
 {
-	guint32 startPosition = input->tell();
+	uint32_t startPosition = input->tell();
 
 	WPD_DEBUG_MSG(("WordPerfect: handling a variable length group\n"));	
 	

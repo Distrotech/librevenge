@@ -26,7 +26,7 @@
 #include "WPXTable.h"
 #include "libwpd_support.h"
 
-_WPXTableCell::_WPXTableCell(guint8 colSpan, guint8 rowSpan, bool boundFromAbove, bool boundFromLeft, guint8 borderBits) :
+_WPXTableCell::_WPXTableCell(uint8_t colSpan, uint8_t rowSpan, bool boundFromAbove, bool boundFromLeft, uint8_t borderBits) :
 	m_colSpan(colSpan),
 	m_rowSpan(rowSpan),
 	m_boundFromAbove(boundFromAbove),
@@ -54,7 +54,7 @@ void WPXTable::insertRow()
 	m_tableRows.push_back(new vector<WPXTableCell *>);
 }
 
-void WPXTable::insertCell(guint8 colSpan, guint8 rowSpan, bool boundFromLeft, bool boundFromAbove, guint8 borderBits)
+void WPXTable::insertCell(uint8_t colSpan, uint8_t rowSpan, bool boundFromLeft, bool boundFromAbove, uint8_t borderBits)
 {	
 	m_tableRows[(m_tableRows.size()-1)]->push_back(new WPXTableCell(colSpan, rowSpan, boundFromLeft, boundFromAbove, borderBits));
 }

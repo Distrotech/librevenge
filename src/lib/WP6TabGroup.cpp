@@ -39,7 +39,7 @@ WP6TabGroup::WP6TabGroup(WPXInputStream *input) :
 
 void WP6TabGroup::_readContents(WPXInputStream *input)
 {
-	guint16 tempPosition = 0;
+	uint16_t tempPosition = 0;
 	if ((getFlags() & 0x40) == 0x40) // 0x40 is "ignore function" flag
 	{
 		m_ignoreFunction = true;

@@ -33,7 +33,7 @@ class WP6ParagraphGroup_LineSpacingSubGroup : public WP6VariableLengthGroup_SubG
 {
 public:
 	WP6ParagraphGroup_LineSpacingSubGroup(WPXInputStream *input);
-	virtual void parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
+	virtual void parse(WP6HLListener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
 
 private:
 	float m_lineSpacing;
@@ -43,22 +43,22 @@ class WP6ParagraphGroup_JustificationModeSubGroup : public WP6VariableLengthGrou
 {
 public:
 	WP6ParagraphGroup_JustificationModeSubGroup(WPXInputStream *input);
-	virtual void parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
+	virtual void parse(WP6HLListener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
 
 private:
-	guint8 m_justification;
+	uint8_t m_justification;
 };
 
 class WP6ParagraphGroup_SpacingAfterParagraphSubGroup : public WP6VariableLengthGroup_SubGroup
 {
 public:
-	WP6ParagraphGroup_SpacingAfterParagraphSubGroup(WPXInputStream *input, const guint16 sizeNonDeletable);
-	virtual void parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
+	WP6ParagraphGroup_SpacingAfterParagraphSubGroup(WPXInputStream *input, const uint16_t sizeNonDeletable);
+	virtual void parse(WP6HLListener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
 
 private:
 	float m_spacingAfterParagraphAbsolute;
 	float m_spacingAfterParagraphRelative;
-	guint16 m_sizeNonDeletable;
+	uint16_t m_sizeNonDeletable;
 };
 
 class WP6ParagraphGroup_TabSetSubGroup : public WP6VariableLengthGroup_SubGroup
@@ -66,7 +66,7 @@ class WP6ParagraphGroup_TabSetSubGroup : public WP6VariableLengthGroup_SubGroup
 public:
 	WP6ParagraphGroup_TabSetSubGroup(WPXInputStream *input);
 	~WP6ParagraphGroup_TabSetSubGroup();
-	virtual void parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
+	virtual void parse(WP6HLListener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
 
 private:
 	bool m_isRelative;
@@ -79,43 +79,43 @@ class WP6ParagraphGroup_IndentFirstLineSubGroup : public WP6VariableLengthGroup_
 {
 public:
 	WP6ParagraphGroup_IndentFirstLineSubGroup(WPXInputStream *input);
-	virtual void parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
+	virtual void parse(WP6HLListener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
 
 private:
-	gint16 m_firstLineOffset;
+	int16_t m_firstLineOffset;
 };
 
 class WP6ParagraphGroup_LeftMarginAdjustmentSubGroup : public WP6VariableLengthGroup_SubGroup
 {
 public:
 	WP6ParagraphGroup_LeftMarginAdjustmentSubGroup(WPXInputStream *input);
-	virtual void parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
+	virtual void parse(WP6HLListener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
 
 private:
-	gint16 m_leftMargin;
+	int16_t m_leftMargin;
 };
 
 class WP6ParagraphGroup_RightMarginAdjustmentSubGroup : public WP6VariableLengthGroup_SubGroup
 {
 public:
 	WP6ParagraphGroup_RightMarginAdjustmentSubGroup(WPXInputStream *input);
-	virtual void parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
+	virtual void parse(WP6HLListener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
 
 private:
-	gint16 m_rightMargin;
+	int16_t m_rightMargin;
 };
 
 class WP6ParagraphGroup_OutlineDefineSubGroup : public WP6VariableLengthGroup_SubGroup
 {
 public:
 	WP6ParagraphGroup_OutlineDefineSubGroup(WPXInputStream *input);
-	virtual void parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
+	virtual void parse(WP6HLListener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
 
 private:
-	guint16 m_outlineHash;
-	guint8 m_numberingMethods[WP6_NUM_LIST_LEVELS];
-	guint8 m_outlineFlags;
-	guint8 m_tabBehaviourFlag;
+	uint16_t m_outlineHash;
+	uint8_t m_numberingMethods[WP6_NUM_LIST_LEVELS];
+	uint8_t m_outlineFlags;
+	uint8_t m_tabBehaviourFlag;
 };
 
 class WP6ParagraphGroup : public WP6VariableLengthGroup

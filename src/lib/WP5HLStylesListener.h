@@ -37,32 +37,32 @@ public:
 	WP5HLStylesListener(vector<WPXPageSpan *> *pageList, vector<WPXTable *> *tableList);
 
 	virtual void startDocument() {}
-	virtual void setAlignmentCharacter(const guint16 character) {}
-	virtual void setLeaderCharacter(const guint16 character, const guint8 numberOfSpaces) {}
+	virtual void setAlignmentCharacter(const uint16_t character) {}
+	virtual void setLeaderCharacter(const uint16_t character, const uint8_t numberOfSpaces) {}
 	virtual void defineTabStops(const bool isRelative, const vector<WPXTabStop> &tabStops, 
 				    const vector<bool> &usePreWP9LeaderMethods) {}
-	virtual void insertCharacter(const guint16 character) {}
-	virtual void insertTab(const guint8 tabType, const guint16 tabPosition) {}
+	virtual void insertCharacter(const uint16_t character) {}
+	virtual void insertTab(const uint8_t tabType, const uint16_t tabPosition) {}
 	virtual void insertEOL() {}
- 	virtual void insertBreak(const guint8 breakType);
-	virtual void attributeChange(const bool isOn, const guint8 attribute) {}
+ 	virtual void insertBreak(const uint8_t breakType);
+	virtual void attributeChange(const bool isOn, const uint8_t attribute) {}
 	virtual void lineSpacingChange(const float lineSpacing) {}
 	virtual void spacingAfterParagraphChange(const float spacingRelative, const float spacingAbsolute) {}
-	virtual void justificationChange(const guint8 justification) {}
-	virtual void pageMarginChange(const guint8 side, const guint16 margin) {}
-	virtual void pageFormChange(const guint16 length, const guint16 width, const WPXFormOrientation orientation) {}
-	virtual void marginChange(const guint8 side, const guint16 margin) {}
-	virtual void paragraphMarginChange(const guint8 side, const gint16 margin) {}
-	virtual void indentFirstLineChange(const gint16 offset) {}
-	virtual void columnChange(const guint8 numColumns) {}
+	virtual void justificationChange(const uint8_t justification) {}
+	virtual void pageMarginChange(const uint8_t side, const uint16_t margin) {}
+	virtual void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation) {}
+	virtual void marginChange(const uint8_t side, const uint16_t margin) {}
+	virtual void paragraphMarginChange(const uint8_t side, const int16_t margin) {}
+	virtual void indentFirstLineChange(const int16_t offset) {}
+	virtual void columnChange(const uint8_t numColumns) {}
 	virtual void endDocument();
 
-	virtual void defineTable(guint8 position, guint16 leftOffset){}
-	virtual void addTableColumnDefinition(guint32 width, guint32 leftGutter, guint32 rightGutter){}
+	virtual void defineTable(uint8_t position, uint16_t leftOffset){}
+	virtual void addTableColumnDefinition(uint32_t width, uint32_t leftGutter, uint32_t rightGutter){}
 	virtual void startTable();
  	virtual void insertRow();
- 	virtual void insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove,
-				const guint8 borderBits,
+ 	virtual void insertCell(const uint8_t colSpan, const uint8_t rowSpan, const bool boundFromLeft, const bool boundFromAbove,
+				const uint8_t borderBits,
 				const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
  	virtual void endTable() {}
 

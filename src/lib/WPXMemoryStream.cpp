@@ -2,7 +2,7 @@
 #include "libwpd_internal.h"
 
 
-WPXMemoryInputStream::WPXMemoryInputStream(guint8 *data, size_t size) :
+WPXMemoryInputStream::WPXMemoryInputStream(uint8_t *data, size_t size) :
 	WPXInputStream(false),
 	m_offset(0),
 	m_data(data),
@@ -17,7 +17,7 @@ WPXMemoryInputStream::~WPXMemoryInputStream()
 	delete [] m_data;
 }
 
-const guint8 * WPXMemoryInputStream::read(size_t numBytes)
+const uint8_t * WPXMemoryInputStream::read(size_t numBytes)
 {
 	delete [] m_tmpBuf;
 	int numBytesToRead;
@@ -30,7 +30,7 @@ const guint8 * WPXMemoryInputStream::read(size_t numBytes)
 	if (numBytesToRead == 0)
 		return NULL;
 
-	m_tmpBuf = new guint8[numBytes];
+	m_tmpBuf = new uint8_t[numBytes];
 	for (size_t i=0; i<numBytes; i++)
 	{
 		m_tmpBuf[i] = m_data[m_offset];

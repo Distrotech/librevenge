@@ -33,15 +33,15 @@
 class WP6GeneralTextPacket : public WP6PrefixDataPacket
 {
 public:
-	WP6GeneralTextPacket(WPXInputStream *input, int id, guint32 dataOffset, guint32 dataSize);
+	WP6GeneralTextPacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize);
 	virtual ~WP6GeneralTextPacket();
 	virtual void _readContents(WPXInputStream *input);
 	virtual void parse(WP6HLListener *listener) const;
 
 private:              
-	guint16 m_numTextBlocks;
-	guint32 m_firstTextBlockOffset;
-	guint32 *m_blockSizes;
+	uint16_t m_numTextBlocks;
+	uint32_t m_firstTextBlockOffset;
+	uint32_t *m_blockSizes;
 
 	WPXMemoryInputStream *m_stream;
 	

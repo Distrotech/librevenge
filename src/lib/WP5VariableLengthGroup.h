@@ -34,17 +34,17 @@ class WP5VariableLengthGroup : public WP5Part
 	WP5VariableLengthGroup(); // WP5VariableLengthGroup should _never_ be constructed, only its inherited classes
 	virtual ~WP5VariableLengthGroup() {}
 	
-	static WP5VariableLengthGroup * constructVariableLengthGroup(WPXInputStream *input, guint8 group);
+	static WP5VariableLengthGroup * constructVariableLengthGroup(WPXInputStream *input, uint8_t group);
 
  protected:
 	void _read(WPXInputStream *input);
  	virtual void _readContents(WPXInputStream *input) {} // we don't always need more information than that provided generically
 
-	const guint8 getSubGroup() const { return m_subGroup; }
+	const uint8_t getSubGroup() const { return m_subGroup; }
 
  private:
-	guint8 m_subGroup;
-	guint16 m_size; 
+	uint8_t m_subGroup;
+	uint16_t m_size; 
 };
 
 #endif /* WP5VARIABLELENGTHGROUP_H */

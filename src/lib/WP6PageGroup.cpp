@@ -55,7 +55,7 @@ void WP6PageGroup::_readContents(WPXInputStream *input)
 		WPD_DEBUG_MSG(("WordPerfect: Read suppressed code (%i)\n", m_suppressedCode));
 		break;
 	case WP6_PAGE_GROUP_FORM:
-		guint8 tmpOrientation;
+		uint8_t tmpOrientation;
 		m_formHashTableIndex = readU8(input);
 		m_formHashValue = readU16(input);
 		m_formLength = readU16(input);
