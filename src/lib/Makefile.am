@@ -63,14 +63,17 @@ libwpd_1_la_SOURCES =				\
 	WP42UnsupportedVariableLengthGroup.cpp	\
 	WP42VariableLengthGroup.cpp		\
 	WP5AttributeGroup.cpp 			\
+	WP5ExtendedCharacterGroup.cpp		\
 	WP5FileStructure.cpp			\
 	WP5FixedLengthGroup.cpp			\
 	WP5FormatGroup.cpp			\
 	WP5Header.cpp				\
 	WP5HLListener.cpp			\
 	WP5HLStylesListener.cpp			\
+	WP5PageFormatGroup.cpp			\
 	WP5Parser.cpp				\
 	WP5Part.cpp				\
+	WP5SingleByteFunction.cpp		\
 	WP5UnsupportedFixedLengthGroup.cpp	\
 	WP5UnsupportedVariableLengthGroup.cpp	\
 	WP5VariableLengthGroup.cpp		\
@@ -150,6 +153,7 @@ libwpd_1_la_SOURCES =				\
 	WP42UnsupportedVariableLengthGroup.h	\
 	WP42VariableLengthGroup.h		\
 	WP5AttributeGroup.h 			\
+	WP5ExtendedCharacterGroup.h		\
 	WP5FileStructure.h			\
 	WP5FixedLengthGroup.h			\
 	WP5FormatGroup.h			\
@@ -157,8 +161,10 @@ libwpd_1_la_SOURCES =				\
 	WP5HLListener.h				\
 	WP5HLStylesListener.h			\
 	WP5LLListener.h				\
+	WP5PageFormatGroup.h			\
 	WP5Part.h				\
 	WP5Parser.h				\
+	WP5SingleByteFunction.h			\
 	WP5UnsupportedFixedLengthGroup.h	\
 	WP5UnsupportedVariableLengthGroup.h	\
 	WP5VariableLengthGroup.h		\

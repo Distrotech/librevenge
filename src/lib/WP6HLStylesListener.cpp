@@ -83,10 +83,10 @@ void WP6HLStylesListener::pageMarginChange(const uint8_t side, const uint16_t ma
 		float marginInch = (float)((double)margin / (double)WPX_NUM_WPUS_PER_INCH);
 		switch(side)
 		{
-			case WP6_PAGE_GROUP_TOP_MARGIN_SET:
+			case WPX_TOP:
 				m_currentPage->setMarginTop(marginInch);
 				break;
-			case WP6_PAGE_GROUP_BOTTOM_MARGIN_SET:
+			case WPX_BOTTOM:
 				m_currentPage->setMarginBottom(marginInch);
 				break;
 		}
@@ -115,12 +115,12 @@ void WP6HLStylesListener::marginChange(const uint8_t side, const uint16_t margin
 		float marginInch = (float)((double)margin / (double)WPX_NUM_WPUS_PER_INCH);
 		switch(side)
 		{
-			case WP6_COLUMN_GROUP_LEFT_MARGIN_SET:
+			case WPX_LEFT:
 				if (!m_currentPageHasContent)
 					m_currentPage->setMarginLeft(marginInch);
 				m_tempMarginLeft = marginInch;
 				break;
-			case WP6_COLUMN_GROUP_RIGHT_MARGIN_SET:
+			case WPX_RIGHT:
 				if (!m_currentPageHasContent)
 					m_currentPage->setMarginRight(marginInch);
 				m_tempMarginRight = marginInch;

@@ -24,43 +24,53 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WP6PageGroup.h"
-#include "WP6LLListener.h"
+#include "WP5PageFormatGroup.h"
+#include "WP5FileStructure.h"
+#include "WP5LLListener.h"
 #include "libwpd_internal.h"
 
-WP6PageGroup::WP6PageGroup(WPXInputStream *input) :
-	WP6VariableLengthGroup(),
-	m_margin(0)
+WP5PageFormatGroup::WP5PageFormatGroup(WPXInputStream *input) :
+	WP5VariableLengthGroup(),
+	m_leftMargin(0),
+	m_rightMargin(0),
+	m_topMargin(0),
+	m_bottomMargin(0)
 {
 	_read(input);
 }
 
-WP6PageGroup::~WP6PageGroup()
+WP5PageFormatGroup::~WP5PageFormatGroup()
 {
 }
 
-void WP6PageGroup::_readContents(WPXInputStream *input)
+void WP5PageFormatGroup::_readContents(WPXInputStream *input)
 {
 	// this group can contain different kinds of data, thus we need to read
 	// the contents accordingly
 	switch (getSubGroup())
 	{
-	case WP6_PAGE_GROUP_TOP_MARGIN_SET:
-	case WP6_PAGE_GROUP_BOTTOM_MARGIN_SET:
-		m_margin = readU16(input);
-		WPD_DEBUG_MSG(("WordPerfect: Read page group margin size (margin: %i)\n", m_margin));
+	case WP5_TOP_PAGE_FORMAT_GROUP_LEFT_RIGHT_MARGIN_SET:
+		// skip 4 bytes (old values of no interest for us)
+		input->seek(4, WPX_SEEK_CUR);
+		m_leftMargin = readU16(input);
+		m_rightMargin = readU16(input);
+		WPD_DEBUG_MSG(("WordPerfect: Page format group left/right margin set (left margin: %i, right margin: %i)\n", m_leftMargin, m_rightMargin));
 		break;
-	case WP6_PAGE_GROUP_SUPPRESS_PAGE_CHARACTERISTICS:
-		m_suppressedCode = readU8(input);
-		WPD_DEBUG_MSG(("WordPerfect: Read suppressed code (%i)\n", m_suppressedCode));
+	case WP5_TOP_PAGE_FORMAT_GROUP_TOP_BOTTOM_MARGIN_SET:
+		// skip 4 bytes (old values of no interest for us)
+		input->seek(4, WPX_SEEK_CUR);
+		m_topMargin = readU16(input);
+		m_bottomMargin = readU16(input);
+		WPD_DEBUG_MSG(("WordPerfect: Page format group top/bottom margin set (top margin: %i, bottom margin: %i)\n", m_topMargin, m_bottomMargin));
 		break;
-	case WP6_PAGE_GROUP_FORM:
+	case WP5_TOP_PAGE_FORMAT_GROUP_FORM:
 		uint8_t tmpOrientation;
-		m_formHashTableIndex = readU8(input);
-		m_formHashValue = readU16(input);
-		m_formLength = readU16(input);
-		m_formWidth = readU16(input);
-		m_formType = readU8(input);
+		// skip to the effective values (146 - 4)
+		input->seek(142, WPX_SEEK_CUR);
+		m_formLength = readU16(input); // New effective length
+		m_formWidth = readU16(input); // New effective width
+		// skipp to the orientation value (193 - 150)
+		input->seek(42, WPX_SEEK_CUR);
 		tmpOrientation = readU8(input);
 		switch (tmpOrientation)
 		{
@@ -82,22 +92,21 @@ void WP6PageGroup::_readContents(WPXInputStream *input)
 	}
 }
 
-void WP6PageGroup::parse(WP6HLListener *listener)
+void WP5PageFormatGroup::parse(WP5HLListener *listener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling a Page group\n"));
 
 	switch (getSubGroup())
 	{
-	case WP6_PAGE_GROUP_TOP_MARGIN_SET:
-		listener->pageMarginChange(WPX_TOP, m_margin);
+	case WP5_TOP_PAGE_FORMAT_GROUP_LEFT_RIGHT_MARGIN_SET:
+		listener->pageMarginChange(WPX_LEFT, m_leftMargin);
+		listener->pageMarginChange(WPX_RIGHT, m_rightMargin);
 		break;
-	case WP6_PAGE_GROUP_BOTTOM_MARGIN_SET:
-		listener->pageMarginChange(WPX_BOTTOM, m_margin);
+	case WP5_TOP_PAGE_FORMAT_GROUP_TOP_BOTTOM_MARGIN_SET:
+		listener->marginChange(WPX_TOP, m_topMargin);
+		listener->marginChange(WPX_BOTTOM, m_bottomMargin);
 		break;
-	case WP6_PAGE_GROUP_SUPPRESS_PAGE_CHARACTERISTICS:
-		listener->suppressPageCharacteristics(m_suppressedCode);
-		break;
-	case WP6_PAGE_GROUP_FORM:
+	case WP5_TOP_PAGE_FORMAT_GROUP_FORM:
 		listener->pageFormChange(m_formLength, m_formWidth, m_formOrientation);
 		break;
 	default: // something else we don't support, since it isn't in the docs

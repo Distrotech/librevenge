@@ -25,6 +25,7 @@
 
 #include "WP5HLListener.h"
 #include "WP5FileStructure.h"
+#include "WPXFileStructure.h"
 
 _WP5ParsingState::_WP5ParsingState()
 {
@@ -153,6 +154,26 @@ void WP5HLListener::attributeChange(const bool isOn, const uint8_t attribute)
 		m_ps->m_textAttributeBits ^= textAttributeBit;
 
 	m_ps->m_textAttributesChanged = true;
+}
+
+void WP5HLListener::marginChange(uint8_t side, uint16_t margin)
+{
+	//if (!isUndoOn())
+	//{
+		float marginInch = (float)((double)margin/ (double)WPX_NUM_WPUS_PER_INCH);
+		bool marginChanged = false;
+
+		switch(side)
+		{
+		case WPX_LEFT:
+			m_ps->m_paragraphMarginLeft = marginInch - m_ps->m_pageMarginLeft;
+			break;
+		case WPX_RIGHT:
+			m_ps->m_paragraphMarginRight = marginInch - m_ps->m_pageMarginRight;
+			break;
+		}
+
+	//}
 }
 
 /****************************************

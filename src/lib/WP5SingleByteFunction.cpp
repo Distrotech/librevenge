@@ -24,68 +24,56 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WP3SingleByteFunction.h"
-#include "WP3LLListener.h"
+#include "WP5SingleByteFunction.h"
+#include "WP5LLListener.h"
 #include "libwpd_internal.h"
 
-WP3SingleByteFunction * WP3SingleByteFunction::constructSingleByteFunction(WPXInputStream *input, uint8_t groupID)
+WP5SingleByteFunction * WP5SingleByteFunction::constructSingleByteFunction(WPXInputStream *input, uint8_t groupID)
 {
 
 	switch (groupID) 
 	{
-	case 0x80: // condensed hard return
-		return new WP3EOLFunction();
-		
-	case 0x81: // condensed hard page
-		return new WP3EOPFunction();
+	case 0x93: // invisible return in line
+	case 0x94: // invisible return EOL
+	case 0x95: // invisible return EOP
+		return new WP5SpaceFunction();
 
-	case 0x96: // hard hyphen in line
-		return new WP3HyphenFunction();
-
-	case 0x97: // soft hyphen in line
-		return new WP3SoftHyphenFunction();		
-	
 	case 0xa0: // hard space
-		return new WP3HardSpaceFunction();
+		return new WP5HardSpaceFunction();
 		
+	case 0xa9: // hard hyphen in line
+	case 0xaa: // hard hyphen EOL
+	case 0xab: // hard hyphen EOP
+		return new WP5HyphenFunction();
+
+	case 0xac: // soft hyphen in line
+	case 0xad: // soft hyphen EOL
+	case 0xae: // soft hyphen EOP
+		return new WP5SoftHyphenFunction();		
+	
 	default:
 		// should not happen
 		return NULL;
 		}
 }
 
-/*void WP3SpaceFunction::parse(WP3HLListener *listener)
+void WP5SpaceFunction::parse(WP5HLListener *listener)
 {
 	listener->insertCharacter((uint16_t) ' ');
-}*/
+}
 
-void WP3HardSpaceFunction::parse(WP3HLListener *listener)
+void WP5HardSpaceFunction::parse(WP5HLListener *listener)
 {
 	listener->insertCharacter((uint16_t) 0xa0);
 }
 
-void WP3HyphenFunction::parse(WP3HLListener *listener)
+void WP5HyphenFunction::parse(WP5HLListener *listener)
 {
 	listener->insertCharacter((uint16_t) '-');
 }
 
-void WP3SoftHyphenFunction::parse(WP3HLListener *listener)
+void WP5SoftHyphenFunction::parse(WP5HLListener *listener)
 {
 	listener->insertCharacter((uint16_t) 0xad);
-}
-
-void WP3EOLFunction::parse(WP3HLListener *listener)
-{
-	listener->insertEOL();
-}
-
-/* void WP3EOCFunction::parse(WP3HLListener *listener)
-{
-	listener->insertBreak(WPX_COLUMN_BREAK);
-}*/
-
-void WP3EOPFunction::parse(WP3HLListener *listener)
-{
-	listener->insertBreak(WPX_PAGE_BREAK);
 }
 

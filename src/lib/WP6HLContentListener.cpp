@@ -601,7 +601,7 @@ void WP6HLContentListener::marginChange(uint8_t side, uint16_t margin)
 
 		switch(side)
 		{
-		case WP6_COLUMN_GROUP_LEFT_MARGIN_SET:
+		case WPX_LEFT:
 			//if (m_ps->m_paragraphMarginLeft != marginInch) // FIXMEFIXME: remove this
 			//	m_ps->m_sectionAttributesChanged = true;
 	  	     /* Following hack is there because the paragraph and column margins are independent in WP6.
@@ -613,7 +613,7 @@ void WP6HLContentListener::marginChange(uint8_t side, uint16_t margin)
 			m_parseState->m_leftMargin = marginInch - m_ps->m_pageMarginLeft;
 			m_ps->m_paragraphMarginLeft = m_parseState->m_leftMargin + m_parseState->m_paragraphLeftMargin;
 			break;
-		case WP6_COLUMN_GROUP_RIGHT_MARGIN_SET:
+		case WPX_RIGHT:
 			//if (m_ps->m_paragraphMarginRight != marginInch)
 			//	m_ps->m_sectionAttributesChanged = true;
 			m_parseState->m_rightMargin = marginInch - m_ps->m_pageMarginRight;

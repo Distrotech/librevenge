@@ -23,6 +23,7 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
+#include "WP5PageFormatGroup.h"
 #include "WP5VariableLengthGroup.h"
 #include "WP5UnsupportedVariableLengthGroup.h"
 #include "libwpd_internal.h"
@@ -38,6 +39,8 @@ WP5VariableLengthGroup * WP5VariableLengthGroup::constructVariableLengthGroup(WP
 	{
 		case WP5_TOP_FORMAT_GROUP:
 			return new WP5FormatGroup(input);
+		case WP5_TOP_PAGE_FORMAT_GROUP:
+			return new WP5PageFormatGroup(input);
 		default:
 			// this is an unhandled group, just skip it
 			return new WP5UnsupportedVariableLengthGroup(input);

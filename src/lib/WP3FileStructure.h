@@ -53,8 +53,8 @@ extern int WP3_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16];
 #define WP3_ATTRIBUTE_SUBSCRIPT 10
 #define WP3_ATTRIBUTE_SUPERSCRIPT 11
 #define WP3_ATTRIBUTE_DOUBLE_UNDERLINE 12
-/* here are the attributes extra large to fine
- * that we are not converting for the while */
+/* here should come the attributes extra large
+ * to fine that we are not converting for the while */
 #define WP3_ATTRIBUTE_SMALL_CAPS 18
 
 

@@ -28,6 +28,7 @@
 #include "WP5Header.h"
 #include "WP5VariableLengthGroup.h"
 #include "WP5FixedLengthGroup.h"
+#include "WP5SingleByteFunction.h"
 #include "libwpd_internal.h"
 
 // constructPart: constructs a parseable low-level representation of part of the document
@@ -38,7 +39,14 @@ WP5Part * WP5Part::constructPart(WPXInputStream *input, uint8_t readVal)
 {	
 	WPD_DEBUG_MSG(("WordPerfect: ConstructPart\n"));
 
-	if (readVal >= (uint8_t)0xC0 && readVal <= (uint8_t)0xCF)
+	if (readVal >= (uint8_t)0x80 && readVal <= (uint8_t)0xBF)
+	{
+		// single-byte function
+	
+		WPD_DEBUG_MSG(("WordPerfect: constructSingleByteFunction(input, val)\n"));
+		return WP5SingleByteFunction::constructSingleByteFunction(input, readVal);
+	}      
+	else if (readVal >= (uint8_t)0xC0 && readVal <= (uint8_t)0xCF)
 	{
 		// fixed length multi-byte function
 	

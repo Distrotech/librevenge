@@ -117,6 +117,8 @@ const uint8_t WPX_TABLE_CELL_BOTTOM_BORDER_OFF = 0x08;
 #define WPX_LEFT 0x00
 #define WPX_RIGHT 0x01
 #define WPX_CENTER 0x02
+#define WPX_TOP 0x03
+#define WPX_BOTTOM 0x04
 
 typedef struct _RGBSColor RGBSColor;
 struct _RGBSColor

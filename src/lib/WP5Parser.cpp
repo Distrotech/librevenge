@@ -92,10 +92,10 @@ void WP5Parser::parseDocument(WPXInputStream *input, WP5HLListener *listener)
 		{
 			listener->insertCharacter( readVal );
 		}
-		else if (readVal >= (uint8_t)0x80 && readVal <= (uint8_t)0xBF)
+/*		else if (readVal >= (uint8_t)0x80 && readVal <= (uint8_t)0xBF)
 		{
 			// single byte functions
-		}			
+		}*/			
 		else 
 		{
 			WP5Part *part = WP5Part::constructPart(input, readVal);

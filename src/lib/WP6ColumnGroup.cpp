@@ -75,9 +75,13 @@ void WP6ColumnGroup::parse(WP6HLListener *listener)
 	switch (getSubGroup())
 	{
 		case 0: // Left Margin Set
+			{						
+				listener->marginChange(WPX_LEFT, m_margin);
+			}
+			break;
 		case 1: // Right Margin Set
 			{						
-				listener->marginChange(getSubGroup(), m_margin);
+				listener->marginChange(WPX_RIGHT, m_margin);
 			}
 			break;
 		case 2: // TODO: Define Text Columns, Partially implemented.
