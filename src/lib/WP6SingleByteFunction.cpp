@@ -23,20 +23,43 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP6FIXEDEOLGROUP_H
-#define WP6FIXEDEOLGROUP_H
+#include "WP6SingleByteFunction.h"
+#include "WP6LLListener.h"
+#include "libwpd_internal.h"
 
-#include "WP6FixedLengthGroup.h"
-
-class WP6FixedEOLGroup : public WP6FixedLengthGroup
+WP6SingleByteFunction * WP6SingleByteFunction::constructSingleByteFunction(GsfInput *input, guint8 groupID)
 {
-public:
-	WP6FixedEOLGroup(GsfInput *input);	
-	virtual void parse(WP6LLListener *llListener);
-	
-protected:
-	virtual void _readContents(GsfInput *input);
+	switch (groupID) 
+		{
+		case WP6_TOP_SOFT_EOL:
+		case WP6_TOP_SOFT_SPACE:
+			return new WP6SpaceFunction();
+			
+		case WP6_TOP_HARD_HYPHEN:
+			return new WP6HyphenFunction();
 
-};
+		case WP6_TOP_HARD_EOL:
+		case WP6_TOP_DORMANT_HARD_RETURN:
+			return new WP6EOLFunction();
+			
+		// Add the remaining cases here
+		default:
+			// should not happen
+			return NULL;
+		}
+}
 
-#endif /* WP6FIXEDEOLGROUP_H */
+void WP6SpaceFunction::parse(WP6LLListener *llListener)
+{
+	llListener->insertCharacter((guint16) ' ');
+}
+
+void WP6EOLFunction::parse(WP6LLListener *llListener)
+{
+	llListener->insertEOL();
+}
+
+void WP6HyphenFunction::parse(WP6LLListener *llListener)
+{
+	llListener->insertCharacter((guint16) '-');
+}

@@ -15,9 +15,7 @@ libwpd_1_a_SOURCES =			\
 	WP6DisplayNumberReferenceGroup.cpp \
 	WP6EOLGroup.cpp			\
 	WP6ExtendedCharacterGroup.cpp 	\
-	WP6FixedEOLGroup.cpp		\
 	WP6FixedLengthGroup.cpp		\
-	WP6FixedSpaceGroup.cpp		\
 	WP6FontDescriptorPacket.cpp	\
 	WP60Header.cpp			\
 	WP61Header.cpp			\
@@ -30,6 +28,7 @@ libwpd_1_a_SOURCES =			\
 	WP6PrefixData.cpp 		\
 	WP6PrefixIndice.cpp 		\
 	WP6PrefixDataPacket.cpp		\
+	WP6SingleByteFunction.cpp	\
 	WP6StyleGroup.cpp		\
 	WP6TabGroup.cpp 		\
 	WP6UndoGroup.cpp		\
@@ -47,9 +46,7 @@ libwpd_1_a_SOURCES =			\
 	WP6DisplayNumberReferenceGroup.h \
 	WP6EOLGroup.h			\
 	WP6ExtendedCharacterGroup.h 	\
-	WP6FixedEOLGroup.h		\
 	WP6FixedLengthGroup.h		\
-	WP6FixedSpaceGroup.h		\
 	WP6FontDescriptorPacket.h	\
 	WP6Header.h 			\
 	WP60Header.h 			\
@@ -63,6 +60,7 @@ libwpd_1_a_SOURCES =			\
 	WP6PrefixData.h	 		\
 	WP6PrefixIndice.h		\
 	WP6PrefixDataPacket.h		\
+	WP6SingleByteFunction.h		\
 	WP6StyleGroup.h			\
 	WP6TabGroup.h	 		\
 	WP6UndoGroup.h			\

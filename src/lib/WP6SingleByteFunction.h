@@ -23,19 +23,32 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WP6FixedEOLGroup.h"
-#include "WP6LLListener.h"
+#ifndef WP6SINGLEBYTEFUNCTION_H
+#define WP6SINGLEBYTEFUNCTION_H
 
-WP6FixedEOLGroup::WP6FixedEOLGroup(GsfInput *input)
-{
-}
-	
-void WP6FixedEOLGroup::parse(WP6LLListener *llListener)
-{
-	llListener->insertEOL();
-}
+#include "WP6Part.h"
 
-void WP6FixedEOLGroup::_readContents(GsfInput *input)
+class WP6SingleByteFunction : public WP6Part
 {
-	
-}
+ public:
+	static WP6SingleByteFunction * WP6SingleByteFunction::constructSingleByteFunction(GsfInput *input, guint8 groupID);
+};
+
+class WP6SpaceFunction : public WP6SingleByteFunction
+{
+public:
+	virtual void parse(WP6LLListener *llListener);	
+};
+
+class WP6EOLFunction : public WP6SingleByteFunction
+{
+public:
+	virtual void parse(WP6LLListener *llListener);	
+};
+
+class WP6HyphenFunction : public WP6SingleByteFunction
+{
+public:
+	virtual void parse(WP6LLListener *llListener);	
+};
+#endif /* WP6SINGLEBYTEFUNCTION_H */

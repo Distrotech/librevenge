@@ -28,6 +28,7 @@
 #include "WP6Header.h"
 #include "WP6VariableLengthGroup.h"
 #include "WP6FixedLengthGroup.h"
+#include "WP6SingleByteFunction.h"
 #include "libwpd_internal.h"
 
 // constructPart: constructs a parseable low-level representation of part of the document
@@ -41,7 +42,7 @@ WP6Part * WP6Part::constructPart(GsfInput *input, guint8 readVal)
 	if (readVal >= (guint8)0x80 && readVal <= (guint8)0xCF)
 		{
 			WPD_DEBUG_MSG(("WordPerfect: constructFixedLengthGroup(input, val)\n"));
-			return WP6FixedLengthGroup::constructFixedLengthGroup(input, readVal);
+			return WP6SingleByteFunction::constructSingleByteFunction(input, readVal);
 		}
 	else if (readVal >= (guint8)0xD0 && readVal <= (guint8)0xEF)
 		{
@@ -56,9 +57,4 @@ WP6Part * WP6Part::constructPart(GsfInput *input, guint8 readVal)
 
 	WPD_DEBUG_MSG(("WordPerfect: Returning NULL from constructPart\n"));
 	return NULL;
-
-	/*
-	// flush any remaining text 
-	WPD_CHECK_INTERNAL_ERROR(wp6_flush_text(wordperfect_state, wordperfect_parse_struct));
-	;*/
 }
