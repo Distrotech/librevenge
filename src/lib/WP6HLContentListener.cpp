@@ -772,6 +772,7 @@ void WP6HLContentListener::endDocument()
 
 	// close the document nice and tight
 	_closeSection();
+	_closePageSpan();
 	m_listenerImpl->endDocument();
 }
 

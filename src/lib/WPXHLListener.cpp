@@ -126,8 +126,7 @@ void WPXHLListener::_closeSection()
 
 void WPXHLListener::_openPageSpan()
 {
-	if (m_ps->m_isPageSpanOpened)
-		m_listenerImpl->closePageSpan();
+	_closePageSpan();
 
 	if ( !m_pageList ||
 	     (m_pageList && m_ps->m_nextPageSpanIndice > (int)m_pageList->size() - 1)
@@ -163,6 +162,15 @@ void WPXHLListener::_openPageSpan()
 	m_ps->m_numPagesRemainingInSpan = (currentPage->getPageSpan() - 1);
 	m_ps->m_nextPageSpanIndice++;
 	m_ps->m_isPageSpanOpened = true;
+}
+
+void WPXHLListener::_closePageSpan()
+{
+	if (m_ps->m_isPageSpanOpened)
+	{
+		m_listenerImpl->closePageSpan();
+		m_ps->m_isPageSpanOpened = false;
+	}
 }
 
 void WPXHLListener::_closeParagraph()

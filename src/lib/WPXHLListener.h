@@ -137,9 +137,11 @@ protected:
 	void _closeSection();
 
 	void _openPageSpan();
+	void _closePageSpan();
 
 	// void _openParagraph();
 	void _closeParagraph();
+
 	void _openSpan();
 	void _closeSpan();
 

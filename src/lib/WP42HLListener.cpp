@@ -80,9 +80,8 @@ void WP42HLListener::endDocument()
 
 	// close the document nice and tight
 	_closeSection();
-
-	_flushText();
-	m_listenerImpl->endDocument();	
+	_closePageSpan();
+	m_listenerImpl->endDocument();
 }
 
 
