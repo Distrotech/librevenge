@@ -965,8 +965,9 @@ void WP6HLContentListener::insertCell(const guint8 colSpan, const guint8 rowSpan
 			throw ParseException();
 		_flushText();
 		_openTableCell(colSpan, rowSpan, boundFromLeft, boundFromAbove,
-			       m_parseState->m_currentTable->getCell(m_parseState->m_currentTableRow,
-								     m_parseState->m_currentTableCol)->m_borderBits,
+//			       m_parseState->m_currentTable->getCell(m_parseState->m_currentTableRow,
+//								     m_parseState->m_currentTableCol)->m_borderBits,
+			       borderBits,	
 			       cellFgColor, cellBgColor);
 		m_parseState->m_currentTableCol++;
 	}
