@@ -25,14 +25,97 @@
 
 #include "WPXPart.h"
 #include "WP6Part.h"
-#include "WP6TextPart.h"
+#include "WP6Header.h"
+#include "UT_libwpd2.h"
 
 WP6Part::WP6Part(FILE * stream)
 	: WPXPart(stream)
 {
 }
 
-WP6Part * WP6Part::constructPart(FILE * stream)
+WP6Part * WP6Part::constructPart(FILE * stream, WPXParser * parser)
 {
-	return new WP6TextPart(stream);
+	guint8 readVal;
+
+	while (ftell(stream) < (long)((WP6Header *)parser->getHeader())->m_iDocumentSize)
+	{
+		WPD_CHECK_FILE_READ_ERROR(fread(&readVal, sizeof(guint8), 1, stream), 1);
+		if (readVal > 0 && readVal < 127)
+		{	     
+			if (readVal < 32)
+			{
+				// International Characters
+				//WPD_CHECK_INTERNAL_ERROR(wp6_handle_character_insert(wp_internationalCharacterMapping[(read_val-1)]));
+			}
+			else
+			{
+				// normal ASCII characters
+				parser->getLLListener()->insertCharacter( (guint32)readVal );
+			}
+		}
+		/*
+		else if (read_val >= 0xD0 && read_val <= 0xE2)
+		{
+			// variable length byte groups (careful that they don't go more than E2? FIXME)
+			WPD_CHECK_INTERNAL_ERROR(wp6_parse_variable_length_group(stream, wordperfect_state, wordperfect_parse_struct, 
+							wordperfect_variable_length_functions,
+							read_val));
+		}				      
+		else
+		{
+			for (i=0; i<WP6_NUM_FIXED_LENGTH_FUNCTIONS; i++)
+			{
+				if (wordperfect_fixed_length_functions[i]->byte == read_val)
+				{
+					WPD_CHECK_INTERNAL_ERROR(wordperfect_fixed_length_functions[i]->func(stream, wordperfect_state, 
+													     wordperfect_parse_struct));
+				}
+			}
+			
+		}*/		
+	}
+	
+	return NULL;
+
+	/*
+	
+	
+	guint8 read_val;
+	unsigned int i;
+	
+
+	
+	while (stream->position < (long)wordperfect_header->document_size) {
+		WPD_CHECK_FILE_READ_ERROR(stream->wpd_callback_get_bytes(&read_val, sizeof(guint8), 1, stream), 1);
+	  
+		if(read_val > 0 && read_val < 127) {	     
+			if (read_val < 32) { // International Characters
+			      //WPD_CHECK_INTERNAL_ERROR(wp6_handle_character_insert(wp_internationalCharacterMapping[(read_val-1)]));
+			}	     
+			else { // normal ASCII characters 
+				WPD_CHECK_INTERNAL_ERROR(wp6_character_insert(wordperfect_state, wordperfect_parse_struct, (guint32)read_val));
+			}
+		}
+		else if (read_val >= 0xD0 && read_val <= 0xE2) { // variable length byte groups (careful that they don't go more than E2? FIXME)
+			WPD_CHECK_INTERNAL_ERROR(wp6_parse_variable_length_group(stream, wordperfect_state, wordperfect_parse_struct, 
+							wordperfect_variable_length_functions,
+							read_val));
+		}				      
+		else {
+			for (i=0; i<WP6_NUM_FIXED_LENGTH_FUNCTIONS; i++) {
+				if (wordperfect_fixed_length_functions[i]->byte == read_val) {
+					WPD_CHECK_INTERNAL_ERROR(wordperfect_fixed_length_functions[i]->func(stream, wordperfect_state, 
+													     wordperfect_parse_struct));
+				}
+			}
+			
+		}
+	}
+
+	// flush any remaining text 
+	WPD_CHECK_INTERNAL_ERROR(wp6_flush_text(wordperfect_state, wordperfect_parse_struct));
+	
+	WPD_DEBUG_MSG(("WordPerfect: Finished with document parse (position = %ld)\n",(long)stream->position));
+	
+	return TRUE;*/
 }

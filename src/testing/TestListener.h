@@ -1,4 +1,4 @@
-/* libwpd2
+ /* libwpd2
  * Copyright (C) 2002 William Lachance (wlach@interlog.com)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
@@ -23,22 +23,16 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP6PART_H
-#define WP6PART_H
+#ifndef TESTLISTENER_H
+#define TESTLISTENER_H
 
-#include <stdio.h>
-#include "WPXPart.h"
-#include "WPXParser.h"
+#include "libwpd2/libwpd2.h"
 #include "glib.h"
 
-class WP6Part : public WPXPart
+class TestListener : public WPXLLListener
 {
 public:
-	WP6Part(FILE * stream);
-	
-	static WP6Part * constructPart(FILE * stream, WPXParser * parser);
-	virtual gboolean parse() {};
+	void insertCharacter(guint32 value);
 };
 
-
-#endif /* WP6PART_H */
+#endif /* TESTLISTENER_H */

@@ -3,7 +3,7 @@
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -23,22 +23,15 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP6PART_H
-#define WP6PART_H
+#ifndef WPXLLLISTENER_H
+#define WPXLLLISTENER_H
 
-#include <stdio.h>
-#include "WPXPart.h"
-#include "WPXParser.h"
 #include "glib.h"
 
-class WP6Part : public WPXPart
+class WPXLLListener
 {
 public:
-	WP6Part(FILE * stream);
-	
-	static WP6Part * constructPart(FILE * stream, WPXParser * parser);
-	virtual gboolean parse() {};
+	virtual void insertCharacter(guint32 value) { };
 };
 
-
-#endif /* WP6PART_H */
+#endif /* WPXLLLISTENER_H */

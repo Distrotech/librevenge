@@ -29,6 +29,8 @@
 #include <stdio.h>
 #include "glib.h"
 #include "WPXHeader.h"
+#include "WPXLLListener.h"
+#include "WPXHLListener.h"
 
 class WPXParser
 {
@@ -37,10 +39,20 @@ public:
 		
 	static WPXParser * constructParser(FILE * stream);
 	virtual gboolean parse() {};
+
+	void registerListener(WPXLLListener * listener) { m_pLLListener = listener; }
+	void registerListener(WPXHLListener * listener) { m_pHLListener = listener; }
+
+	WPXLLListener * getLLListener() { return m_pLLListener; }
+	WPXHLListener * getHLListener() { return m_pHLListener; }
 		
+	WPXHeader * getHeader() { return m_pHeader; }
 protected:
 	FILE * m_pStream;
 	WPXHeader * m_pHeader;
+	
+	WPXLLListener * m_pLLListener;
+	WPXHLListener * m_pHLListener;
 };
 
 #endif /* WPXPARSER_H */

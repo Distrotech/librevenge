@@ -24,3 +24,5 @@
  */
 
 #include "WPXParser.h"
+#include "WPXLLListener.h"
+#include "WPXHLListener.h"
