@@ -1,9 +1,22 @@
 #include "GSFStream.h"
 #include "libwpd_internal.h"
 
+// This one is needed to prevent the confusion of MSVC6 with
+// term allocator It has to come before including first header
+// that leads to glib
+#ifdef _MSC_VER
+# define allocator gallocator
+#endif
+
 #include <gsf/gsf-infile.h>
 #include <gsf/gsf-infile-msole.h>
 #include <gsf/gsf-input.h>
+
+#ifdef _MSC_VER
+# ifdef allocator
+#  undef allocator
+# endif
+#endif
 
 GSFInputStream::GSFInputStream(GsfInput *input) :
 	m_input(input),

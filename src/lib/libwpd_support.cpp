@@ -666,30 +666,40 @@ void UTF8String::append(const uint16_t ucs2)
 	appendUCS4(m_buf, ucs2);
 }
 
-const int STRING_BUF_SIZE = 128;
+#define FIRST_BUF_SIZE 128;
+#ifdef _MSC_VER
+#define vsnprintf _vsnprintf
+#endif
+
 void UTF8String::sprintf(const char *format, ...)
 {
 	va_list args;
-	va_start (args, format);
 
-	char *buf = new char[STRING_BUF_SIZE];
-#ifdef _MSC_VER // MSVC uses _vsnprintf instead of vsnprintf
-	int num_needed = _vsnprintf(buf, STRING_BUF_SIZE, format, args);
-#else /* !_MSC_VER */
-	int num_needed = vsnprintf(buf, STRING_BUF_SIZE, format, args);
-#endif /* _MSC_VER */
-	if (num_needed >= STRING_BUF_SIZE)
+	int bufsize = FIRST_BUF_SIZE;
+	char * buf = NULL;
+
+	for (;;)
 	{
-		delete [] buf;
-		buf = new char[num_needed + 1];
-		vsprintf(buf, format, args);
+			buf = new char[bufsize];
+			va_start(args, format);
+			int outsize = vsnprintf(buf, bufsize, format, args);
+			va_end(args);
+			if ((outsize == -1) | (outsize == bufsize) | (outsize == bufsize - 1))
+			{
+				bufsize = bufsize * 2;
+				delete [] buf;
+			}
+			else if (outsize > bufsize)
+			{
+				bufsize = outsize + 2;
+				delete [] buf;
+			}
+			else
+				break;
 	}
-
 
 	m_buf = buf;
 	delete [] buf;
-
-	va_end(args);
 }
 
 void UTF8String::append(const UTF8String &s)

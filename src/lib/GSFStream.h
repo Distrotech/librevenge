@@ -3,14 +3,20 @@
 
 #include "WPXStream.h"
 
-// This one is needed to prevent the confusion of MSVC6 with 
+// This one is needed to prevent the confusion of MSVC6 with
 // term allocator It has to come before including first header
 // that leads to glib
 #ifdef _MSC_VER
-#define allocator gallocator
+# define allocator gallocator
 #endif
 
 #include <gsf/gsf-input.h>
+
+#ifdef _MSC_VER
+# ifdef allocator
+#  undef allocator
+# endif
+#endif
 
 class GSFInputStream : public WPXInputStream
 {
