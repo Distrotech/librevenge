@@ -27,26 +27,48 @@
 
 uint8_t readU8(WPXInputStream *input)
 {
-	return WPD_LE_GET_GUINT8(input->read(sizeof(uint8_t)));
+	size_t numBytesRead;
+	uint8_t const * p = input->read(sizeof(uint8_t), numBytesRead);
+	
+  	if (numBytesRead != sizeof(uint8_t))
+  		throw FileException();
+
+	return WPD_LE_GET_GUINT8(p);
 }
 
 int8_t read8(WPXInputStream *input)
 {
-	return (int8_t)*(input->read(sizeof(int8_t)));
+	size_t numBytesRead;
+	int8_t const * p = (int8_t const *) input->read(sizeof(int8_t), numBytesRead);
+
+  	if (numBytesRead != sizeof(int8_t))
+  		throw FileException();
+
+	return (int8_t)*(p);
 }
 
 uint16_t readU16(WPXInputStream *input, bool bigendian)
 {
-	uint16_t val = *(uint16_t const *)input->read(sizeof(uint16_t));
+	size_t numBytesRead;
+	uint16_t const *val = (uint16_t const *)input->read(sizeof(uint16_t), numBytesRead);
+
+	if (numBytesRead != sizeof(uint16_t))
+  		throw FileException();
+
 	if (bigendian)
-		return WPD_BE_GET_GUINT16(&val);
-	return WPD_LE_GET_GUINT16(&val);
+		return WPD_BE_GET_GUINT16(val);
+	return WPD_LE_GET_GUINT16(val);
 }
 
 uint32_t readU32(WPXInputStream *input, bool bigendian)
 {
-	uint32_t val = *(uint32_t const *)input->read(sizeof(uint32_t));
+	size_t numBytesRead;
+	uint32_t const *val = (uint32_t const *)input->read(sizeof(uint32_t), numBytesRead);
+
+	if (numBytesRead != sizeof(uint32_t))
+  		throw FileException();
+
 	if (bigendian)
-		return WPD_BE_GET_GUINT32(&val);	
-	return WPD_LE_GET_GUINT32(&val);
+		return WPD_BE_GET_GUINT32(val);
+	return WPD_LE_GET_GUINT32(val);
 }

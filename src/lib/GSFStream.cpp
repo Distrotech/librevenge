@@ -21,9 +21,16 @@ GSFInputStream::~GSFInputStream()
 	g_object_unref(G_OBJECT(m_input));
 }
 
-const uint8_t * GSFInputStream::read(size_t numBytes)
+const uint8_t * GSFInputStream::read(size_t numBytes, size_t &numBytesRead)
 {
-	return gsf_input_read(m_input, numBytes, NULL);
+	const uint8_t *buf = gsf_input_read(m_input, numBytes, NULL);
+
+	if (buf == NULL)
+		numBytesRead = 0;
+	else
+		numBytesRead = numBytes;
+
+	return buf;
 }
 
 int GSFInputStream::seek(long offset, WPX_SEEK_TYPE seekType) 

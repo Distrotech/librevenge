@@ -27,7 +27,7 @@ public:
 	virtual bool isOLEStream();
 	virtual WPXInputStream * getDocumentOLEStream();
 
-	virtual const uint8_t *read(size_t numBytes);
+	virtual const uint8_t *read(size_t numBytes, size_t &numBytesRead);
 	virtual int seek(long offset, WPX_SEEK_TYPE seekType);
 	virtual long tell() { return gsf_input_tell(m_input); }
 	virtual bool atEOS() { return gsf_input_eof(m_input); }

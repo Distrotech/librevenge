@@ -17,7 +17,7 @@ WPXMemoryInputStream::~WPXMemoryInputStream()
 	delete [] m_data;
 }
 
-const uint8_t * WPXMemoryInputStream::read(size_t numBytes)
+const uint8_t * WPXMemoryInputStream::read(size_t numBytes, size_t &numBytesRead)
 {
 	delete [] m_tmpBuf;
 	int numBytesToRead;
@@ -26,12 +26,14 @@ const uint8_t * WPXMemoryInputStream::read(size_t numBytes)
 		numBytesToRead = numBytes;
 	else
 		numBytesToRead = m_size - m_offset;
+	
+	numBytesRead = numBytesToRead; // about as paranoid as we can be..
 
 	if (numBytesToRead == 0)
 		return NULL;
 
-	m_tmpBuf = new uint8_t[numBytes];
-	for (size_t i=0; i<numBytes; i++)
+	m_tmpBuf = new uint8_t[numBytesToRead];
+	for (size_t i=0; i<numBytesToRead; i++)
 	{
 		m_tmpBuf[i] = m_data[m_offset];
 		m_offset++;

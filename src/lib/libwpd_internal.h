@@ -45,10 +45,10 @@
 #endif
 
 #define WPD_LE_GET_GUINT8(p) (*(uint8_t const *)(p))
-#define WPD_LE_GET_GUINT16(p)                           \
+#define WPD_LE_GET_GUINT16(p)				  \
         (uint16_t)((((uint8_t const *)(p))[0] << 0)  |    \
                   (((uint8_t const *)(p))[1] << 8))
-#define WPD_LE_GET_GUINT32(p)                           \
+#define WPD_LE_GET_GUINT32(p) \
         (uint32_t)((((uint8_t const *)(p))[0] << 0)  |    \
                   (((uint8_t const *)(p))[1] << 8)  |    \
                   (((uint8_t const *)(p))[2] << 16) |    \
