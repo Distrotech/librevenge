@@ -148,6 +148,8 @@ struct _WPXParsingState
 	uint16_t m_alignmentCharacter;
 	std::vector<WPXTabStop> m_tabStops;
 	bool m_isTabPositionRelative;
+
+	int m_subDocumentTextPID;
 };
 
 class WPXHLListener : public WPXLLListener

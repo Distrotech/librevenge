@@ -39,7 +39,8 @@ WP6HLStylesListener::WP6HLStylesListener(std::vector<WPXPageSpan *> *pageList, W
 	m_currentPageHasContent(false),
 	m_tempMarginLeft(1.0f),
 	m_tempMarginRight(1.0f),
-	m_isTableDefined(false)
+	m_isTableDefined(false),
+	m_subDocumentTextPID(0)
 {
 }
 
@@ -229,8 +230,10 @@ void WP6HLStylesListener::_handleSubDocument(uint16_t textPID, const bool isHead
 	// do want to capture whatever table-related information is within it..
 	if (!isUndoOn()) 
 	{
-		if (textPID)
+		int oldTextPID = m_subDocumentTextPID;		
+		if ((textPID) && (textPID != oldTextPID))
 		{
+			m_subDocumentTextPID = textPID;
 			if (isHeaderFooter) 
 			{
 				WPXTable * oldCurrentTable = m_currentTable;
@@ -246,6 +249,7 @@ void WP6HLStylesListener::_handleSubDocument(uint16_t textPID, const bool isHead
 			{
 				WP6LLListener::getPrefixDataPacket(textPID)->parse(this);
 			}
+			m_subDocumentTextPID = oldTextPID;
 
 		}
 	}

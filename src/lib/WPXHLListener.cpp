@@ -110,7 +110,9 @@ _WPXParsingState::_WPXParsingState(bool sectionAttributesChanged) :
 	m_inSubDocument(false)
 #endif
 	m_alignmentCharacter('.'),
-	m_isTabPositionRelative(false)
+	m_isTabPositionRelative(false),
+
+	m_subDocumentTextPID(0)
 {
 }
 
@@ -781,12 +783,15 @@ void WPXHLListener::handleSubDocument(uint16_t textPID, const bool isHeaderFoote
 	// save our old parsing state on our "stack"
 	WPXParsingState *oldPS = m_ps;
 	m_ps = new WPXParsingState(false); // false: don't open a new section unless we must inside this type of sub-document
+	m_ps->m_subDocumentTextPID = textPID;
 	// BEGIN: copy page properties into the new parsing state
 	m_ps->m_pageFormWidth = oldPS->m_pageFormWidth;
 	m_ps->m_pageMarginLeft = oldPS->m_pageMarginLeft;
 	m_ps->m_pageMarginRight = oldPS->m_pageMarginRight;
 	// END: copy page properties into the new parsing state
-	_handleSubDocument(textPID, isHeaderFooter, tableList, nextTableIndice);
+	// Check whether the document is calling its own TextPID
+	if ((oldPS->m_subDocumentTextPID != m_ps->m_subDocumentTextPID) || (!textPID))
+		_handleSubDocument(textPID, isHeaderFooter, tableList, nextTableIndice);
 
 	// restore our old parsing state
 	delete m_ps;

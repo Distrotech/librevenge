@@ -111,6 +111,7 @@ private:
 	float m_tempMarginLeft, m_tempMarginRight;
 	bool m_currentPageHasContent;
 	bool m_isTableDefined;
+	int m_subDocumentTextPID;
 };
 
 #endif /* WP6HLSTYLESLISTENER_H */
