@@ -1059,8 +1059,9 @@ void WP6HLContentListener::insertRow(const bool isHeaderRow, const bool isFixedH
 }
 
 void WP6HLContentListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan, const bool boundFromLeft, const bool boundFromAbove,
-					const uint8_t borderBits,
-					const RGBSColor * cellFgColor, const RGBSColor * cellBgColor, const uint32_t cellAttributes)
+					const uint8_t borderBits, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor, 
+					const RGBSColor * cellBorderColor, 
+					const WPXVerticalAlignment cellVerticalAlignment, const uint32_t cellAttributes)
 {
 	if (!isUndoOn())
 	{
@@ -1071,10 +1072,8 @@ void WP6HLContentListener::insertCell(const uint8_t colSpan, const uint8_t rowSp
 			_openParagraph();
 		_flushText();
 		_openTableCell(colSpan, rowSpan, boundFromLeft, boundFromAbove,
-			       m_parseState->m_currentTable->getCell(
-				       m_ps->m_currentTableRow,
-				       m_ps->m_currentTableCol)->m_borderBits,			       
-			       cellFgColor, cellBgColor);
+			       m_parseState->m_currentTable->getCell(m_ps->m_currentTableRow, m_ps->m_currentTableCol)->m_borderBits,			       
+			       cellFgColor, cellBgColor, cellBorderColor, cellVerticalAlignment);
 		m_ps->m_isCellWithoutParagraph = true;
 		m_ps->m_cellAttributeBits = cellAttributes;
 	}

@@ -324,15 +324,36 @@ void RawListenerImpl::closeTableRow()
 }
 
 void RawListenerImpl::openTableCell(const uint32_t col, const uint32_t row, const uint32_t colSpan, const uint32_t rowSpan,
-				   const uint8_t borderBits,
-				   const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
+				   const uint8_t borderBits, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
+				   const RGBSColor * cellBorderColor,
+				   const WPXVerticalAlignment cellVerticalAlignment)
 {
-	_U(("openTableCell(col: %d, row: %d, colSpan: %d, rowSpan: %d, borderBits: %d, cellFgColor: #%02x%02x%02x s:%02x, cellBgColor: #%02x%02x%02x s:%02x)\n",
-			col, row, colSpan, rowSpan,
-			borderBits,
+	UTF8String sCellVerticalAlignment;
+	switch (cellVerticalAlignment)
+	{
+	case TOP:
+		sCellVerticalAlignment.sprintf("TOP");
+		break;
+	case MIDDLE:
+		sCellVerticalAlignment.sprintf("MIDDLE");
+		break;
+	case BOTTOM:
+		sCellVerticalAlignment.sprintf("BOTTOM");
+		break;
+	case FULL:
+		sCellVerticalAlignment.sprintf("FULL");
+		break;
+	default:
+		break;
+	}
+			
+	_U(("openTableCell(col: %d, row: %d, colSpan: %d, rowSpan: %d, borderBits: %d, cellFgColor: #%02x%02x%02x s:%02x, cellBgColor: #%02x%02x%02x s:%02x, cellBorderColor: #%02x%02x%02x s:%02x, cellVerticalAlignment %s)\n",
+			col, row, colSpan, rowSpan, borderBits,
 			// The saturation cannot ever be more that 0x64. It it is, cellFgColor or cellBgColor is NULL
 			(cellFgColor?cellFgColor->m_r:0xff), (cellFgColor?cellFgColor->m_g:0xff), (cellFgColor?cellFgColor->m_b:0xff), (cellFgColor?cellFgColor->m_s:0xff),
-			(cellBgColor?cellBgColor->m_r:0xff), (cellBgColor?cellBgColor->m_g:0xff), (cellBgColor?cellBgColor->m_b:0xff), (cellBgColor?cellBgColor->m_s:0xff)),
+			(cellBgColor?cellBgColor->m_r:0xff), (cellBgColor?cellBgColor->m_g:0xff), (cellBgColor?cellBgColor->m_b:0xff), (cellBgColor?cellBgColor->m_s:0xff),
+			cellBorderColor->m_r, cellBorderColor->m_g, cellBorderColor->m_b, cellBorderColor->m_s,
+			sCellVerticalAlignment.getUTF8()),
 		LC_OPEN_TABLE_CELL);
 }
 

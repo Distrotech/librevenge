@@ -46,10 +46,11 @@ WP6EOLGroup::WP6EOLGroup(WPXInputStream *input) :
 	m_cellIsLocked(false),
 	m_cellAttributes(0),
 	m_cellJustification(0),
-	m_cellVerticalAlign(0),
+	m_cellVerticalAlign(TOP),
 	
 	m_cellFgColor(NULL),
 	m_cellBgColor(NULL),
+	m_cellBorderColor(new RGBSColor(0x00,0x00,0x00,0x64)),
 	
 	m_cellBorders(0x00),
 	
@@ -66,7 +67,8 @@ WP6EOLGroup::WP6EOLGroup(WPXInputStream *input) :
 WP6EOLGroup::~WP6EOLGroup()
 {
 	DELETEP(m_cellFgColor);
-	DELETEP(m_cellBgColor);	
+	DELETEP(m_cellBgColor);
+	DELETEP(m_cellBorderColor);	
 }
 
 void WP6EOLGroup::_readContents(WPXInputStream *input)
@@ -118,7 +120,7 @@ void WP6EOLGroup::_readContents(WPXInputStream *input)
 			case WP6_EOL_GROUP_CELL_INFORMATION:
 				WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_INFORMATION\n"));
 				numBytesToSkip = WP6_EOL_GROUP_CELL_INFORMATION_SIZE;
-				uint8_t cellFlag, justification;
+				uint8_t cellFlag, justification, tmpCellVerticalAlign;
 				uint16_t attributeWord1, attributeWord2;
 				cellFlag = readU8(input);
 				if ((cellFlag & 0x01) == 0x01)
@@ -131,7 +133,24 @@ void WP6EOLGroup::_readContents(WPXInputStream *input)
 					m_cellIsLocked = true;
 				justification = readU8(input);	
 				m_cellJustification = (justification & 0x07);
-				m_cellVerticalAlign = readU8(input);
+				tmpCellVerticalAlign = readU8(input);
+				switch (tmpCellVerticalAlign & 0x03)
+				{
+				case 0x00: // top
+					m_cellVerticalAlign = TOP;
+					break;
+				case 0x01: // center
+					m_cellVerticalAlign = MIDDLE;
+					break;
+				case 0x02: // bottom
+					m_cellVerticalAlign = BOTTOM;
+					break;
+				case 0x03: // full
+					m_cellVerticalAlign = FULL;
+					break;
+				default:
+					break;
+				}				
 				attributeWord1 = readU16(input);
 				attributeWord2 = readU16(input);
 				m_cellAttributes = ((attributeWord2 & 0x03) << 16) + attributeWord1;
@@ -178,6 +197,14 @@ void WP6EOLGroup::_readContents(WPXInputStream *input)
 			case WP6_EOL_GROUP_CELL_LINE_COLOR:
 				WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_LINE_COLOR\n"));
 				numBytesToSkip = WP6_EOL_GROUP_CELL_LINE_COLOR_SIZE;
+
+				m_cellBorderColor->m_r = readU8(input);
+				m_cellBorderColor->m_g = readU8(input);
+				m_cellBorderColor->m_b = readU8(input);
+				m_cellBorderColor->m_s = readU8(input);
+				
+				WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Border Color (%i, %i, %i, %i)\n",
+					       m_cellBorderColor->m_r, m_cellBorderColor->m_g, m_cellBorderColor->m_b, m_cellBorderColor->m_s));				
 				break;
 			case WP6_EOL_GROUP_CELL_NUMBER_TYPE:
 				WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_NUMBER_TYPE\n"));		
@@ -220,6 +247,7 @@ void WP6EOLGroup::parse(WP6HLListener *listener)
 	// first off, grab any prefix information which may be useful
 	const RGBSColor * cellFgColor = m_cellFgColor;
 	const RGBSColor * cellBgColor = m_cellBgColor;
+	const RGBSColor * cellBorderColor = m_cellBorderColor;
 	
 	if (!cellFgColor && !cellBgColor)
 	{
@@ -269,7 +297,7 @@ void WP6EOLGroup::parse(WP6HLListener *listener)
 		case WP6_EOL_GROUP_TABLE_CELL: // Table Cell
 			WPD_DEBUG_MSG(("WordPerfect: EOL group: table cell\n"));
 			listener->insertCell(m_colSpan, m_rowSpan, m_boundFromLeft, m_boundFromAbove,
-						m_cellBorders, cellFgColor, cellBgColor, m_cellAttributes);
+					m_cellBorders, cellFgColor, cellBgColor, cellBorderColor, m_cellVerticalAlign, m_cellAttributes);
 			listener->justificationChange(m_cellJustification);
 			break;
 		case WP6_EOL_GROUP_TABLE_ROW_AND_CELL:
@@ -282,7 +310,7 @@ void WP6EOLGroup::parse(WP6HLListener *listener)
 			listener->insertRow(m_isHeaderRow, m_isFixedHeightRow, m_rowHasMinimumHeight, m_rowHeight);
 			// the cellBorders variable already represent the cell border bits as well
 			listener->insertCell(m_colSpan, m_rowSpan, m_boundFromLeft, m_boundFromAbove,
-						m_cellBorders, cellFgColor, cellBgColor, m_cellAttributes);
+					m_cellBorders, cellFgColor, cellBgColor, cellBorderColor, m_cellVerticalAlign, m_cellAttributes);
 			listener->justificationChange(m_cellJustification);
 			break;
 		case WP6_EOL_GROUP_TABLE_OFF:

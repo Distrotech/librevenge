@@ -42,7 +42,8 @@ class WP6ColumnGroup : public WP6VariableLengthGroup
  	// variables used for subgroup 2 (Columns)
 	uint8_t m_colType;
 	uint8_t m_numColumns;
-	uint8_t m_rowSpacing[4]; // a WP SPacing type variable, which is 4 bytes
+	float m_rowSpacing;
+	vector<bool> m_gap;
 };
 
 #endif /* WP6COLUMNGROUP_H */

@@ -357,15 +357,16 @@ void WPXHLListener::_closeTableRow()
 }
 
 void WPXHLListener::_openTableCell(const uint8_t colSpan, const uint8_t rowSpan, const bool boundFromLeft, const bool boundFromAbove,
-								const uint8_t borderBits,
-								const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
+					const uint8_t borderBits, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
+					const RGBSColor * cellBorderColor,
+					const WPXVerticalAlignment cellVerticalAlignment)
 {
 	_closeTableCell();
 
 	if (!boundFromLeft && !boundFromAbove)
 	{
 		m_listenerImpl->openTableCell(m_ps->m_currentTableCol, m_ps->m_currentTableRow, colSpan, rowSpan,
-					      borderBits, cellFgColor, cellBgColor);
+					      borderBits, cellFgColor, cellBgColor, cellBorderColor, cellVerticalAlignment);
 		m_ps->m_isTableCellOpened = true;
 	}
 	else

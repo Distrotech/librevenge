@@ -112,8 +112,9 @@ public:
  	virtual void openTableRow(const bool isHeaderRow, const bool isFixedHeightRow, const bool hasMinimumHeight, const float height);
 	virtual void closeTableRow();
  	virtual void openTableCell(const uint32_t col, const uint32_t row, const uint32_t colSpan, const uint32_t rowSpan,
-				   const uint8_t borderBits,
-				   const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
+				   const uint8_t borderBits, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
+				   const RGBSColor * cellBorderColor,
+				   const WPXVerticalAlignment cellVerticalAlignment);
 	virtual void closeTableCell();
 	virtual void insertCoveredTableCell(const uint32_t col, const uint32_t row);
  	virtual void closeTable();

@@ -151,8 +151,9 @@ class WPXHLListenerImpl
 	*/
 	virtual void closeTableRow() = 0;
  	virtual void openTableCell(const uint32_t col, const uint32_t row, const uint32_t colSpan, const uint32_t rowSpan,
-				   const uint8_t borderBits,
-				   const RGBSColor * cellFgColor, const RGBSColor * cellBgColor) = 0;
+				   const uint8_t borderBits, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
+				   const RGBSColor * cellBorderColor,
+				   const WPXVerticalAlignment cellVerticalAlignment) = 0;
 	/**
 	Called when the current table cell is closed
 	*/

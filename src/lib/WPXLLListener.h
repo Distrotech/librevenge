@@ -63,8 +63,9 @@ class WPXLLListener
 	virtual void startTable() = 0;
  	virtual void insertRow(const bool isHeaderRow, const bool isFixedHeightRow, const bool hasMinimumHeight, const uint16_t rowHeight) = 0;
  	virtual void insertCell(const uint8_t colSpan, const uint8_t rowSpan, const bool boundFromLeft, const bool boundFromAbove,
-				const uint8_t borderBits,
-				const RGBSColor * cellFgColor, const RGBSColor * cellBgColor, const uint32_t cellAttributes) = 0;
+				const uint8_t borderBits, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
+				const RGBSColor * cellBorderColor, 
+				const WPXVerticalAlignment cellVerticalAlignment, const uint32_t cellAttributes) = 0;
  	virtual void endTable() = 0;
 };
 

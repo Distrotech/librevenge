@@ -50,11 +50,18 @@ void WP6ColumnGroup::_readContents(WPXInputStream *input)
 		case 2:
 			{
 				m_colType = readU8(input);
-				for (int i=0; i<4; i++) 
-					{
-						m_rowSpacing[i] = readU8(input);
-					}
+				uint32_t tmpRowSpacing = readU32(input);
+				int32_t tmpRowSpacingIntegerPart = (int16_t)((tmpRowSpacing & 0xffff0000) >> 16);
+				float tmpRowSpacingFractionalPart = (float)((double)(tmpRowSpacing & 0xffff)/(double)0xffff);
+				m_rowSpacing = (float)tmpRowSpacingIntegerPart + tmpRowSpacing;
 				m_numColumns = readU8(input);
+				for (int i=0; i<m_numColumns; i++)
+				{
+					if ((i % 2) == 0)
+						m_gap.push_back(false);
+					else
+						m_gap.push_back(true);
+				}
 				WPD_DEBUG_MSG(("WordPerfect: Column type: %d\n", m_colType & 0x03));
 				WPD_DEBUG_MSG(("WordPerfect: Numer of columns: %d\n", m_numColumns));				
 			}

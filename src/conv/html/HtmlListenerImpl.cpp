@@ -292,8 +292,9 @@ void HtmlListenerImpl::closeTableRow()
 }
 
 void HtmlListenerImpl::openTableCell(const uint32_t col, const uint32_t row, const uint32_t colSpan, const uint32_t rowSpan,
-						const uint8_t borderBits,
-						const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
+					const uint8_t borderBits, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
+					const RGBSColor * cellBorderColor,
+					const WPXVerticalAlignment cellVerticalAlignment)
 {
 	printf("<td ");
 
