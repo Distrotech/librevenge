@@ -27,23 +27,55 @@
 #include "WP6LLListener.h"
 #include "libwpd_internal.h"
 
+WP6StyleGroup_GlobalOnSubGroup::WP6StyleGroup_GlobalOnSubGroup(GsfInput *input)
+{
+	m_hash = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+	m_systemStyleNumber = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+}
+
+void WP6StyleGroup_GlobalOnSubGroup::parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
+{
+	llListener->globalOn(m_systemStyleNumber);
+}
+
 WP6StyleGroup::WP6StyleGroup(GsfInput *input) :
-	WP6VariableLengthGroup()
+	WP6VariableLengthGroup(),
+	m_subGroupData(NULL)
 {
 	_read(input);
 }
 
+WP6StyleGroup::~WP6StyleGroup()
+{
+	if (m_subGroupData)
+		delete(m_subGroupData);
+
+}
+
 void WP6StyleGroup::_readContents(GsfInput *input)
 {
+	// this group can contain different kinds of data, thus we need to read
+	// the contents accordingly
+	switch (getSubGroup())	
+	{
+	case WP6_STYLE_GROUP_GLOBAL_ON:
+		m_subGroupData = new WP6StyleGroup_GlobalOnSubGroup(input);
+		break;
+	}
 }
 
 void WP6StyleGroup::parse(WP6LLListener *llListener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling a style group\n"));
-	
-	if (!(getSubGroup() % 2) || getSubGroup() == 0)
-		llListener->styleGroupOn(getSubGroup());
-	else
-		llListener->styleGroupOff(getSubGroup());
 
+	if (getSubGroup() == WP6_STYLE_GROUP_GLOBAL_ON)
+		m_subGroupData->parse(llListener, getNumPrefixIDs(), getPrefixIDs());
+	else if (getSubGroup() == WP6_STYLE_GROUP_GLOBAL_OFF)
+		llListener->globalOff();
+	else {
+		if (!(getSubGroup() % 2) || getSubGroup() == 0)
+			llListener->styleGroupOn(getSubGroup());
+		else
+			llListener->styleGroupOff(getSubGroup());
+	}
 }

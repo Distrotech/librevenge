@@ -37,11 +37,12 @@ using namespace std;
 
 class WPXHLListenerImpl;
 
-enum WP6StyleState { NORMAL, DOCUMENT_NOTE, BEGIN_BEFORE_NUMBERING,
-			      BEGIN_NUMBERING_BEFORE_DISPLAY_REFERENCING, 
-			      DISPLAY_REFERENCING, 
-			      BEGIN_NUMBERING_AFTER_DISPLAY_REFERENCING,
-			      BEGIN_AFTER_NUMBERING, STYLE_BODY, STYLE_END };
+enum WP6StyleState { NORMAL, DOCUMENT_NOTE, DOCUMENT_NOTE_GLOBAL, 
+		     BEGIN_BEFORE_NUMBERING,
+		     BEGIN_NUMBERING_BEFORE_DISPLAY_REFERENCING, 
+		     DISPLAY_REFERENCING, 
+		     BEGIN_NUMBERING_AFTER_DISPLAY_REFERENCING,
+		     BEGIN_AFTER_NUMBERING, STYLE_BODY, STYLE_END };
 
 typedef struct _WP6DocumentMetaData WP6DocumentMetaData;
 struct _WP6DocumentMetaData
@@ -181,6 +182,8 @@ public:
 	virtual void displayNumberReferenceGroupOff(const guint8 subGroup);
 	virtual void styleGroupOn(const guint8 subGroup);	
 	virtual void styleGroupOff(const guint8 subGroup);	
+	virtual void globalOn(const guint8 systemStyle);
+	virtual void globalOff();
 	virtual void noteOn(const guint16 textPID);
 	virtual void noteOff(const NoteType noteType);
 	virtual void endDocument();

@@ -662,6 +662,24 @@ void WP6HLListener::styleGroupOff(const guint8 subGroup)
 	}
 }
 
+void WP6HLListener::globalOn(const guint8 systemStyle)
+{
+	if (!m_parseState->m_isUndoOn)
+	{
+		if (systemStyle == WP6_SYSTEM_STYLE_FOOTNOTE || systemStyle == WP6_SYSTEM_STYLE_ENDNOTE)
+			m_parseState->m_styleStateSequence.setCurrentState(DOCUMENT_NOTE_GLOBAL);
+	}
+}
+
+void WP6HLListener::globalOff()
+{
+	if (!m_parseState->m_isUndoOn)
+	{
+		// FIXME: this needs to be verified to be correct in all cases
+		m_parseState->m_styleStateSequence.setCurrentState(NORMAL);
+	}
+}
+
 void WP6HLListener::noteOn(const guint16 textPID)
 {
 	if (!m_parseState->m_isUndoOn)
