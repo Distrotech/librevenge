@@ -98,9 +98,19 @@ void HtmlListenerImpl::openSection(guint numColumns, gfloat marginLeft, gfloat m
 
 void HtmlListenerImpl::insertText(const guint16 *textArray, const guint len)
 {
+	// first convert from ucs2 to ucs4
+	gunichar *textArrayUCS4 = (gunichar *) g_malloc(sizeof(gunichar)*len);
 	for (guint i=0; i<len; i++) {
-		printf("%c", textArray[i]);
+		textArrayUCS4[i] = textArray[i];
 	}
+
+	// then convert from ucs4 to utf8 and write it
+	gchar *textArrayUTF8 = g_ucs4_to_utf8(textArrayUCS4, len, NULL, NULL, NULL); // TODO: handle errors
+	printf("%s", textArrayUTF8);
+
+	// clean up our mess
+	g_free(textArrayUCS4);
+	g_free(textArrayUTF8);
 }
 
 void HtmlListenerImpl::openTable()

@@ -30,7 +30,6 @@
 class WPXHLListenerImpl
 {
  public:
-	//virtual void insertSpan() = 0;
 	virtual void startDocument() = 0;
 	virtual void endDocument() = 0;
 	virtual void openParagraph(guint8 paragraphJustification, guint32 textAttributeBits) = 0;
@@ -41,7 +40,7 @@ class WPXHLListenerImpl
  
  	virtual void openTable() = 0;
  	virtual void openRow() = 0;
- 	virtual void openCell(guint32 col, guint row, guint32 colSpan, guint32 rowSpan) = 0;
+ 	virtual void openCell(guint32 col, guint32 row, guint32 colSpan, guint32 rowSpan) = 0;
  	virtual void closeTable() = 0;
 };
 

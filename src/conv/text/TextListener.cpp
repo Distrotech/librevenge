@@ -36,7 +36,15 @@ TextListener::TextListener() :
 void TextListener::insertCharacter(guint16 character)
 {
 	if (!m_isUndoOn) {
-		printf("%c", (char)character);
+		// first convert from ucs2 to ucs4
+		gunichar characterUCS4 = (gunichar) character;
+		
+		// then convert from ucs4 to utf8 and write it
+		gchar *characterUTF8 = g_ucs4_to_utf8(&characterUCS4, 1, NULL, NULL, NULL); // TODO: handle errors
+		printf("%s", characterUTF8);
+		
+		// clean up our mess
+		g_free(characterUTF8);
 	}
 }
 

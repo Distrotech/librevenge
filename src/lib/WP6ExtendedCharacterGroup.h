@@ -27,15 +27,20 @@
 #define WP6EXTENDEDCHARACTERGROUP_H
 
 #include "WP6FixedLengthGroup.h"
+#include "WP6FileStructure.h"
 
 class WP6ExtendedCharacterGroup : public WP6FixedLengthGroup
 {
 public:
 	WP6ExtendedCharacterGroup(FILE *stream);	
-	virtual void parse(WP6LLListener *llListener) {}
+	virtual void parse(WP6LLListener *llListener);
 	
-protected:
+ protected:
 	virtual void _readContents(FILE *stream);
+
+ private:
+	guint8 m_character;
+	guint8 m_characterSet;
 };
 
 #endif /* WP6EXTENDEDCHARACTERGROUP_H */
