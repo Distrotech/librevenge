@@ -155,30 +155,27 @@ void WPXHLListener::_openPageSpan()
 				     currentPage->getMarginLeft(), currentPage->getMarginRight(),
 				     currentPage->getMarginTop(), currentPage->getMarginBottom());
 
-	m_ps->m_pageFormLength = currentPage->getFormLength();
-	m_ps->m_pageFormWidth = currentPage->getFormWidth();
-	m_ps->m_pageFormOrientation = currentPage->getFormOrientation();
-	m_ps->m_pageMarginLeft = currentPage->getMarginLeft();
-	m_ps->m_pageMarginRight = currentPage->getMarginRight();
-
 	const vector<WPXHeaderFooter> headerFooterList = currentPage->getHeaderFooterList();
 	for (vector<WPXHeaderFooter>::const_iterator iter = headerFooterList.begin(); iter != headerFooterList.end(); iter++)
 	{
 		if (!currentPage->getHeaderFooterSuppression((*iter).getInternalType()))
 		{
 			m_listenerImpl->openHeaderFooter((*iter).getType(), (*iter).getOccurence());
-			handleSubDocument((*iter).getTextPID(), (1.0f - m_ps->m_pageMarginLeft),
-							  (1.0f - m_ps->m_pageMarginRight));
+			handleSubDocument((*iter).getTextPID());
 			m_listenerImpl->closeHeaderFooter((*iter).getType(), (*iter).getOccurence());
 			WPD_DEBUG_MSG(("Header Footer Element: type: %i occurence: %i pid: %i\n",
 				       (*iter).getType(), (*iter).getOccurence(), (*iter).getTextPID()));
 		}
+	}
 
+	m_ps->m_pageFormLength = currentPage->getFormLength();
+	m_ps->m_pageFormWidth = currentPage->getFormWidth();
+	m_ps->m_pageFormOrientation = currentPage->getFormOrientation();
+	m_ps->m_pageMarginLeft = currentPage->getMarginLeft();
+	m_ps->m_pageMarginRight = currentPage->getMarginRight();
 	m_ps->m_numPagesRemainingInSpan = (currentPage->getPageSpan() - 1);
 	m_ps->m_nextPageSpanIndice++;
 	m_ps->m_isPageSpanOpened = true;
-
-	}
 }
 
 void WPXHLListener::_closePageSpan()
@@ -220,20 +217,16 @@ void WPXHLListener::_closeSpan()
 /**
 Creates an new document state. Saves the old state on a "stack".
 */
-void WPXHLListener::handleSubDocument(guint16 textPID, const float leftMarginDiff, const float rightMarginDiff)
+void WPXHLListener::handleSubDocument(guint16 textPID)
 {
 	// save our old parsing state on our "stack"
 	WPXParsingState *oldPS = m_ps;
 	m_ps = new WPXParsingState(false); // false: don't open a new section unless we must inside this type of sub-document
 	// BEGIN: copy page properties into the new parsing state
-	m_ps->m_pageFormLength = oldPS->m_pageFormLength;
 	m_ps->m_pageFormWidth = oldPS->m_pageFormWidth;
-	m_ps->m_pageFormOrientation = oldPS->m_pageFormOrientation;
 	m_ps->m_pageMarginLeft = oldPS->m_pageMarginLeft;
 	m_ps->m_pageMarginRight = oldPS->m_pageMarginRight;
 	// END: copy page properties into the new parsing state
-	m_ps->m_paragraphMarginLeft = leftMarginDiff;
-	m_ps->m_paragraphMarginRight = rightMarginDiff;
 	_handleSubDocument(textPID);
 
 	// restore our old parsing state

@@ -132,7 +132,7 @@ public:
 	WPXHLListener::~WPXHLListener();
 
 	void startDocument();
-	void handleSubDocument(guint16 textPID, const float leftMarginDiff, const float rightMarginDiff);
+	void handleSubDocument(guint16 textPID);
 	virtual void insertBreak(const guint8 breakType);
 
 	WPXParsingState *m_ps; // parse state
