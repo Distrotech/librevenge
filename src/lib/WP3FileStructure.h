@@ -35,8 +35,27 @@ extern int WP3_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16];
 #define WP3_INDENT_GROUP 0xC2
 #define WP3_ATTRIBUTE_GROUP 0xC3
 
+#define WP3_UNDO_GROUP 0xCD
+
 #define WP3_WINDOW_GROUP 0xDA
 #define WP3_STYLE_GROUP 0xDB
 #define WP3_END_OF_LINE_PAGE_GROUP 0xDC
+
+/* Attribute Group */
+#define WP3_ATTRIBUTE_BOLD 0
+#define WP3_ATTRIBUTE_ITALICS 1
+#define WP3_ATTRIBUTE_UNDERLINE 2
+#define WP3_ATTRIBUTE_OUTLINE 3
+#define WP3_ATTRIBUTE_SHADOW 4
+// 5 to 7 is not documented
+#define WP3_ATTRIBUTE_REDLINE 8
+#define WP3_ATTRIBUTE_STRIKE_OUT 9
+#define WP3_ATTRIBUTE_SUBSCRIPT 10
+#define WP3_ATTRIBUTE_SUPERSCRIPT 11
+#define WP3_ATTRIBUTE_DOUBLE_UNDERLINE 12
+/* here are the attributes extra large to fine
+ * that we are not converting for the while */
+#define WP3_ATTRIBUTE_SMALL_CAPS 18
+
 
 #endif /* WP3FILESTRUCTURE_H */

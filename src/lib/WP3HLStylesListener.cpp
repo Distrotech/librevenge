@@ -46,8 +46,8 @@ void WP3HLStylesListener::endDocument()
 
 void WP3HLStylesListener::insertBreak(const uint8_t breakType)
 {
-	//if (!isUndoOn())
-	//{	
+	if (!isUndoOn())
+	{	
 		switch (breakType) 
 		{
 		case WPX_PAGE_BREAK:
@@ -68,7 +68,7 @@ void WP3HLStylesListener::insertBreak(const uint8_t breakType)
 			m_currentPageHasContent = false;
 			break;
 		}
-	//}
+	}
 }
 /*
 void WP3HLStylesListener::pageMarginChange(const uint8_t side, const uint16_t margin)
@@ -140,17 +140,17 @@ void WP3HLStylesListener::suppressPageCharacteristics(const uint8_t suppressCode
 */
 void WP3HLStylesListener::startTable()
 {
-	//if (!isUndoOn()) 
-	//{			
+	if (!isUndoOn()) 
+	{			
 		m_currentPageHasContent = true;
 		m_currentTable = new WPXTable();
 		m_tableList->add(m_currentTable);
-	//}
+	}
 }
 
 void WP3HLStylesListener::insertRow()
 {
-	if (/*!isUndoOn() && */m_currentTable != NULL) 
+	if (!isUndoOn() && m_currentTable != NULL) 
 	{
 		m_currentPageHasContent = true;
 		m_currentTable->insertRow();
@@ -161,7 +161,7 @@ void WP3HLStylesListener::insertCell(const uint8_t colSpan, const uint8_t rowSpa
 				  const uint8_t borderBits, 
 				  const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
 {
-	if (/*!isUndoOn() &&*/ m_currentTable != NULL)
+	if (!isUndoOn() && m_currentTable != NULL)
 	{
 		m_currentPageHasContent = true;
 		m_currentTable->insertCell(colSpan, rowSpan, boundFromLeft, boundFromAbove, borderBits);

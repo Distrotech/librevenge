@@ -24,57 +24,23 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP3SINGLEBYTEFUNCTION_H
-#define WP3SINGLEBYTEFUNCTION_H
+#ifndef WP3UNDOGROUP_H
+#define WP3UNDOGROUP_H
 
-#include "WP3Part.h"
+#include "WP3FixedLengthGroup.h"
 
-class WP3SingleByteFunction : public WP3Part
+class WP3UndoGroup : public WP3FixedLengthGroup
 {
- public:
-	static WP3SingleByteFunction * WP3SingleByteFunction::constructSingleByteFunction(WPXInputStream *input, uint8_t groupID);
+public:
+	WP3UndoGroup(WPXInputStream *input, uint8_t groupID);	
+	virtual void parse(WP3HLListener *listener);
+	
+ protected:
+	virtual void _readContents(WPXInputStream *input);
+
+ private:
+	uint8_t m_undoType;
+	uint16_t m_undoLevel;
+
 };
-
-/*class WP3SpaceFunction : public WP3SingleByteFunction
-{
-public:
-	virtual void parse(WP3HLListener *listener);	
-};*/
-
-class WP3HardSpaceFunction : public WP3SingleByteFunction
-{
-public:
-	virtual void parse(WP3HLListener *listener);	
-};
-
-class WP3EOLFunction : public WP3SingleByteFunction
-{
-public:
-	virtual void parse(WP3HLListener *listener);	
-};
-
-/*class WP3EOCFunction : public WP3SingleByteFunction
-{
-public:
-	virtual void parse(WP3HLListener *listener);	
-};*/
-
-class WP3EOPFunction : public WP3SingleByteFunction
-{
-public:
-	virtual void parse(WP3HLListener *listener);	
-};
-
-class WP3HyphenFunction : public WP3SingleByteFunction
-{
-public:
-	virtual void parse(WP3HLListener *listener);	
-};
-
-class WP3SoftHyphenFunction : public WP3SingleByteFunction
-{
-public:
-	virtual void parse(WP3HLListener *listener);	
-};
-
-#endif /* WP3SINGLEBYTEFUNCTION_H */
+#endif /* WP3UNDOGROUP_H */

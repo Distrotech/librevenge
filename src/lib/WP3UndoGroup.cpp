@@ -24,57 +24,23 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP3SINGLEBYTEFUNCTION_H
-#define WP3SINGLEBYTEFUNCTION_H
+#include "WP3UndoGroup.h"
+#include "WP3LLListener.h"
+#include "libwpd_internal.h"
 
-#include "WP3Part.h"
-
-class WP3SingleByteFunction : public WP3Part
+WP3UndoGroup::WP3UndoGroup(WPXInputStream *input, uint8_t groupID)
+	: WP3FixedLengthGroup(groupID)
 {
- public:
-	static WP3SingleByteFunction * WP3SingleByteFunction::constructSingleByteFunction(WPXInputStream *input, uint8_t groupID);
-};
+	_read(input);
+}
 
-/*class WP3SpaceFunction : public WP3SingleByteFunction
+void WP3UndoGroup::_readContents(WPXInputStream *input)
 {
-public:
-	virtual void parse(WP3HLListener *listener);	
-};*/
+	m_undoType = readU8(input);
+	m_undoLevel = readU16(input, true);
+}
 
-class WP3HardSpaceFunction : public WP3SingleByteFunction
+void WP3UndoGroup::parse(WP3HLListener *listener)
 {
-public:
-	virtual void parse(WP3HLListener *listener);	
-};
-
-class WP3EOLFunction : public WP3SingleByteFunction
-{
-public:
-	virtual void parse(WP3HLListener *listener);	
-};
-
-/*class WP3EOCFunction : public WP3SingleByteFunction
-{
-public:
-	virtual void parse(WP3HLListener *listener);	
-};*/
-
-class WP3EOPFunction : public WP3SingleByteFunction
-{
-public:
-	virtual void parse(WP3HLListener *listener);	
-};
-
-class WP3HyphenFunction : public WP3SingleByteFunction
-{
-public:
-	virtual void parse(WP3HLListener *listener);	
-};
-
-class WP3SoftHyphenFunction : public WP3SingleByteFunction
-{
-public:
-	virtual void parse(WP3HLListener *listener);	
-};
-
-#endif /* WP3SINGLEBYTEFUNCTION_H */
+	listener->undoChange(m_undoType, m_undoLevel);
+}

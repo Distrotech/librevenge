@@ -47,7 +47,7 @@ WP3SingleByteFunction * WP3SingleByteFunction::constructSingleByteFunction(WPXIn
 	
 	case 0xa0: // hard space
 		return new WP3HardSpaceFunction();
-
+		
 	default:
 		// should not happen
 		return NULL;
@@ -62,6 +62,11 @@ WP3SingleByteFunction * WP3SingleByteFunction::constructSingleByteFunction(WPXIn
 void WP3HardSpaceFunction::parse(WP3HLListener *listener)
 {
 	listener->insertCharacter((uint16_t) 0xa0);
+}
+
+void WP3HyphenFunction::parse(WP3HLListener *listener)
+{
+	listener->insertCharacter((uint16_t) '-');
 }
 
 void WP3SoftHyphenFunction::parse(WP3HLListener *listener)
@@ -84,7 +89,3 @@ void WP3EOPFunction::parse(WP3HLListener *listener)
 	listener->insertBreak(WPX_PAGE_BREAK);
 }
 
-void WP3HyphenFunction::parse(WP3HLListener *listener)
-{
-	listener->insertCharacter((uint16_t) '-');
-}

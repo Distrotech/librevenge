@@ -23,7 +23,7 @@
  */
 
 #include "WP3HLListener.h"
-//#include "WP3FileStructure.h"
+#include "WP3FileStructure.h"
 
 _WP3ParsingState::_WP3ParsingState()
 {
@@ -53,19 +53,26 @@ WP3HLListener::~WP3HLListener()
 
 void WP3HLListener::insertCharacter(const uint16_t character)
 {
-	m_textBuffer.append(character);
+        if (!isUndoOn())
+		m_textBuffer.append(character);
 }
 
 void WP3HLListener::insertTab(const uint8_t tabType, const float tabPosition)
 {
-	_flushText();
-	m_listenerImpl->insertTab();
+        if (!isUndoOn())
+	{
+		_flushText();
+		m_listenerImpl->insertTab();
+	}
 }
 
 void WP3HLListener::insertEOL()
 {
-	_flushText();
-	m_ps->m_numDeferredParagraphBreaks++;
+        if (!isUndoOn())
+	{
+		_flushText();
+		m_ps->m_numDeferredParagraphBreaks++;
+	}
 }
 
 void WP3HLListener::endDocument()
@@ -88,10 +95,8 @@ void WP3HLListener::endDocument()
 	{
 		_flushText();
 	}
-
 	// the only other possibility is a logical contradiction: a paragraph
 	// may not be opened and closed at the same time
-
 	// close the document nice and tight
 	_closeSection();
 	_closePageSpan();
@@ -105,54 +110,72 @@ void WP3HLListener::endDocument()
 
 void WP3HLListener::attributeChange(const bool isOn, const uint8_t attribute)
 {
-
-	// flush everything which came before this change
-	_flushText();
-
-	uint32_t textAttributeBit = 0;
-
-	// FIXME: handle all the possible attribute bits
-/*	switch (attribute)
+        if (!isUndoOn())
 	{
-		case WP5_ATTRIBUTE_SUBSCRIPT:
-			textAttributeBit = WPX_SUBSCRIPT_BIT;
-			break;
-		case WP5_ATTRIBUTE_SUPERSCRIPT:
-			textAttributeBit = WPX_SUPERSCRIPT_BIT;
-			break;
-		case WP5_ATTRIBUTE_OUTLINE:
-			textAttributeBit = WPX_OUTLINE_BIT;
-			break;
-		case WP5_ATTRIBUTE_ITALICS:
-			textAttributeBit = WPX_ITALICS_BIT;
-			break;
-		case WP5_ATTRIBUTE_SHADOW:
-			textAttributeBit = WPX_SHADOW_BIT;
-			break;
-		case WP5_ATTRIBUTE_REDLINE:
-			textAttributeBit = WPX_REDLINE_BIT;
-			break;
-		case WP5_ATTRIBUTE_DOUBLE_UNDERLINE:
-			textAttributeBit = WPX_DOUBLE_UNDERLINE_BIT;
-			break;
-		case WP5_ATTRIBUTE_BOLD:
-			textAttributeBit = WPX_BOLD_BIT;
-			break;
-		case WP5_ATTRIBUTE_STRIKE_OUT:
-			textAttributeBit = WPX_STRIKEOUT_BIT;
-			break;
-		case WP5_ATTRIBUTE_UNDERLINE:
-			textAttributeBit = WPX_UNDERLINE_BIT;
-			break;
-	}*/
+		// flush everything which came before this change
+		_flushText();
 
-	if (isOn)
-		m_ps->m_textAttributeBits |= textAttributeBit;
-	else
-		m_ps->m_textAttributeBits ^= textAttributeBit;
+		uint32_t textAttributeBit = 0;
 
-	m_ps->m_textAttributesChanged = true;
+		// FIXME: handle all the possible attribute bits
+		switch (attribute)
+		{
+			case WP3_ATTRIBUTE_BOLD:
+				textAttributeBit = WPX_BOLD_BIT;
+				break;
+			case WP3_ATTRIBUTE_ITALICS:
+				textAttributeBit = WPX_ITALICS_BIT;
+				break;
+			case WP3_ATTRIBUTE_UNDERLINE:
+				textAttributeBit = WPX_UNDERLINE_BIT;
+				break;
+			case WP3_ATTRIBUTE_OUTLINE:
+				textAttributeBit = WPX_OUTLINE_BIT;
+				break;
+			case WP3_ATTRIBUTE_SHADOW:
+				textAttributeBit = WPX_SHADOW_BIT;
+				break;
+			case WP3_ATTRIBUTE_REDLINE:
+				textAttributeBit = WPX_REDLINE_BIT;
+				break;
+			case WP3_ATTRIBUTE_STRIKE_OUT:
+				textAttributeBit = WPX_STRIKEOUT_BIT;
+				break;
+			case WP3_ATTRIBUTE_SUBSCRIPT:
+				textAttributeBit = WPX_SUBSCRIPT_BIT;
+				break;
+			case WP3_ATTRIBUTE_SUPERSCRIPT:
+				textAttributeBit = WPX_SUPERSCRIPT_BIT;
+				break;
+			case WP3_ATTRIBUTE_DOUBLE_UNDERLINE:
+				textAttributeBit = WPX_DOUBLE_UNDERLINE_BIT;
+				break;
+			case WP3_ATTRIBUTE_SMALL_CAPS:
+				textAttributeBit = WPX_SMALL_CAPS_BIT;
+				break;
+		}
+
+		if (isOn)
+			m_ps->m_textAttributeBits |= textAttributeBit;
+		else
+			m_ps->m_textAttributeBits ^= textAttributeBit;
+
+		m_ps->m_textAttributesChanged = true;
+	}
 }
+
+void WP3HLListener::undoChange(const uint8_t undoType, const uint16_t undoLevel)
+{
+        if (undoType == 0x00) // begin invalid text
+                m_isUndoOn = true;
+        else if (undoType == 0x01) // end invalid text
+                m_isUndoOn = false;
+	else if (undoType == 0x02) // begin valid text
+		m_isUndoOn = false;
+	else if (undoType == 0x03) // end valid text
+		m_isUndoOn = true;
+}
+
 
 /****************************************
  private functions

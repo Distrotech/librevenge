@@ -71,6 +71,7 @@ public:
 				const uint8_t borderBits,
 				const RGBSColor * cellFgColor, const RGBSColor * cellBgColor) {};
  	virtual void endTable() {};
+        virtual void undoChange(const uint8_t undoType, const uint16_t undoLevel);
 
 protected:
 	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter, WPXTableList *tableList) {}
