@@ -47,14 +47,6 @@ enum WP6StyleState { NORMAL, DOCUMENT_NOTE, DOCUMENT_NOTE_GLOBAL,
 		     BEGIN_NUMBERING_AFTER_DISPLAY_REFERENCING,
 		     BEGIN_AFTER_NUMBERING, STYLE_BODY, STYLE_END };
 
-typedef struct _WP6TableDefinition WP6TableDefinition;
-struct _WP6TableDefinition
-{
-	uint8_t m_positionBits;
-	float m_leftOffset;
-	vector < WPXColumnDefinition > columns;
-};
-
 const int STATE_MEMORY = 3;
 class WP6StyleStateSequence
 {
@@ -99,14 +91,6 @@ struct _WP6ParsingState
 	WPXTableList *m_tableList;
 	WPXTable *m_currentTable;
 	int m_nextTableIndice;
-	int m_currentTableCol;
-	int m_currentTableRow;
-	bool m_isTableOpened;
-	bool m_isTableRowOpened;
-	bool m_isTableColumnOpened;
-	bool m_isTableCellOpened;
-	int32_t m_currentRow;
-	int32_t m_currentColumn;
 
 	stack<int> m_listLevelStack;
 	uint16_t m_currentOutlineHash; // probably should replace Hash with Key in these sorts of cases
@@ -218,22 +202,10 @@ protected:
 
 	void _openListElement();
 
-	void _openTable();
-	void _closeTable();
-	void _openTableRow();
-	void _closeTableRow();
-	void _openTableCell(const uint8_t colSpan, const uint8_t rowSpan,
-			    const bool boundFromLeft, const bool boundFromAbove,
-				const uint8_t borderBits,
-			    const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
-	void _closeTableCell();
-
 	void _openParagraph();
 
 private:
 	WP6ParsingState *m_parseState;
-
-	WP6TableDefinition m_tableDefinition;
 
 	map<int,WP6OutlineDefinition *> m_outlineDefineHash;
 };

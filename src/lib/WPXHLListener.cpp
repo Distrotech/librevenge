@@ -43,21 +43,19 @@ _WPXParsingState::_WPXParsingState(bool sectionAttributesChanged) :
 	m_tempParagraphJustification(0),
 */
 	m_isSectionOpened(false),
+	m_isPageSpanBreakDeferred(false),
 
 	m_isParagraphOpened(false),
 	m_isParagraphClosed(false),
 	m_isSpanOpened(false),
 	m_numDeferredParagraphBreaks(0),
-/*	m_numRemovedParagraphBreaks(0),
 
-	m_currentTable(NULL),
-	m_nextTableIndice(0),
 	m_currentTableCol(0),
 	m_currentTableRow(0),
 	m_isTableOpened(false),
 	m_isTableRowOpened(false),
 	m_isTableCellOpened(false),
-*/
+
 	m_isPageSpanOpened(false),
 	m_nextPageSpanIndice(0),
 	m_numPagesRemainingInSpan(0),
@@ -199,6 +197,7 @@ void WPXHLListener::_closePageSpan()
 {
 	if (m_ps->m_isPageSpanOpened)
 	{
+		_closeSection();
 		m_listenerImpl->closePageSpan();
 		m_ps->m_isPageSpanOpened = false;
 	}
@@ -230,6 +229,85 @@ void WPXHLListener::_closeSpan()
 
 	m_ps->m_isSpanOpened = false;
 }
+
+void WPXHLListener::_openTable()
+{
+	_closeTable();
+
+	m_listenerImpl->openTable(m_ps->m_tableDefinition.m_positionBits, m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight,
+				  m_ps->m_tableDefinition.m_leftOffset, m_ps->m_tableDefinition.columns);
+	m_ps->m_isTableOpened = true;
+
+	m_ps->m_currentTableRow = (-1);
+	m_ps->m_currentTableCol = (-1);
+}
+
+void WPXHLListener::_closeTable()
+{
+	_closeTableRow();
+
+	if (m_ps->m_isTableOpened)
+	{
+		m_listenerImpl->closeTable();
+		m_ps->m_currentTableRow = (-1);
+		m_ps->m_currentTableCol = (-1);
+	}
+	m_ps->m_isTableOpened = false;
+
+	// handle case where page span is closed in the middle of a table
+	if (m_ps->m_isPageSpanBreakDeferred)
+	{
+	    _closePageSpan();
+	    m_ps->m_isPageSpanBreakDeferred = false;
+	}
+}
+
+void WPXHLListener::_openTableRow()
+{
+	_closeTableRow();
+	m_ps->m_currentTableCol = 0;
+	m_listenerImpl->openTableRow();
+
+	m_ps->m_isTableRowOpened = true;
+	m_ps->m_currentTableRow++;
+}
+
+void WPXHLListener::_closeTableRow()
+{
+	_closeTableCell();
+
+	if (m_ps->m_isTableRowOpened)
+		m_listenerImpl->closeTableRow();
+	m_ps->m_isTableRowOpened = false;
+}
+
+void WPXHLListener::_openTableCell(const uint8_t colSpan, const uint8_t rowSpan, const bool boundFromLeft, const bool boundFromAbove,
+								const uint8_t borderBits,
+								const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
+{
+	_closeTableCell();
+
+	if (!boundFromLeft && !boundFromAbove)
+	{
+		m_listenerImpl->openTableCell(m_ps->m_currentTableCol, m_ps->m_currentTableRow, colSpan, rowSpan,
+					      borderBits, cellFgColor, cellBgColor);
+		m_ps->m_isTableCellOpened = true;
+	}
+	else
+		m_listenerImpl->insertCoveredTableCell(m_ps->m_currentTableCol, m_ps->m_currentTableRow);
+
+	m_ps->m_currentTableCol++;
+}
+
+void WPXHLListener::_closeTableCell()
+{
+	_closeParagraph();
+	if (m_ps->m_isTableCellOpened)
+		m_listenerImpl->closeTableCell();
+
+	m_ps->m_isTableCellOpened = false;
+}
+
 
 /**
 Creates an new document state. Saves the old state on a "stack".
@@ -276,7 +354,10 @@ void WPXHLListener::insertBreak(const uint8_t breakType)
 				m_ps->m_numPagesRemainingInSpan--;
 			else
 			{
+			    if (!m_ps->m_isTableOpened)
 				_openPageSpan();
+			    else
+				m_ps->m_isPageSpanBreakDeferred = true;
 			}
 		default:
 			break;

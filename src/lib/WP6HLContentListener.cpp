@@ -203,14 +203,6 @@ _WP6ParsingState::_WP6ParsingState(WPXTableList * tableList, int nextTableIndice
 	m_tableList(tableList),
 	m_currentTable(NULL),
 	m_nextTableIndice(nextTableIndice),
-	m_currentTableCol(0),
-	m_currentTableRow(0),
-	m_isTableOpened(false),
-	m_isTableRowOpened(false),
-	m_isTableCellOpened(false),
-
-	m_currentRow(-1),
-	m_currentColumn(-1),
 
 	m_currentListLevel(0),
 	m_putativeListElementHasParagraphNumber(false),
@@ -919,7 +911,6 @@ void WP6HLContentListener::endDocument()
 	// may not be opened and closed at the same time
 
 	// close the document nice and tight
-	_closeSection();
 	_closePageSpan();
 	m_listenerImpl->endDocument();
 }
@@ -931,29 +922,29 @@ void WP6HLContentListener::defineTable(uint8_t position, uint16_t leftOffset)
 		switch (position & 0x07)
 		{
 		case 0:
-			m_tableDefinition.m_positionBits = WPX_TABLE_POSITION_ALIGN_WITH_LEFT_MARGIN;
+			m_ps->m_tableDefinition.m_positionBits = WPX_TABLE_POSITION_ALIGN_WITH_LEFT_MARGIN;
 			break;
 		case 1:
-			m_tableDefinition.m_positionBits = WPX_TABLE_POSITION_ALIGN_WITH_RIGHT_MARGIN;
+			m_ps->m_tableDefinition.m_positionBits = WPX_TABLE_POSITION_ALIGN_WITH_RIGHT_MARGIN;
 			break;
 		case 2:
-			m_tableDefinition.m_positionBits = WPX_TABLE_POSITION_CENTER_BETWEEN_MARGINS;
+			m_ps->m_tableDefinition.m_positionBits = WPX_TABLE_POSITION_CENTER_BETWEEN_MARGINS;
 			break;
 		case 3:
-			m_tableDefinition.m_positionBits = WPX_TABLE_POSITION_FULL;
+			m_ps->m_tableDefinition.m_positionBits = WPX_TABLE_POSITION_FULL;
 			break;
 		case 4:
-			m_tableDefinition.m_positionBits = WPX_TABLE_POSITION_ABSOLUTE_FROM_LEFT_MARGIN;
+			m_ps->m_tableDefinition.m_positionBits = WPX_TABLE_POSITION_ABSOLUTE_FROM_LEFT_MARGIN;
 			break;
 		default:
 			// should not happen
 			break;
 		}
 		// Note: WordPerfect has an offset from the left edge of the page. We translate it to the offset from the left margin
-		m_tableDefinition.m_leftOffset = (float)((double)leftOffset / (double)WPX_NUM_WPUS_PER_INCH) - m_ps->m_paragraphMarginLeft;
+		m_ps->m_tableDefinition.m_leftOffset = (float)((double)leftOffset / (double)WPX_NUM_WPUS_PER_INCH) - m_ps->m_paragraphMarginLeft;
 
 		// remove all the old column information
-		m_tableDefinition.columns.clear();
+		m_ps->m_tableDefinition.columns.clear();
 
 		// pull a table definition off of our stack
 		m_parseState->m_currentTable = (*(m_parseState->m_tableList))[m_parseState->m_nextTableIndice++];
@@ -972,7 +963,7 @@ void WP6HLContentListener::addTableColumnDefinition(uint32_t width, uint32_t lef
 		colDef.m_rightGutter = (float)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
 
 		// add the new column definition to our table definition
-		m_tableDefinition.columns.push_back(colDef);
+		m_ps->m_tableDefinition.columns.push_back(colDef);
 	}
 }
 
@@ -991,7 +982,6 @@ void WP6HLContentListener::startTable()
 			m_ps->m_sectionAttributesChanged = false;
 		}
 		_openTable();
-		m_parseState->m_currentTableRow = (-1);
 	}
 }
 
@@ -1001,8 +991,6 @@ void WP6HLContentListener::insertRow()
 	{
 		_flushText();
 		_openTableRow();
-		m_parseState->m_currentTableCol=0;
-		m_parseState->m_currentTableRow++;
 	}
 }
 
@@ -1011,15 +999,14 @@ void WP6HLContentListener::insertCell(const uint8_t colSpan, const uint8_t rowSp
 {
 	if (!isUndoOn())
 	{
-		if (m_parseState->m_currentTableRow < 0) // cell without a row, invalid
+		if (m_ps->m_currentTableRow < 0) // cell without a row, invalid
 			throw ParseException();
 		_flushText();
 		_openTableCell(colSpan, rowSpan, boundFromLeft, boundFromAbove,
 			       m_parseState->m_currentTable->getCell(
-				       m_parseState->m_currentTableRow,
-				       m_parseState->m_currentTableCol)->m_borderBits,			       
+				       m_ps->m_currentTableRow,
+				       m_ps->m_currentTableCol)->m_borderBits,			       
 			       cellFgColor, cellBgColor);
-		m_parseState->m_currentTableCol++;
 	}
 }
 
@@ -1129,7 +1116,7 @@ void WP6HLContentListener::_flushText(const bool fakeText)
 						  !m_parseState->m_putativeListElementHasParagraphNumber)))
 	{
 		if (!m_ps->m_isParagraphOpened &&
-			!(m_parseState->m_isTableOpened && !m_parseState->m_isTableCellOpened) // don't allow paragraphs to be opened when we have already opened a table, but no cell yet. - MARCM (is it really correct, or should this be fixed elsewhere??)
+			!(m_ps->m_isTableOpened && !m_ps->m_isTableCellOpened) // don't allow paragraphs to be opened when we have already opened a table, but no cell yet. - MARCM (is it really correct, or should this be fixed elsewhere??)
 		)
 			m_ps->m_numDeferredParagraphBreaks++;
 
@@ -1267,73 +1254,6 @@ void WP6HLContentListener::_openListElement()
 	m_ps->m_isParagraphOpened = true; // a list element is equivalent to a paragraph
 
 	_openSpan();
-}
-
-void WP6HLContentListener::_openTable()
-{
-	_closeTable();
-
-	m_listenerImpl->openTable(m_tableDefinition.m_positionBits, m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight,
-				  m_tableDefinition.m_leftOffset, m_tableDefinition.columns);
-	m_parseState->m_isTableOpened = true;
-}
-
-void WP6HLContentListener::_closeTable()
-{
-	_closeTableRow();
-
-	if (m_parseState->m_isTableOpened)
-	{
-		m_listenerImpl->closeTable();
-		m_parseState->m_currentRow = 0;
-		m_parseState->m_currentColumn = 0;
-	}
-	m_parseState->m_isTableOpened = false;
-}
-
-void WP6HLContentListener::_openTableRow()
-{
-	_closeTableRow();
-	m_parseState->m_currentRow++;
-	m_parseState->m_currentColumn = -1;
-	m_listenerImpl->openTableRow();
-	m_parseState->m_isTableRowOpened = true;
-}
-
-void WP6HLContentListener::_closeTableRow()
-{
-	_closeTableCell();
-
-	if (m_parseState->m_isTableRowOpened)
-		m_listenerImpl->closeTableRow();
-	m_parseState->m_isTableRowOpened = false;
-}
-
-void WP6HLContentListener::_openTableCell(const uint8_t colSpan, const uint8_t rowSpan, const bool boundFromLeft, const bool boundFromAbove,
-								const uint8_t borderBits,
-								const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
-{
-	_closeTableCell();
-	m_parseState->m_currentColumn++;
-
-	if (!boundFromLeft && !boundFromAbove)
-	{
-		m_listenerImpl->openTableCell(m_parseState->m_currentColumn, m_parseState->m_currentRow, colSpan, rowSpan,
-									borderBits,
-									cellFgColor, cellBgColor);
-		m_parseState->m_isTableCellOpened = true;
-	}
-	else
-		m_listenerImpl->insertCoveredTableCell(m_parseState->m_currentColumn, m_parseState->m_currentRow);
-}
-
-void WP6HLContentListener::_closeTableCell()
-{
-	_closeParagraph();
-	if (m_parseState->m_isTableCellOpened)
-		m_listenerImpl->closeTableCell();
-
-	m_parseState->m_isTableCellOpened = false;
 }
 
 void WP6HLContentListener::_openParagraph()

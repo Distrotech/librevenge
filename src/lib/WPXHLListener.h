@@ -46,6 +46,14 @@ struct _WPXDocumentMetaData
 	UCSString m_descriptiveType;
 };
 
+typedef struct _WPXTableDefinition WPXTableDefinition;
+struct _WPXTableDefinition
+{
+	uint8_t m_positionBits;
+	float m_leftOffset;
+	vector < WPXColumnDefinition > columns;
+};
+
 typedef struct _WPXParsingState WPXParsingState;
 struct _WPXParsingState
 {
@@ -74,22 +82,21 @@ struct _WPXParsingState
 	float m_paragraphLineSpacing;
 */
 	bool m_isSectionOpened;
+	bool m_isPageSpanBreakDeferred;
 
 	bool m_isParagraphOpened;
 	bool m_isParagraphClosed;
 	bool m_isSpanOpened;
 	int m_numDeferredParagraphBreaks;
-/*	int m_numRemovedParagraphBreaks;
 
-	WPXTable *m_currentTable;
-	int m_nextTableIndice;
+	WPXTableDefinition m_tableDefinition;
 	int m_currentTableCol;
 	int m_currentTableRow;
 	bool m_isTableOpened;
 	bool m_isTableRowOpened;
 	bool m_isTableColumnOpened;
 	bool m_isTableCellOpened;
-*/
+
 	bool m_isPageSpanOpened;
 	int m_nextPageSpanIndice;
 	int m_numPagesRemainingInSpan;
@@ -159,6 +166,16 @@ protected:
 
 	void _openSpan();
 	void _closeSpan();
+
+	void _openTable();
+	void _closeTable();
+	void _openTableRow();
+	void _closeTableRow();
+	void _openTableCell(const uint8_t colSpan, const uint8_t rowSpan,
+			    const bool boundFromLeft, const bool boundFromAbove,
+				const uint8_t borderBits,
+			    const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
+	void _closeTableCell();
 
 	bool isUndoOn() { return m_isUndoOn; }
 	bool m_isUndoOn;
