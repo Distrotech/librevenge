@@ -191,7 +191,7 @@ void HtmlListenerImpl::closeEndnote()
 	printf("</endnote>\n");
 }
 
-void HtmlListenerImpl::openTable(const guint8 tablePositionBits, const gfloat leftOffset, const vector < WPXColumnDefinition > columns)
+void HtmlListenerImpl::openTable(const guint8 tablePositionBits, const gfloat leftOffset, const vector < WPXColumnDefinition > &columns)
 {
 	printf("<table border=\"1\">\n");
 	printf("<tbody>\n");

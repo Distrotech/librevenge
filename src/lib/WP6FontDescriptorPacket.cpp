@@ -27,7 +27,9 @@
 #include "WP6FontDescriptorPacket.h"
 #include "libwpd_internal.h"
 
-const char *FONT_WEIGHT_STRINGS[] = { "Black", "Regular", "Normal", "Extended", "Bold", "Light", "Medium", "Extra", "Standaard", "Standard" };
+const char *FONT_WEIGHT_STRINGS[] = { "Black", "Bold", "Demi", "Extended", 
+				      "Extra", "Headline", "Light", "Medium", 
+				      "Normal", "Regular", "Standaard", "Standard" };
 const char * USELESS_WP_POSTFIX = "-WP";
 #define countElements(a) ((sizeof(a) / sizeof(a[0])))
 
@@ -109,10 +111,10 @@ void WP6FontDescriptorPacket::_readContents(GsfInput *input)
 		   WPD_DEBUG_MSG(("WordPerfect: stripping font name (original: %s)\n", m_fontName));
 		   for (int stringPosition=(tempLength-1); stringPosition>=0; stringPosition--)
 		   {
-			   int k;
+			   int k;			   
 			   for (k=0; k<countElements(FONT_WEIGHT_STRINGS); k++) 
 			   {
-				   if (!strcmp(FONT_WEIGHT_STRINGS[k], &m_fontName[stringPosition])) 
+				   if (stringPosition > 0 && !strcmp(FONT_WEIGHT_STRINGS[k], &m_fontName[stringPosition])) 
 				   {
 					   m_fontName[stringPosition-1]='\0';
 					   tempLength = stringPosition-1;

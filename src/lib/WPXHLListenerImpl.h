@@ -84,7 +84,7 @@ class WPXHLListenerImpl
 	virtual void openEndnote(int number) = 0;
 	virtual void closeEndnote() = 0;
 
- 	virtual void openTable(const guint8 tablePositionBits, const gfloat leftOffset, const vector < WPXColumnDefinition > columns) = 0;
+ 	virtual void openTable(const guint8 tablePositionBits, const gfloat leftOffset, const vector < WPXColumnDefinition > &columns) = 0;
  	virtual void openTableRow() = 0;
 	virtual void closeTableRow() = 0;
  	virtual void openTableCell(const guint32 col, const guint32 row, const guint32 colSpan, const guint32 rowSpan, 
