@@ -32,13 +32,18 @@
 class TextListener : public WP6LLListener
 {
 public:
-	TextListener() : WP6LLListener() {}
+	TextListener();
 	~TextListener() {}
 	virtual void startDocument() {}
 	virtual void insertCharacter(guint16 character);
 	virtual void insertEOL();
+	virtual void undoChange(guint8 undoType, guint16 undoLevel);
 	virtual void attributeChange(gboolean isOn, guint8 attribute) {}
+	virtual void marginChange(guint8 side, guint16 margin) {}
 	virtual void endDocument() {}
+
+ private:
+	gboolean m_isUndoOn;
 };
 
 #endif /* TEXTLISTENER_H */

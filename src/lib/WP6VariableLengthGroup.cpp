@@ -25,6 +25,7 @@
 
 #include "WP6VariableLengthGroup.h"
 
+#include "WP6ColumnGroup.h"
 #include "WP6EOLGroup.h"
 #include "WP6UnsupportedVariableLengthGroup.h"
 
@@ -44,13 +45,13 @@ WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(FI
 {
 	switch (groupID)
 	{
-		case WP6_TOP_EOL_GROUP: 
-			return new WP6EOLGroup(stream);
-
-		// Add the remaining cases here
-		default:
-			// this is an unhandled group, just skip it
-			return new WP6UnsupportedVariableLengthGroup(stream);
+	case WP6_TOP_EOL_GROUP: 
+		return new WP6EOLGroup(stream);
+	case WP6_TOP_COLUMN_GROUP:
+		return new WP6ColumnGroup(stream);		
+	default:
+		// this is an unhandled group, just skip it
+		return new WP6UnsupportedVariableLengthGroup(stream);
 	}
 }
 

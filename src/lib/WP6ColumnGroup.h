@@ -23,34 +23,20 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include <stdio.h>
-#include "TextListener.h"
-#include "WP6FileStructure.h" 
+#ifndef WP6COLUMNGROUP_H
+#define WP6COLUMNGROUP_H
 
-TextListener::TextListener() : 
-	WP6LLListener(),
-	m_isUndoOn(FALSE)
-{
-}
+#include "WP6VariableLengthGroup.h"
 
-void TextListener::insertCharacter(guint16 character)
+class WP6ColumnGroup : public WP6VariableLengthGroup
 {
-	if (!m_isUndoOn) {
-		printf("%c", (char)character);
-	}
-}
+ public:
+	WP6ColumnGroup(FILE *stream);	
+	virtual void _readContents(FILE *stream);
+	virtual void parse(WP6LLListener *llListener);
 
-void TextListener::undoChange(guint8 undoType, guint16 undoLevel)
-{
-	if (undoType == WP6_UNDO_GROUP_INVALID_TEXT_START)
-		m_isUndoOn = TRUE;
-	else if (undoType == WP6_UNDO_GROUP_INVALID_TEXT_END)
-		m_isUndoOn = FALSE;
-}
+ private:
+	guint16 m_margin;
+};
 
-void TextListener::insertEOL()
-{
-	if (!m_isUndoOn) {
-		printf("\n");
-	}
-}
+#endif /* WP6COLUMNGROUP_H */

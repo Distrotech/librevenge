@@ -27,6 +27,7 @@
 #include "HtmlListenerImpl.h"
 
 HtmlListenerImpl::HtmlListenerImpl() :
+	m_isSectionOpened(FALSE),
 	m_isParagraphOpened(FALSE),
 	m_isSpanOpened(FALSE)
 {
@@ -53,6 +54,8 @@ void HtmlListenerImpl::endDocument()
 		printf("</span>");
 	if (m_isParagraphOpened) 
 		printf("</p>\n");
+	if (m_isSectionOpened)
+		printf("</section>\n");
 
 	printf("\n");
 	printf("</body>\n");
@@ -80,6 +83,22 @@ void HtmlListenerImpl::openSpan(guint32 textAttributeBits)
 
 	printf("<span "); _appendTextAttributes(textAttributeBits); printf(">");
 	m_isSpanOpened = TRUE;
+}
+
+void HtmlListenerImpl::openSection(guint numColumns, gfloat marginLeft, gfloat marginRight)
+{
+	if (m_isSpanOpened)
+		printf("</span>");
+	if (m_isParagraphOpened)
+		printf("</p>");
+	if (m_isSectionOpened)
+		printf("\n</section>\n");
+
+	m_isSectionOpened = TRUE;
+	m_isParagraphOpened = FALSE;
+	m_isSpanOpened = FALSE;
+
+	printf("<section columns:%i margin-left:%4.4fin margin-right:%4.4fin>\n", numColumns, marginLeft, marginRight);
 }
 
 void HtmlListenerImpl::insertText(const guint16 *textArray, const guint len)

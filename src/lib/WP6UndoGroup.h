@@ -32,10 +32,14 @@ class WP6UndoGroup : public WP6FixedLengthGroup
 {
 public:
 	WP6UndoGroup(FILE *stream);	
-	virtual void parse(WP6LLListener *llListener) {}
+	virtual void parse(WP6LLListener *llListener);
 	
-protected:
-	virtual void _readContents(FILE *stream) {}
-};
+ protected:
+	virtual void _readContents(FILE *stream);
 
+ private:
+	guint8 m_undoType;
+	guint16 m_undoLevel;
+
+};
 #endif /* WP6UNDOGROUP_H */

@@ -32,6 +32,7 @@ class WP6LLListener : public WPXLLListener
  public:
 	WP6LLListener() : WPXLLListener() {}
 	virtual ~WP6LLListener() {}
+	virtual void undoChange(guint8 undoType, guint16 undoLevel) = 0;
 };
 
 #endif /* WP6LLLISTENER_H */

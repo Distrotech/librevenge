@@ -3,9 +3,10 @@ include_HEADERS = libwpd2.h WPXHLListener.h WPXHLListenerImpl.h WPXLLListener.h 
 
 AM_CXXFLAGS = $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS)
 
-libwpd2_a_SOURCES =					\
-	WP6AttributeGroup.cpp			\
-	WP6EOLGroup.cpp					\
+libwpd2_a_SOURCES =			\
+	WP6AttributeGroup.cpp 		\
+	WP6ColumnGroup.cpp		\
+	WP6EOLGroup.cpp			\
 	WP6ExtendedCharacterGroup.cpp 	\
 	WP6FixedEOLGroup.cpp			\
 	WP6FixedLengthGroup.cpp			\
@@ -16,6 +17,24 @@ libwpd2_a_SOURCES =					\
 	WP6Part.cpp						\
 	WP6UndoGroup.cpp				\
 	WP6UnsupportedVariableLengthGroup.cpp \
+	WP6VariableLengthGroup.cpp 	\
+	WPXHeader.cpp 			\
+	WPXParser.cpp 			\
+	libwpd2.h	        	\
+	UT_libwpd2.h	        	\
+	WP6FileStructure.h		\
+	WP6AttributeGroup.h 		\
+	WP6ColumnGroup.h		\
+	WP6EOLGroup.h			\
+	WP6ExtendedCharacterGroup.h 	\
+	WP6FixedEOLGroup.h		\
+	WP6FixedLengthGroup.h		\
+	WP6FixedSpaceGroup.h		\
+	WP6Header.h 			\
+	WP6HLListener.h			\
+	WP6Parser.h			\
+	WP6Part.h	 		\
+	WP6UndoGroup.h			\
 	WP6VariableLengthGroup.cpp 		\
 	WPXHeader.cpp					\
 	WPXParser.cpp					\

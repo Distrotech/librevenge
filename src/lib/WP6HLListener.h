@@ -28,6 +28,7 @@
  
 #include "WP6LLListener.h"
 #include "WPXHLListener.h"
+#include "UT_libwpd2.h"
 
 class WPXHLListenerImpl;
 
@@ -41,7 +42,9 @@ class WP6HLListener : public WP6LLListener
 	virtual void startDocument();
 	virtual void insertCharacter(guint16 character);
 	virtual void insertEOL();
+	virtual void undoChange(guint8 undoType, guint16 undoLevel);
 	virtual void attributeChange(gboolean isOn, guint8 attribute);
+	virtual void marginChange(guint8 side, guint16 margin);
 	virtual void endDocument();
 
  protected:
@@ -49,11 +52,24 @@ class WP6HLListener : public WP6LLListener
 
  private:
 	WPXHLListenerImpl * m_listenerImpl;
+
 	GArray *m_textArray;
+
 	guint32 m_textAttributeBits;
 	gboolean m_textAttributesChanged;
+
 	gboolean m_isParagraphOpened;
 	gboolean m_isParagraphClosed;
+	guint m_numDeferredParagraphBreaks;
+
+	gboolean m_sectionAttributesChanged;
+	guint m_numColumns;
+	gboolean m_isLeftMarginSet;
+	gboolean m_isRightMarginSet;
+	gfloat m_marginLeft;
+	gfloat m_marginRight;
+
+	gboolean m_isUndoOn;
 };
 
 #endif /* WP6HLLISTENER_H */

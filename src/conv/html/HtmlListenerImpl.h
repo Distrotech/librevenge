@@ -39,6 +39,7 @@ class HtmlListenerImpl : public WPXHLListenerImpl
     virtual void startDocument();
     virtual void endDocument();
     virtual void openParagraph(guint32 textAttributeBits);
+    virtual void openSection(guint numColumns, gfloat marginLeft, gfloat marginRight);
     virtual void openSpan(guint32 textAttributeBits);
     virtual void insertText(const guint16 *textArray, const guint len);
 
@@ -46,6 +47,7 @@ class HtmlListenerImpl : public WPXHLListenerImpl
     void _appendTextAttributes(guint32 textAttributeBits);
     
  private:
+    gboolean m_isSectionOpened;
     gboolean m_isParagraphOpened;
     gboolean m_isSpanOpened;
 };

@@ -24,8 +24,20 @@
  */
 
 #include "WP6UndoGroup.h"
+#include "WP6LLListener.h"
 
 WP6UndoGroup::WP6UndoGroup(FILE *stream)
 {
 	_read(stream, WP6_UNDO_GROUP_SIZE);
+}
+
+void WP6UndoGroup::_readContents(FILE *stream)
+{
+	WPD_CHECK_FILE_READ_ERROR(fread(&m_undoType, sizeof(guint8), 1, stream), 1);
+	WPD_CHECK_FILE_READ_ERROR(fread(&m_undoLevel, sizeof(guint16), 1, stream), 1);
+}
+
+void WP6UndoGroup::parse(WP6LLListener *llListener)
+{
+	llListener->undoChange(m_undoType, m_undoLevel);
 }
