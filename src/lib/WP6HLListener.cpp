@@ -754,8 +754,10 @@ void WP6HLListener::endDocument()
 
 void WP6HLListener::defineTable(guint8 position, guint16 leftOffset)
 {
-	switch (position & 0x07)
-	{
+	if (!m_parseState->m_isUndoOn) 
+	{		
+		switch (position & 0x07)
+		{
 		case 0:
 			m_tableDefinition.m_positionBits = WPX_TABLE_POSITION_ALIGN_WITH_LEFT_MARGIN;
 			break;
@@ -774,24 +776,28 @@ void WP6HLListener::defineTable(guint8 position, guint16 leftOffset)
 		default:
 			// should not happen
 			break;
+		}
+		// Note: WordPerfect has an offset from the left edge of the page. We translate it to the offset from the left margin
+		m_tableDefinition.m_leftOffset = (gfloat)((double)leftOffset / (double)WPX_NUM_WPUS_PER_INCH) - m_parseState->m_marginLeft;
+		
+		// remove all the old column information
+		m_tableDefinition.columns.clear();
 	}
-	// Note: WordPerfect has an offset from the left edge of the page. We translate it to the offset from the left margin
-	m_tableDefinition.m_leftOffset = (gfloat)((double)leftOffset / (double)WPX_NUM_WPUS_PER_INCH) - m_parseState->m_marginLeft;
-	
-	// remove all the old column information
-	m_tableDefinition.columns.clear();
 }
 
 void WP6HLListener::addTableColumnDefinition(guint32 width, guint32 leftGutter, guint32 rightGutter)
 {
-	// define the new column
-	WPXColumnDefinition colDef;
-	colDef.m_width = (gfloat)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
-	colDef.m_leftGutter = (gfloat)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
-	colDef.m_rightGutter = (gfloat)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
-	
-	// add the new column definition to our table definition
-	m_tableDefinition.columns.push_back(colDef);
+	if (!m_parseState->m_isUndoOn) 
+	{		
+		// define the new column
+		WPXColumnDefinition colDef;
+		colDef.m_width = (gfloat)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
+		colDef.m_leftGutter = (gfloat)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
+		colDef.m_rightGutter = (gfloat)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
+		
+		// add the new column definition to our table definition
+		m_tableDefinition.columns.push_back(colDef);
+	}
 }
 
 void WP6HLListener::startTable()
