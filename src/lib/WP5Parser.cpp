@@ -74,14 +74,14 @@ void WP5Parser::parseDocument(WPXInputStream *input, WP5HLListener *listener)
 				case 0x0A: // hard new line
 					listener->insertEOL();
 					break;
-				case 0x0B: // soft new page
-					listener->insertBreak(WPX_PAGE_BREAK);
+				case 0x0B: // soft new page (convert like space)
+					listener->insertCharacter((uint16_t) ' ');
 					break;
 				case 0x0C: // hard new page
 					listener->insertBreak(WPX_PAGE_BREAK);
 					break;
-				case 0x0D: // soft new line
-					listener->insertEOL();
+				case 0x0D: // soft new line (convert like space)
+					listener->insertCharacter((uint16_t) ' ');
 					break;
 				default:
 					// unsupported or undocumented token, ignore
