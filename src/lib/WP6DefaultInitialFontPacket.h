@@ -34,7 +34,8 @@ class WP6DefaultInitialFontPacket : public WP6PrefixDataPacket
 	virtual void _readContents(GsfInput *input);
 	const guint16 getInitialFontDescriptorPID() const { return m_initialFontDescriptorPID; }
 	const guint16 getPointSize() const { return m_pointSize; }
-
+	virtual void parse(WP6LLListener *llListener);
+	
  private:
 	guint16 m_numPrefixIDs;
 	guint16 m_initialFontDescriptorPID;

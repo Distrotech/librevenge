@@ -29,9 +29,13 @@
 #include <gsf/gsf-input.h>
 #include "WP6PrefixDataPacket.h"
 #include <map>
+#include <vector>
 using namespace std;
 
 class WP6LLListener;
+typedef multimap<int, WP6PrefixDataPacket *> MPDP;
+typedef MPDP::const_iterator MPDP_CIter;
+typedef MPDP::iterator MPDP_Iter;
 
 class WP6PrefixData
 {
@@ -39,11 +43,13 @@ class WP6PrefixData
 	WP6PrefixData(GsfInput *input, const int numPrefixIndices);
 	virtual ~WP6PrefixData();
 	const WP6PrefixDataPacket *getPrefixDataPacket(const int prefixID) const;
+	pair< MPDP_CIter, MPDP_CIter > * getPrefixDataPacketsOfType(const int type) const;
+
 	const guint16 getDefaultInitialFontPID() const { return m_defaultInitialFontPID; }
-	void parse(WP6LLListener *llListener);
 
  private:
 	map<int, WP6PrefixDataPacket *> m_prefixDataPacketHash;
+	MPDP m_prefixDataPacketTypeHash;
 	int m_defaultInitialFontPID;
 };
 

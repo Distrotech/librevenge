@@ -31,10 +31,6 @@
 #include "WP6LLListener.h"
 #include "libwpd_internal.h"
 
-// void parsePrefixDataPacketNotify(gpointer key, gpointer value, gpointer user_data);
-// void destroyPrefixDataPacketKeyNotify(gpointer data);
-// void destroyPrefixDataPacketNotify(gpointer data);
-
 WP6PrefixData::WP6PrefixData(GsfInput *input, const int numPrefixIndices) :
 	m_defaultInitialFontPID((-1))
 
@@ -51,10 +47,8 @@ WP6PrefixData::WP6PrefixData(GsfInput *input, const int numPrefixIndices) :
 			WPD_DEBUG_MSG(("WordPerfect: constructing prefix packet 0x%x\n", i));
 			WP6PrefixDataPacket *prefixDataPacket = WP6PrefixDataPacket::constructPrefixDataPacket(input, prefixIndiceArray[(i-1)]);
 			if (prefixDataPacket) {
-// 				gint *key = new gint;
-// 				*key = i;
-				// g_hash_table_insert(m_prefixDataPacketHash, (gpointer)key, (gpointer)prefixDataPacket);
 				m_prefixDataPacketHash[i] = prefixDataPacket;
+				m_prefixDataPacketTypeHash.insert(pair<int, WP6PrefixDataPacket *>(prefixIndiceArray[i-1]->getType(), prefixDataPacket));
 				if (dynamic_cast<WP6DefaultInitialFontPacket *>(prefixDataPacket))
 					m_defaultInitialFontPID = i;
 			}
@@ -74,20 +68,21 @@ WP6PrefixData::~WP6PrefixData()
 	for (Iter packet = m_prefixDataPacketHash.begin(); packet!=m_prefixDataPacketHash.end(); packet++) {
 		delete(packet->second);
 	}
- 	//g_hash_table_destroy(m_prefixDataPacketHash);
 }
 
 const WP6PrefixDataPacket * WP6PrefixData::getPrefixDataPacket(const int prefixID) const
 {
-	return static_cast<const WP6PrefixDataPacket *>(m_prefixDataPacketHash.find(prefixID)->second); //(const WP6PrefixDataPacket *)g_hash_table_lookup(m_prefixDataPacketHash, &prefixID);
+	return static_cast<const WP6PrefixDataPacket *>(m_prefixDataPacketHash.find(prefixID)->second);
 }
 
-void WP6PrefixData::parse(WP6LLListener *llListener)
+pair<MPDP_CIter, MPDP_CIter> * WP6PrefixData::getPrefixDataPacketsOfType(const int type) const
 {
-	typedef map<int, WP6PrefixDataPacket *>::iterator Iter;
-	for (Iter packet = m_prefixDataPacketHash.begin(); packet!=m_prefixDataPacketHash.end(); ++packet) {
-		packet->second->parse(llListener);
-	}
-	//g_hash_table_foreach(m_prefixDataPacketHash, parsePrefixDataPacketNotify, llListener);
+ 	pair<MPDP_CIter, MPDP_CIter> *typePair = new pair<MPDP_CIter, MPDP_CIter>;
+	pair<MPDP_CIter, MPDP_CIter> tempPair = m_prefixDataPacketTypeHash.equal_range(type);
+
+ 	typePair->first = tempPair.first;
+ 	typePair->second = tempPair.second;
+
+ 	return typePair;
 }
 

@@ -31,7 +31,7 @@ static char *fontWeightStrings[] = { "Regular", "Bold", "Standaard", "Standard" 
 static int numFontWeightStrings = 4;
 
 WP6FontDescriptorPacket::WP6FontDescriptorPacket(GsfInput *input, int id, guint32 dataOffset, guint32 dataSize) 
-	: WP6PrefixDataPacket(input, id)
+	: WP6PrefixDataPacket(input)
 {
 	_read(input, dataOffset, dataSize);
 }
@@ -76,29 +76,33 @@ void WP6FontDescriptorPacket::_readContents(GsfInput *input)
    
    else 
 	   {
-		   gchar const *tempFontName = (gchar const *)gsf_input_read(input, sizeof(gchar)*m_fontNameLength, NULL);
+		   guint16 const *tempFontName = (guint16 const *)gsf_input_read(input, sizeof(guint16)*(m_fontNameLength/2), NULL);
 		   m_fontName = new gchar[m_fontNameLength];
 
 		   guint16 tempLength1=0;
 		   int numTokens=0;
 		   int lastTokenPosition=0;
-		   for (guint16 i=0; i<m_fontNameLength; i++) 
+		   for (guint16 i=0; i<(m_fontNameLength/2); i++) 
 			   {
-				   if (tempFontName[i] == 0x20) {
+				   guint8 characterSet = (tempFontName[i] & 0xFF00) >> 8;
+				   guint8 character = (tempFontName[i] & 0xFF);
+				   guint16 ucs2Character = extendedCharacterToUCS2(character, characterSet);
+				   
+				   if (ucs2Character == 0x20) {
 					   m_fontName[tempLength1]=' ';
 					   tempLength1++;
 					   numTokens++;
 					   lastTokenPosition=tempLength1;
 				   }
-				   else if (tempFontName[i] != 0x00) {
-					   m_fontName[tempLength1]=tempFontName[i];
+				   else if (ucs2Character != 0x00 && ucs2Character < 0x7F) {
+					   m_fontName[tempLength1]=(gchar) ucs2Character;
 					   tempLength1++;
 				   }
 			   }
 		   m_fontName[tempLength1]='\0';
 		   // TODO/HACK: probably should create a proper static function for doing this
 		   // consume the last token (by replacing the first char with a null-terminator) if its a weight signifier
-		   // (NB: not all wp fonts are terminated by weight, just enough of them to make this annoying
+		   // (NB: not all wp fonts are terminated by weight, just enough of them to make this annoying)
 		   for (int j=0; j<numFontWeightStrings; j++) 
 			   {
 				   if (!strcmp(fontWeightStrings[j], &m_fontName[lastTokenPosition])) 
@@ -117,12 +121,6 @@ void WP6FontDescriptorPacket::_readContents(GsfInput *input)
 			   }
 
 	   }
-
-   //
-   
-   //}
-   //    else
-   //      return gIE_IMPORTERROR;
    WPD_DEBUG_MSG(("WordPerfect: Read Font (primary family id: %i, family member id: %i, font type: %i, font source file type: %i font name length: %i, font name: %s)\n", (int) m_primaryFamilyId, (int) m_primaryFamilyMemberId, (int) m_fontType, (int) m_fontSourceFileType, (int) m_fontNameLength, m_fontName));
 
 }

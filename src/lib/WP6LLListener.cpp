@@ -26,18 +26,9 @@
 #include "WP6PrefixData.h"
 #include "WP6FontDescriptorPacket.h"
 #include "WP6DefaultInitialFontPacket.h"
+#include "WP6FileStructure.h"
 
 const WP6PrefixDataPacket * WP6LLListener::_getPrefixDataPacket(const int prefixID) const
 { 
 	return m_prefixData->getPrefixDataPacket(prefixID); 
 }
-
-const WP6DefaultInitialFontPacket * WP6LLListener::_getDefaultInitialFontPacket() const
-{
-	if (m_prefixData->getDefaultInitialFontPID() > 0)
-		{
-			return dynamic_cast<const WP6DefaultInitialFontPacket *>(_getPrefixDataPacket(m_prefixData->getDefaultInitialFontPID()));
-		}
-	return NULL;
-}
-

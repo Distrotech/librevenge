@@ -35,42 +35,7 @@
 #include "WP6PrefixData.h"
 #include "WP6Part.h"
 #include "libwpd_internal.h"
-
-static guint16 extendedInternationalCharacterMap[32] = 
-{ 
-  229, // lower case 'a' with a small circle
-  197, // upper case 'a' with a small circle
-  230, // lower case 'ae'
-  198, // upper case 'ae'
-  228, // lower case 'a' with diathesis
-  196, // upper case 'a' with diathesis
-  224, // lower case 'a' with acute
-  192, // lower case 'a' with grave
-  226, // lower case 'a' with circonflex
-  227, // lower case 'a' with tilde
-  195, // upper case 'a' with tilde
-  231, // lower case 'c' with hook
-  199, // upper case 'c' with hook
-  235, // lower case 'e' with diathesis
-  232, // lower case 'e' with acute
-  200, // upper case 'e' with acute
-  233, // lower case 'e' with grave
-  234, // lower case 'e' with circonflex
-  236, // lower case 'i' with acute
-  241, // lower case 'n' with tilde
-  209, // upper case 'n' with tilde
-  248, // lower case 'o' with stroke
-  216, // upper case 'o' with stroke
-  241, // lower case 'o' with tilde
-  213, // upper case 'o' with tilde
-  246, // lower case 'o' with diathesis
-  214, // upper case 'o' with diathesis
-  252, // lower case 'u' with diathesis
-  220, // upper case 'u' with diathesis
-  250, // lower case 'u' with acute
-  249, // lower case 'u' with grave
-  223 // double s
-};
+#include "WP6DefaultInitialFontPacket.h"
 
 WP6Parser::WP6Parser(GsfInput * input, WPXLLListener *llListener/*,  WP6Header *header */)
 	: WPXParser(input, llListener)
@@ -109,7 +74,12 @@ void WP6Parser::parse()
 		}
 		WP6PrefixData *prefixData = new WP6PrefixData(getInput(), header->getNumPrefixIndices());
 		static_cast<WP6LLListener *>(getLLListener())->setPrefixData(prefixData);
-		prefixData->parse(static_cast<WP6LLListener *>(getLLListener()));
+
+		// get the relevant initial prefix packets out of storage and tell them to parse
+		// themselves
+		_parsePacket(prefixData, WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY);
+		_parsePacket(prefixData, WP6_INDEX_HEADER_INITIAL_FONT);
+		_parsePackets(prefixData, WP6_INDEX_HEADER_OUTLINE_STYLE);
 
 		getLLListener()->startDocument();
 		
@@ -154,4 +124,30 @@ void WP6Parser::parse()
 		throw FileException();
 	}
 	
+}
+
+void WP6Parser::_parsePacket(WP6PrefixData *prefixData, int type)
+{
+	pair< MPDP_CIter, MPDP_CIter > * typeIterPair;
+	typeIterPair = prefixData->getPrefixDataPacketsOfType(type); 
+	if (typeIterPair->first != typeIterPair->second) 
+		typeIterPair->first->second->parse(static_cast<WP6LLListener *>(getLLListener()));
+
+	delete typeIterPair;
+}
+
+void WP6Parser::_parsePackets(WP6PrefixData *prefixData, int type)
+{
+	pair< MPDP_CIter, MPDP_CIter > * typeIterPair;
+
+	typeIterPair = prefixData->getPrefixDataPacketsOfType(type);
+	for (MPDP_CIter iter=typeIterPair->first; 
+	     iter != typeIterPair->second; 
+	     iter++) 
+	{
+		iter->second->parse(static_cast<WP6LLListener *>(getLLListener()));
+	}
+
+	delete typeIterPair;
+
 }

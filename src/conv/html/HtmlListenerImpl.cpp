@@ -39,14 +39,45 @@ HtmlListenerImpl::~HtmlListenerImpl()
 {
 }
 
-
-void HtmlListenerImpl::startDocument()
+void HtmlListenerImpl::startHeader()
 {
     printf("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\" \"http://www.w3.org/TR/REC-html40/loose.dtd\">\n");
     printf("<html>\n");
     printf("<head>\n");
     printf("<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" >\n");
+}
+
+void HtmlListenerImpl::endHeader()
+{
     printf("</head>\n");
+}
+
+void HtmlListenerImpl::setDocumentMetaData(const UCSString &author, const UCSString &subject,
+ 					 const UCSString &publisher, const UCSString &category,
+ 					 const UCSString &keywords, const UCSString &language,
+ 					 const UCSString &abstract, const UCSString &descriptiveName,
+					 const UCSString &descriptiveType)
+{
+	if (author.getLen() > 0)
+		printf("<meta name=\"author\" content=\"%s\">\n", UTF8String(author).getUTF8());
+	if (subject.getLen() > 0)
+		printf("<meta name=\"subject\" content=\"%s\">\n", UTF8String(subject).getUTF8());
+	if (publisher.getLen() > 0)
+		printf("<meta name=\"publisher\" content=\"%s\">\n", UTF8String(publisher).getUTF8());
+	if (keywords.getLen() > 0)
+		printf("<meta name=\"keywords\" content=\"%s\">\n", UTF8String(keywords).getUTF8());
+	if (language.getLen() > 0)
+		printf("<meta name=\"language\" content=\"%s\">\n", UTF8String(language).getUTF8());
+	if (abstract.getLen() > 0)
+		printf("<meta name=\"abstract\" content=\"%s\">\n", UTF8String(abstract).getUTF8());
+	if (descriptiveName.getLen() > 0)
+		printf("<meta name=\"descriptive-name\" content=\"%s\">\n", UTF8String(descriptiveName).getUTF8());
+	if (descriptiveType.getLen() > 0)
+		printf("<meta name=\"descriptive-type\" content=\"%s\">\n", UTF8String(descriptiveType).getUTF8());
+}
+
+void HtmlListenerImpl::startDocument()
+{
     printf("<body>\n");
 }
 

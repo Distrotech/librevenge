@@ -36,6 +36,14 @@ public:
 	HtmlListenerImpl();
 	virtual ~HtmlListenerImpl();
     
+	virtual void startHeader();
+	virtual void endHeader();
+ 	virtual void setDocumentMetaData(const UCSString &author, const UCSString &subject,
+ 					 const UCSString &publisher, const UCSString &category,
+ 					 const UCSString &keywords, const UCSString &language,
+ 					 const UCSString &abstract, const UCSString &descriptiveName,
+					 const UCSString &descriptiveType)
+;
 	virtual void startDocument();
 	virtual void endDocument();
 	virtual void openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits,

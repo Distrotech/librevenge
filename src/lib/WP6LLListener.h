@@ -35,9 +35,13 @@ enum WP6OutlineLocation { paragraphGroup, indexHeader };
 
 class WP6LLListener : public WPXLLListener
 {
- public:
+public:
 	WP6LLListener() : WPXLLListener(), m_prefixData(NULL) {}
 	virtual ~WP6LLListener() {}
+	virtual void setDate(const guint16 year, const guint8 month, const guint8 day, 
+			     const guint8 hour, const guint8 minute, const guint8 second,
+			     const guint8 dayOfWeek, const guint8 timeZone, const guint8 unused) = 0;
+	virtual void setExtendedInformation(const guint16 type, const UCSString &data) = 0;
 	virtual void fontChange(const guint16 matchedFontPointSize, const guint16 fontPID) = 0;
 	virtual void undoChange(const guint8 undoType, const guint16 undoLevel) = 0;
 	virtual void updateOutlineDefinition(const WP6OutlineLocation outlineLocation, const guint16 outlineHash, 
@@ -49,11 +53,10 @@ class WP6LLListener : public WPXLLListener
 	virtual void styleGroupOn(const guint8 subGroup) = 0;
 	virtual void styleGroupOff(const guint8 subGroup) = 0;
 	void setPrefixData(WP6PrefixData *prefixData) { m_prefixData = prefixData; }
- protected:
+protected:
 	const WP6PrefixDataPacket * _getPrefixDataPacket(const int prefixID) const;
-	const WP6DefaultInitialFontPacket * _getDefaultInitialFontPacket() const; 
 
- private:
+private:
 	WP6PrefixData *m_prefixData;
 };
 

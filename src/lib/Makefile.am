@@ -15,6 +15,7 @@ libwpd_1_a_SOURCES =			\
 	WP6DisplayNumberReferenceGroup.cpp \
 	WP6EOLGroup.cpp			\
 	WP6ExtendedCharacterGroup.cpp 	\
+	WP6ExtendedDocumentSummaryPacket.cpp \
 	WP6FixedLengthGroup.cpp		\
 	WP6FontDescriptorPacket.cpp	\
 	WP60Header.cpp			\
@@ -46,6 +47,7 @@ libwpd_1_a_SOURCES =			\
 	WP6DisplayNumberReferenceGroup.h \
 	WP6EOLGroup.h			\
 	WP6ExtendedCharacterGroup.h 	\
+	WP6ExtendedDocumentSummaryPacket.h \
 	WP6FixedLengthGroup.h		\
 	WP6FontDescriptorPacket.h	\
 	WP6Header.h 			\

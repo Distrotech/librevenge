@@ -39,6 +39,10 @@ public:
 	virtual void insertEOL();
 	virtual void insertBreak(guint8 breakType) {}
 	virtual void undoChange(guint8 undoType, guint16 undoLevel);
+	virtual void setDate(const guint16 year, const guint8 month, const guint8 day, 
+			     const guint8 hour, const guint8 minute, const guint8 second,
+			     const guint8 dayOfWeek, const guint8 timeZone, const guint8 unused) {}
+	virtual void setExtendedInformation(const guint16 type, const UCSString &data) {}
 	virtual void fontChange(guint16 matchedFontPointSize, guint16 fontPID) {}
 	virtual void attributeChange(gboolean isOn, guint8 attribute) {}
 	virtual void justificationChange(guint8 justification) {}

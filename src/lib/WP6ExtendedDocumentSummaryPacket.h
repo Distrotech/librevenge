@@ -23,28 +23,23 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP6PREFIXDATAPACKET_H
-#define WP6PREFIXDATAPACKET_H
-#include <gsf/gsf-input.h>
-#include <stdlib.h>
-#include <glib.h>
-//#include "WP6LLListener.h"
+#ifndef WP6EXTENDEDDOCUMENTSUMMARYPACKET_H
+#define WP6EXTENDEDDOCUMENTSUMMARYPACKET_H
+#include "WP6PrefixDataPacket.h"
+#include "WP6FileStructure.h"
+#include "WP6LLListener.h"
 
-class WP6PrefixIndice;
-class WP6LLListener;
-
-class WP6PrefixDataPacket
+class WP6ExtendedDocumentSummaryPacket : public WP6PrefixDataPacket
 {
  public:
-	WP6PrefixDataPacket(GsfInput * input);	
-	virtual ~WP6PrefixDataPacket() {}
-	virtual void parse(WP6LLListener *llListener) {}
+	WP6ExtendedDocumentSummaryPacket(GsfInput *input, int id, guint32 dataOffset, guint32 dataSize);
+	virtual ~WP6ExtendedDocumentSummaryPacket();
+	virtual void _readContents(GsfInput *input);
+	virtual void parse(WP6LLListener *llListener);
 
-	static WP6PrefixDataPacket * constructPrefixDataPacket(GsfInput * input, WP6PrefixIndice *prefixIndice);
-
- protected:
-	virtual void _readContents(GsfInput *input) = 0;
- 	void _read(GsfInput *input, guint32 dataOffset, guint32 dataSize);
+ private:              
+	guint16 m_dataSize;
+	GsfInput *m_stream;
+	
 };
-
-#endif /* WP6PREFIXDATAPACKET_H */
+#endif /* WP6EXTENDEDDOCUMENTSUMMARYPACKET_H */

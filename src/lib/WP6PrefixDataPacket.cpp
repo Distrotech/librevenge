@@ -27,13 +27,13 @@
 #include "WP6PrefixIndice.h"
 #include "WP6FontDescriptorPacket.h"
 #include "WP6DefaultInitialFontPacket.h"
+#include "WP6ExtendedDocumentSummaryPacket.h"
 #include "WP6OutlineStylePacket.h"
 #include "WP6FileStructure.h" 
 #include "libwpd.h"
 #include "libwpd_internal.h"
 
-WP6PrefixDataPacket::WP6PrefixDataPacket(GsfInput * input, int id)
-	: m_id(id)
+WP6PrefixDataPacket::WP6PrefixDataPacket(GsfInput * input)
 {
 }
 
@@ -49,8 +49,10 @@ WP6PrefixDataPacket * WP6PrefixDataPacket::constructPrefixDataPacket(GsfInput * 
 			return new WP6FontDescriptorPacket(input, prefixIndice->getID(), 
 							   prefixIndice->getDataOffset(), 
 							   prefixIndice->getDataSize());
-		case WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_DESCRIPTOR_POOL:
-			//return new WP6DocumentInformationDescriptorPacket(input, flags);
+		case WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY:
+			return new WP6ExtendedDocumentSummaryPacket(input, prefixIndice->getID(), 
+								    prefixIndice->getDataOffset(), 
+								    prefixIndice->getDataSize());
 		case WP6_INDEX_HEADER_OUTLINE_STYLE:
 			return new WP6OutlineStylePacket(input, prefixIndice->getID(), 
 							 prefixIndice->getDataOffset(), 

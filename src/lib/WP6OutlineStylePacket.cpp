@@ -28,7 +28,7 @@
 #include "libwpd_internal.h"
 
 WP6OutlineStylePacket::WP6OutlineStylePacket(GsfInput *input, int id, guint32 dataOffset, guint32 dataSize) 
-	: WP6PrefixDataPacket(input, id)
+	: WP6PrefixDataPacket(input)
 {
 	_read(input, dataOffset, dataSize);
 }

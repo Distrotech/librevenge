@@ -33,10 +33,12 @@
 #include "WP6DefaultInitialFontPacket.h"
 #include "libwpd_internal.h"
 
+#include "WP6PrefixData.h"
+
 #define WP6_DEFAULT_FONT_SIZE 12.0f
 #define WP6_DEFAULT_FONT_NAME "Times New Roman"
 
-static gint _extractNumericValueFromRoman(gchar romanChar)
+gint _extractNumericValueFromRoman(gchar romanChar)
 {
 	switch (romanChar)
 	{
@@ -59,7 +61,7 @@ static gint _extractNumericValueFromRoman(gchar romanChar)
 // as letters, numbers, or roman numerals.. return an integer value representing its number
 // HACK: this function is really cheesey
 // NOTE: if the input is not valid, the output is unspecified
-static gint _extractDisplayReferenceNumberFromBuf(const UCSString &buf, const OrderedListType listType)
+gint _extractDisplayReferenceNumberFromBuf(const UCSString &buf, const OrderedListType listType)
 {
 	if (listType == LOWERCASE_ROMAN || listType == UPPERCASE_ROMAN)
 	{
@@ -102,7 +104,7 @@ static gint _extractDisplayReferenceNumberFromBuf(const UCSString &buf, const Or
 	return 1;
 }
 
-static OrderedListType _extractListTypeFromBuf(const UCSString &buf, const OrderedListType putativeListType)
+OrderedListType _extractListTypeFromBuf(const UCSString &buf, const OrderedListType putativeListType)
 {
 
 	for (int i=0; i<buf.getLen(); i++)
@@ -221,6 +223,40 @@ WP6HLListener::~WP6HLListener()
 	}
 }
 
+void WP6HLListener::setExtendedInformation(const guint16 type, const UCSString &data)
+{
+	switch (type)
+	{		
+	case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_AUTHOR):
+		m_metaData.m_author.append(data);
+		break;
+	case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_SUBJECT):
+		m_metaData.m_subject.append(data);
+		break;
+	case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_PUBLISHER):
+		m_metaData.m_publisher.append(data);
+		break;
+	case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_CATEGORY):
+		m_metaData.m_category.append(data);
+		break;
+	case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_KEYWORDS):
+		m_metaData.m_keywords.append(data);
+		break;
+	case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_LANGUAGE):
+		m_metaData.m_language.append(data);
+		break;
+	case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_ABSTRACT):
+		m_metaData.m_abstract.append(data);
+		break;
+	case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_DESCRIPTIVE_NAME):
+		m_metaData.m_descriptiveName.append(data);
+		break;
+	case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_DESCRIPTIVE_TYPE):
+		m_metaData.m_descriptiveType.append(data);
+		break;
+	}
+}
+
 void WP6HLListener::insertCharacter(guint16 character)
 {
 	if (!m_isUndoOn)
@@ -286,12 +322,15 @@ void WP6HLListener::insertBreak(guint8 breakType)
 
 void WP6HLListener::startDocument()
 {
-	m_listenerImpl->startDocument();
+	m_listenerImpl->startHeader();
+	m_listenerImpl->setDocumentMetaData(m_metaData.m_author, m_metaData.m_subject,
+					    m_metaData.m_publisher, m_metaData.m_category,
+					    m_metaData.m_keywords, m_metaData.m_language,
+					    m_metaData.m_abstract, m_metaData.m_descriptiveName,
+					    m_metaData.m_descriptiveType);
+	m_listenerImpl->endHeader();
 
-	const WP6DefaultInitialFontPacket * defaultInitialFontPacket = NULL;
-	if (defaultInitialFontPacket = _getDefaultInitialFontPacket()) {		
-		fontChange(defaultInitialFontPacket->getPointSize(), defaultInitialFontPacket->getInitialFontDescriptorPID());	
-	}
+	m_listenerImpl->startDocument();
 }
 
 void WP6HLListener::undoChange(const guint8 undoType, const guint16 undoLevel)

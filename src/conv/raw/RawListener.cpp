@@ -73,6 +73,18 @@ void RawListener::insertEOL()
 	}
 }
 
+void RawListener::setDate(const guint16 year, const guint8 month, const guint8 day, 
+			  const guint8 hour, const guint8 minute, const guint8 second,
+			  const guint8 dayOfWeek, const guint8 timeZone, const guint8 unused)
+{
+	printf("<DATE SET year: %i month: %i day: %i hour: %i minute: %i second: %i dayOfWeek: %i timeZone: %i unused: %i>\n");
+}
+void RawListener::setExtendedInformation(const guint16 type, const UCSString &data)
+{
+	UTF8String tempUTF8(data);
+	printf("<EXTENDED INFO type: %i data: %s>\n", type, tempUTF8.getUTF8());
+	
+}
 void RawListener::updateOutlineDefinition(const WP6OutlineLocation outlineLocation, const guint16 outlineHash, 
 					  const guint8 *numberingMethods, const guint8 tabBehaviourFlag)
 {

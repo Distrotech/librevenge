@@ -42,6 +42,20 @@ enum WP6ParagraphStyleState { notInStyle, beginBeforeNumbering,
 			      beginNumberingAfterDisplayReferencing,
 			      beginAfterNumbering, styleBody, end };
 
+typedef struct _WP6DocumentMetaData WP6DocumentMetaData;
+struct _WP6DocumentMetaData
+{
+	UCSString m_author;
+	UCSString m_subject;
+	UCSString m_publisher; 
+	UCSString m_category;
+	UCSString m_keywords; 
+	UCSString m_language;
+	UCSString m_abstract; 
+	UCSString m_descriptiveName;
+	UCSString m_descriptiveType;
+};
+
 class WP6ParagraphStyleStateSequence
 {
 public:
@@ -79,6 +93,10 @@ class WP6HLListener : public WP6LLListener
 	~WP6HLListener();
 
 	// for getting low-level messages from the parser
+	virtual void setDate(const guint16 year, const guint8 month, const guint8 day, 
+			     const guint8 hour, const guint8 minute, const guint8 second,
+			     const guint8 dayOfWeek, const guint8 timeZone, const guint8 unused) {}
+	virtual void setExtendedInformation(const guint16 type, const UCSString &data);
 	virtual void startDocument();
 	virtual void insertCharacter(guint16 character);
 	virtual void insertEOL();
@@ -111,6 +129,8 @@ class WP6HLListener : public WP6LLListener
 	void _handleListChange(const guint16 outlineHash);
  private:
 	WPXHLListenerImpl * m_listenerImpl;
+
+	WP6DocumentMetaData m_metaData;
 
 	UCSString m_bodyText;
 	UCSString m_textBeforeNumber;

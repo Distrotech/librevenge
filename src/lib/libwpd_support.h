@@ -1,3 +1,4 @@
+
 /* libwpd2
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
@@ -26,6 +27,20 @@
 #ifndef LIBWPD_SUPPORT_H
 #define LIBWPD_SUPPORT_H
 #include <glib.h>
+
+extern guint16 extendedInternationalCharacterMap[];
+extern guint16 multinationalMap[];
+extern guint16 phoneticMap[];
+extern guint16 typographicMap[];
+extern guint16 iconicMap[];
+extern guint16 mathMap[];
+extern guint16 mathextMap[];
+extern guint16 greekMap[];
+extern guint16 hebrewMap[];
+extern guint16 cyrillicMap[];
+extern guint16 japaneseMap[];
+
+guint16 extendedCharacterToUCS2(guint8 character, guint8 characterSet);
 
 enum OrderedListType { ARABIC, LOWERCASE, UPPERCASE, LOWERCASE_ROMAN, UPPERCASE_ROMAN };
 
