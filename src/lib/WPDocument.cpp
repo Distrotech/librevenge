@@ -132,7 +132,59 @@ void WPDocument::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl)
 	}
 }
 
-/*void WPXParser::parse(GsfInput *input, WPXLLListener *llistener)
+void WPDocument::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl, WPXFileType fileType)
+{
+	WPXParser *parser = NULL;
+	WPXHeader *header = NULL;
+	
+	try
+	{
+		switch (fileType)
+		{
+			case WP42_DOCUMENT:
+				WPD_DEBUG_MSG(("WordPerfect: Using the WP42 parser.\n"));
+				parser = new WP42Parser(input);
+				parser->parse(listenerImpl);
+				DELETEP(parser);
+				break;
+			case WP5_DOCUMENT:
+				WPD_DEBUG_MSG(("WordPerfect: Using the WP5 parser.\n"));
+				header = new WPXHeader(input);
+				parser = new WP5Parser(input, header);
+				parser->parse(listenerImpl);
+				DELETEP(parser);
+				DELETEP(header);
+				break;
+			case WP6_DOCUMENT:
+				WPD_DEBUG_MSG(("WordPerfect: Using the WP6 parser.\n"));
+				header = new WPXHeader(input);
+				parser = new WP6Parser(input, header);
+				parser->parse(listenerImpl);
+				DELETEP(parser);			
+				DELETEP(header);
+				break;
+			default:
+				// unhandled file format
+				WPD_DEBUG_MSG(("WordPerfect: Unsupported file format.\n"));
+				break;
+		}
+	}
+	catch (NoFileHeaderException)
+	{
+		// should not happen
+		DELETEP(parser);
+		DELETEP(header);		
+		throw NoFileHeaderException();
+	}
+	catch (FileException)
+	{
+		DELETEP(parser);
+		DELETEP(header);
+		throw FileException(); 
+	}
+}
+
+/*void WPDocument::parse(GsfInput *input, WPXLLListener *llistener)
 {
 	// TODO: implement me
 }*/
