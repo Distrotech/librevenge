@@ -1,0 +1,44 @@
+libwpd coding style
+-------------------
+
+Indentation/spacing: We indent with tabs. Not spaces. This decision is, of
+course, rather contentious, but it does have the force of inertia going for
+it. Try to keep lines less than 120 columns wide.
+
+Naming: Version-specific classes, enumerations, and defines should be prefixed 
+with 'WP', followed by the version number (e.g.: WP6, WP5, WP51, etc.). 
+Generic classes (this includes utility abstractions like streams and strings) 
+should be prefixed with WPX. 
+
+For better worse, we have decided on using the camel caps convention for naming 
+variables (i.e.: tempJustification). Use of hungarian notation (i.e.: iNum) is
+forbidden, with one exception: use the 'm_' prefix for naming class and struct
+variables (i.e.: my_class->m_var). Short-hand for variable names is allowed,
+but don't overdo it (m_var->len() instead of m_variable->length() is ok,
+m_nam instead of m_name is stupid). For WordPerfect-specific state, err on the 
+side of verbosity (e.g.: names like 
+WP6ParagraphGroup_RightMarginAdjustmentSubGroup are _good_), as the extra 
+contextual information is useful when trying to decipher a convoluted piece of 
+code in the libwpd parser.
+
+Memory allocation: Use the C++ standard operations for this (new, delete). 
+The rare use of realloc (and consequent use of malloc and free) in special 
+cases is allowed (although using a data structure from the C++ standard library
+is almost always preferable): take care not to mix and match C and C++ memory 
+allocation functions in this case.
+
+Data structures: Use the C++ standard library wherever appropriate and 
+convenient. It should almost never be necessary to roll your own data 
+structure.
+
+Strings: You may use either the C++ standard strings or our very own 
+UTF8-compliant WPXString. Hand-allocated char *'s are discouraged.
+
+Further information: The OpenOffice.org (http://tools.openoffice.org/coding.html)
+and AbiWord (cvs://cvs.abisource.com/abi/docs/AbiSourceCodeGuidelines.abw) 
+contain lots of useful information that will make you a better C++ coder. 
+Follow their advice religiously, except when they contradict something in this 
+document.
+
+Fun: Remember, the important thing is to have fun. :-) These rules are a means,
+not an end. Happy hacking!

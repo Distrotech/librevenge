@@ -238,7 +238,19 @@ void WPXHLListener::_openPageSpan()
 		if (!currentPage->getHeaderFooterSuppression((*iter).getInternalType()))
 		{
 			WPXPropertyList propList;
-			propList.insert("occurence", (*iter).getOccurence());
+			switch ((*iter).getOccurence())
+			{
+			case ODD:
+				propList.insert("libwpd:occurence", "odd");
+				break;
+			case EVEN:
+				propList.insert("libwpd:occurence", "even");
+				break;
+			case ALL:
+				propList.insert("libwpd:occurence", "all");
+				break;
+			}
+
 			if ((*iter).getType() == HEADER)
 				m_listenerImpl->openHeader(propList); 
 			else

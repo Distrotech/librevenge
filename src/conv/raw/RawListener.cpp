@@ -153,12 +153,7 @@ void RawListenerImpl::endDocument()
 
 void RawListenerImpl::openPageSpan(const WPXPropertyList &propList)
 {
-	_U(("openPageSpan(span: %d, isLastPageSpan: %s, formLength: %.4f, formWidth: %.4f, Orientation: %s, marginLeft: %.4f, marginRight: %.4f, marginTop: %.4f, marginBottom: %.4f\n",
-	    propList["libwpd:num-pages"]->getInt(), (propList["libwpd:is-last-page-span"]->getInt() ? "true" : "false"), 
-	    propList["fo:page-height"]->getFloat(), propList["fo:page-width"]->getFloat(), 
-	    propList["style:print-orientation"]->getStr().cstr(), 
-	    propList["fo:margin-left"]->getFloat(), propList["fo:margin-right"]->getFloat(), 
-	    propList["fo:margin-top"]->getFloat(), propList["fo:margin-bottom"]->getFloat()),
+	_U(("openPageSpan(%s)\n", getPropString(propList).cstr()),
 	   LC_OPEN_PAGE_SPAN);
 }
 
@@ -170,8 +165,8 @@ void RawListenerImpl::closePageSpan()
 
 void RawListenerImpl::openHeader(const WPXPropertyList &propList)
 {
-	_U(("openHeader(headerFooterOccurence: %d)\n",
-	    propList["occurence"]->getInt()),
+	_U(("openHeader(%s)\n",
+	    getPropString(propList).cstr()),
 	   LC_OPEN_HEADER_FOOTER);
 }
 
@@ -183,8 +178,8 @@ void RawListenerImpl::closeHeader()
 
 void RawListenerImpl::openFooter(const WPXPropertyList &propList)
 {
-	_U(("openFooter(headerFooterOccurence: %d)\n",
-	    propList["occurence"]->getInt()),
+	_U(("openFooter(%s)\n",
+	    getPropString(propList).cstr()),
 	   LC_OPEN_HEADER_FOOTER);
 }
 

@@ -43,6 +43,8 @@ public:
 	void appendx(const char c) { m_buf += c; }
 //	void append(const uint16_t ucs2);
 	void clear() { m_buf = ""; }
+	bool operator==(const char *);
+	bool operator==(const WPXString &str);
 
 	class Iter
 	{

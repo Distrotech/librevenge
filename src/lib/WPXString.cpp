@@ -140,6 +140,22 @@ int WPXString::len() const
 	return g_static_utf8_strlen(m_buf.c_str()); 
 }
 
+bool WPXString::operator==(const char *str)
+{
+	if (strcmp(str, m_buf.c_str()) == 0)
+		return true;
+
+	return false;
+}
+
+bool WPXString::operator==(const WPXString &str)
+{
+	if (strcmp(str.cstr(), m_buf.c_str()) == 0)
+		return true;
+
+	return false;
+}
+
 bool WPXString::Iter::next()
 {
 	int len = strlen(m_buf.c_str());
