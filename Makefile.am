@@ -16,3 +16,11 @@ EXTRA_DIST = \
 	libwpd-1.pc.in		\
 	libwpd-stream-1.pc.in	\
 	CHANGES
+
+distclean-local:
+	rm -rf *.cache *~
+
+rpm: dist
+	rpmbuild -ta $(PACKAGE)-$(VERSION).tar.gz
+	@rm -f $(PACKAGE)-$(VERSION).tar.gz
+
