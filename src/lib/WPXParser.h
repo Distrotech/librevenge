@@ -27,10 +27,11 @@
 #define WPXPARSER_H
 
 #include <stdio.h>
-#include "glib.h"
-#include "WPXHeader.h"
+#include <glib.h>
 #include "WPXLLListener.h"
 #include "WPXHLListener.h"
+
+class WPXHeader;
 
 class WPXParser
 {
@@ -38,7 +39,7 @@ public:
 	WPXParser(FILE * stream, WPXHeader * header);
 		
 	static WPXParser * constructParser(FILE * stream);
-	virtual gboolean parse() {};
+	virtual gboolean parse() = 0;
 
 	void registerListener(WPXLLListener * listener) { m_pLLListener = listener; }
 	void registerListener(WPXHLListener * listener) { m_pHLListener = listener; }

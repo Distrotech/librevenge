@@ -29,7 +29,6 @@
 #include "WPXPart.h"
 #include "WPXParser.h"
 #include "WP6FileStructure.h"
-#include "glib.h"
 
 class WP6Part : public WPXPart
 {

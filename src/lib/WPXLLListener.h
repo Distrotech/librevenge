@@ -26,7 +26,7 @@
 #ifndef WPXLLLISTENER_H
 #define WPXLLLISTENER_H
 
-#include "glib.h"
+#include <glib.h>
 
 class WPXLLListener
 {

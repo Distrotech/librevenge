@@ -28,7 +28,7 @@
 
 #include "WPXParser.h"
 #include "UT_libwpd2.h"
-#include "glib.h"
+#include <glib.h>
 
 class WPXPart
 {
