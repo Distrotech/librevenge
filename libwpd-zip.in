@@ -8,27 +8,27 @@ DEVZIP=libwpd-dev-@WPD_VERSION@.zip
 cd @prefix@
 
 DLLDIR=lib
-[ -f bin/libwpd-1-@LT_CURRENT_MINUS_AGE@.dll ] && \
-[ -f bin/libwpd-stream-1-@LT_CURRENT_MINUS_AGE@.dll ] && \
+[ -f bin/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll ] && \
+[ -f bin/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll ] && \
 DLLDIR=bin
 
 strip --strip-all \
-$DLLDIR/libwpd-1-@LT_CURRENT_MINUS_AGE@.dll \
-$DLLDIR/libwpd-stream-1-@LT_CURRENT_MINUS_AGE@.dll
+$DLLDIR/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll \
+$DLLDIR/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll
 
 rm $ZIP
 zip $ZIP -@ <<EOF
-$DLLDIR/libwpd-1-@LT_CURRENT_MINUS_AGE@.dll
-$DLLDIR/libwpd-stream-1-@LT_CURRENT_MINUS_AGE@.dll
+$DLLDIR/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll
+$DLLDIR/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll
 EOF
 
 rm $DEVZIP
 zip -r $DEVZIP -@ <<EOF
-include/libwpd-1
-lib/libwpd-1.dll.a
-lib/libwpd-1.a
-lib/libwpd-stream-1.dll.a
-lib/libwpd-stream-1.a
-lib/pkgconfig/libwpd-1.pc
-lib/pkgconfig/libwpd-stream-1.pc
+include/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@
+lib/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll.a
+lib/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.a
+lib/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll.a
+lib/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.a
+lib/pkgconfig/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.pc
+lib/pkgconfig/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.pc
 EOF

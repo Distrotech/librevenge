@@ -4,9 +4,9 @@ else
 no_undefined =
 endif
 
-version_info = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
-
 if OS_WIN32
+version_info = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) -avoid-version
+
 install-libtool-import-lib:
 	$(INSTALL) .libs/libwpd*-0.8.dll.a $(DESTDIR)$(libdir)
 
@@ -14,6 +14,7 @@ uninstall-libtool-import-lib:
 	-rm $(DESTDIR)$(libdir)/libwpd*-0.8.dll.a
 
 else
+version_info = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
 install-libtool-import-lib:
 uninstall-libtool-import-lib:
 endif

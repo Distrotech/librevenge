@@ -62,7 +62,7 @@ umask 022
 
 %files
 %defattr(644,root,root,755)
-%{_libdir}/libwpd*-1.so.*
+%{_libdir}/libwpd*-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.so.*
 
 %if %{!?_without_stream:1}%{?_without_stream:0}
 %files tools
@@ -72,12 +72,15 @@ umask 022
 
 %files devel
 %defattr(644,root,root,755)
-%{_libdir}/libwpd*-1.so
-%{_libdir}/libwpd*-1.*a
-%{_libdir}/pkgconfig/libwpd*-1.pc
-%{_includedir}/libwpd-1/libwpd
+%{_libdir}/libwpd*-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.so
+%{_libdir}/libwpd*-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.*a
+%{_libdir}/pkgconfig/libwpd*-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.pc
+%{_includedir}/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@/libwpd
 
 %changelog
+* Fri Jan 28 2005 Fridrich Strba <fridrich.strba@bluewin.ch>
+- Adapt to the new libwpd-X.Y and libwpd-stream-X.Y modules
+
 * Wed Sep 29 2004 Fridrich Strba <fridrich.strba@bluewin.ch>
 - Move files between libwpd and libwpd-devel packages
 - Reflect the separation of libwpd-1 and libwpd-stream-1
