@@ -3,7 +3,7 @@
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -23,42 +23,40 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP6CHARACTERGROUP_H
-#define WP6CHARACTERGROUP_H
+#ifndef WP6FONTDESCRIPTORPACKET_H
+#define WP6FONTDESCRIPTORPACKET_H
+#include "WP6PrefixDataPacket.h"
 
-#include "WP6VariableLengthGroup.h"
-
-class WP6CharacterGroup_SubGroup
-{
-public:
-	virtual ~WP6CharacterGroup_SubGroup() {}
-	virtual void parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const = 0;
-};
-
-class WP6CharacterGroup_FontFaceChangeSubGroup : public WP6CharacterGroup_SubGroup
-{
-public:
-	WP6CharacterGroup_FontFaceChangeSubGroup(FILE *stream);
-	virtual void parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
-
-private:
-	guint16 m_oldMatchedPointSize;
-	guint16 m_hash;
-	guint16 m_matchedFontIndex;
-	guint16 m_matchedFontPointSize;
-};
-
-class WP6CharacterGroup : public WP6VariableLengthGroup
+class WP6FontDescriptorPacket : public WP6PrefixDataPacket
 {
  public:
-	WP6CharacterGroup(FILE *stream);	
-	virtual ~WP6CharacterGroup();
+	WP6FontDescriptorPacket(FILE *stream, int id, guint32 dataOffset, guint32 dataSize);
+	virtual ~WP6FontDescriptorPacket();
 	virtual void _readContents(FILE *stream);
-	virtual void parse(WP6LLListener *llListener);
+	const gchar *getFontName() const { return m_fontName; }
 
  private:
-	WP6CharacterGroup_SubGroup *m_subGroupData;
+	guint16 m_characterWidth;
+	guint16 m_ascenderHeight;
+	guint16 m_xHeight;
+	guint16 m_descenderHeight;
+	guint16 m_italicsAdjust;
+	guint8 m_primaryFamilyId; // family id's are supposed to be one unified element, but I split them up to ease parsing
+	guint8 m_primaryFamilyMemberId;
+	
+	guint8 m_scriptingSystem;
+	guint8 m_primaryCharacterSet;
+	guint8 m_width;
+	guint8 m_weight; 
+	guint8 m_attributes;
+	guint8 m_generalCharacteristics;
+	guint8 m_classification;
+	guint8 m_fill; // fill byte
+	guint8 m_fontType;
+	guint8 m_fontSourceFileType;
 
+	guint16 m_fontNameLength;
+
+	gchar *m_fontName; 
 };
-
-#endif /* WP6CHARACTERGROUP_H */
+#endif

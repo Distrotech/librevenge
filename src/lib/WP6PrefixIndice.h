@@ -3,7 +3,7 @@
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -23,42 +23,34 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP6CHARACTERGROUP_H
-#define WP6CHARACTERGROUP_H
+#ifndef WP6PREFIXINDICE_H
+#define WP6PREFIXINDICE_H
+#include <stdio.h>
+#include <stdlib.h>
+#include <glib.h>
 
-#include "WP6VariableLengthGroup.h"
-
-class WP6CharacterGroup_SubGroup
-{
-public:
-	virtual ~WP6CharacterGroup_SubGroup() {}
-	virtual void parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const = 0;
-};
-
-class WP6CharacterGroup_FontFaceChangeSubGroup : public WP6CharacterGroup_SubGroup
-{
-public:
-	WP6CharacterGroup_FontFaceChangeSubGroup(FILE *stream);
-	virtual void parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
-
-private:
-	guint16 m_oldMatchedPointSize;
-	guint16 m_hash;
-	guint16 m_matchedFontIndex;
-	guint16 m_matchedFontPointSize;
-};
-
-class WP6CharacterGroup : public WP6VariableLengthGroup
+class WP6PrefixIndice
 {
  public:
-	WP6CharacterGroup(FILE *stream);	
-	virtual ~WP6CharacterGroup();
-	virtual void _readContents(FILE *stream);
-	virtual void parse(WP6LLListener *llListener);
+	WP6PrefixIndice(FILE * stream, int id);	
+	const int getID() const { return m_id; }
+	const guint8 getType() const { return m_type; }
+	const guint32 getDataSize() const { return m_dataSize; }
+	const guint32 getDataOffset() const { return m_dataOffset; }
 
+ protected:
+ 	void _read(FILE *stream);
+ 
  private:
-	WP6CharacterGroup_SubGroup *m_subGroupData;
-
+	int m_id;
+	guint8 m_type;
+ 	guint8 m_flags;
+ 	guint16	m_useCount;
+ 	guint16 m_hideCount;
+ 	guint32 m_dataSize;
+ 	guint32 m_dataOffset;
+ 
+ 	bool m_hasChildren;
 };
 
-#endif /* WP6CHARACTERGROUP_H */
+#endif /* WP6PREFIXINDICE_H */

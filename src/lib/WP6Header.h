@@ -25,24 +25,23 @@
 
 #ifndef _WP6HEADER_H
 #define _WP6HEADER_H
-#include <stdio.h>
-#include <stdlib.h>
 #include "WPXHeader.h"
 
 class WP6Header : public WPXHeader
 {
  public:
 	WP6Header(FILE * stream);
+	virtual ~WP6Header();
 	
 	const guint16 getIndexHeaderOffset() const { return m_indexHeaderOffset; }
+	const guint16 getNumPrefixIndices() const { return m_numPrefixIndices; }
 	const guint32 getDocumentSize() const { return m_documentSize; }
 	const guint16 getDocumentEncryption() const { return m_documentEncryption; }
 		
  private:
 	guint16 m_indexHeaderOffset;
+	guint16 m_numPrefixIndices;
 	guint32 m_documentSize;
 	guint16 m_documentEncryption;
-
- 	GArray * m_prefixPacketArray;
 };
 #endif /* _WP6HEADER_H  */

@@ -23,54 +23,38 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WP6PrefixPacket.h"
-#include "WP6UnsupportedPrefixPacket.h"
+#include "WP6PrefixIndice.h"
+// #include "WP6UnsupportedPrefixPacket.h"
 #include "WP6FileStructure.h" 
 #include "libwpd.h"
 #include "libwpd_internal.h"
 
-WP6PrefixPacket::WP6PrefixPacket(FILE * stream, guint8 flags)
-	: 	m_flags(flags),
- 		m_useCount(0),
- 		m_hideCount(0),
- 		m_dataSize(0),
- 		m_dataOffset(0),
-		m_hasChildren(FALSE)
+WP6PrefixIndice::WP6PrefixIndice(FILE * stream, int id)
+	: m_id(id),
+	  m_type(0),
+	  m_flags(0),
+	  m_useCount(0),
+	  m_hideCount(0),
+	  m_dataSize(0),
+	  m_dataOffset(0),
+	  m_hasChildren(FALSE)
 {
+	_read(stream);
 }
 
-WP6PrefixPacket * WP6PrefixPacket::constructPrefixPacket(FILE * stream)
+void WP6PrefixIndice::_read(FILE *stream)
 {
-	guint8 flags;
-	guint8 type;
-	
-	// Read the packet flags first
-	WPD_CHECK_FILE_READ_ERROR(fread(&flags, sizeof(guint8), 1, stream), 1);
-	// Now, we can read the packet type, which we need to select which packet to create
-	WPD_CHECK_FILE_READ_ERROR(fread(&type, sizeof(guint8), 1, stream), 1);
-	
-	switch (type)
-	{
-		case WP6_INDEX_HEADER_DESIRED_FONT_DESCRIPTOR_POOL:
-			//return new WP6FontDescriptorPacket(stream, flags);
-		case WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_DESCRIPTOR_POOL:
-			//return new WP6DocumentInformationDescriptorPacket(stream, flags);
-		case WP6_INDEX_HEADER_OUTLINE_STYLE:
-			//return new WP6OutlineStylePacket(stream, flags);
-		default:
-			return new WP6UnsupportedPrefixPacket(stream, flags);
-	}
-}
+	WPD_CHECK_FILE_READ_ERROR(fread(&m_flags, sizeof(guint8), 1, stream), 1);
+	WPD_CHECK_FILE_READ_ERROR(fread(&m_type, sizeof(guint8), 1, stream), 1);
 
-void WP6PrefixPacket::_read(FILE *stream)
-{
 	WPD_CHECK_FILE_READ_ERROR(fread(&m_useCount, sizeof(guint16), 1, stream), 1);
 	WPD_CHECK_FILE_READ_ERROR(fread(&m_hideCount, sizeof(guint16), 1, stream), 1);
 	WPD_CHECK_FILE_READ_ERROR(fread(&m_dataSize, sizeof(guint32), 1, stream), 1);
 	WPD_CHECK_FILE_READ_ERROR(fread(&m_dataOffset, sizeof(guint32), 1, stream), 1);
+
+	WPD_DEBUG_MSG(("Prefix Packet (type: %i, data size: %i, data offset: %i)\n", m_type, m_dataSize, m_dataOffset));
 	
 	if (m_flags & WP6_INDEX_HEADER_ELEMENT_CHILD_PACKET_BIT)
 		m_hasChildren = true;
 
-	_readContents(stream);
 }

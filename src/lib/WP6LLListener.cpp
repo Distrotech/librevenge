@@ -22,23 +22,22 @@
 /* "This product is not manufactured, approved, or supported by 
  * Corel Corporation or Corel Corporation Limited."
  */
+#include "WP6LLListener.h"
+#include "WP6PrefixData.h"
+#include "WP6FontDescriptorPacket.h"
+#include "WP6DefaultInitialFontPacket.h"
 
-#ifndef UT_LIBWPD2_H
-#define UT_LIBWPD2_H
-#include <stdio.h>
-#include "libwpd_support.h"
+WP6PrefixDataPacket const * WP6LLListener::_getPrefixDataPacket(const int prefixID) const
+{ 
+	return m_prefixData->getPrefixDataPacket(prefixID); 
+}
 
-/* Convenience functions/defines, should not be exported externally */
+const WP6DefaultInitialFontPacket * WP6LLListener::_getDefaultInitialFontPacket() const
+{
+	if (m_prefixData->getDefaultInitialFontPID() > 0)
+		{
+			return dynamic_cast<const WP6DefaultInitialFontPacket *>(_getPrefixDataPacket(m_prefixData->getDefaultInitialFontPID()));
+		}
+	return NULL;
+}
 
-#define WPD_CHECK_FILE_ERROR(v) if (v==EOF) { WPD_DEBUG_MSG(("X_CheckFileError: %d\n", __LINE__)); throw FileException(); }
-#define WPD_CHECK_FILE_SEEK_ERROR(v) if (v != 0) { WPD_DEBUG_MSG(("X_CheckFileSeekError: %d\n", __LINE__)); throw FileException(); }
-#define WPD_CHECK_FILE_READ_ERROR(v,num_elements) if (v != num_elements) {\
- WPD_DEBUG_MSG(("X_CheckFileReadElementError: %d\n", __LINE__)); throw FileException(); }
-
-#ifdef DEBUG
-#define WPD_DEBUG_MSG(M) printf M
-#else
-#define WPD_DEBUG_MSG(M)
-#endif
-
-#endif /* UT_LIBWPD2_H */

@@ -23,15 +23,15 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP6UNSUPPORTEDPREFIXPACKET_H
-#define WP6UNSUPPORTEDPREFIXPACKET_H
+#ifndef WP6UNSUPPORTEDPREFIXDATAPACKET_H
+#define WP6UNSUPPORTEDPREFIXDATAPACKET_H
 
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "WP6PrefixPacket.h"
+#include "WP6PrefixDataPacket.h"
 
-class WP6UnsupportedPrefixPacket : public WP6PrefixPacket
+class WP6UnsupportedPrefixDataPacket : public WP6PrefixDataPacket
 {
  public:
 	WP6UnsupportedPrefixPacket(FILE * stream, guint8 flags);
@@ -43,4 +43,4 @@ class WP6UnsupportedPrefixPacket : public WP6PrefixPacket
 
 };
 
-#endif /* WP6UNSUPPORTEDPREFIXPACKET_H */
+#endif /* WP6UNSUPPORTEDPREFIXDATAPACKET_H */

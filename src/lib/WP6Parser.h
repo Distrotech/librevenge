@@ -27,7 +27,6 @@
 #define WP6PARSER_H
 
 #include "WPXParser.h"
-#include "WP6Header.h"
 
 class WP6Parser : public WPXParser
 {

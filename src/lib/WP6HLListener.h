@@ -42,7 +42,8 @@ class WP6HLListener : public WP6LLListener
 	virtual void insertCharacter(guint16 character);
 	virtual void insertEOL();
  	virtual void insertBreak(guint8 breakType); 
-	virtual void undoChange(guint8 undoType, guint16 undoLevel);
+	virtual void undoChange(const guint8 undoType, const guint16 undoLevel);
+	virtual void fontChange(const guint16 matchedFontPointSize, const guint16 fontPID);
 	virtual void attributeChange(gboolean isOn, guint8 attribute);
 	virtual void justificationChange(guint8 justification);
 	virtual void marginChange(guint8 side, guint16 margin);
@@ -64,6 +65,9 @@ class WP6HLListener : public WP6LLListener
 	
 	guint32 m_textAttributeBits;
 	gboolean m_textAttributesChanged;
+
+	gfloat m_currentFontSize;
+	GString * m_currentFontName;
 	
 	gboolean m_isParagraphColumnBreak;
 	gboolean m_isParagraphPageBreak;

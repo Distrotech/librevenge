@@ -38,21 +38,22 @@ class HtmlListenerImpl : public WPXHLListenerImpl
     
     virtual void startDocument();
     virtual void endDocument();
-    virtual void openParagraph(guint8 paragraphJustification, guint32 textAttributeBits,
+    virtual void openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits,
+			       const gchar *fontName, gfloat fontSize, 
 			       gboolean isColumnBreak, gboolean isPageBreak);
-    virtual void openSection(guint numColumns, gfloat marginLeft, gfloat marginRight);
-    virtual void openSpan(guint32 textAttributeBits);
+    virtual void openSection(const guint numColumns, gfloat marginLeft, gfloat marginRight);
+    virtual void openSpan(const guint32 textAttributeBits, const gchar *fontName, const gfloat fontSize);
     virtual void insertText(const guint16 *textArray, const guint len);
     virtual void insertLineBreak() {}
     
     virtual void openTable();
     virtual void openRow();
-    virtual void openCell(guint32 col, guint32 row, guint32 colSpan, guint32 rowSpan, RGBSColor * cellFgColor, RGBSColor * cellBgColor);
+    virtual void openCell(const guint32 col, const guint32 row, const guint32 colSpan, const guint32 rowSpan, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
     virtual void closeTable();
  
  protected:
-    void _appendTextAttributes(guint32 textAttributeBits);
-    void _appendParagraphJustification(guint32 paragraphJustification);
+    void _appendTextAttributes(const guint32 textAttributeBits);
+    void _appendParagraphJustification(const guint32 paragraphJustification);
 
     void _closeCurrentSpan();
     void _closeCurrentParagraph();

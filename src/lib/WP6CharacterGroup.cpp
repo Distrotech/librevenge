@@ -27,10 +27,35 @@
 #include "WP6LLListener.h"
 #include "libwpd_internal.h"
 
+WP6CharacterGroup_FontFaceChangeSubGroup::WP6CharacterGroup_FontFaceChangeSubGroup(FILE *stream)
+{
+   WPD_CHECK_FILE_READ_ERROR((fread(&m_oldMatchedPointSize, sizeof(guint16), 1, stream)), 1);
+   WPD_CHECK_FILE_READ_ERROR((fread(&m_hash, sizeof(guint16), 1, stream)), 1);
+   WPD_CHECK_FILE_READ_ERROR((fread(&m_matchedFontIndex, sizeof(guint16), 1, stream)), 1);
+   WPD_CHECK_FILE_READ_ERROR((fread(&m_matchedFontPointSize, sizeof(guint16), 1, stream)), 1);
+   WPD_DEBUG_MSG(("WordPerfect: Character Group Font Face Change subgroup info (old matched point size: %i, hash: %i, matched font index: %i, matched font point size: %i\n", m_oldMatchedPointSize, m_hash, m_matchedFontIndex, m_matchedFontPointSize));
+}
+
+void WP6CharacterGroup_FontFaceChangeSubGroup::parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
+{
+	WPD_DEBUG_MSG(("WordPerfect: FontFaceChangeSubGroup parsing\n"));
+	// TODO: check that we have 1 prefix id
+	llListener->fontChange(m_matchedFontPointSize, prefixIDs[0]);
+
+	// emit an exception otherwise
+}
+
 WP6CharacterGroup::WP6CharacterGroup(FILE *stream) :
-	WP6VariableLengthGroup()
+	WP6VariableLengthGroup(),
+	m_subGroupData(NULL)
 {
 	_read(stream);
+}
+
+WP6CharacterGroup::~WP6CharacterGroup()
+{
+	if (m_subGroupData)
+		delete(m_subGroupData);
 }
 
 void WP6CharacterGroup::_readContents(FILE *stream)
@@ -39,6 +64,12 @@ void WP6CharacterGroup::_readContents(FILE *stream)
 	// the contents accordingly
 	switch (getSubGroup())	
 	{
+	case WP_CHARACTER_GROUP_FONT_FACE_CHANGE:
+	case WP_CHARACTER_GROUP_FONT_SIZE_CHANGE:
+		m_subGroupData = new WP6CharacterGroup_FontFaceChangeSubGroup(stream);
+		break;
+	default:
+		break;
 	}
 }
 
@@ -48,38 +79,37 @@ void WP6CharacterGroup::parse(WP6LLListener *llListener)
 	
 	switch (getSubGroup())
 	{
-		/*case WP_CHARACTER_GROUP_FONT_FACE_CHANGE:
-			X_CheckWordPerfectError(_handleFontFaceChange());
-			break;     
+		case WP_CHARACTER_GROUP_FONT_FACE_CHANGE:
 		case WP_CHARACTER_GROUP_FONT_SIZE_CHANGE:
-			X_CheckWordPerfectError(_handleFontSizeChange());
+			m_subGroupData->parse(llListener, getNumPrefixIDs(), getPrefixIDs());
 			break;
+			/*
 		case WP_CHARACTER_GROUP_PARAGRAPH_NUMBER_ON:
 			if (m_paragraphStyleState == beginBeforeNumbering || m_paragraphStyleState == styleBody)
 			{
 				m_bPutativeListHasParagraphNumber = true; // indicates that a paragraph style really does encapsulate a list
-				UT_uint16 nonDeletableInfoSize;
-				UT_uint16 outlineStyleHash;
-				UT_uint8 flag;
-				X_CheckFileReadElementError(fread(&nonDeletableInfoSize, sizeof(UT_uint16), 1, m_importFile));
-				X_CheckFileReadElementError(fread(&m_currentOutlineHash, sizeof(UT_uint16), 1, m_importFile));
-				X_CheckFileReadElementError(fread(&m_currentListLevel, sizeof(UT_uint8), 1, m_importFile));
-				X_CheckFileReadElementError(fread(&flag, sizeof(UT_uint8), 1, m_importFile));
-				UT_DEBUGMSG(("WordPerfect: LISTS Paragraph Number ON (outlineStyleHash: %i, level: %i, flag: %i)\n", (int)m_currentOutlineHash, (int)m_currentListLevel, (int) flag));
+				guint16 nonDeletableInfoSize;
+				guint16 outlineStyleHash;
+				guint8 flag;
+				WPD_CHECK_FILE_READ_ERROR((fread(&nonDeletableInfoSize, sizeof(guint16), 1, stream));
+				WPD_CHECK_FILE_READ_ERROR((fread(&m_currentOutlineHash, sizeof(guint16), 1, stream));
+				WPD_CHECK_FILE_READ_ERROR((fread(&m_currentListLevel, sizeof(guint8), 1, stream));
+				WPD_CHECK_FILE_READ_ERROR((fread(&flag, sizeof(guint8), 1, stream));
+				gDEBUGMSG(("WordPerfect: LISTS Paragraph Number ON (outlineStyleHash: %i, level: %i, flag: %i)\n", (int)m_currentOutlineHash, (int)m_currentListLevel, (int) flag));
 				// first, find the correct list definition
 				WordPerfectListDefinition *listDefinition = _getListDefinition(m_currentOutlineHash);
 				if( listDefinition == NULL )
-				return UT_ERROR;
-				xxx_UT_DEBUGMSG(("WordPerfect: %i %i\n", listDefinition->getListID(0), listDefinition->getListID(1)));
+				return gERROR;
+				xxx_gDEBUGMSG(("WordPerfect: %i %i\n", listDefinition->getListID(0), listDefinition->getListID(1)));
 				X_CheckWordPerfectError(_updateDocumentListDefinition(listDefinition, m_currentListLevel));
 				if (listDefinition->isLevelNumbered(m_currentListLevel))
 				listDefinition->incrementLevelNumber(m_currentListLevel);
-				m_currentListTag = UT_rand();
+				m_currentListTag = grand();
 				m_paragraphStyleState = beginNumbering;
 			}        
 			break;
 		case WP_CHARACTER_GROUP_PARAGRAPH_NUMBER_OFF:
-			UT_DEBUGMSG(("WordPerfect: LISTS Paragraph Number OFF\n"));
+			gDEBUGMSG(("WordPerfect: LISTS Paragraph Number OFF\n"));
 			if (m_paragraphStyleState == beginNumbering || m_paragraphStyleState == beginDisplayReferencing)
 			{ 
 				m_paragraphStyleState = styleBody;         
@@ -89,22 +119,22 @@ void WP6CharacterGroup::parse(WP6LLListener *llListener)
 		break;*/
 		case WP6_CHARACTER_GROUP_TABLE_DEFINITION_ON:
 			WPD_DEBUG_MSG(("WordPerfect: TABLE Definition ON\n"));
-			/*UT_uint8 numPfxID;
+			/*guint8 numPfxID;
 			
 			// FIXME: The following prefix IDs only exist if the PFX bit is set
 			// in the flags. For now, we just assume it _is_ set.
-			X_CheckFileReadElementError(fread(&numPfxID, sizeof(numPfxID), 1, m_importFile));
-			UT_DEBUGMSG(("WordPerfect: Number of Table PFX IDs: %d\n", numPfxID));
+			WPD_CHECK_FILE_READ_ERROR((fread(&numPfxID, sizeof(numPfxID), 1, stream));
+			gDEBUGMSG(("WordPerfect: Number of Table PFX IDs: %d\n", numPfxID));
 			for (int i=0; i<numPfxID; i++)
 			{
-			UT_uint16 pfxID;
-			X_CheckFileReadElementError(fread(&pfxID, sizeof(pfxID), 1, m_importFile));
+			guint16 pfxID;
+			WPD_CHECK_FILE_READ_ERROR((fread(&pfxID, sizeof(pfxID), 1, stream));
 			// FIXME: handle the differt prefixes
 			// For now, we just skip over them
 			}
 	
-			UT_uint16 sizeOfNonDelData;
-			X_CheckFileReadElementError(fread(&sizeOfNonDelData, sizeof(sizeOfNonDelData), 1, m_importFile));
+			guint16 sizeOfNonDelData;
+			WPD_CHECK_FILE_READ_ERROR((fread(&sizeOfNonDelData, sizeof(sizeOfNonDelData), 1, stream));
 			// FIXME: handle all the non-deletable (style) data.
 			// For now, we just skip over it.
 			
@@ -126,3 +156,5 @@ void WP6CharacterGroup::parse(WP6LLListener *llListener)
 			break;
 	}
 }
+
+// WP6CharacterGroup * WP6CharacterGroup::constructWP6CharacterGroup

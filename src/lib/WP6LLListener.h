@@ -26,13 +26,25 @@
 #ifndef WP6LLLISTENER_H
 #define WP6LLLISTENER_H
 #include "WPXLLListener.h"
+#include "WP6PrefixDataPacket.h"
+
+class WP6DefaultInitialFontPacket;
+class WP6PrefixData;
 
 class WP6LLListener : public WPXLLListener
 {
  public:
-	WP6LLListener() : WPXLLListener() {}
+	WP6LLListener() : WPXLLListener(), m_prefixData(NULL) {}
 	virtual ~WP6LLListener() {}
-	virtual void undoChange(guint8 undoType, guint16 undoLevel) = 0;
+	virtual void fontChange(const guint16 matchedFontPointSize, const guint16 fontPID) = 0;
+	virtual void undoChange(const guint8 undoType, const guint16 undoLevel) = 0;
+	void setPrefixData(WP6PrefixData *prefixData) { m_prefixData = prefixData; }
+ protected:
+	WP6PrefixDataPacket const * _getPrefixDataPacket(const int prefixID) const;
+	WP6DefaultInitialFontPacket const * _getDefaultInitialFontPacket() const; 
+
+ private:
+	WP6PrefixData *m_prefixData;
 };
 
 #endif /* WP6LLLISTENER_H */

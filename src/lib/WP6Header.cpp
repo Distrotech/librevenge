@@ -25,13 +25,11 @@
 
 #include "libwpd.h"
 #include "WP6Header.h"
-#include "WP6PrefixPacket.h"
 #include "WP6FileStructure.h" 
 #include "libwpd_internal.h"
 
 WP6Header::WP6Header(FILE * stream)
-	:	WPXHeader(stream),
-		m_prefixPacketArray(g_array_new(TRUE, FALSE, sizeof(void *)))
+	:	WPXHeader(stream)
 {
 	guint16 documentEncrypted;
 
@@ -62,15 +60,14 @@ WP6Header::WP6Header(FILE * stream)
 	// skip the Flags = 2 and the Reserved byte = 0
 	guint16 numIndices;
 	WPD_CHECK_FILE_SEEK_ERROR(fseek(stream, m_indexHeaderOffset + WP6_INDEX_HEADER_NUM_INDICES_POSITION, SEEK_SET));
-	WPD_CHECK_FILE_READ_ERROR(fread(&numIndices, sizeof(guint16), 1, stream), 1);
+	WPD_CHECK_FILE_READ_ERROR(fread(&m_numPrefixIndices, sizeof(guint16), 1, stream), 1);
 	WPD_DEBUG_MSG(("WordPerfect: Number of Index Headers = %d \n",numIndices));
 
-	// ignore the 10 reserved bytes that follow and jump to the offset of the Index Header #1
+	// ignore the 10 reserved bytes that follow (jump to the offset of the Index Header #1, where we can resume parsing)
 	WPD_CHECK_FILE_SEEK_ERROR(fseek(stream, m_indexHeaderOffset + WP6_INDEX_HEADER_INDICES_POSITION, SEEK_SET));
-	
-	for (guint32 i=1; i<numIndices; i++)
-	{
-		WP6PrefixPacket * packet = WP6PrefixPacket::constructPrefixPacket(stream);
-		g_array_append_val(m_prefixPacketArray, packet);
-	}
+}
+
+WP6Header::~WP6Header()
+{
+
 }

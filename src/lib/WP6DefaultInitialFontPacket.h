@@ -3,7 +3,7 @@
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
+ * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -23,42 +23,21 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP6CHARACTERGROUP_H
-#define WP6CHARACTERGROUP_H
+#ifndef WP6DEFAULTINITIALFONTPACKET_H
+#define WP6DEFAULTINITIALFONTPACKET_H
+#include "WP6PrefixDataPacket.h"
 
-#include "WP6VariableLengthGroup.h"
-
-class WP6CharacterGroup_SubGroup
-{
-public:
-	virtual ~WP6CharacterGroup_SubGroup() {}
-	virtual void parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const = 0;
-};
-
-class WP6CharacterGroup_FontFaceChangeSubGroup : public WP6CharacterGroup_SubGroup
-{
-public:
-	WP6CharacterGroup_FontFaceChangeSubGroup(FILE *stream);
-	virtual void parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
-
-private:
-	guint16 m_oldMatchedPointSize;
-	guint16 m_hash;
-	guint16 m_matchedFontIndex;
-	guint16 m_matchedFontPointSize;
-};
-
-class WP6CharacterGroup : public WP6VariableLengthGroup
+class WP6DefaultInitialFontPacket : public WP6PrefixDataPacket
 {
  public:
-	WP6CharacterGroup(FILE *stream);	
-	virtual ~WP6CharacterGroup();
+	WP6DefaultInitialFontPacket(FILE *stream, int id, guint32 dataOffset, guint32 dataSize);
 	virtual void _readContents(FILE *stream);
-	virtual void parse(WP6LLListener *llListener);
+	const guint16 getInitialFontDescriptorPID() const { return m_initialFontDescriptorPID; }
+	const guint16 getPointSize() const { return m_pointSize; }
 
  private:
-	WP6CharacterGroup_SubGroup *m_subGroupData;
-
+	guint16 m_numPrefixIDs;
+	guint16 m_initialFontDescriptorPID;
+	guint16 m_pointSize;
 };
-
-#endif /* WP6CHARACTERGROUP_H */
+#endif

@@ -33,16 +33,18 @@ class WPXHLListenerImpl
  public:
 	virtual void startDocument() = 0;
 	virtual void endDocument() = 0;
-	virtual void openParagraph(guint8 paragraphJustification, guint32 textAttributeBits,
-				   gboolean isColumnBreak, gboolean isPageBreak) = 0;
-	virtual void openSpan(guint32 textAttributeBits) = 0;
-	virtual void openSection(guint numColumns, gfloat marginLeft, gfloat marginRight) = 0;
+	virtual void openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits,
+				   const gchar *fontName, const gfloat fontSize, 
+				   const gboolean isColumnBreak, const gboolean isPageBreak) = 0;
+	virtual void openSpan(const guint32 textAttributeBits, const gchar *fontName, const gfloat fontSize) = 0;
+	virtual void openSection(const guint numColumns, const gfloat marginLeft, const gfloat marginRight) = 0;
 	virtual void insertText(const guint16 *textArray, const guint len) = 0;
  	virtual void insertLineBreak() = 0;
  
  	virtual void openTable() = 0;
  	virtual void openRow() = 0;
- 	virtual void openCell(guint32 col, guint32 row, guint32 colSpan, guint32 rowSpan, RGBSColor * cellFgColor, RGBSColor * cellBgColor) = 0;
+ 	virtual void openCell(const guint32 col, const guint32 row, const guint32 colSpan, const guint32 rowSpan, 
+			      const RGBSColor * cellFgColor, const RGBSColor * cellBgColor) = 0;
  	virtual void closeTable() = 0;
 };
 

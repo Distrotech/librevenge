@@ -26,6 +26,8 @@
 #include <stdio.h>
 #include "WP6LLListener.h"
 #include "WP6Parser.h"
+#include "WP6Header.h"
+#include "WP6PrefixData.h"
 #include "WP6Part.h"
 #include "libwpd_internal.h"
 
@@ -77,11 +79,14 @@ void WP6Parser::parse()
 	try
 	{
 		WP6Header * header = new WP6Header(getStream());
+		WP6PrefixData *prefixData = new WP6PrefixData(getStream(), header->getNumPrefixIndices());
+		static_cast<WP6LLListener *>(getLLListener())->setPrefixData(prefixData);
 		
 		getLLListener()->startDocument();
 		
-		WPD_CHECK_FILE_SEEK_ERROR(fseek(getStream(), header->getDocumentOffset() - ftell(getStream()), SEEK_CUR));
+		WPD_CHECK_FILE_SEEK_ERROR(fseek(getStream(), header->getDocumentOffset(), SEEK_SET));
 	
+		WPD_DEBUG_MSG(("WordPerfect: Starting document body parse (position = %ld)\n",(long)ftell(getStream())));
 		while (ftell(getStream()) < (long)((WP6Header *)header)->getDocumentSize())
 		{
 			guint8 readVal;
@@ -105,14 +110,17 @@ void WP6Parser::parse()
 					delete(part);
 				}
 			}
+
 		}
+
+		getLLListener()->endDocument();
+		WPD_DEBUG_MSG(("WordPerfect: Finished with document parse (position = %ld)\n",(long)ftell(getStream())));
+		delete(header);
+		delete(prefixData);
 	}
 	catch(FileException)
 	{
 		WPD_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
 		throw FileException();
 	}
-	
-	getLLListener()->endDocument();
-	WPD_DEBUG_MSG(("WordPerfect: Finished with document parse (position = %ld)\n",(long)ftell(getStream())));
 }

@@ -23,10 +23,16 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
+#include <math.h>
 #include "WP6HLListener.h"
 #include "WPXHLListenerImpl.h"
 #include "WP6FileStructure.h" 
 #include "WPXFileStructure.h"
+#include "WP6FontDescriptorPacket.h"
+#include "WP6DefaultInitialFontPacket.h"
+
+#define WP6_DEFAULT_FONT_SIZE 12.0f
+#define WP6_DEFAULT_FONT_NAME "Times New Roman"
 
 WP6HLListener::WP6HLListener(WPXHLListenerImpl *listenerImpl) :
 	WP6LLListener(), 
@@ -34,6 +40,9 @@ WP6HLListener::WP6HLListener(WPXHLListenerImpl *listenerImpl) :
 	m_textArray(g_array_new(TRUE, FALSE, sizeof(guint16))),
 	m_textAttributeBits(0),
 	m_textAttributesChanged(FALSE),
+
+	m_currentFontSize(WP6_DEFAULT_FONT_SIZE),
+	m_currentFontName(g_string_new(WP6_DEFAULT_FONT_NAME)),
 	
 	m_paragraphJustification(WPX_PARAGRAPH_JUSTIFICATION_LEFT),
 	m_paragraphJustificationChanged(FALSE),
@@ -55,6 +64,7 @@ WP6HLListener::WP6HLListener(WPXHLListenerImpl *listenerImpl) :
 WP6HLListener::~WP6HLListener()
 {
 	g_array_free(m_textArray, TRUE);
+	g_string_free(m_currentFontName, TRUE);
 }
 
 void WP6HLListener::insertCharacter(guint16 character)
@@ -94,15 +104,36 @@ void WP6HLListener::insertBreak(guint8 breakType)
 
 void WP6HLListener::startDocument()
 {
+	const WP6DefaultInitialFontPacket * defaultInitialFontPacket = NULL;
+	if (defaultInitialFontPacket = _getDefaultInitialFontPacket()) {		
+		fontChange(defaultInitialFontPacket->getPointSize(), defaultInitialFontPacket->getInitialFontDescriptorPID());	
+	}
+
 	m_listenerImpl->startDocument();
 }
 
-void WP6HLListener::undoChange(guint8 undoType, guint16 undoLevel)
+void WP6HLListener::undoChange(const guint8 undoType, const guint16 undoLevel)
 {
 	if (undoType == WP6_UNDO_GROUP_INVALID_TEXT_START)
 		m_isUndoOn = TRUE;
 	else if (undoType == WP6_UNDO_GROUP_INVALID_TEXT_END)
 		m_isUndoOn = FALSE;		
+}
+
+void WP6HLListener::fontChange(const guint16 matchedFontPointSize, const guint16 fontPID)
+{
+	if (!m_isUndoOn)
+	{
+		// flush everything which came before this change
+		_flushText();
+
+		m_currentFontSize = rint((double)((((float)matchedFontPointSize)/100.0f)*2.0f));
+		const WP6FontDescriptorPacket *fontDescriptorPacket = NULL;
+		if (fontDescriptorPacket = dynamic_cast<const WP6FontDescriptorPacket *>(_getPrefixDataPacket(fontPID))) {
+			g_string_printf(m_currentFontName, "%s", fontDescriptorPacket->getFontName());
+		}
+		m_textAttributesChanged = TRUE;
+	}
 }
 
 void WP6HLListener::attributeChange(gboolean isOn, guint8 attribute)
@@ -236,6 +267,7 @@ void WP6HLListener::endDocument()
 	if (!m_isParagraphOpened && !m_isParagraphClosed)
 	{
 		m_listenerImpl->openParagraph(m_paragraphJustification, m_textAttributeBits,
+					      m_currentFontName->str, m_currentFontSize,
 					      FALSE, FALSE);
 		_flushText();       
 	}
@@ -311,6 +343,7 @@ void WP6HLListener::_flushText()
 	{
 		m_listenerImpl->openSection(m_numColumns, m_marginLeft, m_marginRight);
 		m_listenerImpl->openParagraph(m_paragraphJustification, m_textAttributeBits,
+					      m_currentFontName->str, m_currentFontSize, 
 					      m_isParagraphColumnBreak, m_isParagraphPageBreak);
 		m_isParagraphColumnBreak = FALSE; m_isParagraphPageBreak = FALSE;
 		m_isParagraphOpened = TRUE;
@@ -324,6 +357,7 @@ void WP6HLListener::_flushText()
 		while (m_numDeferredParagraphBreaks > 0)
 		{
 			m_listenerImpl->openParagraph(m_paragraphJustification, m_textAttributeBits, 
+						      m_currentFontName->str, m_currentFontSize,
 						      m_isParagraphColumnBreak, m_isParagraphPageBreak);
 			m_isParagraphColumnBreak = FALSE; m_isParagraphPageBreak = FALSE;
 			m_numDeferredParagraphBreaks--;
@@ -331,7 +365,7 @@ void WP6HLListener::_flushText()
 		m_isParagraphOpened = TRUE;
 	}
 	else if (m_textAttributesChanged && m_textArray->len > 0)
-		m_listenerImpl->openSpan(m_textAttributeBits);
+		m_listenerImpl->openSpan(m_textAttributeBits, m_currentFontName->str, m_currentFontSize);
 
 	m_listenerImpl->insertText((guint16 *)m_textArray->data, m_textArray->len);
 	

@@ -39,6 +39,7 @@ public:
 	virtual void insertEOL();
 	virtual void insertBreak(guint8 breakType) {}
 	virtual void undoChange(guint8 undoType, guint16 undoLevel);
+	virtual void fontChange(guint16 matchedFontPointSize, guint16 fontPID) {}
 	virtual void attributeChange(gboolean isOn, guint8 attribute) {}
 	virtual void justificationChange(guint8 justification) {}
 	virtual void marginChange(guint8 side, guint16 margin) {}

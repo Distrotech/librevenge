@@ -62,26 +62,27 @@ void HtmlListenerImpl::endDocument()
 	printf("</html>\n");
 }
 
-void HtmlListenerImpl::openParagraph(guint8 paragraphJustification, guint32 textAttributeBits,
-				     gboolean isColumnBreak, gboolean isPageBreak)
+void HtmlListenerImpl::openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits, 
+				     const gchar *fontName, const gfloat fontSize,
+				     const gboolean isColumnBreak, const gboolean isPageBreak)
 {
 	_closeCurrentParagraph();
 
 	printf("<p style=\"");
 	_appendTextAttributes(textAttributeBits);
 	_appendParagraphJustification(paragraphJustification);
-	printf("\">");
+	printf("\" font-name=\"%s\" font-size\"%f\">", fontName, fontSize);
 
 	m_isParagraphOpened = TRUE;
 }
 
-void HtmlListenerImpl::openSpan(guint32 textAttributeBits)
+void HtmlListenerImpl::openSpan(guint32 textAttributeBits, const gchar *fontName, const gfloat fontSize)
 {
 	_closeCurrentSpan();
 
 	printf("<span style=\""); 
 	_appendTextAttributes(textAttributeBits);
-	printf("\">");
+	printf("\" font-name=\"%s\" font-size\"%f\">", fontName, fontSize);
 	m_isSpanOpened = TRUE;
 }
 
@@ -133,7 +134,8 @@ void HtmlListenerImpl::openRow()
 	m_isRowOpened = TRUE;
 }
 
-void HtmlListenerImpl::openCell(guint32 col, guint32 row, guint32 colSpan, guint32 rowSpan, RGBSColor * cellFgColor, RGBSColor * cellBgColor)
+void HtmlListenerImpl::openCell(const guint32 col, const guint32 row, const guint32 colSpan, const guint32 rowSpan, 
+				const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
 {
 	_closeCurrentParagraph();	
 	_closeCurrentCell();

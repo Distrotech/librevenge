@@ -23,31 +23,21 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP6PREFIXPACKET_H
-#define WP6PREFIXPACKET_H
+#include "WP6DefaultInitialFontPacket.h"
+#include "libwpd_internal.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <glib.h>
-
-class WP6PrefixPacket
+WP6DefaultInitialFontPacket::WP6DefaultInitialFontPacket(FILE *stream, int id, guint32 dataOffset, guint32 dataSize)
+	: WP6PrefixDataPacket(stream, id)
 {
- public:
-	WP6PrefixPacket(FILE * stream, guint8 flags);
-	static WP6PrefixPacket * constructPrefixPacket(FILE * stream);
- 
- protected:
- 	virtual void _read(FILE *stream);
-	virtual void _readContents(FILE *stream) {} // we don't always need more information than that provided generically
- 
- private:
- 	guint8 m_flags;
- 	guint16	m_useCount;
- 	guint16 m_hideCount;
- 	guint32 m_dataSize;
- 	guint32 m_dataOffset;
- 
- 	bool m_hasChildren;
-};
+	_read(stream, dataOffset, dataSize);
+}
 
-#endif /* WP6PREFIXPACKET_H */
+void WP6DefaultInitialFontPacket::_readContents(FILE *stream)
+{
+   WPD_CHECK_FILE_READ_ERROR(fread(&m_numPrefixIDs, sizeof(guint16), 1, stream), 1);
+   WPD_CHECK_FILE_READ_ERROR(fread(&m_initialFontDescriptorPID, sizeof(guint16), 1, stream), 1);
+   WPD_CHECK_FILE_READ_ERROR(fread(&m_pointSize, sizeof(guint16), 1, stream), 1);
+   WPD_DEBUG_MSG(("WordPerfect: Read default initial font packet (initial font descriptor pid: %i, point size: %i)\n", 
+		  (int) m_initialFontDescriptorPID, (int) m_pointSize));
+
+}
