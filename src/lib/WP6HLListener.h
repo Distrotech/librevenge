@@ -30,8 +30,6 @@
 #include "WPXHLListener.h"
 #include "WP6FileStructure.h"
 
-using namespace std;
-
 #include <stack>
 #include <map>
 #include <vector>
