@@ -35,7 +35,7 @@ WP6DefaultInitialFontPacket::WP6DefaultInitialFontPacket(GsfInput *input, int id
 
 void WP6DefaultInitialFontPacket::parse(WP6HLListener *listener) const
 {
-	static_cast<WP6LLListener*>(listener)->fontChange(getPointSize(), getInitialFontDescriptorPID());
+	listener->fontChange(getPointSize(), getInitialFontDescriptorPID());
 }
 
 void WP6DefaultInitialFontPacket::_readContents(GsfInput *input)

@@ -46,7 +46,7 @@ void WP6DisplayNumberReferenceGroup::parse(WP6HLListener *listener)
 	WPD_DEBUG_MSG(("WordPerfect: handling an DisplayNumberReference group\n"));
 	
 	if (!(getSubGroup() % 2) || getSubGroup() == 0)
-		static_cast<WP6LLListener*>(listener)->displayNumberReferenceGroupOn(getSubGroup(), m_levelNumberToDisplay);
+		listener->displayNumberReferenceGroupOn(getSubGroup(), m_levelNumberToDisplay);
 	else
-		static_cast<WP6LLListener*>(listener)->displayNumberReferenceGroupOff(getSubGroup());
+		listener->displayNumberReferenceGroupOff(getSubGroup());
 }

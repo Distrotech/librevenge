@@ -44,6 +44,6 @@ void WP6HeaderFooterGroup::parse(WP6HLListener *listener)
 
 	if (getNumPrefixIDs() > 0) // FIXME: perhaps we should throw an exception if this isn't true..
 	{
-		static_cast<WP6LLListener*>(listener)->headerFooterGroup(getSubGroup(), m_occurenceBits, getPrefixIDs()[0]);
+		listener->headerFooterGroup(getSubGroup(), m_occurenceBits, getPrefixIDs()[0]);
 	}	
 }

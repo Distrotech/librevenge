@@ -47,13 +47,13 @@ void WP6FootnoteEndnoteGroup::parse(WP6HLListener *listener)
 	case WP6_FOOTNOTE_ENDNOTE_GROUP_ENDNOTE_ON:
 		if (getNumPrefixIDs() < 1)
 			throw ParseException();
-		static_cast<WP6LLListener*>(listener)->noteOn(getPrefixIDs()[0]);
+		listener->noteOn(getPrefixIDs()[0]);
 		break;
 	case WP6_FOOTNOTE_ENDNOTE_GROUP_FOOTNOTE_OFF:
-		static_cast<WP6LLListener*>(listener)->noteOff(FOOTNOTE);
+		listener->noteOff(FOOTNOTE);
 		break;
 	case WP6_FOOTNOTE_ENDNOTE_GROUP_ENDNOTE_OFF:
-		static_cast<WP6LLListener*>(listener)->noteOff(ENDNOTE);
+		listener->noteOff(ENDNOTE);
 		break;
 	}
 }

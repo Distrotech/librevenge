@@ -45,7 +45,7 @@ void WP6CharacterGroup_FontFaceChangeSubGroup::parse(WP6HLListener *listener, co
 	WPD_DEBUG_MSG(("WordPerfect: FontFaceChangeSubGroup parsing\n"));
 	// TODO: check that we have 1 prefix id
 	// emit an exception otherwise
-	static_cast<WP6LLListener*>(listener)->fontChange(m_matchedFontPointSize, prefixIDs[0]);
+	listener->fontChange(m_matchedFontPointSize, prefixIDs[0]);
 }
 
 /*************************************************************************
@@ -61,7 +61,7 @@ WP6CharacterGroup_ParagraphNumberOnSubGroup::WP6CharacterGroup_ParagraphNumberOn
 
 void WP6CharacterGroup_ParagraphNumberOnSubGroup::parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
 {
-	static_cast<WP6LLListener*>(listener)->paragraphNumberOn(m_outlineHash, m_level, m_flag);
+	listener->paragraphNumberOn(m_outlineHash, m_level, m_flag);
 }
 
 /*************************************************************************
@@ -175,7 +175,7 @@ void WP6CharacterGroup::parse(WP6HLListener *listener)
 			m_subGroupData->parse(listener, getNumPrefixIDs(), getPrefixIDs());
 			break;
 		case WP6_CHARACTER_GROUP_PARAGRAPH_NUMBER_OFF:
-			static_cast<WP6LLListener*>(listener)->paragraphNumberOff();
+			listener->paragraphNumberOff();
 			break;
 		case WP6_CHARACTER_GROUP_TABLE_DEFINITION_ON:
 			WPD_DEBUG_MSG(("WordPerfect: TABLE Definition ON\n"));
