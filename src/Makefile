@@ -9,6 +9,8 @@ all:
 		WP6Part.cpp \
 		WP6VariableLengthGroup.cpp \
 		WP6FixedLengthGroup.cpp \
+		WP6ExtendedCharacterGroup.cpp \
+		WP6UndoGroup.cpp \
 		WP6AttributeOnGroup.cpp \
 		WP6AttributeOffGroup.cpp \
 		`glib-config --cflags` -shared -o libwpd2.so
