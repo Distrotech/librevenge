@@ -24,6 +24,7 @@ Rui Miguel Silva Seabra <rms@1407.org>			original rpm spec,
 							build patches
 Fridrich Strba <fridrich.strba@bluewin.ch>		MingW build system, 
 	       						many feature additions
+Caolan McNamara <caolanm@redhat.com>		        Build fix for STL strings
 
 Thanks
 ------

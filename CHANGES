@@ -30,6 +30,7 @@ CHANGES:
   (William Lachance, Michael Meeks)
 - Internal changes to reduce API/ABI breakage between versions (William Lachance)
 - Fix many memory leaks (William Lachance)
+- Can now build libwpd dynamically against OOo (William Lachance, Fridrich Strba, Caolan McNamara)
 
 0.7.1 -> 0.7.2
 - Added conversion of paragraph margins done by functions of the
