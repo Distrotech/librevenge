@@ -83,37 +83,6 @@ WPXParser * WPXParser::constructParser(FILE * stream)
 		return new WP6Parser(stream, header);
 	}
 
-	
-	
-	
-/*	if (wp6_init(&wordperfect_state) && wp6_register_byte_functions(&wordperfect_variable_length_functions,
-									&wordperfect_fixed_length_functions)) {
-		if ((retval = wp6_parse_header(stream, &wordperfect_header))) {
-			if ((retval=wp6_recognize_contents(&wordperfect_header))) { 
-				WPD_DEBUG_MSG(("WordPerfect: Header Parsed and Contents Recognized as a WP6 Document\n"));
-				if ((retval = wp6_parse_index_header(stream, &wordperfect_header, &wordperfect_state))) {
-					WPD_DEBUG_MSG(("WordPerfect: Index Header Parsed Successfully\n"));
-					if ((retval = wp6_parse_document(stream, &wordperfect_state, wordperfect_parse_struct, 
-									 &wordperfect_header, wordperfect_variable_length_functions,
-									 wordperfect_fixed_length_functions))) {
-						WPD_DEBUG_MSG(("WordPerfect: Document Parsed Successfully\n"));
-						
-					}
-				}
-			}
-		}
-		if (wp6_close(&wordperfect_state, wordperfect_variable_length_functions,
-				wordperfect_fixed_length_functions)) {
-			WPD_DEBUG_MSG(("WordPerfect: Temporary Importer Memory Structures Closed Successfully\n"));
-		}
-		else {
-			WPD_DEBUG_MSG(("WordPerfect: WARNING: Temporary Importer Memory Structures NOT Closed Successfully\n"));
-		}
-	}
-	return retval;
-	
-	*/
-	
 	return NULL;
 }
 

@@ -23,12 +23,18 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef LLPART_H
-#define LLPART_H
+#ifndef WP6PART_H
+#define WP6PART_H
 
-class LLPart
+#include <stdio.h>
+#include "glib.h"
+
+class WP6Part
 {
+public:	
+	static WP6Part * constructPart(FILE * stream);
+	virtual gboolean parse() {};
 };
 
 
-#endif /* LLPART_H */
+#endif /* WP6PART_H */
