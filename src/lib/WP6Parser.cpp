@@ -28,27 +28,45 @@
 #include "WP6Part.h"
 #include "UT_libwpd2.h"
 
-WP6Parser::WP6Parser(FILE * stream, WP6Header * header)
-	: WPXParser(stream, header)
+WP6Parser::WP6Parser(FILE * stream/*,  WP6Header *header */)
+	: WPXParser(stream)
 {
 }
 
+// WP6Parser::parse() reads AND parses a wordperfect document, passing any retrieved low-level
+// information to a low-level listener
 gboolean WP6Parser::parse()
-{
-	if (!getHeader()->parse() )
-		return FALSE;
+{	
+	try {
+		WP6Header * header = new WP6Header(getStream());
+		
+		WPD_CHECK_FILE_SEEK_ERROR(fseek(getStream(), header->getDocumentOffset() - ftell(getStream()), SEEK_CUR));
 	
-	fseek(getStream(), getHeader()->m_iDocumentOffset - ftell(getStream()), SEEK_CUR);
-	
-	WP6Part * part = NULL;
-	while ((part = WP6Part::constructPart(this)))
-	{
-		WPD_DEBUG_MSG(("WordPerfect: parse\n"));
-		part->parse();
-		delete(part);
-		part = NULL;
+		while (ftell(getStream()) < (long)((WP6Header *)header)->getDocumentSize())
+			{
+				guint8 readVal;
+				WPD_CHECK_FILE_READ_ERROR(fread(&readVal, sizeof(guint8), 1, getStream()), 1);
+				
+				if (/*readVal >= (guint8)0x00 &&*/ readVal <= (guint8)0x20)
+					{
+						// Default Extended International Characters
+					}
+				else if (readVal >= (guint8)0x21 && readVal <= (guint8)0x7F)
+					{
+						// normal ASCII characters
+						getLLListener()->insertCharacter( (guint32)readVal );
+					}
+				else 
+					{
+						WP6Part *part = WP6Part::constructPart(this, readVal);
+						if (part != NULL) {
+							part->parse();
+							delete(part);
+						}
+					}
+			}
 	}
-
+	catch(FileException) { WPD_DEBUG_MSG(("WordPerfect: File Seek Exception. Parse terminated prematurely.")); }
 	WPD_DEBUG_MSG(("WordPerfect: Finished with document parse (position = %ld)\n",(long)ftell(getStream())));
 	
 	return TRUE;

@@ -34,41 +34,30 @@ WP6Part::WP6Part(WPXParser * parser)
 {
 }
 
-WP6Part * WP6Part::constructPart(WPXParser * parser)
+// constructPart: constructs a parseable low-level representation of part of the document
+// returns the part if it successfully creates the part, returns NULL if it can't
+// throws an exception if there is an error
+// precondition: readVal us between 0x80 and 0xFF
+WP6Part * WP6Part::constructPart(WPXParser * parser, guint8 readVal)
 {	
 	WPD_DEBUG_MSG(("WordPerfect: ConstructPart\n"));
-	guint8 val;
-	while (ftell(parser->getStream()) < (long)((WP6Header *)parser->getHeader())->m_iDocumentSize)
-	{
-		WPD_CHECK_FILE_READ_ERROR(fread(&val, sizeof(guint8), 1, parser->getStream()), 1);
-		guint32 readVal = val; // convert to a 32 bit int, otherwise gcc3.2 will start whining about comparisions always being true
 		
-		if (readVal >= 0x00 && readVal <= 0x20)
-		{
-			// Default Extended International Characters
-		}
-		else if (readVal >= 0x21 && readVal <= 0x7F)
-		{
-			// normal ASCII characters
-			parser->getLLListener()->insertCharacter( (guint32)readVal );
-		}
-		else if (readVal >= 0x80 && readVal <= 0xCF)
-		{
-			//WPD_DEBUG_MSG(("WordPerfect: constructFixedLengthGroup(parser, val)\n"));
-			//return WP6FixedLengthGroup::constructFixedLengthGroup(parser, val);
-		}
-		else if (readVal >= 0xD0 && readVal <= 0xEF)
-		{
-			WPD_DEBUG_MSG(("WordPerfect: constructVariableLengthGroup(parser, val)\n"));
-			return WP6VariableLengthGroup::constructVariableLengthGroup(parser, val);
-		}      
-		else if (readVal >= 0xF0 && readVal <= 0xFF)
+	if (readVal >= (guint8)0x80 && readVal <= (guint8)0xCF)
 		{
 			WPD_DEBUG_MSG(("WordPerfect: constructFixedLengthGroup(parser, val)\n"));
-			return WP6FixedLengthGroup::constructFixedLengthGroup(parser, val);
+			return WP6FixedLengthGroup::constructFixedLengthGroup(parser, readVal);
 		}
-	}
-	
+	else if (readVal >= (guint8)0xD0 && readVal <= (guint8)0xEF)
+		{
+			WPD_DEBUG_MSG(("WordPerfect: constructVariableLengthGroup(parser, val)\n"));
+			return WP6VariableLengthGroup::constructVariableLengthGroup(parser, readVal);
+		}      
+	else if (readVal >= (guint8)0xF0 && readVal <= (guint8)0xFF)
+		{
+			WPD_DEBUG_MSG(("WordPerfect: constructFixedLengthGroup(parser, val)\n"));
+			return WP6FixedLengthGroup::constructFixedLengthGroup(parser, readVal);
+		}
+
 	WPD_DEBUG_MSG(("WordPerfect: Returning NULL from constructPart\n"));
 	return NULL;
 

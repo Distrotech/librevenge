@@ -36,7 +36,7 @@ class WPXHeader;
 class WPXParser
 {
 public:
-	WPXParser(FILE * stream, WPXHeader * header);
+	WPXParser(FILE * stream);
 		
 	static WPXParser * constructParser(FILE * stream);
 	virtual gboolean parse() = 0;
@@ -47,11 +47,10 @@ public:
 	WPXLLListener * getLLListener() { return m_lLListener; }
 	WPXHLListener * getHLListener() { return m_hLListener; }
 		
-	WPXHeader * getHeader() { return m_header; }
 	FILE * getStream() { return m_stream; }
+
 private:
 	FILE * m_stream;
-	WPXHeader * m_header;
 	
 	WPXLLListener * m_lLListener;
 	WPXHLListener * m_hLListener;

@@ -43,8 +43,8 @@ WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(WP
 {
 	switch (groupID)
 	{
-		//case WP6_TOP_EOL_GROUP: 
-		//	return new WP6EOLGroup(parser);
+		case WP6_TOP_EOL_GROUP: 
+			return new WP6EOLGroup(parser);
 
 		// Add the remaining cases here
 		default:

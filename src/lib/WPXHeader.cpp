@@ -29,17 +29,37 @@
 #include "WPXHeader.h"
 #include "WP6FileStructure.h"
 
-WPXHeader::WPXHeader(FILE * stream, guint32 documentOffset, guint8 productType, guint8 fileType, guint8 majorVersion, guint8 minorVersion)
+// placeholders until we can get exceptions worked out
+#define WPD_CHECK_FILE_SEEK_ERROR2(v) if (v != 0) { WPD_DEBUG_MSG(("X_CheckFileSeekError: %d\n", __LINE__)); }
+#define WPD_CHECK_FILE_READ_ERROR2(v,num_elements) if (v != num_elements) { WPD_DEBUG_MSG(("X_CheckFileReadElementError: %d\n", __LINE__));  }
+
+WPXHeader::WPXHeader(FILE *stream)
 {
-	m_pStream = stream;
-	m_iDocumentOffset = documentOffset;
-	m_iProductType = productType;
-	m_iFileType = fileType;
-	m_iMajorVersion = majorVersion;
-	m_iMinorVersion = minorVersion;
+	char fileMagic[4];
+	/* check the magic */
+	WPD_CHECK_FILE_SEEK_ERROR2(fseek(stream, WP6_HEADER_MAGIC_OFFSET - ftell(stream), SEEK_CUR));
+	WPD_CHECK_FILE_READ_ERROR2(fread(fileMagic, sizeof(char), 3, stream), 3);
+	fileMagic[3] = '\0';
+	
+	if ( strcmp(fileMagic, "WPC") )
+	{
+		WPD_DEBUG_MSG(("WordPerfect: File magic is not equal to \"WPC\"!\n"));
+		// throw an exception
+	}
+	
+	/* get the document pointer */
+	WPD_CHECK_FILE_SEEK_ERROR2(fseek(stream, WP6_HEADER_DOCUMENT_POINTER_OFFSET - ftell(stream), SEEK_CUR));
+	WPD_CHECK_FILE_READ_ERROR2(fread(&m_documentOffset, sizeof(guint32), 1, stream), 1);
+
+	/* get information on product types, file types, versions */
+	WPD_CHECK_FILE_SEEK_ERROR2(fseek(stream, WP6_HEADER_PRODUCT_TYPE_OFFSET - ftell(stream), SEEK_CUR));
+	WPD_CHECK_FILE_READ_ERROR2(fread(&m_productType, sizeof(guint8), 1, stream), 1);
+	WPD_CHECK_FILE_READ_ERROR2(fread(&m_fileType, sizeof(guint8), 1, stream), 1);
+	WPD_CHECK_FILE_READ_ERROR2(fread(&m_majorVersion, sizeof(guint8), 1, stream), 1);
+	WPD_CHECK_FILE_READ_ERROR2(fread(&m_minorVersion, sizeof(guint8), 1, stream), 1);
 	
 	WPD_DEBUG_MSG(("WordPerfect: Product Type: %i File Type: %i Major Version: %i Minor Version: %i\n", 
-					m_iProductType, m_iFileType, 
-					m_iMajorVersion, m_iMinorVersion));		
+					m_productType, m_fileType, 
+					m_majorVersion, m_minorVersion));		
 }
 

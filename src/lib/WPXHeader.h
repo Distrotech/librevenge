@@ -32,20 +32,23 @@
 
 class WPXHeader
 {
-public:	
-	WPXHeader(FILE * stream, guint32 documentOffset, guint8 productType, guint8 fileType, guint8 majorVersion, guint8 minorVersion);
+ public:	
+	WPXHeader(FILE *stream);
 	~WPXHeader() {};
+
+	const guint32 getDocumentOffset() const { return m_documentOffset; }
+	const guint8 getProductType() const { return m_productType; }
+	const guint8 getFileType() const { return m_fileType; }
+	const guint8 getMajorVersion() const { return m_majorVersion; }
+	const guint8 getMinorVersion() const { return m_minorVersion; }
+
+ private:	
+	guint32 m_documentOffset;
+	guint8 m_productType;
+	guint8 m_fileType;
+	guint8 m_majorVersion;
+	guint8 m_minorVersion;
 		
-	virtual gboolean parse() {};
-		
-	guint32 m_iDocumentOffset;
-	guint8 m_iProductType;
-	guint8 m_iFileType;
-	guint8 m_iMajorVersion;
-	guint8 m_iMinorVersion;
-		
-protected:
-	FILE * m_pStream;
 };
 
 #endif /* WPXHEADER_H */

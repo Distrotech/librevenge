@@ -30,15 +30,16 @@
 
 class WP6Header : public WPXHeader
 {
-public:
-	WP6Header(FILE * stream, guint32 documentOffset, guint8 productType, guint8 fileType, guint8 majorVersion, guint8 minorVersion);
+ public:
+	WP6Header(FILE * stream);
 	
-	gboolean parse();
-
-	guint16 m_iIndexHeaderOffset;
-	guint32 m_iDocumentSize;
-	guint16 m_iDocumentEncryption;
+	const guint16 getIndexHeaderOffset() const { return m_indexHeaderOffset; }
+	const guint32 getDocumentSize() const { return m_documentSize; }
+	const guint16 getDocumentEncryption() const { return m_documentEncryption; }
 		
-protected:		
+ private:
+	guint16 m_indexHeaderOffset;
+	guint32 m_documentSize;
+	guint16 m_documentEncryption;
 
 };

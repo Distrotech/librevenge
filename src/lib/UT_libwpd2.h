@@ -26,11 +26,17 @@
 #ifndef UT_LIBWPD2_H
 #define UT_LIBWPD2_H
 
+class FileException
+{
+	// needless to say, we could flesh this class out a bit
+};
+
 /* Convenience functions/defines, should not be exported externally */
 
-#define WPD_CHECK_FILE_ERROR(v) if (v==EOF) { WPD_DEBUG_MSG(("X_CheckFileError: %d\n", __LINE__)); return FALSE; }
-#define WPD_CHECK_FILE_SEEK_ERROR(v) if (v != 0) { WPD_DEBUG_MSG(("X_CheckFileSeekError: %d\n", __LINE__)); return FALSE; }
-#define WPD_CHECK_FILE_READ_ERROR(v,num_elements) if (v != num_elements) { WPD_DEBUG_MSG(("X_CheckFileReadElementError: %d\n", __LINE__)); return FALSE; }
+#define WPD_CHECK_FILE_ERROR(v) if (v==EOF) { WPD_DEBUG_MSG(("X_CheckFileError: %d\n", __LINE__)); throw FileException(); }
+#define WPD_CHECK_FILE_SEEK_ERROR(v) if (v != 0) { WPD_DEBUG_MSG(("X_CheckFileSeekError: %d\n", __LINE__)); throw FileException(); }
+#define WPD_CHECK_FILE_READ_ERROR(v,num_elements) if (v != num_elements) {\
+ WPD_DEBUG_MSG(("X_CheckFileReadElementError: %d\n", __LINE__)); throw FileException(); }
 
 #define WPD_CHECK_INTERNAL_ERROR(v) if (!v) { WPD_DEBUG_MSG(("Internal Error: %d\n", __LINE__)); return FALSE; }
 

@@ -31,10 +31,13 @@
 
 class WP6Parser : public WPXParser
 {
-public:
-	WP6Parser(FILE * stream, WP6Header * header);
+ public:
+	WP6Parser(FILE * stream);
 		
 	gboolean parse();
+
+ private:
+	//WP6Header *m_header;
 };
 
 #endif /* WP6PARSER_H */

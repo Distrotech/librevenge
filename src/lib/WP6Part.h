@@ -36,7 +36,7 @@ class WP6Part : public WPXPart
 	WP6Part(WPXParser * parser);
 	virtual ~WP6Part() {}
 	
-	static WP6Part * constructPart(WPXParser * parser);
+	static WP6Part * constructPart(WPXParser * parser, guint8 readVal);
 	virtual gboolean parse() = 0;
 };
 

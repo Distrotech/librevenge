@@ -29,35 +29,38 @@
 #include "WP6Header.h"
 #include "WP6FileStructure.h" 
 
-WP6Header::WP6Header(FILE * stream, guint32 documentOffset, guint8 productType, guint8 fileType, guint8 majorVersion, guint8 minorVersion)
-	: WPXHeader(stream, documentOffset, productType, fileType, majorVersion, minorVersion)
-{
-}
+// placeholders until we can get exceptions worked out
+#define WPD_CHECK_FILE_SEEK_ERROR2(v) if (v != 0) { WPD_DEBUG_MSG(("X_CheckFileSeekError: %d\n", __LINE__)); }
+#define WPD_CHECK_FILE_READ_ERROR2(v,num_elements) if (v != num_elements) { WPD_DEBUG_MSG(("X_CheckFileReadElementError: %d\n", __LINE__));  }
 
-gboolean WP6Header::parse()
+
+WP6Header::WP6Header(FILE * stream)
+	: WPXHeader(stream)
 {
 	guint16 documentEncrypted;
 
 	/* offsets */
-	WPD_CHECK_FILE_SEEK_ERROR(fseek(m_pStream, WP6_HEADER_ENCRYPTION_OFFSET - ftell(m_pStream), SEEK_CUR));
-	WPD_CHECK_FILE_READ_ERROR(fread(&m_iDocumentEncryption, sizeof(guint16), 1, m_pStream), 1);
-	WPD_CHECK_FILE_SEEK_ERROR(fseek(m_pStream, WP6_HEADER_INDEX_HEADER_POINTER_OFFSET - ftell(m_pStream), SEEK_CUR));
-	WPD_CHECK_FILE_READ_ERROR(fread(&m_iIndexHeaderOffset, sizeof(guint16), 1, m_pStream), 1);
-	WPD_CHECK_FILE_SEEK_ERROR(fseek(m_pStream, WP6_HEADER_DOCUMENT_SIZE_OFFSET - ftell(m_pStream), SEEK_CUR));
-	WPD_CHECK_FILE_READ_ERROR(fread(&m_iDocumentSize, sizeof(guint32), 1, m_pStream), 1);
+	WPD_CHECK_FILE_SEEK_ERROR2(fseek(stream, WP6_HEADER_ENCRYPTION_OFFSET - ftell(stream), SEEK_CUR));
+	WPD_CHECK_FILE_READ_ERROR2(fread(&m_documentEncryption, sizeof(guint16), 1, stream), 1);
+	WPD_CHECK_FILE_SEEK_ERROR2(fseek(stream, WP6_HEADER_INDEX_HEADER_POINTER_OFFSET - ftell(stream), SEEK_CUR));
+	WPD_CHECK_FILE_READ_ERROR2(fread(&m_indexHeaderOffset, sizeof(guint16), 1, stream), 1);
+	WPD_CHECK_FILE_SEEK_ERROR2(fseek(stream, WP6_HEADER_DOCUMENT_SIZE_OFFSET - ftell(stream), SEEK_CUR));
+	WPD_CHECK_FILE_READ_ERROR2(fread(&m_documentSize, sizeof(guint32), 1, stream), 1);
 
-	WPD_DEBUG_MSG(("WordPerfect: Index Header Position = %i \n",(int)m_iIndexHeaderOffset));
-	WPD_DEBUG_MSG(("WordPerfect: Document Pointer = %i \n",(int)m_iDocumentOffset));
-	WPD_DEBUG_MSG(("WordPerfect: Document End Position = %i \n",(int)m_iDocumentSize));
-	WPD_DEBUG_MSG(("WordPerfect: Document Encryption = %i \n",(int)m_iDocumentEncryption));
+	WPD_DEBUG_MSG(("WordPerfect: Index Header Position = %i \n",(int)m_indexHeaderOffset));
+	WPD_DEBUG_MSG(("WordPerfect: Document Pointer = %i \n",(int)getDocumentOffset()));
+	WPD_DEBUG_MSG(("WordPerfect: Document End Position = %i \n",(int)m_documentSize));
+	WPD_DEBUG_MSG(("WordPerfect: Document Encryption = %i \n",(int)m_documentEncryption));
 
 	/* we do not handle encrypted documents */
-	if (m_iDocumentEncryption != 0)
-	  return FALSE;
+	//if (m_documentEncryption != 0)
+	//  return FALSE;
 	
 	/* sanity check */
 	//if (documentOffset > m_iDocumentSize)
 //	  return FALSE;
 	
-	return TRUE;
+	//return TRUE;
+
+
 }
