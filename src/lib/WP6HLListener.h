@@ -77,6 +77,8 @@ class WP6HLListener : public WP6LLListener
 	gboolean m_isParagraphClosed;
 	guint m_numDeferredParagraphBreaks;
 	
+	gboolean m_isTableOpened;
+
 	gboolean m_sectionAttributesChanged;
 	guint m_numColumns;
 	gboolean m_isLeftMarginSet;

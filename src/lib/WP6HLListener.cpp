@@ -49,6 +49,8 @@ WP6HLListener::WP6HLListener(WPXHLListenerImpl *listenerImpl) :
 	m_isParagraphOpened(FALSE),
 	m_isParagraphClosed(FALSE),
 	m_numDeferredParagraphBreaks(0),
+
+	m_isTableOpened(FALSE),
 	
 	m_sectionAttributesChanged(TRUE),
 	m_numColumns(1),
@@ -297,6 +299,11 @@ void WP6HLListener::startTable()
 				m_numDeferredParagraphBreaks--;					
 			_flushText();
 
+			// HACK: handle corner case of tables without an end element by starting
+			// a new table?
+			if (m_isTableOpened)
+				m_listenerImpl->closeTable();
+
 			// handle corner case where we have a new section, but immediately start with a table
 			// FIXME: this isn't a very satisfying solution, and might need to be generalized
 			// as we add more table-like structures into the document
@@ -304,6 +311,7 @@ void WP6HLListener::startTable()
 				m_listenerImpl->openSection(m_numColumns, m_marginLeft, m_marginRight);
 				
 			m_listenerImpl->openTable();
+			m_isTableOpened = TRUE;
 		}
 }
 
@@ -340,6 +348,7 @@ void WP6HLListener::endTable()
 			m_currentRow = 0;
 			m_currentColumn = 0;
 			m_numDeferredParagraphBreaks++;
+			m_isTableOpened = FALSE;
 		}
 }
 
