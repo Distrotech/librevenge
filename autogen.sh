@@ -1,12 +1,5 @@
 #!/bin/sh
 
-accheck=`autoconf --version | grep 2.13`
-if test "x$accheck" != "x"; then
-    echo "error: you appear to be using autoconf 2.13"
-    echo "       the automake build system requires autoconf >= 2.50"
-    exit 1
-fi
-
 aclocal --version > /dev/null 2> /dev/null || {
     echo "error: aclocal not found"
     exit 1
