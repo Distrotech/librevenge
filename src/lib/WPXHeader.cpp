@@ -86,7 +86,7 @@ WPXHeader * WPXHeader::constructHeader(GsfInput *input)
 
 	switch (fileType)
 	{
-		case 0x10:
+		case 0x0a:
 			WPD_DEBUG_MSG(("WordPerect: Supported file type: \"WordPerfect Document\"\n"));
 			break;
 		default:
