@@ -87,6 +87,7 @@ void WPDocument::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl)
 				WPD_DEBUG_MSG(("WordPerfect: Using the WP5 parser.\n"));
 				parser = new WP5Parser(input, header);
 				parser->parse(listenerImpl);
+				DELETEP(parser);
 				break;
 			case 0x01: // ???
 				WPD_DEBUG_MSG(("WordPerfect: Unsupported file format.\n"));
@@ -96,14 +97,14 @@ void WPDocument::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl)
 				WPD_DEBUG_MSG(("WordPerfect: Using the WP6 parser.\n"));
 				parser = new WP6Parser(input, header);
 				parser->parse(listenerImpl);
+				DELETEP(parser);
 				break;
 			default:
 				// unhandled file format
 				WPD_DEBUG_MSG(("WordPerfect: Unsupported file format.\n"));
 				break;
 		}
-		
-		DELETEP(parser);
+
 		DELETEP(header);	
 	}
 	catch (NoFileHeaderException)
@@ -125,6 +126,7 @@ void WPDocument::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl)
 	}
 	catch (FileException)
 	{
+		DELETEP(parser);
 		DELETEP(header);
 		throw FileException(); 
 	}

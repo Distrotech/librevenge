@@ -183,7 +183,6 @@ void WP6EOLGroup::parse(WP6LLListener *llListener)
 			cellBgColor = fsPacket->getBgColor();
 		}
 	}
-
 	   
 	// main search + dispatch for messages
 	switch(getSubGroup())
