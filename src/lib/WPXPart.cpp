@@ -23,7 +23,6 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include <gsf/gsf-input.h>
 #include "WPXPart.h"
 
 WPXPart::WPXPart(WPXInputStream *input)

@@ -70,7 +70,7 @@ void WP6EOLGroup::_readContents(WPXInputStream *input)
 		uint8_t byte;
 		uint16_t numBytesToSkip = 0;
 		byte = readU8(input);
-		gsf_off_t startPosition2 = input->tell();
+		long startPosition2 = input->tell();
 		switch (byte)
 		{
 			case WP6_EOL_GROUP_ROW_INFORMATION:

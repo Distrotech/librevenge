@@ -25,7 +25,6 @@
 
 #ifndef LIBWPD_SUPPORT_H
 #define LIBWPD_SUPPORT_H
-#include <glib.h>
 #include <string>
 using namespace std;
 
@@ -150,8 +149,8 @@ struct _WPXTabStop
 	uint8_t m_leaderNumSpaces;
 };
 
-// UCSString: minimal string class, basically an object-oriented wrapper around glib's UCS4 string
-// (so we don't have to pull in yet more dependencies)
+// UCSString: minimal string class, basically an object-oriented wrapper around
+// glib's UCS4 string (so we don't have to pull in yet more dependencies)
 class UCSString
 {
 public:
@@ -165,11 +164,12 @@ public:
 	void append(const char *);
 	void clear();
 
-	const uint32_t * getUCS4() const { return (uint32_t *)m_stringBuf->data; }
-	const int getLen() const { return m_stringBuf->len; }
+	const uint32_t * getUCS4() const { return m_data; }
+	const int getLen() const         { return m_length; }
 
 private:
-	GArray *m_stringBuf;
+	uint32_t *m_data;
+	uint32_t  m_length; // in chars.
 };
 
 class UTF8String
@@ -181,6 +181,7 @@ public:
 	UTF8String(const char *str);
 
 	const char * getUTF8() const { return m_buf.c_str(); }
+	operator const char *() const { return getUTF8(); }
 	const int getLen() const;
 
 	void sprintf(const char *format, ...);

@@ -63,7 +63,7 @@ struct _WPXParsingState
 	uint32_t m_textAttributeBits;
 	bool m_textAttributesChanged;
 	float m_fontSize;
-	GString *m_fontName;
+	UTF8String *m_fontName;
 	RGBSColor *m_fontColor;
 	RGBSColor *m_highlightColor;
 

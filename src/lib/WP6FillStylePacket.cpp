@@ -23,7 +23,6 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 #include <string.h>
-#include <gsf/gsf-input-memory.h>
 
 #include "WP6FillStylePacket.h"
 #include "WP6Parser.h"

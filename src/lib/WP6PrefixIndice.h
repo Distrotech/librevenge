@@ -26,7 +26,6 @@
 #ifndef WP6PREFIXINDICE_H
 #define WP6PREFIXINDICE_H
 #include <stdlib.h>
-#include <glib.h>
 #include "WPXStream.h"
 
 class WP6PrefixIndice

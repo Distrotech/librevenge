@@ -25,9 +25,7 @@
 
 #ifndef WP6PREFIXDATAPACKET_H
 #define WP6PREFIXDATAPACKET_H
-#include <gsf/gsf-input.h>
 #include <stdlib.h>
-#include <glib.h>
 #include "WPXParser.h"
 
 class WP6HLListener;

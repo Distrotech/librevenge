@@ -25,8 +25,6 @@
 
 #ifndef WP6PREFIXDATA_H
 #define WP6PREFIXDATA_H
-#include <glib.h>
-#include <gsf/gsf-input.h>
 #include "WP6PrefixDataPacket.h"
 #include <map>
 #include <vector>

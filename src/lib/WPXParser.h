@@ -26,7 +26,6 @@
 #ifndef WPXPARSER_H
 #define WPXPARSER_H
 
-#include <gsf/gsf-input.h>
 #include "WPXHeader.h"
 #include "WPXLLListener.h"
 

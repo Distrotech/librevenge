@@ -23,7 +23,6 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 #include <string.h>
-#include <gsf/gsf-input-memory.h>
 
 #include "WP6ExtendedDocumentSummaryPacket.h"
 #include "libwpd_internal.h"
@@ -42,7 +41,6 @@ WP6ExtendedDocumentSummaryPacket::~WP6ExtendedDocumentSummaryPacket()
 
 void WP6ExtendedDocumentSummaryPacket::_readContents(WPXInputStream *input)
 {
-	// we have to use glib's allocation function because libgsf disposes of the data
 	uint8_t *streamData = new uint8_t[m_dataSize];
 	for(int i=0; i<m_dataSize; i++)
 		streamData[i] = readU8(input);

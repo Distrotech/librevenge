@@ -27,7 +27,6 @@
 #define WPXPART_H
 
 #include "WPXParser.h"
-#include <glib.h>
 
 class WPXPart
 {

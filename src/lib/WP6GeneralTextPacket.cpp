@@ -23,7 +23,6 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 #include <string.h>
-#include <gsf/gsf-input-memory.h>
 
 #include "WP6GeneralTextPacket.h"
 #include "WP6Parser.h"
@@ -59,7 +58,6 @@ void WP6GeneralTextPacket::_readContents(WPXInputStream *input)
 		totalSize += m_blockSizes[i];
 	}	
 
-	// we have to use glib's allocation function because libgsf disposes of the data
 	uint8_t *streamData = new uint8_t[totalSize];
 	int streamPos = 0;
 	for(i=0; i<m_numTextBlocks; i++) 

@@ -25,7 +25,6 @@
 
 #ifndef WPXLLLISTENER_H
 #define WPXLLLISTENER_H
-#include <glib.h>
 #include "libwpd_support.h"
 #include <vector>
 

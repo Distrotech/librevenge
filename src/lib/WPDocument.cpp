@@ -23,9 +23,6 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include <gsf/gsf-input.h>
-#include <gsf/gsf-infile.h>
-#include <gsf/gsf-infile-msole.h>
 #include <stdlib.h>
 #include <string.h>
 #include "WPDocument.h"
@@ -255,7 +252,7 @@ void WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerImpl)
 
 		DELETEP(parser);
 		if (document != NULL && isDocumentOLE)
-			g_object_unref(G_OBJECT(document));
+			delete document;
 
 		throw FileException();
 	}
@@ -265,7 +262,7 @@ void WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerImpl)
 
 		DELETEP(parser);
 		if (document != NULL && isDocumentOLE)
-			g_object_unref(G_OBJECT(document));
+			delete document;
 
 		throw GenericException();
 	}

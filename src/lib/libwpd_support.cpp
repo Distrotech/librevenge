@@ -25,6 +25,7 @@
  */
 
 #include "libwpd.h"
+#include <stdarg.h>
 #include <string.h>
 
 const uint16_t asciiMap[] =
@@ -535,50 +536,61 @@ _WPXColumnDefinition::_WPXColumnDefinition()
 {
 }
 
-UCSString::UCSString() : m_stringBuf(g_array_new(TRUE, FALSE, sizeof(uint32_t)))
+UCSString::UCSString() :
+		m_data(NULL),
+		m_length(0)
 {
 }
 
-UCSString::UCSString(const UCSString &stringBuf) : m_stringBuf(g_array_new(TRUE, FALSE, sizeof(uint32_t)))
+UCSString::UCSString(const UCSString &stringBuf) :
+		m_data(NULL),
+		m_length(0)
 {
-	g_array_insert_vals(m_stringBuf, 0, stringBuf.getUCS4(), stringBuf.getLen());
+	append(stringBuf);
 }
 
 UCSString::~UCSString()
 {
-	g_array_free(m_stringBuf, TRUE);
+	if(m_data)
+		free(m_data);
 }
 
 void UCSString::append(uint32_t c)
 {
-	g_array_append_val(m_stringBuf, c);
+	m_data = (uint32_t *)realloc(m_data, (m_length + 1) * 4);
+	m_data[m_length] = c;
+	m_length++;
 }
 
 void UCSString::append(const UCSString &stringBuf)
 {
-	m_stringBuf = g_array_append_vals(m_stringBuf, stringBuf.getUCS4(), stringBuf.getLen());
+	m_data = (uint32_t *)realloc(m_data, (m_length + stringBuf.m_length) * 4);
+	memcpy(&m_data[m_length], stringBuf.m_data,
+		   stringBuf.m_length * 4);
+	m_length += stringBuf.m_length;
 }
 
 // append: appends an ascii-standard (not UTF8!!) string onto the buffer
 // FIXME: this function should really handle appending a UTF8 string onto a buffer
 void UCSString::append(const char *buf)
 {
-	for (int i=0; i<strlen(buf); i++)
-	{
+	int len = strlen(buf);
+	for (int i=0; i<len; i++)
 		append((uint32_t)buf[i]);
-	}
 }
 
 void UCSString::clear()
 {
-	m_stringBuf = g_array_set_size(m_stringBuf, 0);
+	free(m_data);
+	m_data = NULL;
+	m_length = 0;
 }
 
 char *
 g_static_ucs4_to_utf8 (const uint32_t *str,
-		       glong           len,              
-		       glong          *items_read,       
-		       glong          *items_written);
+		       long           len,              
+		       long          *items_read,       
+		       long          *items_written);
 int
 g_static_utf8_strlen (const char *p);
 
@@ -639,14 +651,14 @@ void UTF8String::sprintf(const char *format, ...)
 	int num_needed = vsnprintf(buf, STRING_BUF_SIZE, format, args);
 	if (num_needed >= STRING_BUF_SIZE)
 	{
-		delete buf;
+		delete [] buf;
 		buf = new char[num_needed + 1];
 		vsprintf(buf, format, args);
 	}
 
 
 	m_buf = buf;
-	delete buf;
+	delete [] buf;
 
 	va_end(args);
 }
@@ -674,7 +686,7 @@ int
 g_static_unichar_to_utf8 (uint32_t c,
 			  char   *outbuf)
 {
-	guint len = 0;    
+	unsigned int len = 0;    
 	int first;
 	int i;
     
@@ -764,14 +776,14 @@ static const int8_t g_static_utf8_skip_data[256] = {
  **/
 char *
 g_static_ucs4_to_utf8 (const uint32_t *str,
-		       glong           len,              
-		       glong          *items_read,       
-		       glong          *items_written)
+		       long           len,              
+		       long          *items_read,       
+		       long          *items_written)
 {
-	gint result_length;
+	int result_length;
 	char *result = NULL;
 	char *p;
-	gint i;
+	int i;
 
 	result_length = 0;
 	for (i = 0; len < 0 || i < len ; i++)
@@ -821,14 +833,14 @@ err_out:
 int
 g_static_utf8_strlen (const char *p)
 {
-	glong len = 0;
+	long len = 0;
 	const char *start = p;
 	if (p == NULL)
 		return 0;
 
 	while (*p)
 	{
-		p = g_utf8_next_char (p);
+		p = g_static_utf8_next_char (p);
 		++len;
 	}
 

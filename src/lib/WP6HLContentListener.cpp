@@ -473,7 +473,7 @@ void WP6HLContentListener::fontChange(const uint16_t matchedFontPointSize, const
 			m_parseState->m_paragraphSpacingAfterAbsolute;
 		const WP6FontDescriptorPacket *fontDescriptorPacket = NULL;
 		if (fontDescriptorPacket = dynamic_cast<const WP6FontDescriptorPacket *>(WP6LLListener::getPrefixDataPacket(fontPID))) {
-			g_string_printf(m_ps->m_fontName, "%s", fontDescriptorPacket->getFontName());
+				m_ps->m_fontName->sprintf("%s", fontDescriptorPacket->getFontName());
 		}
 		m_ps->m_textAttributesChanged = true;
 	}

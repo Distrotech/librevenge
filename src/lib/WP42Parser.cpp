@@ -23,9 +23,6 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include <gsf/gsf-input.h>
-#include <gsf/gsf-infile.h>
-#include <gsf/gsf-infile-msole.h>
 #include "WP42Parser.h"
 #include "WP42Part.h"
 #include "WPXHeader.h"

@@ -10,6 +10,8 @@ CHANGES:
 - Remove span parameters from calls to openParagraph and openListElement
 (William Lachance)
 - Additional doxygen comments (William Lachance)
+- Remove mandatory dependancy on glib/libgsf for external applications
+(William Lachance, Michael Meeks)
 
 0.7.1 -> 0.7.2
 - Added conversion of paragraph margins done by functions of the

@@ -25,7 +25,6 @@
 #ifndef WP3PARSER_H
 #define WP3PARSER_H
 
-#include <gsf/gsf-input.h>
 #include "WPXParser.h"
 
 class WPXHLListenerImpl;

@@ -23,7 +23,6 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include <gsf/gsf-input.h>
 #include "WP42Heuristics.h"
 #include "WP42FileStructure.h"
 #include "libwpd_support.h"
