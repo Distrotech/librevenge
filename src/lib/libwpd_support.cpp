@@ -573,11 +573,6 @@ _WPXColumnDefinition::_WPXColumnDefinition()
 {
 }
 
-char *
-g_static_ucs4_to_utf8 (const uint32_t *str,
-		       long           len,              
-		       long          *items_read,       
-		       long          *items_written);
 int g_static_utf8_strlen (const char *p);
 int g_static_unichar_to_utf8 (uint32_t c,  char *outbuf);
 
@@ -597,7 +592,8 @@ static const int8_t g_static_utf8_skip_data[256] = {
     ((Char) < 0x10000 ? 3 :            \
      ((Char) < 0x200000 ? 4 :          \
       ((Char) < 0x4000000 ? 5 : 6)))))
-#define g_static_utf8_next_char(p) (char *)((p) + g_static_utf8_skip_data[*(uint8_t *)(p)])
+#define g_static_utf8_next_char(p) (char *)((p) + g_static_utf8_skip_data[*((uint8_t *)p)])
+		
 
 
 UTF8String::UTF8String() 
@@ -608,9 +604,9 @@ UTF8String::UTF8String(const UTF8String &stringBuf, bool escapeXML)
 {
 	if (escapeXML)
 	{
-		int length = g_static_utf8_strlen(stringBuf.getUTF8());
-		const char *p = stringBuf.getUTF8();
-		const char *end = p + length;
+		int len = strlen(stringBuf()); // want to use standard strlen
+		const char *p = stringBuf();
+		const char *end = p + len; 
 		while (p != end)
 		{
 			const char *next = g_static_utf8_next_char(p);
@@ -628,13 +624,13 @@ UTF8String::UTF8String(const UTF8String &stringBuf, bool escapeXML)
 				break;
 			case '\'':
 				m_buf.append("&apos;");
-				break;				
+				break;
 			case '"':
 				m_buf.append("&quot;");
 				break;
 			default:
 				while (p != next) 
-				{					
+				{		
 					m_buf+=(*p);
 					p++;
 				}
@@ -706,19 +702,32 @@ int UTF8String::getLen() const
 
 bool UTF8String::Iter::next()
 {
-	 if (m_pos == (-1))
-		 m_pos++;
-	 else if (m_pos < m_buf.length())
-	 {
-		 m_pos+=(int32_t) (g_static_utf8_next_char(&m_buf.c_str()[m_pos]) - &m_buf.c_str()[m_pos]);
-	 }
+	int len = strlen(m_buf.c_str());
+
+	if (m_pos == (-1)) 
+		m_pos++;
+	else if (m_pos < len)
+	{
+		m_pos+=(int32_t) (g_static_utf8_next_char(&m_buf.c_str()[m_pos]) - &m_buf.c_str()[m_pos]);
+	}
+
+	if (m_pos < len)
+		return true;
+	return false;
+}
+
+bool UTF8String::Iter::last()
+{
+	if (m_pos >= g_static_utf8_strlen(m_buf.c_str()))
+		return true;
+	return false;
 }
 
 const char * UTF8String::Iter::operator()() const
 { 
 	if (m_pos == (-1)) return NULL; 
 
-	DELETEP(m_curChar);
+	delete [] m_curChar; m_curChar = NULL;
 	int32_t charLength =(int32_t) (g_static_utf8_next_char(&m_buf.c_str()[m_pos]) - &m_buf.c_str()[m_pos]);
 	m_curChar = new char[charLength+1];
 	for (int i=0; i<charLength; i++)
@@ -792,73 +801,6 @@ g_static_unichar_to_utf8 (uint32_t c,
 	}
     
 	return len;
-}
-
-/**
- * g_static_ucs4_to_utf8:
- * 
- * stolen from glib 2.4.1
- *
- * @str: a UCS-4 encoded string
- * @len: the maximum length of @str to use. If @len < 0, then
- *       the string is terminated with a 0 character.
- * @items_read: location to store number of characters read read, or %NULL.
- * @items_written: location to store number of bytes written or %NULL.
- *                 The value here stored does not include the trailing 0
- *                 byte. 
- *
- * Convert a string from a 32-bit fixed width representation as UCS-4.
- * to UTF-8. The result will be terminated with a 0 byte.
- * 
- * Return value: a pointer to a newly allocated UTF-8 string.
- *               If an  error occurs, %NULL will be returned and
- *               @error set.
- **/
-char *
-g_static_ucs4_to_utf8 (const uint32_t *str,
-		       long           len,              
-		       long          *items_read,       
-		       long          *items_written)
-{
-	int result_length;
-	char *result = NULL;
-	char *p;
-	int i;
-
-	result_length = 0;
-	for (i = 0; len < 0 || i < len ; i++)
-	{
-		if (!str[i])
-			break;
-
-		if (str[i] >= 0x80000000)
-		{
-			if (items_read)
-				*items_read = i;
-	  
-			goto err_out;
-		}
-      
-		result_length += UTF8_LENGTH (str[i]);
-	}
-
-	result = new char[(result_length + 1)];
-	p = result;
-
-	i = 0;
-	while (p < result + result_length)
-		p += g_static_unichar_to_utf8 (str[i++], p);
-  
-	*p = '\0';
-
-	if (items_written)
-		*items_written = p - result;
-
-err_out:
-	if (items_read)
-		*items_read = i;
-
-	return result;
 }
 
 /**

@@ -180,14 +180,10 @@ public:
 			m_buf(str.getUTF8()),
 			m_pos(0),
 			m_curChar(NULL) {}
-		virtual ~Iter() { delete m_curChar; }
+		virtual ~Iter() { delete [] m_curChar; }
 		void rewind() { m_pos = (-1); }
 		bool next();
-		bool last() {
-			if (m_pos >= m_buf.length())
-				return true;
-			return false;
-		}
+		bool last();
 		const char * operator()() const;
 	private:
 		string m_buf;
