@@ -222,7 +222,13 @@ void WPXHLListener::handleSubDocument(guint16 textPID)
 	// save our old parsing state on our "stack"
 	WPXParsingState *oldPS = m_ps;
 	m_ps = new WPXParsingState(false); // false: don't open a new section unless we must inside this type of sub-document
-
+	// BEGIN: copy page properties into the new parsing state
+	m_ps->m_pageFormLength = oldPS->m_pageFormLength;
+	m_ps->m_pageFormWidth = oldPS->m_pageFormWidth;
+	m_ps->m_pageFormOrientation = oldPS->m_pageFormOrientation;
+	m_ps->m_pageMarginLeft = oldPS->m_pageMarginLeft;
+	m_ps->m_pageMarginRight = oldPS->m_pageMarginRight;
+	// END: copy page properties into the new parsing state
 	_handleSubDocument(textPID);
 
 	// restore our old parsing state
