@@ -188,6 +188,8 @@ WP6HLListener::WP6HLListener(WPXHLListenerImpl *listenerImpl) :
 	m_currentFontSize(WP6_DEFAULT_FONT_SIZE),
 	m_currentFontName(g_string_new(WP6_DEFAULT_FONT_NAME)),
 	
+	m_isParagraphColumnBreak(FALSE),
+	m_isParagraphPageBreak(FALSE),
 	m_paragraphJustification(WPX_PARAGRAPH_JUSTIFICATION_LEFT),
 	m_paragraphJustificationChanged(FALSE),
 	m_isParagraphOpened(FALSE),
