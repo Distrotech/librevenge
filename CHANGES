@@ -1,7 +1,7 @@
 CHANGES:
 
 0.7.x -> 0.8.0
-- Initial WordPerfect 3.0-3.5 for Mac support (Marc Maurer, Fridrich Strba)
+- Initial WordPerfect 3.0-3.5(e) for Mac support (Marc Maurer, Fridrich Strba)
 - WP3 and WP5: Conversion of the extended character set, of page 
   margins, page form and orientation, line spacing, paragraph
   justification (Fridrich Strba, Smokey Ardisson)
