@@ -44,12 +44,12 @@ HtmlListener::~HtmlListener()
 }
 
 
-void HtmlListener::insertCharacter(guint32 value) const
+void HtmlListener::insertCharacter(guint32 value)
 {
     printf("%c", (char)value);
 }
 
-void HtmlListener::insertEOL() const
+void HtmlListener::insertEOL()
 {
     printf("<br>\n");
 }

@@ -31,8 +31,8 @@
 class WPXLLListener
 {
 public:
-	virtual void insertCharacter(guint32 value) const = 0;
-	virtual void insertEOL() const = 0;
+	virtual void insertCharacter(guint32 value) = 0;
+	virtual void insertEOL() = 0;
 };
 
 #endif /* WPXLLLISTENER_H */
