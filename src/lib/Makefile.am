@@ -20,6 +20,7 @@ libwpd_1_la_SOURCES =			\
 	WP42Part.cpp				\
 	WP42UnsupportedVariableLengthGroup.cpp	\
 	WP42VariableLengthGroup.cpp	\
+	WP5AttributeGroup.cpp 		\
 	WP5FileStructure.cpp		\
 	WP5FixedLengthGroup.cpp		\
 	WP5Header.cpp				\
@@ -73,7 +74,7 @@ libwpd_1_la_SOURCES =			\
 	WPDocument.cpp				\
 	libwpd.h	        		\
 	libwpd_internal.h			\
-	libwpd_math.h			\
+	libwpd_math.h				\
 	libwpd_support.h        	\
 	WP42Heuristics.h			\
 	WP42HLListener.h			\
@@ -81,6 +82,7 @@ libwpd_1_la_SOURCES =			\
 	WP42Part.h					\
 	WP42UnsupportedVariableLengthGroup.h	\
 	WP42VariableLengthGroup.h	\
+	WP5AttributeGroup.h 		\
 	WP5FixedLengthGroup.h		\
 	WP5Header.h					\
 	WP5HLListener.h				\

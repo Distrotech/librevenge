@@ -38,7 +38,7 @@ class WP5VariableLengthGroup : public WP5Part
 
  protected:
 	void _read(GsfInput *input);
- 	virtual void _readContents(GsfInput *input) = 0;
+ 	virtual void _readContents(GsfInput *input) {} // we don't always need more information than that provided generically
 
 	const guint8 getGroup() const { return m_group; }
 

@@ -25,6 +25,8 @@
 
 #include "WP5FixedLengthGroup.h"
 #include "WP5FileStructure.h"
+#include "WP5AttributeGroup.h"
+#include "WP5UnsupportedFixedLengthGroup.h"
 #include "libwpd_internal.h"
 
 WP5FixedLengthGroup::WP5FixedLengthGroup(guint groupID)
@@ -36,11 +38,15 @@ WP5FixedLengthGroup * WP5FixedLengthGroup::constructFixedLengthGroup(GsfInput *i
 {
 	switch (groupID) 
 	{
+		case WP5_TOP_ATTRIBUTE_ON:
+			return new WP5AttributeOnGroup(input, groupID);
 			
+		case WP5_TOP_ATTRIBUTE_OFF:
+			return new WP5AttributeOffGroup(input, groupID);
+		
 		// Add the remaining cases here
 		default:
-			// should not happen
-			return NULL;
+			return new WP5UnsupportedFixedLengthGroup(input, groupID);
 	}
 }
 

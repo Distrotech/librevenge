@@ -23,12 +23,37 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WP5UnsupportedVariableLengthGroup.h"
+#include "WP5AttributeGroup.h"
+#include "WP5LLListener.h"
 #include "libwpd_internal.h"
 
-WP5UnsupportedVariableLengthGroup::WP5UnsupportedVariableLengthGroup(GsfInput *input, guint8 group) :
-	WP5VariableLengthGroup(group)
+WP5AttributeGroup::WP5AttributeGroup(GsfInput *input, guint8 groupID)
+	: WP5FixedLengthGroup(groupID)
 {
-	WPD_DEBUG_MSG(("WordPerfect: Handling an unsupported variable length group\n"));
 	_read(input);
+}
+
+void WP5AttributeGroup::_readContents(GsfInput *input)
+{
+	m_attribute = (guint8)*((const guint8 *)gsf_input_read(input, sizeof(guint8), NULL));
+}
+
+WP5AttributeOnGroup::WP5AttributeOnGroup(GsfInput *input, guint8 groupID)
+	: WP5AttributeGroup(input, groupID)
+{
+}
+
+void WP5AttributeOnGroup::parse(WP5LLListener *llListener)
+{
+	llListener->attributeChange(true, getAttribute());
+}
+
+WP5AttributeOffGroup::WP5AttributeOffGroup(GsfInput *input, guint8 groupID)
+	: WP5AttributeGroup(input, groupID)
+{
+}
+
+void WP5AttributeOffGroup::parse(WP5LLListener *llListener)
+{
+	llListener->attributeChange(false, getAttribute());
 }

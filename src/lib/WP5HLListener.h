@@ -30,6 +30,75 @@
 #include "WPXHLListener.h"
 #include "WPXHLListenerImpl.h"
 
+typedef struct _WP5ParsingState WP5ParsingState;
+struct _WP5ParsingState
+{
+	_WP5ParsingState(bool sectionAttributesChanged=true);
+	~_WP5ParsingState();
+	UCSString m_bodyText;
+	UCSString m_textBeforeNumber;
+	UCSString m_textBeforeDisplayReference;
+	UCSString m_numberText;
+	UCSString m_textAfterDisplayReference;
+	UCSString m_textAfterNumber;
+
+	guint32 m_textAttributeBits;
+	bool m_textAttributesChanged;
+	float m_fontSize;
+	GString * m_fontName;
+
+	bool m_isParagraphColumnBreak;
+	bool m_isParagraphPageBreak;
+	guint8 m_paragraphJustification;
+	guint8 m_tempParagraphJustification;
+	float m_paragraphLineSpacing;
+
+	bool m_isSectionOpened;
+
+	bool m_isParagraphOpened;
+	bool m_isParagraphClosed;
+	bool m_isSpanOpened;
+	guint m_numDeferredParagraphBreaks;
+	guint m_numRemovedParagraphBreaks;
+
+	/*WPXTable *m_currentTable;
+	int m_nextTableIndice;
+	int m_currentTableCol;
+	int m_currentTableRow;
+	bool m_isTableOpened;
+	bool m_isTableRowOpened;
+	bool m_isTableColumnOpened;
+	bool m_isTableCellOpened;
+
+	bool m_isPageSpanOpened;
+	int m_nextPageSpanIndice;
+	int m_numPagesRemainingInSpan;
+
+	bool m_sectionAttributesChanged;
+	guint m_numColumns;
+	bool m_isLeftMarginSet;
+	bool m_isRightMarginSet;
+	float m_pageMarginLeft;
+	float m_pageMarginRight;
+	float m_marginLeft;
+	float m_marginRight;
+	
+	gint32 m_currentRow;
+	gint32 m_currentColumn;
+
+	stack<int> m_listLevelStack;
+	guint16 m_currentOutlineHash; // probably should replace Hash with Key in these sorts of cases
+	guint8 m_oldListLevel;
+	guint8 m_currentListLevel;
+	WP6StyleStateSequence m_styleStateSequence;
+	bool m_putativeListElementHasParagraphNumber;
+	bool m_putativeListElementHasDisplayReferenceNumber;
+
+	int m_noteTextPID;
+	bool m_inSubDocument;*/
+};
+
+
 class WP5HLListener : public WP5LLListener
 {
 public:
@@ -58,15 +127,17 @@ public:
  	virtual void endTable() {};
 
 private:
-	void _flushText();
+	void _openParagraph();
+	void _closeParagraph();
 	void _openSpan();
+	void _closeSpan();
+	void _flushText();
 
 	WPXHLListenerImpl *m_listenerImpl;
 
 	UCSString m_textBuffer;
 
-	bool m_textAttributesChanged;
-	guint32 m_textAttributeBits;
+	WP5ParsingState *m_parseState;
 };
 
 #endif /* WP5HLLISTENER_H */
