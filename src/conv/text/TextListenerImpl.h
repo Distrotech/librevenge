@@ -66,7 +66,7 @@ public:
 
 	virtual void insertTab();
 	virtual void insertText(const UCSString &text);
-	virtual void insertLineBreak() {}
+	virtual void insertLineBreak();
 
 	virtual void defineOrderedListLevel(const int listID, const int listLevel, const WPXNumberingType listType,
 					    const UCSString &textBeforeNumber, const UCSString &textAfterNumber,

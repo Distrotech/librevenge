@@ -66,7 +66,7 @@ public:
 
 	virtual void insertTab();
 	virtual void insertText(const UCSString &text);
-	virtual void insertLineBreak() {}
+	virtual void insertLineBreak();
 
 	virtual void defineOrderedListLevel(const int listID, const int listLevel, const WPXNumberingType listType,
 					    const UCSString &textBeforeNumber, const UCSString &textAfterNumber,
@@ -100,11 +100,28 @@ public:
 	virtual void closeTable();
 
 protected:
-	void _appendTextAttributes(const guint32 textAttributeBits);
+	void _addTextAttributes(const guint32 textAttributeBits);
+	void _removeTextAttributes();
 	void _appendParagraphJustification(const guint32 paragraphJustification);
+	RGBSColor _convertRGBStoRGB(const RGBSColor color);
 
 private:
 	guint m_currentListLevel;
+// textAttributeBits
+	bool m_isSuperscript;
+	bool m_isSubscript;
+	bool m_isBold;
+	bool m_isItalic;
+	bool m_isStrikeout;
+	bool m_isUnderline;
+	bool m_isDoubleUnderline;
+	bool m_isOutline;
+	bool m_isSmallCaps;
+	bool m_isBlink;
+	bool m_isShadow;
+
+	bool m_isHighlightColor;
+
 };
 
 #endif /* HTMLLISTENERIMPL_H */

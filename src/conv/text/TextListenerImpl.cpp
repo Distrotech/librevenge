@@ -52,3 +52,8 @@ void TextListenerImpl::insertText(const UCSString &text)
 	UTF8String tempUTF8(text);
 	printf("%s", tempUTF8.getUTF8());
 }
+
+void TextListenerImpl::insertLineBreak()
+{
+	printf("\n");
+}

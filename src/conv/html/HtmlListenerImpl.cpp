@@ -29,7 +29,19 @@
 // use the BELL code to represent a TAB for now
 #define UCS_TAB 0x0009
 
-HtmlListenerImpl::HtmlListenerImpl()
+HtmlListenerImpl::HtmlListenerImpl():
+	m_isSuperscript(false),
+	m_isSubscript(false),
+	m_isBold(false),
+	m_isItalic(false),
+	m_isStrikeout(false),
+	m_isUnderline(false),
+	m_isDoubleUnderline(false),
+	m_isOutline(false),
+	m_isSmallCaps(false),
+	m_isBlink(false),
+	m_isShadow(false),
+	m_isHighlightColor(false)
 {
 }
 
@@ -125,6 +137,14 @@ void HtmlListenerImpl::openParagraph(const guint8 paragraphJustification,
 {
 	printf("<p style=\"");
 	_appendParagraphJustification(paragraphJustification);
+	if (marginLeftOffset != 0.0f)
+		printf(" margin-left: %.4fin;", marginLeftOffset);
+	if (marginRightOffset != 0.0f)
+		printf(" margin-right: %.4fin;", marginRightOffset);
+	if (spacingAfterParagraph != 0.0f)
+		printf(" margin-bottom: %.4fin;", spacingAfterParagraph);
+	if (lineSpacing != 1.0f)
+		printf(" line-height: %.2f%%;", lineSpacing*100.0f);
 	printf("\">");
 }
 
@@ -136,15 +156,31 @@ void HtmlListenerImpl::closeParagraph()
 void HtmlListenerImpl::openSpan(guint32 textAttributeBits, const gchar *fontName, const float fontSize,
 					const RGBSColor *fontColor, const RGBSColor *highlightColor)
 {
-	printf("<span style=\"");
-	_appendTextAttributes(textAttributeBits);
-	printf("\" font-name=\"%s\" font-size=\"%f\">",
-	       fontName, fontSize);
+	printf("<span style=\"font-family: \'%s\'\">", fontName);
+	printf("<span style=\"font-size: %fpt\">", fontSize);
+	if (textAttributeBits & WPX_REDLINE_BIT)
+		printf("<span style=\"color: #ff3333\">");
+	else
+		printf("<span style=\"color: #%.2x%.2x%.2x\">", _convertRGBStoRGB(*fontColor).m_r,
+			_convertRGBStoRGB(*fontColor).m_g, _convertRGBStoRGB(*fontColor).m_b);
+	if (highlightColor != NULL)
+	{
+		printf("<span style=\"background-color: #%.2x%.2x%.2x\">", _convertRGBStoRGB(*highlightColor).m_r,
+		_convertRGBStoRGB(*highlightColor).m_g, _convertRGBStoRGB(*highlightColor).m_b);
+		m_isHighlightColor = true;
+	}
+	_addTextAttributes(textAttributeBits);
 }
 
 void HtmlListenerImpl::closeSpan()
 {
-	printf("</span>");
+	_removeTextAttributes();
+	printf("</span></span></span>");
+	if (m_isHighlightColor)
+	{
+		printf("</span>");
+		m_isHighlightColor = false;
+	}
 }
 
 void HtmlListenerImpl::openSection(const unsigned int numColumns, const float spaceBefore)
@@ -160,6 +196,11 @@ void HtmlListenerImpl::closeSection()
 void HtmlListenerImpl::insertTab()
 {
 	printf("%c", UCS_TAB);
+}
+
+void HtmlListenerImpl::insertLineBreak()
+{
+	printf("<br>\n");
 }
 
 void HtmlListenerImpl::insertText(const UCSString &text)
@@ -195,6 +236,12 @@ void HtmlListenerImpl::openListElement(const guint8 paragraphJustification,
 {
 	printf("<li style=\"");
 	_appendParagraphJustification(paragraphJustification);
+	if (marginLeft != 0.0f)
+		printf(" margin-left: %.4fin;", marginLeft);
+	if (marginRight != 0.0f)
+		printf(" margin-right: %.4fin;", marginRight);
+	if (spacingAfterParagraph != 0.0f)
+		printf(" margin-bottom: %.4fin;", spacingAfterParagraph);
 	printf("\">");
 }
 
@@ -272,12 +319,114 @@ void HtmlListenerImpl::closeTable()
 	printf("</table>\n");
 }
 
-void HtmlListenerImpl::_appendTextAttributes(const guint32 textAttributeBits)
+void HtmlListenerImpl::_addTextAttributes(const guint32 textAttributeBits)
 {
-	if (textAttributeBits & WPX_BOLD_BIT)
-		printf("font-weight: bold;");
+	if (textAttributeBits & WPX_SUPERSCRIPT_BIT)
+	{
+		printf("<sup>");
+		m_isSuperscript = true;
+	}
+	if (textAttributeBits & WPX_SUBSCRIPT_BIT)
+	{
+		printf("<sub>");
+		m_isSubscript = true;
+	}
 	if (textAttributeBits & WPX_ITALICS_BIT)
-		printf("font-style: italic;");
+	{
+		printf("<i>");
+		m_isItalic = true;
+	}
+	if (textAttributeBits & WPX_BOLD_BIT)
+	{
+		printf("<b>");
+		m_isBold = true;
+	}
+	if (textAttributeBits & WPX_STRIKEOUT_BIT)
+	{
+		printf("<s>");
+		m_isStrikeout = true;
+	}
+	if (textAttributeBits & WPX_UNDERLINE_BIT)
+	{
+		printf("<u>");
+		m_isUnderline = true;
+	}
+	if (textAttributeBits & WPX_DOUBLE_UNDERLINE_BIT)
+	{
+		printf("<u>"); // I did not find double underline in HTML
+		m_isDoubleUnderline = true;
+	}
+	if (textAttributeBits & WPX_OUTLINE_BIT)
+	{
+		m_isOutline = true;
+	}
+	if (textAttributeBits & WPX_SMALL_CAPS_BIT)
+	{
+		m_isSmallCaps = true;
+	}
+	if (textAttributeBits & WPX_BLINK_BIT)
+	{
+		m_isBlink = true;
+	}
+	if (textAttributeBits & WPX_SHADOW_BIT)
+	{
+		m_isShadow = true;
+	}
+}
+
+void HtmlListenerImpl::_removeTextAttributes()
+{
+	if (m_isShadow)
+	{
+		m_isShadow = false;
+	}
+	if (m_isBlink)
+	{
+		m_isBlink = false;
+	}
+	if (m_isSmallCaps)
+	{
+		m_isSmallCaps = false;
+	}
+	if (m_isOutline)
+	{
+		m_isOutline = false;
+	}
+	if (m_isDoubleUnderline)
+	{
+		printf("</u>");
+		m_isDoubleUnderline = false;
+	}
+	if (m_isUnderline)
+	{
+		printf("</u>");
+		m_isUnderline = false;
+	}
+	if (m_isStrikeout)
+	{
+		printf("</s>");
+		m_isStrikeout = false;
+	}
+	if (m_isBold)
+	{
+		printf("</b>");
+		m_isBold = false;
+	}
+	if (m_isItalic)
+	{
+		printf("</i>");
+		m_isItalic = false;
+	}
+	if (m_isSubscript)
+	{
+		printf("</sub>");
+		m_isSubscript = false;
+	}
+	if (m_isSuperscript)
+	{
+		printf("</sup>");
+		m_isSuperscript = false;
+	}
 }
 
 void HtmlListenerImpl::_appendParagraphJustification(const guint32 paragraphJustification)
@@ -299,3 +448,13 @@ void HtmlListenerImpl::_appendParagraphJustification(const guint32 paragraphJust
 			break;
 	}
 }
+
+RGBSColor HtmlListenerImpl::_convertRGBStoRGB(const RGBSColor color)
+{
+	float shading = (float)((float)color.m_s/100.0f); //convert the percents to float between 0 and 1
+	// Mix shading amount of given color with (1-shading) of White (#ffffff)
+	int red = (int)0xFF + (int)((float)color.m_r*shading) - (int)((float)0xFF*shading);
+	int green = (int)0xFF + (int)((float)color.m_g*shading) - (int)((float)0xFF*shading);
+	int blue = (int)0xFF + (int)((float)color.m_b*shading) - (int)((float)0xFF*shading);
+	return RGBSColor(red, green, blue, 0x64);
+} 
