@@ -43,10 +43,10 @@ public:
 
 	virtual void openPageSpan(const WPXPropertyList &propList);
 	virtual void closePageSpan();
-	virtual void openHeader(const WPXPropertyList &propList) {}
-	virtual void closeHeader() {}
-	virtual void openFooter(const WPXPropertyList &propList) {}
-	virtual void closeFooter() {}
+	virtual void openHeader(const WPXPropertyList &propList);
+	virtual void closeHeader();
+	virtual void openFooter(const WPXPropertyList &propList);
+	virtual void closeFooter();
 
 	virtual void openSection(const WPXPropertyList &propList, const vector<WPXPropertyList> &columns) {}
 	virtual void closeSection() {}
@@ -82,28 +82,8 @@ public:
 	virtual void insertCoveredTableCell(const WPXPropertyList &propList) {}
 	virtual void closeTable();
 
-protected:
-	void _addTextAttributes(const int textAttributeBits);
-	void _removeTextAttributes();
-	void _appendParagraphJustification(const int justification);
-	int _rgbsToRGB(const int rgbsColor);
-
 private:
-	unsigned int m_currentListLevel;
-// textAttributeBits
-	bool m_isSuperscript;
-	bool m_isSubscript;
-	bool m_isBold;
-	bool m_isItalic;
-	bool m_isStrikeout;
-	bool m_isUnderline;
-	bool m_isDoubleUnderline;
-	bool m_isOutline;
-	bool m_isSmallCaps;
-	bool m_isBlink;
-	bool m_isShadow;
-
-	bool m_isHighlightColor;
+	bool m_ignore;
 
 };
 
