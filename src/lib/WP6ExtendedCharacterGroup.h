@@ -33,7 +33,7 @@ class WP6ExtendedCharacterGroup : public WP6FixedLengthGroup
 {
 public:
 	WP6ExtendedCharacterGroup(GsfInput *input);	
-	virtual ParseResult parse(WP6LLListener *llListener);
+	virtual void parse(WP6LLListener *llListener);
 	
  protected:
 	virtual void _readContents(GsfInput *input);

@@ -32,7 +32,7 @@ class WP6CharacterGroup_FontFaceChangeSubGroup : public WP6VariableLengthGroup_S
 {
 public:
 	WP6CharacterGroup_FontFaceChangeSubGroup(GsfInput *input);
-	virtual ParseResult parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
+	virtual void parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
 
 private:
 	guint16 m_oldMatchedPointSize;
@@ -45,7 +45,7 @@ class WP6CharacterGroup_ParagraphNumberOnSubGroup : public WP6VariableLengthGrou
 {
 public:
 	WP6CharacterGroup_ParagraphNumberOnSubGroup(GsfInput *input);
-	virtual ParseResult parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
+	virtual void parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
 
 private:
 	guint16 m_outlineHash;
@@ -57,7 +57,7 @@ class WP6CharacterGroup_TableDefinitionOnSubGroup : public WP6VariableLengthGrou
 {
 public:
 	WP6CharacterGroup_TableDefinitionOnSubGroup(GsfInput *input);
-	virtual ParseResult parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
+	virtual void parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
 
 private:
 	guint8 m_flags;
@@ -69,7 +69,7 @@ class WP6CharacterGroup_TableDefinitionOffSubGroup : public WP6VariableLengthGro
 {
 public:
 	WP6CharacterGroup_TableDefinitionOffSubGroup(GsfInput *input);
-	virtual ParseResult parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
+	virtual void parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
 
 private:
 
@@ -79,7 +79,7 @@ class WP6CharacterGroup_TableColumnSubGroup : public WP6VariableLengthGroup_SubG
 {
 public:
 	WP6CharacterGroup_TableColumnSubGroup(GsfInput *input);
-	virtual ParseResult parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
+	virtual void parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
 
 private:
 	guint8 m_flags;
@@ -100,7 +100,7 @@ class WP6CharacterGroup : public WP6VariableLengthGroup
 	WP6CharacterGroup(GsfInput *input);	
 	virtual ~WP6CharacterGroup();
 	virtual void _readContents(GsfInput *input);
-	virtual ParseResult parse(WP6LLListener *llListener);
+	virtual void parse(WP6LLListener *llListener);
 
  private:
 	WP6VariableLengthGroup_SubGroup *m_subGroupData;

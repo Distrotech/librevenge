@@ -127,7 +127,7 @@ struct _WP6ParsingState
 	bool m_isTableCellOpened;
 
 	bool m_isPageSpanOpened;
-	int m_nextPageIndice;
+	int m_nextPageSpanIndice;
 	int m_numPagesRemainingInSpan;
 
 	bool m_sectionAttributesChanged;

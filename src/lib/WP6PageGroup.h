@@ -33,7 +33,7 @@ class WP6PageGroup : public WP6VariableLengthGroup
  public:
 	WP6PageGroup(GsfInput *input);	
 	virtual void _readContents(GsfInput *input);
-	virtual ParseResult parse(WP6LLListener *llListener);
+	virtual void parse(WP6LLListener *llListener);
 
  private:
 	// variables needed for subgroup 0 and 1 (Left/Right Margin Set)

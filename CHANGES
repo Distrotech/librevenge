@@ -2,11 +2,13 @@ CHANGES:
 
 0.5.0 -> 0.6.0
 - Tibetan extended character support (Ted Lemon)
-- Border-less table support (William Lachance)
+- Border-less table cell support (William Lachance)
 - Support for some odd types of tables (William)
 - Top/bottom margin change support (William)
 - Header/footer support (William)
 - Refactored fileheader support (William)
+- Built-in filetype detection (William)
+- Handle corrupt token (0x00) correctly (William)
 
 0.4.0 -> 0.5.0
 - rpm spec (Rui Miguel Silva Seabra)

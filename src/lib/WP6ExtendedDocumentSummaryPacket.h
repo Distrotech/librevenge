@@ -35,7 +35,7 @@ class WP6ExtendedDocumentSummaryPacket : public WP6PrefixDataPacket
 	WP6ExtendedDocumentSummaryPacket(GsfInput *input, int id, guint32 dataOffset, guint32 dataSize);
 	virtual ~WP6ExtendedDocumentSummaryPacket();
 	virtual void _readContents(GsfInput *input);
-	virtual ParseResult parse(WP6LLListener *llListener) const;
+	virtual void parse(WP6LLListener *llListener) const;
 
  private:              
 	guint16 m_dataSize;

@@ -165,7 +165,7 @@ void WP6EOLGroup::_readContents(GsfInput *input)
 	}
 }
 
-ParseResult WP6EOLGroup::parse(WP6LLListener *llListener)
+void WP6EOLGroup::parse(WP6LLListener *llListener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling an EOL group\n"));
 	   
@@ -233,5 +233,4 @@ ParseResult WP6EOLGroup::parse(WP6LLListener *llListener)
 	case WP6_EOL_GROUP_TABLE_OFF_AT_EOC_AT_EOP:
 		llListener->insertBreak(WPX_SOFT_PAGE_BREAK);			    
 	}
-	return PARSE_OK;
 }

@@ -42,21 +42,18 @@ WP6AttributeOnGroup::WP6AttributeOnGroup(GsfInput *input) : WP6AttributeGroup(in
 {
 }
 
-ParseResult WP6AttributeOnGroup::parse(WP6LLListener *llListener)
+void WP6AttributeOnGroup::parse(WP6LLListener *llListener)
 {
 	// FIXME: handle flags
 	llListener->attributeChange(true, getAttribute());
-
-	return PARSE_OK;
 }
 
 WP6AttributeOffGroup::WP6AttributeOffGroup(GsfInput *input) : WP6AttributeGroup(input)
 {
 }
 
-ParseResult WP6AttributeOffGroup::parse(WP6LLListener *llListener)
+void WP6AttributeOffGroup::parse(WP6LLListener *llListener)
 {
 	// FIXME: handle flags
 	llListener->attributeChange(false, getAttribute());
-	return PARSE_OK;
 }

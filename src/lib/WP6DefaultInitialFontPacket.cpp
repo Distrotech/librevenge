@@ -33,11 +33,9 @@ WP6DefaultInitialFontPacket::WP6DefaultInitialFontPacket(GsfInput *input, int id
 	_read(input, dataOffset, dataSize);
 }
 
-ParseResult WP6DefaultInitialFontPacket::parse(WP6LLListener *llListener) const
+void WP6DefaultInitialFontPacket::parse(WP6LLListener *llListener) const
 {
 	llListener->fontChange(getPointSize(), getInitialFontDescriptorPID());
-
-	return PARSE_OK;
 }
 
 void WP6DefaultInitialFontPacket::_readContents(GsfInput *input)
@@ -47,5 +45,4 @@ void WP6DefaultInitialFontPacket::_readContents(GsfInput *input)
    m_pointSize = gsf_le_read_guint16(input);
    WPD_DEBUG_MSG(("WordPerfect: Read default initial font packet (initial font descriptor pid: %i, point size: %i)\n", 
 		  (int) m_initialFontDescriptorPID, (int) m_pointSize));
-
 }

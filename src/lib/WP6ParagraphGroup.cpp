@@ -56,13 +56,12 @@ void WP6ParagraphGroup::_readContents(GsfInput *input)
 	}
 }
 
-ParseResult WP6ParagraphGroup::parse(WP6LLListener *llListener)
+void WP6ParagraphGroup::parse(WP6LLListener *llListener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling an Paragraph group\n"));
 	
 	if (m_subGroupData)
-		return m_subGroupData->parse(llListener, getNumPrefixIDs(), getPrefixIDs());
-
+		m_subGroupData->parse(llListener, getNumPrefixIDs(), getPrefixIDs());
 }
 
 WP6ParagraphGroup_LineSpacingSubGroup::WP6ParagraphGroup_LineSpacingSubGroup(GsfInput *input)
@@ -75,12 +74,10 @@ WP6ParagraphGroup_LineSpacingSubGroup::WP6ParagraphGroup_LineSpacingSubGroup(Gsf
 	m_lineSpacing = lineSpacingIntegerPart + lineSpacingFractionalPart;
 }
 
-ParseResult WP6ParagraphGroup_LineSpacingSubGroup::parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
+void WP6ParagraphGroup_LineSpacingSubGroup::parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
 {
 	WPD_DEBUG_MSG(("WordPerfect: parsing a line spacing change of: %f\n", m_lineSpacing));
 	llListener->lineSpacingChange(m_lineSpacing);
-
-	return PARSE_OK;
 }
 
 WP6ParagraphGroup_JustificationModeSubGroup::WP6ParagraphGroup_JustificationModeSubGroup(GsfInput *input)
@@ -88,11 +85,9 @@ WP6ParagraphGroup_JustificationModeSubGroup::WP6ParagraphGroup_JustificationMode
 	m_justification = gsf_le_read_guint8(input);
 }
 
-ParseResult WP6ParagraphGroup_JustificationModeSubGroup::parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
+void WP6ParagraphGroup_JustificationModeSubGroup::parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
 {
 	llListener->justificationChange(m_justification);
-
-	return PARSE_OK;
 }
 
 WP6ParagraphGroup_OutlineDefineSubGroup::WP6ParagraphGroup_OutlineDefineSubGroup(GsfInput *input)
@@ -112,9 +107,7 @@ WP6ParagraphGroup_OutlineDefineSubGroup::WP6ParagraphGroup_OutlineDefineSubGroup
 		       m_numberingMethods[4], m_numberingMethods[5], m_numberingMethods[6], m_numberingMethods[7]));
 }
 
-ParseResult WP6ParagraphGroup_OutlineDefineSubGroup::parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
+void WP6ParagraphGroup_OutlineDefineSubGroup::parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
 {
 	llListener->updateOutlineDefinition(paragraphGroup, m_outlineHash, m_numberingMethods, m_tabBehaviourFlag);
-
-	return PARSE_OK;
 }

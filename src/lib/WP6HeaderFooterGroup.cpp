@@ -38,14 +38,12 @@ void WP6HeaderFooterGroup::_readContents(GsfInput *input)
 	m_occurenceBits = gsf_le_read_guint16(input);
 }
 
-ParseResult WP6HeaderFooterGroup::parse(WP6LLListener *llListener)
+void WP6HeaderFooterGroup::parse(WP6LLListener *llListener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling an HeaderFooter group\n"));
 
 	if (getNumPrefixIDs() > 0) // FIXME: perhaps we should throw an exception if this isn't true..
 	{
 		llListener->headerFooterGroup(getSubGroup(), m_occurenceBits, getPrefixIDs()[0]);
-	}
-	
-	return PARSE_OK;
+	}	
 }

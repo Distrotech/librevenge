@@ -212,7 +212,7 @@ _WP6ParsingState::_WP6ParsingState(bool sectionAttributesChanged) :
 	m_isTableCellOpened(false),
 	
 	m_isPageSpanOpened(false),
-	m_nextPageIndice(0),
+	m_nextPageSpanIndice(0),
 	m_numPagesRemainingInSpan(0),
 
 	m_sectionAttributesChanged(sectionAttributesChanged),
@@ -1113,10 +1113,10 @@ void WP6HLContentListener::_openPageSpan()
 	if (m_parseState->m_isPageSpanOpened)
 		m_listenerImpl->closePageSpan();
 
-	WPXPageSpan *currentPage = (*m_pageList)[m_parseState->m_nextPageIndice];
+	WPXPageSpan *currentPage = (*m_pageList)[m_parseState->m_nextPageSpanIndice];
 	currentPage->makeConsistent(1);
 	bool isLastPageSpan;
-	(m_pageList->size() > m_parseState->m_nextPageIndice) ? isLastPageSpan = true : isLastPageSpan = false;	
+	(m_pageList->size() <= (m_parseState->m_nextPageSpanIndice+1)) ? isLastPageSpan = true : isLastPageSpan = false;	
 	
 	m_listenerImpl->openPageSpan(currentPage->getPageSpan(), isLastPageSpan,
 				     currentPage->getMarginLeft(), currentPage->getMarginRight(),
@@ -1136,7 +1136,7 @@ void WP6HLContentListener::_openPageSpan()
 	}
 
 	m_parseState->m_numPagesRemainingInSpan = (currentPage->getPageSpan() - 1);
-	m_parseState->m_nextPageIndice++;
+	m_parseState->m_nextPageSpanIndice++;
 	m_parseState->m_isPageSpanOpened = true;
 }
 

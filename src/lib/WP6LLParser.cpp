@@ -154,7 +154,11 @@ void WP6LLParser::parseDocument(GsfInput *input, WP6LLListener *llListener)
 		guint8 readVal;
 		readVal = gsf_le_read_guint8(input);
 		
-		if (readVal <= (guint8)0x20)
+		if (readVal == (guint8)0x00)
+		{
+			// do nothing: this token is meaningless and is likely just corruption
+		}
+		else if (readVal <= (guint8)0x20)
 		{
 			llListener->insertCharacter( extendedInternationalCharacterMap[(readVal-1)] );
 		}
@@ -168,8 +172,7 @@ void WP6LLParser::parseDocument(GsfInput *input, WP6LLListener *llListener)
 			WP6Part *part = WP6Part::constructPart(input, readVal);
 			if (part != NULL)
 			{
-
-				ParseResult result = part->parse(llListener);
+				part->parse(llListener);
 				delete(part);
 			}
 		}

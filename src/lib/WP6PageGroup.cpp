@@ -53,7 +53,7 @@ void WP6PageGroup::_readContents(GsfInput *input)
 	}
 }
 
-ParseResult WP6PageGroup::parse(WP6LLListener *llListener)
+void WP6PageGroup::parse(WP6LLListener *llListener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling an Page group\n"));
 	
@@ -68,7 +68,5 @@ ParseResult WP6PageGroup::parse(WP6LLListener *llListener)
 		break;
 	default: // something else we don't support, since it isn't in the docs
 		break;
-	}
-	
-	return PARSE_OK;
+	}	
 }
