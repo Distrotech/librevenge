@@ -39,6 +39,7 @@ public:
 	static WP6Header * getHeader(GsfInput *input);
 	static WP6PrefixData * getPrefixData(GsfInput *input, WP6Header *header);
 
+	static WPXFileType getFileType(GsfInput *input);
 	static void parse(GsfInput *input, WP6Header *header, WP6LLListener *llistener);
 	static void parseDocument(GsfInput *stream, WP6LLListener *llListener);
 

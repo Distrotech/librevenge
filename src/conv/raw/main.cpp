@@ -23,6 +23,12 @@ int main(int argc, char *argv[])
 			g_error_free (err);
 			return 1;
 		}
+
+	if (WP6LLParser::getFileType(input) != WP6_DOCUMENT)
+	{
+		printf("ERROR: Not a WordPerfect 6/7/8/9/10/11 Document\n");
+		return 1;
+	}
 	
 	RawListener listener;
 

@@ -39,8 +39,42 @@
 #include "WP6DefaultInitialFontPacket.h"
 #include "WPXTable.h"
 
+WPXFileType WP6LLParser::getFileType(GsfInput *input)
+{
+	WPXFileType fileType = OTHER;
+	GsfInput *document = NULL;
+	bool isDocumentOLE = false;
+	
+	try
+	{
+		document =  WP6LLParser::getDocument(input);
+		if (document != NULL) {
+			isDocumentOLE = true;
+		}
+		else
+			document = input;
+		
+		gsf_input_seek(document, 0, G_SEEK_SET);			
+		WPXHeader fileHeader(document);
+
+		if (fileHeader.getFileType() ==  WP6_DOCUMENT_FILE_TYPE &&
+		    fileHeader.getMajorVersion() == WP6_EXPECTED_MAJOR_VERSION)
+			fileType = WP6_DOCUMENT;
+	}
+	catch (FileException)
+	{
+		// no action required: no memory allocated
+	}
+
+	if (document != NULL && isDocumentOLE)
+		g_object_unref(G_OBJECT(document));
+
+	return fileType;
+}
+
 // getDocument: by-passes the OLE stream (if it exists) and returns the (sub) stream with the
-// WordPerfect document. Returns NULL if the document is not OLE.
+// WordPerfect document. Returns NULL if the document is not OLE or it does not contain the
+// the expected WordPerfect type.
 // NB: It is the responsibility of the application to release this input stream
 GsfInput * WP6LLParser::getDocument(GsfInput *input)
 {

@@ -44,6 +44,7 @@ extern const guint16 *tibetanMap1[];
 int extendedCharacterToUCS2(guint8 character, guint8 characterSet,
 			    const guint16 **chars);
 
+enum WPXFileType { WP6_DOCUMENT, OTHER };
 enum WPXNumberingType { ARABIC, LOWERCASE, UPPERCASE, LOWERCASE_ROMAN, UPPERCASE_ROMAN };
 enum WPXNoteType { FOOTNOTE, ENDNOTE };
 enum WPXHeaderFooterType { HEADER, FOOTER };
