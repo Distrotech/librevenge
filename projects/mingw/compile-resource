@@ -1,4 +1,8 @@
-#!/bin/bash
+#!/bin/sh
+
+# This file is courtesy of Tor Lillqvist. Fridrich Strba only translated
+# if from /bin/bash to /bin/sh, so that it works with the default Msys
+# shell. So: the good ideas are of Tor, bugs are of Fridrich.
 
 # Script to compile a resource file for a DLL if there is a .rc file
 # for it. The resource source file is supposed to contain a version
@@ -24,21 +28,22 @@
 # Check if we have a resource file for this DLL.
 rcfile=$1
 resfile=$2
+
 if [ -f $rcfile ]; then
     # Check if we have a build number stamp file.
-    basename=`basename $rcfile .rc`
-    if [ -f $basename-build.stamp ]; then
-	read number <$basename-build.stamp
+    if [ -f $(basename $rcfile '.rc')-build.stamp ]; then
+	read number <$(basename $rcfile '.rc')-build.stamp
 	buildnumber=$[number+1]
 	echo Build number $buildnumber
-	echo $buildnumber >$basename-build.stamp
+	echo $buildnumber >$(basename $rcfile '.rc')-build.stamp
     else
 	echo Using zero as build number
         buildnumber=0
     fi
-
-    m4 -DBUILDNUMBER=$buildnumber <$rcfile >$$.rc &&
-	windres $$.rc $resfile &&
+    rm -f tempfile
+    m4 -DBUILDNUMBER=$buildnumber <$rcfile >$$.rc
+#    exit 1
+	windres $$.rc $resfile
 	rm $$.rc
 else
     # Return failure

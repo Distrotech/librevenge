@@ -2,32 +2,26 @@ AC_INIT(src/lib/WPXParser.cpp)
 
 AM_CONFIG_HEADER(config.h)
 
-dnl This next section is courtesy gtk+
-dnl 
-# Making releases:
-#   WPD_MICRO_VERSION += 1;
-#   WPD_INTERFACE_AGE += 1;
-#   WPD_BINARY_AGE += 1;
-# if any functions have been added, set WPD_INTERFACE_AGE to 0.
-# if backwards compatibility has been broken,
-# set WPD_BINARY_AGE and WPD_INTERFACE_AGE to 0.
-
 WPD_MAJOR_VERSION=0
 WPD_MINOR_VERSION=7
 WPD_MICRO_VERSION=0
 
 WPD_VERSION="$WPD_MAJOR_VERSION.$WPD_MINOR_VERSION.$WPD_MICRO_VERSION"
 
-WPD_INTERFACE_AGE=0
-WPD_BINARY_AGE=0
+AC_SUBST(WPD_MAJOR_VERSION)
+AC_SUBST(WPD_MINOR_VERSION)
+AC_SUBST(WPD_MICRO_VERSION)
+AC_SUBST(WPD_VERSION)
 
 dnl # libtool versioning
 dnl LT_RELEASE=$WPD_MAJOR_VERSION.$WPD_MINOR_VERSION
 dnl AC_SUBST(LT_RELEASE)
 
-LT_CURRENT=`expr $WPD_MICRO_VERSION - $WPD_INTERFACE_AGE`
-LT_REVISION=$WPD_INTERFACE_AGE
-LT_AGE=`expr $WPD_BINARY_AGE - $WPD_INTERFACE_AGE`
+LT_CURRENT=`expr 10 '*' $WPD_MAJOR_VERSION + $WPD_MINOR_VERSION`
+LT_REVISION=$WPD_MICRO_VERSION
+# For 1.0.0 comment the first line and uncomment the second
+LT_AGE=0
+# LT_AGE=$WPD_MINOR_VERSION
 AC_SUBST(LT_CURRENT)
 AC_SUBST(LT_REVISION)
 AC_SUBST(LT_AGE)
@@ -40,6 +34,8 @@ AC_PROG_CXX
 
 AC_PROG_INSTALL
 
+AC_LIBTOOL_WIN32_DLL
+
 AC_DISABLE_STATIC
 AC_PROG_LIBTOOL
 
@@ -49,6 +45,41 @@ PKG_CHECK_MODULES(LIBWPD,[
 glib-2.0 >= 2.0.0
 libgsf-1 >= 1.6.0
 ])
+
+AC_MSG_CHECKING([for native Win32])
+case "$host" in
+  *-*-mingw*)
+    native_win32=yes
+    LIBWPD_WIN32_RESOURCE=libwpd-win32res.lo
+    LIBWPD_DEF=libwpd.def
+    ;;
+  *)
+    native_win32=no
+    LIBWPD_WIN32_RESOURCE=
+    LIBWPD_DEF=
+    ;;
+esac
+AC_MSG_RESULT([$native_win32])
+AM_CONDITIONAL(OS_WIN32, test "$native_win32" = yes)
+AC_SUBST(LIBWPD_WIN32_RESOURCE)
+AC_SUBST(LIBWPD_DEF)
+
+if test "$native_win32" = "yes"; then
+    AC_CHECK_PROG(ms_librarian, lib.exe, yes, no)
+fi
+AM_CONDITIONAL(MS_LIB_AVAILABLE, test x$ms_librarian = xyes)
+
+AC_MSG_CHECKING([for Win32 platform in general])
+case "$host" in
+  *-*-mingw*|*-*-cygwin*)
+    platform_win32=yes
+    ;;
+  *)
+    platform_win32=no
+    ;;
+esac
+AC_MSG_RESULT($platform_win32)
+AM_CONDITIONAL(PLATFORM_WIN32, test "$platform_win32" = yes)
 
 AC_ARG_ENABLE(debug,[  --enable-debug    Turn on debugging],[
 	case "${enableval}" in
@@ -78,6 +109,7 @@ src/conv/html/Makefile
 src/conv/raw/Makefile
 src/conv/text/Makefile
 src/lib/Makefile
+src/lib/libwpd.rc
 libwpd-1.pc
 libwpd.spec
 ])

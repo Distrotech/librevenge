@@ -1,2 +1,36 @@
 EXPORTS
-
+	setDocumentMetaData
+	startDocument
+	endDocument
+	openPageSpan
+	closePageSpan
+	openHeaderFooter
+	closeHeaderFooter
+	openParagraph
+	closeParagraph
+	openSpan
+	closeSpan
+	openSection
+	closeSection
+	insertTab
+	insertText
+	insertLineBreak
+	defineOrderedListLevel
+	defineUnorderedListLevel
+	openOrderedListLevel
+	openUnorderedListLevel
+	closeOrderedListLevel
+	closeUnorderedListLevel
+	openListElement
+	closeListElement
+	openFootnote
+	closeFootnote
+	openEndnote
+	closeEndnote
+	openTable
+	openTableRow
+	closeTableRow
+	openTableCell
+	closeTableCell
+	insertCoveredTableCell
+	

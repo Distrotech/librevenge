@@ -1,11 +1,61 @@
+INCLUDES = -DLIBWPD_COMPILATION
+
+EXTRA_DIST =			\
+	libwpd.rc.in		\
+	libwpd.def
+
+# These may be in the builddir too
+BUILD_EXTRA_DIST = 		\
+	libwpd.rc	
+	
+if PLATFORM_WIN32
+no_undefined = -no-undefined
+version_info = 
+else
+no_undefined =
+version_info = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
+endif
+
+if OS_WIN32
+#export_symbols = -export-symbols $(srcdir)/libwpd.def
+export_symbols = 
+
+install-libtool-import-lib:
+	$(INSTALL) .libs/libwpd-1.dll.a $(DESTDIR)$(libdir)
+	$(INSTALL) $(srcdir)/libwpd.def $(DESTDIR)$(libdir)
+
+uninstall-libtool-import-lib:
+	-rm $(DESTDIR)$(libdir)/libwpd-1.dll.a $(DESTDIR)$(libdir)/libwpd.def
+
+else
+export_symbols =
+install-libtool-import-lib:
+uninstall-libtool-import-lib:
+endif
+
+if MS_LIB_AVAILABLE
+noinst_DATA = libwpd-1.lib
+
+install-ms-lib:
+	$(INSTALL) libwpd-1.lib $(DESTDIR)$(libdir)
+	
+uninstall-ms-lib:
+	-rm $(DESTDIR)$(libdir)/libwpd-1.lib
+else
+install-ms-lib:
+uninstall-ms-lib:
+endif
+ 
 lib_LTLIBRARIES = libwpd-1.la
 libwpd_1_includedir = $(includedir)/libwpd-1/libwpd
 libwpd_1_include_HEADERS = libwpd.h libwpd_support.h WPDocument.h WPXHLListenerImpl.h
 
 AM_CXXFLAGS = $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS)
 
-libwpd_1_la_LIBADD  = $(LIBWPD_LIBS)
-libwpd_1_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) -export-dynamic
+libwpd_1_la_LIBADD  = $(LIBWPD_LIBS) @LIBWPD_WIN32_RESOURCE@
+libwpd_1_la_DEPENDENCIES = @LIBWPD_WIN32_RESOURCE@ @LIBWPD_DEF@
+libwpd_1_la_LDFLAGS = $(version_info) -export-dynamic \
+			$(no_undefined) $(export_symbols)
 libwpd_1_la_SOURCES =			\
 	libwpd_internal.cpp			\
 	libwpd_math.cpp			\
@@ -134,3 +184,19 @@ libwpd_1_la_SOURCES =			\
 	WPXPageSpan.h				\
 	WPXParser.h 				\
 	WPXTable.h
+	
+if OS_WIN32
+
+@LIBWPD_WIN32_RESOURCE@ : libwpd.rc
+	$(top_srcdir)/projects/mingw/lt-compile-resource libwpd.rc @LIBWPD_WIN32_RESOURCE@
+endif
+
+
+install-data-local: install-ms-lib install-libtool-import-lib
+
+uninstall-local: uninstall-ms-lib uninstall-libtool-import-lib 	
+
+# I will fix the name of the DLL once I realize how to tell
+# libtool not to add the '-0' after 'libwpd-1' in the name.
+libwpd-1.lib: libwpd-1.la libwpd.rc
+	lib -name:libwpd-1-0.dll -def:libwpd.def -out $@
