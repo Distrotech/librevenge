@@ -159,6 +159,21 @@ const guint16 phoneticMap[] = {
   0x02a8
 };
 
+/* WP box drawing symbol (charset 3) */
+const guint16 boxdrawingMap[] = {
+  0x2591, 0x2592, 0x2593, 0x2588, 0x258c, 0x2580, 0x2590, 0x2584,
+  0x2500, 0x2502, 0x250c, 0x2510, 0x2518, 0x2514, 0x251c, 0x252c,
+  0x2524, 0x2534, 0x253c, 0x2550, 0x2551, 0x2554, 0x2557, 0x255d,
+  0x255a, 0x2560, 0x2566, 0x2563, 0x2569, 0x256c, 0x2552, 0x2555,
+  0x255b, 0x2558, 0x2553, 0x2556, 0x255c, 0x2559, 0x255e, 0x2565,
+  0x2561, 0x2568, 0x255f, 0x2564, 0x2562, 0x2567, 0x256b, 0x256a,
+  0x2574, 0x2575, 0x2576, 0x2577, 0x2578, 0x2579, 0x257a, 0x257b,
+  0x257c, 0x257e, 0x257d, 0x257f, 0x251f, 0x2522, 0x251e, 0x2521,
+  0x252e, 0x2532, 0x252d, 0x2531, 0x2527, 0x2526, 0x252a, 0x2529,
+  0x2536, 0x253a, 0x2535, 0x2539, 0x2541, 0x2546, 0x253e, 0x2540,
+  0x2544, 0x254a, 0x253d, 0x2545, 0x2548, 0x2543, 0x2549, 0x2547
+};
+
 /* WP typographic symbol (charset 4) */
 const guint16 typographicMap[] = {
   0x25cf, 0x25cb, 0x25a0, 0x2022, 0xf817, 0x00b6, 0x00a7, 0x00a1,
@@ -389,76 +404,83 @@ int extendedCharacterToUCS2(guint8 character,
 {
 	int i;
 
-	if (characterSet == 0) 
+	if (characterSet == 0)
 	{
 		// if characterset == 0, we have ascii. note that this is different from the doc. body
 		// this is not documented in the file format specifications
 		*chars = &asciiMap[character];
 		return 1;
 	}
-	
-	switch (characterSet) 
+
+	switch (characterSet)
 	{
 	case WP6_MULTINATIONAL_CHARACTER_SET:
 		if (character < WP6_NUM_MULTINATIONAL_CHARACTERS) {
 			*chars = &multinationalMap[character];
 			return 1;
 		}
-		
+
 	case WP6_PHONETIC_SYMBOL_CHARACTER_SET:
 		if (character < WP6_NUM_PHONETIC_CHARACTERS) {
 			*chars = &phoneticMap[character];
 			return 1;
 		}
-		
+
+	case WP6_BOX_DRAWING_CHARACTER_SET:
+		if (character < WP6_NUM_BOX_DRAWING_CHARACTERS) {
+			*chars = &boxdrawingMap[character];
+			return 1;
+		}
+
+
 	case WP6_TYPOGRAPHIC_SYMBOL_CHARACTER_SET:
 		if (character < WP6_NUM_TYPOGRAPHIC_CHARACTERS) {
 			*chars = &typographicMap[character];
 			return 1;
 		}
-		
+
 	case WP6_ICONIC_SYMBOL_CHARACTER_SET:
 		if (character < WP6_NUM_ICONIC_CHARACTERS) {
 			*chars = &iconicMap[character];
 			return 1;
 		}
-		
+
 	case WP6_MATH_SCIENTIFIC_CHARACTER_SET:
 		if (character < WP6_NUM_MATH_SCIENTIFIC_CHARACTERS) {
-			*chars = &mathMap[character];       
+			*chars = &mathMap[character];
 			return 1;
 		}
-		
+
 	case WP6_MATH_SCIENTIFIC_EXTENDED_CHARACTER_SET:
 		if (character < WP6_NUM_MATH_SCIENTIFIC_EXTENDED_CHARACTERS) {
-			*chars = &mathextMap[character];       
+			*chars = &mathextMap[character];
 			return 1;
 		}
-		
+
 	case WP6_GREEK_CHARACTER_SET:
 		if (character < WP6_NUM_GREEK_CHARACTERS) {
-			*chars = &greekMap[character];       
+			*chars = &greekMap[character];
 			return 1;
 		}
-		
+
 	case WP6_HEBREW_CHARACTER_SET:
 		if (character < WP6_NUM_HEBREW_CHARACTERS) {
-			*chars = &hebrewMap[character];       
+			*chars = &hebrewMap[character];
 			return 1;
 		}
-		
+
 	case WP6_CYRILLIC_CHARACTER_SET:
 		if (character < WP6_NUM_CYRILLIC_CHARACTERS) {
-			*chars = &cyrillicMap[character];       
+			*chars = &cyrillicMap[character];
 			return 1;
 		}
-		
+
 	case WP6_JAPANESE_CHARACTER_SET:
 		if (character < WP6_NUM_JAPANESE_CHARACTERS) {
 			*chars = &japaneseMap[character];
 			return 1;
 		}
-		
+
 	case WP6_TIBETAN_CHARACTER_SET:
 		if (tibetanMap1[character]) {
 			for (i = 0; tibetanMap1[character][i]; i++)
@@ -502,7 +524,7 @@ UCSString::UCSString() : m_stringBuf(g_array_new(TRUE, FALSE, sizeof(guint32)))
 
 UCSString::UCSString(const UCSString &stringBuf) : m_stringBuf(g_array_new(TRUE, FALSE, sizeof(guint32)))
 {
-	g_array_insert_vals(m_stringBuf, 0, stringBuf.getUCS4(), stringBuf.getLen()); 
+	g_array_insert_vals(m_stringBuf, 0, stringBuf.getUCS4(), stringBuf.getLen());
 }
 
 UCSString::~UCSString()
@@ -532,7 +554,7 @@ void UCSString::append(const gchar *buf)
 
 void UCSString::clear()
 {
-	m_stringBuf = g_array_set_size(m_stringBuf, 0);			
+	m_stringBuf = g_array_set_size(m_stringBuf, 0);
 }
 
 UTF8String::UTF8String() :
@@ -548,7 +570,7 @@ UTF8String::UTF8String(const UTF8String &stringBuf) :
 UTF8String::UTF8String(const UCSString &stringBuf, bool convertToValidXML)
 {
 	gchar *buf;
-	if (convertToValidXML) 
+	if (convertToValidXML)
 	{
 		UCSString tempUCS4;
 		for (guint i=0; i<stringBuf.getLen(); i++) {
@@ -568,7 +590,7 @@ UTF8String::UTF8String(const UCSString &stringBuf, bool convertToValidXML)
 
 		buf = g_ucs4_to_utf8((const gunichar *)tempUCS4.getUCS4(), tempUCS4.getLen(), NULL, NULL, NULL); // TODO: handle errors
 	}
-	else 
+	else
 		buf = g_ucs4_to_utf8((const gunichar *)stringBuf.getUCS4(), stringBuf.getLen(), NULL, NULL, NULL); // TODO: handle errors
 
 	m_buf = g_string_new(buf);
@@ -577,13 +599,13 @@ UTF8String::UTF8String(const UCSString &stringBuf, bool convertToValidXML)
 
 // UTF8String::UTF8String(const gchar *format, ...) :
 // 	m_buf(g_string_new(NULL))
-	
+
 // {
 // 	va_list args;
 // 	va_start (args, format);
-	
+
 // //  	gsize len = g_printf_string_upper_bound(format, args);
-// //  	if (len > 0) 
+// //  	if (len > 0)
 // //  	{
 // 	gchar *buf = NULL;
 // 	buf = g_strdup_vprintf(format, args);
@@ -595,7 +617,7 @@ UTF8String::UTF8String(const UCSString &stringBuf, bool convertToValidXML)
 
 UTF8String::UTF8String(const gchar *str) :
 	m_buf(g_string_new(str))
-	
+
 {
 }
 

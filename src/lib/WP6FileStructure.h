@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002-2003 Marc Maurer (j.m.maurer@student.utwente.nl)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -27,7 +27,7 @@
 #define WP6FILESTRUCTURE_H
 
 // size of the fixed length functiongroups 0xF0 to 0xFF
-extern int WP6_FIXED_LENGTH_FUCNTION_GROUP_SIZE[16]; 
+extern int WP6_FIXED_LENGTH_FUCNTION_GROUP_SIZE[16];
 
 /* standard sizes */
 #define WP6_NUM_LIST_LEVELS 8
@@ -325,6 +325,7 @@ extern int WP6_FIXED_LENGTH_FUCNTION_GROUP_SIZE[16];
 /* Extended Character */
 #define WP6_MULTINATIONAL_CHARACTER_SET 1
 #define WP6_PHONETIC_SYMBOL_CHARACTER_SET 2
+#define WP6_BOX_DRAWING_CHARACTER_SET 3
 #define WP6_TYPOGRAPHIC_SYMBOL_CHARACTER_SET 4
 #define WP6_ICONIC_SYMBOL_CHARACTER_SET 5
 #define WP6_MATH_SCIENTIFIC_CHARACTER_SET 6
@@ -337,6 +338,7 @@ extern int WP6_FIXED_LENGTH_FUCNTION_GROUP_SIZE[16];
 
 #define WP6_NUM_MULTINATIONAL_CHARACTERS 242
 #define WP6_NUM_PHONETIC_CHARACTERS 145
+#define WP6_NUM_BOX_DRAWING_CHARACTERS 88
 #define WP6_NUM_TYPOGRAPHIC_CHARACTERS 102
 #define WP6_NUM_ICONIC_CHARACTERS 255
 #define WP6_NUM_MATH_SCIENTIFIC_CHARACTERS 238

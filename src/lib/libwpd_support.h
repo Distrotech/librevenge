@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -31,6 +31,7 @@ extern const guint16 asciiMap[];
 extern const guint16 extendedInternationalCharacterMap[];
 extern const guint16 multinationalMap[];
 extern const guint16 phoneticMap[];
+extern const guint16 boxdrawingMap[];
 extern const guint16 typographicMap[];
 extern const guint16 iconicMap[];
 extern const guint16 mathMap[];
@@ -101,12 +102,12 @@ const guint8 WPX_TABLE_CELL_BOTTOM_BORDER_OFF = 0x08;
 typedef struct _RGBSColor RGBSColor;
 struct _RGBSColor
 {
-	_RGBSColor(guint8 r, guint8 g, guint8 b, guint8 s);	
+	_RGBSColor(guint8 r, guint8 g, guint8 b, guint8 s);
 	_RGBSColor(); // initializes all values to 0
 	guint8 m_r;
 	guint8 m_g;
  	guint8 m_b;
-	guint8 m_s; 
+	guint8 m_s;
 };
 
 typedef struct _WPXColumnDefinition WPXColumnDefinition;

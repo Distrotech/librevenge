@@ -1,6 +1,7 @@
 CHANGES:
 
 0.7.1 -> 0.7.2
+- Added Box Drawing character set mapping (Fridrich Strba)
 - Handling of hard spaces and soft hyphens (Fridrich Strba)
 - Change in conversion of Deletable Hard/Soft EOL/EOC/EOP
   and handling of some single byte functions that have their
