@@ -20,6 +20,7 @@ libwpd_1_la_SOURCES =			\
 	WP6EOLGroup.cpp			\
 	WP6ExtendedCharacterGroup.cpp 	\
 	WP6ExtendedDocumentSummaryPacket.cpp \
+	WP6FillStylePacket.cpp 		\
 	WP6FixedLengthGroup.cpp		\
 	WP6FontDescriptorPacket.cpp	\
 	WP6FootnoteEndnoteGroup.cpp	\
@@ -63,6 +64,7 @@ libwpd_1_la_SOURCES =			\
 	WP6EOLGroup.h			\
 	WP6ExtendedCharacterGroup.h 	\
 	WP6ExtendedDocumentSummaryPacket.h \
+	WP6FillStylePacket.h		\
 	WP6FixedLengthGroup.h		\
 	WP6FontDescriptorPacket.h	\
 	WP6FootnoteEndnoteGroup.h	\

@@ -30,6 +30,7 @@
 #include "libwpd_internal.h"
 
 #include "WP6LLParser.h" // for TableException
+#include "WP6FillStylePacket.h" // for the fill packet
 
 WP6EOLGroup::WP6EOLGroup(GsfInput *input) :	
 	WP6VariableLengthGroup(),
@@ -48,10 +49,8 @@ WP6EOLGroup::WP6EOLGroup(GsfInput *input) :
 
 WP6EOLGroup::~WP6EOLGroup()
 {
-	if (m_cellFgColor)
-		delete m_cellFgColor;
-	if (m_cellBgColor)
-		delete m_cellBgColor;	
+	delete m_cellFgColor;
+	delete m_cellBgColor;	
 }
 
 void WP6EOLGroup::_readContents(GsfInput *input)
@@ -59,7 +58,7 @@ void WP6EOLGroup::_readContents(GsfInput *input)
 	WPD_DEBUG_MSG(("WordPerfect: EOL Group: Reading Embedded Sub-Function Data\n"));
 	guint16 sizeDeletableSubFunctionData;
 	guint16 startPosition = gsf_input_tell(input);
-	sizeDeletableSubFunctionData = gsf_le_read_guint16(input);	
+	sizeDeletableSubFunctionData = gsf_le_read_guint16(input);		
 	WPD_DEBUG_MSG(("WordPerfect: EOL Group: Size of Deletable Sub-Function Data: %ld,  Size of Deletable and Non-deletable sub-function data: %ld\n", (long) sizeDeletableSubFunctionData, getSizeNonDeletable()));
 	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, sizeDeletableSubFunctionData, G_SEEK_CUR));
 	while (gsf_input_tell(input) < (startPosition + getSizeNonDeletable()))
@@ -128,6 +127,9 @@ void WP6EOLGroup::_readContents(GsfInput *input)
 			
 				m_cellFgColor = new RGBSColor(fR,fG,fB,fS);
 				m_cellBgColor = new RGBSColor(bR,bG,bB,bS);
+				WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded FG Color (%i, %i, %i, %i) BG Color (%i, %i, %i, %i)\n",
+					       m_cellFgColor->m_r, m_cellFgColor->m_g, m_cellFgColor->m_b, m_cellFgColor->m_s,
+					       m_cellBgColor->m_r, m_cellBgColor->m_g, m_cellBgColor->m_b, m_cellBgColor->m_s));
 				break;
 			case WP6_EOL_GROUP_CELL_LINE_COLOR:
 				WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_LINE_COLOR\n"));
@@ -169,6 +171,19 @@ void WP6EOLGroup::_readContents(GsfInput *input)
 void WP6EOLGroup::parse(WP6LLListener *llListener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling an EOL group\n"));
+
+	// first off, grab any prefix information which may be useful
+	const RGBSColor * cellFgColor = m_cellFgColor;
+	const RGBSColor * cellBgColor = m_cellBgColor;
+	for (int i=0; i<getNumPrefixIDs(); i++)
+	{
+		if (const WP6FillStylePacket *fsPacket = dynamic_cast<const WP6FillStylePacket *>(llListener->getPrefixDataPacket(getPrefixIDs()[i]))) 
+		{
+			cellFgColor = fsPacket->getFgColor();
+			cellBgColor = fsPacket->getBgColor();
+		}
+	}
+
 	   
 	// main search + dispatch for messages
 	switch(getSubGroup())
@@ -200,7 +215,7 @@ void WP6EOLGroup::parse(WP6LLListener *llListener)
 		break;
 	case 0x0A: // Table Cell
 		WPD_DEBUG_MSG(("WordPerfect: EOL group: table cell\n"));
-		llListener->insertCell(m_colSpan, m_rowSpan, m_boundFromLeft, m_boundFromAbove, m_cellBorders, m_cellFgColor, m_cellBgColor);
+		llListener->insertCell(m_colSpan, m_rowSpan, m_boundFromLeft, m_boundFromAbove, m_cellBorders, cellFgColor, cellBgColor);
 		break;
 	case WP6_EOL_GROUP_TABLE_ROW_AND_CELL:
 	case WP6_EOL_GROUP_TABLE_ROW_AT_EOC:
@@ -211,7 +226,7 @@ void WP6EOLGroup::parse(WP6LLListener *llListener)
 		WPD_DEBUG_MSG(("WordPerfect: EOL group: table row and cell\n"));
 		llListener->insertRow();
 		// the cellBorders variable already represent the cell border bits as well
-		llListener->insertCell(m_colSpan, m_rowSpan, m_boundFromLeft, m_boundFromAbove, m_cellBorders, m_cellFgColor, m_cellBgColor);
+		llListener->insertCell(m_colSpan, m_rowSpan, m_boundFromLeft, m_boundFromAbove, m_cellBorders, cellFgColor, cellBgColor);
 		break;
 	case WP6_EOL_GROUP_TABLE_OFF:
 	case WP6_EOL_GROUP_TABLE_OFF_AT_EOC:

@@ -426,7 +426,7 @@ void WP6HLContentListener::fontChange(const guint16 matchedFontPointSize, const 
 
 		m_parseState->m_fontSize = rint((double)((((float)matchedFontPointSize)/100.0f)*2.0f));
 		const WP6FontDescriptorPacket *fontDescriptorPacket = NULL;
-		if (fontDescriptorPacket = dynamic_cast<const WP6FontDescriptorPacket *>(_getPrefixDataPacket(fontPID))) {
+		if (fontDescriptorPacket = dynamic_cast<const WP6FontDescriptorPacket *>(getPrefixDataPacket(fontPID))) {
 			g_string_printf(m_parseState->m_fontName, "%s", fontDescriptorPacket->getFontName());
 		}
 		m_parseState->m_textAttributesChanged = true;
@@ -930,7 +930,7 @@ void WP6HLContentListener::_handleSubDocument(guint16 textPID)
 	WP6ParsingState *oldParseState = m_parseState;
 	m_parseState = new WP6ParsingState(false); // false: don't open a new section unless we must inside this type of sub-document
 	if (textPID)
-		_getPrefixDataPacket(textPID)->parse(this);	
+		getPrefixDataPacket(textPID)->parse(this);	
 	else
 		_openParagraph();
 	_flushText();

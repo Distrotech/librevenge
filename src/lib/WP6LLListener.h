@@ -60,9 +60,8 @@ public:
 	virtual void suppressPageCharacteristics(const guint8 suppressCode) = 0;
 
 	void setPrefixData(WP6PrefixData *prefixData) { m_prefixData = prefixData; }
+	const WP6PrefixDataPacket * getPrefixDataPacket(const int prefixID) const;
 
-protected:
-	const WP6PrefixDataPacket * _getPrefixDataPacket(const int prefixID) const;
 
 private:
 	WP6PrefixData *m_prefixData;

@@ -23,29 +23,26 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP6PREFIXDATAPACKET_H
-#define WP6PREFIXDATAPACKET_H
-#include <gsf/gsf-input.h>
-#include <stdlib.h>
-#include <glib.h>
-#include "WPXParser.h"
-//#include "WP6LLListener.h"
+#ifndef WP6FILLSTYLEPACKET_H
+#define WP6FILLSTYLEPACKET_H
+#include "WP6PrefixDataPacket.h"
+#include "WP6FileStructure.h"
+#include "WP6LLListener.h"
 
-class WP6PrefixIndice;
-class WP6LLListener;
+struct _RGBSColor;
+typedef struct _RGBSColor RGBSColor; 
 
-class WP6PrefixDataPacket
+class WP6FillStylePacket : public WP6PrefixDataPacket
 {
 public:
-	WP6PrefixDataPacket(GsfInput * input);	
-	virtual ~WP6PrefixDataPacket() {}
+	WP6FillStylePacket(GsfInput *input, int id, guint32 dataOffset, guint32 dataSize);
+	virtual ~WP6FillStylePacket();
+	virtual void _readContents(GsfInput *input);
 	virtual void parse(WP6LLListener *llListener) const {}
-
-	static WP6PrefixDataPacket * constructPrefixDataPacket(GsfInput * input, WP6PrefixIndice *prefixIndice);
-
-protected:
-	virtual void _readContents(GsfInput *input) = 0;
- 	void _read(GsfInput *input, guint32 dataOffset, guint32 dataSize);
+	const RGBSColor * getFgColor() const { return &m_fgColor; }
+	const RGBSColor * getBgColor() const { return &m_bgColor; }
+private:              
+	RGBSColor m_fgColor;
+	RGBSColor m_bgColor;
 };
-
-#endif /* WP6PREFIXDATAPACKET_H */
+#endif /* WP6FILLSTYLEPACKET_H */
