@@ -131,9 +131,9 @@ void HtmlListenerImpl::closeHeaderFooter(const WPXHeaderFooterType headerFooterT
 	}
 }
 
-void HtmlListenerImpl::openParagraph(const guint8 paragraphJustification, 
+void HtmlListenerImpl::openParagraph(const uint8_t paragraphJustification, 
 				   const float marginLeftOffset, const float marginRightOffset, const float textIndent,
-				   const float lineSpacing, const float spacingAfterParagraph,
+				   const float lineSpacing, const float spacingAfterParagraph, const vector<WPXTabStop> &tabStops,
 				   const bool isColumnBreak, const bool isPageBreak)
 {
 	printf("<p style=\"");
@@ -154,7 +154,7 @@ void HtmlListenerImpl::closeParagraph()
 	printf("</p>\n");
 }
 
-void HtmlListenerImpl::openSpan(guint32 textAttributeBits, const gchar *fontName, const float fontSize,
+void HtmlListenerImpl::openSpan(uint32_t textAttributeBits, const char *fontName, const float fontSize,
 					const RGBSColor *fontColor, const RGBSColor *highlightColor)
 {
 	printf("<span style=\"font-family: \'%s\'\">", fontName);
@@ -231,9 +231,10 @@ void HtmlListenerImpl::closeUnorderedListLevel()
 }
 
 
-void HtmlListenerImpl::openListElement(const guint8 paragraphJustification, 
+void HtmlListenerImpl::openListElement(const uint8_t paragraphJustification, 
 				     const float marginLeft, const float marginRight, const float textIndent,
-				     const float lineSpacing, const float spacingAfterParagraph)
+				     const float lineSpacing, const float spacingAfterParagraph,
+				     const vector<WPXTabStop> &tabStops)
 {
 	printf("<li style=\"");
 	_appendParagraphJustification(paragraphJustification);
@@ -273,14 +274,14 @@ void HtmlListenerImpl::closeEndnote()
 	printf("</endnote>\n");
 }
 
-void HtmlListenerImpl::openTable(const guint8 tablePositionBits, const float marginLeftOffset, const float marginRightOffset,
+void HtmlListenerImpl::openTable(const uint8_t tablePositionBits, const float marginLeftOffset, const float marginRightOffset,
 				 const float leftOffset, const vector < WPXColumnDefinition > &columns)
 {
 	printf("<table border=\"1\">\n");
 	printf("<tbody>\n");
 }
 
-void HtmlListenerImpl::openTableRow(const bool isHeaderRow)
+void HtmlListenerImpl::openTableRow(const bool isHeaderRow, const bool isFixedHeightRow, const bool hasMinimumHeight, const float height)
 {
 	printf("<tr>\n");
 }
@@ -290,8 +291,8 @@ void HtmlListenerImpl::closeTableRow()
 	printf("</tr>\n");
 }
 
-void HtmlListenerImpl::openTableCell(const guint32 col, const guint32 row, const guint32 colSpan, const guint32 rowSpan,
-						const guint8 borderBits,
+void HtmlListenerImpl::openTableCell(const uint32_t col, const uint32_t row, const uint32_t colSpan, const uint32_t rowSpan,
+						const uint8_t borderBits,
 						const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
 {
 	printf("<td ");
@@ -322,7 +323,7 @@ void HtmlListenerImpl::closeTable()
 	printf("</table>\n");
 }
 
-void HtmlListenerImpl::_addTextAttributes(const guint32 textAttributeBits)
+void HtmlListenerImpl::_addTextAttributes(const uint32_t textAttributeBits)
 {
 	if (textAttributeBits & WPX_SUPERSCRIPT_BIT)
 	{
@@ -433,7 +434,7 @@ void HtmlListenerImpl::_removeTextAttributes()
 	}
 }
 
-void HtmlListenerImpl::_appendParagraphJustification(const guint32 paragraphJustification)
+void HtmlListenerImpl::_appendParagraphJustification(const uint32_t paragraphJustification)
 {
 	switch (paragraphJustification)
 	{

@@ -55,12 +55,12 @@ public:
 
 	virtual void openSection(const unsigned int numColumns, const float spaceAfter) {}
 	virtual void closeSection() {}
-	virtual void openParagraph(const guint8 paragraphJustification, 
+	virtual void openParagraph(const uint8_t paragraphJustification, 
 				   const float marginLeftOffset, const float marginRightOffset, const float textIndent,
-				   const float lineSpacing, const float spacingAfterParagraph,
+				   const float lineSpacing, const float spacingAfterParagraph, const vector<WPXTabStop> &tabStops,
 				   const bool isColumnBreak, const bool isPageBreak) {}
 	virtual void closeParagraph();
-	virtual void openSpan(const guint32 textAttributeBits, const gchar *fontName, const float fontSize,
+	virtual void openSpan(const uint32_t textAttributeBits, const char *fontName, const float fontSize,
 				   const RGBSColor *fontColor, const RGBSColor *highlightColor) {}
 	virtual void closeSpan() {}
 
@@ -76,9 +76,9 @@ public:
 	virtual void openUnorderedListLevel(const int listID) {}
 	virtual void closeOrderedListLevel() {}
 	virtual void closeUnorderedListLevel() {}
-	virtual void openListElement(const guint8 paragraphJustification, 
+	virtual void openListElement(const uint8_t paragraphJustification, 
 				     const float marginLeftOffset, const float marginRightOffset, const float textIndent,
-				     const float lineSpacing, const float spacingAfterParagraph) {}
+				     const float lineSpacing, const float spacingAfterParagraph, const vector<WPXTabStop> &tabStops) {}
 	virtual void closeListElement() {}
 
 	virtual void openFootnote(int number) {}
@@ -87,20 +87,20 @@ public:
 	virtual void closeEndnote() {}
 
 
-	virtual void openTable(const guint8 tablePositionBits,
+	virtual void openTable(const uint8_t tablePositionBits,
 			       const float marginLeftOffset, const float marginRightOffset,
 			       const float leftOffset, const vector < WPXColumnDefinition > &columns) {}
-	virtual void openTableRow(const bool isHeaderRow) {}
+	virtual void openTableRow(const bool isHeaderRow, const bool isFixedHeightRow, const bool hasMinimumHeight, const float height) {}
 	virtual void closeTableRow() {}
-	virtual void openTableCell(const guint32 col, const guint32 row, const guint32 colSpan, const guint32 rowSpan,
-				   const guint8 borderBits,
+	virtual void openTableCell(const uint32_t col, const uint32_t row, const uint32_t colSpan, const uint32_t rowSpan,
+				   const uint8_t borderBits,
 				   const RGBSColor * cellFgColor, const RGBSColor * cellBgColor) {}
 	virtual void closeTableCell() {}
-	virtual void insertCoveredTableCell(const guint32 col, const guint32 row) {}
+	virtual void insertCoveredTableCell(const uint32_t col, const uint32_t row) {}
 	virtual void closeTable() {}
 
 private:
-	guint m_currentListLevel;
+	unsigned int m_currentListLevel;
 };
 
 #endif /* TEXTLISTENERIMPL_H */

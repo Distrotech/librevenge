@@ -87,7 +87,7 @@ public:
  	virtual void defineTable(uint8_t position, uint16_t leftOffset);
 	virtual void addTableColumnDefinition(uint32_t width, uint32_t leftGutter, uint32_t rightGutter) {}
 	virtual void startTable();
- 	virtual void insertRow(const bool isHeaderRow);
+ 	virtual void insertRow(const bool isHeaderRow, const bool isFixedHeightRow, const bool hasMinimumHeight, const uint16_t rowHeight);
  	virtual void insertCell(const uint8_t colSpan, const uint8_t rowSpan, const bool boundFromLeft, const bool boundFromAbove,
 				const uint8_t borderBits,
 				const RGBSColor * cellFgColor, const RGBSColor * cellBgColor, const uint32_t cellAttributes);

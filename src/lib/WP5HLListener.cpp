@@ -240,9 +240,24 @@ void WP5HLListener::_openParagraph()
 	m_parseState->m_tempParagraphJustification = 0;
 	*/
 
+	WPXTabStop tmp_tabStop;
+	vector<WPXTabStop> tabStops;
+	for (int i=0; i<m_ps->m_tabStops.size(); i++)
+	{
+		tmp_tabStop = m_ps->m_tabStops[i];
+		if (m_ps->m_isTabPositionRelative)
+			tmp_tabStop.m_position -= m_ps->m_leftMarginByTabs;
+		else
+			tmp_tabStop.m_position -= m_ps->m_paragraphMarginLeft + m_ps->m_pageMarginLeft;
+		/* TODO: fix situations where we have several columns or are inside a table and the tab stop
+		 *       positions are absolute (relative to the paper edge). In this case, they have to be
+		 *       computed for each column or each cell in table. (Fridrich) */
+		tabStops.push_back(tmp_tabStop);
+	}
+
 	m_listenerImpl->openParagraph(m_ps->m_paragraphJustification,
 				      m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight, m_ps->m_paragraphTextIndent,
-				      m_ps->m_paragraphLineSpacing, 0.0f,
+				      m_ps->m_paragraphLineSpacing, 0.0f, tabStops,
 				      m_ps->m_isParagraphColumnBreak, m_ps->m_isParagraphPageBreak);
 
 	if (m_ps->m_numDeferredParagraphBreaks > 0)

@@ -157,10 +157,10 @@ void RawListenerImpl::closeHeaderFooter(const WPXHeaderFooterType headerFooterTy
 
 void RawListenerImpl::openParagraph(const uint8_t paragraphJustification, 
 				    const float marginLeftOffset, const float marginRightOffset, const float textIndent,
-				    const float lineSpacing, const float spacingAfterParagraph,
+				    const float lineSpacing, const float spacingAfterParagraph, const vector<WPXTabStop> &tabStops,
 				    const bool isColumnBreak, const bool isPageBreak)
 {
-	_U(("openParagraph(paragraphJustification: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, textIndent: %.4f, lineSpacing: %.4f, spacingAfterParagraph: %.4f, isColumnBreak: %s, isPageBreak: %s)\n",
+	_U(("openParagraph(paragraphJustification: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, textIndent: %.4f, lineSpacing: %.4f, spacingAfterParagraph: %.4f, isColumnBreak: %s, isPageBreak: %s, TODO: tab-stops.)\n",
 			paragraphJustification, 
 			marginLeftOffset, marginRightOffset, textIndent,
 			lineSpacing, spacingAfterParagraph, (isColumnBreak ? "true" : "false"), (isPageBreak ? "true" : "false")),
@@ -173,7 +173,7 @@ void RawListenerImpl::closeParagraph()
 		LC_OPEN_PARAGRAPH);
 }
 
-void RawListenerImpl::openSpan(const uint32_t textAttributeBits, const gchar *fontName, const float fontSize,
+void RawListenerImpl::openSpan(const uint32_t textAttributeBits, const char *fontName, const float fontSize,
 					const RGBSColor *fontColor, const RGBSColor *highlightColor)
 {
 	_U(("openSpan(textAttributeBits: %u, fontName: %s, fontSize: %.4f,  fontColor: #%02x%02x%02x s:%02x, highlightColor: #%02x%02x%02x s:%02x)\n",
@@ -262,9 +262,9 @@ void RawListenerImpl::closeUnorderedListLevel()
 
 void RawListenerImpl::openListElement(const uint8_t paragraphJustification, 
 				      const float marginLeftOffset, const float marginRightOffset, const float textIndent,
-				      const float lineSpacing, const float spacingAfterParagraph)
+				      const float lineSpacing, const float spacingAfterParagraph, const vector<WPXTabStop> &tabStops)
 {
-	_U(("openListElement(paragraphJustification: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, textIndent: %.4f, lineSpacing: %.4f, spacingAfterParagraph: %.4f)\n",
+	_U(("openListElement(paragraphJustification: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, textIndent: %.4f, lineSpacing: %.4f, spacingAfterParagraph: %.4f, TODO: tab-stops.)\n",
 			paragraphJustification, 
 			marginLeftOffset, marginRightOffset, textIndent,
 			lineSpacing, spacingAfterParagraph),
@@ -310,9 +310,10 @@ void RawListenerImpl::openTable(const uint8_t tablePositionBits,
 		LC_OPEN_TABLE);
 }
 
-void RawListenerImpl::openTableRow(const bool isHeaderRow)
+void RawListenerImpl::openTableRow(const bool isHeaderRow, const bool isFixedHeightRow, const bool hasMinimumHeight, const float height)
 {
-	_U(("openTableRow(isHeaderRow: %s)\n", (isHeaderRow ? "true" : "false")),
+	_U(("openTableRow(isHeaderRow: %s, isFixedHeightRow: %s, hasMinimumHeight: %s, height: %.4f)\n", (isHeaderRow ? "true" : "false"),
+			(isFixedHeightRow ? "true" : "false"), (hasMinimumHeight ? "true" : "false"), height),
 		LC_OPEN_TABLE_ROW);
 }
 

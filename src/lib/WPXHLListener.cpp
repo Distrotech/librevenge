@@ -252,13 +252,38 @@ void WPXHLListener::_openSpan()
 {
 	_closeSpan();
 	// The behaviour of WP6+ is following: if an attribute bit is set in the cell attributes, we cannot
-	// unset it; if it is not set, we can set or unset it
+	// unset it; if it is set, we can set or unset it
 	uint32_t attributeBits = (m_ps->m_textAttributeBits | m_ps->m_cellAttributeBits);
-	if ((m_ps->m_cellAttributeBits & 0x0000001f) != 0x00000000) // font size attribute bits are mutually exclusive
-		attributeBits &= (m_ps->m_cellAttributeBits | 0xffffffe0); // and the cell attributes prevail
-	m_listenerImpl->openSpan(attributeBits,
-				 m_ps->m_fontName->getUTF8(),
-				 m_ps->m_fontSize, m_ps->m_fontColor, m_ps->m_highlightColor);
+	uint8_t fontSizeAttributes;
+	float fontSizeChange;
+	// the font size attribute bits are mutually exclusive and the cell attributes prevail
+	if ((m_ps->m_cellAttributeBits & 0x0000001f) != 0x00000000)
+		fontSizeAttributes = (uint8_t)(m_ps->m_cellAttributeBits & 0x0000001f);
+	else
+		fontSizeAttributes = (uint8_t)(m_ps->m_textAttributeBits & 0x0000001f);
+	switch (fontSizeAttributes)
+	{
+	case 0x01:  // Extra large
+		fontSizeChange = 2.0f;
+		break;	
+	case 0x02: // Very large
+		fontSizeChange = 1.5f;
+		break;
+	case 0x04: // Large
+		fontSizeChange = 1.2f;
+		break;
+	case 0x08: // Small print
+		fontSizeChange = 0.8f;
+		break;
+	case 0x10: // Fine print
+		fontSizeChange = 0.6f;
+		break;
+	default: // Normal
+		fontSizeChange = 1.0f;
+		break;
+	}
+	m_listenerImpl->openSpan((attributeBits & 0xffffffe0), m_ps->m_fontName->getUTF8(),
+				fontSizeChange*m_ps->m_fontSize, m_ps->m_fontColor, m_ps->m_highlightColor);
 
 	m_ps->m_isSpanOpened = true;
 }
@@ -304,7 +329,7 @@ void WPXHLListener::_closeTable()
 	}
 }
 
-void WPXHLListener::_openTableRow(const bool isHeaderRow)
+void WPXHLListener::_openTableRow(const bool isHeaderRow, const bool isFixedHeightRow, const bool hasMinimumHeight, const float height)
 {
 	_closeTableRow();
 	m_ps->m_currentTableCol = 0;
@@ -312,11 +337,11 @@ void WPXHLListener::_openTableRow(const bool isHeaderRow)
 	// The following "Header Row" flags are ignored
 	if (isHeaderRow & !m_ps->m_wasHeaderRow)
 	{
-		m_listenerImpl->openTableRow(true);
+		m_listenerImpl->openTableRow(true, isFixedHeightRow, hasMinimumHeight, height);
 		m_ps->m_wasHeaderRow = true;
 	}
 	else
-		m_listenerImpl->openTableRow(false);
+		m_listenerImpl->openTableRow(false, isFixedHeightRow, hasMinimumHeight, height);
 
 	m_ps->m_isTableRowOpened = true;
 	m_ps->m_currentTableRow++;

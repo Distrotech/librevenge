@@ -151,7 +151,7 @@ void WP6TableRowFunction::parse(WP6HLListener *listener)
 {
 	// use default values: if they were not default values, formater would use
 	// the multi-byte variant of this function
-	listener->insertRow(false);
+	listener->insertRow(false, false, false, 0x00);
 	listener->insertCell(1, 1, false, false, 0x00, NULL, NULL, 0x00000000);
 }
 

@@ -93,7 +93,7 @@ class WPXHLListenerImpl
 	*/
 	virtual void openParagraph(const uint8_t paragraphJustification, 
 				   const float marginLeftOffset, const float marginRightOffset, const float textIndent,
-				   const float lineSpacing, const float spacingAfterParagraph,
+				   const float lineSpacing, const float spacingAfterParagraph, const vector<WPXTabStop> &tabStops,
 				   const bool isColumnBreak, const bool isPageBreak) = 0;
 	/**
 	Called when a paragraph is closed.
@@ -130,7 +130,8 @@ class WPXHLListenerImpl
 	virtual void closeUnorderedListLevel() = 0;
 	virtual void openListElement(const uint8_t paragraphJustification, 
 				     const float marginLeftOffset, const float marginRightOffset, const float textIndent,
-				     const float lineSpacing, const float spacingAfterParagraph) = 0;
+				     const float lineSpacing, const float spacingAfterParagraph, 
+				     const vector<WPXTabStop> &tabStops) = 0;
 	virtual void closeListElement() = 0;
 
 	virtual void openFootnote(int number) = 0;
@@ -144,7 +145,7 @@ class WPXHLListenerImpl
 	/**
 	Called when a new table row is opened
 	*/
- 	virtual void openTableRow(bool isHeaderRow) = 0;
+ 	virtual void openTableRow(const bool isHeaderRow, const bool isFixedHeightRow, const bool hasMinimumHeight, const float height) = 0;
 	/**
 	Called when the current table row is closed
 	*/

@@ -51,6 +51,9 @@ public:
  
 	uint8_t m_cellBorders;
 	bool m_isHeaderRow;
+	bool m_isFixedHeightRow, m_rowHasMinimumHeight;
+	uint16_t m_rowHeight;
+
 	bool m_isDontEndAParagraphStyleForThisHardReturn;
 };
 

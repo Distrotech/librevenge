@@ -149,7 +149,7 @@ void WP42HLStylesListener::startTable()
 	//}
 }
 
-void WP42HLStylesListener::insertRow(const bool isHeaderRow)
+void WP42HLStylesListener::insertRow(const bool isHeaderRow, const bool isFixedHeightRow, const bool hasMinimumHeight, const uint16_t rowHeight)
 {
 	if (/*!isUndoOn() && */m_currentTable != NULL) 
 	{

@@ -193,7 +193,7 @@ void WP6HLStylesListener::endTable()
 	}
 }
 
-void WP6HLStylesListener::insertRow(const bool isHeaderRow)
+void WP6HLStylesListener::insertRow(const bool isHeaderRow, const bool isFixedHeightRow, const bool hasMinimumHeight, const uint16_t rowHeight)
 {
 	if (!isUndoOn() && m_currentTable != NULL) 
 	{

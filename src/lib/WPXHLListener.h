@@ -184,7 +184,7 @@ protected:
 
 	void _openTable();
 	void _closeTable();
-	void _openTableRow(const bool isHeaderRow);
+	void _openTableRow(const bool isHeaderRow, const bool isFixedHeightRow, const bool hasMinimumHeight, const float height);
 	void _closeTableRow();
 	void _openTableCell(const uint8_t colSpan, const uint8_t rowSpan,
 			    const bool boundFromLeft, const bool boundFromAbove,

@@ -1026,7 +1026,7 @@ void WP6HLContentListener::startTable()
 	}
 }
 
-void WP6HLContentListener::insertRow(const bool isHeaderRow)
+void WP6HLContentListener::insertRow(const bool isHeaderRow, const bool isFixedHeightRow, const bool hasMinimumHeight, const uint16_t rowHeight)
 {
 	if (!isUndoOn())
 	{
@@ -1034,7 +1034,8 @@ void WP6HLContentListener::insertRow(const bool isHeaderRow)
 			_openParagraph();
 		m_ps->m_isCellWithoutParagraph = false;
 		_flushText();
-		_openTableRow(isHeaderRow);
+		float height = (float)((double) rowHeight / (double)WPX_NUM_WPUS_PER_INCH);
+		_openTableRow(isHeaderRow, isFixedHeightRow, hasMinimumHeight, height);
 	}
 }
 
@@ -1303,9 +1304,21 @@ void WP6HLContentListener::_handleListChange(const uint16_t outlineHash)
 
 void WP6HLContentListener::_openListElement()
 {
+	WPXTabStop tmp_tabStop;
+	vector<WPXTabStop> tabStops;
+	for (int i=0; i<m_ps->m_tabStops.size(); i++)
+	{
+		tmp_tabStop = m_ps->m_tabStops[i];
+		if (m_ps->m_isTabPositionRelative)
+			tmp_tabStop.m_position -= m_ps->m_leftMarginByTabs;
+		else
+			tmp_tabStop.m_position -= m_ps->m_paragraphMarginLeft;
+		tabStops.push_back(tmp_tabStop);
+	}
+
 	m_listenerImpl->openListElement(m_ps->m_paragraphJustification,
 					m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight, m_ps->m_paragraphTextIndent,
-					m_ps->m_paragraphLineSpacing, m_ps->m_paragraphSpacingAfter);
+					m_ps->m_paragraphLineSpacing, m_ps->m_paragraphSpacingAfter, tabStops);
 	m_ps->m_isParagraphOpened = true; // a list element is equivalent to a paragraph
 	m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange + m_ps->m_leftMarginByParagraphMarginChange;
 	m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange + m_ps->m_rightMarginByParagraphMarginChange;
@@ -1325,10 +1338,27 @@ void WP6HLContentListener::_openParagraph()
 	(m_parseState->m_tempParagraphJustification != 0) ? paragraphJustification = m_parseState->m_tempParagraphJustification :
 		paragraphJustification = m_ps->m_paragraphJustification;
 	m_parseState->m_tempParagraphJustification = 0;
+	
+	// Include the tabstop information
+	
+	WPXTabStop tmp_tabStop;
+	vector<WPXTabStop> tabStops;
+	for (int i=0; i<m_ps->m_tabStops.size(); i++)
+	{
+		tmp_tabStop = m_ps->m_tabStops[i];
+		if (m_ps->m_isTabPositionRelative)
+			tmp_tabStop.m_position -= m_ps->m_leftMarginByTabs;
+		else
+			tmp_tabStop.m_position -= m_ps->m_paragraphMarginLeft + m_ps->m_pageMarginLeft;
+		/* TODO: fix situations where we have several columns or are inside a table and the tab stop
+		 *       positions are absolute (relative to the paper edge). In this case, they have to be
+		 *       computed for each column or each cell in table. (Fridrich) */
+		tabStops.push_back(tmp_tabStop);
+	}
 
 	m_listenerImpl->openParagraph(paragraphJustification,
 				      m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight, m_ps->m_paragraphTextIndent,
-				      m_ps->m_paragraphLineSpacing, m_ps->m_paragraphSpacingAfter,
+				      m_ps->m_paragraphLineSpacing, m_ps->m_paragraphSpacingAfter, tabStops,  
 				      m_ps->m_isParagraphColumnBreak, m_ps->m_isParagraphPageBreak);
 
 	if (m_ps->m_numDeferredParagraphBreaks > 0)
