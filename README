@@ -1,0 +1,13 @@
+INSTALLATION:
+
+Installation on Unix/Linux should be simple. Simply execute the following 
+sequence of commands:
+
+./autogen.sh ; ./configure ; make ; su -c 'make install'
+
+Note that this assumes that you have development versions of glib (>=
+2.0.0).
+
+LINKS:
+
+glib is available at http://www.gtk.org
