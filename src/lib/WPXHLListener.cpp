@@ -218,11 +218,18 @@ void WPXHLListener::_openPageSpan()
 		if (!currentPage->getHeaderFooterSuppression((*iter).getInternalType()))
 		{
 			WPXPropertyList propList;
-			propList.insert("type", WPXPropertyFactory::newIntProp((*iter).getType()));
 			propList.insert("occurence", WPXPropertyFactory::newIntProp((*iter).getOccurence()));
-			m_listenerImpl->openHeaderFooter(propList); //(*iter).getType(), (*iter).getOccurence());
+			if ((*iter).getType() == HEADER)
+				m_listenerImpl->openHeader(propList); 
+			else
+				m_listenerImpl->openFooter(propList); 
+
 			handleSubDocument((*iter).getTextPID(), true, (*iter).getTableList());
-			m_listenerImpl->closeHeaderFooter(propList);
+			if ((*iter).getType() == HEADER)
+				m_listenerImpl->closeHeader();
+			else
+				m_listenerImpl->closeFooter(); 
+
 			WPD_DEBUG_MSG(("Header Footer Element: type: %i occurence: %i pid: %i\n",
 				       (*iter).getType(), (*iter).getOccurence(), (*iter).getTextPID()));
 		}

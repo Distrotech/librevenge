@@ -62,8 +62,10 @@ public:
 
 	virtual void openPageSpan(const WPXPropertyList &propList);
 	virtual void closePageSpan();
-	virtual void openHeaderFooter(const WPXPropertyList &propList);
-	virtual void closeHeaderFooter(const WPXPropertyList &propList);
+	virtual void openHeader(const WPXPropertyList &propList);
+	virtual void closeHeader();
+	virtual void openFooter(const WPXPropertyList &propList);
+	virtual void closeFooter();
 
 	virtual void openParagraph(const WPXPropertyList &propList, const vector<WPXTabStop> &tabStops);
 	virtual void closeParagraph();

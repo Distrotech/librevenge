@@ -81,12 +81,28 @@ class WPXHLListenerImpl
 	Called when a page span is closed.
 	*/
 	virtual void closePageSpan() = 0;
+
 	/**
-	Called when a header or footer should be opened (a sub-document will be placed inside of it).
-	\param occurrence Determines on which pages the header will occur, encoded as an integer
+	Called when a header should be opened (a sub-document will be placed inside of it).
+	\param propList Property list for the header. May contain: 
+	\li \c occurrence Determines on which pages the header will occur, encoded as an integer
 	*/
-	virtual void openHeaderFooter(const WPXPropertyList &propList) = 0;
-	virtual void closeHeaderFooter(const WPXPropertyList &propList) = 0;
+	virtual void openHeader(const WPXPropertyList &propList) = 0;
+	/**
+	Called when a header should be closed.
+	*/
+	virtual void closeHeader() = 0;
+
+	/**
+	Called when a footer should be opened (a sub-document will be placed inside of it).
+	\param propList Property list for the footer. May contain: 
+	\li \c occurrence Determines on which pages the footer will occur, encoded as an integer
+	*/
+	virtual void openFooter(const WPXPropertyList &propList) = 0;
+	/**
+	Called when a footer should be closed.
+	*/
+	virtual void closeFooter() = 0;
 
 	/**
 	Called when a new paragraph is opened. This (or openListElement) will always be called before any text or span is placed into the document.
@@ -157,7 +173,7 @@ class WPXHLListenerImpl
 	\li \c type Type of list encoded as an integer
 	\li \c text-before-number Text that comes before the number in the list
 	\li \c text-after-number Text that comes after the number in the list
-	\li \c starting-number Text that comes after the number in the list
+	\li \c starting-number The starting number of the list
 	*/
 	virtual void defineOrderedListLevel(const WPXPropertyList &propList) = 0;
 	/**
@@ -254,8 +270,7 @@ class WPXHLListenerImpl
 	\li \c col-span Number of columns that the cell spans
 	\li \c row-span Number of rows that the cell spans
 	\li \c border-bits Which borders should be turned on, encoded as a bitfield
-	\li \c foreground-color Foreground color of the cell, encoded as an integer
-	\li \c background-color Background color of the cell, encoded as an integer
+	\li \c color Color of the cell, encoded as an integer
 	\li \c border-color Color of the border lines of the cell encoded as an integer
 	\li \c vertical-alignment Vertical alignment of the content in the cell (top, middle, bottom, or full) encoded as an integer
 	*/

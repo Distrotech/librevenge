@@ -137,17 +137,29 @@ void RawListenerImpl::closePageSpan()
 		LC_OPEN_PAGE_SPAN);
 }
 
-void RawListenerImpl::openHeaderFooter(const WPXPropertyList &propList)
+void RawListenerImpl::openHeader(const WPXPropertyList &propList)
 {
-	_U(("openHeaderFooter(headerFooterType: %d, headerFooterOccurence: %d)\n",
-	    propList["type"]->getInt(), propList["occurence"]->getInt()),
+	_U(("openHeader(headerFooterOccurence: %d)\n",
+	    propList["occurence"]->getInt()),
 	   LC_OPEN_HEADER_FOOTER);
 }
 
-void RawListenerImpl::closeHeaderFooter(const WPXPropertyList &propList)
+void RawListenerImpl::closeHeader()
 {
-	_D(("closeHeaderFooter(headerFooterType: %d, headerFooterOccurence: %d)\n",
-	    propList["type"]->getInt(), propList["occurence"]->getInt()),
+	_D(("closeHeader()\n"),
+	   LC_OPEN_HEADER_FOOTER);
+}
+
+void RawListenerImpl::openFooter(const WPXPropertyList &propList)
+{
+	_U(("openFooter(headerFooterOccurence: %d)\n",
+	    propList["occurence"]->getInt()),
+	   LC_OPEN_HEADER_FOOTER);
+}
+
+void RawListenerImpl::closeFooter()
+{
+	_D(("closeFooter()\n"),
 	   LC_OPEN_HEADER_FOOTER);
 }
 

@@ -99,32 +99,6 @@ void HtmlListenerImpl::closePageSpan()
 	printf("</page-span>\n");
 }
 
-void HtmlListenerImpl::openHeaderFooter(const WPXPropertyList &propList)
-{
-	switch ((WPXHeaderFooterType)propList["type"]->getInt())
-	{
-	case HEADER:
-		printf("<header>\n");
-		break;
-	case FOOTER:
-		printf("<footer>\n");
-		break;
-	}
-}
-
-void HtmlListenerImpl::closeHeaderFooter(const WPXPropertyList &propList)
-{
-	switch  ((WPXHeaderFooterType)propList["type"]->getInt())
-	{
-	case HEADER:
-		printf("</header>\n");
-		break;
-	case FOOTER:
-		printf("</footer>\n");
-		break;
-	}
-}
-
 void HtmlListenerImpl::openParagraph(const WPXPropertyList &propList, const vector<WPXTabStop> &tabStops)
 {
 	printf("<p style=\"");
