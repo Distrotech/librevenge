@@ -516,8 +516,11 @@ void WP6HLContentListener::handleLineBreak()
 		if (m_parseState->m_styleStateSequence.getCurrentState() == STYLE_BODY ||
 		    m_parseState->m_styleStateSequence.getCurrentState() == NORMAL)
 		{
-			if (!m_ps->m_isParagraphOpened)
-				_openParagraph();
+			if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
+				if (m_parseState->m_currentListLevel == 0)
+					_openParagraph();
+				else
+					_openListElement();
 			m_listenerImpl->insertLineBreak();
 		}
 	}
@@ -1043,6 +1046,7 @@ void WP6HLContentListener::endDocument()
 	// corner case: document ends in a list element
 	if (m_parseState->m_styleStateSequence.getCurrentState() != NORMAL)
 	{
+		// maybe one could simply use the "_flushList()" ????
 		_flushText(); // flush the list text
 		m_parseState->m_styleStateSequence.setCurrentState(NORMAL);
 		_flushText(true); // flush the list exterior (forcing a line break, to make _flushText think we've exited a list)
@@ -1366,15 +1370,15 @@ void WP6HLContentListener::_handleListChange(const uint16_t outlineHash)
 			m_listenerImpl->defineUnorderedListLevel(propList);
 		}
 		for (int i=(oldListLevel+1); i<=m_parseState->m_currentListLevel; i++) {
+  			// Fridrich: we should not define list sublevels _inside_ of list elements;
+			// so we just close the element to prevent call graph failure
+ 			_closeListElement();
 			m_parseState->m_listLevelStack.push(i);
  			WPD_DEBUG_MSG(("Pushed level %i onto the list level stack\n", i));
 			
 			WPXPropertyList propList2;
 			propList2.insert("libwpd:id", m_parseState->m_currentOutlineHash);
 
-  			// Fridrich: we should not define list sublevels _inside_ of list elements;
-			// so we just close the element to prevent call graph failure
- 			_closeListElement();
 			if (m_parseState->m_putativeListElementHasDisplayReferenceNumber)
 				m_listenerImpl->openOrderedListLevel(propList2);
 			else
