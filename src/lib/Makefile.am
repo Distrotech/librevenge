@@ -28,7 +28,7 @@ endif
 
 lib_LTLIBRARIES = libwpd-1.la $(target_libwpd_stream)
 libwpd_1_includedir = $(includedir)/libwpd-1/libwpd
-libwpd_1_include_HEADERS = libwpd.h libwpd_support.h WPXStream.h WPDocument.h WPXHLListenerImpl.h
+libwpd_1_include_HEADERS = libwpd.h libwpd_support.h WPXStream.h WPXProperty.h WPDocument.h WPXHLListenerImpl.h
 
 AM_CXXFLAGS = $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS)
 

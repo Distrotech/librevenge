@@ -4,8 +4,8 @@ libdir=@libdir@
 includedir=@includedir@
                                                                        
 Name: libwpd-stream-1
-Description: A library for reading and writing Corel WordPerfect(tm) documents
+Description: GSFStream support for libwpd, a library for reading and writing Corel WordPerfect(tm) documents
 Version: @VERSION@
-Requires: glib-2.0 libgsf-1
+Requires: glib-2.0 libgsf-1 libwpd-1
 Libs: -L${libdir} -lwpd-stream-1
 Cflags: -I${includedir}/libwpd-1
