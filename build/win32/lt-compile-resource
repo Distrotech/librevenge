@@ -48,6 +48,19 @@ case "$o_files_in_dotlibs" in
 	;;
 esac
 
+# Another way of working of libtool: When compiling with --enable-static and
+# --disable-shared options, the .lo file can be still a small text file, and
+# the .o files are created in the same directory as the .lo files.
+
+o_files_in_dot=$(echo ./*.o)
+case "$o_files_in_dot" in
+    ./\*.o)
+    	use_script=$use_script
+    	;;
+    *)	use_script=true
+    	;;
+esac    	
+
 # Try to compile resource file
 $d/compile-resource $rcfile $resfile
 if [ $use_script = true ]; then
