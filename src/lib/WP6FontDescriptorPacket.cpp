@@ -79,7 +79,6 @@ void WP6FontDescriptorPacket::_readContents(GsfInput *input)
    
    else 
 	   {
-		   guint16 const *tempFontName = (guint16 const *)gsf_input_read(input, sizeof(guint16)*(m_fontNameLength/2), NULL);
 		   m_fontName = new gchar[m_fontNameLength];
 
 		   guint16 tempLength=0;
@@ -87,10 +86,14 @@ void WP6FontDescriptorPacket::_readContents(GsfInput *input)
 		   int lastTokenPosition=0;
 		   for (guint16 i=0; i<(m_fontNameLength/2); i++) 
 		   {
-			   guint8 characterSet = (tempFontName[i] & 0xFF00) >> 8;
-			   guint8 character = (tempFontName[i] & 0xFF);
+			   guint8 characterSet;
+			   guint8 character;
 			   int len;
 			   const guint16 *chars;
+			   guint16 charWord = gsf_le_read_guint16(input);
+
+			   characterSet = (charWord & 0xFF00) >> 8;
+			   character = (charWord & 0xFF);
 			   
 			   len = extendedCharacterToUCS2(character, characterSet, &chars);
 			   /* We are only using ascii characters here, and
