@@ -160,7 +160,7 @@ void HtmlListenerImpl::openSpan(const WPXPropertyList &propList)
 		if (propList["fo:color"])
 			printf("color:%s;", propList["fo:color"]->getStr().cstr());
 		if (propList["style:text-background-color"])
-			printf("background-colour:%s;", propList["style:text-background-color"]->getStr().cstr());
+			printf("background-color:%s;", propList["style:text-background-color"]->getStr().cstr());
 
 		printf("\">");
 	}
