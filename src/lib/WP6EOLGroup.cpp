@@ -41,6 +41,14 @@ WP6EOLGroup::WP6EOLGroup(GsfInput *input) :
 	_read(input);
 }
 
+WP6EOLGroup::~WP6EOLGroup()
+{
+	if (m_cellFgColor)
+		delete m_cellFgColor;
+	if (m_cellBgColor)
+		delete m_cellBgColor;	
+}
+
 void WP6EOLGroup::_readContents(GsfInput *input)
 {
 	WPD_DEBUG_MSG(("WordPerfect: EOL Group: Reading Embedded Sub-Function Data\n"));
