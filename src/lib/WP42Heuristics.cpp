@@ -25,7 +25,6 @@
 
 #include "WP42Heuristics.h"
 #include "WP42FileStructure.h"
-#include "libwpd_support.h"
 #include "libwpd_internal.h"
 
 WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input, bool partialContent)

@@ -37,7 +37,7 @@ _WPXParsingState::_WPXParsingState(bool sectionAttributesChanged) :
 	m_textAttributeBits(0),
 	m_textAttributesChanged(false),
 	m_fontSize(12.0f/*WP6_DEFAULT_FONT_SIZE*/), // FIXME ME!!!!!!!!!!!!!!!!!!! HELP WP6_DEFAULT_FONT_SIZE
-	m_fontName(new UTF8String(/*WP6_DEFAULT_FONT_NAME*/"Times New Roman")), // EN PAS DEFAULT FONT AAN VOOR WP5/6/etc
+	m_fontName(new WPXString(/*WP6_DEFAULT_FONT_NAME*/"Times New Roman")), // EN PAS DEFAULT FONT AAN VOOR WP5/6/etc
 	m_fontColor(new RGBSColor(0x00,0x00,0x00,0x64)), //Set default to black. Maybe once it will change, but for the while...
 	m_highlightColor(NULL),
 
@@ -398,7 +398,7 @@ void WPXHLListener::_getTabStops(vector<WPXPropertyList> &tabStops)
 		// leader character
 		if (m_ps->m_tabStops[i].m_leaderCharacter != 0x0000)
 		{
-			UTF8String sLeader;
+			WPXString sLeader;
 			sLeader.sprintf("%c", m_ps->m_tabStops[i].m_leaderCharacter);
 			tmpTabStop.insert("style:leader-char", sLeader);
 		}
@@ -467,12 +467,12 @@ void WPXHLListener::_openSpan()
 
 	WPXPropertyList propList;
  	if (attributeBits & WPX_SUPERSCRIPT_BIT) {
-		UTF8String sSuperScript;
+		WPXString sSuperScript;
 		sSuperScript.sprintf("super %f%%", WPX_DEFAULT_SUPER_SUB_SCRIPT);
 		propList.insert("style:text-position", sSuperScript);
 	}
  	else if (attributeBits & WPX_SUBSCRIPT_BIT) {
-		UTF8String sSubScript;
+		WPXString sSubScript;
 		sSubScript.sprintf("sub %f%%", WPX_DEFAULT_SUPER_SUB_SCRIPT);
 		propList.insert("style:text-position", sSubScript);
 	}
@@ -633,7 +633,7 @@ void WPXHLListener::_closeTableRow()
 
 const float WPX_DEFAULT_TABLE_BORDER_WIDTH = 0.0007f;
 
-void addBorderProps(const char *border, bool borderOn, const UTF8String &borderColor, WPXPropertyList &propList)
+void addBorderProps(const char *border, bool borderOn, const WPXString &borderColor, WPXPropertyList &propList)
 {
 #if 0
 // WLACH_REFACTORING: a (not working, obviously) sketch of an alternate way of doing this
@@ -650,9 +650,9 @@ void addBorderProps(const char *border, bool borderOn, const UTF8String &borderC
 		propList.insert("fo:border-left-width", 0.0f);
 #endif
 	
-	UTF8String borderStyle;
+	WPXString borderStyle;
 	borderStyle.sprintf("fo:border-%s", border);
-	UTF8String props;
+	WPXString props;
 	if (borderOn)
 		props.sprintf("%finch solid %s", WPX_DEFAULT_TABLE_BORDER_WIDTH, borderColor.cstr());
 	else
@@ -675,7 +675,7 @@ void WPXHLListener::_openTableCell(const uint8_t colSpan, const uint8_t rowSpan,
 		propList.insert("table:number-columns-spanned", colSpan);
 		propList.insert("table:number-rows-spanned", rowSpan);
 
-		UTF8String borderColor = _colorToString(cellBorderColor);
+		WPXString borderColor = _colorToString(cellBorderColor);
 		addBorderProps("left", !(borderBits & WPX_TABLE_CELL_LEFT_BORDER_OFF), borderColor, propList);
 		addBorderProps("right", !(borderBits & WPX_TABLE_CELL_RIGHT_BORDER_OFF), borderColor, propList);
 		addBorderProps("top", !(borderBits & WPX_TABLE_CELL_TOP_BORDER_OFF), borderColor, propList);
@@ -819,9 +819,9 @@ void WPXHLListener::justificationChange(const uint8_t justification)
 	}
 }
 
-UTF8String WPXHLListener::_colorToString(const RGBSColor * color)
+WPXString WPXHLListener::_colorToString(const RGBSColor * color)
 {
-	UTF8String tmpString;
+	WPXString tmpString;
 
 	if (color) 
 	{
@@ -838,9 +838,9 @@ UTF8String WPXHLListener::_colorToString(const RGBSColor * color)
 	return tmpString;
 }
 
-UTF8String WPXHLListener::_mergeColorsToString(const RGBSColor *fgColor, const RGBSColor *bgColor)
+WPXString WPXHLListener::_mergeColorsToString(const RGBSColor *fgColor, const RGBSColor *bgColor)
 {
-	UTF8String tmpColor;
+	WPXString tmpColor;
 	RGBSColor tmpFgColor, tmpBgColor;
 
 	if (fgColor != NULL) {

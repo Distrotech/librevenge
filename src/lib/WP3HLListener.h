@@ -79,7 +79,7 @@ protected:
 private:
 	void _flushText(const bool fakeText=false);
 
-	UTF8String m_textBuffer;
+	WPXString m_textBuffer;
 
 	WP3ParsingState *m_parseState;
 };

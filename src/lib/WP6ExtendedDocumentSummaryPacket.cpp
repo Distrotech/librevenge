@@ -59,7 +59,7 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6HLListener *listener) const
 		uint16_t tagID = readU16(m_stream);
 		uint16_t flags = readU16(m_stream);
 
-		UTF8String name;
+		WPXString name;
 		for (uint16_t wpChar = readU16(m_stream);
 		     wpChar != 0; 
 		     wpChar = readU16(m_stream))
@@ -71,7 +71,7 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6HLListener *listener) const
 			len = extendedCharacterToUCS2(character,
 						      characterSet, &chars);
 			for (int j = 0; j < len; j++)
-				name.append(chars[j]);
+				appendUCS4(name, (uint32_t)chars[j]);
 		} 
 		
 		if (tagID == WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_CREATION_DATE ||
@@ -90,7 +90,7 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6HLListener *listener) const
 		}
 		else
 		{
-			UTF8String data;
+			WPXString data;
 			for (uint16_t wpChar = readU16(m_stream);
 			     wpChar != 0; 
 			     wpChar = readU16(m_stream))
@@ -102,7 +102,7 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6HLListener *listener) const
 			len = extendedCharacterToUCS2(character,
 						      characterSet, &chars);
 			for (int j = 0; j < len; j++)
-				data.append(chars[j]);
+				appendUCS4(data, (uint32_t)chars[j]);
 			} 
 			listener->setExtendedInformation(tagID, data);
 		}

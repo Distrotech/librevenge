@@ -26,6 +26,7 @@
 #include "WP5HLListener.h"
 #include "WP5FileStructure.h"
 #include "WPXFileStructure.h"
+#include "libwpd_internal.h"
 
 _WP5ParsingState::_WP5ParsingState()
 {
@@ -55,7 +56,7 @@ WP5HLListener::~WP5HLListener()
 
 void WP5HLListener::insertCharacter(const uint16_t character)
 {
-	m_textBuffer.append(character);
+	appendUCS4(m_textBuffer, (uint32_t)character);
 }
 
 void WP5HLListener::insertTab(const uint8_t tabType, const float tabPosition)

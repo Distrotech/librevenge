@@ -57,34 +57,25 @@ int main(int argc, char *argv[])
 	}
 
 	HtmlListenerImpl listenerImpl;
- 	try 
-	{
-		WPDocument::parse(gsfInput, static_cast<WPXHLListenerImpl *>(&listenerImpl));
-	} 
- 	catch (FileException)
-	{
- 	    printf("ERROR: File Exception!\n");
- 	    return 1;
-	}	
- 	catch (ParseException)
-	{
- 	    printf("ERROR: Parse Exception!\n");
- 	    return 1;
-	}
-	catch (UnsupportedEncryptionException)
-	{
- 	    printf("ERROR: File is password protected!\n");
- 	    return 1;
-	}	
- 	catch (...)
-	{
- 	    printf("ERROR: Unknown Error!\n");
- 	    return 1;
-	}
-	
+ 	WPDResult error = WPDocument::parse(gsfInput, static_cast<WPXHLListenerImpl *>(&listenerImpl));
+
+	if (error == WPD_FILE_ACCESS_ERROR)
+		fprintf(stderr, "ERROR: File Exception!\n");
+	else if (error == WPD_PARSE_ERROR)
+		fprintf(stderr, "ERROR: Parse Exception!\n");
+	else if (error == WPD_UNSUPPORTED_ENCRYPTION_ERROR)
+		fprintf(stderr, "ERROR: File is password protected!\n");
+	else if (error == WPD_OLE_ERROR)
+		fprintf(stderr, "ERROR: File is an OLE document, but does not contain a WordPerfect stream!\n");
+	else if (error != WPD_OK)
+		fprintf(stderr, "ERROR: Unknown Error!\n");
+
 	delete gsfInput;
 	g_object_unref (G_OBJECT (input));
 	gsf_shutdown();
+
+	if (error != WPD_OK)
+		return 1;
 
 	return 0;
 }

@@ -26,7 +26,6 @@
 #ifndef LIBWPD_H
 #define LIBWPD_H
 
-#include "libwpd_support.h"
 #include "WPXHLListenerImpl.h"
 #include "WPDocument.h"
 

@@ -35,15 +35,15 @@ class WPXPageSpan;
 typedef struct _WPXDocumentMetaData WPXDocumentMetaData;
 struct _WPXDocumentMetaData
 {
-	UTF8String m_author;
-	UTF8String m_subject;
-	UTF8String m_publisher;
-	UTF8String m_category;
-	UTF8String m_keywords;
-	UTF8String m_language;
-	UTF8String m_abstract;
-	UTF8String m_descriptiveName;
-	UTF8String m_descriptiveType;
+	WPXString m_author;
+	WPXString m_subject;
+	WPXString m_publisher;
+	WPXString m_category;
+	WPXString m_keywords;
+	WPXString m_language;
+	WPXString m_abstract;
+	WPXString m_descriptiveName;
+	WPXString m_descriptiveType;
 };
 
 typedef struct _WPXTableDefinition WPXTableDefinition;
@@ -61,17 +61,17 @@ struct _WPXParsingState
 	~_WPXParsingState();
 
 /*
-	UTF8String m_bodyText;
-	UTF8String m_textBeforeNumber;
-	UTF8String m_textBeforeDisplayReference;
-	UTF8String m_numberText;
-	UTF8String m_textAfterDisplayReference;
-	UTF8String m_textAfterNumber;
+	WPXString m_bodyText;
+	WPXString m_textBeforeNumber;
+	WPXString m_textBeforeDisplayReference;
+	WPXString m_numberText;
+	WPXString m_textAfterDisplayReference;
+	WPXString m_textAfterNumber;
 */
 	uint32_t m_textAttributeBits;
 	bool m_textAttributesChanged;
 	float m_fontSize;
-	UTF8String *m_fontName;
+	WPXString *m_fontName;
 	RGBSColor *m_fontColor;
 	RGBSColor *m_highlightColor;
 
@@ -200,8 +200,8 @@ protected:
 	bool m_isUndoOn;
 	
 private:
-	UTF8String _colorToString(const RGBSColor * color);
-	UTF8String _mergeColorsToString(const RGBSColor *fgColor, const RGBSColor *bgColor);
+	WPXString _colorToString(const RGBSColor * color);
+	WPXString _mergeColorsToString(const RGBSColor *fgColor, const RGBSColor *bgColor);
 };
 
 #endif /* WPXHLLISTENER_H */

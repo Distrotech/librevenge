@@ -26,6 +26,7 @@
 #include "WP3HLListener.h"
 #include "WP3FileStructure.h"
 #include "WPXFileStructure.h"
+#include "libwpd_internal.h"
 
 _WP3ParsingState::_WP3ParsingState()
 {
@@ -56,7 +57,7 @@ WP3HLListener::~WP3HLListener()
 void WP3HLListener::insertCharacter(const uint16_t character)
 {
         if (!isUndoOn())
-		m_textBuffer.append(character);
+		appendUCS4(m_textBuffer, (uint32_t)character);
 }
 
 void WP3HLListener::insertTab(const uint8_t tabType, const float tabPosition)

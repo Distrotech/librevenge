@@ -28,7 +28,6 @@
 #define WP3MISCELLANEOUSGROUP_H
 
 #include "WP3VariableLengthGroup.h"
-#include "libwpd_support.h"
 
 class WP3MiscellaneousGroup : public WP3VariableLengthGroup
 {

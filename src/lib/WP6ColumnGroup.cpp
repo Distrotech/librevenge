@@ -26,7 +26,6 @@
 #include "WP6ColumnGroup.h"
 #include "WP6LLListener.h"
 #include "libwpd_internal.h"
-#include "libwpd_support.h"
 #include "WPXFileStructure.h"
 
 WP6ColumnGroup::WP6ColumnGroup(WPXInputStream *input) :

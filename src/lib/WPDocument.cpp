@@ -158,7 +158,7 @@ WPXHLListenerImpl class implementation when needed. This is often commonly calle
 \param input The input stream
 \param listenerImpl A WPXHLListener implementation
 */
-void WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerImpl)
+WPDResult WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerImpl)
 {
 	WPXParser *parser = NULL;
 
@@ -175,10 +175,12 @@ void WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerImpl)
 		if (document)
 			isDocumentOLE = true;
 		else
-			return;
+			return WPD_OLE_ERROR;
 	}
 	else
 		document = input;
+
+	WPDResult error = WPD_OK;
 
 	try
 	{
@@ -231,45 +233,36 @@ void WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerImpl)
 				DELETEP(parser);
 			}
 			else
-				throw FileException();
+				error = WPD_FILE_ACCESS_ERROR;
 		}
 	}
 
-	/* TODO: fix code dumplication below */
 	catch (FileException)
 	{
 		WPD_DEBUG_MSG(("File Exception trapped\n"));
-
-		DELETEP(parser);
-		if (document != NULL && isDocumentOLE)
-			DELETEP(document);
-
-		throw FileException();
+		error = WPD_FILE_ACCESS_ERROR;
 	}
 	catch (ParseException)
 	{
 		WPD_DEBUG_MSG(("Parse Exception trapped\n"));
-
-		DELETEP(parser);
-		if (document != NULL && isDocumentOLE)
-			delete document;
-
-		throw FileException();
+		error = WPD_PARSE_ERROR;
+	}
+	catch (UnsupportedEncryptionException)
+	{
+		WPD_DEBUG_MSG(("Encrypted document exception trapped\n"));
+		error = WPD_UNSUPPORTED_ENCRYPTION_ERROR;
 	}
 	catch (...)
 	{
 		WPD_DEBUG_MSG(("Unknown Exception trapped\n"));
-
-		DELETEP(parser);
-		if (document != NULL && isDocumentOLE)
-			delete document;
-
-		throw GenericException();
+		error = WPD_UNKNOWN_ERROR; 
 	}
 
 	DELETEP(parser);
 	if (document != NULL && isDocumentOLE)
 		DELETEP(document);
+
+	return error;
 }
 
 /*

@@ -74,6 +74,42 @@ void WP6Parser::parse(WPXInputStream *input, WP6HLListener *listener)
 	listener->endDocument();		
 }
 
+static const uint16_t extendedInternationalCharacterMap[] =
+{
+  229, // lower case 'a' with a small circle
+  197, // upper case 'a' with a small circle
+  230, // lower case 'ae'
+  198, // upper case 'ae'
+  228, // lower case 'a' with diathesis
+  196, // upper case 'a' with diathesis
+  225, // lower case 'a' with acute
+  224, // lower case 'a' with grave
+  226, // lower case 'a' with circonflex
+  227, // lower case 'a' with tilde
+  195, // upper case 'a' with tilde
+  231, // lower case 'c' with hook
+  199, // upper case 'c' with hook
+  235, // lower case 'e' with diathesis
+  233, // lower case 'e' with acute
+  201, // upper case 'e' with acute
+  232, // lower case 'e' with grave
+  234, // lower case 'e' with circonflex
+  237, // lower case 'i' with acute
+  241, // lower case 'n' with tilde
+  209, // upper case 'n' with tilde
+  248, // lower case 'o' with stroke
+  216, // upper case 'o' with stroke
+  245, // lower case 'o' with tilde
+  213, // upper case 'o' with tilde
+  246, // lower case 'o' with diathesis
+  214, // upper case 'o' with diathesis
+  252, // lower case 'u' with diathesis
+  220, // upper case 'u' with diathesis
+  250, // lower case 'u' with acute
+  249, // lower case 'u' with grave
+  223 // double s
+};
+
 // parseDocument: parses a document body (may call itself recursively, on other streams, or itself)
 void WP6Parser::parseDocument(WPXInputStream *input, WP6HLListener *listener)
 {

@@ -66,14 +66,14 @@ int _extractNumericValueFromRoman(const char romanChar)
 // as letters, numbers, or roman numerals.. return an integer value representing its number
 // HACK: this function is really cheesey
 // NOTE: if the input is not valid, the output is unspecified
-int _extractDisplayReferenceNumberFromBuf(const UTF8String &buf, const WPXNumberingType listType)
+int _extractDisplayReferenceNumberFromBuf(const WPXString &buf, const WPXNumberingType listType)
 {
 	if (listType == LOWERCASE_ROMAN || listType == UPPERCASE_ROMAN)
 	{
 		int currentSum = 0;
 		int lastMark = 0;
 		int currentMark = 0;
-		UTF8String::Iter i(buf);
+		WPXString::Iter i(buf);
 		for (i.rewind(); i.next();)
 		{
 			int currentMark = _extractNumericValueFromRoman(*(i()));
@@ -100,7 +100,7 @@ int _extractDisplayReferenceNumberFromBuf(const UTF8String &buf, const WPXNumber
 	else if (listType == ARABIC)
 	{
 		int currentSum = 0;
-		UTF8String::Iter i(buf);
+		WPXString::Iter i(buf);
 		for (i.rewind(); i.next();)
 		{
 			currentSum *= 10;
@@ -112,9 +112,9 @@ int _extractDisplayReferenceNumberFromBuf(const UTF8String &buf, const WPXNumber
 	return 1;
 }
 
-WPXNumberingType _extractWPXNumberingTypeFromBuf(const UTF8String &buf, const WPXNumberingType putativeWPXNumberingType)
+WPXNumberingType _extractWPXNumberingTypeFromBuf(const WPXString &buf, const WPXNumberingType putativeWPXNumberingType)
 {
-	UTF8String::Iter i(buf);
+	WPXString::Iter i(buf);
 	for (i.rewind(); i.next();)
 	{
 		if ((*(i()) == 'I' || *(i()) == 'V' || *(i()) == 'X') &&
@@ -132,9 +132,9 @@ WPXNumberingType _extractWPXNumberingTypeFromBuf(const UTF8String &buf, const WP
 	return ARABIC;
 }
 
-UTF8String _numberingTypeToString(WPXNumberingType t)
+WPXString _numberingTypeToString(WPXNumberingType t)
 {
-	UTF8String sListTypeSymbol("1");
+	WPXString sListTypeSymbol("1");
 	switch (t)
 	{
 	case ARABIC:
@@ -258,7 +258,7 @@ WP6HLContentListener::~WP6HLContentListener()
 	delete m_parseState;
 }
 
-void WP6HLContentListener::setExtendedInformation(const uint16_t type, const UTF8String &data)
+void WP6HLContentListener::setExtendedInformation(const uint16_t type, const WPXString &data)
 {
 	switch (type)
 	{
@@ -326,29 +326,29 @@ void WP6HLContentListener::insertCharacter(const uint16_t character)
 	{
 		if (m_parseState->m_styleStateSequence.getCurrentState() == STYLE_BODY ||
 		    m_parseState->m_styleStateSequence.getCurrentState() == NORMAL)
-			m_parseState->m_bodyText.append(character);
+			appendUCS4(m_parseState->m_bodyText, (uint32_t)character);
 		else if (m_parseState->m_styleStateSequence.getCurrentState() == BEGIN_BEFORE_NUMBERING)
 		{
-			m_parseState->m_textBeforeNumber.append(character);
+			appendUCS4(m_parseState->m_textBeforeNumber, (uint32_t)character);
 		}
 		else if (m_parseState->m_styleStateSequence.getCurrentState() == BEGIN_NUMBERING_BEFORE_DISPLAY_REFERENCING)
 		{
 			// left delimeter (or the bullet if there is no display referencing)
-			m_parseState->m_textBeforeDisplayReference.append(character);
+			appendUCS4(m_parseState->m_textBeforeDisplayReference, (uint32_t)character);
 		}
 		else if (m_parseState->m_styleStateSequence.getCurrentState() == DISPLAY_REFERENCING)
 		{
 			// the actual paragraph number (in varying forms)
-			m_parseState->m_numberText.append(character);
+			appendUCS4(m_parseState->m_numberText, (uint32_t)character);
 		}
 		else if (m_parseState->m_styleStateSequence.getCurrentState() == BEGIN_NUMBERING_AFTER_DISPLAY_REFERENCING)
 		{
 			// right delimeter (if there was a display no. ref. group)
-			m_parseState->m_textAfterDisplayReference.append(character);
+			appendUCS4(m_parseState->m_textAfterDisplayReference, (uint32_t)character);
 		}
 		else if (m_parseState->m_styleStateSequence.getCurrentState() == BEGIN_AFTER_NUMBERING)
 		{
-			m_parseState->m_textAfterNumber.append(character);
+			appendUCS4(m_parseState->m_textAfterNumber, (uint32_t)character);
 		}
 	}
 }
@@ -1362,6 +1362,8 @@ void WP6HLContentListener::_handleListChange(const uint16_t outlineHash)
 			WPXPropertyList propList2;
 			propList2.insert("libwpd:id", m_parseState->m_currentOutlineHash);
 
+			// Tricky: we define list sublevels _inside_ of list elements
+			_closeSpan();
 			if (m_parseState->m_putativeListElementHasDisplayReferenceNumber)
 				m_listenerImpl->openOrderedListLevel(propList2);
 			else

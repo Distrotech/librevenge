@@ -158,9 +158,9 @@ void HtmlListenerImpl::insertLineBreak()
 	printf("<br>\n");
 }
 
-void HtmlListenerImpl::insertText(const UTF8String &text)
+void HtmlListenerImpl::insertText(const WPXString &text)
 {
-	UTF8String tempUTF8(text, true);
+	WPXString tempUTF8(text, true);
 	printf("%s", tempUTF8.cstr());
 }
 

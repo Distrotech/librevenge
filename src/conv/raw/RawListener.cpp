@@ -90,13 +90,13 @@ void RawListenerImpl::__idprintf(const char *format, ...)
 	va_end(args);
 }
 
-UTF8String getPropString(const WPXPropertyList &propList)
+WPXString getPropString(const WPXPropertyList &propList)
 {
-	UTF8String propString;
+	WPXString propString;
 	WPXPropertyList::Iter i(propList);
 	if (!i.last()) 
 	{
-		UTF8String prop;
+		WPXString prop;
 		prop.sprintf("%s: %s", i.key().c_str(), i()->getStr().cstr());
 		propString.append(prop);
 		for (i; i.next(); )
@@ -109,9 +109,9 @@ UTF8String getPropString(const WPXPropertyList &propList)
 	return propString;
 }
 
-UTF8String getPropString(const vector<WPXPropertyList> &itemList)
+WPXString getPropString(const vector<WPXPropertyList> &itemList)
 {
-	UTF8String propString;
+	WPXString propString;
 
 	propString.append("(");
 	vector<WPXPropertyList>::const_iterator i = itemList.begin();
@@ -230,9 +230,9 @@ void RawListenerImpl::insertTab()
 	__iprintf("insertTab()\n");
 }
 
-void RawListenerImpl::insertText(const UTF8String &text)
+void RawListenerImpl::insertText(const WPXString &text)
 {
-	UTF8String textUTF8(text);
+	WPXString textUTF8(text);
 	__iprintf("insertText(text: %s)\n", textUTF8.cstr());
 }
 

@@ -26,7 +26,7 @@ endif
 
 lib_LTLIBRARIES = libwpd-1.la $(target_libwpd_stream)
 libwpd_1_includedir = $(includedir)/libwpd-1/libwpd
-libwpd_1_include_HEADERS = libwpd.h libwpd_support.h WPXStream.h WPXProperty.h WPDocument.h WPXHLListenerImpl.h
+libwpd_1_include_HEADERS = libwpd.h libwpd_types.h WPXStream.h WPXProperty.h WPXString.h WPDocument.h WPXHLListenerImpl.h
 
 
 AM_CXXFLAGS = $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS)
@@ -37,7 +37,6 @@ libwpd_1_la_LDFLAGS = $(version_info) -export-dynamic $(no_undefined)
 libwpd_1_la_SOURCES =				\
 	libwpd_internal.cpp			\
 	libwpd_math.cpp				\
-	libwpd_support.cpp			\
 	WP3AttributeGroup.cpp			\
 	WP3EndOfLinePageGroup.cpp		\
 	WP3ExtendedCharacterGroup.cpp		\
@@ -124,11 +123,12 @@ libwpd_1_la_SOURCES =				\
 	WPXParser.cpp 				\
 	WPXPart.cpp				\
 	WPXProperty.cpp				\
+	WPXString.cpp				\
 	WPDocument.cpp				\
 	libwpd.h	        		\
 	libwpd_internal.h			\
 	libwpd_math.h				\
-	libwpd_support.h        		\
+	libwpd_types.h				\
 	WP3AttributeGroup.h			\
 	WP3EndOfLinePageGroup.h			\
 	WP3ExtendedCharacterGroup.h		\
@@ -222,6 +222,7 @@ libwpd_1_la_SOURCES =				\
 	WPXParser.h 				\
 	WPXPart.h				\
 	WPXProperty.h				\
+	WPXString.h				\
 	WPXTable.h
 
 libwpd_stream_headers = GSFStream.h

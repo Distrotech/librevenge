@@ -75,7 +75,7 @@ public:
 	virtual void closeSection();
 
 	virtual void insertTab();
-	virtual void insertText(const UTF8String &text);
+	virtual void insertText(const WPXString &text);
  	virtual void insertLineBreak();
 
 	virtual void defineOrderedListLevel(const WPXPropertyList &propList);

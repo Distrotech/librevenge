@@ -24,7 +24,7 @@
  */
 
 #include "WPXTable.h"
-#include "libwpd_support.h"
+#include "libwpd_internal.h"
 
 typedef vector<WPXTableCell *>::iterator VTCIter;
 typedef vector< vector<WPXTableCell *> * >::iterator VVTCIter;

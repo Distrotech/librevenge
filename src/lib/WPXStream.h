@@ -1,6 +1,7 @@
 #ifndef WPXSTREAM_H
 #define WPXSTREAM_H
-#include "libwpd_support.h"
+#include <stdio.h>
+#include "libwpd_types.h"
 
 enum WPX_SEEK_TYPE
 {

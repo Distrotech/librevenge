@@ -25,11 +25,8 @@
 
 #ifndef WPXHLLISTENERIMPL_H
 #define WPXHLLISTENERIMPL_H
-#include "libwpd_support.h"
 #include "WPXProperty.h"
 #include <vector>
-#include <map>
-using namespace std;
 
 /**
 Pure virtual class containing all the callback functions that can be made by
@@ -118,7 +115,7 @@ class WPXHLListenerImpl
 	\li \c page-break Whether this paragraph should start a new page
 	\param tabStops List of tabstop definitions for the paragraph. If the list is empty, default tabstop definition should be used.
 	*/
-	virtual void openParagraph(const WPXPropertyList &propList, const vector<WPXPropertyList> &tabStops) = 0;
+	virtual void openParagraph(const WPXPropertyList &propList, const std::vector<WPXPropertyList> &tabStops) = 0;
 	/**
 	Called when a paragraph is closed.
 	*/
@@ -145,7 +142,7 @@ class WPXHLListenerImpl
 	\li \c margin-bottom  Extra space to add after the section, in inches 
 	\param columns List of definitions of each column: left gutter, right gutter, and width (includes the gutters). Empty if num-columns is equal to 1.
 	*/
-	virtual void openSection(const WPXPropertyList &propList, const vector <WPXPropertyList> &columns) = 0;
+	virtual void openSection(const WPXPropertyList &propList, const std::vector<WPXPropertyList> &columns) = 0;
 	/**
 	Called when a section is closed
 	*/
@@ -159,7 +156,7 @@ class WPXHLListenerImpl
 	Called when a string of text should be inserted
 	\param text A textbuffer encoded in UCS4
 	*/
-	virtual void insertText(const UTF8String &text) = 0;
+	virtual void insertText(const WPXString &text) = 0;
 	/**
 	Called when a line break should be inserted
 	*/
@@ -216,7 +213,7 @@ class WPXHLListenerImpl
 	\li \c line-spacing The amount of spacing between lines, in number of lines (1.0 is single spacing)
 	\param tabStops List of tabstop definitions for the list element. If the list is empty, default tabstop definition should be used.
 	*/
-	virtual void openListElement(const WPXPropertyList &propList, const vector<WPXPropertyList> &tabStops) = 0;
+	virtual void openListElement(const WPXPropertyList &propList, const std::vector<WPXPropertyList> &tabStops) = 0;
 	/**
 	Called when a list element should be closed
 	*/
@@ -249,7 +246,7 @@ class WPXHLListenerImpl
 	\li \c left-offset The offset of the table from the left margin
 	\param columns Column definitions for the table
 	*/
- 	virtual void openTable(const WPXPropertyList &propList, const vector <WPXPropertyList> &columns) = 0;
+ 	virtual void openTable(const WPXPropertyList &propList, const std::vector<WPXPropertyList> &columns) = 0;
 	/**
 	Called when a new table row is opened
 	\param propList Defines a set of properties for the table row. May contain:

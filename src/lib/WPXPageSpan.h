@@ -29,6 +29,7 @@
 #include "WP6FileStructure.h"
 #include <vector>
 #include "WPXTable.h"
+#include "libwpd_internal.h"
 
 // intermediate page representation class: for internal use only (by the high-level content/styles listeners). should not be exported.
 

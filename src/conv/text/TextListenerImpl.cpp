@@ -47,7 +47,7 @@ void TextListenerImpl::insertTab()
 	printf("%c", UCS_TAB);
 }
 
-void TextListenerImpl::insertText(const UTF8String &text)
+void TextListenerImpl::insertText(const WPXString &text)
 {
 	printf("%s", text.cstr());
 }

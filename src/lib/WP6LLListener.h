@@ -28,6 +28,7 @@
 
 #include "WP6PrefixDataPacket.h"
 
+class WPXString;
 class WP6DefaultInitialFontPacket;
 class WP6PrefixData;
 
@@ -41,7 +42,7 @@ public:
 	virtual void setDate(const uint16_t year, const uint8_t month, const uint8_t day,
 			     const uint8_t hour, const uint8_t minute, const uint8_t second,
 			     const uint8_t dayOfWeek, const uint8_t timeZone, const uint8_t unused) = 0;
-	virtual void setExtendedInformation(const uint16_t type, const UTF8String &data) = 0;
+	virtual void setExtendedInformation(const uint16_t type, const WPXString &data) = 0;
 	virtual void characterColorChange(const uint8_t red, const uint8_t green, const uint8_t blue) = 0;
 	virtual void characterShadingChange(const uint8_t shading) = 0;
 	virtual void highlightChange(const bool isOn, const RGBSColor color) = 0;

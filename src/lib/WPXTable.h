@@ -35,7 +35,7 @@
 #ifndef _WPXTABLE_H
 #define _WPXTABLE_H
 #include <vector>
-#include "libwpd_support.h"
+#include "libwpd_types.h"
 
 using namespace std;
 

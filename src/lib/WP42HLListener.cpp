@@ -25,6 +25,7 @@
 
 #include "WP42HLListener.h"
 #include "WP42FileStructure.h"
+#include "libwpd_internal.h"
 
 WP42HLListener::WP42HLListener(vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl) :
 	WPXHLListener(pageList, listenerImpl),
@@ -39,7 +40,7 @@ WP42HLListener::WP42HLListener(vector<WPXPageSpan *> *pageList, WPXHLListenerImp
 
 void WP42HLListener::insertCharacter(const uint16_t character)
 {
-	m_textBuffer.append(character);
+	appendUCS4(m_textBuffer, (uint32_t)character);
 }
 
 void WP42HLListener::insertTab(const uint8_t tabType, const float tabPosition)
