@@ -297,6 +297,12 @@ void WP6HLListener::startTable()
 				m_numDeferredParagraphBreaks--;					
 			_flushText();
 
+			// handle corner case where we have a new section, but immediately start with a table
+			// FIXME: this isn't a very satisfying solution, and might need to be generalized
+			// as we add more table-like structures into the document
+			if (m_sectionAttributesChanged) 
+				m_listenerImpl->openSection(m_numColumns, m_marginLeft, m_marginRight);
+				
 			m_listenerImpl->openTable();
 		}
 }
