@@ -28,8 +28,8 @@
 #include "WP6FileStructure.h" 
 #include "libwpd_internal.h"
 
-WP60Header::WP60Header(GsfInput * input)
-	:	WP6Header(input)
+WP60Header::WP60Header(GsfInput * input, WPXHeader &header)
+	:	WP6Header(input, header)
 {
 	guint16 documentEncrypted;
 

@@ -23,17 +23,50 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP6FOOTNOTEENDNOTEGROUP_H
-#define WP6FOOTNOTEENDNOTEGROUP_H
+#include "WP6PageGroup.h"
+#include "WP6LLListener.h"
+#include "libwpd_internal.h"
 
-#include "WP6VariableLengthGroup.h"
-
-class WP6FootnoteEndnoteGroup : public WP6VariableLengthGroup
+WP6PageGroup::WP6PageGroup(GsfInput *input) :
+	WP6VariableLengthGroup(),
+	m_margin(0)
 {
- public:
-	WP6FootnoteEndnoteGroup(GsfInput *input);	
-	virtual void _readContents(GsfInput *input);
-	virtual ParseResult parse(WP6LLListener *llListener);
-};
+	_read(input);
+}
 
-#endif /* WP6FOOTNOTEENDNOTEGROUP_H */
+void WP6PageGroup::_readContents(GsfInput *input)
+{
+	// this group can contain different kinds of data, thus we need to read
+	// the contents accordingly	
+	switch (getSubGroup())	
+	{
+		case 0: // Top Margin Set
+		case 1: // Bottom Margin Set
+			{
+				m_margin = gsf_le_read_guint16(input);
+				WPD_DEBUG_MSG(("WordPerfect: Read page group margin size (margin: %i)\n", m_margin));
+			}
+			break;
+		default: /* something else we don't support, since it isn't in the docs */
+			break;
+	}
+}
+
+ParseResult WP6PageGroup::parse(WP6LLListener *llListener)
+{
+	WPD_DEBUG_MSG(("WordPerfect: handling an Page group\n"));
+	
+	switch (getSubGroup())
+	{
+		case 0: // Top Margin Set
+		case 1: // Bottom Margin Set
+			{						
+				llListener->pageMarginChange(getSubGroup(), m_margin);
+			}
+			break;
+		default: // something else we don't support, since it isn't in the docs
+			break;
+	}
+	
+	return PARSE_OK;
+}

@@ -27,7 +27,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "WPXParser.h"
-#include "WP6Parser.h"
+#include "WP6LLParser.h"
 #include "WP6FileStructure.h"
 #include "libwpd_internal.h"
 

@@ -36,8 +36,6 @@ public:
 	HtmlListenerImpl();
 	virtual ~HtmlListenerImpl();
     
-	virtual void startHeader();
-	virtual void endHeader();
  	virtual void setDocumentMetaData(const UCSString &author, const UCSString &subject,
 						const UCSString &publisher, const UCSString &category,
 						const UCSString &keywords, const UCSString &language,
@@ -46,12 +44,20 @@ public:
 
 	virtual void startDocument();
 	virtual void endDocument();
+
+	virtual void openPageSpan(const int span, const bool isLastPageSpan,
+				  const float marginLeft, const float marginRight,
+				  const float marginTop, const float marginBottom);
+	virtual void closePageSpan();
+	virtual void openHeaderFooter(const WPXHeaderFooterType headerFooterType);
+	virtual void closeHeaderFooter(const WPXHeaderFooterType headerFooterType);
+
 	virtual void openSection(const guint numColumns, float marginLeft, float marginRight);
 	virtual void closeSection();
 	virtual void openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits,
-						const gchar *fontName, float fontSize, 
-						const float lineSpacing,
-						bool isColumnBreak, bool isPageBreak);
+				   const gchar *fontName, float fontSize, 
+				   const float lineSpacing,
+				   bool isColumnBreak, bool isPageBreak);
 	virtual void closeParagraph();
 	virtual void openSpan(const guint32 textAttributeBits, const gchar *fontName, const float fontSize);
 	virtual void closeSpan();
@@ -77,6 +83,7 @@ public:
 	virtual void closeFootnote();
 	virtual void openEndnote(int number);
 	virtual void closeEndnote();
+
 
 	virtual void openTable(const guint8 tablePositionBits, const float leftOffset, const vector < WPXColumnDefinition > &columns);
 	virtual void openTableRow();

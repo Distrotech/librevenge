@@ -24,11 +24,25 @@ int main(int argc, char *argv[])
 			return 1;
 		}
 	
-	WPXLLListener * listener = new RawListener();
-	WPXParser * parser = new WP6Parser(input, listener);
+	RawListener listener;
+
+	GsfInput *document = NULL;
+	WP6Header * header = NULL;
+	bool isDocumentOLE = false;
+
 	try 
-	  {
-		  parser->parse();
+	  {		
+		document =  WP6LLParser::getDocument(input);
+		if (document != NULL) {
+			isDocumentOLE = true;
+		}
+		else
+			document = input;
+
+		gsf_input_seek(document, 0, G_SEEK_SET);			
+		header = WP6LLParser::getHeader(document);
+		
+		WP6LLParser::parse(input, header, static_cast<WP6LLListener *>(&listener));
 	  } 
 	catch (FileException)
 	  {
@@ -37,9 +51,10 @@ int main(int argc, char *argv[])
 	  }
 
 	gsf_shutdown();
-	delete parser;
-	delete listener;
+	if (document != NULL && isDocumentOLE)
+		g_object_unref(G_OBJECT(document));
+	delete header;
 	g_object_unref (G_OBJECT (input));
-	
+
 	return 0;
 }

@@ -28,8 +28,8 @@
 #include "WP6FileStructure.h" 
 #include "libwpd_internal.h"
 
-WP61Header::WP61Header(GsfInput * input)
-	:	WP6Header(input)
+WP61Header::WP61Header(GsfInput * input, WPXHeader &header)
+	:	WP6Header(input, header)
 {
 	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WP6_HEADER_ENCRYPTION_OFFSET, G_SEEK_SET));
 	m_documentEncryption = gsf_le_read_guint16(input);

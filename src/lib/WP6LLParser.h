@@ -23,26 +23,27 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP6PARSER_H
-#define WP6PARSER_H
+#ifndef WP6LLPARSER_H
+#define WP6LLPARSER_H
 
 #include "WPXParser.h"
+#include "WP6Header.h"
 
 class WP6PrefixData;
 class WP6LLListener;
-class WPXTable;
 
-class WP6Parser : public WPXParser
+class WP6LLParser
 {
 public:
-	WP6Parser(GsfInput * input, WPXLLListener *llListener);		
-	virtual void parse();
-	WPXTable * parseTableDefinition();
-	static void parseDocument(GsfInput *stream, WP6LLListener *llListener, guint8 parseEndConditions = 0);
+	static GsfInput * getDocument(GsfInput *input);
+	static WP6Header * getHeader(GsfInput *input);
+	static WP6PrefixData * getPrefixData(GsfInput *input, WP6Header *header);
 
-protected:
-	void _parsePacket(WP6PrefixData *prefixData, int type);
-	void _parsePackets(WP6PrefixData *prefixData, int type);
+	static void parse(GsfInput *input, WP6Header *header, WP6LLListener *llistener);
+	static void parseDocument(GsfInput *stream, WP6LLListener *llListener);
+
+	static void parsePacket(WP6PrefixData *prefixData, int type, WP6LLListener *llListener);
+	static void parsePackets(WP6PrefixData *prefixData, int type, WP6LLListener *llListener);
 };
 
-#endif /* WP6PARSER_H */
+#endif /* WP6LLPARSER_H */

@@ -1,4 +1,3 @@
-
 /* libwpd2
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
@@ -47,6 +46,7 @@ int extendedCharacterToUCS2(guint8 character, guint8 characterSet,
 
 enum WPXNumberingType { ARABIC, LOWERCASE, UPPERCASE, LOWERCASE_ROMAN, UPPERCASE_ROMAN };
 enum WPXNoteType { FOOTNOTE, ENDNOTE };
+enum WPXHeaderFooterType { HEADER_A, HEADER_B, FOOTER_A, FOOTER_B, WATERMARK_A, WATERMARK_B };
 
 // ATTRIBUTE bits
 #define WPX_EXTRALARGE_BIT 1
@@ -91,6 +91,7 @@ const guint8 WPX_TABLE_CELL_BOTTOM_BORDER_OFF = 0x08;
 
 // BREAK bits
 #define WPX_PAGE_BREAK 0x00
+#define WPX_SOFT_PAGE_BREAK 0x01
 #define WPX_COLUMN_BREAK 0x02
 
 typedef struct _RGBSColor RGBSColor;
@@ -138,13 +139,19 @@ private:
 class UTF8String
 {
 public:
+	UTF8String();
 	UTF8String(const UTF8String &);
 	UTF8String(const UCSString &, bool convertToValidXML = false);
 	//UTF8String(const gchar *);
 	UTF8String(const gchar *format, ...);
 	~UTF8String() { g_string_free(m_buf, TRUE); }
+
 	const gchar * getUTF8() const { return m_buf->str; }
 	const int getLen() const { return m_buf->len; }
+
+	void sprintf(const gchar *format, ...);
+	UTF8String & operator=(const UTF8String &);
+
 private:
 	GString *m_buf;
 };

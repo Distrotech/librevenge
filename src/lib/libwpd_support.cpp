@@ -382,6 +382,7 @@ const guint16 japaneseMap[] = {
  */
 
 #include "WP6TibetanMap.h"
+#include "WP6FileStructure.h"
 
 int extendedCharacterToUCS2(guint8 character,
 			    guint8 characterSet, const guint16 **chars)
@@ -534,6 +535,11 @@ void UCSString::clear()
 	m_stringBuf = g_array_set_size(m_stringBuf, 0);			
 }
 
+UTF8String::UTF8String() :
+	m_buf(g_string_new(NULL))
+{
+}
+
 UTF8String::UTF8String(const UTF8String &stringBuf) :
 	m_buf(g_string_new(stringBuf.getUTF8()))
 {
@@ -579,9 +585,32 @@ UTF8String::UTF8String(const gchar *format, ...) :
 //  	gsize len = g_printf_string_upper_bound(format, args);
 //  	if (len > 0) 
 //  	{
-	gchar *buf = g_strdup_vprintf(format, args);
+	gchar *buf = NULL;
+	buf = g_strdup_vprintf(format, args);
 	m_buf = g_string_append(m_buf, buf);
 	g_free(buf);
 //  	}
 	va_end(args);
+}
+
+void UTF8String::sprintf(const gchar *format, ...)
+{
+	va_list args;
+	va_start (args, format);
+
+	m_buf = g_string_truncate(m_buf, 0);
+
+	gchar *buf = NULL;
+	buf = g_strdup_vprintf(format, args);
+	m_buf = g_string_append(m_buf, buf);
+	g_free(buf);
+
+	va_end(args);
+}
+
+UTF8String & UTF8String::operator=(const UTF8String &str)
+{
+	// FIXME FIXME FIXME (IMPORTANT): Protect against the case of
+	// self assignment (x=x)
+	m_buf = g_string_assign(m_buf, str.getUTF8());
 }

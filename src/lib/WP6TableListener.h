@@ -23,17 +23,19 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-// WP6TableListener: creates an intermediate table representation, given a
+// WP6HLStylesListener: creates an intermediate table representation, given a
 // sequence of messages passed to it by the parser.
 
+#ifndef WP6TABLELISTENER_H
+#define WP6TABLELISTENER_H
 #include "WP6LLListener.h"
+#include <vector>
+#include "WPXTable.h"
 
-class WPXTable;
-
-class WP6TableListener : public WP6LLListener
+class WP6HLStylesListener : public WP6LLListener
 {
 public:
-	WP6TableListener(WPXTable *table) : m_table(table), m_isUndoOn(false) {}
+	WP6HLStylesListener(vector<WPXTable *> *tableList) : m_tableList(tableList), m_isUndoOn(false) {}
 
 	virtual void setDate(const guint16 year, const guint8 month, const guint8 day, 
 						const guint8 hour, const guint8 minute, const guint8 second,
@@ -64,17 +66,20 @@ public:
 	virtual void globalOff() {}
 	virtual void noteOn(const guint16 textPID) {}
 	virtual void noteOff(const WPXNoteType noteType) {}
+	virtual void headerFooterGroup(const WPXHeaderFooterType headerFooterType, const guint8 occurenceBits, const guint16 textPID) {}
 	virtual void endDocument() {}
  
  	virtual void defineTable(guint8 position, guint16 leftOffset) {}
 	virtual void addTableColumnDefinition(guint32 width, guint32 leftGutter, guint32 rightGutter) {}
-	virtual void startTable() {}
+	virtual void startTable();
  	virtual void insertRow();
  	virtual void insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove, 
 				const guint8 borderBits, 
 				const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
  	virtual void endTable() {}
 private:
-	WPXTable *m_table;
+	vector<WPXTable *> *m_tableList;
+	WPXTable *m_currentTable;
 	bool m_isUndoOn;
 };
+#endif /* WP6TABLELISTENER_H */

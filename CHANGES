@@ -1,5 +1,11 @@
 CHANGES:
 
+0.5.0 -> 0.6.0
+- Tibetan extended character support (Ted Lemon)
+- Border-less table support (William Lachance)
+- Support for some odd types of tables (William)
+- Top/bottom margin change support (William)
+
 0.4.0 -> 0.5.0
 - rpm spec (Rui Miguel Silva Seabra)
 - document metadata (William Lachance)
@@ -21,15 +27,15 @@ CHANGES:
 - many bugfixes (William, Marc)
 
 0.3.1 -> 0.3.2
-- small typo fix to wpd2html
-- huge bug in the build system: we require libgsf-1
+- small typo fix to wpd2html (Marc Maurer)
+- huge bug in the build system: we require libgsf-1 (Marc)
 
 0.3.0 -> 0.3.1
 ?
 
 0.2.0 -> 0.3.0:
-- font face/size changes
-- convert library to use libgsf
+- font face/size changes (William Lachance)
+- convert library to use libgsf (William) 
 - handle WordPerfect documents with an OLE header (side effect of
-conversion to libgsf)
-- many bugfixes (memory leaks, general problems)
+conversion to libgsf) (William)
+- many bugfixes (memory leaks, general problems) (William, Marc Maurer)

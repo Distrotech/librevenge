@@ -25,26 +25,20 @@ int main(int argc, char *argv[])
 			return 1;
 		}
 	
-	WPXHLListenerImpl * listenerImpl = new HtmlListenerImpl();
- 	WP6HLListener * listener = new WP6HLListener(listenerImpl);
- 	WP6Parser * parser = new WP6Parser(input, static_cast<WP6LLListener *>(listener));
-	listener->setParser(parser);
-	try 
-	  {
-		  parser->parse();
-	  } 
-	catch (FileException)
-	  {
-	    printf("ERROR: File Exception!\n");
-	    return 1;
-	  }
+	HtmlListenerImpl listenerImpl;
+ 	try 
+ 	  {
+		  WP6HLParser::parse(input, static_cast<WPXHLListenerImpl *>(&listenerImpl));
+ 	  } 
+ 	catch (FileException)
+ 	  {
+ 	    printf("ERROR: File Exception!\n");
+ 	    return 1;
+ 	  }
 	
 	
 	gsf_shutdown();
- 	delete parser;
- 	delete listener;
-	delete listenerImpl;
 	g_object_unref (G_OBJECT (input));
-	
+
 	return 0;
 }

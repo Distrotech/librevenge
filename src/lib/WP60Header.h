@@ -30,7 +30,7 @@
 class WP60Header : public WP6Header
 {
  public:
-	WP60Header(GsfInput * input);
+	WP60Header(GsfInput * input, WPXHeader &header);
 	virtual ~WP60Header();
 		
  private:

@@ -24,11 +24,13 @@
  */
 
 #include "WP6VariableLengthGroup.h"
+#include "WP6PageGroup.h"
 #include "WP6CharacterGroup.h"
 #include "WP6ColumnGroup.h"
 #include "WP6EOLGroup.h"
 #include "WP6ParagraphGroup.h"
 #include "WP6FootnoteEndnoteGroup.h"
+#include "WP6HeaderFooterGroup.h"
 #include "WP6DisplayNumberReferenceGroup.h"
 #include "WP6StyleGroup.h"
 #include "WP6TabGroup.h"
@@ -52,6 +54,8 @@ WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(Gs
 {
 	switch (groupID)
 	{
+	case WP6_TOP_PAGE_GROUP:
+		return new WP6PageGroup(input);
 	case WP6_TOP_EOL_GROUP: 
 		return new WP6EOLGroup(input);
 	case WP6_TOP_CHARACTER_GROUP:
@@ -62,6 +66,8 @@ WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(Gs
 		return new WP6ParagraphGroup(input);
 	case WP6_TOP_FOOTNOTE_ENDNOTE_GROUP:
 		return new WP6FootnoteEndnoteGroup(input);
+	case WP6_TOP_HEADER_FOOTER_GROUP:
+		return new WP6HeaderFooterGroup(input);
 	case WP6_TOP_DISPLAY_NUMBER_REFERENCE_GROUP:
 		return new WP6DisplayNumberReferenceGroup(input);
 	case WP6_TOP_STYLE_GROUP:

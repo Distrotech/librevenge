@@ -33,24 +33,26 @@ using namespace std;
 class WPXHLListenerImpl
 {
  public:
-	// startHeader/endHeader: self explanatory and completely optional. if your listener
-	// implementation doesn't need these functions, don't implement them
-	virtual void startHeader() {}
-	virtual void endHeader() {}
-
 	// setDocumentMeta: should be used to set all document metadata
 	// this function is guaranteed to be called before any subsequent function
 	// which deals with document elements
 	// completely optional. if your listener implementation doesn't 
 	// need/support these functions, don't implement them
  	virtual void setDocumentMetaData(const UCSString &author, const UCSString &subject,
-							const UCSString &publisher, const UCSString &category,
-						const UCSString &keywords, const UCSString &language,
-						const UCSString &abstract, const UCSString &descriptiveName,
-						const UCSString &descriptiveType) {}
+					 const UCSString &publisher, const UCSString &category,
+					 const UCSString &keywords, const UCSString &language,
+					 const UCSString &abstract, const UCSString &descriptiveName,
+					 const UCSString &descriptiveType) {}
 
 	virtual void startDocument() = 0;
 	virtual void endDocument() = 0;
+
+	virtual void openPageSpan(const int span, const bool isLastPageSpan,
+				  const float marginLeft, const float marginRight,
+				  const float marginTop, const float marginBottom) = 0;
+	virtual void closePageSpan() {}
+	virtual void openHeaderFooter(const WPXHeaderFooterType headerFooterType) = 0;
+	virtual void closeHeaderFooter(const WPXHeaderFooterType headerFooterType) = 0;
 
 	virtual void openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits,
 				   const gchar *fontName, const float fontSize, 

@@ -48,6 +48,7 @@ public:
 	virtual void attributeChange(const bool isOn, const guint8 attribute) {}
 	virtual void lineSpacingChange(const float lineSpacing) {}
 	virtual void justificationChange(const guint8 justification) {}
+	virtual void pageMarginChange(const guint8 side, const guint16 margin) {}
 	virtual void marginChange(const guint8 side, const guint16 margin) {}
 	virtual void columnChange(const guint8 numColumns) {}
 	virtual void updateOutlineDefinition(const WP6OutlineLocation outlineLocation, const guint16 outlineHash, 
@@ -63,6 +64,7 @@ public:
 	virtual void globalOff() {}
 	virtual void noteOn(const guint16 textPID) {}
 	virtual void noteOff(const WPXNoteType noteType) {}
+	virtual void headerFooterGroup(const WPXHeaderFooterType headerFooterType, const guint8 occurenceBits, const guint16 textPID) {}
 	virtual void endDocument() {}
 		
 	virtual void defineTable(guint8 position, guint16 leftOffset) {}

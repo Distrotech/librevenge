@@ -32,6 +32,8 @@
 // side by side, one with border, one without-- creating a false ambiguity (none 
 // actually exists: if one cell does not have a border, the other doesn't either) 
 
+#ifndef _WPXTABLE_H
+#define _WPXTABLE_H
 #include <vector>
 #include <glib.h>
 
@@ -63,3 +65,4 @@ public:
 private:
 	vector< vector<WPXTableCell *> * > m_tableRows;
 };
+#endif /* _WPXTABLE_H */

@@ -1,11 +1,11 @@
-#include "WP6TableListener.h"
+#include "WP6HLStylesListener.h"
 #include "WPXTable.h"
 #include "WP6FileStructure.h"
 
-// WP6TableListener: creates an intermediate table representation, given a
+// WP6HLStylesListener: creates an intermediate table representation, given a
 // sequence of messages passed to it by the parser.
 
-void WP6TableListener::undoChange(const guint8 undoType, const guint16 undoLevel)
+void WP6HLStylesListener::undoChange(const guint8 undoType, const guint16 undoLevel)
 {
 	if (undoType == WP6_UNDO_GROUP_INVALID_TEXT_START)
 		m_isUndoOn = true;
@@ -13,16 +13,26 @@ void WP6TableListener::undoChange(const guint8 undoType, const guint16 undoLevel
 		m_isUndoOn = false;		
 }
 
-void WP6TableListener::insertRow()
+
+void WP6HLStylesListener::startTable()
 {
-	if (!m_isUndoOn)
-		m_table->insertRow();
+	if (!m_isUndoOn) 
+	{			
+		m_currentTable = new WPXTable();
+		m_tableList->push_back(m_currentTable);
+	}
 }
 
-void WP6TableListener::insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove, 
+void WP6HLStylesListener::insertRow()
+{
+	if (!m_isUndoOn && m_currentTable != NULL)
+		m_currentTable->insertRow();
+}
+
+void WP6HLStylesListener::insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove, 
 				  const guint8 borderBits, 
 				  const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
 {
-	if (!m_isUndoOn)
-		m_table->insertCell(colSpan, rowSpan, boundFromLeft, boundFromAbove, borderBits);
+	if (!m_isUndoOn && m_currentTable != NULL)
+		m_currentTable->insertCell(colSpan, rowSpan, boundFromLeft, boundFromAbove, borderBits);
 }

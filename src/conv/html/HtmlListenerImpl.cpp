@@ -37,19 +37,6 @@ HtmlListenerImpl::~HtmlListenerImpl()
 {
 }
 
-void HtmlListenerImpl::startHeader()
-{
-    printf("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\" \"http://www.w3.org/TR/REC-html40/loose.dtd\">\n");
-    printf("<html>\n");
-    printf("<head>\n");
-    printf("<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" >\n");
-}
-
-void HtmlListenerImpl::endHeader()
-{
-    printf("</head>\n");
-}
-
 void HtmlListenerImpl::setDocumentMetaData(const UCSString &author, const UCSString &subject,
  					 const UCSString &publisher, const UCSString &category,
  					 const UCSString &keywords, const UCSString &language,
@@ -76,6 +63,11 @@ void HtmlListenerImpl::setDocumentMetaData(const UCSString &author, const UCSStr
 
 void HtmlListenerImpl::startDocument()
 {
+    printf("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\" \"http://www.w3.org/TR/REC-html40/loose.dtd\">\n");
+    printf("<html>\n");
+    printf("<head>\n");
+    printf("<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" >\n");
+    printf("</head>\n");
     printf("<body>\n");
 }
 
@@ -84,6 +76,45 @@ void HtmlListenerImpl::endDocument()
 	printf("\n");
 	printf("</body>\n");
 	printf("</html>\n");
+}
+
+void HtmlListenerImpl::openPageSpan(const int span, const bool isLastPageSpan,
+				    const float marginLeft, const float marginRight,
+				    const float marginTop, const float marginBottom)
+{
+	printf("<page-span span:%i margin-left:%fin margin-right:%fin margin-top:%fin margin-bottom:%fin>\n", span, 
+	       marginLeft, marginRight, marginTop, marginBottom);
+}
+
+void HtmlListenerImpl::closePageSpan()
+{
+	printf("</page-span>\n");
+}
+
+void HtmlListenerImpl::openHeaderFooter(const WPXHeaderFooterType headerFooterType)
+{
+	switch (headerFooterType)
+	{
+	case HEADER_A:
+		printf("<header a>\n");
+		break;
+	case FOOTER_A:
+		printf("<footer a>\n");
+		break;
+	}
+}
+
+void HtmlListenerImpl::closeHeaderFooter(const WPXHeaderFooterType headerFooterType)
+{
+	switch (headerFooterType)
+	{
+	case HEADER_A:
+		printf("</header a>\n");
+		break;
+	case FOOTER_A:
+		printf("</footer a>\n");
+		break;
+	}
 }
 
 void HtmlListenerImpl::openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits, 

@@ -3,7 +3,7 @@
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -23,24 +23,20 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef _WP6HEADER_H
-#define _WP6HEADER_H
+#ifndef WP6HEADERFOOTERGROUP_H
+#define WP6HEADERFOOTERGROUP_H
 
-#include "WPXHeader.h"
+#include "WP6VariableLengthGroup.h"
 
-class WP6Header : public WPXHeader
+class WP6HeaderFooterGroup : public WP6VariableLengthGroup
 {
- public:
-	WP6Header(GsfInput * input, WPXHeader &header) : WPXHeader(header) {};
-	virtual ~WP6Header() {};
+public:
+	WP6HeaderFooterGroup(GsfInput *input);	
+	virtual void _readContents(GsfInput *input);
+	virtual ParseResult parse(WP6LLListener *llListener);
+private:
+	guint8 m_occurenceBits;
 	
-	const guint16 getIndexHeaderOffset() const { return m_indexHeaderOffset; }
-	const guint16 getNumPrefixIndices() const { return m_numPrefixIndices; }
-	const guint16 getDocumentEncryption() const { return m_documentEncryption; }
-		
- protected:
-	guint16 m_indexHeaderOffset;
-	guint16 m_numPrefixIndices;
-	guint16 m_documentEncryption;
 };
-#endif /* _WP6HEADER_H  */
+
+#endif /* WP6HEADERFOOTERGROUP_H */

@@ -23,24 +23,17 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef _WP6HEADER_H
-#define _WP6HEADER_H
+#ifndef WP6HLPARSER_H
+#define WP6HLPARSER_H
 
-#include "WPXHeader.h"
+#include "WP6LLParser.h"
 
-class WP6Header : public WPXHeader
+class WPXHLListenerImpl;
+
+class WP6HLParser : public WP6LLParser
 {
- public:
-	WP6Header(GsfInput * input, WPXHeader &header) : WPXHeader(header) {};
-	virtual ~WP6Header() {};
-	
-	const guint16 getIndexHeaderOffset() const { return m_indexHeaderOffset; }
-	const guint16 getNumPrefixIndices() const { return m_numPrefixIndices; }
-	const guint16 getDocumentEncryption() const { return m_documentEncryption; }
-		
- protected:
-	guint16 m_indexHeaderOffset;
-	guint16 m_numPrefixIndices;
-	guint16 m_documentEncryption;
+public:
+	static void parse(GsfInput *input, WPXHLListenerImpl *listenerImpl);
 };
-#endif /* _WP6HEADER_H  */
+
+#endif /* WP6HLPARSER_H */
