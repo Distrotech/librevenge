@@ -24,9 +24,9 @@
  */
 
 #include <stdio.h>
-#include "TestListener.h"
+#include "TextListener.h"
 
-void TestListener::insertCharacter(guint32 value)
+void TextListener::insertCharacter(guint32 value)
 {
 	printf("%c", (char)value);
 }

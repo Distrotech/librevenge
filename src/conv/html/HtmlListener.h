@@ -23,16 +23,19 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef TESTLISTENER_H
-#define TESTLISTENER_H
+#ifndef HTMLLISTENER_H
+#define HTMLLISTENER_H
 
 #include "libwpd2/libwpd2.h"
 #include "glib.h"
 
-class TestListener : public WPXLLListener
+class HtmlListener : public WPXLLListener
 {
 public:
-	void insertCharacter(guint32 value);
+    HtmlListener();
+    ~HtmlListener();
+
+    void insertCharacter(guint32 value);
 };
 
-#endif /* TESTLISTENER_H */
+#endif /* HTMLLISTENER_H */
