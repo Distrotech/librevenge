@@ -27,6 +27,7 @@
 #include "WPXHLListener.h"
 #include "WPXPageSpan.h"
 #include "libwpd_internal.h"
+#include "WPXProperty.h"
 
 _WPXParsingState::_WPXParsingState(bool sectionAttributesChanged) :
 	m_textAttributeBits(0),
@@ -128,11 +129,10 @@ WPXHLListener::~WPXHLListener()
 
 void WPXHLListener::startDocument()
 {
-	m_listenerImpl->setDocumentMetaData(m_metaData.m_author, m_metaData.m_subject,
-					    m_metaData.m_publisher, m_metaData.m_category,
-					    m_metaData.m_keywords, m_metaData.m_language,
-					    m_metaData.m_abstract, m_metaData.m_descriptiveName,
-					    m_metaData.m_descriptiveType);
+	// FIXME: this is stupid, we should store a property list filled with the relevant metadata
+	// and then pass that directly..
+
+	m_listenerImpl->setDocumentMetaData(m_metaData);
 
 	m_listenerImpl->startDocument();
 	_openPageSpan();
@@ -141,10 +141,16 @@ void WPXHLListener::startDocument()
 void WPXHLListener::_openSection()
 {
 	_closeSection();
+
+	WPXPropertyList propList;
+	propList.insert("num-columns", WPXPropertyFactory::newIntProp(m_ps->m_numColumns));
+
 	if (m_ps->m_numColumns > 1)
-		m_listenerImpl->openSection(m_ps->m_numColumns, m_ps->m_textColumns, 1.0f);
+		propList.insert("space-after", WPXPropertyFactory::newFloatProp(1.0f));
 	else
-		m_listenerImpl->openSection(m_ps->m_numColumns, m_ps->m_textColumns, 0.0f);
+		propList.insert("space-after", WPXPropertyFactory::newFloatProp(0.0f));
+
+	m_listenerImpl->openSection(propList, m_ps->m_textColumns);
 
 	m_ps->m_sectionAttributesChanged = false;
 	m_ps->m_isSectionOpened = true;
@@ -178,12 +184,19 @@ void WPXHLListener::_openPageSpan()
 	currentPage->makeConsistent(1);
 	bool isLastPageSpan;
 	(m_pageList->size() <= (m_ps->m_nextPageSpanIndice+1)) ? isLastPageSpan = true : isLastPageSpan = false;
-
-	m_listenerImpl->openPageSpan(currentPage->getPageSpan(), isLastPageSpan,
-	                 currentPage->getFormLength(), currentPage->getFormWidth(),
-	                 currentPage->getFormOrientation(),
-				     currentPage->getMarginLeft(), currentPage->getMarginRight(),
-				     currentPage->getMarginTop(), currentPage->getMarginBottom());
+	
+	WPXPropertyList propList;
+	propList.insert("span", WPXPropertyFactory::newIntProp(currentPage->getPageSpan()));
+	propList.insert("is-last-page-span", WPXPropertyFactory::newIntProp(isLastPageSpan));
+	propList.insert("form-length", WPXPropertyFactory::newFloatProp(currentPage->getFormLength()));
+	propList.insert("form-width", WPXPropertyFactory::newFloatProp(currentPage->getFormWidth()));
+	propList.insert("form-orientation", WPXPropertyFactory::newIntProp(currentPage->getFormOrientation())); 
+	propList.insert("margin-left", WPXPropertyFactory::newFloatProp(currentPage->getMarginLeft()));
+	propList.insert("margin-right", WPXPropertyFactory::newFloatProp(currentPage->getMarginRight()));
+	propList.insert("margin-top", WPXPropertyFactory::newFloatProp(currentPage->getMarginTop()));
+	propList.insert("margin-bottom", WPXPropertyFactory::newFloatProp(currentPage->getMarginBottom()));
+	
+	m_listenerImpl->openPageSpan(propList);
 
 	m_ps->m_pageFormWidth = currentPage->getFormWidth();
 	m_ps->m_pageMarginLeft = currentPage->getMarginLeft();
@@ -204,9 +217,12 @@ void WPXHLListener::_openPageSpan()
 	{
 		if (!currentPage->getHeaderFooterSuppression((*iter).getInternalType()))
 		{
-			m_listenerImpl->openHeaderFooter((*iter).getType(), (*iter).getOccurence());
+			WPXPropertyList propList;
+			propList.insert("type", WPXPropertyFactory::newIntProp((*iter).getType()));
+			propList.insert("occurence", WPXPropertyFactory::newIntProp((*iter).getOccurence()));
+			m_listenerImpl->openHeaderFooter(propList); //(*iter).getType(), (*iter).getOccurence());
 			handleSubDocument((*iter).getTextPID(), true, (*iter).getTableList());
-			m_listenerImpl->closeHeaderFooter((*iter).getType(), (*iter).getOccurence());
+			m_listenerImpl->closeHeaderFooter(propList);
 			WPD_DEBUG_MSG(("Header Footer Element: type: %i occurence: %i pid: %i\n",
 				       (*iter).getType(), (*iter).getOccurence(), (*iter).getTextPID()));
 		}
@@ -284,8 +300,12 @@ void WPXHLListener::_openSpan()
 		fontSizeChange = 1.0f;
 		break;
 	}
-	m_listenerImpl->openSpan((attributeBits & 0xffffffe0), m_ps->m_fontName->getUTF8(),
-				fontSizeChange*m_ps->m_fontSize, m_ps->m_fontColor, m_ps->m_highlightColor);
+	WPXPropertyList propList;
+	propList.insert("text-attribute-bits", WPXPropertyFactory::newIntProp(attributeBits & 0xffffffe0));
+	propList.insert("font-name", WPXPropertyFactory::newStringProp(*(m_ps->m_fontName)));
+	propList.insert("font-size", WPXPropertyFactory::newFloatProp(fontSizeChange*m_ps->m_fontSize));
+
+	m_listenerImpl->openSpan(propList, m_ps->m_fontColor, m_ps->m_highlightColor);
 
 	m_ps->m_isSpanOpened = true;
 }
@@ -302,8 +322,13 @@ void WPXHLListener::_openTable()
 {
 	_closeTable();
 
-	m_listenerImpl->openTable(m_ps->m_tableDefinition.m_positionBits, m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight,
-				  m_ps->m_tableDefinition.m_leftOffset, m_ps->m_tableDefinition.columns);
+	WPXPropertyList propList;
+	propList.insert("position-bits", WPXPropertyFactory::newIntProp(m_ps->m_tableDefinition.m_positionBits));
+	propList.insert("margin-left", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphMarginLeft));
+	propList.insert("margin-right", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphMarginRight));
+	propList.insert("left-offset", WPXPropertyFactory::newFloatProp(m_ps->m_tableDefinition.m_leftOffset));
+
+	m_listenerImpl->openTable(propList, m_ps->m_tableDefinition.columns);
 	m_ps->m_isTableOpened = true;
 
 	m_ps->m_currentTableRow = (-1);
@@ -335,15 +360,22 @@ void WPXHLListener::_openTableRow(const float height, const bool isMinimumHeight
 {
 	_closeTableRow();
 	m_ps->m_currentTableCol = 0;
+
+	WPXPropertyList propList;
+	propList.insert("height", WPXPropertyFactory::newFloatProp(height));
+	propList.insert("is-minimum-height", WPXPropertyFactory::newIntProp(isMinimumHeight));
+
 	// Only the first "Header Row" in a table is the actual "Header Row"
 	// The following "Header Row" flags are ignored
 	if (isHeaderRow & !m_ps->m_wasHeaderRow)
 	{
-		m_listenerImpl->openTableRow(height, isMinimumHeight, true);
+		propList.insert("is-header-row", WPXPropertyFactory::newIntProp(true));		
 		m_ps->m_wasHeaderRow = true;
 	}
 	else
-		m_listenerImpl->openTableRow(height, isMinimumHeight, false);
+		propList.insert("is-header-row", WPXPropertyFactory::newIntProp(false));		
+
+	m_listenerImpl->openTableRow(propList);
 
 	m_ps->m_isTableRowOpened = true;
 	m_ps->m_currentTableRow++;
@@ -359,20 +391,26 @@ void WPXHLListener::_closeTableRow()
 }
 
 void WPXHLListener::_openTableCell(const uint8_t colSpan, const uint8_t rowSpan, const bool boundFromLeft, const bool boundFromAbove,
-					const uint8_t borderBits, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
-					const RGBSColor * cellBorderColor,
-					const WPXVerticalAlignment cellVerticalAlignment)
+				   const uint8_t borderBits, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
+				   const RGBSColor * cellBorderColor, const WPXVerticalAlignment cellVerticalAlignment)
 {
 	_closeTableCell();
 
+	WPXPropertyList propList;
+	propList.insert("col", WPXPropertyFactory::newIntProp(m_ps->m_currentTableCol));		
+	propList.insert("row", WPXPropertyFactory::newIntProp(m_ps->m_currentTableRow));		
+
 	if (!boundFromLeft && !boundFromAbove)
 	{
-		m_listenerImpl->openTableCell(m_ps->m_currentTableCol, m_ps->m_currentTableRow, colSpan, rowSpan,
-					      borderBits, cellFgColor, cellBgColor, cellBorderColor, cellVerticalAlignment);
+		propList.insert("col-span", WPXPropertyFactory::newIntProp(colSpan));		
+		propList.insert("row-span", WPXPropertyFactory::newIntProp(rowSpan));		
+		propList.insert("border-bits", WPXPropertyFactory::newIntProp(borderBits));		
+		propList.insert("vertical-alignment", WPXPropertyFactory::newIntProp(cellVerticalAlignment));		
+		m_listenerImpl->openTableCell(propList, cellFgColor, cellBgColor, cellBorderColor);
 		m_ps->m_isTableCellOpened = true;
 	}
 	else
-		m_listenerImpl->insertCoveredTableCell(m_ps->m_currentTableCol, m_ps->m_currentTableRow);
+		m_listenerImpl->insertCoveredTableCell(propList);
 
 	m_ps->m_currentTableCol++;
 }

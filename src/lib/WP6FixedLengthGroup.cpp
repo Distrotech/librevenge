@@ -70,7 +70,7 @@ void WP6FixedLengthGroup::_read(WPXInputStream *input)
 	uint32_t startPosition = input->tell();
 	_readContents(input);
 
-	if (m_group >= 0xF0 && m_group <= 0xFF) // just an extra safety check
+	if (m_group >= 0xF0) // just an extra safety check
 	{
 		int size = WP6_FIXED_LENGTH_FUNCTION_GROUP_SIZE[m_group-0xF0];
 		input->seek((startPosition + size - 1 - input->tell()), WPX_SEEK_CUR);

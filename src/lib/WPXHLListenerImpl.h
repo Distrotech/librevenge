@@ -26,7 +26,9 @@
 #ifndef WPXHLLISTENERIMPL_H
 #define WPXHLLISTENERIMPL_H
 #include "libwpd_support.h"
+#include "WPXProperty.h"
 #include <vector>
+#include <map>
 using namespace std;
 
 /**
@@ -41,11 +43,7 @@ class WPXHLListenerImpl
 	/** 
 	Called when all document metadata should be set. This is always the first callback made.
 	*/
- 	virtual void setDocumentMetaData(const UCSString &author, const UCSString &subject,
-					 const UCSString &publisher, const UCSString &category,
-					 const UCSString &keywords, const UCSString &language,
-					 const UCSString &abstract, const UCSString &descriptiveName,
-					 const UCSString &descriptiveType) = 0;
+ 	virtual void setDocumentMetaData(const WPXPropertyList &propList) = 0;
 
 	/**
 	Called at the start of the parsing process. This is always the second callback made.
@@ -69,16 +67,13 @@ class WPXHLListenerImpl
 	\param marginTop The top margin for each page in the span, in inches
 	\param marginBottom The bottom margin for each page in the span, in inches
 	*/
-	virtual void openPageSpan(const int span, const bool isLastPageSpan,
-				  const float formLength, const float formWidth, const WPXFormOrientation orientation,
-				  const float marginLeft, const float marginRight,
-				  const float marginTop, const float marginBottom) = 0;
+	virtual void openPageSpan(const WPXPropertyList &propList) = 0;
 	/**
 	Called when a page span is closed.
 	*/
 	virtual void closePageSpan() = 0;
-	virtual void openHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence) = 0;
-	virtual void closeHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence) = 0;
+	virtual void openHeaderFooter(const WPXPropertyList &propList) = 0;
+	virtual void closeHeaderFooter(const WPXPropertyList &propList) = 0;
 
 	/**
 	Called when a new paragraph is opened. This (or openListElement) will always be called before any text or span is placed into the document.
@@ -93,10 +88,7 @@ class WPXHLListenerImpl
 	\param isColumnBreak Whether this paragraph should be placed in a new column
 	\param isPageBreak Whether this paragraph should start a new page
 	*/
-	virtual void openParagraph(const uint8_t paragraphJustification, 
-				   const float marginLeftOffset, const float marginRightOffset, const float textIndent,
-				   const float lineSpacing, const float spacingBeforeParagraph, const float spacingAfterParagraph,
-				   const vector<WPXTabStop> &tabStops, const bool isColumnBreak, const bool isPageBreak) = 0;
+	virtual void openParagraph(const WPXPropertyList &propList, const vector<WPXTabStop> &tabStops) = 0;
 	/**
 	Called when a paragraph is closed.
 	*/
@@ -110,7 +102,7 @@ class WPXHLListenerImpl
 	\param fontColor The color of the font used in the span
 	\param highlightColor The color of highlight (the pointer is empty if there is no highlight)
 	*/
-	virtual void openSpan(const uint32_t textAttributeBits, const char *fontName, const float fontSize,
+	virtual void openSpan(const WPXPropertyList &propList, 
 			      const RGBSColor *fontColor, const RGBSColor *highlightColor) = 0;
 	/**
 	Called when a text span is closed
@@ -122,7 +114,7 @@ class WPXHLListenerImpl
 	\param columns List of definitions of each column: left gutter, right gutter, and width (includes the gutters). If numColumns>=1 the list is empty.
 	\param spaceAfter Extra space to add after the section, in inches 
 	*/
-	virtual void openSection(const unsigned int numColumns, const vector <WPXColumnDefinition> &columns, const float spaceAfter) = 0;
+	virtual void openSection(const WPXPropertyList &propList, const vector <WPXColumnDefinition> &columns) = 0;
 	/**
 	Called when a section is closed
 	*/
@@ -143,35 +135,28 @@ class WPXHLListenerImpl
 	*/
  	virtual void insertLineBreak() = 0;
 
-	virtual void defineOrderedListLevel(const int listID, const int listLevel, const WPXNumberingType listType,
-					    const UCSString &textBeforeNumber, const UCSString &textAfterNumber,
-					    const int startingNumber) = 0;
-	virtual void defineUnorderedListLevel(const int listID, const int listLevel, const UCSString &bullet) = 0;
-	virtual void openOrderedListLevel(const int listID) = 0;
-	virtual void openUnorderedListLevel(const int listID) = 0;
+	virtual void defineOrderedListLevel(const WPXPropertyList &propList) = 0;
+	virtual void defineUnorderedListLevel(const WPXPropertyList &propList) = 0;
+	virtual void openOrderedListLevel(const WPXPropertyList &propList) = 0;
+	virtual void openUnorderedListLevel(const WPXPropertyList &propList) = 0;
 	virtual void closeOrderedListLevel() = 0;
 	virtual void closeUnorderedListLevel() = 0;
-	virtual void openListElement(const uint8_t paragraphJustification, 
-				     const float marginLeftOffset, const float marginRightOffset, const float textIndent,
-				     const float lineSpacing, const float spacingBeforeParagraph, const float spacingAfterParagraph, 
-				     const vector<WPXTabStop> &tabStops) = 0;
+	virtual void openListElement(const WPXPropertyList &propList, const vector<WPXTabStop> &tabStops) = 0;
 	virtual void closeListElement() = 0;
 
-	virtual void openFootnote(int number) = 0;
+	virtual void openFootnote(const WPXPropertyList &propList) = 0;
 	virtual void closeFootnote() = 0;
-	virtual void openEndnote(int number) = 0;
+	virtual void openEndnote(const WPXPropertyList &propList) = 0;
 	virtual void closeEndnote() = 0;
 
- 	virtual void openTable(const uint8_t tablePositionBits,
-			       const float marginLeftOffset, const float marginRightOffset,
-			       const float leftOffset, const vector < WPXColumnDefinition > &columns) = 0;
+ 	virtual void openTable(const WPXPropertyList &propList, const vector < WPXColumnDefinition > &columns) = 0;
 	/**
 	Called when a new table row is opened
 	\param height The row's height, in inches
 	\param isMinimumHeight Whether the height is a minimum height or an exact height (if height is 0 and isMinimumHeight is true, the row has automatic height) 
 	\param isHeaderRow This row contains headings of columns and should repeat at every page (for tables that span several pages)
 	*/
- 	virtual void openTableRow(const float height, const bool isMinimumHeight, const bool isHeaderRow) = 0;
+ 	virtual void openTableRow(const WPXPropertyList &propList) = 0;
 	/**
 	Called when the current table row is closed
 	*/
@@ -188,15 +173,13 @@ class WPXHLListenerImpl
 	\param cellBorderColor Color of the border lines of the cell
 	\param cellVerticalAlignment Vertical alignment of the content in the cell (top, middle, bottom, or full)
 	*/
- 	virtual void openTableCell(const uint32_t col, const uint32_t row, const uint32_t colSpan, const uint32_t rowSpan,
-				   const uint8_t borderBits, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
-				   const RGBSColor * cellBorderColor,
-				   const WPXVerticalAlignment cellVerticalAlignment) = 0;
+ 	virtual void openTableCell(const WPXPropertyList &propList, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
+				   const RGBSColor * cellBorderColor) = 0;
 	/**
 	Called when the current table cell is closed
 	*/
 	virtual void closeTableCell() = 0;
-	virtual void insertCoveredTableCell(const unsigned int col, const unsigned int row) = 0;
+	virtual void insertCoveredTableCell(const WPXPropertyList &propList) = 0;
 	/**
 	Called when the current table is closed
 	*/

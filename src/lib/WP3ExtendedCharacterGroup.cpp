@@ -52,7 +52,7 @@ void WP3ExtendedCharacterGroup::parse(WP3HLListener *listener)
 	// We are finding the map first in the macRoman character set
 	// and only if we cannot find it, we use the WP character set
 	// map. It seems to be the behaviour of WordPerfect 3.x for Mac.
-	if ((m_macCharacter >= 0x20) && (m_macCharacter <= 0xFF))
+	if (m_macCharacter >= 0x20)
 	{
 		listener->insertCharacter(macintoshCharacterMap[m_macCharacter - 0x20]);
 	}

@@ -30,8 +30,6 @@
 #include "WPXHLListener.h"
 #include "WP6FileStructure.h"
 
-#include <stack>
-#include <map>
 #include <vector>
 
 class WP6HLListener : public WPXHLListener, public WP6LLListener

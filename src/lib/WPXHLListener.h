@@ -164,7 +164,7 @@ public:
 
 	WPXParsingState *m_ps; // parse state
 	WPXHLListenerImpl * m_listenerImpl;
-	WPXDocumentMetaData m_metaData;
+	WPXPropertyList m_metaData;
 	vector <WPXPageSpan *> *m_pageList;
 
 protected:

@@ -53,7 +53,7 @@ WP5Part * WP5Part::constructPart(WPXInputStream *input, uint8_t readVal)
 		WPD_DEBUG_MSG(("WordPerfect: constructFixedLengthGroup(input, val)\n"));
 		return WP5FixedLengthGroup::constructFixedLengthGroup(input, readVal);
 	}      
-	else if (readVal >= (uint8_t)0xD0 && readVal <= (uint8_t)0xFF /* strange: 0xFF should not happen, see 1st 'if' */)
+	else if (readVal >= (uint8_t)0xD0)
 	{
 		// variable length multi-byte function
 	

@@ -125,6 +125,7 @@ libwpd_1_la_SOURCES =				\
 	WPXTable.cpp				\
 	WPXParser.cpp 				\
 	WPXPart.cpp				\
+	WPXProperty.cpp				\
 	WPDocument.cpp				\
 	libwpd.h	        		\
 	libwpd_internal.h			\
@@ -222,6 +223,7 @@ libwpd_1_la_SOURCES =				\
 	WPXPageSpan.h				\
 	WPXParser.h 				\
 	WPXPart.h				\
+	WPXProperty.h				\
 	WPXTable.h
 	
 if OS_WIN32

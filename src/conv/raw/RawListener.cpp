@@ -90,28 +90,23 @@ void RawListenerImpl::__idprintf(const char *format, ...)
 	va_end(args);
 }
 
-void RawListenerImpl::setDocumentMetaData(const UCSString &author, const UCSString &subject,
-					 const UCSString &publisher, const UCSString &category,
-					 const UCSString &keywords, const UCSString &language,
-					 const UCSString &abstract, const UCSString &descriptiveName,
-					 const UCSString &descriptiveType)
+void RawListenerImpl::setDocumentMetaData(const WPXPropertyList &propList)
 {
-	UTF8String authorUTF8(author);
-	UTF8String subjectUTF8(subject);
-	UTF8String publisherUTF8(publisher);
-	UTF8String categoryUTF8(category);
-	UTF8String keywordsUTF8(keywords);
-	UTF8String languageUTF8(language);
-	UTF8String abstractUTF8(abstract);
-	UTF8String descriptiveNameUTF8(descriptiveName);
-	UTF8String descriptiveTypeUTF8(descriptiveType);
-	__iprintf("setDocumentMetaData(author: %s, subject: %s, publisher: %s, category: %s, keywords: %s, language: %s, abstract: %s, descriptiveName: %s, descriptiveType: %s)\n",
-		authorUTF8.getUTF8(), subjectUTF8.getUTF8(),
-		publisherUTF8.getUTF8(), categoryUTF8.getUTF8(),
-		keywordsUTF8.getUTF8(), languageUTF8.getUTF8(),
-		abstractUTF8.getUTF8(), descriptiveNameUTF8.getUTF8(),
-		descriptiveTypeUTF8.getUTF8()
-	);
+	if (m_printCallgraphScore)
+		return;
+
+	__iprintf("setDocumentMetaData(");
+
+	WPXPropertyList::Iter i(propList);
+	if (!i.last()) 
+	{
+		printf("%s: %s", i.key().c_str(), i()->getStr().getUTF8());
+		for (i; i.next(); )
+		{
+			printf(", %s: %s", i.key().c_str(), i()->getStr().getUTF8());
+		}
+	}
+	printf(")\n");
 }
 
 void RawListenerImpl::startDocument()
@@ -125,14 +120,15 @@ void RawListenerImpl::endDocument()
 		LC_START_DOCUMENT);
 }
 
-void RawListenerImpl::openPageSpan(const int span, const bool isLastPageSpan,
-				  const float formLength, const float formWidth, const WPXFormOrientation orientation,
-				  const float marginLeft, const float marginRight,
-				  const float marginTop, const float marginBottom)
+void RawListenerImpl::openPageSpan(const WPXPropertyList &propList)
 {
 	_U(("openPageSpan(span: %d, isLastPageSpan: %s, formLength: %.4f, formWidth: %.4f, Orientation: %s, marginLeft: %.4f, marginRight: %.4f, marginTop: %.4f, marginBottom: %.4f\n",
-			span, (isLastPageSpan ? "true" : "false"), formLength, formWidth, ((orientation==LANDSCAPE) ? "landscape" : "portrait"), marginLeft, marginRight, marginTop, marginBottom),
-		LC_OPEN_PAGE_SPAN);
+	    propList["span"]->getInt(), (propList["is-last-page-span"]->getInt() ? "true" : "false"), propList["form-length"]->getFloat(),
+	    propList["form-width"]->getFloat(), 
+	    (((WPXFormOrientation)propList["form-orientation"]->getInt()==LANDSCAPE) ? "landscape" : "portrait"), 
+	    propList["margin-left"]->getFloat(), propList["margin-right"]->getFloat(), 
+	    propList["margin-top"]->getFloat(), propList["margin-bottom"]->getFloat()),
+	   LC_OPEN_PAGE_SPAN);
 }
 
 void RawListenerImpl::closePageSpan()
@@ -141,30 +137,28 @@ void RawListenerImpl::closePageSpan()
 		LC_OPEN_PAGE_SPAN);
 }
 
-void RawListenerImpl::openHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence)
+void RawListenerImpl::openHeaderFooter(const WPXPropertyList &propList)
 {
 	_U(("openHeaderFooter(headerFooterType: %d, headerFooterOccurence: %d)\n",
-		headerFooterType, headerFooterOccurence),
-		LC_OPEN_HEADER_FOOTER);
+	    propList["type"]->getInt(), propList["occurence"]->getInt()),
+	   LC_OPEN_HEADER_FOOTER);
 }
 
-void RawListenerImpl::closeHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence)
+void RawListenerImpl::closeHeaderFooter(const WPXPropertyList &propList)
 {
 	_D(("closeHeaderFooter(headerFooterType: %d, headerFooterOccurence: %d)\n",
-			headerFooterType, headerFooterOccurence),
-		LC_OPEN_HEADER_FOOTER);
+	    propList["type"]->getInt(), propList["occurence"]->getInt()),
+	   LC_OPEN_HEADER_FOOTER);
 }
 
-void RawListenerImpl::openParagraph(const uint8_t paragraphJustification, 
-				    const float marginLeftOffset, const float marginRightOffset, const float textIndent,
-				    const float lineSpacing, const float spacingBeforeParagraph, const float spacingAfterParagraph,
-				    const vector<WPXTabStop> &tabStops, const bool isColumnBreak, const bool isPageBreak)
+void RawListenerImpl::openParagraph(const WPXPropertyList &propList, const vector<WPXTabStop> &tabStops)
 {
 	_U(("openParagraph(paragraphJustification: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, textIndent: %.4f, lineSpacing: %.4f, spacingBeforeParagraph: %.4f, spacingAfterParagraph: %.4f, isColumnBreak: %s, isPageBreak: %s, TODO: tab-stops.)\n",
-			paragraphJustification, 
-			marginLeftOffset, marginRightOffset, textIndent, lineSpacing, spacingBeforeParagraph, spacingAfterParagraph,
-			(isColumnBreak ? "true" : "false"), (isPageBreak ? "true" : "false")),
-		LC_OPEN_PARAGRAPH);
+	    propList["justification"]->getInt(), propList["margin-left"]->getFloat(), propList["margin-right"]->getFloat(),
+	    propList["text-indent"]->getFloat(), propList["line-spacing"]->getFloat(), propList["space-before"]->getFloat(),
+	    propList["space-after"]->getFloat(), (propList["column-break"]->getInt() ? "true" : "false"),
+	    (propList["page-break"]->getInt() ? "true" : "false")),
+	   LC_OPEN_PARAGRAPH);
 }
 
 void RawListenerImpl::closeParagraph()
@@ -173,15 +167,15 @@ void RawListenerImpl::closeParagraph()
 		LC_OPEN_PARAGRAPH);
 }
 
-void RawListenerImpl::openSpan(const uint32_t textAttributeBits, const char *fontName, const float fontSize,
-					const RGBSColor *fontColor, const RGBSColor *highlightColor)
+void RawListenerImpl::openSpan(const WPXPropertyList &propList, const RGBSColor *fontColor, const RGBSColor *highlightColor)
 {
 	_U(("openSpan(textAttributeBits: %u, fontName: %s, fontSize: %.4f,  fontColor: #%02x%02x%02x s:%02x, highlightColor: #%02x%02x%02x s:%02x)\n",
-			textAttributeBits, fontName, fontSize, (fontColor?fontColor->m_r:0xff), (fontColor?fontColor->m_g:0xff),
-			(fontColor?fontColor->m_b:0xff), (fontColor?fontColor->m_s:0xff), (highlightColor?highlightColor->m_r:0xff),
-			(highlightColor?highlightColor->m_g:0xff), (highlightColor?highlightColor->m_b:0xff),
-			(highlightColor?highlightColor->m_s:0xff)), // saturation cannot be ever 0xff; if it is, the pointer is NULL
-		LC_OPEN_SPAN);
+	    propList["text-attribute-bits"]->getInt(), propList["font-name"]->getStr().getUTF8(), propList["font-size"]->getFloat(),
+	    (fontColor?fontColor->m_r:0xff), (fontColor?fontColor->m_g:0xff),
+	    (fontColor?fontColor->m_b:0xff), (fontColor?fontColor->m_s:0xff), (highlightColor?highlightColor->m_r:0xff),
+	    (highlightColor?highlightColor->m_g:0xff), (highlightColor?highlightColor->m_b:0xff),
+	    (highlightColor?highlightColor->m_s:0xff)), // saturation cannot be ever 0xff; if it is, the pointer is NULL
+	   LC_OPEN_SPAN);
 }
 
 void RawListenerImpl::closeSpan()
@@ -190,11 +184,11 @@ void RawListenerImpl::closeSpan()
 		LC_OPEN_SPAN);
 }
 
-void RawListenerImpl::openSection(const unsigned int numColumns, const vector<WPXColumnDefinition> &columns, const float spaceAfter)
+void RawListenerImpl::openSection(const WPXPropertyList &propList, const vector<WPXColumnDefinition> &columns)
 {
 	UTF8String sColumns;
 	sColumns.sprintf("");
-	if (numColumns > 1)
+	if (propList["num-columns"]->getInt() > 1)
 	{
 		for (int i=0; i<columns.size(); i++)
 		{
@@ -205,7 +199,8 @@ void RawListenerImpl::openSection(const unsigned int numColumns, const vector<WP
 	}
 	else
 		sColumns.sprintf(" SINGLE COLUMN");
-	_U(("openSection(numColumns: %u, columns:%s, spaceAfter: %.4f)\n", numColumns, sColumns.getUTF8(), spaceAfter),
+	_U(("openSection(numColumns: %u, columns:%s, spaceAfter: %.4f)\n", propList["num-columns"]->getInt(), sColumns.getUTF8(), 
+	    propList["space-after"]->getFloat()),
 		LC_OPEN_SECTION);
 }
 
@@ -231,33 +226,29 @@ void RawListenerImpl::insertLineBreak()
 	__iprintf("insertLineBreak()\n");
 }
 
-void RawListenerImpl::defineOrderedListLevel(const int listID, const int listLevel, const WPXNumberingType listType,
-					    const UCSString &textBeforeNumber, const UCSString &textAfterNumber,
-					    const int startingNumber)
+void RawListenerImpl::defineOrderedListLevel(const WPXPropertyList &propList)
 {
-	UTF8String textBeforeNumberUTF8(textBeforeNumber);
-	UTF8String textAfterNumberUTF8(textAfterNumber);
 	__iprintf("defineOrderedListLevel(listID: %d, listLevel: %d, listType: %d, textBeforeNumber: %s, textAfterNumber: %s, startingNumber: %d)\n",
-		listID, listLevel, listType,
-		textBeforeNumberUTF8.getUTF8(), textAfterNumberUTF8.getUTF8(),
-		startingNumber);
+		  propList["id"]->getInt(), propList["level"]->getInt(), propList["type"]->getInt(), 
+		  propList["text-before-number"]->getStr().getUTF8(), propList["text-after-number"]->getStr().getUTF8(),
+		  propList["starting-number"]->getInt());
 }
 
-void RawListenerImpl::defineUnorderedListLevel(const int listID, const int listLevel, const UCSString &bullet)
+void RawListenerImpl::defineUnorderedListLevel(const WPXPropertyList &propList)
 {
-	UTF8String bulletUTF8(bullet);
-	__iprintf("defineUnorderedListLevel(listID: %d, listLevel: %d, bullet: %s)\n", listID, listLevel, bulletUTF8.getUTF8());
+	__iprintf("defineUnorderedListLevel(listID: %d, listLevel: %d, bullet: %s)\n", propList["id"]->getInt(), propList["level"]->getInt(), 
+		  propList["bullet"]->getStr().getUTF8());
 }
 
-void RawListenerImpl::openOrderedListLevel(const int listID)
+void RawListenerImpl::openOrderedListLevel(const WPXPropertyList &propList)
 {
-	_U(("openOrderedListLevel(listID: %d)\n", listID),
+	_U(("openOrderedListLevel(listID: %d)\n", propList["id"]->getInt()),
 		LC_OPEN_ORDERED_LIST_LEVEL);
 }
 
-void RawListenerImpl::openUnorderedListLevel(const int listID)
+void RawListenerImpl::openUnorderedListLevel(const WPXPropertyList &propList)
 {
-	_U(("openUnorderedListLevel(listID: %d)\n", listID),
+	_U(("openUnorderedListLevel(listID: %d)\n", propList["id"]->getInt()),
 		LC_OPEN_UNORDERED_LIST_LEVEL);
 }
 
@@ -273,15 +264,13 @@ void RawListenerImpl::closeUnorderedListLevel()
 		LC_OPEN_UNORDERED_LIST_LEVEL);
 }
 
-void RawListenerImpl::openListElement(const uint8_t paragraphJustification, 
-				      const float marginLeftOffset, const float marginRightOffset, const float textIndent,
-				      const float lineSpacing, const float spacingBeforeParagraph, const float spacingAfterParagraph, const vector<WPXTabStop> &tabStops)
+void RawListenerImpl::openListElement(const WPXPropertyList &propList, const vector<WPXTabStop> &tabStops)
 {
 	_U(("openListElement(paragraphJustification: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, textIndent: %.4f, lineSpacing: %.4f, spacingBeforeParagraph: %.4f, spacingAfterParagraph: %.4f, TODO: tab-stops.)\n",
-			paragraphJustification, 
-			marginLeftOffset, marginRightOffset, textIndent,
-			lineSpacing, spacingBeforeParagraph, spacingAfterParagraph),
-		LC_OPEN_LIST_ELEMENT);
+	    propList["justification"]->getInt(), propList["margin-left"]->getFloat(), propList["margin-right"]->getFloat(),
+	    propList["text-indent"]->getFloat(), propList["line-spacing"]->getFloat(), propList["space-before"]->getFloat(),
+	    propList["space-after"]->getFloat()),
+	   LC_OPEN_LIST_ELEMENT);
 }
 
 void RawListenerImpl::closeListElement()
@@ -290,9 +279,9 @@ void RawListenerImpl::closeListElement()
 		LC_OPEN_LIST_ELEMENT);
 }
 
-void RawListenerImpl::openFootnote(int number)
+void RawListenerImpl::openFootnote(const WPXPropertyList &propList)
 {
-	_U(("openFootnote(number: %d)\n", number),
+	_U(("openFootnote(number: %d)\n", propList["number"]->getInt()),
 		LC_OPEN_FOOTNOTE);
 }
 
@@ -302,9 +291,9 @@ void RawListenerImpl::closeFootnote()
 		LC_OPEN_FOOTNOTE);
 }
 
-void RawListenerImpl::openEndnote(int number)
+void RawListenerImpl::openEndnote(const WPXPropertyList &propList)
 {
-	_U(("openEndnote(number: %d)\n", number),
+	_U(("openEndnote(number: %d)\n", propList["number"]->getInt()),
 		LC_OPEN_ENDNOTE);
 }
 
@@ -314,9 +303,7 @@ void RawListenerImpl::closeEndnote()
 		LC_OPEN_ENDNOTE);
 }
 
-void RawListenerImpl::openTable(const uint8_t tablePositionBits,
-			       const float marginLeftOffset, const float marginRightOffset,
-			       const float leftOffset, const vector < WPXColumnDefinition > &columns)
+void RawListenerImpl::openTable(const WPXPropertyList &propList, const vector < WPXColumnDefinition > &columns)
 {
 	UTF8String sColumns;
 	sColumns.sprintf("");
@@ -328,14 +315,17 @@ void RawListenerImpl::openTable(const uint8_t tablePositionBits,
 	}
 
 	_U(("openTable(tablePositionBits: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, leftOffset: %.4f, columns:%s.)\n",
-			tablePositionBits, marginLeftOffset, marginRightOffset, leftOffset, sColumns.getUTF8()),
-		LC_OPEN_TABLE);
+	    propList["position-bits"]->getInt(), propList["margin-left"]->getFloat(), propList["margin-right"]->getFloat(), 
+	    propList["left-offset"]->getFloat(), sColumns.getUTF8()),
+	   LC_OPEN_TABLE);
 }
 
-void RawListenerImpl::openTableRow(const float height, const bool isMinimumHeight, const bool isHeaderRow)
+void RawListenerImpl::openTableRow(const WPXPropertyList &propList)
 {
-	_U(("openTableRow(height: %.4f, isMinimumHeight: %s, isHeaderRow: %s)\n", height, (isMinimumHeight ? "true" : "false"), (isHeaderRow ? "true" : "false")),
-		LC_OPEN_TABLE_ROW);
+	_U(("openTableRow(height: %.4f, isMinimumHeight: %s, isHeaderRow: %s)\n", propList["height"]->getFloat(),
+	    (propList["is-minimum-height"]->getInt() ? "true" : "false"), 
+	    (propList["is-header-row"]->getInt() ? "true" : "false")),
+	   LC_OPEN_TABLE_ROW);
 }
 
 void RawListenerImpl::closeTableRow()
@@ -344,13 +334,11 @@ void RawListenerImpl::closeTableRow()
 		LC_OPEN_TABLE_ROW);
 }
 
-void RawListenerImpl::openTableCell(const uint32_t col, const uint32_t row, const uint32_t colSpan, const uint32_t rowSpan,
-				   const uint8_t borderBits, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
-				   const RGBSColor * cellBorderColor,
-				   const WPXVerticalAlignment cellVerticalAlignment)
+void RawListenerImpl::openTableCell(const WPXPropertyList &propList, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
+				    const RGBSColor * cellBorderColor)
 {
 	UTF8String sCellVerticalAlignment;
-	switch (cellVerticalAlignment)
+	switch ((WPXVerticalAlignment)propList["vertical-alignment"]->getInt())
 	{
 	case TOP:
 		sCellVerticalAlignment.sprintf("TOP");
@@ -369,24 +357,25 @@ void RawListenerImpl::openTableCell(const uint32_t col, const uint32_t row, cons
 	}
 			
 	_U(("openTableCell(col: %d, row: %d, colSpan: %d, rowSpan: %d, borderBits: %d, cellFgColor: #%02x%02x%02x s:%02x, cellBgColor: #%02x%02x%02x s:%02x, cellBorderColor: #%02x%02x%02x s:%02x, cellVerticalAlignment %s)\n",
-			col, row, colSpan, rowSpan, borderBits,
-			// The saturation cannot ever be more that 0x64. It it is, cellFgColor or cellBgColor is NULL
-			(cellFgColor?cellFgColor->m_r:0xff), (cellFgColor?cellFgColor->m_g:0xff), (cellFgColor?cellFgColor->m_b:0xff), (cellFgColor?cellFgColor->m_s:0xff),
-			(cellBgColor?cellBgColor->m_r:0xff), (cellBgColor?cellBgColor->m_g:0xff), (cellBgColor?cellBgColor->m_b:0xff), (cellBgColor?cellBgColor->m_s:0xff),
-			cellBorderColor->m_r, cellBorderColor->m_g, cellBorderColor->m_b, cellBorderColor->m_s,
-			sCellVerticalAlignment.getUTF8()),
-		LC_OPEN_TABLE_CELL);
+	    propList["col"]->getInt(), propList["row"]->getInt(), propList["col-span"]->getInt(), propList["row-span"]->getInt(),
+	    propList["border-bits"]->getInt(),
+	    // The saturation cannot ever be more that 0x64. It it is, cellFgColor or cellBgColor is NULL
+	    (cellFgColor?cellFgColor->m_r:0xff), (cellFgColor?cellFgColor->m_g:0xff), (cellFgColor?cellFgColor->m_b:0xff), (cellFgColor?cellFgColor->m_s:0xff),
+	    (cellBgColor?cellBgColor->m_r:0xff), (cellBgColor?cellBgColor->m_g:0xff), (cellBgColor?cellBgColor->m_b:0xff), (cellBgColor?cellBgColor->m_s:0xff),
+	    cellBorderColor->m_r, cellBorderColor->m_g, cellBorderColor->m_b, cellBorderColor->m_s,
+	    sCellVerticalAlignment.getUTF8()),
+	   LC_OPEN_TABLE_CELL);
 }
 
 void RawListenerImpl::closeTableCell()
 {
 	_D(("closeTableCell()\n"),
-		LC_OPEN_TABLE_CELL);
+	   LC_OPEN_TABLE_CELL);
 }
 
-void RawListenerImpl::insertCoveredTableCell(const uint32_t col, const uint32_t row)
+void RawListenerImpl::insertCoveredTableCell(const WPXPropertyList &propList)
 {
-	__iprintf("insertCoveredTableCell(col: %d, row: %d)\n", col, row);
+	__iprintf("insertCoveredTableCell(col: %d, row: %d)\n", propList["col"]->getInt(), propList["row"]->getInt());
 }
 
 void RawListenerImpl::closeTable()

@@ -215,10 +215,18 @@ void WP42HLListener::_openParagraph()
 		tabStops.push_back(tmp_tabStop);
 	}
 
-	m_listenerImpl->openParagraph(0,
-				      m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight, m_ps->m_paragraphTextIndent,
-				      1.0f, m_ps->m_paragraphSpacingBefore, m_ps->m_paragraphSpacingAfter, tabStops,
-				      false, false);
+	WPXPropertyList propList;
+	propList.insert("justification", WPXPropertyFactory::newIntProp(0));
+	propList.insert("margin-left", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphMarginLeft));
+	propList.insert("margin-right", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphMarginRight));
+	propList.insert("text-indent", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphTextIndent));
+	propList.insert("line-spacing", WPXPropertyFactory::newFloatProp(1.0f));
+	propList.insert("space-before", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphSpacingBefore));
+	propList.insert("space-after", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphSpacingAfter));
+	propList.insert("column-break", WPXPropertyFactory::newIntProp(false));
+	propList.insert("page-break", WPXPropertyFactory::newIntProp(false));
+
+	m_listenerImpl->openParagraph(propList, tabStops);
 
 	if (m_ps->m_numDeferredParagraphBreaks > 0)
 		m_ps->m_numDeferredParagraphBreaks--;
