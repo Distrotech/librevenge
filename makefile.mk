@@ -10,14 +10,20 @@ SLOFILES= \
 	$(SLO)$/libwpd_internal.obj			\
 	$(SLO)$/libwpd_math.obj				\
 	$(SLO)$/libwpd_support.obj			\
+	$(SLO)$/WP3AttributeGroup.obj			\
 	$(SLO)$/WP3EndOfLinePageGroup.obj		\
+	$(SLO)$/WP3ExtendedCharacterGroup.obj		\
 	$(SLO)$/WP3FileStructure.obj			\
 	$(SLO)$/WP3FixedLengthGroup.obj			\
 	$(SLO)$/WP3Header.obj				\
 	$(SLO)$/WP3HLListener.obj			\
 	$(SLO)$/WP3HLStylesListener.obj			\
+	$(SLO)$/WP3MiscellaneousGroup.obj		\
+	$(SLO)$/WP3PageFormatGroup.obj			\
 	$(SLO)$/WP3Parser.obj				\
 	$(SLO)$/WP3Part.obj	    			\
+	$(SLO)$/WP3SingleByteFunction.obj		\
+	$(SLO)$/WP3UndoGroup.obj			\
 	$(SLO)$/WP3UnsupportedFixedLengthGroup.obj	\
 	$(SLO)$/WP3UnsupportedVariableLengthGroup.obj	\
 	$(SLO)$/WP3VariableLengthGroup.obj		\
@@ -30,14 +36,17 @@ SLOFILES= \
 	$(SLO)$/WP42UnsupportedVariableLengthGroup.obj	\
 	$(SLO)$/WP42VariableLengthGroup.obj		\
 	$(SLO)$/WP5AttributeGroup.obj 			\
+	$(SLO)$/WP5ExtendedCharacterGroup.obj 		\
 	$(SLO)$/WP5FileStructure.obj			\
 	$(SLO)$/WP5FixedLengthGroup.obj			\
 	$(SLO)$/WP5FormatGroup.obj			\
 	$(SLO)$/WP5Header.obj				\
 	$(SLO)$/WP5HLListener.obj			\
 	$(SLO)$/WP5HLStylesListener.obj			\
+	$(SLO)$/WP5PageFormatGroup.obj			\
 	$(SLO)$/WP5Parser.obj				\
 	$(SLO)$/WP5Part.obj				\
+	$(SLO)$/WP5SingleByteFunction.obj		\
 	$(SLO)$/WP5UnsupportedFixedLengthGroup.obj	\
 	$(SLO)$/WP5UnsupportedVariableLengthGroup.obj	\
 	$(SLO)$/WP5VariableLengthGroup.obj		\
