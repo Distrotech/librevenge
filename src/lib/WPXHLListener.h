@@ -108,6 +108,7 @@ struct _WPXParsingState
 	float m_paragraphTextIndent;
 	float m_paragraphSpacingAfter;
 	float m_paragraphSpacingBefore;
+	float m_tempParagraphSpacingBefore;
 
 	/*gint32 m_currentRow;
 	gint32 m_currentColumn;

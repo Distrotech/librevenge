@@ -74,7 +74,8 @@ _WPXParsingState::_WPXParsingState(bool sectionAttributesChanged) :
 	m_paragraphMarginRight(0.0f),
 	m_paragraphTextIndent(0.0f),
 	m_paragraphSpacingAfter(0.0f),
-	m_paragraphSpacingBefore(0.0f)
+	m_paragraphSpacingBefore(0.0f),
+	m_tempParagraphSpacingBefore(0.0f)
 	/*m_currentRow(-1),
 	m_currentColumn(-1),
 
@@ -199,6 +200,7 @@ void WPXHLListener::_closeParagraph()
 		m_listenerImpl->closeParagraph();
 
 	m_ps->m_isParagraphOpened = false;
+	m_ps->m_paragraphSpacingBefore = m_ps->m_tempParagraphSpacingBefore;
 }
 
 void WPXHLListener::_openSpan()

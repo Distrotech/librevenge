@@ -187,7 +187,6 @@ _WP6ParsingState::_WP6ParsingState() :
 	m_paragraphLineSpacing(1.0f),
 	m_paragraphSpacingAfterAbsolute(0.0f),
 	m_paragraphSpacingAfterRelative(1.0f),
-	m_paragraphSpacingBefore(0.0f),
 	m_paragraphJustification(WPX_PARAGRAPH_JUSTIFICATION_LEFT),
 	m_tempParagraphJustification(0),
 	m_leftMargin(0.0f),
@@ -485,7 +484,7 @@ void WP6HLContentListener::spacingBeforeParagraphChange(const gint16 spacing)
 {
 	if (!isUndoOn())
 	{
-		m_parseState->m_paragraphSpacingBefore = (float)((double)spacing/ (double)WPX_NUM_WPUS_PER_INCH);
+		m_ps->m_tempParagraphSpacingBefore = (float)((double)spacing/ (double)WPX_NUM_WPUS_PER_INCH);
 	}
 }
 
@@ -1201,7 +1200,6 @@ void WP6HLContentListener::_openListElement()
 	m_ps->m_isParagraphOpened = true; // a list element is equivalent to a paragraph
 
 	_openSpan();
-	m_ps->m_paragraphSpacingBefore = m_parseState->m_paragraphSpacingBefore;
 	m_ps->m_paragraphMarginLeft = m_parseState->m_leftMargin + m_parseState->m_paragraphLeftMargin;
 	m_ps->m_paragraphMarginRight = m_parseState->m_rightMargin + m_parseState->m_paragraphRightMargin;
 }
