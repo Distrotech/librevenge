@@ -39,8 +39,7 @@ public:
 
 	static void parse(GsfInput *input, WPXHLListenerImpl *listenerImpl);
 	//static void parse(GsfInput *input, WPXHLListenerImpl *listenerImpl, WPXFileType fileType);
-	// WPXFileType getFileType(GsfInput *input)
-	//static void parse(GsfInput *input, WPXLLListener *llistener);
+	//WPXFileType getFileType(GsfInput *input)
 };
 
 #endif /* WPDOCUMENT_H */

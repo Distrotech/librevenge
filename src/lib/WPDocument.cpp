@@ -208,15 +208,10 @@ void WPDocument::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl)
 	}
 }
 
-/*void WPDocument::parse(GsfInput *input, WPXLLListener *llistener)
-{
-	// TODO: implement me
-}*/
-
-
 /*
 
 TOTALLY BROKEN, DO NOT USE!!!
+I MEAN IT!
 
 void WPDocument::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl, WPXFileType fileType)
 {
