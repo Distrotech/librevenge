@@ -24,6 +24,8 @@
  */
 
 #include <gsf/gsf-input.h>
+#include <gsf/gsf-infile.h>
+#include <gsf/gsf-infile-msole.h>
 #include <stdlib.h>
 #include <string.h>
 #include "WPDocument.h"
@@ -36,40 +38,85 @@
 
 WPDConfidence WPDocument::isFileFormatSupported(GsfInput *input, bool partialContent)
 {
+	WPDConfidence confidence = WPD_CONFIDENCE_NONE;
+	
 	WPXHeader *header = NULL;	
+	
+	// by-pass the OLE stream (if it exists) and returns the (sub) stream with the
+	// WordPerfect document. 
+	GsfInput *document = NULL;
+	bool isDocumentOLE = false;
+	
+	// BIG BIG NOTE: very unsave on partial content!!!
+	GsfInfile * ole = GSF_INFILE(gsf_infile_msole_new (input, NULL)); 
+	if (ole != NULL) 
+	{
+		if (!partialContent)
+		{
+			document = gsf_infile_child_by_name(ole, "PerfectOffice_MAIN");
+			g_object_unref(G_OBJECT (ole));
+			if (document == NULL) // is an OLE document, but does not contain a WP document
+			{
+				g_object_unref(G_OBJECT(document));
+				return WPD_CONFIDENCE_NONE; // TODO: throw an exception instead of return?
+			}
+		}
+		else
+		{
+			// HELP! you can't get a child from partial content :-/
+			// here we go again: 
+			// TODO: dig trough the ole stream manually
+			
+			g_object_unref(G_OBJECT (ole));
+			return WPD_CONFIDENCE_LIKELY; // HACK: too high, but for now, we'll live with it
+		}
+	}
+
+	if (document == NULL)
+		document = input;
+	else
+		isDocumentOLE = true;	
 	
 	try
 	{
 		// NOTE: even when passed partial content, we for now just assume that
 		// we can extract the header from it. We could also read the major version
 		// and the preceding -1 WPC stuff manually.
-		header = WPXHeader::constructHeader(input);
+		header = WPXHeader::constructHeader(document);
 		if (header)
 		{
 			switch (header->getMajorVersion())
 			{
 				case 0x00: // WP5 
-					return WPD_CONFIDENCE_EXCELLENT;
+					confidence = WPD_CONFIDENCE_EXCELLENT;
 					break;
 				case 0x01: // ???
-					return WPD_CONFIDENCE_NONE;
+					confidence = WPD_CONFIDENCE_NONE;
 					break;
 				case 0x02: // WP6
-					return WPD_CONFIDENCE_EXCELLENT;
+					confidence = WPD_CONFIDENCE_EXCELLENT;
 					break;
 				default:
 					// unhandled file format
-					return WPD_CONFIDENCE_NONE;
+					confidence = WPD_CONFIDENCE_NONE;
 					break;
 			}
 			
 			DELETEP(header);
 		}
 		else
-			return WP42Heuristics::isWP42FileFormat(input, partialContent);
+			confidence = WP42Heuristics::isWP42FileFormat(input, partialContent);
+		
+		if (document != NULL && isDocumentOLE)
+			g_object_unref(G_OBJECT(document));
+		
+		return confidence;
 	}	
 	catch (FileException)
 	{
+		if (document != NULL && isDocumentOLE)
+			g_object_unref(G_OBJECT(document));
+		
 		return WPD_CONFIDENCE_NONE;
 	}
 		
@@ -80,9 +127,31 @@ void WPDocument::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl)
 {
 	WPXParser *parser = NULL;
 	
+	// by-pass the OLE stream (if it exists) and returns the (sub) stream with the
+	// WordPerfect document. 
+	GsfInput *document = NULL;
+	bool isDocumentOLE = false;
+	
+	GsfInfile * ole = GSF_INFILE(gsf_infile_msole_new (input, NULL));
+	if (ole != NULL) 
+	{
+		document = gsf_infile_child_by_name(ole, "PerfectOffice_MAIN");
+		g_object_unref(G_OBJECT (ole));
+		if (document == NULL) // is an OLE document, but does not contain a WP document
+		{
+			g_object_unref(G_OBJECT(document));
+			return; // FIXME: throw an exception instead of return
+		}
+	}
+
+	if (document == NULL)
+		document = input;
+	else
+		isDocumentOLE = true;
+	
 	try
 	{
-		WPXHeader *header = WPXHeader::constructHeader(input);
+		WPXHeader *header = WPXHeader::constructHeader(document);
 		
 		if (header)
 		{
@@ -90,7 +159,7 @@ void WPDocument::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl)
 			{
 				case 0x00: // WP5 
 					WPD_DEBUG_MSG(("WordPerfect: Using the WP5 parser.\n"));
-					parser = new WP5Parser(input, header);
+					parser = new WP5Parser(document, header);
 					parser->parse(listenerImpl);
 					break;
 				case 0x01: // ???
@@ -99,7 +168,7 @@ void WPDocument::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl)
 					break;
 				case 0x02: // WP6
 					WPD_DEBUG_MSG(("WordPerfect: Using the WP6 parser.\n"));
-					parser = new WP6Parser(input, header);
+					parser = new WP6Parser(document, header);
 					parser->parse(listenerImpl);
 					break;
 				default:
@@ -116,21 +185,26 @@ void WPDocument::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl)
 			// header which can be used to determine which parser to instanciate. 
 			// Use heuristics to determine with some certainty if we are dealing with
 			// a file in the WP4.2 format.		
-			int confidence = WP42Heuristics::isWP42FileFormat(input, false /* FIXME: allow for partial content */);
+			int confidence = WP42Heuristics::isWP42FileFormat(document, false /* FIXME: allow for partial content */);
 	
 			if (confidence == WPD_CONFIDENCE_GOOD || confidence == WPD_CONFIDENCE_EXCELLENT)
 			{
 				WPD_DEBUG_MSG(("WordPerfect: Mostly likely the file format is WP4.2.\n\n"));
 				WPD_DEBUG_MSG(("WordPerfect: Using the WP4.2 parser.\n\n"));
-				WP42Parser *parser = new WP42Parser(input);
+				WP42Parser *parser = new WP42Parser(document);
 				parser->parse(listenerImpl);
 				DELETEP(parser);
 			}
 		}
+		
+		if (document != NULL && isDocumentOLE)
+			g_object_unref(G_OBJECT(document));
 	}
 	catch (FileException)
 	{
 		DELETEP(parser);
+		if (document != NULL && isDocumentOLE)
+			g_object_unref(G_OBJECT(document));
 		throw FileException(); 
 	}
 }

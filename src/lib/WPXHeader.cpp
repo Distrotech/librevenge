@@ -24,8 +24,6 @@
  */
 
 #include <gsf/gsf-input.h>
-#include <gsf/gsf-infile.h>
-#include <gsf/gsf-infile-msole.h>
 #include <stdlib.h>
 #include <string.h>
 #include "WPXHeader.h"
@@ -51,34 +49,13 @@ WPXHeader::~WPXHeader()
 {
 }
 
-// FIXME: the (possibly) created 'OLE stream' should be unreffed!!
-//if (document != NULL && isDocumentOLE)
-//	g_object_unref(G_OBJECT(document));
-
 WPXHeader * WPXHeader::constructHeader(GsfInput *input)
 {
-	// by-pass the OLE stream (if it exists) and returns the (sub) stream with the
-	// WordPerfect document. 
-	// NB: It is the responsibility of the application to release this input stream
-	GsfInput *document = NULL;
-
-	GsfInfile * ole = GSF_INFILE(gsf_infile_msole_new (input, NULL));
-	if (ole != NULL) 
-	{
-		document = gsf_infile_child_by_name(ole, "PerfectOffice_MAIN");
-		g_object_unref(G_OBJECT (ole));
-		if (document == NULL) // is an OLE document, but does not contain a WP document
-			return NULL;
-	}
-
-	if (document == NULL)
-		document = input;
-	
 	gchar fileMagic[4];
 	/* check the magic */
-	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(document, WPX_HEADER_MAGIC_OFFSET - gsf_input_tell(document), G_SEEK_CUR));
+	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WPX_HEADER_MAGIC_OFFSET - gsf_input_tell(input), G_SEEK_CUR));
 	for (int i=0; i<3 /* FIXME: && not EOF */; i++)
-		fileMagic[i] = GSF_LE_GET_GINT8(gsf_input_read(document, sizeof(guint8), NULL));
+		fileMagic[i] = GSF_LE_GET_GINT8(gsf_input_read(input, sizeof(guint8), NULL));
 	fileMagic[3] = '\0';
 	
 	if ( strcmp(fileMagic, "WPC") )
@@ -88,18 +65,18 @@ WPXHeader * WPXHeader::constructHeader(GsfInput *input)
 	}
 	
 	/* get the document pointer */
-	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(document, WPX_HEADER_DOCUMENT_POINTER_OFFSET - gsf_input_tell(document), G_SEEK_CUR));
+	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WPX_HEADER_DOCUMENT_POINTER_OFFSET - gsf_input_tell(input), G_SEEK_CUR));
 	guint32 documentOffset = gsf_le_read_guint32(input);
 
 	/* get information on product types, file types, versions */
-	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(document, WPX_HEADER_PRODUCT_TYPE_OFFSET - gsf_input_tell(document), G_SEEK_CUR));
-	guint8 productType = gsf_le_read_guint8(document);
-	guint8 fileType = gsf_le_read_guint8(document);
-	guint8 majorVersion = gsf_le_read_guint8(document);
-	guint8 minorVersion = gsf_le_read_guint8(document);
+	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WPX_HEADER_PRODUCT_TYPE_OFFSET - gsf_input_tell(input), G_SEEK_CUR));
+	guint8 productType = gsf_le_read_guint8(input);
+	guint8 fileType = gsf_le_read_guint8(input);
+	guint8 majorVersion = gsf_le_read_guint8(input);
+	guint8 minorVersion = gsf_le_read_guint8(input);
 	
-	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(document, WPX_HEADER_ENCRYPTION_OFFSET, G_SEEK_SET));
-	guint8 documentEncryption = gsf_le_read_guint16(document);		
+	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WPX_HEADER_ENCRYPTION_OFFSET, G_SEEK_SET));
+	guint8 documentEncryption = gsf_le_read_guint16(input);		
 	
 	WPD_DEBUG_MSG(("WordPerfect: Product Type: %i File Type: %i Major Version: %i Minor Version: %i\n", 
 					productType, fileType, 
@@ -109,7 +86,7 @@ WPXHeader * WPXHeader::constructHeader(GsfInput *input)
 	switch (majorVersion)
 	{
 		case 0x00: // WP5 
-			return new WP5Header(document, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption);
+			return new WP5Header(input, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption);
 		case 0x01: // ???
 			WPD_DEBUG_MSG(("WordPerfect: Unsupported file format.\n"));
 			return NULL;
@@ -117,9 +94,9 @@ WPXHeader * WPXHeader::constructHeader(GsfInput *input)
 			switch (minorVersion)
 			{
 				case 0x00:
-					return new WP60Header(document, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption);
+					return new WP60Header(input, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption);
 				default: // assume this header can be parsed by a WP61 header parser
-					return new WP61Header(document, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption);
+					return new WP61Header(input, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption);
 			}
 			break;
 		default:

@@ -102,7 +102,7 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(GsfInput *input, bool partialCont
 	// if we didn't entcounter a single WP4.2 function group) then be a bit more carefull.
 	// this would be the case when passed a plaintext file for example
 	if (!functionGroupCount)
-		return WPD_CONDIFENCE_LIKELY;
+		return WPD_CONFIDENCE_LIKELY;
 	
 	return WPD_CONFIDENCE_EXCELLENT;
 }
