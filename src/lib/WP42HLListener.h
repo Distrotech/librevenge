@@ -35,8 +35,10 @@ class WP42HLListener : public WPXHLListener, public WP42LLListener
 public:
 	WP42HLListener(vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl);
 
+	virtual void setAlignmentCharacter(const guint16 character) {};
+	virtual void setDotLeaderCharacters(const guint16 character, const guint8 numberOfSpaces) {};
 	virtual void insertCharacter(const guint16 character);
-	virtual void insertTab(const guint8 tabType);
+	virtual void insertTab(const guint8 tabType, const guint16 tabPosition);
 	virtual void handleLineBreak() {};
 	virtual void insertEOL();
 	virtual void attributeChange(const bool isOn, const guint8 attribute);

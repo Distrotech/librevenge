@@ -108,7 +108,7 @@ struct _WPXParsingState
 	float m_paragraphTextIndent;
 	float m_paragraphSpacingAfter;
 
-	/*gint32 m_currentRow;
+/*	gint32 m_currentRow;
 	gint32 m_currentColumn;
 
 	stack<int> m_listLevelStack;
@@ -120,8 +120,12 @@ struct _WPXParsingState
 	bool m_putativeListElementHasDisplayReferenceNumber;
 
 	int m_noteTextPID;
+*/
 
-	*/
+	guint16 m_alignmentCharacter;
+	guint16 m_dotLeaderCharacter;
+	guint8 m_dotLeaderNumberOfSpaces;
+
 
 };
 

@@ -28,6 +28,17 @@
 
 #include "WP6VariableLengthGroup.h"
 
+class WP6CharacterGroup_SetAlignmentCharacterSubGroup: public WP6VariableLengthGroup_SubGroup
+{
+public:
+	WP6CharacterGroup_SetAlignmentCharacterSubGroup(WPXInputStream *input);
+	virtual void parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
+
+private:
+	guint8 m_character;
+	guint8 m_characterSet;
+};
+
 class WP6CharacterGroup_ColorSubGroup: public WP6VariableLengthGroup_SubGroup
 {
 public:
@@ -61,6 +72,18 @@ private:
 	guint16 m_hash;
 	guint16 m_matchedFontIndex;
 	guint16 m_matchedFontPointSize;
+};
+
+class WP6CharacterGroup_SetDotLeaderCharactersSubGroup: public WP6VariableLengthGroup_SubGroup
+{
+public:
+	WP6CharacterGroup_SetDotLeaderCharactersSubGroup(WPXInputStream *input);
+	virtual void parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
+
+private:
+	guint8 m_character;
+	guint8 m_characterSet;
+	guint8 m_numberOfSpaces;
 };
 
 class WP6CharacterGroup_ParagraphNumberOnSubGroup : public WP6VariableLengthGroup_SubGroup

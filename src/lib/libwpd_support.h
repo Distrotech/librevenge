@@ -51,6 +51,7 @@ enum WPXNoteType { FOOTNOTE, ENDNOTE };
 enum WPXHeaderFooterType { HEADER, FOOTER };
 enum WPXHeaderFooterOccurence { ODD, EVEN, ALL };
 enum WPXFormOrientation { PORTRAIT, LANDSCAPE };
+enum WPXTabAlignment { LEFT, RIGHT, CENTER, CHAR };
 
 enum WPDConfidence { WPD_CONFIDENCE_NONE=0, WPD_CONFIDENCE_POOR, WPD_CONFIDENCE_LIKELY, WPD_CONFIDENCE_GOOD, WPD_CONFIDENCE_EXCELLENT};
 
@@ -123,6 +124,16 @@ struct _WPXColumnDefinition
 	float m_width;
 	float m_leftGutter;
 	float m_rightGutter;
+};
+
+typedef struct _WPXTabStop WPXTabStop;
+struct _WPXTabStop
+{
+	_WPXTabStop(float position, WPXTabAlignment alignment, guint16 leadingChar);
+	_WPXTabStop();
+	float m_position;
+	WPXTabAlignment m_alignment;
+	guint16 m_leadingChar;
 };
 
 // UCSString: minimal string class, basically an object-oriented wrapper around glib's UCS4 string

@@ -512,6 +512,20 @@ _RGBSColor::_RGBSColor()
 {
 }
 
+_WPXTabStop::_WPXTabStop(float position, WPXTabAlignment alignment, guint16 leadingChar)
+	:	m_position(position),
+		m_alignment(alignment),
+		m_leadingChar(leadingChar)
+{
+}
+
+_WPXTabStop::_WPXTabStop()
+	:	m_position(0.0f),
+		m_alignment(LEFT),
+		m_leadingChar('\0')
+{
+}
+
 _WPXColumnDefinition::_WPXColumnDefinition()
 	:	m_width(0),
 		m_leftGutter(0),

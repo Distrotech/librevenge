@@ -2,7 +2,7 @@
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
  * Copyright (C) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -20,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -99,7 +99,8 @@ void WP6PageGroup::_readContents(WPXInputStream *input)
 				m_formName[i] = chars[0];
 			}
 		}
-		WPD_DEBUG_MSG(("WordPerfect: Read form information (length: %i), (width: %i), (orientation: %i), (form name: %s),\n",m_formLength, m_formWidth, m_formName ));
+		WPD_DEBUG_MSG(("WordPerfect: Read form information (length: %i), (width: %i), (form name: %s), (form orientation: %s),\n",
+						m_formLength, m_formWidth, m_formName, ((m_formOrientation==PORTRAIT)?"portrait":"landscape")));
 		break;
 	default: /* something else we don't support, since it isn't in the docs */
 		break;
@@ -109,7 +110,7 @@ void WP6PageGroup::_readContents(WPXInputStream *input)
 void WP6PageGroup::parse(WP6HLListener *listener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling an Page group\n"));
-	
+
 	switch (getSubGroup())
 	{
 	case WP6_PAGE_GROUP_TOP_MARGIN_SET:

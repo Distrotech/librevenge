@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -28,17 +28,23 @@
 #include "libwpd_internal.h"
 
 WP6TabGroup::WP6TabGroup(WPXInputStream *input) :
-	WP6VariableLengthGroup()
+	WP6VariableLengthGroup(),
+	m_position(0)
 {
 	_read(input);
 }
 
 void WP6TabGroup::_readContents(WPXInputStream *input)
 {
+	if ((getSize() >= 12)) // Minimum size of the function if the position information is present
+	{
+		input->seek((getSize() - 12), WPX_SEEK_CUR);
+		m_position = readU16(input);
+	}
 }
 
 void WP6TabGroup::parse(WP6HLListener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling a Tab group\n"));	
-	listener->insertTab(getSubGroup());
+	WPD_DEBUG_MSG(("WordPerfect: handling a Tab group (Tab type %i, tab position %i)\n", getSubGroup(), m_position));
+	listener->insertTab(getSubGroup(), m_position);
 }

@@ -57,7 +57,7 @@ _WPXParsingState::_WPXParsingState(bool sectionAttributesChanged) :
 	m_isTableOpened(false),
 	m_isTableRowOpened(false),
 	m_isTableCellOpened(false),
-	*/
+*/
 	m_isPageSpanOpened(false),
 	m_nextPageSpanIndice(0),
 	m_numPagesRemainingInSpan(0),
@@ -74,8 +74,8 @@ _WPXParsingState::_WPXParsingState(bool sectionAttributesChanged) :
 	m_paragraphMarginLeft(0.0f),
 	m_paragraphMarginRight(0.0f),
 	m_paragraphTextIndent(0.0f),
-	m_paragraphSpacingAfter(0.0f)
-	/*m_currentRow(-1),
+	m_paragraphSpacingAfter(0.0f),
+/*	m_currentRow(-1),
 	m_currentColumn(-1),
 
 	m_currentListLevel(0),
@@ -83,7 +83,13 @@ _WPXParsingState::_WPXParsingState(bool sectionAttributesChanged) :
 	m_putativeListElementHasDisplayReferenceNumber(false),
 
 	m_noteTextPID(0),
-	m_inSubDocument(false)*/
+	m_inSubDocument(false)
+*/
+
+	m_alignmentCharacter('.'),
+	m_dotLeaderCharacter('.'),
+	m_dotLeaderNumberOfSpaces(0)
+
 {
 }
 

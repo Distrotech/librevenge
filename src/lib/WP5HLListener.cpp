@@ -51,7 +51,7 @@ void WP5HLListener::insertCharacter(const guint16 character)
 	m_textBuffer.append(character);
 }
 
-void WP5HLListener::insertTab(const guint8 tabType)
+void WP5HLListener::insertTab(const guint8 tabType, const guint16 tabPosition)
 {
 	_flushText();
 	m_listenerImpl->insertTab();
@@ -204,12 +204,12 @@ void WP5HLListener::_openParagraph()
 	m_parseState->m_tempParagraphJustification = 0;
 	*/
 
-	m_listenerImpl->openParagraph(0, 
+	m_listenerImpl->openParagraph(0,
 				      m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight, m_ps->m_paragraphTextIndent,
 				      1.0f, 0.0f,
 				      m_ps->m_isParagraphColumnBreak, m_ps->m_isParagraphPageBreak);
 
-	if (m_ps->m_numDeferredParagraphBreaks > 0) 
+	if (m_ps->m_numDeferredParagraphBreaks > 0)
 		m_ps->m_numDeferredParagraphBreaks--;
 
 	m_ps->m_isParagraphColumnBreak = false;

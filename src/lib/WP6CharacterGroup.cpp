@@ -1,6 +1,7 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,6 +27,28 @@
 #include "WP6CharacterGroup.h"
 #include "WP6LLListener.h"
 #include "libwpd_internal.h"
+
+/*************************************************************************
+ * WP6CharacterGroup_SetAlignmentCharacterSubGroup
+ *************************************************************************/
+
+WP6CharacterGroup_SetAlignmentCharacterSubGroup::WP6CharacterGroup_SetAlignmentCharacterSubGroup(WPXInputStream *input) :
+	m_characterSet(0),
+	m_character(0)
+{
+	guint16 charWord = readU16(input);
+	m_characterSet = (charWord & 0xFF00) >> 8;
+	m_character = (charWord & 0xFF);
+}
+
+void WP6CharacterGroup_SetAlignmentCharacterSubGroup::parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
+{
+	const guint16 *chars;
+	int len;
+	len = extendedCharacterToUCS2(m_character, m_characterSet, &chars);
+	WPD_DEBUG_MSG(("WordPerfect: Parsing Set Alignment Character (alignment character: 0x%.4x)\n", chars[0]));
+	listener->setAlignmentCharacter(chars[0]);
+}
 
 /*************************************************************************
  * WP6CharacterGroup_ColorSubGroup
@@ -78,6 +101,31 @@ void WP6CharacterGroup_FontFaceChangeSubGroup::parse(WP6HLListener *listener, co
 	// TODO: check that we have 1 prefix id
 	// emit an exception otherwise
 	listener->fontChange(m_matchedFontPointSize, prefixIDs[0]);
+}
+
+/*************************************************************************
+ * WP6CharacterGroup_SetDotLeaderCharactersSubGroup
+ *************************************************************************/
+
+WP6CharacterGroup_SetDotLeaderCharactersSubGroup::WP6CharacterGroup_SetDotLeaderCharactersSubGroup(WPXInputStream *input) :
+	m_characterSet(0),
+	m_character(0),
+	m_numberOfSpaces(0)
+{
+	guint16 charWord = readU16(input);
+	m_characterSet = (charWord & 0xFF00) >> 8;
+	m_character = (charWord & 0xFF);
+	m_numberOfSpaces = readU8(input);
+}
+
+void WP6CharacterGroup_SetDotLeaderCharactersSubGroup::parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
+{
+	const guint16 *chars;
+	int len;
+	len = extendedCharacterToUCS2(m_character, m_characterSet, &chars);
+	WPD_DEBUG_MSG(("WordPerfect: Parsing Set Dot Leader Characters (leader character: 0x%.4x), (number of spaces: %i)\n",
+			chars[0], m_numberOfSpaces));
+	listener->setDotLeaderCharacters(chars[0], m_numberOfSpaces);
 }
 
 /*************************************************************************
@@ -178,11 +226,17 @@ void WP6CharacterGroup::_readContents(WPXInputStream *input)
 		case WP6_CHARACTER_GROUP_FONT_SIZE_CHANGE:
 			m_subGroupData = new WP6CharacterGroup_FontFaceChangeSubGroup(input);
 			break;
+		case WP6_CHARACTER_GROUP_SET_ALIGNMENT_CHARACTER:
+			m_subGroupData = new WP6CharacterGroup_SetAlignmentCharacterSubGroup(input);
+			break;
 		case WP6_CHARACTER_GROUP_COLOR:
 			m_subGroupData = new WP6CharacterGroup_ColorSubGroup(input);
 			break;
 		case WP6_CHARACTER_GROUP_CHARACTER_SHADING_CHANGE:
 			m_subGroupData = new WP6CharacterGroup_CharacterShadingChangeSubGroup(input);
+			break;
+		case WP6_CHARACTER_GROUP_SET_DOT_LEADER_CHARACTERS:
+			m_subGroupData = new WP6CharacterGroup_SetDotLeaderCharactersSubGroup(input);
 			break;
 		case WP6_CHARACTER_GROUP_PARAGRAPH_NUMBER_ON:
 			m_subGroupData = new WP6CharacterGroup_ParagraphNumberOnSubGroup(input);
@@ -209,8 +263,10 @@ void WP6CharacterGroup::parse(WP6HLListener *listener)
 	{
 		case WP6_CHARACTER_GROUP_FONT_FACE_CHANGE:
 		case WP6_CHARACTER_GROUP_FONT_SIZE_CHANGE:
+		case WP6_CHARACTER_GROUP_SET_ALIGNMENT_CHARACTER:
 		case WP6_CHARACTER_GROUP_COLOR:
 		case WP6_CHARACTER_GROUP_CHARACTER_SHADING_CHANGE:
+		case WP6_CHARACTER_GROUP_SET_DOT_LEADER_CHARACTERS:
 		case WP6_CHARACTER_GROUP_PARAGRAPH_NUMBER_ON:
 			m_subGroupData->parse(listener, getNumPrefixIDs(), getPrefixIDs());
 			break;

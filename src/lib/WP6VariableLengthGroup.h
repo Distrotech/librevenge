@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -40,7 +40,7 @@ class WP6VariableLengthGroup : public WP6Part
  public:
 	WP6VariableLengthGroup(); // WP6VariableLengthGroup should _never_ be constructed, only its inherited classes
 	virtual ~WP6VariableLengthGroup();
-	
+
 	static WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, guint8 groupID);
 
  protected:
@@ -48,6 +48,7 @@ class WP6VariableLengthGroup : public WP6Part
 	virtual void _readContents(WPXInputStream *input) {} // we don't always need more information than that provided generically
 
 	const guint8 getSubGroup() const { return m_subGroup; }
+	const guint16 getSize() const { return m_size; }
 	const guint8 getFlags() const { return m_flags; }
 	const guint8 getNumPrefixIDs() const { return m_numPrefixIDs; }
 	guint16 * const getPrefixIDs() const { return m_prefixIDs; }

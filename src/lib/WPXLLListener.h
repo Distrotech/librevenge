@@ -34,8 +34,10 @@ class WPXLLListener
 	WPXLLListener() {}
 	virtual ~WPXLLListener() {}
 	virtual void startDocument() = 0;
+	virtual void setAlignmentCharacter(const guint16 character) = 0;
+	virtual void setDotLeaderCharacters(const guint16 character, const guint8 numberOfSpaces) = 0;
 	virtual void insertCharacter(const guint16 character) = 0;
-	virtual void insertTab(const guint8 tabType) = 0;
+	virtual void insertTab(const guint8 tabType, const guint16 tabPosition) = 0;
 	virtual void handleLineBreak() = 0;
 	virtual void insertEOL() = 0;
  	virtual void insertBreak(const guint8 breakType) = 0;

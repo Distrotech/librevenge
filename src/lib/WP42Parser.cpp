@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,10 +19,10 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
- 
+
 #include <gsf/gsf-input.h>
 #include <gsf/gsf-infile.h>
 #include <gsf/gsf-infile-msole.h>
@@ -46,14 +46,14 @@ WP42Parser::~WP42Parser()
 void WP42Parser::parse(WPXInputStream *input, WP42HLListener *listener)
 {
 	listener->startDocument();
-	
-	input->seek(0, WPX_SEEK_SET);	
-	
+
+	input->seek(0, WPX_SEEK_SET);
+
 	WPD_DEBUG_MSG(("WordPerfect: Starting document body parse (position = %ld)\n",(long)input->tell()));
-	
+
 	parseDocument(input, listener);
-	
-	listener->endDocument();		
+
+	listener->endDocument();
 }
 
 // parseDocument: parses a document body (may call itself recursively, on other streams, or itself)
@@ -63,13 +63,13 @@ void WP42Parser::parseDocument(WPXInputStream *input, WP42HLListener *listener)
 	{
 		guint8 readVal;
 		readVal = readU8(input);
-		
+
 		if (readVal < (guint8)0x20)
 		{
 			switch (readVal)
 			{
 				case 0x09: // tab
-					listener->insertTab(0);
+					listener->insertTab(0, 0);
 					break;
 				case 0x0A: // hard new line
 					listener->insertEOL();
@@ -97,19 +97,19 @@ void WP42Parser::parseDocument(WPXInputStream *input, WP42HLListener *listener)
 		{
 			// single character function codes
 			switch (readVal)
-			{				
+			{
 				case 0x92:
 					listener->attributeChange(true, WP42_ATTRIBUTE_STRIKE_OUT);
 					break;
 				case 0x93:
 					listener->attributeChange(false, WP42_ATTRIBUTE_STRIKE_OUT);
-					break;				
+					break;
 				case 0x94:
 					listener->attributeChange(true, WP42_ATTRIBUTE_UNDERLINE);
 					break;
 				case 0x95:
 					listener->attributeChange(false, WP42_ATTRIBUTE_UNDERLINE);
-					break;	
+					break;
 
 				case 0x90:
 					listener->attributeChange(true, WP42_ATTRIBUTE_REDLINE);
@@ -124,7 +124,7 @@ void WP42Parser::parseDocument(WPXInputStream *input, WP42HLListener *listener)
 				case 0x9D:
 					listener->attributeChange(true, WP42_ATTRIBUTE_BOLD);
 					break;
-				
+
 				case 0xB2:
 					listener->attributeChange(true, WP42_ATTRIBUTE_ITALICS);
 					break;
@@ -137,13 +137,13 @@ void WP42Parser::parseDocument(WPXInputStream *input, WP42HLListener *listener)
 				case 0xB5:
 					listener->attributeChange(false, WP42_ATTRIBUTE_SHADOW);
 					break;
-			
+
 				default:
 					// unsupported or undocumented token, ignore
 					break;
 			}
 		}
-		else 
+		else
 		{
 			WP42Part *part = WP42Part::constructPart(input, readVal);
 			if (part != NULL)
@@ -159,8 +159,8 @@ void WP42Parser::parse(WPXHLListenerImpl *listenerImpl)
 {
 	WPXInputStream *input = getInput();
 	vector<WPXPageSpan *> pageList;
-	vector<WPXTable *> tableList;	
-	
+	vector<WPXTable *> tableList;
+
 	try
  	{
 		// do a "first-pass" parse of the document
@@ -172,12 +172,12 @@ void WP42Parser::parse(WPXHLListenerImpl *listenerImpl)
 		// that are necessary to emit the body of the target document
 		WP42HLListener listener(&pageList, listenerImpl); // FIXME: SHOULD BE CONTENT_LISTENER, AND SHOULD BE PASSED TABLE DATA!
 		parse(input, &listener);
-		
+
 		// cleanup section: free the used resources
 		for (vector<WPXPageSpan *>::iterator iterSpan = pageList.begin(); iterSpan != pageList.end(); iterSpan++)
 		{
 			delete *iterSpan;
-		}	
+		}
 		for (vector<WPXTable *>::iterator iterTable = tableList.begin(); iterTable != tableList.end(); iterTable++)
 		{
 			delete *iterTable;
@@ -194,9 +194,9 @@ void WP42Parser::parse(WPXHLListenerImpl *listenerImpl)
 		for (vector<WPXTable *>::iterator iterTable = tableList.begin(); iterTable != tableList.end(); iterTable++)
 		{
 			delete *iterTable;
-		}		
+		}
 
 		throw FileException();
-	}		
-	
+	}
+
 }

@@ -154,8 +154,10 @@ public:
 						const guint8 hour, const guint8 minute, const guint8 second,
 						const guint8 dayOfWeek, const guint8 timeZone, const guint8 unused) {}
 	virtual void setExtendedInformation(const guint16 type, const UCSString &data);
+	virtual void setAlignmentCharacter(const guint16 character);
+	virtual void setDotLeaderCharacters(const guint16 character, const guint8 numberOfSpaces);
 	virtual void insertCharacter(const guint16 character);
-	virtual void insertTab(const guint8 tabType);
+	virtual void insertTab(const guint8 tabType, const guint16 tabPosition);
 	virtual void handleLineBreak();
 	virtual void insertEOL();
 	virtual void characterColorChange(const guint8 red, const guint8 green, const guint8 blue);
