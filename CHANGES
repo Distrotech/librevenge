@@ -1,5 +1,12 @@
 CHANGES:
 
+0.3.1 -> 0.3.2
+- small typo fix to wpd2html
+- huge bug in the build system: we require libgsf-1
+
+0.3.0 -> 0.3.1
+?
+
 0.2.0 -> 0.3.0:
 - font face/size changes
 - convert library to use libgsf
