@@ -26,6 +26,8 @@
 #ifndef LIBWPD_SUPPORT_H
 #define LIBWPD_SUPPORT_H
 #include <glib.h>
+#include <string>
+using namespace std;
 
 #ifndef _MSC_VER
 #include <stdint.h>
@@ -175,20 +177,16 @@ class UTF8String
 public:
 	UTF8String();
 	UTF8String(const UTF8String &);
-	UTF8String(const UCSString &, bool convertToValidXML = false);
-	//UTF8String(const char *);
+	UTF8String(const UCSString &, bool convertToXML = false);
 	UTF8String(const char *str);
-	//UTF8String(const char *format, ...);
-	~UTF8String() { g_string_free(m_buf, TRUE); }
 
-	const char * getUTF8() const { return m_buf->str; }
-	const int getLen() const { return m_buf->len; }
+	const char * getUTF8() const { return m_buf.c_str(); }
+	const int getLen() const;
 
 	void sprintf(const char *format, ...);
-	//UTF8String & operator=(const UTF8String &);
 
 private:
-	GString *m_buf;
+	string m_buf;
 };
 
 class VersionException

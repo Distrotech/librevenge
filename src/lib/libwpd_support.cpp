@@ -574,20 +574,27 @@ void UCSString::clear()
 	m_stringBuf = g_array_set_size(m_stringBuf, 0);
 }
 
-UTF8String::UTF8String() :
-	m_buf(g_string_new(NULL))
+char *
+g_static_ucs4_to_utf8 (const uint32_t *str,
+		       glong           len,              
+		       glong          *items_read,       
+		       glong          *items_written);
+int
+g_static_utf8_strlen (const char *p);
+
+
+UTF8String::UTF8String()
 {
 }
 
 UTF8String::UTF8String(const UTF8String &stringBuf) :
-	m_buf(g_string_new(stringBuf.getUTF8()))
+	m_buf(stringBuf.getUTF8())
 {
 }
 
-UTF8String::UTF8String(const UCSString &stringBuf, bool convertToValidXML)
+UTF8String::UTF8String(const UCSString &stringBuf, bool convertToXML)
 {
-	char *buf;
-	if (convertToValidXML)
+	if (convertToXML)
 	{
 		UCSString tempUCS4;
 		for (int i=0; i<stringBuf.getLen(); i++) {
@@ -605,60 +612,225 @@ UTF8String::UTF8String(const UCSString &stringBuf, bool convertToValidXML)
 			}
 		}
 
-		buf = g_ucs4_to_utf8((const gunichar *)tempUCS4.getUCS4(), tempUCS4.getLen(), NULL, NULL, NULL); // TODO: handle errors
+		char *tmpBuf = g_static_ucs4_to_utf8((const uint32_t *)tempUCS4.getUCS4(), tempUCS4.getLen(), NULL, NULL);
+		m_buf = tmpBuf;
+		delete [] tmpBuf;
+		return;
 	}
-	else
-		buf = g_ucs4_to_utf8((const gunichar *)stringBuf.getUCS4(), stringBuf.getLen(), NULL, NULL, NULL); // TODO: handle errors
-
-	m_buf = g_string_new(buf);
-	g_free(buf);
+	
+	char *tmpBuf = g_static_ucs4_to_utf8((const uint32_t *)stringBuf.getUCS4(), stringBuf.getLen(), NULL, NULL);
+	m_buf = tmpBuf;
+	delete [] tmpBuf;
 }
 
-// UTF8String::UTF8String(const char *format, ...) :
-// 	m_buf(g_string_new(NULL))
-
-// {
-// 	va_list args;
-// 	va_start (args, format);
-
-// //  	gsize len = g_printf_string_upper_bound(format, args);
-// //  	if (len > 0)
-// //  	{
-// 	char *buf = NULL;
-// 	buf = g_strdup_vprintf(format, args);
-// 	m_buf = g_string_append(m_buf, buf);
-// 	g_free(buf);
-// //  	}
-// 	va_end(args);
-// }
-
 UTF8String::UTF8String(const char *str) :
-	m_buf(g_string_new(str))
+	m_buf(str)
 
 {
 }
 
-
+const int STRING_BUF_SIZE = 128;
 void UTF8String::sprintf(const char *format, ...)
 {
 	va_list args;
 	va_start (args, format);
 
-	m_buf = g_string_truncate(m_buf, 0);
+	char *buf = new char[STRING_BUF_SIZE];
+	int num_needed = vsnprintf(buf, STRING_BUF_SIZE, format, args);
+	if (num_needed >= STRING_BUF_SIZE)
+	{
+		delete buf;
+		buf = new char[num_needed + 1];
+		vsprintf(buf, format, args);
+	}
 
-	char *buf = NULL;
-	buf = g_strdup_vprintf(format, args);
-	m_buf = g_string_append(m_buf, buf);
-	g_free(buf);
+
+	m_buf = buf;
+	delete buf;
 
 	va_end(args);
 }
 
-/*
-UTF8String & UTF8String::operator=(const UTF8String &str)
-{
-	// FIXME FIXME FIXME (IMPORTANT): Protect against the case of
-	// self assignment (x=x)
-	m_buf = g_string_assign(m_buf, str.getUTF8());
+const int UTF8String::getLen() const
+{ 
+	return g_static_utf8_strlen(m_buf.c_str()); 
 }
-*/
+
+/**
+ * g_static_unichar_to_utf8:
+ *
+ * stolen from glib 2.4.1
+ *
+ * @c: a ISO10646 character code
+ * @outbuf: output buffer, must have at least 6 bytes of space.
+ *       If %NULL, the length will be computed and returned
+ *       and nothing will be written to @outbuf.
+ * 
+ * Converts a single character to UTF-8.
+ * 
+ * Return value: number of bytes written
+ **/
+int
+g_static_unichar_to_utf8 (uint32_t c,
+			  char   *outbuf)
+{
+	guint len = 0;    
+	int first;
+	int i;
+    
+	if (c < 0x80)
+	{
+		first = 0;
+		len = 1;
+	}
+	else if (c < 0x800)
+	{
+		first = 0xc0;
+		len = 2;
+	}
+	else if (c < 0x10000)
+	{
+		first = 0xe0;
+		len = 3;
+	}
+	else if (c < 0x200000)
+	{
+		first = 0xf0;
+		len = 4;
+	}
+	else if (c < 0x4000000)
+	{
+		first = 0xf8;
+		len = 5;
+	}
+	else
+	{
+		first = 0xfc;
+		len = 6;
+	}
+    
+	if (outbuf)
+	{
+		for (i = len - 1; i > 0; --i)
+		{
+			outbuf[i] = (c & 0x3f) | 0x80;
+			c >>= 6;
+		}
+		outbuf[0] = c | first;
+	}
+    
+	return len;
+}
+
+
+static const int8_t g_static_utf8_skip_data[256] = {
+  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+  2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+  3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,5,5,6,6,1,1
+};
+
+#define UTF8_LENGTH(Char)              \
+  ((Char) < 0x80 ? 1 :                 \
+   ((Char) < 0x800 ? 2 :               \
+    ((Char) < 0x10000 ? 3 :            \
+     ((Char) < 0x200000 ? 4 :          \
+      ((Char) < 0x4000000 ? 5 : 6)))))
+#define g_static_utf8_next_char(p) (char *)((p) + g_static_utf8_skip_data[*(uint8_t *)(p)])
+
+/**
+ * g_static_ucs4_to_utf8:
+ * 
+ * stolen from glib 2.4.1
+ *
+ * @str: a UCS-4 encoded string
+ * @len: the maximum length of @str to use. If @len < 0, then
+ *       the string is terminated with a 0 character.
+ * @items_read: location to store number of characters read read, or %NULL.
+ * @items_written: location to store number of bytes written or %NULL.
+ *                 The value here stored does not include the trailing 0
+ *                 byte. 
+ *
+ * Convert a string from a 32-bit fixed width representation as UCS-4.
+ * to UTF-8. The result will be terminated with a 0 byte.
+ * 
+ * Return value: a pointer to a newly allocated UTF-8 string.
+ *               If an  error occurs, %NULL will be returned and
+ *               @error set.
+ **/
+char *
+g_static_ucs4_to_utf8 (const uint32_t *str,
+		       glong           len,              
+		       glong          *items_read,       
+		       glong          *items_written)
+{
+	gint result_length;
+	char *result = NULL;
+	char *p;
+	gint i;
+
+	result_length = 0;
+	for (i = 0; len < 0 || i < len ; i++)
+	{
+		if (!str[i])
+			break;
+
+		if (str[i] >= 0x80000000)
+		{
+			if (items_read)
+				*items_read = i;
+	  
+			goto err_out;
+		}
+      
+		result_length += UTF8_LENGTH (str[i]);
+	}
+
+	result = new char[(result_length + 1)];
+	p = result;
+
+	i = 0;
+	while (p < result + result_length)
+		p += g_static_unichar_to_utf8 (str[i++], p);
+  
+	*p = '\0';
+
+	if (items_written)
+		*items_written = p - result;
+
+err_out:
+	if (items_read)
+		*items_read = i;
+
+	return result;
+}
+
+/**
+ * g_static_utf8_strlen:
+ * @p: pointer to the start of a UTF-8 encoded string.
+
+ * 
+ * Returns the length of the string in characters.
+ *
+ * Return value: the length of the string in characters
+ **/
+int
+g_static_utf8_strlen (const char *p)
+{
+	glong len = 0;
+	const char *start = p;
+	if (p == NULL)
+		return 0;
+
+	while (*p)
+	{
+		p = g_utf8_next_char (p);
+		++len;
+	}
+
+	return len;
+}
