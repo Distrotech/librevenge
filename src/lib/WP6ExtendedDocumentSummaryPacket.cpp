@@ -47,7 +47,7 @@ void WP6ExtendedDocumentSummaryPacket::_readContents(GsfInput *input)
 	for(int i=0; i<m_dataSize; i++)
 		streamData[i] = gsf_le_read_guint8(input);
                    
-	m_stream = GSF_INPUT(gsf_input_memory_new(streamData, m_dataSize, true));
+	m_stream = GSF_INPUT(gsf_input_memory_new(streamData, m_dataSize, TRUE));
 }
 
 void WP6ExtendedDocumentSummaryPacket::parse(WP6LLListener *llListener) const
