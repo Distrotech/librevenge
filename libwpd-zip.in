@@ -1,0 +1,34 @@
+#!/bin/sh
+
+# Build runtime and developer zipfiles for libwpd on Win32.
+
+ZIP=libwpd-@WPD_VERSION@.zip
+DEVZIP=libwpd-dev-@WPD_VERSION@.zip
+
+cd @prefix@
+
+DLLDIR=lib
+[ -f bin/libwpd-1-@LT_CURRENT_MINUS_AGE@.dll ] && \
+[ -f bin/libwpd-stream-1-@LT_CURRENT_MINUS_AGE@.dll ] && \
+DLLDIR=bin
+
+strip --strip-all \
+$DLLDIR/libwpd-1-@LT_CURRENT_MINUS_AGE@.dll \
+$DLLDIR/libwpd-stream-1-@LT_CURRENT_MINUS_AGE@.dll
+
+rm $ZIP
+zip $ZIP -@ <<EOF
+$DLLDIR/libwpd-1-@LT_CURRENT_MINUS_AGE@.dll
+$DLLDIR/libwpd-stream-1-@LT_CURRENT_MINUS_AGE@.dll
+EOF
+
+rm $DEVZIP
+zip -r $DEVZIP -@ <<EOF
+include/libwpd-1
+lib/libwpd-1.dll.a
+lib/libwpd-1.a
+lib/libwpd-stream-1.dll.a
+lib/libwpd-stream-1.a
+lib/pkgconfig/libwpd-1.pc
+lib/pkgconfig/libwpd-stream-1.pc
+EOF

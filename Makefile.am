@@ -15,6 +15,7 @@ EXTRA_DIST = \
 	libwpd.spec.in		\
 	libwpd-1.pc.in		\
 	libwpd-stream-1.pc.in	\
+	libwpd-zip.in		\
 	CHANGES
 
 distclean-local:
@@ -23,4 +24,7 @@ distclean-local:
 rpm: dist
 	rpmbuild -ta $(PACKAGE)-$(VERSION).tar.gz
 	@rm -f $(PACKAGE)-$(VERSION).tar.gz
+
+zip: all install
+	sh libwpd-zip
 

@@ -177,6 +177,7 @@ build/win32/Makefile
 libwpd-1.pc
 libwpd-stream-1.pc
 libwpd.spec
+libwpd-zip
 ])
 
 case "$debug" in
