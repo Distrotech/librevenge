@@ -393,12 +393,10 @@ void WP6HLContentListener::insertTab(const uint8_t tabType, const float tabPosit
 				case WP6_TAB_GROUP_BACK_TAB: // converted as hanging indent
 					if (tabPosition >= (float)((double)0xFFFE/(double)WPX_NUM_WPUS_PER_INCH))
 						// fall-back solution if we are not able to read the tabPosition
-						m_ps->m_textIndentByTabs += 0.5f;
+						m_ps->m_textIndentByTabs -= 0.5f;
 					else
-						m_ps->m_textIndentByTabs = m_ps->m_paragraphMarginLeft - tabPosition
-							- m_ps->m_textIndentByParagraphIndentChange;
-					m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange
-						+ m_ps->m_textIndentByTabs;
+						m_ps->m_textIndentByTabs = tabPosition - m_ps->m_paragraphMarginLeft
+							- m_ps->m_pageMarginLeft - m_ps->m_textIndentByParagraphIndentChange;
 					break;
 
 				case WP6_TAB_GROUP_LEFT_INDENT:  // converted as left paragraph margin offset
@@ -408,8 +406,8 @@ void WP6HLContentListener::insertTab(const uint8_t tabType, const float tabPosit
 					else
 						m_ps->m_leftMarginByTabs = tabPosition - m_ps->m_pageMarginLeft
 							- m_ps->m_leftMarginByPageMarginChange - m_ps->m_leftMarginByParagraphMarginChange;
-					m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
-						+ m_ps->m_leftMarginByParagraphMarginChange + m_ps->m_leftMarginByTabs;
+					if (m_ps->m_paragraphTextIndent != 0.0f)
+						m_ps->m_textIndentByTabs -= m_ps->m_paragraphTextIndent;
 					break;
 
 				case WP6_TAB_GROUP_LEFT_RIGHT_INDENT: // converted as left and right paragraph margin offset
@@ -422,15 +420,20 @@ void WP6HLContentListener::insertTab(const uint8_t tabType, const float tabPosit
 					// L/R Indent is symetrical from the effective paragraph margins and position indicates only
 					// the distance from the left edge
 					m_ps->m_rightMarginByTabs = m_ps->m_leftMarginByTabs;
-					m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
-						+ m_ps->m_leftMarginByParagraphMarginChange + m_ps->m_leftMarginByTabs;
-					m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
-						+ m_ps->m_rightMarginByParagraphMarginChange + m_ps->m_rightMarginByTabs;
+					if (m_ps->m_paragraphTextIndent != 0.0f)
+						m_ps->m_textIndentByTabs -= m_ps->m_paragraphTextIndent;
 					break;	
 				
 				default:
 					break;
 				}
+				m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange
+					+ m_ps->m_textIndentByTabs;
+				m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
+					+ m_ps->m_leftMarginByParagraphMarginChange + m_ps->m_leftMarginByTabs;
+				m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
+					+ m_ps->m_rightMarginByParagraphMarginChange + m_ps->m_rightMarginByTabs;
+
 			}
 			else
 			{
