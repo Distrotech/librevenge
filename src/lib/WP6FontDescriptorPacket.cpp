@@ -27,7 +27,7 @@
 #include "WP6FontDescriptorPacket.h"
 #include "libwpd_internal.h"
 
-const char *FONT_WEIGHT_STRINGS[] = { "Black", "Bold", "Demi", "Extended", 
+const char *FONT_WEIGHT_STRINGS[] = { "Bold", "Demi", "Extended", 
 				      "Extra", "Headline", "Light", "Medium", 
 				      "Normal", "Regular", "Standaard", "Standard" };
 const char * USELESS_WP_POSTFIX = "-WP";
