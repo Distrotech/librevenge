@@ -32,7 +32,7 @@ _WPXParsingState::_WPXParsingState(bool sectionAttributesChanged) :
 	m_textAttributesChanged(false),
 	m_fontSize(12.0f/*WP6_DEFAULT_FONT_SIZE*/), // FIXME ME!!!!!!!!!!!!!!!!!!! HELP WP6_DEFAULT_FONT_SIZE
 	m_fontName(g_string_new(/*WP6_DEFAULT_FONT_NAME*/"Times New Roman")), // EN PAS DEFAULT FONT AAN VOOR WP5/6/etc
-	m_fontColor(new RGBSColor(0xff,0xff,0xff,0xff)), //Set default to black. Maybe once it will change, but for the while...
+	m_fontColor(new RGBSColor(0x00,0x00,0x00,0xff)), //Set default to black. Maybe once it will change, but for the while...
 
 	m_isParagraphColumnBreak(false),
 	m_isParagraphPageBreak(false),

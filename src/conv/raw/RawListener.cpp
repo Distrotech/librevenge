@@ -153,8 +153,8 @@ void RawListenerImpl::openParagraph(const guint8 paragraphJustification, const g
 	__iuprintf("openParagraph(paragraphJustification: %d, textAttributeBits: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, textIndent: %.4f, fontName: %s, fontSize: %.4f,  fontColor: #%02x%02x%02x s:%02x, lineSpacing: %.4f, isColumnBreak: %s, isPageBreak: %s)\n",
 		paragraphJustification, textAttributeBits,
 		marginLeftOffset, marginRightOffset, textIndent,
-		fontNameUTF8.getUTF8(), fontSize, (fontColor?fontColor->m_r:0xff), (fontColor?fontColor->m_g:0xff),
-		(fontColor?fontColor->m_b:0xff), (fontColor?fontColor->m_s:0xff), lineSpacing,
+		fontNameUTF8.getUTF8(), fontSize, (fontColor?fontColor->m_r:0x00), (fontColor?fontColor->m_g:0x00),
+		(fontColor?fontColor->m_b:0x00), (fontColor?fontColor->m_s:0xff), lineSpacing,
 		(isColumnBreak ? "true" : "false"), (isPageBreak ? "true" : "false")
 	);
 }
@@ -167,8 +167,8 @@ void RawListenerImpl::closeParagraph()
 void RawListenerImpl::openSpan(const guint32 textAttributeBits, const gchar *fontName, const float fontSize, const RGBSColor *fontColor)
 {
 	__iuprintf("openSpan(textAttributeBits: %u, fontName: %s, fontSize: %.4f,  fontColor: #%02x%02x%02x s:%02x)\n",
-			   textAttributeBits, fontName, fontSize, (fontColor?fontColor->m_r:0xff), (fontColor?fontColor->m_g:0xff),
-			   (fontColor?fontColor->m_b:0xff), (fontColor?fontColor->m_s:0xff)
+			   textAttributeBits, fontName, fontSize, (fontColor?fontColor->m_r:0x00), (fontColor?fontColor->m_g:0x00),
+			   (fontColor?fontColor->m_b:0x00), (fontColor?fontColor->m_s:0xff)
 	);
 }
 
@@ -251,8 +251,8 @@ void RawListenerImpl::openListElement(const guint8 paragraphJustification, const
 	__iuprintf("openListElement(paragraphJustification: %d, textAttributeBits: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, textIndent: %.4f, fontName: %s, fontSize: %.4f, fontColor: #%02x%02x%02x s:%02x, lineSpacing: %.4f)\n",
 		paragraphJustification, textAttributeBits,
 		marginLeftOffset, marginRightOffset, textIndent,
-		fontNameUTF8.getUTF8(), fontSize, (fontColor?fontColor->m_r:0xff), (fontColor?fontColor->m_g:0xff),
-		(fontColor?fontColor->m_b:0xff), (fontColor?fontColor->m_s:0xff), lineSpacing
+		fontNameUTF8.getUTF8(), fontSize, (fontColor?fontColor->m_r:0x00), (fontColor?fontColor->m_g:0x00),
+		(fontColor?fontColor->m_b:0x00), (fontColor?fontColor->m_s:0xff), lineSpacing
 	);
 }
 
