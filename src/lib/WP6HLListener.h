@@ -30,6 +30,10 @@
 #include "WPXHLListener.h"
 #include "WP6FileStructure.h"
 
+#include <stack>
+#include <map>
+using namespace std;
+
 class WPXHLListenerImpl;
 
 enum WP6ParagraphStyleState { notInStyle, beginBeforeNumbering,
@@ -121,12 +125,12 @@ class WP6HLListener : public WP6LLListener
  private:
 	WPXHLListenerImpl * m_listenerImpl;
 
-	GArray *m_textArray;
-	GArray *m_textBeforeNumber;
-	GArray *m_textBeforeDisplayReference;
-	GArray *m_numberText;
-	GArray *m_textAfterDisplayReference;
-	GArray *m_textAfterNumber;
+	UCSString m_bodyText;
+	UCSString m_textBeforeNumber;
+	UCSString m_textBeforeDisplayReference;
+	UCSString m_numberText;
+	UCSString m_textAfterDisplayReference;
+	UCSString m_textAfterNumber;
 
 	guint32 m_textAttributeBits;
 	gboolean m_textAttributesChanged;
@@ -155,8 +159,9 @@ class WP6HLListener : public WP6LLListener
 	gint32 m_currentRow;
 	gint32 m_currentColumn;
 
-	GHashTable *m_outlineDefineHash;
-	GQueue *m_listLevelStack;
+	//GHashTable *m_outlineDefineHash;
+	map<int,WP6OutlineDefinition *> m_outlineDefineHash;
+	stack<int> m_listLevelStack;
 	guint16 m_currentOutlineHash; // probably should replace Hash with Key in these sorts of cases
 	guint8 m_oldListLevel;
 	guint8 m_currentListLevel;

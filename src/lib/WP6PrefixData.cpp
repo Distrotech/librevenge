@@ -31,14 +31,11 @@
 #include "WP6LLListener.h"
 #include "libwpd_internal.h"
 
-void parsePrefixDataPacketNotify(gpointer key, gpointer value, gpointer user_data);
-void destroyPrefixDataPacketKeyNotify(gpointer data);
-void destroyPrefixDataPacketNotify(gpointer data);
+// void parsePrefixDataPacketNotify(gpointer key, gpointer value, gpointer user_data);
+// void destroyPrefixDataPacketKeyNotify(gpointer data);
+// void destroyPrefixDataPacketNotify(gpointer data);
 
 WP6PrefixData::WP6PrefixData(GsfInput *input, const int numPrefixIndices) :
-	m_prefixDataPacketHash(g_hash_table_new_full(&g_int_hash, &g_int_equal, 
-						     &destroyPrefixDataPacketKeyNotify, 
-						     &destroyPrefixDataPacketNotify)),
 	m_defaultInitialFontPID((-1))
 
 {
@@ -54,9 +51,10 @@ WP6PrefixData::WP6PrefixData(GsfInput *input, const int numPrefixIndices) :
 			WPD_DEBUG_MSG(("WordPerfect: constructing prefix packet 0x%x\n", i));
 			WP6PrefixDataPacket *prefixDataPacket = WP6PrefixDataPacket::constructPrefixDataPacket(input, prefixIndiceArray[(i-1)]);
 			if (prefixDataPacket) {
-				gint *key = new gint;
-				*key = i;
-				g_hash_table_insert(m_prefixDataPacketHash, (gpointer)key, (gpointer)prefixDataPacket);
+// 				gint *key = new gint;
+// 				*key = i;
+				// g_hash_table_insert(m_prefixDataPacketHash, (gpointer)key, (gpointer)prefixDataPacket);
+				m_prefixDataPacketHash[i] = prefixDataPacket;
 				if (dynamic_cast<WP6DefaultInitialFontPacket *>(prefixDataPacket))
 					m_defaultInitialFontPID = i;
 			}
@@ -72,17 +70,25 @@ WP6PrefixData::WP6PrefixData(GsfInput *input, const int numPrefixIndices) :
 
 WP6PrefixData::~WP6PrefixData()
 {
- 	g_hash_table_destroy(m_prefixDataPacketHash);
+	typedef map<int, WP6PrefixDataPacket *>::iterator Iter;
+	for (Iter packet = m_prefixDataPacketHash.begin(); packet!=m_prefixDataPacketHash.end(); packet++) {
+		delete(packet->second);
+	}
+ 	//g_hash_table_destroy(m_prefixDataPacketHash);
 }
 
 const WP6PrefixDataPacket * WP6PrefixData::getPrefixDataPacket(const int prefixID) const
 {
-	return (const WP6PrefixDataPacket *)g_hash_table_lookup(m_prefixDataPacketHash, &prefixID);
+	return static_cast<const WP6PrefixDataPacket *>(m_prefixDataPacketHash.find(prefixID)->second); //(const WP6PrefixDataPacket *)g_hash_table_lookup(m_prefixDataPacketHash, &prefixID);
 }
 
 void WP6PrefixData::parse(WP6LLListener *llListener)
 {
-	g_hash_table_foreach(m_prefixDataPacketHash, parsePrefixDataPacketNotify, llListener);
+	typedef map<int, WP6PrefixDataPacket *>::iterator Iter;
+	for (Iter packet = m_prefixDataPacketHash.begin(); packet!=m_prefixDataPacketHash.end(); ++packet) {
+		packet->second->parse(llListener);
+	}
+	//g_hash_table_foreach(m_prefixDataPacketHash, parsePrefixDataPacketNotify, llListener);
 }
 
 // static callbacks for the hash table of prefix data packets

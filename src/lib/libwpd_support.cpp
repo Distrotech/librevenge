@@ -24,6 +24,7 @@
  */
 
 #include "libwpd.h"
+#include <string.h>
 
 _RGBSColor::_RGBSColor(guint8 r, guint8 g, guint8 b, guint8 s)
 	:	m_r(r),
@@ -31,4 +32,47 @@ _RGBSColor::_RGBSColor(guint8 r, guint8 g, guint8 b, guint8 s)
 		m_b(b),
 		m_s(s)
 {
+}
+
+UCSString::UCSString() : m_stringBuf(g_array_new(TRUE, FALSE, sizeof(guint32)))
+{
+}
+
+UCSString::UCSString(const UCSString &stringBuf) : m_stringBuf(g_array_new(TRUE, FALSE, sizeof(guint32)))
+{
+	g_array_insert_vals(m_stringBuf, 0, stringBuf.getUCS4(), stringBuf.getLen()); 
+}
+
+UCSString::~UCSString()
+{
+	g_array_free(m_stringBuf, TRUE);
+}
+
+gchar * UCSString::getUTF8() const
+{
+	return g_ucs4_to_utf8((const gunichar *)m_stringBuf->data, m_stringBuf->len, NULL, NULL, NULL); // TODO: handle errors
+}
+
+void UCSString::append(guint32 c)
+{
+	g_array_append_val(m_stringBuf, c);
+}
+
+void UCSString::append(const UCSString &stringBuf)
+{
+	m_stringBuf = g_array_append_vals(m_stringBuf, stringBuf.getUCS4(), stringBuf.getLen());
+}
+
+// append: appends an ascii-standard (not UTF8!!) string onto the buffer
+void UCSString::append(const gchar *buf)
+{
+	for (int i=0; i<strlen(buf); i++)
+	{
+		append((guint32)buf[i]);
+	}
+}
+
+void UCSString::clear()
+{
+	m_stringBuf = g_array_set_size(m_stringBuf, 0);			
 }

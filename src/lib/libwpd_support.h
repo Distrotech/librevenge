@@ -40,6 +40,29 @@ struct _RGBSColor
 	guint8 m_s; 
 };
 
+// UCSString: minimal string class, basically an object-oriented wrapper around glib's UCS4 string
+// (so we don't have to pull in yet more dependencies)
+class UCSString
+{
+public:
+	UCSString();
+	UCSString(const UCSString &);
+	~UCSString();
+	// UCS2 conversion not needed (yet)
+	// const guint16 * getUCS2();
+	void append(guint32);
+	void append(const UCSString &);
+	void append(const gchar *);
+	void clear();
+
+	gchar * getUTF8() const;
+	const guint32 * getUCS4() const { return (guint32 *)m_stringBuf->data; }
+	const int getLen() const { return m_stringBuf->len; }
+
+private:
+	GArray *m_stringBuf;
+};
+
 class FileException
 {
 	// needless to say, we could flesh this class out a bit

@@ -71,16 +71,16 @@ static int _extractNumericValueFromRoman(char romanChar)
 // as letters, numbers, or roman numerals.. return an integer value representing its number
 // HACK: this function is really cheesey
 // NOTE: if the input is not valid, the output is unspecified
-static int _extractDisplayReferenceNumberFromBuf(const GArray *buf, const WPXListType listType)
+static int _extractDisplayReferenceNumberFromBuf(const UCSString &buf, const WPXListType listType)
 {
 	if (listType == lowercaseRoman || listType == uppercaseRoman)
 	{
 		int currentSum = 0;
 		int lastMark = 0;
 		int currentMark = 0;
-		for (int i=0; i<buf->len; i++)
+		for (int i=0; i<buf.getLen(); i++)
 		{
-			int currentMark = _extractNumericValueFromRoman(((guint16 *)buf->data)[i]);
+			int currentMark = _extractNumericValueFromRoman(buf.getUCS4()[i]);
 			if (lastMark < currentMark) {
 				currentSum = currentMark - lastMark;
 			}
@@ -93,9 +93,9 @@ static int _extractDisplayReferenceNumberFromBuf(const GArray *buf, const WPXLis
 	{
 		// FIXME: what happens to a lettered list that goes past z? ah
 		// the sweet mysteries of life
-		if (buf->len==0)
+		if (buf.getLen()==0)
 			throw ParseException();
-		int c = ((guint16 *)buf->data)[0];
+		int c = buf.getUCS4()[0];
 		if (listType==lowercase)
 			c = toupper(c);
 		return (c - 64);
@@ -103,10 +103,10 @@ static int _extractDisplayReferenceNumberFromBuf(const GArray *buf, const WPXLis
 	else if (listType == arabic)
 	{
 		int currentSum = 0;
-		for (int i=0; i<buf->len; i++)
+		for (int i=0; i<buf.getLen(); i++)
 		{
 			currentSum *= 10;
-			currentSum+=(((guint16 *)buf->data)[i]-48);
+			currentSum+=(buf.getUCS4()[i]-48);
 		}
 		return currentSum;
 	}
@@ -114,19 +114,19 @@ static int _extractDisplayReferenceNumberFromBuf(const GArray *buf, const WPXLis
 	return 1;
 }
 
-static WPXListType _extractListTypeFromBuf(const GArray *buf, const WPXListType putativeListType)
+static WPXListType _extractListTypeFromBuf(const UCSString &buf, const WPXListType putativeListType)
 {
-	for (int i=0; i<buf->len; i++)
+	for (int i=0; i<buf.getLen(); i++)
 	{
-		if ((((guint16 *)buf->data)[i] == 'I' || ((guint16 *)buf->data)[i] == 'V' || ((guint16 *)buf->data)[i] == 'X') && 
+		if ((buf.getUCS4()[i] == 'I' || buf.getUCS4()[i] == 'V' || buf.getUCS4()[i] == 'X') && 
 		    (putativeListType == lowercaseRoman || putativeListType == uppercaseRoman))
 			return uppercaseRoman;
-		else if ((((guint16 *)buf->data)[i] == 'i' || ((guint16 *)buf->data)[i] == 'v' || ((guint16 *)buf->data)[i] == 'x') && 
+		else if ((buf.getUCS4()[i] == 'i' || buf.getUCS4()[i] == 'v' || buf.getUCS4()[i] == 'x') && 
 		    (putativeListType == lowercaseRoman || putativeListType == uppercaseRoman))
 			return lowercaseRoman;
-		else if (((guint16 *)buf->data)[i] >= 'A' && ((guint16 *)buf->data)[i] <= 'Z')
+		else if (buf.getUCS4()[i] >= 'A' && buf.getUCS4()[i] <= 'Z')
 			return uppercase;
-		else if (((guint16 *)buf->data)[i] >= 'a' && ((guint16 *)buf->data)[i] <= 'z')
+		else if (buf.getUCS4()[i] >= 'a' && buf.getUCS4()[i] <= 'z')
 			return lowercase;		
 	}
 
@@ -183,12 +183,6 @@ void WP6OutlineDefinition::_updateNumberingMethods(const WP6OutlineLocation outl
 WP6HLListener::WP6HLListener(WPXHLListenerImpl *listenerImpl) :
 	WP6LLListener(), 
 	m_listenerImpl(listenerImpl),
-	m_textArray(g_array_new(TRUE, FALSE, sizeof(guint16))),
-	m_textBeforeNumber(g_array_new(TRUE, FALSE, sizeof(guint16))),
-	m_textBeforeDisplayReference(g_array_new(TRUE, FALSE, sizeof(guint16))),
-	m_numberText(g_array_new(TRUE, FALSE, sizeof(guint16))),
-	m_textAfterDisplayReference(g_array_new(TRUE, FALSE, sizeof(guint16))),
-	m_textAfterNumber(g_array_new(TRUE, FALSE, sizeof(guint16))),
 	m_textAttributeBits(0),
 	m_textAttributesChanged(FALSE),
 	m_currentFontSize(WP6_DEFAULT_FONT_SIZE),
@@ -210,8 +204,6 @@ WP6HLListener::WP6HLListener(WPXHLListenerImpl *listenerImpl) :
 	m_currentRow(-1),
 	m_currentColumn(-1),
 	
-	m_outlineDefineHash(g_hash_table_new_full(&g_int_hash, &g_int_equal, &destroyOutlineKeyNotify, &destroyOutlineDefinitionNotify)),
-	m_listLevelStack(g_queue_new()),
 	m_currentListLevel(0),
 	m_isPutativeListElementHasParagraphNumber(FALSE),
 	m_isPutativeListElementHasDisplayReferenceNumber(FALSE),
@@ -222,14 +214,11 @@ WP6HLListener::WP6HLListener(WPXHLListenerImpl *listenerImpl) :
 
 WP6HLListener::~WP6HLListener()
 {
-	g_array_free(m_textArray, TRUE);
-	g_array_free(m_textBeforeNumber, TRUE);
-	g_array_free(m_textBeforeDisplayReference, TRUE);
-	g_array_free(m_numberText, TRUE);
-	g_array_free(m_textAfterDisplayReference, TRUE);	
-	g_array_free(m_textAfterNumber, TRUE);	
 	g_string_free(m_currentFontName, TRUE);
-	g_hash_table_destroy(m_outlineDefineHash);
+	typedef map<int, WP6OutlineDefinition *>::iterator Iter;
+	for (Iter outline = m_outlineDefineHash.begin(); outline != m_outlineDefineHash.end(); outline++) {
+		delete(outline->second);
+	}
 }
 
 void WP6HLListener::insertCharacter(guint16 character)
@@ -237,29 +226,29 @@ void WP6HLListener::insertCharacter(guint16 character)
 	if (!m_isUndoOn)
 	{
 		if (m_paragraphStyleStateSequence.getCurrentState() == styleBody || m_paragraphStyleStateSequence.getCurrentState() == notInStyle)
-			g_array_append_val(m_textArray, character);
+			m_bodyText.append(character);
 		else if (m_paragraphStyleStateSequence.getCurrentState() == beginBeforeNumbering)
 		{
-			g_array_append_val(m_textBeforeNumber, character);
+			m_textBeforeNumber.append(character);
 		}
 		else if (m_paragraphStyleStateSequence.getCurrentState() == beginNumberingBeforeDisplayReferencing)
 		{
 			// left delimeter (or the bullet if there is no display referencing)
-			g_array_append_val(m_textBeforeDisplayReference, character);
+			m_textBeforeDisplayReference.append(character);
 		}
 		else if (m_paragraphStyleStateSequence.getCurrentState() == beginDisplayReferencing)
 		{
 			// the actual paragraph number (in varying forms)
-			g_array_append_val(m_numberText, character);
+			m_numberText.append(character);
 		}
 		else if (m_paragraphStyleStateSequence.getCurrentState() == beginNumberingAfterDisplayReferencing)
 		{
 			// right delimeter (if there was a display no. ref. group)
-			g_array_append_val(m_textAfterDisplayReference, character);
+			m_textAfterDisplayReference.append(character);
 		}
 		else if (m_paragraphStyleStateSequence.getCurrentState() == beginAfterNumbering)
 		{
-			g_array_append_val(m_textAfterNumber, character);
+			m_textAfterNumber.append(character);
 		}
 	}
 }
@@ -270,7 +259,6 @@ void WP6HLListener::insertEOL()
 	{
 		if (m_paragraphStyleStateSequence.getCurrentState() == notInStyle)
 			_flushText();		
-		//m_numDeferredParagraphBreaks++;
 		m_numDeferredParagraphBreaks++; 
 	}
 	
@@ -442,16 +430,16 @@ void WP6HLListener::updateOutlineDefinition(const WP6OutlineLocation outlineLoca
 	WP6OutlineDefinition *tempListDefinition = NULL;
 	WPD_DEBUG_MSG(("WordPerfect: Updating OutlineHash %i\n", outlineHash));
 
-	if ((tempListDefinition = (WP6OutlineDefinition *)g_hash_table_lookup(m_outlineDefineHash, &((gint)outlineHash))))
+	WP6OutlineDefinition *tempOutlineDefinition;
+	if (m_outlineDefineHash.find(outlineHash) != m_outlineDefineHash.end())
 	{
-		tempListDefinition->update(numberingMethods, tabBehaviourFlag);
+		tempOutlineDefinition = (m_outlineDefineHash.find(outlineHash))->second;
+		tempOutlineDefinition->update(numberingMethods, tabBehaviourFlag);
 	}
 	else
 	{
-		gint *key = new int;
-		*key = outlineHash;
-		tempListDefinition = new WP6OutlineDefinition(outlineLocation, numberingMethods, tabBehaviourFlag);
-		g_hash_table_insert(m_outlineDefineHash, key, tempListDefinition);
+		tempOutlineDefinition = new WP6OutlineDefinition(outlineLocation, numberingMethods, tabBehaviourFlag);
+		m_outlineDefineHash[outlineHash] = tempOutlineDefinition;
 	}
 }
 
@@ -486,8 +474,8 @@ void WP6HLListener::displayNumberReferenceGroupOn(const guint8 subGroup, const g
 			// HACK: this is the >1st element in a sequence of display reference numbers, pretend it was
 			// the first and remove all memory of what came before in the style sequence
 			if (m_isPutativeListElementHasDisplayReferenceNumber) {
-				m_numberText = g_array_set_size(m_numberText, 0);
-				m_textAfterDisplayReference = g_array_set_size(m_textAfterDisplayReference, 0);	
+				m_numberText.clear();
+				m_textAfterDisplayReference.clear();	
 			}
 			m_isPutativeListElementHasDisplayReferenceNumber = TRUE;
 			break;
@@ -510,10 +498,8 @@ void WP6HLListener::displayNumberReferenceGroupOff(const guint8 subGroup)
 				// dump all our information into the before numbering block, if the display reference
 				// wasn't for a list
 				if (m_paragraphStyleStateSequence.getCurrentState() == beginBeforeNumbering) {
-					m_textBeforeNumber = g_array_append_vals(m_textBeforeNumber, 
-										 (gconstpointer)m_numberText, 
-										 m_numberText->len);
-					m_textBeforeNumber = g_array_set_size(m_numberText, 0);	
+					m_textBeforeNumber.append(m_numberText);
+					m_textBeforeNumber.clear();	
 				}
 				
 			}
@@ -570,10 +556,13 @@ void WP6HLListener::styleGroupOff(const guint8 subGroup)
 			m_paragraphStyleStateSequence.setCurrentState(styleBody);      
 			if (m_isPutativeListElementHasParagraphNumber) 
 			{
-				_handleListChange(m_currentOutlineHash);
-				if (m_sectionAttributesChanged) // FIXME: generalize this everywhere we add a structure like this
+				if (m_sectionAttributesChanged) 
+				{
 					m_listenerImpl->openSection(m_numColumns, m_marginLeft, m_marginRight);
-					m_listenerImpl->openListElement(m_currentOutlineHash);			
+					m_sectionAttributesChanged = FALSE;
+				}
+				_handleListChange(m_currentOutlineHash);
+				m_listenerImpl->openListElement(m_currentOutlineHash);			
 			}
 			else {
 				m_numDeferredParagraphBreaks+=m_numRemovedParagraphBreaks;
@@ -595,8 +584,9 @@ void WP6HLListener::endDocument()
 	if (m_paragraphStyleStateSequence.getCurrentState() != notInStyle)
 	{
 		_flushText();
+		m_currentListLevel = 0;
 		if (m_isPutativeListElementHasParagraphNumber) 
-			m_listenerImpl->closeListElement();
+			_handleListChange(m_currentOutlineHash);
 		m_paragraphStyleStateSequence.setCurrentState(notInStyle);
 		_flushText();
 
@@ -696,13 +686,13 @@ void WP6HLListener::_handleLineBreakElementBegin()
 }
 
 // _flushText
-// FIXME: we need to declare a set of preconditions that must be met before this function is called
+// FIXME: we need to declare a set of preconditions that must be met when this function is called
 // 
 void WP6HLListener::_flushText()
 {		
 	if (m_paragraphStyleStateSequence.getCurrentState() == notInStyle) 
 	{
-		if (m_currentListLevel > 0 && (m_numDeferredParagraphBreaks > 0 || m_textArray->len > 0) && 
+		if (m_currentListLevel > 0 && (m_numDeferredParagraphBreaks > 0 || m_bodyText.getLen() > 0) && 
 		    m_paragraphStyleStateSequence.getCurrentState() == notInStyle)
 		{
 			m_currentListLevel = 0;
@@ -710,7 +700,7 @@ void WP6HLListener::_flushText()
 		}
 	}
 
-	if (m_sectionAttributesChanged && m_textArray->len > 0)
+	if (m_sectionAttributesChanged && m_bodyText.getLen() > 0)
 	{
 		m_listenerImpl->openSection(m_numColumns, m_marginLeft, m_marginRight);
 		m_sectionAttributesChanged = FALSE;
@@ -739,18 +729,18 @@ void WP6HLListener::_flushText()
 		}
 		m_isParagraphOpened = TRUE;
 	}
-	else if (m_textAttributesChanged && m_textArray->len > 0)
+	else if (m_textAttributesChanged && m_bodyText.getLen() > 0)
 		m_listenerImpl->openSpan(m_textAttributeBits, m_currentFontName->str, m_currentFontSize);
 
 	if (!m_isPutativeListElementHasParagraphNumber && !m_sectionAttributesChanged) // conditional to handle section flush coming just before a style definition
 
 	{		
 		m_listenerImpl->insertText(m_textBeforeNumber);
-		m_textBeforeNumber = g_array_set_size(m_textBeforeNumber, 0);	
+		m_textBeforeNumber.clear();	
 	}
 
-	m_listenerImpl->insertText(m_textArray);
-	m_textArray = g_array_set_size(m_textArray, 0);	
+	m_listenerImpl->insertText(m_bodyText);
+	m_bodyText.clear();
 
 	m_textAttributesChanged = FALSE;
 	m_paragraphJustificationChanged = FALSE;
@@ -758,12 +748,12 @@ void WP6HLListener::_flushText()
 
 void WP6HLListener::_handleListChange(const guint16 outlineHash)
 {
-	WP6OutlineDefinition *listDefinition = (WP6OutlineDefinition *) g_hash_table_lookup(m_outlineDefineHash, &((gint)outlineHash));
-	if (!listDefinition)
+	if (m_outlineDefineHash.find(outlineHash) == m_outlineDefineHash.end())
 		throw ParseException();
+	WP6OutlineDefinition *listDefinition = m_outlineDefineHash.find(outlineHash)->second;
 	
-	gint oldListLevel;
-	(g_queue_is_empty(m_listLevelStack)) ? oldListLevel = 0 : oldListLevel = GPOINTER_TO_INT(g_queue_peek_head(m_listLevelStack));
+	int oldListLevel;
+	(m_listLevelStack.empty()) ? oldListLevel = 0 : oldListLevel = m_listLevelStack.top();
 
 	if (m_currentListLevel > oldListLevel)
 	{
@@ -779,7 +769,7 @@ void WP6HLListener::_handleListChange(const guint16 outlineHash)
 			m_listenerImpl->defineUnorderedListLevel(m_currentOutlineHash, m_currentListLevel, m_textBeforeDisplayReference);
 
 		for (gint i=(oldListLevel+1); i<=m_currentListLevel; i++) {
-			g_queue_push_head(m_listLevelStack, GINT_TO_POINTER(i));
+			m_listLevelStack.push(i);
  			WPD_DEBUG_MSG(("Pushed level %i onto the list level stack\n", i));
 			if (m_isPutativeListElementHasDisplayReferenceNumber) 
 				m_listenerImpl->openOrderedListLevel(m_currentOutlineHash);
@@ -790,10 +780,12 @@ void WP6HLListener::_handleListChange(const guint16 outlineHash)
 	else if (m_currentListLevel < oldListLevel)
 	{
 		m_listenerImpl->closeListElement(); // close the current element, which must exist
-		while (GPOINTER_TO_INT(g_queue_peek_head(m_listLevelStack)) > m_currentListLevel)
+		// now keep on closing levels until we reach the current list level, or the list
+		// level stack is empty (signalling that we are out of a list)
+		while (!m_listLevelStack.empty() && m_listLevelStack.top() > m_currentListLevel)
 		{
-			gint tempListLevel = GPOINTER_TO_INT(g_queue_pop_head(m_listLevelStack));
- 			WPD_DEBUG_MSG(("Popped level %i off the list level stack\n", i));
+			int tempListLevel = m_listLevelStack.top(); m_listLevelStack.pop();
+ 			WPD_DEBUG_MSG(("Popped level %i off the list level stack\n", tempListLevel));
 			// we are assuming that whether or not the current element has a paragraph
 			// number or not is representative of the entire list. I think this
 			// assumption holds for all wordperfect files, but it's not correct
@@ -815,10 +807,10 @@ void WP6HLListener::_handleListChange(const guint16 outlineHash)
 		m_listenerImpl->closeListElement(); // but close it
 	}
 
-	m_textBeforeNumber = g_array_set_size(m_textBeforeNumber, 0);	
-	m_textBeforeDisplayReference = g_array_set_size(m_textBeforeDisplayReference, 0);	
-	m_numberText = g_array_set_size(m_numberText, 0);	
-	m_textAfterDisplayReference = g_array_set_size(m_textAfterDisplayReference, 0);	
-	m_textAfterNumber = g_array_set_size(m_textAfterNumber, 0);	
+	m_textBeforeNumber.clear();
+	m_textBeforeDisplayReference.clear();	
+	m_numberText.clear();	
+	m_textAfterDisplayReference.clear();	
+	m_textAfterNumber.clear();	
 	
 }

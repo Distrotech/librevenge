@@ -145,6 +145,7 @@ void WP6Parser::parse()
 		getLLListener()->endDocument();
 		WPD_DEBUG_MSG(("WordPerfect: Finished with document parse (position = %ld)\n",(long)gsf_input_tell(getInput())));
 		delete(header);
+		delete(fileHeader);
 		delete(prefixData);
 	}
 	catch(FileException)

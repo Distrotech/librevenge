@@ -43,13 +43,13 @@ public:
 				   gboolean isColumnBreak, gboolean isPageBreak);
 	virtual void openSection(const guint numColumns, gfloat marginLeft, gfloat marginRight);
 	virtual void openSpan(const guint32 textAttributeBits, const gchar *fontName, const gfloat fontSize);
-	virtual void insertText(const GArray *text);
+	virtual void insertText(const UCSString &text);
 	virtual void insertLineBreak() {}
 
 	virtual void defineOrderedListLevel(const gint listID, const guint16 listLevel, const WPXListType listType, 
-					    const GArray *textBeforeNumber, const GArray *textAfterNumber, 
+					    const UCSString &textBeforeNumber, const UCSString &textAfterNumber, 
 					    const gint startingNum) {}
-	virtual void defineUnorderedListLevel(const gint listID, const guint16 listLevel, const GArray *bullet) {}
+	virtual void defineUnorderedListLevel(const gint listID, const guint16 listLevel, const UCSString &bullet) {}
 	virtual void openOrderedListLevel(const gint listID);
 	virtual void openUnorderedListLevel(const gint listID);
 	virtual void closeOrderedListLevel();

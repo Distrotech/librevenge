@@ -28,6 +28,8 @@
 #include <glib.h>
 #include <gsf/gsf-input.h>
 #include "WP6PrefixDataPacket.h"
+#include <map>
+using namespace std;
 
 class WP6LLListener;
 
@@ -41,7 +43,7 @@ class WP6PrefixData
 	void parse(WP6LLListener *llListener);
 
  private:
-	GHashTable *m_prefixDataPacketHash;
+	map<int, WP6PrefixDataPacket *> m_prefixDataPacketHash;
 	int m_defaultInitialFontPID;
 };
 

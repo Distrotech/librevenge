@@ -45,6 +45,7 @@ class WP6ParagraphGroup : public WP6VariableLengthGroup
 {
  public:
 	WP6ParagraphGroup(GsfInput *input);
+	~WP6ParagraphGroup();
 	virtual void _readContents(GsfInput *input);
 	virtual void parse(WP6LLListener *llListener);
 	const guint8 getJustification() const { return m_justification; }

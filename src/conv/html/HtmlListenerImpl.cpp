@@ -98,20 +98,10 @@ void HtmlListenerImpl::openSection(guint numColumns, gfloat marginLeft, gfloat m
 	printf("<section columns:%i margin-left:%4.4fin margin-right:%4.4fin>\n", numColumns, marginLeft, marginRight);
 }
 
-void HtmlListenerImpl::insertText(const GArray *text)
+void HtmlListenerImpl::insertText(const UCSString &text)
 {
-	// first convert from ucs2 to ucs4
-	gunichar *textUCS4 = (gunichar *) g_malloc(sizeof(gunichar)*text->len);
-	for (guint i=0; i<text->len; i++) {
-		textUCS4[i] = ((guint16 *)text->data)[i];
-	}
-
-	// then convert from ucs4 to utf8 and write it
-	gchar *textUTF8 = g_ucs4_to_utf8(textUCS4, text->len, NULL, NULL, NULL); // TODO: handle errors
+	gchar *textUTF8 = text.getUTF8();
 	printf("%s", textUTF8);
-
-	// clean up our mess
-	g_free(textUCS4);
 	g_free(textUTF8);
 }
 

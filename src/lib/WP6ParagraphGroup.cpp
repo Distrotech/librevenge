@@ -35,6 +35,12 @@ WP6ParagraphGroup::WP6ParagraphGroup(GsfInput *input) :
 	_read(input);
 }
 
+WP6ParagraphGroup::~WP6ParagraphGroup()
+{
+	if (m_subGroupData)
+		delete(m_subGroupData);
+}
+
 void WP6ParagraphGroup::_readContents(GsfInput *input)
 {
 	switch (getSubGroup())

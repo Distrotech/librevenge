@@ -38,13 +38,14 @@ class WPXHLListenerImpl
 				   const gboolean isColumnBreak, const gboolean isPageBreak) = 0;
 	virtual void openSpan(const guint32 textAttributeBits, const gchar *fontName, const gfloat fontSize) = 0;
 	virtual void openSection(const guint numColumns, const gfloat marginLeft, const gfloat marginRight) = 0;
-	virtual void insertText(const GArray *text) = 0;
+
+	virtual void insertText(const UCSString &text) = 0;
  	virtual void insertLineBreak() = 0;
 
 	virtual void defineOrderedListLevel(const gint listID, const guint16 listLevel, const WPXListType listType, 
-					    const GArray *textBeforeNumber, const GArray *textAfterNumber, 
+					    const UCSString &textBeforeNumber, const UCSString &textAfterNumber, 
 					    const gint startingNum) = 0;
-	virtual void defineUnorderedListLevel(const gint listID, const guint16 listLevel, const GArray *bullet) = 0;
+	virtual void defineUnorderedListLevel(const gint listID, const guint16 listLevel, const UCSString &bullet) = 0;
 	virtual void openOrderedListLevel(const gint listID) = 0;
 	virtual void openUnorderedListLevel(const gint listID) = 0;
 	virtual void closeOrderedListLevel() = 0;
