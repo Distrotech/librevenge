@@ -1292,7 +1292,6 @@ void WP6HLContentListener::_openParagraph()
 	m_ps->m_isParagraphOpened = true;
 
 	_openSpan();
-	m_ps->m_paragraphSpacingBefore = m_parseState->m_paragraphSpacingBefore;
 	m_ps->m_paragraphMarginLeft = m_parseState->m_leftMargin + m_parseState->m_paragraphLeftMargin;
 	m_ps->m_paragraphMarginRight = m_parseState->m_rightMargin + m_parseState->m_paragraphRightMargin;
 }
