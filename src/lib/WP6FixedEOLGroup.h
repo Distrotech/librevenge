@@ -31,11 +31,11 @@
 class WP6FixedEOLGroup : public WP6FixedLengthGroup
 {
 public:
-	WP6FixedEOLGroup(FILE *stream);	
+	WP6FixedEOLGroup(GsfInput *input);	
 	virtual void parse(WP6LLListener *llListener);
 	
 protected:
-	virtual void _readContents(FILE *stream);
+	virtual void _readContents(GsfInput *input);
 
 };
 

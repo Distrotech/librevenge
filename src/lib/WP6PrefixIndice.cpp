@@ -29,7 +29,7 @@
 #include "libwpd.h"
 #include "libwpd_internal.h"
 
-WP6PrefixIndice::WP6PrefixIndice(FILE * stream, int id)
+WP6PrefixIndice::WP6PrefixIndice(GsfInput * input, int id)
 	: m_id(id),
 	  m_type(0),
 	  m_flags(0),
@@ -39,18 +39,18 @@ WP6PrefixIndice::WP6PrefixIndice(FILE * stream, int id)
 	  m_dataOffset(0),
 	  m_hasChildren(FALSE)
 {
-	_read(stream);
+	_read(input);
 }
 
-void WP6PrefixIndice::_read(FILE *stream)
+void WP6PrefixIndice::_read(GsfInput *input)
 {
-	WPD_CHECK_FILE_READ_ERROR(fread(&m_flags, sizeof(guint8), 1, stream), 1);
-	WPD_CHECK_FILE_READ_ERROR(fread(&m_type, sizeof(guint8), 1, stream), 1);
+	m_flags = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+	m_type = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
 
-	WPD_CHECK_FILE_READ_ERROR(fread(&m_useCount, sizeof(guint16), 1, stream), 1);
-	WPD_CHECK_FILE_READ_ERROR(fread(&m_hideCount, sizeof(guint16), 1, stream), 1);
-	WPD_CHECK_FILE_READ_ERROR(fread(&m_dataSize, sizeof(guint32), 1, stream), 1);
-	WPD_CHECK_FILE_READ_ERROR(fread(&m_dataOffset, sizeof(guint32), 1, stream), 1);
+	m_useCount = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+	m_hideCount = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+	m_dataSize = *(const guint32 *)gsf_input_read(input, sizeof(guint32), NULL);
+	m_dataOffset = *(const guint32 *)gsf_input_read(input, sizeof(guint32), NULL);
 
 	WPD_DEBUG_MSG(("Prefix Packet (type: %i, data size: %i, data offset: %i)\n", m_type, m_dataSize, m_dataOffset));
 	

@@ -26,9 +26,9 @@
 #include "WP6FixedSpaceGroup.h"
 #include "WP6LLListener.h"
 
-WP6FixedSpaceGroup::WP6FixedSpaceGroup(FILE *stream)
+WP6FixedSpaceGroup::WP6FixedSpaceGroup(GsfInput *input)
 {
-	_read(stream, 1);
+	_read(input, 1);
 }
 	
 void WP6FixedSpaceGroup::parse(WP6LLListener *llListener)

@@ -31,37 +31,37 @@
 #include "libwpd.h"
 #include "libwpd_internal.h"
 
-WP6PrefixDataPacket::WP6PrefixDataPacket(FILE * stream, int id)
+WP6PrefixDataPacket::WP6PrefixDataPacket(GsfInput * input, int id)
 	: m_id(id)
 {
 }
 
-WP6PrefixDataPacket * WP6PrefixDataPacket::constructPrefixDataPacket(FILE * stream, WP6PrefixIndice *prefixIndice)
+WP6PrefixDataPacket * WP6PrefixDataPacket::constructPrefixDataPacket(GsfInput * input, WP6PrefixIndice *prefixIndice)
 {	       
 	switch (prefixIndice->getType())
 	{
 		case WP6_INDEX_HEADER_INITIAL_FONT:			
-			return new WP6DefaultInitialFontPacket(stream, prefixIndice->getID(), 
+			return new WP6DefaultInitialFontPacket(input, prefixIndice->getID(), 
 							   prefixIndice->getDataOffset(), 
 							   prefixIndice->getDataSize());
 		case WP6_INDEX_HEADER_DESIRED_FONT_DESCRIPTOR_POOL:
-			return new WP6FontDescriptorPacket(stream, prefixIndice->getID(), 
+			return new WP6FontDescriptorPacket(input, prefixIndice->getID(), 
 							   prefixIndice->getDataOffset(), 
 							   prefixIndice->getDataSize());
 		case WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_DESCRIPTOR_POOL:
-			//return new WP6DocumentInformationDescriptorPacket(stream, flags);
+			//return new WP6DocumentInformationDescriptorPacket(input, flags);
 		case WP6_INDEX_HEADER_OUTLINE_STYLE:
-			//return new WP6OutlineStylePacket(stream, flags);
+			//return new WP6OutlineStylePacket(input, flags);
 		default:
 			return NULL;
 	}
 }
 
-void WP6PrefixDataPacket::_read(FILE *stream, guint32 dataOffset, guint32 dataSize)
+void WP6PrefixDataPacket::_read(GsfInput *input, guint32 dataOffset, guint32 dataSize)
 {
-	WPD_CHECK_FILE_SEEK_ERROR(fseek(stream, dataOffset, SEEK_SET));
+	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, dataOffset, G_SEEK_SET));
 
-	_readContents(stream);
+	_readContents(input);
 
 	// assert that we haven't surpassed the size of the packet?
 }

@@ -23,7 +23,7 @@
  * Corel Corporation or Corel Corporation Limited."
  */
  
-#include <stdio.h>
+#include <gsf/gsf-input.h>
 #include <stdlib.h>
 #include <string.h>
 #include "WPXHeader.h"
@@ -32,12 +32,13 @@
 #include "libwpd_internal.h"
 
 
-WPXHeader::WPXHeader(FILE *stream)
+WPXHeader::WPXHeader(GsfInput *input)
 {
-	char fileMagic[4];
+	gchar fileMagic[4];
 	/* check the magic */
-	WPD_CHECK_FILE_SEEK_ERROR(fseek(stream, WP6_HEADER_MAGIC_OFFSET - ftell(stream), SEEK_CUR));
-	WPD_CHECK_FILE_READ_ERROR(fread(fileMagic, sizeof(char), 3, stream), 3);
+	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WP6_HEADER_MAGIC_OFFSET - gsf_input_tell(input), G_SEEK_CUR));
+	for (int i=0; i<3; i++)
+		fileMagic[i] = *(const gchar *)gsf_input_read(input, sizeof(guint8), NULL);
 	fileMagic[3] = '\0';
 	
 	if ( strcmp(fileMagic, "WPC") )
@@ -47,15 +48,15 @@ WPXHeader::WPXHeader(FILE *stream)
 	}
 	
 	/* get the document pointer */
-	WPD_CHECK_FILE_SEEK_ERROR(fseek(stream, WP6_HEADER_DOCUMENT_POINTER_OFFSET - ftell(stream), SEEK_CUR));
-	WPD_CHECK_FILE_READ_ERROR(fread(&m_documentOffset, sizeof(guint32), 1, stream), 1);
+	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WP6_HEADER_DOCUMENT_POINTER_OFFSET - gsf_input_tell(input), G_SEEK_CUR));
+	m_documentOffset = *(const guint32 *)gsf_input_read(input, sizeof(guint32), NULL);
 
 	/* get information on product types, file types, versions */
-	WPD_CHECK_FILE_SEEK_ERROR(fseek(stream, WP6_HEADER_PRODUCT_TYPE_OFFSET - ftell(stream), SEEK_CUR));
-	WPD_CHECK_FILE_READ_ERROR(fread(&m_productType, sizeof(guint8), 1, stream), 1);
-	WPD_CHECK_FILE_READ_ERROR(fread(&m_fileType, sizeof(guint8), 1, stream), 1);
-	WPD_CHECK_FILE_READ_ERROR(fread(&m_majorVersion, sizeof(guint8), 1, stream), 1);
-	WPD_CHECK_FILE_READ_ERROR(fread(&m_minorVersion, sizeof(guint8), 1, stream), 1);
+	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WP6_HEADER_PRODUCT_TYPE_OFFSET - gsf_input_tell(input), G_SEEK_CUR));
+	m_productType = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+	m_fileType = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+	m_majorVersion = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+	m_minorVersion = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
 	
 	WPD_DEBUG_MSG(("WordPerfect: Product Type: %i File Type: %i Major Version: %i Minor Version: %i\n", 
 					m_productType, m_fileType, 

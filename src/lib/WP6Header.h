@@ -30,7 +30,7 @@
 class WP6Header : public WPXHeader
 {
  public:
-	WP6Header(FILE * stream);
+	WP6Header(GsfInput * input);
 	virtual ~WP6Header();
 	
 	const guint16 getIndexHeaderOffset() const { return m_indexHeaderOffset; }

@@ -34,11 +34,11 @@ class WP6VariableLengthGroup : public WP6Part
 	WP6VariableLengthGroup(); // WP6VariableLengthGroup should _never_ be constructed, only its inherited classes
 	virtual ~WP6VariableLengthGroup();
 	
-	static WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(FILE *stream, guint8 groupID);
+	static WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(GsfInput *input, guint8 groupID);
 
  protected:
-	void _read(FILE *stream);
-	virtual void _readContents(FILE *stream) {} // we don't always need more information than that provided generically
+	void _read(GsfInput *input);
+	virtual void _readContents(GsfInput *input) {} // we don't always need more information than that provided generically
 
 	const guint8 getGroup() const { return m_group; }
 	const guint8 getSubGroup() const { return m_subGroup; }

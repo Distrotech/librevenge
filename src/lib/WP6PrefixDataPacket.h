@@ -25,7 +25,7 @@
 
 #ifndef WP6PREFIXDATAPACKET_H
 #define WP6PREFIXDATAPACKET_H
-#include <stdio.h>
+#include <gsf/gsf-input.h>
 #include <stdlib.h>
 #include <glib.h>
 
@@ -34,14 +34,14 @@ class WP6PrefixIndice;
 class WP6PrefixDataPacket
 {
  public:
-	WP6PrefixDataPacket(FILE * stream, int id);	
+	WP6PrefixDataPacket(GsfInput * input, int id);	
 	const int getID() const { return m_id; }
  
-	static WP6PrefixDataPacket * constructPrefixDataPacket(FILE * stream, WP6PrefixIndice *prefixIndice);
+	static WP6PrefixDataPacket * constructPrefixDataPacket(GsfInput * input, WP6PrefixIndice *prefixIndice);
 
  protected:
-	virtual void _readContents(FILE *stream) = 0;
- 	void _read(FILE *stream, guint32 dataOffset, guint32 dataSize);
+	virtual void _readContents(GsfInput *input) = 0;
+ 	void _read(GsfInput *input, guint32 dataOffset, guint32 dataSize);
 
  private:
 	int m_id;

@@ -306,17 +306,17 @@ static guint16 japaneseMap[] = {
   0xff99, 0xff9a, 0xff9b, 0xff9c, 0xff9d, 0xff9e, 0xff9f
 };
 
-WP6ExtendedCharacterGroup::WP6ExtendedCharacterGroup(FILE *stream) :
+WP6ExtendedCharacterGroup::WP6ExtendedCharacterGroup(GsfInput *input) :
 	m_character(0),
 	m_characterSet(0)
 {
-	_read(stream, WP6_EXTENDED_CHARACTER_GROUP_SIZE);
+	_read(input, WP6_EXTENDED_CHARACTER_GROUP_SIZE);
 }
 
-void WP6ExtendedCharacterGroup::_readContents(FILE *stream)
+void WP6ExtendedCharacterGroup::_readContents(GsfInput *input)
 {
-	WPD_CHECK_FILE_READ_ERROR(fread(&m_character, sizeof(guint8), 1, stream), 1);
-	WPD_CHECK_FILE_READ_ERROR(fread(&m_characterSet, sizeof(guint8), 1, stream), 1);
+	m_character = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+	m_characterSet = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
 }
 
 void WP6ExtendedCharacterGroup::parse(WP6LLListener *llListener)

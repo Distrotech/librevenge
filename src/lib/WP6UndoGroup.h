@@ -31,11 +31,11 @@
 class WP6UndoGroup : public WP6FixedLengthGroup
 {
 public:
-	WP6UndoGroup(FILE *stream);	
+	WP6UndoGroup(GsfInput *input);	
 	virtual void parse(WP6LLListener *llListener);
 	
  protected:
-	virtual void _readContents(FILE *stream);
+	virtual void _readContents(GsfInput *input);
 
  private:
 	guint8 m_undoType;

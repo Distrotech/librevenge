@@ -31,7 +31,7 @@
 class WP6Parser : public WPXParser
 {
  public:
-	WP6Parser(FILE * stream, WPXLLListener *llListener);		
+	WP6Parser(GsfInput * input, WPXLLListener *llListener);		
 	virtual void parse();
 };
 

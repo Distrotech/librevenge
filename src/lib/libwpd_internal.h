@@ -25,13 +25,14 @@
 
 #ifndef UT_LIBWPD2_H
 #define UT_LIBWPD2_H
+#include <gsf/gsf-input.h>
 #include <stdio.h>
 #include "libwpd_support.h"
 
 /* Convenience functions/defines, should not be exported externally */
 
 #define WPD_CHECK_FILE_ERROR(v) if (v==EOF) { WPD_DEBUG_MSG(("X_CheckFileError: %d\n", __LINE__)); throw FileException(); }
-#define WPD_CHECK_FILE_SEEK_ERROR(v) if (v != 0) { WPD_DEBUG_MSG(("X_CheckFileSeekError: %d\n", __LINE__)); throw FileException(); }
+#define WPD_CHECK_FILE_SEEK_ERROR(v) if (v) { WPD_DEBUG_MSG(("X_CheckFileSeekError: %d\n", __LINE__)); throw FileException(); }
 #define WPD_CHECK_FILE_READ_ERROR(v,num_elements) if (v != num_elements) {\
  WPD_DEBUG_MSG(("X_CheckFileReadElementError: %d\n", __LINE__)); throw FileException(); }
 

@@ -16,6 +16,7 @@ AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
 
 PKG_CHECK_MODULES(LIBWPD,[
 glib-2.0 >= 2.0.0
+libgsf-1 >= 1.6.0
 ])
 
 AC_ARG_ENABLE(debug,[  --enable-debug    Turn on debugging],[

@@ -27,20 +27,20 @@
 #include "WP6LLListener.h"
 #include "libwpd_internal.h"
 
-WP6ParagraphGroup::WP6ParagraphGroup(FILE *stream) :
+WP6ParagraphGroup::WP6ParagraphGroup(GsfInput *input) :
 	WP6VariableLengthGroup(),
 	m_justification(0)
 {
-	_read(stream);
+	_read(input);
 }
 
-void WP6ParagraphGroup::_readContents(FILE *stream)
+void WP6ParagraphGroup::_readContents(GsfInput *input)
 {
 	switch (getSubGroup())
 	{
 		case WP6_PARAGRAPH_GROUP_JUSTIFICATION:
 		{   
-			WPD_CHECK_FILE_READ_ERROR(fread(&m_justification, sizeof(guint8), 1, stream), 1);
+			m_justification = *(const guint8 *)gsf_input_read( input,  sizeof(guint8), NULL);
 			break;
 		}
 		case WP6_PARAGRAPH_GROUP_OUTLINE_DEFINE:

@@ -26,14 +26,14 @@
 #ifndef WPXHEADER_H
 #define WPXHEADER_H
 
-#include <stdio.h>
+#include <gsf/gsf-input.h>
 #include <stdlib.h>
 #include <glib.h>
 
 class WPXHeader
 {
  public:	
-	WPXHeader(FILE *stream);
+	WPXHeader(GsfInput *input);
 	~WPXHeader() {};
 
 	const guint32 getDocumentOffset() const { return m_documentOffset; }

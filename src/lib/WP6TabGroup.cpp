@@ -31,13 +31,13 @@
 // TODO: is this the right way a TAB should be defined or should we use a WPX_CHARACTER_TAB define?
 #define UCS_TAB 0x0009 
 
-WP6TabGroup::WP6TabGroup(FILE *stream) :
+WP6TabGroup::WP6TabGroup(GsfInput *input) :
 	WP6VariableLengthGroup()
 {
-	_read(stream);
+	_read(input);
 }
 
-void WP6TabGroup::_readContents(FILE *stream)
+void WP6TabGroup::_readContents(GsfInput *input)
 {
 }
 

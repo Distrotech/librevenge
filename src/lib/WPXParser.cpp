@@ -23,7 +23,7 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include <stdio.h>
+#include <gsf/gsf-input.h>
 #include <stdlib.h>
 #include <string.h>
 #include "WPXParser.h"
@@ -31,8 +31,8 @@
 #include "WP6FileStructure.h"
 #include "libwpd_internal.h"
 
-WPXParser::WPXParser(FILE * stream, WPXLLListener * listener) :
-	m_stream(stream),
+WPXParser::WPXParser(GsfInput * input, WPXLLListener * listener) :
+	m_input(input),
 	m_llListener(listener)
 {
 }

@@ -45,46 +45,46 @@ WP6VariableLengthGroup::~WP6VariableLengthGroup()
 		g_free(m_prefixIDs);
 }
 
-WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(FILE *stream, guint8 groupID)
+WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(GsfInput *input, guint8 groupID)
 {
 	switch (groupID)
 	{
 		case WP6_TOP_EOL_GROUP: 
-			return new WP6EOLGroup(stream);
+			return new WP6EOLGroup(input);
 		case WP6_TOP_CHARACTER_GROUP:
-			return new WP6CharacterGroup(stream);
+			return new WP6CharacterGroup(input);
 		case WP6_TOP_COLUMN_GROUP:
-			return new WP6ColumnGroup(stream);
+			return new WP6ColumnGroup(input);
 		case WP6_TOP_PARAGRAPH_GROUP:
-			return new WP6ParagraphGroup(stream);
+			return new WP6ParagraphGroup(input);
 		case WP6_TOP_TAB_GROUP:
-			return new WP6TabGroup(stream);
+			return new WP6TabGroup(input);
 		default:
 			// this is an unhandled group, just skip it
-			return new WP6UnsupportedVariableLengthGroup(stream);
+			return new WP6UnsupportedVariableLengthGroup(input);
 	}
 }
 
-void WP6VariableLengthGroup::_read(FILE *stream)
+void WP6VariableLengthGroup::_read(GsfInput *input)
 {
-	guint32 startPosition = ftell(stream);
+	guint32 startPosition = gsf_input_tell(input);
 
 	WPD_DEBUG_MSG(("WordPerfect: handling a variable length group\n"));
 	
-	WPD_CHECK_FILE_READ_ERROR(fread(&m_subGroup, sizeof(guint8), 1, stream), 1);
-	WPD_CHECK_FILE_READ_ERROR(fread(&m_size, sizeof(guint16), 1, stream), 1);
-	WPD_CHECK_FILE_READ_ERROR(fread(&m_flags, sizeof(guint8), 1, stream), 1);
+	m_subGroup = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+	m_size = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+	m_flags = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
 
 	if (m_flags & WP6_VARIABLE_GROUP_PREFIX_ID_BIT)
 	{
-		WPD_CHECK_FILE_READ_ERROR(fread(&m_numPrefixIDs, sizeof(guint8), 1, stream), 1);
+		m_numPrefixIDs = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
 		
 		if (m_numPrefixIDs > 0)
 		{
 			m_prefixIDs = (guint16 *) g_malloc(sizeof(guint16) * m_numPrefixIDs);
 			for (guint32 i = 0; i < m_numPrefixIDs; i++)
 			{
-				WPD_CHECK_FILE_READ_ERROR(fread(&m_prefixIDs[i], sizeof(guint16), 1, stream), 1);		
+				m_prefixIDs[i] = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);		
 			}
 		}	
 	}	
@@ -93,11 +93,11 @@ void WP6VariableLengthGroup::_read(FILE *stream)
 		m_numPrefixIDs = 0;
 	}
 		
-	WPD_CHECK_FILE_READ_ERROR(fread(&m_sizeNonDeletable, sizeof(guint16), 1, stream), 1);	
+	m_sizeNonDeletable = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);	
 	WPD_DEBUG_MSG(("WordPerfect: Read variable group header (start_position: %i, sub_group: %i, size: %i, flags: %i, num_prefix_ids: %i, size_non_deletable: %i)\n", startPosition, m_subGroup, m_size, m_flags, m_numPrefixIDs, m_sizeNonDeletable));
 
-	_readContents(stream);
+	_readContents(input);
 
-	WPD_CHECK_FILE_SEEK_ERROR(fseek(stream, (startPosition + m_size - 1 - ftell(stream)), SEEK_CUR));
+	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, (startPosition + m_size - 1 - gsf_input_tell(input)), G_SEEK_CUR));
 }
 

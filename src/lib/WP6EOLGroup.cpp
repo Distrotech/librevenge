@@ -28,7 +28,7 @@
 #include "WPXHLListener.h"
 #include "libwpd_internal.h"
 
-WP6EOLGroup::WP6EOLGroup(FILE *stream) :	
+WP6EOLGroup::WP6EOLGroup(GsfInput *input) :	
 	WP6VariableLengthGroup(),
 	m_colSpan(1),
 	m_rowSpan(1),
@@ -38,23 +38,23 @@ WP6EOLGroup::WP6EOLGroup(FILE *stream) :
 	m_cellFgColor(NULL),
 	m_cellBgColor(NULL)
 {
-	_read(stream);
+	_read(input);
 }
 
-void WP6EOLGroup::_readContents(FILE *stream)
+void WP6EOLGroup::_readContents(GsfInput *input)
 {
 	WPD_DEBUG_MSG(("WordPerfect: EOL Group: Reading Embedded Sub-Function Data\n"));
 	guint16 sizeDeletableSubFunctionData;
-	guint16 startPosition = ftell(stream);
-	WPD_CHECK_FILE_READ_ERROR(fread(&sizeDeletableSubFunctionData, sizeof(guint16), 1, stream), 1);	
+	guint16 startPosition = gsf_input_tell(input);
+	sizeDeletableSubFunctionData = *(const guint16 *)gsf_input_read( input, sizeof(guint16), NULL);	
 	WPD_DEBUG_MSG(("WordPerfect: EOL Group: Size of Deletable Sub-Function Data: %ld,  Size of Deletable and Non-deletable sub-function data: %ld\n", (long) sizeDeletableSubFunctionData, getSizeNonDeletable()));
-	WPD_CHECK_FILE_SEEK_ERROR(fseek(stream, sizeDeletableSubFunctionData, SEEK_CUR));
-	while (ftell(stream) < (startPosition + getSizeNonDeletable()))
+	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, sizeDeletableSubFunctionData, G_SEEK_CUR));
+	while (gsf_input_tell(input) < (startPosition + getSizeNonDeletable()))
 	{
 		guint8 byte;
 		guint16 numBytesToSkip = 0;
-		WPD_CHECK_FILE_READ_ERROR(fread(&byte, sizeof(guint8), 1, stream), 1);
-		guint16 startPosition2 = ftell(stream);
+		byte = *(const guint8 *)gsf_input_read(input,  sizeof(guint8), NULL);
+		guint16 startPosition2 = gsf_input_tell(input);
 		switch (byte)
 		{
 			case WP6_EOL_GROUP_ROW_INFORMATION:
@@ -63,7 +63,7 @@ void WP6EOLGroup::_readContents(FILE *stream)
 				break;
 			case WP6_EOL_GROUP_CELL_FORMULA:
 				guint16 embeddedSubGroupSize;
-				WPD_CHECK_FILE_READ_ERROR(fread(&embeddedSubGroupSize, sizeof(guint16), 1, stream), 1);
+				embeddedSubGroupSize = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
 				WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_FORMULA (length: %ld)\n", 
 						   (long) embeddedSubGroupSize));
 				numBytesToSkip = embeddedSubGroupSize;
@@ -85,8 +85,12 @@ void WP6EOLGroup::_readContents(FILE *stream)
 				numBytesToSkip = WP6_EOL_GROUP_CELL_SPANNING_INFORMATION_SIZE;
 				guint8 numCellsSpannedHorizontally;
 				guint8 numCellsSpannedVertically;
-				WPD_CHECK_FILE_READ_ERROR(fread(&numCellsSpannedHorizontally, sizeof(guint8), 1, stream), 1);
-				WPD_CHECK_FILE_READ_ERROR(fread(&numCellsSpannedVertically, sizeof(guint8), 1, stream), 1);
+				numCellsSpannedHorizontally = *(const guint8 *)gsf_input_read(input, 
+											      sizeof(guint8), 
+											      NULL);
+				numCellsSpannedVertically = *(const guint8 *)gsf_input_read(input, 
+											    sizeof(guint8), 
+											    NULL);
 				WPD_DEBUG_MSG(("WordPerfect: num cells spanned (h:%ld, v:%ld)\n", 
 						   numCellsSpannedHorizontally, numCellsSpannedVertically));
 				if (numCellsSpannedHorizontally >= 128)
@@ -104,14 +108,14 @@ void WP6EOLGroup::_readContents(FILE *stream)
 				guint8 fR, fG, fB, fS;
 				guint8 bR, bG, bB, bS;
 			
-				WPD_CHECK_FILE_READ_ERROR(fread(&fR, sizeof(guint8), 1, stream), 1);
-				WPD_CHECK_FILE_READ_ERROR(fread(&fG, sizeof(guint8), 1, stream), 1);
-				WPD_CHECK_FILE_READ_ERROR(fread(&fB, sizeof(guint8), 1, stream), 1);
-				WPD_CHECK_FILE_READ_ERROR(fread(&fS, sizeof(guint8), 1, stream), 1);
-				WPD_CHECK_FILE_READ_ERROR(fread(&bR, sizeof(guint8), 1, stream), 1);
-				WPD_CHECK_FILE_READ_ERROR(fread(&bG, sizeof(guint8), 1, stream), 1);
-				WPD_CHECK_FILE_READ_ERROR(fread(&bB, sizeof(guint8), 1, stream), 1);
-				WPD_CHECK_FILE_READ_ERROR(fread(&bS, sizeof(guint8), 1, stream), 1);
+				fR = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+				fG = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+				fB = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+				fS = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+				bR = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+				bG = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+				bB = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+				bS = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
 			
 				m_cellFgColor = new RGBSColor(fR,fG,fB,fS);
 				m_cellBgColor = new RGBSColor(bR,bG,bB,bS);
@@ -147,7 +151,7 @@ void WP6EOLGroup::_readContents(FILE *stream)
 				throw ParseException();
 		}			
 		
-		WPD_CHECK_FILE_SEEK_ERROR(fseek(stream, (startPosition2 + numBytesToSkip - 1 - ftell(stream)), SEEK_CUR));
+		WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, (startPosition2 + numBytesToSkip - 1 - gsf_input_tell(input)), G_SEEK_CUR));
 	}
 }
 

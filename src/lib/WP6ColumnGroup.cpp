@@ -27,14 +27,14 @@
 #include "WP6LLListener.h"
 #include "libwpd_internal.h"
 
-WP6ColumnGroup::WP6ColumnGroup(FILE *stream) :
+WP6ColumnGroup::WP6ColumnGroup(GsfInput *input) :
 	WP6VariableLengthGroup(),
 	m_margin(0)
 {
-	_read(stream);
+	_read(input);
 }
 
-void WP6ColumnGroup::_readContents(FILE *stream)
+void WP6ColumnGroup::_readContents(GsfInput *input)
 {
 	// this group can contain different kinds of data, thus we need to read
 	// the contents accordingly	
@@ -43,16 +43,18 @@ void WP6ColumnGroup::_readContents(FILE *stream)
 		case 0: // Left Margin Set
 		case 1: // Right Margin Set
 			{
-				WPD_CHECK_FILE_READ_ERROR(fread(&m_margin, sizeof(guint16), 1, stream), 1);
+				m_margin = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
 				WPD_DEBUG_MSG(("WordPerfect: Read column group margin size (margin: %i)\n", m_margin));
 			}
 			break;
 		case 2:
 			{
-				WPD_CHECK_FILE_READ_ERROR(fread(&m_colType, sizeof(guint8), 1, stream), 1);
-				if (fread(&m_rowSpacing[0], sizeof(guint8), 4, stream) != 4*sizeof(guint8))
-					/*return FALSE*/; // TODO: Throw exception of something
-				WPD_CHECK_FILE_READ_ERROR(fread(&m_numColumns, sizeof(guint8), 1, stream), 1);
+				m_colType = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+				for (int i=0; i<4; i++) 
+					{
+						m_rowSpacing[i] = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+					}
+				m_numColumns = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
 				WPD_DEBUG_MSG(("WordPerfect: Column type: %d\n", m_colType & 0x03));
 				WPD_DEBUG_MSG(("WordPerfect: Numer of columns: %d\n", m_numColumns));				
 			}

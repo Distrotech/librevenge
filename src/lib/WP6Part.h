@@ -37,7 +37,7 @@ class WP6Part
  public:
 	virtual ~WP6Part() {}
 	
-	static WP6Part * constructPart(FILE *stream, guint8 readVal);
+	static WP6Part * constructPart(GsfInput *input, guint8 readVal);
 	virtual void parse(WP6LLListener *llListener) = 0;
 };
 

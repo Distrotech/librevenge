@@ -1,24 +1,32 @@
+#include <gsf/gsf-utils.h>
+#include <gsf/gsf-input-stdio.h>
 #include <stdio.h>
 #include "libwpd.h"
 #include "HtmlListenerImpl.h"
 
 int main(int argc, char *argv[])
 {
+	gsf_init ();
 	if (argc < 2)
 	{
 		printf("USAGE: wpd2html <WordPerfect Document>\n");
-		return -1;
+		return 1;
 	}
 	
-	FILE * stream = fopen(argv[1], "r");
-	if (!stream)
-	{
-	    printf("ERROR: Unable to open file!\n");
-	    return -1;
-	}
+	GError   *err;
+	GsfInput * input;
+	input = gsf_input_stdio_new (argv[1], &err);
+	if (input == NULL) 
+		{
+			g_return_val_if_fail (err != NULL, 1);
+			
+			g_warning ("'%s' error: %s", argv[1], err->message);
+			g_error_free (err);
+			return 1;
+		}
 	
  	WPXLLListener * listener = new WP6HLListener(new HtmlListenerImpl());
- 	WPXParser * parser = new WP6Parser(stream, listener);
+ 	WPXParser * parser = new WP6Parser(input, listener);
 	try 
 	  {
 		  parser->parse();
@@ -30,6 +38,7 @@ int main(int argc, char *argv[])
 	  }
 	
 	
+	gsf_shutdown();
  	delete parser;
  	delete listener;
 	

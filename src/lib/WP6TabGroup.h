@@ -31,8 +31,8 @@
 class WP6TabGroup : public WP6VariableLengthGroup
 {
  public:
-	WP6TabGroup(FILE *stream);	
-	virtual void _readContents(FILE *stream);
+	WP6TabGroup(GsfInput *input);	
+	virtual void _readContents(GsfInput *input);
 	virtual void parse(WP6LLListener *llListener);
 
  private:

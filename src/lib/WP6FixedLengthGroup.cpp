@@ -32,30 +32,30 @@
 #include "WP6AttributeGroup.h"
 #include "libwpd_internal.h"
 
-WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(FILE *stream, guint8 groupID)
+WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(GsfInput *input, guint8 groupID)
 {
 	switch (groupID) 
 		{
 
 		case WP6_TOP_SOFT_EOL:
 		case WP6_TOP_SOFT_SPACE:
-			return new WP6FixedSpaceGroup(stream);
+			return new WP6FixedSpaceGroup(input);
 			
 		case WP6_TOP_HARD_EOL:
 		case WP6_TOP_DORMANT_HARD_RETURN:
-			return new WP6FixedEOLGroup(stream);
+			return new WP6FixedEOLGroup(input);
 			
 		case WP6_TOP_EXTENDED_CHARACTER: 
-			return new WP6ExtendedCharacterGroup(stream);
+			return new WP6ExtendedCharacterGroup(input);
 			
 		case WP6_TOP_UNDO_GROUP:
-			return new WP6UndoGroup(stream);
+			return new WP6UndoGroup(input);
 			
 		case WP6_TOP_ATTRIBUTE_ON:
-			return new WP6AttributeOnGroup(stream);
+			return new WP6AttributeOnGroup(input);
 			
 		case WP6_TOP_ATTRIBUTE_OFF:
-			return new WP6AttributeOffGroup(stream);
+			return new WP6AttributeOffGroup(input);
 			
 		// Add the remaining cases here
 		default:
@@ -64,9 +64,9 @@ WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(FILE *strea
 	}
 }
 
-void WP6FixedLengthGroup::_read(FILE *stream, guint size)
+void WP6FixedLengthGroup::_read(GsfInput *input, guint size)
 {
-	guint32 startPosition = ftell(stream);
-	_readContents(stream);
-	WPD_CHECK_FILE_SEEK_ERROR(fseek(stream, (startPosition + size - 1 - ftell(stream)), SEEK_CUR));
+	guint32 startPosition = gsf_input_tell(input);
+	_readContents(input);
+	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, (startPosition + size - 1 - gsf_input_tell(input)), G_SEEK_CUR));
 }

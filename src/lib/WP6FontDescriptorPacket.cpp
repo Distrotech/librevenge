@@ -30,10 +30,10 @@
 static char *fontWeightStrings[] = { "Regular", "Bold" };
 static int numFontWeightStrings = 2;
 
-WP6FontDescriptorPacket::WP6FontDescriptorPacket(FILE *stream, int id, guint32 dataOffset, guint32 dataSize) 
-	: WP6PrefixDataPacket(stream, id)
+WP6FontDescriptorPacket::WP6FontDescriptorPacket(GsfInput *input, int id, guint32 dataOffset, guint32 dataSize) 
+	: WP6PrefixDataPacket(input, id)
 {
-	_read(stream, dataOffset, dataSize);
+	_read(input, dataOffset, dataSize);
 }
 
 WP6FontDescriptorPacket::~WP6FontDescriptorPacket()
@@ -41,73 +41,80 @@ WP6FontDescriptorPacket::~WP6FontDescriptorPacket()
 	delete(m_fontName);
 }
 
-void WP6FontDescriptorPacket::_readContents(FILE *stream)
+void WP6FontDescriptorPacket::_readContents(GsfInput *input)
 {
    // short sized characteristics
-   WPD_CHECK_FILE_READ_ERROR(fread(&m_characterWidth, sizeof(guint16), 1, stream), 1);
-   WPD_CHECK_FILE_READ_ERROR(fread(&m_ascenderHeight, sizeof(guint16), 1, stream), 1);
-   WPD_CHECK_FILE_READ_ERROR(fread(&m_xHeight, sizeof(guint16), 1, stream), 1);
-   WPD_CHECK_FILE_READ_ERROR(fread(&m_descenderHeight, sizeof(guint16), 1, stream), 1);
-   WPD_CHECK_FILE_READ_ERROR(fread(&m_italicsAdjust, sizeof(guint16), 1, stream), 1);
-   WPD_CHECK_FILE_READ_ERROR(fread(&m_primaryFamilyMemberId, sizeof(guint8), 1, stream), 1);
-   WPD_CHECK_FILE_READ_ERROR(fread(&m_primaryFamilyId, sizeof(guint8), 1, stream), 1);
+   m_characterWidth = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+   m_ascenderHeight = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+   m_xHeight = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+   m_descenderHeight = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+   m_italicsAdjust = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
    // byte sized characteristics
-   WPD_CHECK_FILE_READ_ERROR(fread(&m_scriptingSystem, sizeof(guint8), 1, stream), 1);
-   WPD_CHECK_FILE_READ_ERROR(fread(&m_primaryCharacterSet, sizeof(guint8), 1, stream), 1);
-   WPD_CHECK_FILE_READ_ERROR(fread(&m_width, sizeof(guint8), 1, stream), 1);
-   WPD_CHECK_FILE_READ_ERROR(fread(&m_weight, sizeof(guint8), 1, stream), 1);
-   WPD_CHECK_FILE_READ_ERROR(fread(&m_attributes, sizeof(guint8), 1, stream), 1);
-   WPD_CHECK_FILE_READ_ERROR(fread(&m_generalCharacteristics, sizeof(guint8), 1, stream), 1);
-   WPD_CHECK_FILE_READ_ERROR(fread(&m_classification, sizeof(guint8), 1, stream), 1);
-   WPD_CHECK_FILE_READ_ERROR(fread(&m_fill, sizeof(guint8), 1, stream), 1);
-   WPD_CHECK_FILE_READ_ERROR(fread(&m_fontType, sizeof(guint8), 1, stream), 1);
-   WPD_CHECK_FILE_READ_ERROR(fread(&m_fontSourceFileType, sizeof(guint8), 1, stream), 1);
+   m_primaryFamilyMemberId = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+   m_primaryFamilyId = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+   m_scriptingSystem = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+   m_primaryCharacterSet = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+   m_width = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+   m_weight = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+   m_attributes = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+   m_generalCharacteristics = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+   m_classification = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+   m_fill = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+   m_fontType = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+   m_fontSourceFileType = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
 
-   WPD_CHECK_FILE_READ_ERROR(fread(&m_fontNameLength, sizeof(guint16), 1, stream), 1); // way more space than we actually need, oh well..
+   m_fontNameLength = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL); 
 
    // TODO: re-do sanity checking
    //if(m_fontNameLength < WP_FONT_NAME_MAX_LENGTH)
    //{	
-   gchar *tempFontName = new char[m_fontNameLength];
-   WPD_CHECK_FILE_READ_ERROR(fread(tempFontName, sizeof(char), m_fontNameLength, stream), m_fontNameLength);
-   m_fontName = new char[m_fontNameLength];
-   guint16 tempLength1=0;
-   int numTokens=0;
-   int lastTokenPosition=0;
-   for (guint16 i=0; i<m_fontNameLength; i++) 
+   if (m_fontNameLength == 0) 
 	   {
-		   if (tempFontName[i] == 0x20) {
-			   m_fontName[tempLength1]=' ';
-			   tempLength1++;
-			   numTokens++;
-			   lastTokenPosition=tempLength1;
-		   }
-		   else if (tempFontName[i] != 0x00) {
-			   m_fontName[tempLength1]=tempFontName[i];
-			   tempLength1++;
-		   }
+		   m_fontName = new gchar[1];
+		   m_fontName[0]='\0';
 	   }
-   m_fontName[tempLength1]='\0';
-   // TODO/HACK: probably should create a proper static function for doing this
-   // consume the last token (by replacing the first char with a null-terminator) if its a weight signifier
-   // (NB: not all wp fonts are terminated by weight, just enough of them to make this annoying
-   for (int j=0; j<numFontWeightStrings; j++) 
+   
+   else 
 	   {
-		   if (!strcmp(fontWeightStrings[j], &m_fontName[lastTokenPosition])) 
+		   gchar const *tempFontName = (gchar const *)gsf_input_read(input, sizeof(gchar)*m_fontNameLength, NULL);
+		   m_fontName = new gchar[m_fontNameLength];
+
+		   guint16 tempLength1=0;
+		   int numTokens=0;
+		   int lastTokenPosition=0;
+		   for (guint16 i=0; i<m_fontNameLength; i++) 
 			   {
-				   if (lastTokenPosition > 0)
-					   m_fontName[lastTokenPosition-1]='\0';
-				   break;
+				   if (tempFontName[i] == 0x20) {
+					   m_fontName[tempLength1]=' ';
+					   tempLength1++;
+					   numTokens++;
+					   lastTokenPosition=tempLength1;
+				   }
+				   else if (tempFontName[i] != 0x00) {
+					   m_fontName[tempLength1]=tempFontName[i];
+					   tempLength1++;
+				   }
+			   }
+		   m_fontName[tempLength1]='\0';
+		   // TODO/HACK: probably should create a proper static function for doing this
+		   // consume the last token (by replacing the first char with a null-terminator) if its a weight signifier
+		   // (NB: not all wp fonts are terminated by weight, just enough of them to make this annoying
+		   for (int j=0; j<numFontWeightStrings; j++) 
+			   {
+				   if (!strcmp(fontWeightStrings[j], &m_fontName[lastTokenPosition])) 
+					   {
+						   if (lastTokenPosition > 0)
+							   m_fontName[lastTokenPosition-1]='\0';
+						   break;
+					   }
 			   }
 	   }
-   delete (tempFontName);
 
    //
-
+   
    //}
    //    else
    //      return gIE_IMPORTERROR;
-   
    WPD_DEBUG_MSG(("WordPerfect: Read Font (primary family id: %i, family member id: %i, font type: %i, font source file type: %i font name length: %i, font name: %s)\n", (int) m_primaryFamilyId, (int) m_primaryFamilyMemberId, (int) m_fontType, (int) m_fontSourceFileType, (int) m_fontNameLength, m_fontName));
 
 }

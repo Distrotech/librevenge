@@ -27,13 +27,13 @@
 #include "WP6LLListener.h"
 #include "libwpd_internal.h"
 
-WP6CharacterGroup_FontFaceChangeSubGroup::WP6CharacterGroup_FontFaceChangeSubGroup(FILE *stream)
+WP6CharacterGroup_FontFaceChangeSubGroup::WP6CharacterGroup_FontFaceChangeSubGroup(GsfInput *input)
 {
-   WPD_CHECK_FILE_READ_ERROR((fread(&m_oldMatchedPointSize, sizeof(guint16), 1, stream)), 1);
-   WPD_CHECK_FILE_READ_ERROR((fread(&m_hash, sizeof(guint16), 1, stream)), 1);
-   WPD_CHECK_FILE_READ_ERROR((fread(&m_matchedFontIndex, sizeof(guint16), 1, stream)), 1);
-   WPD_CHECK_FILE_READ_ERROR((fread(&m_matchedFontPointSize, sizeof(guint16), 1, stream)), 1);
-   WPD_DEBUG_MSG(("WordPerfect: Character Group Font Face Change subgroup info (old matched point size: %i, hash: %i, matched font index: %i, matched font point size: %i\n", m_oldMatchedPointSize, m_hash, m_matchedFontIndex, m_matchedFontPointSize));
+	m_oldMatchedPointSize = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+	m_hash = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+	m_matchedFontIndex = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+	m_matchedFontPointSize = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+	WPD_DEBUG_MSG(("WordPerfect: Character Group Font Face Change subgroup info (old matched point size: %i, hash: %i, matched font index: %i, matched font point size: %i\n", m_oldMatchedPointSize, m_hash, m_matchedFontIndex, m_matchedFontPointSize));
 }
 
 void WP6CharacterGroup_FontFaceChangeSubGroup::parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
@@ -45,11 +45,11 @@ void WP6CharacterGroup_FontFaceChangeSubGroup::parse(WP6LLListener *llListener, 
 	// emit an exception otherwise
 }
 
-WP6CharacterGroup::WP6CharacterGroup(FILE *stream) :
+WP6CharacterGroup::WP6CharacterGroup(GsfInput *input) :
 	WP6VariableLengthGroup(),
 	m_subGroupData(NULL)
 {
-	_read(stream);
+	_read(input);
 }
 
 WP6CharacterGroup::~WP6CharacterGroup()
@@ -58,7 +58,7 @@ WP6CharacterGroup::~WP6CharacterGroup()
 		delete(m_subGroupData);
 }
 
-void WP6CharacterGroup::_readContents(FILE *stream)
+void WP6CharacterGroup::_readContents(GsfInput *input)
 {
 	// this group can contain different kinds of data, thus we need to read
 	// the contents accordingly
@@ -66,7 +66,7 @@ void WP6CharacterGroup::_readContents(FILE *stream)
 	{
 	case WP_CHARACTER_GROUP_FONT_FACE_CHANGE:
 	case WP_CHARACTER_GROUP_FONT_SIZE_CHANGE:
-		m_subGroupData = new WP6CharacterGroup_FontFaceChangeSubGroup(stream);
+		m_subGroupData = new WP6CharacterGroup_FontFaceChangeSubGroup(input);
 		break;
 	default:
 		break;
@@ -91,10 +91,10 @@ void WP6CharacterGroup::parse(WP6LLListener *llListener)
 				guint16 nonDeletableInfoSize;
 				guint16 outlineStyleHash;
 				guint8 flag;
-				WPD_CHECK_FILE_READ_ERROR((fread(&nonDeletableInfoSize, sizeof(guint16), 1, stream));
-				WPD_CHECK_FILE_READ_ERROR((fread(&m_currentOutlineHash, sizeof(guint16), 1, stream));
-				WPD_CHECK_FILE_READ_ERROR((fread(&m_currentListLevel, sizeof(guint8), 1, stream));
-				WPD_CHECK_FILE_READ_ERROR((fread(&flag, sizeof(guint8), 1, stream));
+				(fread(&nonDeletableInfoSize, sizeof(guint16);
+				(fread(&m_currentOutlineHash, sizeof(guint16);
+				(fread(&m_currentListLevel, sizeof(guint8);
+				(fread(&flag, sizeof(guint8);
 				gDEBUGMSG(("WordPerfect: LISTS Paragraph Number ON (outlineStyleHash: %i, level: %i, flag: %i)\n", (int)m_currentOutlineHash, (int)m_currentListLevel, (int) flag));
 				// first, find the correct list definition
 				WordPerfectListDefinition *listDefinition = _getListDefinition(m_currentOutlineHash);
@@ -123,18 +123,18 @@ void WP6CharacterGroup::parse(WP6LLListener *llListener)
 			
 			// FIXME: The following prefix IDs only exist if the PFX bit is set
 			// in the flags. For now, we just assume it _is_ set.
-			WPD_CHECK_FILE_READ_ERROR((fread(&numPfxID, sizeof(numPfxID), 1, stream));
+			(fread(&numPfxID, sizeof(numPfxID);
 			gDEBUGMSG(("WordPerfect: Number of Table PFX IDs: %d\n", numPfxID));
 			for (int i=0; i<numPfxID; i++)
 			{
 			guint16 pfxID;
-			WPD_CHECK_FILE_READ_ERROR((fread(&pfxID, sizeof(pfxID), 1, stream));
+			(fread(&pfxID, sizeof(pfxID);
 			// FIXME: handle the differt prefixes
 			// For now, we just skip over them
 			}
 	
 			guint16 sizeOfNonDelData;
-			WPD_CHECK_FILE_READ_ERROR((fread(&sizeOfNonDelData, sizeof(sizeOfNonDelData), 1, stream));
+			(fread(&sizeOfNonDelData, sizeof(sizeOfNonDelData);
 			// FIXME: handle all the non-deletable (style) data.
 			// For now, we just skip over it.
 			

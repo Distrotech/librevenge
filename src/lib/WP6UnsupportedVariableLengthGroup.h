@@ -34,7 +34,7 @@
 class WP6UnsupportedVariableLengthGroup : public WP6VariableLengthGroup
 {
  public:
-	WP6UnsupportedVariableLengthGroup(FILE *stream);	
+	WP6UnsupportedVariableLengthGroup(GsfInput *input);	
 	virtual void parse(WP6LLListener *llListener) {}
 };
 

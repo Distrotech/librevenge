@@ -27,18 +27,18 @@
 #include "WP6LLListener.h"
 #include "libwpd_internal.h"
 
-WP6AttributeGroup::WP6AttributeGroup(FILE *stream)
+WP6AttributeGroup::WP6AttributeGroup(GsfInput *input)
 	: WP6FixedLengthGroup()
 {
-	_read(stream, WP6_ATTRIBUTE_GROUP_SIZE);
+	_read(input, WP6_ATTRIBUTE_GROUP_SIZE);
 }
 
-void WP6AttributeGroup::_readContents(FILE *stream)
+void WP6AttributeGroup::_readContents(GsfInput *input)
 {
-	WPD_CHECK_FILE_READ_ERROR(fread(&m_attribute, sizeof(guint8), 1, stream), 1);
+	m_attribute = (guint8)*((const guint8 *)gsf_input_read(input, sizeof(guint8), NULL));
 }
 
-WP6AttributeOnGroup::WP6AttributeOnGroup(FILE *stream) : WP6AttributeGroup(stream)
+WP6AttributeOnGroup::WP6AttributeOnGroup(GsfInput *input) : WP6AttributeGroup(input)
 {
 }
 
@@ -48,7 +48,7 @@ void WP6AttributeOnGroup::parse(WP6LLListener *llListener)
 	llListener->attributeChange(TRUE, getAttribute());
 }
 
-WP6AttributeOffGroup::WP6AttributeOffGroup(FILE *stream) : WP6AttributeGroup(stream)
+WP6AttributeOffGroup::WP6AttributeOffGroup(GsfInput *input) : WP6AttributeGroup(input)
 {
 }
 

@@ -38,7 +38,7 @@ public:
 class WP6CharacterGroup_FontFaceChangeSubGroup : public WP6CharacterGroup_SubGroup
 {
 public:
-	WP6CharacterGroup_FontFaceChangeSubGroup(FILE *stream);
+	WP6CharacterGroup_FontFaceChangeSubGroup(GsfInput *input);
 	virtual void parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
 
 private:
@@ -51,9 +51,9 @@ private:
 class WP6CharacterGroup : public WP6VariableLengthGroup
 {
  public:
-	WP6CharacterGroup(FILE *stream);	
+	WP6CharacterGroup(GsfInput *input);	
 	virtual ~WP6CharacterGroup();
-	virtual void _readContents(FILE *stream);
+	virtual void _readContents(GsfInput *input);
 	virtual void parse(WP6LLListener *llListener);
 
  private:

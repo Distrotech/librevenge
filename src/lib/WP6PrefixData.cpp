@@ -32,7 +32,7 @@
 void destroyPrefixDataPacketKeyNotify(gpointer data);
 void destroyPrefixDataPacketNotify(gpointer data);
 
-WP6PrefixData::WP6PrefixData(FILE *stream, const int numPrefixIndices) :
+WP6PrefixData::WP6PrefixData(GsfInput *input, const int numPrefixIndices) :
 	m_prefixDataPacketHash(g_hash_table_new_full(&g_int_hash, &g_int_equal, 
 						     &destroyPrefixDataPacketKeyNotify, 
 						     &destroyPrefixDataPacketNotify)),
@@ -41,10 +41,10 @@ WP6PrefixData::WP6PrefixData(FILE *stream, const int numPrefixIndices) :
 {
 	WP6PrefixIndice ** prefixIndiceArray = new (WP6PrefixIndice *)[(numPrefixIndices-1)];
 	for (guint16 i=1; i<numPrefixIndices; i++)
-		prefixIndiceArray[(i-1)] = new WP6PrefixIndice(stream, i);
+		prefixIndiceArray[(i-1)] = new WP6PrefixIndice(input, i);
 	for (guint16 i=1; i<numPrefixIndices; i++) 
 		{
-			WP6PrefixDataPacket *prefixDataPacket = WP6PrefixDataPacket::constructPrefixDataPacket(stream, prefixIndiceArray[(i-1)]);
+			WP6PrefixDataPacket *prefixDataPacket = WP6PrefixDataPacket::constructPrefixDataPacket(input, prefixIndiceArray[(i-1)]);
 			if (prefixDataPacket) {
 				gint *key = new gint;
 				*key = i;

@@ -26,7 +26,7 @@
 #ifndef WP6UNSUPPORTEDPREFIXDATAPACKET_H
 #define WP6UNSUPPORTEDPREFIXDATAPACKET_H
 
-#include <stdio.h>
+#include <gsf/gsf-input.h>
 #include <stdlib.h>
 
 #include "WP6PrefixDataPacket.h"
@@ -34,10 +34,10 @@
 class WP6UnsupportedPrefixDataPacket : public WP6PrefixDataPacket
 {
  public:
-	WP6UnsupportedPrefixPacket(FILE * stream, guint8 flags);
+	WP6UnsupportedPrefixPacket(GsfInput * input, guint8 flags);
  
  protected:
-	virtual void _readContents(FILE *stream);
+	virtual void _readContents(GsfInput *input);
  
  private:
 

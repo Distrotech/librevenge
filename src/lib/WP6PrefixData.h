@@ -26,13 +26,13 @@
 #ifndef WP6PREFIXDATA_H
 #define WP6PREFIXDATA_H
 #include <glib.h>
-#include <stdio.h>
+#include <gsf/gsf-input.h>
 #include "WP6PrefixDataPacket.h"
 
 class WP6PrefixData
 {
  public:
-	WP6PrefixData(FILE *stream, const int numPrefixIndices);
+	WP6PrefixData(GsfInput *input, const int numPrefixIndices);
 	virtual ~WP6PrefixData();
 	const WP6PrefixDataPacket *getPrefixDataPacket(const int prefixID) const;
 	const guint16 getDefaultInitialFontPID() const { return m_defaultInitialFontPID; }

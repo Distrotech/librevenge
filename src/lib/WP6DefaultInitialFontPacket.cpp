@@ -26,17 +26,17 @@
 #include "WP6DefaultInitialFontPacket.h"
 #include "libwpd_internal.h"
 
-WP6DefaultInitialFontPacket::WP6DefaultInitialFontPacket(FILE *stream, int id, guint32 dataOffset, guint32 dataSize)
-	: WP6PrefixDataPacket(stream, id)
+WP6DefaultInitialFontPacket::WP6DefaultInitialFontPacket(GsfInput *input, int id, guint32 dataOffset, guint32 dataSize)
+	: WP6PrefixDataPacket(input, id)
 {
-	_read(stream, dataOffset, dataSize);
+	_read(input, dataOffset, dataSize);
 }
 
-void WP6DefaultInitialFontPacket::_readContents(FILE *stream)
+void WP6DefaultInitialFontPacket::_readContents(GsfInput *input)
 {
-   WPD_CHECK_FILE_READ_ERROR(fread(&m_numPrefixIDs, sizeof(guint16), 1, stream), 1);
-   WPD_CHECK_FILE_READ_ERROR(fread(&m_initialFontDescriptorPID, sizeof(guint16), 1, stream), 1);
-   WPD_CHECK_FILE_READ_ERROR(fread(&m_pointSize, sizeof(guint16), 1, stream), 1);
+   m_numPrefixIDs = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+   m_initialFontDescriptorPID = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
+   m_pointSize = *(const guint16 *)gsf_input_read( input, sizeof(guint16), NULL);
    WPD_DEBUG_MSG(("WordPerfect: Read default initial font packet (initial font descriptor pid: %i, point size: %i)\n", 
 		  (int) m_initialFontDescriptorPID, (int) m_pointSize));
 

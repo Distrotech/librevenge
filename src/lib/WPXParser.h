@@ -26,23 +26,23 @@
 #ifndef WPXPARSER_H
 #define WPXPARSER_H
 
-#include <stdio.h>
+#include <gsf/gsf-input.h>
 #include "WPXLLListener.h"
 
 class WPXParser
 {
 public:
-	WPXParser(FILE * stream, WPXLLListener * listener);
+	WPXParser(GsfInput * input, WPXLLListener * listener);
 	virtual ~WPXParser() {}
 	
 	virtual void parse() = 0;
 
 	WPXLLListener * getLLListener() { return m_llListener; }
 
-	FILE * getStream() { return m_stream; }
+	GsfInput * getInput() { return m_input; }
 
 private:
-	FILE * m_stream;
+	GsfInput * m_input;
 	WPXLLListener * m_llListener;
 };
 

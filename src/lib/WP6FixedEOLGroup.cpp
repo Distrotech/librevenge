@@ -26,7 +26,7 @@
 #include "WP6FixedEOLGroup.h"
 #include "WP6LLListener.h"
 
-WP6FixedEOLGroup::WP6FixedEOLGroup(FILE *stream)
+WP6FixedEOLGroup::WP6FixedEOLGroup(GsfInput *input)
 {
 }
 	
@@ -35,7 +35,7 @@ void WP6FixedEOLGroup::parse(WP6LLListener *llListener)
 	llListener->insertEOL();
 }
 
-void WP6FixedEOLGroup::_readContents(FILE *stream)
+void WP6FixedEOLGroup::_readContents(GsfInput *input)
 {
 	
 }

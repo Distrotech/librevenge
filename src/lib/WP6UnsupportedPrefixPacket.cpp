@@ -23,16 +23,16 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include <stdio.h>
+#include <gsf/gsf-input.h>
 #include <stdlib.h>
 #include "WP6UnsupportedPrefixPacket.h"
 
-WP6UnsupportedPrefixPacket::WP6UnsupportedPrefixPacket(FILE * stream, guint8 flags)
-	: WP6PrefixPacket(stream, flags)
+WP6UnsupportedPrefixPacket::WP6UnsupportedPrefixPacket(GsfInput * input, guint8 flags)
+	: WP6PrefixPacket(input, flags)
 {
-	_read(stream);
+	_read(input);
 }
 
-void WP6UnsupportedPrefixPacket::_readContents(FILE *stream)
+void WP6UnsupportedPrefixPacket::_readContents(GsfInput *input)
 {
 }

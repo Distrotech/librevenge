@@ -23,7 +23,7 @@
  * Corel Corporation or Corel Corporation Limited."
  */
  
-#include <stdio.h>
+#include <gsf/gsf-input.h>
 #include "WP6LLListener.h"
 #include "WP6Parser.h"
 #include "WP6Header.h"
@@ -67,8 +67,8 @@ static guint16 extendedInternationalCharacterMap[32] =
   223 // double s
 };
 
-WP6Parser::WP6Parser(FILE * stream, WPXLLListener *llListener/*,  WP6Header *header */)
-	: WPXParser(stream, llListener)
+WP6Parser::WP6Parser(GsfInput * input, WPXLLListener *llListener/*,  WP6Header *header */)
+	: WPXParser(input, llListener)
 {
 }
 
@@ -78,19 +78,19 @@ void WP6Parser::parse()
 {	
 	try
 	{
-		WP6Header * header = new WP6Header(getStream());
-		WP6PrefixData *prefixData = new WP6PrefixData(getStream(), header->getNumPrefixIndices());
+		WP6Header * header = new WP6Header(getInput());
+		WP6PrefixData *prefixData = new WP6PrefixData(getInput(), header->getNumPrefixIndices());
 		static_cast<WP6LLListener *>(getLLListener())->setPrefixData(prefixData);
 		
 		getLLListener()->startDocument();
 		
-		WPD_CHECK_FILE_SEEK_ERROR(fseek(getStream(), header->getDocumentOffset(), SEEK_SET));
+		WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(getInput(), header->getDocumentOffset(), G_SEEK_SET));
 	
-		WPD_DEBUG_MSG(("WordPerfect: Starting document body parse (position = %ld)\n",(long)ftell(getStream())));
-		while (ftell(getStream()) < (long)((WP6Header *)header)->getDocumentSize())
+		WPD_DEBUG_MSG(("WordPerfect: Starting document body parse (position = %ld)\n",(long)gsf_input_tell(getInput())));
+		while (gsf_input_tell(getInput()) < (long)((WP6Header *)header)->getDocumentSize())
 		{
 			guint8 readVal;
-			WPD_CHECK_FILE_READ_ERROR(fread(&readVal, sizeof(guint8), 1, getStream()), 1);
+			readVal = *(const guint8 *)gsf_input_read(getInput(), sizeof(guint8), NULL);
 			
 			if (readVal <= (guint8)0x20)
 			{
@@ -103,7 +103,7 @@ void WP6Parser::parse()
 			}
 			else 
 			{
-				WP6Part *part = WP6Part::constructPart(getStream(), readVal);
+				WP6Part *part = WP6Part::constructPart(getInput(), readVal);
 				if (part != NULL)
 				{
 					part->parse(dynamic_cast<WP6LLListener *>(getLLListener()));
@@ -114,7 +114,7 @@ void WP6Parser::parse()
 		}
 
 		getLLListener()->endDocument();
-		WPD_DEBUG_MSG(("WordPerfect: Finished with document parse (position = %ld)\n",(long)ftell(getStream())));
+		WPD_DEBUG_MSG(("WordPerfect: Finished with document parse (position = %ld)\n",(long)gsf_input_tell(getInput())));
 		delete(header);
 		delete(prefixData);
 	}

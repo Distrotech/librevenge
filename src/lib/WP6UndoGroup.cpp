@@ -27,15 +27,15 @@
 #include "WP6LLListener.h"
 #include "libwpd_internal.h"
 
-WP6UndoGroup::WP6UndoGroup(FILE *stream)
+WP6UndoGroup::WP6UndoGroup(GsfInput *input)
 {
-	_read(stream, WP6_UNDO_GROUP_SIZE);
+	_read(input, WP6_UNDO_GROUP_SIZE);
 }
 
-void WP6UndoGroup::_readContents(FILE *stream)
+void WP6UndoGroup::_readContents(GsfInput *input)
 {
-	WPD_CHECK_FILE_READ_ERROR(fread(&m_undoType, sizeof(guint8), 1, stream), 1);
-	WPD_CHECK_FILE_READ_ERROR(fread(&m_undoLevel, sizeof(guint16), 1, stream), 1);
+	m_undoType = *(const guint8 *)gsf_input_read(input, sizeof(guint8), NULL);
+	m_undoLevel = *(const guint16 *)gsf_input_read(input, sizeof(guint16), NULL);
 }
 
 void WP6UndoGroup::parse(WP6LLListener *llListener)
