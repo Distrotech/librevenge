@@ -59,21 +59,50 @@ class WPXHLListenerImpl
 	 */
 	virtual void endDocument() = 0;
 
+	/**
+	Called when a new page span is opened. This will always be called before any actual content is placed into
+	the document.
+	\param span The length of this span, in number of pages
+	\param isLastPageSpan true if this is the start of the last page span in the document
+	\param formLength The height of the page, in inches (portrait or landscape)
+	\param formWidth The width of the page, in inches
+	\param orientation The orientation of the page 
+	\param The left margin for each page in the span, in inches
+	\param The right margin for each page in the span, in inches
+	\param The top margin for each page in the span, in inches
+	\param The bottom margin for each page in the span, in inches
+	*/
 	virtual void openPageSpan(const int span, const bool isLastPageSpan,
 				  const float formLength, const float formWidth, const WPXFormOrientation orientation,
 				  const float marginLeft, const float marginRight,
 				  const float marginTop, const float marginBottom) = 0;
+	/**
+	Called when a page span is closed.
+	*/
 	virtual void closePageSpan() = 0;
 	virtual void openHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence) = 0;
 	virtual void closeHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence) = 0;
 
+	/**
+	Called when a new page span is opened. This (or openListElement) will always be called before any text or span is placed into the document.
+	\param paragraphJustification The justification (left, center, right, full, full all lines, or reserved) encoded as an unsigned 8-bit integer
+	\param marginLeftOffset The left indentation of this paragraph, in inches
+	\param marginLeftOffset The right indentation of this paragraph, in inches
+	\param lineSpacing The amount of spacing between lines, in number of lines (1.0 is single spacing)
+	\param spacingAfterParagraph The amount of extra spacing to be placed after the paragraph, in inches
+	\param isColumnBreak Whether this paragraph should be placed in a new column
+	\param isPageBreak Whether this paragraph should start a new page
+	*/
 	virtual void openParagraph(const guint8 paragraphJustification, 
 				   const float marginLeftOffset, const float marginRightOffset, const float textIndent,
 				   const float lineSpacing, const float spacingAfterParagraph,
 				   const bool isColumnBreak, const bool isPageBreak) = 0;
+	/**
+	Called when a paragraph is closed.
+	*/
 	virtual void closeParagraph() = 0;
 	virtual void openSpan(const guint32 textAttributeBits, const gchar *fontName, const float fontSize,
-				   const RGBSColor *fontColor, const RGBSColor *highlightColor) = 0;
+			      const RGBSColor *fontColor, const RGBSColor *highlightColor) = 0;
 	virtual void closeSpan() = 0;
 	virtual void openSection(const unsigned int numColumns, const float spaceAfter) = 0;
 	virtual void closeSection() = 0;
@@ -84,8 +113,8 @@ class WPXHLListenerImpl
 	virtual void insertTab() = 0;
 	/**
 	Called when a string of text should be inserted. The textbuffer contains only
-    characters which all have the same set of properties.
-	\param text A textbuffer in the UCS encoding
+	characters which all have the same set of properties.
+	\param text A textbuffer in the UCS4 encoding
 	*/
 	virtual void insertText(const UCSString &text) = 0;
 	/**
