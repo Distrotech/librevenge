@@ -168,53 +168,54 @@ void WP6EOLGroup::parse(WP6LLListener *llListener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling an EOL group\n"));
 	   
-	/* WL FIXME: am I handling all the special cases properly here? quite possibly not */
-	//if(!wordperfect_state->undo_on)/* && m_paragraphStyleState != beginPart2BeforeNumbering && 
-		//			m_paragraphStyleState != beginPart2Numbering && 
-				//	m_paragraphStyleState != end) */
+	switch(getSubGroup())
 	{
-		switch(getSubGroup())
-		{
-			case 0: // 0x00 (beginning of file)
-				break; // ignore
-			case 1: // 0x01 (soft EOL)
-			case 2: // 0x02 (soft EOC) 
-			case 3: // 0x03 (soft EOC at EOP) 
-			case 20: // 0x014 (deletable soft EOL)
-			case 21: // 0x15 (deletable soft EOC) 
-			case 22: // 0x16 (deleteable soft EOC at EOP)
-				llListener->insertCharacter((guint16) ' ');
-				break;
-			case 4: // 0x04 (hard end-of-line)
-			case 5: // 0x05 (hard EOL at EOC) 
-			case 6: // 0x06 (hard EOL at EOP)
-			case 23: // 0x17 (deletable hard EOL)
-			case 24: // 0x18 (deletable hard EOL at EOC)
-			case 25: // 0x19 (deletable hard EOL at EOP)
-				llListener->insertEOL();
-				break;
-			case WP6_EOL_CHARACTER_HARD_END_OF_COLUMN: // 0x07 (hard end of column)
-				llListener->insertBreak(WPX_COLUMN_BREAK);
-				break;
-			case 9: // hard EOP
-			case 28: // deletable hard EOP
-				llListener->insertBreak(WPX_PAGE_BREAK);
-				break;
-			case 0x0A: // Table Cell
-				WPD_DEBUG_MSG(("WordPerfect: EOL group: table cell\n"));
-				llListener->insertCell(m_colSpan, m_rowSpan, m_boundFromLeft, m_boundFromAbove, m_cellFgColor, m_cellBgColor);
-				break;
-			case 0x0B: // Table Row and Cell
-				WPD_DEBUG_MSG(("WordPerfect: EOL group: table row and cell\n"));
-				llListener->insertRow();
-				llListener->insertCell(m_colSpan, m_rowSpan, m_boundFromLeft, m_boundFromAbove, m_cellFgColor, m_cellBgColor);
-				break;
-			case 0x11: // Table Off
-				llListener->endTable();
-				break;
+	case 0: // 0x00 (beginning of file)
+		break; // ignore
+	case 1: // 0x01 (soft EOL)
+	case 2: // 0x02 (soft EOC) 
+	case 3: // 0x03 (soft EOC at EOP) 
+	case 20: // 0x014 (deletable soft EOL)
+	case 21: // 0x15 (deletable soft EOC) 
+	case 22: // 0x16 (deleteable soft EOC at EOP)
+		llListener->insertCharacter((guint16) ' ');
+		break;
+	case 4: // 0x04 (hard end-of-line)
+	case 5: // 0x05 (hard EOL at EOC) 
+	case 6: // 0x06 (hard EOL at EOP)
+	case 23: // 0x17 (deletable hard EOL)
+	case 24: // 0x18 (deletable hard EOL at EOC)
+	case 25: // 0x19 (deletable hard EOL at EOP)
+		llListener->insertEOL();
+		break;
+	case WP6_EOL_CHARACTER_HARD_END_OF_COLUMN: // 0x07 (hard end of column)
+		llListener->insertBreak(WPX_COLUMN_BREAK);
+		break;
+	case 9: // hard EOP
+	case 28: // deletable hard EOP
+		llListener->insertBreak(WPX_PAGE_BREAK);
+		break;
+	case 0x0A: // Table Cell
+		WPD_DEBUG_MSG(("WordPerfect: EOL group: table cell\n"));
+		llListener->insertCell(m_colSpan, m_rowSpan, m_boundFromLeft, m_boundFromAbove, m_cellFgColor, m_cellBgColor);
+		break;
+	case WP6_EOL_GROUP_TABLE_ROW_AND_CELL:
+	case WP6_EOL_GROUP_TABLE_ROW_AT_EOC:
+	case WP6_EOL_GROUP_TABLE_ROW_AT_EOP:
+	case WP6_EOL_GROUP_TABLE_ROW_AT_HARD_EOC:
+	case WP6_EOL_GROUP_TABLE_ROW_AT_HARD_EOC_AT_HARD_EOP:
+	case WP6_EOL_GROUP_TABLE_ROW_AT_HARD_EOP:
+		WPD_DEBUG_MSG(("WordPerfect: EOL group: table row and cell\n"));
+		llListener->insertRow();
+		llListener->insertCell(m_colSpan, m_rowSpan, m_boundFromLeft, m_boundFromAbove, m_cellFgColor, m_cellBgColor);
+		break;
+	case WP6_EOL_GROUP_TABLE_OFF:
+	case WP6_EOL_GROUP_TABLE_OFF_AT_EOC:
+	case WP6_EOL_GROUP_TABLE_OFF_AT_EOC_AT_EOP:
+		llListener->endTable();
+		break;
 			    
-			default: // something else we don't support yet
-				break;
-		}
+	default: // something else we don't support yet
+		break;
 	}
 }
