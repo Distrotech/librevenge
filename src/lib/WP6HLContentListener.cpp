@@ -242,7 +242,7 @@ _WP6ParsingState::~_WP6ParsingState()
 	// FIXME: erase current fontname
 }
 
-WP6HLContentListener::WP6HLContentListener(vector<WPXPageSpan *> *pageList, WPXTableList tableList, WPXHLListenerImpl *listenerImpl) :
+WP6HLContentListener::WP6HLContentListener(std::vector<WPXPageSpan *> *pageList, WPXTableList tableList, WPXHLListenerImpl *listenerImpl) :
 	WP6HLListener(pageList, listenerImpl),
 	m_parseState(new WP6ParsingState(tableList))
 {
@@ -250,7 +250,7 @@ WP6HLContentListener::WP6HLContentListener(vector<WPXPageSpan *> *pageList, WPXT
 
 WP6HLContentListener::~WP6HLContentListener()
 {
-	typedef map<int, WP6OutlineDefinition *>::iterator Iter;
+	typedef std::map<int, WP6OutlineDefinition *>::iterator Iter;
 	for (Iter outline = m_outlineDefineHash.begin(); outline != m_outlineDefineHash.end(); outline++)
 	{
 		delete(outline->second);
@@ -353,8 +353,8 @@ void WP6HLContentListener::insertCharacter(const uint16_t character)
 	}
 }
 
-void WP6HLContentListener::defineTabStops(const bool isRelative, const vector<WPXTabStop> &tabStops, 
-					  const vector<bool> &usePreWP9LeaderMethods)
+void WP6HLContentListener::defineTabStops(const bool isRelative, const std::vector<WPXTabStop> &tabStops, 
+					  const std::vector<bool> &usePreWP9LeaderMethods)
 {
 	if (!isUndoOn())
 	{
@@ -764,8 +764,8 @@ void WP6HLContentListener::indentFirstLineChange(int16_t offset)
 	}
 }
 
-void WP6HLContentListener::columnChange(const WPXTextColumnType columnType, const uint8_t numColumns, const vector<float> &columnWidth,
-		const vector<bool> &isFixedWidth)
+void WP6HLContentListener::columnChange(const WPXTextColumnType columnType, const uint8_t numColumns, const std::vector<float> &columnWidth,
+		const std::vector<bool> &isFixedWidth)
 {
 	if (!isUndoOn())
 	{
@@ -780,7 +780,7 @@ void WP6HLContentListener::columnChange(const WPXTextColumnType columnType, cons
 		float remainingSpace = m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight
 						- m_ps->m_leftMarginByPageMarginChange - m_ps->m_rightMarginByPageMarginChange;
 		// determine the space that is to be divided between columns whose width is expressed in percentage of remaining space
-		vector<WPXColumnDefinition> tmpColumnDefinition;
+		std::vector<WPXColumnDefinition> tmpColumnDefinition;
 		tmpColumnDefinition.clear();
 		if (numColumns > 1)
 		{

@@ -145,7 +145,7 @@ void WP6Parser::parseDocument(WPXInputStream *input, WP6HLListener *listener)
 
 void WP6Parser::parsePacket(WP6PrefixData *prefixData, int type, WP6HLListener *listener)
 {
-	pair< MPDP_CIter, MPDP_CIter > * typeIterPair;
+	std::pair< MPDP_CIter, MPDP_CIter > * typeIterPair;
 	typeIterPair = prefixData->getPrefixDataPacketsOfType(type); 
 	if (typeIterPair->first != typeIterPair->second) 
 	{
@@ -157,7 +157,7 @@ void WP6Parser::parsePacket(WP6PrefixData *prefixData, int type, WP6HLListener *
 
 void WP6Parser::parsePackets(WP6PrefixData *prefixData, int type, WP6HLListener *listener)
 {
-	pair< MPDP_CIter, MPDP_CIter > * typeIterPair;
+	std::pair< MPDP_CIter, MPDP_CIter > * typeIterPair;
 
 	typeIterPair = prefixData->getPrefixDataPacketsOfType(type);
 	for (MPDP_CIter iter=typeIterPair->first; 
@@ -176,7 +176,7 @@ void WP6Parser::parsePackets(WP6PrefixData *prefixData, int type, WP6HLListener 
 void WP6Parser::parse(WPXHLListenerImpl *listenerImpl)
 {	
 	WP6PrefixData * prefixData = NULL;
-	vector<WPXPageSpan *> pageList;
+	std::vector<WPXPageSpan *> pageList;
 	WPXTableList tableList;	
 
 	WPXInputStream *input = getInput();
@@ -206,7 +206,7 @@ void WP6Parser::parse(WPXHLListenerImpl *listenerImpl)
 
 		// cleanup section: free the used resources
 		delete prefixData;
-		for (vector<WPXPageSpan *>::iterator iterSpan = pageList.begin(); iterSpan != pageList.end(); iterSpan++)
+		for (std::vector<WPXPageSpan *>::iterator iterSpan = pageList.begin(); iterSpan != pageList.end(); iterSpan++)
 		{
 			delete *iterSpan;
 		}
@@ -217,7 +217,7 @@ void WP6Parser::parse(WPXHLListenerImpl *listenerImpl)
 
 		delete prefixData;
 		
-		for (vector<WPXPageSpan *>::iterator iterSpan = pageList.begin(); iterSpan != pageList.end(); iterSpan++)
+		for (std::vector<WPXPageSpan *>::iterator iterSpan = pageList.begin(); iterSpan != pageList.end(); iterSpan++)
 		{
 			delete *iterSpan;
 		}

@@ -26,8 +26,8 @@
 #include "WPXTable.h"
 #include "libwpd_internal.h"
 
-typedef vector<WPXTableCell *>::iterator VTCIter;
-typedef vector< vector<WPXTableCell *> * >::iterator VVTCIter;
+typedef std::vector<WPXTableCell *>::iterator VTCIter;
+typedef std::vector< std::vector<WPXTableCell *> * >::iterator VVTCIter;
 
 _WPXTableCell::_WPXTableCell(uint8_t colSpan, uint8_t rowSpan, bool boundFromAbove, bool boundFromLeft, uint8_t borderBits) :
 	m_colSpan(colSpan),
@@ -40,8 +40,8 @@ _WPXTableCell::_WPXTableCell(uint8_t colSpan, uint8_t rowSpan, bool boundFromAbo
 
 WPXTable::~WPXTable()
 {
-	typedef vector<WPXTableCell *>::iterator VTCIter;
-	typedef vector< vector<WPXTableCell *> * >::iterator VVTCIter;
+	typedef std::vector<WPXTableCell *>::iterator VTCIter;
+	typedef std::vector< std::vector<WPXTableCell *> * >::iterator VVTCIter;
 	for (VVTCIter iter1 = m_tableRows.begin(); iter1 != m_tableRows.end(); iter1++)
 	{
 		for (VTCIter iter2 = (*iter1)->begin(); iter2 != (*iter1)->end(); iter2++) 
@@ -54,7 +54,7 @@ WPXTable::~WPXTable()
 
 void WPXTable::insertRow()
 {
-	m_tableRows.push_back(new vector<WPXTableCell *>);
+	m_tableRows.push_back(new std::vector<WPXTableCell *>);
 }
 
 void WPXTable::insertCell(uint8_t colSpan, uint8_t rowSpan, bool boundFromLeft, bool boundFromAbove, uint8_t borderBits)
@@ -76,14 +76,14 @@ void WPXTable::makeBordersConsistent()
 			{
 				if (i < (m_tableRows.size()-1)) 
 				{
-					vector<WPXTableCell *> *cellsBottomAdjacent = _getCellsBottomAdjacent(i, j);
+					std::vector<WPXTableCell *> *cellsBottomAdjacent = _getCellsBottomAdjacent(i, j);
 					_makeCellBordersConsistent((*m_tableRows[i])[j], cellsBottomAdjacent, 
 							       WPX_TABLE_CELL_BOTTOM_BORDER_OFF, WPX_TABLE_CELL_TOP_BORDER_OFF);
 					delete cellsBottomAdjacent;		
 				}
 				if (j < (m_tableRows[i]->size()-1))
 				{
-					vector<WPXTableCell *> *cellsRightAdjacent = _getCellsRightAdjacent(i, j);
+					std::vector<WPXTableCell *> *cellsRightAdjacent = _getCellsRightAdjacent(i, j);
 					_makeCellBordersConsistent((*m_tableRows[i])[j], cellsRightAdjacent, 
 							       WPX_TABLE_CELL_RIGHT_BORDER_OFF, WPX_TABLE_CELL_LEFT_BORDER_OFF);
 					delete cellsRightAdjacent;
@@ -93,10 +93,10 @@ void WPXTable::makeBordersConsistent()
 	}
 }
 
-void WPXTable::_makeCellBordersConsistent(WPXTableCell *cell, vector<WPXTableCell *> *adjacentCells, 
+void WPXTable::_makeCellBordersConsistent(WPXTableCell *cell, std::vector<WPXTableCell *> *adjacentCells, 
 				      int adjacencyBitCell, int adjacencyBitBoundCells)
 {
-	typedef vector<WPXTableCell *>::iterator VTCIter;
+	typedef std::vector<WPXTableCell *>::iterator VTCIter;
 	if (adjacentCells->size() > 0) 
 	{
 		// if this cell is adjacent to > 1 cell, and it has no border
@@ -118,10 +118,10 @@ void WPXTable::_makeCellBordersConsistent(WPXTableCell *cell, vector<WPXTableCel
 	}
 }
 
-vector<WPXTableCell *> * WPXTable::_getCellsBottomAdjacent(int i, int j)
+std::vector<WPXTableCell *> * WPXTable::_getCellsBottomAdjacent(int i, int j)
 {
 	int bottomAdjacentRow = i + (*m_tableRows[i])[j]->m_rowSpan;
-	vector<WPXTableCell *> * cellsBottomAdjacent = new vector<WPXTableCell *>;
+	std::vector<WPXTableCell *> * cellsBottomAdjacent = new std::vector<WPXTableCell *>;
 
 	if (bottomAdjacentRow >= m_tableRows.size()) 
 		return cellsBottomAdjacent;
@@ -140,10 +140,10 @@ vector<WPXTableCell *> * WPXTable::_getCellsBottomAdjacent(int i, int j)
 	return cellsBottomAdjacent;
 }
 
-vector<WPXTableCell *> * WPXTable::_getCellsRightAdjacent(int i, int j)
+std::vector<WPXTableCell *> * WPXTable::_getCellsRightAdjacent(int i, int j)
 {
 	int rightAdjacentCol = j + (*m_tableRows[i])[j]->m_colSpan;
-	vector<WPXTableCell *> * cellsRightAdjacent = new vector<WPXTableCell *>;
+	std::vector<WPXTableCell *> * cellsRightAdjacent = new std::vector<WPXTableCell *>;
 
 	if (rightAdjacentCol >= m_tableRows[i]->size()) // num cols is uniform across table: this comparison is valid
 		return cellsRightAdjacent;
@@ -167,7 +167,7 @@ vector<WPXTableCell *> * WPXTable::_getCellsRightAdjacent(int i, int j)
 
 WPXTableList::WPXTableList() :
 	m_refCount(new int),
-	m_tableList(new vector<WPXTable *>)
+	m_tableList(new std::vector<WPXTable *>)
 {
 	(*m_refCount) = 1;
 }
@@ -189,7 +189,7 @@ WPXTableList & WPXTableList::operator=(const WPXTableList & tableList)
 	return (*this);
 }
 
-void WPXTableList::acquire(int *refCount, vector<WPXTable *> *tableList)
+void WPXTableList::acquire(int *refCount, std::vector<WPXTable *> *tableList)
 { 
 	m_refCount = refCount; 
 	m_tableList = tableList; 
@@ -203,7 +203,7 @@ void WPXTableList::release()
 	{ 
 		if (--(*m_refCount) == 0) 
 		{ 
-			for (vector<WPXTable *>::iterator iter = (*m_tableList).begin(); iter != (*m_tableList).end(); iter++)
+			for (std::vector<WPXTable *>::iterator iter = (*m_tableList).begin(); iter != (*m_tableList).end(); iter++)
 				delete (*iter);
 			delete m_tableList; 
 			delete m_refCount; 

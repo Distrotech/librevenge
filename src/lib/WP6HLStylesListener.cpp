@@ -32,7 +32,7 @@
 // WP6HLStylesListener: creates intermediate table and page span representations, given a
 // sequence of messages passed to it by the parser.
 
-WP6HLStylesListener::WP6HLStylesListener(vector<WPXPageSpan *> *pageList, WPXTableList tableList) : 
+WP6HLStylesListener::WP6HLStylesListener(std::vector<WPXPageSpan *> *pageList, WPXTableList tableList) : 
 	WP6HLListener(pageList, NULL),
 	m_currentPage(new WPXPageSpan()),
 	m_tableList(tableList), 

@@ -28,11 +28,10 @@
 #include "WP6PrefixDataPacket.h"
 #include <map>
 #include <vector>
-using namespace std;
 
 class WP6LLListener;
-typedef map<int, WP6PrefixDataPacket *> DPH;	
-typedef multimap<int, WP6PrefixDataPacket *> MPDP;
+typedef std::map<int, WP6PrefixDataPacket *> DPH;	
+typedef std::multimap<int, WP6PrefixDataPacket *> MPDP;
 typedef MPDP::const_iterator MPDP_CIter;
 typedef MPDP::iterator MPDP_Iter;
 
@@ -42,7 +41,7 @@ class WP6PrefixData
 	WP6PrefixData(WPXInputStream *input, const int numPrefixIndices);
 	virtual ~WP6PrefixData();
 	const WP6PrefixDataPacket *getPrefixDataPacket(const int prefixID) const;
-	pair< MPDP_CIter, MPDP_CIter > * getPrefixDataPacketsOfType(const int type) const;
+	std::pair< MPDP_CIter, MPDP_CIter > * getPrefixDataPacketsOfType(const int type) const;
 
 	const uint16_t getDefaultInitialFontPID() const { return m_defaultInitialFontPID; }
 

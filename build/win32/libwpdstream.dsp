@@ -49,7 +49,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"Release\lib\libwpd-stream-1.lib"
+# ADD LIB32 /nologo /out:"Release\lib\libwpd-stream-0.8.lib"
 
 !ELSEIF  "$(CFG)" == "libwpdstream - Win32 Debug"
 
@@ -72,7 +72,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"Debug\lib\libwpd-stream-1.lib"
+# ADD LIB32 /nologo /out:"Debug\lib\libwpd-stream-0.8.lib"
 
 !ENDIF 
 

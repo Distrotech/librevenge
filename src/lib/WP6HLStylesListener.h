@@ -37,7 +37,7 @@
 class WP6HLStylesListener : public WP6HLListener
 {
 public:
-	WP6HLStylesListener(vector<WPXPageSpan *> *pageList, WPXTableList tableList);
+	WP6HLStylesListener(std::vector<WPXPageSpan *> *pageList, WPXTableList tableList);
 
 	virtual void setDate(const uint16_t year, const uint8_t month, const uint8_t day,
 			     const uint8_t hour, const uint8_t minute, const uint8_t second,
@@ -46,8 +46,8 @@ public:
 	virtual void startDocument() {}
 	virtual void setAlignmentCharacter(const uint16_t character) {}
 	virtual void setLeaderCharacter(const uint16_t character, const uint8_t numberOfSpaces) {}
-	virtual void defineTabStops(const bool isRelative, const vector<WPXTabStop> &tabStops, 
-				    const vector<bool> &usePreWP9LeaderMethods) {}
+	virtual void defineTabStops(const bool isRelative, const std::vector<WPXTabStop> &tabStops, 
+				    const std::vector<bool> &usePreWP9LeaderMethods) {}
 	virtual void insertCharacter(const uint16_t character) { if (!isUndoOn()) m_currentPageHasContent = true; }
 	virtual void insertTab(const uint8_t tabType, const float tabPosition) { if (!isUndoOn()) m_currentPageHasContent = true; }
 	virtual void handleLineBreak()  { if (!isUndoOn()) m_currentPageHasContent = true; }
@@ -66,8 +66,8 @@ public:
 	virtual void marginChange(const uint8_t side, const uint16_t margin);
 	virtual void paragraphMarginChange(const uint8_t side, const int16_t margin) {}
 	virtual void indentFirstLineChange(const int16_t offset) {}
-	virtual void columnChange(const WPXTextColumnType columnType, const uint8_t numColumns, const vector<float> &columnWidth,
-				  const vector<bool> &isFixedWidth) {}
+	virtual void columnChange(const WPXTextColumnType columnType, const uint8_t numColumns, const std::vector<float> &columnWidth,
+				  const std::vector<bool> &isFixedWidth) {}
 	virtual void updateOutlineDefinition(const WP6OutlineLocation outlineLocation, const uint16_t outlineHash,
 					     const uint8_t *numberingMethods, const uint8_t tabBehaviourFlag) {}
 

@@ -27,8 +27,6 @@
 #include "WPXPropertyList.h"
 #include <vector>
 
-using namespace std;
-
 WPXPropertyListVectorImpl::~WPXPropertyListVectorImpl()
 {
 }
@@ -37,18 +35,18 @@ class WPXStdPropertyListVectorImpl : public WPXPropertyListVectorImpl
 {
 friend class WPXPropertyListVector;
 public:
-	WPXStdPropertyListVectorImpl(const vector<WPXPropertyList> &_vector) : m_vector(_vector) {}
+	WPXStdPropertyListVectorImpl(const std::vector<WPXPropertyList> &_vector) : m_vector(_vector) {}
 	WPXStdPropertyListVectorImpl() {}
 	virtual void append(const WPXPropertyList &elem) { m_vector.push_back(elem); }
 	virtual size_t count() const { return m_vector.size(); }
-	vector<WPXPropertyList> m_vector;
+	std::vector<WPXPropertyList> m_vector;
 };
 
 class WPXStdPropertyListVectorIterImpl : public WPXPropertyListVectorIterImpl
 {
 public:
-        WPXStdPropertyListVectorIterImpl(vector<WPXPropertyList> * vector) { 
-                m_vector = vector; 
+        WPXStdPropertyListVectorIterImpl(std::vector<WPXPropertyList> * vect) { 
+                m_vector = vect; 
                 m_iter = m_vector->begin(); 
                 m_imaginaryFirst = false; 
 	}
@@ -73,8 +71,8 @@ public:
 	virtual const WPXPropertyList & operator()() const { return (*m_iter); }
 
 private:
-        vector<WPXPropertyList> * m_vector;
-        vector<WPXPropertyList>::iterator m_iter;
+        std::vector<WPXPropertyList> * m_vector;
+        std::vector<WPXPropertyList>::iterator m_iter;
         bool m_imaginaryFirst;
 };
 
@@ -104,9 +102,9 @@ size_t WPXPropertyListVector::count() const
         return m_impl->count();
 }
 
-WPXPropertyListVector::Iter::Iter(const WPXPropertyListVector &vector) 
+WPXPropertyListVector::Iter::Iter(const WPXPropertyListVector &vect) 
 {
-        WPXStdPropertyListVectorImpl *vectorImpl = static_cast<WPXStdPropertyListVectorImpl* >(vector.m_impl);
+        WPXStdPropertyListVectorImpl *vectorImpl = static_cast<WPXStdPropertyListVectorImpl* >(vect.m_impl);
         m_iterImpl = new WPXStdPropertyListVectorIterImpl(&(vectorImpl->m_vector));
 }
 

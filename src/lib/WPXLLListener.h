@@ -28,8 +28,6 @@
 #include "libwpd_internal.h"
 #include <vector>
 
-using namespace std;
-
 class WPXLLListener
 {
  public:
@@ -38,8 +36,8 @@ class WPXLLListener
 	virtual void startDocument() = 0;
 	virtual void setAlignmentCharacter(const uint16_t character) = 0;
 	virtual void setLeaderCharacter(const uint16_t character, const uint8_t numberOfSpaces) = 0;
-	virtual void defineTabStops(const bool isRelative, const vector<WPXTabStop> &tabStops, 
-				    const vector<bool> &usePreWP9LeaderMethods) = 0;
+	virtual void defineTabStops(const bool isRelative, const std::vector<WPXTabStop> &tabStops, 
+				    const std::vector<bool> &usePreWP9LeaderMethods) = 0;
 	virtual void insertCharacter(const uint16_t character) = 0;
 	virtual void insertTab(const uint8_t tabType, const float tabPosition) = 0;
 	virtual void handleLineBreak() = 0;
@@ -55,8 +53,8 @@ class WPXLLListener
 	virtual void marginChange(const uint8_t side, const uint16_t margin) = 0;
 	virtual void paragraphMarginChange(const uint8_t side, const int16_t margin) = 0;
 	virtual void indentFirstLineChange(const int16_t offset) = 0;
-	virtual void columnChange(const WPXTextColumnType columnType, const uint8_t numColumns, const vector<float> &columnWidth,
-				  const vector<bool> &isFixedWidth) = 0;
+	virtual void columnChange(const WPXTextColumnType columnType, const uint8_t numColumns, const std::vector<float> &columnWidth,
+				  const std::vector<bool> &isFixedWidth) = 0;
 	virtual void endDocument() = 0;
 
 	virtual void defineTable(uint8_t position, uint16_t leftOffset) = 0;

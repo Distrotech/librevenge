@@ -213,7 +213,7 @@ WP6ParagraphGroup_TabSetSubGroup::~WP6ParagraphGroup_TabSetSubGroup()
 void WP6ParagraphGroup_TabSetSubGroup::parse(WP6HLListener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const
 {
 	WPD_DEBUG_MSG(("Parsing Tab Set (isRelative: %s, positions: ", (m_isRelative?"true":"false")));
-	for(vector<WPXTabStop>::const_iterator i = m_tabStops.begin(); i != m_tabStops.end(); i++)
+	for(std::vector<WPXTabStop>::const_iterator i = m_tabStops.begin(); i != m_tabStops.end(); i++)
 	{
 		WPD_DEBUG_MSG((" %.4f", (*i).m_position));
 	}

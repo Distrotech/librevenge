@@ -40,13 +40,13 @@ struct _WP3ParsingState
 class WP3HLListener : public WPXHLListener, public WP3LLListener
 {
 public:
-	WP3HLListener(vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl);
+	WP3HLListener(std::vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl);
 	virtual ~WP3HLListener();
 
 	virtual void setAlignmentCharacter(const uint16_t character) {};
 	virtual void setLeaderCharacter(const uint16_t character, const uint8_t numberOfSpaces) {};
-	virtual void defineTabStops(const bool isRelative, const vector<WPXTabStop> &tabStops, 
-				    const vector<bool> &usePreWP9LeaderMethods) {};
+	virtual void defineTabStops(const bool isRelative, const std::vector<WPXTabStop> &tabStops, 
+				    const std::vector<bool> &usePreWP9LeaderMethods) {};
 	virtual void insertCharacter(const uint16_t character);
 	virtual void insertTab(const uint8_t tabType, const float tabPosition);
 	virtual void handleLineBreak() {};
@@ -58,8 +58,8 @@ public:
 	virtual void marginChange(const uint8_t side, const uint16_t margin);
 	virtual void paragraphMarginChange(const uint8_t side, const int16_t margin) {};
 	virtual void indentFirstLineChange(const int16_t offset);
-	virtual void columnChange(const WPXTextColumnType columnType, const uint8_t numColumns, const vector<float> &columnWidth,
-				  const vector<bool> &isFixedWidth) {};
+	virtual void columnChange(const WPXTextColumnType columnType, const uint8_t numColumns, const std::vector<float> &columnWidth,
+				  const std::vector<bool> &isFixedWidth) {};
 	virtual void endDocument();
 
 	virtual void defineTable(uint8_t position, uint16_t leftOffset) {};

@@ -43,8 +43,8 @@ class WP6ColumnGroup : public WP6VariableLengthGroup
 	uint8_t m_colType;
 	uint8_t m_numColumns;
 	float m_rowSpacing;
-	vector<bool> m_isFixedWidth;
-	vector<float> m_columnWidth;
+	std::vector<bool> m_isFixedWidth;
+	std::vector<float> m_columnWidth;
 };
 
 #endif /* WP6COLUMNGROUP_H */

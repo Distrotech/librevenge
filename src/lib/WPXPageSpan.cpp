@@ -172,7 +172,7 @@ void WPXPageSpan::makeConsistent(int startingPageNumber)
 
 void WPXPageSpan::_removeHeaderFooter(WPXHeaderFooterType type, WPXHeaderFooterOccurence occurence)
 {
-	for (vector<WPXHeaderFooter>::iterator iter = m_headerFooterList.begin(); iter != m_headerFooterList.end(); iter++) 
+	for (std::vector<WPXHeaderFooter>::iterator iter = m_headerFooterList.begin(); iter != m_headerFooterList.end(); iter++) 
 	{
 		if ((*iter).getType() == type && (*iter).getOccurence() == occurence) {
 			WPD_DEBUG_MSG(("WordPerfect: Removing header/footer element of type: %i since it is identical to %i\n",(*iter).getType(), type));
@@ -180,7 +180,7 @@ void WPXPageSpan::_removeHeaderFooter(WPXHeaderFooterType type, WPXHeaderFooterO
 			return;
 #if 0
 			WPD_DEBUG_MSG(("WordPerfect: Now our list looks like this:\n"));
-			for (vector<WPXHeaderFooter>::const_iterator iter1 = m_headerFooterList.begin(); 
+			for (std::vector<WPXHeaderFooter>::const_iterator iter1 = m_headerFooterList.begin(); 
 			     iter1 != m_headerFooterList.end(); 
 			     iter1++) 
 			{
@@ -194,7 +194,7 @@ void WPXPageSpan::_removeHeaderFooter(WPXHeaderFooterType type, WPXHeaderFooterO
 
 bool WPXPageSpan::_containsHeaderFooter(WPXHeaderFooterType type, WPXHeaderFooterOccurence occurence)
 {
-	for (vector<WPXHeaderFooter>::iterator iter = m_headerFooterList.begin(); iter != m_headerFooterList.end(); iter++) 
+	for (std::vector<WPXHeaderFooter>::iterator iter = m_headerFooterList.begin(); iter != m_headerFooterList.end(); iter++) 
 	{
 		if ((*iter).getType()==type && (*iter).getOccurence()==occurence)
 			return true;
@@ -218,13 +218,13 @@ bool operator==(const WPXPageSpan &page1, const WPXPageSpan &page2)
 	}
 
 	// NOTE: yes this is O(n^2): so what? n=4 at most
-	const vector<WPXHeaderFooter> headerFooterList1 = page1.getHeaderFooterList();	
-	for (vector<WPXHeaderFooter>::const_iterator iter1 = headerFooterList1.begin(); 
+	const std::vector<WPXHeaderFooter> headerFooterList1 = page1.getHeaderFooterList();	
+	for (std::vector<WPXHeaderFooter>::const_iterator iter1 = headerFooterList1.begin(); 
 	     iter1 != headerFooterList1.end(); 
 	     iter1++) 
 	{
-		const vector<WPXHeaderFooter> headerFooterList2 = page2.getHeaderFooterList();	
-		vector<WPXHeaderFooter>::const_iterator iter2;
+		const std::vector<WPXHeaderFooter> headerFooterList2 = page2.getHeaderFooterList();	
+		std::vector<WPXHeaderFooter>::const_iterator iter2;
 		for (iter2 = headerFooterList2.begin(); iter2 != headerFooterList2.end(); iter2++) 
 		{
 			WPD_DEBUG_MSG(("WordPerfect: WPXPageSpan ==  header/footer comparison (%i, %i))\n", 

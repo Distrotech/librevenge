@@ -27,8 +27,6 @@
 #include <map>
 #include <string>
 
-using namespace std;
-
 class WPXStdMapImpl : public WPXMapImpl
 {
 public:
@@ -40,22 +38,22 @@ public:
 	virtual void clear();
 
 private:
-	mutable map<string, WPXProperty *> m_map;
+	mutable std::map<std::string, WPXProperty *> m_map;
 
 	friend class WPXStdMapIterImpl;
 };
 
 WPXStdMapImpl::~WPXStdMapImpl()
 {
-	for (map<string, WPXProperty *>::iterator iter = m_map.begin();
+	for (std::map<std::string, WPXProperty *>::iterator iter = m_map.begin();
 	     iter != m_map.end();
 	     iter++) { delete iter->second; } 
 }
 
 const WPXProperty * WPXStdMapImpl::operator[](const char *name) const
 {
-	map<string, WPXProperty *>::iterator i;
-	const string s(name);
+	std::map<std::string, WPXProperty *>::iterator i;
+	const std::string s(name);
 	i = m_map.find(s);
 	if (i != m_map.end()) {
 		return i->second;
@@ -77,7 +75,7 @@ void WPXStdMapImpl::remove(const char *name)
 
 void WPXStdMapImpl::clear()
 {
-	for (map<string, WPXProperty *>::iterator iter = m_map.begin();
+	for (std::map<std::string, WPXProperty *>::iterator iter = m_map.begin();
 	     iter != m_map.end();
 	     iter++) { delete iter->second; } 
 
@@ -168,8 +166,8 @@ public:
 
 private:
 	bool m_imaginaryFirst;
-	map<string, WPXProperty *>::iterator m_iter;
-	map<string, WPXProperty *> * m_map;
+	std::map<std::string, WPXProperty *>::iterator m_iter;
+	std::map<std::string, WPXProperty *> * m_map;
 };
 
 

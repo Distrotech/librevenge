@@ -34,8 +34,6 @@
 #include <map>
 #include <vector>
 
-using namespace std;
-
 class WPXHLListenerImpl;
 class WP6LLParser;
 class WPXTable;
@@ -58,7 +56,7 @@ public:
 	void clear() { m_stateSequence.clear(); for (int i=0; i<STATE_MEMORY; i++) m_stateSequence.push_back(NORMAL); }
 
 private:
-	vector<WP6StyleState> m_stateSequence;
+	std::vector<WP6StyleState> m_stateSequence;
 	WP6StyleState m_currentState;
 	WP6StyleState m_previousState;
 };
@@ -84,7 +82,7 @@ struct _WP6ParsingState
 	WPXTable *m_currentTable;
 	int m_nextTableIndice;
 
-	stack<int> m_listLevelStack;
+	std::stack<int> m_listLevelStack;
 	uint16_t m_currentOutlineHash; // probably should replace Hash with Key in these sorts of cases
 	uint8_t m_oldListLevel;
 	uint8_t m_currentListLevel;
@@ -96,8 +94,8 @@ struct _WP6ParsingState
 
 	uint16_t m_leaderCharacter;
 	uint8_t m_leaderNumSpaces;
-	vector<WPXTabStop> m_tempTabStops;
-	vector<bool> m_tempUsePreWP9LeaderMethod;
+	std::vector<WPXTabStop> m_tempTabStops;
+	std::vector<bool> m_tempUsePreWP9LeaderMethod;
 };
 
 struct _WP6ListLevel
@@ -126,7 +124,7 @@ private:
 class WP6HLContentListener : public WP6HLListener
 {
 public:
-	WP6HLContentListener(vector<WPXPageSpan *> *pageList, WPXTableList tableList, WPXHLListenerImpl *listenerImpl);
+	WP6HLContentListener(std::vector<WPXPageSpan *> *pageList, WPXTableList tableList, WPXHLListenerImpl *listenerImpl);
 	virtual ~WP6HLContentListener();
 
 	// for getting low-level messages from the parser
@@ -136,8 +134,8 @@ public:
 	virtual void setExtendedInformation(const uint16_t type, const WPXString &data);
 	virtual void setAlignmentCharacter(const uint16_t character);
 	virtual void setLeaderCharacter(const uint16_t character, const uint8_t numSpaces);
-	virtual void defineTabStops(const bool isRelative, const vector<WPXTabStop> &tabStops, 
-				    const vector<bool> &usePreWP9LeaderMethods);
+	virtual void defineTabStops(const bool isRelative, const std::vector<WPXTabStop> &tabStops, 
+				    const std::vector<bool> &usePreWP9LeaderMethods);
 	virtual void insertCharacter(const uint16_t character);
 	virtual void insertTab(const uint8_t tabType, const float tabPosition);
 	virtual void handleLineBreak();
@@ -153,8 +151,8 @@ public:
 	virtual void marginChange(const uint8_t side, const uint16_t margin);
 	virtual void paragraphMarginChange(const uint8_t side, const int16_t margin);
 	virtual void indentFirstLineChange(const int16_t offset);
-	virtual void columnChange(const WPXTextColumnType columnType, const uint8_t numColumns, const vector<float> &columnWidth,
-				  const vector<bool> &isFixedWidth);
+	virtual void columnChange(const WPXTextColumnType columnType, const uint8_t numColumns, const std::vector<float> &columnWidth,
+				  const std::vector<bool> &isFixedWidth);
 	virtual void updateOutlineDefinition(const WP6OutlineLocation outlineLocation, const uint16_t outlineHash,
 					     const uint8_t *numberingMethods, const uint8_t tabBehaviourFlag);
 
@@ -196,7 +194,7 @@ protected:
 private:
 	WP6ParsingState *m_parseState;
 
-	map<int,WP6OutlineDefinition *> m_outlineDefineHash;
+	std::map<int,WP6OutlineDefinition *> m_outlineDefineHash;
 };
 
 #endif /* WP6HLCONTENTLISTENER_H */

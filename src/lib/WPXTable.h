@@ -37,8 +37,6 @@
 #include <vector>
 #include "libwpd_types.h"
 
-using namespace std;
-
 typedef struct _WPXTableCell WPXTableCell;
 
 struct _WPXTableCell
@@ -59,15 +57,15 @@ public:
 	void insertCell(uint8_t colSpan, uint8_t rowSpan, bool boundFromLeft, bool boundFromAbove, uint8_t borderBits);
 	const WPXTableCell * getCell(int i, int j) { return (*m_tableRows[i])[j]; }
 	void makeBordersConsistent();
-	void _makeCellBordersConsistent(WPXTableCell *cell, vector<WPXTableCell *> *adjacentCells, 
+	void _makeCellBordersConsistent(WPXTableCell *cell, std::vector<WPXTableCell *> *adjacentCells, 
 				      int adjacencyBitCell, int adjacencyBitBoundCells);
-	vector<WPXTableCell *> * _getCellsBottomAdjacent(int i, int j);
-	vector<WPXTableCell *> * _getCellsRightAdjacent(int i, int j);
+	std::vector<WPXTableCell *> * _getCellsBottomAdjacent(int i, int j);
+	std::vector<WPXTableCell *> * _getCellsRightAdjacent(int i, int j);
 
-	const vector< vector<WPXTableCell *> * > * getTableRows() const { return &m_tableRows; } // ugly, but whatever
+	const std::vector< std::vector<WPXTableCell *> * > * getTableRows() const { return &m_tableRows; } // ugly, but whatever
 
 private:
-	vector< vector<WPXTableCell *> * > m_tableRows;
+	std::vector< std::vector<WPXTableCell *> * > m_tableRows;
 };
 
 class WPXTableList
@@ -83,11 +81,11 @@ public:
 
 private:
 	void release(); 
-	void acquire(int *refCount, vector<WPXTable *> *tableList);
+	void acquire(int *refCount, std::vector<WPXTable *> *tableList);
 	int * getRef() const { return m_refCount; }
-	vector<WPXTable *> * get() const { return m_tableList; }
+	std::vector<WPXTable *> * get() const { return m_tableList; }
 
-	vector<WPXTable *> *m_tableList; 
+	std::vector<WPXTable *> *m_tableList; 
 	int *m_refCount;
 };
 #endif /* _WPXTABLE_H */

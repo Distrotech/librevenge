@@ -27,7 +27,7 @@
 #include "WP42FileStructure.h"
 #include "libwpd_internal.h"
 
-WP42HLListener::WP42HLListener(vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl) :
+WP42HLListener::WP42HLListener(std::vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl) :
 	WPXHLListener(pageList, listenerImpl),
 	WP42LLListener()
 {

@@ -29,7 +29,7 @@
 #include "WPXFileStructure.h"
 #include "libwpd_internal.h"
 
-WP42HLStylesListener::WP42HLStylesListener(vector<WPXPageSpan *> *pageList, WPXTableList tableList) : 
+WP42HLStylesListener::WP42HLStylesListener(std::vector<WPXPageSpan *> *pageList, WPXTableList tableList) : 
 	WP42HLListener(pageList, NULL),
 	m_currentPage(new WPXPageSpan()),
 	m_tableList(tableList), 

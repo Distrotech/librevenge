@@ -52,7 +52,7 @@ struct _WPXTableDefinition
 {
 	uint8_t m_positionBits;
 	float m_leftOffset;
-	vector < WPXColumnDefinition > columns;
+	std::vector < WPXColumnDefinition > columns;
 };
 
 typedef struct _WPXParsingState WPXParsingState;
@@ -110,7 +110,7 @@ struct _WPXParsingState
 
 	bool m_sectionAttributesChanged;
 	int m_numColumns;
-	vector < WPXColumnDefinition > m_textColumns;
+	std::vector < WPXColumnDefinition > m_textColumns;
 	bool m_isTextColumnWithoutParagraph;
 
 	float m_pageFormLength;
@@ -148,14 +148,14 @@ struct _WPXParsingState
 	int m_noteTextPID;
 */
 	uint16_t m_alignmentCharacter;
-	vector<WPXTabStop> m_tabStops;
+	std::vector<WPXTabStop> m_tabStops;
 	bool m_isTabPositionRelative;
 };
 
 class WPXHLListener : public WPXLLListener
 {
 public:
-	WPXHLListener(vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl);
+	WPXHLListener(std::vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl);
 	WPXHLListener::~WPXHLListener();
 
 	void startDocument();
@@ -167,7 +167,7 @@ public:
 	WPXParsingState *m_ps; // parse state
 	WPXHLListenerImpl * m_listenerImpl;
 	WPXPropertyList m_metaData;
-	vector <WPXPageSpan *> *m_pageList;
+	std::vector <WPXPageSpan *> *m_pageList;
 
 protected:
 	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice) = 0;

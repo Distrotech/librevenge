@@ -155,7 +155,7 @@ void WP42Parser::parseDocument(WPXInputStream *input, WP42HLListener *listener)
 void WP42Parser::parse(WPXHLListenerImpl *listenerImpl)
 {
 	WPXInputStream *input = getInput();
-	vector<WPXPageSpan *> pageList;
+	std::vector<WPXPageSpan *> pageList;
 	WPXTableList tableList;
 
 	try
@@ -171,7 +171,7 @@ void WP42Parser::parse(WPXHLListenerImpl *listenerImpl)
 		parse(input, &listener);
 
 		// cleanup section: free the used resources
-		for (vector<WPXPageSpan *>::iterator iterSpan = pageList.begin(); iterSpan != pageList.end(); iterSpan++)
+		for (std::vector<WPXPageSpan *>::iterator iterSpan = pageList.begin(); iterSpan != pageList.end(); iterSpan++)
 		{
 			delete *iterSpan;
 		}
@@ -180,7 +180,7 @@ void WP42Parser::parse(WPXHLListenerImpl *listenerImpl)
 	{
 		WPD_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
 
-		for (vector<WPXPageSpan *>::iterator iterSpan = pageList.begin(); iterSpan != pageList.end(); iterSpan++)
+		for (std::vector<WPXPageSpan *>::iterator iterSpan = pageList.begin(); iterSpan != pageList.end(); iterSpan++)
 		{
 			delete *iterSpan;
 		}

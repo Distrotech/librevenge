@@ -31,6 +31,11 @@
 #include "WPXProperty.h"
 #ifdef _MSC_VER
 #include <minmax.h>
+#define LIBWPD_MIN min
+#define LIBWPD_MAX max
+#else
+#define LIBWPD_MIN std::min
+#define LIBWPD_MAX std::max
 #endif
 
 _WPXParsingState::_WPXParsingState(bool sectionAttributesChanged) :
@@ -119,7 +124,7 @@ _WPXParsingState::~_WPXParsingState()
 	DELETEP(m_highlightColor);
 }
 
-WPXHLListener::WPXHLListener(vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl) :
+WPXHLListener::WPXHLListener(std::vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl) :
 	WPXLLListener(),
 	m_pageList(pageList),
 	m_listenerImpl(listenerImpl),
@@ -159,7 +164,7 @@ void WPXHLListener::_openSection()
 		propList.insert("fo:margin-bottom", 0.0f);
 
 	WPXPropertyListVector columns;
- 	typedef vector<WPXColumnDefinition>::const_iterator CDVIter;
+ 	typedef std::vector<WPXColumnDefinition>::const_iterator CDVIter;
  	for (CDVIter iter = m_ps->m_textColumns.begin(); iter != m_ps->m_textColumns.end(); iter++)
 	{
 		WPXPropertyList column;
@@ -234,8 +239,8 @@ void WPXHLListener::_openPageSpan()
 	m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange + m_ps->m_rightMarginByParagraphMarginChange
 			+ m_ps->m_rightMarginByTabs;
 
-	vector<WPXHeaderFooter> headerFooterList = currentPage->getHeaderFooterList();
-	for (vector<WPXHeaderFooter>::iterator iter = headerFooterList.begin(); iter != headerFooterList.end(); iter++)
+	std::vector<WPXHeaderFooter> headerFooterList = currentPage->getHeaderFooterList();
+	for (std::vector<WPXHeaderFooter>::iterator iter = headerFooterList.begin(); iter != headerFooterList.end(); iter++)
 	{
 		if (!currentPage->getHeaderFooterSuppression((*iter).getInternalType()))
 		{
@@ -606,7 +611,7 @@ void WPXHLListener::_openTable()
 
  	float tableWidth = 0.0f;
 	WPXPropertyListVector columns;
- 	typedef vector<WPXColumnDefinition>::const_iterator CDVIter;
+ 	typedef std::vector<WPXColumnDefinition>::const_iterator CDVIter;
  	for (CDVIter iter = m_ps->m_tableDefinition.columns.begin(); iter != m_ps->m_tableDefinition.columns.end(); iter++)
  	{
 		WPXPropertyList column;
@@ -916,11 +921,11 @@ WPXString WPXHLListener::_mergeColorsToString(const RGBSColor *fgColor, const RG
 	}
 
 	float fgAmount = (float)tmpFgColor.m_s/100.0f;
-	float bgAmount = max(((float)tmpBgColor.m_s-(float)tmpFgColor.m_s)/100.0f, 0.0f);
+	float bgAmount = LIBWPD_MAX(((float)tmpBgColor.m_s-(float)tmpFgColor.m_s)/100.0f, 0.0f);
 
-	int bgRed = min((int)(((float)tmpFgColor.m_r*fgAmount)+((float)tmpBgColor.m_r*bgAmount)), 255);
-	int bgGreen = min((int)(((float)tmpFgColor.m_g*fgAmount)+((float)tmpBgColor.m_g*bgAmount)), 255);
-	int bgBlue = min((int)(((float)tmpFgColor.m_b*fgAmount)+((float)tmpBgColor.m_b*bgAmount)), 255);
+	int bgRed = LIBWPD_MIN((int)(((float)tmpFgColor.m_r*fgAmount)+((float)tmpBgColor.m_r*bgAmount)), 255);
+	int bgGreen = LIBWPD_MIN((int)(((float)tmpFgColor.m_g*fgAmount)+((float)tmpBgColor.m_g*bgAmount)), 255);
+	int bgBlue = LIBWPD_MIN((int)(((float)tmpFgColor.m_b*fgAmount)+((float)tmpBgColor.m_b*bgAmount)), 255);
 
 	tmpColor.sprintf("#%.2x%.2x%.2x", bgRed, bgGreen, bgBlue);
 

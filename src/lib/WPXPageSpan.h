@@ -72,7 +72,7 @@ public:
  	const float getMarginTop() const { return m_marginTop; }
  	const float getMarginBottom() const { return m_marginBottom; }
 	const int getPageSpan() const { return m_pageSpan; }
-	const vector<WPXHeaderFooter> & getHeaderFooterList() const { return m_headerFooterList; }
+	const std::vector<WPXHeaderFooter> & getHeaderFooterList() const { return m_headerFooterList; }
 
 	void setHeaderFooter(const uint8_t headerFooterType, const uint8_t occurenceBits, 
 			     const uint16_t textPID, WPXTableList tableList);
@@ -97,7 +97,7 @@ private:
 	WPXFormOrientation m_formOrientation;
 	float m_marginLeft, m_marginRight;
 	float m_marginTop, m_marginBottom;
-	vector<WPXHeaderFooter> m_headerFooterList;
+	std::vector<WPXHeaderFooter> m_headerFooterList;
 
 	int m_pageSpan;
 };
