@@ -16,10 +16,20 @@ LINKS:
 glib is available at ftp://ftp.gnome.org/pub/gnome/sources/glib/
 libgsf is available at ftp://ftp.gnome.org/pub/gnome/sources/libgsf/
 
+Extensive installation instructions can be found in the INSTALL file.
+
+
 Windows - Microsoft(tm) Visual Studio/C++
 =========================================
 
-TODO: Write me!
+A workspace for MSVC6 can be found in the ./projects/msvc/ directory.
+This workspace contains a projects file to compile a release version or 
+a debug version of libwpd. 
+
+NOTE: Using the MSVC build system will result in a static library only. 
+No dll can be created yet using this build system. If you want to create 
+a dll, please use the MingW build system (see below for details).
+
 
 Windows - MingW
 ===============
