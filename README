@@ -31,9 +31,98 @@ No dll can be created yet using this build system. If you want to create
 a dll, please use the MingW build system (see below for details).
 
 
-Windows - MingW
+Windows - MinGW
 ===============
 
-See ./projects/mingw/README for details on how to build libwpd using
-the mingw build system (http://www.mingw.org/).
+First of all, in order to use libwpd in your application, you do not need
+to build it yourself. If you have access to a binary distribution, you
+are encouraged to use it. If for whatever reason you still want to build
+libwpd using MinGW, read following instructions.
 
+
+* Build environment and dependencies
+
+In order to build libwpd, you have to have installed MinGW distribution from
+http://www.mingw.org. Because the build system of libwpd uses autotools, you
+must install also the MSys packages. It is advisable to install all recent
+packages into a path that does not contain spaces. Besides the MinGW
+distribution, you have to install the _runtime_ and _development_ packages of 
+_ALL_ dependencies, namely: GNU libiconv, GNU gettext, zlib, glib2, pkg-config,
+libxml2 and libgsf. All these packages are linked to from Tor Lillqvist's
+"GTK+ and GIMP for Windows" web-site. Go directly to the download section
+(http://www.gimp.org/~tml/gimp/win32/downloads.html).
+
+NOTE: Packages built with MSVC7 are not usable because they are linked with
+MSVCRT70.DLL that is not by default part of Windows.
+Packages build with MSVC5 or MSVC6 are -- like the MinGW natively compiled
+packages -- linked with MSVCRT.DLL and thus are usable. Nonetheless, you
+will have to create libtool import libraries for every DLL that you have to
+link with. To do this, generate from the DLL a *.def file using "pexports.exe"
+tool -- included in one of the packages of MinGW distribution -- and create
+a libtool import library using the DLL, the *.def file and "dlltool.exe".
+Put the result in the ../lib/ directory relative to the DLL file.
+For more details, check the documentation part of the MinGW web-site.
+Typically, in order to make libtool's work easier, call the import libraries
+"lib"$(dllname)".dll.a", unless the library has already the "lib" in the name.
+Example: iconv.dll -> libiconv.dll.a; intl.dll -> libintl.dll.a;
+BUT: libxml2.dll -> libxml2.dll.a
+
+
+* Build procedure
+
+1. Unpack the source code by running:
+
+  gunzip -dc libwpd-{version}.tar.gz | tar xpf
+
+You can also use WinZip or any other GUI compression tool.
+
+2. Next, run:
+
+  export ACLOCAL_FLAGS='-I <pkg-config installation prefix>/share/aclocal'; \
+  ./autogen.sh
+
+Some versions of libtool have bug that prevents MinGW from creating shared
+libraries. The autogen.sh script "libtoolizes" the package using the libtool
+included with MinGW distribution. Like that you are sure that your libtool is
+able to create DLLs.
+The ACLOCAL_FLAGS variable is there in order to allow the auto* scripts to find
+the pkg.m4 macro that is part of the pkg-config distribution. If this macro is
+not found, the generated configure script will be ending with an error.
+
+3. Time to configure libwpd; run:
+
+  ./configure [--prefix=<target>] [--enable-static] [--disable-shared]
+
+By default, the configure script uses as prefix "/usr/local" and configures to
+create only shared libraries. Myself, I build using following options:
+"./configure --prefix=/target --enable-static --enable-shared"
+
+4. In the "libtool" created by the configure script, replace any occurence of
+
+  deplibs_check_method="file_magic ^x86 archive import|^x86 DLL"
+
+by
+
+  deplibs_check_method="pass_all"
+
+For some reasons, libtool is not able to distinguish the libtool import
+libraries libXXX.dll.a from static libraries libXXX.a.  This ugly hack makes it
+link with the first libXXX.dll.a that it meets.
+
+5. Nearly done. Make sure you have a clean build by running:
+ 
+  make clean all
+
+6. And last but not least, compile and install libwpd by running:
+
+  make install [-i]
+
+If you configure using "--enable-static --disable-shared" (pure static library
+creation), the libtool import libraries are not created. Make will try to install
+them and will stop with error. The "-i" option makes it to report the error, but
+not to stop. Like that the installation will succeed.
+
+That's all folks! For more information, ask questions at the mailing list
+libwpd-devel@list.sourceforge.net. Remember that Uncle Google can also be of big
+help especially when the problem is not with libwpd, but with one of its 
+dependencies.
