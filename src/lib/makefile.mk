@@ -105,7 +105,9 @@ SLOFILES= \
 	$(SLO)$/WPXParser.obj 				\
 	$(SLO)$/WPXPart.obj				\
 	$(SLO)$/WPXProperty.obj				\
+	$(SLO)$/WPXPropertyList.obj			\
 	$(SLO)$/WPXString.obj				\
+	$(SLO)$/WPXVector.obj				\
 	$(SLO)$/WPDocument.obj
 
 LIB1ARCHIV=$(LB)$/libwpdlib.a
