@@ -29,8 +29,7 @@
 #include "WP6FixedEOLGroup.h"
 #include "WP6ExtendedCharacterGroup.h"
 #include "WP6UndoGroup.h"
-#include "WP6AttributeOnGroup.h"
-#include "WP6AttributeOffGroup.h"
+#include "WP6AttributeGroup.h"
 
 WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(FILE *stream, guint8 groupID)
 {
