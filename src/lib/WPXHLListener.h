@@ -124,6 +124,7 @@ public:
 
 	void startDocument();
 	void handleSubDocument(guint16 textPID);
+	virtual void insertBreak(const guint8 breakType);
 
 	WPXParsingState *m_ps; // parse state
 	WPXHLListenerImpl * m_listenerImpl;
@@ -132,6 +133,7 @@ public:
 
 protected:
 	virtual void _handleSubDocument(guint16 textPID) = 0;
+	virtual void _flushText(const bool fakeText=false) = 0;
 
 	void _openSection();
 	void _closeSection();
@@ -144,6 +146,9 @@ protected:
 
 	void _openSpan();
 	void _closeSpan();
+
+	bool isUndoOn() { return m_isUndoOn; }
+	bool m_isUndoOn;
 };
 
 #endif /* WPXHLLISTENER_H */

@@ -345,39 +345,6 @@ void WP6HLContentListener::insertEOL()
 	
 }
 
-void WP6HLContentListener::insertBreak(const guint8 breakType)
-{
-	if (!isUndoOn())
-	{	
-		_flushText();
-		switch (breakType) 
-		{
-		case WPX_COLUMN_BREAK:
-			m_ps->m_numDeferredParagraphBreaks++;
-			m_ps->m_isParagraphColumnBreak = true;
-			break;
-		case WPX_PAGE_BREAK:
-			m_ps->m_numDeferredParagraphBreaks++;
-			m_ps->m_isParagraphPageBreak = true;
-			break;
-			// TODO: (.. line break?)
-		}
-		switch (breakType)
-		{
-		case WPX_PAGE_BREAK:
-		case WPX_SOFT_PAGE_BREAK:
-			if (m_ps->m_numPagesRemainingInSpan > 0)
-				m_ps->m_numPagesRemainingInSpan--;
-			else
-			{
-				_openPageSpan();
-			}
-		default:
-			break;
-		}
-	}
-}
-
 void WP6HLContentListener::fontChange(const guint16 matchedFontPointSize, const guint16 fontPID)
 {	
 	if (!isUndoOn())

@@ -46,7 +46,6 @@ public:
 	virtual void insertCharacter(const guint16 character);
 	virtual void insertTab(const guint8 tabType);
 	virtual void insertEOL();
- 	virtual void insertBreak(const guint8 breakType);
 	virtual void attributeChange(const bool isOn, const guint8 attribute);
 	virtual void lineSpacingChange(const float lineSpacing) {};
 	virtual void justificationChange(const guint8 justification) {};
@@ -70,7 +69,7 @@ protected:
 private:
 	void _openParagraph();
 
-	void _flushText();
+	void _flushText(const bool fakeText=false);
 
 	UCSString m_textBuffer;
 

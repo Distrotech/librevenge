@@ -63,41 +63,6 @@ void WP5HLListener::insertEOL()
 	m_ps->m_numDeferredParagraphBreaks++;	
 }
 
-void WP5HLListener::insertBreak(const guint8 breakType)
-{
-	// TODO: move to WPXHLListener???
-	
-	/*if (!isUndoOn())*/
-	{	
-		_flushText();
-		switch (breakType) 
-		{
-		case WPX_COLUMN_BREAK:
-			m_ps->m_numDeferredParagraphBreaks++;
-			m_ps->m_isParagraphColumnBreak = true;
-			break;
-		case WPX_PAGE_BREAK:
-			m_ps->m_numDeferredParagraphBreaks++;
-			m_ps->m_isParagraphPageBreak = true;
-			break;
-			// TODO: (.. line break?)
-		}
-		switch (breakType)
-		{
-		case WPX_PAGE_BREAK:
-		case WPX_SOFT_PAGE_BREAK:
-			if (m_ps->m_numPagesRemainingInSpan > 0)
-				m_ps->m_numPagesRemainingInSpan--;
-			else
-			{
-				_openPageSpan();
-			}
-		default:
-			break;
-		}
-	}
-}
-
 void WP5HLListener::endDocument()
 {
 	// corner case: document ends in a list element
@@ -188,7 +153,7 @@ void WP5HLListener::attributeChange(const bool isOn, const guint8 attribute)
  private functions
 *****************************************/
 
-void WP5HLListener::_flushText()
+void WP5HLListener::_flushText(const bool fakeText)
 {
 	// create a new section, and a new paragraph, if our section attributes have changed and we have inserted
 	// something into the document (or we have forced a break, which assumes the same condition)

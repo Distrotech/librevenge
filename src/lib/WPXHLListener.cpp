@@ -65,8 +65,8 @@ _WPXParsingState::_WPXParsingState(bool sectionAttributesChanged) :
 	m_pageMarginLeft(1.0f),
 	m_pageMarginRight(1.0f),
 	m_paragraphMarginLeft(0.0f), 
-	m_paragraphMarginRight(0.0f)/*,
-	m_currentRow(-1),
+	m_paragraphMarginRight(0.0f)
+	/*m_currentRow(-1),
 	m_currentColumn(-1),
 	
 	m_currentListLevel(0),
@@ -82,7 +82,8 @@ WPXHLListener::WPXHLListener(vector<WPXPageSpan *> *pageList, WPXHLListenerImpl 
 	WPXLLListener(),
 	m_pageList(pageList),
 	m_listenerImpl(listenerImpl),
-	m_ps(new WPXParsingState)
+	m_ps(new WPXParsingState),
+	m_isUndoOn(false)
 {
 }
 
@@ -214,4 +215,37 @@ void WPXHLListener::handleSubDocument(guint16 textPID)
 	// restore our old parsing state
 	delete m_ps;
 	m_ps = oldPS;		
+}
+
+void WPXHLListener::insertBreak(const guint8 breakType)
+{
+	if (!isUndoOn())
+	{	
+		_flushText();
+		switch (breakType) 
+		{
+		case WPX_COLUMN_BREAK:
+			m_ps->m_numDeferredParagraphBreaks++;
+			m_ps->m_isParagraphColumnBreak = true;
+			break;
+		case WPX_PAGE_BREAK:
+			m_ps->m_numDeferredParagraphBreaks++;
+			m_ps->m_isParagraphPageBreak = true;
+			break;
+			// TODO: (.. line break?)
+		}
+		switch (breakType)
+		{
+		case WPX_PAGE_BREAK:
+		case WPX_SOFT_PAGE_BREAK:
+			if (m_ps->m_numPagesRemainingInSpan > 0)
+				m_ps->m_numPagesRemainingInSpan--;
+			else
+			{
+				_openPageSpan();
+			}
+		default:
+			break;
+		}
+	}
 }

@@ -41,10 +41,6 @@ public:
 		
 	// for getting low-level messages from the parser
 	virtual void undoChange(const guint8 undoType, const guint16 undoLevel);
-	bool isUndoOn() { return m_isUndoOn; }
-
-private:
-	bool m_isUndoOn;
 };
 
 #endif /* WP6HLLISTENER_H */

@@ -147,7 +147,7 @@ void WP42HLListener::attributeChange(const bool isOn, const guint8 attribute)
 /*
 TODO: this function needs to be fleshed out
 */
-void WP42HLListener::_flushText()
+void WP42HLListener::_flushText(const bool fakeText)
 {
 	// create a new section, and a new paragraph, if our section attributes have changed and we have inserted
 	// something into the document (or we have forced a break, which assumes the same condition)

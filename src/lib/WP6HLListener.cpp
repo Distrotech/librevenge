@@ -32,8 +32,7 @@
 
 WP6HLListener::WP6HLListener(vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl) :
 	WPXHLListener(pageList, listenerImpl),
-	WP6LLListener(), 
-	m_isUndoOn(false)
+	WP6LLListener()
 {
 }
 

@@ -148,7 +148,6 @@ public:
 	virtual void insertCharacter(const guint16 character);
 	virtual void insertTab(const guint8 tabType);
 	virtual void insertEOL();
- 	virtual void insertBreak(const guint8 breakType); 
 	virtual void fontChange(const guint16 matchedFontPointSize, const guint16 fontPID);
  	virtual void attributeChange(const bool isOn, const guint8 attribute);
 	virtual void lineSpacingChange(const float lineSpacing);
