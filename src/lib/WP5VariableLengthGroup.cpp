@@ -50,8 +50,8 @@ void WP5VariableLengthGroup::_read(WPXInputStream *input)
 
 	WPD_DEBUG_MSG(("WordPerfect: handling a variable length group\n"));	
 	
-	m_subGroup = gsf_le_read_guint8(input);
-	m_size = gsf_le_read_guint16(input) + 4; // the length is the number of data bytes minus 4 (ie. the function codes)
+	m_subGroup = readU8(input);
+	m_size = readU16(input) + 4; // the length is the number of data bytes minus 4 (ie. the function codes)
 	
 	WPD_DEBUG_MSG(("WordPerfect: Read variable group header (start_position: %i, sub_group: 0x%x, size: %i)\n", startPosition, m_subGroup, m_size));
 	

@@ -43,18 +43,18 @@ void WP6ColumnGroup::_readContents(WPXInputStream *input)
 		case 0: // Left Margin Set
 		case 1: // Right Margin Set
 			{
-				m_margin = gsf_le_read_guint16(input);
+				m_margin = readU16(input);
 				WPD_DEBUG_MSG(("WordPerfect: Read column group margin size (margin: %i)\n", m_margin));
 			}
 			break;
 		case 2:
 			{
-				m_colType = gsf_le_read_guint8(input);
+				m_colType = readU8(input);
 				for (int i=0; i<4; i++) 
 					{
-						m_rowSpacing[i] = gsf_le_read_guint8(input);
+						m_rowSpacing[i] = readU8(input);
 					}
-				m_numColumns = gsf_le_read_guint8(input);
+				m_numColumns = readU8(input);
 				WPD_DEBUG_MSG(("WordPerfect: Column type: %d\n", m_colType & 0x03));
 				WPD_DEBUG_MSG(("WordPerfect: Numer of columns: %d\n", m_numColumns));				
 			}

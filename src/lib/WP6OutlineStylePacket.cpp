@@ -41,14 +41,14 @@ void WP6OutlineStylePacket::_readContents(WPXInputStream *input)
 {
 	unsigned int i;
 
-	m_numPIDs = gsf_le_read_guint16(input);
+	m_numPIDs = readU16(input);
 	for (i=0; i<WP6_NUM_LIST_LEVELS; i++) 
-		m_paragraphStylePIDs[i] = gsf_le_read_guint16(input); // seemingly useless
-	m_outlineFlags = gsf_le_read_guint8(input);
-	m_outlineHash = gsf_le_read_guint16(input);
+		m_paragraphStylePIDs[i] = readU16(input); // seemingly useless
+	m_outlineFlags = readU8(input);
+	m_outlineHash = readU16(input);
 	for (i=0; i<WP6_NUM_LIST_LEVELS; i++)  
-		m_numberingMethods[i] = gsf_le_read_guint8(input);
-	m_tabBehaviourFlag = gsf_le_read_guint8(input);
+		m_numberingMethods[i] = readU8(input);
+	m_tabBehaviourFlag = readU8(input);
 	
 	WPD_DEBUG_MSG(("WordPerfect: Read Outline Style Packet (numPrefixIDs: %i, outlineHash: %i, outlineFlags: %i, tab behaviour flag: %i)\n", (int) m_numPIDs, (int) m_outlineHash, (int) m_outlineFlags, (int) m_tabBehaviourFlag));
 	WPD_DEBUG_MSG(("WordPerfect: Read Outline Style Packet (m_paragraphStylePIDs: %i %i %i %i %i %i %i %i)\n", 

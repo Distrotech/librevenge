@@ -80,7 +80,7 @@ void WP6ParagraphGroup::parse(WP6HLListener *listener)
 
 WP6ParagraphGroup_LineSpacingSubGroup::WP6ParagraphGroup_LineSpacingSubGroup(WPXInputStream *input)
 {
-	guint32 lineSpacing = gsf_le_read_guint32(input);
+	guint32 lineSpacing = readU32(input);
 	gint16 lineSpacingIntegerPart = (gint16)((lineSpacing & 0xFFFF0000) >> 16);
 	float lineSpacingFractionalPart = (float)(lineSpacing & 0xFFFF)/(float)0xFFFF;
 	WPD_DEBUG_MSG(("WordPerfect: line spacing integer part: %i fractional part: %f (original value: %i)\n",
@@ -96,7 +96,7 @@ void WP6ParagraphGroup_LineSpacingSubGroup::parse(WP6HLListener *listener, const
 
 WP6ParagraphGroup_IndentFirstLineSubGroup::WP6ParagraphGroup_IndentFirstLineSubGroup(WPXInputStream *input)
 {
-	m_firstLineOffset = (gint16)gsf_le_read_guint16(input);
+	m_firstLineOffset = (gint16)readU16(input);
 	WPD_DEBUG_MSG(("WordPerfect: indent first line: %i\n", m_firstLineOffset));
 }
 
@@ -108,7 +108,7 @@ void WP6ParagraphGroup_IndentFirstLineSubGroup::parse(WP6HLListener *listener, c
 
 WP6ParagraphGroup_LeftMarginAdjustmentSubGroup::WP6ParagraphGroup_LeftMarginAdjustmentSubGroup(WPXInputStream *input)
 {
-	m_leftMargin = (gint16)gsf_le_read_guint16(input);
+	m_leftMargin = (gint16)readU16(input);
 	WPD_DEBUG_MSG(("WordPerfect: left margin adjustment: %i\n", m_leftMargin));
 }
 
@@ -120,7 +120,7 @@ void WP6ParagraphGroup_LeftMarginAdjustmentSubGroup::parse(WP6HLListener *listen
 
 WP6ParagraphGroup_RightMarginAdjustmentSubGroup::WP6ParagraphGroup_RightMarginAdjustmentSubGroup(WPXInputStream *input)
 {
-	m_rightMargin = (gint16)gsf_le_read_guint16(input);
+	m_rightMargin = (gint16)readU16(input);
 	WPD_DEBUG_MSG(("WordPerfect: right margin adjustment: %i\n", m_rightMargin));
 }
 
@@ -132,7 +132,7 @@ void WP6ParagraphGroup_RightMarginAdjustmentSubGroup::parse(WP6HLListener *liste
 
 WP6ParagraphGroup_JustificationModeSubGroup::WP6ParagraphGroup_JustificationModeSubGroup(WPXInputStream *input)
 {
-	m_justification = gsf_le_read_guint8(input);
+	m_justification = readU8(input);
 }
 
 void WP6ParagraphGroup_JustificationModeSubGroup::parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
@@ -145,7 +145,7 @@ WP6ParagraphGroup_SpacingAfterParagraphSubGroup::WP6ParagraphGroup_SpacingAfterP
 	m_sizeNonDeletable = sizeNonDeletable;
 	m_spacingAfterParagraphAbsolute = 0.0f;
 	m_spacingAfterParagraphRelative = 1.0f;
-	guint32 spacingAfterRelative = gsf_le_read_guint32(input);
+	guint32 spacingAfterRelative = readU32(input);
 	gint16 spacingAfterIntegerPart = (gint16)((spacingAfterRelative & 0xFFFF0000) >> 16);
 	float spacingAfterFractionalPart = (float)(spacingAfterRelative & 0xFFFF)/(float)0xFFFF;
 	WPD_DEBUG_MSG(("WordPerfect: spacing after paragraph relative integer part: %i fractional part: %f (original value: %i)\n",
@@ -153,7 +153,7 @@ WP6ParagraphGroup_SpacingAfterParagraphSubGroup::WP6ParagraphGroup_SpacingAfterP
 	m_spacingAfterParagraphRelative = spacingAfterIntegerPart + spacingAfterFractionalPart;
 	if (m_sizeNonDeletable == (guint16)0x06) // Let us use the optional information that is in WPUs
 	{
-		guint16 spacingAfterAbsolute = gsf_le_read_guint16(input);
+		guint16 spacingAfterAbsolute = readU16(input);
 		m_spacingAfterParagraphAbsolute = (float)((double)spacingAfterAbsolute / (double)WPX_NUM_WPUS_PER_INCH);
 		WPD_DEBUG_MSG(("WordPerfect: spacing after paragraph absolute: %i\n", spacingAfterAbsolute));
 	}
@@ -169,10 +169,10 @@ void WP6ParagraphGroup_SpacingAfterParagraphSubGroup::parse(WP6HLListener *liste
 WP6ParagraphGroup_OutlineDefineSubGroup::WP6ParagraphGroup_OutlineDefineSubGroup(WPXInputStream *input)
 {
 	// NB: this is identical to WP6OutlineStylePacket::_readContents!!
-	m_outlineHash = gsf_le_read_guint16(input);
+	m_outlineHash = readU16(input);
 	for (unsigned int i=0; i<WP6_NUM_LIST_LEVELS; i++)
-		m_numberingMethods[i] = gsf_le_read_guint8(input);
-	m_tabBehaviourFlag = gsf_le_read_guint8(input);
+		m_numberingMethods[i] = readU8(input);
+	m_tabBehaviourFlag = readU8(input);
 
 	WPD_DEBUG_MSG(("WordPerfect: Read Outline Style Packet (, outlineHash: %i, tab behaviour flag: %i)\n", (int) m_outlineHash, (int) m_tabBehaviourFlag));
 // 	WPD_DEBUG_MSG(("WordPerfect: Read Outline Style Packet (m_paragraphStylePIDs: %i %i %i %i %i %i %i %i)\n",

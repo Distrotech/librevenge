@@ -55,7 +55,7 @@ WPXHeader * WPXHeader::constructHeader(WPXInputStream *input)
 	/* check the magic */
 	input->seek(WPX_HEADER_MAGIC_OFFSET - input->tell(), WPX_SEEK_CUR);
 	for (int i=0; i<3 /* FIXME: && not EOF */; i++)
-		fileMagic[i] = gsf_le_read_guint8(input);
+		fileMagic[i] = readU8(input);
 	fileMagic[3] = '\0';
 	
 	if ( strcmp(fileMagic, "WPC") )
@@ -66,17 +66,17 @@ WPXHeader * WPXHeader::constructHeader(WPXInputStream *input)
 	
 	/* get the document pointer */
 	input->seek(WPX_HEADER_DOCUMENT_POINTER_OFFSET - input->tell(), WPX_SEEK_CUR);
-	guint32 documentOffset = gsf_le_read_guint32(input);
+	guint32 documentOffset = readU32(input);
 
 	/* get information on product types, file types, versions */
 	input->seek(WPX_HEADER_PRODUCT_TYPE_OFFSET - input->tell(), WPX_SEEK_CUR);
-	guint8 productType = gsf_le_read_guint8(input);
-	guint8 fileType = gsf_le_read_guint8(input);
-	guint8 majorVersion = gsf_le_read_guint8(input);
-	guint8 minorVersion = gsf_le_read_guint8(input);
+	guint8 productType = readU8(input);
+	guint8 fileType = readU8(input);
+	guint8 majorVersion = readU8(input);
+	guint8 minorVersion = readU8(input);
 	
 	input->seek(WPX_HEADER_ENCRYPTION_OFFSET, WPX_SEEK_SET);
-	guint8 documentEncryption = gsf_le_read_guint16(input);		
+	guint8 documentEncryption = readU16(input);		
 	
 	WPD_DEBUG_MSG(("WordPerfect: Product Type: %i File Type: %i Major Version: %i Minor Version: %i\n", 
 					productType, fileType, 

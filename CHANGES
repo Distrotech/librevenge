@@ -11,6 +11,8 @@ CHANGES:
 (William Lachance)
 - Additional doxygen comments (William Lachance)
 - Conversion of Hard-Line-Breaks (Fridrich Strba)
+- Fix crash when tables occurred in embedded sub-documents (William 
+Lachance)
 
 0.7.1 -> 0.7.2
 - Fixed bug in WP6FixedLengthGroup handling (Fridrich Strba)

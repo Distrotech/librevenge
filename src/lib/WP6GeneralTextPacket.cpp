@@ -43,8 +43,8 @@ WP6GeneralTextPacket::~WP6GeneralTextPacket()
 
 void WP6GeneralTextPacket::_readContents(WPXInputStream *input)
 {
-	guint16 m_numTextBlocks = gsf_le_read_guint16(input);
-	guint32 m_firstTextBlockOffset = gsf_le_read_guint32(input);
+	guint16 m_numTextBlocks = readU16(input);
+	guint32 m_firstTextBlockOffset = readU32(input);
 
 	if (m_numTextBlocks < 1)
 		throw ParseException();
@@ -55,7 +55,7 @@ void WP6GeneralTextPacket::_readContents(WPXInputStream *input)
 
 	for(i=0; i<m_numTextBlocks; i++)
 	{
-		m_blockSizes[i] = gsf_le_read_guint32(input);
+		m_blockSizes[i] = readU32(input);
 		totalSize += m_blockSizes[i];
 	}	
 
@@ -66,7 +66,7 @@ void WP6GeneralTextPacket::_readContents(WPXInputStream *input)
 	{
 		for (int j=0; j<m_blockSizes[i]; j++)
 		{
-			streamData[streamPos] = gsf_le_read_guint8(input);
+			streamData[streamPos] = readU8(input);
 			streamPos++;
 		}
 	}

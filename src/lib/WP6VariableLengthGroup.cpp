@@ -85,20 +85,20 @@ void WP6VariableLengthGroup::_read(WPXInputStream *input)
 {
 	guint32 startPosition = input->tell();
 	
-	m_subGroup = gsf_le_read_guint8(input);
-	m_size = gsf_le_read_guint16(input);
-	m_flags = gsf_le_read_guint8(input);
+	m_subGroup = readU8(input);
+	m_size = readU16(input);
+	m_flags = readU8(input);
 
 	if (m_flags & WP6_VARIABLE_GROUP_PREFIX_ID_BIT)
 	{
-		m_numPrefixIDs = gsf_le_read_guint8(input);
+		m_numPrefixIDs = readU8(input);
 		
 		if (m_numPrefixIDs > 0)
 		{
 			m_prefixIDs = (guint16 *) g_malloc(sizeof(guint16) * m_numPrefixIDs);
 			for (guint32 i = 0; i < m_numPrefixIDs; i++)
 			{
-				m_prefixIDs[i] = gsf_le_read_guint16(input);		
+				m_prefixIDs[i] = readU16(input);		
 			}
 		}	
 	}	
@@ -108,7 +108,7 @@ void WP6VariableLengthGroup::_read(WPXInputStream *input)
 		m_prefixIDs = NULL;
 	}
 		
-	m_sizeNonDeletable = gsf_le_read_guint16(input);	
+	m_sizeNonDeletable = readU16(input);	
 	WPD_DEBUG_MSG(("WordPerfect: Read variable group header (start_position: %i, sub_group: %i, size: %i, flags: %i, num_prefix_ids: %i, size_non_deletable: %i)\n", startPosition, m_subGroup, m_size, m_flags, m_numPrefixIDs, m_sizeNonDeletable));
 
 	_readContents(input);

@@ -46,8 +46,8 @@
 
 // add more of these as needed for byteswapping
 // (the 8-bit functions are just there to make things consistent)
-gint8 gsf_le_read_gint8(WPXInputStream *input); 
-guint8 gsf_le_read_guint8(WPXInputStream *input); 
-guint16 gsf_le_read_guint16(WPXInputStream *input);
-guint32 gsf_le_read_guint32(WPXInputStream *input);
+gint8 read8(WPXInputStream *input); 
+guint8 readU8(WPXInputStream *input); 
+guint16 readU16(WPXInputStream *input);
+guint32 readU32(WPXInputStream *input);
 #endif /* LIBWPD_INTERNAL_H */

@@ -39,8 +39,8 @@ WP6ExtendedCharacterGroup::WP6ExtendedCharacterGroup(WPXInputStream *input, guin
 
 void WP6ExtendedCharacterGroup::_readContents(WPXInputStream *input)
 {
-	m_character = gsf_le_read_guint8(input);
-	m_characterSet = gsf_le_read_guint8(input);
+	m_character = readU8(input);
+	m_characterSet = readU8(input);
 }
 
 void WP6ExtendedCharacterGroup::parse(WP6HLListener *listener)

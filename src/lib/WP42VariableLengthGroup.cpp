@@ -50,7 +50,7 @@ void WP42VariableLengthGroup::_read(WPXInputStream *input)
 	while (!input->atEOS())
 	{
 		guint8 readNextVal;
-		readNextVal = gsf_le_read_guint8(input);
+		readNextVal = readU8(input);
 		if (readNextVal == getGroup())
 			break;
 	}	

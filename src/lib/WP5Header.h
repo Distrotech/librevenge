@@ -39,7 +39,7 @@ class WP5Header : public WPXHeader
 	const guint16 getDocumentEncryption() const { return m_documentEncryption; }
 
 protected:
-	void _readIndexInformation(WPXInputStream *input);
+	void _readndexInformation(WPXInputStream *input);
 		
 private:
 	guint16 m_indexHeaderOffset;

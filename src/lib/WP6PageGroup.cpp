@@ -49,21 +49,21 @@ void WP6PageGroup::_readContents(WPXInputStream *input)
 	{
 	case WP6_PAGE_GROUP_TOP_MARGIN_SET:
 	case WP6_PAGE_GROUP_BOTTOM_MARGIN_SET:
-		m_margin = gsf_le_read_guint16(input);
+		m_margin = readU16(input);
 		WPD_DEBUG_MSG(("WordPerfect: Read page group margin size (margin: %i)\n", m_margin));
 		break;
 	case WP6_PAGE_GROUP_SUPPRESS_PAGE_CHARACTERISTICS:
-		m_suppressedCode = gsf_le_read_guint8(input);
+		m_suppressedCode = readU8(input);
 		WPD_DEBUG_MSG(("WordPerfect: Read suppressed code (%i)\n", m_suppressedCode));
 		break;
 	case WP6_PAGE_GROUP_FORM:
 		guint8 tmpOrientation;
-		m_formHashTableIndex = gsf_le_read_guint8(input);
-		m_formHashValue = gsf_le_read_guint16(input);
-		m_formLength = gsf_le_read_guint16(input);
-		m_formWidth = gsf_le_read_guint16(input);
-		m_formType = gsf_le_read_guint8(input);
-		tmpOrientation = gsf_le_read_guint8(input);
+		m_formHashTableIndex = readU8(input);
+		m_formHashValue = readU16(input);
+		m_formLength = readU16(input);
+		m_formWidth = readU16(input);
+		m_formType = readU8(input);
+		tmpOrientation = readU8(input);
 		switch (tmpOrientation)
 		{
 		case 0x01:
@@ -76,7 +76,7 @@ void WP6PageGroup::_readContents(WPXInputStream *input)
 			m_formOrientation = PORTRAIT;
 			break;
 		}
-		m_formNameLength = gsf_le_read_guint8(input);
+		m_formNameLength = readU8(input);
 
 		if (m_formNameLength == 0)
 		{
@@ -92,7 +92,7 @@ void WP6PageGroup::_readContents(WPXInputStream *input)
 				guint8 character;
 				int len;
 				const guint16 *chars;
-				guint16 charWord = gsf_le_read_guint16(input);
+				guint16 charWord = readU16(input);
 				characterSet = (charWord & 0xFF00) >> 8;
 				character = (charWord & 0xFF);
 				len = extendedCharacterToUCS2(character, characterSet, &chars);

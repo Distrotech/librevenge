@@ -81,7 +81,7 @@ void WP6Parser::parseDocument(WPXInputStream *input, WP6HLListener *listener)
 	while (!input->atEOS())
 	{
 		guint8 readVal;
-		readVal = gsf_le_read_guint8(input);
+		readVal = readU8(input);
 		
 		if (readVal == (guint8)0x00)
 		{

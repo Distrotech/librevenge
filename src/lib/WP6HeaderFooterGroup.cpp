@@ -35,7 +35,7 @@ WP6HeaderFooterGroup::WP6HeaderFooterGroup(WPXInputStream *input) :
 
 void WP6HeaderFooterGroup::_readContents(WPXInputStream *input)
 {
-	m_occurenceBits = gsf_le_read_guint16(input);
+	m_occurenceBits = readU16(input);
 }
 
 void WP6HeaderFooterGroup::parse(WP6HLListener *listener)

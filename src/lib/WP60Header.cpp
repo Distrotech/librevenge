@@ -31,7 +31,7 @@
 WP60Header::WP60Header(WPXInputStream * input, guint32 documentOffset, guint8 productType, guint8 fileType, guint8 majorVersion, guint8 minorVersion, guint16 documentEncryption)
 	:	WP6Header(input, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption)
 {
-	_readIndexInformation(input);
+	_readndexInformation(input);
 }
 
 WP60Header::~WP60Header()

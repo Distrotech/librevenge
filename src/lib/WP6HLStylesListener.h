@@ -74,23 +74,23 @@ public:
 	virtual void styleGroupOff(const guint8 subGroup) {}
 	virtual void globalOn(const guint8 systemStyle) {}
 	virtual void globalOff() {}
-	virtual void noteOn(const guint16 textPID) {}
-	virtual void noteOff(const WPXNoteType noteType) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	virtual void noteOn(const guint16 textPID);
+	virtual void noteOff(const WPXNoteType noteType) {}
 	virtual void headerFooterGroup(const guint8 headerFooterType, const guint8 occurenceBits, const guint16 textPID);
 	virtual void suppressPageCharacteristics(const guint8 suppressCode);
 	virtual void endDocument();
 
- 	virtual void defineTable(guint8 position, guint16 leftOffset) {}
+ 	virtual void defineTable(guint8 position, guint16 leftOffset);
 	virtual void addTableColumnDefinition(guint32 width, guint32 leftGutter, guint32 rightGutter) {}
 	virtual void startTable();
  	virtual void insertRow();
  	virtual void insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove,
 				const guint8 borderBits,
 				const RGBSColor * cellFgColor, const RGBSColor * cellBgColor);
- 	virtual void endTable() {}
+ 	virtual void endTable();
 
 protected:
-	virtual void _handleSubDocument(guint16 textPID, const bool isHeaderFooter) {}
+	virtual void _handleSubDocument(guint16 textPID, const bool isHeaderFooter);
 	virtual void _flushText(const bool fakeText=false) {}
 	virtual void _openPageSpan() { /* FIXME: REMOVE ME WHEN IMPLEMENTED IN WPXHLListener */ };
 
@@ -101,6 +101,7 @@ private:
 	WPXTable *m_currentTable;
 	float m_tempMarginLeft, m_tempMarginRight;
 	bool m_currentPageHasContent;
+	bool m_isTableDefined;
 };
 
 #endif /* WP6HLSTYLESLISTENER_H */

@@ -35,7 +35,7 @@ WP6AttributeGroup::WP6AttributeGroup(WPXInputStream *input, guint8 groupID)
 
 void WP6AttributeGroup::_readContents(WPXInputStream *input)
 {
-	m_attribute = gsf_le_read_guint8(input);
+	m_attribute = readU8(input);
 }
 
 WP6AttributeOnGroup::WP6AttributeOnGroup(WPXInputStream *input, guint8 groupID)

@@ -32,11 +32,11 @@ WP61Header::WP61Header(WPXInputStream * input, guint32 documentOffset,  guint8 p
 	:	WP6Header(input, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption)
 {
 	input->seek(WP6_HEADER_DOCUMENT_SIZE_OFFSET, WPX_SEEK_SET);
-	m_documentSize = gsf_le_read_guint32(input);
+	m_documentSize = readU32(input);
 
 	WPD_DEBUG_MSG(("WordPerfect: Document End Position = 0x%x \n",(int)m_documentSize));
 
-	_readIndexInformation(input);
+	_readndexInformation(input);
 }
 
 WP61Header::~WP61Header()

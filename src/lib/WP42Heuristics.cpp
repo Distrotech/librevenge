@@ -38,7 +38,7 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input, bool parti
 	while (!input->atEOS())
 	{
 		guint8 readVal;
-		readVal = gsf_le_read_guint8(input);
+		readVal = readU8(input);
 		
 		if (readVal < (guint8)0x20)
 		{
@@ -66,7 +66,7 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input, bool parti
 				guint8 readNextVal;
 				while (!input->atEOS())
 				{
-					readNextVal = gsf_le_read_guint8(input);
+					readNextVal = readU8(input);
 					if (readNextVal == readVal)
 						break;
 				}
@@ -88,7 +88,7 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input, bool parti
 					return WPD_CONFIDENCE_NONE;
 				
 				// read the closing gate
-				guint8 readNextVal = gsf_le_read_guint8(input);
+				guint8 readNextVal = readU8(input);
 				if (readNextVal != readVal)
 					return WPD_CONFIDENCE_NONE;
 				

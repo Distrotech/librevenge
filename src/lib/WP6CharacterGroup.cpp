@@ -33,9 +33,9 @@
 
 WP6CharacterGroup_ColorSubGroup::WP6CharacterGroup_ColorSubGroup(WPXInputStream *input)
 {
-	m_red = gsf_le_read_guint8(input);
-	m_green = gsf_le_read_guint8(input);
-	m_blue = gsf_le_read_guint8(input);
+	m_red = readU8(input);
+	m_green = readU8(input);
+	m_blue = readU8(input);
 	WPD_DEBUG_MSG(("WordPerfect: Character Group Color subgroup info (red: %i, green: %i, blue: %i)\n", m_red, m_green, m_blue));
 }
 
@@ -50,7 +50,7 @@ void WP6CharacterGroup_ColorSubGroup::parse(WP6HLListener *listener, const guint
 
 WP6CharacterGroup_CharacterShadingChangeSubGroup::WP6CharacterGroup_CharacterShadingChangeSubGroup(WPXInputStream *input)
 {
-	m_shading = gsf_le_read_guint8(input);
+	m_shading = readU8(input);
 	WPD_DEBUG_MSG(("WordPerfect: Character Group Character Shading Change subgroup info (shading: %i)\n", m_shading));
 }
 
@@ -65,10 +65,10 @@ void WP6CharacterGroup_CharacterShadingChangeSubGroup::parse(WP6HLListener *list
 
 WP6CharacterGroup_FontFaceChangeSubGroup::WP6CharacterGroup_FontFaceChangeSubGroup(WPXInputStream *input)
 {
-	m_oldMatchedPointSize = gsf_le_read_guint16(input);
-	m_hash = gsf_le_read_guint16(input);
-	m_matchedFontIndex = gsf_le_read_guint16(input);
-	m_matchedFontPointSize = gsf_le_read_guint16(input);
+	m_oldMatchedPointSize = readU16(input);
+	m_hash = readU16(input);
+	m_matchedFontIndex = readU16(input);
+	m_matchedFontPointSize = readU16(input);
 	WPD_DEBUG_MSG(("WordPerfect: Character Group Font Face Change subgroup info (old matched point size: %i, hash: %i, matched font index: %i, matched font point size: %i\n", m_oldMatchedPointSize, m_hash, m_matchedFontIndex, m_matchedFontPointSize));
 }
 
@@ -86,9 +86,9 @@ void WP6CharacterGroup_FontFaceChangeSubGroup::parse(WP6HLListener *listener, co
 
 WP6CharacterGroup_ParagraphNumberOnSubGroup::WP6CharacterGroup_ParagraphNumberOnSubGroup(WPXInputStream *input)
 {
-	m_outlineHash = gsf_le_read_guint16(input);
-	m_level = gsf_le_read_guint8(input);
-	m_flag = gsf_le_read_guint8(input);
+	m_outlineHash = readU16(input);
+	m_level = readU8(input);
+	m_flag = readU8(input);
 }
 
 void WP6CharacterGroup_ParagraphNumberOnSubGroup::parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
@@ -102,9 +102,9 @@ void WP6CharacterGroup_ParagraphNumberOnSubGroup::parse(WP6HLListener *listener,
 
 WP6CharacterGroup_TableDefinitionOnSubGroup::WP6CharacterGroup_TableDefinitionOnSubGroup(WPXInputStream *input)
 {
-	m_flags = gsf_le_read_guint8(input);
-	m_position = gsf_le_read_guint8(input);
-	m_leftOffset = gsf_le_read_guint16(input);
+	m_flags = readU8(input);
+	m_position = readU8(input);
+	m_leftOffset = readU16(input);
 	// TODO: add the remaining table properties here
 }
 
@@ -134,17 +134,17 @@ void WP6CharacterGroup_TableDefinitionOffSubGroup::parse(WP6HLListener *listener
 
 WP6CharacterGroup_TableColumnSubGroup::WP6CharacterGroup_TableColumnSubGroup(WPXInputStream *input)
 {
-	m_flags = gsf_le_read_guint8(input);
-	m_width = gsf_le_read_guint16(input);
+	m_flags = readU8(input);
+	m_width = readU16(input);
 
-	m_leftGutter = gsf_le_read_guint16(input);
-	m_rigthGutter = gsf_le_read_guint16(input);
-	m_attribWord1 = gsf_le_read_guint16(input);
-	m_attribWord2 = gsf_le_read_guint16(input);
-	m_alignment = gsf_le_read_guint8(input);
-	m_absPosFromRight = gsf_le_read_guint16(input);
-	m_numberType = gsf_le_read_guint16(input);
-	m_currencyIndex = gsf_le_read_guint8(input);
+	m_leftGutter = readU16(input);
+	m_rigthGutter = readU16(input);
+	m_attribWord1 = readU16(input);
+	m_attribWord2 = readU16(input);
+	m_alignment = readU8(input);
+	m_absPosFromRight = readU16(input);
+	m_numberType = readU16(input);
+	m_currencyIndex = readU8(input);
 }
 
 void WP6CharacterGroup_TableColumnSubGroup::parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const

@@ -49,6 +49,7 @@ bool GSFInputStream::isOLEStream()
 	if (m_ole != NULL)
 		return true;
 
+	return false;
 }
 
 WPXInputStream * GSFInputStream::getDocumentOLEStream()

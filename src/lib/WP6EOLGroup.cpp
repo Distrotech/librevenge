@@ -62,14 +62,14 @@ void WP6EOLGroup::_readContents(WPXInputStream *input)
 	WPD_DEBUG_MSG(("WordPerfect: EOL Group: Reading Embedded Sub-Function Data\n"));
 	guint16 sizeDeletableSubFunctionData;
 	guint16 startPosition = input->tell();
-	sizeDeletableSubFunctionData = gsf_le_read_guint16(input);		
+	sizeDeletableSubFunctionData = readU16(input);		
 	WPD_DEBUG_MSG(("WordPerfect: EOL Group: Size of Deletable Sub-Function Data: %ld,  Size of Deletable and Non-deletable sub-function data: %ld\n", (long) sizeDeletableSubFunctionData, getSizeNonDeletable()));
 	input->seek(sizeDeletableSubFunctionData, WPX_SEEK_CUR);
 	while (input->tell() < (startPosition + getSizeNonDeletable()))
 	{
 		guint8 byte;
 		guint16 numBytesToSkip = 0;
-		byte = gsf_le_read_guint8(input);
+		byte = readU8(input);
 		gsf_off_t startPosition2 = input->tell();
 		switch (byte)
 		{
@@ -79,7 +79,7 @@ void WP6EOLGroup::_readContents(WPXInputStream *input)
 				break;
 			case WP6_EOL_GROUP_CELL_FORMULA:
 				guint16 embeddedSubGroupSize;
-				embeddedSubGroupSize = gsf_le_read_guint16(input);
+				embeddedSubGroupSize = readU16(input);
 				WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_FORMULA (length: %ld)\n", 
 						   (long) embeddedSubGroupSize));
 				numBytesToSkip = embeddedSubGroupSize;
@@ -101,8 +101,8 @@ void WP6EOLGroup::_readContents(WPXInputStream *input)
 				numBytesToSkip = WP6_EOL_GROUP_CELL_SPANNING_INFORMATION_SIZE;
 				guint8 numCellsSpannedHorizontally;
 				guint8 numCellsSpannedVertically;
-				numCellsSpannedHorizontally = gsf_le_read_guint8(input);
-				numCellsSpannedVertically = gsf_le_read_guint8(input);
+				numCellsSpannedHorizontally = readU8(input);
+				numCellsSpannedVertically = readU8(input);
 				WPD_DEBUG_MSG(("WordPerfect: num cells spanned (h:%ld, v:%ld)\n", 
 						   numCellsSpannedHorizontally, numCellsSpannedVertically));
 				if (numCellsSpannedHorizontally >= 128)
@@ -120,14 +120,14 @@ void WP6EOLGroup::_readContents(WPXInputStream *input)
 				guint8 fR, fG, fB, fS;
 				guint8 bR, bG, bB, bS;
 			
-				fR = gsf_le_read_guint8(input);
-				fG = gsf_le_read_guint8(input);
-				fB = gsf_le_read_guint8(input);
-				fS = gsf_le_read_guint8(input);
-				bR = gsf_le_read_guint8(input);
-				bG = gsf_le_read_guint8(input);
-				bB = gsf_le_read_guint8(input);
-				bS = gsf_le_read_guint8(input);
+				fR = readU8(input);
+				fG = readU8(input);
+				fB = readU8(input);
+				fS = readU8(input);
+				bR = readU8(input);
+				bG = readU8(input);
+				bB = readU8(input);
+				bS = readU8(input);
 			
 				m_cellFgColor = new RGBSColor(fR,fG,fB,fS);
 				m_cellBgColor = new RGBSColor(bR,bG,bB,bS);
@@ -150,7 +150,7 @@ void WP6EOLGroup::_readContents(WPXInputStream *input)
 			case WP6_EOL_GROUP_CELL_PREFIX_FLAG:
 				WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_PREFIX_FLAG\n"));	
 				numBytesToSkip = WP6_EOL_GROUP_CELL_PREFIX_FLAG_SIZE;
-				m_cellBorders = gsf_le_read_guint8(input);
+				m_cellBorders = readU8(input);
 				break;
 			case WP6_EOL_GROUP_CELL_RECALCULATION_ERROR_NUMBER:
 				WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_RECALCULATION_ERROR_NUMBER\n"));

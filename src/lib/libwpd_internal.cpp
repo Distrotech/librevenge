@@ -26,23 +26,23 @@
 #include "WPXStream.h"
 #include <gsf/gsf-utils.h>
 
-guint8 gsf_le_read_guint8(WPXInputStream *input)
+guint8 readU8(WPXInputStream *input)
 {
 	return GSF_LE_GET_GUINT8(input->read(sizeof(guint8)));
 }
 
-gint8 gsf_le_read_gint8(WPXInputStream *input)
+gint8 read8(WPXInputStream *input)
 {
-	return (gint8)input->read(sizeof(gint8));
+	return (gint8)*(input->read(sizeof(gint8)));
 }
 
-guint16 gsf_le_read_guint16(WPXInputStream *input)
+guint16 readU16(WPXInputStream *input)
 {
 	guint16 val = *(guint16 const *)input->read(sizeof(guint16));
 	return GSF_LE_GET_GUINT16(&val);
 }
 
-guint32 gsf_le_read_guint32(WPXInputStream *input)
+guint32 readU32(WPXInputStream *input)
 {
 	guint32 val = *(guint32 const *)input->read(sizeof(guint32));
 	return GSF_LE_GET_GUINT32(&val);

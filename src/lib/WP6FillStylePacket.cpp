@@ -46,23 +46,23 @@ const int WP6_FILL_STYLE_PACKET_SKIPABLE_DATA_AFTER_FILL_NAME = 3;
 void WP6FillStylePacket::_readContents(WPXInputStream *input)
 {
 	/* skip a whole bunch of useless crap */
-	guint16 numChildPrefixIDs = gsf_le_read_guint16(input);
+	guint16 numChildPrefixIDs = readU16(input);
 	input->seek(sizeof(guint16)*numChildPrefixIDs, WPX_SEEK_CUR);
 	input->seek(WP6_FILL_STYLE_PACKET_SKIPABLE_DATA_AFTER_PREFIX_PACKETS, WPX_SEEK_CUR);
-	gint16 fillNameLength = gsf_le_read_guint16(input);
+	gint16 fillNameLength = readU16(input);
 	if (fillNameLength > 0)
 		input->seek(fillNameLength*sizeof(guint8), WPX_SEEK_CUR);
 	input->seek(WP6_FILL_STYLE_PACKET_SKIPABLE_DATA_AFTER_FILL_NAME, WPX_SEEK_CUR);
 
 	/* now we can finally grab the meat */
-	m_fgColor.m_r = gsf_le_read_guint8(input);
-	m_fgColor.m_g = gsf_le_read_guint8(input);
-	m_fgColor.m_b = gsf_le_read_guint8(input);
-	m_fgColor.m_s = gsf_le_read_guint8(input);
-	m_bgColor.m_r = gsf_le_read_guint8(input);
-	m_bgColor.m_g = gsf_le_read_guint8(input);
-	m_bgColor.m_b = gsf_le_read_guint8(input);
-	m_bgColor.m_s = gsf_le_read_guint8(input);
+	m_fgColor.m_r = readU8(input);
+	m_fgColor.m_g = readU8(input);
+	m_fgColor.m_b = readU8(input);
+	m_fgColor.m_s = readU8(input);
+	m_bgColor.m_r = readU8(input);
+	m_bgColor.m_g = readU8(input);
+	m_bgColor.m_b = readU8(input);
+	m_bgColor.m_s = readU8(input);
 	WPD_DEBUG_MSG(("WordPerfect: Fill Prefix Packet FG Color (%i, %i, %i, %i) BG Color (%i, %i, %i, %i)\n",
 		       m_fgColor.m_r, m_fgColor.m_g, m_fgColor.m_b, m_fgColor.m_s,
 		       m_bgColor.m_r, m_bgColor.m_g, m_bgColor.m_b, m_bgColor.m_s));

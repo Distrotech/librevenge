@@ -35,8 +35,8 @@ WP6UndoGroup::WP6UndoGroup(WPXInputStream *input, guint8 groupID)
 
 void WP6UndoGroup::_readContents(WPXInputStream *input)
 {
-	m_undoType = gsf_le_read_guint8(input);
-	m_undoLevel = gsf_le_read_guint16(input);
+	m_undoType = readU8(input);
+	m_undoLevel = readU16(input);
 }
 
 void WP6UndoGroup::parse(WP6HLListener *listener)

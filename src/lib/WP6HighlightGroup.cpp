@@ -36,10 +36,10 @@ WP6HighlightGroup::WP6HighlightGroup(WPXInputStream *input, guint8 groupID)
 
 void WP6HighlightGroup::_readContents(WPXInputStream *input)
 {
-	m_color.m_r = gsf_le_read_guint8(input);
-	m_color.m_g = gsf_le_read_guint8(input);
-	m_color.m_b = gsf_le_read_guint8(input);
-	m_color.m_s = gsf_le_read_guint8(input);
+	m_color.m_r = readU8(input);
+	m_color.m_g = readU8(input);
+	m_color.m_b = readU8(input);
+	m_color.m_s = readU8(input);
 }
 
 WP6HighlightOnGroup::WP6HighlightOnGroup(WPXInputStream *input, guint8 groupID)

@@ -6,19 +6,20 @@ WPXMemoryInputStream::WPXMemoryInputStream(guint8 *data, size_t size) :
 	WPXInputStream(false),
 	m_offset(0),
 	m_data(data),
-	m_size(size)
+	m_size(size),
+	m_tmpBuf(NULL)
 {
 }
 
 WPXMemoryInputStream::~WPXMemoryInputStream()
 {
-	DELETEP(m_tmpBuf);
-	DELETEP(m_data);
+	delete [] m_tmpBuf;
+	delete [] m_data;
 }
 
 const guint8 * WPXMemoryInputStream::read(size_t numBytes)
 {
-	DELETEP(m_tmpBuf);
+	delete [] m_tmpBuf;
 	int numBytesToRead;
 
 	if ((m_offset+numBytes) < m_size)

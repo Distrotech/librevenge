@@ -38,7 +38,7 @@ WP6DisplayNumberReferenceGroup::WP6DisplayNumberReferenceGroup(WPXInputStream *i
 void WP6DisplayNumberReferenceGroup::_readContents(WPXInputStream *input)
 {
 	if (!(getSubGroup() % 2) || getSubGroup() == 0)
-		m_levelNumberToDisplay = gsf_le_read_guint8(input);
+		m_levelNumberToDisplay = readU8(input);
 }
 
 void WP6DisplayNumberReferenceGroup::parse(WP6HLListener *listener)

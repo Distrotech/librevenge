@@ -29,8 +29,8 @@
 
 WP6StyleGroup_GlobalOnSubGroup::WP6StyleGroup_GlobalOnSubGroup(WPXInputStream *input)
 {
-	m_hash = gsf_le_read_guint16(input);
-	m_systemStyleNumber = gsf_le_read_guint8(input);
+	m_hash = readU16(input);
+	m_systemStyleNumber = readU8(input);
 }
 
 void WP6StyleGroup_GlobalOnSubGroup::parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const

@@ -70,13 +70,13 @@ int main(int argc, char *argv[])
 	GError   *err;
 	GsfInput * input = GSF_INPUT(gsf_input_stdio_new (file, &err));
 	if (input == NULL) 
-		{
-			g_return_val_if_fail (err != NULL, 1);
-			
-			g_warning ("'%s' error: %s", file, err->message);
-			g_error_free (err);
-			return 1;
-		}
+	{
+		g_return_val_if_fail (err != NULL, 1);
+		
+		g_warning ("'%s' error: %s", file, err->message);
+		g_error_free (err);
+		return 1;
+	}
 
 	GSFInputStream *gsfInput = new GSFInputStream(input);
 

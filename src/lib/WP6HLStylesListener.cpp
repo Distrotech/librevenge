@@ -38,7 +38,8 @@ WP6HLStylesListener::WP6HLStylesListener(vector<WPXPageSpan *> *pageList, vector
 	m_tableList(tableList), 
 	m_currentPageHasContent(false),
 	m_tempMarginLeft(1.0f),
-	m_tempMarginRight(1.0f)
+	m_tempMarginRight(1.0f),
+	m_isTableDefined(false)
 {
 }
 
@@ -138,6 +139,8 @@ void WP6HLStylesListener::headerFooterGroup(const guint8 headerFooterType, const
 			       headerFooterType, occurenceBits, textPID));
 		if (headerFooterType <= WP6_HEADER_FOOTER_GROUP_FOOTER_B) // ignore watermarks for now
 			m_currentPage->setHeaderFooter(headerFooterType, occurenceBits, textPID);
+
+		_handleSubDocument(textPID, true);
 	}
 }
 
@@ -157,13 +160,34 @@ void WP6HLStylesListener::suppressPageCharacteristics(const guint8 suppressCode)
 	}
 }
 
-void WP6HLStylesListener::startTable()
+void WP6HLStylesListener::defineTable(guint8 position, guint16 leftOffset)
 {
 	if (!isUndoOn()) 
 	{			
 		m_currentPageHasContent = true;
 		m_currentTable = new WPXTable();
 		m_tableList->push_back(m_currentTable);
+		m_isTableDefined = true;
+	}
+}
+
+void WP6HLStylesListener::startTable()
+{
+	if (!isUndoOn() && !m_isTableDefined) 
+	{			
+		m_currentPageHasContent = true;
+		m_currentTable = new WPXTable();
+		m_tableList->push_back(m_currentTable);
+	}
+
+	m_isTableDefined = false;
+}
+
+void WP6HLStylesListener::endTable()
+{
+	if (!isUndoOn())
+	{
+		m_isTableDefined = false;
 	}
 }
 
@@ -177,6 +201,7 @@ void WP6HLStylesListener::insertRow()
 }
 
 void WP6HLStylesListener::insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove, 
+
 				  const guint8 borderBits, 
 				  const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
 {
@@ -184,5 +209,27 @@ void WP6HLStylesListener::insertCell(const guint8 colSpan, const guint8 rowSpan,
 	{
 		m_currentPageHasContent = true;
 		m_currentTable->insertCell(colSpan, rowSpan, boundFromLeft, boundFromAbove, borderBits);
+	}
+}
+
+void WP6HLStylesListener::noteOn(const guint16 textPID)
+{
+	if (!isUndoOn()) 
+	{
+		m_currentPageHasContent = true; 		
+		_handleSubDocument(textPID, false);
+	}
+}
+
+void WP6HLStylesListener::_handleSubDocument(guint16 textPID, const bool isHeaderFooter)
+{
+	// We don't want to actual insert anything in the case of a sub-document, but we
+	// do want to capture whatever table-related information is within it..
+	if (!isUndoOn()) 
+	{
+		// FIXME: save (some of?) our old parsing state on our "stack"
+		if (textPID)
+			WP6LLListener::getPrefixDataPacket(textPID)->parse(this);
+		// FIXME: restore (some of?) our old parsing state on our "stack"
 	}
 }

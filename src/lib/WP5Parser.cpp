@@ -59,7 +59,7 @@ void WP5Parser::parseDocument(WPXInputStream *input, WP5HLListener *listener)
 	while (!input->atEOS())
 	{
 		guint8 readVal;
-		readVal = gsf_le_read_guint8(input);
+		readVal = readU8(input);
 		
 		if (readVal == 0 || readVal == 0x7F || readVal == 0xFF)
 		{

@@ -47,26 +47,26 @@ WP6FontDescriptorPacket::~WP6FontDescriptorPacket()
 void WP6FontDescriptorPacket::_readContents(WPXInputStream *input)
 {
    // short sized characteristics
-   m_characterWidth = gsf_le_read_guint16(input);
-   m_ascenderHeight = gsf_le_read_guint16(input);
-   m_xHeight = gsf_le_read_guint16(input);
-   m_descenderHeight = gsf_le_read_guint16(input);
-   m_italicsAdjust = gsf_le_read_guint16(input);
+   m_characterWidth = readU16(input);
+   m_ascenderHeight = readU16(input);
+   m_xHeight = readU16(input);
+   m_descenderHeight = readU16(input);
+   m_italicsAdjust = readU16(input);
    // byte sized characteristics
-   m_primaryFamilyMemberId = gsf_le_read_guint8(input);
-   m_primaryFamilyId = gsf_le_read_guint8(input);
-   m_scriptingSystem = gsf_le_read_guint8(input);
-   m_primaryCharacterSet = gsf_le_read_guint8(input);
-   m_width = gsf_le_read_guint8(input);
-   m_weight = gsf_le_read_guint8(input);
-   m_attributes = gsf_le_read_guint8(input);
-   m_generalCharacteristics = gsf_le_read_guint8(input);
-   m_classification = gsf_le_read_guint8(input);
-   m_fill = gsf_le_read_guint8(input);
-   m_fontType = gsf_le_read_guint8(input);
-   m_fontSourceFileType = gsf_le_read_guint8(input);
+   m_primaryFamilyMemberId = readU8(input);
+   m_primaryFamilyId = readU8(input);
+   m_scriptingSystem = readU8(input);
+   m_primaryCharacterSet = readU8(input);
+   m_width = readU8(input);
+   m_weight = readU8(input);
+   m_attributes = readU8(input);
+   m_generalCharacteristics = readU8(input);
+   m_classification = readU8(input);
+   m_fill = readU8(input);
+   m_fontType = readU8(input);
+   m_fontSourceFileType = readU8(input);
 
-   m_fontNameLength = gsf_le_read_guint16(input); 
+   m_fontNameLength = readU16(input); 
 
    // TODO: re-do sanity checking
    //if(m_fontNameLength < WP_FONT_NAME_MAX_LENGTH)
@@ -90,7 +90,7 @@ void WP6FontDescriptorPacket::_readContents(WPXInputStream *input)
 			   guint8 character;
 			   int len;
 			   const guint16 *chars;
-			   guint16 charWord = gsf_le_read_guint16(input);
+			   guint16 charWord = readU16(input);
 
 			   characterSet = (charWord & 0xFF00) >> 8;
 			   character = (charWord & 0xFF);

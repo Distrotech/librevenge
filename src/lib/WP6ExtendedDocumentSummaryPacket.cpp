@@ -45,7 +45,7 @@ void WP6ExtendedDocumentSummaryPacket::_readContents(WPXInputStream *input)
 	// we have to use glib's allocation function because libgsf disposes of the data
 	guint8 *streamData = new guint8[m_dataSize];
 	for(int i=0; i<m_dataSize; i++)
-		streamData[i] = gsf_le_read_guint8(input);
+		streamData[i] = readU8(input);
 	
 	m_stream = new WPXMemoryInputStream(streamData, m_dataSize);
 }
@@ -57,14 +57,14 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6HLListener *listener) const
 
 	for (int i=0; i < m_dataSize; i+=groupLength)
 	{
-		groupLength = gsf_le_read_guint16(m_stream);
-		guint16 tagID = gsf_le_read_guint16(m_stream);
-		guint16 flags = gsf_le_read_guint16(m_stream);
+		groupLength = readU16(m_stream);
+		guint16 tagID = readU16(m_stream);
+		guint16 flags = readU16(m_stream);
 
 		UCSString name;
-		for (guint16 wpChar = gsf_le_read_guint16(m_stream);
+		for (guint16 wpChar = readU16(m_stream);
 		     wpChar != 0; 
-		     wpChar = gsf_le_read_guint16(m_stream))
+		     wpChar = readU16(m_stream))
 		{
 			guint8 character = (wpChar & 0xFF);
 			guint8 characterSet = (wpChar & 0xFF00) >> 8;
@@ -79,23 +79,23 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6HLListener *listener) const
 		if (tagID == WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_CREATION_DATE ||
 		    tagID == WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_DATE_COMPLETED)
 		{
-			guint16 year = gsf_le_read_guint16(m_stream);
-			guint8 month = gsf_le_read_guint8(m_stream);
-			guint8 day = gsf_le_read_guint8(m_stream);
-			guint8 hour = gsf_le_read_guint8(m_stream);
-			guint8 minute = gsf_le_read_guint8(m_stream);
-			guint8 second = gsf_le_read_guint8(m_stream);
-			guint8 dayOfWeek = gsf_le_read_guint8(m_stream);
-			guint8 timeZone = gsf_le_read_guint8(m_stream);
-			guint8 unused = gsf_le_read_guint8(m_stream);
+			guint16 year = readU16(m_stream);
+			guint8 month = readU8(m_stream);
+			guint8 day = readU8(m_stream);
+			guint8 hour = readU8(m_stream);
+			guint8 minute = readU8(m_stream);
+			guint8 second = readU8(m_stream);
+			guint8 dayOfWeek = readU8(m_stream);
+			guint8 timeZone = readU8(m_stream);
+			guint8 unused = readU8(m_stream);
 			listener->setDate(year, month, day, hour, minute, second, dayOfWeek, timeZone, unused);
 		}
 		else
 		{
 			UCSString data;
-			for (guint16 wpChar = gsf_le_read_guint16(m_stream);
+			for (guint16 wpChar = readU16(m_stream);
 			     wpChar != 0; 
-			     wpChar = gsf_le_read_guint16(m_stream))
+			     wpChar = readU16(m_stream))
 			{				
 			guint8 character = (wpChar & 0xFF);
 			guint8 characterSet = (wpChar & 0xFF00) >> 8;

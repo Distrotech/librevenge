@@ -202,15 +202,10 @@ void WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerImpl)
 				DELETEP(parser);
 			}
 		}
-		
-		if (isDocumentOLE)
-			DELETEP(document);
 	}
 	catch (FileException)
 	{
 		DELETEP(parser);
-		if (document != NULL && isDocumentOLE)
-			g_object_unref(G_OBJECT(document));
 		throw FileException(); 
 	}
 }

@@ -44,13 +44,13 @@ WP6PrefixIndice::WP6PrefixIndice(WPXInputStream * input, int id)
 
 void WP6PrefixIndice::_read(WPXInputStream *input)
 {
-	m_flags = gsf_le_read_guint8(input);
-	m_type = gsf_le_read_guint8(input);
+	m_flags = readU8(input);
+	m_type = readU8(input);
 
-	m_useCount = gsf_le_read_guint16(input);
-	m_hideCount = gsf_le_read_guint16(input);
-	m_dataSize = gsf_le_read_guint32(input);
-	m_dataOffset = gsf_le_read_guint32(input);
+	m_useCount = readU16(input);
+	m_hideCount = readU16(input);
+	m_dataSize = readU32(input);
+	m_dataOffset = readU32(input);
 
 	WPD_DEBUG_MSG(("Prefix Packet (type: %i, data size: %i, data offset: %i)\n", m_type, m_dataSize, m_dataOffset));
 	

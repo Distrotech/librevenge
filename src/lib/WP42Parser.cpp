@@ -62,7 +62,7 @@ void WP42Parser::parseDocument(WPXInputStream *input, WP42HLListener *listener)
 	while (!input->atEOS())
 	{
 		guint8 readVal;
-		readVal = gsf_le_read_guint8(input);
+		readVal = readU8(input);
 		
 		if (readVal < (guint8)0x20)
 		{
