@@ -22,6 +22,8 @@
 /* "This product is not manufactured, approved, or supported by 
  * Corel Corporation or Corel Corporation Limited."
  */
+#include <string.h>
+
 #include "WP6FontDescriptorPacket.h"
 #include "libwpd_internal.h"
 
