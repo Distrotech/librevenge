@@ -187,8 +187,8 @@ void WP6OutlineDefinition::_updateNumberingMethods(const WP6OutlineLocation outl
 }
 
 _WP6ParsingState::_WP6ParsingState(WPXTableList * tableList, int nextTableIndice) :
-	m_paragraphSpacingAfterAbsolute(0.0f),
-	m_paragraphSpacingAfterRelative(1.0f),
+	m_paragraphMarginBottomAbsolute(0.0f),
+	m_paragraphMarginBottomRelative(1.0f),
 	m_tempParagraphJustification(0),
 
 	m_numRemovedParagraphBreaks(0),
@@ -551,9 +551,9 @@ void WP6HLContentListener::fontChange(const uint16_t matchedFontPointSize, const
 		m_ps->m_fontSize = rint((double)((((float)matchedFontPointSize)/100.0f)*2.0f));
 		// We compute the real space after paragraph in inches using the size of the font and relative spacing.
 		// We have to recompute this every change of fontSize.
-		m_ps->m_paragraphSpacingAfter =
-			(float)(((m_parseState->m_paragraphSpacingAfterRelative - 1.0f)*m_ps->m_fontSize)/72.0f) +
-			m_parseState->m_paragraphSpacingAfterAbsolute;
+		m_ps->m_paragraphMarginBottom =
+			(float)(((m_parseState->m_paragraphMarginBottomRelative - 1.0f)*m_ps->m_fontSize)/72.0f) +
+			m_parseState->m_paragraphMarginBottomAbsolute;
 		const WP6FontDescriptorPacket *fontDescriptorPacket = NULL;
 		if (fontDescriptorPacket = dynamic_cast<const WP6FontDescriptorPacket *>(WP6LLListener::getPrefixDataPacket(fontPID))) {
 				m_ps->m_fontName->sprintf("%s", fontDescriptorPacket->getFontName());
@@ -640,14 +640,14 @@ void WP6HLContentListener::spacingAfterParagraphChange(const float spacingRelati
 {
 	if (!isUndoOn())
 	{
-		m_parseState->m_paragraphSpacingAfterRelative = spacingRelative;
-		m_parseState->m_paragraphSpacingAfterAbsolute = spacingAbsolute;
+		m_parseState->m_paragraphMarginBottomRelative = spacingRelative;
+		m_parseState->m_paragraphMarginBottomAbsolute = spacingAbsolute;
 		// We compute the real space after paragraph in inches using the size of the font and relative spacing.
 		// We have to recompute this every change of fontSize. That is why we keep the two components in
 		// m_parsingState and the following formula is to be found in the fontChange(...) function as well.
-		m_ps->m_paragraphSpacingAfter =
-			(float)(((m_parseState->m_paragraphSpacingAfterRelative - 1.0f)*m_ps->m_fontSize)/72.0f) +
-			m_parseState->m_paragraphSpacingAfterAbsolute;
+		m_ps->m_paragraphMarginBottom =
+			(float)(((m_parseState->m_paragraphMarginBottomRelative - 1.0f)*m_ps->m_fontSize)/72.0f) +
+			m_parseState->m_paragraphMarginBottomAbsolute;
 		// Variable spacingAfterParagraphRelative already contains the height of the space in inches
 	}
 }
@@ -1388,10 +1388,10 @@ void WP6HLContentListener::_openListElement()
 	propList.insert("justification", WPXPropertyFactory::newIntProp(m_ps->m_paragraphJustification));
 	propList.insert("margin-left", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphMarginLeft));
 	propList.insert("margin-right", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphMarginRight));
+	propList.insert("margin-top", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphMarginTop));
+	propList.insert("margin-bottom", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphMarginBottom));
 	propList.insert("text-indent", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphTextIndent));
 	propList.insert("line-spacing", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphLineSpacing));
-	propList.insert("space-before", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphSpacingBefore));
-	propList.insert("space-after", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphSpacingAfter));
 
 	WPXTabStop tmp_tabStop;
 	vector<WPXTabStop> tabStops;
@@ -1446,15 +1446,7 @@ void WP6HLContentListener::_openParagraph()
 	}
 
 	WPXPropertyList propList;
-	propList.insert("justification", WPXPropertyFactory::newIntProp(paragraphJustification));
-	propList.insert("margin-left", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphMarginLeft));
-	propList.insert("margin-right", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphMarginRight));
-	propList.insert("text-indent", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphTextIndent));
-	propList.insert("line-spacing", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphLineSpacing));
-	propList.insert("space-before", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphSpacingBefore));
-	propList.insert("space-after", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphSpacingAfter));
-	propList.insert("column-break", WPXPropertyFactory::newIntProp(m_ps->m_isParagraphColumnBreak));
-	propList.insert("page-break", WPXPropertyFactory::newIntProp(m_ps->m_isParagraphPageBreak));
+	_appendParagraphProperties(propList, paragraphJustification);
 
 	m_listenerImpl->openParagraph(propList, tabStops);
 

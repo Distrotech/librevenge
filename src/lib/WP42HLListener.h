@@ -69,7 +69,6 @@ public:
 protected:
 	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter, WPXTableList *tableList) {}
 
-	void _openParagraph();
 private:
 	void _flushText(const bool fakeText=false);
 

@@ -76,8 +76,8 @@ struct _WP6ParsingState
 	UCSString m_textAfterNumber;
 
 	uint8_t m_tempParagraphJustification; // TODO: remove this one after the tabs are properly implemented
-	float m_paragraphSpacingAfterRelative;
-	float m_paragraphSpacingAfterAbsolute;
+	float m_paragraphMarginBottomRelative;
+	float m_paragraphMarginBottomAbsolute;
 
 	int m_numRemovedParagraphBreaks;
 

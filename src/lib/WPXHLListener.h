@@ -118,6 +118,8 @@ struct _WPXParsingState
 	float m_pageMarginRight;
 	float m_paragraphMarginLeft;  // resulting paragraph margin that is one of the paragraph
 	float m_paragraphMarginRight; // properties
+	float m_paragraphMarginTop;
+	float m_paragraphMarginBottom;
 	float m_leftMarginByPageMarginChange;  // part of the margin due to the PAGE margin change
 	float m_rightMarginByPageMarginChange; // inside a page that already has content.
 	float m_leftMarginByParagraphMarginChange;  // part of the margin due to the PARAGRAPH
@@ -129,9 +131,6 @@ struct _WPXParsingState
 	float m_textIndentByParagraphIndentChange; // part of the indent due to the PARAGRAPH indent (WP6???)
 	float m_textIndentByTabs; // part of the indent due to the "Back Tab"
 	
-	float m_paragraphSpacingAfter;
-	float m_paragraphSpacingBefore;
-
 /*	int32_t m_currentRow;
 	int32_t m_currentColumn;
 
@@ -170,7 +169,6 @@ public:
 protected:
 	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter, WPXTableList *tableList) = 0;
 	virtual void _flushText(const bool fakeText=false) = 0;
-	virtual void _openParagraph() = 0;
 
 	void _openSection();
 	void _closeSection();
@@ -178,7 +176,8 @@ protected:
 	void _openPageSpan();
 	void _closePageSpan();
 
-	// void _openParagraph();
+	void _appendParagraphProperties(WPXPropertyList &propList, int justification);
+	virtual void _openParagraph();
 	void _closeParagraph();
 
 	void _openSpan();

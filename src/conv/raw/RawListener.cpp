@@ -155,8 +155,8 @@ void RawListenerImpl::openParagraph(const WPXPropertyList &propList, const vecto
 {
 	_U(("openParagraph(paragraphJustification: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, textIndent: %.4f, lineSpacing: %.4f, spacingBeforeParagraph: %.4f, spacingAfterParagraph: %.4f, isColumnBreak: %s, isPageBreak: %s, TODO: tab-stops.)\n",
 	    propList["justification"]->getInt(), propList["margin-left"]->getFloat(), propList["margin-right"]->getFloat(),
-	    propList["text-indent"]->getFloat(), propList["line-spacing"]->getFloat(), propList["space-before"]->getFloat(),
-	    propList["space-after"]->getFloat(), (propList["column-break"]->getInt() ? "true" : "false"),
+	    propList["text-indent"]->getFloat(), propList["line-spacing"]->getFloat(), propList["margin-top"]->getFloat(),
+	    propList["margin-bottom"]->getFloat(), (propList["column-break"]->getInt() ? "true" : "false"),
 	    (propList["page-break"]->getInt() ? "true" : "false")),
 	   LC_OPEN_PARAGRAPH);
 }
@@ -200,7 +200,7 @@ void RawListenerImpl::openSection(const WPXPropertyList &propList, const vector<
 	else
 		sColumns.sprintf(" SINGLE COLUMN");
 	_U(("openSection(numColumns: %u, columns:%s, spaceAfter: %.4f)\n", propList["num-columns"]->getInt(), sColumns.getUTF8(), 
-	    propList["space-after"]->getFloat()),
+	    propList["margin-bottom"]->getFloat()),
 		LC_OPEN_SECTION);
 }
 
@@ -268,8 +268,8 @@ void RawListenerImpl::openListElement(const WPXPropertyList &propList, const vec
 {
 	_U(("openListElement(paragraphJustification: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, textIndent: %.4f, lineSpacing: %.4f, spacingBeforeParagraph: %.4f, spacingAfterParagraph: %.4f, TODO: tab-stops.)\n",
 	    propList["justification"]->getInt(), propList["margin-left"]->getFloat(), propList["margin-right"]->getFloat(),
-	    propList["text-indent"]->getFloat(), propList["line-spacing"]->getFloat(), propList["space-before"]->getFloat(),
-	    propList["space-after"]->getFloat()),
+	    propList["text-indent"]->getFloat(), propList["line-spacing"]->getFloat(), propList["margin-top"]->getFloat(),
+	    propList["margin-bottom"]->getFloat()),
 	   LC_OPEN_LIST_ELEMENT);
 }
 

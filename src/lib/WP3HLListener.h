@@ -77,8 +77,6 @@ protected:
 	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter, WPXTableList *tableList) {}
 
 private:
-	void _openParagraph();
-
 	void _flushText(const bool fakeText=false);
 
 	UCSString m_textBuffer;

@@ -78,6 +78,8 @@ _WPXParsingState::_WPXParsingState(bool sectionAttributesChanged) :
 
 	m_paragraphMarginLeft(0.0f),
 	m_paragraphMarginRight(0.0f),
+	m_paragraphMarginTop(0.0f),
+	m_paragraphMarginBottom(0.0f),
 	m_leftMarginByPageMarginChange(0.0f),
 	m_rightMarginByPageMarginChange(0.0f),
 	m_leftMarginByParagraphMarginChange(0.0f),
@@ -88,8 +90,6 @@ _WPXParsingState::_WPXParsingState(bool sectionAttributesChanged) :
 	m_paragraphTextIndent(0.0f),
 	m_textIndentByParagraphIndentChange(0.0f),
 	m_textIndentByTabs(0.0f),
-	m_paragraphSpacingAfter(0.0f),
-	m_paragraphSpacingBefore(0.0f),
 /*	m_currentRow(-1),
 	m_currentColumn(-1),
 
@@ -146,9 +146,9 @@ void WPXHLListener::_openSection()
 	propList.insert("num-columns", WPXPropertyFactory::newIntProp(m_ps->m_numColumns));
 
 	if (m_ps->m_numColumns > 1)
-		propList.insert("space-after", WPXPropertyFactory::newFloatProp(1.0f));
+		propList.insert("margin-bottom", WPXPropertyFactory::newFloatProp(1.0f));
 	else
-		propList.insert("space-after", WPXPropertyFactory::newFloatProp(0.0f));
+		propList.insert("margin-bottom", WPXPropertyFactory::newFloatProp(0.0f));
 
 	m_listenerImpl->openSection(propList, m_ps->m_textColumns);
 
@@ -255,6 +255,59 @@ void WPXHLListener::_closePageSpan()
 		m_listenerImpl->closePageSpan();
 		m_ps->m_isPageSpanOpened = false;
 	}
+}
+
+void WPXHLListener::_openParagraph()
+{
+	_closeParagraph();
+
+	WPXTabStop tmp_tabStop;
+	vector<WPXTabStop> tabStops;
+	for (int i=0; i<m_ps->m_tabStops.size(); i++)
+	{
+		tmp_tabStop = m_ps->m_tabStops[i];
+		if (m_ps->m_isTabPositionRelative)
+			tmp_tabStop.m_position -= m_ps->m_leftMarginByTabs;
+		else
+			tmp_tabStop.m_position -= m_ps->m_paragraphMarginLeft + m_ps->m_pageMarginLeft;
+		/* TODO: fix situations where we have several columns or are inside a table and the tab stop
+		 *       positions are absolute (relative to the paper edge). In this case, they have to be
+		 *       computed for each column or each cell in table. (Fridrich) */
+		tabStops.push_back(tmp_tabStop);
+	}
+	WPXPropertyList propList;
+	_appendParagraphProperties(propList, 0);
+
+	m_listenerImpl->openParagraph(propList, tabStops);
+
+	if (m_ps->m_numDeferredParagraphBreaks > 0)
+		m_ps->m_numDeferredParagraphBreaks--;
+
+	m_ps->m_isParagraphColumnBreak = false;
+	m_ps->m_isParagraphPageBreak = false;
+	m_ps->m_isParagraphOpened = true;
+	m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange + m_ps->m_leftMarginByParagraphMarginChange;
+	m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange + m_ps->m_rightMarginByParagraphMarginChange;
+	m_ps->m_leftMarginByTabs = 0.0f;
+	m_ps->m_rightMarginByTabs = 0.0f;
+	m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange;
+	m_ps->m_textIndentByTabs = 0.0f;	
+
+	_openSpan();
+}
+
+
+void WPXHLListener::_appendParagraphProperties(WPXPropertyList &propList, int justification)
+{
+	propList.insert("justification", WPXPropertyFactory::newIntProp(justification));
+	propList.insert("margin-left", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphMarginLeft));
+	propList.insert("margin-right", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphMarginRight));
+	propList.insert("margin-top", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphMarginTop));
+	propList.insert("margin-bottom", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphMarginBottom));
+	propList.insert("text-indent", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphTextIndent));
+	propList.insert("line-spacing", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphLineSpacing));
+	propList.insert("column-break", WPXPropertyFactory::newIntProp(m_ps->m_isParagraphColumnBreak));
+	propList.insert("page-break", WPXPropertyFactory::newIntProp(m_ps->m_isParagraphPageBreak));
 }
 
 void WPXHLListener::_closeParagraph()

@@ -271,15 +271,7 @@ void WP5HLListener::_openParagraph()
 	}
 	
 	WPXPropertyList propList;
-	propList.insert("justification", WPXPropertyFactory::newIntProp(m_ps->m_paragraphJustification));
-	propList.insert("margin-left", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphMarginLeft));
-	propList.insert("margin-right", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphMarginRight));
-	propList.insert("text-indent", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphTextIndent));
-	propList.insert("line-spacing", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphLineSpacing));
-	propList.insert("space-before", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphSpacingBefore));
-	propList.insert("space-after", WPXPropertyFactory::newFloatProp(m_ps->m_paragraphSpacingAfter));
-	propList.insert("column-break", WPXPropertyFactory::newIntProp(m_ps->m_isParagraphColumnBreak));
-	propList.insert("page-break", WPXPropertyFactory::newIntProp(m_ps->m_isParagraphPageBreak));
+	_appendParagraphProperties(propList, m_ps->m_paragraphJustification);
 	
 	m_listenerImpl->openParagraph(propList, tabStops);
 

@@ -50,28 +50,24 @@ HtmlListenerImpl::~HtmlListenerImpl()
 {
 }
 
-void HtmlListenerImpl::setDocumentMetaData(const UCSString &author, const UCSString &subject,
- 					 const UCSString &publisher, const UCSString &category,
- 					 const UCSString &keywords, const UCSString &language,
- 					 const UCSString &abstract, const UCSString &descriptiveName,
-					 const UCSString &descriptiveType)
+void HtmlListenerImpl::setDocumentMetaData(const WPXPropertyList &propList)
 {
-	if (author.getLen() > 0)
-		printf("<meta name=\"author\" content=\"%s\">\n", UTF8String(author).getUTF8());
-	if (subject.getLen() > 0)
-		printf("<meta name=\"subject\" content=\"%s\">\n", UTF8String(subject).getUTF8());
-	if (publisher.getLen() > 0)
-		printf("<meta name=\"publisher\" content=\"%s\">\n", UTF8String(publisher).getUTF8());
-	if (keywords.getLen() > 0)
-		printf("<meta name=\"keywords\" content=\"%s\">\n", UTF8String(keywords).getUTF8());
-	if (language.getLen() > 0)
-		printf("<meta name=\"language\" content=\"%s\">\n", UTF8String(language).getUTF8());
-	if (abstract.getLen() > 0)
-		printf("<meta name=\"abstract\" content=\"%s\">\n", UTF8String(abstract).getUTF8());
-	if (descriptiveName.getLen() > 0)
-		printf("<meta name=\"descriptive-name\" content=\"%s\">\n", UTF8String(descriptiveName).getUTF8());
-	if (descriptiveType.getLen() > 0)
-		printf("<meta name=\"descriptive-type\" content=\"%s\">\n", UTF8String(descriptiveType).getUTF8());
+	if (propList["author"])
+		printf("<meta name=\"author\" content=\"%s\">\n", propList["author"]->getStr().getUTF8());
+	if (propList["subject"])
+		printf("<meta name=\"subject\" content=\"%s\">\n", propList["subject"]->getStr().getUTF8());
+	if (propList["publisher"])
+		printf("<meta name=\"publisher\" content=\"%s\">\n", propList["publisher"]->getStr().getUTF8());
+	if (propList["keywords"])
+		printf("<meta name=\"keywords\" content=\"%s\">\n", propList["keywords"]->getStr().getUTF8());
+	if (propList["language"])
+		printf("<meta name=\"language\" content=\"%s\">\n", propList["language"]->getStr().getUTF8());
+	if (propList["abstract"])
+		printf("<meta name=\"abstract\" content=\"%s\">\n", propList["abstract"]->getStr().getUTF8());
+	if (propList["descriptive-name"])
+		printf("<meta name=\"descriptive-name\" content=\"%s\">\n", propList["descriptive-name"]->getStr().getUTF8());
+	if (propList["descriptive-type"])
+		printf("<meta name=\"descriptive-type\" content=\"%s\">\n", propList["descriptive-type"]->getStr().getUTF8());
 }
 
 void HtmlListenerImpl::startDocument()
@@ -91,13 +87,11 @@ void HtmlListenerImpl::endDocument()
 	printf("</html>\n");
 }
 
-void HtmlListenerImpl::openPageSpan(const int span, const bool isLastPageSpan,
-				    const float formLength, const float formWidth, const WPXFormOrientation orientation,
-				    const float marginLeft, const float marginRight,
-				    const float marginTop, const float marginBottom)
+void HtmlListenerImpl::openPageSpan(const WPXPropertyList &propList)
 {
-	printf("<page-span span:%i margin-left:%fin margin-right:%fin margin-top:%fin margin-bottom:%fin>\n", span,
-	       marginLeft, marginRight, marginTop, marginBottom);
+	printf("<page-span span:%i margin-left:%fin margin-right:%fin margin-top:%fin margin-bottom:%fin>\n", propList["span"]->getInt(),
+	       propList["margin-left"]->getFloat(), propList["margin-right"]->getFloat(), 
+	       propList["margin-top"]->getFloat(), propList["margin-bottom"]->getFloat());
 }
 
 void HtmlListenerImpl::closePageSpan()
@@ -105,9 +99,9 @@ void HtmlListenerImpl::closePageSpan()
 	printf("</page-span>\n");
 }
 
-void HtmlListenerImpl::openHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence)
+void HtmlListenerImpl::openHeaderFooter(const WPXPropertyList &propList)
 {
-	switch (headerFooterType)
+	switch ((WPXHeaderFooterType)propList["type"]->getInt())
 	{
 	case HEADER:
 		printf("<header>\n");
@@ -118,9 +112,9 @@ void HtmlListenerImpl::openHeaderFooter(const WPXHeaderFooterType headerFooterTy
 	}
 }
 
-void HtmlListenerImpl::closeHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence)
+void HtmlListenerImpl::closeHeaderFooter(const WPXPropertyList &propList)
 {
-	switch (headerFooterType)
+	switch  ((WPXHeaderFooterType)propList["type"]->getInt())
 	{
 	case HEADER:
 		printf("</header>\n");
@@ -131,23 +125,20 @@ void HtmlListenerImpl::closeHeaderFooter(const WPXHeaderFooterType headerFooterT
 	}
 }
 
-void HtmlListenerImpl::openParagraph(const uint8_t paragraphJustification, 
-				   const float marginLeftOffset, const float marginRightOffset, const float textIndent,
-				   const float lineSpacing, const float spacingBeforeParagraph, const float spacingAfterParagraph,
-				   const vector<WPXTabStop> &tabStops, const bool isColumnBreak, const bool isPageBreak)
+void HtmlListenerImpl::openParagraph(const WPXPropertyList &propList, const vector<WPXTabStop> &tabStops)
 {
 	printf("<p style=\"");
-	_appendParagraphJustification(paragraphJustification);
-	if (marginLeftOffset != 0.0f)
-		printf(" margin-left: %.4fin;", marginLeftOffset);
-	if (marginRightOffset != 0.0f)
-		printf(" margin-right: %.4fin;", marginRightOffset);
-	if (spacingBeforeParagraph != 0.0f)
-		printf(" margin-top: /.4in;", spacingBeforeParagraph);
-	if (spacingAfterParagraph != 0.0f)
-		printf(" margin-bottom: %.4fin;", spacingAfterParagraph);
-	if (lineSpacing != 1.0f)
-		printf(" line-height: %.2f%%;", lineSpacing*100.0f);
+	_appendParagraphJustification(propList["justification"]->getInt());
+	if (propList["margin-left"]->getFloat() != 0.0f)
+		printf(" margin-left: %.4fin;", propList["margin-left"]->getFloat());
+	if (propList["margin-right"]->getFloat() != 0.0f)
+		printf(" margin-right: %.4fin;", propList["margin-right"]->getFloat());
+	if (propList["margin-top"]->getFloat() != 0.0f)
+		printf(" margin-top: /.4in;", propList["margin-top"]->getFloat());
+	if (propList["margin-bottom"]->getFloat() != 0.0f)
+		printf(" margin-bottom: %.4fin;", propList["margin-bottom"]->getFloat());
+	if (propList["line-spacing"]->getFloat() != 1.0f)
+		printf(" line-height: %.2f%%;", propList["line-spacing"]->getFloat()*100.0f);
 	printf("\">");
 }
 
@@ -156,12 +147,11 @@ void HtmlListenerImpl::closeParagraph()
 	printf("</p>\n");
 }
 
-void HtmlListenerImpl::openSpan(uint32_t textAttributeBits, const char *fontName, const float fontSize,
-					const RGBSColor *fontColor, const RGBSColor *highlightColor)
+void HtmlListenerImpl::openSpan(const WPXPropertyList &propList, const RGBSColor *fontColor, const RGBSColor *highlightColor)
 {
-	printf("<span style=\"font-family: \'%s\'\">", fontName);
-	printf("<span style=\"font-size: %.1fpt\">", fontSize);
-	if (textAttributeBits & WPX_REDLINE_BIT)
+	printf("<span style=\"font-family: \'%s\'\">", propList["font-name"]->getStr().getUTF8());
+	printf("<span style=\"font-size: %.1fpt\">", propList["font-size"]->getFloat());
+	if (propList["text-attribute-bits"]->getInt() & WPX_REDLINE_BIT)
 		printf("<span style=\"color: #ff3333\">");
 	else
 		printf("<span style=\"color: #%.2x%.2x%.2x\">", _convertRGBStoRGB(*fontColor).m_r,
@@ -172,7 +162,7 @@ void HtmlListenerImpl::openSpan(uint32_t textAttributeBits, const char *fontName
 		_convertRGBStoRGB(*highlightColor).m_g, _convertRGBStoRGB(*highlightColor).m_b);
 		m_isHighlightColor = true;
 	}
-	_addTextAttributes(textAttributeBits);
+	_addTextAttributes(propList["text-attribute-bits"]->getInt());
 }
 
 void HtmlListenerImpl::closeSpan()
@@ -186,9 +176,9 @@ void HtmlListenerImpl::closeSpan()
 	}
 }
 
-void HtmlListenerImpl::openSection(const unsigned int numColumns, const vector<WPXColumnDefinition> &columns, const float spaceBefore)
+void HtmlListenerImpl::openSection(const WPXPropertyList &propList, const vector< WPXColumnDefinition> &columns)
 {
-	printf("<section columns:%i>\n", numColumns);
+	printf("<section columns:%i>\n", propList["num-columns"]->getInt());
 }
 
 void HtmlListenerImpl::closeSection()
@@ -212,7 +202,7 @@ void HtmlListenerImpl::insertText(const UCSString &text)
 	printf("%s", tempUTF8.getUTF8());
 }
 
-void HtmlListenerImpl::openOrderedListLevel(const int listID)
+void HtmlListenerImpl::openOrderedListLevel(const WPXPropertyList &propList)
 {
 	printf("<ol>\n");
 }
@@ -222,7 +212,7 @@ void HtmlListenerImpl::closeOrderedListLevel()
 	printf("</ol>\n");
 }
 
-void HtmlListenerImpl::openUnorderedListLevel(const int listID)
+void HtmlListenerImpl::openUnorderedListLevel(const WPXPropertyList &propList)
 {
 	printf("<ul>\n");
 }
@@ -233,23 +223,20 @@ void HtmlListenerImpl::closeUnorderedListLevel()
 }
 
 
-void HtmlListenerImpl::openListElement(const uint8_t paragraphJustification, 
-				     const float marginLeft, const float marginRight, const float textIndent,
-				     const float lineSpacing, const float spacingBeforeParagraph,
-				     const float spacingAfterParagraph, const vector<WPXTabStop> &tabStops)
+void HtmlListenerImpl::openListElement(const WPXPropertyList &propList, const vector<WPXTabStop> &tabStops)
 {
 	printf("<li style=\"");
-	_appendParagraphJustification(paragraphJustification);
-	if (marginLeft != 0.0f)
-		printf(" margin-left: %.4fin;", marginLeft);
-	if (marginRight != 0.0f)
-		printf(" margin-right: %.4fin;", marginRight);
-	if (spacingBeforeParagraph != 0.0f)
-		printf(" margin-top: /.4in;", spacingBeforeParagraph);
-	if (spacingAfterParagraph != 0.0f)
-		printf(" margin-bottom: %.4fin;", spacingAfterParagraph);
-	if (lineSpacing != 1.0f)
-		printf(" line-height: %.2f%%;", lineSpacing*100.0f);
+	_appendParagraphJustification(propList["justification"]->getInt());
+	if (propList["margin-left"]->getFloat() != 0.0f)
+		printf(" margin-left: %.4fin;", propList["margin-left"]->getFloat());
+	if (propList["margin-right"]->getFloat() != 0.0f)
+		printf(" margin-right: %.4fin;", propList["margin-right"]->getFloat());
+	if (propList["margin-top"]->getFloat() != 0.0f)
+		printf(" margin-top: %.4in;", propList["margin-top"]->getFloat());
+	if (propList["margin-bottom"]->getFloat() != 0.0f)
+		printf(" margin-bottom: %.4fin;", propList["margin-bottom"]->getFloat());
+	if (propList["line-spacing"]->getFloat() != 1.0f)
+		printf(" line-height: %.2f%%;", propList["line-spacing"]->getFloat()*100.0f);
 	printf("\">");
 }
 
@@ -258,9 +245,9 @@ void HtmlListenerImpl::closeListElement()
 	printf("</li>\n");
 }
 
-void HtmlListenerImpl::openFootnote(int number)
+void HtmlListenerImpl::openFootnote(const WPXPropertyList &propList)
 {
-	printf("<footnote num=\"%i\">\n", number);
+	printf("<footnote num=\"%i\">\n", propList["number"]->getInt());
 }
 
 void HtmlListenerImpl::closeFootnote()
@@ -268,9 +255,9 @@ void HtmlListenerImpl::closeFootnote()
 	printf("</footnote>\n");
 }
 
-void HtmlListenerImpl::openEndnote(int number)
+void HtmlListenerImpl::openEndnote(const WPXPropertyList &propList)
 {
-	printf("<endnote num=\"%i\">\n", number);
+	printf("<endnote num=\"%i\">\n", propList["number"]->getInt());
 }
 
 void HtmlListenerImpl::closeEndnote()
@@ -278,14 +265,13 @@ void HtmlListenerImpl::closeEndnote()
 	printf("</endnote>\n");
 }
 
-void HtmlListenerImpl::openTable(const uint8_t tablePositionBits, const float marginLeftOffset, const float marginRightOffset,
-				 const float leftOffset, const vector < WPXColumnDefinition > &columns)
+void HtmlListenerImpl::openTable(const WPXPropertyList &propList, const vector < WPXColumnDefinition > &columns)
 {
 	printf("<table border=\"1\">\n");
 	printf("<tbody>\n");
 }
 
-void HtmlListenerImpl::openTableRow(const float height, const bool isMinimumHeight, const bool isHeaderRow)
+void HtmlListenerImpl::openTableRow(const WPXPropertyList &propList)
 {
 	printf("<tr>\n");
 }
@@ -295,10 +281,8 @@ void HtmlListenerImpl::closeTableRow()
 	printf("</tr>\n");
 }
 
-void HtmlListenerImpl::openTableCell(const uint32_t col, const uint32_t row, const uint32_t colSpan, const uint32_t rowSpan,
-					const uint8_t borderBits, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
-					const RGBSColor * cellBorderColor,
-					const WPXVerticalAlignment cellVerticalAlignment)
+void HtmlListenerImpl::openTableCell(const WPXPropertyList &propList, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
+				     const RGBSColor * cellBorderColor)
 {
 	printf("<td ");
 
@@ -312,7 +296,7 @@ void HtmlListenerImpl::openTableCell(const uint32_t col, const uint32_t row, con
 		// ...
 		printf("\"");
 	}
-	printf(" rowspan=\"%ld\" colspan=\"%ld\"", rowSpan, colSpan);
+	printf(" rowspan=\"%ld\" colspan=\"%ld\"", propList["row-span"]->getInt(), propList["col-span"]->getInt());
 
 	printf(">\n");
 }
@@ -328,7 +312,7 @@ void HtmlListenerImpl::closeTable()
 	printf("</table>\n");
 }
 
-void HtmlListenerImpl::_addTextAttributes(const uint32_t textAttributeBits)
+void HtmlListenerImpl::_addTextAttributes(const int textAttributeBits)
 {
 	if (textAttributeBits & WPX_SUPERSCRIPT_BIT)
 	{
@@ -439,9 +423,9 @@ void HtmlListenerImpl::_removeTextAttributes()
 	}
 }
 
-void HtmlListenerImpl::_appendParagraphJustification(const uint32_t paragraphJustification)
+void HtmlListenerImpl::_appendParagraphJustification(const int justification)
 {
-	switch (paragraphJustification)
+	switch (justification)
 	{
 		case WPX_PARAGRAPH_JUSTIFICATION_LEFT:
 			printf("text-align: left;");
