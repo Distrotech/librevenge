@@ -26,12 +26,10 @@
 #ifndef WP42LLLISTENER_H
 #define WP42LLLISTENER_H
 
-#include "WPXLLListener.h"
-
-class WP42LLListener : public WPXLLListener
+class WP42LLListener
 {
 public:
-	WP42LLListener() : WPXLLListener() {}
+	WP42LLListener() {}
 	virtual ~WP42LLListener() {}
 
 protected:

@@ -30,7 +30,7 @@
 #include "WPXHLListener.h"
 #include "WPXHLListenerImpl.h"
 
-class WP42HLListener : public WP42LLListener
+class WP42HLListener : public WPXHLListener,WP42LLListener
 {
 public:
 	WP42HLListener(WPXHLListenerImpl *listenerImpl);
