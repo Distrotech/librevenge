@@ -40,6 +40,14 @@ WP6EOLGroup::WP6EOLGroup(WPXInputStream *input) :
 	m_boundFromLeft(false),
 	m_boundFromAbove(false),
 	
+	m_useCellAttributes(false),
+	m_useCellJustification(false),
+	m_ignoreInCalculations(false),
+	m_cellIsLocked(false),
+	m_cellAttributes(0),
+	m_cellJustification(0),
+	m_cellVerticalAlign(0),
+	
 	m_cellFgColor(NULL),
 	m_cellBgColor(NULL),
 	
@@ -62,7 +70,7 @@ void WP6EOLGroup::_readContents(WPXInputStream *input)
 {
 	WPD_DEBUG_MSG(("WordPerfect: EOL Group: Reading Embedded Sub-Function Data\n"));
 	uint16_t sizeDeletableSubFunctionData;
-	uint16_t startPosition = input->tell();
+	unsigned int startPosition = input->tell();
 	sizeDeletableSubFunctionData = readU16(input);		
 	WPD_DEBUG_MSG(("WordPerfect: EOL Group: Size of Deletable Sub-Function Data: %ld,  Size of Deletable and Non-deletable sub-function data: %ld\n", (long) sizeDeletableSubFunctionData, getSizeNonDeletable()));
 	input->seek(sizeDeletableSubFunctionData, WPX_SEEK_CUR);
@@ -100,6 +108,23 @@ void WP6EOLGroup::_readContents(WPXInputStream *input)
 			case WP6_EOL_GROUP_CELL_INFORMATION:
 				WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_INFORMATION\n"));
 				numBytesToSkip = WP6_EOL_GROUP_CELL_INFORMATION_SIZE;
+				uint8_t cellFlag, justification;
+				uint16_t attributeWord1, attributeWord2;
+				cellFlag = readU8(input);
+				if ((cellFlag & 0x01) == 0x01)
+					m_useCellAttributes = true;
+				if ((cellFlag & 0x02) == 0x02)
+					m_useCellJustification = true;
+				if ((cellFlag & 0x40) == 0x40)
+					m_ignoreInCalculations = true;
+				if ((cellFlag & 0x80) == 0x80)
+					m_cellIsLocked = true;
+				justification = readU8(input);	
+				m_cellJustification = (justification & 0x07);
+				m_cellVerticalAlign = readU8(input);
+				attributeWord1 = readU16(input);
+				attributeWord2 = readU16(input);
+				m_cellAttributes = ((attributeWord2 & 0x03) << 16) + attributeWord1;
 				break;
 			case WP6_EOL_GROUP_CELL_SPANNING_INFORMATION:
 				WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_SPANNING_INFORMATION\n"));
@@ -207,14 +232,11 @@ void WP6EOLGroup::parse(WP6HLListener *listener)
 		case WP6_EOL_GROUP_SOFT_EOL:
 		case WP6_EOL_GROUP_SOFT_EOC:
 		case WP6_EOL_GROUP_SOFT_EOC_AT_EOP: // 0x03 (soft EOC at EOP) 
+			listener->insertCharacter((uint16_t) ' ');
+			break;
 		case WP6_EOL_GROUP_DELETABLE_HARD_EOL: // 0x17 (deletable hard EOL)
 		case WP6_EOL_GROUP_DELETABLE_HARD_EOL_AT_EOC: // 0x18 (deletable hard EOL at EOC)
 		case WP6_EOL_GROUP_DELETABLE_HARD_EOL_AT_EOP: // 0x19 (deletable hard EOL at EOP)
-		case WP6_EOL_GROUP_DELETABLE_HARD_EOP: // deletable hard EOP
-		case WP6_EOL_GROUP_DELETABLE_HARD_EOC:
-		case WP6_EOL_GROUP_DELETABLE_HARD_EOC_AT_EOP:
-			listener->insertCharacter((uint16_t) ' ');
-			break;
 		case WP6_EOL_GROUP_HARD_EOL:
 		case WP6_EOL_GROUP_HARD_EOL_AT_EOC:
 		case WP6_EOL_GROUP_HARD_EOL_AT_EOP:
@@ -226,14 +248,19 @@ void WP6EOLGroup::parse(WP6HLListener *listener)
 			break;
 		case WP6_EOL_GROUP_HARD_EOC: // 0x07 (hard end of column)
 		case WP6_EOL_GROUP_HARD_EOC_AT_EOP:
+		case WP6_EOL_GROUP_DELETABLE_HARD_EOC:
+		case WP6_EOL_GROUP_DELETABLE_HARD_EOC_AT_EOP:
 			listener->insertBreak(WPX_COLUMN_BREAK);
 			break;
 		case WP6_EOL_GROUP_HARD_EOP: // hard EOP
+		case WP6_EOL_GROUP_DELETABLE_HARD_EOP: // deletable hard EOP
 			listener->insertBreak(WPX_PAGE_BREAK);
 			break;
 		case WP6_EOL_GROUP_TABLE_CELL: // Table Cell
 			WPD_DEBUG_MSG(("WordPerfect: EOL group: table cell\n"));
-			listener->insertCell(m_colSpan, m_rowSpan, m_boundFromLeft, m_boundFromAbove, m_cellBorders, cellFgColor, cellBgColor);
+			listener->insertCell(m_colSpan, m_rowSpan, m_boundFromLeft, m_boundFromAbove,
+						m_cellBorders, cellFgColor, cellBgColor, m_cellAttributes);
+			listener->justificationChange(m_cellJustification);
 			break;
 		case WP6_EOL_GROUP_TABLE_ROW_AND_CELL:
 		case WP6_EOL_GROUP_TABLE_ROW_AT_EOC:
@@ -244,7 +271,9 @@ void WP6EOLGroup::parse(WP6HLListener *listener)
 			WPD_DEBUG_MSG(("WordPerfect: EOL group: table row and cell\n"));
 			listener->insertRow(m_isHeaderRow);
 			// the cellBorders variable already represent the cell border bits as well
-			listener->insertCell(m_colSpan, m_rowSpan, m_boundFromLeft, m_boundFromAbove, m_cellBorders, cellFgColor, cellBgColor);
+			listener->insertCell(m_colSpan, m_rowSpan, m_boundFromLeft, m_boundFromAbove,
+						m_cellBorders, cellFgColor, cellBgColor, m_cellAttributes);
+			listener->justificationChange(m_cellJustification);
 			break;
 		case WP6_EOL_GROUP_TABLE_OFF:
 		case WP6_EOL_GROUP_TABLE_OFF_AT_EOC:

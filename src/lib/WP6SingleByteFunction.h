@@ -64,6 +64,12 @@ public:
 	virtual void parse(WP6HLListener *listener);	
 };
 
+class WP6SoftEOPFunction : public WP6SingleByteFunction
+{
+public:
+	virtual void parse(WP6HLListener *listener);	
+};
+
 class WP6SoftHyphenFunction : public WP6SingleByteFunction
 {
 public:

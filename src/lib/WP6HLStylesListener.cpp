@@ -203,9 +203,8 @@ void WP6HLStylesListener::insertRow(const bool isHeaderRow)
 }
 
 void WP6HLStylesListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan, const bool boundFromLeft, const bool boundFromAbove, 
-				     
-				     const uint8_t borderBits, 
-				  const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
+				const uint8_t borderBits, 
+				const RGBSColor * cellFgColor, const RGBSColor * cellBgColor, const uint32_t cellAttributes)
 {
 	if (!isUndoOn() && m_currentTable != NULL)
 	{

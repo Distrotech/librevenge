@@ -56,6 +56,9 @@ _WPXParsingState::_WPXParsingState(bool sectionAttributesChanged) :
 	m_isTableRowOpened(false),
 	m_isTableCellOpened(false),
 	m_wasHeaderRow(false),
+	m_isCellWithoutParagraph(false),
+	m_cellAttributeBits(0),
+	m_paragraphJustificationBeforeTable(WPX_PARAGRAPH_JUSTIFICATION_LEFT),
 
 	m_isPageSpanOpened(false),
 	m_nextPageSpanIndice(0),
@@ -248,7 +251,12 @@ void WPXHLListener::_closeParagraph()
 void WPXHLListener::_openSpan()
 {
 	_closeSpan();
-	m_listenerImpl->openSpan(m_ps->m_textAttributeBits,
+	// The behaviour of WP6+ is following: if an attribute bit is set in the cell attributes, we cannot
+	// unset it; if it is not set, we can set or unset it
+	uint32_t attributeBits = (m_ps->m_textAttributeBits | m_ps->m_cellAttributeBits);
+	if ((m_ps->m_cellAttributeBits & 0x0000001f) != 0x00000000) // font size attribute bits are mutually exclusive
+		attributeBits &= (m_ps->m_cellAttributeBits | 0xffffffe0); // and the cell attributes prevail
+	m_listenerImpl->openSpan(attributeBits,
 				 m_ps->m_fontName->getUTF8(),
 				 m_ps->m_fontSize, m_ps->m_fontColor, m_ps->m_highlightColor);
 
@@ -344,6 +352,7 @@ void WPXHLListener::_openTableCell(const uint8_t colSpan, const uint8_t rowSpan,
 void WPXHLListener::_closeTableCell()
 {
 	_closeParagraph();
+	m_ps->m_cellAttributeBits = 0x00000000;
 	if (m_ps->m_isTableCellOpened)
 		m_listenerImpl->closeTableCell();
 

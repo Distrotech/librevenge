@@ -4,8 +4,11 @@ CHANGES:
 - Initial WordPerfect 3.0-3.5 for Mac support (Marc Maurer)
 - WP3 and WP5: Conversion of the extended character set, of page 
   margins, page form and orientation, line spacing, paragraph
-  justification (Fridrich Strba)
+  justification (Fridrich Strba, Smokey Ardisson)
 - WP3: Conversion of text attributes (Fridrich Strba)
+- WP6: Respect paragraph and span properties defined in a Table Cell;
+  conversion of header row; conversion of table-related single-byte
+  functions (Fridrich Strba)
 - WP6: Added conversion of spacing after paragraph and of first
   line indentation done by functions of the paragraph Group
   (Fridrich Strba)
@@ -13,10 +16,10 @@ CHANGES:
 - WP6: Added page form and orientation conversion (Fridrich Strba)
 - WP6: Added font colour conversion (Fridrich Strba)
 - Remove span parameters from calls to openParagraph and openListElement
-(William Lachance)
+  (William Lachance)
 - Additional doxygen comments (William Lachance)
 - Remove mandatory dependancy on glib/libgsf for external applications
-(William Lachance, Michael Meeks)
+  (William Lachance, Michael Meeks)
 
 0.7.1 -> 0.7.2
 - Added conversion of paragraph margins done by functions of the

@@ -97,6 +97,9 @@ struct _WPXParsingState
 	bool m_isTableColumnOpened;
 	bool m_isTableCellOpened;
 	bool m_wasHeaderRow;
+	bool m_isCellWithoutParagraph;
+	uint32_t m_cellAttributeBits;
+	uint8_t m_paragraphJustificationBeforeTable;
 
 	bool m_isPageSpanOpened;
 	int m_nextPageSpanIndice;

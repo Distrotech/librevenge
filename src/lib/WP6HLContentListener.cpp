@@ -200,7 +200,7 @@ _WP6ParsingState::_WP6ParsingState(WPXTableList * tableList, int nextTableIndice
 	m_currentListLevel(0),
 	m_putativeListElementHasParagraphNumber(false),
 	m_putativeListElementHasDisplayReferenceNumber(false),
-
+	
 	m_noteTextPID(0),
 
 	m_leaderCharacter('.'),
@@ -1012,6 +1012,8 @@ void WP6HLContentListener::startTable()
 	{
 		//_handleLineBreakElementBegin();
 
+		// save the justification information. We will need it after the table ends.
+		m_ps->m_paragraphJustificationBeforeTable = m_ps->m_paragraphJustification;
 		// handle corner case where we have a new section, but immediately start with a table
 		// FIXME: this isn't a very satisfying solution, and might need to be generalized
 		// as we add more table-like structures into the document
@@ -1028,25 +1030,33 @@ void WP6HLContentListener::insertRow(const bool isHeaderRow)
 {
 	if (!isUndoOn())
 	{
+		if (m_ps->m_isCellWithoutParagraph)
+			_openParagraph();
+		m_ps->m_isCellWithoutParagraph = false;
 		_flushText();
 		_openTableRow(isHeaderRow);
 	}
 }
 
 void WP6HLContentListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan, const bool boundFromLeft, const bool boundFromAbove,
-			       const uint8_t borderBits, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
+					const uint8_t borderBits,
+					const RGBSColor * cellFgColor, const RGBSColor * cellBgColor, const uint32_t cellAttributes)
 {
 	if (!isUndoOn())
 	{
 		if (m_ps->m_currentTableRow < 0) // cell without a row, invalid
 			throw ParseException();
+		// if previous cell did not have paragraph, we insert a dummy one
+		if (m_ps->m_isCellWithoutParagraph)
+			_openParagraph();
 		_flushText();
 		_openTableCell(colSpan, rowSpan, boundFromLeft, boundFromAbove,
 			       m_parseState->m_currentTable->getCell(
 				       m_ps->m_currentTableRow,
 				       m_ps->m_currentTableCol)->m_borderBits,			       
 			       cellFgColor, cellBgColor);
-		_openParagraph();
+		m_ps->m_isCellWithoutParagraph = true;
+		m_ps->m_cellAttributeBits = cellAttributes;
 	}
 }
 
@@ -1054,8 +1064,13 @@ void WP6HLContentListener::endTable()
 {
 	if (!isUndoOn())
 	{
+		if (m_ps->m_isCellWithoutParagraph)
+			_openParagraph();
+		m_ps->m_isCellWithoutParagraph = false;
 		_flushText();
 		_closeTable();
+		// restore the justification that was there before the table.
+		m_ps->m_paragraphJustification = m_ps->m_paragraphJustificationBeforeTable;
 	}
 }
 
@@ -1292,6 +1307,13 @@ void WP6HLContentListener::_openListElement()
 					m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight, m_ps->m_paragraphTextIndent,
 					m_ps->m_paragraphLineSpacing, m_ps->m_paragraphSpacingAfter);
 	m_ps->m_isParagraphOpened = true; // a list element is equivalent to a paragraph
+	m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange + m_ps->m_leftMarginByParagraphMarginChange;
+	m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange + m_ps->m_rightMarginByParagraphMarginChange;
+	m_ps->m_leftMarginByTabs = 0.0f;
+	m_ps->m_rightMarginByTabs = 0.0f;
+	m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange;
+	m_ps->m_textIndentByTabs = 0.0f;
+	m_ps->m_isCellWithoutParagraph = false;	
 
 	_openSpan();
 }
@@ -1320,7 +1342,8 @@ void WP6HLContentListener::_openParagraph()
 	m_ps->m_leftMarginByTabs = 0.0f;
 	m_ps->m_rightMarginByTabs = 0.0f;
 	m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange;
-	m_ps->m_textIndentByTabs = 0.0f;	
+	m_ps->m_textIndentByTabs = 0.0f;
+	m_ps->m_isCellWithoutParagraph = false;	
 
 	_openSpan();
 }
