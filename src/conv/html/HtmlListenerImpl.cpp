@@ -1,6 +1,7 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -157,7 +158,7 @@ void HtmlListenerImpl::openSpan(guint32 textAttributeBits, const gchar *fontName
 					const RGBSColor *fontColor, const RGBSColor *highlightColor)
 {
 	printf("<span style=\"font-family: \'%s\'\">", fontName);
-	printf("<span style=\"font-size: %fpt\">", fontSize);
+	printf("<span style=\"font-size: %.1fpt\">", fontSize);
 	if (textAttributeBits & WPX_REDLINE_BIT)
 		printf("<span style=\"color: #ff3333\">");
 	else

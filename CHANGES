@@ -10,6 +10,7 @@ CHANGES:
 - Remove span parameters from calls to openParagraph and openListElement
 (William Lachance)
 - Additional doxygen comments (William Lachance)
+- Conversion of Hard-Line-Breaks (Fridrich Strba)
 
 0.7.1 -> 0.7.2
 - Fixed bug in WP6FixedLengthGroup handling (Fridrich Strba)
