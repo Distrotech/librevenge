@@ -1,5 +1,8 @@
 .deps
 .libs
+*.lo
+*.la
 Makefile
 Makefile.in
 wpd2raw
+*.rc
