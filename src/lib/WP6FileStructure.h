@@ -87,6 +87,8 @@ extern int WP6_FIXED_LENGTH_FUCNTION_GROUP_SIZE[16];
 
 #define WP6_VARIABLE_GROUP_PREFIX_ID_BIT 128 /* bit 7 */
 
+/* Main function group list  */
+
 #define WP6_TOP_SOFT_SPACE 0x80
 #define WP6_TOP_HARD_HYPHEN 0x84
 #define WP6_TOP_DORMANT_HARD_RETURN 0x87

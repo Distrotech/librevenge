@@ -31,7 +31,7 @@
 class WP5VariableLengthGroup : public WP5Part
 {
  public:
-	WP5VariableLengthGroup(guint8 group); // WP5VariableLengthGroup should _never_ be constructed, only its inherited classes
+	WP5VariableLengthGroup(); // WP5VariableLengthGroup should _never_ be constructed, only its inherited classes
 	virtual ~WP5VariableLengthGroup() {}
 	
 	static WP5VariableLengthGroup * constructVariableLengthGroup(GsfInput *input, guint8 group);
@@ -40,10 +40,9 @@ class WP5VariableLengthGroup : public WP5Part
 	void _read(GsfInput *input);
  	virtual void _readContents(GsfInput *input) {} // we don't always need more information than that provided generically
 
-	const guint8 getGroup() const { return m_group; }
+	const guint8 getSubGroup() const { return m_subGroup; }
 
  private:
-	guint8 m_group;
 	guint8 m_subGroup;
 	guint16 m_size; 
 };

@@ -1,5 +1,12 @@
 CHANGES:
 
+0.7.0 -> 0.7.1
+- Fixes to the multinational character map (Fridrich Strba)
+- Fix handling of sub documents, broken by me (William Lachance, Marc Maurer)
+- Fix class structure of the WP5 function groups (Marc Maurer)
+- Basic page break support for WP4.2 and WP5.x (Marc Maurer)
+- README update, to avoid confusing licensing issues (Marc Maurer)
+
 0.6.6 -> 0.7.0
 - Basic WP4.2 file format support (Marc Maurer)
 - Basic WP5 file format support (Marc Maurer)

@@ -49,6 +49,7 @@ libwpd_1_la_SOURCES =				\
 	WP5AttributeGroup.cpp 			\
 	WP5FileStructure.cpp			\
 	WP5FixedLengthGroup.cpp			\
+	WP5FormatGroup.cpp				\
 	WP5Header.cpp				\
 	WP5HLListener.cpp			\
 	WP5HLStylesListener.cpp			\
@@ -117,6 +118,7 @@ libwpd_1_la_SOURCES =				\
 	WP5AttributeGroup.h 			\
 	WP5FileStructure.h			\
 	WP5FixedLengthGroup.h			\
+	WP5FormatGroup.h				\
 	WP5Header.h				\
 	WP5HLListener.h				\
 	WP5HLStylesListener.h			\

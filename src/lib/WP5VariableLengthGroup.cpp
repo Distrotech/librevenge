@@ -26,9 +26,9 @@
 #include "WP5VariableLengthGroup.h"
 #include "WP5UnsupportedVariableLengthGroup.h"
 #include "libwpd_internal.h"
+#include "WP5FormatGroup.h"
 
-WP5VariableLengthGroup::WP5VariableLengthGroup(guint8 group)
-	: m_group(group)
+WP5VariableLengthGroup::WP5VariableLengthGroup()
 {
 }
 
@@ -36,9 +36,11 @@ WP5VariableLengthGroup * WP5VariableLengthGroup::constructVariableLengthGroup(Gs
 {
 	switch (group)
 	{
+		case WP5_TOP_FORMAT_GROUP:
+			return new WP5FormatGroup(input);
 		default:
 			// this is an unhandled group, just skip it
-			return new WP5UnsupportedVariableLengthGroup(input, group);
+			return new WP5UnsupportedVariableLengthGroup(input);
 	}
 }
 

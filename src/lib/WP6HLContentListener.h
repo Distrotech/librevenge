@@ -83,8 +83,6 @@ struct _WP6ParsingState
 	UCSString m_textAfterDisplayReference;
 	UCSString m_textAfterNumber;
 
-	bool m_isParagraphColumnBreak;
-	bool m_isParagraphPageBreak;
 	guint8 m_paragraphJustification;
 	guint8 m_tempParagraphJustification; // TODO: wouldn't a better name be m_tabParagraphJustification ? - MARCM
 	float m_paragraphLineSpacing;

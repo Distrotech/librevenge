@@ -41,7 +41,13 @@ extern int WP5_FIXED_LENGTH_FUCNTION_GROUP_SIZE[16];
 #define WP5_ATTRIBUTE_UNDERLINE 0x0E
 #define WP5_ATTRIBUTE_SMALL_CAPS 0x0F
 
+/* Main function group list  */
+
 #define WP5_TOP_ATTRIBUTE_ON 0xC3
 #define WP5_TOP_ATTRIBUTE_OFF 0xC4
+#define WP5_TOP_FORMAT_GROUP 0xD4
+
+/* Format Group */
+#define WP5_FORMAT_GROUP_END_OF_PAGE 0x00
 
 #endif /* WP5FILESTRUCTURE_H */

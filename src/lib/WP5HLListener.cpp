@@ -63,6 +63,41 @@ void WP5HLListener::insertEOL()
 	m_ps->m_numDeferredParagraphBreaks++;	
 }
 
+void WP5HLListener::insertBreak(const guint8 breakType)
+{
+	// TODO: move to WPXHLListener???
+	
+	/*if (!isUndoOn())*/
+	{	
+		_flushText();
+		switch (breakType) 
+		{
+		case WPX_COLUMN_BREAK:
+			m_ps->m_numDeferredParagraphBreaks++;
+			m_ps->m_isParagraphColumnBreak = true;
+			break;
+		case WPX_PAGE_BREAK:
+			m_ps->m_numDeferredParagraphBreaks++;
+			m_ps->m_isParagraphPageBreak = true;
+			break;
+			// TODO: (.. line break?)
+		}
+		switch (breakType)
+		{
+		case WPX_PAGE_BREAK:
+		case WPX_SOFT_PAGE_BREAK:
+			if (m_ps->m_numPagesRemainingInSpan > 0)
+				m_ps->m_numPagesRemainingInSpan--;
+			else
+			{
+				_openPageSpan();
+			}
+		default:
+			break;
+		}
+	}
+}
+
 void WP5HLListener::endDocument()
 {
 	// corner case: document ends in a list element
@@ -207,11 +242,11 @@ void WP5HLListener::_openParagraph()
 				      m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight,
 				      m_ps->m_fontName->str, m_ps->m_fontSize, 
 				      1.0f, 
-				      false, false);
+				      m_ps->m_isParagraphColumnBreak, m_ps->m_isParagraphPageBreak);
 	if (m_ps->m_numDeferredParagraphBreaks > 0) 
 		m_ps->m_numDeferredParagraphBreaks--;
 
-	//m_parseState->m_isParagraphColumnBreak = false; 
-	//m_parseState->m_isParagraphPageBreak = false;
+	m_ps->m_isParagraphColumnBreak = false; 
+	m_ps->m_isParagraphPageBreak = false;
 	m_ps->m_isParagraphOpened = true;
 }

@@ -26,8 +26,8 @@
 #include "WP5UnsupportedVariableLengthGroup.h"
 #include "libwpd_internal.h"
 
-WP5UnsupportedVariableLengthGroup::WP5UnsupportedVariableLengthGroup(GsfInput *input, guint8 group) :
-	WP5VariableLengthGroup(group)
+WP5UnsupportedVariableLengthGroup::WP5UnsupportedVariableLengthGroup(GsfInput *input) :
+	WP5VariableLengthGroup()
 {
 	WPD_DEBUG_MSG(("WordPerfect: Handling an unsupported variable length group\n"));
 	_read(input);

@@ -52,11 +52,7 @@ libxml2 and libgsf. All these packages are linked to from Tor Lillqvist's
 "GTK+ and GIMP for Windows" web-site. Go directly to the download section
 (http://www.gimp.org/~tml/gimp/win32/downloads.html).
 
-NOTE: Packages built with MSVC7 are not usable because they are linked with
-MSVCRT70.DLL that is not by default part of Windows.
-Packages build with MSVC5 or MSVC6 are -- like the MinGW natively compiled
-packages -- linked with MSVCRT.DLL and thus are usable. Nonetheless, you
-will have to create libtool import libraries for every DLL that you have to
+You will have to create libtool import libraries for every DLL that you have to
 link with. To do this, generate from the DLL a *.def file using "pexports.exe"
 tool -- included in one of the packages of MinGW distribution -- and create
 a libtool import library using the DLL, the *.def file and "dlltool.exe".

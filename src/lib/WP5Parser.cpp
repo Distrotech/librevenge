@@ -75,8 +75,10 @@ void WP5Parser::parseDocument(GsfInput *input, WP5HLListener *listener)
 					listener->insertEOL();
 					break;
 				case 0x0B: // soft new page
+					listener->insertBreak(WPX_PAGE_BREAK);
 					break;
 				case 0x0C: // hard new page
+					listener->insertBreak(WPX_PAGE_BREAK);
 					break;
 				case 0x0D: // soft new line
 					listener->insertEOL();
