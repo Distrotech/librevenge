@@ -67,10 +67,10 @@ class WPXHLListenerImpl
 	\param formLength The height of the page, in inches (portrait or landscape)
 	\param formWidth The width of the page, in inches
 	\param orientation The orientation of the page 
-	\param The left margin for each page in the span, in inches
-	\param The right margin for each page in the span, in inches
-	\param The top margin for each page in the span, in inches
-	\param The bottom margin for each page in the span, in inches
+	\param marginLeft The left margin for each page in the span, in inches
+	\param marginRight The right margin for each page in the span, in inches
+	\param marginTop The top margin for each page in the span, in inches
+	\param marginBottom The bottom margin for each page in the span, in inches
 	*/
 	virtual void openPageSpan(const int span, const bool isLastPageSpan,
 				  const float formLength, const float formWidth, const WPXFormOrientation orientation,
