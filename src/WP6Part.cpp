@@ -23,8 +23,16 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
+#include "WPXPart.h"
 #include "WP6Part.h"
+#include "WP6TextPart.h"
+
+WP6Part::WP6Part(FILE * stream)
+	: WPXPart(stream)
+{
+}
 
 WP6Part * WP6Part::constructPart(FILE * stream)
 {
+	return new WP6TextPart(stream);
 }

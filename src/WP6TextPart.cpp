@@ -25,6 +25,17 @@
 
 #include "WP6TextPart.h"
 
+WP6TextPart::WP6TextPart(FILE * stream)
+	: WP6Part(stream)
+{
+}
+
 gboolean WP6TextPart::parse()
 {
+	char c;
+	while (fread(&c, sizeof(char), 1, m_pStream))
+	{
+		printf("%c", c);
+	}
+	printf("\n", c);
 }

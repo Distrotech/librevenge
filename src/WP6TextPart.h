@@ -28,9 +28,10 @@
 
 #include "WP6Part.h"
 
-class WP6TextPart : WP6Part
+class WP6TextPart : public WP6Part
 {
 public:
+	WP6TextPart(FILE * stream);
 	gboolean parse();
 };
 

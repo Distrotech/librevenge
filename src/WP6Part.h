@@ -27,11 +27,14 @@
 #define WP6PART_H
 
 #include <stdio.h>
+#include "WPXPart.h"
 #include "glib.h"
 
-class WP6Part
+class WP6Part : public WPXPart
 {
-public:	
+public:
+	WP6Part(FILE * stream);
+	
 	static WP6Part * constructPart(FILE * stream);
 	virtual gboolean parse() {};
 };

@@ -3,7 +3,7 @@
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -22,28 +22,11 @@
 /* "This product is not manufactured, approved, or supported by 
  * Corel Corporation or Corel Corporation Limited."
  */
- 
+
 #include <stdio.h>
-#include "WP6Parser.h"
-#include "WP6Part.h"
+#include "WPXPart.h"
 
-WP6Parser::WP6Parser(FILE * stream, WP6Header * header)
-	: WPXParser(stream, header)
+WPXPart::WPXPart(FILE * stream)
 {
-}
-
-gboolean WP6Parser::parse()
-{
-	if (!m_pHeader->parse() )
-		return FALSE;
-	
-	fseek(m_pStream, m_pHeader->m_iDocumentOffset, SEEK_SET);
-	
-	WP6Part * part;
-	while (part = WP6Part::constructPart(m_pStream))
-	{
-		part->parse();
-		delete part;
-	}
-	return TRUE;
+	m_pStream = stream;
 }
