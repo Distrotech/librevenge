@@ -374,7 +374,12 @@ void WP6HLContentListener::insertTab(const uint8_t tabType, const float tabPosit
 {
 	if (!isUndoOn())
 	{
-		_flushText(); // allow the current paragraph to flush (if it's finished), in case we need to change justification
+
+		_flushText();
+		// Fridrich Strba -- HACK: we force each tab to be in its own span in order
+		// to prevent previous span's properties to apply to the tab also if they changed.
+		m_ps->m_textAttributesChanged = true;
+
 		// open new section if section attributes changed
 		if (m_ps->m_sectionAttributesChanged)
 		{
@@ -404,6 +409,7 @@ void WP6HLContentListener::insertTab(const uint8_t tabType, const float tabPosit
 						_openParagraph();
 					else
 						_openListElement();
+					_openSpan();
 				break;
 			
 			default:
@@ -482,7 +488,9 @@ void WP6HLContentListener::insertTab(const uint8_t tabType, const float tabPosit
 			}
 			else
 			{
-				// insert tab if paragraph is opened and the tab is not a BackTab
+				// Fridrich Strba -- HACK: we force each tab to be in its own span in order
+				// to prevent previous span's properties to apply to the tab also if they changed.
+				_flushText(true);
 				switch ((tabType & 0xF8) >> 3)
 				{
 				case WP6_TAB_GROUP_TABLE_TAB:
@@ -505,6 +513,8 @@ void WP6HLContentListener::insertTab(const uint8_t tabType, const float tabPosit
 				default:
 					break;
 				}
+				_flushText(true);
+				m_ps->m_textAttributesChanged = true;
 			}
 		}
 	}
@@ -515,7 +525,10 @@ void WP6HLContentListener::handleLineBreak()
 	if(!isUndoOn())
 	{
 		_flushText();
-		
+		// Fridrich Strba -- HACK: we force each tab to be in its own span in order
+		// to prevent previous span's properties to apply to the tab also if they changed.
+		m_ps->m_textAttributesChanged = true;
+
 		if (m_ps->m_sectionAttributesChanged)
 		{
 			_openSection();
@@ -530,7 +543,10 @@ void WP6HLContentListener::handleLineBreak()
 					_openParagraph();
 				else
 					_openListElement();
+			_flushText(true);
 			m_listenerImpl->insertLineBreak();
+			_flushText(true);
+			m_ps->m_textAttributesChanged = true;
 		}
 	}
 }

@@ -6,7 +6,9 @@ if WITH_LIBWPD_DOCS
 
 install-data-am:
 	mkdir -p $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/html
-	$(INSTALL) html/* $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/html/
+	$(INSTALL) html/*.html $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/html/
+	$(INSTALL) html/*.png $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/html/
+	$(INSTALL) html/*.css $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/html/
 
 uninstall-am:
 	-rm -rf $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/html
