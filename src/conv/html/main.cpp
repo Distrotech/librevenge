@@ -1,6 +1,6 @@
 /* libwpd
  * Copyright (C) 2002-2003 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2002-2003 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2002-2004 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -45,7 +45,8 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 	
-	if (!WPDocument::isFileFormatSupported(input, false))
+	WPDConfidence confidence = WPDocument::isFileFormatSupported(input, false);
+	if (confidence == WPD_CONFIDENCE_NONE || confidence == WPD_CONFIDENCE_POOR)
 	{
 		printf("ERROR: Unsupported file format!\n");
 		return 1;

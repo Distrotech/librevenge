@@ -50,7 +50,8 @@ int main(int argc, char *argv[])
 			return 1;
 		}
 
-	if (!WPDocument::isFileFormatSupported(input, false))
+	WPDConfidence confidence = WPDocument::isFileFormatSupported(input, false);
+	if (confidence == WPD_CONFIDENCE_NONE || confidence == WPD_CONFIDENCE_POOR)
 	{
 		printf("ERROR: Unsupported file format!\n");
 		return 1;
