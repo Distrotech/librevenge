@@ -35,8 +35,6 @@ public:
 	~WP6VariableLengthGroup();
 	
 	gboolean parse();
-	//virtual void write();
-	//void notify();
 protected:
 	virtual gboolean _parseContents() { return TRUE; }
 	

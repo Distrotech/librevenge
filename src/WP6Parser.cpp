@@ -26,6 +26,7 @@
 #include <stdio.h>
 #include "WP6Parser.h"
 #include "WP6Part.h"
+#include "UT_libwpd2.h"
 
 WP6Parser::WP6Parser(FILE * stream, WP6Header * header)
 	: WPXParser(stream, header)
