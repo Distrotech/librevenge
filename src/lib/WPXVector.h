@@ -34,6 +34,7 @@ template<class T>
 class WPXVectorImpl
 {
 public:
+	virtual ~WPXVectorImpl();
 	virtual void append(const T &elem) = 0;
 	virtual size_t count() const = 0;
 };
@@ -42,6 +43,7 @@ template<class T>
 class WPXVectorIterImpl
 {
 public:
+	virtual ~WPXVectorIterImpl();
 	virtual void rewind() = 0;
 	virtual bool next() = 0;
 	virtual bool last() = 0;
@@ -52,8 +54,9 @@ template<class T>
 class WPXVector
 {
 public:
-	WPXVector(const WPXVector &);
+	WPXVector(const WPXVector<T> &);
         WPXVector();
+	virtual ~WPXVector();
 	virtual void append(const T &elem);
 	virtual size_t count() const;
 
@@ -61,7 +64,7 @@ public:
         {
         public:
                 Iter(const WPXVector<T> &vector);
-                virtual ~Iter() { delete m_iterImpl; }
+                virtual ~Iter();
                 void rewind();
 		bool next();
 		bool last();

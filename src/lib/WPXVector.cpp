@@ -8,6 +8,11 @@ using namespace std;
 template WPXVector<WPXPropertyList>;
 
 template<class T>
+WPXVectorImpl<T>::~WPXVectorImpl()
+{
+}
+
+template<class T>
 class WPXStdVectorImpl : public WPXVectorImpl<T>
 {
 friend class WPXVector<T>;
@@ -28,6 +33,7 @@ public:
                 m_iter = m_vector->begin(); 
                 m_imaginaryFirst = false; 
 	}
+	virtual ~WPXStdVectorIterImpl() {}
 	virtual void rewind() { 
                 m_iter = m_vector->begin(); 
                 m_imaginaryFirst = true; 
@@ -53,7 +59,7 @@ private:
 };
 
 template<class T>
-WPXVector<T>::WPXVector(const WPXVector &vector)
+WPXVector<T>::WPXVector(const WPXVector<T> &vector)
 {
         WPXStdVectorImpl<T> *vectorImpl = static_cast<WPXStdVectorImpl<T>* >(vector.m_impl);
         m_impl = new WPXStdVectorImpl<T>(vectorImpl->m_vector);
@@ -63,6 +69,12 @@ template<class T>
 WPXVector<T>::WPXVector()
 {
         m_impl = new WPXStdVectorImpl<T>;
+}
+
+template<class T>
+WPXVector<T>::~WPXVector()
+{
+	delete m_impl;
 }
 
 template<class T>
@@ -82,6 +94,12 @@ WPXVector<T>::Iter::Iter(const WPXVector<T> &vector)
 {
         WPXStdVectorImpl<T> *vectorImpl = static_cast<WPXStdVectorImpl<T>* >(vector.m_impl);
         m_iterImpl = new WPXStdVectorIterImpl<T>(&(vectorImpl->m_vector));
+}
+
+template<class T>
+WPXVector<T>::Iter::~Iter() 
+{ 
+	 delete m_iterImpl; 
 }
 
 template<class T>
@@ -106,4 +124,9 @@ template<class T>
 const T & WPXVector<T>::Iter::operator()() const
 {
         return (*m_iterImpl)();
+}
+
+template<class T>
+WPXVectorIterImpl<T>::~WPXVectorIterImpl()
+{
 }
