@@ -77,8 +77,18 @@ void WP6HLListener::insertBreak(guint8 breakType)
 	if (!m_isUndoOn)
 	{	
 		_flushText();
-		
-		m_listenerImpl->insertBreak(breakType);
+		m_numDeferredParagraphBreaks++;
+		switch (breakType) 
+			{
+			case WPX_COLUMN_BREAK:
+				m_isParagraphColumnBreak = TRUE;
+				break;
+			case WPX_PAGE_BREAK:
+				m_isParagraphPageBreak = TRUE;
+				break;
+			// TODO: (.. line break?)
+			}
+		//m_listenerImpl->insertBreak(breakType);
 	}
 }
 
@@ -172,9 +182,12 @@ void WP6HLListener::marginChange(guint8 side, guint16 margin)
 	{
 		// flush everything which came before this change
 		// eliminating one paragraph break which is now implicit in
-		// a paragraph change (FIXME: probably should move this to a general
+		// a paragraph change -- UNLESS the paragraph break represents
+		// something else than its name suggests, such as a paragraph
+		// or column break (FIXME: probably should move this to a general
 		// helper function when we add more section changing messages)
-		if (!m_sectionAttributesChanged && m_numDeferredParagraphBreaks > 0)
+		if (!m_sectionAttributesChanged && m_numDeferredParagraphBreaks > 0 &&
+		    !m_isParagraphColumnBreak && !m_isParagraphPageBreak)
 			m_numDeferredParagraphBreaks--;		
 
 		_flushText();
@@ -201,9 +214,12 @@ void WP6HLListener::columnChange(guint8 numColumns)
 	{
 		// flush everything which came before this change
 		// eliminating one paragraph break which is now implicit in
-		// a paragraph change (FIXME: probably should move this to a general
+		// a paragraph change -- UNLESS the paragraph break represents
+		// something else than its name suggests, such as a paragraph
+		// or column break (FIXME: probably should move this to a general
 		// helper function when we add more section changing messages)
-		if (!m_sectionAttributesChanged && m_numDeferredParagraphBreaks > 0)
+		if (!m_sectionAttributesChanged && m_numDeferredParagraphBreaks > 0 &&
+		    !m_isParagraphColumnBreak && !m_isParagraphPageBreak)
 			m_numDeferredParagraphBreaks--;		
 		
 		_flushText();
@@ -219,7 +235,8 @@ void WP6HLListener::endDocument()
 	// corner case: document contains no end of lines
 	if (!m_isParagraphOpened && !m_isParagraphClosed)
 	{
-		m_listenerImpl->openParagraph(m_paragraphJustification, m_textAttributeBits);
+		m_listenerImpl->openParagraph(m_paragraphJustification, m_textAttributeBits,
+					      FALSE, FALSE);
 		_flushText();       
 	}
 	else if (!m_isParagraphClosed || !m_isParagraphOpened)
@@ -283,7 +300,9 @@ void WP6HLListener::_flushText()
 	if (m_sectionAttributesChanged && m_textArray->len > 0)
 	{
 		m_listenerImpl->openSection(m_numColumns, m_marginLeft, m_marginRight);
-		m_listenerImpl->openParagraph(m_paragraphJustification, m_textAttributeBits);
+		m_listenerImpl->openParagraph(m_paragraphJustification, m_textAttributeBits,
+					      m_isParagraphColumnBreak, m_isParagraphPageBreak);
+		m_isParagraphColumnBreak = FALSE; m_isParagraphPageBreak = FALSE;
 		m_isParagraphOpened = TRUE;
 		m_sectionAttributesChanged = FALSE;
 		if (m_numDeferredParagraphBreaks > 0)
@@ -294,7 +313,9 @@ void WP6HLListener::_flushText()
 	{
 		while (m_numDeferredParagraphBreaks > 0)
 		{
-			m_listenerImpl->openParagraph(m_paragraphJustification, m_textAttributeBits);
+			m_listenerImpl->openParagraph(m_paragraphJustification, m_textAttributeBits, 
+						      m_isParagraphColumnBreak, m_isParagraphPageBreak);
+			m_isParagraphColumnBreak = FALSE; m_isParagraphPageBreak = FALSE;
 			m_numDeferredParagraphBreaks--;
 		}
 		m_isParagraphOpened = TRUE;

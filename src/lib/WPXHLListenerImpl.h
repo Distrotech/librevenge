@@ -34,11 +34,12 @@ class WPXHLListenerImpl
  public:
 	virtual void startDocument() = 0;
 	virtual void endDocument() = 0;
-	virtual void openParagraph(guint8 paragraphJustification, guint32 textAttributeBits) = 0;
+	virtual void openParagraph(guint8 paragraphJustification, guint32 textAttributeBits,
+				   gboolean isColumnBreak, gboolean isPageBreak) = 0;
 	virtual void openSpan(guint32 textAttributeBits) = 0;
 	virtual void openSection(guint numColumns, gfloat marginLeft, gfloat marginRight) = 0;
 	virtual void insertText(const guint16 *textArray, const guint len) = 0;
- 	virtual void insertBreak(guint8 breakType) = 0;
+ 	virtual void insertLineBreak() = 0;
  
  	virtual void openTable() = 0;
  	virtual void openRow() = 0;

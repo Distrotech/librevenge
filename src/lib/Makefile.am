@@ -1,5 +1,6 @@
 lib_LIBRARIES = libwpd2.a
-include_HEADERS = libwpd2.h UT_libwpd2.h WPXHLListener.h WPXHLListenerImpl.h WPXLLListener.h WPXParser.h WP6Parser.h WP6HLListener.h WP6Header.h WP6LLListener.h WPXHeader.h
+include_HEADERS = libwpd2.h WPXHLListener.h WPXHLListenerImpl.h WPXLLListener.h WPXParser.h WP6Parser.h \
+		  WP6HLListener.h WP6Header.h WP6LLListener.h WPXHeader.h WP6FileStructure.h UT_libwpd2.h
 
 AM_CXXFLAGS = $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS)
 
@@ -45,7 +46,7 @@ libwpd2_a_SOURCES =			\
 	WP6PrefixPacket.h	\
 	WP6TabGroup.h 		\
 	WP6UndoGroup.h			\
-	WP6UnsupportedPrefixPacket.h \	
+	WP6UnsupportedPrefixPacket.h \
 	WP6UnsupportedVariableLengthGroup.h \
 	WP6VariableLengthGroup.h	\
 	WPXHeader.h			\

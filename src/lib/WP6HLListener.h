@@ -65,6 +65,8 @@ class WP6HLListener : public WP6LLListener
 	guint32 m_textAttributeBits;
 	gboolean m_textAttributesChanged;
 	
+	gboolean m_isParagraphColumnBreak;
+	gboolean m_isParagraphPageBreak;
 	guint8 m_paragraphJustification;
  	gboolean m_paragraphJustificationChanged;
 	gboolean m_isParagraphOpened;
