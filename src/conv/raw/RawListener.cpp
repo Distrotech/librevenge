@@ -237,27 +237,23 @@ void RawListenerImpl::insertLineBreak()
 
 void RawListenerImpl::defineOrderedListLevel(const WPXPropertyList &propList)
 {
-	__iprintf("defineOrderedListLevel(listID: %d, listLevel: %d, listType: %d, textBeforeNumber: %s, textAfterNumber: %s, startingNumber: %d)\n",
-		  propList["id"]->getInt(), propList["level"]->getInt(), propList["type"]->getInt(), 
-		  propList["text-before-number"]->getStr().getUTF8(), propList["text-after-number"]->getStr().getUTF8(),
-		  propList["starting-number"]->getInt());
+	__iprintf("defineOrderedListLevel(%s)\n", getPropString(propList)());
 }
 
 void RawListenerImpl::defineUnorderedListLevel(const WPXPropertyList &propList)
 {
-	__iprintf("defineUnorderedListLevel(listID: %d, listLevel: %d, bullet: %s)\n", propList["id"]->getInt(), propList["level"]->getInt(), 
-		  propList["bullet"]->getStr().getUTF8());
+	__iprintf("defineUnorderedListLevel(%s)\n", getPropString(propList)());
 }
 
 void RawListenerImpl::openOrderedListLevel(const WPXPropertyList &propList)
 {
-	_U(("openOrderedListLevel(listID: %d)\n", propList["id"]->getInt()),
+	_U(("openOrderedListLevel(%s)\n", getPropString(propList)()),
 		LC_OPEN_ORDERED_LIST_LEVEL);
 }
 
 void RawListenerImpl::openUnorderedListLevel(const WPXPropertyList &propList)
 {
-	_U(("openUnorderedListLevel(listID: %d)\n", propList["id"]->getInt()),
+	_U(("openUnorderedListLevel(%s)\n", getPropString(propList)()),
 		LC_OPEN_UNORDERED_LIST_LEVEL);
 }
 
@@ -287,7 +283,7 @@ void RawListenerImpl::closeListElement()
 
 void RawListenerImpl::openFootnote(const WPXPropertyList &propList)
 {
-	_U(("openFootnote(number: %d)\n", propList["number"]->getInt()),
+	_U(("openFootnote(%s)\n", getPropString(propList)()),
 		LC_OPEN_FOOTNOTE);
 }
 
@@ -299,7 +295,7 @@ void RawListenerImpl::closeFootnote()
 
 void RawListenerImpl::openEndnote(const WPXPropertyList &propList)
 {
-	_U(("openEndnote(number: %d)\n", propList["number"]->getInt()),
+	_U(("openEndnote(number: %s)\n", getPropString(propList)()),
 		LC_OPEN_ENDNOTE);
 }
 
@@ -320,17 +316,14 @@ void RawListenerImpl::openTable(const WPXPropertyList &propList, const vector < 
 		sColumns.sprintf("%sR:%.4f", sColumns.getUTF8(), columns[i].m_rightGutter);
 	}
 
-	_U(("openTable(tablePositionBits: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, leftOffset: %.4f, columns:%s.)\n",
-	    propList["alignment"]->getInt(), propList["margin-left"]->getFloat(), propList["margin-right"]->getFloat(), 
-	    propList["left-offset"]->getFloat(), sColumns.getUTF8()),
+	_U(("openTable(%s, columns:%s.)\n",
+	    getPropString(propList)(), sColumns.getUTF8()),
 	   LC_OPEN_TABLE);
 }
 
 void RawListenerImpl::openTableRow(const WPXPropertyList &propList)
 {
-	_U(("openTableRow(height: %.4f, isMinimumHeight: %s, isHeaderRow: %s)\n", propList["height"]->getFloat(),
-	    (propList["is-minimum-height"]->getInt() ? "true" : "false"), 
-	    (propList["is-header-row"]->getInt() ? "true" : "false")),
+	_U(("openTableRow(%s)\n", getPropString(propList)()),
 	   LC_OPEN_TABLE_ROW);
 }
 
@@ -342,29 +335,7 @@ void RawListenerImpl::closeTableRow()
 
 void RawListenerImpl::openTableCell(const WPXPropertyList &propList)
 {
-	UTF8String sCellVerticalAlignment;
-	switch ((WPXVerticalAlignment)propList["vertical-alignment"]->getInt())
-	{
-	case TOP:
-		sCellVerticalAlignment.sprintf("TOP");
-		break;
-	case MIDDLE:
-		sCellVerticalAlignment.sprintf("MIDDLE");
-		break;
-	case BOTTOM:
-		sCellVerticalAlignment.sprintf("BOTTOM");
-		break;
-	case FULL:
-		sCellVerticalAlignment.sprintf("FULL");
-		break;
-	default:
-		break;
-	}
-			
-	_U(("openTableCell(col: %d, row: %d, colSpan: %d, rowSpan: %d, borderBits: %d, cellColor: %s, cellBorderColor: %s, cellVerticalAlignment %s)\n",
-	    propList["col"]->getInt(), propList["row"]->getInt(), propList["col-span"]->getInt(), propList["row-span"]->getInt(), propList["border-bits"]->getInt(),
-    	    propList["color"]->getStr().getUTF8(), propList["border-color"]->getStr().getUTF8(),
-	    sCellVerticalAlignment.getUTF8()),
+	_U(("openTableCell(%s)\n", getPropString(propList)()),
 	   LC_OPEN_TABLE_CELL);
 }
 
@@ -376,7 +347,7 @@ void RawListenerImpl::closeTableCell()
 
 void RawListenerImpl::insertCoveredTableCell(const WPXPropertyList &propList)
 {
-	__iprintf("insertCoveredTableCell(col: %d, row: %d)\n", propList["col"]->getInt(), propList["row"]->getInt());
+	__iprintf("insertCoveredTableCell(%s)\n", getPropString(propList)());
 }
 
 void RawListenerImpl::closeTable()

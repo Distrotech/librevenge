@@ -132,6 +132,33 @@ WPXNumberingType _extractWPXNumberingTypeFromBuf(const UTF8String &buf, const WP
 	return ARABIC;
 }
 
+UTF8String _numberingTypeToString(WPXNumberingType t)
+{
+	UTF8String sListTypeSymbol("1");
+	switch (t)
+	{
+	case ARABIC:
+		sListTypeSymbol.sprintf("1");
+		break;	
+	case LOWERCASE:
+		sListTypeSymbol.sprintf("a");
+		break;	
+	case UPPERCASE:
+		sListTypeSymbol.sprintf("A");
+		break;	
+ 	case LOWERCASE_ROMAN:
+		sListTypeSymbol.sprintf("i");
+		break;	
+ 	case UPPERCASE_ROMAN:
+		sListTypeSymbol.sprintf("I");
+		break;
+	}
+
+	return sListTypeSymbol;
+}
+
+
+
 WP6OutlineDefinition::WP6OutlineDefinition(const WP6OutlineLocation outlineLocation, const uint8_t *numberingMethods, const uint8_t tabBehaviourFlag)
 {
 	_updateNumberingMethods(outlineLocation, numberingMethods);
@@ -988,10 +1015,10 @@ void WP6HLContentListener::noteOff(const WPXNoteType noteType)
 		m_parseState->m_styleStateSequence.setCurrentState(NORMAL);
 		WPXNumberingType numberingType = _extractWPXNumberingTypeFromBuf(m_parseState->m_numberText, ARABIC);
 		int number = _extractDisplayReferenceNumberFromBuf(m_parseState->m_numberText, numberingType);
-		m_parseState->m_numberText.clear(); // we do not need the text version of the number anymore;
+		m_parseState->m_numberText.clear(); // we do not need the text version of the number anymore
 
 		WPXPropertyList propList;
-		propList.insert("number", number);
+		propList.insert("libwpd:number", number);
 
 		if (noteType == FOOTNOTE)
 			m_listenerImpl->openFootnote(propList);
@@ -1303,24 +1330,27 @@ void WP6HLContentListener::_handleListChange(const uint16_t outlineHash)
 	if (m_parseState->m_currentListLevel > oldListLevel)
 	{
 		WPXPropertyList propList;
-		propList.insert("id", m_parseState->m_currentOutlineHash);
-		propList.insert("level", m_parseState->m_currentListLevel);
+		propList.insert("libwpd:id", m_parseState->m_currentOutlineHash);
+		propList.insert("libwpd:level", m_parseState->m_currentListLevel);
 
-		if (m_parseState->m_putativeListElementHasDisplayReferenceNumber) {
+		if (m_parseState->m_putativeListElementHasDisplayReferenceNumber) 
+		{
 			WPXNumberingType listType = _extractWPXNumberingTypeFromBuf(m_parseState->m_numberText,
-									      outlineDefinition->getListType((m_parseState->m_currentListLevel-1)));
+										    outlineDefinition->getListType((m_parseState->m_currentListLevel-1)));			
 			int number = _extractDisplayReferenceNumberFromBuf(m_parseState->m_numberText, listType);
 
-			propList.insert("text-before-number", m_parseState->m_textBeforeDisplayReference);
-			propList.insert("type", listType);
-			propList.insert("text-after-number", m_parseState->m_textAfterDisplayReference);
-			propList.insert("starting-number", number);
+			propList.insert("style:num-prefix", m_parseState->m_textBeforeDisplayReference);
+			propList.insert("style:num-format", _numberingTypeToString(listType));
+			propList.insert("style:num-suffix", m_parseState->m_textAfterDisplayReference);
+			propList.insert("text:start-value", number);
+			propList.insert("text:space-before", (m_parseState->m_currentListLevel * WPX_DEFAULT_LIST_INDENT));
 
 			m_listenerImpl->defineOrderedListLevel(propList);
 		}
 		else
 		{
-			propList.insert("bullet", m_parseState->m_textBeforeDisplayReference);
+			propList.insert("text:bullet-char", m_parseState->m_textBeforeDisplayReference);
+			propList.insert("text:space-before", (m_parseState->m_currentListLevel * WPX_DEFAULT_LIST_INDENT));
 			m_listenerImpl->defineUnorderedListLevel(propList);
 		}
 		for (int i=(oldListLevel+1); i<=m_parseState->m_currentListLevel; i++) {
@@ -1328,7 +1358,7 @@ void WP6HLContentListener::_handleListChange(const uint16_t outlineHash)
  			WPD_DEBUG_MSG(("Pushed level %i onto the list level stack\n", i));
 			
 			WPXPropertyList propList2;
-			propList2.insert("id", m_parseState->m_currentOutlineHash);
+			propList2.insert("libwpd:id", m_parseState->m_currentOutlineHash);
 
 			if (m_parseState->m_putativeListElementHasDisplayReferenceNumber)
 				m_listenerImpl->openOrderedListLevel(propList2);

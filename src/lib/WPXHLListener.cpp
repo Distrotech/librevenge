@@ -461,10 +461,39 @@ void WPXHLListener::_openTable()
 	_closeTable();
 
 	WPXPropertyList propList;
-	propList.insert("alignment", m_ps->m_tableDefinition.m_positionBits);
-	propList.insert("margin-left", m_ps->m_paragraphMarginLeft);
-	propList.insert("margin-right", m_ps->m_paragraphMarginRight);
-	propList.insert("left-offset", m_ps->m_tableDefinition.m_leftOffset);
+	switch (m_ps->m_tableDefinition.m_positionBits)
+	{
+	case WPX_TABLE_POSITION_ALIGN_WITH_LEFT_MARGIN:
+		propList.insert("table:align", "left");
+		propList.insert("fo:margin-left", 0.0f);
+		break;
+	case WPX_TABLE_POSITION_ALIGN_WITH_RIGHT_MARGIN:
+		propList.insert("table:align", "right");
+		break;
+	case WPX_TABLE_POSITION_CENTER_BETWEEN_MARGINS:
+		propList.insert("table:align", "center");
+		break;
+	case WPX_TABLE_POSITION_ABSOLUTE_FROM_LEFT_MARGIN:
+		propList.insert("table:align", "left");
+		propList.insert("fo:margin-left", m_ps->m_tableDefinition.m_leftOffset - 
+				m_ps->m_pageMarginLeft + m_ps->m_paragraphMarginLeft);
+		break;
+	case WPX_TABLE_POSITION_FULL:
+		propList.insert("table:align", "margins");
+		propList.insert("fo:margin-left", m_ps->m_paragraphMarginLeft);
+		propList.insert("fo:margin-right", m_ps->m_paragraphMarginRight);
+		break;
+	default:
+		break;
+	}
+
+ 	float tableWidth = 0.0f;
+ 	typedef vector<WPXColumnDefinition>::const_iterator CDVIter;
+ 	for (CDVIter iter = m_ps->m_tableDefinition.columns.begin(); iter != m_ps->m_tableDefinition.columns.end(); iter++)
+ 	{
+ 		tableWidth += (*iter).m_width;
+ 	}
+	propList.insert("style:width", tableWidth);
 
 	m_listenerImpl->openTable(propList, m_ps->m_tableDefinition.columns);
 	m_ps->m_isTableOpened = true;
@@ -500,8 +529,10 @@ void WPXHLListener::_openTableRow(const float height, const bool isMinimumHeight
 	m_ps->m_currentTableCol = 0;
 
 	WPXPropertyList propList;
-	propList.insert("height", height);
-	propList.insert("is-minimum-height", isMinimumHeight);
+	if (isMinimumHeight && height != 0.0f) // minimum height kind of stupid if it's not set, right?
+		propList.insert("style:min-row-height", height);
+	else if (height != 0.0f) // this indicates that wordperfect didn't set a height
+		propList.insert("style:row-height", height);
 
 	// Only the first "Header Row" in a table is the actual "Header Row"
 	// The following "Header Row" flags are ignored
@@ -528,6 +559,35 @@ void WPXHLListener::_closeTableRow()
 	m_ps->m_isTableRowOpened = false;
 }
 
+const float WPX_DEFAULT_TABLE_BORDER_WIDTH = 0.0007f;
+
+void addBorderProps(const char *border, bool borderOn, const UTF8String &borderColor, WPXPropertyList &propList)
+{
+#if 0
+// WLACH_REFACTORING: a (not working, obviously) sketch of an alternate way of doing this
+// in case it turns out to be desirable. Right now it appears not, as we would have to
+// retranslate them on import to OOo (because they don't completely support xsl-fo)
+// .. but it might make things way easier in Abi. Maybe not.
+	if (borderOn)
+	{
+		propList.insert("fo:border-left-width", WPX_DEFAULT_TABLE_BORDER_WIDTH);
+		propList.insert("fo:border-left-style", "solid");
+		propList.insert("fo:border-left-color", borderColor);
+	}
+	else
+		propList.insert("fo:border-left-width", 0.0f);
+#endif
+	
+	UTF8String borderStyle;
+	borderStyle.sprintf("fo:border-%s", border);
+	UTF8String props;
+	if (borderOn)
+		props.sprintf("%finch solid %s", WPX_DEFAULT_TABLE_BORDER_WIDTH, borderColor());
+	else
+		props.sprintf("0.0inch");
+	propList.insert(borderStyle(), props);
+}
+
 void WPXHLListener::_openTableCell(const uint8_t colSpan, const uint8_t rowSpan, const bool boundFromLeft, const bool boundFromAbove,
 				   const uint8_t borderBits, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
 				   const RGBSColor * cellBorderColor, const WPXVerticalAlignment cellVerticalAlignment)
@@ -535,17 +595,36 @@ void WPXHLListener::_openTableCell(const uint8_t colSpan, const uint8_t rowSpan,
 	_closeTableCell();
 
 	WPXPropertyList propList;
-	propList.insert("col", m_ps->m_currentTableCol);		
-	propList.insert("row", m_ps->m_currentTableRow);		
+	propList.insert("libwpd:column", m_ps->m_currentTableCol);		
+	propList.insert("libwpd:row", m_ps->m_currentTableRow);		
 
 	if (!boundFromLeft && !boundFromAbove)
 	{
-		propList.insert("col-span", colSpan);
-		propList.insert("row-span", rowSpan);
-		propList.insert("border-bits", borderBits);
-		propList.insert("vertical-alignment", cellVerticalAlignment);
-		propList.insert("color", _mergeColorsToString(cellFgColor, cellBgColor));
-		propList.insert("border-color", _colorToString(cellBorderColor));
+		propList.insert("table:number-columns-spanned", colSpan);
+		propList.insert("table:number-rows-spanned", rowSpan);
+
+		UTF8String borderColor = _colorToString(cellBorderColor);
+		addBorderProps("left", !(borderBits & WPX_TABLE_CELL_LEFT_BORDER_OFF), borderColor, propList);
+		addBorderProps("right", !(borderBits & WPX_TABLE_CELL_RIGHT_BORDER_OFF), borderColor, propList);
+		addBorderProps("top", !(borderBits & WPX_TABLE_CELL_TOP_BORDER_OFF), borderColor, propList);
+		addBorderProps("bottom", !(borderBits & WPX_TABLE_CELL_BOTTOM_BORDER_OFF), borderColor, propList);
+
+		switch (cellVerticalAlignment)
+		{
+		case TOP:
+			propList.insert("fo:vertical-align", "top");
+			break;
+		case MIDDLE:
+			propList.insert("fo:vertical-align", "middle");
+			break;
+		case BOTTOM:
+			propList.insert("fo:vertical-align", "bottom");
+			break;
+		case FULL: // full not in XSL-fo?
+		default:
+			break;
+		}
+		propList.insert("fo:background-color", _mergeColorsToString(cellFgColor, cellBgColor));
 		m_listenerImpl->openTableCell(propList);
 		m_ps->m_isTableCellOpened = true;
 	}
