@@ -451,9 +451,21 @@ void WP6HLContentListener::attributeChange(const bool isOn, const guint8 attribu
 		case WP6_ATTRIBUTE_SUPERSCRIPT:
 			textAttributeBit = WPX_SUPERSCRIPT_BIT;
 			break;
+		case WP6_ATTRIBUTE_OUTLINE:
+			textAttributeBit = WPX_OUTLINE_BIT;
+			break;
 		case WP6_ATTRIBUTE_ITALICS:
 			textAttributeBit = WPX_ITALICS_BIT;
 			break;
+		case WP6_ATTRIBUTE_SHADOW:
+			textAttributeBit = WPX_SHADOW_BIT;
+			break;
+		case WP6_ATTRIBUTE_REDLINE:
+			textAttributeBit = WPX_REDLINE_BIT;
+			break;
+		case WP6_ATTRIBUTE_DOUBLE_UNDERLINE:
+			textAttributeBit = WPX_DOUBLE_UNDERLINE_BIT;
+			break;			
 		case WP6_ATTRIBUTE_BOLD:
 			textAttributeBit = WPX_BOLD_BIT;
 			break;
@@ -462,6 +474,12 @@ void WP6HLContentListener::attributeChange(const bool isOn, const guint8 attribu
 			break;
 		case WP6_ATTRIBUTE_UNDERLINE:
 			textAttributeBit = WPX_UNDERLINE_BIT;
+			break;
+		case WP6_ATTRIBUTE_SMALL_CAPS:
+			textAttributeBit = WPX_SMALL_CAPS_BIT;
+			break;
+		case WP6_ATTRIBUTE_BLINK:
+			textAttributeBit = WPX_BLINK_BIT;
 			break;
 		}
 		
