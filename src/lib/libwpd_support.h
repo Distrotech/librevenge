@@ -28,19 +28,22 @@
 #define LIBWPD_SUPPORT_H
 #include <glib.h>
 
-extern guint16 extendedInternationalCharacterMap[];
-extern guint16 multinationalMap[];
-extern guint16 phoneticMap[];
-extern guint16 typographicMap[];
-extern guint16 iconicMap[];
-extern guint16 mathMap[];
-extern guint16 mathextMap[];
-extern guint16 greekMap[];
-extern guint16 hebrewMap[];
-extern guint16 cyrillicMap[];
-extern guint16 japaneseMap[];
+extern const guint16 asciiMap[];
+extern const guint16 extendedInternationalCharacterMap[];
+extern const guint16 multinationalMap[];
+extern const guint16 phoneticMap[];
+extern const guint16 typographicMap[];
+extern const guint16 iconicMap[];
+extern const guint16 mathMap[];
+extern const guint16 mathextMap[];
+extern const guint16 greekMap[];
+extern const guint16 hebrewMap[];
+extern const guint16 cyrillicMap[];
+extern const guint16 japaneseMap[];
+extern const guint16 *tibetanMap1[];
 
-guint16 extendedCharacterToUCS2(guint8 character, guint8 characterSet);
+int extendedCharacterToUCS2(guint8 character, guint8 characterSet,
+			    const guint16 **chars);
 
 enum WPXNumberingType { ARABIC, LOWERCASE, UPPERCASE, LOWERCASE_ROMAN, UPPERCASE_ROMAN };
 enum WPXNoteType { FOOTNOTE, ENDNOTE };

@@ -67,7 +67,12 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6LLListener *llListener) const
 		{
 			guint8 character = (wpChar & 0xFF);
 			guint8 characterSet = (wpChar & 0xFF00) >> 8;
-			name.append(extendedCharacterToUCS2(character, characterSet));
+			const guint16 *chars;
+			int len, j;
+			len = extendedCharacterToUCS2(character,
+						      characterSet, &chars);
+			for (i = 0; i < len; i++)
+				name.append(chars[i]);
 		} 
 		
 		if (tagID == WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_CREATION_DATE ||
@@ -93,7 +98,12 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6LLListener *llListener) const
 			{				
 			guint8 character = (wpChar & 0xFF);
 			guint8 characterSet = (wpChar & 0xFF00) >> 8;
-			data.append(extendedCharacterToUCS2(character, characterSet));
+			const guint16 *chars;
+			int len, j;
+			len = extendedCharacterToUCS2(character,
+						      characterSet, &chars);
+			for (i = 0; i < len; i++)
+				data.append(chars[i]);
 			} 
 			llListener->setExtendedInformation(tagID, data);
 		}

@@ -26,7 +26,43 @@
 #include "libwpd.h"
 #include <string.h>
 
-guint16 extendedInternationalCharacterMap[] = 
+const guint16 asciiMap[] =
+{
+	  0,   1,   2,   3,   4,   5,   6,   7,
+	  8,   9,  10,  11,  12,  13,  14,  15,
+	 16,  17,  18,  19,  20,  21,  22,  23,
+	 24,  25,  26,  27,  28,  29,  30,  31,
+	 32,  33,  34,  35,  36,  37,  38,  39,
+	 40,  41,  42,  43,  44,  45,  46,  47,
+	 48,  49,  50,  51,  52,  53,  54,  55,
+	 56,  57,  58,  59,  60,  61,  62,  63,
+	 64,  65,  66,  67,  68,  69,  70,  71,
+	 72,  73,  74,  75,  76,  77,  78,  79,
+	 80,  81,  82,  83,  84,  85,  86,  87,
+	 88,  89,  90,  91,  92,  93,  94,  95,
+	 96,  97,  98,  99, 100, 101, 102, 103,
+	104, 105, 106, 107, 108, 109, 110, 111,
+	112, 113, 114, 115, 116, 117, 118, 119,
+	120, 121, 122, 123, 124, 125, 126, 127,
+	128, 129, 130, 131, 132, 133, 134, 135,
+	136, 137, 138, 139, 140, 141, 142, 143,
+	144, 145, 146, 147, 148, 149, 150, 151,
+	152, 153, 154, 155, 156, 157, 158, 159,
+	160, 161, 162, 163, 164, 165, 166, 167,
+	168, 169, 170, 171, 172, 173, 174, 175,
+	176, 177, 178, 179, 180, 181, 182, 183,
+	184, 185, 186, 187, 188, 189, 190, 191,
+	192, 193, 194, 195, 196, 197, 198, 199,
+	200, 201, 202, 203, 204, 205, 206, 207,
+	208, 209, 210, 211, 212, 213, 214, 215,
+	216, 217, 218, 219, 220, 221, 222, 223,
+	224, 225, 226, 227, 228, 229, 230, 231,
+	232, 233, 234, 235, 236, 237, 238, 239,
+	240, 241, 242, 243, 244, 245, 246, 247,
+	248, 249, 250, 251, 252, 253, 254, 255,
+};
+
+const guint16 extendedInternationalCharacterMap[] = 
 { 
   229, // lower case 'a' with a small circle
   197, // upper case 'a' with a small circle
@@ -66,7 +102,7 @@ guint16 extendedInternationalCharacterMap[] =
    KWord project, licensed under the LGPL */
 
 /* WP multinational characters (charset 1) */
-guint16 multinationalMap[] = {
+const guint16 multinationalMap[] = {
   0x0300, 0x00b7, 0x0303, 0x0302, 0x0335, 0x0338, 0x0301, 0x0308,
   0x0304, 0x0313, 0x0315, 0x02bc, 0x0326, 0x0315, 0x030a, 0x0307,
   0x030b, 0x0327, 0x0328, 0x030c, 0x0337, 0x0305, 0x0306, 0x00df,
@@ -101,7 +137,7 @@ guint16 multinationalMap[] = {
 };
 
 /* WP phonetic symbol (charset 2) */
-guint16 phoneticMap[] = {
+const guint16 phoneticMap[] = {
   0x02b9, 0x02ba, 0x02bb, 0xf813, 0x02bd, 0x02bc, 0xf814, 0x02be,
   0x02bf, 0x0310, 0x02d0, 0x02d1, 0x0306, 0x032e, 0x0329, 0x02c8,
   0x02cc, 0x02c9, 0x02ca, 0x02cb, 0x02cd, 0x02ce, 0x02cf, 0x02c6,
@@ -124,7 +160,7 @@ guint16 phoneticMap[] = {
 };
 
 /* WP typographic symbol (charset 4) */
-guint16 typographicMap[] = {
+const guint16 typographicMap[] = {
   0x25cf, 0x25cb, 0x25a0, 0x2022, 0xf817, 0x00b6, 0x00a7, 0x00a1,
   0x00bf, 0x00ab, 0x00bb, 0x00a3, 0x00a5, 0x20a7, 0x0192, 0x00aa,
   0x00ba, 0x00bd, 0x00bc, 0x00a2, 0x00b2, 0x207f, 0x00ae, 0x00a9,
@@ -141,7 +177,7 @@ guint16 typographicMap[] = {
 };
 
 /* WP iconic symbol (charset 5) */
-guint16 iconicMap[] = {
+const guint16 iconicMap[] = {
   0x2661, 0x2662, 0x2667, 0x2664, 0x2642, 0x2640, 0x263c, 0x263a,
   0x263b, 0x266a, 0x266c, 0x25ac, 0x2302, 0x203c, 0x221a, 0x21a8,
   0x2310, 0x2319, 0x25d8, 0x25d9, 0x21b5, 0x2104, 0x261c, 0x2007,
@@ -177,7 +213,7 @@ guint16 iconicMap[] = {
 };
 
 /* WP math/scientific (charset 6) */
-guint16 mathMap[] = {
+const guint16 mathMap[] = {
   0x2212, 0x00b1, 0x2264, 0x2265, 0x221d, 0x01c0, 0x2215, 0x2216,
   0x00f7, 0x2223, 0x2329, 0x232a, 0x223c, 0x2248, 0x2261, 0x2208,
   0x2229, 0x2225, 0x2211, 0x221e, 0x00ac, 0x2192, 0x2190, 0x2191,
@@ -211,7 +247,7 @@ guint16 mathMap[] = {
 };
 
 /* WP math/scientific extended (charset 7) */
-guint16 mathextMap[] = {
+const guint16 mathextMap[] = {
   0x2320, 0x2321, 0xf702, 0xf703, 0x221a, 0xf705, 0xf706, 0xf707,
   0xf708, 0xf709, 0xf70a, 0xf70b, 0xf70c, 0xf70d, 0xf70e, 0xf70f,
   0xf710, 0xf711, 0xf712, 0xf713, 0xf714, 0xf715, 0xf716, 0xf717,
@@ -240,7 +276,7 @@ guint16 mathextMap[] = {
 };
 
 /* WP greek (charset 8) */
-guint16 greekMap[] = {
+const guint16 greekMap[] = {
   0x0391, 0x03b1, 0x0392, 0x03b2, 0x0392, 0x03d0, 0x0393, 0x03b3,
   0x0394, 0x03b4, 0x0395, 0x03b5, 0x0396, 0x03b6, 0x0397, 0x03b7,
   0x0398, 0x03b8, 0x0399, 0x03b9, 0x039a, 0x03ba, 0x039b, 0x03bb,
@@ -272,7 +308,7 @@ guint16 greekMap[] = {
 };
 
 /* WP hebrew (charset 9) */
-guint16 hebrewMap[] = {
+const guint16 hebrewMap[] = {
   0x05d0, 0x05d1, 0x05d2, 0x05d3, 0x05d4, 0x05d5, 0x05d6, 0x05d7,
   0x05d8, 0x05d9, 0x05da, 0x05db, 0x05dc, 0x05dd, 0x05de, 0x05df,
   0x05e0, 0x05e1, 0x05e2, 0x05e3, 0x05e4, 0x05e5, 0x05e6, 0x05e7,
@@ -292,7 +328,7 @@ guint16 hebrewMap[] = {
 };
 
 /* WP cyrillic (charset 10) */
-guint16 cyrillicMap[] = {
+const guint16 cyrillicMap[] = {
   0x0410, 0x0430, 0x0411, 0x0431, 0x0412, 0x0432, 0x0413, 0x0433,
   0x0414, 0x0434, 0x0415, 0x0435, 0x0401, 0x0451, 0x0416, 0x0436,
   0x0417, 0x0437, 0x0418, 0x0438, 0x0419, 0x0439, 0x041a, 0x043a,
@@ -328,7 +364,7 @@ guint16 cyrillicMap[] = {
 };
 
 /* WP japanese (charset 11) */
-guint16 japaneseMap[] = {
+const guint16 japaneseMap[] = {
   0xff61, 0xff62, 0xff63, 0xff64, 0xff65, 0xff66, 0xff67, 0xff68,
   0xff69, 0xff6a, 0xff6b, 0xff6c, 0xff6d, 0xff6e, 0xff6f, 0xff70,
   0xff71, 0xff72, 0xff73, 0xff74, 0xff75, 0xff76, 0xff77, 0xff78,
@@ -339,61 +375,101 @@ guint16 japaneseMap[] = {
   0xff99, 0xff9a, 0xff9b, 0xff9c, 0xff9d, 0xff9e, 0xff9f
 };
 
-guint16 extendedCharacterToUCS2(guint8 character, guint8 characterSet)
+/* WP Tibetan (charset 12)
+ *
+ * WP6TibetanMap.h is generated automatically, so it doesn't make sense
+ * to copy it in here every time it's regenerated.
+ */
+
+#include "WP6TibetanMap.h"
+
+int extendedCharacterToUCS2(guint8 character,
+			    guint8 characterSet, const guint16 **chars)
 {
+	int i;
+
 	if (characterSet == 0) 
 	{
 		// if characterset == 0, we have ascii. note that this is different from the doc. body
 		// this is not documented in the file format specifications
-		return (guint16) character;
+		*chars = &asciiMap[character];
+		return 1;
 	}
 	
 	switch (characterSet) 
 	{
 	case WP6_MULTINATIONAL_CHARACTER_SET:
-		if (character < WP6_NUM_MULTINATIONAL_CHARACTERS)
-			return multinationalMap[character];
+		if (character < WP6_NUM_MULTINATIONAL_CHARACTERS) {
+			*chars = &multinationalMap[character];
+			return 1;
+		}
 		
 	case WP6_PHONETIC_SYMBOL_CHARACTER_SET:
-		if (character < WP6_NUM_PHONETIC_CHARACTERS)
-			return phoneticMap[character];
+		if (character < WP6_NUM_PHONETIC_CHARACTERS) {
+			*chars = &phoneticMap[character];
+			return 1;
+		}
 		
 	case WP6_TYPOGRAPHIC_SYMBOL_CHARACTER_SET:
-		if (character < WP6_NUM_TYPOGRAPHIC_CHARACTERS)
-			return typographicMap[character];
+		if (character < WP6_NUM_TYPOGRAPHIC_CHARACTERS) {
+			*chars = &typographicMap[character];
+			return 1;
+		}
 		
 	case WP6_ICONIC_SYMBOL_CHARACTER_SET:
-		if (character < WP6_NUM_ICONIC_CHARACTERS)
-			return iconicMap[character];
+		if (character < WP6_NUM_ICONIC_CHARACTERS) {
+			*chars = &iconicMap[character];
+			return 1;
+		}
 		
 	case WP6_MATH_SCIENTIFIC_CHARACTER_SET:
-		if (character < WP6_NUM_MATH_SCIENTIFIC_CHARACTERS)
-			return mathMap[character];       
+		if (character < WP6_NUM_MATH_SCIENTIFIC_CHARACTERS) {
+			*chars = &mathMap[character];       
+			return 1;
+		}
 		
 	case WP6_MATH_SCIENTIFIC_EXTENDED_CHARACTER_SET:
-		if (character < WP6_NUM_MATH_SCIENTIFIC_EXTENDED_CHARACTERS)
-			return mathextMap[character];       
+		if (character < WP6_NUM_MATH_SCIENTIFIC_EXTENDED_CHARACTERS) {
+			*chars = &mathextMap[character];       
+			return 1;
+		}
 		
 	case WP6_GREEK_CHARACTER_SET:
-		if (character < WP6_NUM_GREEK_CHARACTERS)
-			return greekMap[character];       
+		if (character < WP6_NUM_GREEK_CHARACTERS) {
+			*chars = &greekMap[character];       
+			return 1;
+		}
 		
 	case WP6_HEBREW_CHARACTER_SET:
-		if (character < WP6_NUM_HEBREW_CHARACTERS)
-			return hebrewMap[character];       
+		if (character < WP6_NUM_HEBREW_CHARACTERS) {
+			*chars = &hebrewMap[character];       
+			return 1;
+		}
 		
 	case WP6_CYRILLIC_CHARACTER_SET:
-		if (character < WP6_NUM_CYRILLIC_CHARACTERS)
-			return cyrillicMap[character];       
+		if (character < WP6_NUM_CYRILLIC_CHARACTERS) {
+			*chars = &cyrillicMap[character];       
+			return 1;
+		}
 		
 	case WP6_JAPANESE_CHARACTER_SET:
-		if (character < WP6_NUM_JAPANESE_CHARACTERS)
-			return japaneseMap[character];
+		if (character < WP6_NUM_JAPANESE_CHARACTERS) {
+			*chars = &japaneseMap[character];
+			return 1;
+		}
 		
+	case WP6_TIBETAN_CHARACTER_SET:
+		if (tibetanMap1[character]) {
+			for (i = 0; tibetanMap1[character][i]; i++)
+				;
+			*chars = tibetanMap1[character];
+			return i;
+		}
 	}
 
 	// last resort: return whitespace
-	return (guint16)' ';
+	*chars = &asciiMap[' '];
+	return 1;
 }
 
 _RGBSColor::_RGBSColor(guint8 r, guint8 g, guint8 b, guint8 s)

@@ -89,16 +89,25 @@ void WP6FontDescriptorPacket::_readContents(GsfInput *input)
 		   {
 			   guint8 characterSet = (tempFontName[i] & 0xFF00) >> 8;
 			   guint8 character = (tempFontName[i] & 0xFF);
-			   guint16 ucs2Character = extendedCharacterToUCS2(character, characterSet);
+			   int len, i;
+			   const guint16 *chars;
 			   
-			   if (ucs2Character == 0x20) {
+			   len = extendedCharacterToUCS2(character, characterSet, &chars);
+			   /* We are only using ascii characters here, and
+			    * if we have more than one character, that's
+			    * going to be an international character, so
+			    * we don't actually iterate through the list of
+			    * characters returned - we assume that just one
+			    * character was returned.
+			    */
+			   if (chars[0] == 0x20) {
 				   m_fontName[tempLength]=' ';
 				   tempLength++;
 				   numTokens++;
 				   lastTokenPosition=tempLength;
 			   }
-			   else if (ucs2Character != 0x00 && ucs2Character < 0x7F) {
-				   m_fontName[tempLength]=(gchar) ucs2Character;
+			   else if (chars[0] != 0x00 && chars[0] < 0x7F) {
+				   m_fontName[tempLength]=(gchar) chars[0];
 				   tempLength++;
 			   }
 		   }

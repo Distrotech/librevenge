@@ -44,5 +44,11 @@ void WP6ExtendedCharacterGroup::_readContents(GsfInput *input)
 
 void WP6ExtendedCharacterGroup::parse(WP6LLListener *llListener)
 {
-	llListener->insertCharacter(extendedCharacterToUCS2(m_character, m_characterSet));
+	const guint16 *chars;
+	int len = extendedCharacterToUCS2(m_character,
+					  m_characterSet, &chars);
+	int i;
+
+	for (i = 0; i < len; i++)
+		llListener->insertCharacter(chars[i]);
 }
