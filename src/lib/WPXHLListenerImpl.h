@@ -1,5 +1,5 @@
 /* libwpd
- * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2002-2005 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
  *
  * This library is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@
 #ifndef WPXHLLISTENERIMPL_H
 #define WPXHLLISTENERIMPL_H
 #include "WPXPropertyList.h"
-#include <vector>
+#include "WPXVector.h"
 
 /**
 Pure virtual class containing all the callback functions that can be made by
@@ -40,13 +40,15 @@ class WPXHLListenerImpl
 	/** 
 	Called when all document metadata should be set. This is always the first callback made.
 	\param propList Property list for the metadata. May contain:
-	\li \c author The document's author
-	\li \c subject The document's subject
-	\li \c publisher The document's publisher
-	\li \c keywords The document's keywords
-	\li \c abstract Abstract of the document's contents
-	\li \c descriptive-name The descriptive name for the document
-	\li \c descriptive-type The descriptive type for the document
+	\li \c dc:author The document's author
+	\li \c dc:subject The document's subject
+	\li \c dc:publisher The document's publisher
+	\li \c dc:type The document's type
+	\li \c dc:language The document's keywords
+	\li \c libwpd:keywords The document's keywords
+	\li \c libwpd:abstract Abstract of the document's contents
+	\li \c libwpd:descriptive-name The descriptive name for the document
+	\li \c libwpd:descriptive-type The descriptive type for the document
 	*/
  	virtual void setDocumentMetaData(const WPXPropertyList &propList) = 0;
 
@@ -63,15 +65,15 @@ class WPXHLListenerImpl
 	Called when a new page span is opened. This will always be called before any actual content is placed into
 	the document.
 	\param propList Property list for the page span. May contain:
-	\li \c num-pages The length of this span, in number of pages
-	\li \c is-last-page-span Whether this is the start of the last page span in the document
-	\li \c page-height The height of the page, in inches
-	\li \c page-width The width of the page, in inches
-	\li \c print-orientation The orientation of the page (portrait or landscape), encoded as an integer
-	\li \c margin-left The left margin for each page in the span, in inches
-	\li \c margin-right The right margin for each page in the span, in inches
-	\li \c margin-top The top margin for each page in the span, in inches
-	\li \c margin-bottom The bottom margin for each page in the span, in inches
+	\li \c libwpd:num-pages The length of this span, in number of pages
+	\li \c libwpd:is-last-page-span Whether this is the start of the last page span in the document
+	\li \c fo:page-width The width of the page, in inches
+	\li \c fo:page-height The height of the page, in inches
+	\li \c style:print-orientation The orientation of the page (portrait or landscape)
+	\li \c fo:margin-left The left margin for each page in the span, in inches
+	\li \c fo:margin-right The right margin for each page in the span, in inches
+	\li \c fo:margin-top The top margin for each page in the span, in inches
+	\li \c fo:margin-bottom The bottom margin for each page in the span, in inches
 	*/
 	virtual void openPageSpan(const WPXPropertyList &propList) = 0;
 	/**
@@ -82,7 +84,7 @@ class WPXHLListenerImpl
 	/**
 	Called when a header should be opened (a sub-document will be placed inside of it).
 	\param propList Property list for the header. May contain: 
-	\li \c occurrence Determines on which pages the header will occur, encoded as an integer
+	\li \c libwpd:occurrence Determines on which pages the header will occur (odd, even, or all)
 	*/
 	virtual void openHeader(const WPXPropertyList &propList) = 0;
 	/**
@@ -93,7 +95,7 @@ class WPXHLListenerImpl
 	/**
 	Called when a footer should be opened (a sub-document will be placed inside of it).
 	\param propList Property list for the footer. May contain: 
-	\li \c occurrence Determines on which pages the footer will occur, encoded as an integer
+	\li \c libwpd:occurrence Determines on which pages the footer will occur (odd, even, or all)
 	*/
 	virtual void openFooter(const WPXPropertyList &propList) = 0;
 	/**
@@ -104,18 +106,20 @@ class WPXHLListenerImpl
 	/**
 	Called when a new paragraph is opened. This (or openListElement) will always be called before any text or span is placed into the document.
 	\param propList Property list for the paragraph. May contain:
-	\li \c justification The justification (left, center, right, full, full all lines, or decimal aligned) encoded as an unsigned 8-bit integer
-	\li \c margin-left The left indentation of this paragraph, in inches
-	\li \c margin-right The right indentation of this paragraph, in inches
-	\li \c margin-top The amount of extra spacing to be placed before the paragraph, in inches
-	\li \c margin-bottom The amount of extra spacing to be placed after the paragraph, in inches
-	\li \c text-indent The indentation of first line, in inches (difference relative to margin-left)
-	\li \c line-spacing The amount of spacing between lines, in number of lines (1.0 is single spacing)
-	\li \c column-break Whether this paragraph should be placed in a new column
-	\li \c page-break Whether this paragraph should start a new page
-	\param tabStops List of tabstop definitions for the paragraph. If the list is empty, default tabstop definition should be used.
+	\li \c fo:text-align The justification of this paragraph (left, center, end, full, or justify)
+	\li \c fo:margin-left The left indentation of this paragraph, in inches
+	\li \c fo:margin-right The right indentation of this paragraph, in inches
+	\li \c fo:margin-top The amount of extra spacing to be placed before the paragraph, in inches
+	\li \c fo:margin-bottom The amount of extra spacing to be placed after the paragraph, in inches
+	\li \c fo:text-indent The indentation of first line, in inches (difference relative to margin-left)
+	\li \c fo:line-height The amount of spacing between lines, in number of lines (1.0 is single spacing)
+	\li \c fo:break-before Whether this paragraph should be placed in a new column or page (the value is set to column or page if so)
+	\param tabStops List of tabstop definitions for the paragraph. If the list is empty, default tabstop definition should be used. Each tab stop may contain:
+	\li \c style:type Type of tab (left, right, center, char, or .)
+	\li \c style:leader-char The leader character
+	\li \c style:position Position of the tab
 	*/
-	virtual void openParagraph(const WPXPropertyList &propList, const std::vector<WPXPropertyList> &tabStops) = 0;
+	virtual void openParagraph(const WPXPropertyList &propList, const WPXVector<WPXPropertyList> &tabStops) = 0;
 	/**
 	Called when a paragraph is closed.
 	*/
@@ -124,10 +128,15 @@ class WPXHLListenerImpl
 	/**
 	Called when a text span is opened
 	\param propList Property list for the span. May contain:
-	\li \c text-attribute-bits  Font style (bold, italic, etc.), encoded as a WP6 attribute state integer
-	\li \c font-name The name of the font used in the span, a text string in ascii
-	\li \c font-size The size of the font used in the span, in points (72 points per inch)
-	\li \c color The color of the font used in the span
+	\li \c fo:font-style Font style (italic or normal)
+	\li \c fo:font-weight Font style (bold or normal)
+	\li \c style:text-crossing-out (single-line, if present)
+	\li \c style:text-underline (double or single)
+	\li \c style:text-outline (true or false)
+	\li \c fo:font-variant (small-caps, if present)
+	\li \c style:font-name The name of the font used in the span, a text string in ascii
+	\li \c fo:font-size The size of the font used in the span, in points (72 points per inch)
+	\li \c fo:color The color of the font used in the span (encoded in hex: #RRGGBB)
 	\li \c text-background-color The background color of the text in the span
 	*/
 	virtual void openSpan(const WPXPropertyList &propList) = 0;
@@ -138,11 +147,14 @@ class WPXHLListenerImpl
 	/**
 	Called when a new section is opened
 	\param propList Property list for the section. May contain: 
-	\li \c num-columns  Number of text columns on the page. If equal to 1, the section does not have columns.
-	\li \c margin-bottom  Extra space to add after the section, in inches 
-	\param columns List of definitions of each column: left gutter, right gutter, and width (includes the gutters). Empty if num-columns is equal to 1.
+	\li \c fo:margin-bottom  Extra space to add after the section, in inches 
+	\li \c text:dont-balance-text-columns Whether or not to balance text columns
+	\param columns List of definitions of each column: left gutter, right gutter, and width (includes the gutters). Empty if there is only one column in the section. Each column may contain:
+	\li \c style:rel-width
+	\li \c fo:margin-left The left indentation of the margin, in inches
+	\li \c fo:margin-right The right indentation of the margin, in inches
 	*/
-	virtual void openSection(const WPXPropertyList &propList, const std::vector<WPXPropertyList> &columns) = 0;
+	virtual void openSection(const WPXPropertyList &propList, const WPXVector<WPXPropertyList> &columns) = 0;
 	/**
 	Called when a section is closed
 	*/
@@ -154,7 +166,7 @@ class WPXHLListenerImpl
 	virtual void insertTab() = 0;
 	/**
 	Called when a string of text should be inserted
-	\param text A textbuffer encoded in UCS4
+	\param text A textbuffer encoded as a UTF8 string
 	*/
 	virtual void insertText(const WPXString &text) = 0;
 	/**
@@ -165,32 +177,34 @@ class WPXHLListenerImpl
 	/**
 	Defines an ordered (enumerated) list level
 	\param propList Defines a set of properties for the list. May contain:
-	\li \c id A unique integer identifier for the list
-	\li \c level Level of indentation
-	\li \c type Type of list encoded as an integer
-	\li \c text-before-number Text that comes before the number in the list
-	\li \c text-after-number Text that comes after the number in the list
-	\li \c starting-number The starting number of the list
+	\li \c libwpd:id A unique integer identifier for the list
+	\li \c libwpd:level The level of the list in the hierarchy
+	\li \c style:num-format Type of list
+	\li \c style:num-prefix Text that comes before the number in the list
+	\li \c style:num-suffix Text that comes after the number in the list
+	\li \c text:start-value The starting number of the list
+	\li \c text:space-before The indentation level of the lists, stored in inches
 	*/
 	virtual void defineOrderedListLevel(const WPXPropertyList &propList) = 0;
 	/**
 	Defines an unordered (unenumerated) list level
 	\param propList Defines a set of properties for the list level. May contain:
-	\li \c id A unique integer identifier for the list
-	\li \c level Level of indentation
-	\li \c bullet The string that should be used as a bullet
+	\li \c libwpd:id A unique integer identifier for the list
+	\li \c libwpd:level The level of the list in the hierarchy
+	\li \c text:bullet-char The string that should be used as a bullet
+	\li \c text:space-before The indentation level of the lists, stored in inches
 	*/
 	virtual void defineUnorderedListLevel(const WPXPropertyList &propList) = 0;	
 	/**
 	Called when a new ordered list level should be opened
 	\param propList Defines a set of properties for the list level. May contain:	
-	\li \c id Which list level definition should be used
+	\li \c libwpd:id Which list level definition should be used
 	*/
 	virtual void openOrderedListLevel(const WPXPropertyList &propList) = 0;
 	/**
 	Called when a new unordered list level should be opened
 	\param propList Defines a set of properties for the list level. May contain:	
-	\li \c id Which list level definition should be used
+	\li \c libwpd:id Which list level definition should be used
 	*/
 	virtual void openUnorderedListLevel(const WPXPropertyList &propList) = 0;
 	/**
@@ -203,17 +217,21 @@ class WPXHLListenerImpl
 	virtual void closeUnorderedListLevel() = 0;
 	/**
 	Called when a list element should be opened
-	\param propList Defines a set of properties for the list element. May contain:	
-	\li \c justification The justification (left, center, right, full, full all lines, or decimal aligned) encoded as an integer
-	\li \c margin-left The left indentation of this list element, in inches
-	\li \c margin-right The right indentation of this list element, in inches
-	\li \c margin-top The amount of extra spacing to be placed before the list element, in inches
-	\li \c margin-bottom The amount of extra spacing to be placed after the list element, in inches
-	\li \c text-indent The indentation of first line, in inches (difference relative to margin-left)
-	\li \c line-spacing The amount of spacing between lines, in number of lines (1.0 is single spacing)
-	\param tabStops List of tabstop definitions for the list element. If the list is empty, default tabstop definition should be used.
+	\param propList Property list for the paragraph. May contain:
+	\li \c fo:text-align The justification of this paragraph (left, center, end, full, or justify)
+	\li \c fo:margin-left The left indentation of this paragraph, in inches
+	\li \c fo:margin-right The right indentation of this paragraph, in inches
+	\li \c fo:margin-top The amount of extra spacing to be placed before the paragraph, in inches
+	\li \c fo:margin-bottom The amount of extra spacing to be placed after the paragraph, in inches
+	\li \c fo:text-indent The indentation of first line, in inches (difference relative to margin-left)
+	\li \c fo:line-height The amount of spacing between lines, in number of lines (1.0 is single spacing)
+	\li \c fo:break-before Whether this paragraph should be placed in a new column or page (the value is set to column or page if so)
+	\param tabStops List of tabstop definitions for the paragraph. If the list is empty, default tabstop definition should be used. Each tab stop may contain:
+	\li \c style:type Type of tab (left, right, center, char, or .)
+	\li \c style:leader-char The leader character
+	\li \c style:position Position of the tab
 	*/
-	virtual void openListElement(const WPXPropertyList &propList, const std::vector<WPXPropertyList> &tabStops) = 0;
+	virtual void openListElement(const WPXPropertyList &propList, const WPXVector<WPXPropertyList> &tabStops) = 0;
 	/**
 	Called when a list element should be closed
 	*/
@@ -222,14 +240,14 @@ class WPXHLListenerImpl
 	/**
 	Called when a footnote should be opened (a sub-document will be placed inside of it)
 	\param propList Defines a set of properties for the footnote. May contain:
-	\li \c number The footnote's number
+	\li \c libwpd:number The footnote's number
 	*/
 	virtual void openFootnote(const WPXPropertyList &propList) = 0;
 	virtual void closeFootnote() = 0;
 	/**
 	Called when a endnote should be opened (a sub-document will be placed inside of it)
 	\param propList Defines a set of properties for the endnote. May contain:
-	\li \c number The endnote's number
+	\li \c libwpd:number The endnote's number
 	*/
 	virtual void openEndnote(const WPXPropertyList &propList) = 0;
 	/**
@@ -240,13 +258,14 @@ class WPXHLListenerImpl
 	/**
 	Called when a table should be opened
 	\param propList Defines a set of properties for the table. May contain:
-	\li \c alignment The alignment (left, right, between margins, full, absolute position from left margin) encoded as an integer
-	\li \c margin-left The left indentation of the table, in inches
-	\li \c margin-right The right indentation of the table, in inches
-	\li \c left-offset The offset of the table from the left margin
-	\param columns Column definitions for the table
+	\li \c table:align The alignment (left, right, center, or margins)
+	\li \c fo:margin-left The left indentation of the table, in inches
+	\li \c fo:margin-right The right indentation of the table, in inches
+	\li \c style:width Total width of the table, in inches
+	\param columns Column definitions for the table. May contain
+	\li \c style:column-width Width of a column, in inches
 	*/
- 	virtual void openTable(const WPXPropertyList &propList, const std::vector<WPXPropertyList> &columns) = 0;
+ 	virtual void openTable(const WPXPropertyList &propList, const WPXVector<WPXPropertyList> &columns) = 0;
 	/**
 	Called when a new table row is opened
 	\param propList Defines a set of properties for the table row. May contain:

@@ -29,6 +29,7 @@
 #include "WPXLLListener.h"
 #include "WPXHLListenerImpl.h"
 #include "WPXTable.h"
+#include "WPXVector.h"
 
 class WPXPageSpan;
 
@@ -180,7 +181,7 @@ protected:
 	void _closePageSpan();
 
 	void _appendParagraphProperties(WPXPropertyList &propList);
-	void _getTabStops(vector<WPXPropertyList> &tabStops);
+	void _getTabStops(WPXVector<WPXPropertyList> &tabStops);
 	void _appendJustification(WPXPropertyList &propList, int justification);
 	virtual void _openParagraph();
 	virtual void _resetParagraphState(const bool isListElement=false);

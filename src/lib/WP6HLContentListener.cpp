@@ -263,31 +263,31 @@ void WP6HLContentListener::setExtendedInformation(const uint16_t type, const WPX
 	switch (type)
 	{
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_AUTHOR):
-			m_metaData.insert("author", data);
+			m_metaData.insert("dc:creator", data);
 			break;
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_SUBJECT):
-			m_metaData.insert("subject", data);
+			m_metaData.insert("dc:subject", data);
 			break;
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_PUBLISHER):
-			m_metaData.insert("publisher", data);
+			m_metaData.insert("dc:publisher", data);
 			break;
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_CATEGORY):
-			m_metaData.insert("category", data);
+			m_metaData.insert("dc:type", data);
 			break;
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_KEYWORDS):
-			m_metaData.insert("keywords", data);
+			m_metaData.insert("libwpd:keywords", data);
 			break;
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_LANGUAGE):
-			m_metaData.insert("language", data);
+			m_metaData.insert("dc:language", data);
 			break;
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_ABSTRACT):
-			m_metaData.insert("abstract", data);
+			m_metaData.insert("libwpd:abstract", data);
 			break;
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_DESCRIPTIVE_NAME):
-			m_metaData.insert("descriptive-name", data);
+			m_metaData.insert("libwpd:descriptive-name", data);
 			break;
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_DESCRIPTIVE_TYPE):
-			m_metaData.insert("descriptive-type", data);
+			m_metaData.insert("libwpd:descriptive-type", data);
 			break;
 	}
 }

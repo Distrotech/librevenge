@@ -1,5 +1,5 @@
 /* libwpd
- * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2003-2005 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
@@ -42,7 +42,6 @@ class WPDocument
 {
 public:
 	static WPDConfidence isFileFormatSupported(WPXInputStream *input, bool partialContent);
-
 	static WPDResult parse(WPXInputStream *input, WPXHLListenerImpl *listenerImpl);
 	//static void parse(WPXInputStream *input, WPXHLListenerImpl *listenerImpl, WPXFileType fileType);
 	//WPXFileType getFileType(WPXInputStream *input)

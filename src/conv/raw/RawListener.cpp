@@ -24,6 +24,7 @@
  */
 
 #include <stdio.h>
+#include <stdarg.h>
 #include "RawListener.h"
 
 #define _U(M, L) \
@@ -109,24 +110,26 @@ WPXString getPropString(const WPXPropertyList &propList)
 	return propString;
 }
 
-WPXString getPropString(const vector<WPXPropertyList> &itemList)
+WPXString getPropString(const WPXVector<WPXPropertyList> &itemList)
 {
 	WPXString propString;
 
 	propString.append("(");
-	vector<WPXPropertyList>::const_iterator i = itemList.begin();
-	if (i != itemList.end())
+	WPXVector<WPXPropertyList>::Iter i(itemList);
+
+	if (!i.last())
 	{
 		propString.append("(");
-		propString.append(getPropString(*i));
+		propString.append(getPropString(i()));
 		propString.append(")");
-		i++;
-	}	
-	for (i; i != itemList.end(); i++)
-	{                
-		propString.append(", (");
-		propString.append(getPropString(*i));
-		propString.append(")");
+
+		for (i; i.next();)
+		{
+			propString.append(", (");
+			propString.append(getPropString(i()));
+			propString.append(")");
+		}
+
 	}
 	propString.append(")");
 
@@ -189,7 +192,7 @@ void RawListenerImpl::closeFooter()
 	   LC_OPEN_HEADER_FOOTER);
 }
 
-void RawListenerImpl::openParagraph(const WPXPropertyList &propList, const vector<WPXPropertyList> &tabStops)
+void RawListenerImpl::openParagraph(const WPXPropertyList &propList, const WPXVector<WPXPropertyList> &tabStops)
 {
 	_U(("openParagraph(%s, tab-stops: %s)\n", getPropString(propList).cstr(), getPropString(tabStops).cstr()),
 	   LC_OPEN_PARAGRAPH);
@@ -210,7 +213,7 @@ void RawListenerImpl::closeSpan()
 	_D(("closeSpan()\n"), LC_OPEN_SPAN);
 }
 
-void RawListenerImpl::openSection(const WPXPropertyList &propList, const vector<WPXPropertyList> &columns)
+void RawListenerImpl::openSection(const WPXPropertyList &propList, const WPXVector<WPXPropertyList> &columns)
 {
 	_U(("openSection(%s, columns: %s)\n", getPropString(propList).cstr(), getPropString(columns).cstr()), LC_OPEN_SECTION);
 }
@@ -269,7 +272,7 @@ void RawListenerImpl::closeUnorderedListLevel()
 	_D(("closeUnorderedListLevel()\n"), LC_OPEN_UNORDERED_LIST_LEVEL);
 }
 
-void RawListenerImpl::openListElement(const WPXPropertyList &propList, const vector<WPXPropertyList> &tabStops)
+void RawListenerImpl::openListElement(const WPXPropertyList &propList, const WPXVector<WPXPropertyList> &tabStops)
 {
 	_U(("openListElement(%s, tab-stops: %s)\n", getPropString(propList).cstr(), getPropString(tabStops).cstr()), 
 	   LC_OPEN_LIST_ELEMENT);
@@ -302,7 +305,7 @@ void RawListenerImpl::closeEndnote()
 	_D(("closeEndnote()\n"), LC_OPEN_ENDNOTE);
 }
 
-void RawListenerImpl::openTable(const WPXPropertyList &propList, const vector <WPXPropertyList> &columns)
+void RawListenerImpl::openTable(const WPXPropertyList &propList, const WPXVector <WPXPropertyList> &columns)
 {
 	_U(("openTable(%s, columns: %s)\n", getPropString(propList).cstr(), getPropString(columns).cstr()), LC_OPEN_TABLE);
 }

@@ -106,7 +106,7 @@ void HtmlListenerImpl::closeFooter()
 	m_ignore = false;
 }
 
-void HtmlListenerImpl::openParagraph(const WPXPropertyList &propList, const vector<WPXPropertyList> &tabStops)
+void HtmlListenerImpl::openParagraph(const WPXPropertyList &propList, const WPXVector<WPXPropertyList> &tabStops)
 {
 	if (!m_ignore)
 	{
@@ -235,7 +235,7 @@ void HtmlListenerImpl::closeUnorderedListLevel()
 }
 
 
-void HtmlListenerImpl::openListElement(const WPXPropertyList &propList, const vector<WPXPropertyList> &tabStops)
+void HtmlListenerImpl::openListElement(const WPXPropertyList &propList, const WPXVector<WPXPropertyList> &tabStops)
 {
 	if (!m_ignore)
 	{
@@ -291,7 +291,7 @@ void HtmlListenerImpl::closeEndnote()
 	}
 }
 
-void HtmlListenerImpl::openTable(const WPXPropertyList &propList, const vector <WPXPropertyList> &columns)
+void HtmlListenerImpl::openTable(const WPXPropertyList &propList, const WPXVector <WPXPropertyList> &columns)
 {
 	if (!m_ignore)
 	{

@@ -158,7 +158,7 @@ void WPXHLListener::_openSection()
 	else
 		propList.insert("fo:margin-bottom", 0.0f);
 
-	vector<WPXPropertyList> columns;
+	WPXVector<WPXPropertyList> columns;
  	typedef vector<WPXColumnDefinition>::const_iterator CDVIter;
  	for (CDVIter iter = m_ps->m_textColumns.begin(); iter != m_ps->m_textColumns.end(); iter++)
 	{
@@ -167,7 +167,7 @@ void WPXHLListener::_openSection()
 		column.insert("style:rel-width", (*iter).m_width * 1440.0f, TWIP);
 		column.insert("fo:margin-left", (*iter).m_leftGutter);
 		column.insert("fo:margin-right", (*iter).m_rightGutter);
-		columns.push_back(column);
+		columns.append(column);
 	}
 	m_listenerImpl->openSection(propList, columns);
 
@@ -305,7 +305,7 @@ void WPXHLListener::_openParagraph()
 	else
 		_closeParagraph();
 
-	vector<WPXPropertyList> tabStops;
+	WPXVector<WPXPropertyList> tabStops;
 	_getTabStops(tabStops);
 
 	WPXPropertyList propList;
@@ -398,7 +398,7 @@ void WPXHLListener::_appendParagraphProperties(WPXPropertyList &propList)
 		propList.insert("fo:break-before", "page");
 }
 
-void WPXHLListener::_getTabStops(vector<WPXPropertyList> &tabStops)
+void WPXHLListener::_getTabStops(WPXVector<WPXPropertyList> &tabStops)
 {
 	for (int i=0; i<m_ps->m_tabStops.size(); i++)
 	{
@@ -441,7 +441,7 @@ void WPXHLListener::_getTabStops(vector<WPXPropertyList> &tabStops)
 		/* TODO: fix situations where we have several columns or are inside a table and the tab stop
 		 *       positions are absolute (relative to the paper edge). In this case, they have to be
 		 *       computed for each column or each cell in table. (Fridrich) */
-		tabStops.push_back(tmpTabStop);
+		tabStops.append(tmpTabStop);
 	}
 }
 
@@ -461,7 +461,7 @@ void WPXHLListener::_openListElement()
 	WPXPropertyList propList;
 	_appendParagraphProperties(propList);
 
-	vector<WPXPropertyList> tabStops;
+	WPXVector<WPXPropertyList> tabStops;
 	_getTabStops(tabStops);
 
 	m_listenerImpl->openListElement(propList, tabStops);
@@ -605,14 +605,14 @@ void WPXHLListener::_openTable()
 	}
 
  	float tableWidth = 0.0f;
-	vector<WPXPropertyList> columns;
+	WPXVector<WPXPropertyList> columns;
  	typedef vector<WPXColumnDefinition>::const_iterator CDVIter;
  	for (CDVIter iter = m_ps->m_tableDefinition.columns.begin(); iter != m_ps->m_tableDefinition.columns.end(); iter++)
  	{
 		WPXPropertyList column;
 		// The "style:rel-width" is expressed in twips (1440 twips per inch) and includes the left and right Gutter
 		column.insert("style:column-width", (*iter).m_width);
-		columns.push_back(column);
+		columns.append(column);
 
  		tableWidth += (*iter).m_width;
  	}
