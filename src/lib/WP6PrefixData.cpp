@@ -58,7 +58,7 @@ WP6PrefixData::WP6PrefixData(GsfInput *input, const int numPrefixIndices) :
 	for (guint16 i=1; i<numPrefixIndices; i++)
 		delete(prefixIndiceArray[(i-1)]);
 
-	delete(prefixIndiceArray);
+	delete[] prefixIndiceArray;
 
 }
 

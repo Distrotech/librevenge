@@ -35,6 +35,7 @@ class WP6PrefixDataPacket
 {
  public:
 	WP6PrefixDataPacket(GsfInput * input, int id);	
+	virtual ~WP6PrefixDataPacket() {}
 	const int getID() const { return m_id; }
  
 	static WP6PrefixDataPacket * constructPrefixDataPacket(GsfInput * input, WP6PrefixIndice *prefixIndice);

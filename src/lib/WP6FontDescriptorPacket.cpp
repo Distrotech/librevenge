@@ -38,7 +38,7 @@ WP6FontDescriptorPacket::WP6FontDescriptorPacket(GsfInput *input, int id, guint3
 
 WP6FontDescriptorPacket::~WP6FontDescriptorPacket()
 {
-	delete(m_fontName);
+	delete [] m_fontName;
 }
 
 void WP6FontDescriptorPacket::_readContents(GsfInput *input)

@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 	gsf_init();
 
 	GError   *err;
-	GsfInput * input = gsf_input_stdio_new (argv[1], &err);
+	GsfInput * input = GSF_INPUT(gsf_input_stdio_new (argv[1], &err));
 	if (input == NULL) 
 		{
 			g_return_val_if_fail (err != NULL, 1);

@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
 	
 	GError   *err;
 	GsfInput * input;
-	input = gsf_input_stdio_new (argv[1], &err);
+	input = GSF_INPUT(gsf_input_stdio_new (argv[1], &err));
 	if (input == NULL) 
 		{
 			g_return_val_if_fail (err != NULL, 1);
@@ -25,7 +25,8 @@ int main(int argc, char *argv[])
 			return 1;
 		}
 	
- 	WPXLLListener * listener = new WP6HLListener(new HtmlListenerImpl());
+	WPXHLListenerImpl * listenerImpl = new HtmlListenerImpl();
+ 	WPXLLListener * listener = new WP6HLListener(listenerImpl);
  	WPXParser * parser = new WP6Parser(input, listener);
 	try 
 	  {
@@ -34,13 +35,14 @@ int main(int argc, char *argv[])
 	catch (FileException)
 	  {
 	    printf("ERROR: File Exception!\n");
-	    return -1;
+	    return 1;
 	  }
 	
 	
 	gsf_shutdown();
  	delete parser;
  	delete listener;
+	delete listenerImpl;
 	g_object_unref (G_OBJECT (input));
 	
 	return 0;

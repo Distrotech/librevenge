@@ -80,7 +80,7 @@ void WP6Parser::parse()
 {	
 	try
 	{
-		GsfInfile * ole = gsf_infile_msole_new (getInput(), NULL);
+		GsfInfile * ole = GSF_INFILE(gsf_infile_msole_new (getInput(), NULL));
 		if (ole != NULL) 
 			{
 				setInput(gsf_infile_child_by_name (ole, "PerfectOffice_MAIN"));
