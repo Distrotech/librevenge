@@ -81,8 +81,6 @@ WPXHeaderFooter::WPXHeaderFooter(const WPXHeaderFooter &headerFooter) :
 
 WPXHeaderFooter::~WPXHeaderFooter()
 {
-	if (m_tableList)
-		m_tableList->unRef();
 }
 
 WPXPageSpan::WPXPageSpan() :
@@ -114,6 +112,17 @@ WPXPageSpan::WPXPageSpan(WPXPageSpan &page, float paragraphMarginLeft, float par
 {
 	for (int i=0; i<WP6_NUM_HEADER_FOOTER_TYPES; i++)
 		m_isHeaderFooterSuppressed[i] = false;
+}
+
+WPXPageSpan::~WPXPageSpan()
+{
+	// we unref the table lists here (instead of in WPXHeaderFooter) because the items in the vector 
+	// are randomly alloc'd and dealloc'd
+	for (vector<WPXHeaderFooter>::iterator iter = m_headerFooterList.begin(); iter != m_headerFooterList.end(); iter++)
+	{
+		if ((*iter).getTableList())
+			(*iter).getTableList()->unRef();
+	}
 }
 
 

@@ -10,8 +10,6 @@ CHANGES:
 - Remove span parameters from calls to openParagraph and openListElement
 (William Lachance)
 - Additional doxygen comments (William Lachance)
-- Fix crash when tables occurred in embedded sub-documents (William 
-Lachance)
 
 0.7.1 -> 0.7.2
 - Added conversion of paragraph margins done by functions of the
@@ -37,6 +35,11 @@ Lachance)
 - Windows versioning: add a BUILDNUMBER (Fridrich Strba)
 - Be more carefull to open plain text files (Marc Maurer)
 - Improved error reporting when a document can not be opened (Marc Maurer)
+- Fix crash when tables occurred in embedded sub-documents (William 
+Lachance)
+- Insert span properties immediately after opening paragraph, preventing
+entire paragraphs from inheriting the properties when you (e.g.) only wanted
+to bold a word (Fridrich Strba)
 
 0.7.0 -> 0.7.1
 - Fixes to the multinational character map (Fridrich Strba)

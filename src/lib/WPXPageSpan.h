@@ -58,6 +58,7 @@ class WPXPageSpan
 public:
 	WPXPageSpan();
 	WPXPageSpan(WPXPageSpan &page, float paragraphMarginLeft=0.0f, float paragraphMarginRight=0.0f);
+	virtual ~WPXPageSpan();
 
 	const bool getHeaderFooterSuppression(const uint8_t headerFooterType) const { if (headerFooterType <= WP6_HEADER_FOOTER_GROUP_FOOTER_B) return m_isHeaderFooterSuppressed[headerFooterType]; return false; }
 	const float getFormLength() const { return m_formLength; }

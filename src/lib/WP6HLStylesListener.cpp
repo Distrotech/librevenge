@@ -180,9 +180,9 @@ void WP6HLStylesListener::startTable()
 		m_currentPageHasContent = true;
 		m_currentTable = new WPXTable();
 		m_tableList->add(m_currentTable);
+		m_isTableDefined = false;
 	}
 
-	m_isTableDefined = false;
 }
 
 void WP6HLStylesListener::endTable()
@@ -203,8 +203,8 @@ void WP6HLStylesListener::insertRow()
 }
 
 void WP6HLStylesListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan, const bool boundFromLeft, const bool boundFromAbove, 
-
-				  const uint8_t borderBits, 
+				     
+				     const uint8_t borderBits, 
 				  const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
 {
 	if (!isUndoOn() && m_currentTable != NULL)

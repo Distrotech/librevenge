@@ -1041,6 +1041,7 @@ void WP6HLContentListener::_handleSubDocument(uint16_t textPID, const bool isHea
 {
 	// save our old parsing state on our "stack"
 	WP6ParsingState *oldParseState = m_parseState;
+
 	if (tableList)
 		m_parseState = new WP6ParsingState(tableList);
 	else

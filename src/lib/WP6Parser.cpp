@@ -143,7 +143,7 @@ void WP6Parser::parse(WPXHLListenerImpl *listenerImpl)
 	WP6PrefixData * prefixData = NULL;
 	vector<WPXPageSpan *> pageList;
 	WPXTableList tableList;	
- 	
+
 	WPXInputStream *input = getInput();
 	
 	try
