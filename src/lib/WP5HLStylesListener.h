@@ -41,9 +41,9 @@ public:
 	virtual void setLeaderCharacter(const uint16_t character, const uint8_t numberOfSpaces) {}
 	virtual void defineTabStops(const bool isRelative, const vector<WPXTabStop> &tabStops, 
 				    const vector<bool> &usePreWP9LeaderMethods) {}
-	virtual void insertCharacter(const uint16_t character) {}
-	virtual void insertTab(const uint8_t tabType, const uint16_t tabPosition) {}
-	virtual void insertEOL() {}
+	virtual void insertCharacter(const uint16_t character) { /*if (!isUndoOn())*/ m_currentPageHasContent = true; }
+	virtual void insertTab(const uint8_t tabType, const uint16_t tabPosition) { /*if (!isUndoOn())*/ m_currentPageHasContent = true; }
+	virtual void insertEOL() { /*if (!isUndoOn())*/ m_currentPageHasContent = true; }
  	virtual void insertBreak(const uint8_t breakType);
 	virtual void attributeChange(const bool isOn, const uint8_t attribute) {}
 	virtual void lineSpacingChange(const float lineSpacing) {}

@@ -99,12 +99,12 @@ void WP5PageFormatGroup::parse(WP5HLListener *listener)
 	switch (getSubGroup())
 	{
 	case WP5_TOP_PAGE_FORMAT_GROUP_LEFT_RIGHT_MARGIN_SET:
-		listener->pageMarginChange(WPX_LEFT, m_leftMargin);
-		listener->pageMarginChange(WPX_RIGHT, m_rightMargin);
+		listener->marginChange(WPX_LEFT, m_leftMargin);
+		listener->marginChange(WPX_RIGHT, m_rightMargin);
 		break;
 	case WP5_TOP_PAGE_FORMAT_GROUP_TOP_BOTTOM_MARGIN_SET:
-		listener->marginChange(WPX_TOP, m_topMargin);
-		listener->marginChange(WPX_BOTTOM, m_bottomMargin);
+		listener->pageMarginChange(WPX_TOP, m_topMargin);
+		listener->pageMarginChange(WPX_BOTTOM, m_bottomMargin);
 		break;
 	case WP5_TOP_PAGE_FORMAT_GROUP_FORM:
 		listener->pageFormChange(m_formLength, m_formWidth, m_formOrientation);
