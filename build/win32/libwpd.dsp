@@ -85,6 +85,10 @@ LIB32=link.exe -lib
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
+SOURCE=..\..\src\lib\GSFStream.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\libwpd_internal.cpp
 # End Source File
 # Begin Source File
@@ -341,6 +345,10 @@ SOURCE=..\..\src\lib\WPXHLListener.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WPXMemoryStream.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WPXPageSpan.cpp
 # End Source File
 # Begin Source File
@@ -359,6 +367,10 @@ SOURCE=..\..\src\lib\WPXTable.cpp
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=..\..\src\lib\GSFStream.h
+# End Source File
 # Begin Source File
 
 SOURCE=..\..\src\lib\libwpd.h
@@ -645,6 +657,10 @@ SOURCE=..\..\src\lib\WPXLLListener.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WPXMemoryStream.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WPXPageSpan.h
 # End Source File
 # Begin Source File
@@ -654,6 +670,10 @@ SOURCE=..\..\src\lib\WPXParser.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WPXPart.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WPXStream.h
 # End Source File
 # Begin Source File
 
