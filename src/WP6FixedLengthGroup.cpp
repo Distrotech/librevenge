@@ -32,4 +32,11 @@ WP6FixedLengthGroup::WP6FixedLengthGroup(FILE * stream)
 
 gboolean WP6FixedLengthGroup::parse()
 {
+	guint32 startPosition = ftell(m_pStream);
+	
+	WPD_CHECK_FILE_READ_ERROR(fread(&m_iSize, sizeof(guint16), 1, m_pStream), 1);
+	
+	WPD_CHECK_INTERNAL_ERROR( _parseContents() );
+	
+	WPD_CHECK_FILE_SEEK_ERROR(fseek(m_pStream, (startPosition + m_iSize - 1 - ftell(m_pStream)), SEEK_CUR));
 }

@@ -27,6 +27,7 @@
 #include "WP6Part.h"
 #include "WP6Header.h"
 #include "WP6VariableLengthGroup.h"
+#include "WP6FixedLengthGroup.h"
 #include "UT_libwpd2.h"
 
 WP6Part::WP6Part(FILE * stream)
@@ -56,18 +57,13 @@ WP6Part * WP6Part::constructPart(FILE * stream, WPXParser * parser)
 		}
 		else if (readVal >= 0xD0 && readVal <= 0xE2)
 		{
+			// TODO: recognize which variable length group we need to instantiate
 			return new WP6VariableLengthGroup(stream);
 		}	      
 		else
 		{
-			/*for (i=0; i<WP6_NUM_FIXED_LENGTH_FUNCTIONS; i++)
-			{
-				if (wordperfect_fixed_length_functions[i]->byte == read_val)
-				{
-					WPD_CHECK_INTERNAL_ERROR(wordperfect_fixed_length_functions[i]->func(stream, wordperfect_state, 
-													     wordperfect_parse_struct));
-				}
-			}*/
+			// TODO: recognize which fixed length group we need to instantiate
+			return new WP6FixedLengthGroup(stream);
 		}	
 	}
 	

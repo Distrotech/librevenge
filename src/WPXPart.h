@@ -27,6 +27,7 @@
 #define WPXPART_H
 
 #include <stdio.h>
+#include "UT_libwpd2.h"
 #include "glib.h"
 
 class WPXPart

@@ -25,7 +25,6 @@
 
 #include "WP6VariableLengthGroup.h"
 #include "WP6FileStructure.h"
-#include "UT_libwpd2.h"
 
 WP6VariableLengthGroup::WP6VariableLengthGroup(FILE * stream)
 	: WP6Part(stream)
