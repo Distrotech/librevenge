@@ -38,6 +38,10 @@ public:
  private:
 	guint8 m_colSpan, m_rowSpan;
 	gboolean m_boundFromLeft, m_boundFromAbove;
+
+	// cell forground and background color
+ 	RGBSColor * m_cellFgColor;
+ 	RGBSColor * m_cellBgColor;
 };
 
 #endif /* WP6EOLGROUP_H */

@@ -51,7 +51,7 @@ class WP6HLListener : public WP6LLListener
  
 	virtual void startTable();
  	virtual void insertRow();
- 	virtual void insertCell(guint8 colSpan, guint8 rowSpan, gboolean boundFromLeft, gboolean boundFromAbove);
+ 	virtual void insertCell(guint8 colSpan, guint8 rowSpan, gboolean boundFromLeft, gboolean boundFromAbove, RGBSColor * cellFgColor, RGBSColor * cellBgColor);
  	virtual void endTable(); 
 
  protected:

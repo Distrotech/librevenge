@@ -25,7 +25,9 @@
  
 #ifndef WPXHLLISTENERIMPL_H
 #define WPXHLLISTENERIMPL_H
+
 #include <glib.h>
+#include "UT_libwpd2.h"
 
 class WPXHLListenerImpl
 {
@@ -40,7 +42,7 @@ class WPXHLListenerImpl
  
  	virtual void openTable() = 0;
  	virtual void openRow() = 0;
- 	virtual void openCell(guint32 col, guint32 row, guint32 colSpan, guint32 rowSpan) = 0;
+ 	virtual void openCell(guint32 col, guint32 row, guint32 colSpan, guint32 rowSpan, RGBSColor * cellFgColor, RGBSColor * cellBgColor) = 0;
  	virtual void closeTable() = 0;
 };
 

@@ -1,9 +1,10 @@
 lib_LIBRARIES = libwpd2.a
-include_HEADERS = libwpd2.h WPXHLListener.h WPXHLListenerImpl.h WPXLLListener.h WPXParser.h WP6Parser.h WP6HLListener.h WP6Header.h WP6LLListener.h WPXHeader.h
+include_HEADERS = libwpd2.h UT_libwpd2.h WPXHLListener.h WPXHLListenerImpl.h WPXLLListener.h WPXParser.h WP6Parser.h WP6HLListener.h WP6Header.h WP6LLListener.h WPXHeader.h
 
 AM_CXXFLAGS = $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS)
 
 libwpd2_a_SOURCES =			\
+	UT_libwpd2.cpp	        	\
 	WP6AttributeGroup.cpp 		\
 	WP6CharacterGroup.cpp		\
 	WP6ColumnGroup.cpp		\

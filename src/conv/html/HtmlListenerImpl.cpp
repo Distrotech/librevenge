@@ -132,13 +132,25 @@ void HtmlListenerImpl::openRow()
 	m_isRowOpened = TRUE;
 }
 
-void HtmlListenerImpl::openCell(guint32 col, guint32 row, guint32 colSpan, guint32 rowSpan)
+void HtmlListenerImpl::openCell(guint32 col, guint32 row, guint32 colSpan, guint32 rowSpan, RGBSColor * cellFgColor, RGBSColor * cellBgColor)
 {
 	_closeCurrentParagraph();	
 	_closeCurrentCell();
+	printf("<td ");
+	
+	if (cellFgColor || cellBgColor)
+	{
+		printf("style=\"");
+		// NOTE: The WordPerfect Cell Foreground Color maps onto the HTML Background Color
+		if (cellFgColor)
+			printf("background-color: rgb(%d, %d, %d);", cellFgColor->R, cellFgColor->G, cellFgColor->B);
+		// TODO: Handle the Cell Background Color here, but I don't think HTML supports that
+		// ...
+		printf("\"");
+	}
+	printf(" rowspan=\"%ld\" colspan=\"%ld\"", rowSpan, colSpan);
 
-	printf("<td rowspan=\"%ld\" colspan=\"%ld\">\n", rowSpan, colSpan);
-
+	printf(">\n");
 	m_isCellOpened = TRUE;
 }
 

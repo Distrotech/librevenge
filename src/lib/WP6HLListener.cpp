@@ -253,14 +253,14 @@ void WP6HLListener::insertRow()
 		}
 }
 
-void WP6HLListener::insertCell(guint8 colSpan, guint8 rowSpan, gboolean boundFromLeft, gboolean boundFromAbove)
+void WP6HLListener::insertCell(guint8 colSpan, guint8 rowSpan, gboolean boundFromLeft, gboolean boundFromAbove, RGBSColor * cellFgColor, RGBSColor * cellBgColor)
 {
 	if (!m_isUndoOn) 
 		{			
 			_flushText();
 			m_currentColumn++;
 			if (!boundFromLeft && !boundFromAbove) {
-				m_listenerImpl->openCell(m_currentColumn, m_currentRow, colSpan, rowSpan);
+				m_listenerImpl->openCell(m_currentColumn, m_currentRow, colSpan, rowSpan, cellFgColor, cellBgColor);
 				m_numDeferredParagraphBreaks++;
 			}
 		}

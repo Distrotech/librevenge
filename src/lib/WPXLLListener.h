@@ -27,6 +27,7 @@
 #define WPXLLLISTENER_H
 
 #include "glib.h"
+#include "UT_libwpd2.h"
 
 class WPXLLListener
 {
@@ -45,7 +46,7 @@ class WPXLLListener
 		
 	virtual void startTable() = 0;
  	virtual void insertRow() = 0;
- 	virtual void insertCell(guint8 colSpan, guint8 rowSpan, gboolean boundFromLeft, gboolean boundFromAbove) = 0;
+ 	virtual void insertCell(guint8 colSpan, guint8 rowSpan, gboolean boundFromLeft, gboolean boundFromAbove, RGBSColor * cellFgColor, RGBSColor * cellBgColor) = 0;
  	virtual void endTable() = 0;
 };
 

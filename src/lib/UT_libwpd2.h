@@ -26,6 +26,8 @@
 #ifndef UT_LIBWPD2_H
 #define UT_LIBWPD2_H
 
+#include <glib.h>
+
 class FileException
 {
 	// needless to say, we could flesh this class out a bit
@@ -34,6 +36,17 @@ class FileException
 class ParseException
 {
 	// needless to say, we could flesh this class out a bit
+};
+
+class RGBSColor
+{
+ public:
+	RGBSColor(guint8 r, guint8 g, guint8 b, guint8 s);
+ 
+	guint8 R;
+	guint8 G;
+ 	guint8 B;
+	guint8 S; 
 };
 
 /* Convenience functions/defines, should not be exported externally */

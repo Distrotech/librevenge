@@ -46,7 +46,7 @@ class HtmlListenerImpl : public WPXHLListenerImpl
     
     virtual void openTable();
     virtual void openRow();
-    virtual void openCell(guint32 col, guint32 row, guint32 colSpan, guint32 rowSpan);
+    virtual void openCell(guint32 col, guint32 row, guint32 colSpan, guint32 rowSpan, RGBSColor * cellFgColor, RGBSColor * cellBgColor);
     virtual void closeTable();
  
  protected:
