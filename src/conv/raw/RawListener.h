@@ -26,13 +26,33 @@
 #ifndef RAWLISTENERIMPL_H
 #define RAWLISTENERIMPL_H
 
+#include <stack>
 #include <glib.h>
 #include "WPXHLListenerImpl.h"
+
+using namespace std;
+
+enum ListenerCallback {
+	LC_START_DOCUMENT = 0,
+	LC_OPEN_PAGE_SPAN,
+	LC_OPEN_HEADER_FOOTER,
+	LC_OPEN_PARAGRAPH,
+	LC_OPEN_SPAN,
+	LC_OPEN_SECTION,
+	LC_OPEN_ORDERED_LIST_LEVEL,
+	LC_OPEN_UNORDERED_LIST_LEVEL,
+	LC_OPEN_LIST_ELEMENT,
+	LC_OPEN_FOOTNOTE,
+	LC_OPEN_ENDNOTE,
+	LC_OPEN_TABLE,
+	LC_OPEN_TABLE_ROW,
+	LC_OPEN_TABLE_CELL
+};
 
 class RawListenerImpl : public WPXHLListenerImpl
 {
 public:
-	RawListenerImpl(bool printIndentLevel);
+	RawListenerImpl(bool printCallgraphScore);
 	~RawListenerImpl();
 
  	virtual void setDocumentMetaData(const UCSString &author, const UCSString &subject,
@@ -99,9 +119,9 @@ public:
 
 private:
 	int	m_indent;
-	int m_actualIndentLevel;
-
-	bool m_printIndentLevel;
+	int m_callbackMisses;
+	bool m_printCallgraphScore;
+	stack<ListenerCallback> m_callStack;
 
 	void __indentUp() { m_indent++; }
 	void __indentDown() { if (m_indent > 0) m_indent--; }

@@ -26,23 +26,40 @@
 #include <stdio.h>
 #include "RawListener.h"
 
-RawListenerImpl::RawListenerImpl(bool printIndentLevel) :
+#define _U(M, L) \
+	if (!m_printCallgraphScore) \
+			__iuprintf M; \
+	else \
+		m_callStack.push(L);
+
+#define _D(M, L) \
+	if (!m_printCallgraphScore) \
+			__idprintf M; \
+	else \
+	{ \
+		ListenerCallback lc = m_callStack.top(); \
+		if (lc != L) \
+			m_callbackMisses++; \
+		m_callStack.pop(); \
+	}	
+	
+RawListenerImpl::RawListenerImpl(bool printCallgraphScore) :
 	m_indent(0),
-	m_actualIndentLevel(0),
-	m_printIndentLevel(printIndentLevel)
+	m_callbackMisses(0),
+	m_printCallgraphScore(printCallgraphScore)
 {
 }
 
 RawListenerImpl::~RawListenerImpl()
 {
-	if (m_printIndentLevel)
-		printf("%d\n", m_actualIndentLevel);
+	if (m_printCallgraphScore)
+		printf("%d\n", m_callStack.size() + m_callbackMisses);
 }
 
 void RawListenerImpl::__iprintf(const char *format, ...)
 {
-	if (m_printIndentLevel) return;
-
+	if (m_printCallgraphScore) return;
+	
 	va_list args;
 	va_start(args, format);
 	for (int i=0; i<m_indent; i++)
@@ -53,12 +70,6 @@ void RawListenerImpl::__iprintf(const char *format, ...)
 
 void RawListenerImpl::__iuprintf(const char *format, ...)
 {
-	if (m_printIndentLevel) 
-	{
-		m_actualIndentLevel++;
-		return;
-	}
-
 	va_list args;
 	va_start(args, format);
 	for (int i=0; i<m_indent; i++)
@@ -70,12 +81,6 @@ void RawListenerImpl::__iuprintf(const char *format, ...)
 
 void RawListenerImpl::__idprintf(const char *format, ...)
 {
-	if (m_printIndentLevel) 
-	{
-		m_actualIndentLevel--;
-		return;
-	}
-
 	va_list args;
 	va_start(args, format);
 	__indentDown();
@@ -111,12 +116,13 @@ void RawListenerImpl::setDocumentMetaData(const UCSString &author, const UCSStri
 
 void RawListenerImpl::startDocument()
 {
-	__iuprintf("startDocument()\n");
+	_U(("startDocument()\n"), LC_START_DOCUMENT);
 }
 
 void RawListenerImpl::endDocument()
 {
-	__idprintf("endDocument()\n");
+	_D(("endDocument()\n"), 
+		LC_START_DOCUMENT);
 }
 
 void RawListenerImpl::openPageSpan(const int span, const bool isLastPageSpan,
@@ -124,27 +130,29 @@ void RawListenerImpl::openPageSpan(const int span, const bool isLastPageSpan,
 				  const float marginLeft, const float marginRight,
 				  const float marginTop, const float marginBottom)
 {
-	__iuprintf("openPageSpan(span: %d, isLastPageSpan: %s, formLength: %.4f, formWidth: %.4f, Orientation: %s, marginLeft: %.4f, marginRight: %.4f, marginTop: %.4f, marginBottom: %.4f\n",
-				span, (isLastPageSpan ? "true" : "false"), formLength, formWidth, ((orientation==LANDSCAPE) ? "landscape" : "portrait"), marginLeft, marginRight, marginTop, marginBottom);
+	_U(("openPageSpan(span: %d, isLastPageSpan: %s, formLength: %.4f, formWidth: %.4f, Orientation: %s, marginLeft: %.4f, marginRight: %.4f, marginTop: %.4f, marginBottom: %.4f\n",
+			span, (isLastPageSpan ? "true" : "false"), formLength, formWidth, ((orientation==LANDSCAPE) ? "landscape" : "portrait"), marginLeft, marginRight, marginTop, marginBottom),
+		LC_OPEN_PAGE_SPAN);
 }
 
 void RawListenerImpl::closePageSpan()
 {
-	__idprintf("closePageSpan()\n");
+	_D(("closePageSpan()\n"),
+		LC_OPEN_PAGE_SPAN);
 }
 
 void RawListenerImpl::openHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence)
 {
-	__iuprintf("openHeaderFooter(headerFooterType: %d, headerFooterOccurence: %d)\n",
-		headerFooterType, headerFooterOccurence
-	);
+	_U(("openHeaderFooter(headerFooterType: %d, headerFooterOccurence: %d)\n",
+		headerFooterType, headerFooterOccurence),
+		LC_OPEN_HEADER_FOOTER);
 }
 
 void RawListenerImpl::closeHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence)
 {
-	__idprintf("closeHeaderFooter(headerFooterType: %d, headerFooterOccurence: %d)\n",
-		headerFooterType, headerFooterOccurence
-	);
+	_D(("closeHeaderFooter(headerFooterType: %d, headerFooterOccurence: %d)\n",
+			headerFooterType, headerFooterOccurence),
+		LC_OPEN_HEADER_FOOTER);
 }
 
 void RawListenerImpl::openParagraph(const guint8 paragraphJustification, 
@@ -152,42 +160,46 @@ void RawListenerImpl::openParagraph(const guint8 paragraphJustification,
 				    const float lineSpacing, const float spacingAfterParagraph,
 				    const bool isColumnBreak, const bool isPageBreak)
 {
-	__iuprintf("openParagraph(paragraphJustification: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, textIndent: %.4f, lineSpacing: %.4f, spacingAfterParagraph: %.4f, isColumnBreak: %s, isPageBreak: %s)\n",
-		paragraphJustification, 
-		marginLeftOffset, marginRightOffset, textIndent,
-		lineSpacing, spacingAfterParagraph, (isColumnBreak ? "true" : "false"), (isPageBreak ? "true" : "false")
-	);
+	_U(("openParagraph(paragraphJustification: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, textIndent: %.4f, lineSpacing: %.4f, spacingAfterParagraph: %.4f, isColumnBreak: %s, isPageBreak: %s)\n",
+			paragraphJustification, 
+			marginLeftOffset, marginRightOffset, textIndent,
+			lineSpacing, spacingAfterParagraph, (isColumnBreak ? "true" : "false"), (isPageBreak ? "true" : "false")),
+		LC_OPEN_PARAGRAPH);
 }
 
 void RawListenerImpl::closeParagraph()
 {
-	__idprintf("closeParagraph()\n");
+	_D(("closeParagraph()\n"),
+		LC_OPEN_PARAGRAPH);
 }
 
 void RawListenerImpl::openSpan(const guint32 textAttributeBits, const gchar *fontName, const float fontSize,
 					const RGBSColor *fontColor, const RGBSColor *highlightColor)
 {
-	__iuprintf("openSpan(textAttributeBits: %u, fontName: %s, fontSize: %.4f,  fontColor: #%02x%02x%02x s:%02x, highlightColor: #%02x%02x%02x s:%02x)\n",
-			   textAttributeBits, fontName, fontSize, (fontColor?fontColor->m_r:0xff), (fontColor?fontColor->m_g:0xff),
-			   (fontColor?fontColor->m_b:0xff), (fontColor?fontColor->m_s:0xff), (highlightColor?highlightColor->m_r:0xff),
-			   (highlightColor?highlightColor->m_g:0xff), (highlightColor?highlightColor->m_b:0xff),
-			   (highlightColor?highlightColor->m_s:0xff) // saturation cannot be ever 0xff; if it is, the pointer is NULL
-	);
+	_U(("openSpan(textAttributeBits: %u, fontName: %s, fontSize: %.4f,  fontColor: #%02x%02x%02x s:%02x, highlightColor: #%02x%02x%02x s:%02x)\n",
+			textAttributeBits, fontName, fontSize, (fontColor?fontColor->m_r:0xff), (fontColor?fontColor->m_g:0xff),
+			(fontColor?fontColor->m_b:0xff), (fontColor?fontColor->m_s:0xff), (highlightColor?highlightColor->m_r:0xff),
+			(highlightColor?highlightColor->m_g:0xff), (highlightColor?highlightColor->m_b:0xff),
+			(highlightColor?highlightColor->m_s:0xff)), // saturation cannot be ever 0xff; if it is, the pointer is NULL
+		LC_OPEN_SPAN);
 }
 
 void RawListenerImpl::closeSpan()
 {
-	__idprintf("closeSpan()\n");
+	_D(("closeSpan()\n"),
+		LC_OPEN_SPAN);
 }
 
 void RawListenerImpl::openSection(const unsigned int numColumns, const float spaceAfter)
 {
-	__iuprintf("openSection(numColumns: %u, spaceAfter: %.4f)\n", numColumns, spaceAfter);
+	_U(("openSection(numColumns: %u, spaceAfter: %.4f)\n", numColumns, spaceAfter),
+		LC_OPEN_SECTION);
 }
 
 void RawListenerImpl::closeSection()
 {
-	__idprintf("closeSection()\n");
+	_D(("closeSection()\n"),
+		LC_OPEN_SECTION);
 }
 
 void RawListenerImpl::insertTab()
@@ -215,8 +227,7 @@ void RawListenerImpl::defineOrderedListLevel(const int listID, const int listLev
 	__iprintf("defineOrderedListLevel(listID: %d, listLevel: %d, listType: %d, textBeforeNumber: %s, textAfterNumber: %s, startingNumber: %d)\n",
 		listID, listLevel, listType,
 		textBeforeNumberUTF8.getUTF8(), textAfterNumberUTF8.getUTF8(),
-		startingNumber
-	);
+		startingNumber);
 }
 
 void RawListenerImpl::defineUnorderedListLevel(const int listID, const int listLevel, const UCSString &bullet)
@@ -227,94 +238,107 @@ void RawListenerImpl::defineUnorderedListLevel(const int listID, const int listL
 
 void RawListenerImpl::openOrderedListLevel(const int listID)
 {
-	__iuprintf("openOrderedListLevel(listID: %d)\n", listID);
+	_U(("openOrderedListLevel(listID: %d)\n", listID),
+		LC_OPEN_ORDERED_LIST_LEVEL);
 }
 
 void RawListenerImpl::openUnorderedListLevel(const int listID)
 {
-	__iuprintf("openUnorderedListLevel(listID: %d)\n", listID);
+	_U(("openUnorderedListLevel(listID: %d)\n", listID),
+		LC_OPEN_UNORDERED_LIST_LEVEL);
 }
 
 void RawListenerImpl::closeOrderedListLevel()
 {
-	__idprintf("closeOrderedListLevel()\n");
+	_D(("closeOrderedListLevel()\n"),
+		LC_OPEN_ORDERED_LIST_LEVEL);
 }
 
 void RawListenerImpl::closeUnorderedListLevel()
 {
-	__idprintf("closeUnorderedListLevel()\n");
+	_D(("closeUnorderedListLevel()\n"),
+		LC_OPEN_UNORDERED_LIST_LEVEL);
 }
 
 void RawListenerImpl::openListElement(const guint8 paragraphJustification, 
 				      const float marginLeftOffset, const float marginRightOffset, const float textIndent,
 				      const float lineSpacing, const float spacingAfterParagraph)
 {
-	__iuprintf("openListElement(paragraphJustification: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, textIndent: %.4f, lineSpacing: %.4f, spacingAfterParagraph: %.4f)\n",
-		paragraphJustification, 
-		marginLeftOffset, marginRightOffset, textIndent,
-	        lineSpacing, spacingAfterParagraph
-	);
+	_U(("openListElement(paragraphJustification: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, textIndent: %.4f, lineSpacing: %.4f, spacingAfterParagraph: %.4f)\n",
+			paragraphJustification, 
+			marginLeftOffset, marginRightOffset, textIndent,
+			lineSpacing, spacingAfterParagraph),
+		LC_OPEN_LIST_ELEMENT);
 }
 
 void RawListenerImpl::closeListElement()
 {
-	__idprintf("closeListElement()\n");
+	_D(("closeListElement()\n"),
+		LC_OPEN_LIST_ELEMENT);
 }
 
 void RawListenerImpl::openFootnote(int number)
 {
-	__iuprintf("openFootnote(number: %d)\n", number);
+	_U(("openFootnote(number: %d)\n", number),
+		LC_OPEN_FOOTNOTE);
 }
 
 void RawListenerImpl::closeFootnote()
 {
-	__idprintf("closeFootnote()\n");
+	_D(("closeFootnote()\n"),
+		LC_OPEN_FOOTNOTE);
 }
 
 void RawListenerImpl::openEndnote(int number)
 {
-	__iuprintf("openEndnote(number: %d)\n", number);
+	_U(("openEndnote(number: %d)\n", number),
+		LC_OPEN_ENDNOTE);
 }
 
 void RawListenerImpl::closeEndnote()
 {
-	__idprintf("closeEndnote()\n");
+	_D(("closeEndnote()\n"),
+		LC_OPEN_ENDNOTE);
 }
 
 void RawListenerImpl::openTable(const guint8 tablePositionBits,
 			       const float marginLeftOffset, const float marginRightOffset,
 			       const float leftOffset, const vector < WPXColumnDefinition > &columns)
 {
-	__iuprintf("openTable(tablePositionBits: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, leftOffset: %.4f, TODO: columns defs.)\n",
-		tablePositionBits, marginLeftOffset, marginRightOffset, leftOffset);
+	_U(("openTable(tablePositionBits: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, leftOffset: %.4f, TODO: columns defs.)\n",
+			tablePositionBits, marginLeftOffset, marginRightOffset, leftOffset),
+		LC_OPEN_TABLE);
 }
 
 void RawListenerImpl::openTableRow()
 {
-	__iuprintf("openTableRow()\n");
+	_U(("openTableRow()\n"),
+		LC_OPEN_TABLE_ROW);
 }
 
 void RawListenerImpl::closeTableRow()
 {
-	__idprintf("closeTableRow()\n");
+	_D(("closeTableRow()\n"),
+		LC_OPEN_TABLE_ROW);
 }
 
 void RawListenerImpl::openTableCell(const guint32 col, const guint32 row, const guint32 colSpan, const guint32 rowSpan,
 				   const guint8 borderBits,
 				   const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
 {
-	__iuprintf("openTableCell(col: %d, row: %d, colSpan: %d, rowSpan: %d, borderBits: %d, cellFgColor: #%02x%02x%02x s:%02x, cellBgColor: #%02x%02x%02x s:%02x)\n",
-		col, row, colSpan, rowSpan,
-		borderBits,
-		// The saturation cannot ever be more that 0x64. It it is, cellFgColor or cellBgColor is NULL
-		(cellFgColor?cellFgColor->m_r:0xff), (cellFgColor?cellFgColor->m_g:0xff), (cellFgColor?cellFgColor->m_b:0xff), (cellFgColor?cellFgColor->m_s:0xff),
-		(cellBgColor?cellBgColor->m_r:0xff), (cellBgColor?cellBgColor->m_g:0xff), (cellBgColor?cellBgColor->m_b:0xff), (cellBgColor?cellBgColor->m_s:0xff)
-	);
+	_U(("openTableCell(col: %d, row: %d, colSpan: %d, rowSpan: %d, borderBits: %d, cellFgColor: #%02x%02x%02x s:%02x, cellBgColor: #%02x%02x%02x s:%02x)\n",
+			col, row, colSpan, rowSpan,
+			borderBits,
+			// The saturation cannot ever be more that 0x64. It it is, cellFgColor or cellBgColor is NULL
+			(cellFgColor?cellFgColor->m_r:0xff), (cellFgColor?cellFgColor->m_g:0xff), (cellFgColor?cellFgColor->m_b:0xff), (cellFgColor?cellFgColor->m_s:0xff),
+			(cellBgColor?cellBgColor->m_r:0xff), (cellBgColor?cellBgColor->m_g:0xff), (cellBgColor?cellBgColor->m_b:0xff), (cellBgColor?cellBgColor->m_s:0xff)),
+		LC_OPEN_TABLE_CELL);
 }
 
 void RawListenerImpl::closeTableCell()
 {
-	__idprintf("closeTableCell()\n");
+	_D(("closeTableCell()\n"),
+		LC_OPEN_TABLE_CELL);
 }
 
 void RawListenerImpl::insertCoveredTableCell(const guint32 col, const guint32 row)
@@ -324,5 +348,6 @@ void RawListenerImpl::insertCoveredTableCell(const guint32 col, const guint32 ro
 
 void RawListenerImpl::closeTable()
 {
-	__idprintf("closeTable()\n");
+	_D(("closeTable()\n"),
+		LC_OPEN_TABLE);
 }
