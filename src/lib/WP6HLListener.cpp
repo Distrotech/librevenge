@@ -59,8 +59,8 @@ void WP6HLListener::insertCharacter(guint16 character)
 void WP6HLListener::insertEOL()
 {
 	if (!m_isUndoOn) {
-		m_numDeferredParagraphBreaks++;
 		_flushText();
+		m_numDeferredParagraphBreaks++;
 	}
 }
 
@@ -120,6 +120,12 @@ void WP6HLListener::marginChange(guint8 side, guint16 margin)
 {
 	if (!m_isUndoOn) {
 		// flush everything which came before this change
+		// eliminating one paragraph break which is now implicit in
+		// a paragraph change (FIXME: probably should move this to a general
+		// helper function when we add more section changing messages)
+		if (!m_sectionAttributesChanged && m_numDeferredParagraphBreaks > 0)
+			m_numDeferredParagraphBreaks--;		
+
 		_flushText();
 		
 		float marginInch = ((float)margin) / (float)WPX_NUM_WPUS_PER_INCH;
