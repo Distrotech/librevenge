@@ -32,6 +32,7 @@
 #include "WPXHeader.h"
 #include "libwpd_internal.h"
 #include "WPXTable.h"
+#include "WP42FileStructure.h"
 
 WP42Parser::WP42Parser(GsfInput *input) :
 	WPXParser(input, NULL)
@@ -66,15 +67,43 @@ void WP42Parser::parse(WPXHLListenerImpl *listenerImpl)
 				case 0x0A: // hard new line
 					hlListener.insertEOL();
 					break;
-				case 0x0B:
+				case 0x0B: // soft new page
 					break;
-				case 0x0C:
+				case 0x0C: // hard new page
 					break;
 				case 0x0D: // soft new line
 					hlListener.insertEOL();
 					break;
+				
+				case 0x92:
+					hlListener.attributeChange(WP42_ATTRIBUTE_STRIKE_OUT, true);
+					break;
+				case 0x93:
+					hlListener.attributeChange(WP42_ATTRIBUTE_STRIKE_OUT, false);
+					break;				
+				case 0x94:
+					hlListener.attributeChange(WP42_ATTRIBUTE_UNDERLINE, true);
+					break;
+				case 0x95:
+					hlListener.attributeChange(WP42_ATTRIBUTE_UNDERLINE, false);
+					break;	
+				
+				case 0x9C:
+					hlListener.attributeChange(WP42_ATTRIBUTE_BOLD, false);
+					break;
+				case 0x9D:
+					hlListener.attributeChange(WP42_ATTRIBUTE_BOLD, true);
+					break;
+				
+				case 0xB2:
+					hlListener.attributeChange(WP42_ATTRIBUTE_ITALICS, true);
+					break;
+				case 0xB3:
+					hlListener.attributeChange(WP42_ATTRIBUTE_ITALICS, false);
+					break;
+				
 				default:
-					// undocumented token, ignore
+					// unsupported or undocumented token, ignore
 					break;
 			}
 		}

@@ -178,4 +178,11 @@ class ParseException
 {
 	// needless to say, we could flesh this class out a bit
 };
+
+// File format support heuristics
+#define WPD_CONFIDENCE_NONE 0
+#define WPD_CONFIDENCE_POOR 1
+#define WPD_CONFIDENCE_GOOD 2
+#define WPD_CONFIDENCE_EXCELLENT 3
+
 #endif

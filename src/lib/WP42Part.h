@@ -28,7 +28,6 @@
 
 #include "WPXPart.h"
 #include "WPXParser.h"
-//#include "WP42FileStructure.h"
 
 class WP42LLListener;
 
@@ -40,6 +39,5 @@ class WP42Part
 	static WP42Part * constructPart(GsfInput *input, guint8 readVal);
 	//virtual void parse(WP42LLListener *llListener) = 0;
 };
-
 
 #endif /* WP6PART_H */

@@ -12,6 +12,8 @@ libwpd_1_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) -expo
 libwpd_1_la_SOURCES =			\
 	libwpd_internal.cpp			\
 	libwpd_support.cpp			\
+	WP42FileStructure.cpp		\
+	WP42Heuristics.cpp			\
 	WP42HLListener.cpp			\
 	WP42Parser.cpp				\
 	WP42Part.cpp				\
@@ -61,6 +63,7 @@ libwpd_1_la_SOURCES =			\
 	libwpd.h	        		\
 	libwpd_internal.h			\
 	libwpd_support.h        	\
+	WP42Heuristics.h			\
 	WP42HLListener.h			\
 	WP42LLListener.h			\
 	WP42Part.h					\

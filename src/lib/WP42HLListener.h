@@ -40,7 +40,7 @@ public:
 	virtual void insertTab(const guint8 tabType);
 	virtual void insertEOL();
  	virtual void insertBreak(const guint8 breakType) {};
-	virtual void attributeChange(const bool isOn, const guint8 attribute) {};
+	virtual void attributeChange(const bool isOn, const guint8 attribute);
 	virtual void lineSpacingChange(const float lineSpacing) {};
 	virtual void justificationChange(const guint8 justification) {};
 	virtual void pageMarginChange(const guint8 side, const guint16 margin) {};
@@ -59,10 +59,14 @@ public:
 
 private:
 	void _flushText();
+	void _openSpan();
 
 	WPXHLListenerImpl *m_listenerImpl;
 
 	UCSString m_textBuffer;
+
+	bool m_textAttributesChanged;
+	guint32 m_textAttributeBits;
 };
 
 #endif /* WP42HLLISTENER_H */

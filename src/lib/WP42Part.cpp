@@ -39,7 +39,7 @@ WP42Part * WP42Part::constructPart(GsfInput *input, guint8 readVal)
 		
 	// TODO: ASSERT readVal
 	
-	if (FUCNTION_GROUP_SIZE[readVal-0xC0] == -1)
+	if (WP42_FUCNTION_GROUP_SIZE[readVal-0xC0] == -1)
 	{
 		WPD_DEBUG_MSG(("WordPerfect: constructVariableLengthGroup(input, val)\n"));
 		return WP42VariableLengthGroup::constructVariableLengthGroup(input, readVal);
@@ -49,7 +49,7 @@ WP42Part * WP42Part::constructPart(GsfInput *input, guint8 readVal)
 		// fixed length function group
 		
 		// for now, we just skip over the group
-		WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, FUCNTION_GROUP_SIZE[readVal-0xC0]-1, G_SEEK_CUR));
+		WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WP42_FUCNTION_GROUP_SIZE[readVal-0xC0]-1, G_SEEK_CUR));
 	}
 
 	WPD_DEBUG_MSG(("WordPerfect: Returning NULL from constructPart\n"));

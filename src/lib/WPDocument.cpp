@@ -29,6 +29,7 @@
 #include "WPDocument.h"
 #include "WPXParser.h"
 #include "WP42Parser.h"
+#include "WP42Heuristics.h"
 #include "WP5Parser.h"
 #include "WP6Parser.h"
 #include "libwpd_internal.h"
@@ -72,12 +73,16 @@ void WPDocument::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl)
 		// header which can be used to determine which parser to instanciate. 
 		// Use heuristics to determine with some certainty if we are dealing with
 		// a file in the WP4.2 format.		
-		
-		WPD_DEBUG_MSG(("WordPerfect: Mostly likely the file format is WP4.2.\n\n"));
-		WPD_DEBUG_MSG(("WordPerfect: Using the WP4.2 parser.\n\n"));
-		WP42Parser *parser = new WP42Parser(input);
-		parser->parse(listenerImpl);
-		DELETEP(parser);
+		int confidence = WP42Heuristics::isWP42FileFormat(input, false /* FIXME: allow for partial content */);
+
+		if (confidence == WPD_CONFIDENCE_GOOD || confidence == WPD_CONFIDENCE_EXCELLENT)
+		{
+			WPD_DEBUG_MSG(("WordPerfect: Mostly likely the file format is WP4.2.\n\n"));
+			WPD_DEBUG_MSG(("WordPerfect: Using the WP4.2 parser.\n\n"));
+			WP42Parser *parser = new WP42Parser(input);
+			parser->parse(listenerImpl);
+			DELETEP(parser);
+		}
 	}
 	catch (FileException)
 	{

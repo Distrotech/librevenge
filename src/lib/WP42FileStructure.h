@@ -26,67 +26,12 @@
 #ifndef WP42FILESTRUCTURE_H
 #define WP42FILESTRUCTURE_H
 
-// size of the functiongroups 0xC0 and 0xF8
-// -1 means the size is variable
-int FUCNTION_GROUP_SIZE[57] = 
-{
-	6,	// 0xC0
-	4,
-	3,	
-	5,	
-	5,	
-	6,	
-	4,	
-	6,	
-	8,	
-	42,	
-	3,	
-	6,	
-	4,	
-	3,	
-	4,	
-	3,	
-	6,	// 0xD0
-	-1,	
-	-1,	
-	4,	
-	4,	
-	4,	
-	6,	
-	-1,	
-	4,	
-	4,	
-	4,	
-	4,	
-	-1,	
-	24,	
-	4,	
-	-1,	
-	4,	// 0XE0
-	3,	
-	-1,	
-	150,	
-	6,	
-	23,	
-	11,		
-	3,	
-	3,	
-	-1,	
-	-1,	
-	32,	
-	4,	
-	-1,	
-	44,	
-	18,	
-	6,	// 0XF0
-	106,	
-	-1,	
-	100,	
-	4,	
-	-1,	
-	5,	
-	-1,
-	-1	// 0xF8
-};
+
+extern int WP42_FUCNTION_GROUP_SIZE[57]; 
+
+#define WP42_ATTRIBUTE_BOLD 0
+#define WP42_ATTRIBUTE_ITALICS 1
+#define WP42_ATTRIBUTE_UNDERLINE 2
+#define WP42_ATTRIBUTE_STRIKE_OUT 3
 
 #endif /* WP42FILESTRUCTURE_H */

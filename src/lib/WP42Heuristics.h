@@ -3,7 +3,7 @@
  * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -23,21 +23,13 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP42LLLISTENER_H
-#define WP42LLLISTENER_H
+#ifndef WP42HEURISTICS_H
+#define WP42HEURISTICS_H
 
-#include "WPXLLListener.h"
-
-class WP42LLListener : public WPXLLListener
+class WP42Heuristics
 {
 public:
-	WP42LLListener() : WPXLLListener() {}
-	virtual ~WP42LLListener() {}
-
-protected:
-
-private:
-
+	static int isWP42FileFormat(GsfInput *input, bool partialContent);
 };
 
-#endif /* WP42LLLISTENER_H */
+#endif /* WP42HEURISTICS_H */

@@ -24,13 +24,19 @@
  */
 
 #include "WP42HLListener.h"
-
+#include "WP42FileStructure.h"
 
 WP42HLListener::WP42HLListener(WPXHLListenerImpl *listenerImpl)
-	: m_listenerImpl(listenerImpl)
+	: m_listenerImpl(listenerImpl),
+	m_textAttributesChanged(false),
+	m_textAttributeBits(0)
 {
 	m_textBuffer.clear();
 }
+
+/****************************************
+ public 'HLListenerImpl' functions
+*****************************************/
 
 void WP42HLListener::startDocument()
 {
@@ -66,7 +72,7 @@ void WP42HLListener::insertEOL()
 					"Times New Roman", 12.0f,
 					1.0f,
 					false, false);
-	m_listenerImpl->openSpan(0, "Times New Roman", 12.0f);		
+	_openSpan();	
 }
 
 void WP42HLListener::endDocument()
@@ -75,8 +81,84 @@ void WP42HLListener::endDocument()
 	m_listenerImpl->endDocument();	
 }
 
+
+/****************************************
+ public 'parser' functions
+*****************************************/
+
+void WP42HLListener::attributeChange(const bool isOn, const guint8 attribute)
+{
+	// flush everything which came before this change
+	_flushText();
+	
+	guint32 textAttributeBit = 0;
+	
+	// FIXME: handle all the possible attribute bits
+	switch (attribute)
+	{
+	/*case WP6_ATTRIBUTE_SUBSCRIPT:
+		textAttributeBit = WPX_SUBSCRIPT_BIT;
+		break;
+	case WP6_ATTRIBUTE_SUPERSCRIPT:
+		textAttributeBit = WPX_SUPERSCRIPT_BIT;
+		break;
+	case WP6_ATTRIBUTE_OUTLINE:
+		textAttributeBit = WPX_OUTLINE_BIT;
+		break;*/
+	case WP42_ATTRIBUTE_ITALICS:
+		textAttributeBit = WPX_ITALICS_BIT;
+		break;/*
+	case WP6_ATTRIBUTE_SHADOW:
+		textAttributeBit = WPX_SHADOW_BIT;
+		break;
+	case WP6_ATTRIBUTE_REDLINE:
+		textAttributeBit = WPX_REDLINE_BIT;
+		break;
+	case WP6_ATTRIBUTE_DOUBLE_UNDERLINE:
+		textAttributeBit = WPX_DOUBLE_UNDERLINE_BIT;
+		break;			*/
+	case WP42_ATTRIBUTE_BOLD:
+		textAttributeBit = WPX_BOLD_BIT;
+		break;
+	case WP42_ATTRIBUTE_STRIKE_OUT:
+		textAttributeBit = WPX_STRIKEOUT_BIT;
+		break;
+	case WP42_ATTRIBUTE_UNDERLINE:
+		textAttributeBit = WPX_UNDERLINE_BIT;
+		break;/*
+	case WP6_ATTRIBUTE_SMALL_CAPS:
+		textAttributeBit = WPX_SMALL_CAPS_BIT;
+		break;
+	case WP6_ATTRIBUTE_BLINK:
+		textAttributeBit = WPX_BLINK_BIT;
+		break;*/
+	}
+	
+	if (isOn) 
+		m_textAttributeBits |= textAttributeBit;
+	else
+		m_textAttributeBits ^= textAttributeBit;
+	
+	m_textAttributesChanged = true;
+}
+
+/****************************************
+ private functions
+*****************************************/
+
+void WP42HLListener::_openSpan()
+{
+	m_listenerImpl->openSpan(m_textAttributeBits, "Times New Roman", 12.0f);	
+}
+
 void WP42HLListener::_flushText()
 {
+	if (m_textAttributesChanged)
+	{
+		_openSpan();
+		m_textAttributesChanged = false;
+	}
+	
 	if (m_textBuffer.getLen())
 	{
 		m_listenerImpl->insertText(m_textBuffer);
