@@ -66,6 +66,8 @@ WPDConfidence WPDocument::isFileFormatSupported(GsfInput *input, bool partialCon
 	
 	WPXHeader *header = NULL;	
 	
+	WPD_DEBUG_MSG(("WPDocument::isFileFormatSupported()\n"));
+	
 	// by-pass the OLE stream (if it exists) and returns the (sub) stream with the
 	// WordPerfect document. 
 	GsfInput *document = NULL;
@@ -134,8 +136,16 @@ WPDConfidence WPDocument::isFileFormatSupported(GsfInput *input, bool partialCon
 	}	
 	catch (FileException)
 	{
+		WPD_DEBUG_MSG(("File Exception trapped\n"));
+		
 		if (document != NULL && isDocumentOLE)
 			g_object_unref(G_OBJECT(document));
+		
+		return WPD_CONFIDENCE_NONE;
+	}
+	catch (...)
+	{
+		WPD_DEBUG_MSG(("Unknown Exception trapped\n"));
 		
 		return WPD_CONFIDENCE_NONE;
 	}
@@ -158,6 +168,8 @@ void WPDocument::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl)
 	// WordPerfect document. 
 	GsfInput *document = NULL;
 	bool isDocumentOLE = false;
+	
+	WPD_DEBUG_MSG(("WPDocument::parse()\n"));
 	
 	GsfInfile * ole = GSF_INFILE(gsf_infile_msole_new (input, NULL));
 	if (ole != NULL) 
@@ -218,17 +230,42 @@ void WPDocument::parse(GsfInput *input, WPXHLListenerImpl *listenerImpl)
 				parser->parse(listenerImpl);
 				DELETEP(parser);
 			}
+			else
+				throw FileException();
 		}
 		
 		if (document != NULL && isDocumentOLE)
 			g_object_unref(G_OBJECT(document));
 	}
+	
+	/* TODO: fix code dumplication below */
 	catch (FileException)
 	{
+		WPD_DEBUG_MSG(("File Exception trapped\n"));
+		
 		DELETEP(parser);
 		if (document != NULL && isDocumentOLE)
 			g_object_unref(G_OBJECT(document));
 		throw FileException(); 
+	}
+	catch (ParseException)
+	{
+		WPD_DEBUG_MSG(("Parse Exception trapped\n"));
+		
+		DELETEP(parser);
+		if (document != NULL && isDocumentOLE)
+			g_object_unref(G_OBJECT(document));
+		throw FileException(); 		
+	}
+	catch (...)
+	{
+		WPD_DEBUG_MSG(("Unknown Exception trapped\n"));
+		
+		DELETEP(parser);
+		if (document != NULL && isDocumentOLE)
+			g_object_unref(G_OBJECT(document));
+		
+		throw Exception();		
 	}
 }
 

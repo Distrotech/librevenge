@@ -33,6 +33,8 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(GsfInput *input, bool partialCont
 {
 	int functionGroupCount = 0;
 	
+	WPD_DEBUG_MSG(("WP42Heuristics::isWP42FileFormat()\n"));
+	
 	gsf_input_seek(input, 0, G_SEEK_SET);
 	
 	while (!gsf_input_eof(input))
@@ -97,12 +99,12 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(GsfInput *input, bool partialCont
 		}
 	}	
 
-	// when we get here, the document is in a format that we could import properly.
-	
-	// if we didn't entcounter a single WP4.2 function group) then be a bit more carefull.
-	// this would be the case when passed a plaintext file for example
+	/* When we get here, the document is in a format that we *could* import properly.
+	However, if we didn't entcounter a single WP4.2 function group) we need to be more carefull:
+	this would be the case when passed a plaintext file for example, which libwpd is not
+	supposed to handle. */
 	if (!functionGroupCount)
-		return WPD_CONFIDENCE_LIKELY;
+		return WPD_CONFIDENCE_POOR;
 	
 	return WPD_CONFIDENCE_EXCELLENT;
 }

@@ -50,7 +50,6 @@ enum WPXNumberingType { ARABIC, LOWERCASE, UPPERCASE, LOWERCASE_ROMAN, UPPERCASE
 enum WPXNoteType { FOOTNOTE, ENDNOTE };
 enum WPXHeaderFooterType { HEADER, FOOTER };
 enum WPXHeaderFooterOccurence { ODD, EVEN, ALL };
-enum WPXFormOrientation { PORTRAIT, LANDSCAPE };
 
 enum WPDConfidence { WPD_CONFIDENCE_NONE=0, WPD_CONFIDENCE_POOR, WPD_CONFIDENCE_LIKELY, WPD_CONFIDENCE_GOOD, WPD_CONFIDENCE_EXCELLENT};
 
@@ -174,6 +173,11 @@ class FileException
 };
 
 class ParseException
+{
+	// needless to say, we could flesh this class out a bit
+};
+
+class Exception
 {
 	// needless to say, we could flesh this class out a bit
 };

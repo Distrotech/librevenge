@@ -51,6 +51,8 @@ WPXHeader::~WPXHeader()
 
 WPXHeader * WPXHeader::constructHeader(GsfInput *input)
 {
+	WPD_DEBUG_MSG(("WPXHeader::constructHeader()\n"));
+	
 	gchar fileMagic[4];
 	/* check the magic */
 	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, WPX_HEADER_MAGIC_OFFSET - gsf_input_tell(input), G_SEEK_CUR));
