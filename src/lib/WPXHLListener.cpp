@@ -158,7 +158,7 @@ void WPXHLListener::_openSection()
 	else
 		propList.insert("fo:margin-bottom", 0.0f);
 
-	WPXVector<WPXPropertyList> columns;
+	WPXPropertyListVector columns;
  	typedef vector<WPXColumnDefinition>::const_iterator CDVIter;
  	for (CDVIter iter = m_ps->m_textColumns.begin(); iter != m_ps->m_textColumns.end(); iter++)
 	{
@@ -305,7 +305,7 @@ void WPXHLListener::_openParagraph()
 	else
 		_closeParagraph();
 
-	WPXVector<WPXPropertyList> tabStops;
+	WPXPropertyListVector tabStops;
 	_getTabStops(tabStops);
 
 	WPXPropertyList propList;
@@ -398,7 +398,7 @@ void WPXHLListener::_appendParagraphProperties(WPXPropertyList &propList)
 		propList.insert("fo:break-before", "page");
 }
 
-void WPXHLListener::_getTabStops(WPXVector<WPXPropertyList> &tabStops)
+void WPXHLListener::_getTabStops(WPXPropertyListVector &tabStops)
 {
 	for (int i=0; i<m_ps->m_tabStops.size(); i++)
 	{
@@ -461,7 +461,7 @@ void WPXHLListener::_openListElement()
 	WPXPropertyList propList;
 	_appendParagraphProperties(propList);
 
-	WPXVector<WPXPropertyList> tabStops;
+	WPXPropertyListVector tabStops;
 	_getTabStops(tabStops);
 
 	m_listenerImpl->openListElement(propList, tabStops);
@@ -605,7 +605,7 @@ void WPXHLListener::_openTable()
 	}
 
  	float tableWidth = 0.0f;
-	WPXVector<WPXPropertyList> columns;
+	WPXPropertyListVector columns;
  	typedef vector<WPXColumnDefinition>::const_iterator CDVIter;
  	for (CDVIter iter = m_ps->m_tableDefinition.columns.begin(); iter != m_ps->m_tableDefinition.columns.end(); iter++)
  	{

@@ -181,7 +181,7 @@ protected:
 	void _closePageSpan();
 
 	void _appendParagraphProperties(WPXPropertyList &propList);
-	void _getTabStops(WPXVector<WPXPropertyList> &tabStops);
+	void _getTabStops(WPXPropertyListVector &tabStops);
 	void _appendJustification(WPXPropertyList &propList, int justification);
 	virtual void _openParagraph();
 	virtual void _resetParagraphState(const bool isListElement=false);

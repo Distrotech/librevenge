@@ -119,7 +119,7 @@ class WPXHLListenerImpl
 	\li \c style:leader-char The leader character
 	\li \c style:position Position of the tab
 	*/
-	virtual void openParagraph(const WPXPropertyList &propList, const WPXVector<WPXPropertyList> &tabStops) = 0;
+	virtual void openParagraph(const WPXPropertyList &propList, const WPXPropertyListVector &tabStops) = 0;
 	/**
 	Called when a paragraph is closed.
 	*/
@@ -154,7 +154,7 @@ class WPXHLListenerImpl
 	\li \c fo:margin-left The left indentation of the margin, in inches
 	\li \c fo:margin-right The right indentation of the margin, in inches
 	*/
-	virtual void openSection(const WPXPropertyList &propList, const WPXVector<WPXPropertyList> &columns) = 0;
+	virtual void openSection(const WPXPropertyList &propList, const WPXPropertyListVector &columns) = 0;
 	/**
 	Called when a section is closed
 	*/
@@ -231,7 +231,7 @@ class WPXHLListenerImpl
 	\li \c style:leader-char The leader character
 	\li \c style:position Position of the tab
 	*/
-	virtual void openListElement(const WPXPropertyList &propList, const WPXVector<WPXPropertyList> &tabStops) = 0;
+	virtual void openListElement(const WPXPropertyList &propList, const WPXPropertyListVector &tabStops) = 0;
 	/**
 	Called when a list element should be closed
 	*/
@@ -265,7 +265,7 @@ class WPXHLListenerImpl
 	\param columns Column definitions for the table. May contain
 	\li \c style:column-width Width of a column, in inches
 	*/
- 	virtual void openTable(const WPXPropertyList &propList, const WPXVector<WPXPropertyList> &columns) = 0;
+ 	virtual void openTable(const WPXPropertyList &propList, const WPXPropertyListVector &columns) = 0;
 	/**
 	Called when a new table row is opened
 	\param propList Defines a set of properties for the table row. May contain:

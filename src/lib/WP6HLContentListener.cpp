@@ -931,7 +931,8 @@ void WP6HLContentListener::styleGroupOn(const uint8_t subGroup)
 		{
 		case WP6_STYLE_GROUP_PARASTYLE_BEGIN_ON_PART1:
 			WPD_DEBUG_MSG(("WordPerfect: Handling para style begin 1 (ON)\n"));
- 			_flushText();
+ 			//_flushText();
+			_closeListElement(); _closeParagraph();
 
 			m_parseState->m_styleStateSequence.setCurrentState(BEGIN_BEFORE_NUMBERING);
 			m_parseState->m_putativeListElementHasParagraphNumber = false;
