@@ -26,6 +26,7 @@
 
 #include "libwpd.h"
 #include <stdarg.h>
+#include <stdio.h>
 #include <string.h>
 
 const uint16_t asciiMap[] =

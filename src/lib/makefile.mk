@@ -1,10 +1,13 @@
 PRJ=..$/..$/..$/..$/..$/..
 
-PRJNAME=wpdsrc
-TARGET=wpdsrc
+PRJNAME=libwpd
+TARGET=wpdlib
 ENABLE_EXCEPTIONS=TRUE
+LIBTARGET=NO
 
+.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
+.INCLUDE :  sv.mk
 
 .IF "$(GUI)"=="WNT"
 CFLAGS+=-GR
@@ -104,23 +107,8 @@ SLOFILES= \
 	$(SLO)$/WPXPart.obj				\
 	$(SLO)$/WPDocument.obj
 
-SHL1LIBS=$(LIB1TARGET) 
-SHL1STDLIBS+= \
-	$(SVLLIB)	\
-	$(SOTLIB) \
-	$(SVXLIB) \
-	$(SO2LIB) \
-	$(SVTOOLLIB) \
-	$(UNOTOOLSLIB) \
-	$(TOOLSLIB) \
-	$(COMPHELPERLIB) \
-	$(UCBHELPERLIB) \
-	$(CPPUHELPERLIB) \
-	$(CPPULIB) \
-	$(SALLIB)
-SHL1TARGET	=	wpd
-SHL1IMPLIB      =       i$(SHL1TARGET)
-SHL1LIBS	=	$(SLB)$/wpdsrc.lib
-DEF1NAME=$(SHL1TARGET)
+LIB1ARCHIV=$(LB)$/libwpdlib.a
+LIB1TARGET=$(SLB)$/$(TARGET).lib
+LIB1OBJFILES= $(SLOFILES)
 
 .INCLUDE :  target.mk
