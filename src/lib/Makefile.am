@@ -76,6 +76,7 @@ libwpd_1_la_SOURCES =				\
 	WP60Header.cpp				\
 	WP61Header.cpp				\
 	WP6HeaderFooterGroup.cpp 		\
+	WP6HighlightGroup.cpp			\
 	WP6HLContentListener.cpp		\
 	WP6HLListener.cpp			\
 	WP6HLStylesListener.cpp			\
@@ -118,7 +119,7 @@ libwpd_1_la_SOURCES =				\
 	WP5AttributeGroup.h 			\
 	WP5FileStructure.h			\
 	WP5FixedLengthGroup.h			\
-	WP5FormatGroup.h				\
+	WP5FormatGroup.h			\
 	WP5Header.h				\
 	WP5HLListener.h				\
 	WP5HLStylesListener.h			\
@@ -146,6 +147,7 @@ libwpd_1_la_SOURCES =				\
 	WP60Header.h 				\
 	WP61Header.h 				\
 	WP6HeaderFooterGroup.h 			\
+	WP6HighlightGroup.h			\
 	WP6HLContentListener.h			\
 	WP6HLListener.h				\
 	WP6HLStylesListener.h			\

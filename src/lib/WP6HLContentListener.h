@@ -151,6 +151,7 @@ public:
 	virtual void insertEOL();
 	virtual void characterColorChange(const guint8 red, const guint8 green, const guint8 blue);
 	virtual void characterShadingChange(const guint8 shading);
+	virtual void highlightChange(const bool isOn, const RGBSColor color);
 	virtual void fontChange(const guint16 matchedFontPointSize, const guint16 fontPID);
  	virtual void attributeChange(const bool isOn, const guint8 attribute);
 	virtual void lineSpacingChange(const float lineSpacing);

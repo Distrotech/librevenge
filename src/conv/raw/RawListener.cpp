@@ -146,16 +146,18 @@ void RawListenerImpl::closeHeaderFooter(const WPXHeaderFooterType headerFooterTy
 void RawListenerImpl::openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits,
 				   const float marginLeftOffset, const float marginRightOffset, const float textIndent,
 				   const gchar *fontName, const float fontSize, const RGBSColor *fontColor,
-				   const float lineSpacing,
+				   const RGBSColor *highlightColor, const float lineSpacing,
 				   const bool isColumnBreak, const bool isPageBreak)
 {
 	UTF8String fontNameUTF8(fontName);
-	__iuprintf("openParagraph(paragraphJustification: %d, textAttributeBits: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, textIndent: %.4f, fontName: %s, fontSize: %.4f,  fontColor: #%02x%02x%02x s:%02x, lineSpacing: %.4f, isColumnBreak: %s, isPageBreak: %s)\n",
+	__iuprintf("openParagraph(paragraphJustification: %d, textAttributeBits: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, textIndent: %.4f, fontName: %s, fontSize: %.4f,  fontColor: #%02x%02x%02x s:%02x, highlightColor: #%02x%02x%02x s:%02x, lineSpacing: %.4f, isColumnBreak: %s, isPageBreak: %s)\n",
 		paragraphJustification, textAttributeBits,
 		marginLeftOffset, marginRightOffset, textIndent,
-		fontNameUTF8.getUTF8(), fontSize, (fontColor?fontColor->m_r:0x00), (fontColor?fontColor->m_g:0x00),
-		(fontColor?fontColor->m_b:0x00), (fontColor?fontColor->m_s:0x00), lineSpacing,
-		(isColumnBreak ? "true" : "false"), (isPageBreak ? "true" : "false")
+		fontNameUTF8.getUTF8(), fontSize, (fontColor?fontColor->m_r:0xff), (fontColor?fontColor->m_g:0xff),
+		(fontColor?fontColor->m_b:0xff), (fontColor?fontColor->m_s:0xff), (highlightColor?highlightColor->m_r:0xff),
+		(highlightColor?highlightColor->m_g:0xff), (highlightColor?highlightColor->m_b:0xff),
+		(highlightColor?highlightColor->m_s:0xff), // saturation cannot be ever 0xff; if it is, the pointer is NULL.
+		lineSpacing, (isColumnBreak ? "true" : "false"), (isPageBreak ? "true" : "false")
 	);
 }
 
@@ -164,11 +166,14 @@ void RawListenerImpl::closeParagraph()
 	__idprintf("closeParagraph()\n");
 }
 
-void RawListenerImpl::openSpan(const guint32 textAttributeBits, const gchar *fontName, const float fontSize, const RGBSColor *fontColor)
+void RawListenerImpl::openSpan(const guint32 textAttributeBits, const gchar *fontName, const float fontSize,
+					const RGBSColor *fontColor, const RGBSColor *highlightColor)
 {
-	__iuprintf("openSpan(textAttributeBits: %u, fontName: %s, fontSize: %.4f,  fontColor: #%02x%02x%02x s:%02x)\n",
-			   textAttributeBits, fontName, fontSize, (fontColor?fontColor->m_r:0x00), (fontColor?fontColor->m_g:0x00),
-			   (fontColor?fontColor->m_b:0x00), (fontColor?fontColor->m_s:0x00)
+	__iuprintf("openSpan(textAttributeBits: %u, fontName: %s, fontSize: %.4f,  fontColor: #%02x%02x%02x s:%02x, highlightColor: #%02x%02x%02x s:%02x)\n",
+			   textAttributeBits, fontName, fontSize, (fontColor?fontColor->m_r:0xff), (fontColor?fontColor->m_g:0xff),
+			   (fontColor?fontColor->m_b:0xff), (fontColor?fontColor->m_s:0xff), (highlightColor?highlightColor->m_r:0xff),
+			   (highlightColor?highlightColor->m_g:0xff), (highlightColor?highlightColor->m_b:0xff),
+			   (highlightColor?highlightColor->m_s:0xff) // saturation cannot be ever 0xff; if it is, the pointer is NULL
 	);
 }
 
@@ -245,14 +250,17 @@ void RawListenerImpl::closeUnorderedListLevel()
 void RawListenerImpl::openListElement(const guint8 paragraphJustification, const guint32 textAttributeBits,
 				   const float marginLeftOffset, const float marginRightOffset, const float textIndent,
 				   const gchar *fontName, const float fontSize, const RGBSColor *fontColor,
-				     const float lineSpacing)
+				   const RGBSColor *highlightColor, const float lineSpacing)
 {
 	UTF8String fontNameUTF8(fontName);
-	__iuprintf("openListElement(paragraphJustification: %d, textAttributeBits: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, textIndent: %.4f, fontName: %s, fontSize: %.4f, fontColor: #%02x%02x%02x s:%02x, lineSpacing: %.4f)\n",
+	__iuprintf("openListElement(paragraphJustification: %d, textAttributeBits: %d, marginLeftOffset: %.4f, marginRightOffset: %.4f, textIndent: %.4f, fontName: %s, fontSize: %.4f, fontColor: #%02x%02x%02x s:%02x, highlightColor: #%02x%02x%02x s:%02x, lineSpacing: %.4f)\n",
 		paragraphJustification, textAttributeBits,
 		marginLeftOffset, marginRightOffset, textIndent,
-		fontNameUTF8.getUTF8(), fontSize, (fontColor?fontColor->m_r:0x00), (fontColor?fontColor->m_g:0x00),
-		(fontColor?fontColor->m_b:0x00), (fontColor?fontColor->m_s:0x00), lineSpacing
+		fontNameUTF8.getUTF8(), fontSize, (fontColor?fontColor->m_r:0xff), (fontColor?fontColor->m_g:0xff),
+		(fontColor?fontColor->m_b:0xff), (fontColor?fontColor->m_s:0xff), (highlightColor?highlightColor->m_r:0xff),
+		(highlightColor?highlightColor->m_g:0xff), (highlightColor?highlightColor->m_b:0xff),
+	    (highlightColor?highlightColor->m_s:0xff), // saturation cannot be ever 0xff; if it is, the pointer is NULL.
+	    lineSpacing
 	);
 }
 
@@ -306,9 +314,9 @@ void RawListenerImpl::openTableCell(const guint32 col, const guint32 row, const 
 	__iuprintf("openTableCell(col: %d, row: %d, colSpan: %d, rowSpan: %d, borderBits: %d, cellFgColor: #%02x%02x%02x s:%02x, cellBgColor: #%02x%02x%02x s:%02x)\n",
 		col, row, colSpan, rowSpan,
 		borderBits,
-		// TODO: if (!cellFgColor) we should output NULL, but for now just output the color #000000 s:00
-		(cellFgColor?cellFgColor->m_r:0), (cellFgColor?cellFgColor->m_g:0), (cellFgColor?cellFgColor->m_b:0), (cellFgColor?cellFgColor->m_s:0),
-		(cellBgColor?cellBgColor->m_r:0), (cellBgColor?cellBgColor->m_g:0), (cellBgColor?cellBgColor->m_b:0), (cellBgColor?cellBgColor->m_s:0)
+		// The saturation cannot ever be more that 0x64. It it is, cellFgColor or cellBgColor is NULL
+		(cellFgColor?cellFgColor->m_r:0xff), (cellFgColor?cellFgColor->m_g:0xff), (cellFgColor?cellFgColor->m_b:0xff), (cellFgColor?cellFgColor->m_s:0xff),
+		(cellBgColor?cellBgColor->m_r:0xff), (cellBgColor?cellBgColor->m_g:0xff), (cellBgColor?cellBgColor->m_b:0xff), (cellBgColor?cellBgColor->m_s:0xff)
 	);
 }
 

@@ -371,6 +371,20 @@ void WP6HLContentListener::characterShadingChange(const guint8 shading)
 	}
 }
 
+void WP6HLContentListener::highlightChange(const bool isOn, const RGBSColor color)
+{
+	if (!isUndoOn())
+	{
+		//flush everything which came before this change
+		_flushText();
+		if (isOn)
+			m_ps->m_highlightColor = new RGBSColor(color.m_r, color.m_g, color.m_b, color.m_s);
+		else
+			DELETEP(m_ps->m_highlightColor);
+		m_ps->m_textAttributesChanged = true;
+	}
+}
+
 void WP6HLContentListener::fontChange(const guint16 matchedFontPointSize, const guint16 fontPID)
 {
 	if (!isUndoOn())
@@ -1093,7 +1107,7 @@ void WP6HLContentListener::_openListElement()
 {
 	m_listenerImpl->openListElement(m_parseState->m_paragraphJustification, m_ps->m_textAttributeBits,
 					m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight, m_ps->m_paragraphTextIndent,
-					m_ps->m_fontName->str, m_ps->m_fontSize, m_ps->m_fontColor,
+					m_ps->m_fontName->str, m_ps->m_fontSize, m_ps->m_fontColor, m_ps->m_highlightColor,
 					m_parseState->m_paragraphLineSpacing);
 	m_ps->m_isParagraphOpened = true; // a list element is equivalent to a paragraph
 
@@ -1176,7 +1190,7 @@ void WP6HLContentListener::_openParagraph()
 
 	m_listenerImpl->openParagraph(paragraphJustification, m_ps->m_textAttributeBits,
 				      m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight, m_ps->m_paragraphTextIndent,
-				      m_ps->m_fontName->str, m_ps->m_fontSize, m_ps->m_fontColor,
+				      m_ps->m_fontName->str, m_ps->m_fontSize, m_ps->m_fontColor, m_ps->m_highlightColor,
 				      m_parseState->m_paragraphLineSpacing,
 				      m_ps->m_isParagraphColumnBreak, m_ps->m_isParagraphPageBreak);
 	if (m_ps->m_numDeferredParagraphBreaks > 0)

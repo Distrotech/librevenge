@@ -44,6 +44,7 @@ public:
 	virtual void setExtendedInformation(const guint16 type, const UCSString &data) = 0;
 	virtual void characterColorChange(const guint8 red, const guint8 green, const guint8 blue) = 0;
 	virtual void characterShadingChange(const guint8 shading) = 0;
+	virtual void highlightChange(const bool isOn, const RGBSColor color) = 0;
 	virtual void fontChange(const guint16 matchedFontPointSize, const guint16 fontPID) = 0;
 	virtual void undoChange(const guint8 undoType, const guint16 undoLevel) = 0;
 	virtual void updateOutlineDefinition(const WP6OutlineLocation outlineLocation, const guint16 outlineHash,

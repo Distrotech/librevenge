@@ -58,11 +58,11 @@ public:
 	virtual void openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits,
 				   const float marginLeftOffset, const float marginRightOffset, const float textIndent,
 				   const gchar *fontName, const float fontSize, const RGBSColor *fontColor,
-				   const float lineSpacing,
+				   const RGBSColor *highlightColor, const float lineSpacing,
 				   bool isColumnBreak, bool isPageBreak) {}
 	virtual void closeParagraph();
 	virtual void openSpan(const guint32 textAttributeBits, const gchar *fontName, const float fontSize,
-				   const RGBSColor *fontColor) {}
+				   const RGBSColor *fontColor, const RGBSColor *highlightColor) {}
 	virtual void closeSpan() {}
 
 	virtual void insertTab();
@@ -80,7 +80,7 @@ public:
 	virtual void openListElement(const guint8 paragraphJustification, const guint32 textAttributeBits,
 				   const float marginLeftOffset, const float marginRightOffset, const float textIndent,
 				   const gchar *fontName, const float fontSize, const RGBSColor *fontColor,
-			       const float lineSpacing) {}
+			       const RGBSColor *highlightColor, const float lineSpacing) {}
 	virtual void closeListElement() {}
 
 	virtual void openFootnote(int number) {}

@@ -249,6 +249,10 @@ SOURCE=..\..\src\lib\WP6HeaderFooterGroup.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP6HighlightGroup.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP6HLContentListener.cpp
 # End Source File
 # Begin Source File
@@ -530,6 +534,10 @@ SOURCE=..\..\src\lib\WP6Header.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP6HeaderFooterGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP6HighlightGroup.h
 # End Source File
 # Begin Source File
 
