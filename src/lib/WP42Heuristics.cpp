@@ -60,7 +60,7 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(GsfInput *input, bool partialCont
 			// check that the size constrains are valid, and that every group_member
 			// is properly closed at the right place
 		
-			if (WP42_FUCNTION_GROUP_SIZE[readVal-0xC0] == -1)
+			if (WP42_FUNCTION_GROUP_SIZE[readVal-0xC0] == -1)
 			{
 				// variable length function group
 				
@@ -84,7 +84,7 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(GsfInput *input, bool partialCont
 				// fixed length function group
 				
 				// seek to the position where the closing gate should be
-				bool res = gsf_input_seek(input, WP42_FUCNTION_GROUP_SIZE[readVal-0xC0]-2, G_SEEK_CUR);
+				bool res = gsf_input_seek(input, WP42_FUNCTION_GROUP_SIZE[readVal-0xC0]-2, G_SEEK_CUR);
 				// when passed the complete file, we should be able to do that
 				if (!partialContent && res)
 					return WPD_CONFIDENCE_NONE;

@@ -36,30 +36,31 @@ public:
 	WP42HLListener(vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl);
 
 	virtual void insertCharacter(const guint16 character);
-	virtual void insertTab(const guint8 tabType);
+	virtual void insertTab(const guint8 tabType, const float tabPosition);
+	virtual void handleLineBreak() {};
 	virtual void insertEOL();
 	virtual void attributeChange(const bool isOn, const guint8 attribute);
 	virtual void lineSpacingChange(const float lineSpacing) {};
 	virtual void justificationChange(const guint8 justification) {};
 	virtual void pageMarginChange(const guint8 side, const guint16 margin) {};
-	virtual void pageFormChange(const guint16 length, const guint16 width, const WPXFormOrientation orientation) {};
 	virtual void marginChange(const guint8 side, const guint16 margin) {};
+	virtual void paragraphMarginChange(const guint8 side, const gint16 margin) {};
 	virtual void columnChange(const guint8 numColumns) {};
 	virtual void endDocument();
-
+		
 	virtual void defineTable(guint8 position, guint16 leftOffset) {};
 	virtual void addTableColumnDefinition(guint32 width, guint32 leftGutter, guint32 rightGutter) {};
 	virtual void startTable() {};
  	virtual void insertRow() {};
- 	virtual void insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove,
-				const guint8 borderBits,
+ 	virtual void insertCell(const guint8 colSpan, const guint8 rowSpan, const bool boundFromLeft, const bool boundFromAbove, 
+				const guint8 borderBits, 	
 				const RGBSColor * cellFgColor, const RGBSColor * cellBgColor) {};
  	virtual void endTable() {};
 
 protected:
-	virtual void _handleSubDocument(guint16 textPID) {}
-
-	void _openParagraph();
+	virtual void _handleSubDocument(guint16 textPID, const bool isHeaderFooter) {}
+		
+	void _openParagraph();		
 private:
 	void _flushText(const bool fakeText=false);
 

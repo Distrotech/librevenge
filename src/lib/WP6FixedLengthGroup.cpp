@@ -65,7 +65,7 @@ void WP6FixedLengthGroup::_read(GsfInput *input)
 	
 	if (m_group >= 0xF0 && m_group <= 0xFF) // just an extra safety check
 	{
-		int size = WP6_FIXED_LENGTH_FUCNTION_GROUP_SIZE[m_group-0xF0];
+		int size = WP6_FIXED_LENGTH_FUNCTION_GROUP_SIZE[m_group-0xF0];
 		WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, (startPosition + size - 1 - gsf_input_tell(input)), G_SEEK_CUR));
 	}
 	else

@@ -27,7 +27,7 @@
 
 // size of the function groups 0xC0 to 0xFF
 // -1 means the size is variable
-int WP42_FUCNTION_GROUP_SIZE[64] = 
+int WP42_FUNCTION_GROUP_SIZE[64] = 
 {
 	6,	// 0xC0
 	4,

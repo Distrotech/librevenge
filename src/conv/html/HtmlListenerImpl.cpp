@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
- *
+ *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by
+/* "This product is not manufactured, approved, or supported by 
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -27,9 +27,21 @@
 #include "HtmlListenerImpl.h"
 
 // use the BELL code to represent a TAB for now
-#define UCS_TAB 0x0009
+#define UCS_TAB 0x0009 
 
-HtmlListenerImpl::HtmlListenerImpl()
+HtmlListenerImpl::HtmlListenerImpl():
+	m_isSuperscript(false),
+	m_isSubscript(false),
+	m_isBold(false),
+	m_isItalic(false),
+	m_isStrikeout(false),
+	m_isUnderline(false),
+	m_isDoubleUnderline(false),
+	m_isOutline(false),
+	m_isSmallCaps(false),
+	m_isBlink(false),
+	m_isShadow(false),
+	m_isRedline(false)
 {
 }
 
@@ -79,11 +91,10 @@ void HtmlListenerImpl::endDocument()
 }
 
 void HtmlListenerImpl::openPageSpan(const int span, const bool isLastPageSpan,
-				    const float formLength, const float formWidth, const WPXFormOrientation orientation,
 				    const float marginLeft, const float marginRight,
 				    const float marginTop, const float marginBottom)
 {
-	printf("<page-span span:%i margin-left:%fin margin-right:%fin margin-top:%fin margin-bottom:%fin>\n", span,
+	printf("<page-span span:%i margin-left:%fin margin-right:%fin margin-top:%fin margin-bottom:%fin>\n", span, 
 	       marginLeft, marginRight, marginTop, marginBottom);
 }
 
@@ -118,17 +129,21 @@ void HtmlListenerImpl::closeHeaderFooter(const WPXHeaderFooterType headerFooterT
 	}
 }
 
-void HtmlListenerImpl::openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits,
-				     const float marginLeft, const float marginRight, const float textIndent,
-				     const gchar *fontName, const float fontSize, const RGBSColor *fontColor,
+void HtmlListenerImpl::openParagraph(const guint8 paragraphJustification, const guint32 textAttributeBits, 
+				     const float marginLeft, const float marginRight,
+				     const gchar *fontName, const float fontSize,
 				     const float lineSpacing,
 				     const bool isColumnBreak, const bool isPageBreak)
 {
 	printf("<p style=\"");
-	_appendTextAttributes(textAttributeBits);
 	_appendParagraphJustification(paragraphJustification);
-	printf("\" font-name=\"%s\" font-size=\"%f\">",
-		   fontName, fontSize);
+	if (marginLeft != 0.0f)
+		printf(" margin-left: %.4fin;", marginLeft);
+	if (marginRight != 0.0f)
+		printf(" margin-right: %.4fin;", marginRight);
+	if (lineSpacing != 1.0f)
+		printf(" line-height: %.2f%%;", lineSpacing*100.0f);
+	printf("\">");
 }
 
 void HtmlListenerImpl::closeParagraph()
@@ -136,18 +151,17 @@ void HtmlListenerImpl::closeParagraph()
 	printf("</p>\n");
 }
 
-void HtmlListenerImpl::openSpan(guint32 textAttributeBits, const gchar *fontName, const float fontSize,
-					const RGBSColor *fontColor)
+void HtmlListenerImpl::openSpan(guint32 textAttributeBits, const gchar *fontName, const float fontSize)
 {
-	printf("<span style=\"");
-	_appendTextAttributes(textAttributeBits);
-	printf("\" font-name=\"%s\" font-size=\"%f\">",
-	       fontName, fontSize);
+	printf("<span style=\"font-family: \'%s\'\">", fontName);
+	printf("<span style=\"font-size: %.1fpt\">", fontSize);
+	_addTextAttributes(textAttributeBits);
 }
 
 void HtmlListenerImpl::closeSpan()
 {
-	printf("</span>");
+	_removeTextAttributes();
+	printf("</span></span>");
 }
 
 void HtmlListenerImpl::openSection(const unsigned int numColumns, const float spaceBefore)
@@ -169,6 +183,11 @@ void HtmlListenerImpl::insertText(const UCSString &text)
 {
 	UTF8String tempUTF8(text);
 	printf("%s", tempUTF8.getUTF8());
+}
+
+void HtmlListenerImpl::insertLineBreak()
+{
+	printf("<br>\n");
 }
 
 void HtmlListenerImpl::openOrderedListLevel(const int listID)
@@ -193,15 +212,19 @@ void HtmlListenerImpl::closeUnorderedListLevel()
 
 
 void HtmlListenerImpl::openListElement(const guint8 paragraphJustification, const guint32 textAttributeBits,
-				     const float marginLeft, const float marginRight, const float textIndent,
-				     const gchar *fontName, const float fontSize, const RGBSColor *fontColor,
+				       const float marginLeftOffset, const float marginRightOffset,
+				       const gchar *fontName, const float fontSize, 
 				       const float lineSpacing)
 {
 	printf("<li style=\"");
-	_appendTextAttributes(textAttributeBits);
 	_appendParagraphJustification(paragraphJustification);
-	printf("\" font-name=\"%s\" font-size=\"%f\">",
-	       fontName, fontSize);
+	if (marginLeftOffset != 0.0f)
+		printf(" margin-left: %.4fin;", marginLeftOffset);
+	if (marginRightOffset != 0.0f)
+		printf(" margin-right: %.4fin;", marginRightOffset);
+	if (lineSpacing != 1.0f)
+		printf(" line-height: %.2f%%;", lineSpacing*100.0f);
+	printf("\">");
 }
 
 void HtmlListenerImpl::closeListElement()
@@ -246,12 +269,12 @@ void HtmlListenerImpl::closeTableRow()
 	printf("</tr>\n");
 }
 
-void HtmlListenerImpl::openTableCell(const guint32 col, const guint32 row, const guint32 colSpan, const guint32 rowSpan,
+void HtmlListenerImpl::openTableCell(const guint32 col, const guint32 row, const guint32 colSpan, const guint32 rowSpan, 
 						const guint8 borderBits,
 						const RGBSColor * cellFgColor, const RGBSColor * cellBgColor)
 {
 	printf("<td ");
-
+	
 	if (cellFgColor || cellBgColor)
 	{
 		printf("style=\"");
@@ -273,17 +296,130 @@ void HtmlListenerImpl::closeTableCell()
 }
 
 void HtmlListenerImpl::closeTable()
-{
+{	
 	printf("</tbody>\n");
 	printf("</table>\n");
 }
 
-void HtmlListenerImpl::_appendTextAttributes(const guint32 textAttributeBits)
+void HtmlListenerImpl::_addTextAttributes(const guint32 textAttributeBits)
 {
-	if (textAttributeBits & WPX_BOLD_BIT)
-		printf("font-weight: bold;");
+	if (textAttributeBits & WPX_REDLINE_BIT)
+	{
+		printf("<span style=\"color: #ff3333\">");
+		m_isRedline = true;
+	}
+	if (textAttributeBits & WPX_SUPERSCRIPT_BIT)
+	{
+		printf("<sup>");
+		m_isSuperscript = true;
+	}
+	if (textAttributeBits & WPX_SUBSCRIPT_BIT)
+	{
+		printf("<sub>");
+		m_isSubscript = true;
+	}
 	if (textAttributeBits & WPX_ITALICS_BIT)
-		printf("font-style: italic;");
+	{
+		printf("<i>");
+		m_isItalic = true;
+	}
+	if (textAttributeBits & WPX_BOLD_BIT)
+	{
+		printf("<b>");
+		m_isBold = true;
+	}
+	if (textAttributeBits & WPX_STRIKEOUT_BIT)
+	{
+		printf("<s>");
+		m_isStrikeout = true;
+	}
+	if (textAttributeBits & WPX_UNDERLINE_BIT)
+	{
+		printf("<u>");
+		m_isUnderline = true;
+	}
+	if (textAttributeBits & WPX_DOUBLE_UNDERLINE_BIT)
+	{
+		printf("<u>"); // I did not find double underline in HTML
+		m_isDoubleUnderline = true;
+	}
+	// Following are just placeholders. I do not know how to convert them into a standard html
+	if (textAttributeBits & WPX_OUTLINE_BIT)
+	{
+		m_isOutline = true;
+	}
+	if (textAttributeBits & WPX_SMALL_CAPS_BIT)
+	{
+		m_isSmallCaps = true;
+	}
+	if (textAttributeBits & WPX_BLINK_BIT)
+	{
+		m_isBlink = true;
+	}
+	if (textAttributeBits & WPX_SHADOW_BIT)
+	{
+		m_isShadow = true;
+	}
+}
+
+void HtmlListenerImpl::_removeTextAttributes()
+{
+	if (m_isShadow)
+	{
+		m_isShadow = false;
+	}
+	if (m_isBlink)
+	{
+		m_isBlink = false;
+	}
+	if (m_isSmallCaps)
+	{
+		m_isSmallCaps = false;
+	}
+	if (m_isOutline)
+	{
+		m_isOutline = false;
+	}
+	if (m_isDoubleUnderline)
+	{
+		printf("</u>");
+		m_isDoubleUnderline = false;
+	}
+	if (m_isUnderline)
+	{
+		printf("</u>");
+		m_isUnderline = false;
+	}
+	if (m_isStrikeout)
+	{
+		printf("</s>");
+		m_isStrikeout = false;
+	}
+	if (m_isBold)
+	{
+		printf("</b>");
+		m_isBold = false;
+	}
+	if (m_isItalic)
+	{
+		printf("</i>");
+		m_isItalic = false;
+	}
+	if (m_isSubscript)
+	{
+		printf("</sub>");
+		m_isSubscript = false;
+	}
+	if (m_isSuperscript)
+	{
+		printf("</sup>");
+		m_isSuperscript = false;
+	}
+	if (m_isRedline)
+	{
+		printf("</span>");
+		m_isRedline = false;
+	}
 }
 
 void HtmlListenerImpl::_appendParagraphJustification(const guint32 paragraphJustification)

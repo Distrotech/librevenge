@@ -26,19 +26,42 @@
 #include "WP6TabGroup.h"
 #include "WP6LLListener.h"
 #include "libwpd_internal.h"
+#include "WPXFileStructure.h"
 
 WP6TabGroup::WP6TabGroup(GsfInput *input) :
-	WP6VariableLengthGroup()
+	WP6VariableLengthGroup(),
+	m_position(0.0f),
+	m_ignoreFunction(false)
 {
 	_read(input);
 }
 
 void WP6TabGroup::_readContents(GsfInput *input)
 {
+	guint16 tempPosition = 0;
+	if ((getFlags() & 0x40) == 0x40) // 0x40 is "ignore function" flag
+		m_ignoreFunction = true;
+	if ((getSize() >= 12) & (getSize() < 18)) // Minimum size of the function if the position information is present
+	{
+		gsf_input_seek(input, getSize() - 12, G_SEEK_CUR);
+		tempPosition = gsf_le_read_guint16(input);
+		m_position = (float)((double)tempPosition/(double)WPX_NUM_WPUS_PER_INCH);
+	}
+	else if (getSize() >= 18)
+	{
+		gsf_input_seek(input, 6, G_SEEK_CUR);
+		tempPosition = gsf_le_read_guint16(input);
+		m_position = (float)((double)tempPosition/(double)WPX_NUM_WPUS_PER_INCH);
+	}
 }
 
 void WP6TabGroup::parse(WP6HLListener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling a Tab group\n"));	
-	listener->insertTab(getSubGroup());
+	WPD_DEBUG_MSG(("WordPerfect: handling a Tab group (Tab type: %i, Tab position: %.4finch, Ignore function: %s)\n", 
+			getSubGroup(), m_position, (m_ignoreFunction?"true":"false")));
+	if (!m_ignoreFunction)
+	{
+		WPD_DEBUG_MSG(("WordPerfect: Parsing a Tab group\n"));		
+		listener->insertTab(getSubGroup(), m_position);
+	}
 }

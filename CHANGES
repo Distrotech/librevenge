@@ -2,6 +2,9 @@ CHANGES:
 
 
 0.7.1 -> 0.7.2
+- Added conversion of paragraph margins done by functions of the
+  paragraph group
+- Conversion of Hard-Line-Breaks (Fridrich Strba)
 - Fixed bug in WP6FixedLengthGroup handling (Fridrich Strba)
 - Added --callgraph to wpd2raw, and added all parameters to the 
   output (Marc Maurer)

@@ -57,7 +57,7 @@ void WP5FixedLengthGroup::_read(GsfInput *input)
 	
 	if (m_group >= 0xC0 && m_group <= 0xCF) // just an extra safety check
 	{
-		int size = WP5_FIXED_LENGTH_FUCNTION_GROUP_SIZE[m_group-0xC0];
+		int size = WP5_FIXED_LENGTH_FUNCTION_GROUP_SIZE[m_group-0xC0];
 		WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, (startPosition + size - 1 - gsf_input_tell(input)), G_SEEK_CUR));
 	}
 	else

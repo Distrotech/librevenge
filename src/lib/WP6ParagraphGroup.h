@@ -48,6 +48,26 @@ private:
 	guint8 m_justification;
 };
 
+class WP6ParagraphGroup_LeftMarginAdjustmentSubGroup : public WP6VariableLengthGroup_SubGroup
+{
+public:
+	WP6ParagraphGroup_LeftMarginAdjustmentSubGroup(GsfInput *input);
+	virtual void parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
+
+private:
+	gint16 m_leftMargin;
+};
+
+class WP6ParagraphGroup_RightMarginAdjustmentSubGroup : public WP6VariableLengthGroup_SubGroup
+{
+public:
+	WP6ParagraphGroup_RightMarginAdjustmentSubGroup(GsfInput *input);
+	virtual void parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const;
+
+private:
+	gint16 m_rightMargin;
+};
+
 class WP6ParagraphGroup_OutlineDefineSubGroup : public WP6VariableLengthGroup_SubGroup
 {
 public:

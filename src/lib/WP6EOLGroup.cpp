@@ -155,6 +155,7 @@ void WP6EOLGroup::_readContents(GsfInput *input)
 			case WP6_EOL_GROUP_DONT_END_A_PARAGRAPH_STYLE_FOR_THIS_HARD_RETURN:
 				WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: DONT_END_A_PARAGRAPH_STYLE_FOR_THIS_HARD_RETURN\n"));
 				numBytesToSkip = WP6_EOL_GROUP_DONT_END_A_PARAGRAPH_STYLE_FOR_THIS_HARD_RETURN_SIZE;
+				m_isDontEndAParagraphStyleForThisHardReturn = true;
 				break;
 			default:
 				// unsupported: shouldn't happen! an error may follow
@@ -210,6 +211,10 @@ void WP6EOLGroup::parse(WP6HLListener *listener)
 		case WP6_EOL_GROUP_HARD_EOL_AT_EOP:
 			listener->insertEOL();
 			break;
+		case WP6_EOL_GROUP_DELETABLE_SOFT_EOL: // 0x014 (deletable soft EOL)
+			if (m_isDontEndAParagraphStyleForThisHardReturn)
+				listener->handleLineBreak();
+			break;
 		case WP6_EOL_GROUP_HARD_EOC: // 0x07 (hard end of column)
 		case WP6_EOL_GROUP_HARD_EOC_AT_EOP:
 			listener->insertBreak(WPX_COLUMN_BREAK);
@@ -237,7 +242,6 @@ void WP6EOLGroup::parse(WP6HLListener *listener)
 		case WP6_EOL_GROUP_TABLE_OFF_AT_EOC_AT_EOP:
 			listener->endTable();
 			break;
-//		case WP6_EOL_GROUP_DELETABLE_SOFT_EOL: // 0x014 (deletable soft EOL)
 //		case WP6_EOL_GROUP_DELETABLE_SOFT_EOC: // 0x15 (deletable soft EOC) 
 //		case WP6_EOL_GROUP_DELETABLE_SOFT_EOC_AT_EOP: // 0x16 (deleteable soft EOC at EOP)
 		default: // something else we don't support yet

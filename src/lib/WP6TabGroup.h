@@ -36,6 +36,8 @@ class WP6TabGroup : public WP6VariableLengthGroup
 	virtual void parse(WP6HLListener *listener);
 
  private:
+	float m_position;
+	bool m_ignoreFunction;
 
 };
 
