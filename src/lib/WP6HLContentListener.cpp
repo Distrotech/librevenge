@@ -189,7 +189,6 @@ _WP6ParsingState::_WP6ParsingState() :
 	m_paragraphJustification(WPX_PARAGRAPH_JUSTIFICATION_LEFT),
 	m_tempParagraphJustification(0),
 
-	m_numDeferredParagraphBreaks(0),
 	m_numRemovedParagraphBreaks(0),
 
 	m_currentTable(NULL),
@@ -343,7 +342,7 @@ void WP6HLContentListener::insertEOL()
 	{
 		if (m_parseState->m_styleStateSequence.getCurrentState() == NORMAL)
 			_flushText();		
-		m_parseState->m_numDeferredParagraphBreaks++; 
+		m_ps->m_numDeferredParagraphBreaks++; 
 	}
 	
 }
@@ -356,11 +355,11 @@ void WP6HLContentListener::insertBreak(const guint8 breakType)
 		switch (breakType) 
 		{
 		case WPX_COLUMN_BREAK:
-			m_parseState->m_numDeferredParagraphBreaks++;
+			m_ps->m_numDeferredParagraphBreaks++;
 			m_parseState->m_isParagraphColumnBreak = true;
 			break;
 		case WPX_PAGE_BREAK:
-			m_parseState->m_numDeferredParagraphBreaks++;
+			m_ps->m_numDeferredParagraphBreaks++;
 			m_parseState->m_isParagraphPageBreak = true;
 			break;
 			// TODO: (.. line break?)
@@ -642,8 +641,8 @@ void WP6HLContentListener::styleGroupOn(const guint8 subGroup)
 			break;
 		case WP6_STYLE_GROUP_PARASTYLE_BEGIN_ON_PART2:
 			WPD_DEBUG_MSG(("WordPerfect: Handling a para style begin 2 (ON)\n"));
-			if (m_parseState->m_numDeferredParagraphBreaks > 0) {
-				m_parseState->m_numDeferredParagraphBreaks--; // very complicated: we are substituting other blocks for paragraph breaks, essentially
+			if (m_ps->m_numDeferredParagraphBreaks > 0) {
+				m_ps->m_numDeferredParagraphBreaks--; // very complicated: we are substituting other blocks for paragraph breaks, essentially
 				m_parseState->m_numRemovedParagraphBreaks = 1; // set it to 1, rather than incrementing, in case we have a leftover
 			}
 			_flushText();
@@ -682,7 +681,7 @@ void WP6HLContentListener::styleGroupOff(const guint8 subGroup)
 				_handleListChange(m_parseState->m_currentOutlineHash);
 			}
 			else {
-				m_parseState->m_numDeferredParagraphBreaks+=m_parseState->m_numRemovedParagraphBreaks;
+				m_ps->m_numDeferredParagraphBreaks+=m_parseState->m_numRemovedParagraphBreaks;
 				m_parseState->m_numRemovedParagraphBreaks = 0;
 				_flushText();
 			}
@@ -915,9 +914,9 @@ void WP6HLContentListener::_handleSubDocument(guint16 textPID)
 // void WP6HLContentListener::_handleLineBreakElementBegin() 
 // {
 // 	if (!m_ps->m_sectionAttributesChanged && 
-// 	    m_parseState->m_numDeferredParagraphBreaks > 0 &&
+// 	    m_ps->m_numDeferredParagraphBreaks > 0 &&
 // 	    !m_parseState->m_isParagraphColumnBreak && !m_parseState->m_isParagraphPageBreak) 
-// 		m_parseState->m_numDeferredParagraphBreaks--;					
+// 		m_ps->m_numDeferredParagraphBreaks--;					
 // 	_flushText();
 // }
 
@@ -940,26 +939,26 @@ void WP6HLContentListener::_flushText(const bool fakeText)
 	// which assumes the same condition)
 	if (m_parseState->m_styleStateSequence.getCurrentState() == NORMAL) 
 	{
-		if (m_parseState->m_currentListLevel > 0 && (m_parseState->m_numDeferredParagraphBreaks > 0 || m_parseState->m_bodyText.getLen() > 0 || fakeText) && 
+		if (m_parseState->m_currentListLevel > 0 && (m_ps->m_numDeferredParagraphBreaks > 0 || m_parseState->m_bodyText.getLen() > 0 || fakeText) && 
 		    m_parseState->m_styleStateSequence.getCurrentState() == NORMAL)
 		{
 			m_parseState->m_currentListLevel = 0;
 			_handleListChange(m_parseState->m_currentOutlineHash);
-			m_parseState->m_numDeferredParagraphBreaks--; // we have an implicit break here, when we close the list
+			m_ps->m_numDeferredParagraphBreaks--; // we have an implicit break here, when we close the list
 			m_ps->m_isParagraphOpened = false;
 		}
 	}
 
 	// create a new section, and a new paragraph, if our section attributes have changed and we have inserted
 	// something into the document (or we have forced a break, which assumes the same condition)
-	if (m_ps->m_sectionAttributesChanged && (m_parseState->m_bodyText.getLen() > 0 || m_parseState->m_numDeferredParagraphBreaks > 0 || fakeText))
+	if (m_ps->m_sectionAttributesChanged && (m_parseState->m_bodyText.getLen() > 0 || m_ps->m_numDeferredParagraphBreaks > 0 || fakeText))
 	{
 		_openSection();
 		if (fakeText)
 			_openParagraph();
 	}
 
-	if (m_parseState->m_numDeferredParagraphBreaks > 0 && (m_parseState->m_styleStateSequence.getCurrentState() == NORMAL || 
+	if (m_ps->m_numDeferredParagraphBreaks > 0 && (m_parseState->m_styleStateSequence.getCurrentState() == NORMAL || 
 						 ((m_parseState->m_styleStateSequence.getCurrentState() == STYLE_BODY || 
 						   m_parseState->m_styleStateSequence.getCurrentState() == STYLE_END) &&
 						  !m_parseState->m_putativeListElementHasParagraphNumber)))
@@ -967,12 +966,12 @@ void WP6HLContentListener::_flushText(const bool fakeText)
 		if (!m_ps->m_isParagraphOpened &&
 			!(m_parseState->m_isTableOpened && !m_parseState->m_isTableCellOpened) // don't allow paragraphs to be opened when we have already opened a table, but no cell yet. - MARCM (is it really correct, or should this be fixed elsewhere??)
 		)
-			m_parseState->m_numDeferredParagraphBreaks++;
+			m_ps->m_numDeferredParagraphBreaks++;
 
-		while (m_parseState->m_numDeferredParagraphBreaks > 1) 
+		while (m_ps->m_numDeferredParagraphBreaks > 1) 
 			_openParagraph(); 			
 		_closeParagraph(); 
-		m_parseState->m_numDeferredParagraphBreaks = 0; // compensate for this by requiring a paragraph to be opened
+		m_ps->m_numDeferredParagraphBreaks = 0; // compensate for this by requiring a paragraph to be opened
 	}
 	else if (m_ps->m_textAttributesChanged && (m_parseState->m_bodyText.getLen() > 0 || fakeText) && m_ps->m_isParagraphOpened) 
 	{
@@ -1185,8 +1184,8 @@ void WP6HLContentListener::_openParagraph()
 				      m_ps->m_fontName->str, m_ps->m_fontSize, 
 				      m_parseState->m_paragraphLineSpacing, 
 				      m_parseState->m_isParagraphColumnBreak, m_parseState->m_isParagraphPageBreak);
-	if (m_parseState->m_numDeferredParagraphBreaks > 0) 
-		m_parseState->m_numDeferredParagraphBreaks--;
+	if (m_ps->m_numDeferredParagraphBreaks > 0) 
+		m_ps->m_numDeferredParagraphBreaks--;
 
 	m_parseState->m_isParagraphColumnBreak = false; 
 	m_parseState->m_isParagraphPageBreak = false;

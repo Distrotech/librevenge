@@ -60,12 +60,7 @@ void WP5HLListener::insertTab(const guint8 tabType)
 void WP5HLListener::insertEOL()
 {
 	_flushText();
-	m_listenerImpl->insertLineBreak();
-	m_listenerImpl->openParagraph(0, 0, 0, 0,
-					"Times New Roman", 12.0f,
-					1.0f,
-					false, false);
-	_openSpan();	
+	m_ps->m_numDeferredParagraphBreaks++;	
 }
 
 void WP5HLListener::endDocument()
@@ -134,6 +129,48 @@ void WP5HLListener::attributeChange(const bool isOn, const guint8 attribute)
  private functions
 *****************************************/
 
+void WP5HLListener::_flushText()
+{
+	// create a new section, and a new paragraph, if our section attributes have changed and we have inserted
+	// something into the document (or we have forced a break, which assumes the same condition)
+	if (m_ps->m_sectionAttributesChanged && (m_textBuffer.getLen() > 0 || m_ps->m_numDeferredParagraphBreaks > 0 /*|| fakeText*/))
+	{
+		_openSection();
+		//if (fakeText)
+			_openParagraph();
+	}	
+	
+	if (m_ps->m_numDeferredParagraphBreaks > 0)
+	{
+		if (!m_ps->m_isParagraphOpened //&&
+			// !(m_parseState->m_isTableOpened && !m_parseState->m_isTableCellOpened) // don't allow paragraphs to be opened when we have already opened a table, but no cell yet. - MARCM (is it really correct, or should this be fixed elsewhere??)
+		)
+			m_ps->m_numDeferredParagraphBreaks++;
+
+		while (m_ps->m_numDeferredParagraphBreaks > 1) 
+			_openParagraph(); 			
+		_closeParagraph(); 
+		m_ps->m_numDeferredParagraphBreaks = 0; // compensate for this by requiring a paragraph to be opened
+	}
+	else if (m_ps->m_textAttributesChanged && m_textBuffer.getLen())
+	{
+		_openSpan();
+		m_ps->m_textAttributesChanged = false;
+	}
+	
+	if (m_textBuffer.getLen())
+	{
+		if (!m_ps->m_isParagraphOpened)
+		{
+			_openParagraph();
+			_openSpan();
+		}
+		
+		m_listenerImpl->insertText(m_textBuffer);
+		m_textBuffer.clear();
+	}
+}
+
 void WP5HLListener::_openParagraph()
 {
 	_closeParagraph();
@@ -147,34 +184,10 @@ void WP5HLListener::_openParagraph()
 				      m_ps->m_fontName->str, m_ps->m_fontSize, 
 				      1.0f, 
 				      false, false);
-	//if (m_parseState->m_numDeferredParagraphBreaks > 0) 
-	//	m_parseState->m_numDeferredParagraphBreaks--;
+	if (m_ps->m_numDeferredParagraphBreaks > 0) 
+		m_ps->m_numDeferredParagraphBreaks--;
 
 	//m_parseState->m_isParagraphColumnBreak = false; 
 	//m_parseState->m_isParagraphPageBreak = false;
 	m_ps->m_isParagraphOpened = true;
-}
-
-void WP5HLListener::_flushText()
-{
-	// create a new section, and a new paragraph, if our section attributes have changed and we have inserted
-	// something into the document (or we have forced a break, which assumes the same condition)
-	if (m_ps->m_sectionAttributesChanged && (m_textBuffer.getLen() > 0 /*|| m_parseState->m_numDeferredParagraphBreaks > 0 || fakeText*/))
-	{
-		_openSection();
-		//if (fakeText)
-			_openParagraph();
-	}	
-	
-	if (m_ps->m_textAttributesChanged && m_textBuffer.getLen())
-	{
-		_openSpan();
-		m_ps->m_textAttributesChanged = false;
-	}
-	
-	if (m_textBuffer.getLen())
-	{
-		m_listenerImpl->insertText(m_textBuffer);
-		m_textBuffer.clear();
-	}
 }

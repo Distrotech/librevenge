@@ -51,12 +51,7 @@ void WP42HLListener::insertTab(const guint8 tabType)
 void WP42HLListener::insertEOL()
 {
 	_flushText();
-	m_listenerImpl->insertLineBreak();
-	m_listenerImpl->openParagraph(0, 0, 0, 0,
-					"Times New Roman", 12.0f,
-					1.0f,
-					false, false);
-	_openSpan();	
+	m_ps->m_numDeferredParagraphBreaks++;
 }
 
 void WP42HLListener::endDocument()
@@ -125,22 +120,33 @@ void WP42HLListener::attributeChange(const bool isOn, const guint8 attribute)
  private functions
 *****************************************/
 
+/*
+TODO: this function needs to be fleshed out
+*/
 void WP42HLListener::_flushText()
 {
 	// create a new section, and a new paragraph, if our section attributes have changed and we have inserted
 	// something into the document (or we have forced a break, which assumes the same condition)
-	if (m_ps->m_sectionAttributesChanged && (m_textBuffer.getLen() > 0/* || m_parseState->m_numDeferredParagraphBreaks > 0 || fakeText*/))
+	if (m_ps->m_sectionAttributesChanged && (m_textBuffer.getLen() > 0 || m_ps->m_numDeferredParagraphBreaks > 0/* || fakeText*/))
 	{
 		_openSection();
 		//if (fakeText)
-			//_openParagraph();
-		m_listenerImpl->openParagraph(0, 0, 0, 0,
-					"Times New Roman", 12.0f,
-					1.0f,
-					false, false);
+			_openParagraph();
 	}
 	
-	if (m_ps->m_textAttributesChanged && m_textBuffer.getLen())
+	if (m_ps->m_numDeferredParagraphBreaks > 0)
+	{
+		if (!m_ps->m_isParagraphOpened //&&
+			// !(m_parseState->m_isTableOpened && !m_parseState->m_isTableCellOpened) // don't allow paragraphs to be opened when we have already opened a table, but no cell yet. - MARCM (is it really correct, or should this be fixed elsewhere??)
+		)
+			m_ps->m_numDeferredParagraphBreaks++;
+
+		while (m_ps->m_numDeferredParagraphBreaks > 1) 
+			_openParagraph(); 			
+		_closeParagraph(); 
+		m_ps->m_numDeferredParagraphBreaks = 0; // compensate for this by requiring a paragraph to be opened
+	}
+	else if (m_ps->m_textAttributesChanged && m_textBuffer.getLen())
 	{
 		_openSpan();
 		m_ps->m_textAttributesChanged = false;
@@ -148,7 +154,35 @@ void WP42HLListener::_flushText()
 	
 	if (m_textBuffer.getLen())
 	{
+		if (!m_ps->m_isParagraphOpened)
+		{
+			_openParagraph();
+			_openSpan();
+		}
+		
 		m_listenerImpl->insertText(m_textBuffer);
 		m_textBuffer.clear();
 	}
+}
+
+/*
+TODO: this function needs to be fleshed out
+*/
+void WP42HLListener::_openParagraph()
+{
+	_closeParagraph();
+	/*guint8 paragraphJustification;
+	(m_parseState->m_tempParagraphJustification != 0) ? paragraphJustification = m_parseState->m_tempParagraphJustification :
+		paragraphJustification = m_parseState->m_paragraphJustification;
+	m_parseState->m_tempParagraphJustification = 0;*/
+	
+	m_listenerImpl->openParagraph(0, m_ps->m_textAttributeBits,
+				      m_ps->m_paragraphMarginLeft, m_ps->m_paragraphMarginRight,
+				      m_ps->m_fontName->str, m_ps->m_fontSize, 
+				      1.0f, 
+				      false, false);
+	if (m_ps->m_numDeferredParagraphBreaks > 0) 
+		m_ps->m_numDeferredParagraphBreaks--;
+
+	m_ps->m_isParagraphOpened = true;
 }

@@ -59,6 +59,7 @@ public:
 protected:
 	virtual void _handleSubDocument(guint16 textPID) {}
 		
+	void _openParagraph();		
 private:
 	void _flushText();
 

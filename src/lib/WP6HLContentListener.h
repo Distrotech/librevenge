@@ -89,7 +89,6 @@ struct _WP6ParsingState
 	guint8 m_tempParagraphJustification; // TODO: wouldn't a better name be m_tabParagraphJustification ? - MARCM
 	float m_paragraphLineSpacing;
 
-	guint m_numDeferredParagraphBreaks;
 	guint m_numRemovedParagraphBreaks;
 
 	WPXTable *m_currentTable;

@@ -44,8 +44,8 @@ _WPXParsingState::_WPXParsingState(bool sectionAttributesChanged) :
 	m_isParagraphOpened(false),
 	m_isParagraphClosed(false),
 	m_isSpanOpened(false),
-/*	m_numDeferredParagraphBreaks(0),
-	m_numRemovedParagraphBreaks(0),
+	m_numDeferredParagraphBreaks(0),
+/*	m_numRemovedParagraphBreaks(0),
 
 	m_currentTable(NULL),
 	m_nextTableIndice(0),

@@ -75,8 +75,8 @@ struct _WPXParsingState
 	bool m_isParagraphOpened;
 	bool m_isParagraphClosed;
 	bool m_isSpanOpened;
-/*	guint m_numDeferredParagraphBreaks;
-	guint m_numRemovedParagraphBreaks;
+	guint m_numDeferredParagraphBreaks;
+/*	guint m_numRemovedParagraphBreaks;
 
 	WPXTable *m_currentTable;
 	int m_nextTableIndice;
