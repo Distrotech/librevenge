@@ -45,6 +45,7 @@ src/conv/Makefile
 src/conv/html/Makefile
 src/conv/text/Makefile
 src/lib/Makefile
+libwpd2.pc
 ])
 
 case "$debug" in
