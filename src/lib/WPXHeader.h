@@ -34,7 +34,7 @@ class WPXHeader
 {
  public:	
 	WPXHeader(GsfInput *input, guint32 documentOffset, guint8 productType, guint8 fileType, guint8 majorVersion, guint8 minorVersion, guint16 documentEncryption);
-	~WPXHeader();
+	virtual ~WPXHeader();
 
 	static WPXHeader * constructHeader(GsfInput *input);
 		

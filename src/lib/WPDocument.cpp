@@ -101,7 +101,6 @@ WPDConfidence WPDocument::isFileFormatSupported(GsfInput *input, bool partialCon
 					confidence = WPD_CONFIDENCE_NONE;
 					break;
 			}
-			
 			DELETEP(header);
 		}
 		else
