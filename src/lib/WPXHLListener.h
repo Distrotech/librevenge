@@ -122,8 +122,7 @@ struct _WPXParsingState
 	int m_noteTextPID;
 */
 	guint16 m_alignmentCharacter;
-	WPXTabStop *m_tabStops;
-	int m_numberOfTabStops;
+	vector<WPXTabStop> m_tabStops;
 	bool m_isTabPositionRelative;
 
 

@@ -99,10 +99,7 @@ void WP6ParagraphGroup_LineSpacingSubGroup::parse(WP6HLListener *listener, const
 
 WP6ParagraphGroup_TabSetSubGroup::WP6ParagraphGroup_TabSetSubGroup(WPXInputStream *input) :
 	m_isRelative(false),
-	m_tabAdjustValue(0.0f),
-	m_numberOfTabStops(0),
-	m_usePreWP9LeaderMethod(NULL),
-	m_tabStops(NULL)
+	m_tabAdjustValue(0.0f)
 {
 	guint8 tmp_definition = readU8(input);
 	guint16 tmp_tabAdjustValue = readU16(input);
@@ -118,12 +115,11 @@ WP6ParagraphGroup_TabSetSubGroup::WP6ParagraphGroup_TabSetSubGroup(WPXInputStrea
 	}
 	guint8 tmp_repetitionCount = 0;
 	WPXTabStop tmp_tabStop;
-	guint8 tmp_numberOfTabStops = readU8(input);
+	guint8 tmp_numTabStops = readU8(input);
 	bool tmp_usePreWP9LeaderMethod;
 	guint8 tmp_tabType;
-	m_numberOfTabStops = 0;
 	int i;
-	for (i = 0; i < tmp_numberOfTabStops; i++)
+	for (i = 0; i < tmp_numTabStops; i++)
 	{
 		tmp_tabType = readU8(input);
 		if ((tmp_tabType & 0x80) != 0)
@@ -153,7 +149,7 @@ WP6ParagraphGroup_TabSetSubGroup::WP6ParagraphGroup_TabSetSubGroup(WPXInputStrea
 				tmp_tabStop.m_alignment = LEFT;
 				break;
 			}
-			tmp_tabStop.m_leaderNumberOfSpaces = 0;
+			tmp_tabStop.m_leaderNumSpaces = 0;
 			if ((tmp_tabType & 0x10) == 0) // no leader character
 			{
 				tmp_tabStop.m_leaderCharacter = '\0';
@@ -165,22 +161,22 @@ WP6ParagraphGroup_TabSetSubGroup::WP6ParagraphGroup_TabSetSubGroup(WPXInputStrea
 				{
 				case 0: // pre-WP9 leader method
 					tmp_tabStop.m_leaderCharacter = '.';
-					tmp_tabStop.m_leaderNumberOfSpaces = 0;
+					tmp_tabStop.m_leaderNumSpaces = 0;
 					tmp_usePreWP9LeaderMethod = true;
 					break;
 				case 1: // dot leader
 					tmp_tabStop.m_leaderCharacter = '.';
-					tmp_tabStop.m_leaderNumberOfSpaces = 0;
+					tmp_tabStop.m_leaderNumSpaces = 0;
 					tmp_usePreWP9LeaderMethod = false;
 					break;
 				case 2: // hyphen leader
 					tmp_tabStop.m_leaderCharacter = '-';
-					tmp_tabStop.m_leaderNumberOfSpaces = 0;
+					tmp_tabStop.m_leaderNumSpaces = 0;
 					tmp_usePreWP9LeaderMethod = false;
 					break;
 				case 3: // underscore leader
 					tmp_tabStop.m_leaderCharacter = '_';
-					tmp_tabStop.m_leaderNumberOfSpaces = 0;
+					tmp_tabStop.m_leaderNumSpaces = 0;
 					tmp_usePreWP9LeaderMethod = false;
 					break;
 				}
@@ -192,21 +188,18 @@ WP6ParagraphGroup_TabSetSubGroup::WP6ParagraphGroup_TabSetSubGroup(WPXInputStrea
 			if (tmp_tabPosition != 0xFFFF)
 			{
 				tmp_tabStop.m_position = (float)((double)tmp_tabPosition/(double)WPX_NUM_WPUS_PER_INCH) -
-								m_tabAdjustValue;
-				_addTabStop(tmp_tabStop);
-				_addLeaderMethod(tmp_usePreWP9LeaderMethod);
-				m_numberOfTabStops++;
+					m_tabAdjustValue;
+				m_tabStops.push_back(tmp_tabStop);
+				m_usePreWP9LeaderMethods.push_back(tmp_usePreWP9LeaderMethod);
 			}
 		}
 		else
 		{
-			int k;
-			for (k=0; k<tmp_repetitionCount; k++)
+			for (int k=0; k<tmp_repetitionCount; k++)
 			{
 				tmp_tabStop.m_position += (float)((double)tmp_tabPosition/(double)WPX_NUM_WPUS_PER_INCH);
-				_addTabStop(tmp_tabStop);
-				_addLeaderMethod(tmp_usePreWP9LeaderMethod);
-				m_numberOfTabStops++;
+				m_tabStops.push_back(tmp_tabStop);
+				m_usePreWP9LeaderMethods.push_back(tmp_usePreWP9LeaderMethod);
 			}
 			tmp_repetitionCount = 0;
 		}
@@ -216,38 +209,17 @@ WP6ParagraphGroup_TabSetSubGroup::WP6ParagraphGroup_TabSetSubGroup(WPXInputStrea
 
 WP6ParagraphGroup_TabSetSubGroup::~WP6ParagraphGroup_TabSetSubGroup()
 {
-	free(m_tabStops);
-	free(m_usePreWP9LeaderMethod);
 }
 
 void WP6ParagraphGroup_TabSetSubGroup::parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
 {
-	WPD_DEBUG_MSG(("Parsing Tab Set (isRelative: %s, numberOfTabStops: %i, positions: ", (m_isRelative?"true":"false"), m_numberOfTabStops));
-	int i;
-	for(i=0; i<m_numberOfTabStops; i++)
+	WPD_DEBUG_MSG(("Parsing Tab Set (isRelative: %s, numTabStops: %i, positions: ", (m_isRelative?"true":"false"), m_numTabStops));
+	for(vector<WPXTabStop>::const_iterator i = m_tabStops.begin(); i != m_tabStops.end(); i++)
 	{
-		WPD_DEBUG_MSG((" %.4f", m_tabStops[i].m_position));
+		WPD_DEBUG_MSG((" %.4f", (*i).m_position));
 	}
 	WPD_DEBUG_MSG((")\n"));
-	listener->defineTabStops(m_isRelative, m_numberOfTabStops, m_tabStops, m_usePreWP9LeaderMethod);
-}
-
-void WP6ParagraphGroup_TabSetSubGroup::_addTabStop(WPXTabStop tabStop)
-{
-	if (m_numberOfTabStops == 0)
-		m_tabStops = (WPXTabStop*)malloc(sizeof(WPXTabStop));
-	else
-		m_tabStops = (WPXTabStop*)realloc(m_tabStops, sizeof(WPXTabStop)*(m_numberOfTabStops + 1));
-	m_tabStops[m_numberOfTabStops] = tabStop;	
-}
-
-void WP6ParagraphGroup_TabSetSubGroup::_addLeaderMethod(bool usePreWP9LeaderMethod)
-{
-	if (m_numberOfTabStops == 0)
-		m_usePreWP9LeaderMethod = (bool*)malloc(sizeof(bool));
-	else
-		m_usePreWP9LeaderMethod = (bool*)realloc(m_usePreWP9LeaderMethod, sizeof(bool)*(m_numberOfTabStops + 1));
-	m_usePreWP9LeaderMethod[m_numberOfTabStops] = usePreWP9LeaderMethod;	
+	listener->defineTabStops(m_isRelative, m_tabStops, m_usePreWP9LeaderMethods);
 }
 
 WP6ParagraphGroup_IndentFirstLineSubGroup::WP6ParagraphGroup_IndentFirstLineSubGroup(WPXInputStream *input)

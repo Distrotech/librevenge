@@ -27,6 +27,9 @@
 #define WPXLLLISTENER_H
 #include <glib.h>
 #include "libwpd_support.h"
+#include <vector>
+
+using namespace std;
 
 class WPXLLListener
 {
@@ -36,8 +39,8 @@ class WPXLLListener
 	virtual void startDocument() = 0;
 	virtual void setAlignmentCharacter(const guint16 character) = 0;
 	virtual void setLeaderCharacter(const guint16 character, const guint8 numberOfSpaces) = 0;
-	virtual void defineTabStops(const bool isRelative, const int numberOfTabStops,
-			const WPXTabStop *tabStops, const bool *usePreWP9LeaderMethod) = 0;
+	virtual void defineTabStops(const bool isRelative, const vector<WPXTabStop> &tabStops, 
+				    const vector<bool> &usePreWP9LeaderMethods) = 0;
 	virtual void insertCharacter(const guint16 character) = 0;
 	virtual void insertTab(const guint8 tabType, const float tabPosition) = 0;
 	virtual void handleLineBreak() = 0;

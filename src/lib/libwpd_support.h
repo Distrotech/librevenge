@@ -129,12 +129,12 @@ struct _WPXColumnDefinition
 typedef struct _WPXTabStop WPXTabStop;
 struct _WPXTabStop
 {
-	_WPXTabStop(float position, WPXTabAlignment alignment, guint16 leaderCharacter, guint8 leaderNumberOfSpaces);
+	_WPXTabStop(float position, WPXTabAlignment alignment, guint16 leaderCharacter, guint8 leaderNumSpaces);
 	_WPXTabStop();
 	float m_position;
 	WPXTabAlignment m_alignment;
 	guint16 m_leaderCharacter;
-	guint8 m_leaderNumberOfSpaces;
+	guint8 m_leaderNumSpaces;
 };
 
 // UCSString: minimal string class, basically an object-oriented wrapper around glib's UCS4 string

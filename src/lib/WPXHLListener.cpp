@@ -87,8 +87,6 @@ _WPXParsingState::_WPXParsingState(bool sectionAttributesChanged) :
 */
 
 	m_alignmentCharacter('.'),
-	m_tabStops(NULL),
-	m_numberOfTabStops(0),
 	m_isTabPositionRelative(false)
 
 {
@@ -99,7 +97,6 @@ _WPXParsingState::~_WPXParsingState()
 	g_string_free(m_fontName, TRUE);
 	DELETEP(m_fontColor);
 	DELETEP(m_highlightColor);
-	delete[] m_tabStops;
 }
 
 WPXHLListener::WPXHLListener(vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl) :

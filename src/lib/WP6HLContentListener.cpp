@@ -216,18 +216,14 @@ _WP6ParsingState::_WP6ParsingState() :
 	m_noteTextPID(0),
 
 	m_leaderCharacter('.'),
-	m_leaderNumberOfSpaces(0),
-	m_tempTabStops(NULL),
-	m_tempUsePreWP9LeaderMethod(NULL)
+	m_leaderNumSpaces(0)
 
 {
 }
 
 _WP6ParsingState::~_WP6ParsingState()
 {
-	// fixme: erase current fontname
-	delete[] m_tempTabStops;
-	delete[] m_tempUsePreWP9LeaderMethod;
+	// FIXME: erase current fontname
 }
 
 WP6HLContentListener::WP6HLContentListener(vector<WPXPageSpan *> *pageList, vector<WPXTable *> *tableList, WPXHLListenerImpl *listenerImpl) :
@@ -289,20 +285,21 @@ void WP6HLContentListener::setAlignmentCharacter(const guint16 character)
 	}
 }
 
-void WP6HLContentListener::setLeaderCharacter(const guint16 character, const guint8 numberOfSpaces)
+void WP6HLContentListener::setLeaderCharacter(const guint16 character, const guint8 numSpaces)
 {
+	assert(m_ps->m_tabStops.size() == m_parseState->m_tempUsePreWP9LeaderMethod.size());
+
 	if (!isUndoOn())
 	{
 		m_parseState->m_leaderCharacter = character;
-		m_parseState->m_leaderNumberOfSpaces = numberOfSpaces;
-		int i;
-		for (i=1; i<m_ps->m_numberOfTabStops; i++)
+		m_parseState->m_leaderNumSpaces = numSpaces;
+		for (int i=0; i<m_ps->m_tabStops.size(); i++)
 		{
 			// change the leader information for those tab stops that use pre-WP9 leader method
 			if (m_parseState->m_tempUsePreWP9LeaderMethod[i])
 			{
 				m_ps->m_tabStops[i].m_leaderCharacter = m_parseState->m_leaderCharacter;
-				m_ps->m_tabStops[i].m_leaderNumberOfSpaces = m_parseState->m_leaderNumberOfSpaces;
+				m_ps->m_tabStops[i].m_leaderNumSpaces = m_parseState->m_leaderNumSpaces;
 			}
 		}
 	}
@@ -341,37 +338,19 @@ void WP6HLContentListener::insertCharacter(const guint16 character)
 	}
 }
 
-void WP6HLContentListener::defineTabStops(const bool isRelative, const int numberOfTabStops,
-											const WPXTabStop *tabStops, const bool *usePreWP9LeaderMethod)
+void WP6HLContentListener::defineTabStops(const bool isRelative, const vector<WPXTabStop> &tabStops, 
+					  const vector<bool> &usePreWP9LeaderMethods)
 {
 	if (!isUndoOn())
 	{
-		// first delete the previous tabstop declaration
-		delete[] m_parseState->m_tempTabStops;
-		delete[] m_parseState->m_tempUsePreWP9LeaderMethod;
-		delete[] m_ps->m_tabStops;
-		// define new number of tab stops
-		m_ps->m_numberOfTabStops = numberOfTabStops;
 		// define whether the position of tabs is relative to the left paragraph margin
 		// or to the left edge of the sheet
 		m_ps->m_isTabPositionRelative = isRelative;
-		// now create the new tabstop declaration
-		m_parseState->m_tempTabStops = new WPXTabStop[m_ps->m_numberOfTabStops];
-		m_parseState->m_tempUsePreWP9LeaderMethod = new bool[m_ps->m_numberOfTabStops];
-		m_ps->m_tabStops = new WPXTabStop[m_ps->m_numberOfTabStops];
-		int i;
 		// define the tab stops
-		for (i=1; i<m_ps->m_numberOfTabStops; i++)
-		{
-			m_ps->m_tabStops[i] = m_parseState->m_tempTabStops[i] = tabStops[i];
-			m_parseState->m_tempUsePreWP9LeaderMethod[i] = usePreWP9LeaderMethod[i];
-			// take care of the pre-WP9 leader method
-			if (m_parseState->m_tempUsePreWP9LeaderMethod[i])
-			{
-				m_ps->m_tabStops[i].m_leaderCharacter = m_parseState->m_leaderCharacter;
-				m_ps->m_tabStops[i].m_leaderNumberOfSpaces = m_parseState->m_leaderNumberOfSpaces;
-			}
-		}
+		m_parseState->m_tempTabStops = m_ps->m_tabStops = tabStops;
+		m_parseState->m_tempUsePreWP9LeaderMethod = usePreWP9LeaderMethods;
+		// take care of the pre-WP9 leader method
+		setLeaderCharacter(m_parseState->m_leaderCharacter, m_parseState->m_leaderNumSpaces);
 	}
 }
 

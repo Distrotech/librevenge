@@ -71,11 +71,8 @@ public:
 private:
 	bool m_isRelative;
 	float m_tabAdjustValue;
-	int m_numberOfTabStops;
-	bool *m_usePreWP9LeaderMethod;
-	WPXTabStop *m_tabStops;
-	void _addTabStop(WPXTabStop tabStop);
-	void _addLeaderMethod(bool usePreWP9LeaderMethod);
+	vector<bool> m_usePreWP9LeaderMethods;
+	vector<WPXTabStop> m_tabStops;
 };
 
 class WP6ParagraphGroup_IndentFirstLineSubGroup : public WP6VariableLengthGroup_SubGroup

@@ -512,11 +512,11 @@ _RGBSColor::_RGBSColor()
 {
 }
 
-_WPXTabStop::_WPXTabStop(float position, WPXTabAlignment alignment, guint16 leaderCharacter, guint8 leaderNumberOfSpaces)
+_WPXTabStop::_WPXTabStop(float position, WPXTabAlignment alignment, guint16 leaderCharacter, guint8 leaderNumSpaces)
 	:	m_position(position),
 		m_alignment(alignment),
 		m_leaderCharacter(leaderCharacter),
-		m_leaderNumberOfSpaces(leaderNumberOfSpaces)
+		m_leaderNumSpaces(leaderNumSpaces)
 {
 }
 
@@ -524,7 +524,7 @@ _WPXTabStop::_WPXTabStop()
 	:	m_position(0.0f),
 		m_alignment(LEFT),
 		m_leaderCharacter('\0'),
-		m_leaderNumberOfSpaces(0)
+		m_leaderNumSpaces(0)
 {
 }
 
