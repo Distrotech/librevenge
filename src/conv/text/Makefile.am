@@ -7,4 +7,4 @@ wpd2text_LDADD = -lwpd2 $(LIBWPD_LIBS)
 
 wpd2text_SOURCES =			\
 	TextListener.cpp	 	\
-	main.cpp		 	\
+	main.cpp
