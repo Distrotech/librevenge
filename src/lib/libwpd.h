@@ -27,10 +27,7 @@
 #define LIBWPD_H
 
 #include "libwpd_support.h"
-#include "WPXLLListener.h"
-#include "WP6LLListener.h"
 #include "WPXHLListenerImpl.h"
-#include "WP6Parser.h"
 #include "WPXParser.h"
 #include "WPDocument.h"
 

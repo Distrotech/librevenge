@@ -53,7 +53,7 @@ void WP6PageGroup::_readContents(GsfInput *input)
 	}
 }
 
-void WP6PageGroup::parse(WP6LLListener *llListener)
+void WP6PageGroup::parse(WP6HLListener *listener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling an Page group\n"));
 	
@@ -61,10 +61,10 @@ void WP6PageGroup::parse(WP6LLListener *llListener)
 	{
 	case WP6_PAGE_GROUP_TOP_MARGIN_SET:
 	case WP6_PAGE_GROUP_BOTTOM_MARGIN_SET:
-		llListener->pageMarginChange(getSubGroup(), m_margin);
+		listener->pageMarginChange(getSubGroup(), m_margin);
 		break;
 	case WP6_PAGE_GROUP_SUPPRESS_PAGE_CHARACTERISTICS:
-		llListener->suppressPageCharacteristics(m_suppressedCode);
+		listener->suppressPageCharacteristics(m_suppressedCode);
 		break;
 	default: // something else we don't support, since it isn't in the docs
 		break;

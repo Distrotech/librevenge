@@ -27,7 +27,7 @@
 #define WP6EXTENDEDDOCUMENTSUMMARYPACKET_H
 #include "WP6PrefixDataPacket.h"
 #include "WP6FileStructure.h"
-#include "WP6LLListener.h"
+#include "WP6HLListener.h"
 
 class WP6ExtendedDocumentSummaryPacket : public WP6PrefixDataPacket
 {
@@ -35,7 +35,7 @@ class WP6ExtendedDocumentSummaryPacket : public WP6PrefixDataPacket
 	WP6ExtendedDocumentSummaryPacket(GsfInput *input, int id, guint32 dataOffset, guint32 dataSize);
 	virtual ~WP6ExtendedDocumentSummaryPacket();
 	virtual void _readContents(GsfInput *input);
-	virtual void parse(WP6LLListener *llListener) const;
+	virtual void parse(WP6HLListener *listener) const;
 
  private:              
 	guint16 m_dataSize;

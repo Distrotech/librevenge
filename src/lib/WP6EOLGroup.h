@@ -34,7 +34,7 @@ public:
 	WP6EOLGroup(GsfInput *input);	
 	~WP6EOLGroup();
 	virtual void _readContents(GsfInput *input);
-	virtual void parse(WP6LLListener *llListener);
+	virtual void parse(WP6HLListener *listener);
 
  private:
 	guint8 m_colSpan, m_rowSpan;

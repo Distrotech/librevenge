@@ -33,7 +33,7 @@ class WP6HeaderFooterGroup : public WP6VariableLengthGroup
 public:
 	WP6HeaderFooterGroup(GsfInput *input);	
 	virtual void _readContents(GsfInput *input);
-	virtual void parse(WP6LLListener *llListener);
+	virtual void parse(WP6HLListener *listener);
 private:
 	guint8 m_occurenceBits;
 	

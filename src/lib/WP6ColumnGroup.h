@@ -33,7 +33,7 @@ class WP6ColumnGroup : public WP6VariableLengthGroup
  public:
 	WP6ColumnGroup(GsfInput *input);	
 	virtual void _readContents(GsfInput *input);
-	virtual void parse(WP6LLListener *llListener);
+	virtual void parse(WP6HLListener *listener);
 
  private:
 	// variables needed for subgroup 0 and 1 (Left/Right Margin Set)

@@ -41,12 +41,12 @@ void WP6DisplayNumberReferenceGroup::_readContents(GsfInput *input)
 		m_levelNumberToDisplay = gsf_le_read_guint8(input);
 }
 
-void WP6DisplayNumberReferenceGroup::parse(WP6LLListener *llListener)
+void WP6DisplayNumberReferenceGroup::parse(WP6HLListener *listener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling an DisplayNumberReference group\n"));
 	
 	if (!(getSubGroup() % 2) || getSubGroup() == 0)
-		llListener->displayNumberReferenceGroupOn(getSubGroup(), m_levelNumberToDisplay);
+		static_cast<WP6LLListener*>(listener)->displayNumberReferenceGroupOn(getSubGroup(), m_levelNumberToDisplay);
 	else
-		llListener->displayNumberReferenceGroupOff(getSubGroup());
+		static_cast<WP6LLListener*>(listener)->displayNumberReferenceGroupOff(getSubGroup());
 }

@@ -62,21 +62,21 @@ WP6PrefixData * WP6Parser::getPrefixData(GsfInput *input)
 	}
 }
 
-void WP6Parser::parse(GsfInput *input, WP6LLListener *llListener)
+void WP6Parser::parse(GsfInput *input, WP6HLListener *listener)
 {
-	llListener->startDocument();
+	listener->startDocument();
 	
 	WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(input, getHeader()->getDocumentOffset(), G_SEEK_SET));	
 	
 	WPD_DEBUG_MSG(("WordPerfect: Starting document body parse (position = %ld)\n",(long)gsf_input_tell(input)));
 	
-	parseDocument(input, llListener);
+	parseDocument(input, listener);
 	
-	llListener->endDocument();		
+	listener->endDocument();		
 }
 
 // parseDocument: parses a document body (may call itself recursively, on other streams, or itself)
-void WP6Parser::parseDocument(GsfInput *input, WP6LLListener *llListener)
+void WP6Parser::parseDocument(GsfInput *input, WP6HLListener *listener)
 {
 	while (!gsf_input_eof(input))
 	{
@@ -89,36 +89,38 @@ void WP6Parser::parseDocument(GsfInput *input, WP6LLListener *llListener)
 		}
 		else if (readVal <= (guint8)0x20)
 		{
-			llListener->insertCharacter( extendedInternationalCharacterMap[(readVal-1)] );
+			listener->insertCharacter( extendedInternationalCharacterMap[(readVal-1)] );
 		}
 		else if (readVal >= (guint8)0x21 && readVal <= (guint8)0x7F)
 		{
 			// normal ASCII characters
-			llListener->insertCharacter( (guint16)readVal );
+			listener->insertCharacter( (guint16)readVal );
 		}
 		else 
 		{
 			WP6Part *part = WP6Part::constructPart(input, readVal);
 			if (part != NULL)
 			{
-				part->parse(llListener);
+				part->parse(listener);
 				DELETEP(part);
 			}
 		}	
 	}
 }
 
-void WP6Parser::parsePacket(WP6PrefixData *prefixData, int type, WP6LLListener *llListener)
+void WP6Parser::parsePacket(WP6PrefixData *prefixData, int type, WP6HLListener *listener)
 {
 	pair< MPDP_CIter, MPDP_CIter > * typeIterPair;
 	typeIterPair = prefixData->getPrefixDataPacketsOfType(type); 
 	if (typeIterPair->first != typeIterPair->second) 
-		typeIterPair->first->second->parse(llListener);
+	{
+		typeIterPair->first->second->parse(listener);
+	}
 
 	DELETEP(typeIterPair);
 }
 
-void WP6Parser::parsePackets(WP6PrefixData *prefixData, int type, WP6LLListener *llListener)
+void WP6Parser::parsePackets(WP6PrefixData *prefixData, int type, WP6HLListener *listener)
 {
 	pair< MPDP_CIter, MPDP_CIter > * typeIterPair;
 
@@ -127,7 +129,7 @@ void WP6Parser::parsePackets(WP6PrefixData *prefixData, int type, WP6LLListener 
 	     iter != typeIterPair->second; 
 	     iter++) 
 	{
-		iter->second->parse(llListener);
+		iter->second->parse(listener);
 	}
 
 	DELETEP(typeIterPair);
@@ -152,20 +154,20 @@ void WP6Parser::parse(WPXHLListenerImpl *listenerImpl)
 		// gather table border information, page properties (per-page)
 		WP6HLStylesListener stylesListener(&pageList, &tableList);
 		stylesListener.setPrefixData(prefixData);
-		parse(input, static_cast<WP6LLListener *>(&stylesListener));
+		parse(input, &stylesListener);
 
 		// second pass: here is where we actually send the messages to the target app
 		// that are necessary to emit the body of the target document
-		WP6HLContentListener hlListener(&pageList, &tableList, listenerImpl);
-		hlListener.setPrefixData(prefixData);
+		WP6HLContentListener listener(&pageList, &tableList, listenerImpl);
+		listener.setPrefixData(prefixData);
 
 		// get the relevant initial prefix packets out of storage and tell them to parse
 		// themselves
-		parsePacket(prefixData, WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY, static_cast<WP6LLListener *>(&hlListener));
-		parsePacket(prefixData, WP6_INDEX_HEADER_INITIAL_FONT, static_cast<WP6LLListener *>(&hlListener));
-		parsePackets(prefixData, WP6_INDEX_HEADER_OUTLINE_STYLE, static_cast<WP6LLListener *>(&hlListener));
+		parsePacket(prefixData, WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY, &listener);
+		parsePacket(prefixData, WP6_INDEX_HEADER_INITIAL_FONT, &listener);
+		parsePackets(prefixData, WP6_INDEX_HEADER_OUTLINE_STYLE, &listener);
 
-		parse(input, static_cast<WP6LLListener *>(&hlListener));
+		parse(input, static_cast<WP6HLListener *>(&listener));
 
 		// cleanup section: free the used resources
 		delete prefixData;

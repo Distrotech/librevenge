@@ -28,7 +28,7 @@
  
 #include "WPXLLListener.h"
 
-class WPXHLListener
+class WPXHLListener : public WPXLLListener
 {
 	// TODO: move the HLListenerImpl here
 };

@@ -8,6 +8,9 @@ CHANGES:
 - Several fixes to make libwpd compile on Win32/MSVC (Marc Maurer)
 - Make the wpd2text converter use the high level parsing framework
   to support WP4 and WP5 documents as well (Marc Maurer)
+- Restructure the class hierarchy to allow for code sharing
+  between the different high level listeners (Marc Maurer)
+- Updated MSVC6 project files, we have a win32 lib again, yay! (Marc Maurer)
 
 0.6.5 -> 0.6.6
 - Add an encryption exception thrown for encrypted documents to allow

@@ -32,7 +32,7 @@ class WP6UnsupportedFixedLengthGroup : public WP6FixedLengthGroup
 {
  public:
 	WP6UnsupportedFixedLengthGroup(GsfInput *input, guint8 groupID);	
-	virtual void parse(WP6LLListener *llListener) {}
+	virtual void parse(WP6HLListener *listener) {}
 	
  protected:
 	virtual void _readContents(GsfInput *input) {}

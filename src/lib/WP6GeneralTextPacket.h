@@ -35,7 +35,7 @@ public:
 	WP6GeneralTextPacket(GsfInput *input, int id, guint32 dataOffset, guint32 dataSize);
 	virtual ~WP6GeneralTextPacket();
 	virtual void _readContents(GsfInput *input);
-	virtual void parse(WP6LLListener *llListener) const;
+	virtual void parse(WP6HLListener *listener) const;
 
 private:              
 	guint16 m_numTextBlocks;

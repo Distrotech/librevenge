@@ -31,6 +31,7 @@
 #include "libwpd_internal.h"
 
 WP6HLListener::WP6HLListener() :
+	WPXHLListener(),
 	WP6LLListener(), 
 	m_isUndoOn(false)
 {

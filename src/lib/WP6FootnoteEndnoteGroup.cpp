@@ -37,7 +37,7 @@ void WP6FootnoteEndnoteGroup::_readContents(GsfInput *input)
 {
 }
 
-void WP6FootnoteEndnoteGroup::parse(WP6LLListener *llListener)
+void WP6FootnoteEndnoteGroup::parse(WP6HLListener *listener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling a footnote/endnote group\n"));
 	
@@ -47,13 +47,13 @@ void WP6FootnoteEndnoteGroup::parse(WP6LLListener *llListener)
 	case WP6_FOOTNOTE_ENDNOTE_GROUP_ENDNOTE_ON:
 		if (getNumPrefixIDs() < 1)
 			throw ParseException();
-		llListener->noteOn(getPrefixIDs()[0]);
+		static_cast<WP6LLListener*>(listener)->noteOn(getPrefixIDs()[0]);
 		break;
 	case WP6_FOOTNOTE_ENDNOTE_GROUP_FOOTNOTE_OFF:
-		llListener->noteOff(FOOTNOTE);
+		static_cast<WP6LLListener*>(listener)->noteOff(FOOTNOTE);
 		break;
 	case WP6_FOOTNOTE_ENDNOTE_GROUP_ENDNOTE_OFF:
-		llListener->noteOff(ENDNOTE);
+		static_cast<WP6LLListener*>(listener)->noteOff(ENDNOTE);
 		break;
 	}
 }

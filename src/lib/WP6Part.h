@@ -28,9 +28,8 @@
 
 #include "WPXPart.h"
 #include "WPXParser.h"
+#include "WP6HLListener.h"
 #include "WP6FileStructure.h"
-
-class WP6LLListener;
 
 class WP6Part
 {
@@ -38,7 +37,7 @@ class WP6Part
 	virtual ~WP6Part() {}
 	
 	static WP6Part * constructPart(GsfInput *input, guint8 readVal);
-	virtual void parse(WP6LLListener *llListener) = 0;
+	virtual void parse(WP6HLListener *listener) = 0;
 };
 
 

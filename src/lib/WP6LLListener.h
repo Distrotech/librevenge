@@ -25,7 +25,7 @@
 
 #ifndef WP6LLLISTENER_H
 #define WP6LLLISTENER_H
-#include "WPXLLListener.h"
+
 #include "WP6PrefixDataPacket.h"
 
 class WP6DefaultInitialFontPacket;
@@ -33,10 +33,10 @@ class WP6PrefixData;
 
 enum WP6OutlineLocation { paragraphGroup, indexHeader };
 
-class WP6LLListener : public WPXLLListener
+class WP6LLListener
 {
 public:
-	WP6LLListener() : WPXLLListener(), m_prefixData(NULL) {}
+	WP6LLListener() : m_prefixData(NULL) {}
 	virtual ~WP6LLListener() {}
 	virtual void setDate(const guint16 year, const guint8 month, const guint8 day, 
 			     const guint8 hour, const guint8 minute, const guint8 second,

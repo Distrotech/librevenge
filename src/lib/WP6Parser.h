@@ -30,7 +30,7 @@
 #include "WP6Header.h"
 
 class WP6PrefixData;
-class WP6LLListener;
+class WP6HLListener;
 class WPXHLListenerImpl;
 
 class WP6Parser : public WPXParser
@@ -41,15 +41,15 @@ public:
 
 	virtual void parse(WPXHLListenerImpl *listenerImpl);
 
-	static void parseDocument(GsfInput *stream, WP6LLListener *llListener);
+	static void parseDocument(GsfInput *stream, WP6HLListener *listener);
 
 private:
 	WP6PrefixData * getPrefixData(GsfInput *input);
 
-	void parse(GsfInput *stream, WP6LLListener *llListener);
+	void parse(GsfInput *stream, WP6HLListener *listener);
 
-	void parsePacket(WP6PrefixData *prefixData, int type, WP6LLListener *llListener);
-	void parsePackets(WP6PrefixData *prefixData, int type, WP6LLListener *llListener);
+	void parsePacket(WP6PrefixData *prefixData, int type, WP6HLListener *listener);
+	void parsePackets(WP6PrefixData *prefixData, int type, WP6HLListener *listener);
 };
 
 #endif /* WP6PARSER_H */

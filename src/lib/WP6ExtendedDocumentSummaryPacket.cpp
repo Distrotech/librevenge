@@ -50,7 +50,7 @@ void WP6ExtendedDocumentSummaryPacket::_readContents(GsfInput *input)
 	m_stream = GSF_INPUT(gsf_input_memory_new(streamData, m_dataSize, TRUE));
 }
 
-void WP6ExtendedDocumentSummaryPacket::parse(WP6LLListener *llListener) const
+void WP6ExtendedDocumentSummaryPacket::parse(WP6HLListener *listener) const
 {
 	int k=0;
 	guint16 groupLength = 0;
@@ -88,7 +88,7 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6LLListener *llListener) const
 			guint8 dayOfWeek = gsf_le_read_guint8(m_stream);
 			guint8 timeZone = gsf_le_read_guint8(m_stream);
 			guint8 unused = gsf_le_read_guint8(m_stream);
-			llListener->setDate(year, month, day, hour, minute, second, dayOfWeek, timeZone, unused);
+			static_cast<WP6LLListener*>(listener)->setDate(year, month, day, hour, minute, second, dayOfWeek, timeZone, unused);
 		}
 		else
 		{
@@ -106,7 +106,7 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6LLListener *llListener) const
 			for (int j = 0; j < len; j++)
 				data.append(chars[j]);
 			} 
-			llListener->setExtendedInformation(tagID, data);
+			static_cast<WP6LLListener*>(listener)->setExtendedInformation(tagID, data);
 		}
 		WPD_CHECK_FILE_SEEK_ERROR(gsf_input_seek(m_stream, (i+groupLength), G_SEEK_SET));
 	}

@@ -40,12 +40,12 @@ WP6CharacterGroup_FontFaceChangeSubGroup::WP6CharacterGroup_FontFaceChangeSubGro
 	WPD_DEBUG_MSG(("WordPerfect: Character Group Font Face Change subgroup info (old matched point size: %i, hash: %i, matched font index: %i, matched font point size: %i\n", m_oldMatchedPointSize, m_hash, m_matchedFontIndex, m_matchedFontPointSize));
 }
 
-void WP6CharacterGroup_FontFaceChangeSubGroup::parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
+void WP6CharacterGroup_FontFaceChangeSubGroup::parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
 {
 	WPD_DEBUG_MSG(("WordPerfect: FontFaceChangeSubGroup parsing\n"));
 	// TODO: check that we have 1 prefix id
 	// emit an exception otherwise
-	llListener->fontChange(m_matchedFontPointSize, prefixIDs[0]);
+	static_cast<WP6LLListener*>(listener)->fontChange(m_matchedFontPointSize, prefixIDs[0]);
 }
 
 /*************************************************************************
@@ -59,9 +59,9 @@ WP6CharacterGroup_ParagraphNumberOnSubGroup::WP6CharacterGroup_ParagraphNumberOn
 	m_flag = gsf_le_read_guint8(input);
 }
 
-void WP6CharacterGroup_ParagraphNumberOnSubGroup::parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
+void WP6CharacterGroup_ParagraphNumberOnSubGroup::parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
 {
-	llListener->paragraphNumberOn(m_outlineHash, m_level, m_flag);
+	static_cast<WP6LLListener*>(listener)->paragraphNumberOn(m_outlineHash, m_level, m_flag);
 }
 
 /*************************************************************************
@@ -76,9 +76,9 @@ WP6CharacterGroup_TableDefinitionOnSubGroup::WP6CharacterGroup_TableDefinitionOn
 	// TODO: add the remaining table properties here
 }
 
-void WP6CharacterGroup_TableDefinitionOnSubGroup::parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
+void WP6CharacterGroup_TableDefinitionOnSubGroup::parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
 {
-	llListener->defineTable(m_position, m_leftOffset);
+	listener->defineTable(m_position, m_leftOffset);
 }
 
 /*************************************************************************
@@ -90,10 +90,10 @@ WP6CharacterGroup_TableDefinitionOffSubGroup::WP6CharacterGroup_TableDefinitionO
 	
 }
 
-void WP6CharacterGroup_TableDefinitionOffSubGroup::parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
+void WP6CharacterGroup_TableDefinitionOffSubGroup::parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
 {
 	// the table is degined now; start the table
-	llListener->startTable();
+	listener->startTable();
 }
 
 /*************************************************************************
@@ -115,9 +115,9 @@ WP6CharacterGroup_TableColumnSubGroup::WP6CharacterGroup_TableColumnSubGroup(Gsf
 	m_currencyIndex = gsf_le_read_guint8(input);
 }
 
-void WP6CharacterGroup_TableColumnSubGroup::parse(WP6LLListener *llListener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
+void WP6CharacterGroup_TableColumnSubGroup::parse(WP6HLListener *listener, const guint8 numPrefixIDs, guint16 const *prefixIDs) const
 {
-	llListener->addTableColumnDefinition(m_width, m_leftGutter, m_rigthGutter);
+	listener->addTableColumnDefinition(m_width, m_leftGutter, m_rigthGutter);
 }
 
 /*************************************************************************
@@ -142,54 +142,54 @@ void WP6CharacterGroup::_readContents(GsfInput *input)
 	// the contents accordingly
 	switch (getSubGroup())	
 	{
-	case WP6_CHARACTER_GROUP_FONT_FACE_CHANGE:
-	case WP6_CHARACTER_GROUP_FONT_SIZE_CHANGE:
-		m_subGroupData = new WP6CharacterGroup_FontFaceChangeSubGroup(input);
-		break;
-	case WP6_CHARACTER_GROUP_PARAGRAPH_NUMBER_ON:
-		m_subGroupData = new WP6CharacterGroup_ParagraphNumberOnSubGroup(input);
-		break;
-	case WP6_CHARACTER_GROUP_TABLE_DEFINITION_ON:
-		m_subGroupData = new WP6CharacterGroup_TableDefinitionOnSubGroup(input);
-		break;
-	case WP6_CHARACTER_GROUP_TABLE_DEFINITION_OFF:
-		m_subGroupData = new WP6CharacterGroup_TableDefinitionOffSubGroup(input);
-		break;	
-	case WP6_CHARACTER_GROUP_TABLE_COLUMN:
-		m_subGroupData = new WP6CharacterGroup_TableColumnSubGroup(input);
-		break;
-	default:
-		break;
+		case WP6_CHARACTER_GROUP_FONT_FACE_CHANGE:
+		case WP6_CHARACTER_GROUP_FONT_SIZE_CHANGE:
+			m_subGroupData = new WP6CharacterGroup_FontFaceChangeSubGroup(input);
+			break;
+		case WP6_CHARACTER_GROUP_PARAGRAPH_NUMBER_ON:
+			m_subGroupData = new WP6CharacterGroup_ParagraphNumberOnSubGroup(input);
+			break;
+		case WP6_CHARACTER_GROUP_TABLE_DEFINITION_ON:
+			m_subGroupData = new WP6CharacterGroup_TableDefinitionOnSubGroup(input);
+			break;
+		case WP6_CHARACTER_GROUP_TABLE_DEFINITION_OFF:
+			m_subGroupData = new WP6CharacterGroup_TableDefinitionOffSubGroup(input);
+			break;	
+		case WP6_CHARACTER_GROUP_TABLE_COLUMN:
+			m_subGroupData = new WP6CharacterGroup_TableColumnSubGroup(input);
+			break;
+		default:
+			break;
 	}
 }
 
-void WP6CharacterGroup::parse(WP6LLListener *llListener)
+void WP6CharacterGroup::parse(WP6HLListener *listener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling a Character group\n"));
 	
 	switch (getSubGroup())
 	{
-	case WP6_CHARACTER_GROUP_FONT_FACE_CHANGE:
-	case WP6_CHARACTER_GROUP_FONT_SIZE_CHANGE:
-	case WP6_CHARACTER_GROUP_PARAGRAPH_NUMBER_ON:
-		m_subGroupData->parse(llListener, getNumPrefixIDs(), getPrefixIDs());
-		break;
-	case WP6_CHARACTER_GROUP_PARAGRAPH_NUMBER_OFF:
-		llListener->paragraphNumberOff();
-		break;
-	case WP6_CHARACTER_GROUP_TABLE_DEFINITION_ON:
-		WPD_DEBUG_MSG(("WordPerfect: TABLE Definition ON\n"));
-		m_subGroupData->parse(llListener, getNumPrefixIDs(), getPrefixIDs());
-		break;
-	case WP6_CHARACTER_GROUP_TABLE_DEFINITION_OFF:
-		WPD_DEBUG_MSG(("WordPerfect: TABLE Definition OFF\n"));
-		m_subGroupData->parse(llListener, getNumPrefixIDs(), getPrefixIDs());
-		break;
-	case WP6_CHARACTER_GROUP_TABLE_COLUMN:
-		WPD_DEBUG_MSG(("WordPerfect: Table Column\n"));
-		m_subGroupData->parse(llListener, getNumPrefixIDs(), getPrefixIDs());
-		break;
-	default: // something else we don't support yet
-		break;
+		case WP6_CHARACTER_GROUP_FONT_FACE_CHANGE:
+		case WP6_CHARACTER_GROUP_FONT_SIZE_CHANGE:
+		case WP6_CHARACTER_GROUP_PARAGRAPH_NUMBER_ON:
+			m_subGroupData->parse(listener, getNumPrefixIDs(), getPrefixIDs());
+			break;
+		case WP6_CHARACTER_GROUP_PARAGRAPH_NUMBER_OFF:
+			static_cast<WP6LLListener*>(listener)->paragraphNumberOff();
+			break;
+		case WP6_CHARACTER_GROUP_TABLE_DEFINITION_ON:
+			WPD_DEBUG_MSG(("WordPerfect: TABLE Definition ON\n"));
+			m_subGroupData->parse(listener, getNumPrefixIDs(), getPrefixIDs());
+			break;
+		case WP6_CHARACTER_GROUP_TABLE_DEFINITION_OFF:
+			WPD_DEBUG_MSG(("WordPerfect: TABLE Definition OFF\n"));
+			m_subGroupData->parse(listener, getNumPrefixIDs(), getPrefixIDs());
+			break;
+		case WP6_CHARACTER_GROUP_TABLE_COLUMN:
+			WPD_DEBUG_MSG(("WordPerfect: Table Column\n"));
+			m_subGroupData->parse(listener, getNumPrefixIDs(), getPrefixIDs());
+			break;
+		default: // something else we don't support yet
+			break;
 	}
 }

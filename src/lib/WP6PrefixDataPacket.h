@@ -29,17 +29,16 @@
 #include <stdlib.h>
 #include <glib.h>
 #include "WPXParser.h"
-//#include "WP6LLListener.h"
 
+class WP6HLListener;
 class WP6PrefixIndice;
-class WP6LLListener;
 
 class WP6PrefixDataPacket
 {
 public:
 	WP6PrefixDataPacket(GsfInput * input);	
 	virtual ~WP6PrefixDataPacket() {}
-	virtual void parse(WP6LLListener *llListener) const {}
+	virtual void parse(WP6HLListener *listener) const {}
 
 	static WP6PrefixDataPacket * constructPrefixDataPacket(GsfInput * input, WP6PrefixIndice *prefixIndice);
 

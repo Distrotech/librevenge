@@ -68,7 +68,7 @@ void WP6ColumnGroup::_readContents(GsfInput *input)
 	}
 }
 
-void WP6ColumnGroup::parse(WP6LLListener *llListener)
+void WP6ColumnGroup::parse(WP6HLListener *listener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling an Column group\n"));
 	
@@ -77,7 +77,7 @@ void WP6ColumnGroup::parse(WP6LLListener *llListener)
 		case 0: // Left Margin Set
 		case 1: // Right Margin Set
 			{						
-				llListener->marginChange(getSubGroup(), m_margin);
+				listener->marginChange(getSubGroup(), m_margin);
 			}
 			break;
 		case 2: // TODO: Define Text Columns, Partially implemented.
@@ -85,7 +85,7 @@ void WP6ColumnGroup::parse(WP6LLListener *llListener)
 				// number of columns = {0,1} means columns off
 				if ((m_numColumns == 0) || (m_numColumns == 1))
 				{
-					llListener->columnChange(1); // the value "1" is bugus, the false bool gives you all the information you need here
+					listener->columnChange(1); // the value "1" is bugus, the false bool gives you all the information you need here
 				} 
 				else
 				{
@@ -93,16 +93,16 @@ void WP6ColumnGroup::parse(WP6LLListener *llListener)
 					switch (m_colType & 0x03)
 					{
 						case WP6_COLUMN_TYPE_NEWSPAPER:
-							llListener->columnChange(m_numColumns);
+							listener->columnChange(m_numColumns);
 							break;
 						case WP6_COLUMN_TYPE_NEWSPAPER_VERTICAL_BALANCE:
-							llListener->columnChange(m_numColumns);
+							listener->columnChange(m_numColumns);
 							break;
 						case WP6_COLUMN_TYPE_PARALLEL:
-							llListener->columnChange(m_numColumns);
+							listener->columnChange(m_numColumns);
 							break;
 						case WP6_COLUMN_TYPE_PARALLEL_PROTECT:
-							llListener->columnChange(m_numColumns);
+							listener->columnChange(m_numColumns);
 							break;
 						default: // something else we don't support, since it isn't in the docs
 							break;
