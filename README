@@ -24,4 +24,6 @@ TODO: Write me!
 Windows - MingW
 ===============
 
-TODO: Write me!
+See ./projects/mingw/README for details on how to build libwpd using
+the mingw build system (http://www.mingw.org/).
+
