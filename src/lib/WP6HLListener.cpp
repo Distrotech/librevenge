@@ -62,7 +62,7 @@ int _extractNumericValueFromRoman(const gchar romanChar)
 // as letters, numbers, or roman numerals.. return an integer value representing its number
 // HACK: this function is really cheesey
 // NOTE: if the input is not valid, the output is unspecified
-int _extractDisplayReferenceNumberFromBuf(const UCSString &buf, const NumberingType listType)
+int _extractDisplayReferenceNumberFromBuf(const UCSString &buf, const WPXNumberingType listType)
 {
 	if (listType == LOWERCASE_ROMAN || listType == UPPERCASE_ROMAN)
 	{
@@ -105,16 +105,16 @@ int _extractDisplayReferenceNumberFromBuf(const UCSString &buf, const NumberingT
 	return 1;
 }
 
-NumberingType _extractNumberingTypeFromBuf(const UCSString &buf, const NumberingType putativeNumberingType)
+WPXNumberingType _extractWPXNumberingTypeFromBuf(const UCSString &buf, const WPXNumberingType putativeWPXNumberingType)
 {
 
 	for (int i=0; i<buf.getLen(); i++)
 	{
 		if ((buf.getUCS4()[i] == 'I' || buf.getUCS4()[i] == 'V' || buf.getUCS4()[i] == 'X') && 
-		    (putativeNumberingType == LOWERCASE_ROMAN || putativeNumberingType == UPPERCASE_ROMAN))
+		    (putativeWPXNumberingType == LOWERCASE_ROMAN || putativeWPXNumberingType == UPPERCASE_ROMAN))
 			return UPPERCASE_ROMAN;
 		else if ((buf.getUCS4()[i] == 'i' || buf.getUCS4()[i] == 'v' || buf.getUCS4()[i] == 'x') && 
-		    (putativeNumberingType == LOWERCASE_ROMAN || putativeNumberingType == UPPERCASE_ROMAN))
+		    (putativeWPXNumberingType == LOWERCASE_ROMAN || putativeWPXNumberingType == UPPERCASE_ROMAN))
 			return LOWERCASE_ROMAN;
 		else if (buf.getUCS4()[i] >= 'A' && buf.getUCS4()[i] <= 'Z')
 			return UPPERCASE;
@@ -715,12 +715,12 @@ void WP6HLListener::noteOn(const guint16 textPID)
 	}
 }
 
-void WP6HLListener::noteOff(const NoteType noteType)
+void WP6HLListener::noteOff(const WPXNoteType noteType)
 {
 	if (!m_parseState->m_isUndoOn)
 	{
 		m_parseState->m_styleStateSequence.setCurrentState(NORMAL);
-		NumberingType numberingType = _extractNumberingTypeFromBuf(m_parseState->m_numberText, ARABIC);
+		WPXNumberingType numberingType = _extractWPXNumberingTypeFromBuf(m_parseState->m_numberText, ARABIC);
 		int number = _extractDisplayReferenceNumberFromBuf(m_parseState->m_numberText, numberingType);
 		if (noteType == FOOTNOTE)
 			m_listenerImpl->openFootnote(number);
@@ -980,7 +980,7 @@ void WP6HLListener::_handleListChange(const guint16 outlineHash)
 	if (m_parseState->m_currentListLevel > oldListLevel)
 	{
 		if (m_parseState->m_putativeListElementHasDisplayReferenceNumber) {
-			NumberingType listType = _extractNumberingTypeFromBuf(m_parseState->m_numberText, 
+			WPXNumberingType listType = _extractWPXNumberingTypeFromBuf(m_parseState->m_numberText, 
 									      outlineDefinition->getListType((m_parseState->m_currentListLevel-1)));
 			int number = _extractDisplayReferenceNumberFromBuf(m_parseState->m_numberText, listType);
 			m_listenerImpl->defineOrderedListLevel(m_parseState->m_currentOutlineHash, 

@@ -60,7 +60,7 @@ public:
 	virtual void insertText(const UCSString &text);
 	virtual void insertLineBreak() {}
 
-	virtual void defineOrderedListLevel(const int listID, const guint16 listLevel, const NumberingType listType, 
+	virtual void defineOrderedListLevel(const int listID, const guint16 listLevel, const WPXNumberingType listType, 
 					    const UCSString &textBeforeNumber, const UCSString &textAfterNumber,
 					    const int startingNumber) {}
 	virtual void defineUnorderedListLevel(const int listID, const guint16 listLevel, const UCSString &bullet) {}

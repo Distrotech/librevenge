@@ -66,7 +66,7 @@ class WPXHLListenerImpl
 	virtual void insertText(const UCSString &text) = 0;
  	virtual void insertLineBreak() = 0;
 
-	virtual void defineOrderedListLevel(const int listID, const guint16 listLevel, const NumberingType listType, 
+	virtual void defineOrderedListLevel(const int listID, const guint16 listLevel, const WPXNumberingType listType, 
 					    const UCSString &textBeforeNumber, const UCSString &textAfterNumber,
 					    const int startingNumber) = 0;
 	virtual void defineUnorderedListLevel(const int listID, const guint16 listLevel, const UCSString &bullet) = 0;

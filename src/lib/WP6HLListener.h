@@ -150,13 +150,13 @@ class WP6OutlineDefinition
 			  const guint8 tabBehaviourFlag);
 	void update(const guint8 *numberingMethods, const guint8 tabBehaviourFlag);
 
-	NumberingType getListType(int level) { return m_listTypes[level]; }
+	WPXNumberingType getListType(int level) { return m_listTypes[level]; }
 
 protected:
 	void _updateNumberingMethods(const WP6OutlineLocation outlineLocation, const guint8 *numberingMethods);
                  
 private:	
-	NumberingType m_listTypes[WP6_NUM_LIST_LEVELS];
+	WPXNumberingType m_listTypes[WP6_NUM_LIST_LEVELS];
 };
 
 class WP6HLListener : public WP6LLListener
@@ -194,7 +194,7 @@ public:
 	virtual void globalOn(const guint8 systemStyle);
 	virtual void globalOff();
 	virtual void noteOn(const guint16 textPID);
-	virtual void noteOff(const NoteType noteType);
+	virtual void noteOff(const WPXNoteType noteType);
 	virtual void endDocument();
  
  	virtual void defineTable(guint8 position, guint16 leftOffset);
