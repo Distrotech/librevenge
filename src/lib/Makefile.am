@@ -127,7 +127,7 @@ libwpd_0_8_la_SOURCES =				\
 	WPXProperty.cpp				\
 	WPXPropertyList.cpp			\
 	WPXString.cpp				\
-	WPXPropertyListVector.cpp				\
+	WPXPropertyListVector.cpp		\
 	WPDocument.cpp				\
 	libwpd.h	        		\
 	libwpd_internal.h			\

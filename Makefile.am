@@ -6,15 +6,22 @@ endif
 
 pkgconf_DATA = libwpd-0.8.pc $(LIBWPD_STREAM_PC)
 
-SUBDIRS = src build
+SUBDIRS = src build docs
 
 EXTRA_DIST = \
-	autogen.sh		\
-	libwpd.spec		\
-	libwpd.spec.in		\
+	autogen.sh	\
+	libwpd.spec	\
+	libwpd.spec.in	\
 	libwpd-*.pc.in	\
-	libwpd-zip.in		\
-	CHANGES
+	libwpd-zip.in	\
+	CHANGES		\
+	COPYING		\
+	CREDITS		\
+	HACKING		\
+	INSTALL		\
+	README		\
+	TODO
+	
 
 distclean-local:
 	rm -rf *.cache *~
@@ -26,3 +33,16 @@ rpm: dist
 zip: all install
 	sh libwpd-zip
 
+if WITH_LIBWPD_DOCS
+install-data-local:
+	mkdir -p $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@
+	$(INSTALL) CHANGES $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/
+	$(INSTALL) COPYING $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/
+	$(INSTALL) CREDITS $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/
+	$(INSTALL) HACKING $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/
+	$(INSTALL) INSTALL $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/
+	$(INSTALL) README $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/
+	$(INSTALL) TODO $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/
+uninstall-local:
+	-rm -rf $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@
+endif

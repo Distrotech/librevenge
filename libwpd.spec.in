@@ -40,6 +40,16 @@ Group: Development/Libraries
 %description devel
 Includes and definitions for developing with libwpd.
 
+%if %{!?_without_docs:1}%{?_without_docs:0}
+%package docs
+Requires: libwpd
+Summary: Documentation of libwpd API
+Group: Development/Documentation
+
+%description docs
+Documentation of libwpd API for developing with libwpd
+%endif
+
 %prep
 %__rm -rf $RPM_BUILD_ROOT
 
@@ -49,6 +59,7 @@ Includes and definitions for developing with libwpd.
 ./configure --prefix=%{_prefix} --exec-prefix=%{_prefix} \
 	%{?_without_stream:--without-stream} \
 	%{?_with_debug:--enable-debug}  \
+	%{?_without_docs:--without-docs}
 
 %__make
 
@@ -76,6 +87,11 @@ umask 022
 %{_libdir}/libwpd*-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.*a
 %{_libdir}/pkgconfig/libwpd*-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.pc
 %{_includedir}/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@/libwpd
+
+%if %{!?_without_docs:1}%{?_without_docs:0}
+%files docs
+%{_datadir}/doc/libwpd-@WPD_VERSION@/*
+%endif
 
 %changelog
 * Fri Jan 28 2005 Fridrich Strba <fridrich.strba@bluewin.ch>
