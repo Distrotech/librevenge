@@ -48,7 +48,7 @@ public:
 		
 	WPXHeader * getHeader() { return m_pHeader; }
 	FILE * getStream() { return m_pStream; }
-protected:
+private:
 	FILE * m_pStream;
 	WPXHeader * m_pHeader;
 	

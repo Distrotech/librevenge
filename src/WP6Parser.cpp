@@ -35,10 +35,10 @@ WP6Parser::WP6Parser(FILE * stream, WP6Header * header)
 
 gboolean WP6Parser::parse()
 {
-	if (!m_pHeader->parse() )
+	if (!getHeader()->parse() )
 		return FALSE;
 	
-	fseek(m_pStream, m_pHeader->m_iDocumentOffset - ftell(m_pStream), SEEK_CUR);
+	fseek(getStream(), getHeader()->m_iDocumentOffset - ftell(getStream()), SEEK_CUR);
 	
 	WP6Part * part;
 	while (part = WP6Part::constructPart(this))
