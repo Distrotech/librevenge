@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -62,32 +62,32 @@ const guint16 asciiMap[] =
 	248, 249, 250, 251, 252, 253, 254, 255,
 };
 
-const guint16 extendedInternationalCharacterMap[] = 
-{ 
+const guint16 extendedInternationalCharacterMap[] =
+{
   229, // lower case 'a' with a small circle
   197, // upper case 'a' with a small circle
   230, // lower case 'ae'
   198, // upper case 'ae'
   228, // lower case 'a' with diathesis
   196, // upper case 'a' with diathesis
-  224, // lower case 'a' with acute
-  192, // lower case 'a' with grave
+  225, // lower case 'a' with acute
+  224, // lower case 'a' with grave
   226, // lower case 'a' with circonflex
   227, // lower case 'a' with tilde
   195, // upper case 'a' with tilde
   231, // lower case 'c' with hook
   199, // upper case 'c' with hook
   235, // lower case 'e' with diathesis
-  232, // lower case 'e' with acute
-  200, // upper case 'e' with acute
-  233, // lower case 'e' with grave
+  233, // lower case 'e' with acute
+  201, // upper case 'e' with acute
+  232, // lower case 'e' with grave
   234, // lower case 'e' with circonflex
-  236, // lower case 'i' with acute
+  237, // lower case 'i' with acute
   241, // lower case 'n' with tilde
   209, // upper case 'n' with tilde
   248, // lower case 'o' with stroke
   216, // upper case 'o' with stroke
-  241, // lower case 'o' with tilde
+  245, // lower case 'o' with tilde
   213, // upper case 'o' with tilde
   246, // lower case 'o' with diathesis
   214, // upper case 'o' with diathesis
@@ -108,7 +108,7 @@ const guint16 multinationalMap[] = {
   0x030b, 0x0327, 0x0328, 0x030c, 0x0337, 0x0305, 0x0306, 0x00df,
   0x0138, 0xf801, 0x00c1, 0x00e1, 0x00c2, 0x00e2, 0x00c4, 0x00e4,
   0x00c0, 0x00e0, 0x00c5, 0x00e5, 0x00c6, 0x00e6, 0x00c7, 0x00e7,
-  0x00c8, 0x00e8, 0x00ca, 0x00ea, 0x00cb, 0x00eb, 0x00c9, 0x00e9,
+  0x00c9, 0x00e9, 0x00ca, 0x00ea, 0x00cb, 0x00eb, 0x00c8, 0x00e8,
   0x00cd, 0x00ed, 0x00ce, 0x00ee, 0x00cf, 0x00ef, 0x00cc, 0x00ec,
   0x00d1, 0x00f1, 0x00d3, 0x00f3, 0x00d4, 0x00f4, 0x00d6, 0x00f6,
   0x00d2, 0x00f2, 0x00da, 0x00fa, 0x00db, 0x00fb, 0x00dc, 0x00fc,
@@ -133,7 +133,7 @@ const guint16 multinationalMap[] = {
   0xf004, 0xf005, 0xf006, 0xf007, 0xf008, 0xf009, 0xf00a, 0xf00b,
   0xf00c, 0xf00d, 0xf00e, 0xf00f, 0x010e, 0x010f, 0x01a0, 0x01a1,
   0x01af, 0x01b0, 0x0114, 0x0115, 0x012c, 0x012d, 0x0049, 0x0131,
-  0x014e, 0x014f 
+  0x014e, 0x014f
 };
 
 /* WP phonetic symbol (charset 2) */

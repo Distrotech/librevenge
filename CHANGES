@@ -3,6 +3,7 @@ CHANGES:
 0.6.6 -> 0.7.0
 - Basic WP4.2 file format support (Marc Maurer)
 - Basic WP5 file format support (Marc Maurer)
+- Fix errors in the international character mappings (Fridrich Strba)
 - Cleanup file header handling mess (Marc Maurer)
 - Removal of stale files (Marc Maurer)
 - Several fixes to make libwpd compile on Win32/MSVC (Marc Maurer)
@@ -12,6 +13,7 @@ CHANGES:
   to support WP4 and WP5 documents as well (Marc Maurer)
 - Restructure the class hierarchy to allow for code sharing
   between the different high level listeners (Marc Maurer)
+- Close open page spans at the end of the document (Marc Maurer)
 - Updated MSVC6 project files, we have a win32 lib again, yay! (Marc Maurer)
 - Reduce the number of installed header files (Marc Maurer)
 - Add mingw build system (Fridrich Strba)
