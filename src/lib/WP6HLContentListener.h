@@ -75,7 +75,6 @@ struct _WP6ParsingState
 	UTF8String m_textAfterDisplayReference;
 	UTF8String m_textAfterNumber;
 
-	uint8_t m_tempParagraphJustification; // TODO: remove this one after the tabs are properly implemented
 	float m_paragraphMarginBottomRelative;
 	float m_paragraphMarginBottomAbsolute;
 
@@ -99,7 +98,6 @@ struct _WP6ParsingState
 	uint8_t m_leaderNumSpaces;
 	vector<WPXTabStop> m_tempTabStops;
 	vector<bool> m_tempUsePreWP9LeaderMethod;
-
 };
 
 struct _WP6ListLevel
@@ -194,8 +192,6 @@ protected:
 	void _handleListChange(const uint16_t outlineHash);
 
 	void _openListElement();
-
-	void _openParagraph();
 
 private:
 	WP6ParsingState *m_parseState;

@@ -97,14 +97,38 @@ UTF8String getPropString(const WPXPropertyList &propList)
 	if (!i.last()) 
 	{
 		UTF8String prop;
-		prop.sprintf("%s: %s", i.key().c_str(), i()->getStr().getUTF8());
+		prop.sprintf("%s: %s", i.key().c_str(), i()->getStr().cstr());
 		propString.append(prop);
 		for (i; i.next(); )
 		{
-			prop.sprintf(", %s: %s", i.key().c_str(), i()->getStr().getUTF8());
+			prop.sprintf(", %s: %s", i.key().c_str(), i()->getStr().cstr());
 			propString.append(prop);
 		}
 	}
+
+	return propString;
+}
+
+UTF8String getPropString(const vector<WPXPropertyList> &itemList)
+{
+	UTF8String propString;
+
+	propString.append("(");
+	vector<WPXPropertyList>::const_iterator i = itemList.begin();
+	if (i != itemList.end())
+	{
+		propString.append("(");
+		propString.append(getPropString(*i));
+		propString.append(")");
+		i++;
+	}	
+	for (i; i != itemList.end(); i++)
+	{                
+		propString.append(", (");
+		propString.append(getPropString(*i));
+		propString.append(")");
+	}
+	propString.append(")");
 
 	return propString;
 }
@@ -114,7 +138,7 @@ void RawListenerImpl::setDocumentMetaData(const WPXPropertyList &propList)
 	if (m_printCallgraphScore)
 		return;
 
-	__iprintf("setDocumentMetaData(%s)\n", getPropString(propList)());
+	__iprintf("setDocumentMetaData(%s)\n", getPropString(propList).cstr());
 }
 
 void RawListenerImpl::startDocument()
@@ -124,8 +148,7 @@ void RawListenerImpl::startDocument()
 
 void RawListenerImpl::endDocument()
 {
-	_D(("endDocument()\n"), 
-		LC_START_DOCUMENT);
+	_D(("endDocument()\n"), LC_START_DOCUMENT);
 }
 
 void RawListenerImpl::openPageSpan(const WPXPropertyList &propList)
@@ -133,7 +156,7 @@ void RawListenerImpl::openPageSpan(const WPXPropertyList &propList)
 	_U(("openPageSpan(span: %d, isLastPageSpan: %s, formLength: %.4f, formWidth: %.4f, Orientation: %s, marginLeft: %.4f, marginRight: %.4f, marginTop: %.4f, marginBottom: %.4f\n",
 	    propList["libwpd:num-pages"]->getInt(), (propList["libwpd:is-last-page-span"]->getInt() ? "true" : "false"), 
 	    propList["fo:page-height"]->getFloat(), propList["fo:page-width"]->getFloat(), 
-	    propList["style:print-orientation"]->getStr()(), 
+	    propList["style:print-orientation"]->getStr().cstr(), 
 	    propList["fo:margin-left"]->getFloat(), propList["fo:margin-right"]->getFloat(), 
 	    propList["fo:margin-top"]->getFloat(), propList["fo:margin-bottom"]->getFloat()),
 	   LC_OPEN_PAGE_SPAN);
@@ -171,26 +194,25 @@ void RawListenerImpl::closeFooter()
 	   LC_OPEN_HEADER_FOOTER);
 }
 
-void RawListenerImpl::openParagraph(const WPXPropertyList &propList, const vector<WPXTabStop> &tabStops)
+void RawListenerImpl::openParagraph(const WPXPropertyList &propList, const vector<WPXPropertyList> &tabStops)
 {
-	_U(("openParagraph(%s)\n", getPropString(propList)()), LC_OPEN_PARAGRAPH);
+	_U(("openParagraph(%s, tab-stops: %s)\n", getPropString(propList).cstr(), getPropString(tabStops).cstr()),
+	   LC_OPEN_PARAGRAPH);
 }
 
 void RawListenerImpl::closeParagraph()
 {
-	_D(("closeParagraph()\n"),
-		LC_OPEN_PARAGRAPH);
+	_D(("closeParagraph()\n"), LC_OPEN_PARAGRAPH);
 }
 
 void RawListenerImpl::openSpan(const WPXPropertyList &propList)
 {
-	_U(("openSpan(%s)\n", getPropString(propList)()), LC_OPEN_SPAN);
+	_U(("openSpan(%s)\n", getPropString(propList).cstr()), LC_OPEN_SPAN);
 }
 
 void RawListenerImpl::closeSpan()
 {
-	_D(("closeSpan()\n"),
-	   LC_OPEN_SPAN);
+	_D(("closeSpan()\n"), LC_OPEN_SPAN);
 }
 
 void RawListenerImpl::openSection(const WPXPropertyList &propList, const vector<WPXColumnDefinition> &columns)
@@ -201,22 +223,20 @@ void RawListenerImpl::openSection(const WPXPropertyList &propList, const vector<
 	{
 		for (int i=0; i<columns.size(); i++)
 		{
-			sColumns.sprintf("%s W:%.4f|", sColumns.getUTF8(), columns[i].m_width);
-			sColumns.sprintf("%sL:%.4f|", sColumns.getUTF8(), columns[i].m_leftGutter);
-			sColumns.sprintf("%sR:%.4f", sColumns.getUTF8(), columns[i].m_rightGutter);
+			sColumns.sprintf("%s W:%.4f|", sColumns.cstr(), columns[i].m_width);
+			sColumns.sprintf("%sL:%.4f|", sColumns.cstr(), columns[i].m_leftGutter);
+			sColumns.sprintf("%sR:%.4f", sColumns.cstr(), columns[i].m_rightGutter);
 		}
 	}
 	else
 		sColumns.sprintf(" SINGLE COLUMN");
-	_U(("openSection(numColumns: %u, columns:%s, spaceAfter: %.4f)\n", propList["fo:column-count"]->getInt(), sColumns.getUTF8(), 
-	    propList["fo:margin-bottom"]->getFloat()),
-		LC_OPEN_SECTION);
+	_U(("openSection(numColumns: %u, columns:%s, spaceAfter: %.4f)\n", propList["fo:column-count"]->getInt(), sColumns.cstr(), 
+	    propList["fo:margin-bottom"]->getFloat()), LC_OPEN_SECTION);
 }
 
 void RawListenerImpl::closeSection()
 {
-	_D(("closeSection()\n"),
-		LC_OPEN_SECTION);
+	_D(("closeSection()\n"), LC_OPEN_SECTION);
 }
 
 void RawListenerImpl::insertTab()
@@ -227,7 +247,7 @@ void RawListenerImpl::insertTab()
 void RawListenerImpl::insertText(const UTF8String &text)
 {
 	UTF8String textUTF8(text);
-	__iprintf("insertText(text: %s)\n", textUTF8.getUTF8());
+	__iprintf("insertText(text: %s)\n", textUTF8.cstr());
 }
 
 void RawListenerImpl::insertLineBreak()
@@ -237,72 +257,68 @@ void RawListenerImpl::insertLineBreak()
 
 void RawListenerImpl::defineOrderedListLevel(const WPXPropertyList &propList)
 {
-	__iprintf("defineOrderedListLevel(%s)\n", getPropString(propList)());
+	__iprintf("defineOrderedListLevel(%s)\n", getPropString(propList).cstr());
 }
 
 void RawListenerImpl::defineUnorderedListLevel(const WPXPropertyList &propList)
 {
-	__iprintf("defineUnorderedListLevel(%s)\n", getPropString(propList)());
+	__iprintf("defineUnorderedListLevel(%s)\n", getPropString(propList).cstr());
 }
 
 void RawListenerImpl::openOrderedListLevel(const WPXPropertyList &propList)
 {
-	_U(("openOrderedListLevel(%s)\n", getPropString(propList)()),
-		LC_OPEN_ORDERED_LIST_LEVEL);
+	_U(("openOrderedListLevel(%s)\n", getPropString(propList).cstr()),
+	   LC_OPEN_ORDERED_LIST_LEVEL);
 }
 
 void RawListenerImpl::openUnorderedListLevel(const WPXPropertyList &propList)
 {
-	_U(("openUnorderedListLevel(%s)\n", getPropString(propList)()),
-		LC_OPEN_UNORDERED_LIST_LEVEL);
+	_U(("openUnorderedListLevel(%s)\n", getPropString(propList).cstr()),
+	   LC_OPEN_UNORDERED_LIST_LEVEL);
 }
 
 void RawListenerImpl::closeOrderedListLevel()
 {
 	_D(("closeOrderedListLevel()\n"),
-		LC_OPEN_ORDERED_LIST_LEVEL);
+	   LC_OPEN_ORDERED_LIST_LEVEL);
 }
 
 void RawListenerImpl::closeUnorderedListLevel()
 {
-	_D(("closeUnorderedListLevel()\n"),
-		LC_OPEN_UNORDERED_LIST_LEVEL);
+	_D(("closeUnorderedListLevel()\n"), LC_OPEN_UNORDERED_LIST_LEVEL);
 }
 
-void RawListenerImpl::openListElement(const WPXPropertyList &propList, const vector<WPXTabStop> &tabStops)
+void RawListenerImpl::openListElement(const WPXPropertyList &propList, const vector<WPXPropertyList> &tabStops)
 {
-	_U(("openListElement(%s)\n", getPropString(propList)()), 
+	_U(("openListElement(%s, tab-stops: %s)\n", getPropString(propList).cstr(), getPropString(tabStops).cstr()), 
 	   LC_OPEN_LIST_ELEMENT);
 }
 
 void RawListenerImpl::closeListElement()
 {
-	_D(("closeListElement()\n"),
-		LC_OPEN_LIST_ELEMENT);
+	_D(("closeListElement()\n"), LC_OPEN_LIST_ELEMENT);
 }
 
 void RawListenerImpl::openFootnote(const WPXPropertyList &propList)
 {
-	_U(("openFootnote(%s)\n", getPropString(propList)()),
-		LC_OPEN_FOOTNOTE);
+	_U(("openFootnote(%s)\n", getPropString(propList).cstr()),
+	   LC_OPEN_FOOTNOTE);
 }
 
 void RawListenerImpl::closeFootnote()
 {
-	_D(("closeFootnote()\n"),
-		LC_OPEN_FOOTNOTE);
+	_D(("closeFootnote()\n"), LC_OPEN_FOOTNOTE);
 }
 
 void RawListenerImpl::openEndnote(const WPXPropertyList &propList)
 {
-	_U(("openEndnote(number: %s)\n", getPropString(propList)()),
-		LC_OPEN_ENDNOTE);
+	_U(("openEndnote(number: %s)\n", getPropString(propList).cstr()),
+	   LC_OPEN_ENDNOTE);
 }
 
 void RawListenerImpl::closeEndnote()
 {
-	_D(("closeEndnote()\n"),
-		LC_OPEN_ENDNOTE);
+	_D(("closeEndnote()\n"), LC_OPEN_ENDNOTE);
 }
 
 void RawListenerImpl::openTable(const WPXPropertyList &propList, const vector < WPXColumnDefinition > &columns)
@@ -311,47 +327,44 @@ void RawListenerImpl::openTable(const WPXPropertyList &propList, const vector < 
 	sColumns.sprintf("");
 	for (int i=0; i<columns.size(); i++)
 	{
-		sColumns.sprintf("%s W:%.4f|", sColumns.getUTF8(), columns[i].m_width);
-		sColumns.sprintf("%sL:%.4f|", sColumns.getUTF8(), columns[i].m_leftGutter);
-		sColumns.sprintf("%sR:%.4f", sColumns.getUTF8(), columns[i].m_rightGutter);
+		sColumns.sprintf("%s W:%.4f|", sColumns.cstr(), columns[i].m_width);
+		sColumns.sprintf("%sL:%.4f|", sColumns.cstr(), columns[i].m_leftGutter);
+		sColumns.sprintf("%sR:%.4f", sColumns.cstr(), columns[i].m_rightGutter);
 	}
 
 	_U(("openTable(%s, columns:%s.)\n",
-	    getPropString(propList)(), sColumns.getUTF8()),
+	    getPropString(propList).cstr(), sColumns.cstr()),
 	   LC_OPEN_TABLE);
 }
 
 void RawListenerImpl::openTableRow(const WPXPropertyList &propList)
 {
-	_U(("openTableRow(%s)\n", getPropString(propList)()),
+	_U(("openTableRow(%s)\n", getPropString(propList).cstr()),
 	   LC_OPEN_TABLE_ROW);
 }
 
 void RawListenerImpl::closeTableRow()
 {
-	_D(("closeTableRow()\n"),
-		LC_OPEN_TABLE_ROW);
+	_D(("closeTableRow()\n"), LC_OPEN_TABLE_ROW);
 }
 
 void RawListenerImpl::openTableCell(const WPXPropertyList &propList)
 {
-	_U(("openTableCell(%s)\n", getPropString(propList)()),
+	_U(("openTableCell(%s)\n", getPropString(propList).cstr()),
 	   LC_OPEN_TABLE_CELL);
 }
 
 void RawListenerImpl::closeTableCell()
 {
-	_D(("closeTableCell()\n"),
-	   LC_OPEN_TABLE_CELL);
+	_D(("closeTableCell()\n"), LC_OPEN_TABLE_CELL);
 }
 
 void RawListenerImpl::insertCoveredTableCell(const WPXPropertyList &propList)
 {
-	__iprintf("insertCoveredTableCell(%s)\n", getPropString(propList)());
+	__iprintf("insertCoveredTableCell(%s)\n", getPropString(propList).cstr());
 }
 
 void RawListenerImpl::closeTable()
 {
-	_D(("closeTable()\n"),
-		LC_OPEN_TABLE);
+	_D(("closeTable()\n"), LC_OPEN_TABLE);
 }

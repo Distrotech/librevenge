@@ -53,21 +53,21 @@ HtmlListenerImpl::~HtmlListenerImpl()
 void HtmlListenerImpl::setDocumentMetaData(const WPXPropertyList &propList)
 {
 	if (propList["author"])
-		printf("<meta name=\"author\" content=\"%s\">\n", propList["author"]->getStr().getUTF8());
+		printf("<meta name=\"author\" content=\"%s\">\n", propList["author"]->getStr().cstr());
 	if (propList["subject"])
-		printf("<meta name=\"subject\" content=\"%s\">\n", propList["subject"]->getStr().getUTF8());
+		printf("<meta name=\"subject\" content=\"%s\">\n", propList["subject"]->getStr().cstr());
 	if (propList["publisher"])
-		printf("<meta name=\"publisher\" content=\"%s\">\n", propList["publisher"]->getStr().getUTF8());
+		printf("<meta name=\"publisher\" content=\"%s\">\n", propList["publisher"]->getStr().cstr());
 	if (propList["keywords"])
-		printf("<meta name=\"keywords\" content=\"%s\">\n", propList["keywords"]->getStr().getUTF8());
+		printf("<meta name=\"keywords\" content=\"%s\">\n", propList["keywords"]->getStr().cstr());
 	if (propList["language"])
-		printf("<meta name=\"language\" content=\"%s\">\n", propList["language"]->getStr().getUTF8());
+		printf("<meta name=\"language\" content=\"%s\">\n", propList["language"]->getStr().cstr());
 	if (propList["abstract"])
-		printf("<meta name=\"abstract\" content=\"%s\">\n", propList["abstract"]->getStr().getUTF8());
+		printf("<meta name=\"abstract\" content=\"%s\">\n", propList["abstract"]->getStr().cstr());
 	if (propList["descriptive-name"])
-		printf("<meta name=\"descriptive-name\" content=\"%s\">\n", propList["descriptive-name"]->getStr().getUTF8());
+		printf("<meta name=\"descriptive-name\" content=\"%s\">\n", propList["descriptive-name"]->getStr().cstr());
 	if (propList["descriptive-type"])
-		printf("<meta name=\"descriptive-type\" content=\"%s\">\n", propList["descriptive-type"]->getStr().getUTF8());
+		printf("<meta name=\"descriptive-type\" content=\"%s\">\n", propList["descriptive-type"]->getStr().cstr());
 }
 
 void HtmlListenerImpl::startDocument()
@@ -99,7 +99,7 @@ void HtmlListenerImpl::closePageSpan()
 	printf("</page-span>\n");
 }
 
-void HtmlListenerImpl::openParagraph(const WPXPropertyList &propList, const vector<WPXTabStop> &tabStops)
+void HtmlListenerImpl::openParagraph(const WPXPropertyList &propList, const vector<WPXPropertyList> &tabStops)
 {
 	printf("<p style=\"");
 	_appendParagraphJustification(propList["justification"]->getInt());
@@ -123,7 +123,7 @@ void HtmlListenerImpl::closeParagraph()
 
 void HtmlListenerImpl::openSpan(const WPXPropertyList &propList)
 {
-	printf("<span style=\"font-family: \'%s\'\">", propList["font-name"]->getStr().getUTF8());
+	printf("<span style=\"font-family: \'%s\'\">", propList["font-name"]->getStr().cstr());
 	printf("<span style=\"font-size: %.1fpt\">", propList["font-size"]->getFloat());
 	if (propList["text-attribute-bits"]->getInt() & WPX_REDLINE_BIT)
 		printf("<span style=\"color: #ff3333\">");
@@ -171,7 +171,7 @@ void HtmlListenerImpl::insertLineBreak()
 void HtmlListenerImpl::insertText(const UTF8String &text)
 {
 	UTF8String tempUTF8(text, true);
-	printf("%s", tempUTF8.getUTF8());
+	printf("%s", tempUTF8.cstr());
 }
 
 void HtmlListenerImpl::openOrderedListLevel(const WPXPropertyList &propList)
@@ -195,7 +195,7 @@ void HtmlListenerImpl::closeUnorderedListLevel()
 }
 
 
-void HtmlListenerImpl::openListElement(const WPXPropertyList &propList, const vector<WPXTabStop> &tabStops)
+void HtmlListenerImpl::openListElement(const WPXPropertyList &propList, const vector<WPXPropertyList> &tabStops)
 {
 	printf("<li style=\"");
 	_appendParagraphJustification(propList["justification"]->getInt());

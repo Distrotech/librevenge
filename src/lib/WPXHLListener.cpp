@@ -44,7 +44,7 @@ _WPXParsingState::_WPXParsingState(bool sectionAttributesChanged) :
 	m_isParagraphPageBreak(false),
 	m_paragraphLineSpacing(1.0f),
 	m_paragraphJustification(WPX_PARAGRAPH_JUSTIFICATION_LEFT),
-//	m_tempParagraphJustification(0),
+	m_tempParagraphJustification(0),
 
 	m_isSectionOpened(false),
 	m_isPageSpanBreakDeferred(false),
@@ -274,28 +274,26 @@ void WPXHLListener::_openParagraph()
 {
 	_closeParagraph();
 
-	WPXTabStop tmp_tabStop;
-	vector<WPXTabStop> tabStops;
-	for (int i=0; i<m_ps->m_tabStops.size(); i++)
-	{
-		tmp_tabStop = m_ps->m_tabStops[i];
-		if (m_ps->m_isTabPositionRelative)
-			tmp_tabStop.m_position -= m_ps->m_leftMarginByTabs;
-		else
-			tmp_tabStop.m_position -= m_ps->m_paragraphMarginLeft + m_ps->m_pageMarginLeft;
-		/* TODO: fix situations where we have several columns or are inside a table and the tab stop
-		 *       positions are absolute (relative to the paper edge). In this case, they have to be
-		 *       computed for each column or each cell in table. (Fridrich) */
-		tabStops.push_back(tmp_tabStop);
-	}
+	vector<WPXPropertyList> tabStops;
+	_getTabStops(tabStops);
+
 	WPXPropertyList propList;
-	_appendParagraphProperties(propList, 0);
+	_appendParagraphProperties(propList);
 
 	m_listenerImpl->openParagraph(propList, tabStops);
 
+	// this is paragraph-specific (handle breaks differently for
+	// lists, which we otherwise treat the same)
 	if (m_ps->m_numDeferredParagraphBreaks > 0)
 		m_ps->m_numDeferredParagraphBreaks--;
 
+	_resetParagraphState();
+
+	_openSpan();
+}
+
+void WPXHLListener::_resetParagraphState()
+{
 	m_ps->m_isParagraphColumnBreak = false;
 	m_ps->m_isParagraphPageBreak = false;
 	m_ps->m_isParagraphOpened = true;
@@ -305,8 +303,9 @@ void WPXHLListener::_openParagraph()
 	m_ps->m_rightMarginByTabs = 0.0f;
 	m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange;
 	m_ps->m_textIndentByTabs = 0.0f;	
-
-	_openSpan();
+	m_ps->m_isCellWithoutParagraph = false;
+	m_ps->m_isTextColumnWithoutParagraph = false;	
+	m_ps->m_tempParagraphJustification = 0;
 }
 
 void WPXHLListener::_appendJustification(WPXPropertyList &propList, int justification)
@@ -333,9 +332,15 @@ void WPXHLListener::_appendJustification(WPXPropertyList &propList, int justific
 	}
 }
 
-void WPXHLListener::_appendParagraphProperties(WPXPropertyList &propList, int justification)
+void WPXHLListener::_appendParagraphProperties(WPXPropertyList &propList)
 {
+	int justification;
+	if (m_ps->m_tempParagraphJustification) 
+		justification = m_ps->m_tempParagraphJustification;
+	else
+		justification = m_ps->m_paragraphJustification;
 	_appendJustification(propList, justification);
+
 	if (m_ps->m_numColumns == 1 && !m_ps->m_isTableOpened)
 	{
 		// these properties are not appropriate inside multiple columns or when
@@ -351,6 +356,53 @@ void WPXHLListener::_appendParagraphProperties(WPXPropertyList &propList, int ju
 		propList.insert("fo:break-before", "column");
 	else if (m_ps->m_isParagraphPageBreak)
 		propList.insert("fo:break-before", "page");
+}
+
+void WPXHLListener::_getTabStops(vector<WPXPropertyList> &tabStops)
+{
+	for (int i=0; i<m_ps->m_tabStops.size(); i++)
+	{
+		WPXPropertyList tmpTabStop;
+
+		// type
+		switch (m_ps->m_tabStops[i].m_alignment)
+		{
+		case RIGHT:
+			tmpTabStop.insert("style:type", "right");
+			break;
+		case CENTER:
+			tmpTabStop.insert("style:type", "center");
+			break;
+		case DECIMAL:
+			tmpTabStop.insert("style:type", "char");
+			tmpTabStop.insert("style:char", "."); // Assume a decimal point for now
+			break;
+		default:  // Left alignment is the default and BAR is not handled in OOo
+			break;
+		}
+		
+		// leader character
+		if (m_ps->m_tabStops[i].m_leaderCharacter != 0x0000)
+		{
+			UTF8String sLeader;
+			sLeader.sprintf("%c", m_ps->m_tabStops[i].m_leaderCharacter);
+			tmpTabStop.insert("style:leader-char", sLeader);
+		}
+
+		// position
+		float position = m_ps->m_tabStops[i].m_position;
+		if (m_ps->m_isTabPositionRelative)
+			position -= m_ps->m_leftMarginByTabs;
+		else
+			position -= m_ps->m_paragraphMarginLeft + m_ps->m_pageMarginLeft;
+		tmpTabStop.insert("style:position", position);
+		
+
+		/* TODO: fix situations where we have several columns or are inside a table and the tab stop
+		 *       positions are absolute (relative to the paper edge). In this case, they have to be
+		 *       computed for each column or each cell in table. (Fridrich) */
+		tabStops.push_back(tmpTabStop);
+	}
 }
 
 void WPXHLListener::_closeParagraph()
@@ -430,7 +482,7 @@ void WPXHLListener::_openSpan()
 		propList.insert("fo:text-shadow", "1pt 1pt");
 
 	if (m_ps->m_fontName)
-		propList.insert("style:font-name", m_ps->m_fontName->getUTF8());
+		propList.insert("style:font-name", m_ps->m_fontName->cstr());
 	propList.insert("fo:font-size", fontSizeChange*m_ps->m_fontSize, POINT);
 
 	// Here we give the priority to the redline bit over the font color. This is how WordPerfect behaves:
@@ -582,10 +634,10 @@ void addBorderProps(const char *border, bool borderOn, const UTF8String &borderC
 	borderStyle.sprintf("fo:border-%s", border);
 	UTF8String props;
 	if (borderOn)
-		props.sprintf("%finch solid %s", WPX_DEFAULT_TABLE_BORDER_WIDTH, borderColor());
+		props.sprintf("%finch solid %s", WPX_DEFAULT_TABLE_BORDER_WIDTH, borderColor.cstr());
 	else
 		props.sprintf("0.0inch");
-	propList.insert(borderStyle(), props);
+	propList.insert(borderStyle.cstr(), props);
 }
 
 void WPXHLListener::_openTableCell(const uint8_t colSpan, const uint8_t rowSpan, const bool boundFromLeft, const bool boundFromAbove,

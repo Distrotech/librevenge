@@ -49,7 +49,7 @@ void TextListenerImpl::insertTab()
 
 void TextListenerImpl::insertText(const UTF8String &text)
 {
-	printf("%s", text.getUTF8());
+	printf("%s", text.cstr());
 }
 
 void TextListenerImpl::insertLineBreak()

@@ -604,8 +604,8 @@ UTF8String::UTF8String(const UTF8String &stringBuf, bool escapeXML)
 {
 	if (escapeXML)
 	{
-		int len = strlen(stringBuf()); // want to use standard strlen
-		const char *p = stringBuf();
+		int len = strlen(stringBuf.cstr()); // want to use standard strlen
+		const char *p = stringBuf.cstr();
 		const char *end = p + len; 
 		while (p != end)
 		{
@@ -641,7 +641,7 @@ UTF8String::UTF8String(const UTF8String &stringBuf, bool escapeXML)
 		}
 	}
 	else
-		this->sprintf("%s", stringBuf.getUTF8());
+		this->sprintf("%s", stringBuf.cstr());
 }
 
 static void appendUCS4(string &buf, uint32_t ucs4)
@@ -694,7 +694,7 @@ void UTF8String::sprintf(const char *format, ...)
 
 void UTF8String::append(const UTF8String &s)
 {
-	m_buf += s.getUTF8();
+	m_buf += s.cstr();
 }
 
 void UTF8String::append(const char *s)
@@ -702,7 +702,7 @@ void UTF8String::append(const char *s)
 	m_buf += s;
 }
 
-int UTF8String::getLen() const
+int UTF8String::len() const
 { 
 	return g_static_utf8_strlen(m_buf.c_str()); 
 }

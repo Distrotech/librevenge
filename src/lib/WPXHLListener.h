@@ -78,7 +78,7 @@ struct _WPXParsingState
 	bool m_isParagraphColumnBreak;
 	bool m_isParagraphPageBreak;
 	uint8_t m_paragraphJustification;
-/*	uint8_t m_tempParagraphJustification;*/
+	uint8_t m_tempParagraphJustification; // TODO: remove this one after the tabs are properly implementedb
 	float m_paragraphLineSpacing;
 
 	bool m_isSectionOpened;
@@ -176,9 +176,11 @@ protected:
 	void _openPageSpan();
 	void _closePageSpan();
 
-	void _appendParagraphProperties(WPXPropertyList &propList, int justification);
+	void _appendParagraphProperties(WPXPropertyList &propList);
+	void _getTabStops(vector<WPXPropertyList> &tabStops);
 	void _appendJustification(WPXPropertyList &propList, int justification);
 	virtual void _openParagraph();
+	virtual void _resetParagraphState();
 	void _closeParagraph();
 
 	void _openSpan();

@@ -164,9 +164,8 @@ public:
 	UTF8String(const char *str);
 	static UTF8String createFromAscii(const char *_str) { UTF8String str = UTF8String(_str); return str; }
 
-	const char * getUTF8() const { return m_buf.c_str(); }
-	const char * operator()() const { return getUTF8(); }
-	int getLen() const;
+	const char * cstr() const { return m_buf.c_str(); }
+	int len() const;
 
 	void sprintf(const char *format, ...);
 	void append(const UTF8String &s);
@@ -179,7 +178,7 @@ public:
 	{
 	public:
 		Iter(const UTF8String &str) :
-			m_buf(str.getUTF8()),
+			m_buf(str.cstr()),
 			m_pos(0),
 			m_curChar(NULL) {}
 		virtual ~Iter() { delete [] m_curChar; }

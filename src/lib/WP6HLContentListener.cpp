@@ -90,9 +90,9 @@ int _extractDisplayReferenceNumberFromBuf(const UTF8String &buf, const WPXNumber
 	{
 		// FIXME: what happens to a lettered list that goes past z? ah
 		// the sweet mysteries of life
-		if (buf.getLen()==0)
+		if (buf.len()==0)
 			throw ParseException();
-		char c = buf.getUTF8()[0];
+		char c = buf.cstr()[0];
 		if (listType==LOWERCASE)
 			c = toupper(c);
 		return (c - 64);
@@ -218,7 +218,6 @@ void WP6OutlineDefinition::_updateNumberingMethods(const WP6OutlineLocation outl
 _WP6ParsingState::_WP6ParsingState(WPXTableList tableList, int nextTableIndice) :
 	m_paragraphMarginBottomAbsolute(0.0f),
 	m_paragraphMarginBottomRelative(1.0f),
-	m_tempParagraphJustification(0),
 
 	m_numRemovedParagraphBreaks(0),
 
@@ -416,11 +415,11 @@ void WP6HLContentListener::insertTab(const uint8_t tabType, const float tabPosit
 				// Begin of code to be removed when the TabGroup is properly implemented
 				case WP6_TAB_GROUP_CENTER_ON_MARGINS:
 				case WP6_TAB_GROUP_CENTER_ON_CURRENT_POSITION:
-					m_parseState->m_tempParagraphJustification = WP6_PARAGRAPH_JUSTIFICATION_CENTER;
+					m_ps->m_tempParagraphJustification = WP6_PARAGRAPH_JUSTIFICATION_CENTER;
 					break;
 
 				case WP6_TAB_GROUP_FLUSH_RIGHT:
-					m_parseState->m_tempParagraphJustification = WP6_PARAGRAPH_JUSTIFICATION_RIGHT;
+					m_ps->m_tempParagraphJustification = WP6_PARAGRAPH_JUSTIFICATION_RIGHT;
 					break;
 				// End of code to be removed when the TabGroup is properly implemented
 
@@ -964,7 +963,8 @@ void WP6HLContentListener::styleGroupOff(const uint8_t subGroup)
 
 				_handleListChange(m_parseState->m_currentOutlineHash);
 			}
-			else {
+			else 
+			{
 				m_ps->m_numDeferredParagraphBreaks+=m_parseState->m_numRemovedParagraphBreaks;
 				m_parseState->m_numRemovedParagraphBreaks = 0;
 				_flushText();
@@ -1242,7 +1242,8 @@ void WP6HLContentListener::_flushText(const bool fakeText)
 	// which assumes the same condition)
 	if (m_parseState->m_styleStateSequence.getCurrentState() == NORMAL)
 	{
-		if (m_parseState->m_currentListLevel > 0 && (m_ps->m_numDeferredParagraphBreaks > 0 || m_parseState->m_bodyText.getLen() > 0 || fakeText) &&
+		if (m_parseState->m_currentListLevel > 0 && 
+		    (m_ps->m_numDeferredParagraphBreaks > 0 || m_parseState->m_bodyText.len() > 0 || fakeText) &&
 		    m_parseState->m_styleStateSequence.getCurrentState() == NORMAL)
 		{
 			m_parseState->m_currentListLevel = 0;
@@ -1254,7 +1255,7 @@ void WP6HLContentListener::_flushText(const bool fakeText)
 
 	// create a new section, and a new paragraph, if our section attributes have changed and we have inserted
 	// something into the document (or we have forced a break, which assumes the same condition)
-	if (m_ps->m_sectionAttributesChanged && (m_parseState->m_bodyText.getLen() > 0 || m_ps->m_numDeferredParagraphBreaks > 0 || fakeText))
+	if (m_ps->m_sectionAttributesChanged && (m_parseState->m_bodyText.len() > 0 || m_ps->m_numDeferredParagraphBreaks > 0 || fakeText))
 	{
 		_openSection();
 		if (fakeText)
@@ -1276,12 +1277,12 @@ void WP6HLContentListener::_flushText(const bool fakeText)
 		_closeParagraph();
 		m_ps->m_numDeferredParagraphBreaks = 0; // compensate for this by requiring a paragraph to be opened
 	}
-	else if (m_ps->m_textAttributesChanged && (m_parseState->m_bodyText.getLen() > 0 || fakeText) && m_ps->m_isParagraphOpened)
+	else if (m_ps->m_textAttributesChanged && (m_parseState->m_bodyText.len() > 0 || fakeText) && m_ps->m_isParagraphOpened)
 	{
 		_openSpan();
 	}
 
-	if (m_parseState->m_bodyText.getLen() || (m_parseState->m_textBeforeNumber.getLen() &&
+	if (m_parseState->m_bodyText.len() || (m_parseState->m_textBeforeNumber.len() &&
 						  !m_parseState->m_putativeListElementHasParagraphNumber))
 	{
 		if (!m_ps->m_isParagraphOpened)
@@ -1290,13 +1291,13 @@ void WP6HLContentListener::_flushText(const bool fakeText)
 			_openSpan();
 		}
 
-		if (m_parseState->m_textBeforeNumber.getLen() &&
+		if (m_parseState->m_textBeforeNumber.len() &&
 		    !m_parseState->m_putativeListElementHasParagraphNumber)
 		{
 			m_listenerImpl->insertText(m_parseState->m_textBeforeNumber);
 			m_parseState->m_textBeforeNumber.clear();
 		}
-		if (m_parseState->m_bodyText.getLen())
+		if (m_parseState->m_bodyText.len())
 		{
 			m_listenerImpl->insertText(m_parseState->m_bodyText);
 			m_parseState->m_bodyText.clear();
@@ -1412,87 +1413,13 @@ void WP6HLContentListener::_handleListChange(const uint16_t outlineHash)
 void WP6HLContentListener::_openListElement()
 {
 	WPXPropertyList propList;
-	// WLACH_REFACTORING: TRY THIS! (with regression testing)
-	//_appendParagraphProperties(WPXPropertyList &propList, int justification);
-	_appendJustification(propList, m_ps->m_paragraphJustification);
-	propList.insert("fo:margin-left", m_ps->m_paragraphMarginLeft);
-	propList.insert("fo:margin-right", m_ps->m_paragraphMarginRight);
-	propList.insert("fo:margin-top", m_ps->m_paragraphMarginTop);
-	propList.insert("fo:margin-bottom", m_ps->m_paragraphMarginBottom);
-	propList.insert("fo:text-indent", m_ps->m_paragraphTextIndent);
-	propList.insert("fo:line-height", m_ps->m_paragraphLineSpacing, PERCENT);
+	_appendParagraphProperties(propList);
 
-	WPXTabStop tmp_tabStop;
-	vector<WPXTabStop> tabStops;
-	for (int i=0; i<m_ps->m_tabStops.size(); i++)
-	{
-		tmp_tabStop = m_ps->m_tabStops[i];
-		if (m_ps->m_isTabPositionRelative)
-			tmp_tabStop.m_position -= m_ps->m_leftMarginByTabs;
-		else
-			tmp_tabStop.m_position -= m_ps->m_paragraphMarginLeft;
-		tabStops.push_back(tmp_tabStop);
-	}
+	vector<WPXPropertyList> tabStops;
+	_getTabStops(tabStops);
 
 	m_listenerImpl->openListElement(propList, tabStops);
-
-	m_ps->m_isParagraphOpened = true; // a list element is equivalent to a paragraph
-	m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange + m_ps->m_leftMarginByParagraphMarginChange;
-	m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange + m_ps->m_rightMarginByParagraphMarginChange;
-	m_ps->m_leftMarginByTabs = 0.0f;
-	m_ps->m_rightMarginByTabs = 0.0f;
-	m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange;
-	m_ps->m_textIndentByTabs = 0.0f;
-	m_ps->m_isCellWithoutParagraph = false;
-	m_ps->m_isTextColumnWithoutParagraph = false;
-
-	_openSpan();
-}
-
-void WP6HLContentListener::_openParagraph()
-{
-	_closeParagraph();
-	uint8_t paragraphJustification;
-	(m_parseState->m_tempParagraphJustification != 0) ? paragraphJustification = m_parseState->m_tempParagraphJustification :
-		paragraphJustification = m_ps->m_paragraphJustification;
-	m_parseState->m_tempParagraphJustification = 0;
-	
-	// Include the tabstop information
-	
-	WPXTabStop tmp_tabStop;
-	vector<WPXTabStop> tabStops;
-	for (int i=0; i<m_ps->m_tabStops.size(); i++)
-	{
-		tmp_tabStop = m_ps->m_tabStops[i];
-		if (m_ps->m_isTabPositionRelative)
-			tmp_tabStop.m_position -= m_ps->m_leftMarginByTabs;
-		else
-			tmp_tabStop.m_position -= m_ps->m_paragraphMarginLeft + m_ps->m_pageMarginLeft;
-		/* TODO: fix situations where we have several columns or are inside a table and the tab stop
-		 *       positions are absolute (relative to the paper edge). In this case, they have to be
-		 *       computed for each column or each cell in table. (Fridrich) */
-		tabStops.push_back(tmp_tabStop);
-	}
-
-	WPXPropertyList propList;
-	_appendParagraphProperties(propList, paragraphJustification);
-
-	m_listenerImpl->openParagraph(propList, tabStops);
-
-	if (m_ps->m_numDeferredParagraphBreaks > 0)
-		m_ps->m_numDeferredParagraphBreaks--;
-
-	m_ps->m_isParagraphColumnBreak = false;
-	m_ps->m_isParagraphPageBreak = false;
-	m_ps->m_isParagraphOpened = true;
-	m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange + m_ps->m_leftMarginByParagraphMarginChange;
-	m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange + m_ps->m_rightMarginByParagraphMarginChange;
-	m_ps->m_leftMarginByTabs = 0.0f;
-	m_ps->m_rightMarginByTabs = 0.0f;
-	m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange;
-	m_ps->m_textIndentByTabs = 0.0f;
-	m_ps->m_isCellWithoutParagraph = false;
-	m_ps->m_isTextColumnWithoutParagraph = false;	
+	_resetParagraphState();
 
 	_openSpan();
 }

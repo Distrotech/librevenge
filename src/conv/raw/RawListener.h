@@ -67,7 +67,7 @@ public:
 	virtual void openFooter(const WPXPropertyList &propList);
 	virtual void closeFooter();
 
-	virtual void openParagraph(const WPXPropertyList &propList, const vector<WPXTabStop> &tabStops);
+	virtual void openParagraph(const WPXPropertyList &propList, const vector<WPXPropertyList> &tabStops);
 	virtual void closeParagraph();
 	virtual void openSpan(const WPXPropertyList &propList);
 	virtual void closeSpan();
@@ -84,7 +84,7 @@ public:
 	virtual void openUnorderedListLevel(const WPXPropertyList &propList);
 	virtual void closeOrderedListLevel();
 	virtual void closeUnorderedListLevel();
-	virtual void openListElement(const WPXPropertyList &propList, const vector<WPXTabStop> &tabStops);
+	virtual void openListElement(const WPXPropertyList &propList, const vector<WPXPropertyList> &tabStops);
 	virtual void closeListElement();
 
 	virtual void openFootnote(const WPXPropertyList &propList);

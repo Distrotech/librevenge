@@ -208,7 +208,7 @@ void WP5HLListener::_flushText(const bool fakeText)
 {
 	// create a new section, and a new paragraph, if our section attributes have changed and we have inserted
 	// something into the document (or we have forced a break, which assumes the same condition)
-	if (m_ps->m_sectionAttributesChanged && (m_textBuffer.getLen() > 0 || m_ps->m_numDeferredParagraphBreaks > 0/* || fakeText*/))
+	if (m_ps->m_sectionAttributesChanged && (m_textBuffer.len() > 0 || m_ps->m_numDeferredParagraphBreaks > 0/* || fakeText*/))
 	{
 		_openSection();
 		//if (fakeText)
@@ -227,13 +227,13 @@ void WP5HLListener::_flushText(const bool fakeText)
 		_closeParagraph();
 		m_ps->m_numDeferredParagraphBreaks = 0; // compensate for this by requiring a paragraph to be opened
 	}
-	else if (m_ps->m_textAttributesChanged && m_textBuffer.getLen())
+	else if (m_ps->m_textAttributesChanged && m_textBuffer.len())
 	{
 		_openSpan();
 		m_ps->m_textAttributesChanged = false;
 	}
 
-	if (m_textBuffer.getLen())
+	if (m_textBuffer.len())
 	{
 		if (!m_ps->m_isParagraphOpened)
 		{
@@ -244,49 +244,4 @@ void WP5HLListener::_flushText(const bool fakeText)
 		m_listenerImpl->insertText(m_textBuffer);
 		m_textBuffer.clear();
 	}
-}
-
-void WP5HLListener::_openParagraph()
-{
-	_closeParagraph();
-	/*uint8_t paragraphJustification;
-	(m_parseState->m_tempParagraphJustification != 0) ? paragraphJustification = m_parseState->m_tempParagraphJustification :
-		paragraphJustification = m_parseState->m_paragraphJustification;
-	m_parseState->m_tempParagraphJustification = 0;
-	*/
-
-	WPXTabStop tmp_tabStop;
-	vector<WPXTabStop> tabStops;
-	for (int i=0; i<m_ps->m_tabStops.size(); i++)
-	{
-		tmp_tabStop = m_ps->m_tabStops[i];
-		if (m_ps->m_isTabPositionRelative)
-			tmp_tabStop.m_position -= m_ps->m_leftMarginByTabs;
-		else
-			tmp_tabStop.m_position -= m_ps->m_paragraphMarginLeft + m_ps->m_pageMarginLeft;
-		/* TODO: fix situations where we have several columns or are inside a table and the tab stop
-		 *       positions are absolute (relative to the paper edge). In this case, they have to be
-		 *       computed for each column or each cell in table. (Fridrich) */
-		tabStops.push_back(tmp_tabStop);
-	}
-	
-	WPXPropertyList propList;
-	_appendParagraphProperties(propList, m_ps->m_paragraphJustification);
-	
-	m_listenerImpl->openParagraph(propList, tabStops);
-
-	if (m_ps->m_numDeferredParagraphBreaks > 0)
-		m_ps->m_numDeferredParagraphBreaks--;
-
-	m_ps->m_isParagraphColumnBreak = false;
-	m_ps->m_isParagraphPageBreak = false;
-	m_ps->m_isParagraphOpened = true;
-	m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange + m_ps->m_leftMarginByParagraphMarginChange;
-	m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange + m_ps->m_rightMarginByParagraphMarginChange;
-	m_ps->m_leftMarginByTabs = 0.0f;
-	m_ps->m_rightMarginByTabs = 0.0f;
-	m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange;
-	m_ps->m_textIndentByTabs = 0.0f;	
-
-	_openSpan();
 }

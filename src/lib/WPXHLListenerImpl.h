@@ -57,9 +57,9 @@ class WPXHLListenerImpl
 	Called at the start of the parsing process. This is always the second callback made.
 	*/
 	virtual void startDocument() = 0;
-	 /**
-	Called at the end of the parsing process. This is always the last callback made.
-	 */
+	/**
+        Called at the end of the parsing process. This is always the last callback made.
+	*/
 	virtual void endDocument() = 0;
 
 	/**
@@ -118,7 +118,7 @@ class WPXHLListenerImpl
 	\li \c page-break Whether this paragraph should start a new page
 	\param tabStops List of tabstop definitions for the paragraph. If the list is empty, default tabstop definition should be used.
 	*/
-	virtual void openParagraph(const WPXPropertyList &propList, const vector<WPXTabStop> &tabStops) = 0;
+	virtual void openParagraph(const WPXPropertyList &propList, const vector<WPXPropertyList> &tabStops) = 0;
 	/**
 	Called when a paragraph is closed.
 	*/
@@ -216,7 +216,7 @@ class WPXHLListenerImpl
 	\li \c line-spacing The amount of spacing between lines, in number of lines (1.0 is single spacing)
 	\param tabStops List of tabstop definitions for the list element. If the list is empty, default tabstop definition should be used.
 	*/
-	virtual void openListElement(const WPXPropertyList &propList, const vector<WPXTabStop> &tabStops) = 0;
+	virtual void openListElement(const WPXPropertyList &propList, const vector<WPXPropertyList> &tabStops) = 0;
 	/**
 	Called when a list element should be closed
 	*/

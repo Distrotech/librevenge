@@ -238,7 +238,7 @@ void WP3HLListener::_flushText(const bool fakeText)
 {
 	// create a new section, and a new paragraph, if our section attributes have changed and we have inserted
 	// something into the document (or we have forced a break, which assumes the same condition)
-	if (m_ps->m_sectionAttributesChanged && (m_textBuffer.getLen() > 0 || m_ps->m_numDeferredParagraphBreaks > 0 /*|| fakeText*/))
+	if (m_ps->m_sectionAttributesChanged && (m_textBuffer.len() > 0 || m_ps->m_numDeferredParagraphBreaks > 0 /*|| fakeText*/))
 	{
 		_openSection();
 		//if (fakeText)
@@ -257,13 +257,13 @@ void WP3HLListener::_flushText(const bool fakeText)
 		_closeParagraph();
 		m_ps->m_numDeferredParagraphBreaks = 0; // compensate for this by requiring a paragraph to be opened
 	}
-	else if (m_ps->m_textAttributesChanged && m_textBuffer.getLen())
+	else if (m_ps->m_textAttributesChanged && m_textBuffer.len())
 	{
 		_openSpan();
 		m_ps->m_textAttributesChanged = false;
 	}
 
-	if (m_textBuffer.getLen())
+	if (m_textBuffer.len())
 	{
 		if (!m_ps->m_isParagraphOpened)
 		{
