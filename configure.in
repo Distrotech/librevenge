@@ -142,6 +142,7 @@ build/win32/Makefile
 libwpd-1.pc
 libwpd.spec
 ])
+dnl src/conv/raw/Makefile
 
 case "$debug" in
      "true" )

@@ -29,7 +29,8 @@ Group: Applications/Publishing
 
 %description tools
 Tools to transform WordPerfect Documents into other formats.
-Currently supported: html, raw, text
+Currently supported: html, text
+##Currently supported: html, raw, text
 
 %package devel
 Requires: libwpd

@@ -2,6 +2,7 @@
 #include <gsf/gsf-input-stdio.h>
 #include <stdio.h>
 #include "libwpd.h"
+#include "WP6HLContentListener.h"
 #include "RawListener.h"
 
 int main(int argc, char *argv[])
