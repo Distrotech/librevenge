@@ -36,69 +36,49 @@ public:
 	TextListenerImpl();
 	virtual ~TextListenerImpl();
 
- 	virtual void setDocumentMetaData(const UCSString &author, const UCSString &subject,
-					 const UCSString &publisher, const UCSString &category,
-					 const UCSString &keywords, const UCSString &language,
-					 const UCSString &abstract, const UCSString &descriptiveName,
-					 const UCSString &descriptiveType) {}
+ 	virtual void setDocumentMetaData(const WPXPropertyList &propList) {}
 
 	virtual void startDocument() {}
 	virtual void endDocument() {}
 
-	virtual void openPageSpan(const int span, const bool isLastPageSpan,
-				  const float formLength, const float formWidth, const WPXFormOrientation orientation,
-				  const float marginLeft, const float marginRight,
-				  const float marginTop, const float marginBottom) {}
+	virtual void openPageSpan(const WPXPropertyList &propList) {}
 	virtual void closePageSpan() {}
-	virtual void openHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence) {}
-	virtual void closeHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence headerFooterOccurence) {}
+	virtual void openHeader(const WPXPropertyList &propList) {}
+	virtual void closeHeader() {}
+	virtual void openFooter(const WPXPropertyList &propList) {}
+	virtual void closeFooter() {}
 
-	virtual void openSection(const unsigned int numColumns, const vector<WPXColumnDefinition> &columns, const float spaceAfter) {}
+	virtual void openSection(const WPXPropertyList &propList, const vector< WPXColumnDefinition > &columns) {}
 	virtual void closeSection() {}
-	virtual void openParagraph(const uint8_t paragraphJustification, 
-				   const float marginLeftOffset, const float marginRightOffset, const float textIndent,
-				   const float lineSpacing, const float spacingBeforeParagraph, const float spacingAfterParagraph,
-				   const vector<WPXTabStop> &tabStops, const bool isColumnBreak, const bool isPageBreak) {}
+	virtual void openParagraph(const WPXPropertyList &propList, const vector< WPXTabStop > &tabStops) {}
 	virtual void closeParagraph();
-	virtual void openSpan(const uint32_t textAttributeBits, const char *fontName, const float fontSize,
-				   const RGBSColor *fontColor, const RGBSColor *highlightColor) {}
+	virtual void openSpan(const WPXPropertyList &propList) {}
 	virtual void closeSpan() {}
 
 	virtual void insertTab();
 	virtual void insertText(const UCSString &text);
 	virtual void insertLineBreak();
 
-	virtual void defineOrderedListLevel(const int listID, const int listLevel, const WPXNumberingType listType,
-					    const UCSString &textBeforeNumber, const UCSString &textAfterNumber,
-					    const int startingNumber) {}
-	virtual void defineUnorderedListLevel(const int listID, const int listLevel, const UCSString &bullet) {}
-	virtual void openOrderedListLevel(const int listID) {}
-	virtual void openUnorderedListLevel(const int listID) {}
+	virtual void defineOrderedListLevel(const WPXPropertyList &propList) {}
+	virtual void defineUnorderedListLevel(const WPXPropertyList &propList) {}
+	virtual void openOrderedListLevel(const WPXPropertyList &propList) {}
+	virtual void openUnorderedListLevel(const WPXPropertyList &propList) {}
 	virtual void closeOrderedListLevel() {}
 	virtual void closeUnorderedListLevel() {}
-	virtual void openListElement(const uint8_t paragraphJustification, 
-				     const float marginLeftOffset, const float marginRightOffset, const float textIndent,
-				     const float lineSpacing, const float spacingBeforeParagraph, const float spacingAfterParagraph,
-				     const vector<WPXTabStop> &tabStops) {}
+	virtual void openListElement(const WPXPropertyList &propList, const vector< WPXTabStop > &tabStops) {}
 	virtual void closeListElement() {}
 
-	virtual void openFootnote(int number) {}
+	virtual void openFootnote(const WPXPropertyList &propList) {}
 	virtual void closeFootnote() {}
-	virtual void openEndnote(int number) {}
+	virtual void openEndnote(const WPXPropertyList &propList) {}
 	virtual void closeEndnote() {}
 
-
-	virtual void openTable(const uint8_t tablePositionBits,
-			       const float marginLeftOffset, const float marginRightOffset,
-			       const float leftOffset, const vector < WPXColumnDefinition > &columns) {}
-	virtual void openTableRow(const float height, const bool isMinimumHeight, const bool isHeaderRow) {}
+	virtual void openTable(const WPXPropertyList &propList, const vector< WPXColumnDefinition > &columns) {}
+	virtual void openTableRow(const WPXPropertyList &propList) {}
 	virtual void closeTableRow() {}
-	virtual void openTableCell(const uint32_t col, const uint32_t row, const uint32_t colSpan, const uint32_t rowSpan,
-				   const uint8_t borderBits,const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
-				   const RGBSColor * cellBorderColor,
-				   const WPXVerticalAlignment cellVerticalAlignment) {}
+	virtual void openTableCell(const WPXPropertyList &propList) {}
 	virtual void closeTableCell() {}
-	virtual void insertCoveredTableCell(const uint32_t col, const uint32_t row) {}
+	virtual void insertCoveredTableCell(const WPXPropertyList &propList) {}
 	virtual void closeTable() {}
 
 private:
