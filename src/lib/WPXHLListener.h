@@ -61,14 +61,14 @@ struct _WPXParsingState
 	_WPXParsingState(bool sectionAttributesChanged=true);
 	~_WPXParsingState();
 
-/*
+#if 0
 	WPXString m_bodyText;
 	WPXString m_textBeforeNumber;
 	WPXString m_textBeforeDisplayReference;
 	WPXString m_numberText;
 	WPXString m_textAfterDisplayReference;
 	WPXString m_textAfterNumber;
-*/
+#endif
 	uint32_t m_textAttributeBits;
 	bool m_textAttributesChanged;
 	float m_fontSize;
@@ -134,9 +134,7 @@ struct _WPXParsingState
 	float m_textIndentByParagraphIndentChange; // part of the indent due to the PARAGRAPH indent (WP6???)
 	float m_textIndentByTabs; // part of the indent due to the "Back Tab"
 	
-/*	int32_t m_currentRow;
-	int32_t m_currentColumn;
-
+#if 0
 	stack<int> m_listLevelStack;
 	uint16_t m_currentOutlineHash; // probably should replace Hash with Key in these sorts of cases
 	uint8_t m_oldListLevel;
@@ -146,7 +144,7 @@ struct _WPXParsingState
 	bool m_putativeListElementHasDisplayReferenceNumber;
 
 	int m_noteTextPID;
-*/
+#endif
 	uint16_t m_alignmentCharacter;
 	std::vector<WPXTabStop> m_tabStops;
 	bool m_isTabPositionRelative;

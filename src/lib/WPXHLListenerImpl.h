@@ -137,7 +137,7 @@ class WPXHLListenerImpl
 	\li \c style:font-name The name of the font used in the span, a text string in ascii
 	\li \c fo:font-size The size of the font used in the span, in points (72 points per inch)
 	\li \c fo:color The color of the font used in the span (encoded in hex: #RRGGBB)
-	\li \c text-background-color The background color of the text in the span
+	\li \c style:text-background-color The background color of the text in the span
 	*/
 	virtual void openSpan(const WPXPropertyList &propList) = 0;
 	/**
@@ -269,9 +269,9 @@ class WPXHLListenerImpl
 	/**
 	Called when a new table row is opened
 	\param propList Defines a set of properties for the table row. May contain:
-	\li \c height The row's height, in inches
-	\li \c is-minimum-height Whether the height is a minimum height or an exact height (if height is 0 and isMinimumHeight is true, the row has automatic height) 
-	\li \c is-header-row This row contains headings of columns and should repeat at every page (for tables that span several pages)
+	\li \c style:row-height The row's height, in inches
+	\li \c style:min-row-height The row's minimum height, in inches
+	\li \c libwpd:is-header-row This row contains headings of columns and should repeat at every page (for tables that span several pages)
 	*/
  	virtual void openTableRow(const WPXPropertyList &propList) = 0;
 	/**
@@ -281,14 +281,16 @@ class WPXHLListenerImpl
 	/**
 	Called when a new table cell is opened
 	\param propList Property list for the table cell. May contain:
-	\li \c col Number of the column in which the cell is positioned
-	\li \c row Number of the row in which the cell is positioned
-	\li \c col-span Number of columns that the cell spans
-	\li \c row-span Number of rows that the cell spans
-	\li \c border-bits Which borders should be turned on, encoded as a bitfield
-	\li \c color Color of the cell
-	\li \c border-color Color of the border lines of the cell
-	\li \c vertical-alignment Vertical alignment of the content in the cell (top, middle, bottom, or full) encoded as an integer
+	\li \c libwpd:column Number of the column in which the cell is positioned
+	\li \c libwpd:row Number of the row in which the cell is positioned
+	\li \c table:number-columns-spanned Number of columns that the cell spans
+	\li \c table:number-rows-spanned Number of rows that the cell spans
+	\li \c fo:border-left Properties of the left border of the cell
+	\li \c fo:border-right Properties of the right border of the cell
+	\li \c fo:border-top Properties of the top border of the cell
+	\li \c fo:border-bottom Properties of the bottom border of the cell
+	\li \c fo:background-color Color of the cell
+	\li \c fo:vertical-align Vertical alignment of the content in the cell (top, middle, or bottom)
 	*/
  	virtual void openTableCell(const WPXPropertyList &propList) = 0;
 	/**
@@ -298,8 +300,8 @@ class WPXHLListenerImpl
 	/**
 	Called when a covered (spanned by another cell in the table) table cell is opened
 	\param propList Property list for the table cell. May contain:
-	\li \c col Number of the column in which the cell is positioned
-	\li \c row Number of the row in which the cell is positioned
+	\li \c libwpd:column Number of the column in which the cell is positioned
+	\li \c libwpd:row Number of the row in which the cell is positioned
 	*/
 	virtual void insertCoveredTableCell(const WPXPropertyList &propList) = 0;
 	/**

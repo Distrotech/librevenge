@@ -101,17 +101,14 @@ _WPXParsingState::_WPXParsingState(bool sectionAttributesChanged) :
 	m_paragraphTextIndent(0.0f),
 	m_textIndentByParagraphIndentChange(0.0f),
 	m_textIndentByTabs(0.0f),
-/*	m_currentRow(-1),
-	m_currentColumn(-1),
-
+#if 0
 	m_currentListLevel(0),
 	m_putativeListElementHasParagraphNumber(false),
 	m_putativeListElementHasDisplayReferenceNumber(false),
 
 	m_noteTextPID(0),
 	m_inSubDocument(false)
-*/
-
+#endif
 	m_alignmentCharacter('.'),
 	m_isTabPositionRelative(false)
 {
@@ -666,11 +663,11 @@ void WPXHLListener::_openTableRow(const float height, const bool isMinimumHeight
 	// The following "Header Row" flags are ignored
 	if (isHeaderRow & !m_ps->m_wasHeaderRow)
 	{
-		propList.insert("is-header-row", true);		
+		propList.insert("libwpd:is-header-row", true);		
 		m_ps->m_wasHeaderRow = true;
 	}
 	else
-		propList.insert("is-header-row", false);		
+		propList.insert("libwpd:is-header-row", false);		
 
 	m_listenerImpl->openTableRow(propList);
 
@@ -689,13 +686,13 @@ void WPXHLListener::_closeTableRow()
 
 const float WPX_DEFAULT_TABLE_BORDER_WIDTH = 0.0007f;
 
-void addBorderProps(const char *border, bool borderOn, const WPXString &borderColor, WPXPropertyList &propList)
+static void addBorderProps(const char *border, bool borderOn, const WPXString &borderColor, WPXPropertyList &propList)
 {
 #if 0
-// WLACH_REFACTORING: a (not working, obviously) sketch of an alternate way of doing this
+// WLACH: a (not working, obviously) sketch of an alternate way of doing this
 // in case it turns out to be desirable. Right now it appears not, as we would have to
 // retranslate them on import to OOo (because they don't completely support xsl-fo)
-// .. but it might make things way easier in Abi. Maybe not.
+// .. but it would make things way easier in Abi.
 	if (borderOn)
 	{
 		propList.insert("fo:border-left-width", WPX_DEFAULT_TABLE_BORDER_WIDTH);
@@ -714,6 +711,7 @@ void addBorderProps(const char *border, bool borderOn, const WPXString &borderCo
 	else
 		props.sprintf("0.0inch");
 	propList.insert(borderStyle.cstr(), props);
+	WPXString borderOff;
 }
 
 void WPXHLListener::_openTableCell(const uint8_t colSpan, const uint8_t rowSpan, const bool boundFromLeft, const bool boundFromAbove,

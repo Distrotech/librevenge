@@ -32,7 +32,7 @@ class WPXPropertyList;
 // NOTE: this class is meant to be used in libwpd's headers (to work around symbol problems 
 // when different versions of the STL are in use), and should not be used inside your application
 // (it will only slow it down with a pointless layer of abstraction)
-
+ 
 class WPXPropertyListVectorImpl
 {
 public:

@@ -1,6 +1,6 @@
 /* libwpd
- * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2002,2004 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2002, 2005 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2002, 2004 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -540,8 +540,8 @@ _WPXTabStop::_WPXTabStop()
 }
 
 _WPXColumnDefinition::_WPXColumnDefinition()
-	:	m_width(0),
-		m_leftGutter(0),
-		m_rightGutter(0)
+	:	m_width(0.0f),
+		m_leftGutter(0.0f),
+		m_rightGutter(0.0f)
 {
 }
