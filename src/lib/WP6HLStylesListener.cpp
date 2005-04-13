@@ -137,12 +137,14 @@ void WP6HLStylesListener::headerFooterGroup(const uint8_t headerFooterType, cons
 	{			
 		WPD_DEBUG_MSG(("WordPerfect: headerFooterGroup (headerFooterType: %i, occurenceBits: %i, textPID: %i)\n", 
 			       headerFooterType, occurenceBits, textPID));
+		bool tempCurrentPageHasContent = m_currentPageHasContent;
 		if (headerFooterType <= WP6_HEADER_FOOTER_GROUP_FOOTER_B) // ignore watermarks for now
 		{
 			WPXTableList tableList; 
 			m_currentPage->setHeaderFooter(headerFooterType, occurenceBits, textPID, tableList);
 			_handleSubDocument(textPID, true, tableList);
 		}
+		m_currentPageHasContent = tempCurrentPageHasContent;
 	}
 }
 
