@@ -12,7 +12,6 @@ Group: System Environment/Libraries
 URL: http://libwpd.sf.net/
 BuildRoot: %{_tmppath}/%{name}-%{version}-buildroot
 License: LGPL
-Prefix: %{prefix}
 Requires: glib2 >= 2.0.0, libgsf >= 1.6.0
 BuildRequires: glib2-devel >= 2.0.0, libgsf-devel >= 1.6.0
 

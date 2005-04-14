@@ -179,7 +179,7 @@ void WPXString::append(const char c)
 
 void WPXString::clear()
 {
-	static_cast<std::string *>(m_buf)->clear();
+	static_cast<std::string *>(m_buf)->erase(static_cast<std::string *>(m_buf)->begin(), static_cast<std::string *>(m_buf)->end());
 }
 
 int WPXString::len() const
