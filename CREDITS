@@ -4,6 +4,7 @@ Current maintainers and principal authors of libwpd2
 ----------------------------------------------------
 William Lachance <william.lachance@sympatico.ca>	Main Author
 Marc Maurer <j.m.maurer@student.utwente.nl>		Main Author
+Fridrich Strba <fridrich.strba@bluewin.ch>              Main Author
 
 
 Contributors
@@ -22,8 +23,6 @@ Michael Meeks <michael@ximian.com>			Remove mandatory
 Michael Pritchett <MPritchett@attglobal.net>		MSVC Project Files
 Rui Miguel Silva Seabra <rms@1407.org>			original rpm spec,
 							build patches
-Fridrich Strba <fridrich.strba@bluewin.ch>		MingW build system, 
-	       						many feature additions
 Caolan McNamara <caolanm@redhat.com>		        Build fix for STL strings
 
 Thanks
