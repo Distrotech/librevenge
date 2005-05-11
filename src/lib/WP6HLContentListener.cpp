@@ -607,15 +607,21 @@ void WP6HLContentListener::fontChange(const uint16_t matchedFontPointSize, const
 		// flush everything which came before this change
 		_flushText();
 
-		m_ps->m_fontSize = rint((double)((((float)matchedFontPointSize)/100.0f)*2.0f));
-		// We compute the real space after paragraph in inches using the size of the font and relative spacing.
-		// We have to recompute this every change of fontSize.
-		m_ps->m_paragraphMarginBottom =
-			(float)(((m_parseState->m_paragraphMarginBottomRelative - 1.0f)*m_ps->m_fontSize)/72.0f) +
-			m_parseState->m_paragraphMarginBottomAbsolute;
-		const WP6FontDescriptorPacket *fontDescriptorPacket = NULL;
-		if (fontDescriptorPacket = dynamic_cast<const WP6FontDescriptorPacket *>(WP6LLListener::getPrefixDataPacket(fontPID))) {
+		if (matchedFontPointSize)
+		{
+			m_ps->m_fontSize = rint((double)((((float)matchedFontPointSize)/100.0f)*2.0f));
+			// We compute the real space after paragraph in inches using the size of the font and relative spacing.
+			// We have to recompute this every change of fontSize.
+			m_ps->m_paragraphMarginBottom =
+				(float)(((m_parseState->m_paragraphMarginBottomRelative - 1.0f)*m_ps->m_fontSize)/72.0f) +
+				m_parseState->m_paragraphMarginBottomAbsolute;
+		}
+		if (fontPID)
+		{
+			const WP6FontDescriptorPacket *fontDescriptorPacket = NULL;
+			if (fontDescriptorPacket = dynamic_cast<const WP6FontDescriptorPacket *>(WP6LLListener::getPrefixDataPacket(fontPID))) {
 				m_ps->m_fontName->sprintf("%s", fontDescriptorPacket->getFontName());
+			}
 		}
 		m_ps->m_textAttributesChanged = true;
 	}
