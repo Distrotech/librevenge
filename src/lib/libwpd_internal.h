@@ -75,7 +75,10 @@ void appendUCS4(WPXString &str, uint32_t ucs4);
 
 // Various helper structures for the libwpd parser..
 
-int extendedCharacterToUCS2(uint8_t character, uint8_t characterSet,
+int extendedCharacterWP6ToUCS2(uint8_t character, uint8_t characterSet,
+			    const uint16_t **chars);
+
+int extendedCharacterWP5ToUCS2(uint8_t character, uint8_t characterSet,
 			    const uint16_t **chars);
 
 enum WPXFileType { WP6_DOCUMENT, WP5_DOCUMENT, WP42_DOCUMENT, OTHER };

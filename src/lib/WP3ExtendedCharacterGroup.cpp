@@ -93,7 +93,7 @@ void WP3ExtendedCharacterGroup::parse(WP3HLListener *listener)
 	else if ((m_characterSet != 0xFF) || ((m_character != 0xFE) && (m_character != 0xFF)))
 	{
 		const uint16_t *chars;
-		int len = extendedCharacterToUCS2(m_character,
+		int len = extendedCharacterWP5ToUCS2(m_character,
 					  	m_characterSet, &chars);
 		int i;
 

@@ -1,4 +1,12 @@
 CHANGES:
+0.8.1 -> 0.8.2
+- Add unicode mappings for WP5/WP3 charsets, different from WP6
+  (Ariya Hidayat, Fridrich Strba, Susan Isiko Strba)
+- Add unicode mappings for WP6 Arabic charsets 13 & 14 (Smokey
+  Ardisson) 
+- Fix conversion of page attributes in documents with headers/footers
+  (Fridrich Strba)
+
 0.8.0 -> 0.8.1
 - Prevent endless loops while parsing sub-documents (Fridrich Strba)
 - Fix conversion of certain belarussian characters (Yury Tarasievich)
@@ -37,7 +45,8 @@ CHANGES:
   (William Lachance, Michael Meeks)
 - Internal changes to reduce API/ABI breakage between versions (William Lachance)
 - Fix many memory leaks (William Lachance)
-- Can now build libwpd dynamically against OOo (William Lachance, Fridrich Strba, Caolan McNamara)
+- Can now build libwpd dynamically against OOo (William Lachance,
+  Fridrich Strba, Caolan McNamara)
 
 0.7.1 -> 0.7.2
 - Added conversion of paragraph margins done by functions of the

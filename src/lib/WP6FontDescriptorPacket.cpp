@@ -95,7 +95,7 @@ void WP6FontDescriptorPacket::_readContents(WPXInputStream *input)
 			   characterSet = (charWord & 0xFF00) >> 8;
 			   character = (charWord & 0xFF);
 			   
-			   len = extendedCharacterToUCS2(character, characterSet, &chars);
+			   len = extendedCharacterWP6ToUCS2(character, characterSet, &chars);
 			   /* We are only using ascii characters here, and
 			    * if we have more than one character, that's
 			    * going to be an international character, so

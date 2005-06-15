@@ -47,7 +47,7 @@ void WP5ExtendedCharacterGroup::_readContents(WPXInputStream *input)
 void WP5ExtendedCharacterGroup::parse(WP5HLListener *listener)
 {
 	const uint16_t *chars;
-	int len = extendedCharacterToUCS2(m_character,
+	int len = extendedCharacterWP5ToUCS2(m_character,
 				  	m_characterSet, &chars);
 	int i;
 	for (i = 0; i < len; i++)
