@@ -381,7 +381,7 @@ void WP6HLContentListener::insertTab(const uint8_t tabType, const float tabPosit
 		m_ps->m_textAttributesChanged = true;
 
 		// open new section if section attributes changed
-		if (m_ps->m_sectionAttributesChanged)
+		if (m_ps->m_sectionAttributesChanged && !m_ps->m_isTableOpened)
 		{
 			_openSection();
 			m_ps->m_sectionAttributesChanged = false;
@@ -529,7 +529,7 @@ void WP6HLContentListener::handleLineBreak()
 		// to prevent previous span's properties to apply to the tab also if they changed.
 		m_ps->m_textAttributesChanged = true;
 
-		if (m_ps->m_sectionAttributesChanged)
+		if (m_ps->m_sectionAttributesChanged && !m_ps->m_isTableOpened)
 		{
 			_openSection();
 			m_ps->m_sectionAttributesChanged = false;
@@ -993,7 +993,7 @@ void WP6HLContentListener::styleGroupOff(const uint8_t subGroup)
 			m_parseState->m_styleStateSequence.setCurrentState(STYLE_BODY);
 			if (m_parseState->m_putativeListElementHasParagraphNumber)
 			{
-				if (m_ps->m_sectionAttributesChanged)
+				if (m_ps->m_sectionAttributesChanged && !m_ps->m_isTableOpened)
 				{
 					_openSection();
 					m_ps->m_sectionAttributesChanged = false;
@@ -1167,7 +1167,10 @@ void WP6HLContentListener::startTable()
 		// handle corner case where we have a new section, but immediately start with a table
 		// FIXME: this isn't a very satisfying solution, and might need to be generalized
 		// as we add more table-like structures into the document
-		if (m_ps->m_sectionAttributesChanged)
+		if (m_ps->m_sectionAttributesChanged && !m_ps->m_isTableOpened)
+		// !m_ps->m_isTableOpened condition seems impossible for the time being, since
+		// there are no nested tables in WP6+ file format, but with "more table-like structures"
+		// it is safer to introduce it though. Does not hurt.
 		{
 			_openSection();
 			m_ps->m_sectionAttributesChanged = false;
@@ -1298,7 +1301,8 @@ void WP6HLContentListener::_flushText(const bool fakeText)
 	// something into the document (or we have forced a break, which assumes the same condition)
 	if (m_ps->m_sectionAttributesChanged && (m_parseState->m_bodyText.len() > 0 || m_ps->m_numDeferredParagraphBreaks > 0 || fakeText))
 	{
-		_openSection();
+		if (!m_ps->m_isTableOpened)
+			_openSection();
 		if (fakeText)
 			_openParagraph();
 	}

@@ -3,9 +3,17 @@ CHANGES:
 - Add unicode mappings for WP5/WP3 charsets, different from WP6
   (Ariya Hidayat, Fridrich Strba, Susan Isiko Strba)
 - Add unicode mappings for WP6 Arabic charsets 13 & 14 (Smokey
-  Ardisson) 
+  Ardisson)
+- Fix http://bugzilla.abisource.com/show_bug.cgi?id=8807 : Improving
+  our extended characters to unicode mappings (Ariya Hidayat, Smokey
+  Ardisson, Fridrich Strba)
 - Fix conversion of page attributes in documents with headers/footers
   (Fridrich Strba)
+- Fix http://bugzilla.abisource.com/show_bug.cgi?id=8830 : Ignore a
+  font size change if the resulting size would be of "Opt"
+  (Fridrich Strba)
+- Fix http://bugzilla.abisource.com/show_bug.cgi?id=9190 : Do NEVER
+  open/close sections inside a table (Fridrich Strba)
 
 0.8.0 -> 0.8.1
 - Prevent endless loops while parsing sub-documents (Fridrich Strba)
