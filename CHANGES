@@ -1,4 +1,7 @@
 CHANGES:
+0.8.2 -> 0.8.3
+- Autopackage support (Robert Staudinger)
+
 0.8.1 -> 0.8.2
 - Add unicode mappings for WP5/WP3 charsets, different from WP6
   (Ariya Hidayat, Fridrich Strba, Susan Isiko Strba)

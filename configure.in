@@ -200,6 +200,7 @@ libwpd-0.8.pc
 libwpd-stream-0.8.pc
 libwpd.spec
 libwpd-zip
+autopackage/default.apspec
 ])
 
 case "$debug" in
