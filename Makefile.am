@@ -6,7 +6,7 @@ endif
 
 pkgconf_DATA = libwpd-0.8.pc $(LIBWPD_STREAM_PC)
 
-SUBDIRS = src build docs
+SUBDIRS = src build docs autopackage
 
 EXTRA_DIST = \
 	autogen.sh	\
