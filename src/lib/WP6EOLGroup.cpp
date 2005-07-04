@@ -280,6 +280,7 @@ void WP6EOLGroup::parse(WP6HLListener *listener)
 		case WP6_EOL_GROUP_DELETABLE_HARD_EOL: // 0x17 (deletable hard EOL)
 		case WP6_EOL_GROUP_DELETABLE_HARD_EOL_AT_EOC: // 0x18 (deletable hard EOL at EOC)
 		case WP6_EOL_GROUP_DELETABLE_HARD_EOL_AT_EOP: // 0x19 (deletable hard EOL at EOP)
+		case WP6_EOL_GROUP_DELETABLE_HARD_EOP: // deletable hard EOP
 		case WP6_EOL_GROUP_HARD_EOL:
 		case WP6_EOL_GROUP_HARD_EOL_AT_EOC:
 		case WP6_EOL_GROUP_HARD_EOL_AT_EOP:
@@ -296,7 +297,6 @@ void WP6EOLGroup::parse(WP6HLListener *listener)
 			listener->insertBreak(WPX_COLUMN_BREAK);
 			break;
 		case WP6_EOL_GROUP_HARD_EOP: // hard EOP
-		case WP6_EOL_GROUP_DELETABLE_HARD_EOP: // deletable hard EOP
 			listener->insertBreak(WPX_PAGE_BREAK);
 			break;
 		case WP6_EOL_GROUP_TABLE_CELL: // Table Cell
