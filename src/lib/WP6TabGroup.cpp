@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
- * Copyright (C) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (C) 2004-2005 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -44,7 +44,19 @@ void WP6TabGroup::_readContents(WPXInputStream *input)
 	{
 		m_ignoreFunction = true;
 	}
-	if ((getSize() >= 12) & (getSize() <= 18)) // Minimum size of the function if the position information is present
+
+/* What follows is a result of reverse-engineering of undocumented information contained in the functions of the
+ * Tab Group. It is result of adjustment by trials and errors and can be wrong in certain cases */	
+
+	if ((getSubGroup() & 0xC0) == 0x00)
+	/* Left aligned tabs contain  the position of the tab as a word (uint16_t) in WPUs
+	 * from left edge of the paper just after the size of "non-deletable" */
+	{
+		tempPosition = readU16(input);
+	}
+	else if ((getSize() >= 12) & (getSize() <= 18)) // Minimum size of the function if the position information is present
+	/* This case might be fully included in the previous condition, but I am not sure;
+	 * so leaving it in for the while */
 	{
 		input->seek((getSize() - 12), WPX_SEEK_CUR);
 		tempPosition = readU16(input);

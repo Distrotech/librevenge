@@ -99,10 +99,10 @@ public:
 protected:
 	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
 
-	virtual void _flushText(const bool fakeText=false) {}
+	virtual void _flushText() {}
 	virtual void _openParagraph() {}
 	virtual void _openPageSpan() { /* FIXME: REMOVE ME WHEN IMPLEMENTED IN WPXHLListener */ };
-	virtual void _flushList() {}
+	virtual void _changeList() {}
 
 private:
 	WPXPageSpan *m_currentPage;

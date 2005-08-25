@@ -92,8 +92,6 @@ enum WPXVerticalAlignment { TOP, MIDDLE, BOTTOM, FULL };
 
 enum WPXTextColumnType { NEWSPAPER, NEWSPAPER_VERTICAL_BALANCE, PARALLEL, PARALLEL_PROTECT };
 
-const float WPX_DEFAULT_LIST_INDENT = 0.2f; // default list indent per level
-
 // ATTRIBUTE bits
 #define WPX_EXTRA_LARGE_BIT 1
 #define WPX_VERY_LARGE_BIT 2

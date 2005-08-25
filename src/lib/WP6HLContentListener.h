@@ -1,6 +1,7 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -45,6 +46,8 @@ enum WP6StyleState { NORMAL, DOCUMENT_NOTE, DOCUMENT_NOTE_GLOBAL,
 		     BEGIN_NUMBERING_AFTER_DISPLAY_REFERENCING,
 		     BEGIN_AFTER_NUMBERING, STYLE_BODY, STYLE_END };
 
+enum WP6ListType { ORDERED, UNORDERED };
+
 const int STATE_MEMORY = 3;
 class WP6StyleStateSequence
 {
@@ -77,15 +80,18 @@ struct _WP6ParsingState
 	float m_paragraphMarginBottomAbsolute;
 
 	int m_numRemovedParagraphBreaks;
+	
+	int m_numListExtraTabs;
+	bool m_isListReference;
 
 	WPXTableList m_tableList;
 	WPXTable *m_currentTable;
 	int m_nextTableIndice;
 
 	std::stack<int> m_listLevelStack;
+	std::stack<WP6ListType> m_listTypeStack;
 	uint16_t m_currentOutlineHash; // probably should replace Hash with Key in these sorts of cases
 	uint8_t m_oldListLevel;
-	uint8_t m_currentListLevel;
 	WP6StyleStateSequence m_styleStateSequence;
 	bool m_putativeListElementHasParagraphNumber;
 	bool m_putativeListElementHasDisplayReferenceNumber;
@@ -186,15 +192,15 @@ protected:
 
 	//void _handleLineBreakElementBegin();
 	void _paragraphNumberOn(const uint16_t outlineHash, const uint8_t level);
-	void _flushText(const bool fakeText=false);
+	void _flushText();
 	void _handleListChange(const uint16_t outlineHash);
 
-	void _flushList();
+	void _changeList();
 
 private:
 	WP6ParsingState *m_parseState;
 
-	std::map<int,WP6OutlineDefinition *> m_outlineDefineHash;
+	std::map<uint16_t,WP6OutlineDefinition *> m_outlineDefineHash;
 };
 
 #endif /* WP6HLCONTENTLISTENER_H */

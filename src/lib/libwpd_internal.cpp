@@ -824,8 +824,6 @@ static const uint16_t japaneseWP5[] = {
 int extendedCharacterWP5ToUCS2(uint8_t character,
 			    uint8_t characterSet, const uint16_t **chars)
 {
-	int i;
-
 	if (characterSet == 0)
 	{
 		// if characterset == 0, we have ascii. note that this is different from the doc. body
