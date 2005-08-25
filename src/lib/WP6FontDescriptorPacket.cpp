@@ -27,9 +27,10 @@
 #include "WP6FontDescriptorPacket.h"
 #include "libwpd_internal.h"
 
-const char *FONT_WEIGHT_STRINGS[] = { "Bold", "Demi", "Extended", "Extra", 
-				      "Headline", "Light", "Medium", "Normal", 
-				      "Regular", "Standaard", "Standard" };
+const char *FONT_WEIGHT_STRINGS[] = {	"Bold", "bold", "Demi", "demi", "Extended", "extended",
+					"Extra", "extra", "Headline", "headline", "Light", "light",
+					"Medium", "medium", "Normal", "normal", "Regular", "regular",
+					"Standaard", "standaard", "Standard", "standard" };
 const char * USELESS_WP_POSTFIX = "-WP";
 #define countElements(a) ((sizeof(a) / sizeof(a[0])))
 
