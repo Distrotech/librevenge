@@ -1,5 +1,11 @@
 CHANGES:
 0.8.2 -> 0.8.3
+- Make parser follow closer the document stream, simplify the _flushText()
+  function; eliminate empty spans and sections (Fridrich Strba) 
+- Improvement of list conversion: position of the list reference, distance
+  of the text from the reference (Fridrich Strba).
+- Get correctly the used undocumented information from the tab group (Fridrich
+  Strba)
 - Autopackage support (Robert Staudinger)
 
 0.8.1 -> 0.8.2
