@@ -883,6 +883,7 @@ void WPXHLListener::handleSubDocument(uint16_t textPID, const bool isHeaderFoote
 	m_ps->m_pageMarginLeft = oldPS->m_pageMarginLeft;
 	m_ps->m_pageMarginRight = oldPS->m_pageMarginRight;
 	m_ps->m_subDocumentTextPIDs = oldPS->m_subDocumentTextPIDs;
+	m_ps->m_isNote = oldPS->m_isNote;
 	// END: copy page properties into the new parsing state
 	m_ps->m_inSubDocument = true;
 	// Check whether the document is calling its own TextPID

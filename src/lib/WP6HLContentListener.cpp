@@ -1037,6 +1037,7 @@ void WP6HLContentListener::noteOn(const uint16_t textPID)
 		// save a reference to the text PID, we want to parse
 		// the packet after we're through with the footnote ref.
 		m_parseState->m_noteTextPID = textPID;
+		m_ps->m_isNote = true;
 	}
 }
 
@@ -1064,6 +1065,7 @@ void WP6HLContentListener::noteOff(const WPXNoteType noteType)
 			m_listenerImpl->closeFootnote();
 		else
 			m_listenerImpl->closeEndnote();
+		m_ps->m_isNote = false;
 	}
 }
 
@@ -1253,7 +1255,7 @@ void WP6HLContentListener::_paragraphNumberOn(const uint16_t outlineHash, const 
 //
 void WP6HLContentListener::_flushText()
 {
-	if (m_ps->m_isListElementOpened)
+	if (m_ps->m_isListElementOpened || m_ps->m_isNote)
 	{
 		m_parseState->m_textBeforeNumber.clear();
 		m_parseState->m_textBeforeDisplayReference.clear();
