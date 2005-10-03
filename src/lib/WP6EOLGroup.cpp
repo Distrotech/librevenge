@@ -125,7 +125,7 @@ void WP6EOLGroup::_readContents(WPXInputStream *input)
 			case WP6_EOL_GROUP_CELL_INFORMATION:
 				WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_INFORMATION\n"));
 				numBytesToSkip = WP6_EOL_GROUP_CELL_INFORMATION_SIZE;
-				uint8_t cellFlag, justification, tmpCellVerticalAlign;
+				uint8_t cellFlag, tmpCellVerticalAlign;
 				uint16_t attributeWord1, attributeWord2;
 				cellFlag = readU8(input);
 				if ((cellFlag & 0x01) == 0x01)
@@ -136,8 +136,7 @@ void WP6EOLGroup::_readContents(WPXInputStream *input)
 					m_ignoreInCalculations = true;
 				if ((cellFlag & 0x80) == 0x80)
 					m_cellIsLocked = true;
-				justification = readU8(input);	
-				m_cellJustification = (justification & 0x07);
+				m_cellJustification = (readU8(input) & 0x07);
 				tmpCellVerticalAlign = readU8(input);
 				switch (tmpCellVerticalAlign & 0x03)
 				{
@@ -301,9 +300,10 @@ void WP6EOLGroup::parse(WP6HLListener *listener)
 			break;
 		case WP6_EOL_GROUP_TABLE_CELL: // Table Cell
 			WPD_DEBUG_MSG(("WordPerfect: EOL group: table cell\n"));
-			listener->insertCell(m_colSpan, m_rowSpan, m_boundFromLeft, m_boundFromAbove,
-					m_cellBorders, cellFgColor, cellBgColor, cellBorderColor, m_cellVerticalAlign, m_cellAttributes);
-			listener->justificationChange(m_cellJustification);
+			listener->insertCell(m_colSpan, m_rowSpan, m_boundFromLeft, m_boundFromAbove, m_cellBorders, cellFgColor,
+					cellBgColor, cellBorderColor, m_cellVerticalAlign, m_useCellAttributes, m_cellAttributes);
+			if (m_useCellJustification)
+				listener->justificationChange(m_cellJustification);
 			break;
 		case WP6_EOL_GROUP_TABLE_ROW_AND_CELL:
 		case WP6_EOL_GROUP_TABLE_ROW_AT_EOC:
@@ -315,9 +315,10 @@ void WP6EOLGroup::parse(WP6HLListener *listener)
 			
 			listener->insertRow(m_rowHeight, m_isMinimumHeight, m_isHeaderRow);
 			// the cellBorders variable already represent the cell border bits as well
-			listener->insertCell(m_colSpan, m_rowSpan, m_boundFromLeft, m_boundFromAbove,
-					m_cellBorders, cellFgColor, cellBgColor, cellBorderColor, m_cellVerticalAlign, m_cellAttributes);
-			listener->justificationChange(m_cellJustification);
+			listener->insertCell(m_colSpan, m_rowSpan, m_boundFromLeft, m_boundFromAbove, m_cellBorders, cellFgColor,
+					cellBgColor, cellBorderColor, m_cellVerticalAlign, m_useCellAttributes, m_cellAttributes);
+			if (m_useCellJustification)
+				listener->justificationChange(m_cellJustification);
 			break;
 		case WP6_EOL_GROUP_TABLE_OFF:
 		case WP6_EOL_GROUP_TABLE_OFF_AT_EOC:

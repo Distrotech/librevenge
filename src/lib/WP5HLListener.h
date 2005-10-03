@@ -63,15 +63,15 @@ public:
 				  const std::vector<bool> &isFixedWidth) {};
 	virtual void endDocument();
 
-	virtual void defineTable(uint8_t position, uint16_t leftOffset) {};
-	virtual void addTableColumnDefinition(uint32_t width, uint32_t leftGutter, uint32_t rightGutter) {};
-	virtual void startTable() {};
- 	virtual void insertRow(const uint16_t rowHeight, const bool isMinimumHeight, const bool isHeaderRow) {};
+	virtual void defineTable(uint8_t position, uint16_t leftOffset);
+	virtual void addTableColumnDefinition(uint32_t width, uint32_t leftGutter, uint32_t rightGutter, uint32_t attributes, uint8_t alignment);
+	virtual void startTable();
+ 	virtual void insertRow(const uint16_t rowHeight, const bool isMinimumHeight, const bool isHeaderRow);
  	virtual void insertCell(const uint8_t colSpan, const uint8_t rowSpan, const bool boundFromLeft, const bool boundFromAbove,
 				const uint8_t borderBits, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor, 
-				const RGBSColor * cellBorderColor, 
-				const WPXVerticalAlignment cellVerticalAlignment, const uint32_t cellAttributes) {};
- 	virtual void endTable() {};
+				const RGBSColor * cellBorderColor, const WPXVerticalAlignment cellVerticalAlignment, 
+				const bool useCellAttributes, const uint32_t cellAttributes);
+ 	virtual void endTable();
 
 protected:
 	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0) {}

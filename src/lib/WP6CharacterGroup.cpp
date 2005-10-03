@@ -167,7 +167,6 @@ void WP6CharacterGroup_TableDefinitionOnSubGroup::parse(WP6HLListener *listener,
 
 WP6CharacterGroup_TableDefinitionOffSubGroup::WP6CharacterGroup_TableDefinitionOffSubGroup(WPXInputStream *input)
 {
-
 }
 
 void WP6CharacterGroup_TableDefinitionOffSubGroup::parse(WP6HLListener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const
@@ -187,9 +186,8 @@ WP6CharacterGroup_TableColumnSubGroup::WP6CharacterGroup_TableColumnSubGroup(WPX
 
 	m_leftGutter = readU16(input);
 	m_rigthGutter = readU16(input);
-	m_attribWord1 = readU16(input);
-	m_attribWord2 = readU16(input);
-	m_alignment = readU8(input);
+	m_attributes = (readU32(input) & 0x0003FFFF);
+	m_alignment = (readU8(input) & 0x07);
 	m_absPosFromRight = readU16(input);
 	m_numberType = readU16(input);
 	m_currencyIndex = readU8(input);
@@ -197,7 +195,7 @@ WP6CharacterGroup_TableColumnSubGroup::WP6CharacterGroup_TableColumnSubGroup(WPX
 
 void WP6CharacterGroup_TableColumnSubGroup::parse(WP6HLListener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const
 {
-	listener->addTableColumnDefinition(m_width, m_leftGutter, m_rigthGutter);
+	listener->addTableColumnDefinition(m_width, m_leftGutter, m_rigthGutter, m_attributes, m_alignment);
 }
 
 /*************************************************************************

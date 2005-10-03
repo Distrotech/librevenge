@@ -131,8 +131,7 @@ private:
 	uint16_t m_width;
 	uint16_t m_leftGutter;
 	uint16_t m_rigthGutter;
-	uint16_t m_attribWord1;
-	uint16_t m_attribWord2;
+	uint32_t m_attributes;
 	uint8_t m_alignment;
 	uint16_t m_absPosFromRight;
 	uint16_t m_numberType;

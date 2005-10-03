@@ -28,6 +28,9 @@
 #include "WP5UnsupportedVariableLengthGroup.h"
 #include "libwpd_internal.h"
 #include "WP5FormatGroup.h"
+#include "WP5DefinitionGroup.h"
+#include "WP5TableEOLGroup.h"
+#include "WP5TableEOPGroup.h"
 
 WP5VariableLengthGroup::WP5VariableLengthGroup()
 {
@@ -39,8 +42,14 @@ WP5VariableLengthGroup * WP5VariableLengthGroup::constructVariableLengthGroup(WP
 	{
 		case WP5_TOP_FORMAT_GROUP:
 			return new WP5FormatGroup(input);
+		case WP5_TOP_DEFINITION_GROUP:
+			return new WP5DefinitionGroup(input);
 		case WP5_TOP_PAGE_FORMAT_GROUP:
 			return new WP5PageFormatGroup(input);
+		case WP5_TOP_TABLE_EOL_GROUP:
+			return new WP5TableEOLGroup(input);
+		case WP5_TOP_TABLE_EOP_GROUP:
+			return new WP5TableEOPGroup(input);
 		default:
 			// this is an unhandled group, just skip it
 			return new WP5UnsupportedVariableLengthGroup(input);

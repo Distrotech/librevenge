@@ -1,6 +1,7 @@
 /* libwpd
  * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,7 +27,7 @@
 #ifndef WP5FILESTRUCTURE_H
 #define WP5FILESTRUCTURE_H
 
-// size of the fixed length functiongroups 0xC0 to 0xCF
+/* size of the fixed length functiongroups 0xC0 to 0xCF */
 extern int WP5_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16]; 
 
 #define WP5_ATTRIBUTE_EXTRA_LARGE 0x00
@@ -53,7 +54,10 @@ extern int WP5_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16];
 #define WP5_TOP_ATTRIBUTE_OFF 0xC4
 #define WP5_TOP_PAGE_FORMAT_GROUP 0xD0
 #define WP5_TOP_FONT_GROUP 0xD1
+#define WP5_TOP_DEFINITION_GROUP 0xD2
 #define WP5_TOP_FORMAT_GROUP 0xD4
+#define WP5_TOP_TABLE_EOL_GROUP 0xDC
+#define WP5_TOP_TABLE_EOP_GROUP 0xDD
 
 /* Page Format Group */
 #define WP5_TOP_PAGE_FORMAT_GROUP_LEFT_RIGHT_MARGIN_SET 0x01
@@ -68,6 +72,19 @@ extern int WP5_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16];
 
 /* Format Group */
 #define WP5_FORMAT_GROUP_END_OF_PAGE 0x00
+
+/* Definition Group */
+#define WP5_TOP_DEFINITION_GROUP_DEFINE_TABLES 0x0B
+
+/* Table EOL Group */
+#define WP5_TABLE_EOL_GROUP_BEGINNING_OF_COLUMN_AT_EOL 0x00
+#define WP5_TABLE_EOL_GROUP_BEGINNING_OF_ROW_AT_EOL 0x01
+#define WP5_TABLE_EOL_GROUP_TABLE_OFF_AT_EOL 0x02
+
+/* Table EOP Group */
+#define WP5_TABLE_EOP_GROUP_BEGINNING_OF_ROW_AT_EOP 0x01
+#define WP5_TABLE_EOP_GROUP_TABLE_OFF_AT_EOP 0x02
+#define WP5_TABLE_EOP_GROUP_BEGINNING_OF_ROW_AT_HARD_EOP 0x03
 
 /* Extended Character */
 #define WP5_INTERNATIONAL_1_CHARACTER_SET 1

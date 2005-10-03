@@ -165,6 +165,14 @@ struct _WPXColumnDefinition
 	float m_rightGutter;
 };
 
+typedef struct _WPXColumnProperties WPXColumnProperties;
+struct _WPXColumnProperties
+{
+	_WPXColumnProperties();
+	uint32_t m_attributes;
+	uint8_t m_alignment;
+};
+
 typedef struct _WPXTabStop WPXTabStop;
 struct _WPXTabStop
 {

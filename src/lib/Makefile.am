@@ -65,6 +65,7 @@ libwpd_0_8_la_SOURCES =				\
 	WP42UnsupportedVariableLengthGroup.cpp	\
 	WP42VariableLengthGroup.cpp		\
 	WP5AttributeGroup.cpp 			\
+	WP5DefinitionGroup.cpp			\
 	WP5ExtendedCharacterGroup.cpp		\
 	WP5FileStructure.cpp			\
 	WP5FixedLengthGroup.cpp			\
@@ -76,6 +77,8 @@ libwpd_0_8_la_SOURCES =				\
 	WP5Parser.cpp				\
 	WP5Part.cpp				\
 	WP5SingleByteFunction.cpp		\
+	WP5TableEOLGroup.cpp			\
+	WP5TableEOPGroup.cpp			\
 	WP5UnsupportedFixedLengthGroup.cpp	\
 	WP5UnsupportedVariableLengthGroup.cpp	\
 	WP5VariableLengthGroup.cpp		\
@@ -161,6 +164,7 @@ libwpd_0_8_la_SOURCES =				\
 	WP42UnsupportedVariableLengthGroup.h	\
 	WP42VariableLengthGroup.h		\
 	WP5AttributeGroup.h 			\
+	WP5DefinitionGroup.h			\
 	WP5ExtendedCharacterGroup.h		\
 	WP5FileStructure.h			\
 	WP5FixedLengthGroup.h			\
@@ -173,6 +177,8 @@ libwpd_0_8_la_SOURCES =				\
 	WP5Part.h				\
 	WP5Parser.h				\
 	WP5SingleByteFunction.h			\
+	WP5TableEOLGroup.h			\
+	WP5TableEOPGroup.h			\
 	WP5UnsupportedFixedLengthGroup.h	\
 	WP5UnsupportedVariableLengthGroup.h	\
 	WP5VariableLengthGroup.h		\

@@ -55,7 +55,7 @@ AC_ARG_WITH(stream,
 	fi
 )
 
-if  test "x$test_stream" = xtrue ; then 
+if  test "x$test_stream" = xtrue ; then
     PKG_CHECK_MODULES(LIBWPD,[
     glib-2.0 >= 2.0.0
     libgsf-1 >= 1.6.0

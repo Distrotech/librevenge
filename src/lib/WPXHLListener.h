@@ -55,6 +55,7 @@ struct _WPXTableDefinition
 	uint8_t m_positionBits;
 	float m_leftOffset;
 	std::vector < WPXColumnDefinition > columns;
+	std::vector < WPXColumnProperties > columnsProperties;
 };
 
 typedef struct _WPXParsingState WPXParsingState;

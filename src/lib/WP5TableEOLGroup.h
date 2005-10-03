@@ -1,7 +1,7 @@
 /* libwpd
- * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
- *
+ * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
+ *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -19,29 +19,34 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by
+/* "This product is not manufactured, approved, or supported by 
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WP6FileStructure.h"
+#ifndef WP5TABLEEOLGROUP_H
+#define WP5TABLEEOLGROUP_H
 
-// size of the fixed length functiongroups 0xF0 to 0xFF
-int WP6_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16] =
+#include "WP5VariableLengthGroup.h"
+
+class WP5TableEOLGroup : public WP5VariableLengthGroup
 {
-	4,	// 0xF0
-	5,	// 0xF1
-	3,	// 0xF2
-	3,	// 0xF3
-	3,	// 0xF4
-	3,	// 0xF5
-	4,	// 0xF6
-	4,	// 0xF7
-	4,	// 0xF8
-	5,	// 0xF9
-	5,	// 0xFA
-	6,	// 0xFB
-	6,	// 0xFC
-	8,	// 0xFD
-	8,	// 0xFE
-	-1	// 0xFF - Cannot be used. -1 is reserved so no size is assigned to this value.
+ public:
+	WP5TableEOLGroup(WPXInputStream *input);	
+	virtual ~WP5TableEOLGroup();
+	virtual void _readContents(WPXInputStream *input);
+	virtual void parse(WP5HLListener *listener);
+
+private:
+	// Beginning column sub-function
+	uint8_t m_cellVerticalAlignment;
+	bool m_useCellAttributes;
+	bool m_useCellJustification;
+	uint8_t m_columnNumber;
+	uint8_t m_colSpan;
+	uint8_t m_rowSpan;
+	bool m_spannedFromAbove;
+	uint16_t m_cellAttributes;
+	uint8_t m_cellJustification;	
 };
+
+#endif /* WP5TABLEEOLGROUP_H */

@@ -89,9 +89,123 @@ void WP5HLListener::endDocument()
 {
 	_closeSpan();
 	_closeParagraph();
+	_closeTable();
 	_closeSection();
 	_closePageSpan();
 	m_listenerImpl->endDocument();
+}
+
+void WP5HLListener::defineTable(uint8_t position, uint16_t leftOffset)
+{
+	if (!isUndoOn())
+	{
+		switch (position & 0x07)
+		{
+		case 0:
+			m_ps->m_tableDefinition.m_positionBits = WPX_TABLE_POSITION_ALIGN_WITH_LEFT_MARGIN;
+			break;
+		case 1:
+			m_ps->m_tableDefinition.m_positionBits = WPX_TABLE_POSITION_ALIGN_WITH_RIGHT_MARGIN;
+			break;
+		case 2:
+			m_ps->m_tableDefinition.m_positionBits = WPX_TABLE_POSITION_CENTER_BETWEEN_MARGINS;
+			break;
+		case 3:
+			m_ps->m_tableDefinition.m_positionBits = WPX_TABLE_POSITION_FULL;
+			break;
+		case 4:
+			m_ps->m_tableDefinition.m_positionBits = WPX_TABLE_POSITION_ABSOLUTE_FROM_LEFT_MARGIN;
+			break;
+		default:
+			// should not happen
+			break;
+		}
+		// Note: WordPerfect has an offset from the left edge of the page. We translate it to the offset from the left margin
+		m_ps->m_tableDefinition.m_leftOffset = (float)((double)leftOffset / (double)WPX_NUM_WPUS_PER_INCH) - m_ps->m_paragraphMarginLeft;
+
+		// remove all the old column information
+		m_ps->m_tableDefinition.columns.clear();
+		m_ps->m_tableDefinition.columnsProperties.clear();
+	}
+}
+
+void WP5HLListener::addTableColumnDefinition(uint32_t width, uint32_t leftGutter, uint32_t rightGutter, uint32_t attributes, uint8_t alignment)
+{
+	if (!isUndoOn())
+	{
+		// define the new column
+		WPXColumnDefinition colDef;
+		colDef.m_width = (float)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
+		colDef.m_leftGutter = (float)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
+		colDef.m_rightGutter = (float)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
+
+		// add the new column definition to our table definition
+		m_ps->m_tableDefinition.columns.push_back(colDef);
+		
+		WPXColumnProperties colProp;
+		colProp.m_attributes = attributes;
+		colProp.m_alignment = alignment;
+		
+		m_ps->m_tableDefinition.columnsProperties.push_back(colProp);
+	}
+}
+
+void WP5HLListener::startTable()
+{
+	if (!isUndoOn())
+	{
+		// save the justification information. We will need it after the table ends.
+		m_ps->m_paragraphJustificationBeforeTable = m_ps->m_paragraphJustification;
+		if (m_ps->m_sectionAttributesChanged && !m_ps->m_isTableOpened)
+		{
+			_closeSection();
+			_openSection();
+			m_ps->m_sectionAttributesChanged = false;
+		}
+		_openTable();
+	}
+}
+
+void WP5HLListener::insertRow(const uint16_t rowHeight, const bool isMinimumHeight, const bool isHeaderRow)
+{
+	if (!isUndoOn())
+	{
+		_flushText();
+		float rowHeightInch = (float)((double) rowHeight / (double)WPX_NUM_WPUS_PER_INCH);
+		_openTableRow(rowHeightInch, isMinimumHeight, isHeaderRow);
+	}
+}
+
+void WP5HLListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan, const bool boundFromLeft, const bool boundFromAbove,
+			const uint8_t borderBits, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor, 
+			const RGBSColor * cellBorderColor, const WPXVerticalAlignment cellVerticalAlignment, 
+			const bool useCellAttributes, const uint32_t cellAttributes)
+{
+	if (!isUndoOn())
+	{
+		if (m_ps->m_currentTableRow < 0) // cell without a row, invalid
+			throw ParseException();
+		_flushText();
+		_openTableCell(colSpan, rowSpan, boundFromLeft, boundFromAbove, borderBits,       
+			       cellFgColor, cellBgColor, cellBorderColor, cellVerticalAlignment);
+		m_ps->m_isCellWithoutParagraph = true;
+		if (useCellAttributes)
+			m_ps->m_cellAttributeBits = cellAttributes;
+		else
+			m_ps->m_cellAttributeBits = m_ps->m_tableDefinition.columnsProperties[m_ps->m_currentTableCol-1].m_attributes;
+		justificationChange(m_ps->m_tableDefinition.columnsProperties[m_ps->m_currentTableCol-1].m_alignment);
+	}
+}
+
+void WP5HLListener::endTable()
+{
+	if (!isUndoOn())
+	{
+		_flushText();
+		_closeTable();
+		// restore the justification that was there before the table.
+		m_ps->m_paragraphJustification = m_ps->m_paragraphJustificationBeforeTable;
+	}
 }
 
 

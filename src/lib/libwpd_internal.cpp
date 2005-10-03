@@ -954,3 +954,9 @@ _WPXColumnDefinition::_WPXColumnDefinition()
 		m_rightGutter(0.0f)
 {
 }
+
+_WPXColumnProperties::_WPXColumnProperties()
+	:	m_attributes(0x00000000),
+		m_alignment(0x00)
+{
+}

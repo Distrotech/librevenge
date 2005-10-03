@@ -67,7 +67,7 @@ _WPXParsingState::_WPXParsingState() :
 	m_isTableCellOpened(false),
 	m_wasHeaderRow(false),
 	m_isCellWithoutParagraph(false),
-	m_cellAttributeBits(0),
+	m_cellAttributeBits(0x00000000),
 	m_paragraphJustificationBeforeTable(WPX_PARAGRAPH_JUSTIFICATION_LEFT),
 
 	m_nextPageSpanIndice(0),

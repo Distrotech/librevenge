@@ -176,8 +176,8 @@ void WP3HLStylesListener::insertRow(const uint16_t rowHeight, const bool isMinim
 
 void WP3HLStylesListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan, const bool boundFromLeft, const bool boundFromAbove, 
 				  const uint8_t borderBits, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
-				  const RGBSColor * cellBorderColor, 
-				  const WPXVerticalAlignment cellVerticalAlignment, const uint32_t cellAttributes)
+				  const RGBSColor * cellBorderColor, const WPXVerticalAlignment cellVerticalAlignment, 
+				  const bool useCellAttributes, const uint32_t cellAttributes)
 {
 	if (!isUndoOn() && m_currentTable != NULL)
 	{

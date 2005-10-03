@@ -28,6 +28,13 @@
 
 #include "WP5Part.h"
 
+class WP5VariableLengthGroup_SubGroup
+{
+public:
+	virtual ~WP5VariableLengthGroup_SubGroup() {}
+	virtual void parse(WP5HLListener *listener) = 0;
+};
+
 class WP5VariableLengthGroup : public WP5Part
 {
  public:

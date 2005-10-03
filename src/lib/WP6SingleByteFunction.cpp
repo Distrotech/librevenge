@@ -152,13 +152,15 @@ void WP6TableRowFunction::parse(WP6HLListener *listener)
 	// use default values: if they were not default values, WordPerfect
 	// would use the multi-byte variant of this function
 	listener->insertRow(0x0000, true, false);
-	listener->insertCell(1, 1, false, false, 0x00, NULL, NULL, new RGBSColor(0x00, 0x00, 0x00, 0x64), TOP, 0x00000000);
+	RGBSColor tmpCellBorderColor(0x00, 0x00, 0x00, 0x64);
+	listener->insertCell(1, 1, false, false, 0x00, NULL, NULL, &tmpCellBorderColor, TOP, false, 0x00000000);
 }
 
 void WP6TableCellFunction::parse(WP6HLListener *listener)
 {
 	// default values
-	listener->insertCell(1, 1, false, false, 0x00, NULL, NULL, new RGBSColor(0x00, 0x00, 0x00, 0x64), TOP, 0x00000000);
+	RGBSColor tmpCellBorderColor(0x00, 0x00, 0x00, 0x64);
+	listener->insertCell(1, 1, false, false, 0x00, NULL, NULL, &tmpCellBorderColor, TOP, false, 0x00000000);
 }
 
 void WP6TableOffFunction::parse(WP6HLListener *listener)

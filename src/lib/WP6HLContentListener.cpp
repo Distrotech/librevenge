@@ -1115,6 +1115,7 @@ void WP6HLContentListener::defineTable(uint8_t position, uint16_t leftOffset)
 
 		// remove all the old column information
 		m_ps->m_tableDefinition.columns.clear();
+		m_ps->m_tableDefinition.columnsProperties.clear();
 
 		// pull a table definition off of our stack
 		m_parseState->m_currentTable = m_parseState->m_tableList[m_parseState->m_nextTableIndice++];
@@ -1122,7 +1123,7 @@ void WP6HLContentListener::defineTable(uint8_t position, uint16_t leftOffset)
 	}
 }
 
-void WP6HLContentListener::addTableColumnDefinition(uint32_t width, uint32_t leftGutter, uint32_t rightGutter)
+void WP6HLContentListener::addTableColumnDefinition(uint32_t width, uint32_t leftGutter, uint32_t rightGutter, uint32_t attributes, uint8_t alignment)
 {
 	if (!isUndoOn())
 	{
@@ -1132,8 +1133,14 @@ void WP6HLContentListener::addTableColumnDefinition(uint32_t width, uint32_t lef
 		colDef.m_leftGutter = (float)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
 		colDef.m_rightGutter = (float)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
 
+		WPXColumnProperties colProp;
+		colProp.m_attributes = attributes;
+		colProp.m_alignment = alignment;
+		
 		// add the new column definition to our table definition
 		m_ps->m_tableDefinition.columns.push_back(colDef);
+		
+		m_ps->m_tableDefinition.columnsProperties.push_back(colProp);
 	}
 }
 
@@ -1171,8 +1178,8 @@ void WP6HLContentListener::insertRow(const uint16_t rowHeight, const bool isMini
 
 void WP6HLContentListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan, const bool boundFromLeft, const bool boundFromAbove,
 					const uint8_t borderBits, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor, 
-					const RGBSColor * cellBorderColor, 
-					const WPXVerticalAlignment cellVerticalAlignment, const uint32_t cellAttributes)
+					const RGBSColor * cellBorderColor, const WPXVerticalAlignment cellVerticalAlignment, 
+					const bool useCellAttributes, const uint32_t cellAttributes)
 {
 	if (!isUndoOn())
 	{
@@ -1183,7 +1190,11 @@ void WP6HLContentListener::insertCell(const uint8_t colSpan, const uint8_t rowSp
 			       m_parseState->m_currentTable->getCell(m_ps->m_currentTableRow, m_ps->m_currentTableCol)->m_borderBits,       
 			       cellFgColor, cellBgColor, cellBorderColor, cellVerticalAlignment);
 		m_ps->m_isCellWithoutParagraph = true;
-		m_ps->m_cellAttributeBits = cellAttributes;
+		if (useCellAttributes)
+			m_ps->m_cellAttributeBits = cellAttributes;
+		else
+			m_ps->m_cellAttributeBits = m_ps->m_tableDefinition.columnsProperties[m_ps->m_currentTableCol-1].m_attributes;
+		justificationChange(m_ps->m_tableDefinition.columnsProperties[m_ps->m_currentTableCol-1].m_alignment);
 	}
 }
 
