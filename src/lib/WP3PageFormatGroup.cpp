@@ -109,21 +109,15 @@ void WP3PageFormatGroup::parse(WP3HLListener *listener)
 	case WP3_PAGE_FORMAT_GROUP_HORIZONTAL_MARGINS:
 		if (m_leftMargin != 0x80000000)
 		{
-			int16_t leftMarginIntegerPart = (int16_t)((m_leftMargin & 0xFFFF0000) >> 16);
-			float leftMarginFractionalPart = (float)((double)(m_leftMargin & 0xFFFF)/(double)0xFFFF);
-			uint16_t leftMarginWPU = (uint16_t)rint((((float)leftMarginIntegerPart + leftMarginFractionalPart)*50)/3);
-			listener->marginChange(WPX_LEFT, leftMarginWPU);
-			WPD_DEBUG_MSG(("WordPerfect: Page format group left margin - integer part: %i fractional part: %f WPUs: %i (original value: %i)\n",
-				       leftMarginIntegerPart, leftMarginFractionalPart, leftMarginWPU, m_leftMargin));
+			listener->marginChange(WPX_LEFT, fixedPointToWPUs(m_leftMargin));
+			WPD_DEBUG_MSG(("WordPerfect: Page format group left margin - WPUs: %i (original value: %i)\n",
+				       fixedPointToWPUs(m_leftMargin), m_leftMargin));
 		}
 		if (m_rightMargin != 0x8000000)
 		{
-			int16_t rightMarginIntegerPart = (int16_t)((m_rightMargin & 0xFFFF0000) >> 16);
-			float rightMarginFractionalPart = (float)((double)(m_rightMargin & 0xFFFF)/(double)0xFFFF);
-			uint16_t rightMarginWPU = (uint16_t)rint((((float)rightMarginIntegerPart + rightMarginFractionalPart)*50)/3);
-			WPD_DEBUG_MSG(("WordPerfect: Page format group right margin - integer part: %i fractional part: %f WPUs: %i (original value: %i)\n",
-				       rightMarginIntegerPart, rightMarginFractionalPart, rightMarginWPU, m_rightMargin));
-			listener->marginChange(WPX_RIGHT, rightMarginWPU);
+			listener->marginChange(WPX_RIGHT, fixedPointToWPUs(m_rightMargin));
+			WPD_DEBUG_MSG(("WordPerfect: Page format group right margin - integer part: WPUs: %i (original value: %i)\n",
+				       fixedPointToWPUs(m_rightMargin), m_rightMargin));
 		}
 		break;
 		
@@ -134,19 +128,9 @@ void WP3PageFormatGroup::parse(WP3HLListener *listener)
 				
 	case WP3_PAGE_FORMAT_GROUP_VERTICAL_MARGINS:
 		if (m_topMargin != 0x80000000)
-		{
-			int16_t topMarginIntegerPart = (int16_t)((m_topMargin & 0xFFFF0000) >> 16);
-			float topMarginFractionalPart = (float)((double)(m_topMargin & 0xFFFF)/(double)0xFFFF);
-			uint16_t topMarginWPU = (uint16_t)rint((((float)topMarginIntegerPart + topMarginFractionalPart)*50)/3);
-			listener->pageMarginChange(WPX_TOP, topMarginWPU);
-		}
+			listener->pageMarginChange(WPX_TOP, fixedPointToWPUs(m_topMargin));
 		if (m_bottomMargin != 0x80000000)
-		{
-			int16_t bottomMarginIntegerPart = (int16_t)((m_bottomMargin & 0xFFFF0000) >> 16);
-			float bottomMarginFractionalPart = (float)((double)(m_bottomMargin & 0xFFFF)/(double)0xFFFF);
-			uint16_t bottomMarginWPU = (uint16_t)rint((((float)bottomMarginIntegerPart + bottomMarginFractionalPart)*50)/3);
-			listener->pageMarginChange(WPX_BOTTOM, bottomMarginWPU);
-		}
+			listener->pageMarginChange(WPX_BOTTOM, fixedPointToWPUs(m_bottomMargin));
 		break;
 
 	case WP3_PAGE_FORMAT_GROUP_JUSTIFICATION_MODE:
@@ -154,12 +138,7 @@ void WP3PageFormatGroup::parse(WP3HLListener *listener)
 		break;
 
 	case WP3_PAGE_FORMAT_GROUP_INDENT_AT_BEGINNING_OF_PARAGRAPH:
-		{
-			int16_t indentIntegerPart = (int16_t)((m_indent & 0xFFFF0000) >> 16);
-			float indentFractionalPart = (float)((double)(m_indent & 0xFFFF)/(double)0xFFFF);
-			uint16_t indentWPU =  (int16_t)rint((((float)indentIntegerPart + indentFractionalPart)*50)/3);
-			listener->indentFirstLineChange(indentWPU);
-		}
+			listener->indentFirstLineChange(fixedPointToWPUs(m_indent));
 		break;
 		
 

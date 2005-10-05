@@ -30,7 +30,6 @@
 #include "WP3LLListener.h"
 #include "WPXFileStructure.h"
 #include "libwpd_internal.h"
-#include "libwpd_math.h"
 
 WP3MiscellaneousGroup::WP3MiscellaneousGroup(WPXInputStream *input) :
 	WP3VariableLengthGroup(),
@@ -53,8 +52,6 @@ void WP3MiscellaneousGroup::_readContents(WPXInputStream *input)
 	switch (getSubGroup())
 	{
 	case WP3_MISCELLANEOUS_GROUP_PAGE_SIZE_OVERRIDE:
-		uint32_t tmpPageWidth;
-		uint32_t tmpPageHeight;
 		uint16_t tmpPageOrientation;
 		
 		// skip 20 bytes of old values
@@ -62,8 +59,8 @@ void WP3MiscellaneousGroup::_readContents(WPXInputStream *input)
 		
 		// read the new values
 		tmpPageOrientation = readU16(input, true);
-		tmpPageWidth = readU32(input, true);
-		tmpPageHeight = readU32(input, true);
+		m_pageWidth = fixedPointToWPUs(readU32(input, true));
+		m_pageHeight = fixedPointToWPUs(readU32(input, true));
 		
 		// determine whether the orientation lasts only one page or is persistent
 		if ((tmpPageOrientation & 0x8000) == 0x0000)
@@ -76,16 +73,7 @@ void WP3MiscellaneousGroup::_readContents(WPXInputStream *input)
 			m_pageOrientation = PORTRAIT;
 		else
 			m_pageOrientation = LANDSCAPE;
-		
-		// compute page dimensions in WPUs
-		{
-			int16_t pageWidthIntegerPart = (int16_t)((tmpPageWidth & 0xFFFF0000) >> 16);
-			float pageWidthFractionalPart = (float)(tmpPageWidth & 0xFFFF)/(float)0xFFFF;
-			m_pageWidth = (uint16_t)rint((((float)pageWidthIntegerPart + pageWidthFractionalPart)*50)/3);
-			int16_t pageHeightIntegerPart = (int16_t)((tmpPageHeight & 0xFFFF0000) >> 16);
-			float pageHeightFractionalPart = (float)(tmpPageHeight & 0xFFFF)/(float)0xFFFF;
-			m_pageHeight = (uint16_t)rint((((float)pageHeightIntegerPart + pageHeightFractionalPart)*50)/3);
-		}
+
 		break;
 		
 	default: /* something else we don't support, since it isn't in the docs */

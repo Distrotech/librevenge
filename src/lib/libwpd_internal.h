@@ -81,6 +81,8 @@ int extendedCharacterWP6ToUCS2(uint8_t character, uint8_t characterSet,
 int extendedCharacterWP5ToUCS2(uint8_t character, uint8_t characterSet,
 			    const uint16_t **chars);
 
+uint16_t fixedPointToWPUs(const uint32_t fixedPointNumber);
+
 enum WPXFileType { WP6_DOCUMENT, WP5_DOCUMENT, WP42_DOCUMENT, OTHER };
 enum WPXNumberingType { ARABIC, LOWERCASE, UPPERCASE, LOWERCASE_ROMAN, UPPERCASE_ROMAN };
 enum WPXNoteType { FOOTNOTE, ENDNOTE };

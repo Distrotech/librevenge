@@ -915,6 +915,16 @@ int extendedCharacterWP5ToUCS2(uint8_t character,
 	return 1;
 }
 
+#include "WPXFileStructure.h"
+#include "libwpd_math.h"
+
+uint16_t fixedPointToWPUs(const uint32_t fixedPointNumber)
+{
+	int16_t fixedPointNumberIntegerPart = (int16_t)((fixedPointNumber & 0xFFFF0000) >> 16);
+	float fixedPointNumberFractionalPart = (float)((double)(fixedPointNumber & 0x0000FFFF)/(double)0xFFFF);
+	uint16_t numberWPU = (uint16_t)rint((((float)fixedPointNumberIntegerPart + fixedPointNumberFractionalPart)*50)/3);
+	return numberWPU;
+}
 
 _RGBSColor::_RGBSColor(uint8_t r, uint8_t g, uint8_t b, uint8_t s)
 	:	m_r(r),

@@ -1,6 +1,6 @@
 /* libwpd
  * Copyright (C) 2004 Marc Maurer (j.m.maurer@student.utwente.nl)
- * Copyright (C) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (C) 2004-2005 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -45,6 +45,8 @@ extern int WP3_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16];
 #define WP3_STYLE_GROUP 0xDB
 #define WP3_END_OF_LINE_PAGE_GROUP 0xDC
 
+#define WP3_TABLES_GROUP 0xE2
+
 /* Attribute Group */
 #define WP3_ATTRIBUTE_BOLD 0
 #define WP3_ATTRIBUTE_ITALICS 1
@@ -74,5 +76,22 @@ extern int WP3_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16];
 /* Miscellaneous Group */
 
 #define WP3_MISCELLANEOUS_GROUP_PAGE_SIZE_OVERRIDE 0x04
+
+/* Tables Group */
+
+#define WP3_TABLES_GROUP_TABLE_FUNCTION 0x01
+#define WP3_TABLES_GROUP_SET_TABLE_CELL_SPAN 0x02
+#define WP3_TABLES_GROUP_SET_TABLE_CELL_TOP_LINE 0x03
+#define WP3_TABLES_GROUP_SET_TABLE_CELL_LEFT_LINE 0x04
+#define WP3_TABLES_GROUP_SET_TABLE_CELL_BOTTOM_LINE 0x05
+#define WP3_TABLES_GROUP_SET_TABLE_CELL_RIGHT_LINE 0x06
+#define WP3_TABLES_GROUP_SET_TABLE_CELL_TOP_LINE_COLOR 0x07
+#define WP3_TABLES_GROUP_SET_TABLE_CELL_LEFT_LINE_COLOR 0x08
+#define WP3_TABLES_GROUP_SET_TABLE_CELL_BOTTOM_LINE_COLOR 0x09
+#define WP3_TABLES_GROUP_SET_TABLE_CELL_RIGHT_LINE_COLOR 0x0A
+#define WP3_TABLES_GROUP_SET_TABLE_CELL_FILL_COLOR_PATTERN 0x0B
+#define WP3_TABLES_GROUP_SET_TABLE_CELL_VERTICAL_ALIGNMENT 0x0C
+#define WP3_TABLES_GROUP_SET_TABLE_CELL_MODE 0x0D
+#define WP3_TABLES_GROUP_SET_TABLE_ROW_MODE 0x0E
 
 #endif /* WP3FILESTRUCTURE_H */

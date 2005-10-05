@@ -1,3 +1,2 @@
 EXTRA_DIST = \
-	default.apspec.in \
-	default.apspec
+	default.apspec.in

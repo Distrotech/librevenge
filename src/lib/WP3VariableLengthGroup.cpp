@@ -29,6 +29,7 @@
 #include "WP3EndOfLinePageGroup.h"
 #include "WP3MiscellaneousGroup.h"
 #include "WP3PageFormatGroup.h"
+#include "WP3TablesGroup.h"
 #include "libwpd_internal.h"
 
 WP3VariableLengthGroup::WP3VariableLengthGroup()
@@ -45,6 +46,8 @@ WP3VariableLengthGroup * WP3VariableLengthGroup::constructVariableLengthGroup(WP
 			return new WP3EndOfLinePageGroup(input);
 		case WP3_MISCELLANEOUS_GROUP:
 			return new WP3MiscellaneousGroup(input);
+		case WP3_TABLES_GROUP:
+			return new WP3TablesGroup(input);
 		default:
 			// this is an unhandled group, just skip it
 			return new WP3UnsupportedVariableLengthGroup(input);
