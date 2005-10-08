@@ -32,7 +32,7 @@ class WP6FixedLengthGroup : public WP6Part
 {
  public:
 	WP6FixedLengthGroup(uint8_t groupID);
-	static WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(WPXInputStream *input, uint8_t groupID);
+	static WP6FixedLengthGroup * constructFixedLengthGroup(WPXInputStream *input, uint8_t groupID);
 
  	const uint8_t getGroup() const { return m_group; }
  

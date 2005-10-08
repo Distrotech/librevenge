@@ -31,8 +31,8 @@
 class WP5FixedLengthGroup : public WP5Part
 {
  public:
-	WP5FixedLengthGroup::WP5FixedLengthGroup(int groupID);
-	static WP5FixedLengthGroup * WP5FixedLengthGroup::constructFixedLengthGroup(WPXInputStream *input, uint8_t groupID);
+	WP5FixedLengthGroup(int groupID);
+	static WP5FixedLengthGroup * constructFixedLengthGroup(WPXInputStream *input, uint8_t groupID);
 
 	const uint8_t getGroup() const { return m_group; } 
  

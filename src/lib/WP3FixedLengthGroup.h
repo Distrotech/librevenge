@@ -30,8 +30,8 @@
 class WP3FixedLengthGroup : public WP3Part
 {
  public:
-	WP3FixedLengthGroup::WP3FixedLengthGroup(int groupID);
-	static WP3FixedLengthGroup * WP3FixedLengthGroup::constructFixedLengthGroup(WPXInputStream *input, uint8_t groupID);
+	WP3FixedLengthGroup(int groupID);
+	static WP3FixedLengthGroup * constructFixedLengthGroup(WPXInputStream *input, uint8_t groupID);
 
 	const uint8_t getGroup() const { return m_group; } 
  

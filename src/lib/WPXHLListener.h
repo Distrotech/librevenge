@@ -163,7 +163,7 @@ class WPXHLListener : public WPXLLListener
 {
 public:
 	WPXHLListener(std::vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl);
-	WPXHLListener::~WPXHLListener();
+	~WPXHLListener();
 
 	void startDocument();
 	void handleSubDocument(uint16_t textPID, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice);

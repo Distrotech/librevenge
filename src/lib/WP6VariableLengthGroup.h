@@ -41,7 +41,7 @@ class WP6VariableLengthGroup : public WP6Part
 	WP6VariableLengthGroup(); // WP6VariableLengthGroup should _never_ be constructed, only its inherited classes
 	virtual ~WP6VariableLengthGroup();
 
-	static WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, uint8_t groupID);
+	static WP6VariableLengthGroup * constructVariableLengthGroup(WPXInputStream *input, uint8_t groupID);
 
  protected:
 	void _read(WPXInputStream *input);

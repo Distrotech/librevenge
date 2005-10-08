@@ -1,4 +1,8 @@
 CHANGES:
+0.8.3 -> 0.8.4
+- Fix compilation with gcc >=  4.1.0 (Stephan Kulow)
+- Initial support for tables in WP5.x format (Fridrich Strba)
+
 0.8.2 -> 0.8.3
 - Make parser follow closer the document stream, simplify the _flushText()
   function; eliminate empty spans and sections (Fridrich Strba) 
