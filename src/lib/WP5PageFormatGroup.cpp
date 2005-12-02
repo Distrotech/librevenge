@@ -26,17 +26,18 @@
 
 #include "WP5PageFormatGroup.h"
 #include "WP5FileStructure.h"
-#include "WP5LLListener.h"
 #include "libwpd_internal.h"
 
 WP5PageFormatGroup::WP5PageFormatGroup(WPXInputStream *input) :
 	WP5VariableLengthGroup(),
 	m_leftMargin(0),
 	m_rightMargin(0),
+	m_lineSpacing(1.0f),
 	m_topMargin(0),
 	m_bottomMargin(0),
-	m_lineSpacing(1.0f),
-	m_justification(0)
+	m_justification(0),
+	m_formLength(0),
+	m_formWidth(0)
 {
 	_read(input);
 }
@@ -116,7 +117,7 @@ void WP5PageFormatGroup::_readContents(WPXInputStream *input)
 	}
 }
 
-void WP5PageFormatGroup::parse(WP5HLListener *listener)
+void WP5PageFormatGroup::parse(WP5Listener *listener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling a Page group\n"));
 

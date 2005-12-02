@@ -25,7 +25,6 @@
  */
 
 #include "WP6SingleByteFunction.h"
-#include "WP6LLListener.h"
 #include "libwpd_internal.h"
 
 WP6SingleByteFunction * WP6SingleByteFunction::constructSingleByteFunction(WPXInputStream *input, uint8_t groupID)
@@ -107,63 +106,63 @@ WP6SingleByteFunction * WP6SingleByteFunction::constructSingleByteFunction(WPXIn
 		
 }
 
-void WP6SpaceFunction::parse(WP6HLListener *listener)
+void WP6SpaceFunction::parse(WP6Listener *listener)
 {
 	listener->insertCharacter((uint16_t) ' ');
 }
 
-void WP6HardSpaceFunction::parse(WP6HLListener *listener)
+void WP6HardSpaceFunction::parse(WP6Listener *listener)
 {
 	listener->insertCharacter((uint16_t) 0xa0);
 }
 
-void WP6SoftHyphenFunction::parse(WP6HLListener *listener)
+void WP6SoftHyphenFunction::parse(WP6Listener *listener)
 {
 	listener->insertCharacter((uint16_t) 0xad);
 }
 
-void WP6EOLFunction::parse(WP6HLListener *listener)
+void WP6EOLFunction::parse(WP6Listener *listener)
 {
 	listener->insertEOL();
 }
 
-void WP6EOCFunction::parse(WP6HLListener *listener)
+void WP6EOCFunction::parse(WP6Listener *listener)
 {
 	listener->insertBreak(WPX_COLUMN_BREAK);
 }
 
-void WP6EOPFunction::parse(WP6HLListener *listener)
+void WP6EOPFunction::parse(WP6Listener *listener)
 {
 	listener->insertBreak(WPX_PAGE_BREAK);
 }
 
-void WP6SoftEOPFunction::parse(WP6HLListener *listener)
+void WP6SoftEOPFunction::parse(WP6Listener *listener)
 {
 	listener->insertBreak(WPX_SOFT_PAGE_BREAK);
 }
 
-void WP6HyphenFunction::parse(WP6HLListener *listener)
+void WP6HyphenFunction::parse(WP6Listener *listener)
 {
 	listener->insertCharacter((uint16_t) '-');
 }
 
-void WP6TableRowFunction::parse(WP6HLListener *listener)
+void WP6TableRowFunction::parse(WP6Listener *listener)
 {
 	// use default values: if they were not default values, WordPerfect
 	// would use the multi-byte variant of this function
 	listener->insertRow(0x0000, true, false);
 	RGBSColor tmpCellBorderColor(0x00, 0x00, 0x00, 0x64);
-	listener->insertCell(1, 1, false, false, 0x00, NULL, NULL, &tmpCellBorderColor, TOP, false, 0x00000000);
+	listener->insertCell(1, 1, 0x00, NULL, NULL, &tmpCellBorderColor, TOP, false, 0x00000000);
 }
 
-void WP6TableCellFunction::parse(WP6HLListener *listener)
+void WP6TableCellFunction::parse(WP6Listener *listener)
 {
 	// default values
 	RGBSColor tmpCellBorderColor(0x00, 0x00, 0x00, 0x64);
-	listener->insertCell(1, 1, false, false, 0x00, NULL, NULL, &tmpCellBorderColor, TOP, false, 0x00000000);
+	listener->insertCell(1, 1, 0x00, NULL, NULL, &tmpCellBorderColor, TOP, false, 0x00000000);
 }
 
-void WP6TableOffFunction::parse(WP6HLListener *listener)
+void WP6TableOffFunction::parse(WP6Listener *listener)
 {
 	listener->endTable();
 }

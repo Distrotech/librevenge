@@ -43,6 +43,7 @@ public:
 	void append(const char *s);
 	void append(const char c);
 	void clear();
+	WPXString& operator=(const WPXString &);
 	bool operator==(const char *);
 	bool operator==(const WPXString &str);
 

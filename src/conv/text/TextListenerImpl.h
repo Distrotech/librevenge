@@ -28,7 +28,6 @@
 
 #include <glib.h>
 #include "WPXHLListenerImpl.h"
-#include "WPXHLListener.h"
 
 class TextListenerImpl : public WPXHLListenerImpl
 {

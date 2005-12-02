@@ -27,6 +27,7 @@
 #define LIBWPD_INTERNAL_H
 #include "WPXStream.h"
 #include <stdio.h>
+#include <string>
 #include "WPXString.h"
 
 /* Various functions/defines that need not/should not be exported externally */
@@ -70,6 +71,8 @@ int8_t read8(WPXInputStream *input);
 uint8_t readU8(WPXInputStream *input); 
 uint16_t readU16(WPXInputStream *input, bool bigendian=false);
 uint32_t readU32(WPXInputStream *input, bool bigendian=false);
+
+std::string readPascalString(WPXInputStream *input);
 
 void appendUCS4(WPXString &str, uint32_t ucs4);
 
@@ -151,6 +154,8 @@ typedef struct _RGBSColor RGBSColor;
 struct _RGBSColor
 {
 	_RGBSColor(uint8_t r, uint8_t g, uint8_t b, uint8_t s);
+	_RGBSColor(uint16_t red, uint16_t green, uint16_t blue); // Construct
+	// RBBSColor from double precision RGB color used by WP3.x for Mac
 	_RGBSColor(); // initializes all values to 0
 	uint8_t m_r;
 	uint8_t m_g;
@@ -212,5 +217,13 @@ class UnsupportedEncryptionException
 {
 	// needless to say, we could flesh this class out a bit
 };
+
+// Various usefull, but cheesey functions
+
+int _extractNumericValueFromRoman(const char romanChar);
+int _extractDisplayReferenceNumberFromBuf(const WPXString &buf, const WPXNumberingType listType);
+WPXNumberingType _extractWPXNumberingTypeFromBuf(const WPXString &buf, const WPXNumberingType putativeWPXNumberingType);
+WPXString _numberingTypeToString(WPXNumberingType t);
+
 
 #endif /* LIBWPD_INTERNAL_H */

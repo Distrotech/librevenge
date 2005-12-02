@@ -183,6 +183,7 @@ class WPXHLListenerImpl
 	\li \c style:num-prefix Text that comes before the number in the list
 	\li \c style:num-suffix Text that comes after the number in the list
 	\li \c text:start-value The starting number of the list
+	\li \c text:min-label-width The distance between the list label and the actual text, stored in inches
 	\li \c text:space-before The indentation level of the lists, stored in inches
 	*/
 	virtual void defineOrderedListLevel(const WPXPropertyList &propList) = 0;
@@ -192,6 +193,7 @@ class WPXHLListenerImpl
 	\li \c libwpd:id A unique integer identifier for the list
 	\li \c libwpd:level The level of the list in the hierarchy
 	\li \c text:bullet-char The string that should be used as a bullet
+	\li \c text:min-label-width The distance between the bullet and the actual text, stored in inches
 	\li \c text:space-before The indentation level of the lists, stored in inches
 	*/
 	virtual void defineUnorderedListLevel(const WPXPropertyList &propList) = 0;	

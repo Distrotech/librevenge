@@ -25,7 +25,6 @@
  */
 
 #include "WP5SingleByteFunction.h"
-#include "WP5LLListener.h"
 #include "libwpd_internal.h"
 
 WP5SingleByteFunction * WP5SingleByteFunction::constructSingleByteFunction(WPXInputStream *input, uint8_t groupID)
@@ -62,27 +61,27 @@ WP5SingleByteFunction * WP5SingleByteFunction::constructSingleByteFunction(WPXIn
 		}
 }
 
-void WP5EOLFunction::parse(WP5HLListener *listener)
+void WP5EOLFunction::parse(WP5Listener *listener)
 {
 	listener->insertEOL();
 }
 
-void WP5SpaceFunction::parse(WP5HLListener *listener)
+void WP5SpaceFunction::parse(WP5Listener *listener)
 {
 	listener->insertCharacter((uint16_t) ' ');
 }
 
-void WP5HardSpaceFunction::parse(WP5HLListener *listener)
+void WP5HardSpaceFunction::parse(WP5Listener *listener)
 {
 	listener->insertCharacter((uint16_t) 0xa0);
 }
 
-void WP5HyphenFunction::parse(WP5HLListener *listener)
+void WP5HyphenFunction::parse(WP5Listener *listener)
 {
 	listener->insertCharacter((uint16_t) '-');
 }
 
-void WP5SoftHyphenFunction::parse(WP5HLListener *listener)
+void WP5SoftHyphenFunction::parse(WP5Listener *listener)
 {
 	listener->insertCharacter((uint16_t) 0xad);
 }

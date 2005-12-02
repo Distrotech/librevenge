@@ -327,9 +327,9 @@ void HtmlListenerImpl::openTableCell(const WPXPropertyList &propList)
 		printf("\" ");
 	
 		if (propList["table:number-columns-spanned"])
-			printf("colspan=\"%d ", propList["table:number-columns-spanned"]->getInt());
+			printf("colspan=\"%d\" ", propList["table:number-columns-spanned"]->getInt());
 		if (propList["table:number-rows-spanned"])
-			printf("rowspan=\"%d ", propList["table:number-rows-spanned"]->getInt());
+			printf("rowspan=\"%d\" ", propList["table:number-rows-spanned"]->getInt());
 
 		printf(">\n");
 	}

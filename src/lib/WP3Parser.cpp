@@ -26,8 +26,8 @@
 #include "WP3Parser.h"
 #include "WPXHeader.h"
 #include "WP3Part.h"
-#include "WP3HLListener.h"
-#include "WP3HLStylesListener.h"
+#include "WP3Listener.h"
+#include "WP3StylesListener.h"
 #include "libwpd_internal.h"
 #include "WPXTable.h"
 
@@ -40,7 +40,7 @@ WP3Parser::~WP3Parser()
 {
 }
 
-void WP3Parser::parse(WPXInputStream *input, WP3HLListener *listener)
+void WP3Parser::parse(WPXInputStream *input, WP3Listener *listener)
 {
 	listener->startDocument();
 	
@@ -54,7 +54,7 @@ void WP3Parser::parse(WPXInputStream *input, WP3HLListener *listener)
 }
 
 // parseDocument: parses a document body (may call itself recursively, on other streams, or itself)
-void WP3Parser::parseDocument(WPXInputStream *input, WP3HLListener *listener)
+void WP3Parser::parseDocument(WPXInputStream *input, WP3Listener *listener)
 {
 	while (!input->atEOS())
 	{
@@ -96,12 +96,12 @@ void WP3Parser::parse(WPXHLListenerImpl *listenerImpl)
  	{
 		// do a "first-pass" parse of the document
 		// gather table border information, page properties (per-page)
-		WP3HLStylesListener stylesListener(&pageList, tableList);
+		WP3StylesListener stylesListener(&pageList, tableList);
 		parse(input, &stylesListener);
 
 		// second pass: here is where we actually send the messages to the target app
 		// that are necessary to emit the body of the target document
-		WP3HLListener listener(&pageList, listenerImpl); // FIXME: SHOULD BE CONTENT_LISTENER, AND SHOULD BE PASSED TABLE DATA!
+		WP3Listener listener(&pageList, listenerImpl); // FIXME: SHOULD BE CONTENT_LISTENER, AND SHOULD BE PASSED TABLE DATA!
 		parse(input, &listener);
 		
 		// cleanup section: free the used resources

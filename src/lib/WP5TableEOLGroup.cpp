@@ -26,7 +26,6 @@
 
 #include "WP5TableEOLGroup.h"
 #include "WP5FileStructure.h"
-#include "WP5LLListener.h"
 #include "libwpd_internal.h"
 
 WP5TableEOLGroup::WP5TableEOLGroup(WPXInputStream *input) :
@@ -62,7 +61,7 @@ void WP5TableEOLGroup::_readContents(WPXInputStream *input)
 		m_cellVerticalAlignment = ((tmpFlags & 0x0C) >> 2);
 		m_columnNumber = readU8(input);
 		tmpColumnSpanning = readU8(input);
-		m_colSpan = tmpColumnSpanning & 0x3F;
+		m_colSpan = tmpColumnSpanning & 0x7F;
 		if ((tmpColumnSpanning & 0x80) == 0x80)
 			m_spannedFromAbove = true;
 		m_rowSpan = readU8(input);
@@ -79,16 +78,17 @@ void WP5TableEOLGroup::_readContents(WPXInputStream *input)
 	}
 }
 
-void WP5TableEOLGroup::parse(WP5HLListener *listener)
+void WP5TableEOLGroup::parse(WP5Listener *listener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling a Table EOL group\n"));
 
 	switch (getSubGroup())
 	{
 	case WP5_TABLE_EOL_GROUP_BEGINNING_OF_COLUMN_AT_EOL:
+		if (!m_spannedFromAbove)
 		{
-		RGBSColor tmpCellBorderColor(0x00, 0x00, 0x00, 0x64);
-		listener->insertCell(m_colSpan, m_rowSpan, false, m_spannedFromAbove, 0x00, NULL, NULL, &tmpCellBorderColor ,
+			RGBSColor tmpCellBorderColor(0x00, 0x00, 0x00, 0x64);
+			listener->insertCell(m_colSpan, m_rowSpan, 0x00, NULL, NULL, &tmpCellBorderColor ,
 				TOP, m_useCellAttributes, m_cellAttributes);
 		}
 		break;

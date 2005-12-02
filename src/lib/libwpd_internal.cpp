@@ -24,6 +24,7 @@
  */
 #include "libwpd_internal.h"
 #include "WPXStream.h"
+#include <ctype.h>
 
 uint8_t readU8(WPXInputStream *input)
 {
@@ -71,6 +72,15 @@ uint32_t readU32(WPXInputStream *input, bool bigendian)
 	if (bigendian)
 		return WPD_BE_GET_GUINT32(val);
 	return WPD_LE_GET_GUINT32(val);
+}
+
+std::string readPascalString(WPXInputStream *input)
+{
+	int pascalStringLength = readU8(input);
+	std::string tmpString;
+	for (int i=0; i<pascalStringLength; i++)
+		tmpString+=(char)readU8(input);
+	return tmpString;
 }
 
 // the ascii map appears stupid, but we need the const 16-bit data for now
@@ -495,77 +505,77 @@ int extendedCharacterWP6ToUCS2(uint8_t character,
 		if (character < WP6_NUM_MULTINATIONAL_CHARACTERS)
 			*chars = &multinationalWP6[character];
 		else
-			*chars = &asciiMap[' '];
+			*chars = &asciiMap[32];
 		return 1;
 		
 	case WP6_PHONETIC_SYMBOL_CHARACTER_SET:
 		if (character < WP6_NUM_PHONETIC_CHARACTERS)
 			*chars = &phoneticWP6[character];
 		else
-			*chars = &asciiMap[' '];
+			*chars = &asciiMap[32];
 		return 1;
 
 	case WP6_BOX_DRAWING_CHARACTER_SET:
 		if (character < WP6_NUM_BOX_DRAWING_CHARACTERS)
 			*chars = &boxdrawingWP6[character];
 		else
-			*chars = &asciiMap[' '];
+			*chars = &asciiMap[32];
 		return 1;
 
 	case WP6_TYPOGRAPHIC_SYMBOL_CHARACTER_SET:
 		if (character < WP6_NUM_TYPOGRAPHIC_CHARACTERS)
 			*chars = &typographicWP6[character];
 		else
-			*chars = &asciiMap[' '];
+			*chars = &asciiMap[32];
 		return 1;
 
 	case WP6_ICONIC_SYMBOL_CHARACTER_SET:
 		if (character < WP6_NUM_ICONIC_CHARACTERS)
 			*chars = &iconicWP6[character];
 		else
-			*chars = &asciiMap[' '];
+			*chars = &asciiMap[32];
 		return 1;
 
 	case WP6_MATH_SCIENTIFIC_CHARACTER_SET:
 		if (character < WP6_NUM_MATH_SCIENTIFIC_CHARACTERS)
 			*chars = &mathWP6[character];
 		else
-			*chars = &asciiMap[' '];
+			*chars = &asciiMap[32];
 		return 1;
 
 	case WP6_MATH_SCIENTIFIC_EXTENDED_CHARACTER_SET:
 		if (character < WP6_NUM_MATH_SCIENTIFIC_EXTENDED_CHARACTERS)
 			*chars = &mathextWP6[character];
 		else
-			*chars = &asciiMap[' '];
+			*chars = &asciiMap[32];
 		return 1;
 
 	case WP6_GREEK_CHARACTER_SET:
 		if (character < WP6_NUM_GREEK_CHARACTERS)
 			*chars = &greekWP6[character];
 		else
-			*chars = &asciiMap[' '];
+			*chars = &asciiMap[32];
 		return 1;
 
 	case WP6_HEBREW_CHARACTER_SET:
 		if (character < WP6_NUM_HEBREW_CHARACTERS)
 			*chars = &hebrewWP6[character];
 		else
-			*chars = &asciiMap[' '];
+			*chars = &asciiMap[32];
 		return 1;
 
 	case WP6_CYRILLIC_CHARACTER_SET:
 		if (character < WP6_NUM_CYRILLIC_CHARACTERS)
 			*chars = &cyrillicWP6[character];
 		else
-			*chars = &asciiMap[' '];
+			*chars = &asciiMap[32];
 		return 1;
 
 	case WP6_JAPANESE_CHARACTER_SET:
 		if (character < WP6_NUM_JAPANESE_CHARACTERS)
 			*chars = &japaneseWP6[character];
 		else
-			*chars = &asciiMap[' '];
+			*chars = &asciiMap[32];
 		return 1;
 
 	case WP6_TIBETAN_CHARACTER_SET:
@@ -576,7 +586,7 @@ int extendedCharacterWP6ToUCS2(uint8_t character,
 			return i;
 		}
 		else {
-			*chars = &asciiMap[' '];
+			*chars = &asciiMap[32];
 			return 1;
 		}
 
@@ -584,19 +594,19 @@ int extendedCharacterWP6ToUCS2(uint8_t character,
 		if (character < WP6_NUM_ARABIC_CHARACTERS)
 			*chars = &arabicWP6[character];
 		else
-			*chars = &asciiMap[' '];
+			*chars = &asciiMap[32];
 		return 1;
 
 	case WP6_ARABIC_SCRIPT_CHARACTER_SET:
 		if (character < WP6_NUM_ARABIC_SCRIPT_CHARACTERS)
 			*chars = &arabicScriptWP6[character];
 		else
-			*chars = &asciiMap[' '];
+			*chars = &asciiMap[32];
 		return 1;
 	}
 
 	// last resort: return whitespace
-	*chars = &asciiMap[' '];
+	*chars = &asciiMap[32];
 	return 1;
 }
 
@@ -838,63 +848,63 @@ int extendedCharacterWP5ToUCS2(uint8_t character,
 		if (character < WP5_NUM_INTERNATIONAL_1_CHARACTERS)
 			*chars = &international1WP5[character];
 		else
-			*chars = &asciiMap[' '];
+			*chars = &asciiMap[32];
 		return 1;
 
 	case WP5_INTERNATIONAL_2_CHARACTER_SET:
 		if (character < WP5_NUM_INTERNATIONAL_2_CHARACTERS)
 			*chars = &international2WP5[character];
 		else
-			*chars = &asciiMap[' '];
+			*chars = &asciiMap[32];
 		return 1;
 
 	case WP5_BOX_DRAWING_CHARACTER_SET:
 		if (character < WP5_NUM_BOX_DRAWING_CHARACTERS)
 			*chars = &boxdrawingWP5[character];
 		else
-			*chars = &asciiMap[' '];
+			*chars = &asciiMap[32];
 		return 1;
 
 	case WP5_TYPOGRAPHIC_SYMBOL_CHARACTER_SET:
 		if (character < WP5_NUM_TYPOGRAPHIC_CHARACTERS)
 			*chars = &typographicWP5[character];
 		else
-			*chars = &asciiMap[' '];
+			*chars = &asciiMap[32];
 		return 1;
 
 	case WP5_ICONIC_SYMBOL_CHARACTER_SET:
 		if (character < WP5_NUM_ICONIC_CHARACTERS)
 			*chars = &iconicWP5[character];
 		else
-			*chars = &asciiMap[' '];
+			*chars = &asciiMap[32];
 		return 1;
 
 	case WP5_MATH_SCIENTIFIC_CHARACTER_SET:
 		if (character < WP5_NUM_MATH_SCIENTIFIC_CHARACTERS)
 			*chars = &mathWP5[character];
 		else
-			*chars = &asciiMap[' '];
+			*chars = &asciiMap[32];
 		return 1;
 
 	case WP5_MATH_SCIENTIFIC_EXTENDED_CHARACTER_SET:
 		if (character < WP5_NUM_MATH_SCIENTIFIC_EXTENDED_CHARACTERS)
 			*chars = &mathextWP5[character];
 		else
-			*chars = &asciiMap[' '];
+			*chars = &asciiMap[32];
 		return 1;
 
 	case WP5_GREEK_CHARACTER_SET:
 		if (character < WP5_NUM_GREEK_CHARACTERS)
 			*chars = &greekWP5[character];
 		else
-			*chars = &asciiMap[' '];
+			*chars = &asciiMap[32];
 		return 1;
 
 	case WP5_HEBREW_CHARACTER_SET:
 		if (character < WP5_NUM_HEBREW_CHARACTERS)
 			*chars = &hebrewWP5[character];
 		else
-			*chars = &asciiMap[' '];
+			*chars = &asciiMap[32];
 		return 1;
 
 	case WP5_CYRILLIC_CHARACTER_SET:
@@ -906,12 +916,12 @@ int extendedCharacterWP5ToUCS2(uint8_t character,
 		if (character < WP5_NUM_JAPANESE_CHARACTERS)
 			*chars = &japaneseWP5[character];
 		else
-			*chars = &asciiMap[' '];
+			*chars = &asciiMap[32];
 		return 1;
 	}
 
 	// last resort: return whitespace
-	*chars = &asciiMap[' '];
+	*chars = &asciiMap[32];
 	return 1;
 }
 
@@ -942,6 +952,30 @@ _RGBSColor::_RGBSColor()
 {
 }
 
+_RGBSColor::_RGBSColor(uint16_t red, uint16_t green, uint16_t blue)
+{
+	int minRGB = red;
+	if (minRGB > green)
+		minRGB = green;
+	if (minRGB > blue)
+		minRGB = blue;
+		
+	if (minRGB >= 65535)
+	{
+		m_r = 255;
+		m_g = 255;
+		m_b = 255;
+		m_s = 100;
+	}
+	else
+	{
+		m_r = (uint8_t)rint(255*((double)(red - minRGB))/((double)(65535 - minRGB)));
+		m_g = (uint8_t)rint(255*((double)(green - minRGB))/((double)(65535 - minRGB)));
+		m_b = (uint8_t)rint(255*((double)(blue - minRGB))/((double)(65535 - minRGB)));
+		m_s = (uint8_t)rint(100*((double)(65535 - minRGB))/(double)65535);
+	}		
+}
+
 _WPXTabStop::_WPXTabStop(float position, WPXTabAlignment alignment, uint16_t leaderCharacter, uint8_t leaderNumSpaces)
 	:	m_position(position),
 		m_alignment(alignment),
@@ -970,3 +1004,118 @@ _WPXColumnProperties::_WPXColumnProperties()
 		m_alignment(0x00)
 {
 }
+
+// HACK: this function is really cheesey
+int _extractNumericValueFromRoman(const char romanChar)
+{
+	switch (romanChar)
+	{
+	case 'I':
+	case 'i':
+		return 1;
+	case 'V':
+	case 'v':
+		return 5;
+	case 'X':
+	case 'x':
+		return 10;
+	default:
+		throw ParseException();
+	}
+	return 1;
+}
+
+// _extractDisplayReferenceNumberFromBuf: given a nuWP6_DEFAULT_FONT_SIZEmber string in UCS2 represented
+// as letters, numbers, or roman numerals.. return an integer value representing its number
+// HACK: this function is really cheesey
+// NOTE: if the input is not valid, the output is unspecified
+int _extractDisplayReferenceNumberFromBuf(const WPXString &buf, const WPXNumberingType listType)
+{
+	if (listType == LOWERCASE_ROMAN || listType == UPPERCASE_ROMAN)
+	{
+		int currentSum = 0;
+		int lastMark = 0;
+		WPXString::Iter i(buf);
+		for (i.rewind(); i.next();)
+		{
+			int currentMark = _extractNumericValueFromRoman(*(i()));
+			if (lastMark < currentMark) {
+				currentSum = currentMark - lastMark;
+			}
+			else
+				currentSum+=currentMark;
+			lastMark = currentMark;
+		}
+		return currentSum;
+	}
+	else if (listType == LOWERCASE || listType == UPPERCASE)
+	{
+		// FIXME: what happens to a lettered list that goes past z? ah
+		// the sweet mysteries of life
+		if (buf.len()==0)
+			throw ParseException();
+		char c = buf.cstr()[0];
+		if (listType==LOWERCASE)
+			c = toupper(c);
+		return (c - 64);
+	}
+	else if (listType == ARABIC)
+	{
+		int currentSum = 0;
+		WPXString::Iter i(buf);
+		for (i.rewind(); i.next();)
+		{
+			currentSum *= 10;
+			currentSum+=(*(i())-48);
+		}
+		return currentSum;
+	}
+
+	return 1;
+}
+
+WPXNumberingType _extractWPXNumberingTypeFromBuf(const WPXString &buf, const WPXNumberingType putativeWPXNumberingType)
+{
+	WPXString::Iter i(buf);
+	for (i.rewind(); i.next();)
+	{
+		if ((*(i()) == 'I' || *(i()) == 'V' || *(i()) == 'X') &&
+		    (putativeWPXNumberingType == LOWERCASE_ROMAN || putativeWPXNumberingType == UPPERCASE_ROMAN))
+			return UPPERCASE_ROMAN;
+		else if ((*(i()) == 'i' || *(i()) == 'v' || *(i()) == 'x') &&
+		    (putativeWPXNumberingType == LOWERCASE_ROMAN || putativeWPXNumberingType == UPPERCASE_ROMAN))
+			return LOWERCASE_ROMAN;
+		else if (*(i()) >= 'A' && *(i()) <= 'Z')
+			return UPPERCASE;
+		else if (*(i()) >= 'a' && *(i()) <= 'z')
+			return LOWERCASE;
+	}
+
+	return ARABIC;
+}
+
+WPXString _numberingTypeToString(WPXNumberingType t)
+{
+	WPXString sListTypeSymbol("1");
+	switch (t)
+	{
+	case ARABIC:
+		sListTypeSymbol.sprintf("1");
+		break;	
+	case LOWERCASE:
+		sListTypeSymbol.sprintf("a");
+		break;	
+	case UPPERCASE:
+		sListTypeSymbol.sprintf("A");
+		break;	
+ 	case LOWERCASE_ROMAN:
+		sListTypeSymbol.sprintf("i");
+		break;	
+ 	case UPPERCASE_ROMAN:
+		sListTypeSymbol.sprintf("I");
+		break;
+	}
+
+	return sListTypeSymbol;
+}
+

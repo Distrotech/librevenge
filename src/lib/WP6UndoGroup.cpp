@@ -24,7 +24,6 @@
  */
 
 #include "WP6UndoGroup.h"
-#include "WP6LLListener.h"
 #include "libwpd_internal.h"
 
 WP6UndoGroup::WP6UndoGroup(WPXInputStream *input, uint8_t groupID)
@@ -39,7 +38,7 @@ void WP6UndoGroup::_readContents(WPXInputStream *input)
 	m_undoLevel = readU16(input);
 }
 
-void WP6UndoGroup::parse(WP6HLListener *listener)
+void WP6UndoGroup::parse(WP6Listener *listener)
 {
 	listener->undoChange(m_undoType, m_undoLevel);
 }

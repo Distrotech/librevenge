@@ -24,28 +24,28 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WP5HLListener.h"
+#include "WP5Listener.h"
 #include "WP5FileStructure.h"
 #include "WPXFileStructure.h"
 #include "libwpd_internal.h"
 
 _WP5ParsingState::_WP5ParsingState()
 {
+	m_textBuffer.clear();
 }
 
 _WP5ParsingState::~_WP5ParsingState()
 {
-}
-
-WP5HLListener::WP5HLListener(std::vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl) :
-	WPXHLListener(pageList, listenerImpl),
-	WP5LLListener(),
-	m_parseState(new WP5ParsingState)
-{
 	m_textBuffer.clear();
 }
 
-WP5HLListener::~WP5HLListener() 
+WP5Listener::WP5Listener(std::vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl) :
+	WPXListener(pageList, listenerImpl),
+	m_parseState(new WP5ParsingState)
+{
+}
+
+WP5Listener::~WP5Listener() 
 {
 	delete m_parseState;
 }
@@ -55,14 +55,14 @@ WP5HLListener::~WP5HLListener()
  public 'HLListenerImpl' functions
 *****************************************/
 
-void WP5HLListener::insertCharacter(const uint16_t character)
+void WP5Listener::insertCharacter(const uint16_t character)
 {
 	if (!m_ps->m_isSpanOpened)
 		_openSpan();
-	appendUCS4(m_textBuffer, (uint32_t)character);
+	appendUCS4(m_parseState->m_textBuffer, (uint32_t)character);
 }
 
-void WP5HLListener::insertTab(const uint8_t tabType, const float tabPosition)
+void WP5Listener::insertTab(const uint8_t tabType, const float tabPosition)
 {
 	if (!m_ps->m_isSpanOpened)
 		_openSpan();
@@ -72,7 +72,7 @@ void WP5HLListener::insertTab(const uint8_t tabType, const float tabPosition)
 	m_listenerImpl->insertTab();
 }
 
-void WP5HLListener::insertEOL()
+void WP5Listener::insertEOL()
 {
 	if (!isUndoOn())
 	{
@@ -85,7 +85,7 @@ void WP5HLListener::insertEOL()
 	}
 }
 
-void WP5HLListener::endDocument()
+void WP5Listener::endDocument()
 {
 	_closeSpan();
 	_closeParagraph();
@@ -95,7 +95,7 @@ void WP5HLListener::endDocument()
 	m_listenerImpl->endDocument();
 }
 
-void WP5HLListener::defineTable(uint8_t position, uint16_t leftOffset)
+void WP5Listener::defineTable(const uint8_t position, const uint16_t leftOffset)
 {
 	if (!isUndoOn())
 	{
@@ -126,10 +126,12 @@ void WP5HLListener::defineTable(uint8_t position, uint16_t leftOffset)
 		// remove all the old column information
 		m_ps->m_tableDefinition.columns.clear();
 		m_ps->m_tableDefinition.columnsProperties.clear();
+		m_ps->m_numRowsToSkip.clear();
 	}
 }
 
-void WP5HLListener::addTableColumnDefinition(uint32_t width, uint32_t leftGutter, uint32_t rightGutter, uint32_t attributes, uint8_t alignment)
+void WP5Listener::addTableColumnDefinition(const uint32_t width, const uint32_t leftGutter, const uint32_t rightGutter,
+										   const uint32_t attributes, const uint8_t alignment)
 {
 	if (!isUndoOn())
 	{
@@ -147,10 +149,13 @@ void WP5HLListener::addTableColumnDefinition(uint32_t width, uint32_t leftGutter
 		colProp.m_alignment = alignment;
 		
 		m_ps->m_tableDefinition.columnsProperties.push_back(colProp);
+
+		// initialize the variable that tells us how many columns to skip
+		m_ps->m_numRowsToSkip.push_back(0);
 	}
 }
 
-void WP5HLListener::startTable()
+void WP5Listener::startTable()
 {
 	if (!isUndoOn())
 	{
@@ -166,7 +171,7 @@ void WP5HLListener::startTable()
 	}
 }
 
-void WP5HLListener::insertRow(const uint16_t rowHeight, const bool isMinimumHeight, const bool isHeaderRow)
+void WP5Listener::insertRow(const uint16_t rowHeight, const bool isMinimumHeight, const bool isHeaderRow)
 {
 	if (!isUndoOn())
 	{
@@ -176,8 +181,8 @@ void WP5HLListener::insertRow(const uint16_t rowHeight, const bool isMinimumHeig
 	}
 }
 
-void WP5HLListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan, const bool boundFromLeft, const bool boundFromAbove,
-			const uint8_t borderBits, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor, 
+void WP5Listener::insertCell(const uint8_t colSpan, const uint8_t rowSpan, const uint8_t borderBits,
+			const RGBSColor * cellFgColor, const RGBSColor * cellBgColor, 
 			const RGBSColor * cellBorderColor, const WPXVerticalAlignment cellVerticalAlignment, 
 			const bool useCellAttributes, const uint32_t cellAttributes)
 {
@@ -186,8 +191,8 @@ void WP5HLListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan, con
 		if (m_ps->m_currentTableRow < 0) // cell without a row, invalid
 			throw ParseException();
 		_flushText();
-		_openTableCell(colSpan, rowSpan, boundFromLeft, boundFromAbove, borderBits,       
-			       cellFgColor, cellBgColor, cellBorderColor, cellVerticalAlignment);
+		_openTableCell(colSpan, rowSpan, borderBits, cellFgColor, cellBgColor,
+					cellBorderColor, cellVerticalAlignment);
 		m_ps->m_isCellWithoutParagraph = true;
 		if (useCellAttributes)
 			m_ps->m_cellAttributeBits = cellAttributes;
@@ -197,7 +202,7 @@ void WP5HLListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan, con
 	}
 }
 
-void WP5HLListener::endTable()
+void WP5Listener::endTable()
 {
 	if (!isUndoOn())
 	{
@@ -213,7 +218,7 @@ void WP5HLListener::endTable()
  public 'parser' functions
 *****************************************/
 
-void WP5HLListener::attributeChange(const bool isOn, const uint8_t attribute)
+void WP5Listener::attributeChange(const bool isOn, const uint8_t attribute)
 {
 	_closeSpan();
 
@@ -278,12 +283,11 @@ void WP5HLListener::attributeChange(const bool isOn, const uint8_t attribute)
 		m_ps->m_textAttributeBits ^= textAttributeBit;
 }
 
-void WP5HLListener::marginChange(uint8_t side, uint16_t margin)
+void WP5Listener::marginChange(uint8_t side, uint16_t margin)
 {
 	//if (!isUndoOn())
 	//{
 		float marginInch = (float)((double)margin/ (double)WPX_NUM_WPUS_PER_INCH);
-		bool marginChanged = false;
 
 		switch(side)
 		{
@@ -300,6 +304,7 @@ void WP5HLListener::marginChange(uint8_t side, uint16_t margin)
 						+ m_ps->m_rightMarginByTabs;
 			break;
 		}
+		m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent;
 	//}
 }
 
@@ -308,10 +313,10 @@ void WP5HLListener::marginChange(uint8_t side, uint16_t margin)
  private functions
 *****************************************/
 
-void WP5HLListener::_flushText()
+void WP5Listener::_flushText()
 {
-	if (m_textBuffer.len())
-		m_listenerImpl->insertText(m_textBuffer);
-	m_textBuffer.clear();
+	if (m_parseState->m_textBuffer.len())
+		m_listenerImpl->insertText(m_parseState->m_textBuffer);
+	m_parseState->m_textBuffer.clear();
 }
 

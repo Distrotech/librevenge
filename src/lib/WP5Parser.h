@@ -29,7 +29,7 @@
 #include "WPXParser.h"
 
 class WPXHLListenerImpl;
-class WP5HLListener;
+class WP5Listener;
 
 class WP5Parser : public WPXParser
 {
@@ -39,10 +39,10 @@ public:
 
 	virtual void parse(WPXHLListenerImpl *listenerImpl);
 	
-	static void parseDocument(WPXInputStream *input, WP5HLListener *listener);
+	static void parseDocument(WPXInputStream *input, WP5Listener *listener);
 
 private:
-	void parse(WPXInputStream *input, WP5HLListener *listener);
+	void parse(WPXInputStream *input, WP5Listener *listener);
 };
 
 #endif /* WP5PARSER_H */

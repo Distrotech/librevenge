@@ -36,7 +36,7 @@ WP6GeneralTextPacket::WP6GeneralTextPacket(WPXInputStream *input, int id, uint32
 
 WP6GeneralTextPacket::~WP6GeneralTextPacket()
 {
-	delete m_stream;
+	delete m_subDocument;
 	delete [] m_blockSizes;
 }
 
@@ -69,11 +69,10 @@ void WP6GeneralTextPacket::_readContents(WPXInputStream *input)
 		}
 	}
 
-	m_stream = new WPXMemoryInputStream(streamData, totalSize);
+	m_subDocument = new WP6SubDocument(streamData, totalSize);
 }
 
-void WP6GeneralTextPacket::parse(WP6HLListener *listener) const
+void WP6GeneralTextPacket::parse(WP6Listener *listener) const
 {
-	m_stream->seek(0, WPX_SEEK_SET);
-	WP6Parser::parseDocument(m_stream, listener);
+	m_subDocument->parse(static_cast<WPXListener *>(listener));
 }

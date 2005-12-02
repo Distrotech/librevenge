@@ -41,10 +41,9 @@ typedef struct _WPXTableCell WPXTableCell;
 
 struct _WPXTableCell
 {
-	_WPXTableCell(uint8_t colSpan, uint8_t rowSpan, bool boundFromLeft, bool boundFromAbove, uint8_t borderBits);
+	_WPXTableCell(uint8_t colSpan, uint8_t rowSpan, uint8_t borderBits);
 	uint8_t m_colSpan;
 	uint8_t m_rowSpan;
-	bool m_boundFromLeft, m_boundFromAbove;
 	uint8_t m_borderBits;
 };
 
@@ -54,7 +53,7 @@ public:
 	WPXTable() {}
 	~WPXTable();
 	void insertRow();
-	void insertCell(uint8_t colSpan, uint8_t rowSpan, bool boundFromLeft, bool boundFromAbove, uint8_t borderBits);
+	void insertCell(uint8_t colSpan, uint8_t rowSpan, uint8_t borderBits);
 	const WPXTableCell * getCell(int i, int j) { return (*m_tableRows[i])[j]; }
 	void makeBordersConsistent();
 	void _makeCellBordersConsistent(WPXTableCell *cell, std::vector<WPXTableCell *> *adjacentCells, 

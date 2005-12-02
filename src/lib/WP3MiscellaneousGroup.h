@@ -35,7 +35,7 @@ class WP3MiscellaneousGroup : public WP3VariableLengthGroup
 	WP3MiscellaneousGroup(WPXInputStream *input);	
 	virtual ~WP3MiscellaneousGroup();
 	virtual void _readContents(WPXInputStream *input);
-	virtual void parse(WP3HLListener *listener);
+	virtual void parse(WP3Listener *listener);
 
  private:
 	// variables needed for subgroup 4 (Page Size Override)

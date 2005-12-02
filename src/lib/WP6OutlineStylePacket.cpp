@@ -60,7 +60,7 @@ void WP6OutlineStylePacket::_readContents(WPXInputStream *input)
                      
 }
 
-void WP6OutlineStylePacket::parse(WP6HLListener *listener) const
+void WP6OutlineStylePacket::parse(WP6Listener *listener) const
 {
 	listener->updateOutlineDefinition(indexHeader, m_outlineHash, m_numberingMethods, m_tabBehaviourFlag);
 }

@@ -28,7 +28,7 @@
 
 #include "WPXPart.h"
 #include "WPXParser.h"
-#include "WP6HLListener.h"
+#include "WP6Listener.h"
 #include "WP6FileStructure.h"
 
 class WP6Part
@@ -37,7 +37,7 @@ class WP6Part
 	virtual ~WP6Part() {}
 	
 	static WP6Part * constructPart(WPXInputStream *input, uint8_t readVal);
-	virtual void parse(WP6HLListener *listener) = 0;
+	virtual void parse(WP6Listener *listener) = 0;
 };
 
 

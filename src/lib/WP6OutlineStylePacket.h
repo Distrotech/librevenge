@@ -27,7 +27,7 @@
 #define WP6OUTLINESTYLEPACKET_H
 #include "WP6PrefixDataPacket.h"
 #include "WP6FileStructure.h"
-#include "WP6HLListener.h"
+#include "WP6Listener.h"
 
 class WP6OutlineStylePacket : public WP6PrefixDataPacket
 {
@@ -35,7 +35,7 @@ class WP6OutlineStylePacket : public WP6PrefixDataPacket
 	WP6OutlineStylePacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize);
 	virtual ~WP6OutlineStylePacket();
 	virtual void _readContents(WPXInputStream *input);
-	virtual void parse(WP6HLListener *listener) const;
+	virtual void parse(WP6Listener *listener) const;
 
  private:              
       uint16_t m_numPIDs;

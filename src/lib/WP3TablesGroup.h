@@ -26,6 +26,7 @@
 #define WP3TABLESGROUP_H
 
 #include "WP3VariableLengthGroup.h"
+#include "libwpd_internal.h"
 
 class WP3TablesGroup : public WP3VariableLengthGroup
 {
@@ -33,7 +34,7 @@ class WP3TablesGroup : public WP3VariableLengthGroup
 	WP3TablesGroup(WPXInputStream *input);	
 	virtual ~WP3TablesGroup();
 	virtual void _readContents(WPXInputStream *input);
-	virtual void parse(WP3HLListener *listener);
+	virtual void parse(WP3Listener *listener);
 
  private:
 	// variables needed for subgroup 1 (Table Function)
@@ -50,8 +51,11 @@ class WP3TablesGroup : public WP3VariableLengthGroup
 	uint32_t m_rightOffsetForDecimalAlign[32];
 	
 	// variables needed for subgroup 2 (Set Table Cell Span)
-	uint8_t m_colSpan;
-	uint8_t m_rowSpan;
+	uint16_t m_colSpan;
+	uint16_t m_rowSpan;
+	
+	// variables needed for subgroup 0x0B (Set Table Cell Fill Color/Patern)
+	RGBSColor m_cellFillColor;
 };
 
 #endif /* WP3TABLESGROUP_H */

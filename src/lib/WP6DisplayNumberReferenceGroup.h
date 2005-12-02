@@ -33,7 +33,7 @@ class WP6DisplayNumberReferenceGroup : public WP6VariableLengthGroup
  public:
 	WP6DisplayNumberReferenceGroup(WPXInputStream *input);	
 	virtual void _readContents(WPXInputStream *input);
-	virtual void parse(WP6HLListener *listener);
+	virtual void parse(WP6Listener *listener);
 	
  private:
 	uint8_t m_levelNumberToDisplay;

@@ -1,5 +1,6 @@
 /* libwpd
  * Copyright (C) 2004 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -40,6 +41,7 @@ class WP3VariableLengthGroup : public WP3Part
  	virtual void _readContents(WPXInputStream *input) {} // we don't always need more information than that provided generically
 
 	const uint8_t getSubGroup() const { return m_subGroup; }
+	const uint16_t getSize() const { return m_size;}
 
  private:
 	uint8_t m_subGroup;

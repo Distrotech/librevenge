@@ -32,7 +32,7 @@ class WP3EndOfLinePageGroup : public WP3VariableLengthGroup
 {
 public:
 	WP3EndOfLinePageGroup(WPXInputStream *input);	
-	virtual void parse(WP3HLListener *listener);
+	virtual void parse(WP3Listener *listener);
 	
 protected:
 	virtual void _readContents(WPXInputStream *input);

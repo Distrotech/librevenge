@@ -6,7 +6,7 @@ endif
 
 bin_PROGRAMS = $(target_wpd2text)
 
-AM_CXXFLAGS = $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS) -I../../lib/
+AM_CXXFLAGS = $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS) -I$(top_srcdir)/src/lib/
 
 wpd2text_LDFLAGS = -L../../lib/
 wpd2text_DEPENDENCIES = @WPD2TEXT_WIN32_RESOURCE@ 

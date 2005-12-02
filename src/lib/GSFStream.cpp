@@ -29,8 +29,8 @@
 #include <gsf/gsf-input.h>
 
 GSFInputStream::GSFInputStream(GsfInput *input) :
-	m_input(input),
 	WPXInputStream(true),
+	m_input(input),
 	m_ole(NULL)
 {
 	g_object_ref(G_OBJECT(input));

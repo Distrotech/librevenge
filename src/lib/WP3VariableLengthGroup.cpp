@@ -1,6 +1,6 @@
 /* libwpd
  * Copyright (C) 2004 Marc Maurer (j.m.maurer@student.utwente.nl)
- * Copyright (C) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (C) 2004-2005 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -29,6 +29,10 @@
 #include "WP3EndOfLinePageGroup.h"
 #include "WP3MiscellaneousGroup.h"
 #include "WP3PageFormatGroup.h"
+#include "WP3FontGroup.h"
+#include "WP3DefinitionGroup.h"
+#include "WP3DisplayGroup.h"
+#include "WP3FootnoteEndnoteGroup.h"
 #include "WP3TablesGroup.h"
 #include "libwpd_internal.h"
 
@@ -48,6 +52,14 @@ WP3VariableLengthGroup * WP3VariableLengthGroup::constructVariableLengthGroup(WP
 			return new WP3MiscellaneousGroup(input);
 		case WP3_TABLES_GROUP:
 			return new WP3TablesGroup(input);
+		case WP3_FONT_GROUP:
+			return new WP3FontGroup(input);
+		case WP3_DEFINITION_GROUP:
+			return new WP3DefinitionGroup(input);
+		case WP3_FOOTNOTE_ENDNOTE_GROUP:
+			return new WP3FootnoteEndnoteGroup(input);
+		case WP3_DISPLAY_GROUP:
+			return new WP3DisplayGroup(input);
 		default:
 			// this is an unhandled group, just skip it
 			return new WP3UnsupportedVariableLengthGroup(input);

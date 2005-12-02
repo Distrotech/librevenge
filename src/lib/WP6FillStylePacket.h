@@ -27,7 +27,7 @@
 #define WP6FILLSTYLEPACKET_H
 #include "WP6PrefixDataPacket.h"
 #include "WP6FileStructure.h"
-#include "WP6LLListener.h"
+#include "libwpd_internal.h"
 
 struct _RGBSColor;
 typedef struct _RGBSColor RGBSColor; 
@@ -38,7 +38,7 @@ public:
 	WP6FillStylePacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize);
 	virtual ~WP6FillStylePacket();
 	virtual void _readContents(WPXInputStream *input);
-	virtual void parse(WP6HLListener *listener) const {}
+	virtual void parse(WP6Listener *listener) const {}
 	const RGBSColor * getFgColor() const { return &m_fgColor; }
 	const RGBSColor * getBgColor() const { return &m_bgColor; }
 private:              

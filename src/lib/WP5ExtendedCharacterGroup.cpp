@@ -27,7 +27,6 @@
 
 #include "WP5ExtendedCharacterGroup.h"
 #include "WP5FileStructure.h"
-#include "WP5LLListener.h"
 #include "libwpd_internal.h"
 
 WP5ExtendedCharacterGroup::WP5ExtendedCharacterGroup(WPXInputStream *input, uint8_t groupID) :
@@ -44,7 +43,7 @@ void WP5ExtendedCharacterGroup::_readContents(WPXInputStream *input)
 	m_characterSet = readU8(input);
 }
 
-void WP5ExtendedCharacterGroup::parse(WP5HLListener *listener)
+void WP5ExtendedCharacterGroup::parse(WP5Listener *listener)
 {
 	const uint16_t *chars;
 	int len = extendedCharacterWP5ToUCS2(m_character,

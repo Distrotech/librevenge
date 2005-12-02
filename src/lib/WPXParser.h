@@ -27,7 +27,7 @@
 #define WPXPARSER_H
 
 #include "WPXHeader.h"
-#include "WPXLLListener.h"
+//#include "WPXListener.h"
 
 class WPXHLListenerImpl;
 
@@ -45,7 +45,7 @@ protected:
 	
 private:
 	WPXInputStream * m_input;
-	WPXLLListener * m_llListener;
+//	WPXListener * m_hlListener;
 
 	WPXHeader * m_header;
 };

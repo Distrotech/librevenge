@@ -26,7 +26,6 @@
 
 #include "WP6ExtendedCharacterGroup.h"
 #include "WP6FileStructure.h"
-#include "WP6LLListener.h"
 #include "libwpd_internal.h"
 
 WP6ExtendedCharacterGroup::WP6ExtendedCharacterGroup(WPXInputStream *input, uint8_t groupID) :
@@ -43,7 +42,7 @@ void WP6ExtendedCharacterGroup::_readContents(WPXInputStream *input)
 	m_characterSet = readU8(input);
 }
 
-void WP6ExtendedCharacterGroup::parse(WP6HLListener *listener)
+void WP6ExtendedCharacterGroup::parse(WP6Listener *listener)
 {
 	const uint16_t *chars;
 	int len = extendedCharacterWP6ToUCS2(m_character,

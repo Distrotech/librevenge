@@ -42,7 +42,7 @@ WP5AttributeOnGroup::WP5AttributeOnGroup(WPXInputStream *input, uint8_t groupID)
 {
 }
 
-void WP5AttributeOnGroup::parse(WP5HLListener *listener)
+void WP5AttributeOnGroup::parse(WP5Listener *listener)
 {
 	listener->attributeChange(true, getAttribute());
 }
@@ -52,7 +52,7 @@ WP5AttributeOffGroup::WP5AttributeOffGroup(WPXInputStream *input, uint8_t groupI
 {
 }
 
-void WP5AttributeOffGroup::parse(WP5HLListener *listener)
+void WP5AttributeOffGroup::parse(WP5Listener *listener)
 {
 	listener->attributeChange(false, getAttribute());
 }

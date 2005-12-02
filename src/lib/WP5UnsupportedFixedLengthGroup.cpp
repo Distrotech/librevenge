@@ -24,7 +24,6 @@
  */
 
 #include "WP5UnsupportedFixedLengthGroup.h"
-#include "WP5LLListener.h"
 #include "libwpd_internal.h"
 
 WP5UnsupportedFixedLengthGroup::WP5UnsupportedFixedLengthGroup(WPXInputStream *input, uint8_t groupID)

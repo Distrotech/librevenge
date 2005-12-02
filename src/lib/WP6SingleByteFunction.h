@@ -37,67 +37,67 @@ class WP6SingleByteFunction : public WP6Part
 class WP6SpaceFunction : public WP6SingleByteFunction
 {
 public:
-	virtual void parse(WP6HLListener *listener);	
+	virtual void parse(WP6Listener *listener);	
 };
 
 class WP6HardSpaceFunction : public WP6SingleByteFunction
 {
 public:
-	virtual void parse(WP6HLListener *listener);	
+	virtual void parse(WP6Listener *listener);	
 };
 
 class WP6EOLFunction : public WP6SingleByteFunction
 {
 public:
-	virtual void parse(WP6HLListener *listener);	
+	virtual void parse(WP6Listener *listener);	
 };
 
 class WP6EOCFunction : public WP6SingleByteFunction
 {
 public:
-	virtual void parse(WP6HLListener *listener);	
+	virtual void parse(WP6Listener *listener);	
 };
 
 class WP6EOPFunction : public WP6SingleByteFunction
 {
 public:
-	virtual void parse(WP6HLListener *listener);	
+	virtual void parse(WP6Listener *listener);	
 };
 
 class WP6SoftEOPFunction : public WP6SingleByteFunction
 {
 public:
-	virtual void parse(WP6HLListener *listener);	
+	virtual void parse(WP6Listener *listener);	
 };
 
 class WP6SoftHyphenFunction : public WP6SingleByteFunction
 {
 public:
-	virtual void parse(WP6HLListener *listener);	
+	virtual void parse(WP6Listener *listener);	
 };
 
 class WP6HyphenFunction : public WP6SingleByteFunction
 {
 public:
-	virtual void parse(WP6HLListener *listener);	
+	virtual void parse(WP6Listener *listener);	
 };
 
 class WP6TableOffFunction : public WP6SingleByteFunction
 {
 public:
-	virtual void parse(WP6HLListener *listener);	
+	virtual void parse(WP6Listener *listener);	
 };
 
 class WP6TableCellFunction : public WP6SingleByteFunction
 {
 public:
-	virtual void parse(WP6HLListener *listener);	
+	virtual void parse(WP6Listener *listener);	
 };
 
 class WP6TableRowFunction : public WP6SingleByteFunction
 {
 public:
-	virtual void parse(WP6HLListener *listener);	
+	virtual void parse(WP6Listener *listener);	
 };
 
 #endif /* WP6SINGLEBYTEFUNCTION_H */

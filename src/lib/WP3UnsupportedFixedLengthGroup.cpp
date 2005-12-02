@@ -23,7 +23,6 @@
  */
 
 #include "WP3UnsupportedFixedLengthGroup.h"
-#include "WP3LLListener.h"
 #include "libwpd_internal.h"
 
 WP3UnsupportedFixedLengthGroup::WP3UnsupportedFixedLengthGroup(WPXInputStream *input, uint8_t groupID)

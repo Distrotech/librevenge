@@ -1,7 +1,11 @@
 if PLATFORM_WIN32
 no_undefined = -no-undefined
 else
+if PLATFORM_DARWIN
+no_undefined = -no-undefined
+else
 no_undefined =
+endif
 endif
 
 if OS_WIN32
@@ -30,6 +34,7 @@ libwpd_0_8_includedir = $(includedir)/libwpd-0.8/libwpd
 libwpd_0_8_include_HEADERS = libwpd.h libwpd_types.h WPXStream.h WPXProperty.h WPXPropertyList.h \
 WPXString.h WPXPropertyListVector.h WPDocument.h WPXHLListenerImpl.h
 
+INCLUDES = -I$(srcdir)
 
 AM_CXXFLAGS = $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS)
 
@@ -40,18 +45,23 @@ libwpd_0_8_la_SOURCES =				\
 	libwpd_internal.cpp			\
 	libwpd_math.cpp				\
 	WP3AttributeGroup.cpp			\
+	WP3DefinitionGroup.cpp			\
+	WP3DisplayGroup.cpp			\
 	WP3EndOfLinePageGroup.cpp		\
 	WP3ExtendedCharacterGroup.cpp		\
 	WP3FileStructure.cpp			\
 	WP3FixedLengthGroup.cpp			\
+	WP3FontGroup.cpp			\
+	WP3FootnoteEndnoteGroup.cpp		\
 	WP3Header.cpp				\
-	WP3HLListener.cpp			\
-	WP3HLStylesListener.cpp			\
+	WP3Listener.cpp				\
 	WP3MiscellaneousGroup.cpp		\
 	WP3PageFormatGroup.cpp			\
 	WP3Parser.cpp				\
 	WP3Part.cpp				\
 	WP3SingleByteFunction.cpp		\
+	WP3StylesListener.cpp			\
+	WP3SubDocument.cpp			\
 	WP3TablesGroup.cpp			\
 	WP3UndoGroup.cpp			\
 	WP3UnsupportedFixedLengthGroup.cpp 	\
@@ -59,10 +69,10 @@ libwpd_0_8_la_SOURCES =				\
 	WP3VariableLengthGroup.cpp		\
 	WP42FileStructure.cpp			\
 	WP42Heuristics.cpp			\
-	WP42HLListener.cpp			\
-	WP42HLStylesListener.cpp		\
+	WP42Listener.cpp			\
 	WP42Parser.cpp				\
 	WP42Part.cpp				\
+	WP42StylesListener.cpp			\
 	WP42UnsupportedVariableLengthGroup.cpp	\
 	WP42VariableLengthGroup.cpp		\
 	WP5AttributeGroup.cpp 			\
@@ -72,12 +82,12 @@ libwpd_0_8_la_SOURCES =				\
 	WP5FixedLengthGroup.cpp			\
 	WP5FormatGroup.cpp			\
 	WP5Header.cpp				\
-	WP5HLListener.cpp			\
-	WP5HLStylesListener.cpp			\
+	WP5Listener.cpp				\
 	WP5PageFormatGroup.cpp			\
 	WP5Parser.cpp				\
 	WP5Part.cpp				\
 	WP5SingleByteFunction.cpp		\
+	WP5StylesListener.cpp			\
 	WP5TableEOLGroup.cpp			\
 	WP5TableEOPGroup.cpp			\
 	WP5UnsupportedFixedLengthGroup.cpp	\
@@ -86,6 +96,7 @@ libwpd_0_8_la_SOURCES =				\
 	WP6AttributeGroup.cpp 			\
 	WP6CharacterGroup.cpp			\
 	WP6ColumnGroup.cpp			\
+	WP6ContentListener.cpp			\
 	WP6DefaultInitialFontPacket.cpp		\
 	WP6DisplayNumberReferenceGroup.cpp 	\
 	WP6EOLGroup.cpp				\
@@ -102,10 +113,7 @@ libwpd_0_8_la_SOURCES =				\
 	WP61Header.cpp				\
 	WP6HeaderFooterGroup.cpp 		\
 	WP6HighlightGroup.cpp			\
-	WP6HLContentListener.cpp		\
-	WP6HLListener.cpp			\
-	WP6HLStylesListener.cpp			\
-	WP6LLListener.cpp			\
+	WP6Listener.cpp				\
 	WP6Parser.cpp				\
 	WP6OutlineStylePacket.cpp		\
 	WP6PageGroup.cpp			\
@@ -116,6 +124,8 @@ libwpd_0_8_la_SOURCES =				\
 	WP6PrefixDataPacket.cpp			\
 	WP6SingleByteFunction.cpp		\
 	WP6StyleGroup.cpp			\
+	WP6StylesListener.cpp			\
+	WP6SubDocument.cpp			\
 	WP6TabGroup.cpp 			\
 	WP6UndoGroup.cpp			\
 	WP6UnsupportedFixedLengthGroup.cpp 	\
@@ -123,7 +133,7 @@ libwpd_0_8_la_SOURCES =				\
 	WP6VariableLengthGroup.cpp 		\
 	WPXPageSpan.cpp				\
 	WPXHeader.cpp 				\
-	WPXHLListener.cpp 			\
+	WPXListener.cpp 			\
 	WPXMemoryStream.cpp			\
 	WPXTable.cpp				\
 	WPXParser.cpp 				\
@@ -131,6 +141,7 @@ libwpd_0_8_la_SOURCES =				\
 	WPXProperty.cpp				\
 	WPXPropertyList.cpp			\
 	WPXString.cpp				\
+	WPXSubDocument.cpp			\
 	WPXPropertyListVector.cpp		\
 	WPDocument.cpp				\
 	libwpd.h	        		\
@@ -138,19 +149,23 @@ libwpd_0_8_la_SOURCES =				\
 	libwpd_math.h				\
 	libwpd_types.h				\
 	WP3AttributeGroup.h			\
+	WP3DefinitionGroup.h			\
+	WP3DisplayGroup.h			\
 	WP3EndOfLinePageGroup.h			\
 	WP3ExtendedCharacterGroup.h		\
 	WP3FileStructure.h			\
 	WP3FixedLengthGroup.h			\
+	WP3FontGroup.h				\
+	WP3FootnoteEndnoteGroup.h		\
 	WP3Header.h				\
-	WP3HLListener.h				\
-	WP3HLStylesListener.h			\
-	WP3LLListener.h				\
+	WP3Listener.h				\
 	WP3MiscellaneousGroup.h			\
 	WP3PageFormatGroup.h			\
 	WP3Parser.h				\
 	WP3Part.h				\
 	WP3SingleByteFunction.h			\
+	WP3StylesListener.h			\
+	WP3SubDocument.h			\
 	WP3TablesGroup.h			\
 	WP3UndoGroup.h				\
 	WP3UnsupportedFixedLengthGroup.h 	\
@@ -158,11 +173,10 @@ libwpd_0_8_la_SOURCES =				\
 	WP3VariableLengthGroup.h		\
 	WP42FileStructure.h			\
 	WP42Heuristics.h			\
-	WP42HLListener.h			\
-	WP42HLStylesListener.h			\
-	WP42LLListener.h			\
+	WP42Listener.h				\
 	WP42Part.h				\
 	WP42Parser.h				\
+	WP42StylesListener.h			\
 	WP42UnsupportedVariableLengthGroup.h	\
 	WP42VariableLengthGroup.h		\
 	WP5AttributeGroup.h 			\
@@ -172,13 +186,12 @@ libwpd_0_8_la_SOURCES =				\
 	WP5FixedLengthGroup.h			\
 	WP5FormatGroup.h			\
 	WP5Header.h				\
-	WP5HLListener.h				\
-	WP5HLStylesListener.h			\
-	WP5LLListener.h				\
+	WP5Listener.h				\
 	WP5PageFormatGroup.h			\
 	WP5Part.h				\
 	WP5Parser.h				\
 	WP5SingleByteFunction.h			\
+	WP5StylesListener.h			\
 	WP5TableEOLGroup.h			\
 	WP5TableEOPGroup.h			\
 	WP5UnsupportedFixedLengthGroup.h	\
@@ -188,6 +201,7 @@ libwpd_0_8_la_SOURCES =				\
 	WP6AttributeGroup.h 			\
 	WP6CharacterGroup.h			\
 	WP6ColumnGroup.h			\
+	WP6ContentListener.h			\
 	WP6DefaultInitialFontPacket.h		\
 	WP6DisplayNumberReferenceGroup.h	\
 	WP6EOLGroup.h				\
@@ -203,10 +217,7 @@ libwpd_0_8_la_SOURCES =				\
 	WP61Header.h 				\
 	WP6HeaderFooterGroup.h 			\
 	WP6HighlightGroup.h			\
-	WP6HLContentListener.h			\
-	WP6HLListener.h				\
-	WP6HLStylesListener.h			\
-	WP6LLListener.h				\
+	WP6Listener.h				\
 	WP6OutlineStylePacket.h			\
 	WP6PageGroup.h				\
 	WP6ParagraphGroup.h			\
@@ -217,6 +228,8 @@ libwpd_0_8_la_SOURCES =				\
 	WP6PrefixDataPacket.h			\
 	WP6SingleByteFunction.h			\
 	WP6StyleGroup.h				\
+	WP6StylesListener.h			\
+	WP6SubDocument.h			\
 	WP6TabGroup.h	 			\
 	WP6TibetanMap.h				\
 	WP6UndoGroup.h				\
@@ -226,9 +239,8 @@ libwpd_0_8_la_SOURCES =				\
 	WPXHeader.h				\
 	WPDocument.h				\
 	WPXFileStructure.h			\
-	WPXLLListener.h				\
-	WPXHLListener.h				\
 	WPXHLListenerImpl.h			\
+	WPXListener.h				\
 	WPXMemoryStream.h			\
 	WPXPageSpan.h				\
 	WPXParser.h 				\
@@ -236,6 +248,7 @@ libwpd_0_8_la_SOURCES =				\
 	WPXProperty.h				\
 	WPXPropertyList.h			\
 	WPXString.h				\
+	WPXSubDocument.h			\
 	WPXTable.h				\
 	WPXPropertyListVector.h
 

@@ -28,7 +28,7 @@
 
 #include <string>
 #include <stdarg.h>
-#include <string.h>
+//#include <string.h>
 #include <stdio.h>
 
 static int g_static_utf8_strlen (const char *p);
@@ -65,17 +65,16 @@ WPXString::WPXString()
 
 WPXString::WPXString(const WPXString &stringBuf)
 {
-	m_buf = static_cast<void *>(new std::string());
-	append(stringBuf);
+	m_buf = static_cast<void *>(new std::string(*static_cast<std::string*>(stringBuf.m_buf)));
 }
 
 WPXString::WPXString(const WPXString &stringBuf, bool escapeXML) 
 {
-	m_buf = static_cast<void *>(new std::string());
 
 	if (escapeXML)
 	{
-		int len = strlen(stringBuf.cstr()); // want to use standard strlen
+		m_buf = static_cast<void *>(new std::string());
+		int len = static_cast<std::string*>(stringBuf.m_buf)->length(); // strlen(stringBuf.cstr()); // want to use standard strlen
 		const char *p = stringBuf.cstr();
 		const char *end = p + len; 
 		while (p != end)
@@ -112,7 +111,7 @@ WPXString::WPXString(const WPXString &stringBuf, bool escapeXML)
 		}
 	}
 	else
-		append(stringBuf);
+		m_buf = static_cast<void *>(new std::string(*static_cast<std::string*>(stringBuf.m_buf)));
 }
 
 WPXString::WPXString(const char *str)
@@ -164,7 +163,7 @@ void WPXString::sprintf(const char *format, ...)
 
 void WPXString::append(const WPXString &s)
 {
-	static_cast<std::string *>(m_buf)->append(s.cstr());
+	static_cast<std::string *>(m_buf)->append(*static_cast<std::string*>(s.m_buf));
 }
 
 void WPXString::append(const char *s)
@@ -187,20 +186,20 @@ int WPXString::len() const
 	return g_static_utf8_strlen(cstr()); 
 }
 
+WPXString& WPXString::operator=(const WPXString &stringBuf)
+{
+	*static_cast<std::string*>(m_buf) = *static_cast<std::string*>(stringBuf.m_buf);
+	return *this;
+}
+
 bool WPXString::operator==(const char *str)
 {
-	if (strcmp(str, cstr()) == 0)
-		return true;
-
-	return false;
+	return (*static_cast<std::string*>(m_buf) == str);
 }
 
 bool WPXString::operator==(const WPXString &str)
 {
-	if (strcmp(str.cstr(), cstr()) == 0)
-		return true;
-
-	return false;
+	return (*static_cast<std::string*>(m_buf) == *static_cast<std::string*>(str.m_buf));
 }
 
 WPXString::Iter::Iter(const WPXString &str) :
@@ -353,7 +352,6 @@ int
 g_static_utf8_strlen (const char *p)
 {
 	long len = 0;
-	const char *start = p;
 	if (p == NULL)
 		return 0;
 

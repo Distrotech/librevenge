@@ -97,6 +97,14 @@ SOURCE=..\..\src\lib\WP3AttributeGroup.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP3DefinitionGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3DisplayGroup.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP3EndOfLinePageGroup.cpp
 # End Source File
 # Begin Source File
@@ -113,15 +121,19 @@ SOURCE=..\..\src\lib\WP3FixedLengthGroup.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP3FontGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3FootnoteEndnoteGroup.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP3Header.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WP3HLListener.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\lib\WP3HLStylesListener.cpp
+SOURCE=..\..\src\lib\WP3Listener.cpp
 # End Source File
 # Begin Source File
 
@@ -142,6 +154,18 @@ SOURCE=..\..\src\lib\WP3Part.cpp
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP3SingleByteFunction.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3StylesListener.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3SubDocument.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3TablesGroup.cpp
 # End Source File
 # Begin Source File
 
@@ -169,11 +193,7 @@ SOURCE=..\..\src\lib\WP42Heuristics.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WP42HLListener.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\lib\WP42HLStylesListener.cpp
+SOURCE=..\..\src\lib\WP42Listener.cpp
 # End Source File
 # Begin Source File
 
@@ -182,6 +202,10 @@ SOURCE=..\..\src\lib\WP42Parser.cpp
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP42Part.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP42StylesListener.cpp
 # End Source File
 # Begin Source File
 
@@ -194,6 +218,10 @@ SOURCE=..\..\src\lib\WP42VariableLengthGroup.cpp
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP5AttributeGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5DefinitionGroup.cpp
 # End Source File
 # Begin Source File
 
@@ -217,11 +245,7 @@ SOURCE=..\..\src\lib\WP5Header.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WP5HLListener.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\lib\WP5HLStylesListener.cpp
+SOURCE=..\..\src\lib\WP5Listener.cpp
 # End Source File
 # Begin Source File
 
@@ -238,6 +262,18 @@ SOURCE=..\..\src\lib\WP5Part.cpp
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP5SingleByteFunction.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5StylesListener.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5TableEOLGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5TableEOPGroup.cpp
 # End Source File
 # Begin Source File
 
@@ -270,6 +306,10 @@ SOURCE=..\..\src\lib\WP6CharacterGroup.cpp
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP6ColumnGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP6ContentListener.cpp
 # End Source File
 # Begin Source File
 
@@ -329,19 +369,7 @@ SOURCE=..\..\src\lib\WP6HighlightGroup.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WP6HLContentListener.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\lib\WP6HLListener.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\lib\WP6HLStylesListener.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\lib\WP6LLListener.cpp
+SOURCE=..\..\src\lib\WP6Listener.cpp
 # End Source File
 # Begin Source File
 
@@ -385,6 +413,14 @@ SOURCE=..\..\src\lib\WP6StyleGroup.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP6StylesListener.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP6SubDocument.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP6TabGroup.cpp
 # End Source File
 # Begin Source File
@@ -413,7 +449,7 @@ SOURCE=..\..\src\lib\WPXHeader.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXHLListener.cpp
+SOURCE=..\..\src\lib\WPXListener.cpp
 # End Source File
 # Begin Source File
 
@@ -449,6 +485,10 @@ SOURCE=..\..\src\lib\WPXString.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WPXSubDocument.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WPXTable.cpp
 # End Source File
 # End Group
@@ -477,6 +517,14 @@ SOURCE=..\..\src\lib\WP3AttributeGroup.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP3DefinitionGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3DisplayGroup.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP3EndOfLinePageGroup.h
 # End Source File
 # Begin Source File
@@ -493,19 +541,19 @@ SOURCE=..\..\src\lib\WP3FixedLengthGroup.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP3FontGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3FootnoteEndnoteGroup.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP3Header.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WP3HLListener.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\lib\WP3HLStylesListener.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\lib\WP3LLListener.h
+SOURCE=..\..\src\lib\WP3Listener.h
 # End Source File
 # Begin Source File
 
@@ -526,6 +574,18 @@ SOURCE=..\..\src\lib\WP3Part.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP3SingleByteFunction.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3StylesListener.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3SubDocument.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3TablesGroup.h
 # End Source File
 # Begin Source File
 
@@ -553,15 +613,7 @@ SOURCE=..\..\src\lib\WP42Heuristics.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WP42HLListener.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\lib\WP42HLStylesListener.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\lib\WP42LLListener.h
+SOURCE=..\..\src\lib\WP42Listener.h
 # End Source File
 # Begin Source File
 
@@ -570,6 +622,10 @@ SOURCE=..\..\src\lib\WP42Parser.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP42Part.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP42StylesListener.h
 # End Source File
 # Begin Source File
 
@@ -582,6 +638,10 @@ SOURCE=..\..\src\lib\WP42VariableLengthGroup.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP5AttributeGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5DefinitionGroup.h
 # End Source File
 # Begin Source File
 
@@ -605,15 +665,7 @@ SOURCE=..\..\src\lib\WP5Header.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WP5HLListener.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\lib\WP5HLStylesListener.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\lib\WP5LLListener.h
+SOURCE=..\..\src\lib\WP5Listener.h
 # End Source File
 # Begin Source File
 
@@ -630,6 +682,18 @@ SOURCE=..\..\src\lib\WP5Part.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP5SingleByteFunction.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5StylesListener.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5TableEOLGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5TableEOPGroup.h
 # End Source File
 # Begin Source File
 
@@ -662,6 +726,10 @@ SOURCE=..\..\src\lib\WP6CharacterGroup.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP6ColumnGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP6ContentListener.h
 # End Source File
 # Begin Source File
 
@@ -721,19 +789,7 @@ SOURCE=..\..\src\lib\WP6HighlightGroup.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WP6HLContentListener.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\lib\WP6HLListener.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\lib\WP6HLStylesListener.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\lib\WP6LLListener.h
+SOURCE=..\..\src\lib\WP6Listener.h
 # End Source File
 # Begin Source File
 
@@ -777,6 +833,14 @@ SOURCE=..\..\src\lib\WP6StyleGroup.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP6StylesListener.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP6SubDocument.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP6TabGroup.h
 # End Source File
 # Begin Source File
@@ -813,15 +877,11 @@ SOURCE=..\..\src\lib\WPXHeader.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXHLListener.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\lib\WPXHLListenerImpl.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXLLListener.h
+SOURCE=..\..\src\lib\WPXListener.h
 # End Source File
 # Begin Source File
 
@@ -858,6 +918,10 @@ SOURCE=..\..\src\lib\WPXStream.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WPXString.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WPXSubDocument.h
 # End Source File
 # Begin Source File
 

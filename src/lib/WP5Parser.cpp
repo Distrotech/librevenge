@@ -26,8 +26,8 @@
 #include "WP5Parser.h"
 #include "WPXHeader.h"
 #include "WP5Part.h"
-#include "WP5HLListener.h"
-#include "WP5HLStylesListener.h"
+#include "WP5Listener.h"
+#include "WP5StylesListener.h"
 #include "libwpd_internal.h"
 #include "WPXTable.h"
 
@@ -40,7 +40,7 @@ WP5Parser::~WP5Parser()
 {
 }
 
-void WP5Parser::parse(WPXInputStream *input, WP5HLListener *listener)
+void WP5Parser::parse(WPXInputStream *input, WP5Listener *listener)
 {
 	listener->startDocument();
 	
@@ -54,7 +54,7 @@ void WP5Parser::parse(WPXInputStream *input, WP5HLListener *listener)
 }
 
 // parseDocument: parses a document body (may call itself recursively, on other streams, or itself)
-void WP5Parser::parseDocument(WPXInputStream *input, WP5HLListener *listener)
+void WP5Parser::parseDocument(WPXInputStream *input, WP5Listener *listener)
 {
 	while (!input->atEOS())
 	{
@@ -114,12 +114,12 @@ void WP5Parser::parse(WPXHLListenerImpl *listenerImpl)
  	{
 		// do a "first-pass" parse of the document
 		// gather table border information, page properties (per-page)
-		WP5HLStylesListener stylesListener(&pageList, tableList);
+		WP5StylesListener stylesListener(&pageList, tableList);
 		parse(input, &stylesListener);
 
 		// second pass: here is where we actually send the messages to the target app
 		// that are necessary to emit the body of the target document
-		WP5HLListener listener(&pageList, listenerImpl); // FIXME: SHOULD BE CONTENT_LISTENER, AND SHOULD BE PASSED TABLE DATA!
+		WP5Listener listener(&pageList, listenerImpl); // FIXME: SHOULD BE CONTENT_LISTENER, AND SHOULD BE PASSED TABLE DATA!
 		parse(input, &listener);
 		
 		// cleanup section: free the used resources

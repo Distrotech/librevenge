@@ -23,7 +23,7 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WP6HLListener.h"
+#include "WP6Listener.h"
 #include "WP6DefaultInitialFontPacket.h"
 #include "libwpd_internal.h"
 
@@ -33,7 +33,7 @@ WP6DefaultInitialFontPacket::WP6DefaultInitialFontPacket(WPXInputStream *input, 
 	_read(input, dataOffset, dataSize);
 }
 
-void WP6DefaultInitialFontPacket::parse(WP6HLListener *listener) const
+void WP6DefaultInitialFontPacket::parse(WP6Listener *listener) const
 {
 	listener->fontChange(getPointSize(), getInitialFontDescriptorPID());
 }

@@ -30,6 +30,7 @@
 #include <vector>
 #include "WPXTable.h"
 #include "libwpd_internal.h"
+#include "WPXSubDocument.h"
 
 // intermediate page representation class: for internal use only (by the high-level content/styles listeners). should not be exported.
 
@@ -37,22 +38,22 @@ class WPXHeaderFooter
 {
 public:
 	WPXHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence occurence, 
-			const uint8_t internalType, const uint16_t textPID, WPXTableList tableList);
+			const uint8_t internalType, const WPXSubDocument * subDocument, WPXTableList tableList);
 	WPXHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence occurence, 
-			const uint8_t internalType, const uint16_t textPID);
+			const uint8_t internalType, const WPXSubDocument * subDocument);
 	WPXHeaderFooter(const WPXHeaderFooter &headerFooter);
 	~WPXHeaderFooter();
 	const WPXHeaderFooterType getType() const { return m_type; }
 	const WPXHeaderFooterOccurence getOccurence() const { return m_occurence; }
 	const uint8_t getInternalType() const { return m_internalType; }
-	const uint16_t getTextPID() const { return m_textPID; }
+	const WPXSubDocument * getSubDocument() const { return m_subDocument; }
 	WPXTableList getTableList() const { return m_tableList; }
 
 private:
 	WPXHeaderFooterType m_type;
 	WPXHeaderFooterOccurence m_occurence;
 	uint8_t m_internalType; // for suppression
-	uint16_t m_textPID; // for the actual text
+	const WPXSubDocument * m_subDocument; // for the actual text
 	WPXTableList m_tableList;
 };
 
@@ -75,7 +76,7 @@ public:
 	const std::vector<WPXHeaderFooter> & getHeaderFooterList() const { return m_headerFooterList; }
 
 	void setHeaderFooter(const uint8_t headerFooterType, const uint8_t occurenceBits, 
-			     const uint16_t textPID, WPXTableList tableList);
+			     const WPXSubDocument * subDocument, WPXTableList tableList);
 	void setHeadFooterSuppression(const uint8_t headerFooterType, const bool suppress) { m_isHeaderFooterSuppressed[headerFooterType] = suppress; }
 	void setFormLength(const float formLength) { m_formLength = formLength; }
 	void setFormWidth(const float formWidth) { m_formWidth = formWidth; }

@@ -24,13 +24,15 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WPXHLLISTENER_H
-#define WPXHLLISTENER_H
+#ifndef WPXLISTENER_H
+#define WPXLISTENER_H
 
-#include "WPXLLListener.h"
 #include "WPXHLListenerImpl.h"
 #include "WPXTable.h"
 #include "WPXPropertyListVector.h"
+#include "libwpd_internal.h"
+#include "WPXSubDocument.h"
+#include <vector>
 #include <set>
 
 class WPXPageSpan;
@@ -64,14 +66,6 @@ struct _WPXParsingState
 	_WPXParsingState();
 	~_WPXParsingState();
 
-#if 0
-	WPXString m_bodyText;
-	WPXString m_textBeforeNumber;
-	WPXString m_textBeforeDisplayReference;
-	WPXString m_numberText;
-	WPXString m_textAfterDisplayReference;
-	WPXString m_textAfterNumber;
-#endif
 	uint32_t m_textAttributeBits;
 	float m_fontSize;
 	WPXString *m_fontName;
@@ -93,9 +87,11 @@ struct _WPXParsingState
 	bool m_isParagraphOpened;
 	bool m_isListElementOpened;
 
+	std::vector<unsigned int> m_numRowsToSkip;
 	WPXTableDefinition m_tableDefinition;
 	int m_currentTableCol;
 	int m_currentTableRow;
+	int m_currentTableCellNumberInRow;
 	bool m_isTableOpened;
 	bool m_isTableRowOpened;
 	bool m_isTableColumnOpened;
@@ -139,37 +135,52 @@ struct _WPXParsingState
 
 	uint8_t m_currentListLevel;
 	
-#if 0
-	stack<int> m_listLevelStack;
-	uint16_t m_currentOutlineHash; // probably should replace Hash with Key in these sorts of cases
-	uint8_t m_oldListLevel;
-	WP6StyleStateSequence m_styleStateSequence;
-	bool m_putativeListElementHasParagraphNumber;
-	bool m_putativeListElementHasDisplayReferenceNumber;
-
-	int m_noteTextPID;
-#endif
 	uint16_t m_alignmentCharacter;
 	std::vector<WPXTabStop> m_tabStops;
 	bool m_isTabPositionRelative;
 
-	std::set <int> m_subDocumentTextPIDs;
+	std::set <const WPXSubDocument *> m_subDocuments;
 
 	bool m_inSubDocument;
 	bool m_isNote;
 };
 
-class WPXHLListener : public WPXLLListener
+class WPXListener
 {
 public:
-	WPXHLListener(std::vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl);
-	~WPXHLListener();
+	WPXListener(std::vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl);
+	virtual ~WPXListener();
 
-	void startDocument();
-	void handleSubDocument(uint16_t textPID, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice);
+	virtual void startDocument();
+	void handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice);
 	virtual void insertBreak(const uint8_t breakType);
 	virtual void lineSpacingChange(const float lineSpacing);
 	virtual void justificationChange(const uint8_t justification);
+	virtual void setAlignmentCharacter(const uint16_t character) = 0;
+	virtual void setLeaderCharacter(const uint16_t character, const uint8_t numberOfSpaces) = 0;
+	virtual void defineTabStops(const bool isRelative, const std::vector<WPXTabStop> &tabStops, 
+				    const std::vector<bool> &usePreWP9LeaderMethods) = 0;
+	virtual void insertCharacter(const uint16_t character) = 0;
+	virtual void insertTab(const uint8_t tabType, const float tabPosition) = 0;
+	virtual void handleLineBreak() = 0;
+	virtual void insertEOL() = 0;
+	virtual void attributeChange(const bool isOn, const uint8_t attribute) = 0;
+	virtual void spacingAfterParagraphChange(const float spacingRelative, const float spacingAbsolute) = 0;
+	virtual void pageMarginChange(const uint8_t side, const uint16_t margin) = 0;
+	virtual void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation,
+					const bool isPersistent) = 0;
+	virtual void marginChange(const uint8_t side, const uint16_t margin) = 0;
+	virtual void paragraphMarginChange(const uint8_t side, const int16_t margin) = 0;
+	virtual void indentFirstLineChange(const int16_t offset) = 0;
+	virtual void columnChange(const WPXTextColumnType columnType, const uint8_t numColumns, const std::vector<float> &columnWidth,
+					const std::vector<bool> &isFixedWidth) = 0;
+	virtual void endDocument() = 0;
+
+	virtual void defineTable(const uint8_t position, const uint16_t leftOffset) = 0;
+	virtual void addTableColumnDefinition(const uint32_t width, const uint32_t leftGutter, const uint32_t rightGutter,
+					const uint32_t attributes, const uint8_t alignment) = 0;
+	virtual void startTable() = 0;
+ 	virtual void endTable() = 0;
 
 	WPXParsingState *m_ps; // parse state
 	WPXHLListenerImpl * m_listenerImpl;
@@ -177,7 +188,7 @@ public:
 	std::vector <WPXPageSpan *> *m_pageList;
 
 protected:
-	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice) = 0;
+	virtual void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice) = 0;
 	virtual void _flushText() = 0;
 	virtual void _changeList() = 0;
 
@@ -187,11 +198,11 @@ protected:
 	void _openPageSpan();
 	void _closePageSpan();
 
-	void _appendParagraphProperties(WPXPropertyList &propList, const bool isListElement=false);
-	void _getTabStops(WPXPropertyListVector &tabStops);
-	void _appendJustification(WPXPropertyList &propList, int justification);
-	virtual void _openParagraph();
+	virtual void _appendParagraphProperties(WPXPropertyList &propList, const bool isListElement=false);
+	virtual void _getTabStops(WPXPropertyListVector &tabStops);
+	virtual void _appendJustification(WPXPropertyList &propList, int justification);
 	virtual void _resetParagraphState(const bool isListElement=false);
+	virtual void _openParagraph();
 	void _closeParagraph();
 
 	void _openListElement();
@@ -204,8 +215,8 @@ protected:
 	void _closeTable();
 	void _openTableRow(const float height, const bool isMinimumHeight, const bool isHeaderRow);
 	void _closeTableRow();
-	void _openTableCell(const uint8_t colSpan, const uint8_t rowSpan, const bool boundFromLeft, const bool boundFromAbove,
-				const uint8_t borderBits, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
+	void _openTableCell(const uint8_t colSpan, const uint8_t rowSpan, const uint8_t borderBits, 
+				const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
 				const RGBSColor * cellBorderColor,
 				const WPXVerticalAlignment cellVerticalAlignment);
 	void _closeTableCell();
@@ -218,4 +229,4 @@ private:
 	WPXString _mergeColorsToString(const RGBSColor *fgColor, const RGBSColor *bgColor);
 };
 
-#endif /* WPXHLLISTENER_H */
+#endif /* WPXLISTENER_H */

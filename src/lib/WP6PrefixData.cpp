@@ -28,7 +28,6 @@
 #include "WP6PrefixDataPacket.h"
 #include "WP6FontDescriptorPacket.h"
 #include "WP6DefaultInitialFontPacket.h"
-#include "WP6LLListener.h"
 #include "libwpd_internal.h"
 
 WP6PrefixData::WP6PrefixData(WPXInputStream *input, const int numPrefixIndices) :

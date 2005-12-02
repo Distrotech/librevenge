@@ -124,7 +124,7 @@ void WP6FontDescriptorPacket::_readContents(WPXInputStream *input)
 		   WPD_DEBUG_MSG(("WordPerfect: stripping font name (original: %s)\n", m_fontName));
 		   for (int stringPosition=(tempLength-1); stringPosition>=0; stringPosition--)
 		   {
-			   int k;			   
+			   unsigned int k;			   
 			   for (k=0; k<countElements(FONT_WEIGHT_STRINGS); k++) 
 			   {
 				   if (stringPosition > 0 && !strcmp(FONT_WEIGHT_STRINGS[k], &m_fontName[stringPosition])) 

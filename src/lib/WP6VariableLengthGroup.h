@@ -32,7 +32,7 @@ class WP6VariableLengthGroup_SubGroup
 {
 public:
 	virtual ~WP6VariableLengthGroup_SubGroup() {}
-	virtual void parse(WP6HLListener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const = 0;
+	virtual void parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const = 0;
 };
 
 class WP6VariableLengthGroup : public WP6Part

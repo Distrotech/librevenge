@@ -33,7 +33,7 @@ class WP6FootnoteEndnoteGroup : public WP6VariableLengthGroup
  public:
 	WP6FootnoteEndnoteGroup(WPXInputStream *input);	
 	virtual void _readContents(WPXInputStream *input);
-	virtual void parse(WP6HLListener *listener);
+	virtual void parse(WP6Listener *listener);
 };
 
 #endif /* WP6FOOTNOTEENDNOTEGROUP_H */

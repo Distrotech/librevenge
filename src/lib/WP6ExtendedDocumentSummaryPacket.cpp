@@ -48,16 +48,15 @@ void WP6ExtendedDocumentSummaryPacket::_readContents(WPXInputStream *input)
 	m_stream = new WPXMemoryInputStream(streamData, m_dataSize);
 }
 
-void WP6ExtendedDocumentSummaryPacket::parse(WP6HLListener *listener) const
+void WP6ExtendedDocumentSummaryPacket::parse(WP6Listener *listener) const
 {
-	int k=0;
 	uint16_t groupLength = 0;
 
 	for (int i=0; i < m_dataSize; i+=groupLength)
 	{
 		groupLength = readU16(m_stream);
 		uint16_t tagID = readU16(m_stream);
-		uint16_t flags = readU16(m_stream);
+		m_stream->seek(2, WPX_SEEK_CUR);
 
 		WPXString name;
 		for (uint16_t wpChar = readU16(m_stream);

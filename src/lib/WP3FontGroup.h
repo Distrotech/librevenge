@@ -1,9 +1,8 @@
 /* libwpd
- * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -23,23 +22,27 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include <math.h>
-#include <ctype.h>
-#include "WP6HLListener.h"
-#include "WP6FileStructure.h"
-#include "WPXFileStructure.h"
-#include "libwpd_internal.h"
+#ifndef WP3FONTGROUP_H
+#define WP3FONTGROUP_H
 
-WP6HLListener::WP6HLListener(std::vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl) :
-	WPXHLListener(pageList, listenerImpl),
-	WP6LLListener()
-{
-}
+#include "WP3VariableLengthGroup.h"
 
-void WP6HLListener::undoChange(const uint8_t undoType, const uint16_t undoLevel)
+class WP3FontGroup : public WP3VariableLengthGroup
 {
-	if (undoType == WP6_UNDO_GROUP_INVALID_TEXT_START)
-		m_isUndoOn = true;
-	else if (undoType == WP6_UNDO_GROUP_INVALID_TEXT_END)
-		m_isUndoOn = false;		
-}
+ public:
+	WP3FontGroup(WPXInputStream *input);	
+	virtual ~WP3FontGroup();
+	virtual void _readContents(WPXInputStream *input);
+	virtual void parse(WP3Listener *listener);
+
+ private:
+ 	/* Set Text Color */
+	RGBSColor m_fontColor;
+ 	/* Set Text Font */
+	std::string m_fontName;
+	/* Set Font Size */
+	uint16_t m_fontSize;
+
+};
+
+#endif /* WP3FONTGROUP_H */

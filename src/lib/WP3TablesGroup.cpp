@@ -25,7 +25,7 @@
 #include <math.h>
 #include "WP3TablesGroup.h"
 #include "WP3FileStructure.h"
-#include "WP3LLListener.h"
+#include "WP3Listener.h"
 #include "WPXFileStructure.h"
 #include "libwpd_internal.h"
 #include "libwpd_math.h"
@@ -50,6 +50,7 @@ void WP3TablesGroup::_readContents(WPXInputStream *input)
 {
 	// this group can contain different kinds of data, thus we need to read
 	// the contents accordingly
+	uint8_t i;
 	switch (getSubGroup())
 	{
 	case WP3_TABLES_GROUP_TABLE_FUNCTION:
@@ -60,8 +61,9 @@ void WP3TablesGroup::_readContents(WPXInputStream *input)
 		m_leftGutterSpacing = readU32(input, true);
 		m_bottomGutterSpacing = readU32(input, true);
 		m_rightGutterSpacing = readU32(input, true);
+		input->seek(3, WPX_SEEK_CUR);
 		m_numColumns = readU8(input);
-		for (uint8_t i=0; i<m_numColumns; i++)
+		for (i=0; i<m_numColumns; i++)
 		{
 			m_columnMode[i] = readU8(input);
 			m_numberFormat[i] = readU8(input);
@@ -70,8 +72,9 @@ void WP3TablesGroup::_readContents(WPXInputStream *input)
 		}		
 		break;
 	case WP3_TABLES_GROUP_SET_TABLE_CELL_SPAN:
-		m_colSpan = readU8(input);
-		m_rowSpan = readU8(input);
+		m_colSpan = readU16(input, true);
+		m_rowSpan = readU16(input, true);
+		m_colSpan++; m_rowSpan++;
 		break;
 	case WP3_TABLES_GROUP_SET_TABLE_CELL_TOP_LINE:
 		break;
@@ -90,6 +93,12 @@ void WP3TablesGroup::_readContents(WPXInputStream *input)
 	case WP3_TABLES_GROUP_SET_TABLE_CELL_RIGHT_LINE_COLOR:
 		break;
 	case WP3_TABLES_GROUP_SET_TABLE_CELL_FILL_COLOR_PATTERN:
+		{
+			uint16_t tmpRed = readU16(input, true);
+			uint16_t tmpGreen = readU16(input, true);
+			uint16_t tmpBlue = readU16(input, true);
+			m_cellFillColor = RGBSColor(tmpRed, tmpGreen, tmpBlue);
+		}
 		break;
 	case WP3_TABLES_GROUP_SET_TABLE_CELL_VERTICAL_ALIGNMENT:
 		break;
@@ -102,15 +111,22 @@ void WP3TablesGroup::_readContents(WPXInputStream *input)
 	}
 }
 
-void WP3TablesGroup::parse(WP3HLListener *listener)
+void WP3TablesGroup::parse(WP3Listener *listener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling a Tables group\n"));
 
+	uint8_t i;
 	switch (getSubGroup())
 	{
 	case WP3_TABLES_GROUP_TABLE_FUNCTION:
+		listener->defineTable(m_tableMode, fixedPointToWPUs(m_offsetFromLeftEdge));
+		for (i=0; i<m_numColumns; i++)
+			listener->addTableColumnDefinition(fixedPointToWPUs(m_columnWidth[i]), fixedPointToWPUs(m_leftGutterSpacing),
+								fixedPointToWPUs(m_rightGutterSpacing), 0, LEFT);
+		listener->startTable();
 		break;
 	case WP3_TABLES_GROUP_SET_TABLE_CELL_SPAN:
+		listener->setTableCellSpan(m_colSpan, m_rowSpan);
 		break;
 	case WP3_TABLES_GROUP_SET_TABLE_CELL_TOP_LINE:
 		break;
@@ -129,6 +145,7 @@ void WP3TablesGroup::parse(WP3HLListener *listener)
 	case WP3_TABLES_GROUP_SET_TABLE_CELL_RIGHT_LINE_COLOR:
 		break;
 	case WP3_TABLES_GROUP_SET_TABLE_CELL_FILL_COLOR_PATTERN:
+		listener->setTableCellFillColor(&m_cellFillColor);
 		break;
 	case WP3_TABLES_GROUP_SET_TABLE_CELL_VERTICAL_ALIGNMENT:
 		break;

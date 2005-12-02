@@ -1,6 +1,6 @@
 /* libwpd
- * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2004 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,26 +23,34 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP5HLLISTENER_H
-#define WP5HLLISTENER_H
+#ifndef WP3LISTENER_H
+#define WP3LISTENER_H
 
-#include "WP5LLListener.h"
-#include "WPXHLListener.h"
+#include "WPXListener.h"
 #include "WPXHLListenerImpl.h"
+#include "libwpd_internal.h"
 
-typedef struct _WP5ParsingState WP5ParsingState;
-struct _WP5ParsingState
+typedef struct _WP3ParsingState WP3ParsingState;
+struct _WP3ParsingState
 {
-	_WP5ParsingState();
-	~_WP5ParsingState();
+	_WP3ParsingState();
+	~_WP3ParsingState();
+	uint16_t m_colSpan;
+	uint16_t m_rowSpan;
+	WPXString m_textBuffer;
+	RGBSColor * m_cellFillColor;
+	WPXString m_noteReference;
+
+	WPXTableList m_tableList;
 };
 
+class WP3SubDocument;
 
-class WP5HLListener : public WPXHLListener, public WP5LLListener
+class WP3Listener : public WPXListener
 {
 public:
-	WP5HLListener(std::vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl);
-	virtual ~WP5HLListener();
+	WP3Listener(std::vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl);
+	virtual ~WP3Listener();
 
 	virtual void setAlignmentCharacter(const uint16_t character) {};
 	virtual void setLeaderCharacter(const uint16_t character, const uint8_t numberOfSpaces) {};
@@ -58,31 +66,39 @@ public:
 	virtual void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool isPersistent) {};
 	virtual void marginChange(const uint8_t side, const uint16_t margin);
 	virtual void paragraphMarginChange(const uint8_t side, const int16_t margin) {};
-	virtual void indentFirstLineChange(const int16_t offset) {};
+	virtual void indentFirstLineChange(const int16_t offset);
 	virtual void columnChange(const WPXTextColumnType columnType, const uint8_t numColumns, const std::vector<float> &columnWidth,
-				  const std::vector<bool> &isFixedWidth) {};
+					const std::vector<bool> &isFixedWidth);
 	virtual void endDocument();
 
-	virtual void defineTable(uint8_t position, uint16_t leftOffset);
-	virtual void addTableColumnDefinition(uint32_t width, uint32_t leftGutter, uint32_t rightGutter, uint32_t attributes, uint8_t alignment);
+	virtual void defineTable(const uint8_t position, const uint16_t leftOffset);
+	virtual void addTableColumnDefinition(const uint32_t width, const uint32_t leftGutter, const uint32_t rightGutter,
+					const uint32_t attributes, const uint8_t alignment);
 	virtual void startTable();
- 	virtual void insertRow(const uint16_t rowHeight, const bool isMinimumHeight, const bool isHeaderRow);
- 	virtual void insertCell(const uint8_t colSpan, const uint8_t rowSpan, const bool boundFromLeft, const bool boundFromAbove,
-				const uint8_t borderBits, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor, 
-				const RGBSColor * cellBorderColor, const WPXVerticalAlignment cellVerticalAlignment, 
-				const bool useCellAttributes, const uint32_t cellAttributes);
+ 	virtual void insertRow();
+ 	virtual void insertCell();
+ 	virtual void closeCell();
+	virtual void closeRow();
+	virtual void setTableCellSpan(const uint16_t colSpan, const uint16_t rowSpan);
+	virtual void setTableCellFillColor(const RGBSColor * cellFillColor);
  	virtual void endTable();
-
+	virtual void undoChange(const uint8_t undoType, const uint16_t undoLevel);
+	virtual void justificationChange(const uint8_t justification);
+	virtual void setTextColor(const RGBSColor * fontColor);
+	virtual void setTextFont(const std::string fontName);
+	virtual void setFontSize(const uint16_t fontSize);
+	virtual void insertNoteReference(const std::string noteReference);
+	virtual void insertNote(const WPXNoteType noteType, const WP3SubDocument *subDocument);
+	
 protected:
-	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0) {}
+	virtual void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
+	virtual void _openParagraph();
 
 private:
 	void _flushText();
 	void _changeList() {};
 
-	WPXString m_textBuffer;
-
-	WP5ParsingState *m_parseState;
+	WP3ParsingState *m_parseState;
 };
 
-#endif /* WP5HLLISTENER_H */
+#endif /* WP3LISTENER_H */

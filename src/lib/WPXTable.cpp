@@ -29,11 +29,9 @@
 typedef std::vector<WPXTableCell *>::iterator VTCIter;
 typedef std::vector< std::vector<WPXTableCell *> * >::iterator VVTCIter;
 
-_WPXTableCell::_WPXTableCell(uint8_t colSpan, uint8_t rowSpan, bool boundFromAbove, bool boundFromLeft, uint8_t borderBits) :
+_WPXTableCell::_WPXTableCell(uint8_t colSpan, uint8_t rowSpan, uint8_t borderBits) :
 	m_colSpan(colSpan),
 	m_rowSpan(rowSpan),
-	m_boundFromAbove(boundFromAbove),
-	m_boundFromLeft(boundFromLeft),
 	m_borderBits(borderBits)
 {
 }
@@ -57,9 +55,9 @@ void WPXTable::insertRow()
 	m_tableRows.push_back(new std::vector<WPXTableCell *>);
 }
 
-void WPXTable::insertCell(uint8_t colSpan, uint8_t rowSpan, bool boundFromLeft, bool boundFromAbove, uint8_t borderBits)
+void WPXTable::insertCell(uint8_t colSpan, uint8_t rowSpan, uint8_t borderBits)
 {	
-	m_tableRows[(m_tableRows.size()-1)]->push_back(new WPXTableCell(colSpan, rowSpan, boundFromLeft, boundFromAbove, borderBits));
+	m_tableRows[(m_tableRows.size()-1)]->push_back(new WPXTableCell(colSpan, rowSpan, borderBits));
 }
 
 // makeConsistent: make the table border specification (defined per-cell) consistent, with no
@@ -72,22 +70,19 @@ void WPXTable::makeBordersConsistent()
 	{
   		for (int j=0; j<m_tableRows[i]->size(); j++)
   		{
-			if (!(*m_tableRows[i])[j]->m_boundFromLeft && !(*m_tableRows[i])[j]->m_boundFromAbove)
+			if (i < (m_tableRows.size()-1)) 
 			{
-				if (i < (m_tableRows.size()-1)) 
-				{
-					std::vector<WPXTableCell *> *cellsBottomAdjacent = _getCellsBottomAdjacent(i, j);
-					_makeCellBordersConsistent((*m_tableRows[i])[j], cellsBottomAdjacent, 
-							       WPX_TABLE_CELL_BOTTOM_BORDER_OFF, WPX_TABLE_CELL_TOP_BORDER_OFF);
-					delete cellsBottomAdjacent;		
-				}
-				if (j < (m_tableRows[i]->size()-1))
-				{
-					std::vector<WPXTableCell *> *cellsRightAdjacent = _getCellsRightAdjacent(i, j);
-					_makeCellBordersConsistent((*m_tableRows[i])[j], cellsRightAdjacent, 
-							       WPX_TABLE_CELL_RIGHT_BORDER_OFF, WPX_TABLE_CELL_LEFT_BORDER_OFF);
-					delete cellsRightAdjacent;
-				}
+				std::vector<WPXTableCell *> *cellsBottomAdjacent = _getCellsBottomAdjacent(i, j);
+				_makeCellBordersConsistent((*m_tableRows[i])[j], cellsBottomAdjacent, 
+						       WPX_TABLE_CELL_BOTTOM_BORDER_OFF, WPX_TABLE_CELL_TOP_BORDER_OFF);
+				delete cellsBottomAdjacent;		
+			}
+			if (j < (m_tableRows[i]->size()-1))
+			{
+				std::vector<WPXTableCell *> *cellsRightAdjacent = _getCellsRightAdjacent(i, j);
+				_makeCellBordersConsistent((*m_tableRows[i])[j], cellsRightAdjacent, 
+						       WPX_TABLE_CELL_RIGHT_BORDER_OFF, WPX_TABLE_CELL_LEFT_BORDER_OFF);
+				delete cellsRightAdjacent;
 			}
 		} 
 	}
@@ -128,9 +123,7 @@ std::vector<WPXTableCell *> * WPXTable::_getCellsBottomAdjacent(int i, int j)
 	
 	for (int j1=0; j1<m_tableRows[bottomAdjacentRow]->size(); j1++)
 	{
-		if (!(*m_tableRows[bottomAdjacentRow])[j1]->m_boundFromAbove &&
-		    !(*m_tableRows[bottomAdjacentRow])[j1]->m_boundFromLeft &&
-		    ((j1 + (*m_tableRows[bottomAdjacentRow])[j1]->m_colSpan) > j) &&
+		if (((j1 + (*m_tableRows[bottomAdjacentRow])[j1]->m_colSpan) > j) &&
 		    (j1 < (j + (*m_tableRows[i])[j]->m_colSpan)))
 		{
 			cellsBottomAdjacent->push_back((*m_tableRows[bottomAdjacentRow])[j1]);
@@ -142,7 +135,8 @@ std::vector<WPXTableCell *> * WPXTable::_getCellsBottomAdjacent(int i, int j)
 
 std::vector<WPXTableCell *> * WPXTable::_getCellsRightAdjacent(int i, int j)
 {
-	int rightAdjacentCol = j + (*m_tableRows[i])[j]->m_colSpan;
+//	int rightAdjacentCol = j + (*m_tableRows[i])[j]->m_colSpan;
+	int rightAdjacentCol = j + 1;
 	std::vector<WPXTableCell *> * cellsRightAdjacent = new std::vector<WPXTableCell *>;
 
 	if (rightAdjacentCol >= m_tableRows[i]->size()) // num cols is uniform across table: this comparison is valid
@@ -152,9 +146,7 @@ std::vector<WPXTableCell *> * WPXTable::_getCellsRightAdjacent(int i, int j)
 	{
 		if ((*m_tableRows[i1]).size() > rightAdjacentCol) // ignore cases where the right adjacent column 
 		{                                                 // pushes us beyond table borders (FIXME: good idea?)
-			if (!(*m_tableRows[i1])[rightAdjacentCol]->m_boundFromAbove &&
-			    !(*m_tableRows[i1])[rightAdjacentCol]->m_boundFromLeft &&
-			    ((i1 + (*m_tableRows[i1])[rightAdjacentCol]->m_rowSpan) > i) &&
+			if (((i1 + (*m_tableRows[i1])[rightAdjacentCol]->m_rowSpan) > i) &&
 			    (i1 < (i + (*m_tableRows[i])[j]->m_rowSpan)))
 			{
 				cellsRightAdjacent->push_back((*m_tableRows[i1])[rightAdjacentCol]);
@@ -166,8 +158,8 @@ std::vector<WPXTableCell *> * WPXTable::_getCellsRightAdjacent(int i, int j)
 }
 
 WPXTableList::WPXTableList() :
-	m_refCount(new int),
-	m_tableList(new std::vector<WPXTable *>)
+	m_tableList(new std::vector<WPXTable *>),
+	m_refCount(new int)
 {
 	(*m_refCount) = 1;
 }

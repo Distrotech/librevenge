@@ -1,8 +1,8 @@
 /* libwpd
- * Copyright (C) 2004 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -22,16 +22,26 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP3LLLISTENER_H
-#define WP3LLLISTENER_H
+#ifndef WP3DEFINITIONGROUP_H
+#define WP3DEFINITIONGROUP_H
 
-#include "WPXLLListener.h"
+#include "WP3VariableLengthGroup.h"
 
-class WP3LLListener
+class WP3DefinitionGroup : public WP3VariableLengthGroup
 {
-public:
-	WP3LLListener() {}
-	virtual ~WP3LLListener() {}
+ public:
+	WP3DefinitionGroup(WPXInputStream *input);	
+	virtual ~WP3DefinitionGroup();
+	virtual void _readContents(WPXInputStream *input);
+	virtual void parse(WP3Listener *listener);
+
+ private:
+ 	/* Variables used for subgroup 0x01 Set Columns On/Off */
+	uint8_t m_colType;
+	uint8_t m_numColumns;
+	std::vector<bool> m_isFixedWidth;
+	std::vector<float> m_columnWidth;
+
 };
 
-#endif /* WP3LLLISTENER_H */
+#endif /* WP3DefinitionGroup_H */

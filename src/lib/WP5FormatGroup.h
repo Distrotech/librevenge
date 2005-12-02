@@ -32,7 +32,7 @@ class WP5FormatGroup : public WP5VariableLengthGroup
 {
 public:
 	WP5FormatGroup(WPXInputStream *input);	
-	virtual void parse(WP5HLListener *listener);
+	virtual void parse(WP5Listener *listener);
 	
 protected:
 	virtual void _readContents(WPXInputStream *input);

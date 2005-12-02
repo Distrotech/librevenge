@@ -51,7 +51,7 @@ class RawListenerImpl : public WPXHLListenerImpl
 {
 public:
 	RawListenerImpl(bool printCallgraphScore);
-	~RawListenerImpl();
+	virtual ~RawListenerImpl();
 
  	virtual void setDocumentMetaData(const WPXPropertyList &propList);
 

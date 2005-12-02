@@ -1,6 +1,5 @@
 /* libwpd
- * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,19 +22,17 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP42LLLISTENER_H
-#define WP42LLLISTENER_H
+#include "WPXSubDocument.h"
+#include "WP3Parser.h"
+#include "libwpd_internal.h"
+#include "WPXListener.h"
 
-class WP42LLListener
+WPXSubDocument::WPXSubDocument() :
+	m_stream(NULL)
 {
-public:
-	WP42LLListener() {}
-	virtual ~WP42LLListener() {}
+}
 
-protected:
-
-private:
-
-};
-
-#endif /* WP42LLLISTENER_H */
+WPXSubDocument::~WPXSubDocument()
+{
+	delete m_stream;
+}

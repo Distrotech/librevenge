@@ -1,6 +1,6 @@
 /* libwpd
  * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2004 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,37 +23,42 @@
  * Corel Corporation or Corel Corporation Limited."
  */
  
-#include "WP5HLStylesListener.h"
+#include "WP6StylesListener.h"
 #include "WPXTable.h"
-#include "WP5FileStructure.h"
+#include "WP6FileStructure.h"
 #include "WPXFileStructure.h"
 #include "libwpd_internal.h"
+#include "WP6SubDocument.h"
 
-WP5HLStylesListener::WP5HLStylesListener(std::vector<WPXPageSpan *> *pageList, WPXTableList tableList) : 
-	WP5HLListener(pageList, NULL),
+// WP6StylesListener: creates intermediate table and page span representations, given a
+// sequence of messages passed to it by the parser.
+
+WP6StylesListener::WP6StylesListener(std::vector<WPXPageSpan *> *pageList, WPXTableList tableList) : 
+	WP6Listener(pageList, NULL),
 	m_currentPage(new WPXPageSpan()),
 	m_tableList(tableList), 
-	m_currentPageHasContent(false),
 	m_tempMarginLeft(1.0f),
-	m_tempMarginRight(1.0f)
+	m_tempMarginRight(1.0f),
+	m_currentPageHasContent(false),
+	m_isTableDefined(false)
 {
 }
 
-void WP5HLStylesListener::endDocument()
+void WP6StylesListener::endDocument()
 {	
 	insertBreak(WPX_SOFT_PAGE_BREAK); // pretend we just had a soft page break (for the last page)
 	delete(m_currentPage); // and delete the non-existent page that was allocated as a result (scandalous waste!)
 }
 
-void WP5HLStylesListener::insertBreak(const uint8_t breakType)
+void WP6StylesListener::insertBreak(const uint8_t breakType)
 {
-	//if (!isUndoOn())
-	//{	
+	if (!isUndoOn())
+	{	
 		switch (breakType) 
 		{
 		case WPX_PAGE_BREAK:
 		case WPX_SOFT_PAGE_BREAK:
-			if (WPXHLListener::m_pageList->size() > 0 && (*m_currentPage)==(*(m_pageList->back())))
+			if (WPXListener::m_pageList->size() > 0 && (*m_currentPage)==(*(m_pageList->back())))
 			{
 				int oldPageSpan = m_pageList->back()->getPageSpan();
 				m_pageList->back()->setPageSpan(oldPageSpan + 1);
@@ -69,13 +74,13 @@ void WP5HLStylesListener::insertBreak(const uint8_t breakType)
 			m_currentPageHasContent = false;
 			break;
 		}
-	//}
+	}
 }
 
-void WP5HLStylesListener::pageMarginChange(const uint8_t side, const uint16_t margin)
+void WP6StylesListener::pageMarginChange(const uint8_t side, const uint16_t margin)
 {
-	//if (!isUndoOn()) 
-	//{
+	if (!isUndoOn()) 
+	{
 		float marginInch = (float)((double)margin / (double)WPX_NUM_WPUS_PER_INCH);
 		switch(side)
 		{
@@ -86,13 +91,13 @@ void WP5HLStylesListener::pageMarginChange(const uint8_t side, const uint16_t ma
 				m_currentPage->setMarginBottom(marginInch);
 				break;
 		}
-	//}
+	}
 }
 
-void WP5HLStylesListener::pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool isPersistent)
+void WP6StylesListener::pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool isPersistent)
 {
-	//if (!isUndoOn())
-	//{
+	if (!isUndoOn())
+	{
 		float lengthInch = (float)((double)length / (double)WPX_NUM_WPUS_PER_INCH);
 		float widthInch = (float)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
 		if (!m_currentPageHasContent)
@@ -101,14 +106,13 @@ void WP5HLStylesListener::pageFormChange(const uint16_t length, const uint16_t w
 			m_currentPage->setFormWidth(widthInch);
 			m_currentPage->setFormOrientation(orientation);
 		}
-	//}
+	}
 }
 
-
-void WP5HLStylesListener::marginChange(const uint8_t side, const uint16_t margin)
+void WP6StylesListener::marginChange(const uint8_t side, const uint16_t margin)
 {
-	//if (!isUndoOn()) 
-	//{		
+	if (!isUndoOn())
+	{
 		float marginInch = (float)((double)margin / (double)WPX_NUM_WPUS_PER_INCH);
 		switch(side)
 		{
@@ -124,22 +128,29 @@ void WP5HLStylesListener::marginChange(const uint8_t side, const uint16_t margin
 				break;
 		}
 		
-	//}
+	}
 
 }
-/*
-void WP5HLStylesListener::headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, const uint16_t textPID)
+
+void WP6StylesListener::headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, const uint16_t textPID)
 {
 	if (!isUndoOn()) 
 	{			
 		WPD_DEBUG_MSG(("WordPerfect: headerFooterGroup (headerFooterType: %i, occurenceBits: %i, textPID: %i)\n", 
 			       headerFooterType, occurenceBits, textPID));
+		bool tempCurrentPageHasContent = m_currentPageHasContent;
 		if (headerFooterType <= WP6_HEADER_FOOTER_GROUP_FOOTER_B) // ignore watermarks for now
-			m_currentPage->setHeaderFooter(headerFooterType, occurenceBits, textPID);
+		{
+			WPXTableList tableList; 
+			m_currentPage->setHeaderFooter(headerFooterType, occurenceBits,
+						(textPID ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : NULL), tableList);
+			_handleSubDocument((textPID ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : NULL), true, tableList);
+		}
+		m_currentPageHasContent = tempCurrentPageHasContent;
 	}
 }
 
-void WP5HLStylesListener::suppressPageCharacteristics(const uint8_t suppressCode)
+void WP6StylesListener::suppressPageCharacteristics(const uint8_t suppressCode)
 {
 	if (!isUndoOn()) 
 	{			
@@ -154,34 +165,97 @@ void WP5HLStylesListener::suppressPageCharacteristics(const uint8_t suppressCode
 			m_currentPage->setHeadFooterSuppression(WP6_HEADER_FOOTER_GROUP_FOOTER_B, true);			
 	}
 }
-*/
-void WP5HLStylesListener::startTable()
+
+void WP6StylesListener::defineTable(const uint8_t position, const uint16_t leftOffset)
 {
-	//if (!isUndoOn()) 
-	//{			
+	if (!isUndoOn()) 
+	{			
 		m_currentPageHasContent = true;
 		m_currentTable = new WPXTable();
 		m_tableList.add(m_currentTable);
-	//}
+		m_isTableDefined = true;
+	}
 }
 
-void WP5HLStylesListener::insertRow(const uint16_t rowHeight, const bool isMinimumHeight, const bool isHeaderRow)
+void WP6StylesListener::startTable()
 {
-	if (/*!isUndoOn() && */m_currentTable != NULL) 
+	if (!isUndoOn() && !m_isTableDefined) 
+	{			
+		m_currentPageHasContent = true;
+		m_currentTable = new WPXTable();
+		m_tableList.add(m_currentTable);
+		m_isTableDefined = false;
+	}
+
+}
+
+void WP6StylesListener::endTable()
+{
+	if (!isUndoOn())
+	{
+		m_isTableDefined = false;
+	}
+}
+
+void WP6StylesListener::insertRow(const uint16_t rowHeight, const bool isMinimumHeight, const bool isHeaderRow)
+{
+	if (!isUndoOn() && m_currentTable != NULL) 
 	{
 		m_currentPageHasContent = true;
 		m_currentTable->insertRow();
 	}
 }
 
-void WP5HLStylesListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan, const bool boundFromLeft, const bool boundFromAbove, 
-				  const uint8_t borderBits, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
-				  const RGBSColor * cellBorderColor, const WPXVerticalAlignment cellVerticalAlignment, 
-				  const bool useCellAttributes, const uint32_t cellAttributes)
+void WP6StylesListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan, const uint8_t borderBits, 
+				const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
+				const RGBSColor * cellBorderColor, const WPXVerticalAlignment cellVerticalAlignment, 
+				const bool useCellAttributes, const uint32_t cellAttributes)
 {
-	if (/*!isUndoOn() &&*/ m_currentTable != NULL)
+	if (!isUndoOn() && m_currentTable != NULL)
 	{
 		m_currentPageHasContent = true;
-		m_currentTable->insertCell(colSpan, rowSpan, boundFromLeft, boundFromAbove, borderBits);
+		m_currentTable->insertCell(colSpan, rowSpan, borderBits);
+	}
+}
+
+void WP6StylesListener::noteOn(const uint16_t textPID)
+{
+	if (!isUndoOn()) 
+	{
+		m_currentPageHasContent = true; 		
+		_handleSubDocument((textPID ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : NULL), false, m_tableList);
+	}
+}
+
+void WP6StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice)
+{
+	// We don't want to actual insert anything in the case of a sub-document, but we
+	// do want to capture whatever table-related information is within it..
+	if (!isUndoOn()) 
+	{
+		std::set <const WPXSubDocument *> oldSubDocuments;
+		oldSubDocuments = m_subDocuments;
+		// prevent entering in an endless loop		
+		if ((subDocument) && (oldSubDocuments.find(subDocument) == oldSubDocuments.end()))
+		{
+			m_subDocuments.insert(subDocument);
+			if (isHeaderFooter) 
+			{
+				WPXTable * oldCurrentTable = m_currentTable;
+				WPXTableList oldTableList = m_tableList;
+				m_tableList = tableList;
+
+				subDocument->parse(this);
+
+				m_tableList = oldTableList;
+				m_currentTable = oldCurrentTable;
+			}
+			else
+			{
+				subDocument->parse(this);
+			}
+			m_subDocuments = oldSubDocuments;
+
+		}
 	}
 }

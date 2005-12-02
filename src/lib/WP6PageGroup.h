@@ -34,7 +34,7 @@ class WP6PageGroup : public WP6VariableLengthGroup
 	WP6PageGroup(WPXInputStream *input);	
 	virtual ~WP6PageGroup();
 	virtual void _readContents(WPXInputStream *input);
-	virtual void parse(WP6HLListener *listener);
+	virtual void parse(WP6Listener *listener);
 
  private:
 	// variables needed for subgroup 0 and 1 (Left/Right Margin Set)

@@ -38,32 +38,32 @@ class WP5SingleByteFunction : public WP5Part
 class WP5EOLFunction : public WP5SingleByteFunction
 {
 public:
-	virtual void parse(WP5HLListener *listener);	
+	virtual void parse(WP5Listener *listener);	
 };
 
 class WP5SpaceFunction : public WP5SingleByteFunction
 {
 public:
-	virtual void parse(WP5HLListener *listener);	
+	virtual void parse(WP5Listener *listener);	
 };
 
 class WP5HardSpaceFunction : public WP5SingleByteFunction
 {
 public:
-	virtual void parse(WP5HLListener *listener);	
+	virtual void parse(WP5Listener *listener);	
 };
 
 
 class WP5HyphenFunction : public WP5SingleByteFunction
 {
 public:
-	virtual void parse(WP5HLListener *listener);	
+	virtual void parse(WP5Listener *listener);	
 };
 
 class WP5SoftHyphenFunction : public WP5SingleByteFunction
 {
 public:
-	virtual void parse(WP5HLListener *listener);	
+	virtual void parse(WP5Listener *listener);	
 };
 
 #endif /* WP5SINGLEBYTEFUNCTION_H */

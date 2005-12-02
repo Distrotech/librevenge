@@ -26,7 +26,6 @@
 
 #include "WP5TableEOPGroup.h"
 #include "WP5FileStructure.h"
-#include "WP5LLListener.h"
 #include "libwpd_internal.h"
 
 WP5TableEOPGroup::WP5TableEOPGroup(WPXInputStream *input) :
@@ -54,9 +53,9 @@ void WP5TableEOPGroup::_readContents(WPXInputStream *input)
 	}
 }
 
-void WP5TableEOPGroup::parse(WP5HLListener *listener)
+void WP5TableEOPGroup::parse(WP5Listener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling a Page group\n"));
+	WPD_DEBUG_MSG(("WordPerfect: handling a Table EOP group\n"));
 
 	switch (getSubGroup())
 	{

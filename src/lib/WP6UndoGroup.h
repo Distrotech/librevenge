@@ -32,7 +32,7 @@ class WP6UndoGroup : public WP6FixedLengthGroup
 {
 public:
 	WP6UndoGroup(WPXInputStream *input, uint8_t groupID);	
-	virtual void parse(WP6HLListener *listener);
+	virtual void parse(WP6Listener *listener);
 	
  protected:
 	virtual void _readContents(WPXInputStream *input);

@@ -27,7 +27,6 @@
 #include <math.h>
 #include "WP3PageFormatGroup.h"
 #include "WP3FileStructure.h"
-#include "WP3LLListener.h"
 #include "libwpd_internal.h"
 #include "libwpd_math.h"
 
@@ -35,9 +34,9 @@ WP3PageFormatGroup::WP3PageFormatGroup(WPXInputStream *input) :
 	WP3VariableLengthGroup(),
 	m_leftMargin(0),
 	m_rightMargin(0),
+	m_lineSpacing(1.0f),
 	m_topMargin(0),
 	m_bottomMargin(0),
-	m_lineSpacing(1.0f),
 	m_justification(0),
 	m_indent(0)
 {
@@ -100,9 +99,9 @@ void WP3PageFormatGroup::_readContents(WPXInputStream *input)
 	}
 }
 
-void WP3PageFormatGroup::parse(WP3HLListener *listener)
+void WP3PageFormatGroup::parse(WP3Listener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling a Page group\n"));
+	WPD_DEBUG_MSG(("WordPerfect: handling a Page Format group\n"));
 
 	switch (getSubGroup())
 	{

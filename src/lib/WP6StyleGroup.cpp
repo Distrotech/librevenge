@@ -24,7 +24,6 @@
  */
 
 #include "WP6StyleGroup.h"
-#include "WP6LLListener.h"
 #include "libwpd_internal.h"
 
 WP6StyleGroup_GlobalOnSubGroup::WP6StyleGroup_GlobalOnSubGroup(WPXInputStream *input)
@@ -33,7 +32,7 @@ WP6StyleGroup_GlobalOnSubGroup::WP6StyleGroup_GlobalOnSubGroup(WPXInputStream *i
 	m_systemStyleNumber = readU8(input);
 }
 
-void WP6StyleGroup_GlobalOnSubGroup::parse(WP6HLListener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const
+void WP6StyleGroup_GlobalOnSubGroup::parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const
 {
 	listener->globalOn(m_systemStyleNumber);
 }
@@ -64,7 +63,7 @@ void WP6StyleGroup::_readContents(WPXInputStream *input)
 	}
 }
 
-void WP6StyleGroup::parse(WP6HLListener *listener)
+void WP6StyleGroup::parse(WP6Listener *listener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling a style group\n"));
 

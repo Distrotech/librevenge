@@ -27,7 +27,6 @@
 
 #include "WP3ExtendedCharacterGroup.h"
 #include "WP3FileStructure.h"
-#include "WP3LLListener.h"
 #include "libwpd_internal.h"
 
 WP3ExtendedCharacterGroup::WP3ExtendedCharacterGroup(WPXInputStream *input, uint8_t groupID) :
@@ -81,7 +80,7 @@ const uint16_t macintoshCharacterMap[] =
   0x00af, 0x02d8, 0x02d9, 0x02da, 0x00b8, 0x02dd, 0x02db, 0x02c7
 };
 
-void WP3ExtendedCharacterGroup::parse(WP3HLListener *listener)
+void WP3ExtendedCharacterGroup::parse(WP3Listener *listener)
 {
 	// We are finding the map first in the macRoman character set
 	// and only if we cannot find it, we use the WP character set

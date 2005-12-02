@@ -150,7 +150,7 @@ Parses the input stream content. It will make callbacks to the functions provide
 WPXHLListenerImpl class implementation when needed. This is often commonly called the
 'main parsing routine'.
 \param input The input stream
-\param listenerImpl A WPXHLListener implementation
+\param listenerImpl A WPXListener implementation
 */
 WPDResult WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerImpl)
 {

@@ -29,7 +29,6 @@
 #include <map>
 #include <vector>
 
-class WP6LLListener;
 typedef std::map<int, WP6PrefixDataPacket *> DPH;	
 typedef std::multimap<int, WP6PrefixDataPacket *> MPDP;
 typedef MPDP::const_iterator MPDP_CIter;

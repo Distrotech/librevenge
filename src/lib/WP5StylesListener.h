@@ -1,4 +1,5 @@
 /* libwpd
+ * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2004 Marc Maurer (j.m.maurer@student.utwente.nl)
  *
  * This library is free software; you can redistribute it and/or
@@ -22,27 +23,27 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP3HLSTYLESLISTENER_H
-#define WP3HLSTYLESLISTENER_H
+#ifndef WP5STYLESLISTENER_H
+#define WP5STYLESLISTENER_H
 
-#include "WP3HLListener.h"
+#include "WP5Listener.h"
 #include <vector>
 #include "WPXPageSpan.h"
 #include "WPXTable.h"
 
-class WP3HLStylesListener : public WP3HLListener
+class WP5StylesListener : public WP5Listener
 {
 public:
-	WP3HLStylesListener(std::vector<WPXPageSpan *> *pageList, WPXTableList tableList);
+	WP5StylesListener(std::vector<WPXPageSpan *> *pageList, WPXTableList tableList);
 
 	virtual void startDocument() {}
 	virtual void setAlignmentCharacter(const uint16_t character) {}
 	virtual void setLeaderCharacter(const uint16_t character, const uint8_t numberOfSpaces) {}
 	virtual void defineTabStops(const bool isRelative, const std::vector<WPXTabStop> &tabStops, 
 				    const std::vector<bool> &usePreWP9LeaderMethods) {}
-	virtual void insertCharacter(const uint16_t character) {}
-	virtual void insertTab(const uint8_t tabType, const uint16_t tabPosition) {}
-	virtual void insertEOL() {}
+	virtual void insertCharacter(const uint16_t character) { /*if (!isUndoOn())*/ m_currentPageHasContent = true; }
+	virtual void insertTab(const uint8_t tabType, const uint16_t tabPosition) { /*if (!isUndoOn())*/ m_currentPageHasContent = true; }
+	virtual void insertEOL() { /*if (!isUndoOn())*/ m_currentPageHasContent = true; }
  	virtual void insertBreak(const uint8_t breakType);
 	virtual void attributeChange(const bool isOn, const uint8_t attribute) {}
 	virtual void lineSpacingChange(const float lineSpacing) {}
@@ -57,19 +58,20 @@ public:
 				  const std::vector<bool> &isFixedWidth) {}
 	virtual void endDocument();
 
-	virtual void defineTable(uint8_t position, uint16_t leftOffset){}
-	virtual void addTableColumnDefinition(uint32_t width, uint32_t leftGutter, uint32_t rightGutter, uint32_t attributes, uint8_t alignment){}
+	virtual void defineTable(const uint8_t position, const uint16_t leftOffset){}
+	virtual void addTableColumnDefinition(const uint32_t width, const uint32_t leftGutter, const uint32_t rightGutter,
+				const uint32_t attributes, const uint8_t alignment){}
 	virtual void startTable();
  	virtual void insertRow(const uint16_t rowHeight, const bool isMinimumHeight, const bool isHeaderRow);
- 	virtual void insertCell(const uint8_t colSpan, const uint8_t rowSpan, const bool boundFromLeft, const bool boundFromAbove,
-				const uint8_t borderBits, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor, 
+ 	virtual void insertCell(const uint8_t colSpan, const uint8_t rowSpan, const uint8_t borderBits,
+				const RGBSColor * cellFgColor, const RGBSColor * cellBgColor, 
 				const RGBSColor * cellBorderColor, const WPXVerticalAlignment cellVerticalAlignment, 
 				const bool useCellAttributes, const uint32_t cellAttributes);
  	virtual void endTable() {}
 
 
 protected:
-	virtual void _openPageSpan() { /* FIXME: REMOVE ME WHEN IMPLEMENTED IN WPXHLListener */ };
+	virtual void _openPageSpan() { /* FIXME: REMOVE ME WHEN IMPLEMENTED IN WPXListener */ };
 
 private:
 	WPXPageSpan *m_currentPage;
@@ -80,4 +82,4 @@ private:
 	bool m_currentPageHasContent;
 };
 
-#endif /* WP3HLSTYLESLISTENER_H */
+#endif /* WP5STYLESLISTENER_H */

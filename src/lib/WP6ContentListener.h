@@ -24,11 +24,11 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP6HLCONTENTLISTENER_H
-#define WP6HLCONTENTLISTENER_H
+#ifndef WP6CONTENTLISTENER_H
+#define WP6CONTENTLISTENER_H
 
-#include "WP6HLListener.h"
-#include "WPXHLListener.h"
+#include "WP6Listener.h"
+#include "WPXListener.h"
 #include "WP6FileStructure.h"
 
 #include <stack>
@@ -127,11 +127,11 @@ private:
 	WPXNumberingType m_listTypes[WP6_NUM_LIST_LEVELS];
 };
 
-class WP6HLContentListener : public WP6HLListener
+class WP6ContentListener : public WP6Listener
 {
 public:
-	WP6HLContentListener(std::vector<WPXPageSpan *> *pageList, WPXTableList tableList, WPXHLListenerImpl *listenerImpl);
-	virtual ~WP6HLContentListener();
+	WP6ContentListener(std::vector<WPXPageSpan *> *pageList, WPXTableList tableList, WPXHLListenerImpl *listenerImpl);
+	virtual ~WP6ContentListener();
 
 	// for getting low-level messages from the parser
 	virtual void setDate(const uint16_t year, const uint8_t month, const uint8_t day,
@@ -176,19 +176,20 @@ public:
 	virtual void suppressPageCharacteristics(const uint8_t suppressCode) {}
 	virtual void endDocument();
 
- 	virtual void defineTable(uint8_t position, uint16_t leftOffset);
-	virtual void addTableColumnDefinition(uint32_t width, uint32_t leftGutter, uint32_t rightGutter, uint32_t attributes, uint8_t alignment);
+ 	virtual void defineTable(const uint8_t position, const uint16_t leftOffset);
+	virtual void addTableColumnDefinition(const uint32_t width, const uint32_t leftGutter, const uint32_t rightGutter,
+				const uint32_t attributes, const uint8_t alignment);
 	virtual void startTable();
  	virtual void insertRow(const uint16_t rowHeight, const bool isMinimumHeight, const bool isHeaderRow);
- 	virtual void insertCell(const uint8_t colSpan, const uint8_t rowSpan, const bool boundFromLeft, const bool boundFromAbove,
-				const uint8_t borderBits, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
+ 	virtual void insertCell(const uint8_t colSpan, const uint8_t rowSpan, const uint8_t borderBits,
+				const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
 				const RGBSColor * cellBorderColor, const WPXVerticalAlignment cellVerticalAlignment, 
 				const bool useCellAttributes, const uint32_t cellAttributes);
  	virtual void endTable();
 
 
 protected:
-	virtual void _handleSubDocument(uint16_t textPID, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
+	virtual void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
 
 	//void _handleLineBreakElementBegin();
 	void _paragraphNumberOn(const uint16_t outlineHash, const uint8_t level);
@@ -203,4 +204,4 @@ private:
 	std::map<uint16_t,WP6OutlineDefinition *> m_outlineDefineHash;
 };
 
-#endif /* WP6HLCONTENTLISTENER_H */
+#endif /* WP6CONTENTLISTENER_H */

@@ -25,7 +25,6 @@
  */
 
 #include "WP6TabGroup.h"
-#include "WP6LLListener.h"
 #include "libwpd_internal.h"
 #include "WPXFileStructure.h"
 
@@ -69,7 +68,7 @@ void WP6TabGroup::_readContents(WPXInputStream *input)
 	m_position = (float)((double)tempPosition/(double)WPX_NUM_WPUS_PER_INCH);
 }
 
-void WP6TabGroup::parse(WP6HLListener *listener)
+void WP6TabGroup::parse(WP6Listener *listener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling a Tab group (Tab type: %i, Tab position: %.4finch, Ignore function: %s)\n", 
 			getSubGroup(), m_position, (m_ignoreFunction?"true":"false")));

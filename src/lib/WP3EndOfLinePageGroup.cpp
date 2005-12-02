@@ -47,8 +47,7 @@
  */
 
 #include "WP3EndOfLinePageGroup.h"
-#include "WP3LLListener.h"
-#include "WPXHLListener.h"
+#include "WPXListener.h"
 #include "libwpd_internal.h"
 
 WP3EndOfLinePageGroup::WP3EndOfLinePageGroup(WPXInputStream *input) :	
@@ -62,7 +61,7 @@ void WP3EndOfLinePageGroup::_readContents(WPXInputStream *input)
 	// nothing really to do here...
 }
 
-void WP3EndOfLinePageGroup::parse(WP3HLListener *listener)
+void WP3EndOfLinePageGroup::parse(WP3Listener *listener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling an End of Line/Page group\n"));
 	
@@ -96,8 +95,10 @@ void WP3EndOfLinePageGroup::parse(WP3HLListener *listener)
 		case 0x07: // Hard End of Page
 			break;
 		case 0x08: // Hard End of Column
+			listener->insertBreak(WPX_COLUMN_BREAK);
 			break;
 		case 0x09: // Hard End of Column/Soft End of Page
+			listener->insertBreak(WPX_COLUMN_BREAK);
 			break;
 		case 0x0A: // Hard End of Line (Hard EOC not in columns)
 			listener->insertEOL();
@@ -126,24 +127,35 @@ void WP3EndOfLinePageGroup::parse(WP3HLListener *listener)
 		case 0x13: // Hard Beginning of File
 			break;
 		case 0x14: // Temporary Hard End of Column
+			listener->insertBreak(WPX_COLUMN_BREAK);
 			break;
 		case 0x15: // Temporary Hard End of Column/Soft EOP
+			listener->insertBreak(WPX_COLUMN_BREAK);
 			break;
 		case 0x16: // Hard End of Table Cell
+			listener->closeCell();
 			break;
 		case 0x17: // (reserved)
 			break;
 		case 0x18: // Hard End of Table Row/Cell
+			listener->closeRow();
 			break;
 		case 0x19: // Hard End of Table Row/Cell/Soft EOP
+			listener->closeRow();
 			break;
 		case 0x1A: // Hard End of Table Row/End of Table
+			listener->closeRow();
+			listener->endTable();
 			break;
 		case 0x1B: // Hard End of Table Row/End of Table/Soft EOP
+			listener->closeRow();
+			listener->endTable();
 			break;
 		case 0x1C: // Hard End of Table Row/Cell/End of Header
+			listener->closeRow();
 			break;
 		case 0x1D: // Hard End of Table Row/Cell/Soft EOP/Start of Header
+			listener->closeRow();
 			break;
 		case 0x1E: // (reserved)
 			break;

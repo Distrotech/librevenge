@@ -34,7 +34,7 @@ class WP5TableEOPGroup : public WP5VariableLengthGroup
 	WP5TableEOPGroup(WPXInputStream *input);	
 	virtual ~WP5TableEOPGroup();
 	virtual void _readContents(WPXInputStream *input);
-	virtual void parse(WP5HLListener *listener);
+	virtual void parse(WP5Listener *listener);
 
 };
 

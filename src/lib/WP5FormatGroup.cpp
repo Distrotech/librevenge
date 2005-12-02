@@ -23,8 +23,7 @@
  */
 
 #include "WP5FormatGroup.h"
-#include "WP5LLListener.h"
-#include "WPXHLListener.h"
+#include "WPXListener.h"
 #include "libwpd_internal.h"
 
 WP5FormatGroup::WP5FormatGroup(WPXInputStream *input) :	
@@ -46,7 +45,7 @@ void WP5FormatGroup::_readContents(WPXInputStream *input)
 	}	
 }
 
-void WP5FormatGroup::parse(WP5HLListener *listener)
+void WP5FormatGroup::parse(WP5Listener *listener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling a Format group\n"));
 

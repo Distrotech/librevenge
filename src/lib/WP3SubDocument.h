@@ -1,6 +1,5 @@
 /* libwpd
- * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,13 +21,19 @@
 /* "This product is not manufactured, approved, or supported by 
  * Corel Corporation or Corel Corporation Limited."
  */
-#include "WP6LLListener.h"
-#include "WP6PrefixData.h"
-#include "WP6FontDescriptorPacket.h"
-#include "WP6DefaultInitialFontPacket.h"
-#include "WP6FileStructure.h"
 
-const WP6PrefixDataPacket * WP6LLListener::getPrefixDataPacket(const int prefixID) const
-{ 
-	return m_prefixData->getPrefixDataPacket(prefixID); 
-}
+#ifndef WP3SUBDOCUMENT_H
+#define WP3SUBDOCUMENT_H
+
+#include "WPXMemoryStream.h"
+#include "WPXSubDocument.h"
+#include "WP3Listener.h"
+
+class WP3SubDocument : public WPXSubDocument
+{
+public:
+	WP3SubDocument(WPXInputStream *input, int dataSize);
+	virtual void parse(WPXListener *listener) const;
+
+};
+#endif /* WP3SUBDOCUMENT_H */

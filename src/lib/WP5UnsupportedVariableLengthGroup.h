@@ -35,7 +35,7 @@ class WP5UnsupportedVariableLengthGroup : public WP5VariableLengthGroup
 {
 public:
 	WP5UnsupportedVariableLengthGroup(WPXInputStream *input);
-	virtual void parse(WP5HLListener *listener) {}
+	virtual void parse(WP5Listener *listener) {}
 };
 
 #endif /* WP5UNSUPPORTEDVARIABLELENGTHGROUP_H */

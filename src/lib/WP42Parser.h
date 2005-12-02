@@ -27,7 +27,7 @@
 #define WP42PARSER_H
 
 #include "WPXParser.h"
-#include "WP42HLListener.h"
+#include "WP42Listener.h"
 
 class WPXHLListenerImpl;
 
@@ -39,10 +39,10 @@ public:
 
 	virtual void parse(WPXHLListenerImpl *listenerImpl);
 
-	static void parseDocument(WPXInputStream *input, WP42HLListener *listener);
+	static void parseDocument(WPXInputStream *input, WP42Listener *listener);
 
 private:
-	void parse(WPXInputStream *input, WP42HLListener *listener);
+	void parse(WPXInputStream *input, WP42Listener *listener);
 };
 
 #endif /* WP42PARSER_H */
