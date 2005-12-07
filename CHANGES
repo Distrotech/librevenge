@@ -7,9 +7,9 @@ CHANGES:
 - Collapse the LL and HL Listeners into one classe each (Fridrich)
 - Initial support of tables in WP3.x format including the cell background
   colour (Fridrich Strba)
-- Conversion of section with multiple columns in WP3.x format (Fridrich)
+- Conversion of sections with multiple columns in WP3.x format (Fridrich)
 - Conversion of foot/endnotes in WP3.x format (Fridrich)
-- Adding a proper assignment operator to WPXString class as well as trying
+- Adding an assignment operator to WPXString class as well as trying
   to make it much more a std::string wrapper (Fridrich)
 
 0.8.2 -> 0.8.3
