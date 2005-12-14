@@ -26,7 +26,7 @@
 #include "WP3Parser.h"
 #include "WPXHeader.h"
 #include "WP3Part.h"
-#include "WP3Listener.h"
+#include "WP3ContentListener.h"
 #include "WP3StylesListener.h"
 #include "libwpd_internal.h"
 #include "WPXTable.h"
@@ -101,7 +101,7 @@ void WP3Parser::parse(WPXHLListenerImpl *listenerImpl)
 
 		// second pass: here is where we actually send the messages to the target app
 		// that are necessary to emit the body of the target document
-		WP3Listener listener(&pageList, listenerImpl); // FIXME: SHOULD BE CONTENT_LISTENER, AND SHOULD BE PASSED TABLE DATA!
+		WP3ContentListener listener(&pageList, listenerImpl); // FIXME: SHOULD BE CONTENT_LISTENER, AND SHOULD BE PASSED TABLE DATA!
 		parse(input, &listener);
 		
 		// cleanup section: free the used resources

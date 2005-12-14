@@ -26,7 +26,7 @@
 #include "WP5Parser.h"
 #include "WPXHeader.h"
 #include "WP5Part.h"
-#include "WP5Listener.h"
+#include "WP5ContentListener.h"
 #include "WP5StylesListener.h"
 #include "libwpd_internal.h"
 #include "WPXTable.h"
@@ -119,7 +119,7 @@ void WP5Parser::parse(WPXHLListenerImpl *listenerImpl)
 
 		// second pass: here is where we actually send the messages to the target app
 		// that are necessary to emit the body of the target document
-		WP5Listener listener(&pageList, listenerImpl); // FIXME: SHOULD BE CONTENT_LISTENER, AND SHOULD BE PASSED TABLE DATA!
+		WP5ContentListener listener(&pageList, listenerImpl); // FIXME: SHOULD BE CONTENT_LISTENER, AND SHOULD BE PASSED TABLE DATA!
 		parse(input, &listener);
 		
 		// cleanup section: free the used resources

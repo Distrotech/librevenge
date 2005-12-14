@@ -30,6 +30,7 @@
 #include "WPXTable.h"
 #include "WP42FileStructure.h"
 #include "WP42StylesListener.h"
+#include "WP42ContentListener.h"
 
 WP42Parser::WP42Parser(WPXInputStream *input) :
 	WPXParser(input, NULL)
@@ -167,7 +168,7 @@ void WP42Parser::parse(WPXHLListenerImpl *listenerImpl)
 
 		// second pass: here is where we actually send the messages to the target app
 		// that are necessary to emit the body of the target document
-		WP42Listener listener(&pageList, listenerImpl); // FIXME: SHOULD BE CONTENT_LISTENER, AND SHOULD BE PASSED TABLE DATA!
+		WP42ContentListener listener(&pageList, listenerImpl); // FIXME: SHOULD BE CONTENT_LISTENER, AND SHOULD BE PASSED TABLE DATA!
 		parse(input, &listener);
 
 		// cleanup section: free the used resources

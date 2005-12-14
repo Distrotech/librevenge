@@ -165,7 +165,7 @@ void WP3StylesListener::startTable()
 	}
 }
 
-void WP3StylesListener::insertRow(const uint16_t rowHeight, const bool isMinimumHeight, const bool isHeaderRow)
+void WP3StylesListener::insertRow()
 {
 	if (!isUndoOn() && m_currentTable != NULL) 
 	{
@@ -174,15 +174,14 @@ void WP3StylesListener::insertRow(const uint16_t rowHeight, const bool isMinimum
 	}
 }
 
-void WP3StylesListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan, const uint8_t borderBits, 
-				  const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
-				  const RGBSColor * cellBorderColor, const WPXVerticalAlignment cellVerticalAlignment, 
-				  const bool useCellAttributes, const uint32_t cellAttributes)
+void WP3StylesListener::insertCell()
 {
 	if (!isUndoOn() && m_currentTable != NULL)
 	{
 		m_currentPageHasContent = true;
+#if 0
 		m_currentTable->insertCell(colSpan, rowSpan, borderBits);
+#endif
 	}
 }
 

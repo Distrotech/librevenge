@@ -30,75 +30,52 @@
 #include "WPXHLListenerImpl.h"
 #include "libwpd_internal.h"
 
-typedef struct _WP3ParsingState WP3ParsingState;
-struct _WP3ParsingState
-{
-	_WP3ParsingState();
-	~_WP3ParsingState();
-	uint16_t m_colSpan;
-	uint16_t m_rowSpan;
-	WPXString m_textBuffer;
-	RGBSColor * m_cellFillColor;
-	WPXString m_noteReference;
-
-	WPXTableList m_tableList;
-};
-
 class WP3SubDocument;
 
 class WP3Listener : public WPXListener
 {
 public:
 	WP3Listener(std::vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl);
-	virtual ~WP3Listener();
+	virtual ~WP3Listener() {}
 
-	virtual void setAlignmentCharacter(const uint16_t character) {};
-	virtual void setLeaderCharacter(const uint16_t character, const uint8_t numberOfSpaces) {};
+	virtual void setAlignmentCharacter(const uint16_t character) = 0;
+	virtual void setLeaderCharacter(const uint16_t character, const uint8_t numberOfSpaces) = 0;
 	virtual void defineTabStops(const bool isRelative, const std::vector<WPXTabStop> &tabStops, 
-				    const std::vector<bool> &usePreWP9LeaderMethods) {};
-	virtual void insertCharacter(const uint16_t character);
-	virtual void insertTab(const uint8_t tabType, const float tabPosition);
-	virtual void handleLineBreak() {};
-	virtual void insertEOL();
-	virtual void attributeChange(const bool isOn, const uint8_t attribute);
-	virtual void spacingAfterParagraphChange(const float spacingRelative, const float spacingAbsolute) {};
-	virtual void pageMarginChange(const uint8_t side, const uint16_t margin) {};
-	virtual void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool isPersistent) {};
-	virtual void marginChange(const uint8_t side, const uint16_t margin);
-	virtual void paragraphMarginChange(const uint8_t side, const int16_t margin) {};
-	virtual void indentFirstLineChange(const int16_t offset);
+				    const std::vector<bool> &usePreWP9LeaderMethods) = 0;
+	virtual void insertCharacter(const uint16_t character) = 0;
+	virtual void insertTab(const uint8_t tabType, const float tabPosition) = 0;
+	virtual void handleLineBreak() = 0;
+	virtual void insertEOL() = 0;
+	virtual void attributeChange(const bool isOn, const uint8_t attribute) = 0;
+	virtual void spacingAfterParagraphChange(const float spacingRelative, const float spacingAbsolute) = 0;
+	virtual void pageMarginChange(const uint8_t side, const uint16_t margin) = 0;
+	virtual void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool isPersistent) = 0;
+	virtual void marginChange(const uint8_t side, const uint16_t margin) = 0;
+	virtual void paragraphMarginChange(const uint8_t side, const int16_t margin) = 0;
+	virtual void indentFirstLineChange(const int16_t offset) = 0;
 	virtual void columnChange(const WPXTextColumnType columnType, const uint8_t numColumns, const std::vector<float> &columnWidth,
-					const std::vector<bool> &isFixedWidth);
-	virtual void endDocument();
+					const std::vector<bool> &isFixedWidth) = 0;
+	virtual void endDocument() = 0;
 
-	virtual void defineTable(const uint8_t position, const uint16_t leftOffset);
+	virtual void defineTable(const uint8_t position, const uint16_t leftOffset) = 0;
 	virtual void addTableColumnDefinition(const uint32_t width, const uint32_t leftGutter, const uint32_t rightGutter,
-					const uint32_t attributes, const uint8_t alignment);
-	virtual void startTable();
- 	virtual void insertRow();
- 	virtual void insertCell();
- 	virtual void closeCell();
-	virtual void closeRow();
-	virtual void setTableCellSpan(const uint16_t colSpan, const uint16_t rowSpan);
-	virtual void setTableCellFillColor(const RGBSColor * cellFillColor);
- 	virtual void endTable();
-	virtual void undoChange(const uint8_t undoType, const uint16_t undoLevel);
-	virtual void justificationChange(const uint8_t justification);
-	virtual void setTextColor(const RGBSColor * fontColor);
-	virtual void setTextFont(const std::string fontName);
-	virtual void setFontSize(const uint16_t fontSize);
-	virtual void insertNoteReference(const std::string noteReference);
-	virtual void insertNote(const WPXNoteType noteType, const WP3SubDocument *subDocument);
+					const uint32_t attributes, const uint8_t alignment) = 0;
+	virtual void startTable() = 0;
+ 	virtual void insertRow() = 0;
+ 	virtual void insertCell() = 0;
+ 	virtual void closeCell() = 0;
+	virtual void closeRow() = 0;
+	virtual void setTableCellSpan(const uint16_t colSpan, const uint16_t rowSpan) = 0;
+	virtual void setTableCellFillColor(const RGBSColor * cellFillColor) = 0;
+ 	virtual void endTable() = 0;
+	virtual void undoChange(const uint8_t undoType, const uint16_t undoLevel) = 0;
+	virtual void justificationChange(const uint8_t justification) = 0;
+	virtual void setTextColor(const RGBSColor * fontColor) = 0;
+	virtual void setTextFont(const std::string fontName) = 0;
+	virtual void setFontSize(const uint16_t fontSize) = 0;
+	virtual void insertNoteReference(const std::string noteReference) = 0;
+	virtual void insertNote(const WPXNoteType noteType, const WP3SubDocument *subDocument) = 0;
 	
-protected:
-	virtual void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
-	virtual void _openParagraph();
-
-private:
-	void _flushText();
-	void _changeList() {};
-
-	WP3ParsingState *m_parseState;
 };
 
 #endif /* WP3LISTENER_H */

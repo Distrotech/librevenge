@@ -36,7 +36,6 @@
 #include <vector>
 
 class WPXHLListenerImpl;
-class WP6LLParser;
 class WPXTable;
 
 enum WP6StyleState { NORMAL, DOCUMENT_NOTE, DOCUMENT_NOTE_GLOBAL,

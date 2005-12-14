@@ -45,6 +45,7 @@ libwpd_0_8_la_SOURCES =				\
 	libwpd_internal.cpp			\
 	libwpd_math.cpp				\
 	WP3AttributeGroup.cpp			\
+	WP3ContentListener.cpp			\
 	WP3DefinitionGroup.cpp			\
 	WP3DisplayGroup.cpp			\
 	WP3EndOfLinePageGroup.cpp		\
@@ -67,6 +68,7 @@ libwpd_0_8_la_SOURCES =				\
 	WP3UnsupportedFixedLengthGroup.cpp 	\
 	WP3UnsupportedVariableLengthGroup.cpp 	\
 	WP3VariableLengthGroup.cpp		\
+	WP42ContentListener.cpp			\
 	WP42FileStructure.cpp			\
 	WP42Heuristics.cpp			\
 	WP42Listener.cpp			\
@@ -76,6 +78,7 @@ libwpd_0_8_la_SOURCES =				\
 	WP42UnsupportedVariableLengthGroup.cpp	\
 	WP42VariableLengthGroup.cpp		\
 	WP5AttributeGroup.cpp 			\
+	WP5ContentListener.cpp			\
 	WP5DefinitionGroup.cpp			\
 	WP5ExtendedCharacterGroup.cpp		\
 	WP5FileStructure.cpp			\
@@ -149,6 +152,7 @@ libwpd_0_8_la_SOURCES =				\
 	libwpd_math.h				\
 	libwpd_types.h				\
 	WP3AttributeGroup.h			\
+	WP3ContentListener.h			\
 	WP3DefinitionGroup.h			\
 	WP3DisplayGroup.h			\
 	WP3EndOfLinePageGroup.h			\
@@ -171,6 +175,7 @@ libwpd_0_8_la_SOURCES =				\
 	WP3UnsupportedFixedLengthGroup.h 	\
 	WP3UnsupportedVariableLengthGroup.h	\
 	WP3VariableLengthGroup.h		\
+	WP42ContentListener.h			\
 	WP42FileStructure.h			\
 	WP42Heuristics.h			\
 	WP42Listener.h				\
@@ -180,6 +185,7 @@ libwpd_0_8_la_SOURCES =				\
 	WP42UnsupportedVariableLengthGroup.h	\
 	WP42VariableLengthGroup.h		\
 	WP5AttributeGroup.h 			\
+	WP5ContentListener.h			\
 	WP5DefinitionGroup.h			\
 	WP5ExtendedCharacterGroup.h		\
 	WP5FileStructure.h			\
