@@ -43,17 +43,15 @@ WP6PrefixData::WP6PrefixData(WPXInputStream *input, const int numPrefixIndices) 
 	}
 	
 	for (i=1; i<numPrefixIndices; i++) 
-		{
-			WPD_DEBUG_MSG(("WordPerfect: constructing prefix packet 0x%x\n", i));
-			WP6PrefixDataPacket *prefixDataPacket = WP6PrefixDataPacket::constructPrefixDataPacket(input, prefixIndiceArray[(i-1)]);
-			if (prefixDataPacket) {
-				m_prefixDataPacketHash[i] = prefixDataPacket;
-//				m_prefixDataPacketTypeHash.insert(pair<int, WP6PrefixDataPacket *>(prefixIndiceArray[i-1]->getType(), prefixDataPacket));
-				m_prefixDataPacketTypeHash.insert(::std::map<int, WP6PrefixDataPacket *>::value_type(prefixIndiceArray[i-1]->getType(), prefixDataPacket));
-				if (dynamic_cast<WP6DefaultInitialFontPacket *>(prefixDataPacket))
-					m_defaultInitialFontPID = i;
-			}
-			
+	{
+		WPD_DEBUG_MSG(("WordPerfect: constructing prefix packet 0x%x\n", i));
+		WP6PrefixDataPacket *prefixDataPacket = WP6PrefixDataPacket::constructPrefixDataPacket(input, prefixIndiceArray[(i-1)]);
+		if (prefixDataPacket) {
+			m_prefixDataPacketHash[i] = prefixDataPacket;
+			m_prefixDataPacketTypeHash.insert(::std::map<int, WP6PrefixDataPacket *>::value_type(prefixIndiceArray[i-1]->getType(), prefixDataPacket));
+			if (dynamic_cast<WP6DefaultInitialFontPacket *>(prefixDataPacket))
+				m_defaultInitialFontPID = i;
+		}
 	}
 
 	for (i=1; i<numPrefixIndices; i++)

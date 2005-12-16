@@ -30,6 +30,7 @@
 #include "WP5StylesListener.h"
 #include "libwpd_internal.h"
 #include "WPXTable.h"
+#include "WP5PrefixData.h"
 
 WP5Parser::WP5Parser(WPXInputStream *input, WPXHeader *header) :
 	WPXParser(input, header)
@@ -38,6 +39,21 @@ WP5Parser::WP5Parser(WPXInputStream *input, WPXHeader *header) :
 
 WP5Parser::~WP5Parser()
 {
+}
+
+WP5PrefixData * WP5Parser::getPrefixData(WPXInputStream *input)
+{
+	WP5PrefixData *prefixData = NULL;
+	try
+	{
+		prefixData = new WP5PrefixData(input);
+		return prefixData;
+	}
+	catch(FileException)
+	{
+		DELETEP(prefixData);
+		throw FileException();
+	}
 }
 
 void WP5Parser::parse(WPXInputStream *input, WP5Listener *listener)
@@ -109,9 +125,12 @@ void WP5Parser::parse(WPXHLListenerImpl *listenerImpl)
 	WPXInputStream *input = getInput();
 	std::vector<WPXPageSpan *> pageList;
 	WPXTableList tableList;	
+	WP5PrefixData * prefixData = NULL;
 	
 	try
  	{
+		prefixData = getPrefixData(input);
+
 		// do a "first-pass" parse of the document
 		// gather table border information, page properties (per-page)
 		WP5StylesListener stylesListener(&pageList, tableList);
@@ -123,6 +142,7 @@ void WP5Parser::parse(WPXHLListenerImpl *listenerImpl)
 		parse(input, &listener);
 		
 		// cleanup section: free the used resources
+		delete prefixData;
 		for (std::vector<WPXPageSpan *>::iterator iterSpan = pageList.begin(); iterSpan != pageList.end(); iterSpan++)
 		{
 			delete *iterSpan;
@@ -131,6 +151,8 @@ void WP5Parser::parse(WPXHLListenerImpl *listenerImpl)
 	catch(FileException)
 	{
 		WPD_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
+
+		delete prefixData;
 
 		for (std::vector<WPXPageSpan *>::iterator iterSpan = pageList.begin(); iterSpan != pageList.end(); iterSpan++)
 		{

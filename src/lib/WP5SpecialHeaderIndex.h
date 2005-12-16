@@ -1,6 +1,5 @@
 /* libwpd
- * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,13 +22,28 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "libwpd.h"
-#include "WP5Header.h"
-#include "libwpd_internal.h"
+#ifndef WP5SPECIALHEADERINDEX_H
+#define WP5SPECIALHEADERINDEX_H
+#include <stdlib.h>
+#include "WPXStream.h"
 
-WP5Header::WP5Header(WPXInputStream * input, uint32_t documentOffset, uint8_t productType, uint8_t fileType, uint8_t majorVersion, uint8_t minorVersion, uint16_t documentEncryption) :
-	WPXHeader(input, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption)
+class WP5SpecialHeaderIndex
 {
-	input->seek(2, WPX_SEEK_CUR); // skip the reserved 2 bytes
-	// nothing to do here really...
-}
+ public:
+	WP5SpecialHeaderIndex(WPXInputStream * input);	
+	const uint16_t getType() const { return m_type; }
+	const uint16_t getNumOfIndexes() const { return m_numOfIndexes; }
+	const uint16_t getIndexBlockSize() const { return m_indexBlockSize; }
+	const uint32_t getNextBlockOffset() const { return m_nextBlockOffset; }
+
+ protected:
+ 	void _read(WPXInputStream *input);
+ 
+ private:
+	uint16_t m_type;
+	uint16_t m_numOfIndexes;
+ 	uint16_t m_indexBlockSize;
+ 	uint32_t m_nextBlockOffset;
+};
+
+#endif /* WP5SPECIALHEADERINDEX_H */

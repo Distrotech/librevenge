@@ -1,6 +1,5 @@
 /* libwpd
- * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,13 +22,24 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "libwpd.h"
-#include "WP5Header.h"
-#include "libwpd_internal.h"
+#ifndef WP6PREFIXDATAPACKET_H
+#define WP6PREFIXDATAPACKET_H
+#include <stdlib.h>
+#include "WPXParser.h"
 
-WP5Header::WP5Header(WPXInputStream * input, uint32_t documentOffset, uint8_t productType, uint8_t fileType, uint8_t majorVersion, uint8_t minorVersion, uint16_t documentEncryption) :
-	WPXHeader(input, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption)
+class WP5GeneralPacketIndex;
+
+class WP5GeneralPacketData
 {
-	input->seek(2, WPX_SEEK_CUR); // skip the reserved 2 bytes
-	// nothing to do here really...
-}
+public:
+	WP5GeneralPacketData(WPXInputStream * input);	
+	virtual ~WP5GeneralPacketData() {}
+
+	static WP5GeneralPacketData * constructGeneralPacketData(WPXInputStream * input, WP5GeneralPacketIndex *packetIndex);
+
+protected:
+	virtual void _readContents(WPXInputStream *input) = 0;
+ 	void _read(WPXInputStream *input, uint32_t dataOffset, uint32_t dataSize);
+};
+
+#endif /* WP6PREFIXDATAPACKET_H */

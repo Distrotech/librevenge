@@ -1,6 +1,5 @@
 /* libwpd
- * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,13 +22,28 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "libwpd.h"
-#include "WP5Header.h"
-#include "libwpd_internal.h"
+#ifndef WP5GENERALPACKETINDEX_H
+#define WP5GENERALPACKETINDEX_H
+#include <stdlib.h>
+#include "WPXStream.h"
 
-WP5Header::WP5Header(WPXInputStream * input, uint32_t documentOffset, uint8_t productType, uint8_t fileType, uint8_t majorVersion, uint8_t minorVersion, uint16_t documentEncryption) :
-	WPXHeader(input, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption)
+class WP5GeneralPacketIndex
 {
-	input->seek(2, WPX_SEEK_CUR); // skip the reserved 2 bytes
-	// nothing to do here really...
-}
+ public:
+	WP5GeneralPacketIndex(WPXInputStream * input, int id);	
+	const int getID() const { return m_id; }
+	const uint16_t getType() const { return m_type; }
+	const uint32_t getDataSize() const { return m_dataSize; }
+	const uint32_t getDataOffset() const { return m_dataOffset; }
+
+ protected:
+ 	void _read(WPXInputStream *input);
+ 
+ private:
+	int m_id;
+	uint16_t m_type;
+ 	uint32_t m_dataSize;
+ 	uint32_t m_dataOffset;
+};
+
+#endif /* WP5GENERALPACKETINDEX_H */

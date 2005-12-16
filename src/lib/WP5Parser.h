@@ -30,18 +30,21 @@
 
 class WPXHLListenerImpl;
 class WP5Listener;
+class WP5PrefixData;
 
 class WP5Parser : public WPXParser
 {
 public:
 	WP5Parser(WPXInputStream *input, WPXHeader *header);
 	~WP5Parser();
-
+	
 	virtual void parse(WPXHLListenerImpl *listenerImpl);
 	
 	static void parseDocument(WPXInputStream *input, WP5Listener *listener);
 
 private:
+	WP5PrefixData * getPrefixData(WPXInputStream *input);
+
 	void parse(WPXInputStream *input, WP5Listener *listener);
 };
 

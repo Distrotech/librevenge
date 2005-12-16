@@ -1,6 +1,5 @@
 /* libwpd
- * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,13 +22,27 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "libwpd.h"
-#include "WP5Header.h"
+#include "WP5SpecialHeaderIndex.h"
 #include "libwpd_internal.h"
 
-WP5Header::WP5Header(WPXInputStream * input, uint32_t documentOffset, uint8_t productType, uint8_t fileType, uint8_t majorVersion, uint8_t minorVersion, uint16_t documentEncryption) :
-	WPXHeader(input, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption)
+WP5SpecialHeaderIndex::WP5SpecialHeaderIndex(WPXInputStream * input) :
+	  m_type(0),
+	  m_numOfIndexes(0),
+	  m_indexBlockSize(0),
+	  m_nextBlockOffset(0)
 {
-	input->seek(2, WPX_SEEK_CUR); // skip the reserved 2 bytes
-	// nothing to do here really...
+	_read(input);
+}
+
+void WP5SpecialHeaderIndex::_read(WPXInputStream *input)
+{
+	m_type = readU16(input);
+	
+	m_numOfIndexes = readU16(input);
+
+	m_indexBlockSize = readU16(input);
+	m_nextBlockOffset = readU32(input);
+
+	WPD_DEBUG_MSG(("Special Header Index (type: %i, number of indexes: %i, index block size: %i, next block offset: %i)\n",
+			m_type, m_numOfIndexes, m_indexBlockSize, m_nextBlockOffset));
 }

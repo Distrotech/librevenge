@@ -84,12 +84,16 @@ libwpd_0_8_la_SOURCES =				\
 	WP5FileStructure.cpp			\
 	WP5FixedLengthGroup.cpp			\
 	WP5FormatGroup.cpp			\
+	WP5GeneralPacketData.cpp		\
+	WP5GeneralPacketIndex.cpp		\
 	WP5Header.cpp				\
 	WP5Listener.cpp				\
 	WP5PageFormatGroup.cpp			\
 	WP5Parser.cpp				\
 	WP5Part.cpp				\
+	WP5PrefixData.cpp			\
 	WP5SingleByteFunction.cpp		\
+	WP5SpecialHeaderIndex.cpp		\
 	WP5StylesListener.cpp			\
 	WP5TableEOLGroup.cpp			\
 	WP5TableEOPGroup.cpp			\
@@ -191,12 +195,16 @@ libwpd_0_8_la_SOURCES =				\
 	WP5FileStructure.h			\
 	WP5FixedLengthGroup.h			\
 	WP5FormatGroup.h			\
+	WP5GeneralPacketData.h			\
+	WP5GeneralPacketIndex.h			\
 	WP5Header.h				\
 	WP5Listener.h				\
 	WP5PageFormatGroup.h			\
 	WP5Part.h				\
 	WP5Parser.h				\
+	WP5PrefixData.h				\
 	WP5SingleByteFunction.h			\
+	WP5SpecialHeaderIndex.h			\
 	WP5StylesListener.h			\
 	WP5TableEOLGroup.h			\
 	WP5TableEOPGroup.h			\

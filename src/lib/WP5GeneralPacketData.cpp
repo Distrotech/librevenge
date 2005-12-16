@@ -1,6 +1,5 @@
 /* libwpd
- * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,13 +22,30 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
+#include "WP5GeneralPacketData.h"
+#include "WP5GeneralPacketIndex.h"
+#include "WP5SpecialHeaderIndex.h"
 #include "libwpd.h"
-#include "WP5Header.h"
 #include "libwpd_internal.h"
 
-WP5Header::WP5Header(WPXInputStream * input, uint32_t documentOffset, uint8_t productType, uint8_t fileType, uint8_t majorVersion, uint8_t minorVersion, uint16_t documentEncryption) :
-	WPXHeader(input, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption)
+WP5GeneralPacketData::WP5GeneralPacketData(WPXInputStream * input)
 {
-	input->seek(2, WPX_SEEK_CUR); // skip the reserved 2 bytes
-	// nothing to do here really...
+}
+
+WP5GeneralPacketData * WP5GeneralPacketData::constructGeneralPacketData(WPXInputStream * input, WP5GeneralPacketIndex *packetIndex)
+{	       
+	switch (packetIndex->getType())
+	{
+	default:
+		return NULL;
+	}
+}
+
+void WP5GeneralPacketData::_read(WPXInputStream *input, uint32_t dataOffset, uint32_t dataSize)
+{
+	input->seek(dataOffset, WPX_SEEK_SET);
+
+	_readContents(input);
+
+	// assert that we haven't surpassed the size of the packet?
 }
