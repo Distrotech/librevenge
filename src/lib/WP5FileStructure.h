@@ -47,8 +47,12 @@ extern int WP5_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16];
 #define WP5_ATTRIBUTE_UNDERLINE 0x0E
 #define WP5_ATTRIBUTE_SMALL_CAPS 0x0F
 
-/* Main function group list  */
+/* Genearal data packet list */
+#define WP50_LIST_FONTS_USED_PACKET 0x02
+#define WP5_FONT_NAME_STRING_POOL_PACKET 0x07
+#define WP51_LIST_FONTS_USED_PACKET 0x0F
 
+/* Main function group list  */
 #define WP5_TOP_EXTENDED_CHARACTER 0xC0
 #define WP5_TOP_ATTRIBUTE_ON 0xC3
 #define WP5_TOP_ATTRIBUTE_OFF 0xC4

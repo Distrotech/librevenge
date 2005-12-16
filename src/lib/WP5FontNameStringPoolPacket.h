@@ -22,24 +22,18 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP6PREFIXDATAPACKET_H
-#define WP6PREFIXDATAPACKET_H
-#include <stdlib.h>
-#include "WPXParser.h"
+#ifndef WP5FONTNAMESTRINGPACKET_H
+#define WP5FONTNAMESTRINGPACKET_H
+#include "WP5GeneralPacketData.h"
+#include "WPXMemoryStream.h"
 
-class WP5GeneralPacketIndex;
-
-class WP5GeneralPacketData
+class WP5FontNameStringPoolPacket : public WP5GeneralPacketData
 {
 public:
-	WP5GeneralPacketData(WPXInputStream * input);	
-	virtual ~WP5GeneralPacketData() {}
+	WP5FontNameStringPoolPacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize);
+	~WP5FontNameStringPoolPacket();
+	void _readContents(WPXInputStream *input, uint32_t dataSize);
 
-	static WP5GeneralPacketData * constructGeneralPacketData(WPXInputStream * input, WP5GeneralPacketIndex *packetIndex);
-
-protected:
-	virtual void _readContents(WPXInputStream *input, uint32_t dataSize) = 0;
- 	virtual void _read(WPXInputStream *input, uint32_t dataOffset, uint32_t dataSize);
+private:              
 };
-
-#endif /* WP6PREFIXDATAPACKET_H */
+#endif /* WP5FONTNAMESTRINGPACKET_H */

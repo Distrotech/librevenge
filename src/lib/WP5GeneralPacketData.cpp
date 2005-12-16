@@ -25,6 +25,9 @@
 #include "WP5GeneralPacketData.h"
 #include "WP5GeneralPacketIndex.h"
 #include "WP5SpecialHeaderIndex.h"
+#include "WP5FileStructure.h"
+#include "WP5ListFontsUsedPacket.h"
+#include "WP5FontNameStringPoolPacket.h"
 #include "libwpd.h"
 #include "libwpd_internal.h"
 
@@ -34,8 +37,18 @@ WP5GeneralPacketData::WP5GeneralPacketData(WPXInputStream * input)
 
 WP5GeneralPacketData * WP5GeneralPacketData::constructGeneralPacketData(WPXInputStream * input, WP5GeneralPacketIndex *packetIndex)
 {	       
+	WPD_DEBUG_MSG(("BAlise 1\n"));
 	switch (packetIndex->getType())
 	{
+	case WP50_LIST_FONTS_USED_PACKET:
+	case WP51_LIST_FONTS_USED_PACKET:
+		WPD_DEBUG_MSG(("BAlise 2\n"));
+		return new WP5ListFontsUsedPacket(input, packetIndex->getID(), packetIndex->getDataOffset(), 
+						packetIndex->getDataSize(), packetIndex->getType());
+	case WP5_FONT_NAME_STRING_POOL_PACKET:
+		WPD_DEBUG_MSG(("BAlise 3\n"));
+		return new WP5FontNameStringPoolPacket(input, packetIndex->getID(), packetIndex->getDataOffset(), 
+							packetIndex->getDataSize());
 	default:
 		return NULL;
 	}
@@ -45,7 +58,7 @@ void WP5GeneralPacketData::_read(WPXInputStream *input, uint32_t dataOffset, uin
 {
 	input->seek(dataOffset, WPX_SEEK_SET);
 
-	_readContents(input);
+	_readContents(input, dataSize);
 
 	// assert that we haven't surpassed the size of the packet?
 }

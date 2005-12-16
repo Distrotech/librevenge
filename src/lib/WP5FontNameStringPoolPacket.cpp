@@ -21,25 +21,22 @@
 /* "This product is not manufactured, approved, or supported by 
  * Corel Corporation or Corel Corporation Limited."
  */
+#include <string.h>
 
-#ifndef WP6PREFIXDATAPACKET_H
-#define WP6PREFIXDATAPACKET_H
-#include <stdlib.h>
-#include "WPXParser.h"
+#include "WP5FontNameStringPoolPacket.h"
+#include "WP5Parser.h"
+#include "libwpd_internal.h"
 
-class WP5GeneralPacketIndex;
+WP5FontNameStringPoolPacket::WP5FontNameStringPoolPacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize) 
+	: WP5GeneralPacketData(input)
+{	
+	_read(input, dataOffset, dataSize);
+}
 
-class WP5GeneralPacketData
+WP5FontNameStringPoolPacket::~WP5FontNameStringPoolPacket()
 {
-public:
-	WP5GeneralPacketData(WPXInputStream * input);	
-	virtual ~WP5GeneralPacketData() {}
+}
 
-	static WP5GeneralPacketData * constructGeneralPacketData(WPXInputStream * input, WP5GeneralPacketIndex *packetIndex);
-
-protected:
-	virtual void _readContents(WPXInputStream *input, uint32_t dataSize) = 0;
- 	virtual void _read(WPXInputStream *input, uint32_t dataOffset, uint32_t dataSize);
-};
-
-#endif /* WP6PREFIXDATAPACKET_H */
+void WP5FontNameStringPoolPacket::_readContents(WPXInputStream *input, uint32_t dataSize)
+{
+}

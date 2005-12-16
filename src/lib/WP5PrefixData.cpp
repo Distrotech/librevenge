@@ -44,19 +44,21 @@ WP5PrefixData::WP5PrefixData(WPXInputStream *input)
 				id++;
 			}
 		}
-		if (shi.getNextBlockOffset() == 0)
-			return;
-		else
+		if (shi.getNextBlockOffset() != 0)
 			input->seek(shi.getNextBlockOffset(), WPX_SEEK_SET);
+		else
+			break;
 	}
 	
 	std::vector<WP5GeneralPacketIndex>::iterator gpiIter;
 	for (gpiIter = prefixIndexVector.begin(); gpiIter != prefixIndexVector.end(); gpiIter++)
 	{
-		WPD_DEBUG_MSG(("WordPerfect: constructing general packet data 0x%x\n", (*gpiIter).getID()));
+		WPD_DEBUG_MSG(("WordPerfect: constructing general packet data %i\n", (*gpiIter).getID()));
 		WP5GeneralPacketData *generalPacketData = WP5GeneralPacketData::constructGeneralPacketData(input, &(*gpiIter));
+		WPD_DEBUG_MSG(("Balise B\n"));
 		if (generalPacketData)
 		{
+			WPD_DEBUG_MSG(("Balise A\n"));
 			m_generalPacketDataMapByType[gpiIter->getType()] = generalPacketData;
 			m_generalPacketDataMapByID[gpiIter->getID()] = generalPacketData;
 		}	
