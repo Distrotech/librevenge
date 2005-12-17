@@ -97,6 +97,10 @@ SOURCE=..\..\src\lib\WP3AttributeGroup.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP3ContentListener.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP3DefinitionGroup.cpp
 # End Source File
 # Begin Source File
@@ -185,6 +189,10 @@ SOURCE=..\..\src\lib\WP3VariableLengthGroup.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP42ContentListener.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP42FileStructure.cpp
 # End Source File
 # Begin Source File
@@ -221,6 +229,10 @@ SOURCE=..\..\src\lib\WP5AttributeGroup.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP5ContentListener.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP5DefinitionGroup.cpp
 # End Source File
 # Begin Source File
@@ -237,7 +249,19 @@ SOURCE=..\..\src\lib\WP5FixedLengthGroup.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP5FontNameStringPoolPacket.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP5FormatGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5GeneralPacketData.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5GeneralPacketIndex.cpp
 # End Source File
 # Begin Source File
 
@@ -246,6 +270,10 @@ SOURCE=..\..\src\lib\WP5Header.cpp
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP5Listener.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5ListFontsUsedPacket.cpp
 # End Source File
 # Begin Source File
 
@@ -261,7 +289,15 @@ SOURCE=..\..\src\lib\WP5Part.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP5PrefixData.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP5SingleByteFunction.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5SpecialHeaderIndex.cpp
 # End Source File
 # Begin Source File
 
@@ -517,6 +553,10 @@ SOURCE=..\..\src\lib\WP3AttributeGroup.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP3ContentListener.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP3DefinitionGroup.h
 # End Source File
 # Begin Source File
@@ -605,6 +645,10 @@ SOURCE=..\..\src\lib\WP3VariableLengthGroup.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP42ContentListener.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP42FileStructure.h
 # End Source File
 # Begin Source File
@@ -641,6 +685,10 @@ SOURCE=..\..\src\lib\WP5AttributeGroup.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP5ContentListener.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP5DefinitionGroup.h
 # End Source File
 # Begin Source File
@@ -657,7 +705,19 @@ SOURCE=..\..\src\lib\WP5FixedLengthGroup.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP5FontNameStringPoolPacket.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP5FormatGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5GeneralPacketData.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5GeneralPacketIndex.h
 # End Source File
 # Begin Source File
 
@@ -666,6 +726,10 @@ SOURCE=..\..\src\lib\WP5Header.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP5Listener.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5ListFontsUsedPacket.h
 # End Source File
 # Begin Source File
 
@@ -681,7 +745,15 @@ SOURCE=..\..\src\lib\WP5Part.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP5PrefixData.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP5SingleByteFunction.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5SpecialHeaderIndex.h
 # End Source File
 # Begin Source File
 
