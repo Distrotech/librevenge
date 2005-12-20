@@ -30,7 +30,15 @@
 #include "libwpd_internal.h"
 
 WP5Listener::WP5Listener(std::vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl) :
-	WPXListener(pageList, listenerImpl)
+	WPXListener(pageList, listenerImpl),
+	m_prefixData(NULL)
 {
 }
 
+const WP5GeneralPacketData * WP5Listener::getGeneralPacketData(const int type) const
+{
+	if (m_prefixData)
+		return m_prefixData->getGeneralPacketData(type); 
+	else
+		return NULL;
+}

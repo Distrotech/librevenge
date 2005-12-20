@@ -37,16 +37,13 @@ WP5GeneralPacketData::WP5GeneralPacketData(WPXInputStream * input)
 
 WP5GeneralPacketData * WP5GeneralPacketData::constructGeneralPacketData(WPXInputStream * input, WP5GeneralPacketIndex *packetIndex)
 {	       
-	WPD_DEBUG_MSG(("BAlise 1\n"));
 	switch (packetIndex->getType())
 	{
 	case WP50_LIST_FONTS_USED_PACKET:
 	case WP51_LIST_FONTS_USED_PACKET:
-		WPD_DEBUG_MSG(("BAlise 2\n"));
 		return new WP5ListFontsUsedPacket(input, packetIndex->getID(), packetIndex->getDataOffset(), 
 						packetIndex->getDataSize(), packetIndex->getType());
 	case WP5_FONT_NAME_STRING_POOL_PACKET:
-		WPD_DEBUG_MSG(("BAlise 3\n"));
 		return new WP5FontNameStringPoolPacket(input, packetIndex->getID(), packetIndex->getDataOffset(), 
 							packetIndex->getDataSize());
 	default:

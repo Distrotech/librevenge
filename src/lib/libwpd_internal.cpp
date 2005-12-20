@@ -74,12 +74,21 @@ uint32_t readU32(WPXInputStream *input, bool bigendian)
 	return WPD_LE_GET_GUINT32(val);
 }
 
-std::string readPascalString(WPXInputStream *input)
+WPXString readPascalString(WPXInputStream *input)
 {
 	int pascalStringLength = readU8(input);
-	std::string tmpString;
+	WPXString tmpString;
 	for (int i=0; i<pascalStringLength; i++)
-		tmpString+=(char)readU8(input);
+		tmpString.append((char)readU8(input));
+	return tmpString;
+}
+
+WPXString readCString(WPXInputStream *input)
+{
+	WPXString tmpString;
+	char character;
+	while ((character = (char)readU8(input)) != '\0')
+		tmpString.append(character);
 	return tmpString;
 }
 

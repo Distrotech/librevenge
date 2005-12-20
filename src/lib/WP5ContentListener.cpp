@@ -308,6 +308,11 @@ void WP5ContentListener::marginChange(uint8_t side, uint16_t margin)
 	//}
 }
 
+void WP5ContentListener::setFont(const WPXString fontName, const float fontSize)
+{
+	*(m_ps->m_fontName) = fontName;
+	m_ps->m_fontSize = fontSize;
+}
 
 /****************************************
  private functions

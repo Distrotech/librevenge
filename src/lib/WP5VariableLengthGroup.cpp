@@ -28,6 +28,7 @@
 #include "WP5UnsupportedVariableLengthGroup.h"
 #include "libwpd_internal.h"
 #include "WP5FormatGroup.h"
+#include "WP5FontGroup.h"
 #include "WP5DefinitionGroup.h"
 #include "WP5TableEOLGroup.h"
 #include "WP5TableEOPGroup.h"
@@ -38,6 +39,7 @@ WP5VariableLengthGroup::WP5VariableLengthGroup()
 
 WP5VariableLengthGroup * WP5VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, uint8_t group)
 {
+	WPD_DEBUG_MSG(("WordPerfect: handling a variable length group Ox%x\n", group));	
 	switch (group)
 	{
 		case WP5_TOP_FORMAT_GROUP:
@@ -46,6 +48,8 @@ WP5VariableLengthGroup * WP5VariableLengthGroup::constructVariableLengthGroup(WP
 			return new WP5DefinitionGroup(input);
 		case WP5_TOP_PAGE_FORMAT_GROUP:
 			return new WP5PageFormatGroup(input);
+		case WP5_TOP_FONT_GROUP:
+			return new WP5FontGroup(input);
 		case WP5_TOP_TABLE_EOL_GROUP:
 			return new WP5TableEOLGroup(input);
 		case WP5_TOP_TABLE_EOP_GROUP:
@@ -60,12 +64,10 @@ void WP5VariableLengthGroup::_read(WPXInputStream *input)
 {
 	uint32_t startPosition = input->tell();
 
-	WPD_DEBUG_MSG(("WordPerfect: handling a variable length group\n"));	
-	
 	m_subGroup = readU8(input);
 	m_size = readU16(input) + 4; // the length is the number of data bytes minus 4 (ie. the function codes)
 	
-	WPD_DEBUG_MSG(("WordPerfect: Read variable group header (start_position: %i, sub_group: 0x%x, size: %i)\n", startPosition, m_subGroup, m_size));
+	WPD_DEBUG_MSG(("WordPerfect: Read variable group header (start_position: %i, sub_group: 0x%2x, size: %i)\n", startPosition, m_subGroup, m_size));
 	
 	_readContents(input);
 	

@@ -28,6 +28,7 @@
 #define WP5LISTENER_H
 
 #include "WPXListener.h"
+#include "WP5PrefixData.h"
 
 class WP5Listener : public WPXListener
 {
@@ -39,6 +40,7 @@ public:
 	virtual void setLeaderCharacter(const uint16_t character, const uint8_t numberOfSpaces) = 0;
 	virtual void defineTabStops(const bool isRelative, const std::vector<WPXTabStop> &tabStops, 
 				const std::vector<bool> &usePreWP9LeaderMethods) = 0;
+	virtual void setFont(const WPXString fontName, const float fontSize) = 0;
 	virtual void insertCharacter(const uint16_t character) = 0;
 	virtual void insertTab(const uint8_t tabType, const float tabPosition) = 0;
 	virtual void handleLineBreak() = 0;
@@ -65,6 +67,11 @@ public:
 				const bool useCellAttributes, const uint32_t cellAttributes) = 0;
  	virtual void endTable() = 0;
 
+	void setPrefixData(WP5PrefixData *prefixData) { m_prefixData = prefixData; }
+	const WP5GeneralPacketData * getGeneralPacketData(const int type) const;
+
+private:
+	WP5PrefixData *m_prefixData;
 };
 
 #endif /* WP5LISTENER_H */

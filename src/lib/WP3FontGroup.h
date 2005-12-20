@@ -26,6 +26,7 @@
 #define WP3FONTGROUP_H
 
 #include "WP3VariableLengthGroup.h"
+#include "WPXString.h"
 
 class WP3FontGroup : public WP3VariableLengthGroup
 {
@@ -39,7 +40,7 @@ class WP3FontGroup : public WP3VariableLengthGroup
  	/* Set Text Color */
 	RGBSColor m_fontColor;
  	/* Set Text Font */
-	std::string m_fontName;
+	WPXString m_fontName;
 	/* Set Font Size */
 	uint16_t m_fontSize;
 

@@ -39,4 +39,24 @@ WP5FontNameStringPoolPacket::~WP5FontNameStringPoolPacket()
 
 void WP5FontNameStringPoolPacket::_readContents(WPXInputStream *input, uint32_t dataSize)
 {
+	unsigned int tmpInitialOffset = input->tell();
+	while (input->tell() < (tmpInitialOffset + dataSize))
+	{
+		unsigned int offset = input->tell() - tmpInitialOffset;
+		WPXString fontName = readCString(input);
+		m_fontNameString[offset] = fontName;
+	}
+	
+	for (std::map<unsigned int, WPXString>::const_iterator Iter = m_fontNameString.begin(); Iter != m_fontNameString.end(); Iter++)
+		WPD_DEBUG_MSG(("WP5 Font Name String Pool Packet: offset: %i font name: %s\n", Iter->first, (Iter->second).cstr()));
 }
+
+WPXString WP5FontNameStringPoolPacket::getFontName(const unsigned int offset) const
+{
+	std::map<unsigned int, WPXString>::const_iterator Iter = m_fontNameString.find(offset);
+	if (Iter != m_fontNameString.end())
+		return Iter->second;
+	// if the offset is not correct, return the default value
+	return WPXString("Times New Roman");
+}
+

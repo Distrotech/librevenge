@@ -52,6 +52,7 @@ public:
 	void setLeaderCharacter(const uint16_t character, const uint8_t numberOfSpaces) {};
 	void defineTabStops(const bool isRelative, const std::vector<WPXTabStop> &tabStops, 
 				const std::vector<bool> &usePreWP9LeaderMethods) {};
+	void setFont(const WPXString fontName, const float fontSize);
 	void insertCharacter(const uint16_t character);
 	void insertTab(const uint8_t tabType, const float tabPosition);
 	void handleLineBreak() {};

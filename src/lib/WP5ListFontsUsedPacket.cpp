@@ -42,6 +42,7 @@ WP5ListFontsUsedPacket::~WP5ListFontsUsedPacket()
 void WP5ListFontsUsedPacket::_readContents(WPXInputStream *input, uint32_t dataSize)
 {
 	int numFonts = (int)(dataSize / 86); // 86 == size of the structure describing the font
+	WPD_DEBUG_MSG(("WP5 List Fonts Used Packet, data size: %i, number fonts: %i\n", dataSize, numFonts));
 	int tempFontNameOffset;
 	float tempFontSize;
 	for (int i=0; i<numFonts; i++)
@@ -65,3 +66,18 @@ void WP5ListFontsUsedPacket::_readContents(WPXInputStream *input, uint32_t dataS
 		fontSize.push_back(tempFontSize);
 	}
 }
+
+int WP5ListFontsUsedPacket::getFontNameOffset(const int fontNumber) const
+{
+	if ((fontNumber >= 0) && (fontNumber < fontNameOffset.size()))
+		return fontNameOffset[fontNumber];
+	return 0;
+}
+
+float WP5ListFontsUsedPacket::getFontSize(const int fontNumber) const
+{
+	if ((fontNumber >= 0) && (fontNumber < fontSize.size()))
+		return fontSize[fontNumber];
+	return 0.0f;
+}
+

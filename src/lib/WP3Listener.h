@@ -71,9 +71,9 @@ public:
 	virtual void undoChange(const uint8_t undoType, const uint16_t undoLevel) = 0;
 	virtual void justificationChange(const uint8_t justification) = 0;
 	virtual void setTextColor(const RGBSColor * fontColor) = 0;
-	virtual void setTextFont(const std::string fontName) = 0;
+	virtual void setTextFont(const WPXString fontName) = 0;
 	virtual void setFontSize(const uint16_t fontSize) = 0;
-	virtual void insertNoteReference(const std::string noteReference) = 0;
+	virtual void insertNoteReference(const WPXString noteReference) = 0;
 	virtual void insertNote(const WPXNoteType noteType, const WP3SubDocument *subDocument) = 0;
 	
 };

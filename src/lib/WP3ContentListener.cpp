@@ -488,13 +488,13 @@ void WP3ContentListener::setTextColor(const RGBSColor *fontColor)
 	}
 }
 
-void WP3ContentListener::setTextFont(const std::string fontName)
+void WP3ContentListener::setTextFont(const WPXString fontName)
 {
 	if (!isUndoOn())
 	{
 		_closeSpan();
 		
-		m_ps->m_fontName->sprintf("%s", fontName.c_str());
+		*(m_ps->m_fontName) = fontName;
 	}
 }
 
@@ -508,11 +508,11 @@ void WP3ContentListener::setFontSize(const uint16_t fontSize)
 	}
 }
 
-void WP3ContentListener::insertNoteReference(const std::string noteReference)
+void WP3ContentListener::insertNoteReference(const WPXString noteReference)
 {
 	if (!isUndoOn())
 	{
-		m_parseState->m_noteReference.sprintf("%s", noteReference.c_str());
+		m_parseState->m_noteReference = noteReference;
 	}
 }
 

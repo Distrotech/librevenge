@@ -26,6 +26,7 @@
 #define WP3DISPLAYGROUP_H
 
 #include "WP3VariableLengthGroup.h"
+#include "WPXString.h"
 
 class WP3DisplayGroup : public WP3VariableLengthGroup
 {
@@ -36,7 +37,7 @@ class WP3DisplayGroup : public WP3VariableLengthGroup
 	virtual void parse(WP3Listener *listener);
 
  private:
- 	std::string m_noteReference;
+ 	WPXString m_noteReference;
 };
 
 #endif /* WP3DISPLAYGROUP_H */

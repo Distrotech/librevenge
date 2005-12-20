@@ -1073,7 +1073,6 @@ void WP6ContentListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan
 		if (m_ps->m_currentTableRow < 0) // cell without a row, invalid
 			throw ParseException();
 		_flushText();
-		WPD_DEBUG_MSG(("Balise 1\n"));
 		_openTableCell(colSpan, rowSpan, m_parseState->m_currentTable->getCell(m_ps->m_currentTableRow,  
 			       	m_ps->m_currentTableCellNumberInRow)->m_borderBits, cellFgColor, cellBgColor,      
 			       cellBorderColor, cellVerticalAlignment);
@@ -1082,7 +1081,6 @@ void WP6ContentListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan
 			       cellBorderColor, cellVerticalAlignment);
 #endif
 
-		WPD_DEBUG_MSG(("Balise 2\n"));
 		m_ps->m_isCellWithoutParagraph = true;
 		if (useCellAttributes)
 			m_ps->m_cellAttributeBits = cellAttributes;

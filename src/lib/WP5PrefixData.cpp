@@ -55,38 +55,24 @@ WP5PrefixData::WP5PrefixData(WPXInputStream *input)
 	{
 		WPD_DEBUG_MSG(("WordPerfect: constructing general packet data %i\n", (*gpiIter).getID()));
 		WP5GeneralPacketData *generalPacketData = WP5GeneralPacketData::constructGeneralPacketData(input, &(*gpiIter));
-		WPD_DEBUG_MSG(("Balise B\n"));
 		if (generalPacketData)
 		{
-			WPD_DEBUG_MSG(("Balise A\n"));
-			m_generalPacketDataMapByType[gpiIter->getType()] = generalPacketData;
-			m_generalPacketDataMapByID[gpiIter->getID()] = generalPacketData;
+			m_generalPacketData[gpiIter->getType()] = generalPacketData;
 		}	
 	}
-
-	
 }
 
 WP5PrefixData::~WP5PrefixData()
 {
 	std::map<int, WP5GeneralPacketData *>::const_iterator Iter;
-	for (Iter = m_generalPacketDataMapByType.begin(); Iter != m_generalPacketDataMapByType.end(); Iter++)
+	for (Iter = m_generalPacketData.begin(); Iter != m_generalPacketData.end(); Iter++)
 		delete (Iter->second);
 }
 
-const WP5GeneralPacketData * WP5PrefixData::getGeneralPacketDataByID(const int packetID) const
+const WP5GeneralPacketData * WP5PrefixData::getGeneralPacketData(const int type) const
 {
-	std::map<int, WP5GeneralPacketData *>::const_iterator Iter = m_generalPacketDataMapByID.find(packetID);
-	if (Iter != m_generalPacketDataMapByID.end())
-		return static_cast<const WP5GeneralPacketData *>(Iter->second);
-	else
-		return NULL;
-}
-
-const WP5GeneralPacketData * WP5PrefixData::getGeneralPacketDataByType(const int type) const
-{
-	std::map<int, WP5GeneralPacketData *>::const_iterator Iter = m_generalPacketDataMapByType.find(type);
-	if (Iter != m_generalPacketDataMapByType.end())
+	std::map<int, WP5GeneralPacketData *>::const_iterator Iter = m_generalPacketData.find(type);
+	if (Iter != m_generalPacketData.end())
 		return static_cast<const WP5GeneralPacketData *>(Iter->second);
 	else
 		return NULL;

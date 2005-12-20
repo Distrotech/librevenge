@@ -85,9 +85,9 @@ public:
 	void undoChange(const uint8_t undoType, const uint16_t undoLevel);
 	void justificationChange(const uint8_t justification);
 	void setTextColor(const RGBSColor * fontColor);
-	void setTextFont(const std::string fontName);
+	void setTextFont(const WPXString fontName);
 	void setFontSize(const uint16_t fontSize);
-	void insertNoteReference(const std::string noteReference);
+	void insertNoteReference(const WPXString noteReference);
 	void insertNote(const WPXNoteType noteType, const WP3SubDocument *subDocument);
 	
 protected:

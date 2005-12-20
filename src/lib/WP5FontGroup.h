@@ -2,7 +2,7 @@
  * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -22,22 +22,22 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP5FONTNAMESTRINGPACKET_H
-#define WP5FONTNAMESTRINGPACKET_H
-#include "WP5GeneralPacketData.h"
-#include "WPXMemoryStream.h"
-#include "WPXString.h"
-#include <map>
+#ifndef WP5FONTGROUP_H
+#define WP5FONTGROUP_H
 
-class WP5FontNameStringPoolPacket : public WP5GeneralPacketData
+#include "WP5VariableLengthGroup.h"
+
+class WP5FontGroup : public WP5VariableLengthGroup
 {
 public:
-	WP5FontNameStringPoolPacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize);
-	~WP5FontNameStringPoolPacket();
-	void _readContents(WPXInputStream *input, uint32_t dataSize);
-	WPXString getFontName(const unsigned int offset) const;
+	WP5FontGroup(WPXInputStream *input);	
+	virtual void parse(WP5Listener *listener);
+	
+protected:
+	virtual void _readContents(WPXInputStream *input);
 
 private:
-	std::map<unsigned int, WPXString> m_fontNameString;
+	uint16_t m_fontNumber;
 };
-#endif /* WP5FONTNAMESTRINGPACKET_H */
+
+#endif /* WP5FONTGROUP_H */

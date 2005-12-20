@@ -34,6 +34,8 @@ public:
 	WP5ListFontsUsedPacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize, uint16_t packetType);
 	virtual ~WP5ListFontsUsedPacket();
 	virtual void _readContents(WPXInputStream *input, uint32_t dataSize);
+	int getFontNameOffset(const int fontNumber) const;
+	float getFontSize(const int fontNumber) const;
 
 private:
 	uint16_t m_packetType;

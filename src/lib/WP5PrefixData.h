@@ -33,11 +33,9 @@ class WP5PrefixData
  public:
 	WP5PrefixData(WPXInputStream *input);
 	virtual ~WP5PrefixData();
-	const WP5GeneralPacketData *getGeneralPacketDataByID(const int packetID) const;
-	const WP5GeneralPacketData *getGeneralPacketDataByType(const int type) const;
+	const WP5GeneralPacketData *getGeneralPacketData(const int type) const;
 private:
-	std::map<int, WP5GeneralPacketData *> m_generalPacketDataMapByType;
-	std::map<int, WP5GeneralPacketData *> m_generalPacketDataMapByID;
+	std::map<int, WP5GeneralPacketData *> m_generalPacketData;
 };
 
 #endif /* WP5PREFIXDATA_H */

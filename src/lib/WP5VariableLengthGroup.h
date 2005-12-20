@@ -51,7 +51,7 @@ class WP5VariableLengthGroup : public WP5Part
 
  private:
 	uint8_t m_subGroup;
-	uint16_t m_size; 
+	uint16_t m_size;
 };
 
 #endif /* WP5VARIABLELENGTHGROUP_H */

@@ -139,6 +139,8 @@ void WP5Parser::parse(WPXHLListenerImpl *listenerImpl)
 		// second pass: here is where we actually send the messages to the target app
 		// that are necessary to emit the body of the target document
 		WP5ContentListener listener(&pageList, listenerImpl); // FIXME: SHOULD BE CONTENT_LISTENER, AND SHOULD BE PASSED TABLE DATA!
+		listener.setPrefixData(prefixData);
+
 		parse(input, &listener);
 		
 		// cleanup section: free the used resources

@@ -72,7 +72,8 @@ uint8_t readU8(WPXInputStream *input);
 uint16_t readU16(WPXInputStream *input, bool bigendian=false);
 uint32_t readU32(WPXInputStream *input, bool bigendian=false);
 
-std::string readPascalString(WPXInputStream *input);
+WPXString readPascalString(WPXInputStream *input);
+WPXString readCString(WPXInputStream *input);
 
 void appendUCS4(WPXString &str, uint32_t ucs4);
 
