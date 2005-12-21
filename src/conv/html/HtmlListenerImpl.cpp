@@ -1,6 +1,6 @@
 /* libwpd
  * Copyright (C) 2002-2004 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)
  * Copyright (C) 2005 Net Integration Technologies (http://www.net-itech.com)
  *

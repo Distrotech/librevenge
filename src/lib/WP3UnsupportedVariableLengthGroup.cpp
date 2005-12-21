@@ -1,5 +1,5 @@
 /* libwpd
- * Copyright (C) 2004 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2004 Marc Maurer (uwog@uwog.net)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
