@@ -12,9 +12,11 @@ install-data-am:
 
 uninstall-am:
 	-rm -rf $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/html
-	
+
 all:
-	doxygen doxygen.cfg
+	test -f header.html.in || $(LN_S) $(srcdir)/header.html.in ./
+	test -f footer.html.in || $(LN_S) $(srcdir)/footer.html.in ./
+	doxygen $(srcdir)/doxygen.cfg
 
 else
 

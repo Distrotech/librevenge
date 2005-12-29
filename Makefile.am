@@ -21,7 +21,6 @@ EXTRA_DIST = \
 	INSTALL		\
 	README		\
 	TODO
-	
 
 distclean-local:
 	rm -rf *.cache *~
@@ -36,13 +35,13 @@ zip: all install
 if WITH_LIBWPD_DOCS
 install-data-local:
 	mkdir -p $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@
-	$(INSTALL) CHANGES $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/
-	$(INSTALL) COPYING $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/
-	$(INSTALL) CREDITS $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/
-	$(INSTALL) HACKING $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/
-	$(INSTALL) INSTALL $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/
-	$(INSTALL) README $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/
-	$(INSTALL) TODO $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/
+	$(INSTALL) $(srcdir)/CHANGES $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/
+	$(INSTALL) $(srcdir)/COPYING $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/
+	$(INSTALL) $(srcdir)/CREDITS $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/
+	$(INSTALL) $(srcdir)/HACKING $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/
+	$(INSTALL) $(srcdir)/INSTALL $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/
+	$(INSTALL) $(srcdir)/README $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/
+	$(INSTALL) $(srcdir)/TODO $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/
 uninstall-local:
 	-rm -rf $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@
 endif
