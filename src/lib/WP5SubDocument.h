@@ -1,5 +1,5 @@
 /* libwpd
- * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,17 +22,18 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WP3SubDocument.h"
-#include "WP3Parser.h"
-#include "libwpd_internal.h"
+#ifndef WP5SUBDOCUMENT_H
+#define WP5SUBDOCUMENT_H
 
-WP3SubDocument::WP3SubDocument(WPXInputStream *input, const int dataSize) :
-	WPXSubDocument(input, dataSize)
-{
-}
+#include "WPXMemoryStream.h"
+#include "WPXSubDocument.h"
+#include "WP5Listener.h"
 
-void WP3SubDocument::parse(WPXListener *listener) const
+class WP5SubDocument : public WPXSubDocument
 {
-	m_stream->seek(0, WPX_SEEK_SET);
-	WP3Parser::parseDocument(m_stream, static_cast<WP3Listener *>(listener));
-}
+public:
+	WP5SubDocument(WPXInputStream *input, const int dataSize);
+	virtual void parse(WPXListener *listener) const;
+
+};
+#endif /* WP5SUBDOCUMENT_H */

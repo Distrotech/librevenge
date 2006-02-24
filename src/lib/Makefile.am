@@ -98,6 +98,7 @@ libwpd_0_8_la_SOURCES = \
 	WP5SingleByteFunction.cpp \
 	WP5SpecialHeaderIndex.cpp \
 	WP5StylesListener.cpp \
+	WP5SubDocument.cpp \
 	WP5TableEOLGroup.cpp \
 	WP5TableEOPGroup.cpp \
 	WP5UnsupportedFixedLengthGroup.cpp \
@@ -212,6 +213,7 @@ libwpd_0_8_la_SOURCES = \
 	WP5SingleByteFunction.h \
 	WP5SpecialHeaderIndex.h \
 	WP5StylesListener.h \
+	WP5SubDocument.h \
 	WP5TableEOLGroup.h \
 	WP5TableEOPGroup.h \
 	WP5UnsupportedFixedLengthGroup.h \

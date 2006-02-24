@@ -28,9 +28,8 @@
 #include "WP6Listener.h"
 
 WP6SubDocument::WP6SubDocument(uint8_t * streamData, const int dataSize) :
-	WPXSubDocument()
+	WPXSubDocument(streamData, dataSize)
 {
-	m_stream = new WPXMemoryInputStream(streamData, dataSize);
 }
 
 void WP6SubDocument::parse(WPXListener *listener) const
