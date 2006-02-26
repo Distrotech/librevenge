@@ -29,6 +29,7 @@
 #include "libwpd_internal.h"
 #include "WP5FormatGroup.h"
 #include "WP5FontGroup.h"
+#include "WP5FootnoteEndnoteGroup.h"
 #include "WP5DefinitionGroup.h"
 #include "WP5TableEOLGroup.h"
 #include "WP5TableEOPGroup.h"
@@ -50,6 +51,8 @@ WP5VariableLengthGroup * WP5VariableLengthGroup::constructVariableLengthGroup(WP
 			return new WP5PageFormatGroup(input);
 		case WP5_TOP_FONT_GROUP:
 			return new WP5FontGroup(input);
+		case WP5_TOP_FOOTNOTE_ENDNOTE_GROUP:
+			return new WP5FootnoteEndnoteGroup(input);
 		case WP5_TOP_TABLE_EOL_GROUP:
 			return new WP5TableEOLGroup(input);
 		case WP5_TOP_TABLE_EOP_GROUP:

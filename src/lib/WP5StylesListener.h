@@ -31,6 +31,8 @@
 #include "WPXPageSpan.h"
 #include "WPXTable.h"
 
+class WP5SubDocument;
+
 class WP5StylesListener : public WP5Listener
 {
 public:
@@ -71,6 +73,8 @@ public:
 				const bool useCellAttributes, const uint32_t cellAttributes);
  	void endTable() {}
 
+	void insertNoteReference(const WPXString noteReference) {};
+	void insertNote(const WPXNoteType noteType, const WP5SubDocument *subDocument) {};
 
 protected:
 	void _openPageSpan() { /* FIXME: REMOVE ME WHEN IMPLEMENTED IN WPXListener */ }

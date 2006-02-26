@@ -39,8 +39,12 @@ struct _WP5ParsingState
 	_WP5ParsingState();
 	~_WP5ParsingState();
 	WPXString m_textBuffer;
+	WPXString m_noteReference;
+
+	WPXTableList m_tableList;
 };
 
+class WP5SubDocument;
 
 class WP5ContentListener : public WP5Listener
 {
@@ -79,8 +83,11 @@ public:
 				const bool useCellAttributes, const uint32_t cellAttributes);
  	void endTable();
 
+	void insertNoteReference(const WPXString noteReference);
+	void insertNote(const WPXNoteType noteType, const WP5SubDocument *subDocument);
+	
 protected:
-	void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0) {}
+	void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
 
 private:
 	void _flushText();

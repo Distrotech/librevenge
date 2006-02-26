@@ -30,6 +30,8 @@
 #include "WPXListener.h"
 #include "WP5PrefixData.h"
 
+class WP5SubDocument;
+
 class WP5Listener : public WPXListener
 {
 public:
@@ -66,6 +68,9 @@ public:
 				const RGBSColor * cellBorderColor, const WPXVerticalAlignment cellVerticalAlignment, 
 				const bool useCellAttributes, const uint32_t cellAttributes) = 0;
  	virtual void endTable() = 0;
+
+	virtual void insertNoteReference(const WPXString noteReference) = 0;
+	virtual void insertNote(const WPXNoteType noteType, const WP5SubDocument *subDocument) = 0;
 
 	void setPrefixData(WP5PrefixData *prefixData) { m_prefixData = prefixData; }
 	const WP5GeneralPacketData * getGeneralPacketData(const int type) const;

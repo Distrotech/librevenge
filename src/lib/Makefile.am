@@ -85,6 +85,7 @@ libwpd_0_8_la_SOURCES = \
 	WP5FixedLengthGroup.cpp \
 	WP5FontGroup.cpp \
 	WP5FontNameStringPoolPacket.cpp \
+	WP5FootnoteEndnoteGroup.cpp \
 	WP5FormatGroup.cpp \
 	WP5GeneralPacketData.cpp \
 	WP5GeneralPacketIndex.cpp \
@@ -200,6 +201,7 @@ libwpd_0_8_la_SOURCES = \
 	WP5FixedLengthGroup.h \
 	WP5FontGroup.h \
 	WP5FontNameStringPoolPacket.h \
+	WP5FootnoteEndnoteGroup.h \
 	WP5FormatGroup.h \
 	WP5GeneralPacketData.h \
 	WP5GeneralPacketIndex.h \

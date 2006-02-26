@@ -28,15 +28,18 @@
 #include "WP5FileStructure.h"
 #include "WPXFileStructure.h"
 #include "libwpd_internal.h"
+#include "WP5SubDocument.h"
 
 _WP5ParsingState::_WP5ParsingState()
 {
 	m_textBuffer.clear();
+	m_noteReference.clear();
 }
 
 _WP5ParsingState::~_WP5ParsingState()
 {
 	m_textBuffer.clear();
+	m_noteReference.clear();
 }
 
 WP5ContentListener::WP5ContentListener(std::vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl) :
@@ -313,6 +316,74 @@ void WP5ContentListener::setFont(const WPXString fontName, const float fontSize)
 	*(m_ps->m_fontName) = fontName;
 	m_ps->m_fontSize = fontSize;
 }
+
+void WP5ContentListener::insertNoteReference(const WPXString noteReference)
+{
+	if (!isUndoOn())
+	{
+		m_parseState->m_noteReference = noteReference;
+	}
+}
+
+void WP5ContentListener::insertNote(const WPXNoteType noteType, const WP5SubDocument *subDocument)
+{
+	if (!isUndoOn())
+	{
+		_closeSpan();
+		m_ps->m_isNote = true;
+		WPXNumberingType numberingType = _extractWPXNumberingTypeFromBuf(m_parseState->m_noteReference, ARABIC);
+		int number = _extractDisplayReferenceNumberFromBuf(m_parseState->m_noteReference, numberingType);
+		m_parseState->m_noteReference.clear();
+		
+		WPXPropertyList propList;
+		propList.insert("libwpd:number", number);
+
+		if (noteType == FOOTNOTE)
+			m_listenerImpl->openFootnote(propList);
+		else
+			m_listenerImpl->openEndnote(propList);
+
+		handleSubDocument(subDocument, false, m_parseState->m_tableList, 0);
+
+		if (noteType == FOOTNOTE)
+			m_listenerImpl->closeFootnote();
+		else
+			m_listenerImpl->closeEndnote();
+		m_ps->m_isNote = false;
+	}
+}
+
+void WP5ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice)
+{
+		// save our old parsing state on our "stack"
+		WP5ParsingState *oldParseState = m_parseState;
+	
+		m_parseState = new WP5ParsingState();
+
+		if (subDocument)
+			subDocument->parse(this);
+		else
+			_openSpan();
+		
+		// Close the sub-document properly
+		if (m_ps->m_isParagraphOpened)
+			_closeParagraph();
+		if (m_ps->m_isListElementOpened)
+			_closeListElement();
+
+		m_ps->m_currentListLevel = 0;
+		_changeList();
+
+#if 0
+		_closeSection();
+#endif
+
+		// restore our old parsing state
+		delete m_parseState;
+		m_parseState = oldParseState;
+}
+	
+
 
 /****************************************
  private functions
