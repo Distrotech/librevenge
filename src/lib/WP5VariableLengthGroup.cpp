@@ -28,6 +28,7 @@
 #include "WP5UnsupportedVariableLengthGroup.h"
 #include "libwpd_internal.h"
 #include "WP5FormatGroup.h"
+#include "WP5HeaderFooterGroup.h"
 #include "WP5FontGroup.h"
 #include "WP5FootnoteEndnoteGroup.h"
 #include "WP5DefinitionGroup.h"
@@ -49,6 +50,8 @@ WP5VariableLengthGroup * WP5VariableLengthGroup::constructVariableLengthGroup(WP
 			return new WP5DefinitionGroup(input);
 		case WP5_TOP_PAGE_FORMAT_GROUP:
 			return new WP5PageFormatGroup(input);
+		case WP5_TOP_HEADER_FOOTER_GROUP:
+			return new WP5HeaderFooterGroup(input);
 		case WP5_TOP_FONT_GROUP:
 			return new WP5FontGroup(input);
 		case WP5_TOP_FOOTNOTE_ENDNOTE_GROUP:

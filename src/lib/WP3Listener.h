@@ -75,6 +75,7 @@ public:
 	virtual void setFontSize(const uint16_t fontSize) = 0;
 	virtual void insertNoteReference(const WPXString noteReference) = 0;
 	virtual void insertNote(const WPXNoteType noteType, const WP3SubDocument *subDocument) = 0;
+	virtual void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, const WP3SubDocument *subDocument) = 0;
 	
 };
 

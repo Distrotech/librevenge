@@ -28,6 +28,7 @@
 #include "WP5FileStructure.h"
 #include "WPXFileStructure.h"
 #include "libwpd_internal.h"
+#include "WP5SubDocument.h"
 
 WP5StylesListener::WP5StylesListener(std::vector<WPXPageSpan *> *pageList, WPXTableList tableList) : 
 	WP5Listener(pageList, NULL),
@@ -127,18 +128,25 @@ void WP5StylesListener::marginChange(const uint8_t side, const uint16_t margin)
 	//}
 
 }
-/*
-void WP5StylesListener::headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, const uint16_t textPID)
+
+void WP5StylesListener::headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, const WP5SubDocument *subDocument)
 {
 	if (!isUndoOn()) 
 	{			
-		WPD_DEBUG_MSG(("WordPerfect: headerFooterGroup (headerFooterType: %i, occurenceBits: %i, textPID: %i)\n", 
-			       headerFooterType, occurenceBits, textPID));
-		if (headerFooterType <= WP6_HEADER_FOOTER_GROUP_FOOTER_B) // ignore watermarks for now
-			m_currentPage->setHeaderFooter(headerFooterType, occurenceBits, textPID);
+		WPD_DEBUG_MSG(("WordPerfect: headerFooterGroup (headerFooterType: %i, occurenceBits: %i)\n", 
+			       headerFooterType, occurenceBits));
+		bool tempCurrentPageHasContent = m_currentPageHasContent;
+		if (headerFooterType <= WP5_HEADER_FOOTER_GROUP_FOOTER_B)
+		{
+			WPXTableList tableList; 
+			m_currentPage->setHeaderFooter(headerFooterType, occurenceBits, subDocument, tableList);
+			_handleSubDocument(subDocument, true, tableList);
+		}
+		m_currentPageHasContent = tempCurrentPageHasContent;
 	}
 }
 
+/*
 void WP5StylesListener::suppressPageCharacteristics(const uint8_t suppressCode)
 {
 	if (!isUndoOn()) 
@@ -183,5 +191,38 @@ void WP5StylesListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan,
 	{
 		m_currentPageHasContent = true;
 		m_currentTable->insertCell(colSpan, rowSpan, borderBits);
+	}
+}
+
+void WP5StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice)
+{
+	// We don't want to actual insert anything in the case of a sub-document, but we
+	// do want to capture whatever table-related information is within it..
+	if (!isUndoOn()) 
+	{
+		std::set <const WPXSubDocument *> oldSubDocuments;
+		oldSubDocuments = m_subDocuments;
+		// prevent entering in an endless loop		
+		if ((subDocument) && (oldSubDocuments.find(subDocument) == oldSubDocuments.end()))
+		{
+			m_subDocuments.insert(subDocument);
+			if (isHeaderFooter) 
+			{
+				WPXTable * oldCurrentTable = m_currentTable;
+				WPXTableList oldTableList = m_tableList;
+				m_tableList = tableList;
+
+				subDocument->parse(this);
+
+				m_tableList = oldTableList;
+				m_currentTable = oldCurrentTable;
+			}
+			else
+			{
+				subDocument->parse(this);
+			}
+			m_subDocuments = oldSubDocuments;
+
+		}
 	}
 }

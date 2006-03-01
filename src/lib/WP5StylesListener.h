@@ -28,6 +28,7 @@
 
 #include "WP5Listener.h"
 #include <vector>
+#include <set>
 #include "WPXPageSpan.h"
 #include "WPXTable.h"
 
@@ -75,11 +76,12 @@ public:
 
 	void insertNoteReference(const WPXString noteReference) {};
 	void insertNote(const WPXNoteType noteType, const WP5SubDocument *subDocument) {};
+	void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, const WP5SubDocument *subDocument);
 
 protected:
 	void _openPageSpan() { /* FIXME: REMOVE ME WHEN IMPLEMENTED IN WPXListener */ }
 
-	void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0) {}
+	void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
 
 private:
 	void _flushText() {}
@@ -91,6 +93,7 @@ private:
 	WPXTable *m_currentTable;
 	float m_tempMarginLeft, m_tempMarginRight;
 	bool m_currentPageHasContent;
+	std::set <const WPXSubDocument *> m_subDocuments;
 };
 
 #endif /* WP5STYLESLISTENER_H */

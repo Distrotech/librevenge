@@ -85,6 +85,8 @@ public:
 
 	void insertNoteReference(const WPXString noteReference);
 	void insertNote(const WPXNoteType noteType, const WP5SubDocument *subDocument);
+	void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, const WP5SubDocument *subDocument) {}
+
 	
 protected:
 	void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);

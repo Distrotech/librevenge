@@ -71,6 +71,7 @@ public:
 
 	virtual void insertNoteReference(const WPXString noteReference) = 0;
 	virtual void insertNote(const WPXNoteType noteType, const WP5SubDocument *subDocument) = 0;
+	virtual void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, const WP5SubDocument *subDocument) = 0;
 
 	void setPrefixData(WP5PrefixData *prefixData) { m_prefixData = prefixData; }
 	const WP5GeneralPacketData * getGeneralPacketData(const int type) const;

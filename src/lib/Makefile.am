@@ -55,6 +55,7 @@ libwpd_0_8_la_SOURCES = \
 	WP3FontGroup.cpp \
 	WP3FootnoteEndnoteGroup.cpp \
 	WP3Header.cpp \
+	WP3HeaderFooterGroup.cpp \
 	WP3Listener.cpp \
 	WP3MiscellaneousGroup.cpp \
 	WP3PageFormatGroup.cpp \
@@ -90,6 +91,7 @@ libwpd_0_8_la_SOURCES = \
 	WP5GeneralPacketData.cpp \
 	WP5GeneralPacketIndex.cpp \
 	WP5Header.cpp \
+	WP5HeaderFooterGroup.cpp \
 	WP5Listener.cpp \
 	WP5ListFontsUsedPacket.cpp \
 	WP5PageFormatGroup.cpp \
@@ -171,6 +173,7 @@ libwpd_0_8_la_SOURCES = \
 	WP3FontGroup.h \
 	WP3FootnoteEndnoteGroup.h \
 	WP3Header.h \
+	WP3HeaderFooterGroup.h \
 	WP3Listener.h \
 	WP3MiscellaneousGroup.h \
 	WP3PageFormatGroup.h \
@@ -206,6 +209,7 @@ libwpd_0_8_la_SOURCES = \
 	WP5GeneralPacketData.h \
 	WP5GeneralPacketIndex.h \
 	WP5Header.h \
+	WP5HeaderFooterGroup.h \
 	WP5Listener.h \
 	WP5ListFontsUsedPacket.h \
 	WP5PageFormatGroup.h \

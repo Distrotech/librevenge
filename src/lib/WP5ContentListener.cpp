@@ -364,7 +364,7 @@ void WP5ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, c
 			subDocument->parse(this);
 		else
 			_openSpan();
-		
+
 		// Close the sub-document properly
 		if (m_ps->m_isParagraphOpened)
 			_closeParagraph();

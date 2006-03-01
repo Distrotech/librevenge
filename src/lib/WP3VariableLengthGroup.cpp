@@ -32,6 +32,7 @@
 #include "WP3FontGroup.h"
 #include "WP3DefinitionGroup.h"
 #include "WP3DisplayGroup.h"
+#include "WP3HeaderFooterGroup.h"
 #include "WP3FootnoteEndnoteGroup.h"
 #include "WP3TablesGroup.h"
 #include "libwpd_internal.h"
@@ -56,6 +57,8 @@ WP3VariableLengthGroup * WP3VariableLengthGroup::constructVariableLengthGroup(WP
 			return new WP3FontGroup(input);
 		case WP3_DEFINITION_GROUP:
 			return new WP3DefinitionGroup(input);
+		case WP3_HEADER_FOOTER_GROUP:
+			return new WP3HeaderFooterGroup(input);
 		case WP3_FOOTNOTE_ENDNOTE_GROUP:
 			return new WP3FootnoteEndnoteGroup(input);
 		case WP3_DISPLAY_GROUP:
