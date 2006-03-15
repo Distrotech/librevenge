@@ -29,7 +29,8 @@
 // use the BELL code to represent a TAB for now
 #define UCS_TAB 0x0009 
 
-TextListenerImpl::TextListenerImpl()
+TextListenerImpl::TextListenerImpl(const bool isInfo) :
+	m_isInfo(isInfo)
 {
 }
 
@@ -37,22 +38,41 @@ TextListenerImpl::~TextListenerImpl()
 {
 }
 
+void TextListenerImpl::setDocumentMetaData(const WPXPropertyList &propList)
+{
+	if (!m_isInfo)
+		return;
+	WPXPropertyList::Iter propIter(propList);
+	for (propIter.rewind(); propIter.next(); )
+	{
+		printf("%s %s\n", propIter.key(), propIter()->getStr().cstr());
+	}	
+}
+
 void TextListenerImpl::closeParagraph()
 {
+	if (m_isInfo)
+		return;
 	printf("\n");
 }
 
 void TextListenerImpl::insertTab()
 {
+	if (m_isInfo)
+		return;
 	printf("%c", UCS_TAB);
 }
 
 void TextListenerImpl::insertText(const WPXString &text)
 {
+	if (m_isInfo)
+		return;
 	printf("%s", text.cstr());
 }
 
 void TextListenerImpl::insertLineBreak()
 {
+	if (m_isInfo)
+		return;
 	printf("\n");
 }

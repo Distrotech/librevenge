@@ -32,10 +32,10 @@
 class TextListenerImpl : public WPXHLListenerImpl
 {
 public:
-	TextListenerImpl();
+	TextListenerImpl(const bool isInfo=false);
 	virtual ~TextListenerImpl();
 
- 	virtual void setDocumentMetaData(const WPXPropertyList &propList) {}
+ 	virtual void setDocumentMetaData(const WPXPropertyList &propList);
 
 	virtual void startDocument() {}
 	virtual void endDocument() {}
@@ -82,6 +82,7 @@ public:
 
 private:
 	unsigned int m_currentListLevel;
+	bool m_isInfo;
 };
 
 #endif /* TEXTLISTENERIMPL_H */

@@ -26,6 +26,7 @@
 #include <gsf/gsf-utils.h>
 #include <gsf/gsf-input-stdio.h>
 #include <stdio.h>
+#include <string.h>
 #include "libwpd.h"
 #include "GSFStream.h"
 #include "TextListenerImpl.h"
@@ -34,18 +35,34 @@ int main(int argc, char *argv[])
 {
 	if (argc < 2)
 	{
-		printf("Usage: wpd2text <WordPerfect Document>\n");
+		printf("Usage: wpd2text [--info] <WordPerfect Document>\n");
+		printf("Use \"--info\" to get document metadata instead\n");
+		printf("of the document itself\n");
 		return -1;
 	}
 	gsf_init();
 
 	GError   *err;
-	GsfInput * input = GSF_INPUT(gsf_input_stdio_new (argv[1], &err));
+        char *szInputFile;
+	bool isInfo;
+
+        if (!strcmp(argv[1], "--info"))
+	{
+                isInfo = true;
+		szInputFile = argv[2];
+	}		
+	else
+	{
+		isInfo = false;
+                szInputFile = argv[1];
+	}
+
+	GsfInput * input = GSF_INPUT(gsf_input_stdio_new (szInputFile, &err));
 	if (input == NULL) 
 	{
 		g_return_val_if_fail (err != NULL, 1);
 		
-		g_warning ("'%s' error: %s", argv[1], err->message);
+		g_warning ("'%s' error: %s", szInputFile, err->message);
 		g_error_free (err);
 		return 1;
 	}
@@ -59,7 +76,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 	
-	TextListenerImpl listenerImpl;
+	TextListenerImpl listenerImpl(isInfo);
  	WPDResult error = WPDocument::parse(gsfInput, static_cast<WPXHLListenerImpl *>(&listenerImpl));
 
 	if (error == WPD_FILE_ACCESS_ERROR)
