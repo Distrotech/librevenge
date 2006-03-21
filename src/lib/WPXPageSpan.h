@@ -26,7 +26,7 @@
 #ifndef WPXPAGE_H
 #define WPXPAGE_H
 #include "libwpd.h"
-#include "WP6FileStructure.h"
+#include "WPXFileStructure.h"
 #include <vector>
 #include "WPXTable.h"
 #include "libwpd_internal.h"
@@ -64,7 +64,7 @@ public:
 	WPXPageSpan(WPXPageSpan &page, float paragraphMarginLeft=0.0f, float paragraphMarginRight=0.0f);
 	virtual ~WPXPageSpan();
 
-	const bool getHeaderFooterSuppression(const uint8_t headerFooterType) const { if (headerFooterType <= WP6_HEADER_FOOTER_GROUP_FOOTER_B) return m_isHeaderFooterSuppressed[headerFooterType]; return false; }
+	const bool getHeaderFooterSuppression(const uint8_t headerFooterType) const { if (headerFooterType <= WPX_FOOTER_B) return m_isHeaderFooterSuppressed[headerFooterType]; return false; }
 	const float getFormLength() const { return m_formLength; }
 	const float getFormWidth() const { return m_formWidth; }
 	const WPXFormOrientation getFormOrientation() const { return m_formOrientation; }
@@ -75,7 +75,7 @@ public:
 	const int getPageSpan() const { return m_pageSpan; }
 	const std::vector<WPXHeaderFooter> & getHeaderFooterList() const { return m_headerFooterList; }
 
-	void setHeaderFooter(const uint8_t headerFooterType, const uint8_t occurenceBits, 
+	void setHeaderFooter(const WPXHeaderFooterType type, const uint8_t headerFooterType, const WPXHeaderFooterOccurence occurence, 
 			     const WPXSubDocument * subDocument, WPXTableList tableList);
 	void setHeadFooterSuppression(const uint8_t headerFooterType, const bool suppress) { m_isHeaderFooterSuppressed[headerFooterType] = suppress; }
 	void setFormLength(const float formLength) { m_formLength = formLength; }
@@ -93,7 +93,7 @@ protected:
 	bool _containsHeaderFooter(WPXHeaderFooterType type, WPXHeaderFooterOccurence occurence);
 
 private:
-	bool m_isHeaderFooterSuppressed[WP6_NUM_HEADER_FOOTER_TYPES];
+	bool m_isHeaderFooterSuppressed[WPX_NUM_HEADER_FOOTER_TYPES];
 	float m_formLength, m_formWidth;
 	WPXFormOrientation m_formOrientation;
 	float m_marginLeft, m_marginRight;

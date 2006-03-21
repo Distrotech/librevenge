@@ -138,7 +138,9 @@ void WP3StylesListener::headerFooterGroup(const uint8_t headerFooterType, const 
 		if (headerFooterType <= WP3_HEADER_FOOTER_GROUP_FOOTER_B) // ignore watermarks for now
 		{
 			WPXTableList tableList; 
+#if 0
 			m_currentPage->setHeaderFooter(headerFooterType, occurenceBits, subDocument, tableList);
+#endif
 			_handleSubDocument(subDocument, true, tableList);
 		}
 		m_currentPageHasContent = tempCurrentPageHasContent;

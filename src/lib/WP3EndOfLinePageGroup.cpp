@@ -93,6 +93,7 @@ void WP3EndOfLinePageGroup::parse(WP3Listener *listener)
 			listener->insertEOL();
 			break;
 		case 0x07: // Hard End of Page
+			listener->insertBreak(WPX_PAGE_BREAK);
 			break;
 		case 0x08: // Hard End of Column
 			listener->insertBreak(WPX_COLUMN_BREAK);

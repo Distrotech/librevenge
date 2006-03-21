@@ -141,8 +141,18 @@ void WP6StylesListener::headerFooterGroup(const uint8_t headerFooterType, const 
 		bool tempCurrentPageHasContent = m_currentPageHasContent;
 		if (headerFooterType <= WP6_HEADER_FOOTER_GROUP_FOOTER_B) // ignore watermarks for now
 		{
+			WPXHeaderFooterType wpxType = ((headerFooterType <= WP6_HEADER_FOOTER_GROUP_HEADER_B) ? HEADER : FOOTER);
+			
+			WPXHeaderFooterOccurence wpxOccurence;
+			if (occurenceBits & WP6_HEADER_FOOTER_GROUP_EVEN_BIT && occurenceBits & WP6_HEADER_FOOTER_GROUP_ODD_BIT)
+				wpxOccurence = ALL;
+			else if (occurenceBits & WP6_HEADER_FOOTER_GROUP_EVEN_BIT)
+				wpxOccurence = EVEN;
+			else
+				wpxOccurence = ODD;
+
 			WPXTableList tableList; 
-			m_currentPage->setHeaderFooter(headerFooterType, occurenceBits,
+			m_currentPage->setHeaderFooter(wpxType, headerFooterType, wpxOccurence,
 						(textPID ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : NULL), tableList);
 			_handleSubDocument((textPID ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : NULL), true, tableList);
 		}
@@ -156,13 +166,13 @@ void WP6StylesListener::suppressPageCharacteristics(const uint8_t suppressCode)
 	{			
 		WPD_DEBUG_MSG(("WordPerfect: suppressPageCharacteristics (suppressCode: %u)\n", suppressCode));
 		if (suppressCode & WP6_PAGE_GROUP_SUPPRESS_HEADER_A)
-			m_currentPage->setHeadFooterSuppression(WP6_HEADER_FOOTER_GROUP_HEADER_A, true);
+			m_currentPage->setHeadFooterSuppression(WPX_HEADER_A, true);
 		if (suppressCode & WP6_PAGE_GROUP_SUPPRESS_HEADER_B)
-			m_currentPage->setHeadFooterSuppression(WP6_HEADER_FOOTER_GROUP_HEADER_B, true);
+			m_currentPage->setHeadFooterSuppression(WPX_HEADER_B, true);
 		if (suppressCode & WP6_PAGE_GROUP_SUPPRESS_FOOTER_A)
-			m_currentPage->setHeadFooterSuppression(WP6_HEADER_FOOTER_GROUP_FOOTER_A, true);
+			m_currentPage->setHeadFooterSuppression(WPX_FOOTER_A, true);
 		if (suppressCode & WP6_PAGE_GROUP_SUPPRESS_FOOTER_B)
-			m_currentPage->setHeadFooterSuppression(WP6_HEADER_FOOTER_GROUP_FOOTER_B, true);			
+			m_currentPage->setHeadFooterSuppression(WPX_FOOTER_B, true);			
 	}
 }
 

@@ -139,7 +139,9 @@ void WP5StylesListener::headerFooterGroup(const uint8_t headerFooterType, const 
 		if (headerFooterType <= WP5_HEADER_FOOTER_GROUP_FOOTER_B)
 		{
 			WPXTableList tableList; 
+#if 0
 			m_currentPage->setHeaderFooter(headerFooterType, occurenceBits, subDocument, tableList);
+#endif
 			_handleSubDocument(subDocument, true, tableList);
 		}
 		m_currentPageHasContent = tempCurrentPageHasContent;
