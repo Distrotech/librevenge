@@ -30,13 +30,14 @@
 #include "libwpd_internal.h"
 #include "WP5SubDocument.h"
 
-WP5StylesListener::WP5StylesListener(std::vector<WPXPageSpan *> *pageList, WPXTableList tableList) : 
+WP5StylesListener::WP5StylesListener(std::vector<WPXPageSpan *> *pageList, WPXTableList tableList, std::vector<WP5SubDocument *> subDocuments) : 
 	WP5Listener(pageList, NULL),
 	m_currentPage(new WPXPageSpan()),
 	m_tableList(tableList), 
 	m_tempMarginLeft(1.0f),
 	m_tempMarginRight(1.0f),
-	m_currentPageHasContent(false)
+	m_currentPageHasContent(false),
+	m_subDocuments(subDocuments)
 {
 }
 
@@ -129,20 +130,37 @@ void WP5StylesListener::marginChange(const uint8_t side, const uint16_t margin)
 
 }
 
-void WP5StylesListener::headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, const WP5SubDocument *subDocument)
+void WP5StylesListener::headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, WP5SubDocument *subDocument)
 {
 	if (!isUndoOn()) 
 	{			
+		if (subDocument)
+			m_subDocuments.push_back(subDocument);
+
 		WPD_DEBUG_MSG(("WordPerfect: headerFooterGroup (headerFooterType: %i, occurenceBits: %i)\n", 
 			       headerFooterType, occurenceBits));
 		bool tempCurrentPageHasContent = m_currentPageHasContent;
 		if (headerFooterType <= WP5_HEADER_FOOTER_GROUP_FOOTER_B)
 		{
+			WPXHeaderFooterType wpxType = ((headerFooterType <= WP5_HEADER_FOOTER_GROUP_HEADER_B) ? HEADER : FOOTER);
+
+			WPXHeaderFooterOccurence wpxOccurence;
+			if (occurenceBits & WP5_HEADER_FOOTER_GROUP_ALL_BIT)
+				wpxOccurence = ALL;
+			else if (occurenceBits & WP5_HEADER_FOOTER_GROUP_EVEN_BIT)
+				wpxOccurence = EVEN;
+			else if (occurenceBits & WP5_HEADER_FOOTER_GROUP_ODD_BIT)
+				wpxOccurence = ODD;
+			else
+				wpxOccurence = NEVER;
 			WPXTableList tableList; 
-#if 0
-			m_currentPage->setHeaderFooter(headerFooterType, occurenceBits, subDocument, tableList);
-#endif
-			_handleSubDocument(subDocument, true, tableList);
+
+			if (wpxOccurence != NEVER)
+			{
+				m_currentPage->setHeaderFooter(wpxType, headerFooterType, wpxOccurence, subDocument, tableList);
+
+				_handleSubDocument(subDocument, true, tableList);
+			}
 		}
 		m_currentPageHasContent = tempCurrentPageHasContent;
 	}
@@ -202,29 +220,20 @@ void WP5StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, co
 	// do want to capture whatever table-related information is within it..
 	if (!isUndoOn()) 
 	{
-		std::set <const WPXSubDocument *> oldSubDocuments;
-		oldSubDocuments = m_subDocuments;
-		// prevent entering in an endless loop		
-		if ((subDocument) && (oldSubDocuments.find(subDocument) == oldSubDocuments.end()))
+		if (isHeaderFooter) 
 		{
-			m_subDocuments.insert(subDocument);
-			if (isHeaderFooter) 
-			{
-				WPXTable * oldCurrentTable = m_currentTable;
-				WPXTableList oldTableList = m_tableList;
-				m_tableList = tableList;
+			WPXTable * oldCurrentTable = m_currentTable;
+			WPXTableList oldTableList = m_tableList;
+			m_tableList = tableList;
 
-				subDocument->parse(this);
+			subDocument->parse(this);
 
-				m_tableList = oldTableList;
-				m_currentTable = oldCurrentTable;
-			}
-			else
-			{
-				subDocument->parse(this);
-			}
-			m_subDocuments = oldSubDocuments;
-
+			m_tableList = oldTableList;
+			m_currentTable = oldCurrentTable;
+		}
+		else
+		{
+			subDocument->parse(this);
 		}
 	}
 }

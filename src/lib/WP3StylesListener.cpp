@@ -29,13 +29,14 @@
 #include "libwpd_internal.h"
 #include "WP3SubDocument.h"
 
-WP3StylesListener::WP3StylesListener(std::vector<WPXPageSpan *> *pageList, WPXTableList tableList) : 
+WP3StylesListener::WP3StylesListener(std::vector<WPXPageSpan *> *pageList, WPXTableList tableList, std::vector<WP3SubDocument *>subDocuments) : 
 	WP3Listener(pageList, NULL),
 	m_currentPage(new WPXPageSpan()),
 	m_tableList(tableList), 
 	m_tempMarginLeft(1.0f),
 	m_tempMarginRight(1.0f),
-	m_currentPageHasContent(false)
+	m_currentPageHasContent(false),
+	m_subDocuments(subDocuments)
 {
 }
 
@@ -128,19 +129,32 @@ void WP3StylesListener::pageFormChange(const uint16_t length, const uint16_t wid
 	}
 }
 
-void WP3StylesListener::headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, const WP3SubDocument *subDocument)
+void WP3StylesListener::headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, WP3SubDocument *subDocument)
 {
 	if (!isUndoOn()) 
-	{			
+	{
+		if (subDocument)
+			m_subDocuments.push_back(subDocument);			
+
 		WPD_DEBUG_MSG(("WordPerfect: headerFooterGroup (headerFooterType: %i, occurenceBits: %i)\n", 
 			       headerFooterType, occurenceBits));
 		bool tempCurrentPageHasContent = m_currentPageHasContent;
 		if (headerFooterType <= WP3_HEADER_FOOTER_GROUP_FOOTER_B) // ignore watermarks for now
 		{
-			WPXTableList tableList; 
-#if 0
-			m_currentPage->setHeaderFooter(headerFooterType, occurenceBits, subDocument, tableList);
-#endif
+			WPXHeaderFooterType wpxType = ((headerFooterType <= WP3_HEADER_FOOTER_GROUP_HEADER_B) ? HEADER : FOOTER);
+			
+			WPXHeaderFooterOccurence wpxOccurence;
+			if (occurenceBits & WP3_HEADER_FOOTER_GROUP_EVEN_BIT && occurenceBits & WP3_HEADER_FOOTER_GROUP_ODD_BIT)
+				wpxOccurence = ALL;
+			else if (occurenceBits & WP3_HEADER_FOOTER_GROUP_EVEN_BIT)
+				wpxOccurence = EVEN;
+			else
+				wpxOccurence = ODD;
+
+			WPXTableList tableList;
+
+			m_currentPage->setHeaderFooter(wpxType, headerFooterType, wpxOccurence, subDocument, tableList);
+
 			_handleSubDocument(subDocument, true, tableList);
 		}
 		m_currentPageHasContent = tempCurrentPageHasContent;
@@ -200,12 +214,9 @@ void WP3StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, co
 	// do want to capture whatever table-related information is within it..
 	if (!isUndoOn()) 
 	{
-		std::set <const WPXSubDocument *> oldSubDocuments;
-		oldSubDocuments = m_subDocuments;
 		// prevent entering in an endless loop		
-		if ((subDocument) && (oldSubDocuments.find(subDocument) == oldSubDocuments.end()))
+		if (subDocument)
 		{
-			m_subDocuments.insert(subDocument);
 			if (isHeaderFooter) 
 			{
 				WPXTable * oldCurrentTable = m_currentTable;
@@ -221,8 +232,6 @@ void WP3StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, co
 			{
 				subDocument->parse(this);
 			}
-			m_subDocuments = oldSubDocuments;
-
 		}
 	}
 }

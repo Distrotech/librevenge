@@ -90,21 +90,27 @@ void WP3Parser::parse(WPXHLListenerImpl *listenerImpl)
 {
 	WPXInputStream *input = getInput();
 	std::vector<WPXPageSpan *> pageList;
-	WPXTableList tableList;	
+	WPXTableList tableList;
+	std::vector<WP3SubDocument *> subDocuments;	
 	
 	try
  	{
 		// do a "first-pass" parse of the document
 		// gather table border information, page properties (per-page)
-		WP3StylesListener stylesListener(&pageList, tableList);
+		WP3StylesListener stylesListener(&pageList, tableList, subDocuments);
 		parse(input, &stylesListener);
 
 		// second pass: here is where we actually send the messages to the target app
 		// that are necessary to emit the body of the target document
-		WP3ContentListener listener(&pageList, listenerImpl); // FIXME: SHOULD BE CONTENT_LISTENER, AND SHOULD BE PASSED TABLE DATA!
+		WP3ContentListener listener(&pageList, subDocuments, listenerImpl); // FIXME: SHOULD BE CONTENT_LISTENER, AND SHOULD BE PASSED TABLE DATA!
 		parse(input, &listener);
 		
 		// cleanup section: free the used resources
+		for (std::vector<WP3SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); iterSubDoc++)
+		{
+			if (*iterSubDoc)
+				delete *iterSubDoc;
+		}
 		for (std::vector<WPXPageSpan *>::iterator iterSpan = pageList.begin(); iterSpan != pageList.end(); iterSpan++)
 		{
 			delete *iterSpan;
@@ -114,6 +120,11 @@ void WP3Parser::parse(WPXHLListenerImpl *listenerImpl)
 	{
 		WPD_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
 
+		for (std::vector<WP3SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); iterSubDoc++)
+		{
+			if (*iterSubDoc)
+				delete *iterSubDoc;
+		}
 		for (std::vector<WPXPageSpan *>::iterator iterSpan = pageList.begin(); iterSpan != pageList.end(); iterSpan++)
 		{
 			delete *iterSpan;

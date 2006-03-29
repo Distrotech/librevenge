@@ -49,8 +49,8 @@ WPXSubDocument::WPXSubDocument(uint8_t * streamData, const int dataSize) :
 	m_stream = new WPXMemoryInputStream(streamData, dataSize);
 }
 
-
 WPXSubDocument::~WPXSubDocument()
 {
-	delete m_stream;
+	if (m_stream)
+		delete m_stream;
 }

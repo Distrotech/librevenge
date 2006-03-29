@@ -35,8 +35,6 @@ WP3HeaderFooterGroup::WP3HeaderFooterGroup(WPXInputStream *input) :
 
 WP3HeaderFooterGroup::~WP3HeaderFooterGroup()
 {
-	if (m_subDocument)
-		DELETEP(m_subDocument);
 }
 
 void WP3HeaderFooterGroup::_readContents(WPXInputStream *input)
@@ -44,8 +42,8 @@ void WP3HeaderFooterGroup::_readContents(WPXInputStream *input)
 	if (getSubGroup() <= WP3_HEADER_FOOTER_GROUP_FOOTER_B)  // omit watermarks for the while
 	{
 		input->seek(14, WPX_SEEK_CUR);
-		int tmpSubDocumentLength = readU16(input, true);
-		input->seek(tmpSubDocumentLength, WPX_SEEK_CUR);
+		uint16_t tmpSubDocumentLength = readU16(input, true);  // read first the old subdocument length
+		input->seek(tmpSubDocumentLength, WPX_SEEK_CUR);  // and skip the old subdocument
 		m_definition = readU8(input);
 		input->seek(4, WPX_SEEK_CUR);
 		tmpSubDocumentLength = readU16(input, true);
@@ -56,10 +54,9 @@ void WP3HeaderFooterGroup::_readContents(WPXInputStream *input)
 void WP3HeaderFooterGroup::parse(WP3Listener *listener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling a HeaderFooter group\n"));
-#if 0
+
 	if (getSubGroup() <= WP3_HEADER_FOOTER_GROUP_FOOTER_B)  // omit watermarks for the while
 	{
 		listener->headerFooterGroup(getSubGroup(), m_definition, m_subDocument);
 	}
-#endif
 }

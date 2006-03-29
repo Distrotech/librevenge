@@ -27,6 +27,7 @@
 #define WP5CONTENTLISTENER_H
 
 #include "WP5Listener.h"
+#include "WP5SubDocument.h"
 #include "WPXString.h"
 #include "libwpd_internal.h"
 #include "WPXHLListenerImpl.h"
@@ -44,12 +45,10 @@ struct _WP5ParsingState
 	WPXTableList m_tableList;
 };
 
-class WP5SubDocument;
-
 class WP5ContentListener : public WP5Listener
 {
 public:
-	WP5ContentListener(std::vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl);
+	WP5ContentListener(std::vector<WPXPageSpan *> *pageList, std::vector<WP5SubDocument *> subDocuments, WPXHLListenerImpl *listenerImpl);
 	~WP5ContentListener();
 
 	void setAlignmentCharacter(const uint16_t character) {};
@@ -85,7 +84,7 @@ public:
 
 	void insertNoteReference(const WPXString noteReference);
 	void insertNote(const WPXNoteType noteType, const WP5SubDocument *subDocument);
-	void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, const WP5SubDocument *subDocument) {}
+	void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, WP5SubDocument *subDocument);
 
 	
 protected:
@@ -96,6 +95,7 @@ private:
 	void _changeList() {};
 
 	WP5ParsingState *m_parseState;
+	std::vector<WP5SubDocument *> m_subDocuments;
 };
 
 #endif /* WP5CONTENTLISTENER_H */

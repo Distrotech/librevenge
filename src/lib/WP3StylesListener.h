@@ -34,7 +34,7 @@
 class WP3StylesListener : public WP3Listener
 {
 public:
-	WP3StylesListener(std::vector<WPXPageSpan *> *pageList, WPXTableList tableList);
+	WP3StylesListener(std::vector<WPXPageSpan *> *pageList, WPXTableList tableList, std::vector<WP3SubDocument *> subDocuments);
 
 	void startDocument() {}
 	void setAlignmentCharacter(const uint16_t character) {}
@@ -75,8 +75,8 @@ public:
 	void setTextFont(const WPXString fontName) {}
 	void setFontSize(const uint16_t fontSize) {}
 	void insertNoteReference(const WPXString noteReference) {};
-	void insertNote(const WPXNoteType noteType, const WP3SubDocument *subDocument) {};
-	void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, const WP3SubDocument *subDocument);
+	void insertNote(const WPXNoteType noteType, WP3SubDocument *subDocument) {};
+	void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, WP3SubDocument *subDocument);
 
 protected:
 	void _openPageSpan() { /* FIXME: REMOVE ME WHEN IMPLEMENTED IN WPXListener */ };
@@ -93,7 +93,7 @@ private:
 	WPXTable *m_currentTable;
 	float m_tempMarginLeft, m_tempMarginRight;
 	bool m_currentPageHasContent;
-	std::set <const WPXSubDocument *> m_subDocuments;
+	std::vector<WP3SubDocument *> m_subDocuments;
 };
 
 #endif /* WP3STYLESLISTENER_H */

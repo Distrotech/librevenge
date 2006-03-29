@@ -31,13 +31,12 @@
 #include <set>
 #include "WPXPageSpan.h"
 #include "WPXTable.h"
-
-class WP5SubDocument;
+#include "WP5SubDocument.h"
 
 class WP5StylesListener : public WP5Listener
 {
 public:
-	WP5StylesListener(std::vector<WPXPageSpan *> *pageList, WPXTableList tableList);
+	WP5StylesListener(std::vector<WPXPageSpan *> *pageList, WPXTableList tableList, std::vector<WP5SubDocument*> subDocuments);
 
 	void startDocument() {}
 	void setAlignmentCharacter(const uint16_t character) {}
@@ -76,7 +75,7 @@ public:
 
 	void insertNoteReference(const WPXString noteReference) {};
 	void insertNote(const WPXNoteType noteType, const WP5SubDocument *subDocument) {};
-	void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, const WP5SubDocument *subDocument);
+	void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, WP5SubDocument *subDocument);
 
 protected:
 	void _openPageSpan() { /* FIXME: REMOVE ME WHEN IMPLEMENTED IN WPXListener */ }
@@ -93,7 +92,7 @@ private:
 	WPXTable *m_currentTable;
 	float m_tempMarginLeft, m_tempMarginRight;
 	bool m_currentPageHasContent;
-	std::set <const WPXSubDocument *> m_subDocuments;
+	std::vector<WP5SubDocument *> m_subDocuments;
 };
 
 #endif /* WP5STYLESLISTENER_H */

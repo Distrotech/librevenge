@@ -37,8 +37,9 @@ public:
 	WPXSubDocument(uint8_t * streamData, const int dataSize);
 	virtual ~WPXSubDocument();
 	virtual void parse(WPXListener *listener) const = 0;
+	WPXMemoryInputStream *getStream() const { return m_stream;}
 
-protected:              
+private:              
 	WPXMemoryInputStream *m_stream;
 	
 };

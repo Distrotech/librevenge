@@ -42,9 +42,10 @@ _WP5ParsingState::~_WP5ParsingState()
 	m_noteReference.clear();
 }
 
-WP5ContentListener::WP5ContentListener(std::vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl) :
+WP5ContentListener::WP5ContentListener(std::vector<WPXPageSpan *> *pageList, std::vector<WP5SubDocument*> subDocuments, WPXHLListenerImpl *listenerImpl) :
 	WP5Listener(pageList, listenerImpl),
-	m_parseState(new WP5ParsingState)
+	m_parseState(new WP5ParsingState),
+	m_subDocuments(subDocuments)
 {
 }
 
@@ -382,7 +383,12 @@ void WP5ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, c
 		delete m_parseState;
 		m_parseState = oldParseState;
 }
-	
+
+void WP5ContentListener::headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, WP5SubDocument *subDocument)
+{
+	if (subDocument)
+		m_subDocuments.push_back(subDocument);
+}	
 
 
 /****************************************

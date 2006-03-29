@@ -86,8 +86,9 @@ public:
  	void setMarginTop(const float marginTop) { m_marginTop = marginTop; }
  	void setMarginBottom(const float marginBottom) { m_marginBottom = marginBottom; }
 	void setPageSpan(const int pageSpan) { m_pageSpan = pageSpan; }
-
+	
 	void makeConsistent(int startingPageNumber);
+	
 protected:
 	void _removeHeaderFooter(WPXHeaderFooterType type, WPXHeaderFooterOccurence occurence);
 	bool _containsHeaderFooter(WPXHeaderFooterType type, WPXHeaderFooterOccurence occurence);

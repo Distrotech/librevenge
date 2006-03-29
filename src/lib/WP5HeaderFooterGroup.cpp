@@ -34,8 +34,6 @@ WP5HeaderFooterGroup::WP5HeaderFooterGroup(WPXInputStream *input) :
 
 WP5HeaderFooterGroup::~WP5HeaderFooterGroup()
 {
-	if (m_subDocument)
-		DELETEP(m_subDocument);
 }
 
 void WP5HeaderFooterGroup::_readContents(WPXInputStream *input)
@@ -53,7 +51,6 @@ void WP5HeaderFooterGroup::_readContents(WPXInputStream *input)
 void WP5HeaderFooterGroup::parse(WP5Listener *listener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling a HeaderFooter group\n"));
-#if 0
+
 	listener->headerFooterGroup(getSubGroup(), m_occurenceBits, m_subDocument);
-#endif
 }

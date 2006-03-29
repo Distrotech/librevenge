@@ -35,10 +35,10 @@ public:
 	virtual ~WP5HeaderFooterGroup();	
 	virtual void _readContents(WPXInputStream *input);
 	virtual void parse(WP5Listener *listener);
+	WP5SubDocument *m_subDocument;
+
 private:
 	uint8_t m_occurenceBits;
-	WP5SubDocument *m_subDocument;
-	
 };
 
 #endif /* WP5HEADERFOOTERGROUP_H */

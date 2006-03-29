@@ -126,6 +126,7 @@ void WP5Parser::parse(WPXHLListenerImpl *listenerImpl)
 	std::vector<WPXPageSpan *> pageList;
 	WPXTableList tableList;	
 	WP5PrefixData * prefixData = NULL;
+	std::vector<WP5SubDocument *> subDocuments;
 	
 	try
  	{
@@ -133,18 +134,23 @@ void WP5Parser::parse(WPXHLListenerImpl *listenerImpl)
 
 		// do a "first-pass" parse of the document
 		// gather table border information, page properties (per-page)
-		WP5StylesListener stylesListener(&pageList, tableList);
+		WP5StylesListener stylesListener(&pageList, tableList, subDocuments);
 		parse(input, &stylesListener);
 
 		// second pass: here is where we actually send the messages to the target app
 		// that are necessary to emit the body of the target document
-		WP5ContentListener listener(&pageList, listenerImpl); // FIXME: SHOULD BE CONTENT_LISTENER, AND SHOULD BE PASSED TABLE DATA!
+		WP5ContentListener listener(&pageList, subDocuments, listenerImpl); // FIXME: SHOULD BE CONTENT_LISTENER, AND SHOULD BE PASSED TABLE DATA!
 		listener.setPrefixData(prefixData);
 
 		parse(input, &listener);
 		
 		// cleanup section: free the used resources
 		delete prefixData;
+		for (std::vector<WP5SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); iterSubDoc++)
+		{
+			if (*iterSubDoc)
+				delete (*iterSubDoc);
+		}
 		for (std::vector<WPXPageSpan *>::iterator iterSpan = pageList.begin(); iterSpan != pageList.end(); iterSpan++)
 		{
 			delete *iterSpan;
@@ -155,6 +161,11 @@ void WP5Parser::parse(WPXHLListenerImpl *listenerImpl)
 		WPD_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
 
 		delete prefixData;
+		for (std::vector<WP5SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); iterSubDoc++)
+		{
+			if (*iterSubDoc)
+				delete (*iterSubDoc);
+		}
 
 		for (std::vector<WPXPageSpan *>::iterator iterSpan = pageList.begin(); iterSpan != pageList.end(); iterSpan++)
 		{
