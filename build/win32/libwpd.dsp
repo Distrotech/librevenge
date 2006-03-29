@@ -137,6 +137,10 @@ SOURCE=..\..\src\lib\WP3Header.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP3HeaderFooterGroup.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP3Listener.cpp
 # End Source File
 # Begin Source File
@@ -249,7 +253,15 @@ SOURCE=..\..\src\lib\WP5FixedLengthGroup.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP5FontGroup.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP5FontNameStringPoolPacket.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5FootnoteEndnoteGroup.cpp
 # End Source File
 # Begin Source File
 
@@ -266,6 +278,10 @@ SOURCE=..\..\src\lib\WP5GeneralPacketIndex.cpp
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP5Header.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5HeaderFooterGroup.cpp
 # End Source File
 # Begin Source File
 
@@ -302,6 +318,10 @@ SOURCE=..\..\src\lib\WP5SpecialHeaderIndex.cpp
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP5StylesListener.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5SubDocument.cpp
 # End Source File
 # Begin Source File
 
@@ -593,6 +613,10 @@ SOURCE=..\..\src\lib\WP3Header.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP3HeaderFooterGroup.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP3Listener.h
 # End Source File
 # Begin Source File
@@ -705,7 +729,15 @@ SOURCE=..\..\src\lib\WP5FixedLengthGroup.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP5FontGroup.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP5FontNameStringPoolPacket.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5FootnoteEndnoteGroup.h
 # End Source File
 # Begin Source File
 
@@ -722,6 +754,10 @@ SOURCE=..\..\src\lib\WP5GeneralPacketIndex.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP5Header.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5HeaderFooterGroup.h
 # End Source File
 # Begin Source File
 
@@ -758,6 +794,10 @@ SOURCE=..\..\src\lib\WP5SpecialHeaderIndex.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP5StylesListener.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5SubDocument.h
 # End Source File
 # Begin Source File
 
