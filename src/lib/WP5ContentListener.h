@@ -48,7 +48,7 @@ struct _WP5ParsingState
 class WP5ContentListener : public WP5Listener
 {
 public:
-	WP5ContentListener(std::vector<WPXPageSpan *> *pageList, std::vector<WP5SubDocument *> subDocuments, WPXHLListenerImpl *listenerImpl);
+	WP5ContentListener(std::vector<WPXPageSpan *> *pageList, std::vector<WP5SubDocument *> &subDocuments, WPXHLListenerImpl *listenerImpl);
 	~WP5ContentListener();
 
 	void setAlignmentCharacter(const uint16_t character) {};
@@ -85,7 +85,7 @@ public:
 	void insertNoteReference(const WPXString noteReference);
 	void insertNote(const WPXNoteType noteType, const WP5SubDocument *subDocument);
 	void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, WP5SubDocument *subDocument);
-
+	void suppressPageCharacteristics(const uint8_t suppressCode) {};
 	
 protected:
 	void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
@@ -95,7 +95,7 @@ private:
 	void _changeList() {};
 
 	WP5ParsingState *m_parseState;
-	std::vector<WP5SubDocument *> m_subDocuments;
+	std::vector<WP5SubDocument *> &m_subDocuments;
 };
 
 #endif /* WP5CONTENTLISTENER_H */

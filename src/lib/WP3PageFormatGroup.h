@@ -48,6 +48,8 @@ class WP3PageFormatGroup : public WP3VariableLengthGroup
 	uint32_t m_bottomMargin;
 	// variable needed for subgroup 0x06 (Justification Mode)
 	uint8_t m_justification;
+	// variable needed for subgroup 0x07 (Suppress Page)
+	uint16_t m_suppressCode;
 	// variable needed for subgroup 0x0C (Indent At Beginning of Line)
 	uint32_t m_indent;
 

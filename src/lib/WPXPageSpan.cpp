@@ -105,12 +105,11 @@ WPXPageSpan::~WPXPageSpan()
 void WPXPageSpan::setHeaderFooter(const WPXHeaderFooterType type, const uint8_t headerFooterType, const WPXHeaderFooterOccurence occurence, 
 				  const  WPXSubDocument * subDocument, WPXTableList tableList)
 {
-//	WPXHeaderFooterType type = _convertHeaderFooterType(headerFooterType);
-//	WPXHeaderFooterOccurence wpxOccurence = _convertHeaderFooterOccurence(occurenceBits);
 	WPXHeaderFooter headerFooter(type, occurence, headerFooterType, subDocument, tableList);
 	switch (occurence) 
 	{
 	case ALL:
+	case NEVER:
 		_removeHeaderFooter(type, ODD); _removeHeaderFooter(type, EVEN); _removeHeaderFooter(type, ALL);
 		break;
 	case ODD:
@@ -120,7 +119,9 @@ void WPXPageSpan::setHeaderFooter(const WPXHeaderFooterType type, const uint8_t 
 		_removeHeaderFooter(type, EVEN); _removeHeaderFooter(type, ALL);
 		break;		
 	}
-	m_headerFooterList.push_back(headerFooter);
+
+	if ((occurence != NEVER) && (subDocument))
+		m_headerFooterList.push_back(headerFooter);
 
 	bool containsHFLeft = _containsHeaderFooter(type, ODD);
 	bool containsHFRight = _containsHeaderFooter(type, EVEN);

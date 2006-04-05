@@ -36,6 +36,7 @@ WP5PageFormatGroup::WP5PageFormatGroup(WPXInputStream *input) :
 	m_topMargin(0),
 	m_bottomMargin(0),
 	m_justification(0),
+	m_suppressCode(0),
 	m_formLength(0),
 	m_formWidth(0)
 {
@@ -88,6 +89,11 @@ void WP5PageFormatGroup::_readContents(WPXInputStream *input)
 			m_justification = 0x05;
 		WPD_DEBUG_MSG(("WordPerfect: Page format group justification (0x%2x)\n", m_justification));
 		break;
+	case WP5_TOP_PAGE_FORMAT_GROUP_SUPPRESS_PAGE_CHARACTERISTICS:
+		// skip 1 byte (old suppress code)
+		input->seek(1, WPX_SEEK_CUR);
+		m_suppressCode = readU8(input);
+		break;
 	case WP5_TOP_PAGE_FORMAT_GROUP_FORM:
 		uint8_t tmpOrientation;
 		// skip to the new DESIRED values (99 - 4)
@@ -137,6 +143,9 @@ void WP5PageFormatGroup::parse(WP5Listener *listener)
 		break;
 	case WP5_TOP_PAGE_FORMAT_GROUP_JUSTIFICATION:
 		listener->justificationChange(m_justification);
+		break;
+	case WP5_TOP_PAGE_FORMAT_GROUP_SUPPRESS_PAGE_CHARACTERISTICS:
+		listener->suppressPageCharacteristics(m_suppressCode);
 		break;
 	case WP5_TOP_PAGE_FORMAT_GROUP_FORM:
 		listener->pageFormChange(m_formLength, m_formWidth, m_formOrientation, true);

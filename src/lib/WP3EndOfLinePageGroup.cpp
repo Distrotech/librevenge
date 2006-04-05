@@ -83,11 +83,13 @@ void WP3EndOfLinePageGroup::parse(WP3Listener *listener)
 			break;
 		case 0x03: // Hard End of Line/Soft End of Page/Column
 			listener->insertEOL();
+			listener->insertBreak(WPX_SOFT_PAGE_BREAK);
 			break;
 		case 0x04: // Temporary End of Line
 			listener->insertEOL();
 			break;
 		case 0x05: // Temporary End of Page/Column
+			listener->insertBreak(WPX_PAGE_BREAK);
 			break;
 		case 0x06: // Dormant Hard Return
 			listener->insertEOL();
@@ -100,18 +102,21 @@ void WP3EndOfLinePageGroup::parse(WP3Listener *listener)
 			break;
 		case 0x09: // Hard End of Column/Soft End of Page
 			listener->insertBreak(WPX_COLUMN_BREAK);
+			listener->insertBreak(WPX_SOFT_PAGE_BREAK);
 			break;
 		case 0x0A: // Hard End of Line (Hard EOC not in columns)
 			listener->insertEOL();
 			break;
 		case 0x0B: // Hard EOL/Soft EOP (Hard EOC/soft EOP not columns)
 			listener->insertEOL();
+			listener->insertBreak(WPX_SOFT_PAGE_BREAK);
 			break;
 		case 0x0C: // Hard Hyphen at End of Line
 			listener->insertCharacter((uint16_t) '-');
 			break;
 		case 0x0D: // Hard Hyphen at End of Page/Column
 			listener->insertCharacter((uint16_t) '-');
+			listener->insertBreak(WPX_SOFT_PAGE_BREAK);
 			break;
 		case 0x0E: // Soft Hyphen at End of Line
 			listener->insertCharacter((uint16_t) 0xad);
@@ -122,6 +127,7 @@ void WP3EndOfLinePageGroup::parse(WP3Listener *listener)
 		case 0x10: // Auto Hyphen at End of Line
 			break;
 		case 0x11: // Auto Hyphen at End of Page/Column
+			listener->insertBreak(WPX_SOFT_PAGE_BREAK);
 			break;
 		case 0x12: // (reserved)
 			break;
@@ -132,6 +138,7 @@ void WP3EndOfLinePageGroup::parse(WP3Listener *listener)
 			break;
 		case 0x15: // Temporary Hard End of Column/Soft EOP
 			listener->insertBreak(WPX_COLUMN_BREAK);
+			listener->insertBreak(WPX_SOFT_PAGE_BREAK);
 			break;
 		case 0x16: // Hard End of Table Cell
 			listener->closeCell();
@@ -143,6 +150,7 @@ void WP3EndOfLinePageGroup::parse(WP3Listener *listener)
 			break;
 		case 0x19: // Hard End of Table Row/Cell/Soft EOP
 			listener->closeRow();
+			listener->insertBreak(WPX_SOFT_PAGE_BREAK);
 			break;
 		case 0x1A: // Hard End of Table Row/End of Table
 			listener->closeRow();
@@ -151,12 +159,14 @@ void WP3EndOfLinePageGroup::parse(WP3Listener *listener)
 		case 0x1B: // Hard End of Table Row/End of Table/Soft EOP
 			listener->closeRow();
 			listener->endTable();
+			listener->insertBreak(WPX_SOFT_PAGE_BREAK);
 			break;
 		case 0x1C: // Hard End of Table Row/Cell/End of Header
 			listener->closeRow();
 			break;
 		case 0x1D: // Hard End of Table Row/Cell/Soft EOP/Start of Header
 			listener->closeRow();
+			listener->insertBreak(WPX_SOFT_PAGE_BREAK);
 			break;
 		case 0x1E: // (reserved)
 			break;

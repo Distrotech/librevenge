@@ -48,7 +48,7 @@ struct _WP3ParsingState
 class WP3ContentListener : public WP3Listener
 {
 public:
-	WP3ContentListener(std::vector<WPXPageSpan *> *pageList, std::vector<WP3SubDocument *> subDocuments, WPXHLListenerImpl *listenerImpl);
+	WP3ContentListener(std::vector<WPXPageSpan *> *pageList, std::vector<WP3SubDocument *> &subDocuments, WPXHLListenerImpl *listenerImpl);
 	~WP3ContentListener();
 
 	void setAlignmentCharacter(const uint16_t character) {};
@@ -86,9 +86,11 @@ public:
 	void setTextColor(const RGBSColor * fontColor);
 	void setTextFont(const WPXString fontName);
 	void setFontSize(const uint16_t fontSize);
-	void insertNoteReference(const WPXString noteReference);
+	void insertPageNumber(const WPXString &pageNumber);
+	void insertNoteReference(const WPXString &noteReference);
 	void insertNote(const WPXNoteType noteType, WP3SubDocument *subDocument);
 	void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, WP3SubDocument *subDocument);
+	void suppressPage(const uint16_t suppressCode) {};
 	
 protected:
 	void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
@@ -99,7 +101,7 @@ private:
 	void _changeList() {};
 
 	WP3ParsingState *m_parseState;
-	std::vector<WP3SubDocument *> m_subDocuments;
+	std::vector<WP3SubDocument *> &m_subDocuments;
 };
 
 #endif /* WP3CONTENTLISTENER_H */

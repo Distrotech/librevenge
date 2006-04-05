@@ -38,6 +38,7 @@ WP3PageFormatGroup::WP3PageFormatGroup(WPXInputStream *input) :
 	m_topMargin(0),
 	m_bottomMargin(0),
 	m_justification(0),
+	m_suppressCode(0),
 	m_indent(0)
 {
 	_read(input);
@@ -87,6 +88,12 @@ void WP3PageFormatGroup::_readContents(WPXInputStream *input)
 		input->seek(1, WPX_SEEK_CUR);
 		m_justification = readU8(input);
 		break;
+
+	case WP3_PAGE_FORMAT_GROUP_SUPPRESS_PAGE:
+		// skip 2 bytes (old suppress code)
+		input->seek(2, WPX_SEEK_CUR);
+		m_suppressCode = readU16(input, true);
+		break;
 		
 	case WP3_PAGE_FORMAT_GROUP_INDENT_AT_BEGINNING_OF_PARAGRAPH:
 		// skip 4 bytes (old indent indent value of no interest for us)
@@ -135,6 +142,9 @@ void WP3PageFormatGroup::parse(WP3Listener *listener)
 	case WP3_PAGE_FORMAT_GROUP_JUSTIFICATION_MODE:
 		listener->justificationChange(m_justification);
 		break;
+
+	case WP3_PAGE_FORMAT_GROUP_SUPPRESS_PAGE:
+		listener->suppressPage(m_suppressCode);
 
 	case WP3_PAGE_FORMAT_GROUP_INDENT_AT_BEGINNING_OF_PARAGRAPH:
 			listener->indentFirstLineChange(fixedPointToWPUs(m_indent));

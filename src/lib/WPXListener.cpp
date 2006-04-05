@@ -908,7 +908,7 @@ void WPXListener::handleSubDocument(const WPXSubDocument *subDocument, const boo
 	// END: copy page properties into the new parsing state
 	m_ps->m_inSubDocument = true;
 	// Check whether the document is calling itself
-	if ((m_ps->m_subDocuments.find(subDocument) == m_ps->m_subDocuments.end()) || (!subDocument))
+	if ((subDocument) && (m_ps->m_subDocuments.find(subDocument) == m_ps->m_subDocuments.end()))
 	{
 		m_ps->m_subDocuments.insert(subDocument);
 		_handleSubDocument(subDocument, isHeaderFooter, tableList, nextTableIndice);

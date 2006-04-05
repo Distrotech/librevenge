@@ -30,9 +30,10 @@
 #include "libwpd_internal.h"
 #include "WP5SubDocument.h"
 
-WP5StylesListener::WP5StylesListener(std::vector<WPXPageSpan *> *pageList, WPXTableList tableList, std::vector<WP5SubDocument *> subDocuments) : 
+WP5StylesListener::WP5StylesListener(std::vector<WPXPageSpan *> *pageList, WPXTableList tableList, std::vector<WP5SubDocument *> &subDocuments) : 
 	WP5Listener(pageList, NULL),
 	m_currentPage(new WPXPageSpan()),
+	m_nextPage(NULL),
 	m_tableList(tableList), 
 	m_tempMarginLeft(1.0f),
 	m_tempMarginRight(1.0f),
@@ -45,12 +46,15 @@ void WP5StylesListener::endDocument()
 {	
 	insertBreak(WPX_SOFT_PAGE_BREAK); // pretend we just had a soft page break (for the last page)
 	delete(m_currentPage); // and delete the non-existent page that was allocated as a result (scandalous waste!)
+	if (m_nextPage)
+		delete (m_nextPage);
 }
 
 void WP5StylesListener::insertBreak(const uint8_t breakType)
 {
 	//if (!isUndoOn())
 	//{	
+		WPXTableList tableList;
 		switch (breakType) 
 		{
 		case WPX_PAGE_BREAK:
@@ -66,6 +70,25 @@ void WP5StylesListener::insertBreak(const uint8_t breakType)
 				m_pageList->push_back(m_currentPage);
 			}
 			m_currentPage = new WPXPageSpan(*(m_pageList->back()));
+			if (m_nextPage)
+			{
+				for(std::vector<WPXHeaderFooter>::const_iterator HFiter = (m_nextPage->getHeaderFooterList()).begin();
+					HFiter != (m_nextPage->getHeaderFooterList()).end(); HFiter++)
+				{
+					if ((*HFiter).getOccurence() != NEVER)
+					{
+						m_currentPage->setHeaderFooter((*HFiter).getType(), (*HFiter).getInternalType(),
+							(*HFiter).getOccurence(), (*HFiter).getSubDocument(), (*HFiter).getTableList());
+						_handleSubDocument((*HFiter).getSubDocument(), true, (*HFiter).getTableList());
+					}
+					else
+						m_currentPage->setHeaderFooter((*HFiter).getType(), (*HFiter).getInternalType(),
+							(*HFiter).getOccurence(), NULL, (*HFiter).getTableList());	
+					
+				}
+				delete (m_nextPage);
+				m_nextPage = NULL;
+			}
 			m_currentPage->setMarginLeft(m_tempMarginLeft);
 			m_currentPage->setMarginRight(m_tempMarginRight);
 			m_currentPageHasContent = false;
@@ -153,36 +176,47 @@ void WP5StylesListener::headerFooterGroup(const uint8_t headerFooterType, const 
 				wpxOccurence = ODD;
 			else
 				wpxOccurence = NEVER;
-			WPXTableList tableList; 
-
-			if (wpxOccurence != NEVER)
+			WPXTableList tableList;
+			
+			if ((wpxType == HEADER) && tempCurrentPageHasContent)
 			{
-				m_currentPage->setHeaderFooter(wpxType, headerFooterType, wpxOccurence, subDocument, tableList);
+				if (!m_nextPage)
+					m_nextPage = new WPXPageSpan();
+				m_nextPage->setHeaderFooter(wpxType, headerFooterType, wpxOccurence, subDocument, tableList);
+			}
 
-				_handleSubDocument(subDocument, true, tableList);
+			else /* FOOTER || !tempCurrentPageHasContent */
+			{
+				if (wpxOccurence != NEVER)
+				{
+					m_currentPage->setHeaderFooter(wpxType, headerFooterType, wpxOccurence, subDocument, tableList);
+					_handleSubDocument(subDocument, true, tableList);
+				}
+				else
+					m_currentPage->setHeaderFooter(wpxType, headerFooterType, wpxOccurence, NULL, tableList);
 			}
 		}
 		m_currentPageHasContent = tempCurrentPageHasContent;
 	}
 }
 
-/*
+
 void WP5StylesListener::suppressPageCharacteristics(const uint8_t suppressCode)
 {
 	if (!isUndoOn()) 
 	{			
 		WPD_DEBUG_MSG(("WordPerfect: suppressPageCharacteristics (suppressCode: %u)\n", suppressCode));
-		if (suppressCode & WP6_PAGE_GROUP_SUPPRESS_HEADER_A)
-			m_currentPage->setHeadFooterSuppression(WP6_HEADER_FOOTER_GROUP_HEADER_A, true);
-		if (suppressCode & WP6_PAGE_GROUP_SUPPRESS_HEADER_B)
-			m_currentPage->setHeadFooterSuppression(WP6_HEADER_FOOTER_GROUP_HEADER_B, true);
-		if (suppressCode & WP6_PAGE_GROUP_SUPPRESS_FOOTER_A)
-			m_currentPage->setHeadFooterSuppression(WP6_HEADER_FOOTER_GROUP_FOOTER_A, true);
-		if (suppressCode & WP6_PAGE_GROUP_SUPPRESS_FOOTER_B)
-			m_currentPage->setHeadFooterSuppression(WP6_HEADER_FOOTER_GROUP_FOOTER_B, true);			
+		if (suppressCode & WP5_PAGE_GROUP_SUPPRESS_HEADER_A)
+			m_currentPage->setHeadFooterSuppression(WPX_HEADER_A, true);
+		if (suppressCode & WP5_PAGE_GROUP_SUPPRESS_HEADER_B)
+			m_currentPage->setHeadFooterSuppression(WPX_HEADER_B, true);
+		if (suppressCode & WP5_PAGE_GROUP_SUPPRESS_FOOTER_A)
+			m_currentPage->setHeadFooterSuppression(WPX_FOOTER_A, true);
+		if (suppressCode & WP5_PAGE_GROUP_SUPPRESS_FOOTER_B)
+			m_currentPage->setHeadFooterSuppression(WPX_FOOTER_B, true);			
 	}
 }
-*/
+
 void WP5StylesListener::startTable()
 {
 	//if (!isUndoOn()) 
@@ -225,6 +259,8 @@ void WP5StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, co
 			WPXTable * oldCurrentTable = m_currentTable;
 			WPXTableList oldTableList = m_tableList;
 			m_tableList = tableList;
+			marginChange(WPX_NUM_WPUS_PER_INCH, WPX_LEFT);
+			marginChange(WPX_NUM_WPUS_PER_INCH, WPX_RIGHT);
 
 			subDocument->parse(this);
 

@@ -36,7 +36,7 @@
 class WP5StylesListener : public WP5Listener
 {
 public:
-	WP5StylesListener(std::vector<WPXPageSpan *> *pageList, WPXTableList tableList, std::vector<WP5SubDocument*> subDocuments);
+	WP5StylesListener(std::vector<WPXPageSpan *> *pageList, WPXTableList tableList, std::vector<WP5SubDocument*> &subDocuments);
 
 	void startDocument() {}
 	void setAlignmentCharacter(const uint16_t character) {}
@@ -76,6 +76,7 @@ public:
 	void insertNoteReference(const WPXString noteReference) {};
 	void insertNote(const WPXNoteType noteType, const WP5SubDocument *subDocument) {};
 	void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, WP5SubDocument *subDocument);
+	void suppressPageCharacteristics(const uint8_t suppressCode);
 
 protected:
 	void _openPageSpan() { /* FIXME: REMOVE ME WHEN IMPLEMENTED IN WPXListener */ }
@@ -86,13 +87,13 @@ private:
 	void _flushText() {}
 	void _changeList() {}
 
-	WPXPageSpan *m_currentPage;
+	WPXPageSpan *m_currentPage, *m_nextPage;
 
 	WPXTableList m_tableList;
 	WPXTable *m_currentTable;
 	float m_tempMarginLeft, m_tempMarginRight;
 	bool m_currentPageHasContent;
-	std::vector<WP5SubDocument *> m_subDocuments;
+	std::vector<WP5SubDocument *> &m_subDocuments;
 };
 
 #endif /* WP5STYLESLISTENER_H */

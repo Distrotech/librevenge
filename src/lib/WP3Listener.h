@@ -73,9 +73,11 @@ public:
 	virtual void setTextColor(const RGBSColor * fontColor) = 0;
 	virtual void setTextFont(const WPXString fontName) = 0;
 	virtual void setFontSize(const uint16_t fontSize) = 0;
-	virtual void insertNoteReference(const WPXString noteReference) = 0;
+	virtual void insertPageNumber(const WPXString &pageNumber) = 0;
+	virtual void insertNoteReference(const WPXString &noteReference) = 0;
 	virtual void insertNote(const WPXNoteType noteType, WP3SubDocument *subDocument) = 0;
 	virtual void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, WP3SubDocument *subDocument) = 0;
+	virtual void suppressPage(const uint16_t suppressCode) = 0;
 	
 };
 

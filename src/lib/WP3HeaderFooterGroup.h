@@ -35,9 +35,10 @@ public:
 	virtual ~WP3HeaderFooterGroup();	
 	virtual void _readContents(WPXInputStream *input);
 	virtual void parse(WP3Listener *listener);
-	WP3SubDocument *m_subDocument;	
+
 private:
 	uint8_t m_definition;
+	WP3SubDocument *m_subDocument;	
 };
 
 #endif /* WP3HEADERFOOTERGROUP_H */

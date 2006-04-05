@@ -38,6 +38,7 @@ class WP3DisplayGroup : public WP3VariableLengthGroup
 
  private:
  	WPXString m_noteReference;
+	WPXString m_pageNumber;
 };
 
 #endif /* WP3DISPLAYGROUP_H */

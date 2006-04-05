@@ -40,8 +40,20 @@ WP3DisplayGroup::~WP3DisplayGroup()
 
 void WP3DisplayGroup::_readContents(WPXInputStream *input)
 {
-	input->seek(4, WPX_SEEK_CUR);
-	m_noteReference = readPascalString(input);
+	switch (getSubGroup())
+	{
+	case WP3_DISPLAY_GROUP_INSERT_PAGE_NUMBER:
+		input->seek(4, WPX_SEEK_CUR);
+		m_pageNumber = readPascalString(input);
+		break;
+	case WP3_DISPLAY_GROUP_INSERT_FOOTNOTE_NUMBER:
+	case WP3_DISPLAY_GROUP_INSERT_ENDNOTE_NUMBER:
+		input->seek(4, WPX_SEEK_CUR);
+		m_noteReference = readPascalString(input);
+		break;
+	default:
+		break;
+	}
 }
 
 void WP3DisplayGroup::parse(WP3Listener *listener)
@@ -50,14 +62,13 @@ void WP3DisplayGroup::parse(WP3Listener *listener)
 
 	switch (getSubGroup())
 	{
+	case WP3_DISPLAY_GROUP_INSERT_PAGE_NUMBER:
+		listener->insertPageNumber(m_pageNumber);
 	case WP3_DISPLAY_GROUP_INSERT_FOOTNOTE_NUMBER:
 	case WP3_DISPLAY_GROUP_INSERT_ENDNOTE_NUMBER:
 		listener->insertNoteReference(m_noteReference);
 		break;
-	default: // something else we don't support, since it isn't in the docs
+	default:
 		break;
 	}
-	
-//	if (m_noteReference)
-//		delete [] m_noteReference;
 }

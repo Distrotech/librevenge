@@ -47,6 +47,8 @@ class WP5PageFormatGroup : public WP5VariableLengthGroup
 	uint16_t m_bottomMargin;
 	// variables needed for subgroup 6 (Justification)
 	uint8_t m_justification;
+	// variable needed for subgroup 7 (Suppress Page Characteristics)
+	uint8_t m_suppressCode;
 	// variables needed for subgroup 11 (Form)
 	uint16_t m_formLength;
 	uint16_t m_formWidth;

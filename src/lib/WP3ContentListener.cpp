@@ -45,7 +45,7 @@ _WP3ParsingState::~_WP3ParsingState()
 	DELETEP(m_cellFillColor);
 }
 
-WP3ContentListener::WP3ContentListener(std::vector<WPXPageSpan *> *pageList, std::vector<WP3SubDocument *>subDocuments, WPXHLListenerImpl *listenerImpl) :
+WP3ContentListener::WP3ContentListener(std::vector<WPXPageSpan *> *pageList, std::vector<WP3SubDocument *>&subDocuments, WPXHLListenerImpl *listenerImpl) :
 	WP3Listener(pageList, listenerImpl),
 	m_parseState(new WP3ParsingState),
 	m_subDocuments(subDocuments)
@@ -509,7 +509,17 @@ void WP3ContentListener::setFontSize(const uint16_t fontSize)
 	}
 }
 
-void WP3ContentListener::insertNoteReference(const WPXString noteReference)
+void WP3ContentListener::insertPageNumber(const WPXString &pageNumber)
+{
+	if (!isUndoOn())
+	{
+		if (!m_ps->m_isSpanOpened)
+			_openSpan();
+		m_parseState->m_textBuffer.append(pageNumber);
+	}
+}
+
+void WP3ContentListener::insertNoteReference(const WPXString &noteReference)
 {
 	if (!isUndoOn())
 	{
