@@ -40,7 +40,7 @@ class WPXSubDocument;
 class WP6StylesListener : public WP6Listener
 {
 public:
-	WP6StylesListener(std::vector<WPXPageSpan *> *pageList, WPXTableList tableList);
+	WP6StylesListener(std::list<WPXPageSpan *> *pageList, WPXTableList tableList);
 
 	virtual void setDate(const uint16_t year, const uint8_t month, const uint8_t day,
 			     const uint8_t hour, const uint8_t minute, const uint8_t second,

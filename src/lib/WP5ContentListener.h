@@ -48,7 +48,7 @@ struct _WP5ParsingState
 class WP5ContentListener : public WP5Listener
 {
 public:
-	WP5ContentListener(std::vector<WPXPageSpan *> *pageList, std::vector<WP5SubDocument *> &subDocuments, WPXHLListenerImpl *listenerImpl);
+	WP5ContentListener(std::list<WPXPageSpan *> *pageList, std::vector<WP5SubDocument *> &subDocuments, WPXHLListenerImpl *listenerImpl);
 	~WP5ContentListener();
 
 	void setAlignmentCharacter(const uint16_t character) {};

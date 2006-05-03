@@ -29,7 +29,7 @@
 #include "libwpd_internal.h"
 #include "WP3SubDocument.h"
 
-WP3StylesListener::WP3StylesListener(std::vector<WPXPageSpan *> *pageList, WPXTableList tableList, std::vector<WP3SubDocument *>&subDocuments) : 
+WP3StylesListener::WP3StylesListener(std::list<WPXPageSpan *> *pageList, WPXTableList tableList, std::vector<WP3SubDocument *>&subDocuments) : 
 	WP3Listener(pageList, NULL),
 	m_currentPage(new WPXPageSpan()),
 	m_nextPage(NULL),

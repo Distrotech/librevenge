@@ -28,6 +28,7 @@
 
 #include "WP5Listener.h"
 #include <vector>
+#include <list>
 #include <set>
 #include "WPXPageSpan.h"
 #include "WPXTable.h"
@@ -36,7 +37,7 @@
 class WP5StylesListener : public WP5Listener
 {
 public:
-	WP5StylesListener(std::vector<WPXPageSpan *> *pageList, WPXTableList tableList, std::vector<WP5SubDocument*> &subDocuments);
+	WP5StylesListener(std::list<WPXPageSpan *> *pageList, WPXTableList tableList, std::vector<WP5SubDocument*> &subDocuments);
 
 	void startDocument() {}
 	void setAlignmentCharacter(const uint16_t character) {}

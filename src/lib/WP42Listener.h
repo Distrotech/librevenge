@@ -32,7 +32,7 @@
 class WP42Listener : public WPXListener
 {
 public:
-	WP42Listener(std::vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl);
+	WP42Listener(std::list<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl);
 	virtual ~WP42Listener() {};
 
 	virtual void setAlignmentCharacter(const uint16_t character) = 0;

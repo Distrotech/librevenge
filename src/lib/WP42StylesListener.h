@@ -34,7 +34,7 @@
 class WP42StylesListener : public WP42Listener
 {
 public:
-	WP42StylesListener(std::vector<WPXPageSpan *> *pageList, WPXTableList tableList);
+	WP42StylesListener(std::list<WPXPageSpan *> *pageList, WPXTableList tableList);
 
 	void startDocument() {}
 	void setAlignmentCharacter(const uint16_t character) {}

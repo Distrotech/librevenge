@@ -71,7 +71,6 @@ _WPXParsingState::_WPXParsingState() :
 	m_cellAttributeBits(0x00000000),
 	m_paragraphJustificationBeforeTable(WPX_PARAGRAPH_JUSTIFICATION_LEFT),
 
-	m_nextPageSpanIndice(0),
 	m_numPagesRemainingInSpan(0),
 
 	m_sectionAttributesChanged(false),
@@ -118,12 +117,13 @@ _WPXParsingState::~_WPXParsingState()
 	DELETEP(m_highlightColor);
 }
 
-WPXListener::WPXListener(std::vector<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl) :
+WPXListener::WPXListener(std::list<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl) :
 	m_ps(new WPXParsingState),
 	m_listenerImpl(listenerImpl),
 	m_pageList(pageList),
 	m_isUndoOn(false)
 {
+	m_ps->m_nextPageSpanIter = pageList->begin();
 }
 
 WPXListener::~WPXListener()
@@ -214,16 +214,16 @@ void WPXListener::_openPageSpan()
 	m_ps->m_listBeginPosition += m_ps->m_pageMarginLeft;
 	
 	if ( !m_pageList ||
-	     (m_pageList && m_ps->m_nextPageSpanIndice > (int)m_pageList->size() - 1)
+	     (m_pageList && m_ps->m_nextPageSpanIter == m_pageList->end())
 	   )
 	{
 		throw ParseException();
 	}
 
-	WPXPageSpan *currentPage = (*m_pageList)[m_ps->m_nextPageSpanIndice];
+	WPXPageSpan *currentPage = (*m_ps->m_nextPageSpanIter);
 	currentPage->makeConsistent(1);
 	bool isLastPageSpan;
-	(m_pageList->size() <= (m_ps->m_nextPageSpanIndice+1)) ? isLastPageSpan = true : isLastPageSpan = false;
+	((*m_ps->m_nextPageSpanIter) == m_pageList->back()) ? isLastPageSpan = true : isLastPageSpan = false;
 	
 	WPXPropertyList propList;
 	propList.insert("libwpd:num-pages", currentPage->getPageSpan());
@@ -311,7 +311,7 @@ void WPXListener::_openPageSpan()
 	m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange + m_ps->m_textIndentByTabs;
 
 	m_ps->m_numPagesRemainingInSpan = (currentPage->getPageSpan() - 1);
-	m_ps->m_nextPageSpanIndice++;
+	m_ps->m_nextPageSpanIter++;
 }
 
 void WPXListener::_closePageSpan()

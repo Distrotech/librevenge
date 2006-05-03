@@ -34,7 +34,7 @@
 class WP3StylesListener : public WP3Listener
 {
 public:
-	WP3StylesListener(std::vector<WPXPageSpan *> *pageList, WPXTableList tableList, std::vector<WP3SubDocument *> &subDocuments);
+	WP3StylesListener(std::list<WPXPageSpan *> *pageList, WPXTableList tableList, std::vector<WP3SubDocument *> &subDocuments);
 
 	void startDocument() {}
 	void setAlignmentCharacter(const uint16_t character) {}

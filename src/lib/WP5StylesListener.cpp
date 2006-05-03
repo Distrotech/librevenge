@@ -30,7 +30,7 @@
 #include "libwpd_internal.h"
 #include "WP5SubDocument.h"
 
-WP5StylesListener::WP5StylesListener(std::vector<WPXPageSpan *> *pageList, WPXTableList tableList, std::vector<WP5SubDocument *> &subDocuments) : 
+WP5StylesListener::WP5StylesListener(std::list<WPXPageSpan *> *pageList, WPXTableList tableList, std::vector<WP5SubDocument *> &subDocuments) : 
 	WP5Listener(pageList, NULL),
 	m_currentPage(new WPXPageSpan()),
 	m_nextPage(NULL),

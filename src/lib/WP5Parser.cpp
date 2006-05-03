@@ -123,7 +123,7 @@ void WP5Parser::parseDocument(WPXInputStream *input, WP5Listener *listener)
 void WP5Parser::parse(WPXHLListenerImpl *listenerImpl)
 {
 	WPXInputStream *input = getInput();
-	std::vector<WPXPageSpan *> pageList;
+	std::list<WPXPageSpan *> pageList;
 	WPXTableList tableList;	
 	WP5PrefixData * prefixData = NULL;
 	std::vector<WP5SubDocument *> subDocuments;
@@ -151,7 +151,7 @@ void WP5Parser::parse(WPXHLListenerImpl *listenerImpl)
 			if (*iterSubDoc)
 				delete (*iterSubDoc);
 		}
-		for (std::vector<WPXPageSpan *>::iterator iterSpan = pageList.begin(); iterSpan != pageList.end(); iterSpan++)
+		for (std::list<WPXPageSpan *>::iterator iterSpan = pageList.begin(); iterSpan != pageList.end(); iterSpan++)
 		{
 			delete *iterSpan;
 		}	
@@ -167,7 +167,7 @@ void WP5Parser::parse(WPXHLListenerImpl *listenerImpl)
 				delete (*iterSubDoc);
 		}
 
-		for (std::vector<WPXPageSpan *>::iterator iterSpan = pageList.begin(); iterSpan != pageList.end(); iterSpan++)
+		for (std::list<WPXPageSpan *>::iterator iterSpan = pageList.begin(); iterSpan != pageList.end(); iterSpan++)
 		{
 			delete *iterSpan;
 		}
