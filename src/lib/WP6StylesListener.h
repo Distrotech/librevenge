@@ -32,6 +32,7 @@
 #include "WP6Listener.h"
 #include <vector>
 #include <set>
+#include <list>
 #include "WPXPageSpan.h"
 #include "WPXTable.h"
 
@@ -116,6 +117,7 @@ private:
 	bool m_currentPageHasContent;
 	bool m_isTableDefined;
 	std::set <const WPXSubDocument *> m_subDocuments;
+	std::list<WPXPageSpan *>::iterator m_pageListHardPageMark;
 };
 
 #endif /* WP6STYLESLISTENER_H */

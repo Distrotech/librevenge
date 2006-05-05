@@ -32,6 +32,7 @@
 WP3StylesListener::WP3StylesListener(std::list<WPXPageSpan *> *pageList, WPXTableList tableList, std::vector<WP3SubDocument *>&subDocuments) : 
 	WP3Listener(pageList, NULL),
 	m_currentPage(new WPXPageSpan()),
+	m_pageListHardPageMark(m_pageList->end()),
 	m_nextPage(NULL),
 	m_tableList(tableList), 
 	m_tempMarginLeft(1.0f),
@@ -51,11 +52,13 @@ void WP3StylesListener::insertBreak(const uint8_t breakType)
 {
 	if (!isUndoOn())
 	{	
+		WPXTableList tableList;
 		switch (breakType) 
 		{
 		case WPX_PAGE_BREAK:
 		case WPX_SOFT_PAGE_BREAK:
-			if (WPXListener::m_pageList->size() > 0 && (*m_currentPage)==(*(m_pageList->back())))
+			if ((WPXListener::m_pageList->size() > 0) && ((*m_currentPage)==(*(m_pageList->back()))
+				&& (m_pageListHardPageMark != m_pageList->end())))
 			{
 				int oldPageSpan = m_pageList->back()->getPageSpan();
 				m_pageList->back()->setPageSpan(oldPageSpan + 1);
@@ -64,6 +67,8 @@ void WP3StylesListener::insertBreak(const uint8_t breakType)
 			else
 			{
 				m_pageList->push_back(m_currentPage);
+				if (m_pageListHardPageMark == m_pageList->end())
+					m_pageListHardPageMark--;
 			}
 			m_currentPage = new WPXPageSpan(*(m_pageList->back()));
 			if (m_nextPage)
@@ -85,10 +90,14 @@ void WP3StylesListener::insertBreak(const uint8_t breakType)
 				delete (m_nextPage);
 				m_nextPage = NULL;
 			}
-			m_currentPage->setMarginLeft(m_tempMarginLeft);
-			m_currentPage->setMarginRight(m_tempMarginRight);
 			m_currentPageHasContent = false;
 			break;
+		}
+		if (breakType == WPX_PAGE_BREAK)
+		{
+			m_pageListHardPageMark = m_pageList->end();
+			m_currentPage->setMarginLeft(m_tempMarginLeft);
+			m_currentPage->setMarginRight(m_tempMarginRight);
 		}
 	}
 }
@@ -114,17 +123,36 @@ void WP3StylesListener::marginChange(const uint8_t side, const uint16_t margin)
 {
 	if (!isUndoOn()) 
 	{		
+		std::list<WPXPageSpan *>::iterator Iter;
 		float marginInch = (float)((double)margin / (double)WPX_NUM_WPUS_PER_INCH);
 		switch(side)
 		{
 			case WPX_LEFT:
-				if (!m_currentPageHasContent)
+				if (!m_currentPageHasContent && (m_pageListHardPageMark == m_pageList->end()))
 					m_currentPage->setMarginLeft(marginInch);
+				else if (m_currentPage->getMarginLeft() > marginInch)
+				{
+					// Change the margin for the current page and for all pages in the list since the last Hard Break
+					m_currentPage->setMarginLeft(marginInch);
+					for (Iter = m_pageListHardPageMark; Iter != m_pageList->end(); Iter++)
+					{
+						(*Iter)->setMarginLeft(marginInch);
+					}
+				}
 				m_tempMarginLeft = marginInch;
 				break;
 			case WPX_RIGHT:
-				if (!m_currentPageHasContent)
+				if (!m_currentPageHasContent && (m_pageListHardPageMark == m_pageList->end()))
 					m_currentPage->setMarginRight(marginInch);
+				else if (m_currentPage->getMarginRight() > marginInch)
+				{
+					// Change the margin for the current page and for all pages in the list since the last Hard Break
+					m_currentPage->setMarginRight(marginInch);
+					for (Iter = m_pageListHardPageMark; Iter != m_pageList->end(); Iter++)
+					{
+						(*Iter)->setMarginRight(marginInch);
+					}
+				}
 				m_tempMarginRight = marginInch;
 				break;
 		}

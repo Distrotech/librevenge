@@ -95,6 +95,7 @@ private:
 	float m_tempMarginLeft, m_tempMarginRight;
 	bool m_currentPageHasContent;
 	std::vector<WP5SubDocument *> &m_subDocuments;
+	std::list<WPXPageSpan *>::iterator m_pageListHardPageMark;
 };
 
 #endif /* WP5STYLESLISTENER_H */

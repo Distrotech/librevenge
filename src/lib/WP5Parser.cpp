@@ -137,6 +137,22 @@ void WP5Parser::parse(WPXHLListenerImpl *listenerImpl)
 		WP5StylesListener stylesListener(&pageList, tableList, subDocuments);
 		parse(input, &stylesListener);
 
+		// postprocess the pageList == remove duplicate page spans due to the page breaks
+		std::list<WPXPageSpan *>::iterator previousPage = pageList.begin();
+		for (std::list<WPXPageSpan *>::iterator Iter=pageList.begin(); Iter != pageList.end(); /* Iter++ */)
+		{
+			if ((Iter != previousPage) && (*(*previousPage)==*(*Iter)))
+			{
+				(*previousPage)->setPageSpan((*previousPage)->getPageSpan() + (*Iter)->getPageSpan());
+				Iter = pageList.erase(Iter);
+			}
+			else
+			{
+				previousPage = Iter;
+				Iter++;
+			}
+		}
+
 		// second pass: here is where we actually send the messages to the target app
 		// that are necessary to emit the body of the target document
 		WP5ContentListener listener(&pageList, subDocuments, listenerImpl); // FIXME: SHOULD BE CONTENT_LISTENER, AND SHOULD BE PASSED TABLE DATA!

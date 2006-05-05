@@ -189,6 +189,22 @@ void WP6Parser::parse(WPXHLListenerImpl *listenerImpl)
 		WP6StylesListener stylesListener(&pageList, tableList);
 		stylesListener.setPrefixData(prefixData);
 		parse(input, &stylesListener);
+		
+		// postprocess the pageList == remove duplicate page spans due to the page breaks
+		std::list<WPXPageSpan *>::iterator previousPage = pageList.begin();
+		for (std::list<WPXPageSpan *>::iterator Iter=pageList.begin(); Iter != pageList.end(); /* Iter++ */)
+		{
+			if ((Iter != previousPage) && (*(*previousPage)==*(*Iter)))
+			{
+				(*previousPage)->setPageSpan((*previousPage)->getPageSpan() + (*Iter)->getPageSpan());
+				Iter = pageList.erase(Iter);
+			}
+			else
+			{
+				previousPage = Iter;
+				Iter++;
+			}
+		}
 
 		// second pass: here is where we actually send the messages to the target app
 		// that are necessary to emit the body of the target document
