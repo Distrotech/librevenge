@@ -62,8 +62,7 @@ void WP6StylesListener::insertBreak(const uint8_t breakType)
 			if ((WPXListener::m_pageList->size() > 0) && ((*m_currentPage)==(*(m_pageList->back()))
 				&& (m_pageListHardPageMark != m_pageList->end())))
 			{
-				int oldPageSpan = m_pageList->back()->getPageSpan();
-				m_pageList->back()->setPageSpan(oldPageSpan + 1);
+				m_pageList->back()->setPageSpan(m_pageList->back()->getPageSpan() + 1);
 				delete(m_currentPage);
 			}
 			else
@@ -73,6 +72,7 @@ void WP6StylesListener::insertBreak(const uint8_t breakType)
 					m_pageListHardPageMark--;
 			}
 			m_currentPage = new WPXPageSpan(*(m_pageList->back()));
+			m_currentPage->setPageSpan(1);
 			m_currentPageHasContent = false;
 			break;
 		}
