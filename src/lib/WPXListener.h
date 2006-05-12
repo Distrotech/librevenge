@@ -83,6 +83,7 @@ struct _WPXParsingState
 	bool m_isPageSpanOpened;
 	bool m_isSectionOpened;
 	bool m_isPageSpanBreakDeferred;
+	bool m_isHeaderFooterWithoutParagraph;
 
 	bool m_isSpanOpened;
 	bool m_isParagraphOpened;
@@ -122,6 +123,8 @@ struct _WPXParsingState
 	float m_paragraphMarginBottom;
 	float m_leftMarginByPageMarginChange;  // part of the margin due to the PAGE margin change
 	float m_rightMarginByPageMarginChange; // inside a page that already has content.
+	float m_sectionMarginLeft;  // In multicolumn sections, the above two will be rather interpreted
+	float m_sectionMarginRight; // as section margin change 
 	float m_leftMarginByParagraphMarginChange;  // part of the margin due to the PARAGRAPH
 	float m_rightMarginByParagraphMarginChange; // margin change (in WP6)
 	float m_leftMarginByTabs;  // part of the margin due to the LEFT or LEFT/RIGHT Indent; the
@@ -162,7 +165,7 @@ public:
 	virtual void defineTabStops(const bool isRelative, const std::vector<WPXTabStop> &tabStops, 
 				    const std::vector<bool> &usePreWP9LeaderMethods) = 0;
 	virtual void insertCharacter(const uint16_t character) = 0;
-	virtual void insertTab(const uint8_t tabType, const float tabPosition) = 0;
+	virtual void insertTab(const uint8_t tabType, float tabPosition) = 0;
 	virtual void handleLineBreak() = 0;
 	virtual void insertEOL() = 0;
 	virtual void attributeChange(const bool isOn, const uint8_t attribute) = 0;
@@ -224,6 +227,8 @@ protected:
 
 	bool isUndoOn() { return m_isUndoOn; }
 	bool m_isUndoOn;
+
+	float _movePositionToFirstColumn(float position);
 	
 private:
 	WPXString _colorToString(const RGBSColor * color);

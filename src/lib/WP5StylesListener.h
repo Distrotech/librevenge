@@ -46,7 +46,7 @@ public:
 				    const std::vector<bool> &usePreWP9LeaderMethods) {}
 	void setFont(const WPXString fontName, const float fontSize) {}
 	void insertCharacter(const uint16_t character) { /*if (!isUndoOn())*/ m_currentPageHasContent = true; }
-	void insertTab(const uint8_t tabType, const float tabPosition) { /*if (!isUndoOn())*/ m_currentPageHasContent = true; }
+	void insertTab(const uint8_t tabType, float tabPosition) { /*if (!isUndoOn())*/ m_currentPageHasContent = true; }
 	void handleLineBreak() { /*if (!isUndoOn())*/ m_currentPageHasContent = true; };
 	void insertEOL() { /*if (!isUndoOn())*/ m_currentPageHasContent = true; }
  	void insertBreak(const uint8_t breakType);

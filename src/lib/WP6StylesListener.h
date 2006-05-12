@@ -53,7 +53,7 @@ public:
 	virtual void defineTabStops(const bool isRelative, const std::vector<WPXTabStop> &tabStops, 
 				    const std::vector<bool> &usePreWP9LeaderMethods) {}
 	virtual void insertCharacter(const uint16_t character) { if (!isUndoOn()) m_currentPageHasContent = true; }
-	virtual void insertTab(const uint8_t tabType, const float tabPosition) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	virtual void insertTab(const uint8_t tabType, float tabPosition) { if (!isUndoOn()) m_currentPageHasContent = true; }
 	virtual void handleLineBreak()  { if (!isUndoOn()) m_currentPageHasContent = true; }
 	virtual void insertEOL() { if (!isUndoOn()) m_currentPageHasContent = true; }
  	virtual void insertBreak(const uint8_t breakType);

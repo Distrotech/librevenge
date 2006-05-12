@@ -62,7 +62,7 @@ void WP42ContentListener::insertCharacter(const uint16_t character)
 	appendUCS4(m_parseState->m_textBuffer, (uint32_t)character);
 }
 
-void WP42ContentListener::insertTab(const uint8_t tabType, const float tabPosition)
+void WP42ContentListener::insertTab(const uint8_t tabType, float tabPosition)
 {
 	if (!isUndoOn())
 	{

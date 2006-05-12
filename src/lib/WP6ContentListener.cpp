@@ -38,6 +38,7 @@
 #include "WPXTable.h"
 
 #include <assert.h>
+#include <algorithm>
 
 #define WP6_DEFAULT_FONT_SIZE 12.0f
 #define WP6_DEFAULT_FONT_NAME "Times New Roman"
@@ -268,8 +269,9 @@ void WP6ContentListener::defineTabStops(const bool isRelative, const std::vector
 }
 
 
-void WP6ContentListener::insertTab(const uint8_t tabType, const float tabPosition)
+void WP6ContentListener::insertTab(const uint8_t tabType, float tabPosition)
 {
+	tabPosition = _movePositionToFirstColumn(tabPosition);
 	if (!isUndoOn())
 	{
 		// First of all, open paragraph for tabs that always are converted as tabs
@@ -325,8 +327,8 @@ void WP6ContentListener::insertTab(const uint8_t tabType, const float tabPositio
 					// fall-back solution if we are not able to read the tabPosition
 					m_ps->m_textIndentByTabs += 0.5f;
 				else
-					m_ps->m_textIndentByTabs = tabPosition - m_ps->m_paragraphMarginLeft
-						- m_ps->m_pageMarginLeft - m_ps->m_textIndentByParagraphIndentChange;
+					m_ps->m_textIndentByTabs = tabPosition - m_ps->m_paragraphMarginLeft - m_ps->m_pageMarginLeft 
+						- m_ps->m_sectionMarginLeft - m_ps->m_textIndentByParagraphIndentChange;
 				if (m_parseState->m_isListReference)
 					m_parseState->m_numListExtraTabs++;
 				break;
@@ -336,8 +338,8 @@ void WP6ContentListener::insertTab(const uint8_t tabType, const float tabPositio
 					// fall-back solution if we are not able to read the tabPosition
 					m_ps->m_textIndentByTabs -= 0.5f;
 				else
-					m_ps->m_textIndentByTabs = tabPosition - m_ps->m_paragraphMarginLeft
-						- m_ps->m_pageMarginLeft - m_ps->m_textIndentByParagraphIndentChange;
+					m_ps->m_textIndentByTabs = tabPosition - m_ps->m_paragraphMarginLeft - m_ps->m_pageMarginLeft
+						- m_ps->m_sectionMarginLeft - m_ps->m_textIndentByParagraphIndentChange;
 				if (m_parseState->m_isListReference)
 					m_parseState->m_numListExtraTabs--;
 				break;
@@ -347,7 +349,7 @@ void WP6ContentListener::insertTab(const uint8_t tabType, const float tabPositio
 					// fall-back solution if we are not able to read the tabPosition
 					m_ps->m_leftMarginByTabs += 0.5f;
 				else
-					m_ps->m_leftMarginByTabs = tabPosition - m_ps->m_pageMarginLeft
+					m_ps->m_leftMarginByTabs = tabPosition - m_ps->m_pageMarginLeft - m_ps->m_sectionMarginRight
 						- m_ps->m_leftMarginByPageMarginChange - m_ps->m_leftMarginByParagraphMarginChange;
 				if (m_parseState->m_isListReference)
 					m_parseState->m_numListExtraTabs++;
@@ -360,7 +362,7 @@ void WP6ContentListener::insertTab(const uint8_t tabType, const float tabPositio
 					// fall-back solution if we are not able to read the tabPosition
 					m_ps->m_leftMarginByTabs += 0.5f;
 				else
-					m_ps->m_leftMarginByTabs = tabPosition - m_ps->m_pageMarginLeft
+					m_ps->m_leftMarginByTabs = tabPosition - m_ps->m_pageMarginLeft - m_ps->m_sectionMarginLeft
 						- m_ps->m_leftMarginByPageMarginChange - m_ps->m_leftMarginByParagraphMarginChange;
 				if (m_parseState->m_isListReference)
 					m_parseState->m_numListExtraTabs++;
@@ -606,13 +608,31 @@ void WP6ContentListener::marginChange(uint8_t side, uint16_t margin)
 		switch(side)
 		{
 		case WPX_LEFT:
-			m_ps->m_leftMarginByPageMarginChange = marginInch - m_ps->m_pageMarginLeft;
+			if (m_ps->m_numColumns > 1)
+			{
+				m_ps->m_leftMarginByPageMarginChange = 0.0f;
+				m_ps->m_sectionMarginLeft = marginInch - m_ps->m_pageMarginLeft;
+			}
+			else
+			{
+				m_ps->m_leftMarginByPageMarginChange = marginInch - m_ps->m_pageMarginLeft;
+				m_ps->m_sectionMarginLeft = 0.0f;
+			}
 			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
 						+ m_ps->m_leftMarginByParagraphMarginChange
 						+ m_ps->m_leftMarginByTabs;
 			break;
 		case WPX_RIGHT:
-			m_ps->m_rightMarginByPageMarginChange = marginInch - m_ps->m_pageMarginRight;
+			if (m_ps->m_numColumns > 1)
+			{
+				m_ps->m_rightMarginByPageMarginChange = 0.0f;
+				m_ps->m_sectionMarginRight = marginInch - m_ps->m_pageMarginRight;
+			}
+			else
+			{
+				m_ps->m_rightMarginByPageMarginChange = marginInch - m_ps->m_pageMarginRight;
+				m_ps->m_sectionMarginRight = 0.0f;
+			}
 			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
 						+ m_ps->m_rightMarginByParagraphMarginChange
 						+ m_ps->m_rightMarginByTabs;
@@ -678,13 +698,15 @@ void WP6ContentListener::columnChange(const WPXTextColumnType columnType, const 
 {
 	if (!isUndoOn())
 	{
+		int oldColumnNum = m_ps->m_numColumns;
 		// In WP, the last column ends with a hard column break code.
 		// In this case, we do not really want to insert any column break
 		m_ps->m_isParagraphColumnBreak = false;
 		m_ps->m_isTextColumnWithoutParagraph = false;
 
-		float remainingSpace = m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight
-						- m_ps->m_leftMarginByPageMarginChange - m_ps->m_rightMarginByPageMarginChange;
+		float remainingSpace = m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_sectionMarginLeft
+			- m_ps->m_pageMarginRight - m_ps->m_sectionMarginRight
+			- m_ps->m_leftMarginByPageMarginChange - m_ps->m_rightMarginByPageMarginChange;
 		// determine the space that is to be divided between columns whose width is expressed in percentage of remaining space
 		std::vector<WPXColumnDefinition> tmpColumnDefinition;
 		tmpColumnDefinition.clear();
@@ -731,6 +753,15 @@ void WP6ContentListener::columnChange(const WPXTextColumnType columnType, const 
 		m_ps->m_numColumns = numColumns;
 		m_ps->m_textColumns = tmpColumnDefinition;
 		m_ps->m_isTextColumnWithoutParagraph = true;
+		if ((m_ps->m_numColumns > 1 && oldColumnNum <= 1) || (m_ps->m_numColumns <= 1 && oldColumnNum > 1))
+		{
+			m_ps->m_paragraphMarginLeft -= m_ps->m_leftMarginByPageMarginChange;
+			m_ps->m_paragraphMarginRight -= m_ps->m_rightMarginByPageMarginChange;
+			std::swap(m_ps->m_leftMarginByPageMarginChange, m_ps->m_sectionMarginLeft);
+			std::swap(m_ps->m_rightMarginByPageMarginChange, m_ps->m_sectionMarginRight);
+			m_ps->m_paragraphMarginLeft += m_ps->m_leftMarginByPageMarginChange;
+			m_ps->m_paragraphMarginRight += m_ps->m_rightMarginByPageMarginChange;
+		}
 	}
 }
 

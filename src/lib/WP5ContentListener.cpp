@@ -66,7 +66,7 @@ void WP5ContentListener::insertCharacter(const uint16_t character)
 	appendUCS4(m_parseState->m_textBuffer, (uint32_t)character);
 }
 
-void WP5ContentListener::insertTab(const uint8_t tabType, const float tabPosition)
+void WP5ContentListener::insertTab(const uint8_t tabType, float tabPosition)
 {
 	if (!m_ps->m_isSpanOpened)
 		_openSpan();
@@ -296,13 +296,31 @@ void WP5ContentListener::marginChange(uint8_t side, uint16_t margin)
 		switch(side)
 		{
 		case WPX_LEFT:
-			m_ps->m_leftMarginByPageMarginChange = marginInch - m_ps->m_pageMarginLeft;
+			if (m_ps->m_numColumns > 1)
+			{
+				m_ps->m_leftMarginByPageMarginChange = 0.0f;
+				m_ps->m_sectionMarginLeft = marginInch - m_ps->m_pageMarginLeft;
+			}
+			else
+			{
+				m_ps->m_leftMarginByPageMarginChange = marginInch - m_ps->m_pageMarginLeft;
+				m_ps->m_sectionMarginLeft = 0.0f;
+			}
 			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
 						+ m_ps->m_leftMarginByParagraphMarginChange
 						+ m_ps->m_leftMarginByTabs;
 			break;
 		case WPX_RIGHT:
-			m_ps->m_rightMarginByPageMarginChange = marginInch - m_ps->m_pageMarginRight;
+			if (m_ps->m_numColumns > 1)
+			{
+				m_ps->m_rightMarginByPageMarginChange = 0.0f;
+				m_ps->m_sectionMarginRight = marginInch - m_ps->m_pageMarginRight;
+			}
+			else
+			{
+				m_ps->m_rightMarginByPageMarginChange = marginInch - m_ps->m_pageMarginRight;
+				m_ps->m_sectionMarginRight = 0.0f;
+			}
 			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
 						+ m_ps->m_rightMarginByParagraphMarginChange
 						+ m_ps->m_rightMarginByTabs;

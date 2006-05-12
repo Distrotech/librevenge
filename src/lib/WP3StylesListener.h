@@ -42,7 +42,7 @@ public:
 	void defineTabStops(const bool isRelative, const std::vector<WPXTabStop> &tabStops, 
 				    const std::vector<bool> &usePreWP9LeaderMethods) {}
 	void insertCharacter(const uint16_t character) {}
-	void insertTab(const uint8_t tabType, const float tabPosition) {}
+	void insertTab(const uint8_t tabType, float tabPosition) {}
 	void handleLineBreak() {};
 	void insertEOL() {}
  	void insertBreak(const uint8_t breakType);

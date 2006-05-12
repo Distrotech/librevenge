@@ -271,6 +271,7 @@ class WPXHLListenerImpl
 	/**
 	Called when a new table row is opened
 	\param propList Defines a set of properties for the table row. May contain:
+	\li \c fo:break-before Whether this table should be placed in a new column or page (the value is set to column or page if so)
 	\li \c style:row-height The row's height, in inches
 	\li \c style:min-row-height The row's minimum height, in inches
 	\li \c libwpd:is-header-row This row contains headings of columns and should repeat at every page (for tables that span several pages)

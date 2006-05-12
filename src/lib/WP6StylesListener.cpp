@@ -43,6 +43,7 @@ WP6StylesListener::WP6StylesListener(std::list<WPXPageSpan *> *pageList, WPXTabl
 	m_currentPageHasContent(false),
 	m_isTableDefined(false)
 {
+	m_pageListHardPageMark = m_pageList->end();
 }
 
 void WP6StylesListener::endDocument()

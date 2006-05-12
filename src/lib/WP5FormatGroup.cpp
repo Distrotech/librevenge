@@ -52,7 +52,7 @@ void WP5FormatGroup::parse(WP5Listener *listener)
 	switch(getSubGroup())
 	{
 		case WP5_FORMAT_GROUP_END_OF_PAGE:
-			listener->insertBreak(WPX_PAGE_BREAK);
+			// listener->insertBreak(WPX_PAGE_BREAK);
 			break;		
 		default:
 			break;		

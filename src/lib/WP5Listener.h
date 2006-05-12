@@ -44,7 +44,7 @@ public:
 				const std::vector<bool> &usePreWP9LeaderMethods) = 0;
 	virtual void setFont(const WPXString fontName, const float fontSize) = 0;
 	virtual void insertCharacter(const uint16_t character) = 0;
-	virtual void insertTab(const uint8_t tabType, const float tabPosition) = 0;
+	virtual void insertTab(const uint8_t tabType, float tabPosition) = 0;
 	virtual void handleLineBreak() = 0;
 	virtual void insertEOL() = 0;
 	virtual void attributeChange(const bool isOn, const uint8_t attribute) = 0;

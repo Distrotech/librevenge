@@ -55,6 +55,7 @@ _WPXParsingState::_WPXParsingState() :
 	m_isPageSpanOpened(false),
 	m_isSectionOpened(false),
 	m_isPageSpanBreakDeferred(false),
+	m_isHeaderFooterWithoutParagraph(false),
 
 	m_isSpanOpened(false),
 	m_isParagraphOpened(false),
@@ -90,6 +91,8 @@ _WPXParsingState::_WPXParsingState() :
 	m_paragraphMarginBottom(0.0f),
 	m_leftMarginByPageMarginChange(0.0f),
 	m_rightMarginByPageMarginChange(0.0f),
+	m_sectionMarginLeft(0.0f),
+	m_sectionMarginRight(0.0f),
 	m_leftMarginByParagraphMarginChange(0.0f),
 	m_rightMarginByParagraphMarginChange(0.0f),
 	m_leftMarginByTabs(0.0f),
@@ -155,6 +158,8 @@ void WPXListener::_openSection()
 
 		WPXPropertyList propList;
 
+		propList.insert("fo:margin-left", m_ps->m_sectionMarginLeft);
+		propList.insert("fo:margin-right", m_ps->m_sectionMarginRight);
 		if (m_ps->m_numColumns > 1)
 		{
 			propList.insert("fo:margin-bottom", 1.0f);
@@ -208,8 +213,14 @@ void WPXListener::_openPageSpan()
 		startDocument();
 
 	// Hack to be sure that the paragraph margins are consistent even if the page margin changes
-	m_ps->m_leftMarginByPageMarginChange += m_ps->m_pageMarginLeft;
-	m_ps->m_rightMarginByPageMarginChange += m_ps->m_pageMarginRight;
+	if (m_ps->m_leftMarginByPageMarginChange != 0)
+		m_ps->m_leftMarginByPageMarginChange += m_ps->m_pageMarginLeft;
+	if (m_ps->m_rightMarginByPageMarginChange != 0)
+		m_ps->m_rightMarginByPageMarginChange += m_ps->m_pageMarginRight;
+	if (m_ps->m_sectionMarginLeft != 0)
+		m_ps->m_sectionMarginLeft += m_ps->m_pageMarginLeft;
+	if (m_ps->m_sectionMarginRight != 0)
+		m_ps->m_sectionMarginRight += m_ps->m_pageMarginRight;
 	m_ps->m_listReferencePosition += m_ps->m_pageMarginLeft;
 	m_ps->m_listBeginPosition += m_ps->m_pageMarginLeft;
 	
@@ -250,8 +261,14 @@ void WPXListener::_openPageSpan()
 
 	// Hack to be sure that the paragraph margins are consistent even if the page margin changes
 	// Compute new values
-	m_ps->m_leftMarginByPageMarginChange -= m_ps->m_pageMarginLeft;
-	m_ps->m_rightMarginByPageMarginChange -= m_ps->m_pageMarginRight;
+	if (m_ps->m_leftMarginByPageMarginChange != 0)
+		m_ps->m_leftMarginByPageMarginChange -= m_ps->m_pageMarginLeft;
+	if (m_ps->m_rightMarginByPageMarginChange != 0)
+		m_ps->m_rightMarginByPageMarginChange -= m_ps->m_pageMarginRight;
+	if (m_ps->m_sectionMarginLeft != 0)
+		m_ps->m_sectionMarginLeft -= m_ps->m_pageMarginLeft;
+	if (m_ps->m_sectionMarginRight != 0)
+		m_ps->m_sectionMarginRight -= m_ps->m_pageMarginRight;
 	m_ps->m_listReferencePosition -= m_ps->m_pageMarginLeft;
 	m_ps->m_listBeginPosition -= m_ps->m_pageMarginLeft;
 
@@ -378,7 +395,8 @@ void WPXListener::_resetParagraphState(const bool isListElement)
 	m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange;
 	m_ps->m_textIndentByTabs = 0.0f;
 	m_ps->m_isCellWithoutParagraph = false;
-	m_ps->m_isTextColumnWithoutParagraph = false;	
+	m_ps->m_isTextColumnWithoutParagraph = false;
+	m_ps->m_isHeaderFooterWithoutParagraph = false;
 	m_ps->m_tempParagraphJustification = 0;
 	m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent;
 	m_ps->m_listBeginPosition = m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent;
@@ -417,10 +435,9 @@ void WPXListener::_appendParagraphProperties(WPXPropertyList &propList, const bo
 		justification = m_ps->m_paragraphJustification;
 	_appendJustification(propList, justification);
 
-	if (m_ps->m_numColumns <= 1 && !m_ps->m_isTableOpened)
+	if (!m_ps->m_isTableOpened)
 	{
-		// these properties are not appropriate inside multiple columns or when
-		// a table is opened..
+		// these properties are not appropriate when a table is opened..
 		if (isListElement)
 		{
 			propList.insert("fo:margin-left", (m_ps->m_listBeginPosition - m_ps->m_paragraphTextIndent));
@@ -478,7 +495,7 @@ void WPXListener::_getTabStops(WPXPropertyListVector &tabStops)
 		if (m_ps->m_isTabPositionRelative)
 			position -= m_ps->m_leftMarginByTabs;
 		else
-			position -= m_ps->m_paragraphMarginLeft + m_ps->m_pageMarginLeft;
+			position -= m_ps->m_paragraphMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_pageMarginLeft;
 		tmpTabStop.insert("style:position", position);
 		
 
@@ -501,6 +518,9 @@ void WPXListener::_closeParagraph()
 
 	m_ps->m_isParagraphOpened = false;
 	m_ps->m_currentListLevel = 0;
+
+	if (!m_ps->m_isTableOpened && m_ps->m_isPageSpanBreakDeferred && !m_ps->m_inSubDocument)
+		_closePageSpan();
 }
 
 void WPXListener::_openListElement()
@@ -534,6 +554,9 @@ void WPXListener::_closeListElement()
 	
 	m_ps->m_isListElementOpened = false;
 	m_ps->m_currentListLevel = 0;
+
+	if (!m_ps->m_isTableOpened && m_ps->m_isPageSpanBreakDeferred && !m_ps->m_inSubDocument)
+		_closePageSpan();
 }
 
 const float WPX_DEFAULT_SUPER_SUB_SCRIPT = 58.0f; 
@@ -663,8 +686,8 @@ void WPXListener::_openTable()
 		break;
 	case WPX_TABLE_POSITION_ABSOLUTE_FROM_LEFT_MARGIN:
 		propList.insert("table:align", "left");
-		propList.insert("fo:margin-left", m_ps->m_tableDefinition.m_leftOffset - 
-				m_ps->m_pageMarginLeft + m_ps->m_paragraphMarginLeft);
+		propList.insert("fo:margin-left", _movePositionToFirstColumn(m_ps->m_tableDefinition.m_leftOffset) - 
+			m_ps->m_pageMarginLeft - m_ps->m_sectionMarginLeft + m_ps->m_paragraphMarginLeft);
 		break;
 	case WPX_TABLE_POSITION_FULL:
 		propList.insert("table:align", "margins");
@@ -911,7 +934,14 @@ void WPXListener::handleSubDocument(const WPXSubDocument *subDocument, const boo
 	if ((subDocument) && (m_ps->m_subDocuments.find(subDocument) == m_ps->m_subDocuments.end()))
 	{
 		m_ps->m_subDocuments.insert(subDocument);
+		if (isHeaderFooter)
+			m_ps->m_isHeaderFooterWithoutParagraph = true;
 		_handleSubDocument(subDocument, isHeaderFooter, tableList, nextTableIndice);
+		if (m_ps->m_isHeaderFooterWithoutParagraph)
+		{
+			_openSpan();
+			_closeParagraph();
+		}
 	}
 
 	// restore our old parsing state
@@ -951,7 +981,7 @@ void WPXListener::insertBreak(const uint8_t breakType)
 				m_ps->m_numPagesRemainingInSpan--;
 			else
 			{
-			    if (!m_ps->m_isTableOpened)
+			    if (!m_ps->m_isTableOpened && !m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
 				_closePageSpan();
 			    else
 				m_ps->m_isPageSpanBreakDeferred = true;
@@ -1055,4 +1085,24 @@ WPXString WPXListener::_mergeColorsToString(const RGBSColor *fgColor, const RGBS
 	tmpColor.sprintf("#%.2x%.2x%.2x", bgRed, bgGreen, bgBlue);
 
 	return tmpColor;
+}
+
+float WPXListener::_movePositionToFirstColumn(float position)
+{
+	if (m_ps->m_numColumns <= 1)
+		return position;
+	float tempSpaceRemaining = position - m_ps->m_pageMarginLeft - m_ps->m_sectionMarginLeft;
+	position -= m_ps->m_textColumns[0].m_leftGutter;
+	for (int i = 0; i < (m_ps->m_textColumns.size() - 1); i++)
+	{
+		if ((tempSpaceRemaining -= m_ps->m_textColumns[i].m_width - m_ps->m_textColumns[i].m_rightGutter) > 0)
+		{
+			position -= m_ps->m_textColumns[i].m_width - m_ps->m_textColumns[i].m_leftGutter
+					+ m_ps->m_textColumns[i+1].m_leftGutter;
+			tempSpaceRemaining -= m_ps->m_textColumns[i].m_rightGutter;
+		}
+		else
+			return position;
+	}
+	return position;
 }

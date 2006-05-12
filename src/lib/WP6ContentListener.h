@@ -142,7 +142,7 @@ public:
 	virtual void defineTabStops(const bool isRelative, const std::vector<WPXTabStop> &tabStops, 
 				    const std::vector<bool> &usePreWP9LeaderMethods);
 	virtual void insertCharacter(const uint16_t character);
-	virtual void insertTab(const uint8_t tabType, const float tabPosition);
+	virtual void insertTab(const uint8_t tabType, float tabPosition);
 	virtual void handleLineBreak();
 	virtual void insertEOL();
 	virtual void characterColorChange(const uint8_t red, const uint8_t green, const uint8_t blue);

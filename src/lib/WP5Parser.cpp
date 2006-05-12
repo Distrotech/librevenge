@@ -92,6 +92,7 @@ void WP5Parser::parseDocument(WPXInputStream *input, WP5Listener *listener)
 					break;
 				case 0x0B: // soft new page (convert like space)
 					listener->insertCharacter((uint16_t) ' ');
+					listener->insertBreak(WPX_SOFT_PAGE_BREAK);
 					break;
 				case 0x0C: // hard new page
 					listener->insertBreak(WPX_PAGE_BREAK);

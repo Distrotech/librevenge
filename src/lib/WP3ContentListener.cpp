@@ -28,6 +28,7 @@
 #include "WPXFileStructure.h"
 #include "libwpd_internal.h"
 #include "WP3SubDocument.h"
+#include <algorithm>
 
 _WP3ParsingState::_WP3ParsingState():
 	m_colSpan(1),
@@ -72,7 +73,7 @@ void WP3ContentListener::insertCharacter(const uint16_t character)
 	}
 }
 
-void WP3ContentListener::insertTab(const uint8_t tabType, const float tabPosition)
+void WP3ContentListener::insertTab(const uint8_t tabType, float tabPosition)
 {
         if (!isUndoOn())
 	{
@@ -128,10 +129,10 @@ void WP3ContentListener::defineTable(const uint8_t position, const uint16_t left
 			m_ps->m_tableDefinition.m_positionBits = WPX_TABLE_POSITION_ALIGN_WITH_LEFT_MARGIN;
 			break;
 		case 1:
-			m_ps->m_tableDefinition.m_positionBits = WPX_TABLE_POSITION_ALIGN_WITH_RIGHT_MARGIN;
+			m_ps->m_tableDefinition.m_positionBits = WPX_TABLE_POSITION_CENTER_BETWEEN_MARGINS;
 			break;
 		case 2:
-			m_ps->m_tableDefinition.m_positionBits = WPX_TABLE_POSITION_CENTER_BETWEEN_MARGINS;
+			m_ps->m_tableDefinition.m_positionBits = WPX_TABLE_POSITION_ALIGN_WITH_RIGHT_MARGIN;
 			break;
 		case 3:
 			m_ps->m_tableDefinition.m_positionBits = WPX_TABLE_POSITION_FULL;
@@ -144,7 +145,7 @@ void WP3ContentListener::defineTable(const uint8_t position, const uint16_t left
 			break;
 		}
 		// Note: WordPerfect has an offset from the left edge of the page. We translate it to the offset from the left margin
-		m_ps->m_tableDefinition.m_leftOffset = (float)((double)leftOffset / (double)WPX_NUM_WPUS_PER_INCH) - m_ps->m_paragraphMarginLeft;
+		m_ps->m_tableDefinition.m_leftOffset = _movePositionToFirstColumn( (float)((double)leftOffset / (double)WPX_NUM_WPUS_PER_INCH) ) - m_ps->m_paragraphMarginLeft;
 
 		// remove all the old column information
 		m_ps->m_tableDefinition.columns.clear();
@@ -356,13 +357,31 @@ void WP3ContentListener::marginChange(const uint8_t side, const uint16_t margin)
 		switch(side)
 		{
 		case WPX_LEFT:
-			m_ps->m_leftMarginByPageMarginChange = marginInch - m_ps->m_pageMarginLeft;
+			if (m_ps->m_numColumns > 1)
+			{
+				m_ps->m_leftMarginByPageMarginChange = 0.0f;
+				m_ps->m_sectionMarginLeft = marginInch - m_ps->m_pageMarginLeft;
+			}
+			else
+			{
+				m_ps->m_leftMarginByPageMarginChange = marginInch - m_ps->m_pageMarginLeft;
+				m_ps->m_sectionMarginLeft = 0.0f;
+			}
 			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
 						+ m_ps->m_leftMarginByParagraphMarginChange
 						+ m_ps->m_leftMarginByTabs;
 			break;
 		case WPX_RIGHT:
-			m_ps->m_rightMarginByPageMarginChange = marginInch - m_ps->m_pageMarginRight;
+			if (m_ps->m_numColumns > 1)
+			{
+				m_ps->m_rightMarginByPageMarginChange = 0.0f;
+				m_ps->m_sectionMarginRight = marginInch - m_ps->m_pageMarginRight;
+			}
+			else
+			{
+				m_ps->m_rightMarginByPageMarginChange = marginInch - m_ps->m_pageMarginRight;
+				m_ps->m_sectionMarginRight = 0.0f;
+			}
 			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
 						+ m_ps->m_rightMarginByParagraphMarginChange
 						+ m_ps->m_rightMarginByTabs;
@@ -422,13 +441,15 @@ void WP3ContentListener::columnChange(const WPXTextColumnType columnType, const 
 {
 	if (!isUndoOn())
 	{
+		int oldColumnNum = m_ps->m_numColumns;
 		// In WP, the last column ends with a hard column break code.
 		// In this case, we do not really want to insert any column break
 		m_ps->m_isParagraphColumnBreak = false;
 		m_ps->m_isTextColumnWithoutParagraph = false;
 
-		float remainingSpace = m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight
-						- m_ps->m_leftMarginByPageMarginChange - m_ps->m_rightMarginByPageMarginChange;
+		float remainingSpace = m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_sectionMarginLeft
+			- m_ps->m_pageMarginRight - m_ps->m_sectionMarginRight
+			- m_ps->m_leftMarginByPageMarginChange - m_ps->m_rightMarginByPageMarginChange;
 		// determine the space that is to be divided between columns whose width is expressed in percentage of remaining space
 		std::vector<WPXColumnDefinition> tmpColumnDefinition;
 		tmpColumnDefinition.clear();
@@ -475,6 +496,15 @@ void WP3ContentListener::columnChange(const WPXTextColumnType columnType, const 
 		m_ps->m_numColumns = numColumns;
 		m_ps->m_textColumns = tmpColumnDefinition;
 		m_ps->m_isTextColumnWithoutParagraph = true;
+		if ((m_ps->m_numColumns > 1 && oldColumnNum <= 1) || (m_ps->m_numColumns <= 1 && oldColumnNum > 1))
+		{
+			m_ps->m_paragraphMarginLeft -= m_ps->m_leftMarginByPageMarginChange;
+			m_ps->m_paragraphMarginRight -= m_ps->m_rightMarginByPageMarginChange;
+			std::swap(m_ps->m_leftMarginByPageMarginChange, m_ps->m_sectionMarginLeft);
+			std::swap(m_ps->m_rightMarginByPageMarginChange, m_ps->m_sectionMarginRight);
+			m_ps->m_paragraphMarginLeft += m_ps->m_leftMarginByPageMarginChange;
+			m_ps->m_paragraphMarginRight += m_ps->m_rightMarginByPageMarginChange;
+		}
 	}
 }
 
