@@ -27,7 +27,6 @@
 #include "WP5VariableLengthGroup.h"
 #include "WP5UnsupportedVariableLengthGroup.h"
 #include "libwpd_internal.h"
-#include "WP5FormatGroup.h"
 #include "WP5HeaderFooterGroup.h"
 #include "WP5FontGroup.h"
 #include "WP5FootnoteEndnoteGroup.h"
@@ -44,8 +43,6 @@ WP5VariableLengthGroup * WP5VariableLengthGroup::constructVariableLengthGroup(WP
 	WPD_DEBUG_MSG(("WordPerfect: handling a variable length group Ox%x\n", group));	
 	switch (group)
 	{
-		case WP5_TOP_FORMAT_GROUP:
-			return new WP5FormatGroup(input);
 		case WP5_TOP_DEFINITION_GROUP:
 			return new WP5DefinitionGroup(input);
 		case WP5_TOP_PAGE_FORMAT_GROUP:

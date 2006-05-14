@@ -1,4 +1,21 @@
 CHANGES:
+0.8.4 -> 0.8.5
+- Conversion of foot/endnotes in WP5.x format (Fridrich)
+- Conversion of headers/footers in WP3 and WP5 parsers (Fridrich)
+- Prevent paragraph negative paragraph margins due to page margin change.
+  Removes the ugly text-border lines running across the text in
+  OpenOffice.org (Fridrich)
+- Make page margins constant between two hard page breaks (Fridrich)
+- Convert page margin changes into section margins in multi-column sections
+- Move absolute position values in multicolumn sections from whatever column
+  they are in into  the first one. Fixes the off-page position of the second
+  table in 05mechanicalservice.wpd (Fridrich)
+- Defer page span change to the end of the current paragraph if it is
+  opened (Fridrich)
+- Fix http://bugzilla.abisource.com/show_bug.cgi?id=10105, an incorrect
+  conversion of table alignment in WP3.x file format (Fridrich)
+- Fix small issue with incorrect number of pages in page-spans (Fridrich)
+
 0.8.3 -> 0.8.4
 - Fix compilation with gcc >=  4.1.0 (Stephan Kulow)
 - Initial support for tables in WP5.x format (Fridrich Strba)
