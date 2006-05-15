@@ -1,5 +1,6 @@
 CHANGES:
 0.8.4 -> 0.8.5
+- Conversion of font face, size and colour in WP5 parser (Fridrich)
 - Conversion of foot/endnotes in WP5.x format (Fridrich)
 - Conversion of headers/footers in WP3 and WP5 parsers (Fridrich)
 - Prevent paragraph negative paragraph margins due to page margin change.
