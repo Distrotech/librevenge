@@ -265,10 +265,6 @@ SOURCE=..\..\src\lib\WP5FootnoteEndnoteGroup.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WP5FormatGroup.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\lib\WP5GeneralPacketData.cpp
 # End Source File
 # Begin Source File
@@ -738,10 +734,6 @@ SOURCE=..\..\src\lib\WP5FontNameStringPoolPacket.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP5FootnoteEndnoteGroup.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\lib\WP5FormatGroup.h
 # End Source File
 # Begin Source File
 
