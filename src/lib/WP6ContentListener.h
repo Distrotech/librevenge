@@ -133,62 +133,62 @@ public:
 	virtual ~WP6ContentListener();
 
 	// for getting low-level messages from the parser
-	virtual void setDate(const uint16_t year, const uint8_t month, const uint8_t day,
+	void setDate(const uint16_t year, const uint8_t month, const uint8_t day,
 						const uint8_t hour, const uint8_t minute, const uint8_t second,
 						const uint8_t dayOfWeek, const uint8_t timeZone, const uint8_t unused) {}
-	virtual void setExtendedInformation(const uint16_t type, const WPXString &data);
-	virtual void setAlignmentCharacter(const uint16_t character);
-	virtual void setLeaderCharacter(const uint16_t character, const uint8_t numSpaces);
-	virtual void defineTabStops(const bool isRelative, const std::vector<WPXTabStop> &tabStops, 
+	void setExtendedInformation(const uint16_t type, const WPXString &data);
+	void setAlignmentCharacter(const uint16_t character);
+	void setLeaderCharacter(const uint16_t character, const uint8_t numSpaces);
+	void defineTabStops(const bool isRelative, const std::vector<WPXTabStop> &tabStops, 
 				    const std::vector<bool> &usePreWP9LeaderMethods);
-	virtual void insertCharacter(const uint16_t character);
-	virtual void insertTab(const uint8_t tabType, float tabPosition);
-	virtual void handleLineBreak();
-	virtual void insertEOL();
-	virtual void characterColorChange(const uint8_t red, const uint8_t green, const uint8_t blue);
-	virtual void characterShadingChange(const uint8_t shading);
-	virtual void highlightChange(const bool isOn, const RGBSColor color);
-	virtual void fontChange(const uint16_t matchedFontPointSize, const uint16_t fontPID);
- 	virtual void attributeChange(const bool isOn, const uint8_t attribute);
-	virtual void spacingAfterParagraphChange(const float spacingRelative, const float spacingAbsolute);
-	virtual void pageMarginChange(const uint8_t side, const uint16_t margin) {}
-	virtual void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool isPersistent) {}
-	virtual void marginChange(const uint8_t side, const uint16_t margin);
-	virtual void paragraphMarginChange(const uint8_t side, const int16_t margin);
-	virtual void indentFirstLineChange(const int16_t offset);
-	virtual void columnChange(const WPXTextColumnType columnType, const uint8_t numColumns, const std::vector<float> &columnWidth,
+	void insertCharacter(const uint16_t character);
+	void insertTab(const uint8_t tabType, float tabPosition);
+	void handleLineBreak();
+	void insertEOL();
+	void characterColorChange(const uint8_t red, const uint8_t green, const uint8_t blue);
+	void characterShadingChange(const uint8_t shading);
+	void highlightChange(const bool isOn, const RGBSColor color);
+	void fontChange(const uint16_t matchedFontPointSize, const uint16_t fontPID);
+ 	void attributeChange(const bool isOn, const uint8_t attribute);
+	void spacingAfterParagraphChange(const float spacingRelative, const float spacingAbsolute);
+	void pageMarginChange(const uint8_t side, const uint16_t margin) {}
+	void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool isPersistent) {}
+	void marginChange(const uint8_t side, const uint16_t margin);
+	void paragraphMarginChange(const uint8_t side, const int16_t margin);
+	void indentFirstLineChange(const int16_t offset);
+	void columnChange(const WPXTextColumnType columnType, const uint8_t numColumns, const std::vector<float> &columnWidth,
 				  const std::vector<bool> &isFixedWidth);
-	virtual void updateOutlineDefinition(const WP6OutlineLocation outlineLocation, const uint16_t outlineHash,
+	void updateOutlineDefinition(const WP6OutlineLocation outlineLocation, const uint16_t outlineHash,
 					     const uint8_t *numberingMethods, const uint8_t tabBehaviourFlag);
 
-	virtual void paragraphNumberOn(const uint16_t outlineHash, const uint8_t level, const uint8_t flag);
-	virtual void paragraphNumberOff();
-	virtual void displayNumberReferenceGroupOn(const uint8_t subGroup, const uint8_t level);
-	virtual void displayNumberReferenceGroupOff(const uint8_t subGroup);
-	virtual void styleGroupOn(const uint8_t subGroup);
-	virtual void styleGroupOff(const uint8_t subGroup);
-	virtual void globalOn(const uint8_t systemStyle);
-	virtual void globalOff();
-	virtual void noteOn(const uint16_t textPID);
-	virtual void noteOff(const WPXNoteType noteType);
-	virtual void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, const uint16_t textPID) {}
-	virtual void suppressPageCharacteristics(const uint8_t suppressCode) {}
-	virtual void endDocument();
+	void paragraphNumberOn(const uint16_t outlineHash, const uint8_t level, const uint8_t flag);
+	void paragraphNumberOff();
+	void displayNumberReferenceGroupOn(const uint8_t subGroup, const uint8_t level);
+	void displayNumberReferenceGroupOff(const uint8_t subGroup);
+	void styleGroupOn(const uint8_t subGroup);
+	void styleGroupOff(const uint8_t subGroup);
+	void globalOn(const uint8_t systemStyle);
+	void globalOff();
+	void noteOn(const uint16_t textPID);
+	void noteOff(const WPXNoteType noteType);
+	void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, const uint16_t textPID) {}
+	void suppressPageCharacteristics(const uint8_t suppressCode) {}
+	void endDocument();
 
- 	virtual void defineTable(const uint8_t position, const uint16_t leftOffset);
-	virtual void addTableColumnDefinition(const uint32_t width, const uint32_t leftGutter, const uint32_t rightGutter,
+ 	void defineTable(const uint8_t position, const uint16_t leftOffset);
+	void addTableColumnDefinition(const uint32_t width, const uint32_t leftGutter, const uint32_t rightGutter,
 				const uint32_t attributes, const uint8_t alignment);
-	virtual void startTable();
- 	virtual void insertRow(const uint16_t rowHeight, const bool isMinimumHeight, const bool isHeaderRow);
- 	virtual void insertCell(const uint8_t colSpan, const uint8_t rowSpan, const uint8_t borderBits,
+	void startTable();
+ 	void insertRow(const uint16_t rowHeight, const bool isMinimumHeight, const bool isHeaderRow);
+ 	void insertCell(const uint8_t colSpan, const uint8_t rowSpan, const uint8_t borderBits,
 				const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
 				const RGBSColor * cellBorderColor, const WPXVerticalAlignment cellVerticalAlignment, 
 				const bool useCellAttributes, const uint32_t cellAttributes);
- 	virtual void endTable();
+ 	void endTable();
 
 
 protected:
-	virtual void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
+	void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
 
 	//void _handleLineBreakElementBegin();
 	void _paragraphNumberOn(const uint16_t outlineHash, const uint8_t level);

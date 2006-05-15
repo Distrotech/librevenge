@@ -60,6 +60,7 @@ public:
 	void insertTab(const uint8_t tabType, float tabPosition);
 	void handleLineBreak() {};
 	void insertEOL();
+	void characterColorChange(const uint8_t red, const uint8_t green, const uint8_t blue);
 	void attributeChange(const bool isOn, const uint8_t attribute);
 	void spacingAfterParagraphChange(const float spacingRelative, const float spacingAbsolute) {};
 	void pageMarginChange(const uint8_t side, const uint16_t margin) {};

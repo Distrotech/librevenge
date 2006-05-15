@@ -47,6 +47,7 @@ public:
 	virtual void insertTab(const uint8_t tabType, float tabPosition) = 0;
 	virtual void handleLineBreak() = 0;
 	virtual void insertEOL() = 0;
+	virtual void characterColorChange(const uint8_t red, const uint8_t green, const uint8_t blue) = 0;
 	virtual void attributeChange(const bool isOn, const uint8_t attribute) = 0;
 	virtual void spacingAfterParagraphChange(const float spacingRelative, const float spacingAbsolute) = 0;
 	virtual void pageMarginChange(const uint8_t side, const uint16_t margin) = 0;

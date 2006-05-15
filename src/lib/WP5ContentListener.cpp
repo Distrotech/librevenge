@@ -224,73 +224,76 @@ void WP5ContentListener::endTable()
 
 void WP5ContentListener::attributeChange(const bool isOn, const uint8_t attribute)
 {
-	_closeSpan();
-
-	uint32_t textAttributeBit = 0;
-
-	// FIXME: handle all the possible attribute bits
-	switch (attribute)
+	if (!isUndoOn())
 	{
-		case WP5_ATTRIBUTE_EXTRA_LARGE:
-			textAttributeBit = WPX_EXTRA_LARGE_BIT;
-			break;
-		case WP5_ATTRIBUTE_VERY_LARGE:
-			textAttributeBit = WPX_VERY_LARGE_BIT;
-			break;
-		case WP5_ATTRIBUTE_LARGE:
-			textAttributeBit = WPX_LARGE_BIT;
-			break;
-		case WP5_ATTRIBUTE_SMALL_PRINT:
-			textAttributeBit = WPX_SMALL_PRINT_BIT;
-			break;
-		case WP5_ATTRIBUTE_FINE_PRINT:
-			textAttributeBit = WPX_FINE_PRINT_BIT;
-			break;		
-		case WP5_ATTRIBUTE_SUPERSCRIPT:
-			textAttributeBit = WPX_SUPERSCRIPT_BIT;
-			break;
-		case WP5_ATTRIBUTE_SUBSCRIPT:
-			textAttributeBit = WPX_SUBSCRIPT_BIT;
-			break;
-		case WP5_ATTRIBUTE_OUTLINE:
-			textAttributeBit = WPX_OUTLINE_BIT;
-			break;
-		case WP5_ATTRIBUTE_ITALICS:
-			textAttributeBit = WPX_ITALICS_BIT;
-			break;
-		case WP5_ATTRIBUTE_SHADOW:
-			textAttributeBit = WPX_SHADOW_BIT;
-			break;
-		case WP5_ATTRIBUTE_REDLINE:
-			textAttributeBit = WPX_REDLINE_BIT;
-			break;
-		case WP5_ATTRIBUTE_DOUBLE_UNDERLINE:
-			textAttributeBit = WPX_DOUBLE_UNDERLINE_BIT;
-			break;
-		case WP5_ATTRIBUTE_BOLD:
-			textAttributeBit = WPX_BOLD_BIT;
-			break;
-		case WP5_ATTRIBUTE_STRIKE_OUT:
-			textAttributeBit = WPX_STRIKEOUT_BIT;
-			break;
-		case WP5_ATTRIBUTE_UNDERLINE:
-			textAttributeBit = WPX_UNDERLINE_BIT;
-			break;
-		case WP5_ATTRIBUTE_SMALL_CAPS:
-			textAttributeBit = WPX_SMALL_CAPS_BIT;
-			break;
-	}
+		_closeSpan();
 
-	if (isOn)
-		m_ps->m_textAttributeBits |= textAttributeBit;
-	else
-		m_ps->m_textAttributeBits ^= textAttributeBit;
+		uint32_t textAttributeBit = 0;
+
+		// FIXME: handle all the possible attribute bits
+		switch (attribute)
+		{
+			case WP5_ATTRIBUTE_EXTRA_LARGE:
+				textAttributeBit = WPX_EXTRA_LARGE_BIT;
+				break;
+			case WP5_ATTRIBUTE_VERY_LARGE:
+				textAttributeBit = WPX_VERY_LARGE_BIT;
+				break;
+			case WP5_ATTRIBUTE_LARGE:
+				textAttributeBit = WPX_LARGE_BIT;
+				break;
+			case WP5_ATTRIBUTE_SMALL_PRINT:
+				textAttributeBit = WPX_SMALL_PRINT_BIT;
+				break;
+			case WP5_ATTRIBUTE_FINE_PRINT:
+				textAttributeBit = WPX_FINE_PRINT_BIT;
+				break;		
+			case WP5_ATTRIBUTE_SUPERSCRIPT:
+				textAttributeBit = WPX_SUPERSCRIPT_BIT;
+				break;
+			case WP5_ATTRIBUTE_SUBSCRIPT:
+				textAttributeBit = WPX_SUBSCRIPT_BIT;
+				break;
+			case WP5_ATTRIBUTE_OUTLINE:
+				textAttributeBit = WPX_OUTLINE_BIT;
+				break;
+			case WP5_ATTRIBUTE_ITALICS:
+				textAttributeBit = WPX_ITALICS_BIT;
+				break;
+			case WP5_ATTRIBUTE_SHADOW:
+				textAttributeBit = WPX_SHADOW_BIT;
+				break;
+			case WP5_ATTRIBUTE_REDLINE:
+				textAttributeBit = WPX_REDLINE_BIT;
+				break;
+			case WP5_ATTRIBUTE_DOUBLE_UNDERLINE:
+				textAttributeBit = WPX_DOUBLE_UNDERLINE_BIT;
+				break;
+			case WP5_ATTRIBUTE_BOLD:
+				textAttributeBit = WPX_BOLD_BIT;
+				break;
+			case WP5_ATTRIBUTE_STRIKE_OUT:
+				textAttributeBit = WPX_STRIKEOUT_BIT;
+				break;
+			case WP5_ATTRIBUTE_UNDERLINE:
+				textAttributeBit = WPX_UNDERLINE_BIT;
+				break;
+			case WP5_ATTRIBUTE_SMALL_CAPS:
+				textAttributeBit = WPX_SMALL_CAPS_BIT;
+				break;
+		}
+
+		if (isOn)
+			m_ps->m_textAttributeBits |= textAttributeBit;
+		else
+			m_ps->m_textAttributeBits ^= textAttributeBit;
+	}
 }
 
 void WP5ContentListener::marginChange(uint8_t side, uint16_t margin)
 {
-	//if (!isUndoOn())
-	//{
+	if (!isUndoOn())
+	{
 		float marginInch = (float)((double)margin/ (double)WPX_NUM_WPUS_PER_INCH);
 
 		switch(side)
@@ -327,13 +330,28 @@ void WP5ContentListener::marginChange(uint8_t side, uint16_t margin)
 			break;
 		}
 		m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent;
-	//}
+	}
+}
+
+void WP5ContentListener::characterColorChange(const uint8_t red, const uint8_t green, const uint8_t blue)
+{
+	if (!isUndoOn())
+	{
+		_closeSpan();
+		m_ps->m_fontColor->m_r = red;
+		m_ps->m_fontColor->m_g = green;
+		m_ps->m_fontColor->m_b = blue;
+ 	}
 }
 
 void WP5ContentListener::setFont(const WPXString fontName, const float fontSize)
 {
-	*(m_ps->m_fontName) = fontName;
-	m_ps->m_fontSize = fontSize;
+	if (!isUndoOn())
+	{
+		_closeSpan();
+		*(m_ps->m_fontName) = fontName;
+		m_ps->m_fontSize = fontSize;
+	}
 }
 
 void WP5ContentListener::insertNoteReference(const WPXString noteReference)

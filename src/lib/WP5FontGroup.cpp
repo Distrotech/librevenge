@@ -33,7 +33,11 @@
 
 WP5FontGroup::WP5FontGroup(WPXInputStream *input) :	
 	WP5VariableLengthGroup(),
-	m_fontNumber(0)
+	m_red(0),
+	m_green(0),
+	m_blue(0),
+	m_fontNumber(0),
+	m_fontSize(-1)
 {
 	_read(input);
 }
@@ -43,10 +47,19 @@ void WP5FontGroup::_readContents(WPXInputStream *input)
 	switch(getSubGroup())
 	{
 		case WP5_TOP_FONT_GROUP_COLOR:
+			input->seek(3, WPX_SEEK_CUR);
+			m_red = readU8(input);
+			m_green = readU8(input);
+			m_blue = readU8(input);
 			break;
 		case WP5_TOP_FONT_GROUP_FONT_CHANGE:
 			input->seek(25, WPX_SEEK_CUR);
 			m_fontNumber = readU8(input);
+			if (getSize() >= 36)
+			{
+				input->seek(2, WPX_SEEK_CUR);
+				m_fontSize = (float)(readU16(input) / 50);
+			}
 			break;
 		default:
 			break;
@@ -64,6 +77,7 @@ void WP5FontGroup::parse(WP5Listener *listener)
 	switch(getSubGroup())
 	{
 		case WP5_TOP_FONT_GROUP_COLOR:
+			listener->characterColorChange(m_red, m_green, m_blue);
 			break;
 		case WP5_TOP_FONT_GROUP_FONT_CHANGE:
 			if (listener->getGeneralPacketData(15))
@@ -84,6 +98,8 @@ void WP5FontGroup::parse(WP5Listener *listener)
 			}
 
 			tmpFontName = static_cast<const WP5FontNameStringPoolPacket*>(listener->getGeneralPacketData(7))->getFontName(tmpFontNameOffset);
+			if (m_fontSize >= 0)
+				tmpFontSize = m_fontSize;
 
 			WPD_DEBUG_MSG(("WP5 Parsing Font Change, fontNumber %i, fontName: %s, fontSize: %.4f\n", m_fontNumber, tmpFontName.cstr(), tmpFontSize));
 			listener->setFont(tmpFontName, tmpFontSize);

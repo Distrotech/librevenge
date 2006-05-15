@@ -37,7 +37,9 @@ protected:
 	virtual void _readContents(WPXInputStream *input);
 
 private:
-	uint16_t m_fontNumber;
+	uint8_t m_red, m_green, m_blue;
+	uint8_t m_fontNumber;
+	float m_fontSize;
 };
 
 #endif /* WP5FONTGROUP_H */

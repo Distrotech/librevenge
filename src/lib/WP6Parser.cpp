@@ -197,6 +197,7 @@ void WP6Parser::parse(WPXHLListenerImpl *listenerImpl)
 			if ((Iter != previousPage) && (*(*previousPage)==*(*Iter)))
 			{
 				(*previousPage)->setPageSpan((*previousPage)->getPageSpan() + (*Iter)->getPageSpan());
+				delete (*Iter);
 				Iter = pageList.erase(Iter);
 			}
 			else
