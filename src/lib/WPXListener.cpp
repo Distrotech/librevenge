@@ -120,13 +120,13 @@ _WPXParsingState::~_WPXParsingState()
 	DELETEP(m_highlightColor);
 }
 
-WPXListener::WPXListener(std::list<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl) :
+WPXListener::WPXListener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl) :
 	m_ps(new WPXParsingState),
 	m_listenerImpl(listenerImpl),
 	m_pageList(pageList),
 	m_isUndoOn(false)
 {
-	m_ps->m_nextPageSpanIter = pageList->begin();
+	m_ps->m_nextPageSpanIter = pageList.begin();
 }
 
 WPXListener::~WPXListener()
@@ -224,40 +224,38 @@ void WPXListener::_openPageSpan()
 	m_ps->m_listReferencePosition += m_ps->m_pageMarginLeft;
 	m_ps->m_listBeginPosition += m_ps->m_pageMarginLeft;
 	
-	if ( !m_pageList ||
-	     (m_pageList && m_ps->m_nextPageSpanIter == m_pageList->end())
-	   )
+	if ( m_pageList.empty() || (m_ps->m_nextPageSpanIter == m_pageList.end()))
 	{
 		throw ParseException();
 	}
 
-	WPXPageSpan *currentPage = (*m_ps->m_nextPageSpanIter);
-	currentPage->makeConsistent(1);
-	bool isLastPageSpan;
-	((*m_ps->m_nextPageSpanIter) == m_pageList->back()) ? isLastPageSpan = true : isLastPageSpan = false;
+	WPXPageSpan currentPage = (*m_ps->m_nextPageSpanIter);
+	currentPage.makeConsistent(1);
 	
 	WPXPropertyList propList;
-	propList.insert("libwpd:num-pages", currentPage->getPageSpan());
-	propList.insert("libwpd:is-last-page-span", isLastPageSpan);
-	propList.insert("fo:page-height", currentPage->getFormLength());
-	propList.insert("fo:page-width", currentPage->getFormWidth());
-	if (currentPage->getFormOrientation() == LANDSCAPE)
+	propList.insert("libwpd:num-pages", currentPage.getPageSpan());
+
+	std::list<WPXPageSpan>::iterator lastPageSpan = --m_pageList.end(); 
+	propList.insert("libwpd:is-last-page-span", ((m_ps->m_nextPageSpanIter == lastPageSpan) ? true : false));
+	propList.insert("fo:page-height", currentPage.getFormLength());
+	propList.insert("fo:page-width", currentPage.getFormWidth());
+	if (currentPage.getFormOrientation() == LANDSCAPE)
 		propList.insert("style:print-orientation", "landscape"); 
 	else
 		propList.insert("style:print-orientation", "portrait"); 
-	propList.insert("fo:margin-left", currentPage->getMarginLeft());
-	propList.insert("fo:margin-right", currentPage->getMarginRight());
-	propList.insert("fo:margin-top", currentPage->getMarginTop());
-	propList.insert("fo:margin-bottom", currentPage->getMarginBottom());
+	propList.insert("fo:margin-left", currentPage.getMarginLeft());
+	propList.insert("fo:margin-right", currentPage.getMarginRight());
+	propList.insert("fo:margin-top", currentPage.getMarginTop());
+	propList.insert("fo:margin-bottom", currentPage.getMarginBottom());
 	
 	if (!m_ps->m_isPageSpanOpened)
 		m_listenerImpl->openPageSpan(propList);
 
 	m_ps->m_isPageSpanOpened = true;
 
-	m_ps->m_pageFormWidth = currentPage->getFormWidth();
-	m_ps->m_pageMarginLeft = currentPage->getMarginLeft();
-	m_ps->m_pageMarginRight = currentPage->getMarginRight();
+	m_ps->m_pageFormWidth = currentPage.getFormWidth();
+	m_ps->m_pageMarginLeft = currentPage.getMarginLeft();
+	m_ps->m_pageMarginRight = currentPage.getMarginRight();
 
 	// Hack to be sure that the paragraph margins are consistent even if the page margin changes
 	// Compute new values
@@ -277,10 +275,10 @@ void WPXListener::_openPageSpan()
 	m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange + m_ps->m_rightMarginByParagraphMarginChange
 			+ m_ps->m_rightMarginByTabs;
 
-	std::vector<WPXHeaderFooter> headerFooterList = currentPage->getHeaderFooterList();
+	std::vector<WPXHeaderFooter> headerFooterList = currentPage.getHeaderFooterList();
 	for (std::vector<WPXHeaderFooter>::iterator iter = headerFooterList.begin(); iter != headerFooterList.end(); iter++)
 	{
-		if (!currentPage->getHeaderFooterSuppression((*iter).getInternalType()))
+		if (!currentPage.getHeaderFooterSuppression((*iter).getInternalType()))
 		{
 			WPXPropertyList propList;
 			switch ((*iter).getOccurence())
@@ -314,11 +312,11 @@ void WPXListener::_openPageSpan()
 
 	/* Some of this would maybe not be necessary, but it does not do any harm 
 	 * and apparently solves some troubles */
-	m_ps->m_pageFormLength = currentPage->getFormLength();
-	m_ps->m_pageFormWidth = currentPage->getFormWidth();
-	m_ps->m_pageFormOrientation = currentPage->getFormOrientation();
-	m_ps->m_pageMarginLeft = currentPage->getMarginLeft();
-	m_ps->m_pageMarginRight = currentPage->getMarginRight();
+	m_ps->m_pageFormLength = currentPage.getFormLength();
+	m_ps->m_pageFormWidth = currentPage.getFormWidth();
+	m_ps->m_pageFormOrientation = currentPage.getFormOrientation();
+	m_ps->m_pageMarginLeft = currentPage.getMarginLeft();
+	m_ps->m_pageMarginRight = currentPage.getMarginRight();
 
 	m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange + m_ps->m_leftMarginByParagraphMarginChange
 			+ m_ps->m_leftMarginByTabs;
@@ -327,7 +325,7 @@ void WPXListener::_openPageSpan()
 
 	m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange + m_ps->m_textIndentByTabs;
 
-	m_ps->m_numPagesRemainingInSpan = (currentPage->getPageSpan() - 1);
+	m_ps->m_numPagesRemainingInSpan = (currentPage.getPageSpan() - 1);
 	m_ps->m_nextPageSpanIter++;
 }
 

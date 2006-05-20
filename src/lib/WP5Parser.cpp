@@ -124,7 +124,7 @@ void WP5Parser::parseDocument(WPXInputStream *input, WP5Listener *listener)
 void WP5Parser::parse(WPXHLListenerImpl *listenerImpl)
 {
 	WPXInputStream *input = getInput();
-	std::list<WPXPageSpan *> pageList;
+	std::list<WPXPageSpan> pageList;
 	WPXTableList tableList;	
 	WP5PrefixData * prefixData = NULL;
 	std::vector<WP5SubDocument *> subDocuments;
@@ -135,17 +135,16 @@ void WP5Parser::parse(WPXHLListenerImpl *listenerImpl)
 
 		// do a "first-pass" parse of the document
 		// gather table border information, page properties (per-page)
-		WP5StylesListener stylesListener(&pageList, tableList, subDocuments);
+		WP5StylesListener stylesListener(pageList, tableList, subDocuments);
 		parse(input, &stylesListener);
 
 		// postprocess the pageList == remove duplicate page spans due to the page breaks
-		std::list<WPXPageSpan *>::iterator previousPage = pageList.begin();
-		for (std::list<WPXPageSpan *>::iterator Iter=pageList.begin(); Iter != pageList.end(); /* Iter++ */)
+		std::list<WPXPageSpan>::iterator previousPage = pageList.begin();
+		for (std::list<WPXPageSpan>::iterator Iter=pageList.begin(); Iter != pageList.end(); /* Iter++ */)
 		{
-			if ((Iter != previousPage) && (*(*previousPage)==*(*Iter)))
+			if ((Iter != previousPage) && ((*previousPage)==(*Iter)))
 			{
-				(*previousPage)->setPageSpan((*previousPage)->getPageSpan() + (*Iter)->getPageSpan());
-				delete(*Iter);
+				(*previousPage).setPageSpan((*previousPage).getPageSpan() + (*Iter).getPageSpan());
 				Iter = pageList.erase(Iter);
 			}
 			else
@@ -157,7 +156,7 @@ void WP5Parser::parse(WPXHLListenerImpl *listenerImpl)
 
 		// second pass: here is where we actually send the messages to the target app
 		// that are necessary to emit the body of the target document
-		WP5ContentListener listener(&pageList, subDocuments, listenerImpl); // FIXME: SHOULD BE CONTENT_LISTENER, AND SHOULD BE PASSED TABLE DATA!
+		WP5ContentListener listener(pageList, subDocuments, listenerImpl); // FIXME: SHOULD BE CONTENT_LISTENER, AND SHOULD BE PASSED TABLE DATA!
 		listener.setPrefixData(prefixData);
 
 		parse(input, &listener);
@@ -169,10 +168,6 @@ void WP5Parser::parse(WPXHLListenerImpl *listenerImpl)
 			if (*iterSubDoc)
 				delete (*iterSubDoc);
 		}
-		for (std::list<WPXPageSpan *>::iterator iterSpan = pageList.begin(); iterSpan != pageList.end(); iterSpan++)
-		{
-			delete *iterSpan;
-		}	
 	}
 	catch(FileException)
 	{
@@ -183,11 +178,6 @@ void WP5Parser::parse(WPXHLListenerImpl *listenerImpl)
 		{
 			if (*iterSubDoc)
 				delete (*iterSubDoc);
-		}
-
-		for (std::list<WPXPageSpan *>::iterator iterSpan = pageList.begin(); iterSpan != pageList.end(); iterSpan++)
-		{
-			delete *iterSpan;
 		}
 
 		throw FileException();

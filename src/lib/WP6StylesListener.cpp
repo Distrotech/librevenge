@@ -33,23 +33,22 @@
 // WP6StylesListener: creates intermediate table and page span representations, given a
 // sequence of messages passed to it by the parser.
 
-WP6StylesListener::WP6StylesListener(std::list<WPXPageSpan *> *pageList, WPXTableList tableList) : 
+WP6StylesListener::WP6StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList) : 
 	WP6Listener(pageList, NULL),
-	m_currentPage(new WPXPageSpan()),
-	m_pageListHardPageMark(m_pageList->end()),
+	m_currentPage(WPXPageSpan()),
+	m_pageListHardPageMark(m_pageList.end()),
 	m_tableList(tableList), 
 	m_tempMarginLeft(1.0f),
 	m_tempMarginRight(1.0f),
 	m_currentPageHasContent(false),
 	m_isTableDefined(false)
 {
-	m_pageListHardPageMark = m_pageList->end();
+	m_pageListHardPageMark = m_pageList.end();
 }
 
 void WP6StylesListener::endDocument()
 {	
 	insertBreak(WPX_SOFT_PAGE_BREAK); // pretend we just had a soft page break (for the last page)
-	delete(m_currentPage); // and delete the non-existent page that was allocated as a result (scandalous waste!)
 }
 
 void WP6StylesListener::insertBreak(const uint8_t breakType)
@@ -60,28 +59,27 @@ void WP6StylesListener::insertBreak(const uint8_t breakType)
 		{
 		case WPX_PAGE_BREAK:
 		case WPX_SOFT_PAGE_BREAK:
-			if ((WPXListener::m_pageList->size() > 0) && ((*m_currentPage)==(*(m_pageList->back()))
-				&& (m_pageListHardPageMark != m_pageList->end())))
+			if ((WPXListener::m_pageList.size() > 0) && (m_currentPage==m_pageList.back())
+				&& (m_pageListHardPageMark != m_pageList.end()))
 			{
-				m_pageList->back()->setPageSpan(m_pageList->back()->getPageSpan() + 1);
-				delete(m_currentPage);
+				m_pageList.back().setPageSpan(m_pageList.back().getPageSpan() + 1);
 			}
 			else
 			{
-				m_pageList->push_back(m_currentPage);
-				if (m_pageListHardPageMark == m_pageList->end())
+				m_pageList.push_back(m_currentPage);
+				if (m_pageListHardPageMark == m_pageList.end())
 					m_pageListHardPageMark--;
 			}
-			m_currentPage = new WPXPageSpan(*(m_pageList->back()));
-			m_currentPage->setPageSpan(1);
+			m_currentPage = WPXPageSpan(m_pageList.back(), 0.0f, 0.0f);
+			m_currentPage.setPageSpan(1);
 			m_currentPageHasContent = false;
 			break;
 		}
 		if (breakType == WPX_PAGE_BREAK)
 		{
-			m_pageListHardPageMark = m_pageList->end();
-			m_currentPage->setMarginLeft(m_tempMarginLeft);
-			m_currentPage->setMarginRight(m_tempMarginRight);
+			m_pageListHardPageMark = m_pageList.end();
+			m_currentPage.setMarginLeft(m_tempMarginLeft);
+			m_currentPage.setMarginRight(m_tempMarginRight);
 		}
 	}
 }
@@ -94,10 +92,10 @@ void WP6StylesListener::pageMarginChange(const uint8_t side, const uint16_t marg
 		switch(side)
 		{
 			case WPX_TOP:
-				m_currentPage->setMarginTop(marginInch);
+				m_currentPage.setMarginTop(marginInch);
 				break;
 			case WPX_BOTTOM:
-				m_currentPage->setMarginBottom(marginInch);
+				m_currentPage.setMarginBottom(marginInch);
 				break;
 		}
 	}
@@ -111,9 +109,9 @@ void WP6StylesListener::pageFormChange(const uint16_t length, const uint16_t wid
 		float widthInch = (float)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
 		if (!m_currentPageHasContent)
 		{
-			m_currentPage->setFormLength(lengthInch);
-			m_currentPage->setFormWidth(widthInch);
-			m_currentPage->setFormOrientation(orientation);
+			m_currentPage.setFormLength(lengthInch);
+			m_currentPage.setFormWidth(widthInch);
+			m_currentPage.setFormOrientation(orientation);
 		}
 	}
 }
@@ -122,34 +120,34 @@ void WP6StylesListener::marginChange(const uint8_t side, const uint16_t margin)
 {
 	if (!isUndoOn())
 	{
-		std::list<WPXPageSpan *>::iterator Iter;
+		std::list<WPXPageSpan>::iterator Iter;
 		float marginInch = (float)((double)margin / (double)WPX_NUM_WPUS_PER_INCH);
 		switch(side)
 		{
 			case WPX_LEFT:
-				if (!m_currentPageHasContent && (m_pageListHardPageMark == m_pageList->end()))
-					m_currentPage->setMarginLeft(marginInch);
-				else if (m_currentPage->getMarginLeft() > marginInch)
+				if (!m_currentPageHasContent && (m_pageListHardPageMark == m_pageList.end()))
+					m_currentPage.setMarginLeft(marginInch);
+				else if (m_currentPage.getMarginLeft() > marginInch)
 				{
 					// Change the margin for the current page and for all pages in the list since the last Hard Break
-					m_currentPage->setMarginLeft(marginInch);
-					for (Iter = m_pageListHardPageMark; Iter != m_pageList->end(); Iter++)
+					m_currentPage.setMarginLeft(marginInch);
+					for (Iter = m_pageListHardPageMark; Iter != m_pageList.end(); Iter++)
 					{
-						(*Iter)->setMarginLeft(marginInch);
+						(*Iter).setMarginLeft(marginInch);
 					}
 				}
 				m_tempMarginLeft = marginInch;
 				break;
 			case WPX_RIGHT:
-				if (!m_currentPageHasContent && (m_pageListHardPageMark == m_pageList->end()))
-					m_currentPage->setMarginRight(marginInch);
-				else if (m_currentPage->getMarginRight() > marginInch)
+				if (!m_currentPageHasContent && (m_pageListHardPageMark == m_pageList.end()))
+					m_currentPage.setMarginRight(marginInch);
+				else if (m_currentPage.getMarginRight() > marginInch)
 				{
 					// Change the margin for the current page and for all pages in the list since the last Hard Break
-					m_currentPage->setMarginRight(marginInch);
-					for (Iter = m_pageListHardPageMark; Iter != m_pageList->end(); Iter++)
+					m_currentPage.setMarginRight(marginInch);
+					for (Iter = m_pageListHardPageMark; Iter != m_pageList.end(); Iter++)
 					{
-						(*Iter)->setMarginRight(marginInch);
+						(*Iter).setMarginRight(marginInch);
 					}
 				}
 				m_tempMarginRight = marginInch;
@@ -180,7 +178,7 @@ void WP6StylesListener::headerFooterGroup(const uint8_t headerFooterType, const 
 				wpxOccurence = ODD;
 
 			WPXTableList tableList; 
-			m_currentPage->setHeaderFooter(wpxType, headerFooterType, wpxOccurence,
+			m_currentPage.setHeaderFooter(wpxType, headerFooterType, wpxOccurence,
 						(textPID ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : NULL), tableList);
 			_handleSubDocument((textPID ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : NULL), true, tableList);
 		}
@@ -194,13 +192,13 @@ void WP6StylesListener::suppressPageCharacteristics(const uint8_t suppressCode)
 	{			
 		WPD_DEBUG_MSG(("WordPerfect: suppressPageCharacteristics (suppressCode: %u)\n", suppressCode));
 		if (suppressCode & WP6_PAGE_GROUP_SUPPRESS_HEADER_A)
-			m_currentPage->setHeadFooterSuppression(WPX_HEADER_A, true);
+			m_currentPage.setHeadFooterSuppression(WPX_HEADER_A, true);
 		if (suppressCode & WP6_PAGE_GROUP_SUPPRESS_HEADER_B)
-			m_currentPage->setHeadFooterSuppression(WPX_HEADER_B, true);
+			m_currentPage.setHeadFooterSuppression(WPX_HEADER_B, true);
 		if (suppressCode & WP6_PAGE_GROUP_SUPPRESS_FOOTER_A)
-			m_currentPage->setHeadFooterSuppression(WPX_FOOTER_A, true);
+			m_currentPage.setHeadFooterSuppression(WPX_FOOTER_A, true);
 		if (suppressCode & WP6_PAGE_GROUP_SUPPRESS_FOOTER_B)
-			m_currentPage->setHeadFooterSuppression(WPX_FOOTER_B, true);			
+			m_currentPage.setHeadFooterSuppression(WPX_FOOTER_B, true);			
 	}
 }
 

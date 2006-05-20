@@ -41,7 +41,7 @@ enum WP6OutlineLocation { paragraphGroup, indexHeader };
 class WP6Listener : public WPXListener
 {
 public:
-	WP6Listener(std::list<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl);
+	WP6Listener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl);
 	virtual ~WP6Listener() {};
 	virtual void setDate(const uint16_t year, const uint8_t month, const uint8_t day,
 			     const uint8_t hour, const uint8_t minute, const uint8_t second,

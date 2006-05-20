@@ -103,7 +103,7 @@ struct _WPXParsingState
 	uint32_t m_cellAttributeBits;
 	uint8_t m_paragraphJustificationBeforeTable;
 	
-	std::list<WPXPageSpan *>::iterator m_nextPageSpanIter;
+	std::list<WPXPageSpan>::iterator m_nextPageSpanIter;
 	int m_numPagesRemainingInSpan;
 
 	bool m_sectionAttributesChanged;
@@ -152,7 +152,7 @@ struct _WPXParsingState
 class WPXListener
 {
 public:
-	WPXListener(std::list<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl);
+	WPXListener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl);
 	virtual ~WPXListener();
 
 	virtual void startDocument();
@@ -189,7 +189,7 @@ public:
 	WPXParsingState *m_ps; // parse state
 	WPXHLListenerImpl * m_listenerImpl;
 	WPXPropertyList m_metaData;
-	std::list <WPXPageSpan *> *m_pageList;
+	std::list <WPXPageSpan> &m_pageList;
 
 protected:
 	virtual void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice) = 0;

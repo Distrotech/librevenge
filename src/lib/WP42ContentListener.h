@@ -41,7 +41,7 @@ struct _WP42ParsingState
 class WP42ContentListener : public WP42Listener
 {
 public:
-	WP42ContentListener(std::list<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl);
+	WP42ContentListener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl);
 	~WP42ContentListener();
 
 	void setAlignmentCharacter(const uint16_t character) {};

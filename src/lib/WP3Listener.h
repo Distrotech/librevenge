@@ -35,7 +35,7 @@ class WP3SubDocument;
 class WP3Listener : public WPXListener
 {
 public:
-	WP3Listener(std::list<WPXPageSpan *> *pageList, WPXHLListenerImpl *listenerImpl);
+	WP3Listener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl);
 	virtual ~WP3Listener() {}
 
 	virtual void setAlignmentCharacter(const uint16_t character) = 0;

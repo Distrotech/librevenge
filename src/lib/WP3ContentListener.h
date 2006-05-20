@@ -48,7 +48,7 @@ struct _WP3ParsingState
 class WP3ContentListener : public WP3Listener
 {
 public:
-	WP3ContentListener(std::list<WPXPageSpan *> *pageList, std::vector<WP3SubDocument *> &subDocuments, WPXHLListenerImpl *listenerImpl);
+	WP3ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP3SubDocument *> &subDocuments, WPXHLListenerImpl *listenerImpl);
 	~WP3ContentListener();
 
 	void setAlignmentCharacter(const uint16_t character) {};

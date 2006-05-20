@@ -29,9 +29,9 @@
 #include "WPXFileStructure.h"
 #include "libwpd_internal.h"
 
-WP42StylesListener::WP42StylesListener(std::list<WPXPageSpan *> *pageList, WPXTableList tableList) : 
+WP42StylesListener::WP42StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList) : 
 	WP42Listener(pageList, NULL),
-	m_currentPage(new WPXPageSpan()),
+	m_currentPage(WPXPageSpan()),
 	m_tableList(tableList), 
 	m_tempMarginLeft(1.0f),
 	m_tempMarginRight(1.0f),
@@ -42,7 +42,6 @@ WP42StylesListener::WP42StylesListener(std::list<WPXPageSpan *> *pageList, WPXTa
 void WP42StylesListener::endDocument()
 {	
 	insertBreak(WPX_SOFT_PAGE_BREAK); // pretend we just had a soft page break (for the last page)
-	delete(m_currentPage); // and delete the non-existent page that was allocated as a result (scandalous waste!)
 }
 
 void WP42StylesListener::insertBreak(const uint8_t breakType)
@@ -53,19 +52,12 @@ void WP42StylesListener::insertBreak(const uint8_t breakType)
 		{
 		case WPX_PAGE_BREAK:
 		case WPX_SOFT_PAGE_BREAK:
-			if (WPXListener::m_pageList->size() > 0 && (*m_currentPage)==(*(m_pageList->back())))
-			{
-				int oldPageSpan = m_pageList->back()->getPageSpan();
-				m_pageList->back()->setPageSpan(oldPageSpan + 1);
-				delete(m_currentPage);
-			}
+			if ((WPXListener::m_pageList.size()) > 0 && (m_currentPage==m_pageList.back()))
+				m_pageList.back().setPageSpan(m_pageList.back().getPageSpan() + 1);
 			else
-			{
-				m_pageList->push_back(m_currentPage);
-			}
-			m_currentPage = new WPXPageSpan(*(m_pageList->back()));
-			m_currentPage->setMarginLeft(m_tempMarginLeft);
-			m_currentPage->setMarginRight(m_tempMarginRight);
+				m_pageList.push_back(WPXPageSpan(m_currentPage));
+			m_currentPage.setMarginLeft(m_tempMarginLeft);
+			m_currentPage.setMarginRight(m_tempMarginRight);
 			m_currentPageHasContent = false;
 			break;
 		}
@@ -80,10 +72,10 @@ void WP42StylesListener::pageMarginChange(const uint8_t side, const uint16_t mar
 		switch(side)
 		{
 			case WP6_PAGE_GROUP_TOP_MARGIN_SET:
-				m_currentPage->setMarginTop(marginInch);
+				m_currentPage.setMarginTop(marginInch);
 				break;
 			case WP6_PAGE_GROUP_BOTTOM_MARGIN_SET:
-				m_currentPage->setMarginBottom(marginInch);
+				m_currentPage.setMarginBottom(marginInch);
 				break;
 		}
 	}
@@ -98,12 +90,12 @@ void WP42StylesListener::marginChange(const uint8_t side, const uint16_t margin)
 		{
 			case WP6_COLUMN_GROUP_LEFT_MARGIN_SET:
 				if (!m_currentPageHasContent)
-					m_currentPage->setMarginLeft(marginInch);
+					m_currentPage.setMarginLeft(marginInch);
 				m_tempMarginLeft = marginInch;
 				break;
 			case WP6_COLUMN_GROUP_RIGHT_MARGIN_SET:
 				if (!m_currentPageHasContent)
-					m_currentPage->setMarginRight(marginInch);
+					m_currentPage.setMarginRight(marginInch);
 				m_tempMarginRight = marginInch;
 				break;
 		}
@@ -119,7 +111,7 @@ void WP42StylesListener::headerFooterGroup(const uint8_t headerFooterType, const
 		WPD_DEBUG_MSG(("WordPerfect: headerFooterGroup (headerFooterType: %i, occurenceBits: %i, textPID: %i)\n", 
 			       headerFooterType, occurenceBits, textPID));
 		if (headerFooterType <= WP6_HEADER_FOOTER_GROUP_FOOTER_B) // ignore watermarks for now
-			m_currentPage->setHeaderFooter(headerFooterType, occurenceBits, textPID);
+			m_currentPage.setHeaderFooter(headerFooterType, occurenceBits, textPID);
 	}
 }
 
@@ -129,13 +121,13 @@ void WP42StylesListener::suppressPageCharacteristics(const uint8_t suppressCode)
 	{			
 		WPD_DEBUG_MSG(("WordPerfect: suppressPageCharacteristics (suppressCode: %u)\n", suppressCode));
 		if (suppressCode & WP6_PAGE_GROUP_SUPPRESS_HEADER_A)
-			m_currentPage->setHeadFooterSuppression(WP6_HEADER_FOOTER_GROUP_HEADER_A, true);
+			m_currentPage.setHeadFooterSuppression(WP6_HEADER_FOOTER_GROUP_HEADER_A, true);
 		if (suppressCode & WP6_PAGE_GROUP_SUPPRESS_HEADER_B)
-			m_currentPage->setHeadFooterSuppression(WP6_HEADER_FOOTER_GROUP_HEADER_B, true);
+			m_currentPage.setHeadFooterSuppression(WP6_HEADER_FOOTER_GROUP_HEADER_B, true);
 		if (suppressCode & WP6_PAGE_GROUP_SUPPRESS_FOOTER_A)
-			m_currentPage->setHeadFooterSuppression(WP6_HEADER_FOOTER_GROUP_FOOTER_A, true);
+			m_currentPage.setHeadFooterSuppression(WP6_HEADER_FOOTER_GROUP_FOOTER_A, true);
 		if (suppressCode & WP6_PAGE_GROUP_SUPPRESS_FOOTER_B)
-			m_currentPage->setHeadFooterSuppression(WP6_HEADER_FOOTER_GROUP_FOOTER_B, true);			
+			m_currentPage.setHeadFooterSuppression(WP6_HEADER_FOOTER_GROUP_FOOTER_B, true);			
 	}
 }
 */

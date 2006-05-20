@@ -34,7 +34,7 @@
 class WP3StylesListener : public WP3Listener
 {
 public:
-	WP3StylesListener(std::list<WPXPageSpan *> *pageList, WPXTableList tableList, std::vector<WP3SubDocument *> &subDocuments);
+	WP3StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, std::vector<WP3SubDocument *> &subDocuments);
 
 	void startDocument() {}
 	void setAlignmentCharacter(const uint16_t character) {}
@@ -89,14 +89,14 @@ private:
 	void _flushText() {};
 	void _changeList() {};
 	
-	WPXPageSpan *m_currentPage, *m_nextPage;
+	WPXPageSpan m_currentPage, m_nextPage;
 
 	WPXTableList m_tableList;
 	WPXTable *m_currentTable;
 	float m_tempMarginLeft, m_tempMarginRight;
 	bool m_currentPageHasContent;
 	std::vector<WP3SubDocument *> &m_subDocuments;
-	std::list<WPXPageSpan *>::iterator m_pageListHardPageMark;
+	std::list<WPXPageSpan>::iterator m_pageListHardPageMark;
 };
 
 #endif /* WP3STYLESLISTENER_H */

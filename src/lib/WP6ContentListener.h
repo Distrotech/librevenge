@@ -129,7 +129,7 @@ private:
 class WP6ContentListener : public WP6Listener
 {
 public:
-	WP6ContentListener(std::list<WPXPageSpan *> *pageList, WPXTableList tableList, WPXHLListenerImpl *listenerImpl);
+	WP6ContentListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, WPXHLListenerImpl *listenerImpl);
 	virtual ~WP6ContentListener();
 
 	// for getting low-level messages from the parser

@@ -61,7 +61,8 @@ class WPXPageSpan
 {
 public:
 	WPXPageSpan();
-	WPXPageSpan(WPXPageSpan &page, float paragraphMarginLeft=0.0f, float paragraphMarginRight=0.0f);
+	WPXPageSpan(const WPXPageSpan &page, float paragraphMarginLeft, float paragraphMarginRight);
+	WPXPageSpan(const WPXPageSpan &page);
 	virtual ~WPXPageSpan();
 
 	const bool getHeaderFooterSuppression(const uint8_t headerFooterType) const { if (headerFooterType <= WPX_FOOTER_B) return m_isHeaderFooterSuppressed[headerFooterType]; return false; }

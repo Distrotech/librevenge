@@ -41,7 +41,7 @@ class WPXSubDocument;
 class WP6StylesListener : public WP6Listener
 {
 public:
-	WP6StylesListener(std::list<WPXPageSpan *> *pageList, WPXTableList tableList);
+	WP6StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList);
 
 	virtual void setDate(const uint16_t year, const uint8_t month, const uint8_t day,
 			     const uint8_t hour, const uint8_t minute, const uint8_t second,
@@ -109,7 +109,7 @@ protected:
 	virtual void _changeList() {}
 
 private:
-	WPXPageSpan *m_currentPage;
+	WPXPageSpan m_currentPage;
 
 	WPXTableList m_tableList;
 	WPXTable *m_currentTable;
@@ -117,7 +117,7 @@ private:
 	bool m_currentPageHasContent;
 	bool m_isTableDefined;
 	std::set <const WPXSubDocument *> m_subDocuments;
-	std::list<WPXPageSpan *>::iterator m_pageListHardPageMark;
+	std::list<WPXPageSpan>::iterator m_pageListHardPageMark;
 };
 
 #endif /* WP6STYLESLISTENER_H */

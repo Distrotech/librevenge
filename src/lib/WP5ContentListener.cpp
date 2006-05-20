@@ -42,7 +42,7 @@ _WP5ParsingState::~_WP5ParsingState()
 	m_noteReference.clear();
 }
 
-WP5ContentListener::WP5ContentListener(std::list<WPXPageSpan *> *pageList, std::vector<WP5SubDocument*> &subDocuments, WPXHLListenerImpl *listenerImpl) :
+WP5ContentListener::WP5ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP5SubDocument*> &subDocuments, WPXHLListenerImpl *listenerImpl) :
 	WP5Listener(pageList, listenerImpl),
 	m_parseState(new WP5ParsingState),
 	m_subDocuments(subDocuments)

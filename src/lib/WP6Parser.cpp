@@ -175,7 +175,7 @@ void WP6Parser::parsePackets(WP6PrefixData *prefixData, int type, WP6Listener *l
 void WP6Parser::parse(WPXHLListenerImpl *listenerImpl)
 {	
 	WP6PrefixData * prefixData = NULL;
-	std::list<WPXPageSpan *> pageList;
+	std::list<WPXPageSpan> pageList;
 	WPXTableList tableList;	
 
 	WPXInputStream *input = getInput();
@@ -186,18 +186,17 @@ void WP6Parser::parse(WPXHLListenerImpl *listenerImpl)
 		
 		// do a "first-pass" parse of the document
 		// gather table border information, page properties (per-page)
-		WP6StylesListener stylesListener(&pageList, tableList);
+		WP6StylesListener stylesListener(pageList, tableList);
 		stylesListener.setPrefixData(prefixData);
 		parse(input, &stylesListener);
 		
 		// postprocess the pageList == remove duplicate page spans due to the page breaks
-		std::list<WPXPageSpan *>::iterator previousPage = pageList.begin();
-		for (std::list<WPXPageSpan *>::iterator Iter=pageList.begin(); Iter != pageList.end(); /* Iter++ */)
+		std::list<WPXPageSpan>::iterator previousPage = pageList.begin();
+		for (std::list<WPXPageSpan>::iterator Iter=pageList.begin(); Iter != pageList.end(); /* Iter++ */)
 		{
-			if ((Iter != previousPage) && (*(*previousPage)==*(*Iter)))
+			if ((Iter != previousPage) && ((*previousPage)==(*Iter)))
 			{
-				(*previousPage)->setPageSpan((*previousPage)->getPageSpan() + (*Iter)->getPageSpan());
-				delete (*Iter);
+				(*previousPage).setPageSpan((*previousPage).getPageSpan() + (*Iter).getPageSpan());
 				Iter = pageList.erase(Iter);
 			}
 			else
@@ -209,7 +208,7 @@ void WP6Parser::parse(WPXHLListenerImpl *listenerImpl)
 
 		// second pass: here is where we actually send the messages to the target app
 		// that are necessary to emit the body of the target document
-		WP6ContentListener listener(&pageList, tableList, listenerImpl);
+		WP6ContentListener listener(pageList, tableList, listenerImpl);
 		listener.setPrefixData(prefixData);
 
 		// get the relevant initial prefix packets out of storage and tell them to parse
@@ -222,10 +221,6 @@ void WP6Parser::parse(WPXHLListenerImpl *listenerImpl)
 
 		// cleanup section: free the used resources
 		delete prefixData;
-		for (std::list<WPXPageSpan *>::iterator iterSpan = pageList.begin(); iterSpan != pageList.end(); iterSpan++)
-		{
-			delete *iterSpan;
-		}
 	}
 	catch(FileException)
 	{
@@ -233,11 +228,6 @@ void WP6Parser::parse(WPXHLListenerImpl *listenerImpl)
 
 		delete prefixData;
 		
-		for (std::list<WPXPageSpan *>::iterator iterSpan = pageList.begin(); iterSpan != pageList.end(); iterSpan++)
-		{
-			delete *iterSpan;
-		}
-
 		throw FileException();
 	}
 }
