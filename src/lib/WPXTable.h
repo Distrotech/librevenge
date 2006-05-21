@@ -61,7 +61,7 @@ public:
 	std::vector<WPXTableCell *> * _getCellsBottomAdjacent(int i, int j);
 	std::vector<WPXTableCell *> * _getCellsRightAdjacent(int i, int j);
 
-	const std::vector< std::vector<WPXTableCell *> * > * getTableRows() const { return &m_tableRows; } // ugly, but whatever
+	const std::vector< std::vector<WPXTableCell *> * >& getRows() const { return m_tableRows; }
 
 private:
 	std::vector< std::vector<WPXTableCell *> * > m_tableRows;
