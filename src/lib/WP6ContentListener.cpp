@@ -1103,7 +1103,20 @@ void WP6ContentListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan
 	{
 		if (m_ps->m_currentTableRow < 0) // cell without a row, invalid
 			throw ParseException();
+			
+		if (!m_parseState->m_currentTable)
+			throw ParseException(); // no table opened, invalid
+			
+		if (m_parseState->m_currentTable->getRows().size() <= m_ps->m_currentTableRow)
+		{
+			throw ParseException(); // requesting a row larger than the number of rows the table holds
+		}
+			
+		if (m_parseState->m_currentTable->getRows()[m_ps->m_currentTableRow]->size() <= m_ps->m_currentTableCellNumberInRow)
+			throw ParseException(); // requesting a cell smaller than the number of cells in the row
+			
 		_flushText();
+		
 		_openTableCell(colSpan, rowSpan, m_parseState->m_currentTable->getCell(m_ps->m_currentTableRow,  
 			       	m_ps->m_currentTableCellNumberInRow)->m_borderBits, cellFgColor, cellBgColor,      
 			       cellBorderColor, cellVerticalAlignment);
