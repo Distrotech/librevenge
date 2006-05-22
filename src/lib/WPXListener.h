@@ -32,11 +32,10 @@
 #include "WPXPropertyListVector.h"
 #include "libwpd_internal.h"
 #include "WPXSubDocument.h"
+#include "WPXPageSpan.h"
 #include <vector>
 #include <list>
 #include <set>
-
-class WPXPageSpan;
 
 typedef struct _WPXDocumentMetaData WPXDocumentMetaData;
 struct _WPXDocumentMetaData

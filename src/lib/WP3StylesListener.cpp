@@ -84,6 +84,7 @@ void WP3StylesListener::insertBreak(const uint8_t breakType)
 						(*HFiter).getOccurence(), NULL, (*HFiter).getTableList());	
 				
 			}
+			m_nextPage = WPXPageSpan();
 			m_currentPageHasContent = false;
 			break;
 		}
