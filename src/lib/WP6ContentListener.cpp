@@ -1184,6 +1184,10 @@ void WP6ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, c
 	_closeSection();
 #endif
 
+	// if we are in a foot/endNote, the nextTableIndice sequence has to be maintained
+	if (!isHeaderFooter)
+		oldParseState->m_nextTableIndice = m_parseState->m_nextTableIndice;
+
 	// restore our old parsing state
 	delete m_parseState;
 	m_parseState = oldParseState;
