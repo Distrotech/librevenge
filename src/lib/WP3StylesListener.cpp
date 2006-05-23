@@ -56,7 +56,7 @@ void WP3StylesListener::insertBreak(const uint8_t breakType)
 		{
 		case WPX_PAGE_BREAK:
 		case WPX_SOFT_PAGE_BREAK:
-			if ((WPXListener::m_pageList.size() > 0) && (m_currentPage==m_pageList.back())
+			if ((m_pageList.size() > 0) && (m_currentPage==m_pageList.back())
 				&& (m_pageListHardPageMark != m_pageList.end()))
 			{
 				m_pageList.back().setPageSpan(m_pageList.back().getPageSpan() + 1);

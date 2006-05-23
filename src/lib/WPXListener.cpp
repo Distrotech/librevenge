@@ -955,6 +955,8 @@ void WPXListener::insertBreak(const uint8_t breakType)
 		switch (breakType)
 		{
 		case WPX_COLUMN_BREAK:
+			if (!m_ps->m_isPageSpanOpened && !m_ps->m_inSubDocument)
+				_openSpan();				
 			if (m_ps->m_isParagraphOpened)
 				_closeParagraph();
 			if (m_ps->m_isListElementOpened)
@@ -963,6 +965,8 @@ void WPXListener::insertBreak(const uint8_t breakType)
 			m_ps->m_isTextColumnWithoutParagraph = true;
 			break;
 		case WPX_PAGE_BREAK:
+			if (!m_ps->m_isPageSpanOpened && !m_ps->m_inSubDocument)
+				_openSpan();				
 			if (m_ps->m_isParagraphOpened)
 				_closeParagraph();
 			if (m_ps->m_isListElementOpened)
