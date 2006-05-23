@@ -163,6 +163,7 @@ void WPXPageSpan::makeConsistent(int startingPageNumber)
 {
 	if (!(startingPageNumber % 2))
 	{
+	// not sure whether this has any use (Fridrich) ?
 	}
 }
 
@@ -174,16 +175,6 @@ void WPXPageSpan::_removeHeaderFooter(WPXHeaderFooterType type, WPXHeaderFooterO
 			WPD_DEBUG_MSG(("WordPerfect: Removing header/footer element of type: %i since it is identical to %i\n",(*iter).getType(), type));
 			m_headerFooterList.erase(iter);
 			return;
-#if 0
-			WPD_DEBUG_MSG(("WordPerfect: Now our list looks like this:\n"));
-			for (std::vector<WPXHeaderFooter>::const_iterator iter1 = m_headerFooterList.begin(); 
-			     iter1 != m_headerFooterList.end(); 
-			     iter1++) 
-			{
-			WPD_DEBUG_MSG(("WordPerfect: El.: %i %i\n", (*iter1).getType(), (*iter1).getTextPID()));
-			}
-			return;
-#endif
 		}
 	}
 }
@@ -212,17 +203,18 @@ bool operator==(const WPXPageSpan &page1, const WPXPageSpan &page2)
 	}
 
 	// NOTE: yes this is O(n^2): so what? n=4 at most
-	const std::vector<WPXHeaderFooter> headerFooterList1 = page1.getHeaderFooterList();	
-	for (std::vector<WPXHeaderFooter>::const_iterator iter1 = headerFooterList1.begin(); 
-	     iter1 != headerFooterList1.end(); 
-	     iter1++) 
+	const std::vector<WPXHeaderFooter> headerFooterList1 = page1.getHeaderFooterList();
+	const std::vector<WPXHeaderFooter> headerFooterList2 = page2.getHeaderFooterList();
+	std::vector<WPXHeaderFooter>::const_iterator iter1;		
+	std::vector<WPXHeaderFooter>::const_iterator iter2;		
+
+	for (iter1 = headerFooterList1.begin(); iter1 != headerFooterList1.end(); iter1++)
 	{
-		const std::vector<WPXHeaderFooter> headerFooterList2 = page2.getHeaderFooterList();	
-		std::vector<WPXHeaderFooter>::const_iterator iter2;
 		for (iter2 = headerFooterList2.begin(); iter2 != headerFooterList2.end(); iter2++) 
 		{
 			WPD_DEBUG_MSG(("WordPerfect: WPXPageSpan ==  header/footer comparison)\n"));
-			if ((*iter1).getType() == (*iter2).getType() && (*iter1).getSubDocument() == (*iter2).getSubDocument())
+			if ((*iter1).getType() == (*iter2).getType() && (*iter1).getSubDocument() == (*iter2).getSubDocument()
+				&& (*iter1).getOccurence() == (*iter2).getOccurence())
 			{
 				WPD_DEBUG_MSG(("WordPerfect: WPXPageSpan == found same header/footer, breaking)\n"));
 				break;
@@ -231,6 +223,29 @@ bool operator==(const WPXPageSpan &page1, const WPXPageSpan &page2)
 		if (iter2 == headerFooterList2.end())
 			return false;
 	}
+	
+	// If we came here, we know that every header/footer that is found in the first page span is in the second too.
+	// But this is not enought for us to know whether the page spans are equal. Now we have to check in addition
+	// whether every header/footer that is in the second one is in the first too. If someone wants to optimize this,
+	// (s)he is most welcome :-)
+	
+	for (iter2 = headerFooterList2.begin(); iter2 != headerFooterList2.end(); iter2++)
+	{
+		for (iter1 = headerFooterList1.begin(); iter1 != headerFooterList1.end(); iter1++) 
+		{
+			WPD_DEBUG_MSG(("WordPerfect: WPXPageSpan ==  header/footer comparison)\n"));
+			if ((*iter2).getType() == (*iter1).getType() && (*iter2).getSubDocument() == (*iter1).getSubDocument()
+				&& (*iter2).getOccurence() == (*iter1).getOccurence())
+			{
+				WPD_DEBUG_MSG(("WordPerfect: WPXPageSpan == found same header/footer, breaking)\n"));
+				break;
+			}
+		}		
+		if (iter1 == headerFooterList1.end())
+			return false;
+	}
+
+	
 	WPD_DEBUG_MSG(("WordPerfect: WPXPageSpan == comparison finished, found no differences\n"));
 
 	return true;

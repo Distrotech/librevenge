@@ -41,10 +41,10 @@ public:
 	void setLeaderCharacter(const uint16_t character, const uint8_t numberOfSpaces) {}
 	void defineTabStops(const bool isRelative, const std::vector<WPXTabStop> &tabStops, 
 				    const std::vector<bool> &usePreWP9LeaderMethods) {}
-	void insertCharacter(const uint16_t character) {}
-	void insertTab(const uint8_t tabType, float tabPosition) {}
-	void handleLineBreak() {};
-	void insertEOL() {}
+	void insertCharacter(const uint16_t character) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	void insertTab(const uint8_t tabType, float tabPosition) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	void handleLineBreak() { if (!isUndoOn()) m_currentPageHasContent = true; };
+	void insertEOL() { if (!isUndoOn()) m_currentPageHasContent = true; }
  	void insertBreak(const uint8_t breakType);
 	void attributeChange(const bool isOn, const uint8_t attribute) {}
 	void lineSpacingChange(const float lineSpacing) {}
@@ -76,7 +76,7 @@ public:
 	void setFontSize(const uint16_t fontSize) {}
 	void insertPageNumber(const WPXString &pageNumber) {}
 	void insertNoteReference(const WPXString &noteReference) {}
-	void insertNote(const WPXNoteType noteType, WP3SubDocument *subDocument) {}
+	void insertNote(const WPXNoteType noteType, WP3SubDocument *subDocument) { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, WP3SubDocument *subDocument);
 	void suppressPage(const uint16_t suppressCode);
 
@@ -89,7 +89,7 @@ private:
 	void _flushText() {};
 	void _changeList() {};
 	
-	WPXPageSpan m_currentPage, m_nextPage;
+	WPXPageSpan m_currentPage;
 
 	WPXTableList m_tableList;
 	WPXTable *m_currentTable;

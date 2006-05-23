@@ -165,11 +165,16 @@ void WP5ContentListener::startTable()
 	{
 		// save the justification information. We will need it after the table ends.
 		m_ps->m_paragraphJustificationBeforeTable = m_ps->m_paragraphJustification;
-		if (m_ps->m_sectionAttributesChanged && !m_ps->m_isTableOpened)
+		if (m_ps->m_sectionAttributesChanged && !m_ps->m_isTableOpened && !m_ps->m_inSubDocument)
 		{
 			_closeSection();
 			_openSection();
 			m_ps->m_sectionAttributesChanged = false;
+		}
+		if (!m_ps->m_isPageSpanOpened && !m_ps->m_inSubDocument)
+		{
+			_openPageSpan();
+			_openSection();
 		}
 		_openTable();
 	}

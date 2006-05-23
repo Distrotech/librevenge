@@ -112,6 +112,8 @@ void WP3ContentListener::insertEOL()
 
 void WP3ContentListener::endDocument()
 {
+	if (!m_ps->m_isPageSpanOpened)
+		_openSpan();
 	_closeSpan();
 	_closeParagraph();
 	_closeSection();
@@ -184,11 +186,18 @@ void WP3ContentListener::startTable()
 	{
 		// save the justification information. We will need it after the table ends.
 		m_ps->m_paragraphJustificationBeforeTable = m_ps->m_paragraphJustification;
-		if (m_ps->m_sectionAttributesChanged && !m_ps->m_isTableOpened)
+		m_ps->m_paragraphJustificationBeforeTable = m_ps->m_paragraphJustification;
+		if (m_ps->m_sectionAttributesChanged && !m_ps->m_isTableOpened && !m_ps->m_inSubDocument)
+		{
 			_closeSection();
-		m_ps->m_sectionAttributesChanged = false;
-		if (!m_ps->m_isTableOpened && !m_ps->m_isSectionOpened)
 			_openSection();
+			m_ps->m_sectionAttributesChanged = false;
+		}
+		if (!m_ps->m_isPageSpanOpened && !m_ps->m_inSubDocument)
+		{
+			_openPageSpan();
+			_openSection();
+		}
 		_openTable();
 	}
 }

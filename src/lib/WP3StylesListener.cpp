@@ -33,7 +33,6 @@ WP3StylesListener::WP3StylesListener(std::list<WPXPageSpan> &pageList, WPXTableL
 	WP3Listener(pageList, NULL),
 	m_pageListHardPageMark(m_pageList.end()),
 	m_currentPage(WPXPageSpan()),
-	m_nextPage(WPXPageSpan()),
 	m_tableList(tableList), 
 	m_tempMarginLeft(1.0f),
 	m_tempMarginRight(1.0f),
@@ -50,7 +49,8 @@ void WP3StylesListener::endDocument()
 void WP3StylesListener::insertBreak(const uint8_t breakType)
 {
 	if (!isUndoOn())
-	{	
+	{
+		m_currentPageHasContent = true;	
 		WPXTableList tableList;
 		switch (breakType) 
 		{
@@ -69,22 +69,6 @@ void WP3StylesListener::insertBreak(const uint8_t breakType)
 			}
 			m_currentPage = WPXPageSpan(m_pageList.back(), 0.0f, 0.0f);
 			m_currentPage.setPageSpan(1);
-
-			for(std::vector<WPXHeaderFooter>::const_iterator HFiter = (m_nextPage.getHeaderFooterList()).begin();
-				HFiter != (m_nextPage.getHeaderFooterList()).end(); HFiter++)
-			{
-				if ((*HFiter).getOccurence() != NEVER)
-				{
-					m_currentPage.setHeaderFooter((*HFiter).getType(), (*HFiter).getInternalType(),
-						(*HFiter).getOccurence(), (*HFiter).getSubDocument(), (*HFiter).getTableList());
-					_handleSubDocument((*HFiter).getSubDocument(), true, (*HFiter).getTableList());
-				}
-				else
-					m_currentPage.setHeaderFooter((*HFiter).getType(), (*HFiter).getInternalType(),
-						(*HFiter).getOccurence(), NULL, (*HFiter).getTableList());	
-				
-			}
-			m_nextPage = WPXPageSpan();
 			m_currentPageHasContent = false;
 			break;
 		}
@@ -198,20 +182,13 @@ void WP3StylesListener::headerFooterGroup(const uint8_t headerFooterType, const 
 
 			WPXTableList tableList;
 
-			
-			if ((wpxType == HEADER) && tempCurrentPageHasContent)
-				m_nextPage.setHeaderFooter(wpxType, headerFooterType, wpxOccurence, subDocument, tableList);
-
-			else /* FOOTER || !tempCurrentPageHasContent */
+			if (wpxOccurence != NEVER)
 			{
-				if (wpxOccurence != NEVER)
-				{
-					m_currentPage.setHeaderFooter(wpxType, headerFooterType, wpxOccurence, subDocument, tableList);
-					_handleSubDocument(subDocument, true, tableList);
-				}
-				else
-					m_currentPage.setHeaderFooter(wpxType, headerFooterType, wpxOccurence, NULL, tableList);
+				m_currentPage.setHeaderFooter(wpxType, headerFooterType, wpxOccurence, subDocument, tableList);
+				_handleSubDocument(subDocument, true, tableList);
 			}
+			else
+				m_currentPage.setHeaderFooter(wpxType, headerFooterType, wpxOccurence, NULL, tableList);
 		}
 		m_currentPageHasContent = tempCurrentPageHasContent;
 	}
