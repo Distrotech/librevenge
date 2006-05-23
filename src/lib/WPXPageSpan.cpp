@@ -191,6 +191,13 @@ bool WPXPageSpan::_containsHeaderFooter(WPXHeaderFooterType type, WPXHeaderFoote
 	return false;
 }
 
+inline bool operator==(const WPXHeaderFooter &headerFooter1, const WPXHeaderFooter &headerFooter2)
+{
+	return ((headerFooter1.getType() == headerFooter2.getType()) && 
+		(headerFooter1.getSubDocument() == headerFooter2.getSubDocument()) &&
+		(headerFooter1.getOccurence() == headerFooter2.getOccurence()) );
+}
+
 bool operator==(const WPXPageSpan &page1, const WPXPageSpan &page2)
 {
 	if ((page1.getMarginLeft() != page2.getMarginLeft()) || (page1.getMarginRight() != page2.getMarginRight()) ||
@@ -230,11 +237,4 @@ bool operator==(const WPXPageSpan &page1, const WPXPageSpan &page2)
 	WPD_DEBUG_MSG(("WordPerfect: WPXPageSpan == comparison finished, found no differences\n"));
 
 	return true;
-}
-
-inline bool operator==(const WPXHeaderFooter &headerFooter1, const WPXHeaderFooter &headerFooter2)
-{
-	return ((headerFooter1.getType() == headerFooter2.getType()) && 
-		(headerFooter1.getSubDocument() == headerFooter2.getSubDocument()) &&
-		(headerFooter1.getOccurence() == headerFooter2.getOccurence()) );
 }
