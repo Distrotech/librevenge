@@ -106,4 +106,5 @@ private:
 };
 
 bool operator==(const WPXPageSpan &, const WPXPageSpan &);
+bool operator==(const WPXHeaderFooter &, const WPXHeaderFooter &);
 #endif /* WPXPAGE_H */

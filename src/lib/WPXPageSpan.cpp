@@ -24,6 +24,7 @@
  */
 
 #include <math.h>
+#include <algorithm>
 #include "WPXPageSpan.h"
 #include "libwpd_internal.h"
 
@@ -210,17 +211,7 @@ bool operator==(const WPXPageSpan &page1, const WPXPageSpan &page2)
 
 	for (iter1 = headerFooterList1.begin(); iter1 != headerFooterList1.end(); iter1++)
 	{
-		for (iter2 = headerFooterList2.begin(); iter2 != headerFooterList2.end(); iter2++) 
-		{
-			WPD_DEBUG_MSG(("WordPerfect: WPXPageSpan ==  header/footer comparison)\n"));
-			if ((*iter1).getType() == (*iter2).getType() && (*iter1).getSubDocument() == (*iter2).getSubDocument()
-				&& (*iter1).getOccurence() == (*iter2).getOccurence())
-			{
-				WPD_DEBUG_MSG(("WordPerfect: WPXPageSpan == found same header/footer, breaking)\n"));
-				break;
-			}
-		}		
-		if (iter2 == headerFooterList2.end())
+		if (std::find(headerFooterList2.begin(), headerFooterList2.end(), (*iter1)) == headerFooterList2.end())
 			return false;
 	}
 	
@@ -231,17 +222,7 @@ bool operator==(const WPXPageSpan &page1, const WPXPageSpan &page2)
 	
 	for (iter2 = headerFooterList2.begin(); iter2 != headerFooterList2.end(); iter2++)
 	{
-		for (iter1 = headerFooterList1.begin(); iter1 != headerFooterList1.end(); iter1++) 
-		{
-			WPD_DEBUG_MSG(("WordPerfect: WPXPageSpan ==  header/footer comparison)\n"));
-			if ((*iter2).getType() == (*iter1).getType() && (*iter2).getSubDocument() == (*iter1).getSubDocument()
-				&& (*iter2).getOccurence() == (*iter1).getOccurence())
-			{
-				WPD_DEBUG_MSG(("WordPerfect: WPXPageSpan == found same header/footer, breaking)\n"));
-				break;
-			}
-		}		
-		if (iter1 == headerFooterList1.end())
+		if (std::find(headerFooterList1.begin(), headerFooterList1.end(), (*iter2)) == headerFooterList1.end())
 			return false;
 	}
 
@@ -249,4 +230,11 @@ bool operator==(const WPXPageSpan &page1, const WPXPageSpan &page2)
 	WPD_DEBUG_MSG(("WordPerfect: WPXPageSpan == comparison finished, found no differences\n"));
 
 	return true;
+}
+
+inline bool operator==(const WPXHeaderFooter &headerFooter1, const WPXHeaderFooter &headerFooter2)
+{
+	return ((headerFooter1.getType() == headerFooter2.getType()) && 
+		(headerFooter1.getSubDocument() == headerFooter2.getSubDocument()) &&
+		(headerFooter1.getOccurence() == headerFooter2.getOccurence()) );
 }
