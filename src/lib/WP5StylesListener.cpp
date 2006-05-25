@@ -273,8 +273,8 @@ void WP5StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, co
 			WPXTable * oldCurrentTable = m_currentTable;
 			WPXTableList oldTableList = m_tableList;
 			m_tableList = tableList;
-			marginChange(WPX_NUM_WPUS_PER_INCH, WPX_LEFT);
-			marginChange(WPX_NUM_WPUS_PER_INCH, WPX_RIGHT);
+			marginChange(WPX_LEFT, WPX_NUM_WPUS_PER_INCH);
+			marginChange(WPX_RIGHT, WPX_NUM_WPUS_PER_INCH);
 
 			subDocument->parse(this);
 
