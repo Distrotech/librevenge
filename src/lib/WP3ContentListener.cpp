@@ -596,32 +596,38 @@ void WP3ContentListener::insertNote(const WPXNoteType noteType, WP3SubDocument *
 
 void WP3ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice)
 {
-		// save our old parsing state on our "stack"
-		WP3ParsingState *oldParseState = m_parseState;
-	
-		m_parseState = new WP3ParsingState();
+	// save our old parsing state on our "stack"
+	WP3ParsingState *oldParseState = m_parseState;
 
-		if (subDocument)
-			subDocument->parse(this);
-		else
-			_openSpan();
-		
-		// Close the sub-document properly
-		if (m_ps->m_isParagraphOpened)
-			_closeParagraph();
-		if (m_ps->m_isListElementOpened)
-			_closeListElement();
+	m_parseState = new WP3ParsingState();
 
-		m_ps->m_currentListLevel = 0;
-		_changeList();
+	if (isHeaderFooter)
+	{
+		marginChange(WPX_LEFT, WPX_NUM_WPUS_PER_INCH);
+		marginChange(WPX_RIGHT, WPX_NUM_WPUS_PER_INCH);
+	}
+
+	if (subDocument)
+		subDocument->parse(this);
+	else
+		_openSpan();
+
+	// Close the sub-document properly
+	if (m_ps->m_isParagraphOpened)
+		_closeParagraph();
+	if (m_ps->m_isListElementOpened)
+		_closeListElement();
+
+	m_ps->m_currentListLevel = 0;
+	_changeList();
 
 #if 0
-		_closeSection();
+	_closeSection();
 #endif
 
-		// restore our old parsing state
-		delete m_parseState;
-		m_parseState = oldParseState;
+	// restore our old parsing state
+	delete m_parseState;
+	m_parseState = oldParseState;
 }
 	
 void WP3ContentListener::headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, WP3SubDocument *subDocument)
