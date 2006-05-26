@@ -31,6 +31,8 @@
 #include "libwpd_internal.h"
 #include "WPXTable.h"
 #include "WP5PrefixData.h"
+#include "WP5ListFontsUsedPacket.h"
+#include "WP5FontNameStringPoolPacket.h"
 
 WP5Parser::WP5Parser(WPXInputStream *input, WPXHeader *header) :
 	WPXParser(input, header)
@@ -156,8 +158,39 @@ void WP5Parser::parse(WPXHLListenerImpl *listenerImpl)
 
 		// second pass: here is where we actually send the messages to the target app
 		// that are necessary to emit the body of the target document
-		WP5ContentListener listener(pageList, subDocuments, listenerImpl); // FIXME: SHOULD BE CONTENT_LISTENER, AND SHOULD BE PASSED TABLE DATA!
+		WP5ContentListener listener(pageList, subDocuments, listenerImpl); // FIXME: SHOULD BE PASSED TABLE DATA!
 		listener.setPrefixData(prefixData);
+
+
+		// According the documentation, first font in the font list is the default font, so use it as such
+		// This is the quick and dirty way and maybe one could do it differently
+		// FIXME: UGLY, UGLY, UGLY!!! FIND A BETTER WAY TO ACHIEVE THE SAME
+		uint16_t tmpFontNameOffset;
+		float tmpFontSize = 12.0f;
+		WPXString tmpFontName("Times New Roman");
+		bool tmpHasFontsUsedPacket = true;
+
+		if (listener.getGeneralPacketData(15))
+		{
+			tmpFontSize = static_cast<const WP5ListFontsUsedPacket*>(listener.getGeneralPacketData(15))->getFontSize(0);
+			tmpFontNameOffset = static_cast<const WP5ListFontsUsedPacket*>(listener.getGeneralPacketData(15))->getFontNameOffset(0);
+		}
+		else if (listener.getGeneralPacketData(2))
+		{
+			tmpFontSize = static_cast<const WP5ListFontsUsedPacket*>(listener.getGeneralPacketData(2))->getFontSize(0);
+			tmpFontNameOffset = static_cast<const WP5ListFontsUsedPacket*>(listener.getGeneralPacketData(2))->getFontNameOffset(0);
+			tmpFontName = static_cast<const WP5FontNameStringPoolPacket*>(listener.getGeneralPacketData(7))->getFontName(tmpFontNameOffset);
+		}
+		else
+			tmpHasFontsUsedPacket = false;
+		
+		if (tmpHasFontsUsedPacket && (listener.getGeneralPacketData(7)))
+			tmpFontName = static_cast<const WP5FontNameStringPoolPacket*>(listener.getGeneralPacketData(7))->getFontName(tmpFontNameOffset);
+			
+		listener.setFont(tmpFontName, tmpFontSize);
+		listener.setDefaultFont(tmpFontName, tmpFontSize);
+		// FIXME: UGLY, UGLY, UGLY!!! FIND A BETTER WAY TO ACHIEVE THE SAME
+		
 
 		parse(input, &listener);
 		

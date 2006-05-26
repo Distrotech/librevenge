@@ -30,7 +30,10 @@
 #include "libwpd_internal.h"
 #include "WP5SubDocument.h"
 
-_WP5ParsingState::_WP5ParsingState()
+_WP5ParsingState::_WP5ParsingState(const WPXString defaultFontName, const float defaultFontSize) :
+	m_defaultFontName(defaultFontName),
+	m_defaultFontSize(defaultFontSize) // fallback solution
+
 {
 	m_textBuffer.clear();
 	m_noteReference.clear();
@@ -400,7 +403,8 @@ void WP5ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, c
 	// save our old parsing state on our "stack"
 	WP5ParsingState *oldParseState = m_parseState;
 
-	m_parseState = new WP5ParsingState();
+	m_parseState = new WP5ParsingState(oldParseState->m_defaultFontName, oldParseState->m_defaultFontSize);
+	setFont(m_parseState->m_defaultFontName, m_parseState->m_defaultFontSize);
 
 	if (isHeaderFooter)
 	{
@@ -435,6 +439,12 @@ void WP5ContentListener::headerFooterGroup(const uint8_t headerFooterType, const
 	if (subDocument)
 		m_subDocuments.push_back(subDocument);
 }	
+
+void WP5ContentListener::setDefaultFont(const WPXString fontName, const float fontSize)
+{
+	m_parseState->m_defaultFontName = fontName;
+	m_parseState->m_defaultFontSize = fontSize;
+}
 
 
 /****************************************

@@ -37,10 +37,12 @@
 typedef struct _WP5ParsingState WP5ParsingState;
 struct _WP5ParsingState
 {
-	_WP5ParsingState();
+	_WP5ParsingState(const WPXString defaultFontName = WPXString("Times New Roman"), const float defaultFontSize = 12.0f);
 	~_WP5ParsingState();
 	WPXString m_textBuffer;
 	WPXString m_noteReference;
+	float m_defaultFontSize;
+	WPXString m_defaultFontName;
 
 	WPXTableList m_tableList;
 };
@@ -87,6 +89,8 @@ public:
 	void insertNote(const WPXNoteType noteType, const WP5SubDocument *subDocument);
 	void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, WP5SubDocument *subDocument);
 	void suppressPageCharacteristics(const uint8_t suppressCode) {};
+	
+	void setDefaultFont(const WPXString fontName, const float fontSize);
 	
 protected:
 	void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
