@@ -95,6 +95,7 @@ private:
 	WPXTable *m_currentTable;
 	float m_tempMarginLeft, m_tempMarginRight;
 	bool m_currentPageHasContent;
+	bool m_isSubDocument;
 	std::vector<WP3SubDocument *> &m_subDocuments;
 	std::list<WPXPageSpan>::iterator m_pageListHardPageMark;
 };

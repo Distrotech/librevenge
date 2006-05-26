@@ -39,6 +39,7 @@ WP5StylesListener::WP5StylesListener(std::list<WPXPageSpan> &pageList, WPXTableL
 	m_tempMarginLeft(1.0f),
 	m_tempMarginRight(1.0f),
 	m_currentPageHasContent(false),
+	m_isSubDocument(false),
 	m_subDocuments(subDocuments)
 {
 }
@@ -134,6 +135,9 @@ void WP5StylesListener::marginChange(const uint8_t side, const uint16_t margin)
 {
 	//if (!isUndoOn()) 
 	//{		
+		if (m_isSubDocument)
+			return;
+
 		std::list<WPXPageSpan>::iterator Iter;
 		float marginInch = (float)((double)margin / (double)WPX_NUM_WPUS_PER_INCH);
 		switch(side)
@@ -268,8 +272,11 @@ void WP5StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, co
 	// do want to capture whatever table-related information is within it..
 	if (!isUndoOn()) 
 	{
+		bool oldIsSubDocument = m_isSubDocument;
+		m_isSubDocument = true;
 		if (isHeaderFooter) 
 		{
+			bool oldCurrentPageHasContent = m_currentPageHasContent;
 			WPXTable * oldCurrentTable = m_currentTable;
 			WPXTableList oldTableList = m_tableList;
 			m_tableList = tableList;
@@ -278,10 +285,12 @@ void WP5StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, co
 
 			m_tableList = oldTableList;
 			m_currentTable = oldCurrentTable;
+			m_currentPageHasContent = oldCurrentPageHasContent;
 		}
 		else
 		{
 			subDocument->parse(this);
 		}
+		m_isSubDocument = oldIsSubDocument;
 	}
 }

@@ -37,8 +37,10 @@ WP3StylesListener::WP3StylesListener(std::list<WPXPageSpan> &pageList, WPXTableL
 	m_tempMarginLeft(1.0f),
 	m_tempMarginRight(1.0f),
 	m_currentPageHasContent(false),
+	m_isSubDocument(false),
 	m_subDocuments(subDocuments)
 {
+	m_pageListHardPageMark = m_pageList.end();
 }
 
 void WP3StylesListener::endDocument()
@@ -102,6 +104,9 @@ void WP3StylesListener::marginChange(const uint8_t side, const uint16_t margin)
 {
 	if (!isUndoOn()) 
 	{		
+		if (m_isSubDocument)
+			return; // do not collect L/R margin information in sub documents
+
 		std::list<WPXPageSpan>::iterator Iter;
 		float marginInch = (float)((double)margin / (double)WPX_NUM_WPUS_PER_INCH);
 		switch(side)
@@ -247,9 +252,11 @@ void WP3StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, co
 	// do want to capture whatever table-related information is within it..
 	if (!isUndoOn()) 
 	{
-		// prevent entering in an endless loop		
+		bool oldIsSubDocument = m_isSubDocument;
+		m_isSubDocument = true;
 		if (isHeaderFooter) 
 		{
+			bool oldCurrentPageHasContent = m_currentPageHasContent;
 			WPXTable * oldCurrentTable = m_currentTable;
 			WPXTableList oldTableList = m_tableList;
 			m_tableList = tableList;
@@ -258,10 +265,13 @@ void WP3StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, co
 
 			m_tableList = oldTableList;
 			m_currentTable = oldCurrentTable;
+			m_currentPageHasContent = oldCurrentPageHasContent;
 		}
 		else
 		{
 			subDocument->parse(this);
 		}
+		m_isSubDocument = oldIsSubDocument;
+		
 	}
 }

@@ -41,7 +41,8 @@ WP6StylesListener::WP6StylesListener(std::list<WPXPageSpan> &pageList, WPXTableL
 	m_tempMarginLeft(1.0f),
 	m_tempMarginRight(1.0f),
 	m_currentPageHasContent(false),
-	m_isTableDefined(false)
+	m_isTableDefined(false),
+	m_isSubDocument(false)
 {
 	m_pageListHardPageMark = m_pageList.end();
 }
@@ -120,6 +121,9 @@ void WP6StylesListener::marginChange(const uint8_t side, const uint16_t margin)
 {
 	if (!isUndoOn())
 	{
+		if (m_isSubDocument)
+			return; // do not deal with L/R margins in headers, footer and notes
+
 		std::list<WPXPageSpan>::iterator Iter;
 		float marginInch = (float)((double)margin / (double)WPX_NUM_WPUS_PER_INCH);
 		switch(side)
@@ -275,8 +279,11 @@ void WP6StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, co
 		if ((subDocument) && (oldSubDocuments.find(subDocument) == oldSubDocuments.end()))
 		{
 			m_subDocuments.insert(subDocument);
+			bool oldIsSubDocument = m_isSubDocument;
+			m_isSubDocument = true;
 			if (isHeaderFooter) 
 			{
+				bool oldCurrentPageHasContent = m_currentPageHasContent;
 				WPXTable * oldCurrentTable = m_currentTable;
 				WPXTableList oldTableList = m_tableList;
 				m_tableList = tableList;
@@ -285,11 +292,13 @@ void WP6StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, co
 
 				m_tableList = oldTableList;
 				m_currentTable = oldCurrentTable;
+				m_currentPageHasContent = oldCurrentPageHasContent;
 			}
 			else
 			{
 				subDocument->parse(this);
 			}
+			m_isSubDocument = oldIsSubDocument;
 			m_subDocuments = oldSubDocuments;
 
 		}

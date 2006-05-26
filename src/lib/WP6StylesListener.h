@@ -116,6 +116,7 @@ private:
 	float m_tempMarginLeft, m_tempMarginRight;
 	bool m_currentPageHasContent;
 	bool m_isTableDefined;
+	bool m_isSubDocument;
 	std::set <const WPXSubDocument *> m_subDocuments;
 	std::list<WPXPageSpan>::iterator m_pageListHardPageMark;
 };
