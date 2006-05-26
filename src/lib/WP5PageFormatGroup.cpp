@@ -64,9 +64,9 @@ void WP5PageFormatGroup::_readContents(WPXInputStream *input)
 		// skip 2 bytes (old spacing of no interest for us)
 		input->seek(2, WPX_SEEK_CUR);
 		{
-			uint16_t lineSpacing = readU32(input, true);
+			uint16_t lineSpacing = readU16(input);
 			int8_t lineSpacingIntegerPart = (int8_t)((lineSpacing & 0xFF00) >> 8);
-			float lineSpacingFractionalPart = (float)(lineSpacing & 0xFF)/(float)0xFF;
+			float lineSpacingFractionalPart = (float)(lineSpacing & 0x00FF)/(float)0xFF;
 			WPD_DEBUG_MSG(("WordPerfect: Page format group line spacing - integer part: %i fractional part: %f (original value: %i)\n",
 				       lineSpacingIntegerPart, lineSpacingFractionalPart, lineSpacing));
 			m_lineSpacing = lineSpacingIntegerPart + lineSpacingFractionalPart;
