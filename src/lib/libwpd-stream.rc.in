@@ -17,7 +17,7 @@ VS_VERSION_INFO VERSIONINFO
 	VALUE "FileDescription", "libwpd-stream"
 	VALUE "FileVersion", "@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.@WPD_MICRO_VERSION@.BUILDNUMBER"
 	VALUE "InternalName", "libwpd-stream-1"
-	VALUE "LegalCopyright", "Copyright (C) 2002-2004 William Lachance, Marc Maurer, other contributers"
+	VALUE "LegalCopyright", "Copyright (C) 2002-2006 William Lachance, Marc Maurer, Fridrich Strba, other contributers"
 	VALUE "OriginalFilename", "libwpd-stream-1-@LT_CURRENT_MINUS_AGE@.dll"
 	VALUE "ProductName", "libwpd"
 	VALUE "ProductVersion", "@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.@WPD_MICRO_VERSION@"

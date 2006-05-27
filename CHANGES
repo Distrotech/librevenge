@@ -1,6 +1,7 @@
 CHANGES:
 0.8.4 -> 0.8.5
-- Conversion of font face, size and colour in WP5 parser (Fridrich)
+- Conversion of font face, size and colour in WP5 parser, including the
+  default font informatione (Fridrich)
 - Conversion of foot/endnotes in WP5.x format (Fridrich)
 - Conversion of headers/footers in WP3 and WP5 parsers (Fridrich)
 - Prevent paragraph negative paragraph margins due to page margin change.
@@ -12,10 +13,18 @@ CHANGES:
   they are in into  the first one. Fixes the off-page position of the second
   table in 05mechanicalservice.wpd (Fridrich)
 - Defer page span change to the end of the current paragraph if it is
-  opened (Fridrich)
+  opened in order to prevent a paragraph break where it is not there in the
+  original document (Fridrich)
 - Fix http://bugzilla.abisource.com/show_bug.cgi?id=10105, an incorrect
   conversion of table alignment in WP3.x file format (Fridrich)
 - Fix small issue with incorrect number of pages in page-spans (Fridrich)
+- Fix an issue with "==" operator for WPXPageSpan classes. The result is now
+  the same independent on the order of the operands (Fridrich)
+- Fix http://bugzilla.abisource.com/show_bug.cgi?id=10279, a crash if a table
+  from the middle of the tableList is in footnote and/or endnote (Marc, Fridrich)
+- Add an option "--info" to wpd2text; called with this option, wpd2text dumps the
+  information of the document instead of converting it. This could be useful for 
+  beagle (Fridrich)
 
 0.8.3 -> 0.8.4
 - Fix compilation with gcc >=  4.1.0 (Stephan Kulow)
