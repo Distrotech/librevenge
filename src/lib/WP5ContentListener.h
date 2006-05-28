@@ -53,10 +53,6 @@ public:
 	WP5ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP5SubDocument *> &subDocuments, WPXHLListenerImpl *listenerImpl);
 	~WP5ContentListener();
 
-	void setAlignmentCharacter(const uint16_t character) {};
-	void setLeaderCharacter(const uint16_t character, const uint8_t numberOfSpaces) {};
-	void defineTabStops(const bool isRelative, const std::vector<WPXTabStop> &tabStops, 
-				const std::vector<bool> &usePreWP9LeaderMethods) {};
 	void setFont(const WPXString fontName, const float fontSize);
 	void insertCharacter(const uint16_t character);
 	void insertTab(const uint8_t tabType, float tabPosition);
@@ -64,14 +60,10 @@ public:
 	void insertEOL();
 	void characterColorChange(const uint8_t red, const uint8_t green, const uint8_t blue);
 	void attributeChange(const bool isOn, const uint8_t attribute);
-	void spacingAfterParagraphChange(const float spacingRelative, const float spacingAbsolute) {};
 	void pageMarginChange(const uint8_t side, const uint16_t margin) {};
 	void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool isPersistent) {};
 	void marginChange(const uint8_t side, const uint16_t margin);
 	void paragraphMarginChange(const uint8_t side, const int16_t margin) {};
-	void indentFirstLineChange(const int16_t offset) {};
-	void columnChange(const WPXTextColumnType columnType, const uint8_t numColumns, const std::vector<float> &columnWidth,
-				const std::vector<bool> &isFixedWidth) {};
 	void endDocument();
 
 	void defineTable(const uint8_t position, const uint16_t leftOffset);
