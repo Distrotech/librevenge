@@ -1,5 +1,6 @@
 /* libwpd
- * Copyright (C) 2004 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2004 Marc Maurer (uwog@uwog.net)
+ * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -31,6 +32,7 @@
 
 WP3StylesListener::WP3StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, std::vector<WP3SubDocument *>&subDocuments) : 
 	WP3Listener(pageList, NULL),
+	WPXStylesListener(pageList, NULL),
 	m_pageListHardPageMark(m_pageList.end()),
 	m_currentPage(WPXPageSpan()),
 	m_tableList(tableList), 
@@ -45,6 +47,7 @@ WP3StylesListener::WP3StylesListener(std::list<WPXPageSpan> &pageList, WPXTableL
 
 void WP3StylesListener::endDocument()
 {	
+	setUndoOn(false);
 	insertBreak(WPX_PAGE_BREAK); // pretend we just had a soft page break (for the last page)
 }
 
@@ -81,6 +84,17 @@ void WP3StylesListener::insertBreak(const uint8_t breakType)
 			m_currentPage.setMarginRight(m_tempMarginRight);
 		}
 	}
+}
+
+void WP3StylesListener::undoChange(const uint8_t undoType, const uint16_t undoLevel)
+{
+// enable it after being sure whether the Algeria* documents have header
+#if 0
+        if (undoType == 0x00) // begin invalid text
+                setUndoOn(true);
+        else if (undoType == 0x01) // end invalid text
+                setUndoOn(false);
+#endif
 }
 
 void WP3StylesListener::pageMarginChange(const uint8_t side, const uint16_t margin)
@@ -248,30 +262,24 @@ void WP3StylesListener::insertCell()
 
 void WP3StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice)
 {
-	// We don't want to actual insert anything in the case of a sub-document, but we
-	// do want to capture whatever table-related information is within it..
-	if (!isUndoOn()) 
+	bool oldIsSubDocument = m_isSubDocument;
+	m_isSubDocument = true;
+	if (isHeaderFooter) 
 	{
-		bool oldIsSubDocument = m_isSubDocument;
-		m_isSubDocument = true;
-		if (isHeaderFooter) 
-		{
-			bool oldCurrentPageHasContent = m_currentPageHasContent;
-			WPXTable * oldCurrentTable = m_currentTable;
-			WPXTableList oldTableList = m_tableList;
-			m_tableList = tableList;
+		bool oldCurrentPageHasContent = m_currentPageHasContent;
+		WPXTable * oldCurrentTable = m_currentTable;
+		WPXTableList oldTableList = m_tableList;
+		m_tableList = tableList;
 
-			subDocument->parse(this);
+		subDocument->parse(static_cast<WP3Listener *>(this));
 
-			m_tableList = oldTableList;
-			m_currentTable = oldCurrentTable;
-			m_currentPageHasContent = oldCurrentPageHasContent;
-		}
-		else
-		{
-			subDocument->parse(this);
-		}
-		m_isSubDocument = oldIsSubDocument;
-		
+		m_tableList = oldTableList;
+		m_currentTable = oldCurrentTable;
+		m_currentPageHasContent = oldCurrentPageHasContent;
 	}
+	else
+	{
+		subDocument->parse(static_cast<WP3Listener *>(this));
+	}
+	m_isSubDocument = oldIsSubDocument;
 }

@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
- * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
+ * Copyright (C) 2005-2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,7 +30,7 @@
 #include "libwpd_internal.h"
 #include "WP5SubDocument.h"
 
-_WP5ParsingState::_WP5ParsingState(const WPXString defaultFontName, const float defaultFontSize) :
+_WP5ContentParsingState::_WP5ContentParsingState(const WPXString defaultFontName, const float defaultFontSize) :
 	m_defaultFontName(defaultFontName),
 	m_defaultFontSize(defaultFontSize) // fallback solution
 
@@ -39,7 +39,7 @@ _WP5ParsingState::_WP5ParsingState(const WPXString defaultFontName, const float 
 	m_noteReference.clear();
 }
 
-_WP5ParsingState::~_WP5ParsingState()
+_WP5ContentParsingState::~_WP5ContentParsingState()
 {
 	m_textBuffer.clear();
 	m_noteReference.clear();
@@ -47,7 +47,8 @@ _WP5ParsingState::~_WP5ParsingState()
 
 WP5ContentListener::WP5ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP5SubDocument*> &subDocuments, WPXHLListenerImpl *listenerImpl) :
 	WP5Listener(pageList, listenerImpl),
-	m_parseState(new WP5ParsingState),
+	WPXContentListener(pageList, listenerImpl),
+	m_parseState(new WP5ContentParsingState),
 	m_subDocuments(subDocuments)
 {
 }
@@ -401,9 +402,9 @@ void WP5ContentListener::insertNote(const WPXNoteType noteType, const WP5SubDocu
 void WP5ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice)
 {
 	// save our old parsing state on our "stack"
-	WP5ParsingState *oldParseState = m_parseState;
+	WP5ContentParsingState *oldParseState = m_parseState;
 
-	m_parseState = new WP5ParsingState(oldParseState->m_defaultFontName, oldParseState->m_defaultFontSize);
+	m_parseState = new WP5ContentParsingState(oldParseState->m_defaultFontName, oldParseState->m_defaultFontSize);
 	setFont(m_parseState->m_defaultFontName, m_parseState->m_defaultFontSize);
 
 	if (isHeaderFooter)
@@ -413,7 +414,7 @@ void WP5ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, c
 	}
 
 	if (subDocument)
-		subDocument->parse(this);
+		subDocument->parse(static_cast<WP5Listener *>(this));
 	else
 		_openSpan();
 

@@ -1,6 +1,6 @@
 /* libwpd
- * Copyright (C) 2004 Marc Maurer (j.m.maurer@student.utwente.nl)
- * Copyright (C) 2004-2005 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (C) 2004 Marc Maurer (uwog@uwog.net)
+ * Copyright (C) 2004-2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,7 +30,7 @@
 #include "WP3SubDocument.h"
 #include <algorithm>
 
-_WP3ParsingState::_WP3ParsingState():
+_WP3ContentParsingState::_WP3ContentParsingState():
 	m_colSpan(1),
 	m_rowSpan(1),
 	m_cellFillColor(NULL)
@@ -39,7 +39,7 @@ _WP3ParsingState::_WP3ParsingState():
 	m_noteReference.clear();
 }
 
-_WP3ParsingState::~_WP3ParsingState()
+_WP3ContentParsingState::~_WP3ContentParsingState()
 {
 	m_textBuffer.clear();
 	m_noteReference.clear();
@@ -48,7 +48,8 @@ _WP3ParsingState::~_WP3ParsingState()
 
 WP3ContentListener::WP3ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP3SubDocument *>&subDocuments, WPXHLListenerImpl *listenerImpl) :
 	WP3Listener(pageList, listenerImpl),
-	m_parseState(new WP3ParsingState),
+	WPXContentListener(pageList, listenerImpl),
+	m_parseState(new WP3ContentParsingState),
 	m_subDocuments(subDocuments)
 {
 }
@@ -352,9 +353,9 @@ void WP3ContentListener::attributeChange(const bool isOn, const uint8_t attribut
 void WP3ContentListener::undoChange(const uint8_t undoType, const uint16_t undoLevel)
 {
         if (undoType == 0x00) // begin invalid text
-                m_isUndoOn = true;
+                setUndoOn(true);
         else if (undoType == 0x01) // end invalid text
-                m_isUndoOn = false;
+                setUndoOn(false);
 }
 
 void WP3ContentListener::marginChange(const uint8_t side, const uint16_t margin)
@@ -597,9 +598,12 @@ void WP3ContentListener::insertNote(const WPXNoteType noteType, WP3SubDocument *
 void WP3ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice)
 {
 	// save our old parsing state on our "stack"
-	WP3ParsingState *oldParseState = m_parseState;
+	WP3ContentParsingState *oldParseState = m_parseState;
 
-	m_parseState = new WP3ParsingState();
+	m_parseState = new WP3ContentParsingState();
+
+	bool oldIsUndoOn = isUndoOn();
+	setUndoOn(false);
 
 	if (isHeaderFooter)
 	{
@@ -608,7 +612,7 @@ void WP3ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, c
 	}
 
 	if (subDocument)
-		subDocument->parse(this);
+		subDocument->parse(static_cast<WP3Listener *>(this));
 	else
 		_openSpan();
 
@@ -628,6 +632,7 @@ void WP3ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, c
 	// restore our old parsing state
 	delete m_parseState;
 	m_parseState = oldParseState;
+	setUndoOn(oldIsUndoOn);
 }
 	
 void WP3ContentListener::headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, WP3SubDocument *subDocument)
@@ -650,7 +655,7 @@ void WP3ContentListener::_openParagraph()
 		}
 	}
 
-	WPXListener::_openParagraph();
+	WPXContentListener::_openParagraph();
 }
 
 /****************************************

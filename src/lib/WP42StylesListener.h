@@ -1,6 +1,6 @@
 /* libwpd
  * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2004 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2004 Marc Maurer (uwog@uwog.net)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,11 +27,12 @@
 #define WP42STYLESLISTENER_H
 
 #include "WP42Listener.h"
+#include "WPXStylesListener.h"
 #include <vector>
 #include "WPXPageSpan.h"
 #include "WPXTable.h"
 
-class WP42StylesListener : public WP42Listener
+class WP42StylesListener : public WP42Listener, public WPXStylesListener
 {
 public:
 	WP42StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList);

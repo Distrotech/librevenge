@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2002-2005 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
- * Copyright (C) 2004-2005 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
+ * Copyright (C) 2004-2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -99,7 +99,7 @@ void WP6OutlineDefinition::_updateNumberingMethods(const WP6OutlineLocation outl
 
 }
 
-_WP6ParsingState::_WP6ParsingState(WPXTableList tableList, int nextTableIndice) :
+_WP6ContentParsingState::_WP6ContentParsingState(WPXTableList tableList, int nextTableIndice) :
 	m_paragraphMarginBottomRelative(1.0f),
 	m_paragraphMarginBottomAbsolute(0.0f),
 
@@ -126,14 +126,15 @@ _WP6ParsingState::_WP6ParsingState(WPXTableList tableList, int nextTableIndice) 
 {
 }
 
-_WP6ParsingState::~_WP6ParsingState()
+_WP6ContentParsingState::~_WP6ContentParsingState()
 {
 	// FIXME: erase current fontname
 }
 
 WP6ContentListener::WP6ContentListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, WPXHLListenerImpl *listenerImpl) :
 	WP6Listener(pageList, listenerImpl),
-	m_parseState(new WP6ParsingState(tableList))
+	WPXContentListener(pageList, listenerImpl),
+	m_parseState(new WP6ContentParsingState(tableList))
 {
 }
 
@@ -1154,9 +1155,9 @@ void WP6ContentListener::endTable()
 void WP6ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice)
 {
 	// save our old parsing state on our "stack"
-	WP6ParsingState *oldParseState = m_parseState;
+	WP6ContentParsingState *oldParseState = m_parseState;
 	
-	m_parseState = new WP6ParsingState(tableList, nextTableIndice);
+	m_parseState = new WP6ContentParsingState(tableList, nextTableIndice);
 
 	if (isHeaderFooter)
 	{
@@ -1167,7 +1168,7 @@ void WP6ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, c
 	}
 
 	if (subDocument)
-		subDocument->parse(this);
+		subDocument->parse(static_cast<WP6Listener *>(this));
 	else
 		_openSpan();
 	
@@ -1381,3 +1382,12 @@ void WP6ContentListener::_changeList()
 		_closeListElement();
 	_handleListChange(m_parseState->m_currentOutlineHash);
 }
+
+void WP6ContentListener::undoChange(const uint8_t undoType, const uint16_t undoLevel)
+{
+	if (undoType == WP6_UNDO_GROUP_INVALID_TEXT_START)
+		setUndoOn(true);
+	else if (undoType == WP6_UNDO_GROUP_INVALID_TEXT_END)
+		setUndoOn(false);		
+}
+

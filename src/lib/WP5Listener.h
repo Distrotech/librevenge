@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
- * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
+ * Copyright (C) 2005-2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,6 +29,11 @@
 
 #include "WPXListener.h"
 #include "WP5PrefixData.h"
+//#include "WP5SubDocument.h"
+#include "WPXPageSpan.h"
+#include "WPXHLListenerImpl.h"
+#include <list>
+#include <vector>
 
 class WP5SubDocument;
 
@@ -38,11 +43,15 @@ public:
 	WP5Listener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl);
 	virtual ~WP5Listener() {};
 
+	virtual void startDocument() = 0;
 	virtual void setFont(const WPXString fontName, const float fontSize) = 0;
 	virtual void insertCharacter(const uint16_t character) = 0;
 	virtual void insertTab(const uint8_t tabType, float tabPosition) = 0;
 	virtual void handleLineBreak() = 0;
 	virtual void insertEOL() = 0;
+	virtual void insertBreak(const uint8_t breakType) = 0;
+	virtual void lineSpacingChange(const float lineSpacing) = 0;
+	virtual void justificationChange(const uint8_t justification) = 0;
 	virtual void characterColorChange(const uint8_t red, const uint8_t green, const uint8_t blue) = 0;
 	virtual void attributeChange(const bool isOn, const uint8_t attribute) = 0;
 	virtual void pageMarginChange(const uint8_t side, const uint16_t margin) = 0;

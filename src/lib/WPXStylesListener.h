@@ -1,7 +1,5 @@
 /* libwpd
- * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
- * Copyright (C) 2005-2006 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,37 +22,30 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WPXLISTENER_H
-#define WPXLISTENER_H
+#ifndef WPXSTYLESLISTENER_H
+#define WPXSTYLESLISTENER_H
 
 #include "libwpd_internal.h"
-#include "WPXString.h"
+#include "WPXPageSpan.h"
+#include "WPXListener.h"
+#include "WPXPageSpan.h"
 #include <vector>
+#include <list>
 
-typedef struct _WPXDocumentMetaData WPXDocumentMetaData;
-struct _WPXDocumentMetaData
-{
-	WPXString m_author;
-	WPXString m_subject;
-	WPXString m_publisher;
-	WPXString m_category;
-	WPXString m_keywords;
-	WPXString m_language;
-	WPXString m_abstract;
-	WPXString m_descriptiveName;
-	WPXString m_descriptiveType;
-};
-
-class WPXListener
+class WPXStylesListener : public WPXListener
 {
 public:
-	WPXListener();
-	virtual ~WPXListener();
+	WPXStylesListener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl);
+	virtual ~WPXStylesListener();
+
+	WPXHLListenerImpl * m_listenerImpl;
+	std::list <WPXPageSpan> &m_pageList;
 
 protected:
-	bool m_isUndoOn;
-	
-private:
+	bool isUndoOn() { return m_isUndoOn; }
+	void setUndoOn(bool isUndoOn) { m_isUndoOn = isUndoOn; }
+		
+
 };
 
-#endif /* WPXLISTENER_H */
+#endif /* WPXSTYLESLISTENER_H */

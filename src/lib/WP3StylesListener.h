@@ -1,5 +1,6 @@
 /* libwpd
- * Copyright (C) 2004 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2004 Marc Maurer (uwog@uwog.net)
+ * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,12 +27,13 @@
 #define WP3STYLESLISTENER_H
 
 #include "WP3Listener.h"
+#include "WPXStylesListener.h"
 #include <vector>
 #include <set>
 #include "WPXPageSpan.h"
 #include "WPXTable.h"
 
-class WP3StylesListener : public WP3Listener
+class WP3StylesListener : public WP3Listener, public WPXStylesListener
 {
 public:
 	WP3StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, std::vector<WP3SubDocument *> &subDocuments);
@@ -70,7 +72,7 @@ public:
 	void setTableCellSpan(const uint16_t colSpan, const uint16_t rowSpan) {}
 	void setTableCellFillColor(const RGBSColor * cellFillColor) {}
  	void endTable() {}
-	void undoChange(const uint8_t undoType, const uint16_t undoLevel) {}
+	void undoChange(const uint8_t undoType, const uint16_t undoLevel);
 	void setTextColor(const RGBSColor * fontColor) {}
 	void setTextFont(const WPXString fontName) {}
 	void setFontSize(const uint16_t fontSize) {}

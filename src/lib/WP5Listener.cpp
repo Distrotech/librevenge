@@ -1,6 +1,6 @@
 /* libwpd
  * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This library is free software; you can redistribute it and/or
@@ -30,7 +30,7 @@
 #include "libwpd_internal.h"
 
 WP5Listener::WP5Listener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl) :
-	WPXListener(pageList, listenerImpl),
+	WPXListener(),
 	m_prefixData(NULL)
 {
 }

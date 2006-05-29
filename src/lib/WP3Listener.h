@@ -1,6 +1,6 @@
 /* libwpd
- * Copyright (C) 2004 Marc Maurer (j.m.maurer@student.utwente.nl)
- * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (C) 2004 Marc Maurer (uwog@uwog.net)
+ * Copyright (C) 2005-2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,6 +29,11 @@
 #include "WPXListener.h"
 #include "WPXHLListenerImpl.h"
 #include "libwpd_internal.h"
+//#include "WP3SubDocument.h"
+#include "WPXTable.h"
+#include "WPXPageSpan.h"
+#include <list>
+#include <vector>
 
 class WP3SubDocument;
 
@@ -38,14 +43,17 @@ public:
 	WP3Listener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl);
 	virtual ~WP3Listener() {}
 
+	virtual void startDocument() = 0;
 	virtual void setAlignmentCharacter(const uint16_t character) = 0;
 	virtual void setLeaderCharacter(const uint16_t character, const uint8_t numberOfSpaces) = 0;
 	virtual void defineTabStops(const bool isRelative, const std::vector<WPXTabStop> &tabStops, 
 				    const std::vector<bool> &usePreWP9LeaderMethods) = 0;
 	virtual void insertCharacter(const uint16_t character) = 0;
 	virtual void insertTab(const uint8_t tabType, float tabPosition) = 0;
+	virtual void insertBreak(const uint8_t breakType) = 0;
 	virtual void handleLineBreak() = 0;
 	virtual void insertEOL() = 0;
+	virtual void lineSpacingChange(const float lineSpacing) = 0;
 	virtual void attributeChange(const bool isOn, const uint8_t attribute) = 0;
 	virtual void spacingAfterParagraphChange(const float spacingRelative, const float spacingAbsolute) = 0;
 	virtual void pageMarginChange(const uint8_t side, const uint16_t margin) = 0;
@@ -78,7 +86,9 @@ public:
 	virtual void insertNote(const WPXNoteType noteType, WP3SubDocument *subDocument) = 0;
 	virtual void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, WP3SubDocument *subDocument) = 0;
 	virtual void suppressPage(const uint16_t suppressCode) = 0;
-	
+
+protected:
+	virtual void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice) = 0;	
 };
 
 #endif /* WP3LISTENER_H */

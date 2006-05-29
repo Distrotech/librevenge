@@ -1,6 +1,7 @@
 /* libwpd
  * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2004 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2004 Marc Maurer (uwog@uwog.net)
+ * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -32,6 +33,7 @@
 
 WP5StylesListener::WP5StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, std::vector<WP5SubDocument *> &subDocuments) : 
 	WP5Listener(pageList, NULL),
+	WPXStylesListener(pageList, NULL),
 	m_currentPage(WPXPageSpan()),
 	m_nextPage(WPXPageSpan()),
 	m_pageListHardPageMark(m_pageList.end()),
@@ -58,7 +60,7 @@ void WP5StylesListener::insertBreak(const uint8_t breakType)
 		{
 		case WPX_PAGE_BREAK:
 		case WPX_SOFT_PAGE_BREAK:
-			if ((WPXListener::m_pageList.size() > 0) && (m_currentPage==m_pageList.back())
+			if ((m_pageList.size() > 0) && (m_currentPage==m_pageList.back())
 				&& (m_pageListHardPageMark != m_pageList.end()))
 			{
 				m_pageList.back().setPageSpan(m_pageList.back().getPageSpan() + 1);
@@ -281,7 +283,7 @@ void WP5StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, co
 			WPXTableList oldTableList = m_tableList;
 			m_tableList = tableList;
 
-			subDocument->parse(this);
+			subDocument->parse(static_cast<WP5Listener *>(this));
 
 			m_tableList = oldTableList;
 			m_currentTable = oldCurrentTable;
@@ -289,7 +291,7 @@ void WP5StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, co
 		}
 		else
 		{
-			subDocument->parse(this);
+			subDocument->parse(static_cast<WP5Listener *>(this));
 		}
 		m_isSubDocument = oldIsSubDocument;
 	}

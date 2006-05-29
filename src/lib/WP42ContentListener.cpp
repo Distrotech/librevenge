@@ -1,6 +1,6 @@
 /* libwpd
  * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2003-2004 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2003-2004 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This library is free software; you can redistribute it and/or
@@ -28,12 +28,12 @@
 #include "WP42FileStructure.h"
 #include "libwpd_internal.h"
 
-_WP42ParsingState::_WP42ParsingState()
+_WP42ContentParsingState::_WP42ContentParsingState()
 {
 	m_textBuffer.clear();
 }
 
-_WP42ParsingState::~_WP42ParsingState()
+_WP42ContentParsingState::~_WP42ContentParsingState()
 {
 	m_textBuffer.clear();
 }
@@ -41,7 +41,8 @@ _WP42ParsingState::~_WP42ParsingState()
 
 WP42ContentListener::WP42ContentListener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl) :
 	WP42Listener(pageList, listenerImpl),
-	m_parseState(new WP42ParsingState)
+	WPXContentListener(pageList, listenerImpl),
+	m_parseState(new WP42ContentParsingState)
 {
 }
 

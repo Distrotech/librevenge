@@ -1,6 +1,7 @@
 /* libwpd
  * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
+ * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -35,6 +36,7 @@
 
 WP6StylesListener::WP6StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList) : 
 	WP6Listener(pageList, NULL),
+	WPXStylesListener(pageList, NULL),
 	m_currentPage(WPXPageSpan()),
 	m_pageListHardPageMark(m_pageList.end()),
 	m_tableList(tableList), 
@@ -60,7 +62,7 @@ void WP6StylesListener::insertBreak(const uint8_t breakType)
 		{
 		case WPX_PAGE_BREAK:
 		case WPX_SOFT_PAGE_BREAK:
-			if ((WPXListener::m_pageList.size() > 0) && (m_currentPage==m_pageList.back())
+			if ((m_pageList.size() > 0) && (m_currentPage==m_pageList.back())
 				&& (m_pageListHardPageMark != m_pageList.end()))
 			{
 				m_pageList.back().setPageSpan(m_pageList.back().getPageSpan() + 1);
@@ -271,7 +273,7 @@ void WP6StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, co
 {
 	// We don't want to actual insert anything in the case of a sub-document, but we
 	// do want to capture whatever table-related information is within it..
-	if (!isUndoOn()) 
+//	if (!isUndoOn()) 
 	{
 		std::set <const WPXSubDocument *> oldSubDocuments;
 		oldSubDocuments = m_subDocuments;
@@ -288,7 +290,7 @@ void WP6StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, co
 				WPXTableList oldTableList = m_tableList;
 				m_tableList = tableList;
 
-				subDocument->parse(this);
+				subDocument->parse(static_cast<WP6Listener *>(this));
 
 				m_tableList = oldTableList;
 				m_currentTable = oldCurrentTable;
@@ -296,11 +298,19 @@ void WP6StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, co
 			}
 			else
 			{
-				subDocument->parse(this);
+				subDocument->parse(static_cast<WP6Listener *>(this));
 			}
 			m_isSubDocument = oldIsSubDocument;
 			m_subDocuments = oldSubDocuments;
 
 		}
 	}
+}
+
+void WP6StylesListener::undoChange(const uint8_t undoType, const uint16_t undoLevel)
+{
+	if (undoType == WP6_UNDO_GROUP_INVALID_TEXT_START)
+		setUndoOn(true);
+	else if (undoType == WP6_UNDO_GROUP_INVALID_TEXT_END)
+		setUndoOn(false);		
 }

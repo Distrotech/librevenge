@@ -1,6 +1,7 @@
 /* libwpd
  * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2004 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2004 Marc Maurer (uwog@uwog.net)
+ * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,6 +28,7 @@
 #define WP5STYLESLISTENER_H
 
 #include "WP5Listener.h"
+#include "WPXStylesListener.h"
 #include <vector>
 #include <list>
 #include <set>
@@ -34,7 +36,7 @@
 #include "WPXTable.h"
 #include "WP5SubDocument.h"
 
-class WP5StylesListener : public WP5Listener
+class WP5StylesListener : public WP5Listener, public WPXStylesListener
 {
 public:
 	WP5StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, std::vector<WP5SubDocument*> &subDocuments);

@@ -1,6 +1,7 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
+ * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,10 +28,13 @@
 #define WP6LISTENER_H
  
 #include "WPXListener.h"
+#include "WPXPageSpan.h"
+#include "WPXHLListenerImpl.h"
 #include "WP6FileStructure.h"
 
-#include <vector>
 #include "WP6PrefixDataPacket.h"
+#include <vector>
+#include <list>
 
 class WPXString;
 class WP6DefaultInitialFontPacket;
@@ -43,6 +47,8 @@ class WP6Listener : public WPXListener
 public:
 	WP6Listener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl);
 	virtual ~WP6Listener() {};
+
+	virtual void startDocument() = 0;
 	virtual void setDate(const uint16_t year, const uint8_t month, const uint8_t day,
 			     const uint8_t hour, const uint8_t minute, const uint8_t second,
 			     const uint8_t dayOfWeek, const uint8_t timeZone, const uint8_t unused) = 0;
@@ -55,6 +61,9 @@ public:
 	virtual void insertTab(const uint8_t tabType, float tabPosition) = 0;
 	virtual void handleLineBreak() = 0;
 	virtual void insertEOL() = 0;
+	virtual void insertBreak(const uint8_t breakType) = 0;
+	virtual void lineSpacingChange(const float lineSpacing) = 0;
+	virtual void justificationChange(const uint8_t justification) = 0;
 	virtual void characterColorChange(const uint8_t red, const uint8_t green, const uint8_t blue) = 0;
 	virtual void characterShadingChange(const uint8_t shading) = 0;
 	virtual void highlightChange(const bool isOn, const RGBSColor color) = 0;
@@ -95,12 +104,11 @@ public:
 				const bool useCellAttributes, const uint32_t cellAttributes) = 0;
  	virtual void endTable() = 0;
 
+	virtual void undoChange(const uint8_t undoType, const uint16_t undoLevel) = 0;
+
 	void setPrefixData(WP6PrefixData *prefixData) { m_prefixData = prefixData; }
 	const WP6PrefixDataPacket * getPrefixDataPacket(const int prefixID) const;
 		
-	// for getting low-level messages from the parser
-	virtual void undoChange(const uint8_t undoType, const uint16_t undoLevel);
-
 private:
 	WP6PrefixData *m_prefixData;
 };

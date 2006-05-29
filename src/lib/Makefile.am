@@ -144,19 +144,21 @@ libwpd_0_8_la_SOURCES = \
 	WP6UnsupportedFixedLengthGroup.cpp \
 	WP6UnsupportedVariableLengthGroup.cpp \
 	WP6VariableLengthGroup.cpp \
-	WPXPageSpan.cpp \
+	WPDocument.cpp \
+	WPXContentListener.cpp \
 	WPXHeader.cpp \
 	WPXListener.cpp \
 	WPXMemoryStream.cpp \
-	WPXTable.cpp \
+	WPXPageSpan.cpp \
 	WPXParser.cpp \
 	WPXPart.cpp \
 	WPXProperty.cpp \
 	WPXPropertyList.cpp \
-	WPXString.cpp \
-	WPXSubDocument.cpp \
 	WPXPropertyListVector.cpp \
-	WPDocument.cpp \
+	WPXString.cpp \
+	WPXStylesListener.cpp \
+	WPXSubDocument.cpp \
+	WPXTable.cpp \
 	libwpd.h \
 	libwpd_internal.h \
 	libwpd_math.h \
@@ -262,8 +264,9 @@ libwpd_0_8_la_SOURCES = \
 	WP6UnsupportedFixedLengthGroup.h \
 	WP6UnsupportedVariableLengthGroup.h \
 	WP6VariableLengthGroup.h \
-	WPXHeader.h \
 	WPDocument.h \
+	WPXContentListener.h \
+	WPXHeader.h \
 	WPXFileStructure.h \
 	WPXHLListenerImpl.h \
 	WPXListener.h \
@@ -273,10 +276,11 @@ libwpd_0_8_la_SOURCES = \
 	WPXPart.h \
 	WPXProperty.h \
 	WPXPropertyList.h \
+	WPXPropertyListVector.h \
 	WPXString.h \
+	WPXStylesListener.h \
 	WPXSubDocument.h \
-	WPXTable.h \
-	WPXPropertyListVector.h
+	WPXTable.h
 
 libwpd_stream_headers = GSFStream.h
 libwpd_stream_sources = GSFStream.cpp

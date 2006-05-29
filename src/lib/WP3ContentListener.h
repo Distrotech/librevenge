@@ -1,6 +1,6 @@
 /* libwpd
- * Copyright (C) 2004 Marc Maurer (j.m.maurer@student.utwente.nl)
- * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (C) 2004 Marc Maurer (uwog@uwog.net)
+ * Copyright (C) 2005-2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,14 +28,15 @@
 
 #include "WP3Listener.h"
 #include "WPXHLListenerImpl.h"
+#include "WPXContentListener.h"
 #include "libwpd_internal.h"
 #include "WP3SubDocument.h"
 
-typedef struct _WP3ParsingState WP3ParsingState;
-struct _WP3ParsingState
+typedef struct _WP3ContentParsingState WP3ContentParsingState;
+struct _WP3ContentParsingState
 {
-	_WP3ParsingState();
-	~_WP3ParsingState();
+	_WP3ContentParsingState();
+	~_WP3ContentParsingState();
 	uint16_t m_colSpan;
 	uint16_t m_rowSpan;
 	WPXString m_textBuffer;
@@ -45,21 +46,24 @@ struct _WP3ParsingState
 	WPXTableList m_tableList;
 };
 
-class WP3ContentListener : public WP3Listener
+class WP3ContentListener : public WP3Listener, public WPXContentListener
 {
 public:
 	WP3ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP3SubDocument *> &subDocuments, WPXHLListenerImpl *listenerImpl);
 	~WP3ContentListener();
 
+	void startDocument() { return WPXContentListener::startDocument(); };
 	void setAlignmentCharacter(const uint16_t character) {};
 	void setLeaderCharacter(const uint16_t character, const uint8_t numberOfSpaces) {};
 	void defineTabStops(const bool isRelative, const std::vector<WPXTabStop> &tabStops, 
 				    const std::vector<bool> &usePreWP9LeaderMethods) {};
 	void insertCharacter(const uint16_t character);
 	void insertTab(const uint8_t tabType, float tabPosition);
+	void insertBreak(const uint8_t breakType) { return WPXContentListener::insertBreak(breakType); };
 	void handleLineBreak() {};
 	void insertEOL();
 	void attributeChange(const bool isOn, const uint8_t attribute);
+	void lineSpacingChange(const float lineSpacing) { return WPXContentListener::lineSpacingChange(lineSpacing); };
 	void spacingAfterParagraphChange(const float spacingRelative, const float spacingAbsolute) {};
 	void pageMarginChange(const uint8_t side, const uint16_t margin) {};
 	void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool isPersistent) {};
@@ -100,7 +104,7 @@ private:
 	void _flushText();
 	void _changeList() {};
 
-	WP3ParsingState *m_parseState;
+	WP3ContentParsingState *m_parseState;
 	std::vector<WP3SubDocument *> &m_subDocuments;
 };
 

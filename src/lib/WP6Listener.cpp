@@ -1,6 +1,7 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
+ * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -34,17 +35,9 @@
 #include "WP6DefaultInitialFontPacket.h"
 
 WP6Listener::WP6Listener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl) :
-	WPXListener(pageList, listenerImpl),
+	WPXListener(),
 	m_prefixData(NULL)
 {
-}
-
-void WP6Listener::undoChange(const uint8_t undoType, const uint16_t undoLevel)
-{
-	if (undoType == WP6_UNDO_GROUP_INVALID_TEXT_START)
-		m_isUndoOn = true;
-	else if (undoType == WP6_UNDO_GROUP_INVALID_TEXT_END)
-		m_isUndoOn = false;		
 }
 
 const WP6PrefixDataPacket * WP6Listener::getPrefixDataPacket(const int prefixID) const

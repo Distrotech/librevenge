@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2002 Marc Maurer (j.m.maurer@student.utwente.nl)
- * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
+ * Copyright (C) 2005-2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,7 +28,7 @@
 #define WP6CONTENTLISTENER_H
 
 #include "WP6Listener.h"
-#include "WPXListener.h"
+#include "WPXContentListener.h"
 #include "WP6FileStructure.h"
 
 #include <stack>
@@ -63,11 +63,11 @@ private:
 	WP6StyleState m_previousState;
 };
 
-typedef struct _WP6ParsingState WP6ParsingState;
-struct _WP6ParsingState
+typedef struct _WP6ContentParsingState WP6ContentParsingState;
+struct _WP6ContentParsingState
 {
-	_WP6ParsingState(WPXTableList tableList, int nextTableIndice = 0);
-	~_WP6ParsingState();
+	_WP6ContentParsingState(WPXTableList tableList, int nextTableIndice = 0);
+	~_WP6ContentParsingState();
 	WPXString m_bodyText;
 	WPXString m_textBeforeNumber;
 	WPXString m_textBeforeDisplayReference;
@@ -126,13 +126,13 @@ private:
 	WPXNumberingType m_listTypes[WP6_NUM_LIST_LEVELS];
 };
 
-class WP6ContentListener : public WP6Listener
+class WP6ContentListener : public WP6Listener, public WPXContentListener
 {
 public:
 	WP6ContentListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, WPXHLListenerImpl *listenerImpl);
 	virtual ~WP6ContentListener();
 
-	// for getting low-level messages from the parser
+	void startDocument() { return WPXContentListener::startDocument(); };
 	void setDate(const uint16_t year, const uint8_t month, const uint8_t day,
 						const uint8_t hour, const uint8_t minute, const uint8_t second,
 						const uint8_t dayOfWeek, const uint8_t timeZone, const uint8_t unused) {}
@@ -145,6 +145,9 @@ public:
 	void insertTab(const uint8_t tabType, float tabPosition);
 	void handleLineBreak();
 	void insertEOL();
+	void insertBreak(const uint8_t breakType) { return WPXContentListener::insertBreak(breakType); };
+	void lineSpacingChange(const float lineSpacing) { return WPXContentListener::lineSpacingChange(lineSpacing); };
+	void justificationChange(const uint8_t justification) { return WPXContentListener::justificationChange(justification); };
 	void characterColorChange(const uint8_t red, const uint8_t green, const uint8_t blue);
 	void characterShadingChange(const uint8_t shading);
 	void highlightChange(const bool isOn, const RGBSColor color);
@@ -186,6 +189,7 @@ public:
 				const bool useCellAttributes, const uint32_t cellAttributes);
  	void endTable();
 
+	void undoChange(const uint8_t undoType, const uint16_t undoLevel);
 
 protected:
 	void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
@@ -198,7 +202,7 @@ protected:
 	void _changeList();
 
 private:
-	WP6ParsingState *m_parseState;
+	WP6ContentParsingState *m_parseState;
 
 	std::map<uint16_t,WP6OutlineDefinition *> m_outlineDefineHash;
 };

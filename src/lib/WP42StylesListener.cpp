@@ -1,6 +1,6 @@
 /* libwpd
  * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2004 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2004 Marc Maurer (uwog@uwog.net)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -31,6 +31,7 @@
 
 WP42StylesListener::WP42StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList) : 
 	WP42Listener(pageList, NULL),
+	WPXStylesListener(pageList, NULL),
 	m_currentPage(WPXPageSpan()),
 	m_tableList(tableList), 
 	m_tempMarginLeft(1.0f),
@@ -52,7 +53,7 @@ void WP42StylesListener::insertBreak(const uint8_t breakType)
 		{
 		case WPX_PAGE_BREAK:
 		case WPX_SOFT_PAGE_BREAK:
-			if ((WPXListener::m_pageList.size()) > 0 && (m_currentPage==m_pageList.back()))
+			if ((m_pageList.size()) > 0 && (m_currentPage==m_pageList.back()))
 				m_pageList.back().setPageSpan(m_pageList.back().getPageSpan() + 1);
 			else
 				m_pageList.push_back(WPXPageSpan(m_currentPage));

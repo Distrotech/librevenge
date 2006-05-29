@@ -1,6 +1,6 @@
 /* libwpd
  * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This library is free software; you can redistribute it and/or
@@ -28,6 +28,10 @@
 #define WP42LISTENER_H
 
 #include "WPXListener.h"
+#include "libwpd_internal.h"
+#include "WPXHLListenerImpl.h"
+#include "WPXPageSpan.h"
+#include <list>
 
 class WP42Listener : public WPXListener
 {
@@ -35,12 +39,14 @@ public:
 	WP42Listener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl);
 	virtual ~WP42Listener() {};
 
+	virtual void startDocument() = 0;
 	virtual void setAlignmentCharacter(const uint16_t character) = 0;
 	virtual void setLeaderCharacter(const uint16_t character, const uint8_t numberOfSpaces) = 0;
 	virtual void defineTabStops(const bool isRelative, const std::vector<WPXTabStop> &tabStops, 
 				    const std::vector<bool> &usePreWP9LeaderMethods) = 0;
 	virtual void insertCharacter(const uint16_t character) = 0;
 	virtual void insertTab(const uint8_t tabType, float tabPosition) = 0;
+	virtual void insertBreak(const uint8_t breakType) = 0;
 	virtual void handleLineBreak() = 0;
 	virtual void insertEOL() = 0;
 	virtual void attributeChange(const bool isOn, const uint8_t attribute) = 0;

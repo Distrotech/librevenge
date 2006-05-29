@@ -1,6 +1,7 @@
 /* libwpd
  * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2003 Marc Maurer (j.m.maurer@student.utwente.nl)
+ * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
+ * Copyright (C) 2005-2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,6 +28,7 @@
 #define WP5CONTENTLISTENER_H
 
 #include "WP5Listener.h"
+#include "WPXContentListener.h"
 #include "WP5SubDocument.h"
 #include "WPXString.h"
 #include "libwpd_internal.h"
@@ -34,11 +36,11 @@
 #include "WPXListener.h"
 #include <vector>
 
-typedef struct _WP5ParsingState WP5ParsingState;
-struct _WP5ParsingState
+typedef struct _WP5ContentParsingState WP5ContentParsingState;
+struct _WP5ContentParsingState
 {
-	_WP5ParsingState(const WPXString defaultFontName = WPXString("Times New Roman"), const float defaultFontSize = 12.0f);
-	~_WP5ParsingState();
+	_WP5ContentParsingState(const WPXString defaultFontName = WPXString("Times New Roman"), const float defaultFontSize = 12.0f);
+	~_WP5ContentParsingState();
 	WPXString m_textBuffer;
 	WPXString m_noteReference;
 	float m_defaultFontSize;
@@ -47,17 +49,21 @@ struct _WP5ParsingState
 	WPXTableList m_tableList;
 };
 
-class WP5ContentListener : public WP5Listener
+class WP5ContentListener : public WP5Listener, public WPXContentListener
 {
 public:
 	WP5ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP5SubDocument *> &subDocuments, WPXHLListenerImpl *listenerImpl);
 	~WP5ContentListener();
 
+	void startDocument() { return WPXContentListener::startDocument(); };
 	void setFont(const WPXString fontName, const float fontSize);
 	void insertCharacter(const uint16_t character);
 	void insertTab(const uint8_t tabType, float tabPosition);
 	void handleLineBreak() {};
 	void insertEOL();
+	void insertBreak(const uint8_t breakType) { return WPXContentListener::insertBreak(breakType); };
+	void lineSpacingChange(const float lineSpacing) { return WPXContentListener::lineSpacingChange(lineSpacing); };
+	void justificationChange(const uint8_t justification) { return WPXContentListener::justificationChange(justification); };
 	void characterColorChange(const uint8_t red, const uint8_t green, const uint8_t blue);
 	void attributeChange(const bool isOn, const uint8_t attribute);
 	void pageMarginChange(const uint8_t side, const uint16_t margin) {};
@@ -91,7 +97,7 @@ private:
 	void _flushText();
 	void _changeList() {};
 
-	WP5ParsingState *m_parseState;
+	WP5ContentParsingState *m_parseState;
 	std::vector<WP5SubDocument *> &m_subDocuments;
 };
 
