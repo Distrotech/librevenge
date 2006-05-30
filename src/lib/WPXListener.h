@@ -51,10 +51,11 @@ public:
 	WPXListener();
 	virtual ~WPXListener();
 
-protected:
-	bool m_isUndoOn;
+	bool isUndoOn() { return m_isUndoOn; }
+	void setUndoOn(bool isUndoOn) { m_isUndoOn = isUndoOn; }
 	
 private:
+	bool m_isUndoOn;
 };
 
 #endif /* WPXLISTENER_H */

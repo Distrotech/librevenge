@@ -31,9 +31,9 @@ WP5SubDocument::WP5SubDocument(WPXInputStream *input, const int dataSize) :
 {
 }
 
-void WP5SubDocument::parse(WPXListener *listener) const
+void WP5SubDocument::parse(WP5Listener *listener) const
 {
 	WPXMemoryInputStream *tmpStream = getStream();
 	tmpStream->seek(0, WPX_SEEK_SET);
-	WP5Parser::parseDocument(tmpStream, static_cast<WP5Listener *>(listener));
+	WP5Parser::parseDocument(tmpStream, listener);
 }

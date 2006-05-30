@@ -612,7 +612,7 @@ void WP3ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, c
 	}
 
 	if (subDocument)
-		subDocument->parse(static_cast<WP3Listener *>(this));
+		static_cast<const WP3SubDocument *>(subDocument)->parse(this);
 	else
 		_openSpan();
 

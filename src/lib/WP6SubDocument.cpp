@@ -25,16 +25,15 @@
 #include "WP6SubDocument.h"
 #include "WP6Parser.h"
 #include "libwpd_internal.h"
-#include "WP6Listener.h"
 
 WP6SubDocument::WP6SubDocument(uint8_t * streamData, const int dataSize) :
 	WPXSubDocument(streamData, dataSize)
 {
 }
 
-void WP6SubDocument::parse(WPXListener *listener) const
+void WP6SubDocument::parse(WP6Listener *listener) const
 {
 	WPXMemoryInputStream *tmpStream = getStream();
 	tmpStream->seek(0, WPX_SEEK_SET);
-	WP6Parser::parseDocument(tmpStream, static_cast<WP6Listener *>(listener));
+	WP6Parser::parseDocument(tmpStream, listener);
 }

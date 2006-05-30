@@ -25,7 +25,6 @@
 
 #include "WP3Listener.h"
 
-WP3Listener::WP3Listener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl) :
-	WPXListener()
+WP3Listener::WP3Listener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl)
 {
 }

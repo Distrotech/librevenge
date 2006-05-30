@@ -27,7 +27,6 @@
 #ifndef WP5LISTENER_H
 #define WP5LISTENER_H
 
-#include "WPXListener.h"
 #include "WP5PrefixData.h"
 //#include "WP5SubDocument.h"
 #include "WPXPageSpan.h"
@@ -37,7 +36,7 @@
 
 class WP5SubDocument;
 
-class WP5Listener : public WPXListener
+class WP5Listener
 {
 public:
 	WP5Listener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl);

@@ -1168,7 +1168,7 @@ void WP6ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, c
 	}
 
 	if (subDocument)
-		subDocument->parse(static_cast<WP6Listener *>(this));
+		static_cast<const WP6SubDocument *>(subDocument)->parse(this);
 	else
 		_openSpan();
 	
@@ -1390,4 +1390,3 @@ void WP6ContentListener::undoChange(const uint8_t undoType, const uint16_t undoL
 	else if (undoType == WP6_UNDO_GROUP_INVALID_TEXT_END)
 		setUndoOn(false);		
 }
-

@@ -27,7 +27,6 @@
 #ifndef WP6LISTENER_H
 #define WP6LISTENER_H
  
-#include "WPXListener.h"
 #include "WPXPageSpan.h"
 #include "WPXHLListenerImpl.h"
 #include "WP6FileStructure.h"
@@ -42,7 +41,7 @@ class WP6PrefixData;
 
 enum WP6OutlineLocation { paragraphGroup, indexHeader };
 
-class WP6Listener : public WPXListener
+class WP6Listener
 {
 public:
 	WP6Listener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl);

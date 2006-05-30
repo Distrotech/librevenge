@@ -186,9 +186,6 @@ protected:
 
 	float _movePositionToFirstColumn(float position);
 
-	bool isUndoOn() { return m_isUndoOn; }
-	void setUndoOn(bool isUndoOn) { m_isUndoOn = isUndoOn; }
-		
 private:
 	WPXString _colorToString(const RGBSColor * color);
 	WPXString _mergeColorsToString(const RGBSColor *fgColor, const RGBSColor *bgColor);

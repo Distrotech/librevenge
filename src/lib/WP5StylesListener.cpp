@@ -283,7 +283,7 @@ void WP5StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, co
 			WPXTableList oldTableList = m_tableList;
 			m_tableList = tableList;
 
-			subDocument->parse(static_cast<WP5Listener *>(this));
+			static_cast<const WP5SubDocument *>(subDocument)->parse(this);
 
 			m_tableList = oldTableList;
 			m_currentTable = oldCurrentTable;
@@ -291,7 +291,7 @@ void WP5StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, co
 		}
 		else
 		{
-			subDocument->parse(static_cast<WP5Listener *>(this));
+			static_cast<const WP5SubDocument *>(subDocument)->parse(this);
 		}
 		m_isSubDocument = oldIsSubDocument;
 	}

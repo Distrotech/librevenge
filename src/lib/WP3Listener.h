@@ -26,7 +26,6 @@
 #ifndef WP3LISTENER_H
 #define WP3LISTENER_H
 
-#include "WPXListener.h"
 #include "WPXHLListenerImpl.h"
 #include "libwpd_internal.h"
 //#include "WP3SubDocument.h"
@@ -37,7 +36,7 @@
 
 class WP3SubDocument;
 
-class WP3Listener : public WPXListener
+class WP3Listener
 {
 public:
 	WP3Listener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl);

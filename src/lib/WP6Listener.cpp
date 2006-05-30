@@ -26,6 +26,7 @@
 
 #include <math.h>
 #include <ctype.h>
+#include "WPXListener.h"
 #include "WP6Listener.h"
 #include "WP6FileStructure.h"
 #include "WPXFileStructure.h"
@@ -35,7 +36,6 @@
 #include "WP6DefaultInitialFontPacket.h"
 
 WP6Listener::WP6Listener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl) :
-	WPXListener(),
 	m_prefixData(NULL)
 {
 }

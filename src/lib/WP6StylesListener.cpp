@@ -290,7 +290,7 @@ void WP6StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, co
 				WPXTableList oldTableList = m_tableList;
 				m_tableList = tableList;
 
-				subDocument->parse(static_cast<WP6Listener *>(this));
+				static_cast<const WP6SubDocument *>(subDocument)->parse(this);
 
 				m_tableList = oldTableList;
 				m_currentTable = oldCurrentTable;
@@ -298,7 +298,7 @@ void WP6StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, co
 			}
 			else
 			{
-				subDocument->parse(static_cast<WP6Listener *>(this));
+				static_cast<const WP6SubDocument *>(subDocument)->parse(this);
 			}
 			m_isSubDocument = oldIsSubDocument;
 			m_subDocuments = oldSubDocuments;

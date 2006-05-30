@@ -31,9 +31,9 @@ WP3SubDocument::WP3SubDocument(WPXInputStream *input, const int dataSize) :
 {
 }
 
-void WP3SubDocument::parse(WPXListener *listener) const
+void WP3SubDocument::parse(WP3Listener *listener) const
 {
 	WPXMemoryInputStream *tmpStream = getStream();
 	tmpStream->seek(0, WPX_SEEK_SET);
-	WP3Parser::parseDocument(tmpStream, static_cast<WP3Listener *>(listener));
+	WP3Parser::parseDocument(tmpStream, listener);
 }

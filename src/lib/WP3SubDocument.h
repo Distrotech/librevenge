@@ -33,7 +33,7 @@ class WP3SubDocument : public WPXSubDocument
 {
 public:
 	WP3SubDocument(WPXInputStream *input, const int dataSize);
-	virtual void parse(WPXListener *listener) const;
+	void parse(WP3Listener *listener) const;
 
 };
 #endif /* WP3SUBDOCUMENT_H */

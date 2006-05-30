@@ -74,5 +74,5 @@ void WP6GeneralTextPacket::_readContents(WPXInputStream *input)
 
 void WP6GeneralTextPacket::parse(WP6Listener *listener) const
 {
-	m_subDocument->parse(static_cast<WPXListener *>(listener));
+	m_subDocument->parse(listener);
 }

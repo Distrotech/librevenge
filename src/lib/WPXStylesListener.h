@@ -41,11 +41,6 @@ public:
 	WPXHLListenerImpl * m_listenerImpl;
 	std::list <WPXPageSpan> &m_pageList;
 
-protected:
-	bool isUndoOn() { return m_isUndoOn; }
-	void setUndoOn(bool isUndoOn) { m_isUndoOn = isUndoOn; }
-		
-
 };
 
 #endif /* WPXSTYLESLISTENER_H */

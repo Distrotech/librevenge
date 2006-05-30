@@ -27,12 +27,12 @@
 
 #include "WPXMemoryStream.h"
 #include "WPXSubDocument.h"
-#include "WPXListener.h"
+#include "WP6Listener.h"
 
 class WP6SubDocument : public WPXSubDocument
 {
 public:
 	WP6SubDocument(uint8_t * streamData, const int dataSize);
-	virtual void parse(WPXListener *listener) const;
+	void parse(WP6Listener *listener) const;
 };
 #endif /* WP6SUBDOCUMENT_H */

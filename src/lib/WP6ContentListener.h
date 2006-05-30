@@ -130,7 +130,7 @@ class WP6ContentListener : public WP6Listener, public WPXContentListener
 {
 public:
 	WP6ContentListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, WPXHLListenerImpl *listenerImpl);
-	virtual ~WP6ContentListener();
+	~WP6ContentListener();
 
 	void startDocument() { WPXContentListener::startDocument(); };
 	void setDate(const uint16_t year, const uint8_t month, const uint8_t day,

@@ -47,8 +47,8 @@ WP3StylesListener::WP3StylesListener(std::list<WPXPageSpan> &pageList, WPXTableL
 
 void WP3StylesListener::endDocument()
 {	
+	insertBreak(WPX_SOFT_PAGE_BREAK); // pretend we just had a soft page break (for the last page)
 	setUndoOn(false);
-	insertBreak(WPX_PAGE_BREAK); // pretend we just had a soft page break (for the last page)
 }
 
 void WP3StylesListener::insertBreak(const uint8_t breakType)
@@ -88,8 +88,8 @@ void WP3StylesListener::insertBreak(const uint8_t breakType)
 
 void WP3StylesListener::undoChange(const uint8_t undoType, const uint16_t undoLevel)
 {
-// enable it after being sure whether the Algeria* documents have header
-#if 0
+// enable when have understood the undo change functions in WP3 file-format
+#if 0  
         if (undoType == 0x00) // begin invalid text
                 setUndoOn(true);
         else if (undoType == 0x01) // end invalid text
@@ -264,6 +264,7 @@ void WP3StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, co
 {
 	bool oldIsSubDocument = m_isSubDocument;
 	m_isSubDocument = true;
+	bool oldIsUndoOn = isUndoOn();
 	if (isHeaderFooter) 
 	{
 		bool oldCurrentPageHasContent = m_currentPageHasContent;
@@ -271,7 +272,7 @@ void WP3StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, co
 		WPXTableList oldTableList = m_tableList;
 		m_tableList = tableList;
 
-		subDocument->parse(static_cast<WP3Listener *>(this));
+		static_cast<const WP3SubDocument *>(subDocument)->parse(this);
 
 		m_tableList = oldTableList;
 		m_currentTable = oldCurrentTable;
@@ -279,7 +280,8 @@ void WP3StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, co
 	}
 	else
 	{
-		subDocument->parse(static_cast<WP3Listener *>(this));
+		static_cast<const WP3SubDocument *>(subDocument)->parse(this);
 	}
 	m_isSubDocument = oldIsSubDocument;
+	setUndoOn(oldIsUndoOn);
 }

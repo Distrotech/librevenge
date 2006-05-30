@@ -414,7 +414,7 @@ void WP5ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, c
 	}
 
 	if (subDocument)
-		subDocument->parse(static_cast<WP5Listener *>(this));
+		static_cast<const WP5SubDocument *>(subDocument)->parse(this);
 	else
 		_openSpan();
 

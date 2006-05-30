@@ -26,7 +26,6 @@
 
 #include "WP42Listener.h"
 
-WP42Listener::WP42Listener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl) :
-	WPXListener()
+WP42Listener::WP42Listener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl)
 {
 }
