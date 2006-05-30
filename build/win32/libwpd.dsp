@@ -981,14 +981,13 @@ SOURCE=..\..\src\lib\WPDocument.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXFileStructure.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\lib\WPXContentListener.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WPXFileStructure.h
+# End Source File
+# Begin Source File
 
 SOURCE=..\..\src\lib\WPXHeader.h
 # End Source File
