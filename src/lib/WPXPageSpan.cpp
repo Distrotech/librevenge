@@ -195,7 +195,8 @@ inline bool operator==(const WPXHeaderFooter &headerFooter1, const WPXHeaderFoot
 {
 	return ((headerFooter1.getType() == headerFooter2.getType()) && 
 		(headerFooter1.getSubDocument() == headerFooter2.getSubDocument()) &&
-		(headerFooter1.getOccurence() == headerFooter2.getOccurence()) );
+		(headerFooter1.getOccurence() == headerFooter2.getOccurence()) &&
+		(headerFooter1.getInternalType() == headerFooter2.getInternalType()) );
 }
 
 bool operator==(const WPXPageSpan &page1, const WPXPageSpan &page2)
