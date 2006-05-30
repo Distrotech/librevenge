@@ -135,7 +135,7 @@ struct _WPXContentParsingState
 
 class WPXContentListener : public WPXListener
 {
-public:
+protected:
 	WPXContentListener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl);
 	virtual ~WPXContentListener();
 
@@ -150,7 +150,6 @@ public:
 	WPXPropertyList m_metaData;
 	std::list <WPXPageSpan> &m_pageList;
 
-protected:
 	virtual void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice) = 0;
 	virtual void _flushText() = 0;
 	virtual void _changeList() = 0;

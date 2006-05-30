@@ -34,7 +34,7 @@
 
 class WPXStylesListener : public WPXListener
 {
-public:
+protected:
 	WPXStylesListener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl);
 	virtual ~WPXStylesListener();
 

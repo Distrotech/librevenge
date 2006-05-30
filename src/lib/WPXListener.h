@@ -31,7 +31,8 @@
 #include "WPXString.h"
 #include <vector>
 
-typedef struct _WPXDocumentMetaData WPXDocumentMetaData;
+#if 0
+typedef struct _WPXDocumentMetaData;
 struct _WPXDocumentMetaData
 {
 	WPXString m_author;
@@ -44,14 +45,14 @@ struct _WPXDocumentMetaData
 	WPXString m_descriptiveName;
 	WPXString m_descriptiveType;
 };
+#endif
 
 class WPXListener
 {
-public:
+protected:
 	WPXListener();
 	virtual ~WPXListener();
 
-protected:
 	bool isUndoOn() { return m_isUndoOn; }
 	void setUndoOn(bool isUndoOn) { m_isUndoOn = isUndoOn; }
 	
