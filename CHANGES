@@ -1,10 +1,10 @@
 CHANGES:
 0.8.4 -> 0.8.5
 - Conversion of font face, size and colour in WP5 parser, including the
-  default font informatione (Fridrich)
+  default font information (Fridrich)
 - Conversion of foot/endnotes in WP5.x format (Fridrich)
 - Conversion of headers/footers in WP3 and WP5 parsers (Fridrich)
-- Prevent paragraph negative paragraph margins due to page margin change.
+- Prevent negative paragraph margins due to page margin change.
   Removes the ugly text-border lines running across the text in
   OpenOffice.org (Fridrich)
 - Make page margins constant between two hard page breaks (Fridrich)
