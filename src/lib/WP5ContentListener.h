@@ -55,15 +55,15 @@ public:
 	WP5ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP5SubDocument *> &subDocuments, WPXHLListenerImpl *listenerImpl);
 	~WP5ContentListener();
 
-	void startDocument() { return WPXContentListener::startDocument(); };
+	void startDocument() { WPXContentListener::startDocument(); };
 	void setFont(const WPXString fontName, const float fontSize);
 	void insertCharacter(const uint16_t character);
 	void insertTab(const uint8_t tabType, float tabPosition);
 	void handleLineBreak() {};
 	void insertEOL();
-	void insertBreak(const uint8_t breakType) { return WPXContentListener::insertBreak(breakType); };
-	void lineSpacingChange(const float lineSpacing) { return WPXContentListener::lineSpacingChange(lineSpacing); };
-	void justificationChange(const uint8_t justification) { return WPXContentListener::justificationChange(justification); };
+	void insertBreak(const uint8_t breakType) { WPXContentListener::insertBreak(breakType); };
+	void lineSpacingChange(const float lineSpacing) { WPXContentListener::lineSpacingChange(lineSpacing); };
+	void justificationChange(const uint8_t justification) { WPXContentListener::justificationChange(justification); };
 	void characterColorChange(const uint8_t red, const uint8_t green, const uint8_t blue);
 	void attributeChange(const bool isOn, const uint8_t attribute);
 	void pageMarginChange(const uint8_t side, const uint16_t margin) {};

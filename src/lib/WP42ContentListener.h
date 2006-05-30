@@ -45,14 +45,14 @@ public:
 	WP42ContentListener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl);
 	~WP42ContentListener();
 
-	void startDocument() { return WPXContentListener::startDocument(); };
+	void startDocument() { WPXContentListener::startDocument(); };
 	void setAlignmentCharacter(const uint16_t character) {};
 	void setLeaderCharacter(const uint16_t character, const uint8_t numberOfSpaces) {};
 	void defineTabStops(const bool isRelative, const std::vector<WPXTabStop> &tabStops, 
 				    const std::vector<bool> &usePreWP9LeaderMethods) {};
 	void insertCharacter(const uint16_t character);
 	void insertTab(const uint8_t tabType, float tabPosition);
-	void insertBreak(const uint8_t breakType) { return WPXContentListener::insertBreak(breakType); };
+	void insertBreak(const uint8_t breakType) { WPXContentListener::insertBreak(breakType); };
 	void handleLineBreak() {};
 	void insertEOL();
 	void attributeChange(const bool isOn, const uint8_t attribute);

@@ -497,6 +497,10 @@ SOURCE=..\..\src\lib\WPDocument.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WPXContentListener.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WPXHeader.cpp
 # End Source File
 # Begin Source File
@@ -534,6 +538,10 @@ SOURCE=..\..\src\lib\WPXPropertyListVector.cpp
 # Begin Source File
 
 SOURCE=..\..\src\lib\WPXString.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WPXStylesListener.cpp
 # End Source File
 # Begin Source File
 
@@ -977,6 +985,11 @@ SOURCE=..\..\src\lib\WPXFileStructure.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WPXContentListener.h
+# End Source File
+# Begin Source File
+
+
 SOURCE=..\..\src\lib\WPXHeader.h
 # End Source File
 # Begin Source File
@@ -1022,6 +1035,10 @@ SOURCE=..\..\src\lib\WPXStream.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WPXString.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WPXStylesListener.h
 # End Source File
 # Begin Source File
 

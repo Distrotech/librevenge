@@ -132,7 +132,7 @@ public:
 	WP6ContentListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, WPXHLListenerImpl *listenerImpl);
 	virtual ~WP6ContentListener();
 
-	void startDocument() { return WPXContentListener::startDocument(); };
+	void startDocument() { WPXContentListener::startDocument(); };
 	void setDate(const uint16_t year, const uint8_t month, const uint8_t day,
 						const uint8_t hour, const uint8_t minute, const uint8_t second,
 						const uint8_t dayOfWeek, const uint8_t timeZone, const uint8_t unused) {}
@@ -145,9 +145,9 @@ public:
 	void insertTab(const uint8_t tabType, float tabPosition);
 	void handleLineBreak();
 	void insertEOL();
-	void insertBreak(const uint8_t breakType) { return WPXContentListener::insertBreak(breakType); };
-	void lineSpacingChange(const float lineSpacing) { return WPXContentListener::lineSpacingChange(lineSpacing); };
-	void justificationChange(const uint8_t justification) { return WPXContentListener::justificationChange(justification); };
+	void insertBreak(const uint8_t breakType) { WPXContentListener::insertBreak(breakType); };
+	void lineSpacingChange(const float lineSpacing) { WPXContentListener::lineSpacingChange(lineSpacing); };
+	void justificationChange(const uint8_t justification) { WPXContentListener::justificationChange(justification); };
 	void characterColorChange(const uint8_t red, const uint8_t green, const uint8_t blue);
 	void characterShadingChange(const uint8_t shading);
 	void highlightChange(const bool isOn, const RGBSColor color);

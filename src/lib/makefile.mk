@@ -120,6 +120,7 @@ SLOFILES= \
 	$(SLO)$/WP6UnsupportedVariableLengthGroup.obj \
 	$(SLO)$/WP6VariableLengthGroup.obj \
 	$(SLO)$/WPXPageSpan.obj \
+	$(SLO)$/WPXContentListener.obj \
 	$(SLO)$/WPXHeader.obj \
 	$(SLO)$/WPXListener.obj \
 	$(SLO)$/WPXMemoryStream.obj \
@@ -129,6 +130,7 @@ SLOFILES= \
 	$(SLO)$/WPXProperty.obj \
 	$(SLO)$/WPXPropertyList.obj \
 	$(SLO)$/WPXString.obj \
+	$(SLO)$/WPXStylesListener.obj \
 	$(SLO)$/WPXSubDocument.obj \
 	$(SLO)$/WPXPropertyListVector.obj \
 	$(SLO)$/WPDocument.obj
