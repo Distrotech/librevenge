@@ -51,6 +51,7 @@ public:
 	WPXListener();
 	virtual ~WPXListener();
 
+protected:
 	bool isUndoOn() { return m_isUndoOn; }
 	void setUndoOn(bool isUndoOn) { m_isUndoOn = isUndoOn; }
 	
