@@ -25,6 +25,8 @@ CHANGES:
 - Add an option "--info" to wpd2text; called with this option, wpd2text dumps the
   information of the document instead of converting it. This could be useful for 
   beagle (Fridrich)
+- Refactoring of the listener structure and split of WPXListener into WPXContentListener
+  and WPXStylesListener (Fridrich, Marc and Cyrille Moureau as a guest star)
 
 0.8.3 -> 0.8.4
 - Fix compilation with gcc >=  4.1.0 (Stephan Kulow)
