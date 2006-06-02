@@ -28,7 +28,6 @@
 
 #include "WPXHLListenerImpl.h"
 #include "libwpd_internal.h"
-//#include "WP3SubDocument.h"
 #include "WPXTable.h"
 #include "WPXPageSpan.h"
 #include <list>
@@ -39,7 +38,7 @@ class WP3SubDocument;
 class WP3Listener
 {
 public:
-	WP3Listener(std::list<WPXPageSpan> &pageList);
+	WP3Listener();
 	virtual ~WP3Listener() {}
 
 	virtual void startDocument() = 0;

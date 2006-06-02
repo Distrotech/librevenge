@@ -29,7 +29,7 @@
 #include "WPXFileStructure.h"
 #include "libwpd_internal.h"
 
-WP5Listener::WP5Listener(std::list<WPXPageSpan> &pageList) :
+WP5Listener::WP5Listener() :
 	m_prefixData(NULL)
 {
 }

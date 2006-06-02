@@ -47,7 +47,7 @@ _WP3ContentParsingState::~_WP3ContentParsingState()
 }
 
 WP3ContentListener::WP3ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP3SubDocument *>&subDocuments, WPXHLListenerImpl *listenerImpl) :
-	WP3Listener(pageList),
+	WP3Listener(),
 	WPXContentListener(pageList, listenerImpl),
 	m_parseState(new WP3ContentParsingState),
 	m_subDocuments(subDocuments)

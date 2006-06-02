@@ -35,7 +35,7 @@
 // sequence of messages passed to it by the parser.
 
 WP6StylesListener::WP6StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList) : 
-	WP6Listener(pageList),
+	WP6Listener(),
 	WPXStylesListener(pageList),
 	m_currentPage(WPXPageSpan()),
 	m_pageListHardPageMark(m_pageList.end()),

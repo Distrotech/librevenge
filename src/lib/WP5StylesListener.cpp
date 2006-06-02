@@ -32,7 +32,7 @@
 #include "WP5SubDocument.h"
 
 WP5StylesListener::WP5StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, std::vector<WP5SubDocument *> &subDocuments) : 
-	WP5Listener(pageList),
+	WP5Listener(),
 	WPXStylesListener(pageList),
 	m_currentPage(WPXPageSpan()),
 	m_nextPage(WPXPageSpan()),

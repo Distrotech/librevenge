@@ -132,7 +132,7 @@ _WP6ContentParsingState::~_WP6ContentParsingState()
 }
 
 WP6ContentListener::WP6ContentListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, WPXHLListenerImpl *listenerImpl) :
-	WP6Listener(pageList),
+	WP6Listener(),
 	WPXContentListener(pageList, listenerImpl),
 	m_parseState(new WP6ContentParsingState(tableList))
 {

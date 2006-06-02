@@ -40,7 +40,7 @@ _WP42ContentParsingState::~_WP42ContentParsingState()
 
 
 WP42ContentListener::WP42ContentListener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl) :
-	WP42Listener(pageList),
+	WP42Listener(),
 	WPXContentListener(pageList, listenerImpl),
 	m_parseState(new WP42ContentParsingState)
 {

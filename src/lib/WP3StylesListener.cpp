@@ -31,7 +31,7 @@
 #include "WP3SubDocument.h"
 
 WP3StylesListener::WP3StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, std::vector<WP3SubDocument *>&subDocuments) : 
-	WP3Listener(pageList),
+	WP3Listener(),
 	WPXStylesListener(pageList),
 	m_pageListHardPageMark(m_pageList.end()),
 	m_currentPage(WPXPageSpan()),

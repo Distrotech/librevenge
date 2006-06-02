@@ -35,7 +35,7 @@
 class WP42Listener
 {
 public:
-	WP42Listener(std::list<WPXPageSpan> &pageList);
+	WP42Listener();
 	virtual ~WP42Listener() {};
 
 	virtual void startDocument() = 0;
