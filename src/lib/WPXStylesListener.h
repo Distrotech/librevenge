@@ -32,15 +32,11 @@
 #include <vector>
 #include <list>
 
-class WPXStylesListener : public WPXListener
+class WPXStylesListener : protected WPXListener
 {
 protected:
-	WPXStylesListener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl);
+	WPXStylesListener(std::list<WPXPageSpan> &pageList);
 	virtual ~WPXStylesListener();
-
-	WPXHLListenerImpl * m_listenerImpl;
-	std::list <WPXPageSpan> &m_pageList;
-
 };
 
 #endif /* WPXSTYLESLISTENER_H */

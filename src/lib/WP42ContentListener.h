@@ -39,7 +39,7 @@ struct _WP42ContentParsingState
 	WPXString m_textBuffer;
 };
 
-class WP42ContentListener : public WP42Listener, public WPXContentListener
+class WP42ContentListener : public WP42Listener, protected WPXContentListener
 {
 public:
 	WP42ContentListener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl);

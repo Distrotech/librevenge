@@ -27,10 +27,8 @@
 
 #include "WPXStylesListener.h"
 
-WPXStylesListener::WPXStylesListener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl) :
-	WPXListener(),
-	m_listenerImpl(listenerImpl),
-	m_pageList(pageList)
+WPXStylesListener::WPXStylesListener(std::list<WPXPageSpan> &pageList) :
+	WPXListener(pageList)
 {
 }
 

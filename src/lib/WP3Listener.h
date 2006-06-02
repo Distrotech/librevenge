@@ -39,7 +39,7 @@ class WP3SubDocument;
 class WP3Listener
 {
 public:
-	WP3Listener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl);
+	WP3Listener(std::list<WPXPageSpan> &pageList);
 	virtual ~WP3Listener() {}
 
 	virtual void startDocument() = 0;

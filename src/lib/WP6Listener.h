@@ -44,7 +44,7 @@ enum WP6OutlineLocation { paragraphGroup, indexHeader };
 class WP6Listener
 {
 public:
-	WP6Listener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl);
+	WP6Listener(std::list<WPXPageSpan> &pageList);
 	virtual ~WP6Listener() {};
 
 	virtual void startDocument() = 0;

@@ -35,7 +35,7 @@
 #include "WP6FontDescriptorPacket.h"
 #include "WP6DefaultInitialFontPacket.h"
 
-WP6Listener::WP6Listener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl) :
+WP6Listener::WP6Listener(std::list<WPXPageSpan> &pageList) :
 	m_prefixData(NULL)
 {
 }

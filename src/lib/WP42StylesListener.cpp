@@ -30,8 +30,8 @@
 #include "libwpd_internal.h"
 
 WP42StylesListener::WP42StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList) : 
-	WP42Listener(pageList, NULL),
-	WPXStylesListener(pageList, NULL),
+	WP42Listener(pageList),
+	WPXStylesListener(pageList),
 	m_currentPage(WPXPageSpan()),
 	m_tableList(tableList), 
 	m_tempMarginLeft(1.0f),
@@ -47,8 +47,8 @@ void WP42StylesListener::endDocument()
 
 void WP42StylesListener::insertBreak(const uint8_t breakType)
 {
-	//if (!WP42Listener::isUndoOn())
-	//{	
+	if (!isUndoOn())
+	{	
 		switch (breakType) 
 		{
 		case WPX_PAGE_BREAK:
@@ -62,12 +62,12 @@ void WP42StylesListener::insertBreak(const uint8_t breakType)
 			m_currentPageHasContent = false;
 			break;
 		}
-	//}
+	}
 }
 /*
 void WP42StylesListener::pageMarginChange(const uint8_t side, const uint16_t margin)
 {
-	if (!WP42Listener::isUndoOn()) 
+	if (!isUndoOn()) 
 	{
 		float marginInch = (float)(((double)margin + (double)WP6_NUM_EXTRA_WPU) / (double)WPX_NUM_WPUS_PER_INCH);
 		switch(side)
@@ -84,7 +84,7 @@ void WP42StylesListener::pageMarginChange(const uint8_t side, const uint16_t mar
 
 void WP42StylesListener::marginChange(const uint8_t side, const uint16_t margin)
 {
-	if (!WP42Listener::isUndoOn()) 
+	if (!isUndoOn()) 
 	{		
 		float marginInch = (float)(((double)margin + (double)WP6_NUM_EXTRA_WPU) / (double)WPX_NUM_WPUS_PER_INCH);
 		switch(side)
@@ -107,7 +107,7 @@ void WP42StylesListener::marginChange(const uint8_t side, const uint16_t margin)
 
 void WP42StylesListener::headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, const uint16_t textPID)
 {
-	if (!WP42Listener::isUndoOn()) 
+	if (!isUndoOn()) 
 	{			
 		WPD_DEBUG_MSG(("WordPerfect: headerFooterGroup (headerFooterType: %i, occurenceBits: %i, textPID: %i)\n", 
 			       headerFooterType, occurenceBits, textPID));
@@ -118,7 +118,7 @@ void WP42StylesListener::headerFooterGroup(const uint8_t headerFooterType, const
 
 void WP42StylesListener::suppressPageCharacteristics(const uint8_t suppressCode)
 {
-	if (!WP42Listener::isUndoOn()) 
+	if (!isUndoOn()) 
 	{			
 		WPD_DEBUG_MSG(("WordPerfect: suppressPageCharacteristics (suppressCode: %u)\n", suppressCode));
 		if (suppressCode & WP6_PAGE_GROUP_SUPPRESS_HEADER_A)
@@ -134,17 +134,17 @@ void WP42StylesListener::suppressPageCharacteristics(const uint8_t suppressCode)
 */
 void WP42StylesListener::startTable()
 {
-	//if (!WP42Listener::isUndoOn()) 
-	//{			
+	if (!isUndoOn()) 
+	{			
 		m_currentPageHasContent = true;
 		m_currentTable = new WPXTable();
 		m_tableList.add(m_currentTable);
-	//}
+	}
 }
 
 void WP42StylesListener::insertRow(const uint16_t rowHeight, const bool isMinimumHeight, const bool isHeaderRow)
 {
-	if (/*!WP42Listener::isUndoOn() && */m_currentTable != NULL) 
+	if (!isUndoOn() && m_currentTable) 
 	{
 		m_currentPageHasContent = true;
 		m_currentTable->insertRow();
@@ -156,7 +156,7 @@ void WP42StylesListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan
 				  const RGBSColor * cellBorderColor, const WPXVerticalAlignment cellVerticalAlignment, 
 				  const bool useCellAttributes, const uint32_t cellAttributes)
 {
-	if (/*!WP42Listener::isUndoOn() &&*/ m_currentTable != NULL)
+	if (!isUndoOn() && m_currentTable)
 	{
 		m_currentPageHasContent = true;
 		m_currentTable->insertCell(colSpan, rowSpan, borderBits);

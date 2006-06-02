@@ -39,7 +39,7 @@
 
 class WPXSubDocument;
 
-class WP6StylesListener : public WP6Listener, public WPXStylesListener
+class WP6StylesListener : public WP6Listener, protected WPXStylesListener
 {
 public:
 	WP6StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList);

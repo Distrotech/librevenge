@@ -32,7 +32,7 @@
 #include "WPXPageSpan.h"
 #include "WPXTable.h"
 
-class WP42StylesListener : public WP42Listener, public WPXStylesListener
+class WP42StylesListener : public WP42Listener, protected WPXStylesListener
 {
 public:
 	WP42StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList);

@@ -27,8 +27,9 @@
 
 #include "WPXListener.h"
 
-WPXListener::WPXListener() :
-	m_isUndoOn(false)
+WPXListener::WPXListener(std::list<WPXPageSpan> &pageList) :
+	m_isUndoOn(false),
+	m_pageList(pageList)
 {
 }
 

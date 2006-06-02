@@ -33,7 +33,7 @@
 #include "WPXPageSpan.h"
 #include "WPXTable.h"
 
-class WP3StylesListener : public WP3Listener, public WPXStylesListener
+class WP3StylesListener : public WP3Listener, protected WPXStylesListener
 {
 public:
 	WP3StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, std::vector<WP3SubDocument *> &subDocuments);

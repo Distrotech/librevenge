@@ -126,7 +126,7 @@ private:
 	WPXNumberingType m_listTypes[WP6_NUM_LIST_LEVELS];
 };
 
-class WP6ContentListener : public WP6Listener, public WPXContentListener
+class WP6ContentListener : public WP6Listener, protected WPXContentListener
 {
 public:
 	WP6ContentListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, WPXHLListenerImpl *listenerImpl);

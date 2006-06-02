@@ -29,32 +29,20 @@
 
 #include "libwpd_internal.h"
 #include "WPXString.h"
+#include "WPXPageSpan.h"
 #include <vector>
-
-#if 0
-typedef struct _WPXDocumentMetaData;
-struct _WPXDocumentMetaData
-{
-	WPXString m_author;
-	WPXString m_subject;
-	WPXString m_publisher;
-	WPXString m_category;
-	WPXString m_keywords;
-	WPXString m_language;
-	WPXString m_abstract;
-	WPXString m_descriptiveName;
-	WPXString m_descriptiveType;
-};
-#endif
+#include <list>
 
 class WPXListener
 {
 protected:
-	WPXListener();
+	WPXListener(std::list<WPXPageSpan> &pageList);
 	virtual ~WPXListener();
 
 	bool isUndoOn() { return m_isUndoOn; }
 	void setUndoOn(bool isUndoOn) { m_isUndoOn = isUndoOn; }
+
+	std::list<WPXPageSpan> &m_pageList;
 	
 private:
 	bool m_isUndoOn;

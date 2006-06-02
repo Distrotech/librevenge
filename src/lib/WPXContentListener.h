@@ -148,7 +148,6 @@ protected:
 	WPXContentParsingState *m_ps; // parse state
 	WPXHLListenerImpl * m_listenerImpl;
 	WPXPropertyList m_metaData;
-	std::list <WPXPageSpan> &m_pageList;
 
 	virtual void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice) = 0;
 	virtual void _flushText() = 0;

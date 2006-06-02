@@ -36,7 +36,7 @@
 #include "WPXTable.h"
 #include "WP5SubDocument.h"
 
-class WP5StylesListener : public WP5Listener, public WPXStylesListener
+class WP5StylesListener : public WP5Listener, protected WPXStylesListener
 {
 public:
 	WP5StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, std::vector<WP5SubDocument*> &subDocuments);

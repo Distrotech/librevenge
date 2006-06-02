@@ -40,7 +40,7 @@ _WP42ContentParsingState::~_WP42ContentParsingState()
 
 
 WP42ContentListener::WP42ContentListener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl) :
-	WP42Listener(pageList, listenerImpl),
+	WP42Listener(pageList),
 	WPXContentListener(pageList, listenerImpl),
 	m_parseState(new WP42ContentParsingState)
 {
@@ -58,9 +58,12 @@ WP42ContentListener::~WP42ContentListener()
 
 void WP42ContentListener::insertCharacter(const uint16_t character)
 {
-	if (m_ps->m_isSpanOpened)
-		_openSpan();
-	appendUCS4(m_parseState->m_textBuffer, (uint32_t)character);
+	if (!isUndoOn())
+	{
+		if (m_ps->m_isSpanOpened)
+			_openSpan();
+		appendUCS4(m_parseState->m_textBuffer, (uint32_t)character);
+	}
 }
 
 void WP42ContentListener::insertTab(const uint8_t tabType, float tabPosition)

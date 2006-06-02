@@ -118,10 +118,9 @@ _WPXContentParsingState::~_WPXContentParsingState()
 }
 
 WPXContentListener::WPXContentListener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl) :
-	WPXListener(),
+	WPXListener(pageList),
 	m_ps(new WPXContentParsingState),
-	m_listenerImpl(listenerImpl),
-	m_pageList(pageList)
+	m_listenerImpl(listenerImpl)
 {
 	m_ps->m_nextPageSpanIter = pageList.begin();
 }

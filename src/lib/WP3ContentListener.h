@@ -46,7 +46,7 @@ struct _WP3ContentParsingState
 	WPXTableList m_tableList;
 };
 
-class WP3ContentListener : public WP3Listener, public WPXContentListener
+class WP3ContentListener : public WP3Listener, protected WPXContentListener
 {
 public:
 	WP3ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP3SubDocument *> &subDocuments, WPXHLListenerImpl *listenerImpl);
