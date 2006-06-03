@@ -59,7 +59,6 @@ public:
 	void setFont(const WPXString fontName, const float fontSize);
 	void insertCharacter(const uint16_t character);
 	void insertTab(const uint8_t tabType, float tabPosition);
-	void handleLineBreak() {};
 	void insertEOL();
 	void insertBreak(const uint8_t breakType) { WPXContentListener::insertBreak(breakType); };
 	void lineSpacingChange(const float lineSpacing) { WPXContentListener::lineSpacingChange(lineSpacing); };
@@ -93,10 +92,10 @@ public:
 protected:
 	void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
 
-private:
 	void _flushText();
 	void _changeList() {};
 
+private:
 	WP5ContentParsingState *m_parseState;
 	std::vector<WP5SubDocument *> &m_subDocuments;
 };

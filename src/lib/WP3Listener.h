@@ -42,22 +42,15 @@ public:
 	virtual ~WP3Listener() {}
 
 	virtual void startDocument() = 0;
-	virtual void setAlignmentCharacter(const uint16_t character) = 0;
-	virtual void setLeaderCharacter(const uint16_t character, const uint8_t numberOfSpaces) = 0;
-	virtual void defineTabStops(const bool isRelative, const std::vector<WPXTabStop> &tabStops, 
-				    const std::vector<bool> &usePreWP9LeaderMethods) = 0;
 	virtual void insertCharacter(const uint16_t character) = 0;
 	virtual void insertTab(const uint8_t tabType, float tabPosition) = 0;
 	virtual void insertBreak(const uint8_t breakType) = 0;
-	virtual void handleLineBreak() = 0;
 	virtual void insertEOL() = 0;
 	virtual void lineSpacingChange(const float lineSpacing) = 0;
 	virtual void attributeChange(const bool isOn, const uint8_t attribute) = 0;
-	virtual void spacingAfterParagraphChange(const float spacingRelative, const float spacingAbsolute) = 0;
 	virtual void pageMarginChange(const uint8_t side, const uint16_t margin) = 0;
 	virtual void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool isPersistent) = 0;
 	virtual void marginChange(const uint8_t side, const uint16_t margin) = 0;
-	virtual void paragraphMarginChange(const uint8_t side, const int16_t margin) = 0;
 	virtual void indentFirstLineChange(const int16_t offset) = 0;
 	virtual void columnChange(const WPXTextColumnType columnType, const uint8_t numColumns, const std::vector<float> &columnWidth,
 					const std::vector<bool> &isFixedWidth) = 0;
@@ -67,8 +60,6 @@ public:
 	virtual void addTableColumnDefinition(const uint32_t width, const uint32_t leftGutter, const uint32_t rightGutter,
 					const uint32_t attributes, const uint8_t alignment) = 0;
 	virtual void startTable() = 0;
- 	virtual void insertRow() = 0;
- 	virtual void insertCell() = 0;
  	virtual void closeCell() = 0;
 	virtual void closeRow() = 0;
 	virtual void setTableCellSpan(const uint16_t colSpan, const uint16_t rowSpan) = 0;
@@ -84,9 +75,6 @@ public:
 	virtual void insertNote(const WPXNoteType noteType, WP3SubDocument *subDocument) = 0;
 	virtual void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, WP3SubDocument *subDocument) = 0;
 	virtual void suppressPage(const uint16_t suppressCode) = 0;
-
-protected:
-	virtual void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice) = 0;	
 };
 
 #endif /* WP3LISTENER_H */

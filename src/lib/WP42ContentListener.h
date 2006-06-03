@@ -46,46 +46,20 @@ public:
 	~WP42ContentListener();
 
 	void startDocument() { WPXContentListener::startDocument(); };
-	void setAlignmentCharacter(const uint16_t character) {};
-	void setLeaderCharacter(const uint16_t character, const uint8_t numberOfSpaces) {};
-	void defineTabStops(const bool isRelative, const std::vector<WPXTabStop> &tabStops, 
-				    const std::vector<bool> &usePreWP9LeaderMethods) {};
 	void insertCharacter(const uint16_t character);
 	void insertTab(const uint8_t tabType, float tabPosition);
 	void insertBreak(const uint8_t breakType) { WPXContentListener::insertBreak(breakType); };
-	void handleLineBreak() {};
 	void insertEOL();
 	void attributeChange(const bool isOn, const uint8_t attribute);
-	void lineSpacingChange(const float lineSpacing) {};
-	void spacingAfterParagraphChange(const float spacingRelative, const float spacingAbsolute) {};
-	void justificationChange(const uint8_t justification) {};
-	void pageMarginChange(const uint8_t side, const uint16_t margin) {};
-	void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool isPersistent) {};
-	void marginChange(const uint8_t side, const uint16_t margin) {};
-	void paragraphMarginChange(const uint8_t side, const int16_t margin) {};
-	void indentFirstLineChange(const int16_t offset) {};
-	void columnChange(const WPXTextColumnType typeColumn, const uint8_t numColumns, const std::vector<float> &columnWidth,
-				  const std::vector<bool> &isFixedWidth) {};
 	void endDocument();
-
-	void defineTable(const uint8_t position, const uint16_t leftOffset) {};
-	void addTableColumnDefinition(const uint32_t width, const uint32_t leftGutter, const uint32_t rightGutter,
-				const uint32_t attributes, const uint8_t alignment) {};
-	void startTable() {};
- 	void insertRow(const uint16_t rowHeight, const bool isMinimumHeight, const bool isHeaderRow) {};
- 	void insertCell(const uint8_t colSpan, const uint8_t rowSpan, const bool boundFromLeft, const bool boundFromAbove,
-				const uint8_t borderBits, const RGBSColor * cellFgColor, const RGBSColor * cellBgColor, 
-				const RGBSColor * cellBorderColor, const WPXVerticalAlignment cellVerticalAlignment, 
-				const bool useCellAttributes, const uint32_t cellAttributes) {};
- 	void endTable() {};
 
 protected:
 	void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0) {}
 
-private:
 	void _flushText();
 	void _changeList() {};
 
+private:
 	WP42ContentParsingState *m_parseState;
 };
 

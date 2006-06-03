@@ -45,7 +45,6 @@ public:
 	void setFont(const WPXString fontName, const float fontSize) {}
 	void insertCharacter(const uint16_t character) { /*if (!isUndoOn())*/ m_currentPageHasContent = true; }
 	void insertTab(const uint8_t tabType, float tabPosition) { /*if (!isUndoOn())*/ m_currentPageHasContent = true; }
-	void handleLineBreak() { /*if (!isUndoOn())*/ m_currentPageHasContent = true; };
 	void characterColorChange(const uint8_t red, const uint8_t green, const uint8_t blue) {};
 	void insertEOL() { /*if (!isUndoOn())*/ m_currentPageHasContent = true; }
  	void insertBreak(const uint8_t breakType);
@@ -74,14 +73,12 @@ public:
 	void suppressPageCharacteristics(const uint8_t suppressCode);
 
 protected:
-	void _openPageSpan() { /* FIXME: REMOVE ME WHEN IMPLEMENTED IN WPXListener */ }
-
 	void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
 
-private:
 	void _flushText() {}
 	void _changeList() {}
 
+private:
 	WPXPageSpan m_currentPage, m_nextPage;
 
 	WPXTableList m_tableList;

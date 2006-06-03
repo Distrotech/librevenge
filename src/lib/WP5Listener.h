@@ -46,7 +46,6 @@ public:
 	virtual void setFont(const WPXString fontName, const float fontSize) = 0;
 	virtual void insertCharacter(const uint16_t character) = 0;
 	virtual void insertTab(const uint8_t tabType, float tabPosition) = 0;
-	virtual void handleLineBreak() = 0;
 	virtual void insertEOL() = 0;
 	virtual void insertBreak(const uint8_t breakType) = 0;
 	virtual void lineSpacingChange(const float lineSpacing) = 0;

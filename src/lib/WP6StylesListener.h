@@ -102,12 +102,11 @@ public:
  	void endTable();
 
 	void undoChange(const uint8_t undoType, const uint16_t undoLevel);
+
 protected:
 	void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
 
 	void _flushText() {}
-	void _openParagraph() {}
-	void _openPageSpan() { /* FIXME: REMOVE ME WHEN IMPLEMENTED IN WPXListener */ };
 	void _changeList() {}
 
 private:

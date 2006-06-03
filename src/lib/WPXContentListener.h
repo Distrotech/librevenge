@@ -139,11 +139,11 @@ protected:
 	WPXContentListener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl);
 	virtual ~WPXContentListener();
 
-	virtual void startDocument();
+	void startDocument();
 	void handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice);
-	virtual void insertBreak(const uint8_t breakType);
-	virtual void lineSpacingChange(const float lineSpacing);
-	virtual void justificationChange(const uint8_t justification);
+	void insertBreak(const uint8_t breakType);
+	void lineSpacingChange(const float lineSpacing);
+	void justificationChange(const uint8_t justification);
 
 	WPXContentParsingState *m_ps; // parse state
 	WPXHLListenerImpl * m_listenerImpl;
@@ -159,10 +159,10 @@ protected:
 	void _openPageSpan();
 	void _closePageSpan();
 
-	virtual void _appendParagraphProperties(WPXPropertyList &propList, const bool isListElement=false);
-	virtual void _getTabStops(WPXPropertyListVector &tabStops);
-	virtual void _appendJustification(WPXPropertyList &propList, int justification);
-	virtual void _resetParagraphState(const bool isListElement=false);
+	void _appendParagraphProperties(WPXPropertyList &propList, const bool isListElement=false);
+	void _getTabStops(WPXPropertyListVector &tabStops);
+	void _appendJustification(WPXPropertyList &propList, int justification);
+	void _resetParagraphState(const bool isListElement=false);
 	virtual void _openParagraph();
 	void _closeParagraph();
 

@@ -53,22 +53,15 @@ public:
 	~WP3ContentListener();
 
 	void startDocument() { WPXContentListener::startDocument(); };
-	void setAlignmentCharacter(const uint16_t character) {};
-	void setLeaderCharacter(const uint16_t character, const uint8_t numberOfSpaces) {};
-	void defineTabStops(const bool isRelative, const std::vector<WPXTabStop> &tabStops, 
-				    const std::vector<bool> &usePreWP9LeaderMethods) {};
 	void insertCharacter(const uint16_t character);
 	void insertTab(const uint8_t tabType, float tabPosition);
 	void insertBreak(const uint8_t breakType) { WPXContentListener::insertBreak(breakType); };
-	void handleLineBreak() {};
 	void insertEOL();
 	void attributeChange(const bool isOn, const uint8_t attribute);
 	void lineSpacingChange(const float lineSpacing) { WPXContentListener::lineSpacingChange(lineSpacing); };
-	void spacingAfterParagraphChange(const float spacingRelative, const float spacingAbsolute) {};
 	void pageMarginChange(const uint8_t side, const uint16_t margin) {};
 	void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool isPersistent) {};
 	void marginChange(const uint8_t side, const uint16_t margin);
-	void paragraphMarginChange(const uint8_t side, const int16_t margin) {};
 	void indentFirstLineChange(const int16_t offset);
 	void columnChange(const WPXTextColumnType columnType, const uint8_t numColumns, const std::vector<float> &columnWidth,
 					const std::vector<bool> &isFixedWidth);
@@ -100,10 +93,10 @@ protected:
 	void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
 	void _openParagraph();
 
-private:
 	void _flushText();
 	void _changeList() {};
 
+private:
 	WP3ContentParsingState *m_parseState;
 	std::vector<WP3SubDocument *> &m_subDocuments;
 };
