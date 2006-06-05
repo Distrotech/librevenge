@@ -44,6 +44,9 @@ WP42ContentListener::WP42ContentListener(std::list<WPXPageSpan> &pageList, WPXHL
 	WPXContentListener(pageList, listenerImpl),
 	m_parseState(new WP42ContentParsingState)
 {
+// Default line is 6 lpi, it means that the caracters are of 12 points
+	*(m_ps->m_fontName) = "Courier";
+	m_ps->m_fontSize = 12.0f;
 }
 
 WP42ContentListener::~WP42ContentListener() 

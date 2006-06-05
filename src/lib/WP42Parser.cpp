@@ -73,13 +73,13 @@ void WP42Parser::parseDocument(WPXInputStream *input, WP42Listener *listener)
 					listener->insertEOL();
 					break;
 				case 0x0B: // soft new page
-					listener->insertBreak(WPX_PAGE_BREAK);
+					listener->insertBreak(WPX_SOFT_PAGE_BREAK);
 					break;
 				case 0x0C: // hard new page
 					listener->insertBreak(WPX_PAGE_BREAK);
 					break;
 				case 0x0D: // soft new line
-					listener->insertEOL();
+					listener->insertCharacter(' ');
 					break;
 				default:
 					// unsupported or undocumented token, ignore
@@ -146,7 +146,6 @@ void WP42Parser::parseDocument(WPXInputStream *input, WP42Listener *listener)
 			WP42Part *part = WP42Part::constructPart(input, readVal);
 			if (part != NULL)
 			{
-				//part->parse(llListener);
 				delete(part);
 			}
 		}
@@ -168,7 +167,7 @@ void WP42Parser::parse(WPXHLListenerImpl *listenerImpl)
 
 		// second pass: here is where we actually send the messages to the target app
 		// that are necessary to emit the body of the target document
-		WP42ContentListener listener(pageList, listenerImpl); // FIXME: SHOULD BE CONTENT_LISTENER, AND SHOULD BE PASSED TABLE DATA!
+		WP42ContentListener listener(pageList, listenerImpl);
 		parse(input, &listener);
 
 	}

@@ -49,9 +49,7 @@ void WP42VariableLengthGroup::_read(WPXInputStream *input)
 	// skip over the remaining bytes of the group, if any
 	while (!input->atEOS())
 	{
-		uint8_t readNextVal;
-		readNextVal = readU8(input);
-		if (readNextVal == getGroup())
+		if (readU8(input) == getGroup())
 			break;
 	}	
 	
