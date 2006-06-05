@@ -76,6 +76,7 @@ libwpd_0_8_la_SOURCES = \
 	WP42Parser.cpp \
 	WP42Part.cpp \
 	WP42StylesListener.cpp \
+	WP42SubDocument.cpp \
 	WP42UnsupportedVariableLengthGroup.cpp \
 	WP42VariableLengthGroup.cpp \
 	WP5AttributeGroup.cpp \
@@ -195,6 +196,7 @@ libwpd_0_8_la_SOURCES = \
 	WP42Part.h \
 	WP42Parser.h \
 	WP42StylesListener.h \
+	WP42SubDocument.h \
 	WP42UnsupportedVariableLengthGroup.h \
 	WP42VariableLengthGroup.h \
 	WP5AttributeGroup.h \
