@@ -71,6 +71,7 @@ libwpd_0_8_la_SOURCES = \
 	WP3VariableLengthGroup.cpp \
 	WP42ContentListener.cpp \
 	WP42FileStructure.cpp \
+	WP42HeaderFooterGroup.cpp \
 	WP42Heuristics.cpp \
 	WP42Listener.cpp \
 	WP42Parser.cpp \
@@ -191,6 +192,7 @@ libwpd_0_8_la_SOURCES = \
 	WP3VariableLengthGroup.h \
 	WP42ContentListener.h \
 	WP42FileStructure.h \
+	WP42HeaderFooterGroup.h \
 	WP42Heuristics.h \
 	WP42Listener.h \
 	WP42Part.h \

@@ -35,5 +35,6 @@ void WP42SubDocument::parse(WP42Listener *listener) const
 {
 	WPXMemoryInputStream *tmpStream = getStream();
 	tmpStream->seek(0, WPX_SEEK_SET);
+	listener->marginReset(readU8(tmpStream), readU8(tmpStream));
 	WP42Parser::parseDocument(tmpStream, listener);
 }

@@ -44,6 +44,7 @@ public:
 	virtual void insertBreak(const uint8_t breakType) = 0;
 	virtual void insertEOL() = 0;
 	virtual void attributeChange(const bool isOn, const uint8_t attribute) = 0;
+	virtual void marginReset(const uint8_t leftMargin, const uint8_t rightMargin) = 0;
 	virtual void endDocument() = 0;
 
 };

@@ -1,6 +1,4 @@
 /* libwpd
- * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
@@ -24,38 +22,37 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WP42VariableLengthGroup.h"
-#include "WP42UnsupportedVariableLengthGroup.h"
 #include "WP42HeaderFooterGroup.h"
-#include "WP42FileStructure.h"
 #include "libwpd_internal.h"
+#include <string>
 
-WP42VariableLengthGroup::WP42VariableLengthGroup(uint8_t group)
-	: m_group(group)
+WP42HeaderFooterGroup::WP42HeaderFooterGroup(WPXInputStream *input, uint8_t group) :
+	WP42VariableLengthGroup(group),
+	m_definition(0),
+	m_subDocument(NULL)
+{
+	_read(input);
+}
+
+WP42HeaderFooterGroup::~WP42HeaderFooterGroup()
 {
 }
 
-WP42VariableLengthGroup * WP42VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, uint8_t group)
+void WP42HeaderFooterGroup::_readContents(WPXInputStream *input)
 {
-	switch (group)
-	{
-		case WP42_HEADER_FOOTER_GROUP:
-			return new WP42HeaderFooterGroup(input, group);
-		default:
-			// this is an unhandled group, just skip it
-			return new WP42UnsupportedVariableLengthGroup(input, group);
-	}
+	input->seek(2, WPX_SEEK_CUR);
+	std::string tempSubDocumentText;
+	uint8_t tempCharacter;
+	while ((tempCharacter = readU8(input)) == 0xFF);
+	tempSubDocumentText.append(1, (char)tempCharacter);
+	while ((tempCharacter = readU8(input)) != 0xFF)
+		tempSubDocumentText.append(1, (char)tempCharacter);
+	input->seek(1, WPX_SEEK_CUR);
+	m_subDocument = new WP42SubDocument((uint8_t *)(tempSubDocumentText.c_str()), tempSubDocumentText.length() - 1);
+	m_definition = readU8(input);
 }
 
-void WP42VariableLengthGroup::_read(WPXInputStream *input)
+void WP42HeaderFooterGroup::parse(WP42Listener *listener)
 {
-	_readContents(input);
-	
-	// skip over the remaining bytes of the group, if any
-	while (!input->atEOS())
-	{
-		if (readU8(input) == getGroup())
-			break;
-	}	
-	
+	WPD_DEBUG_MSG(("WordPerfect: handling a HeaderFooter group\n"));
 }

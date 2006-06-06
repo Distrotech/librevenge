@@ -43,6 +43,7 @@ public:
 	void insertEOL() {}
  	void insertBreak(const uint8_t breakType);
 	void attributeChange(const bool isOn, const uint8_t attribute) {}
+	void marginReset(const uint8_t leftMargin, const uint8_t rightMargin) {};
 	void endDocument();
 
 private:
