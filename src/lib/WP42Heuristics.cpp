@@ -82,7 +82,7 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input, bool parti
 				// fixed length function group
 				
 				// seek to the position where the closing gate should be
-				bool res = input->seek(WP42_FUNCTION_GROUP_SIZE[readVal-0xC0]-2, WPX_SEEK_CUR);
+				int res = input->seek(WP42_FUNCTION_GROUP_SIZE[readVal-0xC0]-2, WPX_SEEK_CUR);
 				// when passed the complete file, we should be able to do that
 				if (!partialContent && res)
 					return WPD_CONFIDENCE_NONE;

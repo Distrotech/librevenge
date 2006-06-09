@@ -180,7 +180,7 @@ WPXString WPXBoolProperty::getStr() const
 
 WPXProperty * WPXBoolProperty::clone() const
 {
-	return new WPXBoolProperty((const bool)getInt());
+	return new WPXBoolProperty((const bool)(getInt() != 0));
 }
 
 WPXFloatProperty::WPXFloatProperty(const float val) :

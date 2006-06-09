@@ -201,6 +201,10 @@ SOURCE=..\..\src\lib\WP42FileStructure.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP42HeaderFooterGroup.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP42Heuristics.cpp
 # End Source File
 # Begin Source File
@@ -218,6 +222,10 @@ SOURCE=..\..\src\lib\WP42Part.cpp
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP42StylesListener.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP42SubDocument.cpp
 # End Source File
 # Begin Source File
 
@@ -681,6 +689,10 @@ SOURCE=..\..\src\lib\WP42FileStructure.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP42HeaderFooterGroup.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP42Heuristics.h
 # End Source File
 # Begin Source File
@@ -698,6 +710,10 @@ SOURCE=..\..\src\lib\WP42Part.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP42StylesListener.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP42SubDocument.h
 # End Source File
 # Begin Source File
 
