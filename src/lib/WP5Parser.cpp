@@ -180,7 +180,6 @@ void WP5Parser::parse(WPXHLListenerImpl *listenerImpl)
 		{
 			tmpFontSize = static_cast<const WP5ListFontsUsedPacket*>(listener.getGeneralPacketData(2))->getFontSize(0);
 			tmpFontNameOffset = static_cast<const WP5ListFontsUsedPacket*>(listener.getGeneralPacketData(2))->getFontNameOffset(0);
-			tmpFontName = static_cast<const WP5FontNameStringPoolPacket*>(listener.getGeneralPacketData(7))->getFontName(tmpFontNameOffset);
 		}
 		else
 			tmpHasFontsUsedPacket = false;

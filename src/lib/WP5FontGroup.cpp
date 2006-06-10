@@ -97,7 +97,8 @@ void WP5FontGroup::parse(WP5Listener *listener)
 				return;
 			}
 
-			tmpFontName = static_cast<const WP5FontNameStringPoolPacket*>(listener->getGeneralPacketData(7))->getFontName(tmpFontNameOffset);
+			if (listener->getGeneralPacketData(7))
+				tmpFontName = static_cast<const WP5FontNameStringPoolPacket*>(listener->getGeneralPacketData(7))->getFontName(tmpFontNameOffset);
 			if (m_fontSize >= 0)
 				tmpFontSize = m_fontSize;
 
