@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
- * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (c) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,38 +24,20 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WP42VariableLengthGroup.h"
-#include "WP42UnsupportedVariableLengthGroup.h"
-#include "WP42HeaderFooterGroup.h"
-#include "WP42FileStructure.h"
-#include "libwpd_internal.h"
+#ifndef WP42UNSUPPORTEDMULTIBYTEFUNCTIONGROUP_H
+#define WP42UNSUPPORTEDMULTIBYTEFUNCTIONGROUP_H
 
-WP42VariableLengthGroup::WP42VariableLengthGroup(uint8_t group)
-	: m_group(group)
-{
-}
+#include "WP42MultiByteFunctionGroup.h"
 
-WP42VariableLengthGroup * WP42VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, uint8_t group)
-{
-	switch (group)
-	{
-		case WP42_HEADER_FOOTER_GROUP:
-			return new WP42HeaderFooterGroup(input, group);
-		default:
-			// this is an unhandled group, just skip it
-			return new WP42UnsupportedVariableLengthGroup(input, group);
-	}
-}
+// a pedantic and irritating class that we should only need until we completely cover wordperfect's
+// set of variable length groups (there are a finite number)
 
-void WP42VariableLengthGroup::_read(WPXInputStream *input)
+class WP42UnsupportedMultiByteFunctionGroup : public WP42MultiByteFunctionGroup
 {
-	_readContents(input);
-	
-	// skip over the remaining bytes of the group, if any
-	while (!input->atEOS())
-	{
-		if (readU8(input) == getGroup())
-			break;
-	}	
-	
-}
+public:
+	WP42UnsupportedMultiByteFunctionGroup(WPXInputStream *input, uint8_t group);
+
+	void _readContents(WPXInputStream *input);
+};
+
+#endif /* WP42UNSUPPORTEDMULTIBYTEFUNCTIONGROUP_H */

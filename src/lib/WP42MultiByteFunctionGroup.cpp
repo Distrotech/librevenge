@@ -1,6 +1,6 @@
 /* libwpd
  * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2003-2004 Marc Maurer (uwog@uwog.net)
+ * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
@@ -24,27 +24,35 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WPXPart.h"
-#include "WP42Part.h"
-#include "WP42FileStructure.h"
 #include "WP42MultiByteFunctionGroup.h"
+#include "WP42UnsupportedMultiByteFunctionGroup.h"
+#include "WP42HeaderFooterGroup.h"
+#include "WP42FileStructure.h"
 #include "libwpd_internal.h"
 
-// constructPart: constructs a parseable low-level representation of part of the document
-// returns the part if it successfully creates the part, returns NULL if it can't
-// throws an exception if there is an error
-// precondition: readVal us between 0xC0 and 0xFF
-// TODO: check the precondition :D
-WP42Part * WP42Part::constructPart(WPXInputStream *input, uint8_t readVal)
-{	
-	WPD_DEBUG_MSG(("WordPerfect: ConstructPart(readVal: 0x0%x)\n", readVal));
+WP42MultiByteFunctionGroup::WP42MultiByteFunctionGroup(uint8_t group)
+	: m_group(group)
+{
+}
 
-	if (((uint8_t)0xC0 > readVal) || ((uint8_t)0xF8 < readVal))
+WP42MultiByteFunctionGroup * WP42MultiByteFunctionGroup::constructMultiByteFunctionGroup(WPXInputStream *input, uint8_t group)
+{
+	switch (group)
 	{
-		WPD_DEBUG_MSG(("WordPerfect: Returning NULL from constructPart\n"));
-		return NULL;
+		case WP42_HEADER_FOOTER_GROUP:
+			return new WP42HeaderFooterGroup(input, group);
+		default:
+			// this is an unhandled group, just skip it
+			return new WP42UnsupportedMultiByteFunctionGroup(input, group);
 	}
+}
+
+void WP42MultiByteFunctionGroup::_read(WPXInputStream *input)
+{
+	_readContents(input);
 	
-	WPD_DEBUG_MSG(("WordPerfect: constructMultiByteFunctionGroup(input, val)\n"));
-	return WP42MultiByteFunctionGroup::constructMultiByteFunctionGroup(input, readVal);
+	// skip over the remaining bytes of the group, if any
+	while (!input->atEOS() && (readU8(input) != getGroup()));
+	// IMPORTANT: if the class that implements _readContent(input) already reads the closing gate,
+	// IMPORTANT: it is necessary to make an input->seek(-1, WPX_SEEK_CUR) for this function to work well.
 }

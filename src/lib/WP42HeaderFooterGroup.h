@@ -25,10 +25,10 @@
 #ifndef WP42HEADERFOOTERGROUP_H
 #define WP42HEADERFOOTERGROUP_H
 
-#include "WP42VariableLengthGroup.h"
+#include "WP42MultiByteFunctionGroup.h"
 #include "WP42SubDocument.h"
 
-class WP42HeaderFooterGroup : public WP42VariableLengthGroup
+class WP42HeaderFooterGroup : public WP42MultiByteFunctionGroup
 {
 public:
 	WP42HeaderFooterGroup(WPXInputStream *input, uint8_t group);

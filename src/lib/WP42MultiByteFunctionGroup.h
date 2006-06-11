@@ -1,6 +1,7 @@
 /* libwpd
  * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
+ * Copyright (c) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,16 +24,27 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WP42UnsupportedVariableLengthGroup.h"
-#include "libwpd_internal.h"
+#ifndef WP42MULTIBYTEFUNCTIONGROUP_H
+#define WP42MULTIBYTEFUNCTIONGROUP_H
 
-WP42UnsupportedVariableLengthGroup::WP42UnsupportedVariableLengthGroup(WPXInputStream *input, uint8_t group) :
-	WP42VariableLengthGroup(group)
-{
-}
+#include "WP42Part.h"
 
-void WP42UnsupportedVariableLengthGroup::_readContents(WPXInputStream *input)
+class WP42MultiByteFunctionGroup : public WP42Part
 {
-	WPD_DEBUG_MSG(("WordPerfect: Handling an unsupported variable length group\n"));
-	_read(input);
+ public:
+	WP42MultiByteFunctionGroup(uint8_t group); // WP42MultiByteFunctionGroup should _never_ be constructed, only its inherited classes
+	virtual ~WP42MultiByteFunctionGroup() {}
+	
+	static WP42MultiByteFunctionGroup * constructMultiByteFunctionGroup(WPXInputStream *input, uint8_t group);
+
+ protected:
+	void _read(WPXInputStream *input);
+ 	virtual void _readContents(WPXInputStream *input) = 0;
+
+	const uint8_t getGroup() const { return m_group; }
+
+ private:
+	uint8_t m_group;
 };
+
+#endif /* WP42MULTIBYTEFUNCTIONGROUP_H */

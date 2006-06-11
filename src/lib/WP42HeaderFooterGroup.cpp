@@ -27,7 +27,7 @@
 #include <string>
 
 WP42HeaderFooterGroup::WP42HeaderFooterGroup(WPXInputStream *input, uint8_t group) :
-	WP42VariableLengthGroup(group),
+	WP42MultiByteFunctionGroup(group),
 	m_definition(0),
 	m_subDocument(NULL)
 {
