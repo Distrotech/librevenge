@@ -74,12 +74,13 @@ libwpd_0_8_la_SOURCES = \
 	WP42HeaderFooterGroup.cpp \
 	WP42Heuristics.cpp \
 	WP42Listener.cpp \
+	WP42MarginResetGroup.cpp \
+	WP42MultiByteFunctionGroup.cpp \
 	WP42Parser.cpp \
 	WP42Part.cpp \
 	WP42StylesListener.cpp \
 	WP42SubDocument.cpp \
 	WP42UnsupportedMultiByteFunctionGroup.cpp \
-	WP42MultiByteFunctionGroup.cpp \
 	WP5AttributeGroup.cpp \
 	WP5ContentListener.cpp \
 	WP5DefinitionGroup.cpp \
@@ -195,12 +196,13 @@ libwpd_0_8_la_SOURCES = \
 	WP42HeaderFooterGroup.h \
 	WP42Heuristics.h \
 	WP42Listener.h \
+	WP42MarginResetGroup.h \
+	WP42MultiByteFunctionGroup.h \
 	WP42Part.h \
 	WP42Parser.h \
 	WP42StylesListener.h \
 	WP42SubDocument.h \
 	WP42UnsupportedMultiByteFunctionGroup.h \
-	WP42MultiByteFunctionGroup.h \
 	WP5AttributeGroup.h \
 	WP5ContentListener.h \
 	WP5DefinitionGroup.h \

@@ -27,6 +27,7 @@
 #include "WP42MultiByteFunctionGroup.h"
 #include "WP42UnsupportedMultiByteFunctionGroup.h"
 #include "WP42HeaderFooterGroup.h"
+#include "WP42MarginResetGroup.h"
 #include "WP42FileStructure.h"
 #include "libwpd_internal.h"
 
@@ -39,6 +40,8 @@ WP42MultiByteFunctionGroup * WP42MultiByteFunctionGroup::constructMultiByteFunct
 {
 	switch (group)
 	{
+		case WP42_MARGIN_RESET_GROUP:
+			return new WP42MarginResetGroup(input, group);
 		case WP42_HEADER_FOOTER_GROUP:
 			return new WP42HeaderFooterGroup(input, group);
 		default:

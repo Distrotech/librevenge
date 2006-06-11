@@ -1,9 +1,8 @@
 /* libwpd
- * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2003-2004 Marc Maurer (uwog@uwog.net)
+ * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -23,21 +22,22 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP42FILESTRUCTURE_H
-#define WP42FILESTRUCTURE_H
+#ifndef WP42MARGINRESETGROUP_H
+#define WP42MARGINRESETGROUP_H
 
-// size of the functiongroups 0xC0 to 0xFF
-extern int WP42_FUNCTION_GROUP_SIZE[64]; 
+#include "WP42MultiByteFunctionGroup.h"
+#include "WP42SubDocument.h"
 
-#define WP42_ATTRIBUTE_BOLD 0
-#define WP42_ATTRIBUTE_ITALICS 1
-#define WP42_ATTRIBUTE_UNDERLINE 2
-#define WP42_ATTRIBUTE_STRIKE_OUT 3
-#define WP42_ATTRIBUTE_SHADOW 4
-#define WP42_ATTRIBUTE_REDLINE 5
+class WP42MarginResetGroup : public WP42MultiByteFunctionGroup
+{
+public:
+	WP42MarginResetGroup(WPXInputStream *input, uint8_t group);
+	virtual ~WP42MarginResetGroup();	
+	virtual void _readContents(WPXInputStream *input);
+	virtual void parse(WP42Listener *listener);
 
-#define WP42_MARGIN_RESET_GROUP 0xC0
+private:
+	uint8_t m_leftMargin, m_rightMargin;
+};
 
-#define WP42_HEADER_FOOTER_GROUP 0xD1
-
-#endif /* WP42FILESTRUCTURE_H */
+#endif /* WP42MARGINRESETGROUP_H */

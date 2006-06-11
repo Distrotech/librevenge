@@ -55,10 +55,6 @@ WP42ContentListener::~WP42ContentListener()
 }
 
 
-/****************************************
- public 'HLListenerImpl' functions
-*****************************************/
-
 void WP42ContentListener::insertCharacter(const uint16_t character)
 {
 	if (!isUndoOn())
@@ -105,10 +101,6 @@ void WP42ContentListener::endDocument()
 }
 
 
-/****************************************
- public 'parser' functions
-*****************************************/
-
 void WP42ContentListener::attributeChange(const bool isOn, const uint8_t attribute)
 {
 	_closeSpan();
@@ -154,6 +146,14 @@ void WP42ContentListener::attributeChange(const bool isOn, const uint8_t attribu
 		m_ps->m_textAttributeBits |= textAttributeBit;
 	else
 		m_ps->m_textAttributeBits ^= textAttributeBit;
+}
+
+void WP42ContentListener::marginReset(const uint8_t leftMargin, const uint8_t rightMargin)
+{
+	float leftMarginInch = (leftMargin*WPX_NUM_WPUS_PER_INCH)/10;
+	float rightMarginInch = m_ps->m_pageFormWidth - (((rightMargin + 1) * WPX_NUM_WPUS_PER_INCH)/10);
+	m_ps->m_leftMarginByPageMarginChange = leftMarginInch - m_ps->m_pageMarginLeft;
+	m_ps->m_rightMarginByPageMarginChange = rightMarginInch - m_ps->m_pageMarginRight;
 }
 
 /****************************************

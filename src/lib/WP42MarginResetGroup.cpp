@@ -1,9 +1,8 @@
 /* libwpd
- * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2003-2004 Marc Maurer (uwog@uwog.net)
+ * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -23,21 +22,31 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP42FILESTRUCTURE_H
-#define WP42FILESTRUCTURE_H
+#include "WP42MarginResetGroup.h"
+#include "libwpd_internal.h"
+#include <string>
 
-// size of the functiongroups 0xC0 to 0xFF
-extern int WP42_FUNCTION_GROUP_SIZE[64]; 
+WP42MarginResetGroup::WP42MarginResetGroup(WPXInputStream *input, uint8_t group) :
+	WP42MultiByteFunctionGroup(group),
+	m_leftMargin(0),
+	m_rightMargin(0)
+{
+	_read(input);
+}
 
-#define WP42_ATTRIBUTE_BOLD 0
-#define WP42_ATTRIBUTE_ITALICS 1
-#define WP42_ATTRIBUTE_UNDERLINE 2
-#define WP42_ATTRIBUTE_STRIKE_OUT 3
-#define WP42_ATTRIBUTE_SHADOW 4
-#define WP42_ATTRIBUTE_REDLINE 5
+WP42MarginResetGroup::~WP42MarginResetGroup()
+{
+}
 
-#define WP42_MARGIN_RESET_GROUP 0xC0
+void WP42MarginResetGroup::_readContents(WPXInputStream *input)
+{
+	input->seek(2, WPX_SEEK_CUR);
+	m_leftMargin = readU8(input);
+	m_rightMargin = readU8(input);
+}
 
-#define WP42_HEADER_FOOTER_GROUP 0xD1
-
-#endif /* WP42FILESTRUCTURE_H */
+void WP42MarginResetGroup::parse(WP42Listener *listener)
+{
+	WPD_DEBUG_MSG(("WordPerfect: handling the Margin Reset group\n"));
+	listener->marginReset(m_leftMargin, m_rightMargin);
+}
