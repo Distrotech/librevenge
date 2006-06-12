@@ -39,9 +39,10 @@ _WP42ContentParsingState::~_WP42ContentParsingState()
 }
 
 
-WP42ContentListener::WP42ContentListener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl) :
+WP42ContentListener::WP42ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP42SubDocument *> &subDocuments, WPXHLListenerImpl *listenerImpl) :
 	WP42Listener(),
 	WPXContentListener(pageList, listenerImpl),
+	m_subDocuments(subDocuments),
 	m_parseState(new WP42ContentParsingState)
 {
 // Default line is 6 lpi, it means that the caracters are of 12 points
@@ -155,6 +156,12 @@ void WP42ContentListener::marginReset(const uint8_t leftMargin, const uint8_t ri
 	m_ps->m_leftMarginByPageMarginChange = leftMarginInch - m_ps->m_pageMarginLeft;
 	m_ps->m_rightMarginByPageMarginChange = rightMarginInch - m_ps->m_pageMarginRight;
 }
+
+void WP42ContentListener::headerFooterGroup(const uint8_t headerFooterDefinition, WP42SubDocument *subDocument)
+{
+	if (subDocument)
+		m_subDocuments.push_back(subDocument);			
+}	
 
 /****************************************
  private functions

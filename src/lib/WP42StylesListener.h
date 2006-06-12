@@ -27,6 +27,7 @@
 #define WP42STYLESLISTENER_H
 
 #include "WP42Listener.h"
+#include "WP42SubDocument.h"
 #include "WPXStylesListener.h"
 #include <vector>
 #include "WPXPageSpan.h"
@@ -35,7 +36,7 @@
 class WP42StylesListener : public WP42Listener, protected WPXStylesListener
 {
 public:
-	WP42StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList);
+	WP42StylesListener(std::list<WPXPageSpan> &pageList, std::vector<WP42SubDocument *> &subDocuments);
 
 	void startDocument() {}
 	void insertCharacter(const uint16_t character) {}
@@ -44,13 +45,12 @@ public:
  	void insertBreak(const uint8_t breakType);
 	void attributeChange(const bool isOn, const uint8_t attribute) {}
 	void marginReset(const uint8_t leftMargin, const uint8_t rightMargin) {};
+	void headerFooterGroup(const uint8_t headerFooterDefinition, WP42SubDocument *subDocument);
 	void endDocument();
 
 private:
 	WPXPageSpan m_currentPage;
-
-	WPXTableList m_tableList;
-	WPXTable *m_currentTable;
+	std::vector<WP42SubDocument *> &m_subDocuments;
 	float m_tempMarginLeft, m_tempMarginRight;
 	bool m_currentPageHasContent;
 };

@@ -48,11 +48,17 @@ void WP42HeaderFooterGroup::_readContents(WPXInputStream *input)
 	while ((tempCharacter = readU8(input)) != 0xFF)
 		tempSubDocumentText.append(1, (char)tempCharacter);
 	input->seek(1, WPX_SEEK_CUR);
-	m_subDocument = new WP42SubDocument((uint8_t *)(tempSubDocumentText.c_str()), tempSubDocumentText.length() - 1);
+	uint8_t* tempSubDocument = new uint8_t[tempSubDocumentText.length()];
+	for (int i = 0; i<tempSubDocumentText.length(); i++)
+	{
+		tempSubDocument[i] = tempSubDocumentText.c_str()[i];
+	}
+	m_subDocument = new WP42SubDocument(tempSubDocument, tempSubDocumentText.length());
 	m_definition = readU8(input);
 }
 
 void WP42HeaderFooterGroup::parse(WP42Listener *listener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling a HeaderFooter group\n"));
+	listener->headerFooterGroup(m_definition, m_subDocument);
 }

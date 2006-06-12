@@ -28,6 +28,7 @@
 
 #include "WPXPart.h"
 #include "WPXParser.h"
+#include "WP42Listener.h"
 
 class WP42LLListener;
 
@@ -37,7 +38,7 @@ class WP42Part
 	virtual ~WP42Part() {}
 	
 	static WP42Part * constructPart(WPXInputStream *input, uint8_t readVal);
-	//virtual void parse(WP42LLListener *llListener) = 0;
+	virtual void parse(WP42Listener *listener) = 0;
 };
 
 #endif /* WP6PART_H */

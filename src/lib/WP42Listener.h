@@ -32,6 +32,8 @@
 #include "WPXPageSpan.h"
 #include <list>
 
+class WP42SubDocument;
+
 class WP42Listener
 {
 public:
@@ -45,6 +47,7 @@ public:
 	virtual void insertEOL() = 0;
 	virtual void attributeChange(const bool isOn, const uint8_t attribute) = 0;
 	virtual void marginReset(const uint8_t leftMargin, const uint8_t rightMargin) = 0;
+	virtual void headerFooterGroup(const uint8_t headerFooterDefinition, WP42SubDocument *subDocument) = 0;
 	virtual void endDocument() = 0;
 
 };

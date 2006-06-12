@@ -29,11 +29,11 @@
 #include "WPXFileStructure.h"
 #include "libwpd_internal.h"
 
-WP42StylesListener::WP42StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList) : 
+WP42StylesListener::WP42StylesListener(std::list<WPXPageSpan> &pageList, std::vector<WP42SubDocument *> &subDocuments) : 
 	WP42Listener(),
 	WPXStylesListener(pageList),
+	m_subDocuments(subDocuments),
 	m_currentPage(WPXPageSpan()),
-	m_tableList(tableList), 
 	m_tempMarginLeft(1.0f),
 	m_tempMarginRight(1.0f),
 	m_currentPageHasContent(false)
@@ -64,3 +64,10 @@ void WP42StylesListener::insertBreak(const uint8_t breakType)
 		}
 	}
 }
+
+void WP42StylesListener::headerFooterGroup(const uint8_t headerFooterDefinition, WP42SubDocument *subDocument)
+{
+	if (subDocument)
+		m_subDocuments.push_back(subDocument);			
+}	
+

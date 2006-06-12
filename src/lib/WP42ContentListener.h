@@ -28,6 +28,7 @@
 #define WP42CONTENTLISTENER_H
 
 #include "WP42Listener.h"
+#include "WP42SubDocument.h"
 #include "WPXContentListener.h"
 #include "WPXHLListenerImpl.h"
 
@@ -42,7 +43,7 @@ struct _WP42ContentParsingState
 class WP42ContentListener : public WP42Listener, protected WPXContentListener
 {
 public:
-	WP42ContentListener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl);
+	WP42ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP42SubDocument *> &subDocuments, WPXHLListenerImpl *listenerImpl);
 	~WP42ContentListener();
 
 	void startDocument() { WPXContentListener::startDocument(); };
@@ -52,6 +53,7 @@ public:
 	void insertEOL();
 	void attributeChange(const bool isOn, const uint8_t attribute);
 	void marginReset(const uint8_t leftMargin, const uint8_t rightMargin);
+	void headerFooterGroup(const uint8_t headerFooterDefinition, WP42SubDocument *subDocument);
 	void endDocument();
 
 protected:
@@ -62,6 +64,7 @@ protected:
 
 private:
 	WP42ContentParsingState *m_parseState;
+	std::vector<WP42SubDocument *> &m_subDocuments;
 };
 
 #endif /* WP42LISTENER_H */

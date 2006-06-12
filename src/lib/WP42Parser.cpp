@@ -147,6 +147,7 @@ void WP42Parser::parseDocument(WPXInputStream *input, WP42Listener *listener)
 			WP42Part *part = WP42Part::constructPart(input, readVal);
 			if (part != NULL)
 			{
+				part->parse(listener);
 				delete(part);
 			}
 		}
@@ -159,24 +160,36 @@ void WP42Parser::parse(WPXHLListenerImpl *listenerImpl)
 {
 	WPXInputStream *input = getInput();
 	std::list<WPXPageSpan> pageList;
-	WPXTableList tableList;
-
+	std::vector<WP42SubDocument *> subDocuments;	
+	
 	try
  	{
 		// do a "first-pass" parse of the document
 		// gather table border information, page properties (per-page)
-		WP42StylesListener stylesListener(pageList, tableList);
+		WP42StylesListener stylesListener(pageList, subDocuments);
 		parse(input, &stylesListener);
-
+		
 		// second pass: here is where we actually send the messages to the target app
 		// that are necessary to emit the body of the target document
-		WP42ContentListener listener(pageList, listenerImpl);
+		WP42ContentListener listener(pageList, subDocuments, listenerImpl);
 		parse(input, &listener);
 
+		// cleanup section: free the used resources
+		for (std::vector<WP42SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); iterSubDoc++)
+		{
+			if (*iterSubDoc)
+				delete (*iterSubDoc);
+		}
 	}
 	catch(FileException)
 	{
 		WPD_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
+
+		for (std::vector<WP42SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); iterSubDoc++)
+		{
+			if (*iterSubDoc)
+				delete (*iterSubDoc);
+		}
 
 		throw FileException();
 	}
