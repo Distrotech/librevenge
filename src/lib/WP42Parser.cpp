@@ -65,6 +65,8 @@ void WP42Parser::parseDocument(WPXInputStream *input, WP42Listener *listener)
 
 		if (readVal < (uint8_t)0x20)
 		{
+			WPD_DEBUG_MSG(("Handling Control Character 0x%2x\n", readVal));			
+
 			switch (readVal)
 			{
 				case 0x09: // tab
@@ -89,11 +91,15 @@ void WP42Parser::parseDocument(WPXInputStream *input, WP42Listener *listener)
 		}
 		else if (readVal >= (uint8_t)0x20 && readVal <= (uint8_t)0x7F)
 		{
+			WPD_DEBUG_MSG(("Handling Ascii Character 0x%2x\n", readVal));			
+
 			// normal ASCII characters
 			listener->insertCharacter( readVal );
 		}
 		else if (readVal >= (uint8_t)0x80 && readVal <= (uint8_t)0xBF)
 		{
+			WPD_DEBUG_MSG(("Handling Single Character Function 0x%2x\n", readVal));			
+
 			// single character function codes
 			switch (readVal)
 			{
@@ -148,7 +154,7 @@ void WP42Parser::parseDocument(WPXInputStream *input, WP42Listener *listener)
 			if (part != NULL)
 			{
 				part->parse(listener);
-				delete(part);
+				DELETEP(part);
 			}
 		}
 		// ignore the rest since they are not documented and at least 0xFF is a special character that

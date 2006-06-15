@@ -53,5 +53,5 @@ void WP42HeaderFooterGroup::_readContents(WPXInputStream *input)
 void WP42HeaderFooterGroup::parse(WP42Listener *listener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling a HeaderFooter group\n"));
-//	listener->headerFooterGroup(m_definition, m_subDocument);
+	listener->headerFooterGroup(m_definition, m_subDocument);
 }

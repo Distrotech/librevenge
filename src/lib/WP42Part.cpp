@@ -37,7 +37,7 @@
 // TODO: check the precondition :D
 WP42Part * WP42Part::constructPart(WPXInputStream *input, uint8_t readVal)
 {	
-	WPD_DEBUG_MSG(("WordPerfect: ConstructPart(readVal: 0x0%x)\n", readVal));
+	WPD_DEBUG_MSG(("WordPerfect: ConstructPart(readVal: 0x%2x)\n", readVal));
 
 	if (((uint8_t)0xC0 > readVal) || ((uint8_t)0xF8 < readVal))
 	{

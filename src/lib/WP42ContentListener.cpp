@@ -62,7 +62,7 @@ void WP42ContentListener::insertCharacter(const uint16_t character)
 {
 	if (!isUndoOn())
 	{
-		if (m_ps->m_isSpanOpened)
+		if (!m_ps->m_isSpanOpened)
 			_openSpan();
 		appendUCS4(m_parseState->m_textBuffer, (uint32_t)character);
 	}

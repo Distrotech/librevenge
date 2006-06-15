@@ -148,6 +148,26 @@ void WP42StylesListener::suppressPageCharacteristics(const uint8_t suppressCode)
 {
 	if (!isUndoOn())
 	{
+		if (suppressCode & 0x01)
+		{
+			m_currentPage.setHeadFooterSuppression(WPX_HEADER_A, true);
+			m_currentPage.setHeadFooterSuppression(WPX_HEADER_B, true);
+			m_currentPage.setHeadFooterSuppression(WPX_FOOTER_A, true);
+			m_currentPage.setHeadFooterSuppression(WPX_FOOTER_B, true);
+		}
+		if (suppressCode & 0x08)
+		{
+			m_currentPage.setHeadFooterSuppression(WPX_HEADER_A, true);
+			m_currentPage.setHeadFooterSuppression(WPX_HEADER_B, true);
+		}
+		if (suppressCode & 0x10)
+			m_currentPage.setHeadFooterSuppression(WPX_HEADER_A, true);
+		if (suppressCode & 0x20)
+			m_currentPage.setHeadFooterSuppression(WPX_HEADER_B, true);
+		if (suppressCode & 0x40)
+			m_currentPage.setHeadFooterSuppression(WPX_FOOTER_A, true);
+		if (suppressCode & 0x80)
+			m_currentPage.setHeadFooterSuppression(WPX_FOOTER_B, true);
 	}
 }
 
