@@ -39,12 +39,10 @@
 typedef struct _WP5ContentParsingState WP5ContentParsingState;
 struct _WP5ContentParsingState
 {
-	_WP5ContentParsingState(const WPXString defaultFontName = WPXString("Times New Roman"), const float defaultFontSize = 12.0f);
+	_WP5ContentParsingState();
 	~_WP5ContentParsingState();
 	WPXString m_textBuffer;
 	WPXString m_noteReference;
-	float m_defaultFontSize;
-	WPXString m_defaultFontName;
 
 	WPXTableList m_tableList;
 };
@@ -98,6 +96,8 @@ protected:
 private:
 	WP5ContentParsingState *m_parseState;
 	std::vector<WP5SubDocument *> &m_subDocuments;
+	float m_defaultFontSize;
+	WPXString m_defaultFontName;
 };
 
 #endif /* WP5CONTENTLISTENER_H */

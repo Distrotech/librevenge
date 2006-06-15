@@ -75,9 +75,6 @@ public:
 protected:
 	void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
 
-	void _flushText() {}
-	void _changeList() {}
-
 private:
 	WPXPageSpan m_currentPage, m_nextPage;
 

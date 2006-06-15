@@ -80,6 +80,7 @@ libwpd_0_8_la_SOURCES = \
 	WP42Part.cpp \
 	WP42StylesListener.cpp \
 	WP42SubDocument.cpp \
+	WP42SuppressPageCharacteristicsGroup.cpp \
 	WP42UnsupportedMultiByteFunctionGroup.cpp \
 	WP5AttributeGroup.cpp \
 	WP5ContentListener.cpp \
@@ -202,6 +203,7 @@ libwpd_0_8_la_SOURCES = \
 	WP42Parser.h \
 	WP42StylesListener.h \
 	WP42SubDocument.h \
+	WP42SuppressPageCharacteristicsGroup.h \
 	WP42UnsupportedMultiByteFunctionGroup.h \
 	WP5AttributeGroup.h \
 	WP5ContentListener.h \

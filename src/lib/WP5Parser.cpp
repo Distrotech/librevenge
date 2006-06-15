@@ -143,7 +143,7 @@ void WP5Parser::parse(WPXHLListenerImpl *listenerImpl)
 
 		// postprocess the pageList == remove duplicate page spans due to the page breaks
 		std::list<WPXPageSpan>::iterator previousPage = pageList.begin();
-		for (std::list<WPXPageSpan>::iterator Iter=pageList.begin(); Iter != pageList.end(); /* Iter++ */)
+		for (std::list<WPXPageSpan>::iterator Iter=pageList.begin(); Iter != pageList.end();)
 		{
 			if ((Iter != previousPage) && ((*previousPage)==(*Iter)))
 			{

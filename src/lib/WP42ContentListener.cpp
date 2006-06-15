@@ -28,6 +28,8 @@
 #include "WP42FileStructure.h"
 #include "libwpd_internal.h"
 
+#define WP42_NUM_TEXT_COLUMS_PER_INCH 12
+
 _WP42ContentParsingState::_WP42ContentParsingState()
 {
 	m_textBuffer.clear();
@@ -85,6 +87,7 @@ void WP42ContentListener::insertEOL()
 	{
 		if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
 			_openSpan();
+
 		if (m_ps->m_isParagraphOpened)
 			_closeParagraph();
 		if (m_ps->m_isListElementOpened)
@@ -151,10 +154,13 @@ void WP42ContentListener::attributeChange(const bool isOn, const uint8_t attribu
 
 void WP42ContentListener::marginReset(const uint8_t leftMargin, const uint8_t rightMargin)
 {
-	float leftMarginInch = (leftMargin*WPX_NUM_WPUS_PER_INCH)/10;
-	float rightMarginInch = m_ps->m_pageFormWidth - (((rightMargin + 1) * WPX_NUM_WPUS_PER_INCH)/10);
-	m_ps->m_leftMarginByPageMarginChange = leftMarginInch - m_ps->m_pageMarginLeft;
-	m_ps->m_rightMarginByPageMarginChange = rightMarginInch - m_ps->m_pageMarginRight;
+	if (!isUndoOn())
+	{
+		float leftMarginInch = (float)(leftMargin/WP42_NUM_TEXT_COLUMS_PER_INCH);
+		float rightMarginInch = m_ps->m_pageFormWidth - (float)((rightMargin + 1)/WP42_NUM_TEXT_COLUMS_PER_INCH);
+		m_ps->m_leftMarginByPageMarginChange = leftMarginInch - m_ps->m_pageMarginLeft;
+		m_ps->m_rightMarginByPageMarginChange = rightMarginInch - m_ps->m_pageMarginRight;
+	}
 }
 
 void WP42ContentListener::headerFooterGroup(const uint8_t headerFooterDefinition, WP42SubDocument *subDocument)
@@ -162,6 +168,37 @@ void WP42ContentListener::headerFooterGroup(const uint8_t headerFooterDefinition
 	if (subDocument)
 		m_subDocuments.push_back(subDocument);			
 }	
+
+void WP42ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice)
+{
+	// save our old parsing state on our "stack"
+	WP42ContentParsingState *oldParseState = m_parseState;
+
+	m_parseState = new WP42ContentParsingState();
+
+	if (subDocument)
+	{
+		static_cast<const WP42SubDocument *>(subDocument)->parse(this);
+	}
+	else
+		_openSpan();
+
+	// Close the sub-document properly
+	if (m_ps->m_isParagraphOpened)
+		_closeParagraph();
+	if (m_ps->m_isListElementOpened)
+		_closeListElement();
+
+	m_ps->m_currentListLevel = 0;
+	_changeList();
+#if 0
+	_closeSection();
+#endif
+
+	// restore our old parsing state
+	delete m_parseState;
+	m_parseState = oldParseState;
+}
 
 /****************************************
  private functions

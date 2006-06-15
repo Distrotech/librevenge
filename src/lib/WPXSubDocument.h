@@ -36,7 +36,6 @@ public:
 	WPXSubDocument(WPXInputStream *input, const int dataSize);
 	WPXSubDocument(uint8_t * streamData, const int dataSize);
 	virtual ~WPXSubDocument();
-//	virtual void parse(WPXListener *listener) const = 0;
 	WPXMemoryInputStream *getStream() const { return m_stream;}
 
 private:              

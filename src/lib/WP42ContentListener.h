@@ -46,18 +46,19 @@ public:
 	WP42ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP42SubDocument *> &subDocuments, WPXHLListenerImpl *listenerImpl);
 	~WP42ContentListener();
 
-	void startDocument() { WPXContentListener::startDocument(); };
+	void startDocument() { WPXContentListener::startDocument(); }
 	void insertCharacter(const uint16_t character);
 	void insertTab(const uint8_t tabType, float tabPosition);
-	void insertBreak(const uint8_t breakType) { WPXContentListener::insertBreak(breakType); };
+	void insertBreak(const uint8_t breakType) { WPXContentListener::insertBreak(breakType); }
 	void insertEOL();
 	void attributeChange(const bool isOn, const uint8_t attribute);
 	void marginReset(const uint8_t leftMargin, const uint8_t rightMargin);
 	void headerFooterGroup(const uint8_t headerFooterDefinition, WP42SubDocument *subDocument);
+	void suppressPageCharacteristics(const uint8_t suppressCode) {}
 	void endDocument();
 
 protected:
-	void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0) {}
+	void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
 
 	void _flushText();
 	void _changeList() {};

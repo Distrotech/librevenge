@@ -180,11 +180,11 @@ void WP5StylesListener::marginChange(const uint8_t side, const uint16_t margin)
 
 void WP5StylesListener::headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, WP5SubDocument *subDocument)
 {
+	if (subDocument)
+		m_subDocuments.push_back(subDocument);
+
 	if (!isUndoOn()) 
 	{			
-		if (subDocument)
-			m_subDocuments.push_back(subDocument);
-
 		WPD_DEBUG_MSG(("WordPerfect: headerFooterGroup (headerFooterType: %i, occurenceBits: %i)\n", 
 			       headerFooterType, occurenceBits));
 		bool tempCurrentPageHasContent = m_currentPageHasContent;

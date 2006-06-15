@@ -2,7 +2,7 @@
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -22,19 +22,21 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP42SUBDOCUMENT_H
-#define WP42SUBDOCUMENT_H
+#ifndef WP42SUPPRESSPAGECHARACTERISTICSGROUP_H
+#define WP42SUPPRESSPAGECHARACTERISTICSGROUP_H
 
-#include "WPXMemoryStream.h"
-#include "WPXSubDocument.h"
-#include "WP42Listener.h"
+#include "WP42MultiByteFunctionGroup.h"
 
-class WP42SubDocument : public WPXSubDocument
+class WP42SuppressPageCharacteristicsGroup : public WP42MultiByteFunctionGroup
 {
 public:
-	WP42SubDocument(uint8_t * streamData, const int dataSize);
-	WP42SubDocument(WPXInputStream *input, const int dataSize);
-	virtual void parse(WP42Listener *listener) const;
+	WP42SuppressPageCharacteristicsGroup(WPXInputStream *input, uint8_t group);
+	virtual ~WP42SuppressPageCharacteristicsGroup();	
+	virtual void _readContents(WPXInputStream *input);
+	virtual void parse(WP42Listener *listener);
 
+private:
+	uint8_t m_suppressCode;
 };
-#endif /* WP42SUBDOCUMENT_H */
+
+#endif /* WP42SUPPRESSPAGECHARACTERISTICSGROUP_H */

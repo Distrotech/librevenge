@@ -28,6 +28,7 @@
 #include "WP42UnsupportedMultiByteFunctionGroup.h"
 #include "WP42HeaderFooterGroup.h"
 #include "WP42MarginResetGroup.h"
+#include "WP42SuppressPageCharacteristicsGroup.h"
 #include "WP42FileStructure.h"
 #include "libwpd_internal.h"
 
@@ -42,6 +43,8 @@ WP42MultiByteFunctionGroup * WP42MultiByteFunctionGroup::constructMultiByteFunct
 	{
 		case WP42_MARGIN_RESET_GROUP:
 			return new WP42MarginResetGroup(input, group);
+		case WP42_SUPPRESS_PAGE_CHARACTERISTICS_GROUP:
+			return new WP42SuppressPageCharacteristicsGroup(input, group);
 		case WP42_HEADER_FOOTER_GROUP:
 			return new WP42HeaderFooterGroup(input, group);
 		default:
@@ -55,7 +58,7 @@ void WP42MultiByteFunctionGroup::_read(WPXInputStream *input)
 	_readContents(input);
 	
 	// skip over the remaining bytes of the group, if any
-	while (!input->atEOS() && (readU8(input) != getGroup()));
+	while (!input->atEOS() && (readU8(input) != m_group));// getGroup()));
 	// IMPORTANT: if the class that implements _readContent(input) already reads the closing gate,
 	// IMPORTANT: it is necessary to make an input->seek(-1, WPX_SEEK_CUR) for this function to work well.
 }

@@ -30,10 +30,7 @@
 #include "libwpd_internal.h"
 #include "WP5SubDocument.h"
 
-_WP5ContentParsingState::_WP5ContentParsingState(const WPXString defaultFontName, const float defaultFontSize) :
-	m_defaultFontName(defaultFontName),
-	m_defaultFontSize(defaultFontSize) // fallback solution
-
+_WP5ContentParsingState::_WP5ContentParsingState()
 {
 	m_textBuffer.clear();
 	m_noteReference.clear();
@@ -49,7 +46,9 @@ WP5ContentListener::WP5ContentListener(std::list<WPXPageSpan> &pageList, std::ve
 	WP5Listener(),
 	WPXContentListener(pageList, listenerImpl),
 	m_parseState(new WP5ContentParsingState),
-	m_subDocuments(subDocuments)
+	m_subDocuments(subDocuments),
+	m_defaultFontSize(12.0f),
+	m_defaultFontName("Times New Roman")
 {
 }
 
@@ -404,8 +403,8 @@ void WP5ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, c
 	// save our old parsing state on our "stack"
 	WP5ContentParsingState *oldParseState = m_parseState;
 
-	m_parseState = new WP5ContentParsingState(oldParseState->m_defaultFontName, oldParseState->m_defaultFontSize);
-	setFont(m_parseState->m_defaultFontName, m_parseState->m_defaultFontSize);
+	m_parseState = new WP5ContentParsingState();
+	setFont(m_defaultFontName, m_defaultFontSize);
 
 	if (isHeaderFooter)
 	{
@@ -443,8 +442,8 @@ void WP5ContentListener::headerFooterGroup(const uint8_t headerFooterType, const
 
 void WP5ContentListener::setDefaultFont(const WPXString fontName, const float fontSize)
 {
-	m_parseState->m_defaultFontName = fontName;
-	m_parseState->m_defaultFontSize = fontSize;
+	m_defaultFontName = fontName;
+	m_defaultFontSize = fontSize;
 }
 
 

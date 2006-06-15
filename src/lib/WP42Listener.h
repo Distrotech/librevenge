@@ -48,6 +48,7 @@ public:
 	virtual void attributeChange(const bool isOn, const uint8_t attribute) = 0;
 	virtual void marginReset(const uint8_t leftMargin, const uint8_t rightMargin) = 0;
 	virtual void headerFooterGroup(const uint8_t headerFooterDefinition, WP42SubDocument *subDocument) = 0;
+	virtual void suppressPageCharacteristics(const uint8_t suppressCode) = 0;
 	virtual void endDocument() = 0;
 
 };

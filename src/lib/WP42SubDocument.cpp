@@ -31,6 +31,11 @@ WP42SubDocument::WP42SubDocument(uint8_t * streamData, const int dataSize) :
 {
 }
 
+WP42SubDocument::WP42SubDocument(WPXInputStream *input, const int dataSize) :
+	WPXSubDocument(input, dataSize)
+{
+}
+
 void WP42SubDocument::parse(WP42Listener *listener) const
 {
 	WPXMemoryInputStream *tmpStream = getStream();

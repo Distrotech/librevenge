@@ -34,8 +34,11 @@ WP42StylesListener::WP42StylesListener(std::list<WPXPageSpan> &pageList, std::ve
 	WPXStylesListener(pageList),
 	m_subDocuments(subDocuments),
 	m_currentPage(WPXPageSpan()),
+	m_nextPage(WPXPageSpan()),
+	m_pageListHardPageMark(m_pageList.end()),
 	m_tempMarginLeft(1.0f),
 	m_tempMarginRight(1.0f),
+	m_isSubDocument(false),
 	m_currentPageHasContent(false)
 {
 }
@@ -49,25 +52,123 @@ void WP42StylesListener::insertBreak(const uint8_t breakType)
 {
 	if (!isUndoOn())
 	{	
+		WPXTableList tableList;
 		switch (breakType) 
 		{
 		case WPX_PAGE_BREAK:
 		case WPX_SOFT_PAGE_BREAK:
-			if ((m_pageList.size()) > 0 && (m_currentPage==m_pageList.back()))
+			if ((m_pageList.size() > 0) && (m_currentPage==m_pageList.back())
+				&& (m_pageListHardPageMark != m_pageList.end()))
+			{
 				m_pageList.back().setPageSpan(m_pageList.back().getPageSpan() + 1);
+			}
 			else
+			{
 				m_pageList.push_back(WPXPageSpan(m_currentPage));
-			m_currentPage.setMarginLeft(m_tempMarginLeft);
-			m_currentPage.setMarginRight(m_tempMarginRight);
+				if (m_pageListHardPageMark == m_pageList.end())
+					m_pageListHardPageMark--;
+			}
+			m_currentPage = WPXPageSpan(m_pageList.back(), 0.0f, 0.0f);
+			m_currentPage.setPageSpan(1);
+
+			for(std::vector<WPXHeaderFooter>::const_iterator HFiter = (m_nextPage.getHeaderFooterList()).begin();
+				HFiter != (m_nextPage.getHeaderFooterList()).end(); HFiter++)
+			{
+				if ((*HFiter).getOccurence() != NEVER)
+				{
+					m_currentPage.setHeaderFooter((*HFiter).getType(), (*HFiter).getInternalType(),
+						(*HFiter).getOccurence(), (*HFiter).getSubDocument(), (*HFiter).getTableList());
+					_handleSubDocument((*HFiter).getSubDocument(), true, (*HFiter).getTableList());
+				}
+				else
+					m_currentPage.setHeaderFooter((*HFiter).getType(), (*HFiter).getInternalType(),
+						(*HFiter).getOccurence(), NULL, (*HFiter).getTableList());	
+			}
+			m_nextPage = WPXPageSpan();
 			m_currentPageHasContent = false;
 			break;
+		}
+		if (breakType == WPX_PAGE_BREAK)
+		{
+			m_pageListHardPageMark = m_pageList.end();
+			m_currentPage.setMarginLeft(m_tempMarginLeft);
+			m_currentPage.setMarginRight(m_tempMarginRight);
 		}
 	}
 }
 
+
 void WP42StylesListener::headerFooterGroup(const uint8_t headerFooterDefinition, WP42SubDocument *subDocument)
 {
 	if (subDocument)
-		m_subDocuments.push_back(subDocument);			
+		m_subDocuments.push_back(subDocument);
+
+	if (!isUndoOn())
+	{
+		bool tempCurrentPageHasContent = m_currentPageHasContent;
+
+		uint8_t headerFooterType = (headerFooterDefinition & 0x03);
+		WPXHeaderFooterType wpxType = ((headerFooterType <= WPX_HEADER_B) ? HEADER : FOOTER);
+
+		uint8_t occurenceBits = ((headerFooterDefinition & 0xFC) >> 2);
+
+		WPD_DEBUG_MSG(("WordPerfect: headerFooterGroup (headerFooterType: %i, occurenceBits: %i)\n", 
+			       headerFooterType, occurenceBits));
+
+		WPXHeaderFooterOccurence wpxOccurence;
+
+		if (occurenceBits & WP42_HEADER_FOOTER_GROUP_ALL_BIT)
+			wpxOccurence = ALL;
+		else if (occurenceBits & WP42_HEADER_FOOTER_GROUP_EVEN_BIT)
+			wpxOccurence = EVEN;
+		else if (occurenceBits & WP42_HEADER_FOOTER_GROUP_ODD_BIT)
+			wpxOccurence = ODD;
+		else
+			wpxOccurence = NEVER;
+
+		WPXTableList tableList;
+
+		if ((wpxType == HEADER) && tempCurrentPageHasContent)
+			m_nextPage.setHeaderFooter(wpxType, headerFooterType, wpxOccurence, subDocument, tableList);
+		else /* FOOTER || !tempCurrentPageHasContent */
+		{
+			if (wpxOccurence != NEVER)
+			{
+				m_currentPage.setHeaderFooter(wpxType, headerFooterType, wpxOccurence, subDocument, tableList);
+				_handleSubDocument(subDocument, true, tableList);
+			}
+			else
+				m_currentPage.setHeaderFooter(wpxType, headerFooterType, wpxOccurence, NULL, tableList);
+		}
+		m_currentPageHasContent = tempCurrentPageHasContent;
+	}
 }	
 
+void WP42StylesListener::suppressPageCharacteristics(const uint8_t suppressCode)
+{
+	if (!isUndoOn())
+	{
+	}
+}
+
+void WP42StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice)
+{
+	if (!isUndoOn()) 
+	{
+		bool oldIsSubDocument = m_isSubDocument;
+		m_isSubDocument = true;
+		if (isHeaderFooter) 
+		{
+			bool oldCurrentPageHasContent = m_currentPageHasContent;
+
+			static_cast<const WP42SubDocument *>(subDocument)->parse(this);
+
+			m_currentPageHasContent = oldCurrentPageHasContent;
+		}
+		else
+		{
+			static_cast<const WP42SubDocument *>(subDocument)->parse(this);
+		}
+		m_isSubDocument = oldIsSubDocument;
+	}
+}
