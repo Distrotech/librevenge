@@ -50,6 +50,9 @@ void WP42StylesListener::endDocument()
 
 void WP42StylesListener::insertBreak(const uint8_t breakType)
 {
+	if (m_isSubDocument)
+		return;
+
 	if (!isUndoOn())
 	{	
 		WPXTableList tableList;
@@ -66,7 +69,9 @@ void WP42StylesListener::insertBreak(const uint8_t breakType)
 			{
 				m_pageList.push_back(WPXPageSpan(m_currentPage));
 				if (m_pageListHardPageMark == m_pageList.end())
+				{
 					m_pageListHardPageMark--;
+				}
 			}
 			m_currentPage = WPXPageSpan(m_pageList.back(), 0.0f, 0.0f);
 			m_currentPage.setPageSpan(1);
@@ -81,8 +86,10 @@ void WP42StylesListener::insertBreak(const uint8_t breakType)
 					_handleSubDocument((*HFiter).getSubDocument(), true, (*HFiter).getTableList());
 				}
 				else
+				{
 					m_currentPage.setHeaderFooter((*HFiter).getType(), (*HFiter).getInternalType(),
-						(*HFiter).getOccurence(), NULL, (*HFiter).getTableList());	
+						(*HFiter).getOccurence(), NULL, (*HFiter).getTableList());
+				}	
 			}
 			m_nextPage = WPXPageSpan();
 			m_currentPageHasContent = false;
@@ -181,13 +188,15 @@ void WP42StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, c
 		{
 			bool oldCurrentPageHasContent = m_currentPageHasContent;
 
-			static_cast<const WP42SubDocument *>(subDocument)->parse(this);
+			if (subDocument)
+				static_cast<const WP42SubDocument *>(subDocument)->parse(this);
 
 			m_currentPageHasContent = oldCurrentPageHasContent;
 		}
 		else
 		{
-			static_cast<const WP42SubDocument *>(subDocument)->parse(this);
+			if (subDocument)
+				static_cast<const WP42SubDocument *>(subDocument)->parse(this);
 		}
 		m_isSubDocument = oldIsSubDocument;
 	}

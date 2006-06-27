@@ -56,6 +56,9 @@ void WP6StylesListener::endDocument()
 
 void WP6StylesListener::insertBreak(const uint8_t breakType)
 {
+	if (m_isSubDocument)
+		return;
+
 	if (!isUndoOn())
 	{	
 		switch (breakType) 

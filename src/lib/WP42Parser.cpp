@@ -65,7 +65,7 @@ void WP42Parser::parseDocument(WPXInputStream *input, WP42Listener *listener)
 
 		if (readVal < (uint8_t)0x20)
 		{
-			WPD_DEBUG_MSG(("Handling Control Character 0x%2x\n", readVal));			
+			WPD_DEBUG_MSG(("Offset: %i, Handling Control Character 0x%2x\n", input->tell(), readVal));			
 
 			switch (readVal)
 			{
@@ -91,14 +91,14 @@ void WP42Parser::parseDocument(WPXInputStream *input, WP42Listener *listener)
 		}
 		else if (readVal >= (uint8_t)0x20 && readVal <= (uint8_t)0x7F)
 		{
-			WPD_DEBUG_MSG(("Handling Ascii Character 0x%2x\n", readVal));			
+			WPD_DEBUG_MSG(("Offset: %i, Handling Ascii Character 0x%2x\n", input->tell(), readVal));			
 
 			// normal ASCII characters
 			listener->insertCharacter( readVal );
 		}
 		else if (readVal >= (uint8_t)0x80 && readVal <= (uint8_t)0xBF)
 		{
-			WPD_DEBUG_MSG(("Handling Single Character Function 0x%2x\n", readVal));			
+			WPD_DEBUG_MSG(("Offset: %i, Handling Single Character Function 0x%2x\n", input->tell(), readVal));			
 
 			// single character function codes
 			switch (readVal)
@@ -174,7 +174,7 @@ void WP42Parser::parse(WPXHLListenerImpl *listenerImpl)
 		// gather table border information, page properties (per-page)
 		WP42StylesListener stylesListener(pageList, subDocuments);
 		parse(input, &stylesListener);
-		
+
 		// postprocess the pageList == remove duplicate page spans due to the page breaks
 		std::list<WPXPageSpan>::iterator previousPage = pageList.begin();
 		for (std::list<WPXPageSpan>::iterator Iter=pageList.begin(); Iter != pageList.end();)

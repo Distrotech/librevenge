@@ -53,6 +53,9 @@ void WP5StylesListener::endDocument()
 
 void WP5StylesListener::insertBreak(const uint8_t breakType)
 {
+	if (m_isSubDocument)
+		return;
+
 	//if (!isUndoOn())
 	//{	
 		WPXTableList tableList;

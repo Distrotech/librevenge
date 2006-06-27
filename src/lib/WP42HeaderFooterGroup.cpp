@@ -44,10 +44,12 @@ void WP42HeaderFooterGroup::_readContents(WPXInputStream *input)
 	unsigned int tmpStartPosition = input->tell();
 	while (readU8(input) != 0xFF);
 	int tmpSubDocumentSize=input->tell() - tmpStartPosition -1;
+	WPD_DEBUG_MSG(("WP42SubDocument startPosition = %i; SubDocumentSize = %i\n", tmpStartPosition, tmpSubDocumentSize));
 	input->seek(1, WPX_SEEK_CUR);
 	m_definition = readU8(input);
 	input->seek(tmpStartPosition, WPX_SEEK_SET);
-	m_subDocument = new WP42SubDocument(input, tmpSubDocumentSize);
+	if (tmpSubDocumentSize > 2)
+		m_subDocument = new WP42SubDocument(input, tmpSubDocumentSize);
 }
 
 void WP42HeaderFooterGroup::parse(WP42Listener *listener)

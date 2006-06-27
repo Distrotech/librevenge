@@ -974,6 +974,10 @@ void WPXContentListener::insertBreak(const uint8_t breakType)
 			break;
 			// TODO: (.. line break?)
 		}
+
+		if (m_ps->m_inSubDocument)
+			return;
+
 		switch (breakType)
 		{
 		case WPX_PAGE_BREAK:

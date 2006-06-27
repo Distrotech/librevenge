@@ -53,6 +53,9 @@ void WP3StylesListener::endDocument()
 
 void WP3StylesListener::insertBreak(const uint8_t breakType)
 {
+	if (m_isSubDocument)
+		return;
+
 	if (!isUndoOn())
 	{
 		m_currentPageHasContent = true;	
