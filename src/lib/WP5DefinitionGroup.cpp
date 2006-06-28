@@ -60,11 +60,12 @@ WP5DefinitionGroup_DefineTablesSubGroup::WP5DefinitionGroup_DefineTablesSubGroup
 
 void WP5DefinitionGroup_DefineTablesSubGroup::parse(WP5Listener *listener)
 {
+	// Since there are no nested tables in WP5, a new table definition automatically closes previous table
+	listener->endTable();
+
 	listener->defineTable(m_position, m_leftOffset);
 	for (int i=0; i < m_numColumns; i++)
-	{
 		listener->addTableColumnDefinition(m_columnWidth[i], m_leftGutter, m_rightGutter, m_attributeBits[i], m_columnAlignment[i]);
-	}
 	listener->startTable();
 }
 
@@ -78,7 +79,8 @@ WP5DefinitionGroup::WP5DefinitionGroup(WPXInputStream *input) :
 
 WP5DefinitionGroup::~WP5DefinitionGroup()
 {
-	delete m_subGroupData;
+	if (m_subGroupData)
+		delete m_subGroupData;
 }
 
 void WP5DefinitionGroup::_readContents(WPXInputStream *input)

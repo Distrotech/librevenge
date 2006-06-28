@@ -47,7 +47,8 @@ void WP3HeaderFooterGroup::_readContents(WPXInputStream *input)
 		m_definition = readU8(input);
 		input->seek(4, WPX_SEEK_CUR);
 		tmpSubDocumentLength = readU16(input, true);
-		m_subDocument = new WP3SubDocument(input, tmpSubDocumentLength);
+		if (tmpSubDocumentLength)
+			m_subDocument = new WP3SubDocument(input, tmpSubDocumentLength);
 	}
 }
 

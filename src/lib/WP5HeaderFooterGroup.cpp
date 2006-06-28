@@ -44,7 +44,8 @@ void WP5HeaderFooterGroup::_readContents(WPXInputStream *input)
 	if (m_occurenceBits)
 	{
 		input->seek(10, WPX_SEEK_CUR);
-		m_subDocument = new WP5SubDocument(input, tmpSubDocumentLength);
+		if (tmpSubDocumentLength)
+			m_subDocument = new WP5SubDocument(input, tmpSubDocumentLength);
 	}
 }
 

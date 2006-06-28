@@ -275,7 +275,8 @@ void WP3StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, co
 		WPXTableList oldTableList = m_tableList;
 		m_tableList = tableList;
 
-		static_cast<const WP3SubDocument *>(subDocument)->parse(this);
+		if (subDocument)
+			static_cast<const WP3SubDocument *>(subDocument)->parse(this);
 
 		m_tableList = oldTableList;
 		m_currentTable = oldCurrentTable;
@@ -283,7 +284,8 @@ void WP3StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, co
 	}
 	else
 	{
-		static_cast<const WP3SubDocument *>(subDocument)->parse(this);
+		if (subDocument)
+			static_cast<const WP3SubDocument *>(subDocument)->parse(this);
 	}
 	m_isSubDocument = oldIsSubDocument;
 	setUndoOn(oldIsUndoOn);
