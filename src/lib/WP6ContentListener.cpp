@@ -324,7 +324,7 @@ void WP6ContentListener::insertTab(const uint8_t tabType, float tabPosition)
 			case WP6_TAB_GROUP_CENTER_TAB:
 			case WP6_TAB_GROUP_DECIMAL_TAB:
 #endif
-				if (tabPosition >= (float)((double)0xFFFE/(double)WPX_NUM_WPUS_PER_INCH))
+				if (tabPosition >= _movePositionToFirstColumn((double)0xFFFE/(double)WPX_NUM_WPUS_PER_INCH))
 					// fall-back solution if we are not able to read the tabPosition
 					m_ps->m_textIndentByTabs += 0.5f;
 				else
@@ -335,7 +335,7 @@ void WP6ContentListener::insertTab(const uint8_t tabType, float tabPosition)
 				break;
 
 			case WP6_TAB_GROUP_BACK_TAB: // converted as hanging indent
-				if (tabPosition >= (float)((double)0xFFFE/(double)WPX_NUM_WPUS_PER_INCH))
+				if (tabPosition >= _movePositionToFirstColumn((double)0xFFFE/(double)WPX_NUM_WPUS_PER_INCH))
 					// fall-back solution if we are not able to read the tabPosition
 					m_ps->m_textIndentByTabs -= 0.5f;
 				else
@@ -346,7 +346,7 @@ void WP6ContentListener::insertTab(const uint8_t tabType, float tabPosition)
 				break;
 
 			case WP6_TAB_GROUP_LEFT_INDENT:  // converted as left paragraph margin offset
-				if (tabPosition >= (float)((double)0xFFFE/(double)WPX_NUM_WPUS_PER_INCH))
+				if (tabPosition >= _movePositionToFirstColumn((double)0xFFFE/(double)WPX_NUM_WPUS_PER_INCH))
 					// fall-back solution if we are not able to read the tabPosition
 					m_ps->m_leftMarginByTabs += 0.5f;
 				else
@@ -359,7 +359,7 @@ void WP6ContentListener::insertTab(const uint8_t tabType, float tabPosition)
 				break;
 
 			case WP6_TAB_GROUP_LEFT_RIGHT_INDENT: // converted as left and right paragraph margin offset
-				if (tabPosition >= (float)((double)0xFFFE/(double)WPX_NUM_WPUS_PER_INCH))
+				if (tabPosition >= _movePositionToFirstColumn((double)0xFFFE/(double)WPX_NUM_WPUS_PER_INCH))
 					// fall-back solution if we are not able to read the tabPosition
 					m_ps->m_leftMarginByTabs += 0.5f;
 				else
