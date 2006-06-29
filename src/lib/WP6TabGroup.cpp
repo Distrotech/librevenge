@@ -53,7 +53,7 @@ void WP6TabGroup::_readContents(WPXInputStream *input)
 	{
 		tempPosition = readU16(input);
 	}
-	else if ((getSize() >= 12) & (getSize() <= 18)) // Minimum size of the function if the position information is present
+	else if ((getSize() >= 12) && (getSize() <= 18)) // Minimum size of the function if the position information is present
 	/* This case might be fully included in the previous condition, but I am not sure;
 	 * so leaving it in for the while */
 	{
@@ -65,6 +65,10 @@ void WP6TabGroup::_readContents(WPXInputStream *input)
 		input->seek(6, WPX_SEEK_CUR);
 		tempPosition = readU16(input);
 	}
+	// If we got a tempPosition of 0, it means, the information in WPUs is not there (WP6 for DOS??).
+	// We will have to dig a bit more to see whether we can get the information from the screen units ???
+	if (!tempPosition)
+		tempPosition = 0xFFFF;
 	m_position = (float)((double)tempPosition/(double)WPX_NUM_WPUS_PER_INCH);
 }
 

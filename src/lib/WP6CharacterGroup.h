@@ -74,6 +74,16 @@ private:
 	uint16_t m_matchedFontPointSize;
 };
 
+class WP6CharacterGroup_FontSizeChangeSubGroup : public WP6VariableLengthGroup_SubGroup
+{
+public:
+	WP6CharacterGroup_FontSizeChangeSubGroup(WPXInputStream *input);
+	virtual void parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
+
+private:
+	uint16_t m_desiredFontPointSize;
+};
+
 class WP6CharacterGroup_SetDotLeaderCharactersSubGroup: public WP6VariableLengthGroup_SubGroup
 {
 public:

@@ -222,6 +222,7 @@ void WPXContentListener::_openPageSpan()
 	
 	if ( m_pageList.empty() || (m_ps->m_nextPageSpanIter == m_pageList.end()))
 	{
+		WPD_DEBUG_MSG(("m_pageList.empty() || (m_ps->m_nextPageSpanIter == m_pageList.end())\n"));
 		throw ParseException();
 	}
 
@@ -753,7 +754,8 @@ void WPXContentListener::_closeTable()
 
 void WPXContentListener::_openTableRow(const float height, const bool isMinimumHeight, const bool isHeaderRow)
 {
-	_closeTableRow();
+	if (m_ps->m_isTableRowOpened)
+		_closeTableRow();
 	
 	m_ps->m_currentTableCol = 0;
 	m_ps->m_currentTableCellNumberInRow = 0;
@@ -787,12 +789,16 @@ void WPXContentListener::_closeTableRow()
 	{
 		while (m_ps->m_currentTableCol < m_ps->m_numRowsToSkip.size())
 		{
-			if (!m_ps->m_numRowsToSkip[m_ps->m_currentTableCol]) // This case should not happen, so if it does it means that we did something wrong
+			if (!m_ps->m_numRowsToSkip[m_ps->m_currentTableCol]) // This case should not happen, but does :-(
 			{
-				throw ParseException();
+				// m_ps->m_currentTableCol++;
+				// Fill the table row untill the end with empty cells
+				RGBSColor tmpCellBorderColor(0x00, 0x00, 0x00, 0x64);
+				_openTableCell(1, 1, 0xFF, NULL, NULL, &tmpCellBorderColor, TOP);
+				_closeTableCell();
 			}
-			m_ps->m_numRowsToSkip[m_ps->m_currentTableCol]--;
-			m_ps->m_currentTableCol++;
+			else
+				m_ps->m_numRowsToSkip[m_ps->m_currentTableCol++]--;
 		}
 
 		if (m_ps->m_isTableCellOpened)
@@ -837,7 +843,8 @@ void WPXContentListener::_openTableCell(const uint8_t colSpan, const uint8_t row
 				   const RGBSColor * cellBorderColor, const WPXVerticalAlignment cellVerticalAlignment)
 {
 	uint8_t tmpColSpan = colSpan;
-	_closeTableCell();
+	if (m_ps->m_isTableCellOpened)
+		_closeTableCell();
 
 	while (m_ps->m_currentTableCol < m_ps->m_numRowsToSkip.size() && m_ps->m_numRowsToSkip[m_ps->m_currentTableCol])
 	{
@@ -877,13 +884,13 @@ void WPXContentListener::_openTableCell(const uint8_t colSpan, const uint8_t row
 	m_listenerImpl->openTableCell(propList);
 	m_ps->m_currentTableCellNumberInRow++;
 	m_ps->m_isTableCellOpened = true;
+	m_ps->m_isCellWithoutParagraph = true;
 
 	while ((m_ps->m_currentTableCol < m_ps->m_numRowsToSkip.size()) && (tmpColSpan > 0))
 	{
-		if (m_ps->m_numRowsToSkip[m_ps->m_currentTableCol]) // This case should not happen, so if it does it means that we did something wrong
+		if (m_ps->m_numRowsToSkip[m_ps->m_currentTableCol]) // This case should not happen, but it happens in real-life documents :-(
 		{
 			m_ps->m_numRowsToSkip[m_ps->m_currentTableCol]=0;
-			//throw ParseException();
 		}
 		m_ps->m_numRowsToSkip[m_ps->m_currentTableCol] += (rowSpan - 1);
 		m_ps->m_currentTableCol++;
@@ -1009,8 +1016,16 @@ void WPXContentListener::justificationChange(const uint8_t justification)
 {
 	if (!isUndoOn())
 	{
-		// could be done simply by:
-		// m_ps->m_paragraphJustification = justification;
+		// We discovered that if there is not a paragraph break before justificationChange,
+		// newer versions of WordPerfect add a temporary hard return just before the code.
+		// So, we will mimick them!
+		if (m_ps->m_isParagraphOpened)
+			_closeParagraph();
+		if (m_ps->m_isListElementOpened)
+			_closeListElement();
+
+		m_ps->m_currentListLevel = 0;
+
 		switch (justification)
 		{
 		case 0x00:

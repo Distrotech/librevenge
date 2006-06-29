@@ -219,6 +219,8 @@ void WP5ContentListener::endTable()
 	if (!isUndoOn())
 	{
 		_flushText();
+		if (!m_ps->m_isTableOpened)
+			return;
 		_closeTable();
 		// restore the justification that was there before the table.
 		m_ps->m_paragraphJustification = m_ps->m_paragraphJustificationBeforeTable;

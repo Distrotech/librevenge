@@ -649,6 +649,16 @@ void WP6ContentListener::paragraphMarginChange(uint8_t side, int16_t margin)
 {
 	if (!isUndoOn())
 	{
+		// We discovered that if there is not a paragraph break before paragraphMarginChange,
+		// newer version of WordPerfect add a temporary hard return just before the code.
+		// So, we will mimick them
+		if (m_ps->m_isParagraphOpened)
+			_closeParagraph();
+		if (m_ps->m_isListElementOpened)
+			_closeListElement();
+
+		m_ps->m_currentListLevel = 0;
+
 		float marginInch = (float)((double)margin / (double)WPX_NUM_WPUS_PER_INCH);
 		switch(side)
 		{
@@ -1003,6 +1013,15 @@ void WP6ContentListener::defineTable(const uint8_t position, const uint16_t left
 {
 	if (!isUndoOn())
 	{
+		// close any open paragraphs and flush the list
+		if (m_ps->m_isParagraphOpened)
+			_closeParagraph();
+		if (m_ps->m_isListElementOpened)
+			_closeListElement();
+
+		m_ps->m_currentListLevel = 0;
+		_changeList();
+
 		switch (position & 0x07)
 		{
 		case 0:
@@ -1103,30 +1122,35 @@ void WP6ContentListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan
 	if (!isUndoOn())
 	{
 		if (m_ps->m_currentTableRow < 0) // cell without a row, invalid
+		{
+			WPD_DEBUG_MSG(("Cell without a row, invalid\n"));
 			throw ParseException();
+		}
 			
 		if (!m_parseState->m_currentTable)
+		{
+			WPD_DEBUG_MSG(("No table opened, invalid\n"));
 			throw ParseException(); // no table opened, invalid
+		}
 			
 		if (m_parseState->m_currentTable->getRows().size() <= m_ps->m_currentTableRow)
 		{
+			WPD_DEBUG_MSG(("Requesting a row larger than the number of rows the table holds\n"));
 			throw ParseException(); // requesting a row larger than the number of rows the table holds
 		}
 			
 		if (m_parseState->m_currentTable->getRows()[m_ps->m_currentTableRow]->size() <= m_ps->m_currentTableCellNumberInRow)
+		{
+			WPD_DEBUG_MSG(("Requesting a cell smallar than the number of cells in the row\n"));
 			throw ParseException(); // requesting a cell smaller than the number of cells in the row
+		}
 			
 		_flushText();
 		
 		_openTableCell(colSpan, rowSpan, m_parseState->m_currentTable->getCell(m_ps->m_currentTableRow,  
 			       	m_ps->m_currentTableCellNumberInRow)->m_borderBits, cellFgColor, cellBgColor,      
 			       cellBorderColor, cellVerticalAlignment);
-#if 0
-		_openTableCell(colSpan, rowSpan, borderBits, cellFgColor, cellBgColor,      
-			       cellBorderColor, cellVerticalAlignment);
-#endif
 
-		m_ps->m_isCellWithoutParagraph = true;
 		if (useCellAttributes)
 			m_ps->m_cellAttributeBits = cellAttributes;
 		else

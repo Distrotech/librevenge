@@ -103,6 +103,24 @@ void WP6CharacterGroup_FontFaceChangeSubGroup::parse(WP6Listener *listener, cons
 }
 
 /*************************************************************************
+ * WP6CharacterGroup_FontSizeChangeSubGroups
+ *************************************************************************/
+
+WP6CharacterGroup_FontSizeChangeSubGroup::WP6CharacterGroup_FontSizeChangeSubGroup(WPXInputStream *input)
+{
+	m_desiredFontPointSize = readU16(input);
+	WPD_DEBUG_MSG(("WordPerfect: Character Group Font Size Change subgroup info (desired font point size: %i\n", m_desiredFontPointSize));
+}
+
+void WP6CharacterGroup_FontSizeChangeSubGroup::parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const
+{
+	WPD_DEBUG_MSG(("WordPerfect: FontSizeChangeSubGroup parsing\n"));
+	// TODO: check that we have 1 prefix id
+	// emit an exception otherwise
+	listener->fontChange(m_desiredFontPointSize, prefixIDs[0]);
+}
+
+/*************************************************************************
  * WP6CharacterGroup_SetDotLeaderCharactersSubGroup
  *************************************************************************/
 
@@ -220,8 +238,10 @@ void WP6CharacterGroup::_readContents(WPXInputStream *input)
 	switch (getSubGroup())
 	{
 		case WP6_CHARACTER_GROUP_FONT_FACE_CHANGE:
-		case WP6_CHARACTER_GROUP_FONT_SIZE_CHANGE:
 			m_subGroupData = new WP6CharacterGroup_FontFaceChangeSubGroup(input);
+			break;
+		case WP6_CHARACTER_GROUP_FONT_SIZE_CHANGE:
+			m_subGroupData = new WP6CharacterGroup_FontSizeChangeSubGroup(input);
 			break;
 		case WP6_CHARACTER_GROUP_SET_ALIGNMENT_CHARACTER:
 			m_subGroupData = new WP6CharacterGroup_SetAlignmentCharacterSubGroup(input);
