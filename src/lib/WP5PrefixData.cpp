@@ -34,9 +34,24 @@ WP5PrefixData::WP5PrefixData(WPXInputStream *input)
 	while (true)
 	{
 		WP5SpecialHeaderIndex shi = WP5SpecialHeaderIndex(input);
+
+		if ((shi.getType() != 0xfffb) || (shi.getNumOfIndexes() != 5)) // if this is not the type, we have a corruption and ignore the rest of prefix data
+		{
+			WPD_DEBUG_MSG(("WordPerfect: detected possible prefix data corruption, ignoring this and all following packets.\n"));
+			break;
+		}
+
+		bool tmpFoundPossibleCorruption = false;
 		for (int i=0; i<(shi.getNumOfIndexes()-1); i++)
 		{
 			WP5GeneralPacketIndex gpi = WP5GeneralPacketIndex(input, id);
+			if ((gpi.getType() > 0x02ff) && (gpi.getType() < 0xfffb))
+			{
+				WPD_DEBUG_MSG(("WordPerfect: detected possible prefix data corruption, ignoring this and all following packets.\n"));
+				tmpFoundPossibleCorruption = true;
+				break;
+			}
+
 			if ((gpi.getType() != 0) && (gpi.getType() != 0xffff))
 			{
 				WPD_DEBUG_MSG(("WordPerfect: constructing general packet index 0x%x\n", id));
@@ -44,6 +59,9 @@ WP5PrefixData::WP5PrefixData(WPXInputStream *input)
 				id++;
 			}
 		}
+		if (tmpFoundPossibleCorruption)
+			break;		
+
 		if (shi.getNextBlockOffset() != 0)
 			input->seek(shi.getNextBlockOffset(), WPX_SEEK_SET);
 		else
