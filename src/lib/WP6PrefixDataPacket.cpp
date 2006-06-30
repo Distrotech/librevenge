@@ -74,6 +74,9 @@ WP6PrefixDataPacket * WP6PrefixDataPacket::constructPrefixDataPacket(WPXInputStr
 
 void WP6PrefixDataPacket::_read(WPXInputStream *input, uint32_t dataOffset, uint32_t dataSize)
 {
+	if (!dataSize)
+		return;
+
 	input->seek(dataOffset, WPX_SEEK_SET);
 
 	_readContents(input);

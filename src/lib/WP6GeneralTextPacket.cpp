@@ -28,16 +28,22 @@
 #include "WP6Parser.h"
 #include "libwpd_internal.h"
 
-WP6GeneralTextPacket::WP6GeneralTextPacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize) 
-	: WP6PrefixDataPacket(input)
+WP6GeneralTextPacket::WP6GeneralTextPacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize): 
+	WP6PrefixDataPacket(input),
+	m_numTextBlocks(0x0000),
+	m_firstTextBlockOffset(0x00000000),
+	m_subDocument(NULL),
+	m_blockSizes(NULL)
 {	
 	_read(input, dataOffset, dataSize);
 }
 
 WP6GeneralTextPacket::~WP6GeneralTextPacket()
 {
-	delete m_subDocument;
-	delete [] m_blockSizes;
+	if (m_subDocument)
+		delete m_subDocument;
+	if (m_blockSizes)
+		delete [] m_blockSizes;
 }
 
 void WP6GeneralTextPacket::_readContents(WPXInputStream *input)
@@ -46,7 +52,10 @@ void WP6GeneralTextPacket::_readContents(WPXInputStream *input)
 	uint32_t m_firstTextBlockOffset = readU32(input);
 
 	if (m_numTextBlocks < 1)
-		throw ParseException();
+	{
+		WPD_DEBUG_MSG(("WordPerfect: Number of text blocks is %i\n", m_numTextBlocks));
+		return; // m_subDocument will be NULL
+	}
 	
 	m_blockSizes = new uint32_t[m_numTextBlocks];
 	int totalSize = 0;
@@ -74,5 +83,6 @@ void WP6GeneralTextPacket::_readContents(WPXInputStream *input)
 
 void WP6GeneralTextPacket::parse(WP6Listener *listener) const
 {
-	m_subDocument->parse(listener);
+	if (m_subDocument)
+		m_subDocument->parse(listener);
 }
