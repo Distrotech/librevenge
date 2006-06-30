@@ -95,16 +95,6 @@ void WP42ContentListener::insertEOL()
 	}
 }
 
-void WP42ContentListener::endDocument()
-{
-	_closeSpan();
-	_closeParagraph();
-	_closeSection();
-	_closePageSpan();
-	m_listenerImpl->endDocument();
-}
-
-
 void WP42ContentListener::attributeChange(const bool isOn, const uint8_t attribute)
 {
 	_closeSpan();

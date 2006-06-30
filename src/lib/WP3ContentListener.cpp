@@ -111,17 +111,6 @@ void WP3ContentListener::insertEOL()
 
 }
 
-void WP3ContentListener::endDocument()
-{
-	if (!m_ps->m_isPageSpanOpened)
-		_openSpan();
-	_closeSpan();
-	_closeParagraph();
-	_closeSection();
-	_closePageSpan();
-	m_listenerImpl->endDocument();
-}
-
 void WP3ContentListener::defineTable(const uint8_t position, const uint16_t leftOffset)
 {
 	if (!isUndoOn())

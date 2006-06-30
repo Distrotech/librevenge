@@ -236,7 +236,8 @@ void WP6EOLGroup::_readContents(WPXInputStream *input)
 				// HACK: one document seems to have a completely bogus value within 
 				// pre-emptively throw a parsing exception
 				WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: UNKNOWN SUBFUNCTION (%x) (BAD BAD BAD)\n", byte));
-				throw ParseException();
+				numBytesToSkip = readU16(input); // It seems that unknow sub-functions have their length information
+				// embedded: <subfunction>[length]...[length]<subfunction>
 		}			
 		
 		input->seek((startPosition2 + numBytesToSkip - 1 - input->tell()), WPX_SEEK_CUR);

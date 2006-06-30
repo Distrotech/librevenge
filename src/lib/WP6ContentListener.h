@@ -176,7 +176,7 @@ public:
 	void noteOff(const WPXNoteType noteType);
 	void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, const uint16_t textPID) {}
 	void suppressPageCharacteristics(const uint8_t suppressCode) {}
-	void endDocument();
+	void endDocument() { WPXContentListener::endDocument(); };
 
  	void defineTable(const uint8_t position, const uint16_t leftOffset);
 	void addTableColumnDefinition(const uint32_t width, const uint32_t leftGutter, const uint32_t rightGutter,

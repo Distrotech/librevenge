@@ -65,7 +65,7 @@ public:
 	void indentFirstLineChange(const int16_t offset);
 	void columnChange(const WPXTextColumnType columnType, const uint8_t numColumns, const std::vector<float> &columnWidth,
 					const std::vector<bool> &isFixedWidth);
-	void endDocument();
+	void endDocument() { WPXContentListener::endDocument(); };
 
 	void defineTable(const uint8_t position, const uint16_t leftOffset);
 	void addTableColumnDefinition(const uint32_t width, const uint32_t leftGutter, const uint32_t rightGutter,

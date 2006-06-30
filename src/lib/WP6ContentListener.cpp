@@ -272,7 +272,12 @@ void WP6ContentListener::defineTabStops(const bool isRelative, const std::vector
 
 void WP6ContentListener::insertTab(const uint8_t tabType, float tabPosition)
 {
-	tabPosition = _movePositionToFirstColumn(tabPosition);
+	bool tmpHasTabPositionInformation = true;
+	if (tabPosition >= (float)((double)0xFFFE/(double)WPX_NUM_WPUS_PER_INCH))
+		tmpHasTabPositionInformation = false;
+	else
+		tabPosition = _movePositionToFirstColumn(tabPosition);
+
 	if (!isUndoOn())
 	{
 		// First of all, open paragraph for tabs that always are converted as tabs
@@ -324,7 +329,7 @@ void WP6ContentListener::insertTab(const uint8_t tabType, float tabPosition)
 			case WP6_TAB_GROUP_CENTER_TAB:
 			case WP6_TAB_GROUP_DECIMAL_TAB:
 #endif
-				if (tabPosition >= _movePositionToFirstColumn((double)0xFFFE/(double)WPX_NUM_WPUS_PER_INCH))
+				if (!tmpHasTabPositionInformation)
 					// fall-back solution if we are not able to read the tabPosition
 					m_ps->m_textIndentByTabs += 0.5f;
 				else
@@ -335,7 +340,7 @@ void WP6ContentListener::insertTab(const uint8_t tabType, float tabPosition)
 				break;
 
 			case WP6_TAB_GROUP_BACK_TAB: // converted as hanging indent
-				if (tabPosition >= _movePositionToFirstColumn((double)0xFFFE/(double)WPX_NUM_WPUS_PER_INCH))
+				if (!tmpHasTabPositionInformation)
 					// fall-back solution if we are not able to read the tabPosition
 					m_ps->m_textIndentByTabs -= 0.5f;
 				else
@@ -346,7 +351,7 @@ void WP6ContentListener::insertTab(const uint8_t tabType, float tabPosition)
 				break;
 
 			case WP6_TAB_GROUP_LEFT_INDENT:  // converted as left paragraph margin offset
-				if (tabPosition >= _movePositionToFirstColumn((double)0xFFFE/(double)WPX_NUM_WPUS_PER_INCH))
+				if (!tmpHasTabPositionInformation)
 					// fall-back solution if we are not able to read the tabPosition
 					m_ps->m_leftMarginByTabs += 0.5f;
 				else
@@ -359,7 +364,7 @@ void WP6ContentListener::insertTab(const uint8_t tabType, float tabPosition)
 				break;
 
 			case WP6_TAB_GROUP_LEFT_RIGHT_INDENT: // converted as left and right paragraph margin offset
-				if (tabPosition >= _movePositionToFirstColumn((double)0xFFFE/(double)WPX_NUM_WPUS_PER_INCH))
+				if (!tmpHasTabPositionInformation)
 					// fall-back solution if we are not able to read the tabPosition
 					m_ps->m_leftMarginByTabs += 0.5f;
 				else
@@ -991,22 +996,6 @@ void WP6ContentListener::noteOff(const WPXNoteType noteType)
 			m_listenerImpl->closeEndnote();
 		m_ps->m_isNote = false;
 	}
-}
-
-void WP6ContentListener::endDocument()
-{
-	if (m_ps->m_isParagraphOpened)
-		_closeParagraph();
-	if (m_ps->m_isListElementOpened)
-		_closeListElement();
-
-	m_ps->m_currentListLevel = 0;
-	_changeList(); // flush the list exterior
-
-	// close the document nice and tight
-	_closeSection();
-	_closePageSpan();
-	m_listenerImpl->endDocument();
 }
 
 void WP6ContentListener::defineTable(const uint8_t position, const uint16_t leftOffset)

@@ -140,6 +140,7 @@ protected:
 	virtual ~WPXContentListener();
 
 	void startDocument();
+	void endDocument();
 	void handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice);
 	void insertBreak(const uint8_t breakType);
 	void lineSpacingChange(const float lineSpacing);

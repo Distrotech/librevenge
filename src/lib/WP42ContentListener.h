@@ -55,7 +55,7 @@ public:
 	void marginReset(const uint8_t leftMargin, const uint8_t rightMargin);
 	void headerFooterGroup(const uint8_t headerFooterDefinition, WP42SubDocument *subDocument);
 	void suppressPageCharacteristics(const uint8_t suppressCode) {}
-	void endDocument();
+	void endDocument() { WPXContentListener::endDocument(); };
 
 protected:
 	void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);

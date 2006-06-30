@@ -92,16 +92,6 @@ void WP5ContentListener::insertEOL()
 	}
 }
 
-void WP5ContentListener::endDocument()
-{
-	_closeSpan();
-	_closeParagraph();
-	_closeTable();
-	_closeSection();
-	_closePageSpan();
-	m_listenerImpl->endDocument();
-}
-
 void WP5ContentListener::defineTable(const uint8_t position, const uint16_t leftOffset)
 {
 	if (!isUndoOn())

@@ -67,7 +67,7 @@ public:
 	void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool isPersistent) {};
 	void marginChange(const uint8_t side, const uint16_t margin);
 	void paragraphMarginChange(const uint8_t side, const int16_t margin) {};
-	void endDocument();
+	void endDocument() { WPXContentListener::endDocument(); };
 
 	void defineTable(const uint8_t position, const uint16_t leftOffset);
 	void addTableColumnDefinition(const uint32_t width, const uint32_t leftGutter, const uint32_t rightGutter,
