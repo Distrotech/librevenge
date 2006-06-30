@@ -41,5 +41,5 @@ void WP5GeneralPacketIndex::_read(WPXInputStream *input)
 	m_dataSize = readU32(input);
 	m_dataOffset = readU32(input);
 
-	WPD_DEBUG_MSG(("General Packet Index (type: %i, data size: %u, data offset: %u)\n", m_type, m_dataSize, m_dataOffset));
+	WPD_DEBUG_MSG(("General Packet Index (id: %i, type: %i, data size: %u, data offset: %u)\n", m_id, m_type, m_dataSize, m_dataOffset));
 }

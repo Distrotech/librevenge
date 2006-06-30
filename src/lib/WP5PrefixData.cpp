@@ -35,7 +35,7 @@ WP5PrefixData::WP5PrefixData(WPXInputStream *input)
 	{
 		WP5SpecialHeaderIndex shi = WP5SpecialHeaderIndex(input);
 
-		if ((shi.getType() != 0xfffb) || (shi.getNumOfIndexes() != 5)) // if this is not the type, we have a corruption and ignore the rest of prefix data
+		if ((shi.getType() != 0xfffb) || (shi.getNumOfIndexes() != 5) || (shi.getIndexBlockSize() != 50))
 		{
 			WPD_DEBUG_MSG(("WordPerfect: detected possible prefix data corruption, ignoring this and all following packets.\n"));
 			break;
