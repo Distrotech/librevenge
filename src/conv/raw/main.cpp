@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
 		file = argv[1];
 		
 	
-	GError   *err;
+	GError   *err = NULL;
 	GsfInput * input = GSF_INPUT(gsf_input_stdio_new (file, &err));
 	if (input == NULL) 
 	{

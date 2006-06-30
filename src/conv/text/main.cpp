@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 	}
 	gsf_init();
 
-	GError   *err;
+	GError   *err = NULL;
         char *szInputFile;
 	bool isInfo;
 

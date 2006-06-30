@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 	
-	GError   *err;
+	GError   *err = NULL;
 	GsfInput * input;
 	input = GSF_INPUT(gsf_input_stdio_new (argv[1], &err));
 	if (input == NULL) 
