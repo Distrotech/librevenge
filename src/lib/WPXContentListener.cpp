@@ -147,6 +147,9 @@ void WPXContentListener::startDocument()
 
 void WPXContentListener::endDocument()
 {
+	if (!m_ps->m_isPageSpanOpened)
+		_openSpan();
+
 	if (m_ps->m_isTableOpened)
 		_closeTable();
 	if (m_ps->m_isParagraphOpened)
