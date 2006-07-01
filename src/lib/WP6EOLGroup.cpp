@@ -57,7 +57,6 @@ WP6EOLGroup::WP6EOLGroup(WPXInputStream *input) :
 	m_isMinimumHeight(true),
 	m_rowHeight(0),
 	m_isDontEndAParagraphStyleForThisHardReturn(false)
-
 {
 	_read(input);
 }
@@ -72,10 +71,15 @@ WP6EOLGroup::~WP6EOLGroup()
 void WP6EOLGroup::_readContents(WPXInputStream *input)
 {
 	WPD_DEBUG_MSG(("WordPerfect: EOL Group: Reading Embedded Sub-Function Data\n"));
-	uint16_t sizeDeletableSubFunctionData;
 	unsigned int startPosition = input->tell();
-	sizeDeletableSubFunctionData = readU16(input);		
+	uint16_t sizeDeletableSubFunctionData = readU16(input);		
 	WPD_DEBUG_MSG(("WordPerfect: EOL Group: Size of Deletable Sub-Function Data: %ld,  Size of Deletable and Non-deletable sub-function data: %ld\n", (long) sizeDeletableSubFunctionData, (long) getSizeNonDeletable()));
+	if ((long)sizeDeletableSubFunctionData > (long)getSizeNonDeletable())
+	{
+		WPD_DEBUG_MSG(("WordPerfect: EOL Group: Possible corruption detected, not reading Sub-Function Data\n"));
+		return;
+	}
+		
 	input->seek(sizeDeletableSubFunctionData, WPX_SEEK_CUR);
 	while (input->tell() < (startPosition + getSizeNonDeletable()))
 	{
@@ -232,12 +236,9 @@ void WP6EOLGroup::_readContents(WPXInputStream *input)
 				m_isDontEndAParagraphStyleForThisHardReturn = true;
 				break;
 			default:
-				// unsupported: shouldn't happen! an error may follow
-				// HACK: one document seems to have a completely bogus value within 
-				// pre-emptively throw a parsing exception
 				WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: UNKNOWN SUBFUNCTION (%x) (BAD BAD BAD)\n", byte));
-				numBytesToSkip = readU16(input); // It seems that unknow sub-functions have their length information
-				// embedded: <subfunction>[length]...[length]<subfunction>
+				numBytesToSkip = readU16(input); // It seems that these two unknow sub-functions have their
+				                                 // length information embedded: <subfunction>[length]...[length]<subfunction>
 		}			
 		
 		input->seek((startPosition2 + numBytesToSkip - 1 - input->tell()), WPX_SEEK_CUR);

@@ -53,10 +53,13 @@ WP6PrefixData * WP6Parser::getPrefixData(WPXInputStream *input)
 		prefixData = new WP6PrefixData(input, ((WP6Header*)getHeader())->getNumPrefixIndices());
 		return prefixData;
 	}
-	catch(FileException)
+	catch(...)
 	{
+		WPD_DEBUG_MSG(("WordPerfect: Prefix Data most likely corrupted, ignoring and trying to parse the document body.\n"));
+		// TODO: Try to check packet after packet so that we try to recover at least the begining if the corruption is not at
+		//       the begining.
 		DELETEP(prefixData);
-		throw FileException();
+		return NULL;
 	}
 }
 
@@ -144,6 +147,9 @@ void WP6Parser::parseDocument(WPXInputStream *input, WP6Listener *listener)
 
 void WP6Parser::parsePacket(WP6PrefixData *prefixData, int type, WP6Listener *listener)
 {
+	if (!prefixData)
+		return;
+
 	std::pair< MPDP_CIter, MPDP_CIter > * typeIterPair;
 	typeIterPair = prefixData->getPrefixDataPacketsOfType(type); 
 	if (typeIterPair->first != typeIterPair->second) 
@@ -156,6 +162,9 @@ void WP6Parser::parsePacket(WP6PrefixData *prefixData, int type, WP6Listener *li
 
 void WP6Parser::parsePackets(WP6PrefixData *prefixData, int type, WP6Listener *listener)
 {
+	if (!prefixData)
+		return;
+
 	std::pair< MPDP_CIter, MPDP_CIter > * typeIterPair;
 
 	typeIterPair = prefixData->getPrefixDataPacketsOfType(type);

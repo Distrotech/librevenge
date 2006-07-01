@@ -41,6 +41,9 @@ WP6Listener::WP6Listener() :
 }
 
 const WP6PrefixDataPacket * WP6Listener::getPrefixDataPacket(const int prefixID) const
-{ 
-	return m_prefixData->getPrefixDataPacket(prefixID); 
+{
+	if (m_prefixData)
+		return m_prefixData->getPrefixDataPacket(prefixID);
+	else
+		return NULL;
 }
