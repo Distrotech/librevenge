@@ -987,7 +987,7 @@ void WP6ContentListener::noteOff(const WPXNoteType noteType)
 			m_listenerImpl->openEndnote(propList);
 
 		uint16_t textPID = m_parseState->m_noteTextPID;
-		handleSubDocument((textPID ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : NULL), 
+		handleSubDocument(((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : NULL), 
 				false, m_parseState->m_tableList, m_parseState->m_nextTableIndice);
 
 		if (noteType == FOOTNOTE)
@@ -1160,11 +1160,6 @@ void WP6ContentListener::endTable()
 	}
 }
 
-// _handleSubDocument: Creates an empty set of document state (saving the old one on a "stack")
-// if textPID>0: Parses a wordperfect text packet (e.g.: a footnote or a header), and naively
-// sends its text to the hll implementation and naively inserts it into the document
-// if textPID=0: Simply creates a blank paragraph
-// once finished, restores document state to what it was before
 void WP6ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice)
 {
 	// save our old parsing state on our "stack"

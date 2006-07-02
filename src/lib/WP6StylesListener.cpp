@@ -188,8 +188,8 @@ void WP6StylesListener::headerFooterGroup(const uint8_t headerFooterType, const 
 
 			WPXTableList tableList; 
 			m_currentPage.setHeaderFooter(wpxType, headerFooterType, wpxOccurence,
-						(textPID ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : NULL), tableList);
-			_handleSubDocument((textPID ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : NULL), true, tableList);
+						((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : NULL), tableList);
+			_handleSubDocument(((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : NULL), true, tableList);
 		}
 		m_currentPageHasContent = tempCurrentPageHasContent;
 	}
@@ -268,7 +268,7 @@ void WP6StylesListener::noteOn(const uint16_t textPID)
 	if (!isUndoOn()) 
 	{
 		m_currentPageHasContent = true; 		
-		_handleSubDocument((textPID ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : NULL), false, m_tableList);
+		_handleSubDocument(((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : NULL), false, m_tableList);
 	}
 }
 

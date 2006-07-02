@@ -76,10 +76,10 @@ void WP6EOLGroup::_readContents(WPXInputStream *input)
 	WPD_DEBUG_MSG(("WordPerfect: EOL Group: Size of Deletable Sub-Function Data: %ld,  Size of Deletable and Non-deletable sub-function data: %ld\n", (long) sizeDeletableSubFunctionData, (long) getSizeNonDeletable()));
 	if ((long)sizeDeletableSubFunctionData > (long)getSizeNonDeletable())
 	{
-		WPD_DEBUG_MSG(("WordPerfect: EOL Group: Possible corruption detected, not reading Sub-Function Data\n"));
-		return;
+		WPD_DEBUG_MSG(("WordPerfect: EOL Group: Possible corruption detected, bailing out\n"));
+		throw FileException();
 	}
-		
+
 	input->seek(sizeDeletableSubFunctionData, WPX_SEEK_CUR);
 	while (input->tell() < (startPosition + getSizeNonDeletable()))
 	{
@@ -235,10 +235,16 @@ void WP6EOLGroup::_readContents(WPXInputStream *input)
 				numBytesToSkip = WP6_EOL_GROUP_DONT_END_A_PARAGRAPH_STYLE_FOR_THIS_HARD_RETURN_SIZE;
 				m_isDontEndAParagraphStyleForThisHardReturn = true;
 				break;
-			default:
+			case 0x8e:
+			case 0x8f:
 				WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: UNKNOWN SUBFUNCTION (%x) (BAD BAD BAD)\n", byte));
 				numBytesToSkip = readU16(input); // It seems that these two unknow sub-functions have their
 				                                 // length information embedded: <subfunction>[length]...[length]<subfunction>
+				break;
+			default:
+				WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: UNKNOWN SUBFUNCTION (%x) (BAD BAD BAD)\n", byte));
+				WPD_DEBUG_MSG(("WordPerfect: Possible corruption detected, bailing out\n"));
+				throw FileException();
 		}			
 		
 		input->seek((startPosition2 + numBytesToSkip - 1 - input->tell()), WPX_SEEK_CUR);

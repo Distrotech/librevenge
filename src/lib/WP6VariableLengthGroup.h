@@ -37,13 +37,13 @@ public:
 
 class WP6VariableLengthGroup : public WP6Part
 {
- public:
+public:
 	WP6VariableLengthGroup(); // WP6VariableLengthGroup should _never_ be constructed, only its inherited classes
 	virtual ~WP6VariableLengthGroup();
 
 	static WP6VariableLengthGroup * constructVariableLengthGroup(WPXInputStream *input, uint8_t groupID);
 
- protected:
+protected:
 	void _read(WPXInputStream *input);
 	virtual void _readContents(WPXInputStream *input) {} // we don't always need more information than that provided generically
 
@@ -54,7 +54,7 @@ class WP6VariableLengthGroup : public WP6Part
 	uint16_t * const getPrefixIDs() const { return m_prefixIDs; }
 	const uint16_t getSizeNonDeletable() const { return m_sizeNonDeletable; }
 
- private:
+private:
 	uint8_t m_subGroup;
 	uint16_t m_size;
 	uint8_t m_flags;
