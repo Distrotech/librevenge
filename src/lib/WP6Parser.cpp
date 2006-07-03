@@ -53,15 +53,23 @@ WP6PrefixData * WP6Parser::getPrefixData(WPXInputStream *input)
 		prefixData = new WP6PrefixData(input, ((WP6Header*)getHeader())->getNumPrefixIndices());
 		return prefixData;
 	}
+	catch(FileException)
+	{
+		WPD_DEBUG_MSG(("WordPerfect: Prefix Data most likely corrupted.\n"));
+		// TODO: Try to check packet after packet so that we try to recover at least the begining if the corruption is not at
+		//       the begining.
+		DELETEP(prefixData);
+		throw FileException();
+	}
 	catch(...)
 	{
-		WPD_DEBUG_MSG(("WordPerfect: Prefix Data most likely corrupted, ignoring and trying to parse the document body.\n"));
+		WPD_DEBUG_MSG(("WordPerfect: Prefix Data most likely corrupted. Trying to ignore.\n"));
 		// TODO: Try to check packet after packet so that we try to recover at least the begining if the corruption is not at
 		//       the begining.
 		DELETEP(prefixData);
 		return NULL;
 	}
-}
+		}
 
 void WP6Parser::parse(WPXInputStream *input, WP6Listener *listener)
 {

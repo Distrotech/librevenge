@@ -62,7 +62,12 @@ void WP3FixedLengthGroup::_read(WPXInputStream *input)
 	if (m_group >= 0xC0 && m_group <= 0xCF) // just an extra safety check
 	{
 		int size = WP3_FIXED_LENGTH_FUNCTION_GROUP_SIZE[m_group-0xC0];
-		input->seek((startPosition + size - 1 - input->tell()), WPX_SEEK_CUR);
+		input->seek((startPosition + size - 2 - input->tell()), WPX_SEEK_CUR);
+		if (m_group != readU8(input))
+		{
+			WPD_DEBUG_MSG(("WordPerfect: Possible corruption detected. Bailing out!\n"));
+			throw FileException();
+		}
 	}
 	else
 		throw FileException();

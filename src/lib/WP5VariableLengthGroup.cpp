@@ -73,6 +73,19 @@ void WP5VariableLengthGroup::_read(WPXInputStream *input)
 	WPD_DEBUG_MSG(("WordPerfect: Read variable group header (start_position: %i, sub_group: 0x%2x, size: %i)\n", startPosition, m_subGroup, m_size));
 	
 	_readContents(input);
+
+	input->seek((startPosition + m_size - 5 - input->tell()), WPX_SEEK_CUR);
+
+	if (m_size != (readU16(input) + 4))
+	{
+		WPD_DEBUG_MSG(("WordPerfect: Possible corruption detected. Bailing out!\n"));
+		throw FileException();
+	}
+	if (m_subGroup != readU8(input))
+	{
+		WPD_DEBUG_MSG(("WordPerfect: Possible corruption detected. Bailing out!\n"));
+		throw FileException();
+	}
 	
 	input->seek((startPosition + m_size - 1 - input->tell()), WPX_SEEK_CUR);
 

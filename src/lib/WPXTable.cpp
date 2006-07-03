@@ -56,7 +56,11 @@ void WPXTable::insertRow()
 }
 
 void WPXTable::insertCell(uint8_t colSpan, uint8_t rowSpan, uint8_t borderBits)
-{	
+{
+	if (m_tableRows.size() < 1)
+		throw ParseException();
+	if (!m_tableRows[(m_tableRows.size()-1)])
+		throw ParseException();	
 	m_tableRows[(m_tableRows.size()-1)]->push_back(new WPXTableCell(colSpan, rowSpan, borderBits));
 }
 
