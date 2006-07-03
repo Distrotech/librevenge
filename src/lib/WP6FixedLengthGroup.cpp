@@ -73,14 +73,12 @@ void WP6FixedLengthGroup::_read(WPXInputStream *input)
 	if (m_group >= 0xF0) // just an extra safety check
 	{
 		int size = WP6_FIXED_LENGTH_FUNCTION_GROUP_SIZE[m_group-0xF0];
-		input->seek((startPosition + size - 1 - input->tell()), WPX_SEEK_CUR);
-#if 0
+		input->seek((startPosition + size - 2 - input->tell()), WPX_SEEK_CUR);
 		if (m_group != readU8(input))
 		{
 			WPD_DEBUG_MSG(("WordPerfect: Possible corruption detected: bailing out!\n"));
 			throw FileException();
 		}
-#endif
 	}
 	else
 		throw FileException();

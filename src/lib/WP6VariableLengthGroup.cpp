@@ -121,8 +121,7 @@ void WP6VariableLengthGroup::_read(WPXInputStream *input)
 
 	input->seek((startPosition + m_size - 4 - input->tell()), WPX_SEEK_CUR);
 
-	uint16_t tmpSize = readU16(input);
-	if (m_size != tmpSize)
+	if (m_size != readU16(input))
 	{
 		WPD_DEBUG_MSG(("WordPerfect: Possible corruption detected, bailing out!\n"));
 		throw FileException();
