@@ -25,9 +25,9 @@
 
 #include "WP42FileStructure.h"
 
-// size of the function groups 0xC0 to 0xFF
+// size of the function groups 0xC0 to 0xF8
 // -1 means the size is variable
-int WP42_FUNCTION_GROUP_SIZE[64] = 
+int WP42_FUNCTION_GROUP_SIZE[57] = 
 {
 	6,	// 0xC0
 	4,
@@ -72,7 +72,7 @@ int WP42_FUNCTION_GROUP_SIZE[64] =
 	3,	
 	-1,	
 	-1,	
-	32,	
+	-1,	// 0XEB Documentation lies that the size is 32, but it is not true.	
 	4,	
 	-1,	
 	44,	
@@ -85,20 +85,5 @@ int WP42_FUNCTION_GROUP_SIZE[64] =
 	-1,	
 	5,	
 	-1,
-	-1,	// 0xF8
-	
-	/*
-	The values below are for hyphenation function groups.
-	
-	NOTE: I have NO clue whatsoever how these would look. I just ASSUME
-	these groups have a variable group size.
-	*/
-	
-	-1,  // 0xF9
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1, // 0xFF
+	-1	// 0xF8
 };

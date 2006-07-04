@@ -37,8 +37,10 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input, bool parti
 	
 	while (!input->atEOS())
 	{
-		uint8_t readVal;
-		readVal = readU8(input);
+		uint32_t tmpOffset = input->tell();
+		uint8_t readVal = readU8(input);
+
+		WPD_DEBUG_MSG(("WP42Heuristics, Offset 0x%.8x, value 0x%.2x\n", tmpOffset, readVal));
 		
 		if (readVal < (uint8_t)0x20)
 		{
@@ -51,6 +53,11 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input, bool parti
 		else if (readVal >= (uint8_t)0x80 && readVal <= (uint8_t)0xBF)
 		{
 			// single character function codes, skip
+		}
+		else if (readVal >= (uint8_t)0xFB)
+		{
+			// special codes that should not be separated
+			return WPD_CONFIDENCE_NONE;
 		}
 		else 
 		{
