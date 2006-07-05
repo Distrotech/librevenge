@@ -39,6 +39,7 @@ WP5HeaderFooterGroup::~WP5HeaderFooterGroup()
 void WP5HeaderFooterGroup::_readContents(WPXInputStream *input)
 {
 	int tmpSubDocumentLength = getSize() - 26;
+	WPD_DEBUG_MSG(("WordPerfect: reading HeaderFooter group. SubDocument size: %i\n", tmpSubDocumentLength));
 	input->seek(7, WPX_SEEK_CUR);
 	m_occurenceBits = readU8(input);
 	if (m_occurenceBits)
