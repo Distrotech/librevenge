@@ -80,7 +80,7 @@ void WP5Parser::parseDocument(WPXInputStream *input, WP5Listener *listener)
 		uint8_t readVal;
 		readVal = readU8(input);
 		
-		if (readVal == 0 || readVal == 0x7F || readVal == 0xFF || readVal == 0xE8)
+		if (readVal == 0 || readVal == 0x7F || readVal == 0xFF)
 		{
 			// do nothing: this token is meaningless and is likely just corruption
 		}
