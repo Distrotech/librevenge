@@ -35,7 +35,7 @@
 // returns the part if it successfully creates the part, returns NULL if it can't
 // throws an exception if there is an error
 // precondition: readVal is between 0xC0 and 0xFF
-WP5Part * WP5Part::constructPart(WPXInputStream *input, uint8_t readVal)
+WP5Part * WP5Part::constructPart(WPXInputStream *input, const uint8_t readVal)
 {	
 	WPD_DEBUG_MSG(("WordPerfect: ConstructPart\n"));
 
@@ -50,6 +50,11 @@ WP5Part * WP5Part::constructPart(WPXInputStream *input, uint8_t readVal)
 	{
 		// fixed length multi-byte function
 	
+		if (!WP5FixedLengthGroup::isGroupConsistent(input, readVal))
+		{
+			WPD_DEBUG_MSG(("WordPerfect: Consistency Check (fixed length) failed; ignoring this byte\n"));
+			return NULL;
+		}
 		WPD_DEBUG_MSG(("WordPerfect: constructFixedLengthGroup(input, val)\n"));
 		return WP5FixedLengthGroup::constructFixedLengthGroup(input, readVal);
 	}      
@@ -57,9 +62,20 @@ WP5Part * WP5Part::constructPart(WPXInputStream *input, uint8_t readVal)
 	{
 		// variable length multi-byte function
 	
+		/* check whether the function is consistent with the variable length
+		 * function definition. If not, just skip the function byte and try next position.
+		 * The documentation speaks about variable length functions from 0xD0 to 0xFF, but
+		 * only 0xD0 to 0xDF, 0xE1 and 0xFE are documented. We saw in some documents that
+		 * the 0xE8 function was a single byte undocumented function (or corruption???) */
+		if (!WP5VariableLengthGroup::isGroupConsistent(input, readVal))
+		{
+			WPD_DEBUG_MSG(("WordPerfect: Consistency Check (variable length) failed; ignoring this byte\n"));
+			return NULL;
+		}
 		WPD_DEBUG_MSG(("WordPerfect: constructVariableLengthGroup(input, val)\n"));
 		return WP5VariableLengthGroup::constructVariableLengthGroup(input, readVal);
 	}
+
 
 	WPD_DEBUG_MSG(("WordPerfect: Returning NULL from constructPart\n"));
 	return NULL;

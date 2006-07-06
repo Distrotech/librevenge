@@ -34,7 +34,9 @@ class WP3VariableLengthGroup : public WP3Part
 	WP3VariableLengthGroup(); // WP3VariableLengthGroup should _never_ be constructed, only its inherited classes
 	virtual ~WP3VariableLengthGroup() {}
 	
-	static WP3VariableLengthGroup * constructVariableLengthGroup(WPXInputStream *input, uint8_t group);
+	static WP3VariableLengthGroup * constructVariableLengthGroup(WPXInputStream *input, const uint8_t group);
+
+	static bool isGroupConsistent(WPXInputStream *input, const uint8_t group);
 
  protected:
 	void _read(WPXInputStream *input);

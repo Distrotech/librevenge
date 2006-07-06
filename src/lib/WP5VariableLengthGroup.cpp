@@ -38,7 +38,7 @@ WP5VariableLengthGroup::WP5VariableLengthGroup()
 {
 }
 
-WP5VariableLengthGroup * WP5VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, uint8_t group)
+WP5VariableLengthGroup * WP5VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, const uint8_t group)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling a variable length group Ox%x\n", group));	
 	switch (group)
@@ -63,6 +63,46 @@ WP5VariableLengthGroup * WP5VariableLengthGroup::constructVariableLengthGroup(WP
 	}
 }
 
+bool WP5VariableLengthGroup::isGroupConsistent(WPXInputStream *input, const uint8_t group)
+{
+	uint32_t startPosition = input->tell();
+
+	try
+	{
+		uint8_t subGroup = readU8(input);
+		uint16_t size = readU16(input);
+
+		if (input->seek((startPosition + size - 1 - input->tell()), WPX_SEEK_CUR))
+		{
+			input->seek(startPosition, WPX_SEEK_SET);
+			return false;
+		}
+		if (size != readU16(input))
+		{
+			input->seek(startPosition, WPX_SEEK_SET);
+			return false;
+		}
+		if (subGroup != readU8(input))
+		{
+			input->seek(startPosition, WPX_SEEK_SET);
+			return false;
+		}
+		if (group != readU8(input))
+		{
+			input->seek(startPosition, WPX_SEEK_SET);
+			return false;
+		}
+		
+		input->seek(startPosition, WPX_SEEK_SET);
+		return true;
+	}
+	catch(...)
+	{
+		input->seek(startPosition, WPX_SEEK_SET);
+		return false;
+	}
+}
+
 void WP5VariableLengthGroup::_read(WPXInputStream *input)
 {
 	uint32_t startPosition = input->tell();
@@ -71,7 +111,7 @@ void WP5VariableLengthGroup::_read(WPXInputStream *input)
 	m_size = readU16(input) + 4; // the length is the number of data bytes minus 4 (ie. the function codes)
 	
 	WPD_DEBUG_MSG(("WordPerfect: Read variable group header (start_position: %i, sub_group: 0x%2x, size: %i)\n", startPosition, m_subGroup, m_size));
-	
+
 	_readContents(input);
 
 	input->seek((startPosition + m_size - 5 - input->tell()), WPX_SEEK_CUR);
@@ -86,7 +126,6 @@ void WP5VariableLengthGroup::_read(WPXInputStream *input)
 		WPD_DEBUG_MSG(("WordPerfect: Possible corruption detected. Bailing out!\n"));
 		throw FileException();
 	}
-	
-	input->seek((startPosition + m_size - 1 - input->tell()), WPX_SEEK_CUR);
 
+	input->seek((startPosition + m_size - 1 - input->tell()), WPX_SEEK_CUR);
 }

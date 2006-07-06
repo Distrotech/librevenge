@@ -35,24 +35,34 @@
 // returns the part if it successfully creates the part, returns NULL if it can't
 // throws an exception if there is an error
 // precondition: readVal us between 0x80 and 0xFF
-WP6Part * WP6Part::constructPart(WPXInputStream *input, uint8_t readVal)
+WP6Part * WP6Part::constructPart(WPXInputStream *input, const uint8_t readVal)
 {	
 	WPD_DEBUG_MSG(("WordPerfect: ConstructPart\n"));
 		
 	if (readVal >= (uint8_t)0x80 && readVal <= (uint8_t)0xCF)
 	{
-		WPD_DEBUG_MSG(("WordPerfect: constructFixedLengthGroup(input, val)\n"));
+		WPD_DEBUG_MSG(("WordPerfect: constructSingleByteFunction(input, val=0x%.2x)\n", readVal));
 		return WP6SingleByteFunction::constructSingleByteFunction(input, readVal);
 	}
 	else if (readVal >= (uint8_t)0xD0 && readVal <= (uint8_t)0xEF)
 	{
-		WPD_DEBUG_MSG(("WordPerfect: constructVariableLengthGroup(input, val)\n"));
+		if (!WP6VariableLengthGroup::isGroupConsistent(input, readVal))
+		{
+			WPD_DEBUG_MSG(("WordPerfect: Consistency Check (variable length) failed; ignoring this byte\n"));
+			return NULL;
+		}
+		WPD_DEBUG_MSG(("WordPerfect: constructVariableLengthGroup(input, val=0x%.2x)\n", readVal));
 		return WP6VariableLengthGroup::constructVariableLengthGroup(input, readVal);
 	}      
 
 	else if (readVal >= (uint8_t)0xF0)
 	{
-		WPD_DEBUG_MSG(("WordPerfect: constructFixedLengthGroup(input, val)\n"));
+		if (!WP6FixedLengthGroup::isGroupConsistent(input, readVal))
+		{
+			WPD_DEBUG_MSG(("WordPerfect: Consistency Check (fixed length) failed; ignoring this byte\n"));
+			return NULL;
+		}
+		WPD_DEBUG_MSG(("WordPerfect: constructFixedLengthGroup(input, val=0x%.2x)\n", readVal));
 		return WP6FixedLengthGroup::constructFixedLengthGroup(input, readVal);
 	}
 

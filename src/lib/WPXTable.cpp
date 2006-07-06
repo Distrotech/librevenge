@@ -52,7 +52,7 @@ WPXTable::~WPXTable()
 
 void WPXTable::insertRow()
 {
-	m_tableRows.push_back(new std::vector<WPXTableCell *>);
+	m_tableRows.push_back(new std::vector<WPXTableCell *>());
 }
 
 void WPXTable::insertCell(uint8_t colSpan, uint8_t rowSpan, uint8_t borderBits)

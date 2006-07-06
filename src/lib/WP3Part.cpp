@@ -35,7 +35,7 @@
 // returns the part if it successfully creates the part, returns NULL if it can't
 // throws an exception if there is an error
 // precondition: readVal is between 0xC0 and 0xEF
-WP3Part * WP3Part::constructPart(WPXInputStream *input, uint8_t readVal)
+WP3Part * WP3Part::constructPart(WPXInputStream *input, const uint8_t readVal)
 {	
 	WPD_DEBUG_MSG(("WordPerfect: ConstructPart for group 0x%x\n", readVal));
 	
@@ -49,6 +49,11 @@ WP3Part * WP3Part::constructPart(WPXInputStream *input, uint8_t readVal)
 	{
 		// fixed length multi-byte function
 	
+		if (!WP3FixedLengthGroup::isGroupConsistent(input, readVal))
+		{
+			WPD_DEBUG_MSG(("WordPerfect: Consistency Check (fixed length) failed; ignoring this byte\n"));
+			return NULL;
+		}
 		WPD_DEBUG_MSG(("WordPerfect: constructFixedLengthGroup(input, val)\n"));
 		return WP3FixedLengthGroup::constructFixedLengthGroup(input, readVal);
 	}      
@@ -56,6 +61,11 @@ WP3Part * WP3Part::constructPart(WPXInputStream *input, uint8_t readVal)
 	{
 		// variable length multi-byte function
 	
+		if (!WP3VariableLengthGroup::isGroupConsistent(input, readVal))
+		{
+			WPD_DEBUG_MSG(("WordPerfect: Consistency Check (variable length) failed; ignoring this byte\n"));
+			return NULL;
+		}
 		WPD_DEBUG_MSG(("WordPerfect: constructVariableLengthGroup(input, val)\n"));
 		return WP3VariableLengthGroup::constructVariableLengthGroup(input, readVal);
 	}

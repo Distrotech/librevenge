@@ -37,20 +37,22 @@ public:
 
 class WP5VariableLengthGroup : public WP5Part
 {
- public:
+public:
 	WP5VariableLengthGroup(); // WP5VariableLengthGroup should _never_ be constructed, only its inherited classes
 	virtual ~WP5VariableLengthGroup() {}
 	
-	static WP5VariableLengthGroup * constructVariableLengthGroup(WPXInputStream *input, uint8_t group);
+	static WP5VariableLengthGroup * constructVariableLengthGroup(WPXInputStream *input, const uint8_t group);
 
- protected:
+	static bool isGroupConsistent(WPXInputStream *input, const uint8_t group);
+
+protected:
 	void _read(WPXInputStream *input);
  	virtual void _readContents(WPXInputStream *input) {} // we don't always need more information than that provided generically
 
 	const uint8_t getSubGroup() const { return m_subGroup; }
 	const uint16_t getSize() const { return m_size; }
 
- private:
+private:
 	uint8_t m_subGroup;
 	uint16_t m_size;
 };

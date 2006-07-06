@@ -30,17 +30,20 @@
 
 class WP5FixedLengthGroup : public WP5Part
 {
- public:
-	WP5FixedLengthGroup(int groupID);
-	static WP5FixedLengthGroup * constructFixedLengthGroup(WPXInputStream *input, uint8_t groupID);
+public:
+	WP5FixedLengthGroup(const uint8_t groupID);
+	static WP5FixedLengthGroup * constructFixedLengthGroup(WPXInputStream *input, const uint8_t groupID);
+
+	static bool isGroupConsistent(WPXInputStream *input, const uint8_t groupID);
 
 	const uint8_t getGroup() const { return m_group; } 
  
- protected:
+protected:
 	void _read(WPXInputStream *input);
 	virtual void _readContents(WPXInputStream *input) = 0; // we always read the contents in the case of a fixed length group
- private:
-	uint8_t m_group;	 
+
+private:
+	uint8_t m_group;
 };
 
 #endif /* WP5FIXEDLENGTHGROUP_H */

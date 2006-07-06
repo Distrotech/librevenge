@@ -34,7 +34,7 @@ class WP3Part
  public:
 	virtual ~WP3Part() {}
 	
-	static WP3Part * constructPart(WPXInputStream *input, uint8_t readVal);
+	static WP3Part * constructPart(WPXInputStream *input, const uint8_t readVal);
 	virtual void parse(WP3Listener *listener) = 0;
 };
 

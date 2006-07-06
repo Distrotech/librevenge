@@ -35,7 +35,7 @@ WP3FixedLengthGroup::WP3FixedLengthGroup(int groupID)
 {
 }
 
-WP3FixedLengthGroup * WP3FixedLengthGroup::constructFixedLengthGroup(WPXInputStream *input, uint8_t groupID)
+WP3FixedLengthGroup * WP3FixedLengthGroup::constructFixedLengthGroup(WPXInputStream *input, const uint8_t groupID)
 {
 	switch (groupID) 
 	{
@@ -51,6 +51,34 @@ WP3FixedLengthGroup * WP3FixedLengthGroup::constructFixedLengthGroup(WPXInputStr
 		// Add the remaining cases here
 		default:
 			return new WP3UnsupportedFixedLengthGroup(input, groupID);
+	}
+}
+
+bool WP3FixedLengthGroup::isGroupConsistent(WPXInputStream *input, const uint8_t groupID)
+{
+	uint32_t startPosition = input->tell();
+
+	try
+	{
+		int size = WP3_FIXED_LENGTH_FUNCTION_GROUP_SIZE[groupID-0xC0];
+		if (input->seek((startPosition + size - 2 - input->tell()), WPX_SEEK_CUR))
+		{
+			input->seek(startPosition, WPX_SEEK_SET);
+			return false;
+		}
+		if (groupID != readU8(input))
+		{
+			input->seek(startPosition, WPX_SEEK_SET);
+			return false;
+		}
+		
+		input->seek(startPosition, WPX_SEEK_SET);
+		return true;
+	}
+	catch(...)
+	{
+		input->seek(startPosition, WPX_SEEK_SET);
+		return false;
 	}
 }
 

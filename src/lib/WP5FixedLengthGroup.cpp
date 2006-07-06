@@ -31,12 +31,12 @@
 #include "WP5UnsupportedFixedLengthGroup.h"
 #include "libwpd_internal.h"
 
-WP5FixedLengthGroup::WP5FixedLengthGroup(int groupID)
-	: m_group(groupID)
+WP5FixedLengthGroup::WP5FixedLengthGroup(const uint8_t groupID):
+	m_group(groupID)
 {
 }
 
-WP5FixedLengthGroup * WP5FixedLengthGroup::constructFixedLengthGroup(WPXInputStream *input, uint8_t groupID)
+WP5FixedLengthGroup * WP5FixedLengthGroup::constructFixedLengthGroup(WPXInputStream *input, const uint8_t groupID)
 {
 	switch (groupID) 
 	{
@@ -52,6 +52,34 @@ WP5FixedLengthGroup * WP5FixedLengthGroup::constructFixedLengthGroup(WPXInputStr
 		// Add the remaining cases here
 		default:
 			return new WP5UnsupportedFixedLengthGroup(input, groupID);
+	}
+}
+
+bool WP5FixedLengthGroup::isGroupConsistent(WPXInputStream *input, const uint8_t groupID)
+{
+	uint32_t startPosition = input->tell();
+
+	try
+	{
+		int size = WP5_FIXED_LENGTH_FUNCTION_GROUP_SIZE[groupID-0xC0];
+		if (input->seek((startPosition + size - 2 - input->tell()), WPX_SEEK_CUR))
+		{
+			input->seek(startPosition, WPX_SEEK_SET);
+			return false;
+		}
+		if (groupID != readU8(input))
+		{
+			input->seek(startPosition, WPX_SEEK_SET);
+			return false;
+		}
+		
+		input->seek(startPosition, WPX_SEEK_SET);
+		return true;
+	}
+	catch(...)
+	{
+		input->seek(startPosition, WPX_SEEK_SET);
+		return false;
 	}
 }
 

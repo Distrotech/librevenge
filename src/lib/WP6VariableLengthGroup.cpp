@@ -51,7 +51,7 @@ WP6VariableLengthGroup::~WP6VariableLengthGroup()
 		delete [] m_prefixIDs;
 }
 
-WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, uint8_t groupID)
+WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, const uint8_t groupID)
 {
 	switch (groupID)
 	{
@@ -78,6 +78,41 @@ WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(WP
 	default:
 		// this is an unhandled group, just skip it
 		return new WP6UnsupportedVariableLengthGroup(input);
+	}
+}
+
+bool WP6VariableLengthGroup::isGroupConsistent(WPXInputStream *input, const uint8_t groupID)
+{
+	uint32_t startPosition = input->tell();
+
+	try
+	{
+		uint8_t subGroup = readU8(input);
+		uint16_t size = readU16(input);
+
+		if (input->seek((startPosition + size - 4 - input->tell()), WPX_SEEK_CUR))
+		{
+			input->seek(startPosition, WPX_SEEK_SET);
+			return false;
+		}
+		if (size != readU16(input))
+		{
+			input->seek(startPosition, WPX_SEEK_SET);
+			return false;
+		}
+		if (groupID != readU8(input))
+		{
+			input->seek(startPosition, WPX_SEEK_SET);
+			return false;
+		}
+		
+		input->seek(startPosition, WPX_SEEK_SET);
+		return true;
+	}
+	catch(...)
+	{
+		input->seek(startPosition, WPX_SEEK_SET);
+		return false;
 	}
 }
 

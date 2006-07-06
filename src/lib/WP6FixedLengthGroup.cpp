@@ -65,6 +65,34 @@ WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(WPXInputStr
 	}
 }
 
+bool WP6FixedLengthGroup::isGroupConsistent(WPXInputStream *input, const uint8_t groupID)
+{
+	uint32_t startPosition = input->tell();
+
+	try
+	{
+		int size = WP6_FIXED_LENGTH_FUNCTION_GROUP_SIZE[groupID-0xF0];
+		if (input->seek((startPosition + size - 2 - input->tell()), WPX_SEEK_CUR))
+		{
+			input->seek(startPosition, WPX_SEEK_SET);
+			return false;
+		}
+		if (groupID != readU8(input))
+		{
+			input->seek(startPosition, WPX_SEEK_SET);
+			return false;
+		}
+		
+		input->seek(startPosition, WPX_SEEK_SET);
+		return true;
+	}
+	catch(...)
+	{
+		input->seek(startPosition, WPX_SEEK_SET);
+		return false;
+	}
+}
+
 void WP6FixedLengthGroup::_read(WPXInputStream *input)
 {
 	uint32_t startPosition = input->tell();

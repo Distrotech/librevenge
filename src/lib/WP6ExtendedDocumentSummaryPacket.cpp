@@ -27,20 +27,25 @@
 #include "WP6ExtendedDocumentSummaryPacket.h"
 #include "libwpd_internal.h"
 
-WP6ExtendedDocumentSummaryPacket::WP6ExtendedDocumentSummaryPacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize) 
-	: WP6PrefixDataPacket(input),
-	  m_dataSize(dataSize)
+WP6ExtendedDocumentSummaryPacket::WP6ExtendedDocumentSummaryPacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize) :
+	WP6PrefixDataPacket(input),
+	m_dataSize(dataSize),
+	m_stream(NULL)
 {	
-	_read(input, dataOffset, dataSize);
+	if (dataSize > 0)
+		_read(input, dataOffset, dataSize);
 }
 
 WP6ExtendedDocumentSummaryPacket::~WP6ExtendedDocumentSummaryPacket()
 {
-	DELETEP(m_stream);
+	if (m_stream)
+		DELETEP(m_stream);
 }
 
 void WP6ExtendedDocumentSummaryPacket::_readContents(WPXInputStream *input)
 {
+	if (m_dataSize <= 0)
+		return;
 	uint8_t *streamData = new uint8_t[m_dataSize];
 	for(int i=0; i<m_dataSize; i++)
 		streamData[i] = readU8(input);
@@ -50,18 +55,26 @@ void WP6ExtendedDocumentSummaryPacket::_readContents(WPXInputStream *input)
 
 void WP6ExtendedDocumentSummaryPacket::parse(WP6Listener *listener) const
 {
+	if (!m_stream)
+		return;
 	uint16_t groupLength = 0;
 
-	for (int i=0; i < m_dataSize; i+=groupLength)
+	for (int i=0; i < m_dataSize && !m_stream->atEOS(); i+=groupLength)
 	{
 		groupLength = readU16(m_stream);
+		if ((groupLength <= 0) || m_stream->atEOS())
+			return;
 		uint16_t tagID = readU16(m_stream);
-		m_stream->seek(2, WPX_SEEK_CUR);
+		if (m_stream->atEOS())
+			return;
+		if (m_stream->seek(2, WPX_SEEK_CUR))
+			return;
 
 		WPXString name;
-		for (uint16_t wpChar = readU16(m_stream);
-		     wpChar != 0; 
-		     wpChar = readU16(m_stream))
+		uint16_t wpChar;
+		if (!m_stream->atEOS())
+			wpChar = readU16(m_stream);
+		for (; wpChar != 0 && !m_stream->atEOS(); wpChar = readU16(m_stream))
 		{
 			uint8_t character = (wpChar & 0xFF);
 			uint8_t characterSet = (wpChar & 0xFF00) >> 8;
@@ -90,18 +103,18 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6Listener *listener) const
 		else
 		{
 			WPXString data;
-			for (uint16_t wpChar = readU16(m_stream);
-			     wpChar != 0; 
-			     wpChar = readU16(m_stream))
+			if (!m_stream->atEOS())
+				wpChar = readU16(m_stream);
+			for (; wpChar != 0 && !m_stream->atEOS(); wpChar = readU16(m_stream))
 			{				
-			uint8_t character = (wpChar & 0xFF);
-			uint8_t characterSet = (wpChar & 0xFF00) >> 8;
-			const uint16_t *chars;
-			int len;
-			len = extendedCharacterWP6ToUCS2(character,
+				uint8_t character = (wpChar & 0xFF);
+				uint8_t characterSet = (wpChar & 0xFF00) >> 8;
+				const uint16_t *chars;
+				int len;
+				len = extendedCharacterWP6ToUCS2(character,
 						      characterSet, &chars);
-			for (int j = 0; j < len; j++)
-				appendUCS4(data, (uint32_t)chars[j]);
+				for (int j = 0; j < len; j++)
+					appendUCS4(data, (uint32_t)chars[j]);
 			} 
 			listener->setExtendedInformation(tagID, data);
 		}

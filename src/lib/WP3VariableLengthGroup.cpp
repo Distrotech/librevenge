@@ -69,6 +69,46 @@ WP3VariableLengthGroup * WP3VariableLengthGroup::constructVariableLengthGroup(WP
 	}
 }
 
+bool WP3VariableLengthGroup::isGroupConsistent(WPXInputStream *input, const uint8_t group)
+{
+	uint32_t startPosition = input->tell();
+
+	try
+	{
+		uint8_t subGroup = readU8(input);
+		uint16_t size = readU16(input, true);
+
+		if (input->seek((startPosition + size - 1 - input->tell()), WPX_SEEK_CUR))
+		{
+			input->seek(startPosition, WPX_SEEK_SET);
+			return false;
+		}
+		if (size != readU16(input, true))
+		{
+			input->seek(startPosition, WPX_SEEK_SET);
+			return false;
+		}
+		if (subGroup != readU8(input))
+		{
+			input->seek(startPosition, WPX_SEEK_SET);
+			return false;
+		}
+		if (group != readU8(input))
+		{
+			input->seek(startPosition, WPX_SEEK_SET);
+			return false;
+		}
+		
+		input->seek(startPosition, WPX_SEEK_SET);
+		return true;
+	}
+	catch(...)
+	{
+		input->seek(startPosition, WPX_SEEK_SET);
+		return false;
+	}
+}
+
 void WP3VariableLengthGroup::_read(WPXInputStream *input)
 {
 	uint32_t startPosition = input->tell();
