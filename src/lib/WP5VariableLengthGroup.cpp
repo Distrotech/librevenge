@@ -73,7 +73,7 @@ bool WP5VariableLengthGroup::isGroupConsistent(WPXInputStream *input, const uint
 		uint8_t subGroup = readU8(input);
 		uint16_t size = readU16(input);
 
-		if (input->seek((startPosition + size - 1 - input->tell()), WPX_SEEK_CUR))
+		if (input->seek((startPosition + size - 1 - input->tell()), WPX_SEEK_CUR) || input->atEOS())
 		{
 			input->seek(startPosition, WPX_SEEK_SET);
 			return false;
