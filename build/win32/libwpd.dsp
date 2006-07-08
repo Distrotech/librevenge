@@ -213,6 +213,14 @@ SOURCE=..\..\src\lib\WP42Listener.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP42MarginResetGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP42MultiByteFunctionGroup.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP42Parser.cpp
 # End Source File
 # Begin Source File
@@ -229,11 +237,11 @@ SOURCE=..\..\src\lib\WP42SubDocument.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WP42UnsupportedVariableLengthGroup.cpp
+SOURCE=..\..\src\lib\WP42SuppressPageCharacteristicsGroup.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WP42VariableLengthGroup.cpp
+SOURCE=..\..\src\lib\WP42UnsupportedMultiByteFunctionGroup.cpp
 # End Source File
 # Begin Source File
 
@@ -701,6 +709,14 @@ SOURCE=..\..\src\lib\WP42Listener.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP42MarginResetGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP42MultiByteFunctionGroup.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP42Parser.h
 # End Source File
 # Begin Source File
@@ -717,11 +733,11 @@ SOURCE=..\..\src\lib\WP42SubDocument.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WP42UnsupportedVariableLengthGroup.h
+SOURCE=..\..\src\lib\WP42SuppressPageCharacteristicsGroup.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WP42VariableLengthGroup.h
+SOURCE=..\..\src\lib\WP42UnsupportedMultiByteFunctionGroup.h
 # End Source File
 # Begin Source File
 
