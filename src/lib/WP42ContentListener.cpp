@@ -144,6 +144,7 @@ void WP42ContentListener::attributeChange(const bool isOn, const uint8_t attribu
 
 void WP42ContentListener::marginReset(const uint8_t leftMargin, const uint8_t rightMargin)
 {
+#if 0
 	if (!isUndoOn())
 	{
 		float leftMarginInch = (float)(leftMargin/WP42_NUM_TEXT_COLUMS_PER_INCH);
@@ -151,6 +152,7 @@ void WP42ContentListener::marginReset(const uint8_t leftMargin, const uint8_t ri
 		m_ps->m_leftMarginByPageMarginChange = leftMarginInch - m_ps->m_pageMarginLeft;
 		m_ps->m_rightMarginByPageMarginChange = rightMarginInch - m_ps->m_pageMarginRight;
 	}
+#endif
 }
 
 void WP42ContentListener::headerFooterGroup(const uint8_t headerFooterDefinition, WP42SubDocument *subDocument)
