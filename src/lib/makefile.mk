@@ -46,13 +46,17 @@ SLOFILES= \
 	$(SLO)$/WP3VariableLengthGroup.obj \
 	$(SLO)$/WP42ContentListener.obj \
 	$(SLO)$/WP42FileStructure.obj \
+	$(SLO)$/WP42HeaderFooterGroup.obj \
 	$(SLO)$/WP42Heuristics.obj \
 	$(SLO)$/WP42Listener.obj \
+	$(SLO)$/WP42MarginResetGroup.obj \
+	$(SLO)$/WP42MultiByteFunctionGroup.obj \
 	$(SLO)$/WP42Parser.obj \
 	$(SLO)$/WP42Part.obj \
 	$(SLO)$/WP42StylesListener.obj \
-	$(SLO)$/WP42UnsupportedVariableLengthGroup.obj \
-	$(SLO)$/WP42VariableLengthGroup.obj \
+	$(SLO)$/WP42SubDocument.obj \
+	$(SLO)$/WP42SuppressPageCharacteristicsGroup.obj \
+	$(SLO)$/WP42UnsupportedMultiByteFunctionGroup.obj \
 	$(SLO)$/WP5AttributeGroup.obj \
 	$(SLO)$/WP5ContentListener.obj \
 	$(SLO)$/WP5DefinitionGroup.obj \

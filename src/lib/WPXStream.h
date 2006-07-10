@@ -40,12 +40,49 @@ public:
 		m_supportsOLE(supportsOLE) {}
 	virtual ~WPXInputStream() {}
 
+	/**
+	Analyses the content of the input stream to see whether it is an OLE2 storage.
+	\return A boolean value that should be true if the input stream is an OLE2 storage
+	and false if it is not the case
+	*/
 	virtual bool isOLEStream() = 0;
+	/**
+	Extracts a \c PerfectOffice_MAIN stream from an OLE2 storage.
+	\return Should be a pointer to WPXInputStream constructed from the \c PerfectOffice_MAIN stream if it exists.
+	\return Should be NULL pointer, if the \c PerfectOffice_MAIN stream does not exist inside the OLE2 storage
+	or if the input stream is not an OLE2 storage.
+	*/
 	virtual WPXInputStream * getDocumentOLEStream() = 0;
 
+	/**
+	Tries to read a given number of bytes starting from the current position inside the input stream.
+	\param numBytes Number of bytes desired to be read.
+	\param numBytesRead Number of bytes that were possible to be read.
+	\return Should be a pointer to an array of numBytesRead bytes (uint8_t[numBytesRead]).
+	\return Optionally it could be NULL if the desired number of bytes could not be read.
+	*/
 	const virtual uint8_t *read(size_t numBytes, size_t &numBytesRead) = 0;
+	/**
+	Moves to the next location inside the input stream.
+	\param offset The offset of the location inside the input stream to move to.
+	It is relative either to the current position or to the beginning of the input stream
+	depending on the value \c seekType parameter.
+	\param seekType Determines whether the \c offset is relative to the
+	begining of the input stream (\c WPX_SEEK_SET) or to the current position (\c WPX_SEEK_CUR).
+	\return An integer value that should be 0 (zero) if the seek was successful and any other value
+	if it failed (i.e. requested \c offset is beyond the end of the input stream or before its begining).
+	*/
 	virtual int seek(long offset, WPX_SEEK_TYPE seekType) = 0;
+	/**
+	Returns the actual position inside the input stream.
+	\return A long integer value that should should correspond to the position of the next location to be read in the input stream.
+	*/
 	virtual long tell() = 0;
+	/**
+	Determines whether the current position is at end of the stream.
+	\return A boolean value that should be true if the next location to be read in the input stream
+	is beyond its end. In all other cases, it should be false.
+	*/
 	virtual bool atEOS() = 0;
 
 private:
