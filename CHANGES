@@ -1,4 +1,32 @@
 CHANGES:
+0.8.5 -> 0.8.6
+- Initial conversion of headers/footers in WP42 parser (Fridrich)
+- Fix some parser errors in WP42 parser; now we seek to the right place
+  and parse correctly all functions (Fridrich)
+- Fixed crash in wpd2foo if invoked with non-existing filename (Jody Goldberg)
+- Assure that the table we send to the listener implementation is a valid
+  table independent of how messy the table is in the WP document (Fridrich)
+- Fix situations where there is no tab position information in WPUs inside
+  the tabulator function; the fallback works now even if the position is 0
+  like in WP6 for DOS documents.
+- Try not to crash under any circumstance by sanitizing the code and throwing
+  exception in illogical, but in WP documents very real, situations (sum1,
+  Fridrich)
+- Make every implementation of WPXInputStream that we use return !0 if a seek
+  fails; be more paranoiac with the result of read functions (sum1, Fridrich)
+- Ignore corrupted prefix packets in WP5 documents (Fridrich)
+- Try to convert as much information as possible even in corrupted WP3, WP5 and
+  WP6 documents (Fridrich) - Libwpd now converts many documents that make crash
+  WordPerfect itself.
+- Fine-tune the WP42 document detection. Detect as many WP42 files as possible
+  while still discarding plain text documents (Fridrich, Marc)
+- Let the WP6 parser not die if the prefix packet it refers to is corrupted or
+  absent (Fridrich)
+- Fix hangs while parsing a corrupted WP6ExtendedDocumentSummaryPacket (sum1,
+  Fridrich)
+- General improvement of libwpd's conversion-success-rate and extensive QA with
+  more than 46'000 real life documents (Mr. SUM1)
+
 0.8.4 -> 0.8.5
 - Conversion of font face, size and colour in WP5 parser, including the
   default font information (Fridrich)
