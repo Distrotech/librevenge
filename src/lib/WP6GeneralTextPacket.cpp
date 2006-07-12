@@ -66,6 +66,8 @@ void WP6GeneralTextPacket::_readContents(WPXInputStream *input)
 	if (totalSize <= 0)
 	{
 		WPD_DEBUG_MSG(("WordPerfect: The total size of the text is %i\n", totalSize));
+		if (blockSizes)
+			delete [] blockSizes;
 		return; // m_subDocument will be NULL
 	}
 	uint8_t *streamData = new uint8_t[totalSize];
