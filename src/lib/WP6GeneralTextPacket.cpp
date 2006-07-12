@@ -63,6 +63,11 @@ void WP6GeneralTextPacket::_readContents(WPXInputStream *input)
 	}	
 
 //	input->seek(firstTextBlockOffset, WPX_SEEK_SET);
+	if (totalSize <= 0)
+	{
+		WPD_DEBUG_MSG(("WordPerfect: The total size of the text is %i\n", totalSize));
+		return; // m_subDocument will be NULL
+	}
 	uint8_t *streamData = new uint8_t[totalSize];
 	int streamPos = 0;
 	for(i=0; i<numTextBlocks; i++) 

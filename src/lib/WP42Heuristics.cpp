@@ -40,7 +40,7 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input, bool parti
 	{
 		uint8_t readVal = readU8(input);
 
-		WPD_DEBUG_MSG(("WP42Heuristics, Offset 0x%.8x, value 0x%.2x\n", tmpOffset, readVal));
+		WPD_DEBUG_MSG(("WP42Heuristics, Offset 0x%.8x, value 0x%.2x\n", input->tell() - 1, readVal));
 		
 		if (readVal < (uint8_t)0x20)
 		{
