@@ -32,7 +32,7 @@ class WP5DefinitionGroup_DefineTablesSubGroup : public WP5VariableLengthGroup_Su
 {
 public:
 	WP5DefinitionGroup_DefineTablesSubGroup(WPXInputStream *input);
-	virtual void parse(WP5Listener *listener);
+	void parse(WP5Listener *listener);
 
 private:
 	uint8_t m_position;
@@ -51,7 +51,7 @@ class WP5DefinitionGroup : public WP5VariableLengthGroup
 public:
 	WP5DefinitionGroup(WPXInputStream *input);
 	~WP5DefinitionGroup();	
-	virtual void parse(WP5Listener *listener);
+	void parse(WP5Listener *listener);
 	
 protected:
 	virtual void _readContents(WPXInputStream *input);

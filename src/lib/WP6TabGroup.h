@@ -33,8 +33,8 @@ class WP6TabGroup : public WP6VariableLengthGroup
 {
  public:
 	WP6TabGroup(WPXInputStream *input);
-	virtual void _readContents(WPXInputStream *input);
-	virtual void parse(WP6Listener *listener);
+	void _readContents(WPXInputStream *input);
+	void parse(WP6Listener *listener);
 
  private:
 	float m_position;

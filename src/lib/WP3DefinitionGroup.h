@@ -31,9 +31,9 @@ class WP3DefinitionGroup : public WP3VariableLengthGroup
 {
  public:
 	WP3DefinitionGroup(WPXInputStream *input);	
-	virtual ~WP3DefinitionGroup();
-	virtual void _readContents(WPXInputStream *input);
-	virtual void parse(WP3Listener *listener);
+	~WP3DefinitionGroup();
+	void _readContents(WPXInputStream *input);
+	void parse(WP3Listener *listener);
 
  private:
  	/* Variables used for subgroup 0x01 Set Columns On/Off */

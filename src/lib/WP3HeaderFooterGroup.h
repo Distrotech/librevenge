@@ -32,9 +32,9 @@ class WP3HeaderFooterGroup : public WP3VariableLengthGroup
 {
 public:
 	WP3HeaderFooterGroup(WPXInputStream *input);
-	virtual ~WP3HeaderFooterGroup();	
-	virtual void _readContents(WPXInputStream *input);
-	virtual void parse(WP3Listener *listener);
+	~WP3HeaderFooterGroup();	
+	void _readContents(WPXInputStream *input);
+	void parse(WP3Listener *listener);
 
 private:
 	uint8_t m_definition;

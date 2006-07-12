@@ -32,9 +32,9 @@ class WP42MarginResetGroup : public WP42MultiByteFunctionGroup
 {
 public:
 	WP42MarginResetGroup(WPXInputStream *input, uint8_t group);
-	virtual ~WP42MarginResetGroup();	
-	virtual void _readContents(WPXInputStream *input);
-	virtual void parse(WP42Listener *listener);
+	~WP42MarginResetGroup();	
+	void _readContents(WPXInputStream *input);
+	void parse(WP42Listener *listener);
 
 private:
 	uint8_t m_leftMargin, m_rightMargin;

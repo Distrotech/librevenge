@@ -38,7 +38,7 @@ public:
 	WP5Parser(WPXInputStream *input, WPXHeader *header);
 	~WP5Parser();
 	
-	virtual void parse(WPXHLListenerImpl *listenerImpl);
+	void parse(WPXHLListenerImpl *listenerImpl);
 	
 	static void parseDocument(WPXInputStream *input, WP5Listener *listener);
 

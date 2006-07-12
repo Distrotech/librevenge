@@ -33,7 +33,7 @@ class WP6ParagraphGroup_LineSpacingSubGroup : public WP6VariableLengthGroup_SubG
 {
 public:
 	WP6ParagraphGroup_LineSpacingSubGroup(WPXInputStream *input);
-	virtual void parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
+	void parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
 
 private:
 	float m_lineSpacing;
@@ -43,7 +43,7 @@ class WP6ParagraphGroup_JustificationModeSubGroup : public WP6VariableLengthGrou
 {
 public:
 	WP6ParagraphGroup_JustificationModeSubGroup(WPXInputStream *input);
-	virtual void parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
+	void parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
 
 private:
 	uint8_t m_justification;
@@ -53,7 +53,7 @@ class WP6ParagraphGroup_SpacingAfterParagraphSubGroup : public WP6VariableLength
 {
 public:
 	WP6ParagraphGroup_SpacingAfterParagraphSubGroup(WPXInputStream *input, const uint16_t sizeNonDeletable);
-	virtual void parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
+	void parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
 
 private:
 	float m_spacingAfterParagraphAbsolute;
@@ -66,7 +66,7 @@ class WP6ParagraphGroup_TabSetSubGroup : public WP6VariableLengthGroup_SubGroup
 public:
 	WP6ParagraphGroup_TabSetSubGroup(WPXInputStream *input);
 	~WP6ParagraphGroup_TabSetSubGroup();
-	virtual void parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
+	void parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
 
 private:
 	bool m_isRelative;
@@ -79,7 +79,7 @@ class WP6ParagraphGroup_IndentFirstLineSubGroup : public WP6VariableLengthGroup_
 {
 public:
 	WP6ParagraphGroup_IndentFirstLineSubGroup(WPXInputStream *input);
-	virtual void parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
+	void parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
 
 private:
 	int16_t m_firstLineOffset;
@@ -89,7 +89,7 @@ class WP6ParagraphGroup_LeftMarginAdjustmentSubGroup : public WP6VariableLengthG
 {
 public:
 	WP6ParagraphGroup_LeftMarginAdjustmentSubGroup(WPXInputStream *input);
-	virtual void parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
+	void parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
 
 private:
 	int16_t m_leftMargin;
@@ -99,7 +99,7 @@ class WP6ParagraphGroup_RightMarginAdjustmentSubGroup : public WP6VariableLength
 {
 public:
 	WP6ParagraphGroup_RightMarginAdjustmentSubGroup(WPXInputStream *input);
-	virtual void parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
+	void parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
 
 private:
 	int16_t m_rightMargin;
@@ -109,7 +109,7 @@ class WP6ParagraphGroup_OutlineDefineSubGroup : public WP6VariableLengthGroup_Su
 {
 public:
 	WP6ParagraphGroup_OutlineDefineSubGroup(WPXInputStream *input);
-	virtual void parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
+	void parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
 
 private:
 	uint16_t m_outlineHash;
@@ -123,8 +123,8 @@ class WP6ParagraphGroup : public WP6VariableLengthGroup
  public:
 	WP6ParagraphGroup(WPXInputStream *input);
 	~WP6ParagraphGroup();
-	virtual void _readContents(WPXInputStream *input);
-	virtual void parse(WP6Listener *listener);
+	void _readContents(WPXInputStream *input);
+	void parse(WP6Listener *listener);
 private:
 	WP6VariableLengthGroup_SubGroup *m_subGroupData;
 };

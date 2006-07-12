@@ -32,9 +32,9 @@ class WP3DisplayGroup : public WP3VariableLengthGroup
 {
  public:
 	WP3DisplayGroup(WPXInputStream *input);	
-	virtual ~WP3DisplayGroup();
-	virtual void _readContents(WPXInputStream *input);
-	virtual void parse(WP3Listener *listener);
+	~WP3DisplayGroup();
+	void _readContents(WPXInputStream *input);
+	void parse(WP3Listener *listener);
 
  private:
  	WPXString m_noteReference;

@@ -30,10 +30,7 @@
 
 WP6GeneralTextPacket::WP6GeneralTextPacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize): 
 	WP6PrefixDataPacket(input),
-	m_numTextBlocks(0x0000),
-	m_firstTextBlockOffset(0x00000000),
-	m_subDocument(NULL),
-	m_blockSizes(NULL)
+	m_subDocument(NULL)
 {	
 	_read(input, dataOffset, dataSize);
 }
@@ -42,41 +39,42 @@ WP6GeneralTextPacket::~WP6GeneralTextPacket()
 {
 	if (m_subDocument)
 		delete m_subDocument;
-	if (m_blockSizes)
-		delete [] m_blockSizes;
 }
 
 void WP6GeneralTextPacket::_readContents(WPXInputStream *input)
 {
-	uint16_t m_numTextBlocks = readU16(input);
-	uint32_t m_firstTextBlockOffset = readU32(input);
+	uint16_t numTextBlocks = readU16(input);
+	uint32_t firstTextBlockOffset = readU32(input);
 
-	if (m_numTextBlocks < 1)
+	if (numTextBlocks < 1)
 	{
-		WPD_DEBUG_MSG(("WordPerfect: Number of text blocks is %i\n", m_numTextBlocks));
+		WPD_DEBUG_MSG(("WordPerfect: Number of text blocks is %i\n", numTextBlocks));
 		return; // m_subDocument will be NULL
 	}
 	
-	m_blockSizes = new uint32_t[m_numTextBlocks];
+	uint32_t *blockSizes = new uint32_t[numTextBlocks];
 	int totalSize = 0;
-	int i;
+	unsigned int i;
 
-	for(i=0; i<m_numTextBlocks; i++)
+	for(i=0; i<numTextBlocks; i++)
 	{
-		m_blockSizes[i] = readU32(input);
-		totalSize += m_blockSizes[i];
+		blockSizes[i] = readU32(input);
+		totalSize += blockSizes[i];
 	}	
 
+//	input->seek(firstTextBlockOffset, WPX_SEEK_SET);
 	uint8_t *streamData = new uint8_t[totalSize];
 	int streamPos = 0;
-	for(i=0; i<m_numTextBlocks; i++) 
+	for(i=0; i<numTextBlocks; i++) 
 	{
-		for (int j=0; j<m_blockSizes[i]; j++)
+		for (unsigned int j=0; j<blockSizes[i]; j++)
 		{
 			streamData[streamPos] = readU8(input);
 			streamPos++;
 		}
 	}
+	if (blockSizes)
+		delete [] blockSizes;
 
 	m_subDocument = new WP6SubDocument(streamData, totalSize);
 }

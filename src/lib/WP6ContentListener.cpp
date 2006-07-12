@@ -1353,13 +1353,11 @@ void WP6ContentListener::_handleListChange(const uint16_t outlineHash)
 		while (!m_parseState->m_listLevelStack.empty() && !m_parseState->m_listTypeStack.empty()
 			&& m_parseState->m_listLevelStack.top() > m_ps->m_currentListLevel)
 		{
-			int tempListLevel = m_parseState->m_listLevelStack.top();
+ 			WPD_DEBUG_MSG(("Popped level %i off the list level stack\n", m_parseState->m_listLevelStack.top()));
 			m_parseState->m_listLevelStack.pop();
 			
 			WP6ListType tmpListType = m_parseState->m_listTypeStack.top();
 			m_parseState->m_listTypeStack.pop();
-
- 			WPD_DEBUG_MSG(("Popped level %i off the list level stack\n", tempListLevel));
 
 			// we are assuming that whether or not the current element has a paragraph
 			// number or not is representative of the entire list. I think this

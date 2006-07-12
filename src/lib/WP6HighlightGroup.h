@@ -47,14 +47,14 @@ class WP6HighlightOnGroup : public WP6HighlightGroup
 {
  public:
 	WP6HighlightOnGroup(WPXInputStream *input, uint8_t groupID);
-	virtual void parse(WP6Listener *listener);
+	void parse(WP6Listener *listener);
 };
 
 class WP6HighlightOffGroup : public WP6HighlightGroup
 {
  public:
 	WP6HighlightOffGroup(WPXInputStream *input, uint8_t groupID);
-	virtual void parse(WP6Listener *listener);
+	void parse(WP6Listener *listener);
 };
 
 #endif /* WP6HIGHLIGHTGROUP_H */

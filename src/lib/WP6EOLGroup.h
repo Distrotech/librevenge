@@ -33,8 +33,8 @@ class WP6EOLGroup : public WP6VariableLengthGroup
 public:
 	WP6EOLGroup(WPXInputStream *input);	
 	~WP6EOLGroup();
-	virtual void _readContents(WPXInputStream *input);
-	virtual void parse(WP6Listener *listener);
+	void _readContents(WPXInputStream *input);
+	void parse(WP6Listener *listener);
 
  private:
 	uint8_t m_colSpan, m_rowSpan;

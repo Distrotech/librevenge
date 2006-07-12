@@ -32,9 +32,9 @@ class WP5HeaderFooterGroup : public WP5VariableLengthGroup
 {
 public:
 	WP5HeaderFooterGroup(WPXInputStream *input);
-	virtual ~WP5HeaderFooterGroup();	
-	virtual void _readContents(WPXInputStream *input);
-	virtual void parse(WP5Listener *listener);
+	~WP5HeaderFooterGroup();	
+	void _readContents(WPXInputStream *input);
+	void parse(WP5Listener *listener);
 
 private:
 	uint8_t m_occurenceBits;

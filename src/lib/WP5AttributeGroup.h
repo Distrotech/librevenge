@@ -47,14 +47,14 @@ class WP5AttributeOnGroup : public WP5AttributeGroup
 {
  public:
 	WP5AttributeOnGroup(WPXInputStream *input, uint8_t groupID);
-	virtual void parse(WP5Listener *listener);
+	void parse(WP5Listener *listener);
 };
 
 class WP5AttributeOffGroup : public WP5AttributeGroup
 {
  public:
 	WP5AttributeOffGroup(WPXInputStream *input, uint8_t groupID);
-	virtual void parse(WP5Listener *listener);
+	void parse(WP5Listener *listener);
 };
 
 #endif /* WP5ATTRIBUTEGROUP_H */

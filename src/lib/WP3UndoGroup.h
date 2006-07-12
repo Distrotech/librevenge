@@ -33,10 +33,10 @@ class WP3UndoGroup : public WP3FixedLengthGroup
 {
 public:
 	WP3UndoGroup(WPXInputStream *input, uint8_t groupID);	
-	virtual void parse(WP3Listener *listener);
+	void parse(WP3Listener *listener);
 	
  protected:
-	virtual void _readContents(WPXInputStream *input);
+	void _readContents(WPXInputStream *input);
 
  private:
 	uint8_t m_undoType;

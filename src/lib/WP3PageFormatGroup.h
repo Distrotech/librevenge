@@ -33,9 +33,9 @@ class WP3PageFormatGroup : public WP3VariableLengthGroup
 {
  public:
 	WP3PageFormatGroup(WPXInputStream *input);	
-	virtual ~WP3PageFormatGroup();
-	virtual void _readContents(WPXInputStream *input);
-	virtual void parse(WP3Listener *listener);
+	~WP3PageFormatGroup();
+	void _readContents(WPXInputStream *input);
+	void parse(WP3Listener *listener);
 
  private:
 	// variables needed for subgroup 0x01 (Horizontal Margins)

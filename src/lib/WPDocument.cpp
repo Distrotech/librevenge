@@ -216,7 +216,7 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerIm
 			// a file in the WP4.2 format.
 			int confidence = WP42Heuristics::isWP42FileFormat(document, false /* FIXME: allow for partial content */);
 
-			if (confidence == WPD_CONFIDENCE_GOOD || confidence == WPD_CONFIDENCE_EXCELLENT)
+			if (confidence != WPD_CONFIDENCE_NONE)
 			{
 				WPD_DEBUG_MSG(("WordPerfect: Mostly likely the file format is WP4.2.\n\n"));
 				WPD_DEBUG_MSG(("WordPerfect: Using the WP4.2 parser.\n\n"));

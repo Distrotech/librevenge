@@ -36,9 +36,9 @@ class WP6FillStylePacket : public WP6PrefixDataPacket
 {
 public:
 	WP6FillStylePacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize);
-	virtual ~WP6FillStylePacket();
-	virtual void _readContents(WPXInputStream *input);
-	virtual void parse(WP6Listener *listener) const {}
+	~WP6FillStylePacket();
+	void _readContents(WPXInputStream *input);
+	void parse(WP6Listener *listener) const {}
 	const RGBSColor * getFgColor() const { return &m_fgColor; }
 	const RGBSColor * getBgColor() const { return &m_bgColor; }
 private:              

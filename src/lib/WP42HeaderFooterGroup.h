@@ -32,9 +32,9 @@ class WP42HeaderFooterGroup : public WP42MultiByteFunctionGroup
 {
 public:
 	WP42HeaderFooterGroup(WPXInputStream *input, uint8_t group);
-	virtual ~WP42HeaderFooterGroup();	
-	virtual void _readContents(WPXInputStream *input);
-	virtual void parse(WP42Listener *listener);
+	~WP42HeaderFooterGroup();	
+	void _readContents(WPXInputStream *input);
+	void parse(WP42Listener *listener);
 
 private:
 	uint8_t m_definition;

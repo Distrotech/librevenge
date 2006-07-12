@@ -34,7 +34,7 @@ class WP42SubDocument : public WPXSubDocument
 public:
 	WP42SubDocument(uint8_t * streamData, const int dataSize);
 	WP42SubDocument(WPXInputStream *input, const int dataSize);
-	virtual void parse(WP42Listener *listener) const;
+	void parse(WP42Listener *listener) const;
 
 };
 #endif /* WP42SUBDOCUMENT_H */

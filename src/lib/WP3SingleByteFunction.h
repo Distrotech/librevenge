@@ -38,31 +38,31 @@ class WP3SingleByteFunction : public WP3Part
 class WP3HardSpaceFunction : public WP3SingleByteFunction
 {
 public:
-	virtual void parse(WP3Listener *listener);	
+	void parse(WP3Listener *listener);	
 };
 
 class WP3EOLFunction : public WP3SingleByteFunction
 {
 public:
-	virtual void parse(WP3Listener *listener);	
+	void parse(WP3Listener *listener);	
 };
 
 class WP3EOPFunction : public WP3SingleByteFunction
 {
 public:
-	virtual void parse(WP3Listener *listener);	
+	void parse(WP3Listener *listener);	
 };
 
 class WP3HyphenFunction : public WP3SingleByteFunction
 {
 public:
-	virtual void parse(WP3Listener *listener);	
+	void parse(WP3Listener *listener);	
 };
 
 class WP3SoftHyphenFunction : public WP3SingleByteFunction
 {
 public:
-	virtual void parse(WP3Listener *listener);	
+	void parse(WP3Listener *listener);	
 };
 
 #endif /* WP3SINGLEBYTEFUNCTION_H */

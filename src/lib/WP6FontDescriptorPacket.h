@@ -31,8 +31,8 @@ class WP6FontDescriptorPacket : public WP6PrefixDataPacket
 {
  public:
 	WP6FontDescriptorPacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize);
-	virtual ~WP6FontDescriptorPacket();
-	virtual void _readContents(WPXInputStream *input);
+	~WP6FontDescriptorPacket();
+	void _readContents(WPXInputStream *input);
 	const char *getFontName() const { return m_fontName; }
 
  private:

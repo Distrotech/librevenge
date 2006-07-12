@@ -34,7 +34,7 @@ class WP3UnsupportedVariableLengthGroup : public WP3VariableLengthGroup
 {
 public:
 	WP3UnsupportedVariableLengthGroup(WPXInputStream *input);
-	virtual void parse(WP3Listener *listener) {}
+	void parse(WP3Listener *listener) {}
 };
 
 #endif /* WP3UNSUPPORTEDVARIABLELENGTHGROUP_H */

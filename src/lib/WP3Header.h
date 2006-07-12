@@ -31,6 +31,6 @@ class WP3Header : public WPXHeader
 {
  public:
 	WP3Header(WPXInputStream * input, uint32_t documentOffset, uint8_t productType, uint8_t fileType, uint8_t majorVersion, uint8_t minorVersion, uint16_t documentEncryption);
-	virtual ~WP3Header() {};
+	~WP3Header() {};
 };
 #endif /* _WP3HEADER_H  */

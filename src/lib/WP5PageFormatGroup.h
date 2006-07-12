@@ -32,9 +32,9 @@ class WP5PageFormatGroup : public WP5VariableLengthGroup
 {
  public:
 	WP5PageFormatGroup(WPXInputStream *input);	
-	virtual ~WP5PageFormatGroup();
-	virtual void _readContents(WPXInputStream *input);
-	virtual void parse(WP5Listener *listener);
+	~WP5PageFormatGroup();
+	void _readContents(WPXInputStream *input);
+	void parse(WP5Listener *listener);
 
  private:
 	// variables needed for subgroup 1 (Left/Right Margin Set)

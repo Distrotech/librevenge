@@ -34,10 +34,10 @@ class WP3ExtendedCharacterGroup : public WP3FixedLengthGroup
 {
 public:
 	WP3ExtendedCharacterGroup(WPXInputStream *input, uint8_t groupID);	
-	virtual void parse(WP3Listener *listener);
+	void parse(WP3Listener *listener);
 	
  protected:
-	virtual void _readContents(WPXInputStream *input);
+	void _readContents(WPXInputStream *input);
 
  private:
 	uint8_t m_macCharacter;

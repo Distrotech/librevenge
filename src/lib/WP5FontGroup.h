@@ -31,10 +31,10 @@ class WP5FontGroup : public WP5VariableLengthGroup
 {
 public:
 	WP5FontGroup(WPXInputStream *input);	
-	virtual void parse(WP5Listener *listener);
+	void parse(WP5Listener *listener);
 	
 protected:
-	virtual void _readContents(WPXInputStream *input);
+	void _readContents(WPXInputStream *input);
 
 private:
 	uint8_t m_red, m_green, m_blue;

@@ -34,10 +34,10 @@ class WP5ExtendedCharacterGroup : public WP5FixedLengthGroup
 {
 public:
 	WP5ExtendedCharacterGroup(WPXInputStream *input, uint8_t groupID);	
-	virtual void parse(WP5Listener *listener);
+	void parse(WP5Listener *listener);
 	
  protected:
-	virtual void _readContents(WPXInputStream *input);
+	void _readContents(WPXInputStream *input);
 
  private:
 	uint8_t m_character;

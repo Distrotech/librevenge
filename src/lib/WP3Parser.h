@@ -36,7 +36,7 @@ public:
 	WP3Parser(WPXInputStream *input, WPXHeader *header);
 	~WP3Parser();
 
-	virtual void parse(WPXHLListenerImpl *listenerImpl);
+	void parse(WPXHLListenerImpl *listenerImpl);
 	
 	static void parseDocument(WPXInputStream *input, WP3Listener *listener);
 

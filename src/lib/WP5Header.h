@@ -32,6 +32,6 @@ class WP5Header : public WPXHeader
 {
  public:
 	WP5Header(WPXInputStream * input, uint32_t documentOffset, uint8_t productType, uint8_t fileType, uint8_t majorVersion, uint8_t minorVersion, uint16_t documentEncryption);
-	virtual ~WP5Header() {};
+	~WP5Header() {};
 };
 #endif /* _WP5HEADER_H  */

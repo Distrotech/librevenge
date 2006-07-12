@@ -33,9 +33,9 @@ class WP3FootnoteEndnoteGroup : public WP3VariableLengthGroup
 {
  public:
 	WP3FootnoteEndnoteGroup(WPXInputStream *input);	
-	virtual ~WP3FootnoteEndnoteGroup();
-	virtual void _readContents(WPXInputStream *input);
-	virtual void parse(WP3Listener *listener);
+	~WP3FootnoteEndnoteGroup();
+	void _readContents(WPXInputStream *input);
+	void parse(WP3Listener *listener);
 
  private:
 	WP3SubDocument *m_subDocument;

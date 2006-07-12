@@ -31,10 +31,10 @@ class WP6DefaultInitialFontPacket : public WP6PrefixDataPacket
 {
  public:
 	WP6DefaultInitialFontPacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize);
-	virtual void _readContents(WPXInputStream *input);
+	void _readContents(WPXInputStream *input);
 	const uint16_t getInitialFontDescriptorPID() const { return m_initialFontDescriptorPID; }
 	const uint16_t getPointSize() const { return m_pointSize; }
-	virtual void parse(WP6Listener *listener) const;
+	void parse(WP6Listener *listener) const;
 	
  private:
 	uint16_t m_numPrefixIDs;

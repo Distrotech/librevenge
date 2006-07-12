@@ -32,9 +32,9 @@ class WP5TableEOLGroup : public WP5VariableLengthGroup
 {
  public:
 	WP5TableEOLGroup(WPXInputStream *input);	
-	virtual ~WP5TableEOLGroup();
-	virtual void _readContents(WPXInputStream *input);
-	virtual void parse(WP5Listener *listener);
+	~WP5TableEOLGroup();
+	void _readContents(WPXInputStream *input);
+	void parse(WP5Listener *listener);
 
 private:
 	// Beginning column sub-function

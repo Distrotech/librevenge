@@ -32,9 +32,9 @@ class WP3FontGroup : public WP3VariableLengthGroup
 {
  public:
 	WP3FontGroup(WPXInputStream *input);	
-	virtual ~WP3FontGroup();
-	virtual void _readContents(WPXInputStream *input);
-	virtual void parse(WP3Listener *listener);
+	~WP3FontGroup();
+	void _readContents(WPXInputStream *input);
+	void parse(WP3Listener *listener);
 
  private:
  	/* Set Text Color */
