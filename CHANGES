@@ -1,5 +1,8 @@
 CHANGES:
 0.8.5 -> 0.8.6
+- Initial support of WP Mac 2.x documents (Fridrich)
+- Fix an alignment bug where alignment was propagated from multicolumn
+  sections into following single column sections (Fridrich)
 - Initial conversion of headers/footers in WP42 parser (Fridrich)
 - Fix some parser errors in WP42 parser; now we seek to the right place
   and parse correctly all functions (Fridrich)

@@ -715,6 +715,9 @@ void WP6ContentListener::columnChange(const WPXTextColumnType columnType, const 
 	if (!isUndoOn())
 	{
 		int oldColumnNum = m_ps->m_numColumns;
+		if (oldColumnNum > 1)
+			m_ps->m_paragraphJustification = m_ps->m_paragraphJustificationBeforeColumns;
+
 		// In WP, the last column ends with a hard column break code.
 		// In this case, we do not really want to insert any column break
 		m_ps->m_isParagraphColumnBreak = false;
@@ -778,6 +781,8 @@ void WP6ContentListener::columnChange(const WPXTextColumnType columnType, const 
 			m_ps->m_paragraphMarginLeft += m_ps->m_leftMarginByPageMarginChange;
 			m_ps->m_paragraphMarginRight += m_ps->m_rightMarginByPageMarginChange;
 		}
+		if (m_ps->m_numColumns > 1)
+			m_ps->m_paragraphJustificationBeforeColumns = m_ps->m_paragraphJustification;
 	}
 }
 

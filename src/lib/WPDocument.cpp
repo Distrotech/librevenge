@@ -97,19 +97,40 @@ WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input, bool part
 		header = WPXHeader::constructHeader(document);
 		if (header)
 		{
-			switch (header->getMajorVersion())
+			switch (header->getFileType())
 			{
-				case 0x00: // WP5
-				case 0x02: // WP6
-				case 0x03: // WP Mac 3.0-3.5
-				case 0x04: // WP Mac 3.5e
-					confidence = WPD_CONFIDENCE_EXCELLENT;
+				case 0x0a: // WordPerfect File
+					switch (header->getMajorVersion())
+					{
+						case 0x00: // WP5
+						case 0x02: // WP6+
+							confidence = WPD_CONFIDENCE_EXCELLENT;
+							break;
+						default:
+							// unhandled file format
+							confidence = WPD_CONFIDENCE_NONE;
+							break;
+					}
+					break;
+				case 0x2c: // WP Mac File
+					switch (header->getMajorVersion())
+					{
+						case 0x02: // WP Mac 2.x
+						case 0x03: // WP Mac 3.0-3.5
+						case 0x04: // WP Mac 3.5e
+							confidence = WPD_CONFIDENCE_EXCELLENT;
+							break;
+						default:
+							// unhandled file format
+							confidence = WPD_CONFIDENCE_NONE;
+							break;
+					}
 					break;
 				default:
-					// unhandled file format
+					// unhandled file type
 					confidence = WPD_CONFIDENCE_NONE;
 					break;
-			}
+			}						
 			DELETEP(header);
 		}
 		else
@@ -182,27 +203,46 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerIm
 
 		if (header)
 		{
-			switch (header->getMajorVersion())
+			switch (header->getFileType())
 			{
-				case 0x00: // WP5
-					WPD_DEBUG_MSG(("WordPerfect: Using the WP5 parser.\n"));
-					parser = new WP5Parser(document, header);
-					parser->parse(listenerImpl);
+				case 0x0a: // WordPerfect File
+					switch (header->getMajorVersion())
+					{
+						case 0x00: // WP5
+							WPD_DEBUG_MSG(("WordPerfect: Using the WP5 parser.\n"));
+							parser = new WP5Parser(document, header);
+							parser->parse(listenerImpl);
+							break;
+						case 0x02: // WP6
+							WPD_DEBUG_MSG(("WordPerfect: Using the WP6 parser.\n"));
+							parser = new WP6Parser(document, header);
+							parser->parse(listenerImpl);
+							break;
+						default:
+							// unhandled file format
+							WPD_DEBUG_MSG(("WordPerfect: Unsupported file format.\n"));
+							break;
+					}
 					break;
-				case 0x02: // WP6
-					WPD_DEBUG_MSG(("WordPerfect: Using the WP6 parser.\n"));
-					parser = new WP6Parser(document, header);
-					parser->parse(listenerImpl);
-					break;
-				case 0x03: // WP Mac 3.0-3.5
-				case 0x04: // WP Mac 3.5e
-					WPD_DEBUG_MSG(("WordPerfect: Using the WP3 parser.\n"));
-					parser = new WP3Parser(document, header);
-					parser->parse(listenerImpl);
+				case 0x2c: // WP Mac File
+					switch (header->getMajorVersion())
+					{
+						case 0x02: // WP Mac 2.x
+						case 0x03: // WP Mac 3.0-3.5
+						case 0x04: // WP Mac 3.5e
+							WPD_DEBUG_MSG(("WordPerfect: Using the WP3 parser.\n"));
+							parser = new WP3Parser(document, header);
+							parser->parse(listenerImpl);
+							break;
+						default:
+							// unhandled file format
+							WPD_DEBUG_MSG(("WordPerfect: Unsupported file format.\n"));
+							break;
+					}
 					break;
 				default:
 					// unhandled file format
-					WPD_DEBUG_MSG(("WordPerfect: Unsupported file format.\n"));
+					WPD_DEBUG_MSG(("WordPerfect: Unsupported file type.\n"));
 					break;
 			}
 
@@ -256,71 +296,3 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerIm
 
 	return error;
 }
-
-/*
-
-TOTALLY BROKEN, DO NOT USE!!!
-I MEAN IT!
-
-void WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerImpl, WPXFileType fileType)
-{
-	WPXParser *parser = NULL;
-	WPXHeader *header = NULL;
-
-	try
-	{
-		switch (fileType)
-		{
-			case WP42_DOCUMENT:
-				WPD_DEBUG_MSG(("WordPerfect: Using the WP42 parser.\n"));
-				parser = new WP42Parser(input);
-				parser->parse(listenerImpl);
-				DELETEP(parser);
-				break;
-			case WP5_DOCUMENT:
-				WPD_DEBUG_MSG(("WordPerfect: Using the WP5 parser.\n"));
-				header = new WPXHeader(input);
-				parser = new WP5Parser(input, header);
-				parser->parse(listenerImpl);
-				DELETEP(parser);
-				DELETEP(header);
-				break;
-			case WP6_DOCUMENT:
-				WPD_DEBUG_MSG(("WordPerfect: Using the WP6 parser.\n"));
-				header = new WPXHeader(input);
-				parser = new WP6Parser(input, header);
-				parser->parse(listenerImpl);
-				DELETEP(parser);
-				DELETEP(header);
-				break;
-			default:
-				// unhandled file format
-				WPD_DEBUG_MSG(("WordPerfect: Unsupported file format.\n"));
-				break;
-		}
-	}
-	catch (NoFileHeaderException)
-	{
-		// should not happen
-		DELETEP(parser);
-		DELETEP(header);
-		throw NoFileHeaderException();
-	}
-	catch (FileException)
-	{
-		DELETEP(parser);
-		DELETEP(header);
-		throw FileException();
-	}
-}
-
-*/
-
-
-/*
-TOTALLY BROKEN - MIGHT BE NICE TO HAVE
-
-WPXFileType WPDocument::WPXParser::getFileType(WPXInputStream *input)
-{
-
-}*/

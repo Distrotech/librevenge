@@ -89,38 +89,46 @@ WPXHeader * WPXHeader::constructHeader(WPXInputStream *input)
 	switch (fileType)
 	{
 		case 0x0a:
-			WPD_DEBUG_MSG(("WordPerect: Supported file type: \"WordPerfect Document\"\n"));
-			break;
+			WPD_DEBUG_MSG(("WordPerfect: Supported file type: \"WordPerfect Document\"\n"));
+			switch (majorVersion)
+			{
+				case 0x00: // WP5 
+					return new WP5Header(input, documentOffset, productType, fileType,
+								majorVersion, minorVersion, documentEncryption);
+				case 0x02: // WP6
+					switch (minorVersion)
+					{
+						case 0x00:
+							return new WP60Header(input, documentOffset, productType, fileType,
+										majorVersion, minorVersion, documentEncryption);
+						default: // assume this header can be parsed by a WP61 header parser
+							return new WP61Header(input, documentOffset, productType, fileType,
+										majorVersion, minorVersion, documentEncryption);
+					}
+				default:
+					// unhandled file format
+					WPD_DEBUG_MSG(("WordPerfect: Unsupported major number: %d\n", majorVersion));
+					return NULL;
+			}
 		case 0x2c:
-			WPD_DEBUG_MSG(("WordPerect: Supported file type: \"MAC WP 2.0 document\"\n"));
-			break; 
+			WPD_DEBUG_MSG(("WordPerfect: Supported file type: \"MAC WP 2.0 document\"\n"));
+			switch (majorVersion)
+			{
+				case 0x02: // WP Mac 2.x
+				case 0x03: // WP Mac 3.0-3.5
+				case 0x04: // WP Mac 3.5e
+					return new WP3Header(input, documentOffset, productType, fileType,
+								majorVersion, minorVersion, documentEncryption);
+				default:
+					// unhandled file format
+					WPD_DEBUG_MSG(("WordPerfect: Unsupported major number: %d\n", majorVersion));
+					return NULL;
+			}
 		default:
 			WPD_DEBUG_MSG(("WordPerfect: Unsupported file type: %d\n", fileType));
 			return NULL;
 	}
 	
-	switch (majorVersion)
-	{
-		case 0x00: // WP5 
-			return new WP5Header(input, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption);
-		case 0x02: // WP6
-			switch (minorVersion)
-			{
-				case 0x00:
-					return new WP60Header(input, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption);
-				default: // assume this header can be parsed by a WP61 header parser
-					return new WP61Header(input, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption);
-			}
-			break;
-		case 0x03: // WP Mac 3.0-3.5
-		case 0x04: // WP Mac 3.5e
-			return new WP3Header(input, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption);
-			break;
-		default:
-			// unhandled file format
-			WPD_DEBUG_MSG(("WordPerfect: Unsupported major number: %d\n", majorVersion));
-			return NULL;
-	}
 
 	return NULL;
 }

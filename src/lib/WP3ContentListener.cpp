@@ -176,7 +176,6 @@ void WP3ContentListener::startTable()
 	{
 		// save the justification information. We will need it after the table ends.
 		m_ps->m_paragraphJustificationBeforeTable = m_ps->m_paragraphJustification;
-		m_ps->m_paragraphJustificationBeforeTable = m_ps->m_paragraphJustification;
 		if (m_ps->m_sectionAttributesChanged && !m_ps->m_isTableOpened && !m_ps->m_inSubDocument)
 		{
 			_closeSection();
@@ -441,6 +440,9 @@ void WP3ContentListener::columnChange(const WPXTextColumnType columnType, const 
 	if (!isUndoOn())
 	{
 		int oldColumnNum = m_ps->m_numColumns;
+		if (oldColumnNum > 1)
+			m_ps->m_paragraphJustification = m_ps->m_paragraphJustificationBeforeColumns;
+
 		// In WP, the last column ends with a hard column break code.
 		// In this case, we do not really want to insert any column break
 		m_ps->m_isParagraphColumnBreak = false;
@@ -504,6 +506,8 @@ void WP3ContentListener::columnChange(const WPXTextColumnType columnType, const 
 			m_ps->m_paragraphMarginLeft += m_ps->m_leftMarginByPageMarginChange;
 			m_ps->m_paragraphMarginRight += m_ps->m_rightMarginByPageMarginChange;
 		}
+		if (m_ps->m_numColumns > 1)
+			m_ps->m_paragraphJustificationBeforeColumns = m_ps->m_paragraphJustification;
 	}
 }
 
