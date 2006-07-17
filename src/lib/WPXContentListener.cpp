@@ -68,7 +68,6 @@ _WPXContentParsingState::_WPXContentParsingState() :
 	m_isCellWithoutParagraph(false),
 	m_cellAttributeBits(0x00000000),
 	m_paragraphJustificationBeforeTable(WPX_PARAGRAPH_JUSTIFICATION_LEFT),
-	m_paragraphJustificationBeforeColumns(WPX_PARAGRAPH_JUSTIFICATION_LEFT),
 
 	m_numPagesRemainingInSpan(0),
 

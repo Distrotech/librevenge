@@ -1,4 +1,8 @@
 CHANGES:
+0.8.6 - 0.8.7
+- Revert the alignment fix, in order to mimick the way WP for Mac renders
+  the documents (Fridrich)
+
 0.8.5 -> 0.8.6
 - Initial support of WP Mac 2.x documents (Fridrich)
 - Fix an alignment bug where alignment was propagated from multicolumn
