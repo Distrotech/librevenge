@@ -138,8 +138,8 @@ void WP5StylesListener::pageFormChange(const uint16_t length, const uint16_t wid
 
 void WP5StylesListener::marginChange(const uint8_t side, const uint16_t margin)
 {
-	//if (!isUndoOn()) 
-	//{		
+	if (!isUndoOn()) 
+	{		
 		if (m_isSubDocument)
 			return;
 
@@ -177,7 +177,7 @@ void WP5StylesListener::marginChange(const uint8_t side, const uint16_t margin)
 				break;
 		}
 		
-	//}
+	}
 
 }
 
@@ -242,17 +242,17 @@ void WP5StylesListener::suppressPageCharacteristics(const uint8_t suppressCode)
 
 void WP5StylesListener::startTable()
 {
-	//if (!isUndoOn()) 
-	//{			
+	if (!isUndoOn()) 
+	{			
 		m_currentPageHasContent = true;
 		m_currentTable = new WPXTable();
 		m_tableList.add(m_currentTable);
-	//}
+	}
 }
 
 void WP5StylesListener::insertRow(const uint16_t rowHeight, const bool isMinimumHeight, const bool isHeaderRow)
 {
-	if (/*!isUndoOn() && */m_currentTable != NULL) 
+	if (!isUndoOn()) 
 	{
 		m_currentPageHasContent = true;
 		m_currentTable->insertRow();
@@ -264,7 +264,7 @@ void WP5StylesListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan,
 				  const RGBSColor * cellBorderColor, const WPXVerticalAlignment cellVerticalAlignment, 
 				  const bool useCellAttributes, const uint32_t cellAttributes)
 {
-	if (/*!isUndoOn() &&*/ m_currentTable != NULL)
+	if (!isUndoOn())
 	{
 		m_currentPageHasContent = true;
 		m_currentTable->insertCell(colSpan, rowSpan, borderBits);

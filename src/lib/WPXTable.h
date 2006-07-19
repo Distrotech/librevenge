@@ -54,17 +54,17 @@ public:
 	~WPXTable();
 	void insertRow();
 	void insertCell(uint8_t colSpan, uint8_t rowSpan, uint8_t borderBits);
-	const WPXTableCell * getCell(int i, int j) { return (*m_tableRows[i])[j]; }
+	const WPXTableCell  getCell(int i, int j) { return (m_tableRows[i])[j]; }
 	void makeBordersConsistent();
-	void _makeCellBordersConsistent(WPXTableCell *cell, std::vector<WPXTableCell *> *adjacentCells, 
+	void _makeCellBordersConsistent(WPXTableCell cell, std::vector<WPXTableCell > adjacentCells, 
 				      int adjacencyBitCell, int adjacencyBitBoundCells);
-	std::vector<WPXTableCell *> * _getCellsBottomAdjacent(int i, int j);
-	std::vector<WPXTableCell *> * _getCellsRightAdjacent(int i, int j);
+	std::vector<WPXTableCell >  _getCellsBottomAdjacent(int i, int j);
+	std::vector<WPXTableCell >  _getCellsRightAdjacent(int i, int j);
 
-	const std::vector< std::vector<WPXTableCell *> * >& getRows() const { return m_tableRows; }
+	const std::vector< std::vector<WPXTableCell> >& getRows() const { return m_tableRows; }
 
 private:
-	std::vector< std::vector<WPXTableCell *> * > m_tableRows;
+	std::vector< std::vector<WPXTableCell> > m_tableRows;
 };
 
 class WPXTableList

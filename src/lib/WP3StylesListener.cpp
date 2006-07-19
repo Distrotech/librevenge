@@ -35,6 +35,7 @@ WP3StylesListener::WP3StylesListener(std::list<WPXPageSpan> &pageList, WPXTableL
 	WPXStylesListener(pageList),
 	m_pageListHardPageMark(m_pageList.end()),
 	m_currentPage(WPXPageSpan()),
+	m_currentTable(NULL),
 	m_tableList(tableList), 
 	m_tempMarginLeft(1.0f),
 	m_tempMarginRight(1.0f),
@@ -245,7 +246,7 @@ void WP3StylesListener::startTable()
 
 void WP3StylesListener::insertRow()
 {
-	if (!isUndoOn() && m_currentTable != NULL) 
+	if (!isUndoOn()) 
 	{
 		m_currentPageHasContent = true;
 		m_currentTable->insertRow();
@@ -254,7 +255,7 @@ void WP3StylesListener::insertRow()
 
 void WP3StylesListener::insertCell()
 {
-	if (!isUndoOn() && m_currentTable != NULL)
+	if (!isUndoOn())
 	{
 		m_currentPageHasContent = true;
 #if 0

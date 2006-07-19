@@ -1129,16 +1129,16 @@ void WP6ContentListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan
 			throw ParseException(); // requesting a row larger than the number of rows the table holds
 		}
 			
-		if (m_parseState->m_currentTable->getRows()[m_ps->m_currentTableRow]->size() <= m_ps->m_currentTableCellNumberInRow)
+		if (m_parseState->m_currentTable->getRows()[m_ps->m_currentTableRow].size() <= m_ps->m_currentTableCellNumberInRow)
 		{
-			WPD_DEBUG_MSG(("Requesting a cell smallar than the number of cells in the row\n"));
+			WPD_DEBUG_MSG(("Requesting a cell smaller than the number of cells in the row\n"));
 			throw ParseException(); // requesting a cell smaller than the number of cells in the row
 		}
 			
 		_flushText();
 		
 		_openTableCell(colSpan, rowSpan, m_parseState->m_currentTable->getCell(m_ps->m_currentTableRow,  
-			       	m_ps->m_currentTableCellNumberInRow)->m_borderBits, cellFgColor, cellBgColor,      
+			       	m_ps->m_currentTableCellNumberInRow).m_borderBits, cellFgColor, cellBgColor,      
 			       cellBorderColor, cellVerticalAlignment);
 
 		if (useCellAttributes)

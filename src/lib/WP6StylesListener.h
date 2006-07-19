@@ -113,7 +113,7 @@ private:
 	WPXPageSpan m_currentPage;
 
 	WPXTableList m_tableList;
-	WPXTable *m_currentTable;
+	WPXTable * m_currentTable;
 	float m_tempMarginLeft, m_tempMarginRight;
 	bool m_currentPageHasContent;
 	bool m_isTableDefined;

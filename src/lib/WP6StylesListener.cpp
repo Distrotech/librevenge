@@ -38,6 +38,7 @@ WP6StylesListener::WP6StylesListener(std::list<WPXPageSpan> &pageList, WPXTableL
 	WP6Listener(),
 	WPXStylesListener(pageList),
 	m_currentPage(WPXPageSpan()),
+	m_currentTable(NULL),
 	m_pageListHardPageMark(m_pageList.end()),
 	m_tableList(tableList), 
 	m_tempMarginLeft(1.0f),
@@ -244,7 +245,7 @@ void WP6StylesListener::endTable()
 
 void WP6StylesListener::insertRow(const uint16_t rowHeight, const bool isMinimumHeight, const bool isHeaderRow)
 {
-	if (!isUndoOn() && m_currentTable != NULL) 
+	if (!isUndoOn()) 
 	{
 		m_currentPageHasContent = true;
 		m_currentTable->insertRow();
@@ -256,7 +257,7 @@ void WP6StylesListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan,
 				const RGBSColor * cellBorderColor, const WPXVerticalAlignment cellVerticalAlignment, 
 				const bool useCellAttributes, const uint32_t cellAttributes)
 {
-	if (!isUndoOn() && m_currentTable != NULL)
+	if (!isUndoOn())
 	{
 		m_currentPageHasContent = true;
 		m_currentTable->insertCell(colSpan, rowSpan, borderBits);
@@ -289,7 +290,7 @@ void WP6StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, co
 			if (isHeaderFooter) 
 			{
 				bool oldCurrentPageHasContent = m_currentPageHasContent;
-				WPXTable * oldCurrentTable = m_currentTable;
+				WPXTable *oldCurrentTable = m_currentTable;
 				WPXTableList oldTableList = m_tableList;
 				m_tableList = tableList;
 
