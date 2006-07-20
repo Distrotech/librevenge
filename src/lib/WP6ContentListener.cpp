@@ -1138,7 +1138,7 @@ void WP6ContentListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan
 		_flushText();
 		
 		_openTableCell(colSpan, rowSpan, m_parseState->m_currentTable->getCell(m_ps->m_currentTableRow,  
-			       	m_ps->m_currentTableCellNumberInRow).m_borderBits, cellFgColor, cellBgColor,      
+			       	m_ps->m_currentTableCellNumberInRow)->m_borderBits, cellFgColor, cellBgColor,      
 			       cellBorderColor, cellVerticalAlignment);
 
 		if (useCellAttributes)
