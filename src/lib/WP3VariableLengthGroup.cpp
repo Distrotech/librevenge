@@ -41,7 +41,7 @@ WP3VariableLengthGroup::WP3VariableLengthGroup()
 {
 }
 
-WP3VariableLengthGroup * WP3VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, uint8_t group)
+WP3VariableLengthGroup * WP3VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, const uint8_t group)
 {
 	switch (group)
 	{
