@@ -28,7 +28,7 @@
 #define WP42FILESTRUCTURE_H
 
 // size of the functiongroups 0xC0 to 0xF8
-extern int WP42_FUNCTION_GROUP_SIZE[57]; 
+extern int WP42_FUNCTION_GROUP_SIZE[63]; 
 
 #define WP42_ATTRIBUTE_BOLD 0
 #define WP42_ATTRIBUTE_ITALICS 1

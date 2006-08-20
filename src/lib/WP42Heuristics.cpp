@@ -55,7 +55,7 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input, bool parti
 			// single character function codes, skip
 			functionGroupCount++;
 		}
-		else if (readVal >= (uint8_t)0xFB)
+		else if (readVal >= (uint8_t)0xFF)
 		{
 			// special codes that should not be found as separate functions
 			return WPD_CONFIDENCE_NONE;

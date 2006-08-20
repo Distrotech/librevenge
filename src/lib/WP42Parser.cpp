@@ -148,7 +148,7 @@ void WP42Parser::parseDocument(WPXInputStream *input, WP42Listener *listener)
 					break;
 			}
 		}
-		else if (readVal >= (uint8_t)0xC0 && readVal <= (uint8_t)0xF8)
+		else if (readVal >= (uint8_t)0xC0 && readVal <= (uint8_t)0xFE)
 		{
 			WP42Part *part = WP42Part::constructPart(input, readVal);
 			if (part != NULL)

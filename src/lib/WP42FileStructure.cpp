@@ -26,11 +26,11 @@
 
 #include "WP42FileStructure.h"
 
-// size of the function groups 0xC0 to 0xF8
+// size of the function groups 0xC0 to 0xFE
 // -1 means the size is variable
-int WP42_FUNCTION_GROUP_SIZE[57] = 
+int WP42_FUNCTION_GROUP_SIZE[63] = 
 {
-	6,	// 0xC0
+	-1,  //0xC0 (6, or 10?)
 	4,
 	3,	
 	5,	
@@ -39,12 +39,12 @@ int WP42_FUNCTION_GROUP_SIZE[57] =
 	4,	
 	6,	
 	8,	
-	42,	
+	-1, // (42, or 54?)	
 	3,	
 	6,	
 	4,	
 	3,	
-	4,	
+	-1, // (4, or 6?)
 	3,	
 	6,	// 0xD0
 	-1,	
@@ -86,5 +86,11 @@ int WP42_FUNCTION_GROUP_SIZE[57] =
 	-1,	
 	5,	
 	-1,
-	-1	// 0xF8
+	-1,
+	-1,	// 0xF9
+	-1,	// 0xFA
+	-1,	// 0xFB
+	-1,	// 0xFC
+	-1,	// 0xFD
+	-1	// 0xFE
 };
