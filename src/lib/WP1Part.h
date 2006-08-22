@@ -1,3 +1,4 @@
+ * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
 /* libwpd
  * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
