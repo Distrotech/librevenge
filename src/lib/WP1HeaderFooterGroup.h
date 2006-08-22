@@ -25,10 +25,10 @@
 #ifndef WP1HEADERFOOTERGROUP_H
 #define WP1HEADERFOOTERGROUP_H
 
-#include "WP1MultiByteFunctionGroup.h"
+#include "WP1VariableLengthGroup.h"
 #include "WP1SubDocument.h"
 
-class WP1HeaderFooterGroup : public WP1MultiByteFunctionGroup
+class WP1HeaderFooterGroup : public WP1VariableLengthGroup
 {
 public:
 	WP1HeaderFooterGroup(WPXInputStream *input, uint8_t group);

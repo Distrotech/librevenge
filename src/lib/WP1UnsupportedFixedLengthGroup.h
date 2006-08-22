@@ -24,21 +24,21 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP1UNSUPPORTEDMULTIBYTEFUNCTIONGROUP_H
-#define WP1UNSUPPORTEDMULTIBYTEFUNCTIONGROUP_H
+#ifndef WP1UNSUPPORTEDFIXEDLENGTHGROUP_H
+#define WP1UNSUPPORTEDFIXEDLENGTHGROUP_H
 
-#include "WP1MultiByteFunctionGroup.h"
+#include "WP1FixedLengthGroup.h"
 
 // a pedantic and irritating class that we should only need until we completely cover wordperfect's
 // set of variable length groups (there are a finite number)
 
-class WP1UnsupportedMultiByteFunctionGroup : public WP1MultiByteFunctionGroup
+class WP1UnsupportedFixedLengthGroup : public WP1FixedLengthGroup
 {
 public:
-	WP1UnsupportedMultiByteFunctionGroup(WPXInputStream *input, uint8_t group);
+	WP1UnsupportedFixedLengthGroup(WPXInputStream *input, uint8_t group);
 
 	void _readContents(WPXInputStream *input);
 	void parse(WP1Listener *listener) {}
 };
 
-#endif /* WP1UNSUPPORTEDMULTIBYTEFUNCTIONGROUP_H */
+#endif /* WP1UNSUPPORTEDFIXEDLENGTHGROUP_H */

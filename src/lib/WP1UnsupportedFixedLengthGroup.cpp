@@ -1,4 +1,6 @@
 /* libwpd
+ * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
@@ -22,21 +24,16 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP1SUPPRESSPAGECHARACTERISTICSGROUP_H
-#define WP1SUPPRESSPAGECHARACTERISTICSGROUP_H
+#include "WP1UnsupportedFixedLengthGroup.h"
+#include "libwpd_internal.h"
 
-#include "WP1MultiByteFunctionGroup.h"
-
-class WP1SuppressPageCharacteristicsGroup : public WP1MultiByteFunctionGroup
+WP1UnsupportedFixedLengthGroup::WP1UnsupportedFixedLengthGroup(WPXInputStream *input, uint8_t group) :
+	WP1FixedLengthGroup(group)
 {
-public:
-	WP1SuppressPageCharacteristicsGroup(WPXInputStream *input, uint8_t group);
-	~WP1SuppressPageCharacteristicsGroup();	
-	void _readContents(WPXInputStream *input);
-	void parse(WP1Listener *listener);
+	_read(input);
+}
 
-private:
-	uint8_t m_suppressCode;
+void WP1UnsupportedFixedLengthGroup::_readContents(WPXInputStream *input)
+{
+	WPD_DEBUG_MSG(("WordPerfect: Handling an unsupported fixed length group\n"));
 };
-
-#endif /* WP1SUPPRESSPAGECHARACTERISTICSGROUP_H */

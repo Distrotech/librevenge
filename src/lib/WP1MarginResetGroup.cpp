@@ -27,7 +27,7 @@
 #include <string>
 
 WP1MarginResetGroup::WP1MarginResetGroup(WPXInputStream *input, uint8_t group) :
-	WP1MultiByteFunctionGroup(group),
+	WP1FixedLengthGroup(group),
 	m_leftMargin(0),
 	m_rightMargin(0)
 {

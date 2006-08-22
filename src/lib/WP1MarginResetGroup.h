@@ -25,10 +25,10 @@
 #ifndef WP1MARGINRESETGROUP_H
 #define WP1MARGINRESETGROUP_H
 
-#include "WP1MultiByteFunctionGroup.h"
+#include "WP1FixedLengthGroup.h"
 #include "WP1SubDocument.h"
 
-class WP1MarginResetGroup : public WP1MultiByteFunctionGroup
+class WP1MarginResetGroup : public WP1FixedLengthGroup
 {
 public:
 	WP1MarginResetGroup(WPXInputStream *input, uint8_t group);

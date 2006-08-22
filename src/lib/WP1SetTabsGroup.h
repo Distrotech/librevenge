@@ -22,28 +22,23 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WP1SuppressPageCharacteristicsGroup.h"
-#include "libwpd_internal.h"
-#include <string>
+#ifndef WP1SETTABSGROUP_H
+#define WP1SETTABSGROUP_H
 
-WP1SuppressPageCharacteristicsGroup::WP1SuppressPageCharacteristicsGroup(WPXInputStream *input, uint8_t group) :
-	WP1MultiByteFunctionGroup(group),
-	m_suppressCode(0)
-{
-	_read(input);
-}
+#include "WP1VariableLengthGroup.h"
+#include "WP1SubDocument.h"
 
-WP1SuppressPageCharacteristicsGroup::~WP1SuppressPageCharacteristicsGroup()
+class WP1SetTabsGroup : public WP1VariableLengthGroup
 {
-}
+public:
+	WP1SetTabsGroup(WPXInputStream *input, uint8_t group);
+	~WP1SetTabsGroup();	
+	void _readContents(WPXInputStream *input);
+	void parse(WP1Listener *listener);
 
-void WP1SuppressPageCharacteristicsGroup::_readContents(WPXInputStream *input)
-{
-	m_suppressCode = readU8(input);
-}
+private:
+	uint8_t m_definition;
+	WP1SubDocument *m_subDocument;
+};
 
-void WP1SuppressPageCharacteristicsGroup::parse(WP1Listener *listener)
-{
-	WPD_DEBUG_MSG(("WordPerfect: handling a SuppressPageCharacteristics group\n"));
-	listener->suppressPageCharacteristics(m_suppressCode);
-}
+#endif /* WP1SETTABSGROUP_H */

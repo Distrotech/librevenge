@@ -1,10 +1,10 @@
 /* libwpd
  * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2003-2004 Marc Maurer (uwog@uwog.net)
+ * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -24,28 +24,16 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP1FILESTRUCTURE_H
-#define WP1FILESTRUCTURE_H
+#include "WP1UnsupportedVariableLengthGroup.h"
+#include "libwpd_internal.h"
 
-// size of the functiongroups 0xC0 to 0xF8
-extern int WP1_FUNCTION_GROUP_SIZE[63]; 
+WP1UnsupportedVariableLengthGroup::WP1UnsupportedVariableLengthGroup(WPXInputStream *input, uint8_t group) :
+	WP1VariableLengthGroup(group)
+{
+	_read(input);
+}
 
-#define WP1_ATTRIBUTE_BOLD 0
-#define WP1_ATTRIBUTE_ITALICS 1
-#define WP1_ATTRIBUTE_UNDERLINE 2
-#define WP1_ATTRIBUTE_STRIKE_OUT 3
-#define WP1_ATTRIBUTE_SHADOW 4
-#define WP1_ATTRIBUTE_REDLINE 5
-
-#define WP1_MARGIN_RESET_GROUP 0xC0
-
-#define WP1_SET_TABS_GROUP 0xC9
-
-#define WP1_SUPPRESS_PAGE_CHARACTERISTICS_GROUP 0xCF
-
-#define WP1_HEADER_FOOTER_GROUP 0xD1
-#define WP1_HEADER_FOOTER_GROUP_ALL_BIT 1
-#define WP1_HEADER_FOOTER_GROUP_ODD_BIT 2
-#define WP1_HEADER_FOOTER_GROUP_EVEN_BIT 4
-
-#endif /* WP1FILESTRUCTURE_H */
+void WP1UnsupportedVariableLengthGroup::_readContents(WPXInputStream *input)
+{
+	WPD_DEBUG_MSG(("WordPerfect: Handling an unsupported variable length group\n"));
+};

@@ -1,0 +1,99 @@
+/* libwpd
+ * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
+ * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
+ *  
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ *
+ * For further information visit http://libwpd.sourceforge.net
+ */
+
+/* "This product is not manufactured, approved, or supported by 
+ * Corel Corporation or Corel Corporation Limited."
+ */
+
+#include "WP1FixedLengthGroup.h"
+#include "WP1UnsupportedFixedLengthGroup.h"
+#include "WP1MarginResetGroup.h"
+#include "WP1FileStructure.h"
+#include "libwpd_internal.h"
+
+WP1FixedLengthGroup::WP1FixedLengthGroup(uint8_t group)
+	: m_group(group)
+{
+}
+
+WP1FixedLengthGroup * WP1FixedLengthGroup::constructFixedLengthGroup(WPXInputStream *input, uint8_t group)
+{
+	switch (group)
+	{
+		case WP1_MARGIN_RESET_GROUP:
+			return new WP1MarginResetGroup(input, group);
+		default:
+			// this is an unhandled group, just skip it
+			return new WP1UnsupportedFixedLengthGroup(input, group);
+	}
+}
+
+bool WP1FixedLengthGroup::isGroupConsistent(WPXInputStream *input, const uint8_t groupID)
+{
+	uint32_t startPosition = input->tell();
+
+	try
+	{
+		int size = WP1_FUNCTION_GROUP_SIZE[groupID-0xC0];
+		if (input->seek((startPosition + size - 2 - input->tell()), WPX_SEEK_CUR) || input->atEOS())
+		{
+			input->seek(startPosition, WPX_SEEK_SET);
+			return false;
+		}
+		if (groupID != readU8(input))
+		{
+			input->seek(startPosition, WPX_SEEK_SET);
+			return false;
+		}
+		
+		input->seek(startPosition, WPX_SEEK_SET);
+		return true;
+	}
+	catch(...)
+	{
+		input->seek(startPosition, WPX_SEEK_SET);
+		return false;
+	}
+}
+
+void WP1FixedLengthGroup::_read(WPXInputStream *input)
+{
+	uint32_t startPosition = input->tell();
+	
+	if (m_group >= 0xC0 && m_group <= 0xFE) // just an extra safety check
+	{
+		int size = WP1_FUNCTION_GROUP_SIZE[m_group-0xC0];
+		if (size == -1)
+			return;
+
+		_readContents(input);
+
+		input->seek((startPosition + size - 2 - input->tell()), WPX_SEEK_CUR);
+		if (m_group != readU8(input))
+		{
+			WPD_DEBUG_MSG(("WordPerfect: Possible corruption detected. Bailing out!\n"));
+			throw FileException();
+		}
+	}
+	else
+		throw FileException();
+}

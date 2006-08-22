@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
  * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
- * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (c) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,16 +24,21 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WP1UnsupportedMultiByteFunctionGroup.h"
-#include "libwpd_internal.h"
+#ifndef WP1UNSUPPORTEDVARIABLELENGTHGROUP_H
+#define WP1UNSUPPORTEDVARIABLELENGTHGROUP_H
 
-WP1UnsupportedMultiByteFunctionGroup::WP1UnsupportedMultiByteFunctionGroup(WPXInputStream *input, uint8_t group) :
-	WP1MultiByteFunctionGroup(group)
-{
-	_read(input);
-}
+#include "WP1VariableLengthGroup.h"
 
-void WP1UnsupportedMultiByteFunctionGroup::_readContents(WPXInputStream *input)
+// a pedantic and irritating class that we should only need until we completely cover wordperfect's
+// set of variable length groups (there are a finite number)
+
+class WP1UnsupportedVariableLengthGroup : public WP1VariableLengthGroup
 {
-	WPD_DEBUG_MSG(("WordPerfect: Handling an unsupported variable length group\n"));
+public:
+	WP1UnsupportedVariableLengthGroup(WPXInputStream *input, uint8_t group);
+
+	void _readContents(WPXInputStream *input);
+	void parse(WP1Listener *listener) {}
 };
+
+#endif /* WP1UNSUPPORTEDVARIABLELENGTHGROUP_H */

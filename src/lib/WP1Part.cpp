@@ -27,7 +27,8 @@
 #include "WPXPart.h"
 #include "WP1Part.h"
 #include "WP1FileStructure.h"
-#include "WP1MultiByteFunctionGroup.h"
+#include "WP1FixedLengthGroup.h"
+#include "WP1VariableLengthGroup.h"
 #include "libwpd_internal.h"
 
 // constructPart: constructs a parseable low-level representation of part of the document
@@ -44,7 +45,14 @@ WP1Part * WP1Part::constructPart(WPXInputStream *input, uint8_t readVal)
 		WPD_DEBUG_MSG(("WordPerfect: Returning NULL from constructPart\n"));
 		return NULL;
 	}
-	
-	WPD_DEBUG_MSG(("WordPerfect: constructMultiByteFunctionGroup(input, val)\n"));
-	return WP1MultiByteFunctionGroup::constructMultiByteFunctionGroup(input, readVal);
+	else if (WP1_FUNCTION_GROUP_SIZE[readVal-0xC0] == -1)
+	{
+		WPD_DEBUG_MSG(("WordPerfect: constructVariableLengthGroup\n"));
+		return WP1VariableLengthGroup::constructVariableLengthGroup(input, readVal);
+	}
+	else
+	{
+		WPD_DEBUG_MSG(("WordPerfect: constructFixedLengthGroup\n"));
+		return WP1FixedLengthGroup::constructFixedLengthGroup(input, readVal);
+	}
 }

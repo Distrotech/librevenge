@@ -27,7 +27,7 @@
 #include <vector>
 
 WP1HeaderFooterGroup::WP1HeaderFooterGroup(WPXInputStream *input, uint8_t group) :
-	WP1MultiByteFunctionGroup(group),
+	WP1VariableLengthGroup(group),
 	m_definition(0),
 	m_subDocument(NULL)
 {

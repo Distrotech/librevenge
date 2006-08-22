@@ -46,17 +46,19 @@ libwpd_0_8_la_SOURCES = \
 	libwpd_math.cpp \
 	WP1ContentListener.cpp \
 	WP1FileStructure.cpp \
+	WP1FixedLengthGroup.cpp \
 	WP1HeaderFooterGroup.cpp \
 	WP1Heuristics.cpp \
 	WP1Listener.cpp \
 	WP1MarginResetGroup.cpp \
-	WP1MultiByteFunctionGroup.cpp \
 	WP1Parser.cpp \
 	WP1Part.cpp \
+	WP1SetTabsGroup.cpp \
 	WP1StylesListener.cpp \
 	WP1SubDocument.cpp \
-	WP1SuppressPageCharacteristicsGroup.cpp \
-	WP1UnsupportedMultiByteFunctionGroup.cpp \
+	WP1UnsupportedFixedLengthGroup.cpp \
+	WP1UnsupportedVariableLengthGroup.cpp \
+	WP1VariableLengthGroup.cpp \
 	WP3AttributeGroup.cpp \
 	WP3ContentListener.cpp \
 	WP3DefinitionGroup.cpp \
@@ -182,17 +184,19 @@ libwpd_0_8_la_SOURCES = \
 	libwpd_types.h \
 	WP1ContentListener.h \
 	WP1FileStructure.h \
+	WP1FixedLengthGroup.h \
 	WP1HeaderFooterGroup.h \
 	WP1Heuristics.h \
 	WP1Listener.h \
 	WP1MarginResetGroup.h \
-	WP1MultiByteFunctionGroup.h \
 	WP1Parser.h \
 	WP1Part.h \
+	WP1SetTabsGroup.h \
 	WP1StylesListener.h \
 	WP1SubDocument.h \
-	WP1SuppressPageCharacteristicsGroup.h \
-	WP1UnsupportedMultiByteFunctionGroup.h \
+	WP1UnsupportedFixedLengthGroup.h \
+	WP1UnsupportedVariableLengthGroup.h \
+	WP1VariableLengthGroup.h \
 	WP3AttributeGroup.h \
 	WP3ContentListener.h \
 	WP3DefinitionGroup.h \

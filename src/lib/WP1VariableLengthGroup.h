@@ -24,27 +24,31 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP1MULTIBYTEFUNCTIONGROUP_H
-#define WP1MULTIBYTEFUNCTIONGROUP_H
+#ifndef WP1VARIABLELENGTHGROUP_H
+#define WP1VARIABLELENGTHGROUP_H
 
 #include "WP1Part.h"
 
-class WP1MultiByteFunctionGroup : public WP1Part
+class WP1VariableLengthGroup : public WP1Part
 {
  public:
-	WP1MultiByteFunctionGroup(uint8_t group); // WP1MultiByteFunctionGroup should _never_ be constructed, only its inherited classes
-	virtual ~WP1MultiByteFunctionGroup() {}
+	WP1VariableLengthGroup(uint8_t group); // WP1VariableLengthGroup should _never_ be constructed, only its inherited classes
+	virtual ~WP1VariableLengthGroup() {}
 	
-	static WP1MultiByteFunctionGroup * constructMultiByteFunctionGroup(WPXInputStream *input, uint8_t group);
+	static WP1VariableLengthGroup * constructVariableLengthGroup(WPXInputStream *input, uint8_t group);
+
+	static bool isGroupConsistent(WPXInputStream *input, const uint8_t group);
 
  protected:
 	void _read(WPXInputStream *input);
  	virtual void _readContents(WPXInputStream *input) = 0;
 
 	const uint8_t getGroup() const { return m_group; }
+	const uint32_t getSize() const { return m_size; }
 
  private:
 	uint8_t m_group;
+	uint32_t m_size;
 };
 
-#endif /* WP1MULTIBYTEFUNCTIONGROUP_H */
+#endif /* WP1VARIABLELENGTHGROUP_H */

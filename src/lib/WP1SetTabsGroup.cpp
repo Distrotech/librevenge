@@ -1,10 +1,8 @@
 /* libwpd
- * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2003-2004 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -24,28 +22,26 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP1FILESTRUCTURE_H
-#define WP1FILESTRUCTURE_H
+#include "WP1SetTabsGroup.h"
+#include "libwpd_internal.h"
+#include <vector>
 
-// size of the functiongroups 0xC0 to 0xF8
-extern int WP1_FUNCTION_GROUP_SIZE[63]; 
+WP1SetTabsGroup::WP1SetTabsGroup(WPXInputStream *input, uint8_t group) :
+	WP1VariableLengthGroup(group),
+	m_definition(0),
+	m_subDocument(NULL)
+{
+	_read(input);
+}
 
-#define WP1_ATTRIBUTE_BOLD 0
-#define WP1_ATTRIBUTE_ITALICS 1
-#define WP1_ATTRIBUTE_UNDERLINE 2
-#define WP1_ATTRIBUTE_STRIKE_OUT 3
-#define WP1_ATTRIBUTE_SHADOW 4
-#define WP1_ATTRIBUTE_REDLINE 5
+WP1SetTabsGroup::~WP1SetTabsGroup()
+{
+}
 
-#define WP1_MARGIN_RESET_GROUP 0xC0
+void WP1SetTabsGroup::_readContents(WPXInputStream *input)
+{
+}
 
-#define WP1_SET_TABS_GROUP 0xC9
-
-#define WP1_SUPPRESS_PAGE_CHARACTERISTICS_GROUP 0xCF
-
-#define WP1_HEADER_FOOTER_GROUP 0xD1
-#define WP1_HEADER_FOOTER_GROUP_ALL_BIT 1
-#define WP1_HEADER_FOOTER_GROUP_ODD_BIT 2
-#define WP1_HEADER_FOOTER_GROUP_EVEN_BIT 4
-
-#endif /* WP1FILESTRUCTURE_H */
+void WP1SetTabsGroup::parse(WP1Listener *listener)
+{
+}
