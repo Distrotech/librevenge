@@ -4,7 +4,7 @@
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -24,73 +24,27 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WP42FileStructure.h"
+#include "WPXPart.h"
+#include "WP1Part.h"
+#include "WP1FileStructure.h"
+#include "WP1MultiByteFunctionGroup.h"
+#include "libwpd_internal.h"
 
-// size of the function groups 0xC0 to 0xFE
-// -1 means the size is variable
-int WP42_FUNCTION_GROUP_SIZE[63] = 
-{
-	6,	// 0xC0
-	4,
-	3,	
-	5,	
-	5,	
-	6,	
-	4,	
-	6,	
-	8,	
-	42,	
-	3,	
-	6,	
-	4,	
-	3,	
-	4,
-	3,	
-	6,	// 0xD0
-	-1,	
-	-1,	
-	4,	
-	4,	
-	4,	
-	6,	
-	-1,	
-	4,	
-	4,	
-	4,	
-	4,	
-	-1,	
-	24,	
-	4,	
-	-1,	
-	4,	// 0XE0
-	3,	
-	-1,	
-	150,	
-	6,	
-	23,	
-	11,		
-	3,	
-	3,	
-	-1,	
-	-1,	
-	-1,	// 0XEB Documentation lies that the size is 32, but it is not true.	
-	4,	
-	-1,	
-	44,	
-	18,	
-	6,	// 0XF0
-	106,	
-	-1,	
-	100,	
-	4,	
-	-1,	
-	5,	
-	-1,
-	-1,
-	-1,	// 0xF9
-	-1,	// 0xFA
-	-1,	// 0xFB
-	-1,	// 0xFC
-	-1,	// 0xFD
-	-1	// 0xFE
-};
+// constructPart: constructs a parseable low-level representation of part of the document
+// returns the part if it successfully creates the part, returns NULL if it can't
+// throws an exception if there is an error
+// precondition: readVal us between 0xC0 and 0xFF
+// TODO: check the precondition :D
+WP1Part * WP1Part::constructPart(WPXInputStream *input, uint8_t readVal)
+{	
+	WPD_DEBUG_MSG(("WordPerfect: Offset: %i, ConstructPart(readVal: 0x%2x)\n", input->tell(), readVal));
+
+	if (((uint8_t)0xC0 > readVal) || ((uint8_t)0xFE < readVal))
+	{
+		WPD_DEBUG_MSG(("WordPerfect: Returning NULL from constructPart\n"));
+		return NULL;
+	}
+	
+	WPD_DEBUG_MSG(("WordPerfect: constructMultiByteFunctionGroup(input, val)\n"));
+	return WP1MultiByteFunctionGroup::constructMultiByteFunctionGroup(input, readVal);
+}

@@ -19,6 +19,19 @@ CFLAGSCXX+=-frtti
 SLOFILES= \
 	$(SLO)$/libwpd_internal.obj \
 	$(SLO)$/libwpd_math.obj \
+	$(SLO)$/WP1ContentListener.obj \
+	$(SLO)$/WP1FileStructure.obj \
+	$(SLO)$/WP1HeaderFooterGroup.obj \
+	$(SLO)$/WP1Heuristics.obj \
+	$(SLO)$/WP1Listener.obj \
+	$(SLO)$/WP1MarginResetGroup.obj \
+	$(SLO)$/WP1MultiByteFunctionGroup.obj \
+	$(SLO)$/WP1Parser.obj \
+	$(SLO)$/WP1Part.obj \
+	$(SLO)$/WP1StylesListener.obj \
+	$(SLO)$/WP1SubDocument.obj \
+	$(SLO)$/WP1SuppressPageCharacteristicsGroup.obj \
+	$(SLO)$/WP1UnsupportedMultiByteFunctionGroup.obj \
 	$(SLO)$/WP3AttributeGroup.obj \
 	$(SLO)$/WP3ContentListener.obj \
 	$(SLO)$/WP3DefinitionGroup.obj \

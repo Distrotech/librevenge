@@ -24,73 +24,26 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WP42FileStructure.h"
+#ifndef WP1FILESTRUCTURE_H
+#define WP1FILESTRUCTURE_H
 
-// size of the function groups 0xC0 to 0xFE
-// -1 means the size is variable
-int WP42_FUNCTION_GROUP_SIZE[63] = 
-{
-	6,	// 0xC0
-	4,
-	3,	
-	5,	
-	5,	
-	6,	
-	4,	
-	6,	
-	8,	
-	42,	
-	3,	
-	6,	
-	4,	
-	3,	
-	4,
-	3,	
-	6,	// 0xD0
-	-1,	
-	-1,	
-	4,	
-	4,	
-	4,	
-	6,	
-	-1,	
-	4,	
-	4,	
-	4,	
-	4,	
-	-1,	
-	24,	
-	4,	
-	-1,	
-	4,	// 0XE0
-	3,	
-	-1,	
-	150,	
-	6,	
-	23,	
-	11,		
-	3,	
-	3,	
-	-1,	
-	-1,	
-	-1,	// 0XEB Documentation lies that the size is 32, but it is not true.	
-	4,	
-	-1,	
-	44,	
-	18,	
-	6,	// 0XF0
-	106,	
-	-1,	
-	100,	
-	4,	
-	-1,	
-	5,	
-	-1,
-	-1,
-	-1,	// 0xF9
-	-1,	// 0xFA
-	-1,	// 0xFB
-	-1,	// 0xFC
-	-1,	// 0xFD
-	-1	// 0xFE
-};
+// size of the functiongroups 0xC0 to 0xF8
+extern int WP1_FUNCTION_GROUP_SIZE[63]; 
+
+#define WP1_ATTRIBUTE_BOLD 0
+#define WP1_ATTRIBUTE_ITALICS 1
+#define WP1_ATTRIBUTE_UNDERLINE 2
+#define WP1_ATTRIBUTE_STRIKE_OUT 3
+#define WP1_ATTRIBUTE_SHADOW 4
+#define WP1_ATTRIBUTE_REDLINE 5
+
+#define WP1_MARGIN_RESET_GROUP 0xC0
+
+#define WP1_SUPPRESS_PAGE_CHARACTERISTICS_GROUP 0xCF
+
+#define WP1_HEADER_FOOTER_GROUP 0xD1
+#define WP1_HEADER_FOOTER_GROUP_ALL_BIT 1
+#define WP1_HEADER_FOOTER_GROUP_ODD_BIT 2
+#define WP1_HEADER_FOOTER_GROUP_EVEN_BIT 4
+
+#endif /* WP1FILESTRUCTURE_H */

@@ -1,10 +1,10 @@
 /* libwpd
  * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2003-2004 Marc Maurer (uwog@uwog.net)
- * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
+ * Copyright (c) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -24,73 +24,27 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WP42FileStructure.h"
+#ifndef WP1MULTIBYTEFUNCTIONGROUP_H
+#define WP1MULTIBYTEFUNCTIONGROUP_H
 
-// size of the function groups 0xC0 to 0xFE
-// -1 means the size is variable
-int WP42_FUNCTION_GROUP_SIZE[63] = 
+#include "WP1Part.h"
+
+class WP1MultiByteFunctionGroup : public WP1Part
 {
-	6,	// 0xC0
-	4,
-	3,	
-	5,	
-	5,	
-	6,	
-	4,	
-	6,	
-	8,	
-	42,	
-	3,	
-	6,	
-	4,	
-	3,	
-	4,
-	3,	
-	6,	// 0xD0
-	-1,	
-	-1,	
-	4,	
-	4,	
-	4,	
-	6,	
-	-1,	
-	4,	
-	4,	
-	4,	
-	4,	
-	-1,	
-	24,	
-	4,	
-	-1,	
-	4,	// 0XE0
-	3,	
-	-1,	
-	150,	
-	6,	
-	23,	
-	11,		
-	3,	
-	3,	
-	-1,	
-	-1,	
-	-1,	// 0XEB Documentation lies that the size is 32, but it is not true.	
-	4,	
-	-1,	
-	44,	
-	18,	
-	6,	// 0XF0
-	106,	
-	-1,	
-	100,	
-	4,	
-	-1,	
-	5,	
-	-1,
-	-1,
-	-1,	// 0xF9
-	-1,	// 0xFA
-	-1,	// 0xFB
-	-1,	// 0xFC
-	-1,	// 0xFD
-	-1	// 0xFE
+ public:
+	WP1MultiByteFunctionGroup(uint8_t group); // WP1MultiByteFunctionGroup should _never_ be constructed, only its inherited classes
+	virtual ~WP1MultiByteFunctionGroup() {}
+	
+	static WP1MultiByteFunctionGroup * constructMultiByteFunctionGroup(WPXInputStream *input, uint8_t group);
+
+ protected:
+	void _read(WPXInputStream *input);
+ 	virtual void _readContents(WPXInputStream *input) = 0;
+
+	const uint8_t getGroup() const { return m_group; }
+
+ private:
+	uint8_t m_group;
 };
+
+#endif /* WP1MULTIBYTEFUNCTIONGROUP_H */

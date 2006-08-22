@@ -32,6 +32,15 @@
 
 /* Various functions/defines that need not/should not be exported externally */
 
+#ifdef _MSC_VER
+#include <minmax.h>
+#define LIBWPD_MIN min
+#define LIBWPD_MAX max
+#else
+#define LIBWPD_MIN std::min
+#define LIBWPD_MAX std::max
+#endif
+
 #define WPD_CHECK_FILE_ERROR(v) if (v==EOF) { WPD_DEBUG_MSG(("X_CheckFileError: %d\n", __LINE__)); throw FileException(); }
 #define WPD_CHECK_FILE_SEEK_ERROR(v) if (v) { WPD_DEBUG_MSG(("X_CheckFileSeekError: %d\n", __LINE__)); throw FileException(); }
 #define WPD_CHECK_FILE_READ_ERROR(v,num_elements) if (v != num_elements) {\

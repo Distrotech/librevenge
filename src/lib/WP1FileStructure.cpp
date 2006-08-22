@@ -24,13 +24,13 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WP42FileStructure.h"
+#include "WP1FileStructure.h"
 
 // size of the function groups 0xC0 to 0xFE
 // -1 means the size is variable
-int WP42_FUNCTION_GROUP_SIZE[63] = 
+int WP1_FUNCTION_GROUP_SIZE[63] = 
 {
-	6,	// 0xC0
+	10,	//0xC0
 	4,
 	3,	
 	5,	
@@ -39,12 +39,12 @@ int WP42_FUNCTION_GROUP_SIZE[63] =
 	4,	
 	6,	
 	8,	
-	42,	
+	-1,	
 	3,	
 	6,	
 	4,	
 	3,	
-	4,
+	6,
 	3,	
 	6,	// 0xD0
 	-1,	
@@ -73,7 +73,7 @@ int WP42_FUNCTION_GROUP_SIZE[63] =
 	3,	
 	-1,	
 	-1,	
-	-1,	// 0XEB Documentation lies that the size is 32, but it is not true.	
+	32,	
 	4,	
 	-1,	
 	44,	
@@ -85,11 +85,11 @@ int WP42_FUNCTION_GROUP_SIZE[63] =
 	4,	
 	-1,	
 	5,	
+	4,
 	-1,
-	-1,
-	-1,	// 0xF9
+	8,	// 0xF9
 	-1,	// 0xFA
-	-1,	// 0xFB
+	4,	// 0xFB
 	-1,	// 0xFC
 	-1,	// 0xFD
 	-1	// 0xFE

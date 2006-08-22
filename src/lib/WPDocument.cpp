@@ -28,8 +28,10 @@
 #include "WPDocument.h"
 #include "WPXHeader.h"
 #include "WPXParser.h"
+#include "WP1Parser.h"
 #include "WP3Parser.h"
 #include "WP42Parser.h"
+#include "WP1Heuristics.h"
 #include "WP42Heuristics.h"
 #include "WP5Parser.h"
 #include "WP6Parser.h"
@@ -134,7 +136,10 @@ WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input, bool part
 			DELETEP(header);
 		}
 		else
-			confidence = WP42Heuristics::isWP42FileFormat(input, partialContent);
+			confidence = WP1Heuristics::isWP1FileFormat(input, partialContent);
+			if (confidence != WPD_CONFIDENCE_EXCELLENT)
+				confidence = LIBWPD_MAX(confidence, WP42Heuristics::isWP42FileFormat(input, partialContent));
+			
 
 		// dispose of the reference to the ole input stream, if we allocated one
 		if (document != NULL && isDocumentOLE)
@@ -253,10 +258,16 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerIm
 			// WP file formats prior to version 5.x do not contain a generic
 			// header which can be used to determine which parser to instanciate.
 			// Use heuristics to determine with some certainty if we are dealing with
-			// a file in the WP4.2 format.
-			int confidence = WP42Heuristics::isWP42FileFormat(document, false /* FIXME: allow for partial content */);
-
-			if (confidence != WPD_CONFIDENCE_NONE)
+			// a file in the WP4.2 format or WP Mac 1.x format.
+			if (WP1Heuristics::isWP1FileFormat(document, false) != WPD_CONFIDENCE_NONE)
+			{
+				WPD_DEBUG_MSG(("WordPerfect: Mostly likely the file format is WP Mac 1.x.\n\n"));
+				WPD_DEBUG_MSG(("WordPerfect: Using the WP Mac 1.x parser.\n\n"));
+				WP1Parser *parser = new WP1Parser(document);
+				parser->parse(listenerImpl);
+				DELETEP(parser);
+			}
+			else if (WP42Heuristics::isWP42FileFormat(document, false) != WPD_CONFIDENCE_NONE)
 			{
 				WPD_DEBUG_MSG(("WordPerfect: Mostly likely the file format is WP4.2.\n\n"));
 				WPD_DEBUG_MSG(("WordPerfect: Using the WP4.2 parser.\n\n"));
@@ -265,6 +276,7 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerIm
 				DELETEP(parser);
 			}
 			else
+
 				error = WPD_FILE_ACCESS_ERROR;
 		}
 	}

@@ -1,6 +1,4 @@
 /* libwpd
- * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2003-2004 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
@@ -24,73 +22,24 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WP42FileStructure.h"
+#include "WP1SubDocument.h"
+#include "WP1Parser.h"
+#include "libwpd_internal.h"
 
-// size of the function groups 0xC0 to 0xFE
-// -1 means the size is variable
-int WP42_FUNCTION_GROUP_SIZE[63] = 
+WP1SubDocument::WP1SubDocument(uint8_t * streamData, const int dataSize) :
+	WPXSubDocument(streamData, dataSize)
 {
-	6,	// 0xC0
-	4,
-	3,	
-	5,	
-	5,	
-	6,	
-	4,	
-	6,	
-	8,	
-	42,	
-	3,	
-	6,	
-	4,	
-	3,	
-	4,
-	3,	
-	6,	// 0xD0
-	-1,	
-	-1,	
-	4,	
-	4,	
-	4,	
-	6,	
-	-1,	
-	4,	
-	4,	
-	4,	
-	4,	
-	-1,	
-	24,	
-	4,	
-	-1,	
-	4,	// 0XE0
-	3,	
-	-1,	
-	150,	
-	6,	
-	23,	
-	11,		
-	3,	
-	3,	
-	-1,	
-	-1,	
-	-1,	// 0XEB Documentation lies that the size is 32, but it is not true.	
-	4,	
-	-1,	
-	44,	
-	18,	
-	6,	// 0XF0
-	106,	
-	-1,	
-	100,	
-	4,	
-	-1,	
-	5,	
-	-1,
-	-1,
-	-1,	// 0xF9
-	-1,	// 0xFA
-	-1,	// 0xFB
-	-1,	// 0xFC
-	-1,	// 0xFD
-	-1	// 0xFE
-};
+}
+
+WP1SubDocument::WP1SubDocument(WPXInputStream *input, const int dataSize) :
+	WPXSubDocument(input, dataSize)
+{
+}
+
+void WP1SubDocument::parse(WP1Listener *listener) const
+{
+	WPXMemoryInputStream *tmpStream = getStream();
+	tmpStream->seek(0, WPX_SEEK_SET);
+	listener->marginReset(readU8(tmpStream), readU8(tmpStream));
+	WP1Parser::parseDocument(tmpStream, listener);
+}

@@ -26,14 +26,6 @@
 #include "WPXPageSpan.h"
 #include "libwpd_internal.h"
 #include "WPXProperty.h"
-#ifdef _MSC_VER
-#include <minmax.h>
-#define LIBWPD_MIN min
-#define LIBWPD_MAX max
-#else
-#define LIBWPD_MIN std::min
-#define LIBWPD_MAX std::max
-#endif
 
 _WPXContentParsingState::_WPXContentParsingState() :
 	m_textAttributeBits(0),
