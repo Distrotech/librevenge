@@ -2,7 +2,7 @@
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -22,18 +22,21 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP1SUBDOCUMENT_H
-#define WP1SUBDOCUMENT_H
+#ifndef WP1SUPPRESSPAGECHARACTERISTICSGROUP_H
+#define WP1SUPPRESSPAGECHARACTERISTICSGROUP_H
 
-#include "WPXMemoryStream.h"
-#include "WPXSubDocument.h"
-#include "WP1Listener.h"
+#include "WP1FixedLengthGroup.h"
 
-class WP1SubDocument : public WPXSubDocument
+class WP1SuppressPageCharacteristicsGroup : public WP1FixedLengthGroup
 {
 public:
-	WP1SubDocument(WPXInputStream *input, const int dataSize);
-	void parse(WP1Listener *listener) const;
+	WP1SuppressPageCharacteristicsGroup(WPXInputStream *input, uint8_t group);
+	~WP1SuppressPageCharacteristicsGroup();	
+	void _readContents(WPXInputStream *input);
+	void parse(WP1Listener *listener);
 
+private:
+	uint8_t m_suppressCode;
 };
-#endif /* WP1SUBDOCUMENT_H */
+
+#endif /* WP1SUPPRESSPAGECHARACTERISTICSGROUP_H */

@@ -118,7 +118,7 @@ void WP1StylesListener::headerFooterGroup(const uint8_t headerFooterDefinition, 
 		uint8_t headerFooterType = (headerFooterDefinition & 0x03);
 		WPXHeaderFooterType wpxType = ((headerFooterType <= WPX_HEADER_B) ? HEADER : FOOTER);
 
-		uint8_t occurenceBits = ((headerFooterDefinition & 0xFC) >> 2);
+		uint8_t occurenceBits = ((headerFooterDefinition & 0x1C) >> 2);
 
 		WPD_DEBUG_MSG(("WordPerfect: headerFooterGroup (headerFooterType: %i, occurenceBits: %i)\n", 
 			       headerFooterType, occurenceBits));
@@ -162,11 +162,6 @@ void WP1StylesListener::suppressPageCharacteristics(const uint8_t suppressCode)
 			m_currentPage.setHeadFooterSuppression(WPX_HEADER_B, true);
 			m_currentPage.setHeadFooterSuppression(WPX_FOOTER_A, true);
 			m_currentPage.setHeadFooterSuppression(WPX_FOOTER_B, true);
-		}
-		if (suppressCode & 0x08)
-		{
-			m_currentPage.setHeadFooterSuppression(WPX_HEADER_A, true);
-			m_currentPage.setHeadFooterSuppression(WPX_HEADER_B, true);
 		}
 		if (suppressCode & 0x10)
 			m_currentPage.setHeadFooterSuppression(WPX_HEADER_A, true);

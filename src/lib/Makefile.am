@@ -56,6 +56,7 @@ libwpd_0_8_la_SOURCES = \
 	WP1SetTabsGroup.cpp \
 	WP1StylesListener.cpp \
 	WP1SubDocument.cpp \
+	WP1SuppressPageCharacteristicsGroup.cpp \
 	WP1UnsupportedFixedLengthGroup.cpp \
 	WP1UnsupportedVariableLengthGroup.cpp \
 	WP1VariableLengthGroup.cpp \
@@ -194,6 +195,7 @@ libwpd_0_8_la_SOURCES = \
 	WP1SetTabsGroup.h \
 	WP1StylesListener.h \
 	WP1SubDocument.h \
+	WP1SuppressPageCharacteristicsGroup.h \
 	WP1UnsupportedFixedLengthGroup.h \
 	WP1UnsupportedVariableLengthGroup.h \
 	WP1VariableLengthGroup.h \

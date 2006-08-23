@@ -40,18 +40,12 @@ WP1HeaderFooterGroup::~WP1HeaderFooterGroup()
 
 void WP1HeaderFooterGroup::_readContents(WPXInputStream *input)
 {
-	input->seek(4, WPX_SEEK_CUR);
-	unsigned int tmpStartPosition = input->tell();
-	while (readU8(input) != 0xD1);
-	input->seek(-3, WPX_SEEK_CUR);
-	int tmpSubDocumentSize = 0;
-	if (readU8(input) == 0xFF)
-		tmpSubDocumentSize=input->tell() - tmpStartPosition -1;
-	WPD_DEBUG_MSG(("WP1SubDocument startPosition = %i; SubDocumentSize = %i\n", tmpStartPosition, tmpSubDocumentSize));
-	input->seek(1, WPX_SEEK_CUR);
 	m_definition = readU8(input);
-	input->seek(tmpStartPosition, WPX_SEEK_SET);
-	if (tmpSubDocumentSize > 2)
+
+	int tmpSubDocumentSize = getSize() - 0x13;
+	input->seek(18, WPX_SEEK_CUR);
+	WPD_DEBUG_MSG(("WP1SubDocument subDocumentSize = %i\n", tmpSubDocumentSize));
+	if (tmpSubDocumentSize)
 		m_subDocument = new WP1SubDocument(input, tmpSubDocumentSize);
 }
 

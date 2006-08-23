@@ -26,11 +26,6 @@
 #include "WP1Parser.h"
 #include "libwpd_internal.h"
 
-WP1SubDocument::WP1SubDocument(uint8_t * streamData, const int dataSize) :
-	WPXSubDocument(streamData, dataSize)
-{
-}
-
 WP1SubDocument::WP1SubDocument(WPXInputStream *input, const int dataSize) :
 	WPXSubDocument(input, dataSize)
 {
@@ -40,6 +35,5 @@ void WP1SubDocument::parse(WP1Listener *listener) const
 {
 	WPXMemoryInputStream *tmpStream = getStream();
 	tmpStream->seek(0, WPX_SEEK_SET);
-	listener->marginReset(readU8(tmpStream), readU8(tmpStream));
 	WP1Parser::parseDocument(tmpStream, listener);
 }

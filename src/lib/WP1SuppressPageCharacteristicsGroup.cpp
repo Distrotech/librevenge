@@ -2,7 +2,7 @@
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -22,18 +22,28 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP1SUBDOCUMENT_H
-#define WP1SUBDOCUMENT_H
+#include "WP1SuppressPageCharacteristicsGroup.h"
+#include "libwpd_internal.h"
+#include <string>
 
-#include "WPXMemoryStream.h"
-#include "WPXSubDocument.h"
-#include "WP1Listener.h"
-
-class WP1SubDocument : public WPXSubDocument
+WP1SuppressPageCharacteristicsGroup::WP1SuppressPageCharacteristicsGroup(WPXInputStream *input, uint8_t group) :
+	WP1FixedLengthGroup(group),
+	m_suppressCode(0)
 {
-public:
-	WP1SubDocument(WPXInputStream *input, const int dataSize);
-	void parse(WP1Listener *listener) const;
+	_read(input);
+}
 
-};
-#endif /* WP1SUBDOCUMENT_H */
+WP1SuppressPageCharacteristicsGroup::~WP1SuppressPageCharacteristicsGroup()
+{
+}
+
+void WP1SuppressPageCharacteristicsGroup::_readContents(WPXInputStream *input)
+{
+	m_suppressCode = readU8(input);
+}
+
+void WP1SuppressPageCharacteristicsGroup::parse(WP1Listener *listener)
+{
+	WPD_DEBUG_MSG(("WordPerfect: handling a SuppressPageCharacteristics group\n"));
+	listener->suppressPageCharacteristics(m_suppressCode);
+}
