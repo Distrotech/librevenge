@@ -22,22 +22,29 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP1MARGINRESETGROUP_H
-#define WP1MARGINRESETGROUP_H
+#include "WP1TopMarginGroup.h"
+#include "libwpd_internal.h"
+#include <string>
 
-#include "WP1FixedLengthGroup.h"
-#include "WP1SubDocument.h"
-
-class WP1MarginResetGroup : public WP1FixedLengthGroup
+WP1TopMarginGroup::WP1TopMarginGroup(WPXInputStream *input, uint8_t group) :
+	WP1FixedLengthGroup(group),
+	m_topMargin(0)
 {
-public:
-	WP1MarginResetGroup(WPXInputStream *input, uint8_t group);
-	~WP1MarginResetGroup();	
-	void _readContents(WPXInputStream *input);
-	void parse(WP1Listener *listener);
+	_read(input);
+}
 
-private:
-	uint16_t m_leftMargin, m_rightMargin;
-};
+WP1TopMarginGroup::~WP1TopMarginGroup()
+{
+}
 
-#endif /* WP1MARGINRESETGROUP_H */
+void WP1TopMarginGroup::_readContents(WPXInputStream *input)
+{
+	input->seek(2, WPX_SEEK_CUR);
+	m_topMargin = readU16(input,true);
+}
+
+void WP1TopMarginGroup::parse(WP1Listener *listener)
+{
+	WPD_DEBUG_MSG(("WordPerfect: handling the Top Margin group\n"));
+	listener->topMarginSet(m_topMargin);
+}

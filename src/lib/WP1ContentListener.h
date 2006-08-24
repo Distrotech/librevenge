@@ -48,11 +48,15 @@ public:
 
 	void startDocument() { WPXContentListener::startDocument(); }
 	void insertCharacter(const uint16_t character);
+	void insertExtendedCharacter(const uint8_t extendedCharacter);
 	void insertTab(const uint8_t tabType, float tabPosition);
 	void insertBreak(const uint8_t breakType) { WPXContentListener::insertBreak(breakType); }
 	void insertEOL();
 	void attributeChange(const bool isOn, const uint8_t attribute);
-	void marginReset(const uint8_t leftMargin, const uint8_t rightMargin);
+	void fontPointSize(const uint8_t pointSize);
+	void marginReset(const uint16_t leftMargin, const uint16_t rightMargin);
+	void topMarginSet(const uint16_t topMargin) {}
+	void bottomMarginSet(const uint16_t bottomMargin) {}
 	void headerFooterGroup(const uint8_t headerFooterDefinition, WP1SubDocument *subDocument);
 	void suppressPageCharacteristics(const uint8_t suppressCode) {}
 	void endDocument() { WPXContentListener::endDocument(); };

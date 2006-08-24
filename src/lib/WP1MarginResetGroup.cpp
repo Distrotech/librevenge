@@ -40,9 +40,9 @@ WP1MarginResetGroup::~WP1MarginResetGroup()
 
 void WP1MarginResetGroup::_readContents(WPXInputStream *input)
 {
-	input->seek(2, WPX_SEEK_CUR);
-	m_leftMargin = readU8(input);
-	m_rightMargin = readU8(input);
+	input->seek(4, WPX_SEEK_CUR);
+	m_leftMargin = readU16(input, true);
+	m_rightMargin = readU16(input, true);
 }
 
 void WP1MarginResetGroup::parse(WP1Listener *listener)

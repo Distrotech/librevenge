@@ -22,22 +22,28 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP1MARGINRESETGROUP_H
-#define WP1MARGINRESETGROUP_H
+#include "WP1ExtendedCharacterGroup.h"
+#include "libwpd_internal.h"
+#include <string>
 
-#include "WP1FixedLengthGroup.h"
-#include "WP1SubDocument.h"
-
-class WP1MarginResetGroup : public WP1FixedLengthGroup
+WP1ExtendedCharacterGroup::WP1ExtendedCharacterGroup(WPXInputStream *input, uint8_t group) :
+	WP1FixedLengthGroup(group),
+	m_extendedCharacter(0)
 {
-public:
-	WP1MarginResetGroup(WPXInputStream *input, uint8_t group);
-	~WP1MarginResetGroup();	
-	void _readContents(WPXInputStream *input);
-	void parse(WP1Listener *listener);
+	_read(input);
+}
 
-private:
-	uint16_t m_leftMargin, m_rightMargin;
-};
+WP1ExtendedCharacterGroup::~WP1ExtendedCharacterGroup()
+{
+}
 
-#endif /* WP1MARGINRESETGROUP_H */
+void WP1ExtendedCharacterGroup::_readContents(WPXInputStream *input)
+{
+	m_extendedCharacter = readU8(input);
+}
+
+void WP1ExtendedCharacterGroup::parse(WP1Listener *listener)
+{
+	WPD_DEBUG_MSG(("WordPerfect: handling the Extended Character group\n"));
+	listener->insertExtendedCharacter(m_extendedCharacter);
+}

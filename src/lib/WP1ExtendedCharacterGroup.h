@@ -22,22 +22,22 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP1MARGINRESETGROUP_H
-#define WP1MARGINRESETGROUP_H
+#ifndef WP1EXTENDEDCHARACTERGROUP_H
+#define WP1EXTENDEDCHARACTERGROUP_H
 
 #include "WP1FixedLengthGroup.h"
 #include "WP1SubDocument.h"
 
-class WP1MarginResetGroup : public WP1FixedLengthGroup
+class WP1ExtendedCharacterGroup : public WP1FixedLengthGroup
 {
 public:
-	WP1MarginResetGroup(WPXInputStream *input, uint8_t group);
-	~WP1MarginResetGroup();	
+	WP1ExtendedCharacterGroup(WPXInputStream *input, uint8_t group);
+	~WP1ExtendedCharacterGroup();	
 	void _readContents(WPXInputStream *input);
 	void parse(WP1Listener *listener);
 
 private:
-	uint16_t m_leftMargin, m_rightMargin;
+	uint8_t m_extendedCharacter;
 };
 
-#endif /* WP1MARGINRESETGROUP_H */
+#endif /* WP1EXTENDEDCHARACTERGROUP_H */

@@ -28,6 +28,10 @@
 #include "WP1SuppressPageCharacteristicsGroup.h"
 #include "WP1UnsupportedFixedLengthGroup.h"
 #include "WP1MarginResetGroup.h"
+#include "WP1TopMarginGroup.h"
+#include "WP1BottomMarginGroup.h"
+#include "WP1ExtendedCharacterGroup.h"
+#include "WP1PointSizeGroup.h"
 #include "WP1FileStructure.h"
 #include "libwpd_internal.h"
 
@@ -42,8 +46,16 @@ WP1FixedLengthGroup * WP1FixedLengthGroup::constructFixedLengthGroup(WPXInputStr
 	{
 		case WP1_MARGIN_RESET_GROUP:
 			return new WP1MarginResetGroup(input, group);
+		case WP1_TOP_MARGIN_SET_GROUP:
+			return new WP1TopMarginGroup(input, group);
+		case WP1_BOTTOM_MARGIN_SET_GROUP:
+			return new WP1BottomMarginGroup(input, group);
 		case WP1_SUPPRESS_PAGE_CHARACTERISTICS_GROUP:
 			return new WP1SuppressPageCharacteristicsGroup(input, group);
+		case WP1_EXTENDED_CHARACTER_GROUP:
+			return new WP1ExtendedCharacterGroup(input, group);
+		case WP1_POINT_SIZE_GROUP:
+			return new WP1PointSizeGroup(input, group);
 		default:
 			// this is an unhandled group, just skip it
 			return new WP1UnsupportedFixedLengthGroup(input, group);

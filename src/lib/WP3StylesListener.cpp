@@ -160,7 +160,6 @@ void WP3StylesListener::marginChange(const uint8_t side, const uint16_t margin)
 		}
 		
 	}
-
 }
 
 void WP3StylesListener::pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool isPersistent)

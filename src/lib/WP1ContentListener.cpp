@@ -48,7 +48,7 @@ WP1ContentListener::WP1ContentListener(std::list<WPXPageSpan> &pageList, std::ve
 	m_parseState(new WP1ContentParsingState)
 {
 // Default line is 6 lpi, it means that the caracters are of 12 points
-	*(m_ps->m_fontName) = "Courier";
+	*(m_ps->m_fontName) = "Geneva";
 	m_ps->m_fontSize = 12.0f;
 }
 
@@ -65,6 +65,19 @@ void WP1ContentListener::insertCharacter(const uint16_t character)
 		if (!m_ps->m_isSpanOpened)
 			_openSpan();
 		appendUCS4(m_parseState->m_textBuffer, (uint32_t)character);
+	}
+}
+
+void WP1ContentListener::insertExtendedCharacter(const uint8_t extendedCharacter)
+{
+	if (!isUndoOn())
+	{
+		if (!m_ps->m_isSpanOpened)
+			_openSpan();
+		if (extendedCharacter <= 0x20)
+			appendUCS4(m_parseState->m_textBuffer, (uint32_t)0x20);
+		else
+			appendUCS4(m_parseState->m_textBuffer, (uint32_t)macintoshCharacterMap[extendedCharacter - 0x20]);
 	}
 }
 
@@ -142,17 +155,39 @@ void WP1ContentListener::attributeChange(const bool isOn, const uint8_t attribut
 		m_ps->m_textAttributeBits ^= textAttributeBit;
 }
 
-void WP1ContentListener::marginReset(const uint8_t leftMargin, const uint8_t rightMargin)
+void WP1ContentListener::fontPointSize(const uint8_t pointSize)
 {
-#if 0
 	if (!isUndoOn())
 	{
-		float leftMarginInch = (float)(leftMargin/WP1_NUM_TEXT_COLUMS_PER_INCH);
-		float rightMarginInch = m_ps->m_pageFormWidth - (float)((rightMargin + 1)/WP1_NUM_TEXT_COLUMS_PER_INCH);
-		m_ps->m_leftMarginByPageMarginChange = leftMarginInch - m_ps->m_pageMarginLeft;
-		m_ps->m_rightMarginByPageMarginChange = rightMarginInch - m_ps->m_pageMarginRight;
+		_closeSpan();
+		
+		m_ps->m_fontSize=float(pointSize);
 	}
-#endif
+}
+
+void WP1ContentListener::marginReset(const uint16_t leftMargin, const uint16_t rightMargin)
+{
+	if (!isUndoOn())
+	{
+		if (leftMargin)
+		{
+			float leftMarginInch = (float)((double)leftMargin/72.0f);
+			m_ps->m_leftMarginByPageMarginChange = leftMarginInch - m_ps->m_pageMarginLeft;
+			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
+						+ m_ps->m_leftMarginByParagraphMarginChange
+						+ m_ps->m_leftMarginByTabs;
+
+		}
+		if (rightMargin)
+		{
+			float rightMarginInch = (float)((double)rightMargin/72.0f);
+			m_ps->m_rightMarginByPageMarginChange = rightMarginInch - m_ps->m_pageMarginRight;
+			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
+						+ m_ps->m_rightMarginByParagraphMarginChange
+						+ m_ps->m_rightMarginByTabs;
+		}
+		m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent;
+	}
 }
 
 void WP1ContentListener::headerFooterGroup(const uint8_t headerFooterDefinition, WP1SubDocument *subDocument)

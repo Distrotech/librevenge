@@ -91,8 +91,6 @@ void WP1Parser::parseDocument(WPXInputStream *input, WP1Listener *listener)
 		}
 		else if (readVal >= (uint8_t)0x20 && readVal <= (uint8_t)0x7F)
 		{
-			WPD_DEBUG_MSG(("Offset: %i, Handling Ascii Character 0x%2x\n", input->tell(), readVal));			
-
 			// normal ASCII characters
 			listener->insertCharacter( readVal );
 		}
