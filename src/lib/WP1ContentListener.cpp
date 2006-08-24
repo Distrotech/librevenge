@@ -196,6 +196,15 @@ void WP1ContentListener::headerFooterGroup(const uint8_t headerFooterDefinition,
 		m_subDocuments.push_back(subDocument);			
 }	
 
+void WP1ContentListener::setTabs(const std::vector<WPXTabStop> tabStops)
+{
+	if (!isUndoOn())
+	{
+		m_ps->m_isTabPositionRelative = false;
+		m_ps->m_tabStops = tabStops;
+	}
+}
+
 void WP1ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice)
 {
 	// save our old parsing state on our "stack"

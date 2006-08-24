@@ -37,8 +37,7 @@ public:
 	void parse(WP1Listener *listener);
 
 private:
-	uint8_t m_definition;
-	WP1SubDocument *m_subDocument;
+	std::vector<WPXTabStop> m_tabStops;
 };
 
 #endif /* WP1SETTABSGROUP_H */

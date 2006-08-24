@@ -51,6 +51,7 @@ public:
 	virtual void marginReset(const uint16_t leftMargin, const uint16_t rightMargin) = 0;
 	virtual void topMarginSet(const uint16_t topMargin) = 0;
 	virtual void bottomMarginSet(const uint16_t bottomMargin) = 0;
+	virtual void setTabs(const std::vector<WPXTabStop> tabStops) = 0;
 	virtual void headerFooterGroup(const uint8_t headerFooterDefinition, WP1SubDocument *subDocument) = 0;
 	virtual void suppressPageCharacteristics(const uint8_t suppressCode) = 0;
 	virtual void endDocument() = 0;

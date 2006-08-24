@@ -27,9 +27,7 @@
 #include <vector>
 
 WP1SetTabsGroup::WP1SetTabsGroup(WPXInputStream *input, uint8_t group) :
-	WP1VariableLengthGroup(group),
-	m_definition(0),
-	m_subDocument(NULL)
+	WP1VariableLengthGroup(group)
 {
 	_read(input);
 }
@@ -40,8 +38,75 @@ WP1SetTabsGroup::~WP1SetTabsGroup()
 
 void WP1SetTabsGroup::_readContents(WPXInputStream *input)
 {
+	// Skip first the old condensed tab table
+	while (readU8(input) != 0xff)
+		input->seek(2, WPX_SEEK_CUR);
+	// Now read the new condensed tab table
+	int8_t tmpTabType = 0;
+	float tmpTabPosition = 0.0f;
+	WPXTabStop tmpTabStop;
+	tmpTabStop.m_position = 0.0f;
+	tmpTabStop.m_alignment = LEFT;
+	tmpTabStop.m_leaderCharacter = '\0';
+	tmpTabStop.m_leaderNumSpaces = 0;
+	while ((tmpTabType = read8(input)) != (int8_t)0xff)
+	{
+		float tmpTabPosition = (float)((double)readU16(input, true) / 72.0f);
+
+		if (tmpTabType < 0)
+		{
+			for (int8_t i = tmpTabType; i < 0; i++)
+			{
+				tmpTabStop.m_position += tmpTabPosition;
+				m_tabStops.push_back(tmpTabStop);
+			}
+		}
+		else
+		{
+			tmpTabStop.m_position = tmpTabPosition;
+
+			switch (tmpTabType & 0x03)
+			{
+			case 0:
+				tmpTabStop.m_alignment = LEFT;
+				break;
+			case 1:
+				tmpTabStop.m_alignment = CENTER;
+				break;
+			case 2:
+				tmpTabStop.m_alignment = RIGHT;
+				break;
+			case 3:
+				tmpTabStop.m_alignment = DECIMAL;
+				break;
+			default:
+				tmpTabStop.m_alignment = LEFT;
+				break;
+			}
+
+			if (tmpTabType & 0x04)
+			{
+				tmpTabStop.m_leaderCharacter = '.';
+				tmpTabStop.m_leaderNumSpaces = 0;
+			}
+			else
+			{
+				tmpTabStop.m_leaderCharacter = '\0';
+				tmpTabStop.m_leaderNumSpaces = 0;
+			}
+
+			m_tabStops.push_back(tmpTabStop);
+		}	
+	}
 }
 
 void WP1SetTabsGroup::parse(WP1Listener *listener)
 {
+	WPD_DEBUG_MSG(("Parsing Set Tabs Group (positions: "));
+	for(std::vector<WPXTabStop>::const_iterator i = m_tabStops.begin(); i != m_tabStops.end(); i++)
+	{
+		WPD_DEBUG_MSG((" %.4f", (*i).m_position));
+	}
+	WPD_DEBUG_MSG((")\n"));
+	listener->setTabs(m_tabStops);
 }
