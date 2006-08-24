@@ -35,6 +35,7 @@ WP3PageFormatGroup::WP3PageFormatGroup(WPXInputStream *input) :
 	m_leftMargin(0),
 	m_rightMargin(0),
 	m_lineSpacing(1.0f),
+	m_isRelative(false),
 	m_topMargin(0),
 	m_bottomMargin(0),
 	m_justification(0),
@@ -52,6 +53,10 @@ void WP3PageFormatGroup::_readContents(WPXInputStream *input)
 {
 	// this group can contain different kinds of data, thus we need to read
 	// the contents accordingly
+	int8_t tmpTabType = 0;
+	float tmpTabPosition = 0.0f;
+	WPXTabStop tmpTabStop = WPXTabStop();
+
 	switch (getSubGroup())
 	{
 	case WP3_PAGE_FORMAT_GROUP_HORIZONTAL_MARGINS:
@@ -72,6 +77,86 @@ void WP3PageFormatGroup::_readContents(WPXInputStream *input)
 			WPD_DEBUG_MSG(("WordPerfect: Page format group line spacing - integer part: %i fractional part: %f (original value: %i)\n",
 				       lineSpacingIntegerPart, lineSpacingFractionalPart, lineSpacing));
 			m_lineSpacing = lineSpacingIntegerPart + lineSpacingFractionalPart;
+		}
+		break;
+
+	case WP3_PAGE_FORMAT_GROUP_SET_TABS:
+		// skip old condensed tab table if the first value is not 0xFF
+		if (0xFF != readU8(input))
+		{
+			while (readU8(input) != 0xFF)
+				input->seek(4, WPX_SEEK_CUR);
+		}
+
+		m_isRelative = (readU8(input) & 0x01);
+
+		while ((tmpTabType = read8(input)) != (int8_t)0xff)
+		{
+			float tmpTabPosition = fixedPointToFloat(readU32(input, true)) / 72.0f;
+
+			if (tmpTabType < 0)
+			{
+				for (int8_t i = tmpTabType; i < 0; i++)
+				{
+					tmpTabStop.m_position += tmpTabPosition;
+					m_tabStops.push_back(tmpTabStop);
+				}
+			}
+			else
+			{
+				tmpTabStop.m_position = tmpTabPosition;
+
+				switch (tmpTabType & 0x0f)
+				{
+				case 0:
+					tmpTabStop.m_alignment = LEFT;
+					break;
+				case 1:
+					tmpTabStop.m_alignment = CENTER;
+					break;
+				case 2:
+					tmpTabStop.m_alignment = RIGHT;
+					break;
+				case 3:
+					tmpTabStop.m_alignment = DECIMAL;
+					break;
+				case 4: tmpTabStop.m_alignment = BAR;
+					break;
+				default:
+					tmpTabStop.m_alignment = LEFT;
+					break;
+				}
+
+				switch ((tmpTabType & 0x70) >> 4 )
+				{
+				case 0:
+					tmpTabStop.m_leaderCharacter = '\0';
+					tmpTabStop.m_leaderNumSpaces = 0;
+					break;
+				case 1:
+					tmpTabStop.m_leaderCharacter = '.';
+					tmpTabStop.m_leaderNumSpaces = 1;
+					break;
+				case 2:
+					tmpTabStop.m_leaderCharacter = '.';
+					tmpTabStop.m_leaderNumSpaces = 0;
+					break;
+				case 3:
+					tmpTabStop.m_leaderCharacter = '-';
+					tmpTabStop.m_leaderNumSpaces = 1;
+					break;
+				case 4:
+					tmpTabStop.m_leaderCharacter = '_';
+					tmpTabStop.m_leaderNumSpaces = 0;
+					break;
+				default:
+					tmpTabStop.m_leaderCharacter = '.';
+					tmpTabStop.m_leaderNumSpaces = 0;
+					break;
+				}
+
+				m_tabStops.push_back(tmpTabStop);
+			}	
 		}
 		break;
 		
@@ -132,6 +217,16 @@ void WP3PageFormatGroup::parse(WP3Listener *listener)
 	        listener->lineSpacingChange(m_lineSpacing);
 		break;
 				
+	case WP3_PAGE_FORMAT_GROUP_SET_TABS:
+		WPD_DEBUG_MSG(("Parsing Set Tabs Group (positions: "));
+		for(std::vector<WPXTabStop>::const_iterator i = m_tabStops.begin(); i != m_tabStops.end(); i++)
+		{
+			WPD_DEBUG_MSG((" %.4f", (*i).m_position));
+		}
+		WPD_DEBUG_MSG((")\n"));
+		listener->setTabs(m_isRelative, m_tabStops);
+		break;
+
 	case WP3_PAGE_FORMAT_GROUP_VERTICAL_MARGINS:
 		if (m_topMargin != 0x80000000)
 			listener->pageMarginChange(WPX_TOP, fixedPointToWPUs(m_topMargin));

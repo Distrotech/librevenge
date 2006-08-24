@@ -41,14 +41,12 @@ void WP1SetTabsGroup::_readContents(WPXInputStream *input)
 	// Skip first the old condensed tab table
 	while (readU8(input) != 0xff)
 		input->seek(2, WPX_SEEK_CUR);
+
 	// Now read the new condensed tab table
 	int8_t tmpTabType = 0;
 	float tmpTabPosition = 0.0f;
-	WPXTabStop tmpTabStop;
-	tmpTabStop.m_position = 0.0f;
-	tmpTabStop.m_alignment = LEFT;
-	tmpTabStop.m_leaderCharacter = '\0';
-	tmpTabStop.m_leaderNumSpaces = 0;
+	WPXTabStop tmpTabStop = WPXTabStop();
+
 	while ((tmpTabType = read8(input)) != (int8_t)0xff)
 	{
 		float tmpTabPosition = (float)((double)readU16(input, true) / 72.0f);

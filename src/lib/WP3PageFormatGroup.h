@@ -28,6 +28,8 @@
 #define WP3PAGEFORMATGROUP_H
 
 #include "WP3VariableLengthGroup.h"
+#include "libwpd_internal.h"
+#include <vector>
 
 class WP3PageFormatGroup : public WP3VariableLengthGroup
 {
@@ -43,6 +45,9 @@ class WP3PageFormatGroup : public WP3VariableLengthGroup
 	uint32_t m_rightMargin;
 	// variable needed for subgroup 0x02 (Line Spacing)
 	float m_lineSpacing;
+	// variables needed for subgroup 0x04 (Set Tabs)
+	bool m_isRelative;
+	std::vector<WPXTabStop> m_tabStops;
 	// variables needed for subgroup 0x05 (Vertical Margins)
 	uint32_t m_topMargin;
 	uint32_t m_bottomMargin;

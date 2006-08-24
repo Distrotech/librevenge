@@ -945,6 +945,13 @@ uint16_t fixedPointToWPUs(const uint32_t fixedPointNumber)
 	return numberWPU;
 }
 
+float fixedPointToFloat(const uint32_t fixedPointNumber)
+{
+	int16_t fixedPointNumberIntegerPart = (int16_t)((fixedPointNumber & 0xFFFF0000) >> 16);
+	float fixedPointNumberFractionalPart = (float)((double)(fixedPointNumber & 0x0000FFFF)/(double)0xFFFF);
+	return ((float)fixedPointNumberIntegerPart + fixedPointNumberFractionalPart);
+}	
+
 _RGBSColor::_RGBSColor(uint8_t r, uint8_t g, uint8_t b, uint8_t s)
 	:	m_r(r),
 		m_g(g),

@@ -434,6 +434,15 @@ void WP3ContentListener::indentFirstLineChange(const int16_t offset)
 	}
 }
 
+void WP3ContentListener::setTabs(const bool isRelative, const std::vector<WPXTabStop> tabStops)
+{
+	if (!isUndoOn())
+	{
+		m_ps->m_isTabPositionRelative = isRelative;
+		m_ps->m_tabStops = tabStops;
+	}
+}
+
 void WP3ContentListener::columnChange(const WPXTextColumnType columnType, const uint8_t numColumns, const std::vector<float> &columnWidth,
 		const std::vector<bool> &isFixedWidth)
 {
