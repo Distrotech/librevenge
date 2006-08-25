@@ -32,6 +32,8 @@
 #include "WP1BottomMarginGroup.h"
 #include "WP1ExtendedCharacterGroup.h"
 #include "WP1PointSizeGroup.h"
+#include "WP1LeftIndentGroup.h"
+#include "WP1LeftRightIndentGroup.h"
 #include "WP1FileStructure.h"
 #include "libwpd_internal.h"
 
@@ -50,8 +52,12 @@ WP1FixedLengthGroup * WP1FixedLengthGroup::constructFixedLengthGroup(WPXInputStr
 			return new WP1TopMarginGroup(input, group);
 		case WP1_BOTTOM_MARGIN_SET_GROUP:
 			return new WP1BottomMarginGroup(input, group);
+		case WP1_LEFT_INDENT_GROUP:
+			return new WP1LeftIndentGroup(input, group);
 		case WP1_SUPPRESS_PAGE_CHARACTERISTICS_GROUP:
 			return new WP1SuppressPageCharacteristicsGroup(input, group);
+		case WP1_LEFT_RIGHT_INDENT_GROUP:
+			return new WP1LeftRightIndentGroup(input, group);
 		case WP1_EXTENDED_CHARACTER_GROUP:
 			return new WP1ExtendedCharacterGroup(input, group);
 		case WP1_POINT_SIZE_GROUP:

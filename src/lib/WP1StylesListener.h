@@ -42,7 +42,7 @@ public:
 	void startDocument() {}
 	void insertCharacter(const uint16_t character) { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void insertExtendedCharacter(const uint8_t extendedCharacter) { if (!isUndoOn()) m_currentPageHasContent = true; }
-	void insertTab(const uint8_t tabType, float tabPosition) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	void insertTab() { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void insertEOL() { if (!isUndoOn()) m_currentPageHasContent = true; }
  	void insertBreak(const uint8_t breakType);
 	void attributeChange(const bool isOn, const uint8_t attribute) {}
@@ -50,6 +50,8 @@ public:
 	void marginReset(const uint16_t leftMargin, const uint16_t rightMargin);
 	void topMarginSet(const uint16_t topMargin);
 	void bottomMarginSet(const uint16_t bottomMargin);
+	void leftIndent(const uint16_t leftMarginOffset) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	void leftRightIndent(const uint16_t leftRightMarginOffset) { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void setTabs(const std::vector<WPXTabStop> tabStops) {}
 	void headerFooterGroup(const uint8_t headerFooterDefinition, WP1SubDocument *subDocument);
 	void suppressPageCharacteristics(const uint8_t suppressCode);

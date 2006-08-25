@@ -30,7 +30,8 @@
 
 #define WP1_NUM_TEXT_COLUMS_PER_INCH 12
 
-_WP1ContentParsingState::_WP1ContentParsingState()
+_WP1ContentParsingState::_WP1ContentParsingState() :
+	m_numDeferredTabs(0)
 {
 	m_textBuffer.clear();
 }
@@ -64,6 +65,10 @@ void WP1ContentListener::insertCharacter(const uint16_t character)
 	{
 		if (!m_ps->m_isSpanOpened)
 			_openSpan();
+		for (;m_parseState->m_numDeferredTabs > 0; m_parseState->m_numDeferredTabs--)
+		{
+			m_listenerImpl->insertTab();
+		}
 		appendUCS4(m_parseState->m_textBuffer, (uint32_t)character);
 	}
 }
@@ -74,6 +79,10 @@ void WP1ContentListener::insertExtendedCharacter(const uint8_t extendedCharacter
 	{
 		if (!m_ps->m_isSpanOpened)
 			_openSpan();
+		for (;m_parseState->m_numDeferredTabs > 0; m_parseState->m_numDeferredTabs--)
+		{
+			m_listenerImpl->insertTab();
+		}
 		if (extendedCharacter <= 0x20)
 			appendUCS4(m_parseState->m_textBuffer, (uint32_t)0x20);
 		else
@@ -81,16 +90,21 @@ void WP1ContentListener::insertExtendedCharacter(const uint8_t extendedCharacter
 	}
 }
 
-void WP1ContentListener::insertTab(const uint8_t tabType, float tabPosition)
+void WP1ContentListener::insertTab()
 {
 	if (!isUndoOn())
 	{
-		if (!m_ps->m_isSpanOpened)
-			_openSpan();
+		if (!m_ps->m_isParagraphOpened)
+			m_parseState->m_numDeferredTabs++;
 		else
-			_flushText();
+		{
+			if (!m_ps->m_isSpanOpened)
+				_openSpan();
+			else
+				_flushText();
 
-		m_listenerImpl->insertTab();
+			m_listenerImpl->insertTab();
+		}
 	}
 }
 
@@ -100,6 +114,10 @@ void WP1ContentListener::insertEOL()
 	{
 		if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
 			_openSpan();
+		for (;m_parseState->m_numDeferredTabs > 0; m_parseState->m_numDeferredTabs--)
+		{
+			m_listenerImpl->insertTab();
+		}
 
 		if (m_ps->m_isParagraphOpened)
 			_closeParagraph();
@@ -187,6 +205,48 @@ void WP1ContentListener::marginReset(const uint16_t leftMargin, const uint16_t r
 						+ m_ps->m_rightMarginByTabs;
 		}
 		m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent;
+	}
+}
+
+void WP1ContentListener::leftIndent(const uint16_t leftMarginOffset)
+{
+	if (!isUndoOn())
+	{
+		if (m_ps->m_isParagraphOpened)
+			insertTab();
+		else
+		{
+			m_parseState->m_numDeferredTabs = 0;
+			m_ps->m_leftMarginByTabs = (float)((double)leftMarginOffset / 72.0f);
+			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
+						+ m_ps->m_leftMarginByParagraphMarginChange
+						+ m_ps->m_leftMarginByTabs;
+			m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft
+						+ m_ps->m_paragraphTextIndent;
+		}
+	}
+}
+
+void WP1ContentListener::leftRightIndent(const uint16_t leftRightMarginOffset)
+{
+	if (!isUndoOn())
+	{
+		if (m_ps->m_isParagraphOpened)
+			insertTab();
+		else
+		{
+			m_parseState->m_numDeferredTabs = 0;
+			m_ps->m_leftMarginByTabs = m_ps->m_rightMarginByTabs =
+						(float)((double)leftRightMarginOffset / 72.0f);
+			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
+						+ m_ps->m_leftMarginByParagraphMarginChange
+						+ m_ps->m_leftMarginByTabs;
+			m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft
+						+ m_ps->m_paragraphTextIndent;
+			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
+						+ m_ps->m_rightMarginByParagraphMarginChange
+						+ m_ps->m_rightMarginByTabs;
+		}
 	}
 }
 

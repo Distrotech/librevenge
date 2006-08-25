@@ -51,6 +51,8 @@ libwpd_0_8_la_SOURCES = \
 	WP1FixedLengthGroup.cpp \
 	WP1HeaderFooterGroup.cpp \
 	WP1Heuristics.cpp \
+	WP1LeftIndentGroup.cpp \
+	WP1LeftRightIndentGroup.cpp \
 	WP1Listener.cpp \
 	WP1MarginResetGroup.cpp \
 	WP1Parser.cpp \
@@ -194,6 +196,8 @@ libwpd_0_8_la_SOURCES = \
 	WP1FixedLengthGroup.h \
 	WP1HeaderFooterGroup.h \
 	WP1Heuristics.h \
+	WP1LeftIndentGroup.h \
+	WP1LeftRightIndentGroup.h \
 	WP1Listener.h \
 	WP1MarginResetGroup.h \
 	WP1Parser.h \

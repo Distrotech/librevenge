@@ -38,6 +38,7 @@ struct _WP1ContentParsingState
 	_WP1ContentParsingState();
 	~_WP1ContentParsingState();
 	WPXString m_textBuffer;
+	int m_numDeferredTabs;
 };
 
 class WP1ContentListener : public WP1Listener, protected WPXContentListener
@@ -49,7 +50,7 @@ public:
 	void startDocument() { WPXContentListener::startDocument(); }
 	void insertCharacter(const uint16_t character);
 	void insertExtendedCharacter(const uint8_t extendedCharacter);
-	void insertTab(const uint8_t tabType, float tabPosition);
+	void insertTab();
 	void insertBreak(const uint8_t breakType) { WPXContentListener::insertBreak(breakType); }
 	void insertEOL();
 	void attributeChange(const bool isOn, const uint8_t attribute);
@@ -57,6 +58,8 @@ public:
 	void marginReset(const uint16_t leftMargin, const uint16_t rightMargin);
 	void topMarginSet(const uint16_t topMargin) {}
 	void bottomMarginSet(const uint16_t bottomMargin) {}
+	void leftIndent(const uint16_t leftMarginOffset);
+	void leftRightIndent(const uint16_t leftRightMarginOffset);
 	void setTabs(const std::vector<WPXTabStop> tabStops);
 	void headerFooterGroup(const uint8_t headerFooterDefinition, WP1SubDocument *subDocument);
 	void suppressPageCharacteristics(const uint8_t suppressCode) {}
