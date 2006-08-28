@@ -55,6 +55,7 @@ public:
 	void setTabs(const std::vector<WPXTabStop> tabStops) {}
 	void headerFooterGroup(const uint8_t headerFooterDefinition, WP1SubDocument *subDocument);
 	void suppressPageCharacteristics(const uint8_t suppressCode);
+	void justificationChange(const uint8_t justification) {}
 	void endDocument();
 
 protected:

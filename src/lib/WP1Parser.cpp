@@ -101,24 +101,25 @@ void WP1Parser::parseDocument(WPXInputStream *input, WP1Listener *listener)
 			// single character function codes
 			switch (readVal)
 			{
+				case 0x90:
+					listener->attributeChange(true, WP1_ATTRIBUTE_REDLINE);
+					break;
+				case 0x91:
+					listener->attributeChange(false, WP1_ATTRIBUTE_REDLINE);
+					break;
+
 				case 0x92:
 					listener->attributeChange(true, WP1_ATTRIBUTE_STRIKE_OUT);
 					break;
 				case 0x93:
 					listener->attributeChange(false, WP1_ATTRIBUTE_STRIKE_OUT);
 					break;
+
 				case 0x94:
 					listener->attributeChange(true, WP1_ATTRIBUTE_UNDERLINE);
 					break;
 				case 0x95:
 					listener->attributeChange(false, WP1_ATTRIBUTE_UNDERLINE);
-					break;
-
-				case 0x90:
-					listener->attributeChange(true, WP1_ATTRIBUTE_REDLINE);
-					break;
-				case 0x91:
-					listener->attributeChange(false, WP1_ATTRIBUTE_REDLINE);
 					break;
 
 				case 0x9C:
@@ -134,12 +135,33 @@ void WP1Parser::parseDocument(WPXInputStream *input, WP1Listener *listener)
 				case 0xB3:
 					listener->attributeChange(false, WP1_ATTRIBUTE_ITALICS);
 					break;
+
 				case 0xB4:
 					listener->attributeChange(true, WP1_ATTRIBUTE_SHADOW);
 					break;
 				case 0xB5:
 					listener->attributeChange(false, WP1_ATTRIBUTE_SHADOW);
 					break;
+
+				case 0xB6:
+					listener->attributeChange(true, WP1_ATTRIBUTE_OUTLINE);
+					break;
+				case 0xB7:
+					listener->attributeChange(false, WP1_ATTRIBUTE_OUTLINE);
+					break;
+
+				case 0xBC:
+					listener->attributeChange(true, WP1_ATTRIBUTE_SUPERSCRIPT);
+					break;
+				case 0xB9:
+					listener->attributeChange(false, WP1_ATTRIBUTE_SUPERSCRIPT);
+					break;
+
+				case 0xBD:
+					listener->attributeChange(true, WP1_ATTRIBUTE_SUBSCRIPT);
+					break;
+				case 0xB8:
+					listener->attributeChange(false, WP1_ATTRIBUTE_SUBSCRIPT);
 
 				default:
 					// unsupported or undocumented token, ignore

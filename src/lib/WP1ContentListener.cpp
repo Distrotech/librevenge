@@ -132,10 +132,9 @@ void WP1ContentListener::attributeChange(const bool isOn, const uint8_t attribut
 
 	uint32_t textAttributeBit = 0;
 
-	// FIXME: handle all the possible attribute bits
 	switch (attribute)
 	{
-	/*case WP1_ATTRIBUTE_SUBSCRIPT:
+	case WP1_ATTRIBUTE_SUBSCRIPT:
 		textAttributeBit = WPX_SUBSCRIPT_BIT;
 		break;
 	case WP1_ATTRIBUTE_SUPERSCRIPT:
@@ -143,7 +142,7 @@ void WP1ContentListener::attributeChange(const bool isOn, const uint8_t attribut
 		break;
 	case WP1_ATTRIBUTE_OUTLINE:
 		textAttributeBit = WPX_OUTLINE_BIT;
-		break;*/
+		break;
 	case WP1_ATTRIBUTE_ITALICS:
 		textAttributeBit = WPX_ITALICS_BIT;
 		break;
@@ -153,9 +152,6 @@ void WP1ContentListener::attributeChange(const bool isOn, const uint8_t attribut
 	case WP1_ATTRIBUTE_REDLINE:
 		textAttributeBit = WPX_REDLINE_BIT;
 		break;
-	/*case WP1_ATTRIBUTE_DOUBLE_UNDERLINE:
-		textAttributeBit = WPX_DOUBLE_UNDERLINE_BIT;
-		break;			*/
 	case WP1_ATTRIBUTE_BOLD:
 		textAttributeBit = WPX_BOLD_BIT;
 		break;
@@ -246,6 +242,28 @@ void WP1ContentListener::leftRightIndent(const uint16_t leftRightMarginOffset)
 			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
 						+ m_ps->m_rightMarginByParagraphMarginChange
 						+ m_ps->m_rightMarginByTabs;
+		}
+	}
+}
+
+void WP1ContentListener::justificationChange(const uint8_t justification)
+{
+	if (!isUndoOn())
+	{
+		switch (justification)
+		{
+		case 0x00:
+			m_ps->m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_LEFT;
+			break;
+		case 0x01:
+			m_ps->m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_CENTER;
+			break;
+		case 0x02:
+			m_ps->m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_RIGHT;
+			break;
+		case 0x03:
+			m_ps->m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_FULL;
+			break;
 		}
 	}
 }
