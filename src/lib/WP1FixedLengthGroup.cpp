@@ -28,6 +28,7 @@
 #include "WP1SuppressPageCharacteristicsGroup.h"
 #include "WP1UnsupportedFixedLengthGroup.h"
 #include "WP1MarginResetGroup.h"
+#include "WP1MarginReleaseGroup.h"
 #include "WP1TopMarginGroup.h"
 #include "WP1BottomMarginGroup.h"
 #include "WP1ExtendedCharacterGroup.h"
@@ -59,6 +60,8 @@ WP1FixedLengthGroup * WP1FixedLengthGroup::constructFixedLengthGroup(WPXInputStr
 			return new WP1SuppressPageCharacteristicsGroup(input, group);
 		case WP1_LEFT_RIGHT_INDENT_GROUP:
 			return new WP1LeftRightIndentGroup(input, group);
+		case WP1_MARGIN_RELEASE_GROUP:
+			return new WP1MarginReleaseGroup(input, group);
 		case WP1_EXTENDED_CHARACTER_GROUP:
 			return new WP1ExtendedCharacterGroup(input, group);
 		case WP1_POINT_SIZE_GROUP:

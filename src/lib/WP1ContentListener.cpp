@@ -246,6 +246,25 @@ void WP1ContentListener::leftRightIndent(const uint16_t leftRightMarginOffset)
 	}
 }
 
+void WP1ContentListener::leftMarginRelease(const uint16_t release)
+{
+	if (!isUndoOn())
+	{
+		if (!m_ps->m_isParagraphOpened)
+		{
+			if (!m_parseState->m_numDeferredTabs)
+			{
+				m_ps->m_textIndentByTabs -= (float)((double)release / 72.0f);
+				m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange
+					+ m_ps->m_textIndentByTabs;
+			}
+			else
+				m_parseState->m_numDeferredTabs--;
+		}
+		m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent;
+	}
+}
+
 void WP1ContentListener::justificationChange(const uint8_t justification)
 {
 	if (!isUndoOn())

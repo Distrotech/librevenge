@@ -52,6 +52,7 @@ public:
 	void bottomMarginSet(const uint16_t bottomMargin);
 	void leftIndent(const uint16_t leftMarginOffset) { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void leftRightIndent(const uint16_t leftRightMarginOffset) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	void leftMarginRelease(const uint16_t release) {}
 	void setTabs(const std::vector<WPXTabStop> tabStops) {}
 	void headerFooterGroup(const uint8_t headerFooterDefinition, WP1SubDocument *subDocument);
 	void suppressPageCharacteristics(const uint8_t suppressCode);

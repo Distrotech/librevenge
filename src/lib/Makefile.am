@@ -55,6 +55,7 @@ libwpd_0_8_la_SOURCES = \
 	WP1LeftIndentGroup.cpp \
 	WP1LeftRightIndentGroup.cpp \
 	WP1Listener.cpp \
+	WP1MarginReleaseGroup.cpp \
 	WP1MarginResetGroup.cpp \
 	WP1Parser.cpp \
 	WP1Part.cpp \
@@ -201,6 +202,7 @@ libwpd_0_8_la_SOURCES = \
 	WP1LeftIndentGroup.h \
 	WP1LeftRightIndentGroup.h \
 	WP1Listener.h \
+	WP1MarginReleaseGroup.h \
 	WP1MarginResetGroup.h \
 	WP1Parser.h \
 	WP1Part.h \

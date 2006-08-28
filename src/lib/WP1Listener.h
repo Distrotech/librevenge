@@ -53,6 +53,7 @@ public:
 	virtual void bottomMarginSet(const uint16_t bottomMargin) = 0;
 	virtual void leftIndent(const uint16_t leftMarginOffset) = 0;
 	virtual void leftRightIndent(const uint16_t leftRightMarginOffset) = 0;
+	virtual void leftMarginRelease(const uint16_t release) = 0;
 	virtual void setTabs(const std::vector<WPXTabStop> tabStops) = 0;
 	virtual void headerFooterGroup(const uint8_t headerFooterDefinition, WP1SubDocument *subDocument) = 0;
 	virtual void suppressPageCharacteristics(const uint8_t suppressCode) = 0;
