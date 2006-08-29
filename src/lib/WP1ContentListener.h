@@ -65,6 +65,7 @@ public:
 	void headerFooterGroup(const uint8_t headerFooterDefinition, WP1SubDocument *subDocument);
 	void suppressPageCharacteristics(const uint8_t suppressCode) {}
 	void justificationChange(const uint8_t justification);
+	void lineSpacingChange(const uint8_t spacing) { WPXContentListener::lineSpacingChange((float)((double)spacing/2.0f)); }
 	void endDocument() { WPXContentListener::endDocument(); };
 
 protected:

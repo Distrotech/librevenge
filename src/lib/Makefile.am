@@ -61,6 +61,7 @@ libwpd_0_8_la_SOURCES = \
 	WP1Part.cpp \
 	WP1PointSizeGroup.cpp \
 	WP1SetTabsGroup.cpp \
+	WP1SpacingResetGroup.cpp \
 	WP1StylesListener.cpp \
 	WP1SubDocument.cpp \
 	WP1SuppressPageCharacteristicsGroup.cpp \
@@ -208,6 +209,7 @@ libwpd_0_8_la_SOURCES = \
 	WP1Part.h \
 	WP1PointSizeGroup.h \
 	WP1SetTabsGroup.h \
+	WP1SpacingResetGroup.h \
 	WP1StylesListener.h \
 	WP1SubDocument.h \
 	WP1SuppressPageCharacteristicsGroup.h \

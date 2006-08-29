@@ -36,6 +36,7 @@
 #include "WP1LeftIndentGroup.h"
 #include "WP1LeftRightIndentGroup.h"
 #include "WP1JustificationGroup.h"
+#include "WP1SpacingResetGroup.h"
 #include "WP1FileStructure.h"
 #include "libwpd_internal.h"
 
@@ -68,6 +69,8 @@ WP1FixedLengthGroup * WP1FixedLengthGroup::constructFixedLengthGroup(WPXInputStr
 			return new WP1PointSizeGroup(input, group);
 		case WP1_JUSTIFICATION_GROUP:
 			return new WP1JustificationGroup(input, group);
+		case WP1_SPACING_RESET_GROUP:
+			return new WP1SpacingResetGroup(input, group);
 		default:
 			// this is an unhandled group, just skip it
 			return new WP1UnsupportedFixedLengthGroup(input, group);

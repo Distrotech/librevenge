@@ -58,6 +58,7 @@ public:
 	virtual void headerFooterGroup(const uint8_t headerFooterDefinition, WP1SubDocument *subDocument) = 0;
 	virtual void suppressPageCharacteristics(const uint8_t suppressCode) = 0;
 	virtual void justificationChange(const uint8_t justification) = 0;
+	virtual void lineSpacingChange(const uint8_t spacing) = 0;
 	virtual void endDocument() = 0;
 
 };
