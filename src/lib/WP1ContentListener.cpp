@@ -31,7 +31,9 @@
 #define WP1_NUM_TEXT_COLUMS_PER_INCH 12
 
 _WP1ContentParsingState::_WP1ContentParsingState() :
-	m_numDeferredTabs(0)
+	m_numDeferredTabs(0),
+	m_footNoteNumber(0),
+	m_endNoteNumber(0)
 {
 	m_textBuffer.clear();
 }
@@ -48,7 +50,6 @@ WP1ContentListener::WP1ContentListener(std::list<WPXPageSpan> &pageList, std::ve
 	m_subDocuments(subDocuments),
 	m_parseState(new WP1ContentParsingState)
 {
-// Default line is 6 lpi, it means that the caracters are of 12 points
 	*(m_ps->m_fontName) = "Geneva";
 	m_ps->m_fontSize = 12.0f;
 }
@@ -125,6 +126,38 @@ void WP1ContentListener::insertEOL()
 			_closeListElement();
 	}
 }
+
+void WP1ContentListener::insertNote(const WPXNoteType noteType, WP1SubDocument *subDocument)
+{
+	if (!isUndoOn())
+	{
+		_closeSpan();
+		m_ps->m_isNote = true;
+
+		WPXPropertyList propList;
+
+		if (noteType == FOOTNOTE)
+		{
+			propList.insert("libwpd:number", ++(m_parseState->m_footNoteNumber));
+			m_listenerImpl->openFootnote(propList);
+		}
+		else
+		{
+			propList.insert("libwpd:number", ++(m_parseState->m_endNoteNumber));
+			m_listenerImpl->openEndnote(propList);
+		}
+
+		WPXTableList tableList;
+		handleSubDocument(subDocument, false, tableList, 0);
+
+		if (noteType == FOOTNOTE)
+			m_listenerImpl->closeFootnote();
+		else
+			m_listenerImpl->closeEndnote();
+		m_ps->m_isNote = false;
+	}
+}
+
 
 void WP1ContentListener::attributeChange(const bool isOn, const uint8_t attribute)
 {

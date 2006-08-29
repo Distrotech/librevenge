@@ -46,6 +46,7 @@ public:
 	virtual void insertTab() = 0;
 	virtual void insertBreak(const uint8_t breakType) = 0;
 	virtual void insertEOL() = 0;
+	virtual void insertNote(const WPXNoteType noteType, WP1SubDocument *subDocument) = 0;
 	virtual void attributeChange(const bool isOn, const uint8_t attribute) = 0;
 	virtual void fontPointSize(const uint8_t pointSize) = 0;
 	virtual void marginReset(const uint16_t leftMargin, const uint16_t rightMargin) = 0;

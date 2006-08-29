@@ -28,6 +28,7 @@
 #include "WP1UnsupportedVariableLengthGroup.h"
 #include "WP1SetTabsGroup.h"
 #include "WP1HeaderFooterGroup.h"
+#include "WP1FootnoteEndnoteGroup.h"
 #include "WP1FileStructure.h"
 #include "libwpd_internal.h"
 
@@ -44,6 +45,8 @@ WP1VariableLengthGroup * WP1VariableLengthGroup::constructVariableLengthGroup(WP
 			return new WP1SetTabsGroup(input, group);
 		case WP1_HEADER_FOOTER_GROUP:
 			return new WP1HeaderFooterGroup(input, group);
+		case WP1_FOOTNOTE_ENDNOTE_GROUP:
+			return new WP1FootnoteEndnoteGroup(input, group);
 		default:
 			// this is an unhandled group, just skip it
 			return new WP1UnsupportedVariableLengthGroup(input, group);

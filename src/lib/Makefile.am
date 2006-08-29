@@ -49,6 +49,7 @@ libwpd_0_8_la_SOURCES = \
 	WP1ExtendedCharacterGroup.cpp \
 	WP1FileStructure.cpp \
 	WP1FixedLengthGroup.cpp \
+	WP1FootnoteEndnoteGroup.cpp \
 	WP1HeaderFooterGroup.cpp \
 	WP1Heuristics.cpp \
 	WP1JustificationGroup.cpp \
@@ -197,6 +198,7 @@ libwpd_0_8_la_SOURCES = \
 	WP1ExtendedCharacterGroup.h \
 	WP1FileStructure.h \
 	WP1FixedLengthGroup.h \
+	WP1FootnoteEndnoteGroup.h \
 	WP1HeaderFooterGroup.h \
 	WP1Heuristics.h \
 	WP1JustificationGroup.h \
