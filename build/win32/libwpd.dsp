@@ -93,6 +93,110 @@ SOURCE=..\..\src\lib\libwpd_math.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP1BottomMarginGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1ContentListener.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1ExtendedCharacterGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1FileStructure.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1FixedLengthGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1FootnoteEndnoteGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1HeaderFooterGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1Heuristics.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1JustificationGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1LeftIndentGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1LeftRightIndentGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1Listener.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1MarginReleaseGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1MarginResetGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1Parser.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1Part.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1PointSizeGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1SetTabsGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1SpacingResetGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1StylesListener.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1SubDocument.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1SuppressPageCharacteristicsGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1TopMarginGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1UnsupportedFixedLengthGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1UnsupportedVariableLengthGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1VariableLengthGroup.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP3AttributeGroup.cpp
 # End Source File
 # Begin Source File
@@ -586,6 +690,110 @@ SOURCE=..\..\src\lib\libwpd_math.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\libwpd_types.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1BottomMarginGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1ContentListener.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1ExtendedCharacterGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1FileStructure.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1FixedLengthGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1FootnoteEndnoteGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1HeaderFooterGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1Heuristics.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1JustificationGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1LeftIndentGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1LeftRightIndentGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1Listener.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1MarginReleaseGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1MarginResetGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1Parser.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1Part.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1PointSizeGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1SetTabsGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1SpacingResetGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1StylesListener.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1SubDocument.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1SuppressPageCharacteristicsGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1TopMarginGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1UnsupportedFixedLengthGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1UnsupportedVariableLengthGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1VariableLengthGroup.h
 # End Source File
 # Begin Source File
 

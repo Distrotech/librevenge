@@ -39,7 +39,7 @@ WP6OutlineStylePacket::~WP6OutlineStylePacket()
 
 void WP6OutlineStylePacket::_readContents(WPXInputStream *input)
 {
-	unsigned int i;
+	unsigned i;
 
 	m_numPIDs = readU16(input);
 	for (i=0; i<WP6_NUM_LIST_LEVELS; i++) 

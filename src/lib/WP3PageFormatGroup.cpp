@@ -195,6 +195,10 @@ void WP3PageFormatGroup::parse(WP3Listener *listener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling a Page Format group\n"));
 
+#ifdef DEBUG
+    std::vector<WPXTabStop>::const_iterator tabStopsIter;
+#endif
+    
 	switch (getSubGroup())
 	{
 	case WP3_PAGE_FORMAT_GROUP_HORIZONTAL_MARGINS:
@@ -218,12 +222,14 @@ void WP3PageFormatGroup::parse(WP3Listener *listener)
 		break;
 				
 	case WP3_PAGE_FORMAT_GROUP_SET_TABS:
+ #ifdef DEBUG
 		WPD_DEBUG_MSG(("Parsing Set Tabs Group (positions: "));
-		for(std::vector<WPXTabStop>::const_iterator i = m_tabStops.begin(); i != m_tabStops.end(); i++)
+        for(tabStopsIter = m_tabStops.begin(); tabStopsIter != m_tabStops.end(); tabStopsIter++)
 		{
-			WPD_DEBUG_MSG((" %.4f", (*i).m_position));
+			WPD_DEBUG_MSG((" %.4f", (*tabStopsIter).m_position));
 		}
 		WPD_DEBUG_MSG((")\n"));
+#endif
 		listener->setTabs(m_isRelative, m_tabStops);
 		break;
 
