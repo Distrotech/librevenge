@@ -142,7 +142,7 @@ void WPXString::sprintf(const char *format, ...)
 			va_start(args, format);
 			int outsize = vsnprintf(buf, bufsize, format, args);
 			va_end(args);
-			if ((outsize == -1) | (outsize == bufsize) | (outsize == bufsize - 1))
+			if ((outsize == -1) || (outsize == bufsize) || (outsize == bufsize - 1))
 			{
 				bufsize = bufsize * 2;
 				delete [] buf;
