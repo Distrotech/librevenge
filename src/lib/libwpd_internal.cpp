@@ -1116,19 +1116,19 @@ WPXString _numberingTypeToString(WPXNumberingType t)
 	switch (t)
 	{
 	case ARABIC:
-		sListTypeSymbol.sprintf("1");
+		sListTypeSymbol = "1";
 		break;	
 	case LOWERCASE:
-		sListTypeSymbol.sprintf("a");
+		sListTypeSymbol = "a";
 		break;	
 	case UPPERCASE:
-		sListTypeSymbol.sprintf("A");
+		sListTypeSymbol = "A";
 		break;	
  	case LOWERCASE_ROMAN:
-		sListTypeSymbol.sprintf("i");
+		sListTypeSymbol = "i";
 		break;	
  	case UPPERCASE_ROMAN:
-		sListTypeSymbol.sprintf("I");
+		sListTypeSymbol = "I";
 		break;
 	}
 

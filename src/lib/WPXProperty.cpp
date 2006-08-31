@@ -168,14 +168,10 @@ WPXBoolProperty::WPXBoolProperty(const bool val)  :
 
 WPXString WPXBoolProperty::getStr() const 
 { 
-	WPXString str; 
-
 	if (getInt())
-		str.sprintf("true"); 
+		return "true"; 
 	else
-		str.sprintf("false"); 
-
-	return str; 
+		return "false"; 
 }
 
 WPXProperty * WPXBoolProperty::clone() const
