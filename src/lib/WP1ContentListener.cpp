@@ -246,13 +246,12 @@ void WP1ContentListener::leftIndent(const uint16_t leftMarginOffset)
 		else
 		{
 			m_parseState->m_numDeferredTabs = 0;
-			m_ps->m_leftMarginByTabs = (float)((double)leftMarginOffset / 72.0f);
+			m_ps->m_leftMarginByTabs += (float)((double)leftMarginOffset / 72.0f);
 			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
 						+ m_ps->m_leftMarginByParagraphMarginChange
 						+ m_ps->m_leftMarginByTabs;
-			m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft
-						+ m_ps->m_paragraphTextIndent;
 		}
+		m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent;
 	}
 }
 
@@ -265,17 +264,16 @@ void WP1ContentListener::leftRightIndent(const uint16_t leftRightMarginOffset)
 		else
 		{
 			m_parseState->m_numDeferredTabs = 0;
-			m_ps->m_leftMarginByTabs = m_ps->m_rightMarginByTabs =
-						(float)((double)leftRightMarginOffset / 72.0f);
+			m_ps->m_leftMarginByTabs += (float)((double)leftRightMarginOffset / 72.0f);
+			m_ps->m_rightMarginByTabs += (float)((double)leftRightMarginOffset / 72.0f);
 			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
 						+ m_ps->m_leftMarginByParagraphMarginChange
 						+ m_ps->m_leftMarginByTabs;
-			m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft
-						+ m_ps->m_paragraphTextIndent;
 			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
 						+ m_ps->m_rightMarginByParagraphMarginChange
 						+ m_ps->m_rightMarginByTabs;
 		}
+		m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent;
 	}
 }
 
