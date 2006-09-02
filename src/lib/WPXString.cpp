@@ -134,11 +134,11 @@ void WPXString::sprintf(const char *format, ...)
 	va_list args;
 
 	int bufsize = FIRST_BUF_SIZE;
-	char firstBuffer[bufsize];
-	char * buf = firstBuffer;
+	char * buf = NULL;
 
 	while(true)
 	{
+			buf = new char[bufsize];
 			va_start(args, format);
 			int outsize = vsnprintf(buf, bufsize, format, args);
 			va_end(args);
@@ -150,17 +150,12 @@ void WPXString::sprintf(const char *format, ...)
 			else
 				break;
 
-			if (buf != firstBuffer)
-			{
-				delete [] buf;
-				buf = new char[bufsize];
-			}
+			delete [] buf;
 	}
 
 	clear();
 	append(buf);
-	if (buf != firstBuffer)
-		delete [] buf;
+	delete [] buf;
 }
 
 void WPXString::append(const WPXString &s)
