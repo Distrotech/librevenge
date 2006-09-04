@@ -333,6 +333,34 @@ void WP1ContentListener::setTabs(const std::vector<WPXTabStop> tabStops)
 	}
 }
 
+void WP1ContentListener::flushRightOn()
+{
+	if (!isUndoOn())
+	{
+		if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
+		{
+			m_parseState->m_numDeferredTabs = 0;
+			m_ps->m_tempParagraphJustification = WPX_PARAGRAPH_JUSTIFICATION_RIGHT;
+		}
+		else
+			insertTab();
+	}
+}
+
+void WP1ContentListener::centerOn()
+{
+	if (!isUndoOn())
+	{
+		if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
+		{
+			m_parseState->m_numDeferredTabs = 0;
+			m_ps->m_tempParagraphJustification = WPX_PARAGRAPH_JUSTIFICATION_CENTER;
+		}
+		else
+			insertTab();
+	}
+}
+
 void WP1ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice)
 {
 	// save our old parsing state on our "stack"

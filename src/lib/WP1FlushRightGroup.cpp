@@ -1,7 +1,5 @@
 /* libwpd
- * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
- * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
- * Copyright (c) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,29 +22,22 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP1FIXEDLENGTHGROUP_H
-#define WP1FIXEDLENGTHGROUP_H
+#include "WP1FlushRightGroup.h"
+#include "libwpd_internal.h"
+#include <string>
 
-#include "WP1Part.h"
-
-class WP1FixedLengthGroup : public WP1Part
+WP1FlushRightGroup::WP1FlushRightGroup(WPXInputStream *input, uint8_t group) :
+	WP1FixedLengthGroup(group)
 {
- public:
-	WP1FixedLengthGroup(uint8_t group); // WP1FixedLengthGroup should _never_ be constructed, only its inherited classes
-	virtual ~WP1FixedLengthGroup() {}
-	
-	static WP1FixedLengthGroup * constructFixedLengthGroup(WPXInputStream *input, uint8_t group);
+	_read(input);
+}
 
-	static bool isGroupConsistent(WPXInputStream *input, const uint8_t groupID);
+WP1FlushRightGroup::~WP1FlushRightGroup()
+{
+}
 
- protected:
-	void _read(WPXInputStream *input);
- 	virtual void _readContents(WPXInputStream *input) {};
-
-	const uint8_t getGroup() const { return m_group; }
-
- private:
-	uint8_t m_group;
-};
-
-#endif /* WP1FIXEDLENGTHGROUP_H */
+void WP1FlushRightGroup::parse(WP1Listener *listener)
+{
+	WPD_DEBUG_MSG(("WordPerfect: handling the Flush Right group\n"));
+	listener->flushRightOn();
+}

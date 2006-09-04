@@ -45,10 +45,12 @@ libwpd_0_8_la_SOURCES = \
 	libwpd_internal.cpp \
 	libwpd_math.cpp \
 	WP1BottomMarginGroup.cpp \
+	WP1CenterTextGroup.cpp \
 	WP1ContentListener.cpp \
 	WP1ExtendedCharacterGroup.cpp \
 	WP1FileStructure.cpp \
 	WP1FixedLengthGroup.cpp \
+	WP1FlushRightGroup.cpp \
 	WP1FootnoteEndnoteGroup.cpp \
 	WP1HeaderFooterGroup.cpp \
 	WP1Heuristics.cpp \
@@ -194,10 +196,12 @@ libwpd_0_8_la_SOURCES = \
 	libwpd_math.h \
 	libwpd_types.h \
 	WP1BottomMarginGroup.h \
+	WP1CenterTextGroup.h \
 	WP1ContentListener.h \
 	WP1ExtendedCharacterGroup.h \
 	WP1FileStructure.h \
 	WP1FixedLengthGroup.h \
+	WP1FlushRightGroup.h \
 	WP1FootnoteEndnoteGroup.h \
 	WP1HeaderFooterGroup.h \
 	WP1Heuristics.h \

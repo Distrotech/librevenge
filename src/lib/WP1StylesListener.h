@@ -59,6 +59,10 @@ public:
 	void suppressPageCharacteristics(const uint8_t suppressCode);
 	void justificationChange(const uint8_t justification) {}
 	void lineSpacingChange(const uint8_t spacing) {}
+	void flushRightOn() {}
+	void flushRightOff() {}
+	void centerOn() {}
+	void centerOff() {}
 	void endDocument();
 
 protected:

@@ -315,11 +315,11 @@ void WP6ContentListener::insertTab(const uint8_t tabType, float tabPosition)
 			// Begin of code to be removed when the TabGroup is properly implemented
 			case WP6_TAB_GROUP_CENTER_ON_MARGINS:
 			case WP6_TAB_GROUP_CENTER_ON_CURRENT_POSITION:
-				m_ps->m_tempParagraphJustification = WP6_PARAGRAPH_JUSTIFICATION_CENTER;
+				m_ps->m_tempParagraphJustification = WPX_PARAGRAPH_JUSTIFICATION_CENTER;
 				break;
 
 			case WP6_TAB_GROUP_FLUSH_RIGHT:
-				m_ps->m_tempParagraphJustification = WP6_PARAGRAPH_JUSTIFICATION_RIGHT;
+				m_ps->m_tempParagraphJustification = WPX_PARAGRAPH_JUSTIFICATION_RIGHT;
 				break;
 			// End of code to be removed when the TabGroup is properly implemented
 

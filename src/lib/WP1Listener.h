@@ -60,6 +60,10 @@ public:
 	virtual void suppressPageCharacteristics(const uint8_t suppressCode) = 0;
 	virtual void justificationChange(const uint8_t justification) = 0;
 	virtual void lineSpacingChange(const uint8_t spacing) = 0;
+	virtual void flushRightOn() = 0;
+	virtual void flushRightOff() = 0;
+	virtual void centerOn() = 0;
+	virtual void centerOff() = 0;
 	virtual void endDocument() = 0;
 
 };
