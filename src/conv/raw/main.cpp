@@ -83,6 +83,7 @@ int main(int argc, char *argv[])
 	if (confidence == WPD_CONFIDENCE_NONE || confidence == WPD_CONFIDENCE_POOR)
 	{
 		printf("ERROR: Unsupported file format!\n");
+		delete gsfInput;
 		return 1;
 	}
 	
