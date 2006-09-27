@@ -97,6 +97,10 @@ SOURCE=..\..\src\lib\WP1BottomMarginGroup.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP1CenterTextGroup.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP1ContentListener.cpp
 # End Source File
 # Begin Source File
@@ -110,6 +114,10 @@ SOURCE=..\..\src\lib\WP1FileStructure.cpp
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP1FixedLengthGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1FlushRightGroup.cpp
 # End Source File
 # Begin Source File
 
@@ -697,6 +705,10 @@ SOURCE=..\..\src\lib\WP1BottomMarginGroup.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP1CenterTextGroup.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP1ContentListener.h
 # End Source File
 # Begin Source File
@@ -710,6 +722,10 @@ SOURCE=..\..\src\lib\WP1FileStructure.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP1FixedLengthGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1FlushRightGroup.h
 # End Source File
 # Begin Source File
 

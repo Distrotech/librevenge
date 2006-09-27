@@ -19,19 +19,34 @@ CFLAGSCXX+=-frtti
 SLOFILES= \
 	$(SLO)$/libwpd_internal.obj \
 	$(SLO)$/libwpd_math.obj \
+	$(SLO)$/WP1BottomMarginGroup.obj \
+	$(SLO)$/WP1CenterTextGroup.obj \
 	$(SLO)$/WP1ContentListener.obj \
+	$(SLO)$/WP1ExtendedCharacterGroup.obj \
 	$(SLO)$/WP1FileStructure.obj \
+	$(SLO)$/WP1FixedLengthGroup.obj \
+	$(SLO)$/WP1FlushRightGroup.obj \
+	$(SLO)$/WP1FootnoteEndnoteGroup.obj \
 	$(SLO)$/WP1HeaderFooterGroup.obj \
 	$(SLO)$/WP1Heuristics.obj \
+	$(SLO)$/WP1JustificationGroup.obj \
+	$(SLO)$/WP1LeftIndentGroup.obj \
+	$(SLO)$/WP1LeftRightIndentGroup.obj \
 	$(SLO)$/WP1Listener.obj \
+	$(SLO)$/WP1MarginReleaseGroup.obj \
 	$(SLO)$/WP1MarginResetGroup.obj \
-	$(SLO)$/WP1MultiByteFunctionGroup.obj \
 	$(SLO)$/WP1Parser.obj \
 	$(SLO)$/WP1Part.obj \
+	$(SLO)$/WP1PointSizeGroup.obj \
+	$(SLO)$/WP1SetTabsGroup.obj \
+	$(SLO)$/WP1SpacingResetGroup.obj \
 	$(SLO)$/WP1StylesListener.obj \
 	$(SLO)$/WP1SubDocument.obj \
 	$(SLO)$/WP1SuppressPageCharacteristicsGroup.obj \
-	$(SLO)$/WP1UnsupportedMultiByteFunctionGroup.obj \
+	$(SLO)$/WP1TopMarginGroup.obj \
+	$(SLO)$/WP1UnsupportedFixedLengthGroup.obj \
+	$(SLO)$/WP1UnsupportedVariableLengthGroup.obj \
+	$(SLO)$/WP1VariableLengthGroup.obj \
 	$(SLO)$/WP3AttributeGroup.obj \
 	$(SLO)$/WP3ContentListener.obj \
 	$(SLO)$/WP3DefinitionGroup.obj \
@@ -136,21 +151,21 @@ SLOFILES= \
 	$(SLO)$/WP6UnsupportedFixedLengthGroup.obj \
 	$(SLO)$/WP6UnsupportedVariableLengthGroup.obj \
 	$(SLO)$/WP6VariableLengthGroup.obj \
-	$(SLO)$/WPXPageSpan.obj \
+	$(SLO)$/WPDocument.obj \
 	$(SLO)$/WPXContentListener.obj \
 	$(SLO)$/WPXHeader.obj \
 	$(SLO)$/WPXListener.obj \
 	$(SLO)$/WPXMemoryStream.obj \
-	$(SLO)$/WPXTable.obj \
+	$(SLO)$/WPXPageSpan.obj \
 	$(SLO)$/WPXParser.obj \
 	$(SLO)$/WPXPart.obj \
 	$(SLO)$/WPXProperty.obj \
 	$(SLO)$/WPXPropertyList.obj \
+	$(SLO)$/WPXPropertyListVector.obj \
 	$(SLO)$/WPXString.obj \
 	$(SLO)$/WPXStylesListener.obj \
 	$(SLO)$/WPXSubDocument.obj \
-	$(SLO)$/WPXPropertyListVector.obj \
-	$(SLO)$/WPDocument.obj
+	$(SLO)$/WPXTable.obj
 
 LIB1ARCHIV=$(LB)$/libwpdlib.a
 LIB1TARGET=$(SLB)$/$(TARGET).lib
