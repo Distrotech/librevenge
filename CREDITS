@@ -29,6 +29,8 @@ Smokey Ardisson <alqahira@mindspring.com>		WordPerfect 6+ Arabic
 Kamran Khan <sum1_abi@yahoo.com>			Audit libwpd with more than 46k
 							documents and help to improve
 							considerably libwpd stability
+Andrew Ziem <ahziem1@mailbolt.com>			Fix memory leak in standalone
+							WordPerfect converters.
 
 Thanks
 ------
