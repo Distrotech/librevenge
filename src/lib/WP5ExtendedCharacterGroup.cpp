@@ -1,5 +1,5 @@
 /* libwpd
- * Copyright (C) 2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2002 Ariya Hidayat <ariyahidayat@yahoo.de>
  * Copyright (C) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)

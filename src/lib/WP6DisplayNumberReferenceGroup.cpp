@@ -1,6 +1,6 @@
 
 /* libwpd
- * Copyright (C) 2002 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
  *  
  * This library is free software; you can redistribute it and/or

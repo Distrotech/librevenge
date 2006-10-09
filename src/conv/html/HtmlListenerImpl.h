@@ -1,5 +1,5 @@
 /* libwpd
- * Copyright (C) 2002-2005 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2002-2005 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2005 Net Integration Technologies (http://www.net-itech.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
  *
