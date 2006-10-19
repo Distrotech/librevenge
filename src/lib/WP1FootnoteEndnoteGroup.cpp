@@ -37,6 +37,8 @@ WP1FootnoteEndnoteGroup::WP1FootnoteEndnoteGroup(WPXInputStream *input, uint8_t 
 
 WP1FootnoteEndnoteGroup::~WP1FootnoteEndnoteGroup()
 {
+	if (m_subDocument)
+		delete m_subDocument;
 }
 
 void WP1FootnoteEndnoteGroup::_readContents(WPXInputStream *input)
