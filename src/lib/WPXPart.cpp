@@ -25,6 +25,6 @@
 
 #include "WPXPart.h"
 
-WPXPart::WPXPart(WPXInputStream *input)
+WPXPart::WPXPart(WPXInputStream * /* input */)
 {
 }

@@ -32,7 +32,7 @@ WP6FootnoteEndnoteGroup::WP6FootnoteEndnoteGroup(WPXInputStream *input) :
 	_read(input);
 }
 
-void WP6FootnoteEndnoteGroup::_readContents(WPXInputStream *input)
+void WP6FootnoteEndnoteGroup::_readContents(WPXInputStream * /* input */)
 {
 }
 

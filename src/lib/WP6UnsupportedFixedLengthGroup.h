@@ -32,10 +32,10 @@ class WP6UnsupportedFixedLengthGroup : public WP6FixedLengthGroup
 {
  public:
 	WP6UnsupportedFixedLengthGroup(WPXInputStream *input, uint8_t groupID);	
-	void parse(WP6Listener *listener) {}
+	void parse(WP6Listener * /* listener */) {}
 	
  protected:
-	void _readContents(WPXInputStream *input) {}
+	void _readContents(WPXInputStream * /* input */) {}
 };
 
 #endif /* WP6UNSUPPORTEDFIXEDLENGTHGROUP_H */

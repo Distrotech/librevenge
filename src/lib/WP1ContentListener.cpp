@@ -318,7 +318,7 @@ void WP1ContentListener::justificationChange(const uint8_t justification)
 	}
 }
 
-void WP1ContentListener::headerFooterGroup(const uint8_t headerFooterDefinition, WP1SubDocument *subDocument)
+void WP1ContentListener::headerFooterGroup(const uint8_t /* headerFooterDefinition */, WP1SubDocument *subDocument)
 {
 	if (subDocument)
 		m_subDocuments.push_back(subDocument);			
@@ -361,7 +361,8 @@ void WP1ContentListener::centerOn()
 	}
 }
 
-void WP1ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice)
+void WP1ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool /* isHeaderFooter */,
+						WPXTableList /* tableList */, int /* nextTableIndice */)
 {
 	// save our old parsing state on our "stack"
 	WP1ContentParsingState *oldParseState = m_parseState;

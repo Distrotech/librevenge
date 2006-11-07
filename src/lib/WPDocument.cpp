@@ -167,8 +167,6 @@ WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input, bool part
 
 		return WPD_CONFIDENCE_NONE;
 	}
-
-	return WPD_CONFIDENCE_NONE;
 }
 
 /**
@@ -263,7 +261,7 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerIm
 			{
 				WPD_DEBUG_MSG(("WordPerfect: Mostly likely the file format is WP Mac 1.x.\n\n"));
 				WPD_DEBUG_MSG(("WordPerfect: Using the WP Mac 1.x parser.\n\n"));
-				WP1Parser *parser = new WP1Parser(document);
+				parser = new WP1Parser(document);
 				parser->parse(listenerImpl);
 				DELETEP(parser);
 			}
@@ -271,7 +269,7 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerIm
 			{
 				WPD_DEBUG_MSG(("WordPerfect: Mostly likely the file format is WP4.2.\n\n"));
 				WPD_DEBUG_MSG(("WordPerfect: Using the WP4.2 parser.\n\n"));
-				WP42Parser *parser = new WP42Parser(document);
+				parser = new WP42Parser(document);
 				parser->parse(listenerImpl);
 				DELETEP(parser);
 			}

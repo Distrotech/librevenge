@@ -38,7 +38,7 @@ public:
 	WP42UnsupportedMultiByteFunctionGroup(WPXInputStream *input, uint8_t group);
 
 	void _readContents(WPXInputStream *input);
-	void parse(WP42Listener *listener) {}
+	void parse(WP42Listener * /* listener */) {}
 };
 
 #endif /* WP42UNSUPPORTEDMULTIBYTEFUNCTIONGROUP_H */

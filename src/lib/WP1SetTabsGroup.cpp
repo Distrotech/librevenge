@@ -49,7 +49,7 @@ void WP1SetTabsGroup::_readContents(WPXInputStream *input)
 
 	while ((tmpTabType = read8(input)) != (int8_t)0xff)
 	{
-		float tmpTabPosition = (float)((double)readU16(input, true) / 72.0f);
+		tmpTabPosition = (float)((double)readU16(input, true) / 72.0f);
 
 		if (tmpTabType < 0)
 		{

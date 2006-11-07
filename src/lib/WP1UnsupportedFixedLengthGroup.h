@@ -38,7 +38,7 @@ public:
 	WP1UnsupportedFixedLengthGroup(WPXInputStream *input, uint8_t group);
 
 	void _readContents(WPXInputStream *input);
-	void parse(WP1Listener *listener) {}
+	void parse(WP1Listener * /* listener */) {}
 };
 
 #endif /* WP1UNSUPPORTEDFIXEDLENGTHGROUP_H */

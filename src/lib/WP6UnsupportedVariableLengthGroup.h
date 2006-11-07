@@ -35,7 +35,7 @@ class WP6UnsupportedVariableLengthGroup : public WP6VariableLengthGroup
 {
  public:
 	WP6UnsupportedVariableLengthGroup(WPXInputStream *input);	
-	void parse(WP6Listener *listener) {}
+	void parse(WP6Listener * /* listener */) {}
 };
 
 #endif /* WP6UNSUPPORTEDVARIABLELENGTHGROUP_H */

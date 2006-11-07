@@ -120,7 +120,7 @@ void WP5StylesListener::pageMarginChange(const uint8_t side, const uint16_t marg
 	//}
 }
 
-void WP5StylesListener::pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool isPersistent)
+void WP5StylesListener::pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool /* isPersistent */)
 {
 	//if (!isUndoOn())
 	//{
@@ -250,7 +250,7 @@ void WP5StylesListener::startTable()
 	}
 }
 
-void WP5StylesListener::insertRow(const uint16_t rowHeight, const bool isMinimumHeight, const bool isHeaderRow)
+void WP5StylesListener::insertRow(const uint16_t /* rowHeight */, const bool /* isMinimumHeight */, const bool /* isHeaderRow */)
 {
 	if (!isUndoOn()) 
 	{
@@ -260,9 +260,9 @@ void WP5StylesListener::insertRow(const uint16_t rowHeight, const bool isMinimum
 }
 
 void WP5StylesListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan, const uint8_t borderBits, 
-				  const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
-				  const RGBSColor * cellBorderColor, const WPXVerticalAlignment cellVerticalAlignment, 
-				  const bool useCellAttributes, const uint32_t cellAttributes)
+				  const RGBSColor * /* cellFgColor */, const RGBSColor * /* cellBgColor */,
+				  const RGBSColor * /* cellBorderColor */, const WPXVerticalAlignment /* cellVerticalAlignment */, 
+				  const bool /* useCellAttributes */, const uint32_t /* cellAttributes */)
 {
 	if (!isUndoOn())
 	{
@@ -271,7 +271,8 @@ void WP5StylesListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan,
 	}
 }
 
-void WP5StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice)
+void WP5StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter,
+						WPXTableList tableList, int /* nextTableIndice */)
 {
 	// We don't want to actual insert anything in the case of a sub-document, but we
 	// do want to capture whatever table-related information is within it..

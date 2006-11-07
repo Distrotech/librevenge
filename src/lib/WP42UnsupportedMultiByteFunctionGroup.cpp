@@ -33,7 +33,7 @@ WP42UnsupportedMultiByteFunctionGroup::WP42UnsupportedMultiByteFunctionGroup(WPX
 	_read(input);
 }
 
-void WP42UnsupportedMultiByteFunctionGroup::_readContents(WPXInputStream *input)
+void WP42UnsupportedMultiByteFunctionGroup::_readContents(WPXInputStream * /* input */)
 {
 	WPD_DEBUG_MSG(("WordPerfect: Handling an unsupported variable length group\n"));
 };

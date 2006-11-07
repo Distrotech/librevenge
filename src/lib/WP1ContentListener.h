@@ -58,14 +58,14 @@ public:
 	void attributeChange(const bool isOn, const uint8_t attribute);
 	void fontPointSize(const uint8_t pointSize);
 	void marginReset(const uint16_t leftMargin, const uint16_t rightMargin);
-	void topMarginSet(const uint16_t topMargin) {}
-	void bottomMarginSet(const uint16_t bottomMargin) {}
+	void topMarginSet(const uint16_t /* topMargin */) {}
+	void bottomMarginSet(const uint16_t /* bottomMargin */) {}
 	void leftIndent(const uint16_t leftMarginOffset);
 	void leftRightIndent(const uint16_t leftRightMarginOffset);
 	void leftMarginRelease(const uint16_t release);
 	void setTabs(const std::vector<WPXTabStop> tabStops);
 	void headerFooterGroup(const uint8_t headerFooterDefinition, WP1SubDocument *subDocument);
-	void suppressPageCharacteristics(const uint8_t suppressCode) {}
+	void suppressPageCharacteristics(const uint8_t /* suppressCode */) {}
 	void justificationChange(const uint8_t justification);
 	void lineSpacingChange(const uint8_t spacing) { WPXContentListener::lineSpacingChange((float)((double)spacing/2.0f)); }
 	void flushRightOn();

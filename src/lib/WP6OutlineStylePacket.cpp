@@ -27,7 +27,7 @@
 #include "WP6OutlineStylePacket.h"
 #include "libwpd_internal.h"
 
-WP6OutlineStylePacket::WP6OutlineStylePacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize) 
+WP6OutlineStylePacket::WP6OutlineStylePacket(WPXInputStream *input, int /* id */, uint32_t dataOffset, uint32_t dataSize) 
 	: WP6PrefixDataPacket(input)
 {
 	_read(input, dataOffset, dataSize);

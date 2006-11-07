@@ -40,7 +40,8 @@ WP6CharacterGroup_SetAlignmentCharacterSubGroup::WP6CharacterGroup_SetAlignmentC
 	m_character = (charWord & 0xFF);
 }
 
-void WP6CharacterGroup_SetAlignmentCharacterSubGroup::parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const
+void WP6CharacterGroup_SetAlignmentCharacterSubGroup::parse(WP6Listener *listener, const uint8_t /* numPrefixIDs */,
+				uint16_t const * /* prefixIDs */) const
 {
 	const uint16_t *chars;
 	int len;
@@ -61,7 +62,7 @@ WP6CharacterGroup_ColorSubGroup::WP6CharacterGroup_ColorSubGroup(WPXInputStream 
 	WPD_DEBUG_MSG(("WordPerfect: Character Group Color subgroup info (red: %i, green: %i, blue: %i)\n", m_red, m_green, m_blue));
 }
 
-void WP6CharacterGroup_ColorSubGroup::parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const
+void WP6CharacterGroup_ColorSubGroup::parse(WP6Listener *listener, const uint8_t /* numPrefixIDs */, uint16_t const * /* prefixIDs */) const
 {
 	listener->characterColorChange(m_red, m_green, m_blue);
 }
@@ -76,7 +77,8 @@ WP6CharacterGroup_CharacterShadingChangeSubGroup::WP6CharacterGroup_CharacterSha
 	WPD_DEBUG_MSG(("WordPerfect: Character Group Character Shading Change subgroup info (shading: %i)\n", m_shading));
 }
 
-void WP6CharacterGroup_CharacterShadingChangeSubGroup::parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const
+void WP6CharacterGroup_CharacterShadingChangeSubGroup::parse(WP6Listener *listener, const uint8_t /* numPrefixIDs */,
+								uint16_t const * /* prefixIDs */) const
 {
 	listener->characterShadingChange(m_shading);
 }
@@ -94,7 +96,7 @@ WP6CharacterGroup_FontFaceChangeSubGroup::WP6CharacterGroup_FontFaceChangeSubGro
 	WPD_DEBUG_MSG(("WordPerfect: Character Group Font Face Change subgroup info (old matched point size: %i, hash: %i, matched font index: %i, matched font point size: %i\n", m_oldMatchedPointSize, m_hash, m_matchedFontIndex, m_matchedFontPointSize));
 }
 
-void WP6CharacterGroup_FontFaceChangeSubGroup::parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const
+void WP6CharacterGroup_FontFaceChangeSubGroup::parse(WP6Listener *listener, const uint8_t /* numPrefixIDs */, uint16_t const *prefixIDs) const
 {
 	WPD_DEBUG_MSG(("WordPerfect: FontFaceChangeSubGroup parsing\n"));
 	// TODO: check that we have 1 prefix id
@@ -112,7 +114,7 @@ WP6CharacterGroup_FontSizeChangeSubGroup::WP6CharacterGroup_FontSizeChangeSubGro
 	WPD_DEBUG_MSG(("WordPerfect: Character Group Font Size Change subgroup info (desired font point size: %i\n", m_desiredFontPointSize));
 }
 
-void WP6CharacterGroup_FontSizeChangeSubGroup::parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const
+void WP6CharacterGroup_FontSizeChangeSubGroup::parse(WP6Listener *listener, const uint8_t /* numPrefixIDs */, uint16_t const *prefixIDs) const
 {
 	WPD_DEBUG_MSG(("WordPerfect: FontSizeChangeSubGroup parsing\n"));
 	// TODO: check that we have 1 prefix id
@@ -135,7 +137,8 @@ WP6CharacterGroup_SetDotLeaderCharactersSubGroup::WP6CharacterGroup_SetDotLeader
 	m_numberOfSpaces = readU8(input);
 }
 
-void WP6CharacterGroup_SetDotLeaderCharactersSubGroup::parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const
+void WP6CharacterGroup_SetDotLeaderCharactersSubGroup::parse(WP6Listener *listener, const uint8_t /* numPrefixIDs */,
+								uint16_t const * /* prefixIDs */) const
 {
 	const uint16_t *chars;
 	int len;
@@ -156,7 +159,8 @@ WP6CharacterGroup_ParagraphNumberOnSubGroup::WP6CharacterGroup_ParagraphNumberOn
 	m_flag = readU8(input);
 }
 
-void WP6CharacterGroup_ParagraphNumberOnSubGroup::parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const
+void WP6CharacterGroup_ParagraphNumberOnSubGroup::parse(WP6Listener *listener, const uint8_t /* numPrefixIDs */,
+							uint16_t const * /* prefixIDs */) const
 {
 	listener->paragraphNumberOn(m_outlineHash, m_level, m_flag);
 }
@@ -173,7 +177,8 @@ WP6CharacterGroup_TableDefinitionOnSubGroup::WP6CharacterGroup_TableDefinitionOn
 	// TODO: add the remaining table properties here
 }
 
-void WP6CharacterGroup_TableDefinitionOnSubGroup::parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const
+void WP6CharacterGroup_TableDefinitionOnSubGroup::parse(WP6Listener *listener, const uint8_t /* numPrefixIDs */,
+							uint16_t const * /* prefixIDs */) const
 {
 	listener->defineTable(m_position, m_leftOffset);
 }
@@ -182,11 +187,12 @@ void WP6CharacterGroup_TableDefinitionOnSubGroup::parse(WP6Listener *listener, c
  * WP6CharacterGroup_TableDefinitionOffSubGroup
  *************************************************************************/
 
-WP6CharacterGroup_TableDefinitionOffSubGroup::WP6CharacterGroup_TableDefinitionOffSubGroup(WPXInputStream *input)
+WP6CharacterGroup_TableDefinitionOffSubGroup::WP6CharacterGroup_TableDefinitionOffSubGroup(WPXInputStream * /* input */)
 {
 }
 
-void WP6CharacterGroup_TableDefinitionOffSubGroup::parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const
+void WP6CharacterGroup_TableDefinitionOffSubGroup::parse(WP6Listener *listener, const uint8_t /* numPrefixIDs */,
+							uint16_t const * /* prefixIDs */) const
 {
 	// the table is degined now; start the table
 	listener->startTable();
@@ -210,7 +216,7 @@ WP6CharacterGroup_TableColumnSubGroup::WP6CharacterGroup_TableColumnSubGroup(WPX
 	m_currencyIndex = readU8(input);
 }
 
-void WP6CharacterGroup_TableColumnSubGroup::parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const
+void WP6CharacterGroup_TableColumnSubGroup::parse(WP6Listener *listener, const uint8_t /* numPrefixIDs */, uint16_t const * /* prefixIDs */) const
 {
 	listener->addTableColumnDefinition(m_width, m_leftGutter, m_rigthGutter, m_attributes, m_alignment);
 }

@@ -40,12 +40,12 @@ public:
 	WP42StylesListener(std::list<WPXPageSpan> &pageList, std::vector<WP42SubDocument *> &subDocuments);
 
 	void startDocument() {}
-	void insertCharacter(const uint16_t character) { if (!isUndoOn()) m_currentPageHasContent = true; }
-	void insertTab(const uint8_t tabType, float tabPosition) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	void insertCharacter(const uint16_t /* character */) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	void insertTab(const uint8_t /* tabType */, float /* tabPosition */) { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void insertEOL() { if (!isUndoOn()) m_currentPageHasContent = true; }
  	void insertBreak(const uint8_t breakType);
-	void attributeChange(const bool isOn, const uint8_t attribute) {}
-	void marginReset(const uint8_t leftMargin, const uint8_t rightMargin) {}
+	void attributeChange(const bool /* isOn */, const uint8_t /* attribute */) {}
+	void marginReset(const uint8_t /* leftMargin */, const uint8_t /* rightMargin */) {}
 	void headerFooterGroup(const uint8_t headerFooterDefinition, WP42SubDocument *subDocument);
 	void suppressPageCharacteristics(const uint8_t suppressCode);
 	void endDocument();

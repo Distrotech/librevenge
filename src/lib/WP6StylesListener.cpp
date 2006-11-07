@@ -108,7 +108,7 @@ void WP6StylesListener::pageMarginChange(const uint8_t side, const uint16_t marg
 	}
 }
 
-void WP6StylesListener::pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool isPersistent)
+void WP6StylesListener::pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool /* isPersistent */)
 {
 	if (!isUndoOn())
 	{
@@ -212,7 +212,7 @@ void WP6StylesListener::suppressPageCharacteristics(const uint8_t suppressCode)
 	}
 }
 
-void WP6StylesListener::defineTable(const uint8_t position, const uint16_t leftOffset)
+void WP6StylesListener::defineTable(const uint8_t /* position */, const uint16_t /* leftOffset */)
 {
 	if (!isUndoOn()) 
 	{			
@@ -243,7 +243,7 @@ void WP6StylesListener::endTable()
 	}
 }
 
-void WP6StylesListener::insertRow(const uint16_t rowHeight, const bool isMinimumHeight, const bool isHeaderRow)
+void WP6StylesListener::insertRow(const uint16_t /* rowHeight */, const bool /* isMinimumHeight */, const bool /* isHeaderRow */)
 {
 	if (!isUndoOn()) 
 	{
@@ -253,9 +253,9 @@ void WP6StylesListener::insertRow(const uint16_t rowHeight, const bool isMinimum
 }
 
 void WP6StylesListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan, const uint8_t borderBits, 
-				const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
-				const RGBSColor * cellBorderColor, const WPXVerticalAlignment cellVerticalAlignment, 
-				const bool useCellAttributes, const uint32_t cellAttributes)
+				const RGBSColor * /* cellFgColor */, const RGBSColor * /* cellBgColor */,
+				const RGBSColor * /* cellBorderColor */, const WPXVerticalAlignment /* cellVerticalAlignment */, 
+				const bool /* useCellAttributes */, const uint32_t /* cellAttributes */)
 {
 	if (!isUndoOn())
 	{
@@ -273,7 +273,8 @@ void WP6StylesListener::noteOn(const uint16_t textPID)
 	}
 }
 
-void WP6StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice)
+void WP6StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList,
+						int /* nextTableIndice */)
 {
 	// We don't want to actual insert anything in the case of a sub-document, but we
 	// do want to capture whatever table-related information is within it..
@@ -311,7 +312,7 @@ void WP6StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, co
 	}
 }
 
-void WP6StylesListener::undoChange(const uint8_t undoType, const uint16_t undoLevel)
+void WP6StylesListener::undoChange(const uint8_t undoType, const uint16_t /* undoLevel */)
 {
 	if (undoType == WP6_UNDO_GROUP_INVALID_TEXT_START)
 		setUndoOn(true);

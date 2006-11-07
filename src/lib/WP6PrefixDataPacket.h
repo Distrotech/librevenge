@@ -37,7 +37,7 @@ class WP6PrefixDataPacket
 public:
 	WP6PrefixDataPacket(WPXInputStream * input);	
 	virtual ~WP6PrefixDataPacket() {}
-	virtual void parse(WP6Listener *listener) const {}
+	virtual void parse(WP6Listener * /* listener */) const {}
 	virtual WP6SubDocument * getSubDocument() const { return NULL; }
 
 	static WP6PrefixDataPacket * constructPrefixDataPacket(WPXInputStream * input, WP6PrefixIndice *prefixIndice);

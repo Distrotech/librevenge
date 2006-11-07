@@ -38,7 +38,7 @@ WP5TableEOPGroup::~WP5TableEOPGroup()
 {
 }
 
-void WP5TableEOPGroup::_readContents(WPXInputStream *input)
+void WP5TableEOPGroup::_readContents(WPXInputStream * /* input */)
 {
 	switch (getSubGroup())
 	{

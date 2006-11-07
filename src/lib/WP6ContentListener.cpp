@@ -43,7 +43,8 @@
 #define WP6_DEFAULT_FONT_SIZE 12.0f
 #define WP6_DEFAULT_FONT_NAME "Times New Roman"
 
-WP6OutlineDefinition::WP6OutlineDefinition(const WP6OutlineLocation outlineLocation, const uint8_t *numberingMethods, const uint8_t tabBehaviourFlag)
+WP6OutlineDefinition::WP6OutlineDefinition(const WP6OutlineLocation outlineLocation, const uint8_t *numberingMethods,
+						const uint8_t /* tabBehaviourFlag */)
 {
 	_updateNumberingMethods(outlineLocation, numberingMethods);
 }
@@ -61,12 +62,12 @@ WP6OutlineDefinition::WP6OutlineDefinition()
 // outline style is defined in a prefix packet, then you are given more information later
 // in the document)
 // FIXME: make sure this is in the right place
-void WP6OutlineDefinition::update(const uint8_t *numberingMethods, const uint8_t tabBehaviourFlag)
+void WP6OutlineDefinition::update(const uint8_t *numberingMethods, const uint8_t /* tabBehaviourFlag */)
 {
 	_updateNumberingMethods(paragraphGroup, numberingMethods);
 }
 
-void WP6OutlineDefinition::_updateNumberingMethods(const WP6OutlineLocation outlineLocation, const uint8_t *numberingMethods)
+void WP6OutlineDefinition::_updateNumberingMethods(const WP6OutlineLocation /* outlineLocation */, const uint8_t *numberingMethods)
 {
 	for (int i=0; i<WP6_NUM_LIST_LEVELS; i++)
 	{
@@ -709,8 +710,8 @@ void WP6ContentListener::indentFirstLineChange(int16_t offset)
 	}
 }
 
-void WP6ContentListener::columnChange(const WPXTextColumnType columnType, const uint8_t numColumns, const std::vector<float> &columnWidth,
-		const std::vector<bool> &isFixedWidth)
+void WP6ContentListener::columnChange(const WPXTextColumnType /* columnType */, const uint8_t numColumns,
+					const std::vector<float> &columnWidth, const std::vector<bool> &isFixedWidth)
 {
 	if (!isUndoOn())
 	{
@@ -800,7 +801,7 @@ void WP6ContentListener::updateOutlineDefinition(const WP6OutlineLocation outlin
 	}
 }
 
-void WP6ContentListener::paragraphNumberOn(const uint16_t outlineHash, const uint8_t level, const uint8_t flag)
+void WP6ContentListener::paragraphNumberOn(const uint16_t outlineHash, const uint8_t level, const uint8_t /* flag */)
 {
 	if (!isUndoOn())
 	{
@@ -822,7 +823,7 @@ void WP6ContentListener::paragraphNumberOff()
 	}
 }
 
-void WP6ContentListener::displayNumberReferenceGroupOn(const uint8_t subGroup, const uint8_t level)
+void WP6ContentListener::displayNumberReferenceGroupOn(const uint8_t subGroup, const uint8_t /* level */)
 {
 	if (!isUndoOn())
 	{
@@ -1047,8 +1048,8 @@ void WP6ContentListener::defineTable(const uint8_t position, const uint16_t left
 	}
 }
 
-void WP6ContentListener::addTableColumnDefinition(const uint32_t width, const uint32_t leftGutter, const uint32_t rightGutter,
-												  const uint32_t attributes, const uint8_t alignment)
+void WP6ContentListener::addTableColumnDefinition(const uint32_t width, const uint32_t /* leftGutter */,
+						const uint32_t /* rightGutter */, const uint32_t attributes, const uint8_t alignment)
 {
 	if (!isUndoOn())
 	{
@@ -1104,7 +1105,7 @@ void WP6ContentListener::insertRow(const uint16_t rowHeight, const bool isMinimu
 	}
 }
 
-void WP6ContentListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan, const uint8_t borderBits, 
+void WP6ContentListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan, const uint8_t /* borderBits */, 
 					const RGBSColor * cellFgColor, const RGBSColor * cellBgColor, 
 					const RGBSColor * cellBorderColor, const WPXVerticalAlignment cellVerticalAlignment, 
 					const bool useCellAttributes, const uint32_t cellAttributes)
@@ -1390,7 +1391,7 @@ void WP6ContentListener::_changeList()
 	_handleListChange(m_parseState->m_currentOutlineHash);
 }
 
-void WP6ContentListener::undoChange(const uint8_t undoType, const uint16_t undoLevel)
+void WP6ContentListener::undoChange(const uint8_t undoType, const uint16_t /* undoLevel */)
 {
 	if (undoType == WP6_UNDO_GROUP_INVALID_TEXT_START)
 		setUndoOn(true);

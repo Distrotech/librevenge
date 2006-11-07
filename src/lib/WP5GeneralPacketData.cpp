@@ -31,7 +31,7 @@
 #include "libwpd.h"
 #include "libwpd_internal.h"
 
-WP5GeneralPacketData::WP5GeneralPacketData(WPXInputStream * input)
+WP5GeneralPacketData::WP5GeneralPacketData(WPXInputStream * /* input */)
 {
 }
 

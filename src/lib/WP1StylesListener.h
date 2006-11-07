@@ -40,25 +40,25 @@ public:
 	WP1StylesListener(std::list<WPXPageSpan> &pageList, std::vector<WP1SubDocument *> &subDocuments);
 
 	void startDocument() {}
-	void insertCharacter(const uint16_t character) { if (!isUndoOn()) m_currentPageHasContent = true; }
-	void insertExtendedCharacter(const uint8_t extendedCharacter) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	void insertCharacter(const uint16_t /* character */) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	void insertExtendedCharacter(const uint8_t /* extendedCharacter */) { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void insertTab() { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void insertEOL() { if (!isUndoOn()) m_currentPageHasContent = true; }
  	void insertBreak(const uint8_t breakType);
-	void insertNote(const WPXNoteType noteType, WP1SubDocument *subDocument) {}
-	void attributeChange(const bool isOn, const uint8_t attribute) {}
-	void fontPointSize(const uint8_t pointSize) {}
+	void insertNote(const WPXNoteType /* noteType */, WP1SubDocument * /* subDocument */) {}
+	void attributeChange(const bool /* isOn */, const uint8_t /* attribute */) {}
+	void fontPointSize(const uint8_t /* pointSize */) {}
 	void marginReset(const uint16_t leftMargin, const uint16_t rightMargin);
 	void topMarginSet(const uint16_t topMargin);
 	void bottomMarginSet(const uint16_t bottomMargin);
-	void leftIndent(const uint16_t leftMarginOffset) { if (!isUndoOn()) m_currentPageHasContent = true; }
-	void leftRightIndent(const uint16_t leftRightMarginOffset) { if (!isUndoOn()) m_currentPageHasContent = true; }
-	void leftMarginRelease(const uint16_t release) {}
-	void setTabs(const std::vector<WPXTabStop> tabStops) {}
+	void leftIndent(const uint16_t /* leftMarginOffset */) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	void leftRightIndent(const uint16_t /* leftRightMarginOffset */) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	void leftMarginRelease(const uint16_t /* release */) {}
+	void setTabs(const std::vector<WPXTabStop> /* tabStops */) {}
 	void headerFooterGroup(const uint8_t headerFooterDefinition, WP1SubDocument *subDocument);
 	void suppressPageCharacteristics(const uint8_t suppressCode);
-	void justificationChange(const uint8_t justification) {}
-	void lineSpacingChange(const uint8_t spacing) {}
+	void justificationChange(const uint8_t /* justification */) {}
+	void lineSpacingChange(const uint8_t /* spacing */) {}
 	void flushRightOn() {}
 	void flushRightOff() {}
 	void centerOn() {}

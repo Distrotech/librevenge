@@ -33,7 +33,7 @@ WP1UnsupportedFixedLengthGroup::WP1UnsupportedFixedLengthGroup(WPXInputStream *i
 	_read(input);
 }
 
-void WP1UnsupportedFixedLengthGroup::_readContents(WPXInputStream *input)
+void WP1UnsupportedFixedLengthGroup::_readContents(WPXInputStream * /* input */)
 {
 	WPD_DEBUG_MSG(("WordPerfect: Handling an unsupported fixed length group\n"));
 };

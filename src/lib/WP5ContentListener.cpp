@@ -69,7 +69,7 @@ void WP5ContentListener::insertCharacter(const uint16_t character)
 	appendUCS4(m_parseState->m_textBuffer, (uint32_t)character);
 }
 
-void WP5ContentListener::insertTab(const uint8_t tabType, float tabPosition)
+void WP5ContentListener::insertTab(const uint8_t /* tabType */, float /* tabPosition */)
 {
 	if (!m_ps->m_isSpanOpened)
 		_openSpan();
@@ -127,8 +127,8 @@ void WP5ContentListener::defineTable(const uint8_t position, const uint16_t left
 	}
 }
 
-void WP5ContentListener::addTableColumnDefinition(const uint32_t width, const uint32_t leftGutter, const uint32_t rightGutter,
-										   const uint32_t attributes, const uint8_t alignment)
+void WP5ContentListener::addTableColumnDefinition(const uint32_t width, const uint32_t /* leftGutter */,
+						const uint32_t /* rightGutter */, const uint32_t attributes, const uint8_t alignment)
 {
 	if (!isUndoOn())
 	{
@@ -390,7 +390,8 @@ void WP5ContentListener::insertNote(const WPXNoteType noteType, const WP5SubDocu
 	}
 }
 
-void WP5ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice)
+void WP5ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter,
+				WPXTableList /* tableList */, int /* nextTableIndice */)
 {
 	// save our old parsing state on our "stack"
 	WP5ContentParsingState *oldParseState = m_parseState;
@@ -426,7 +427,8 @@ void WP5ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, c
 	m_parseState = oldParseState;
 }
 
-void WP5ContentListener::headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, WP5SubDocument *subDocument)
+void WP5ContentListener::headerFooterGroup(const uint8_t /* headerFooterType */, const uint8_t /* occurenceBits */,
+						WP5SubDocument *subDocument)
 {
 	if (subDocument)
 		m_subDocuments.push_back(subDocument);

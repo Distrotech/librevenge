@@ -290,7 +290,7 @@ void WPXContentListener::_openPageSpan()
 	{
 		if (!currentPage.getHeaderFooterSuppression((*iter).getInternalType()))
 		{
-			WPXPropertyList propList;
+			propList.clear();
 			switch ((*iter).getOccurence())
 			{
 			case ODD:

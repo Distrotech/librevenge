@@ -44,55 +44,55 @@ class WP6StylesListener : public WP6Listener, protected WPXStylesListener
 public:
 	WP6StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList);
 
-	void setDate(const uint16_t year, const uint8_t month, const uint8_t day,
-		const uint8_t hour, const uint8_t minute, const uint8_t second,
-		const uint8_t dayOfWeek, const uint8_t timeZone, const uint8_t unused) {}
-	void setExtendedInformation(const uint16_t type, const WPXString &data) {}
+	void setDate(const uint16_t /* year */, const uint8_t /* month */, const uint8_t /* day */,
+		const uint8_t /* hour */, const uint8_t /* minute */, const uint8_t /* second */,
+		const uint8_t /* dayOfWeek */, const uint8_t /* timeZone */, const uint8_t /* unused */) {}
+	void setExtendedInformation(const uint16_t /* type */, const WPXString & /* data */) {}
 	void startDocument() {}
-	void setAlignmentCharacter(const uint16_t character) {}
-	void setLeaderCharacter(const uint16_t character, const uint8_t numberOfSpaces) {}
-	void defineTabStops(const bool isRelative, const std::vector<WPXTabStop> &tabStops, 
-				    const std::vector<bool> &usePreWP9LeaderMethods) {}
-	void insertCharacter(const uint16_t character) { if (!isUndoOn()) m_currentPageHasContent = true; }
-	void insertTab(const uint8_t tabType, float tabPosition) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	void setAlignmentCharacter(const uint16_t /* character */) {}
+	void setLeaderCharacter(const uint16_t /* character */, const uint8_t /* numberOfSpaces */) {}
+	void defineTabStops(const bool /* isRelative */, const std::vector<WPXTabStop> & /* tabStops */, 
+				    const std::vector<bool> & /* usePreWP9LeaderMethods */) {}
+	void insertCharacter(const uint16_t /* character */) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	void insertTab(const uint8_t /* tabType */, float /* tabPosition */) { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void handleLineBreak()  { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void insertEOL() { if (!isUndoOn()) m_currentPageHasContent = true; }
  	void insertBreak(const uint8_t breakType);
-	void characterColorChange(const uint8_t red, const uint8_t green, const uint8_t blue) {}
-	void characterShadingChange(const uint8_t shading) {}
-	void highlightChange(const bool isOn, const RGBSColor color) {}
-	void fontChange(const uint16_t matchedFontPointSize, const uint16_t fontPID) {}
-	void attributeChange(const bool isOn, const uint8_t attribute) {}
-	void lineSpacingChange(const float lineSpacing) {}
-	void spacingAfterParagraphChange(const float spacingRelative, const float spacingAbsolute) {}
-	void justificationChange(const uint8_t justification) {}
+	void characterColorChange(const uint8_t /* red */, const uint8_t /* green */, const uint8_t /* blue */) {}
+	void characterShadingChange(const uint8_t /* shading */) {}
+	void highlightChange(const bool /* isOn */, const RGBSColor /* color */) {}
+	void fontChange(const uint16_t /* matchedFontPointSize */, const uint16_t /* fontPID */) {}
+	void attributeChange(const bool /* isOn */, const uint8_t /* attribute */) {}
+	void lineSpacingChange(const float /* lineSpacing */) {}
+	void spacingAfterParagraphChange(const float /* spacingRelative */, const float /* spacingAbsolute */) {}
+	void justificationChange(const uint8_t /* justification */) {}
 	void pageMarginChange(const uint8_t side, const uint16_t margin);
 	void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool isPersistent);
 	void marginChange(const uint8_t side, const uint16_t margin);
-	void paragraphMarginChange(const uint8_t side, const int16_t margin) {}
-	void indentFirstLineChange(const int16_t offset) {}
-	void columnChange(const WPXTextColumnType columnType, const uint8_t numColumns, const std::vector<float> &columnWidth,
-				  const std::vector<bool> &isFixedWidth) {}
-	void updateOutlineDefinition(const WP6OutlineLocation outlineLocation, const uint16_t outlineHash,
-					     const uint8_t *numberingMethods, const uint8_t tabBehaviourFlag) {}
+	void paragraphMarginChange(const uint8_t /* side */, const int16_t /* margin */) {}
+	void indentFirstLineChange(const int16_t /* offset */) {}
+	void columnChange(const WPXTextColumnType /* columnType */, const uint8_t /* numColumns */,
+				const std::vector<float> & /* columnWidth */, const std::vector<bool> & /* isFixedWidth */) {}
+	void updateOutlineDefinition(const WP6OutlineLocation /* outlineLocation */, const uint16_t /* outlineHash */,
+					     const uint8_t * /* numberingMethods */, const uint8_t /* tabBehaviourFlag */) {}
 
-	void paragraphNumberOn(const uint16_t outlineHash, const uint8_t level, const uint8_t flag) {}
+	void paragraphNumberOn(const uint16_t /* outlineHash */, const uint8_t /* level */, const uint8_t /* flag */) {}
 	void paragraphNumberOff() { if (!isUndoOn()) m_currentPageHasContent = true; }
-	void displayNumberReferenceGroupOn(const uint8_t subGroup, const uint8_t level) {}
-	void displayNumberReferenceGroupOff(const uint8_t subGroup) { if (!isUndoOn()) m_currentPageHasContent = true; }
-	void styleGroupOn(const uint8_t subGroup) {}
-	void styleGroupOff(const uint8_t subGroup) {}
-	void globalOn(const uint8_t systemStyle) {}
+	void displayNumberReferenceGroupOn(const uint8_t /* subGroup */, const uint8_t /* level */) {}
+	void displayNumberReferenceGroupOff(const uint8_t /* subGroup */) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	void styleGroupOn(const uint8_t /* subGroup */) {}
+	void styleGroupOff(const uint8_t /* subGroup */) {}
+	void globalOn(const uint8_t /* systemStyle */) {}
 	void globalOff() {}
 	void noteOn(const uint16_t textPID);
-	void noteOff(const WPXNoteType noteType) {}
+	void noteOff(const WPXNoteType /* noteType */) {}
 	void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, const uint16_t textPID);
 	void suppressPageCharacteristics(const uint8_t suppressCode);
 	void endDocument();
 
  	void defineTable(const uint8_t position, const uint16_t leftOffset);
-	void addTableColumnDefinition(const uint32_t width, const uint32_t leftGutter, const uint32_t rightGutter,
-				const uint32_t attributes, const uint8_t alignment) {}
+	void addTableColumnDefinition(const uint32_t /* width */, const uint32_t /* leftGutter */, const uint32_t /* rightGutter */,
+				const uint32_t /* attributes */, const uint8_t /* alignment */) {}
 	void startTable();
  	void insertRow(const uint16_t rowHeight, const bool isMinimumHeight, const bool isHeaderRow);
  	void insertCell(const uint8_t colSpan, const uint8_t rowSpan, const uint8_t borderBits, 

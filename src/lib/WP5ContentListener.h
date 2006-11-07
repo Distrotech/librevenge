@@ -63,10 +63,11 @@ public:
 	void justificationChange(const uint8_t justification) { WPXContentListener::justificationChange(justification); };
 	void characterColorChange(const uint8_t red, const uint8_t green, const uint8_t blue);
 	void attributeChange(const bool isOn, const uint8_t attribute);
-	void pageMarginChange(const uint8_t side, const uint16_t margin) {};
-	void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool isPersistent) {};
+	void pageMarginChange(const uint8_t /* side */, const uint16_t /* margin */) {};
+	void pageFormChange(const uint16_t /* length */, const uint16_t /* width */,
+				const WPXFormOrientation /* orientation */, const bool /* isPersistent */) {};
 	void marginChange(const uint8_t side, const uint16_t margin);
-	void paragraphMarginChange(const uint8_t side, const int16_t margin) {};
+	void paragraphMarginChange(const uint8_t /* side */, const int16_t /* margin */) {};
 	void endDocument() { WPXContentListener::endDocument(); };
 
 	void defineTable(const uint8_t position, const uint16_t leftOffset);
@@ -83,7 +84,7 @@ public:
 	void insertNoteReference(const WPXString noteReference);
 	void insertNote(const WPXNoteType noteType, const WP5SubDocument *subDocument);
 	void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, WP5SubDocument *subDocument);
-	void suppressPageCharacteristics(const uint8_t suppressCode) {};
+	void suppressPageCharacteristics(const uint8_t /* suppressCode */) {};
 	
 	void setDefaultFont(const WPXString fontName, const float fontSize);
 	

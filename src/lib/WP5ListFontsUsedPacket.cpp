@@ -28,7 +28,7 @@
 #include "WP5Parser.h"
 #include "libwpd_internal.h"
 
-WP5ListFontsUsedPacket::WP5ListFontsUsedPacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize, uint16_t packetType) :
+WP5ListFontsUsedPacket::WP5ListFontsUsedPacket(WPXInputStream *input, int /* id */, uint32_t dataOffset, uint32_t dataSize, uint16_t packetType) :
 	WP5GeneralPacketData(input),
 	m_packetType(packetType)
 {	

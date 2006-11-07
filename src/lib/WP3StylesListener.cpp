@@ -90,7 +90,7 @@ void WP3StylesListener::insertBreak(const uint8_t breakType)
 	}
 }
 
-void WP3StylesListener::undoChange(const uint8_t undoType, const uint16_t undoLevel)
+void WP3StylesListener::undoChange(const uint8_t /* undoType */, const uint16_t /* undoLevel */)
 {
 // enable when have understood the undo change functions in WP3 file-format
 #if 0  
@@ -162,7 +162,7 @@ void WP3StylesListener::marginChange(const uint8_t side, const uint16_t margin)
 	}
 }
 
-void WP3StylesListener::pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool isPersistent)
+void WP3StylesListener::pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool /* isPersistent */)
 {
 	if (!isUndoOn())
 	{
@@ -263,7 +263,8 @@ void WP3StylesListener::insertCell()
 	}
 }
 
-void WP3StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice)
+void WP3StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter,
+						WPXTableList tableList, int /* nextTableIndice */)
 {
 	bool oldIsSubDocument = m_isSubDocument;
 	m_isSubDocument = true;

@@ -54,7 +54,7 @@ public:
 	void attributeChange(const bool isOn, const uint8_t attribute);
 	void marginReset(const uint8_t leftMargin, const uint8_t rightMargin);
 	void headerFooterGroup(const uint8_t headerFooterDefinition, WP42SubDocument *subDocument);
-	void suppressPageCharacteristics(const uint8_t suppressCode) {}
+	void suppressPageCharacteristics(const uint8_t /* suppressCode */) {}
 	void endDocument() { WPXContentListener::endDocument(); };
 
 protected:

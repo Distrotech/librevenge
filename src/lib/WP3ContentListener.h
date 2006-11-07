@@ -59,8 +59,9 @@ public:
 	void insertEOL();
 	void attributeChange(const bool isOn, const uint8_t attribute);
 	void lineSpacingChange(const float lineSpacing) { WPXContentListener::lineSpacingChange(lineSpacing); };
-	void pageMarginChange(const uint8_t side, const uint16_t margin) {};
-	void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool isPersistent) {};
+	void pageMarginChange(const uint8_t /* side */, const uint16_t /* margin */) {};
+	void pageFormChange(const uint16_t /* length */, const uint16_t /* width */, const WPXFormOrientation /* orientation */,
+				const bool /* isPersistent */) {};
 	void marginChange(const uint8_t side, const uint16_t margin);
 	void indentFirstLineChange(const int16_t offset);
 	void setTabs(const bool isRelative, const std::vector<WPXTabStop> tabStops);
@@ -88,7 +89,7 @@ public:
 	void insertNoteReference(const WPXString &noteReference);
 	void insertNote(const WPXNoteType noteType, WP3SubDocument *subDocument);
 	void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, WP3SubDocument *subDocument);
-	void suppressPage(const uint16_t suppressCode) {};
+	void suppressPage(const uint16_t /* suppressCode */) {};
 	
 protected:
 	void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);

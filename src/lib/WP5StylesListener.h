@@ -42,23 +42,23 @@ public:
 	WP5StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, std::vector<WP5SubDocument*> &subDocuments);
 
 	void startDocument() {}
-	void setFont(const WPXString fontName, const float fontSize) {}
-	void insertCharacter(const uint16_t character) { /*if (!isUndoOn())*/ m_currentPageHasContent = true; }
-	void insertTab(const uint8_t tabType, float tabPosition) { /*if (!isUndoOn())*/ m_currentPageHasContent = true; }
-	void characterColorChange(const uint8_t red, const uint8_t green, const uint8_t blue) {};
+	void setFont(const WPXString /* fontName */, const float /* fontSize */) {}
+	void insertCharacter(const uint16_t /* character */) { /*if (!isUndoOn())*/ m_currentPageHasContent = true; }
+	void insertTab(const uint8_t /* tabType */, float /* tabPosition */) { /*if (!isUndoOn())*/ m_currentPageHasContent = true; }
+	void characterColorChange(const uint8_t /* red */, const uint8_t /* green */, const uint8_t /* blue */) {};
 	void insertEOL() { /*if (!isUndoOn())*/ m_currentPageHasContent = true; }
  	void insertBreak(const uint8_t breakType);
-	void attributeChange(const bool isOn, const uint8_t attribute) {}
-	void lineSpacingChange(const float lineSpacing) {}
-	void justificationChange(const uint8_t justification) {}
+	void attributeChange(const bool /* isOn */, const uint8_t /* attribute */) {}
+	void lineSpacingChange(const float /* lineSpacing */) {}
+	void justificationChange(const uint8_t /* justification */) {}
 	void pageMarginChange(const uint8_t side, const uint16_t margin);
 	void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool isPersistent);
 	void marginChange(const uint8_t side, const uint16_t margin);
 	void endDocument();
 
-	void defineTable(const uint8_t position, const uint16_t leftOffset){}
-	void addTableColumnDefinition(const uint32_t width, const uint32_t leftGutter, const uint32_t rightGutter,
-				const uint32_t attributes, const uint8_t alignment){}
+	void defineTable(const uint8_t /* position */, const uint16_t /* leftOffset */) {}
+	void addTableColumnDefinition(const uint32_t /* width */, const uint32_t /* leftGutter */, const uint32_t /* rightGutter */,
+				const uint32_t /* attributes */, const uint8_t /* alignment */) {}
 	void startTable();
  	void insertRow(const uint16_t rowHeight, const bool isMinimumHeight, const bool isHeaderRow);
  	void insertCell(const uint8_t colSpan, const uint8_t rowSpan, const uint8_t borderBits,
@@ -67,8 +67,8 @@ public:
 				const bool useCellAttributes, const uint32_t cellAttributes);
  	void endTable() {}
 
-	void insertNoteReference(const WPXString noteReference) {};
-	void insertNote(const WPXNoteType noteType, const WP5SubDocument *subDocument) {};
+	void insertNoteReference(const WPXString /* noteReference */) {};
+	void insertNote(const WPXNoteType /* noteType */, const WP5SubDocument * /* subDocument */) {};
 	void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, WP5SubDocument *subDocument);
 	void suppressPageCharacteristics(const uint8_t suppressCode);
 

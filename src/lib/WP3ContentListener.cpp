@@ -74,7 +74,7 @@ void WP3ContentListener::insertCharacter(const uint16_t character)
 	}
 }
 
-void WP3ContentListener::insertTab(const uint8_t tabType, float tabPosition)
+void WP3ContentListener::insertTab(const uint8_t /* tabType */, float /* tabPosition */)
 {
         if (!isUndoOn())
 	{
@@ -146,7 +146,8 @@ void WP3ContentListener::defineTable(const uint8_t position, const uint16_t left
 	}
 }
 
-void WP3ContentListener::addTableColumnDefinition(const uint32_t width, const uint32_t leftGutter, const uint32_t rightGutter, const uint32_t attributes, const uint8_t alignment)
+void WP3ContentListener::addTableColumnDefinition(const uint32_t width, const uint32_t /* leftGutter */,
+						const uint32_t /* rightGutter */, const uint32_t attributes, const uint8_t alignment)
 {
 	if (!isUndoOn())
 	{
@@ -338,7 +339,7 @@ void WP3ContentListener::attributeChange(const bool isOn, const uint8_t attribut
 	}
 }
 
-void WP3ContentListener::undoChange(const uint8_t undoType, const uint16_t undoLevel)
+void WP3ContentListener::undoChange(const uint8_t undoType, const uint16_t /* undoLevel */)
 {
         if (undoType == 0x00) // begin invalid text
                 setUndoOn(true);
@@ -443,8 +444,8 @@ void WP3ContentListener::setTabs(const bool isRelative, const std::vector<WPXTab
 	}
 }
 
-void WP3ContentListener::columnChange(const WPXTextColumnType columnType, const uint8_t numColumns, const std::vector<float> &columnWidth,
-		const std::vector<bool> &isFixedWidth)
+void WP3ContentListener::columnChange(const WPXTextColumnType /* columnType */, const uint8_t numColumns,
+					const std::vector<float> &columnWidth, const std::vector<bool> &isFixedWidth)
 {
 	if (!isUndoOn())
 	{
@@ -593,7 +594,8 @@ void WP3ContentListener::insertNote(const WPXNoteType noteType, WP3SubDocument *
 	}
 }
 
-void WP3ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice)
+void WP3ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter,
+						WPXTableList /* tableList */, int /* nextTableIndice */)
 {
 	// save our old parsing state on our "stack"
 	WP3ContentParsingState *oldParseState = m_parseState;
@@ -633,7 +635,7 @@ void WP3ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, c
 	setUndoOn(oldIsUndoOn);
 }
 	
-void WP3ContentListener::headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, WP3SubDocument *subDocument)
+void WP3ContentListener::headerFooterGroup(const uint8_t /* headerFooterType */, const uint8_t /* occurenceBits */, WP3SubDocument *subDocument)
 {
 	if (subDocument)
 		m_subDocuments.push_back(subDocument);			

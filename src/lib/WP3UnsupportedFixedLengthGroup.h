@@ -31,10 +31,10 @@ class WP3UnsupportedFixedLengthGroup : public WP3FixedLengthGroup
 {
  public:
 	WP3UnsupportedFixedLengthGroup(WPXInputStream *input, uint8_t groupID);	
-	void parse(WP3Listener *listener) {}
+	void parse(WP3Listener * /* listener */) {}
 	
  protected:
-	void _readContents(WPXInputStream *input) {}
+	void _readContents(WPXInputStream * /* input */) {}
 };
 
 #endif /* WP3UNSUPPORTEDFIXEDLENGTHGROUP_H */

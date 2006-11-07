@@ -27,7 +27,7 @@
 #include "WP3SingleByteFunction.h"
 #include "libwpd_internal.h"
 
-WP3SingleByteFunction * WP3SingleByteFunction::constructSingleByteFunction(WPXInputStream *input, uint8_t groupID)
+WP3SingleByteFunction * WP3SingleByteFunction::constructSingleByteFunction(WPXInputStream * /* input */, uint8_t groupID)
 {
 
 	switch (groupID) 

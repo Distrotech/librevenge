@@ -35,7 +35,7 @@
 #include "libwpd.h"
 #include "libwpd_internal.h"
 
-WP6PrefixDataPacket::WP6PrefixDataPacket(WPXInputStream * input)
+WP6PrefixDataPacket::WP6PrefixDataPacket(WPXInputStream * /* input */)
 {
 }
 

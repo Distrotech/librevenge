@@ -241,7 +241,8 @@ void WP1StylesListener::suppressPageCharacteristics(const uint8_t suppressCode)
 	}
 }
 
-void WP1StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice)
+void WP1StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter,
+						WPXTableList /* tableList */, int /* nextTableIndice */)
 {
 	if (!isUndoOn()) 
 	{

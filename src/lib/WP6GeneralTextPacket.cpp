@@ -28,7 +28,7 @@
 #include "WP6Parser.h"
 #include "libwpd_internal.h"
 
-WP6GeneralTextPacket::WP6GeneralTextPacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize): 
+WP6GeneralTextPacket::WP6GeneralTextPacket(WPXInputStream *input, int /* id */, uint32_t dataOffset, uint32_t dataSize): 
 	WP6PrefixDataPacket(input),
 	m_subDocument(NULL)
 {	

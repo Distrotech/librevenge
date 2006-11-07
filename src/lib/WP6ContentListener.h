@@ -133,9 +133,9 @@ public:
 	~WP6ContentListener();
 
 	void startDocument() { WPXContentListener::startDocument(); };
-	void setDate(const uint16_t year, const uint8_t month, const uint8_t day,
-						const uint8_t hour, const uint8_t minute, const uint8_t second,
-						const uint8_t dayOfWeek, const uint8_t timeZone, const uint8_t unused) {}
+	void setDate(const uint16_t /* year */, const uint8_t /* month */, const uint8_t /* day */,
+			const uint8_t /* hour */, const uint8_t /* minute */, const uint8_t /* second */,
+			const uint8_t /* dayOfWeek */, const uint8_t /* timeZone */, const uint8_t /* unused */) {}
 	void setExtendedInformation(const uint16_t type, const WPXString &data);
 	void setAlignmentCharacter(const uint16_t character);
 	void setLeaderCharacter(const uint16_t character, const uint8_t numSpaces);
@@ -154,8 +154,9 @@ public:
 	void fontChange(const uint16_t matchedFontPointSize, const uint16_t fontPID);
  	void attributeChange(const bool isOn, const uint8_t attribute);
 	void spacingAfterParagraphChange(const float spacingRelative, const float spacingAbsolute);
-	void pageMarginChange(const uint8_t side, const uint16_t margin) {}
-	void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool isPersistent) {}
+	void pageMarginChange(const uint8_t /* side */, const uint16_t /* margin */) {}
+	void pageFormChange(const uint16_t /* length */, const uint16_t /* width */, const WPXFormOrientation /* orientation */,
+				const bool /* isPersistent */) {}
 	void marginChange(const uint8_t side, const uint16_t margin);
 	void paragraphMarginChange(const uint8_t side, const int16_t margin);
 	void indentFirstLineChange(const int16_t offset);
@@ -174,8 +175,8 @@ public:
 	void globalOff();
 	void noteOn(const uint16_t textPID);
 	void noteOff(const WPXNoteType noteType);
-	void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, const uint16_t textPID) {}
-	void suppressPageCharacteristics(const uint8_t suppressCode) {}
+	void headerFooterGroup(const uint8_t /* headerFooterType */, const uint8_t /* occurenceBits */, const uint16_t /* textPID */) {}
+	void suppressPageCharacteristics(const uint8_t /* suppressCode */) {}
 	void endDocument() { WPXContentListener::endDocument(); };
 
  	void defineTable(const uint8_t position, const uint16_t leftOffset);
