@@ -75,6 +75,7 @@ public:
 	void endDocument() { WPXContentListener::endDocument(); };
 
 protected:
+	using WPXContentListener::lineSpacingChange;
 	void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
 
 	void _flushText();
