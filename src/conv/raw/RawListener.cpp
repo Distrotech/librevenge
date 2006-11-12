@@ -54,7 +54,7 @@ RawListenerImpl::RawListenerImpl(bool printCallgraphScore) :
 RawListenerImpl::~RawListenerImpl()
 {
 	if (m_printCallgraphScore)
-		printf("%d\n", m_callStack.size() + m_callbackMisses);
+		printf("%d\n", (int)(m_callStack.size() + m_callbackMisses));
 }
 
 void RawListenerImpl::__iprintf(const char *format, ...)
