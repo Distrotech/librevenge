@@ -39,8 +39,8 @@ public:
 
 	virtual const uint8_t *read(size_t numBytes, size_t &numBytesRead);
 	virtual int seek(long offset, WPX_SEEK_TYPE seekType);
-	virtual long tell() { return gsf_input_tell(m_input); }
-	virtual bool atEOS() { return gsf_input_eof(m_input); }
+	virtual long tell() { return (long)gsf_input_tell(m_input); }
+	virtual bool atEOS() { return (bool)(gsf_input_eof(m_input) != 0); }
 
 private:
 	GsfInput *m_input;

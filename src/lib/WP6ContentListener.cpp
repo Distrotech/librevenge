@@ -502,7 +502,7 @@ void WP6ContentListener::fontChange(const uint16_t matchedFontPointSize, const u
 		_closeSpan();
 		if (matchedFontPointSize)
 		{
-			m_ps->m_fontSize = rint((double)((((double)matchedFontPointSize)/100.0f)*2.0f));
+			m_ps->m_fontSize = (float)rint((double)((((double)matchedFontPointSize)/100.0f)*2.0f));
 			// We compute the real space after paragraph in inches using the size of the font and relative spacing.
 			// We have to recompute this every change of fontSize.
 			m_ps->m_paragraphMarginBottom =
