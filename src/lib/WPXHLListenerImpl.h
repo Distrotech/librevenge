@@ -38,7 +38,7 @@ definitions listed here.
 class WPXHLListenerImpl
 {
  public:
-	virtual ~WPXHLListenerImpl() {}
+	// virtual ~WPXHLListenerImpl() {}
 
 	/** 
 	Called when all document metadata should be set. This is always the first callback made.
