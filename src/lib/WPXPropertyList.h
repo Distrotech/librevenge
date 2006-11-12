@@ -45,7 +45,7 @@ public:
 class WPXMapIterImpl
 {
 public:
-	// virtual ~WPXMapIterImpl() {}
+	virtual ~WPXMapIterImpl() {}
 	virtual void rewind() = 0;
 	virtual bool next() = 0;
 	virtual bool last() = 0;
