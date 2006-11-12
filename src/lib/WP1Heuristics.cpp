@@ -40,7 +40,7 @@ WPDConfidence WP1Heuristics::isWP1FileFormat(WPXInputStream *input, bool partial
 	{
 		uint8_t readVal = readU8(input);
 
-		WPD_DEBUG_MSG(("WP1Heuristics, Offset 0x%.8x, value 0x%.2x\n", input->tell() - 1, readVal));
+		WPD_DEBUG_MSG(("WP1Heuristics, Offset 0x%.8x, value 0x%.2x\n", (unsigned int)input->tell() - 1, readVal));
 		
 		if (readVal < (uint8_t)0x20)
 		{
@@ -76,11 +76,11 @@ WPDConfidence WP1Heuristics::isWP1FileFormat(WPXInputStream *input, bool partial
 				
 				long functionLength = readU32(input, true);
 				long closingFunctionLength = 0;
-				WPD_DEBUG_MSG(("WP1Heuristics functionLength = 0x%.8x\n", functionLength));
+				WPD_DEBUG_MSG(("WP1Heuristics functionLength = 0x%.8x\n", (unsigned int)functionLength));
 
 				input->seek(functionLength, WPX_SEEK_CUR);
 				closingFunctionLength = readU32(input, true);
-				WPD_DEBUG_MSG(("WP1Heuristics closingFunctionLength = 0x%.8x\n", closingFunctionLength));
+				WPD_DEBUG_MSG(("WP1Heuristics closingFunctionLength = 0x%.8x\n", (unsigned int)closingFunctionLength));
 				if (functionLength != closingFunctionLength)
 					return WPD_CONFIDENCE_NONE;
 					

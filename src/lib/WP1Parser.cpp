@@ -65,7 +65,7 @@ void WP1Parser::parseDocument(WPXInputStream *input, WP1Listener *listener)
 
 		if (readVal < (uint8_t)0x20)
 		{
-			WPD_DEBUG_MSG(("Offset: %i, Handling Control Character 0x%2x\n", input->tell(), readVal));			
+			WPD_DEBUG_MSG(("Offset: %i, Handling Control Character 0x%2x\n", (unsigned int)input->tell(), readVal));			
 
 			switch (readVal)
 			{
@@ -96,7 +96,7 @@ void WP1Parser::parseDocument(WPXInputStream *input, WP1Listener *listener)
 		}
 		else if (readVal >= (uint8_t)0x80 && readVal <= (uint8_t)0xBF)
 		{
-			WPD_DEBUG_MSG(("Offset: %i, Handling Single Character Function 0x%2x\n", input->tell(), readVal));			
+			WPD_DEBUG_MSG(("Offset: %i, Handling Single Character Function 0x%2x\n", (unsigned int)input->tell(), readVal));			
 
 			// single character function codes
 			switch (readVal)
