@@ -302,6 +302,9 @@ void WPXContentListener::_openPageSpan()
 			case ALL:
 				propList.insert("libwpd:occurence", "all");
 				break;
+			case NEVER:
+			default:
+				break;
 			}
 
 			if ((*iter).getType() == HEADER)
@@ -469,7 +472,7 @@ void WPXContentListener::_appendParagraphProperties(WPXPropertyList &propList, c
 
 void WPXContentListener::_getTabStops(WPXPropertyListVector &tabStops)
 {
-	for (int i=0; i<m_ps->m_tabStops.size(); i++)
+	for (int i=0; i<(int)m_ps->m_tabStops.size(); i++)
 	{
 		WPXPropertyList tmpTabStop;
 
@@ -800,7 +803,7 @@ void WPXContentListener::_closeTableRow()
 {
 	if (m_ps->m_isTableRowOpened)
 	{
-		while (m_ps->m_currentTableCol < m_ps->m_numRowsToSkip.size())
+		while ((long)m_ps->m_currentTableCol < (long)m_ps->m_numRowsToSkip.size())
 		{
 			if (!m_ps->m_numRowsToSkip[m_ps->m_currentTableCol]) // This case should not happen, but does :-(
 			{
@@ -859,7 +862,7 @@ void WPXContentListener::_openTableCell(const uint8_t colSpan, const uint8_t row
 	if (m_ps->m_isTableCellOpened)
 		_closeTableCell();
 
-	while (m_ps->m_currentTableCol < m_ps->m_numRowsToSkip.size() && m_ps->m_numRowsToSkip[m_ps->m_currentTableCol])
+	while ((long)m_ps->m_currentTableCol < (long)m_ps->m_numRowsToSkip.size() && m_ps->m_numRowsToSkip[m_ps->m_currentTableCol])
 	{
 		m_ps->m_numRowsToSkip[m_ps->m_currentTableCol]--;
 		m_ps->m_currentTableCol++;
@@ -899,7 +902,7 @@ void WPXContentListener::_openTableCell(const uint8_t colSpan, const uint8_t row
 	m_ps->m_isTableCellOpened = true;
 	m_ps->m_isCellWithoutParagraph = true;
 
-	while ((m_ps->m_currentTableCol < m_ps->m_numRowsToSkip.size()) && (tmpColSpan > 0))
+	while (((long)m_ps->m_currentTableCol < (long)m_ps->m_numRowsToSkip.size()) && (tmpColSpan > 0))
 	{
 		if (m_ps->m_numRowsToSkip[m_ps->m_currentTableCol]) // This case should not happen, but it happens in real-life documents :-(
 		{
@@ -1129,7 +1132,7 @@ float WPXContentListener::_movePositionToFirstColumn(float position)
 		return position;
 	float tempSpaceRemaining = position - m_ps->m_pageMarginLeft - m_ps->m_sectionMarginLeft;
 	position -= m_ps->m_textColumns[0].m_leftGutter;
-	for (int i = 0; i < (m_ps->m_textColumns.size() - 1); i++)
+	for (int i = 0; i < (int)(m_ps->m_textColumns.size() - 1); i++)
 	{
 		if ((tempSpaceRemaining -= m_ps->m_textColumns[i].m_width - m_ps->m_textColumns[i].m_rightGutter) > 0)
 		{

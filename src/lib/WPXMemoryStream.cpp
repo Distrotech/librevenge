@@ -62,7 +62,7 @@ const uint8_t * WPXMemoryInputStream::read(size_t numBytes, size_t &numBytesRead
 		return NULL;
 
 	m_tmpBuf = new uint8_t[numBytesToRead];
-	for (size_t i=0; i<numBytesToRead; i++)
+	for (size_t i=0; (long)i<(long)numBytesToRead; i++)
 	{
 		m_tmpBuf[i] = m_data[m_offset];
 		m_offset++;
@@ -83,7 +83,7 @@ int WPXMemoryInputStream::seek(long offset, WPX_SEEK_TYPE seekType)
 		m_offset = 0;
 		return 1;
 	}
-	if (m_offset > m_size)
+	if ((long)m_offset > (long)m_size)
 	{
 		m_offset = m_size;
 		return 1;
@@ -99,7 +99,7 @@ long WPXMemoryInputStream::tell()
 
 bool WPXMemoryInputStream::atEOS()
 {
-	if (m_offset == m_size) 
+	if ((long)m_offset == (long)m_size) 
 		return true; 
 
 	return false;

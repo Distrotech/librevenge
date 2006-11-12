@@ -33,15 +33,15 @@
 WP3StylesListener::WP3StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, std::vector<WP3SubDocument *>&subDocuments) : 
 	WP3Listener(),
 	WPXStylesListener(pageList),
-	m_pageListHardPageMark(m_pageList.end()),
 	m_currentPage(WPXPageSpan()),
-	m_currentTable(NULL),
 	m_tableList(tableList), 
+	m_currentTable(NULL),
 	m_tempMarginLeft(1.0f),
 	m_tempMarginRight(1.0f),
 	m_currentPageHasContent(false),
 	m_isSubDocument(false),
-	m_subDocuments(subDocuments)
+	m_subDocuments(subDocuments),
+	m_pageListHardPageMark(m_pageList.end())
 {
 	m_pageListHardPageMark = m_pageList.end();
 }

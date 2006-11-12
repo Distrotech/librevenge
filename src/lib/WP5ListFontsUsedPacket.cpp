@@ -69,14 +69,14 @@ void WP5ListFontsUsedPacket::_readContents(WPXInputStream *input, uint32_t dataS
 
 int WP5ListFontsUsedPacket::getFontNameOffset(const int fontNumber) const
 {
-	if ((fontNumber >= 0) && (fontNumber < fontNameOffset.size()))
+	if ((fontNumber >= 0) && ((long)fontNumber < (long)fontNameOffset.size()))
 		return fontNameOffset[fontNumber];
 	return 0;
 }
 
 float WP5ListFontsUsedPacket::getFontSize(const int fontNumber) const
 {
-	if ((fontNumber >= 0) && (fontNumber < fontSize.size()))
+	if ((fontNumber >= 0) && ((long)fontNumber < (long)fontSize.size()))
 		return fontSize[fontNumber];
 	return 0.0f;
 }

@@ -81,7 +81,7 @@ void WP6EOLGroup::_readContents(WPXInputStream *input)
 	}
 
 	input->seek(sizeDeletableSubFunctionData, WPX_SEEK_CUR);
-	while (input->tell() < (startPosition + getSizeNonDeletable()))
+	while ((long)input->tell() < (long)(startPosition + getSizeNonDeletable()))
 	{
 		uint8_t byte;
 		uint16_t numBytesToSkip = 0;

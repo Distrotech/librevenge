@@ -36,13 +36,14 @@ WP5StylesListener::WP5StylesListener(std::list<WPXPageSpan> &pageList, WPXTableL
 	WPXStylesListener(pageList),
 	m_currentPage(WPXPageSpan()),
 	m_nextPage(WPXPageSpan()),
-	m_pageListHardPageMark(m_pageList.end()),
-	m_tableList(tableList), 
+	m_tableList(tableList),
+	m_currentTable(NULL), 
 	m_tempMarginLeft(1.0f),
 	m_tempMarginRight(1.0f),
 	m_currentPageHasContent(false),
 	m_isSubDocument(false),
-	m_subDocuments(subDocuments)
+	m_subDocuments(subDocuments),
+	m_pageListHardPageMark(m_pageList.end())
 {
 }
 

@@ -465,7 +465,7 @@ void WP3ContentListener::columnChange(const WPXTextColumnType /* columnType */, 
 		if (numColumns > 1)
 		{
 			int i;
-			for (i=0; i<columnWidth.size(); i++)
+			for (i=0; i<(int)columnWidth.size(); i++)
 			{
 				if (isFixedWidth[i])
 					remainingSpace -= columnWidth[i];

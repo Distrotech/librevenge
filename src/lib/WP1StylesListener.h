@@ -38,6 +38,7 @@ class WP1StylesListener : public WP1Listener, protected WPXStylesListener
 {
 public:
 	WP1StylesListener(std::list<WPXPageSpan> &pageList, std::vector<WP1SubDocument *> &subDocuments);
+	~WP1StylesListener() {}
 
 	void startDocument() {}
 	void insertCharacter(const uint16_t /* character */) { if (!isUndoOn()) m_currentPageHasContent = true; }

@@ -44,7 +44,7 @@ WP6GeneralTextPacket::~WP6GeneralTextPacket()
 void WP6GeneralTextPacket::_readContents(WPXInputStream *input)
 {
 	uint16_t numTextBlocks = readU16(input);
-	uint32_t firstTextBlockOffset = readU32(input);
+	input->seek(4, WPX_SEEK_CUR);
 
 	if (numTextBlocks < 1)
 	{
@@ -62,7 +62,6 @@ void WP6GeneralTextPacket::_readContents(WPXInputStream *input)
 		totalSize += blockSizes[i];
 	}	
 
-//	input->seek(firstTextBlockOffset, WPX_SEEK_SET);
 	if (totalSize <= 0)
 	{
 		WPD_DEBUG_MSG(("WordPerfect: The total size of the text is %i\n", totalSize));

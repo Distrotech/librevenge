@@ -28,8 +28,8 @@
 
 WP1FootnoteEndnoteGroup::WP1FootnoteEndnoteGroup(WPXInputStream *input, uint8_t group) :
 	WP1VariableLengthGroup(group),
-	m_noteNumber(0),
 	m_noteType(FOOTNOTE),
+	m_noteNumber(0),
 	m_subDocument(NULL)
 {
 	_read(input);

@@ -512,7 +512,7 @@ void WP6ContentListener::fontChange(const uint16_t matchedFontPointSize, const u
 		if (fontPID)
 		{
 			const WP6FontDescriptorPacket *fontDescriptorPacket = NULL;
-			if (fontDescriptorPacket = dynamic_cast<const WP6FontDescriptorPacket *>(WP6Listener::getPrefixDataPacket(fontPID))) {
+			if ((fontDescriptorPacket = dynamic_cast<const WP6FontDescriptorPacket *>(WP6Listener::getPrefixDataPacket(fontPID)))) {
 				*(m_ps->m_fontName) = fontDescriptorPacket->getFontName();
 			}
 		}
@@ -731,7 +731,7 @@ void WP6ContentListener::columnChange(const WPXTextColumnType /* columnType */, 
 		if (numColumns > 1)
 		{
 			int i;
-			for (i=0; i<columnWidth.size(); i++)
+			for (i=0; i<(int)columnWidth.size(); i++)
 			{
 				if (isFixedWidth[i])
 					remainingSpace -= columnWidth[i];
@@ -1124,13 +1124,13 @@ void WP6ContentListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan
 			throw ParseException(); // no table opened, invalid
 		}
 			
-		if (m_parseState->m_currentTable->getRows().size() <= m_ps->m_currentTableRow)
+		if ((int)m_parseState->m_currentTable->getRows().size() <= (int)m_ps->m_currentTableRow)
 		{
 			WPD_DEBUG_MSG(("Requesting a row larger than the number of rows the table holds\n"));
 			throw ParseException(); // requesting a row larger than the number of rows the table holds
 		}
 			
-		if (m_parseState->m_currentTable->getRows()[m_ps->m_currentTableRow].size() <= m_ps->m_currentTableCellNumberInRow)
+		if ((int)m_parseState->m_currentTable->getRows()[m_ps->m_currentTableRow].size() <= (int)m_ps->m_currentTableCellNumberInRow)
 		{
 			WPD_DEBUG_MSG(("Requesting a cell smaller than the number of cells in the row\n"));
 			throw ParseException(); // requesting a cell smaller than the number of cells in the row
@@ -1260,7 +1260,7 @@ void WP6ContentListener::_flushText()
 	
 	if (m_parseState->m_numListExtraTabs > 0)
 	{
-		for (m_parseState->m_numListExtraTabs; m_parseState->m_numListExtraTabs > 0; m_parseState->m_numListExtraTabs--)
+		for (; m_parseState->m_numListExtraTabs > 0; m_parseState->m_numListExtraTabs--)
 			m_listenerImpl->insertTab();
 		m_parseState->m_numListExtraTabs = 0;
 	}

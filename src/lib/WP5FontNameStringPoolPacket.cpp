@@ -40,7 +40,7 @@ WP5FontNameStringPoolPacket::~WP5FontNameStringPoolPacket()
 void WP5FontNameStringPoolPacket::_readContents(WPXInputStream *input, uint32_t dataSize)
 {
 	unsigned int tmpInitialOffset = input->tell();
-	while (input->tell() < (tmpInitialOffset + dataSize))
+	while ((long)input->tell() < (long)(tmpInitialOffset + dataSize))
 	{
 		unsigned int offset = input->tell() - tmpInitialOffset;
 		WPXString fontName = readCString(input);

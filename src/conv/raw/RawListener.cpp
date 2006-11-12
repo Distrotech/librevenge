@@ -100,7 +100,7 @@ WPXString getPropString(const WPXPropertyList &propList)
 		WPXString prop;
 		prop.sprintf("%s: %s", i.key(), i()->getStr().cstr());
 		propString.append(prop);
-		for (i; i.next(); )
+		for (; i.next(); )
 		{
 			prop.sprintf(", %s: %s", i.key(), i()->getStr().cstr());
 			propString.append(prop);
@@ -123,7 +123,7 @@ WPXString getPropString(const WPXPropertyListVector &itemList)
 		propString.append(getPropString(i()));
 		propString.append(")");
 
-		for (i; i.next();)
+		for (; i.next();)
 		{
 			propString.append(", (");
 			propString.append(getPropString(i()));

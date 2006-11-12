@@ -47,8 +47,8 @@ _WP1ContentParsingState::~_WP1ContentParsingState()
 WP1ContentListener::WP1ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP1SubDocument *> &subDocuments, WPXHLListenerImpl *listenerImpl) :
 	WP1Listener(),
 	WPXContentListener(pageList, listenerImpl),
-	m_subDocuments(subDocuments),
-	m_parseState(new WP1ContentParsingState)
+	m_parseState(new WP1ContentParsingState),
+	m_subDocuments(subDocuments)
 {
 	*(m_ps->m_fontName) = "Geneva";
 	m_ps->m_fontSize = 12.0f;

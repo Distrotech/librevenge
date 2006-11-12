@@ -44,8 +44,8 @@ _WP42ContentParsingState::~_WP42ContentParsingState()
 WP42ContentListener::WP42ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP42SubDocument *> &subDocuments, WPXHLListenerImpl *listenerImpl) :
 	WP42Listener(),
 	WPXContentListener(pageList, listenerImpl),
-	m_subDocuments(subDocuments),
-	m_parseState(new WP42ContentParsingState)
+	m_parseState(new WP42ContentParsingState),
+	m_subDocuments(subDocuments)
 {
 // Default line is 6 lpi, it means that the caracters are of 12 points
 	*(m_ps->m_fontName) = "Courier";

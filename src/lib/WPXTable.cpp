@@ -118,10 +118,10 @@ std::vector<WPXTableCell *> WPXTable::_getCellsBottomAdjacent(int i, int j)
 	int bottomAdjacentRow = i + (m_tableRows[i])[j]->m_rowSpan;
 	std::vector<WPXTableCell *>  cellsBottomAdjacent = std::vector<WPXTableCell *>();
 
-	if (bottomAdjacentRow >= m_tableRows.size()) 
+	if ((long)bottomAdjacentRow >= (long)m_tableRows.size()) 
 		return cellsBottomAdjacent;
 	
-	for (int j1=0; j1<m_tableRows[bottomAdjacentRow].size(); j1++)
+	for (int j1=0; j1<(int)m_tableRows[bottomAdjacentRow].size(); j1++)
 	{
 		if (((j1 + (m_tableRows[bottomAdjacentRow])[j1]->m_colSpan) > j) &&
 		    (j1 < (j + (m_tableRows[i])[j]->m_colSpan)))
@@ -138,12 +138,12 @@ std::vector<WPXTableCell *> WPXTable::_getCellsRightAdjacent(int i, int j)
 	int rightAdjacentCol = j + 1;
 	std::vector<WPXTableCell *> cellsRightAdjacent = std::vector<WPXTableCell *>();
 
-	if (rightAdjacentCol >= m_tableRows[i].size()) // num cols is uniform across table: this comparison is valid
+	if ((long)rightAdjacentCol >= (long)m_tableRows[i].size()) // num cols is uniform across table: this comparison is valid
 		return cellsRightAdjacent;
 	
-	for(int i1=0; i1<m_tableRows.size(); i1++)
+	for(int i1=0; i1<(int)m_tableRows.size(); i1++)
 	{
-		if ((m_tableRows[i1]).size() > rightAdjacentCol) // ignore cases where the right adjacent column 
+		if ((long)(m_tableRows[i1]).size() > (long)rightAdjacentCol) // ignore cases where the right adjacent column 
 		{                                                 // pushes us beyond table borders (FIXME: good idea?)
 			if (((i1 + (m_tableRows[i1])[rightAdjacentCol]->m_rowSpan) > i) &&
 			    (i1 < (i + (m_tableRows[i])[j]->m_rowSpan)))

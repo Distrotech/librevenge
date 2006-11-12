@@ -38,14 +38,14 @@ WP6StylesListener::WP6StylesListener(std::list<WPXPageSpan> &pageList, WPXTableL
 	WP6Listener(),
 	WPXStylesListener(pageList),
 	m_currentPage(WPXPageSpan()),
-	m_currentTable(NULL),
-	m_pageListHardPageMark(m_pageList.end()),
 	m_tableList(tableList), 
+	m_currentTable(NULL),
 	m_tempMarginLeft(1.0f),
 	m_tempMarginRight(1.0f),
 	m_currentPageHasContent(false),
 	m_isTableDefined(false),
-	m_isSubDocument(false)
+	m_isSubDocument(false),
+	m_pageListHardPageMark(m_pageList.end())
 {
 	m_pageListHardPageMark = m_pageList.end();
 }
