@@ -969,6 +969,10 @@ _RGBSColor::_RGBSColor()
 }
 
 _RGBSColor::_RGBSColor(uint16_t red, uint16_t green, uint16_t blue)
+	:	m_r(0),
+		m_g(0),
+		m_b(0),
+		m_s(0)
 {
 	int minRGB = red;
 	if (minRGB > green)

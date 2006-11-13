@@ -44,9 +44,9 @@ protected:
 	WPXInputStream * getInput() { return m_input; }
 	
 private:
+	WPXParser(const WPXParser&);
+	WPXParser& operator=(const WPXParser&);
 	WPXInputStream * m_input;
-//	WPXListener * m_hlListener;
-
 	WPXHeader * m_header;
 };
 

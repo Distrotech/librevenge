@@ -38,8 +38,6 @@ definitions listed here.
 class WPXHLListenerImpl
 {
  public:
-	// virtual ~WPXHLListenerImpl() {}
-
 	/** 
 	Called when all document metadata should be set. This is always the first callback made.
 	\param propList Property list for the metadata. May contain:
@@ -314,6 +312,9 @@ class WPXHLListenerImpl
 	Called when the current table is closed
 	*/
  	virtual void closeTable() = 0;
+
+protected:
+	~WPXHLListenerImpl() {}
 };
 
 #endif /* WPXHLLISTENERIMPL_H */

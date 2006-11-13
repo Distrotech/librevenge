@@ -82,6 +82,8 @@ public:
 		const char * key();
 	private:
 		WPXMapIterImpl *m_iterImpl;
+		Iter(const Iter&);
+		Iter& operator=(const Iter&);
 	};
 	friend class WPXPropertyList::Iter;
 

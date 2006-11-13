@@ -40,6 +40,8 @@ public:
 
 private:              
 	WPXMemoryInputStream *m_stream;
+	WPXSubDocument(const WPXSubDocument&);
+	WPXSubDocument& operator=(const WPXSubDocument&);
 	
 };
-#endif /* WP3SUBDOCUMENT_H */
+#endif /* WPXSUBDOCUMENT_H */

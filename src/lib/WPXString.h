@@ -57,6 +57,8 @@ public:
 		bool last();
 		const char * operator()() const;
 	private:
+		Iter(const Iter&);
+		Iter& operator=(const Iter&);
 		void *m_buf;
 		int m_pos;
 		mutable char *m_curChar;

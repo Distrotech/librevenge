@@ -72,11 +72,14 @@ public:
 
         private:
                 WPXPropertyListVectorIterImpl *m_iterImpl;
+		Iter(const Iter&);
+		Iter& operator=(const Iter&);
         };
         friend class WPXPropertyListVector::Iter;
 
 private:
 	WPXPropertyListVectorImpl *m_impl;
+	WPXPropertyListVector& operator=(WPXPropertyListVector&);
 };
 
 #endif /* WPXPROPERTYLISTVECTOR_H */
