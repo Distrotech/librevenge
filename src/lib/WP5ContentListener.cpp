@@ -344,7 +344,7 @@ void WP5ContentListener::characterColorChange(const uint8_t red, const uint8_t g
  	}
 }
 
-void WP5ContentListener::setFont(const WPXString fontName, const float fontSize)
+void WP5ContentListener::setFont(const WPXString &fontName, const float fontSize)
 {
 	if (!isUndoOn())
 	{
@@ -354,7 +354,7 @@ void WP5ContentListener::setFont(const WPXString fontName, const float fontSize)
 	}
 }
 
-void WP5ContentListener::insertNoteReference(const WPXString noteReference)
+void WP5ContentListener::insertNoteReference(const WPXString &noteReference)
 {
 	if (!isUndoOn())
 	{
@@ -434,7 +434,7 @@ void WP5ContentListener::headerFooterGroup(const uint8_t /* headerFooterType */,
 		m_subDocuments.push_back(subDocument);
 }	
 
-void WP5ContentListener::setDefaultFont(const WPXString fontName, const float fontSize)
+void WP5ContentListener::setDefaultFont(const WPXString &fontName, const float fontSize)
 {
 	m_defaultFontName = fontName;
 	m_defaultFontSize = fontSize;

@@ -148,7 +148,7 @@ void WP5PageFormatGroup::parse(WP5Listener *listener)
 		listener->suppressPageCharacteristics(m_suppressCode);
 		break;
 	case WP5_TOP_PAGE_FORMAT_GROUP_FORM:
-		listener->pageFormChange(m_formLength, m_formWidth, m_formOrientation, true);
+		listener->pageFormChange(m_formLength, m_formWidth, m_formOrientation);
 		break;
 	default: // something else we don't support, since it isn't in the docs
 		break;

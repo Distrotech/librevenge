@@ -34,8 +34,7 @@ WP3MiscellaneousGroup::WP3MiscellaneousGroup(WPXInputStream *input) :
 	WP3VariableLengthGroup(),
 	m_pageWidth(0),
 	m_pageHeight(0),
-	m_pageOrientation(PORTRAIT),
-	m_isPersistent(true)
+	m_pageOrientation(PORTRAIT)
 {
 	_read(input);
 }
@@ -61,12 +60,6 @@ void WP3MiscellaneousGroup::_readContents(WPXInputStream *input)
 		m_pageWidth = fixedPointToWPUs(readU32(input, true));
 		m_pageHeight = fixedPointToWPUs(readU32(input, true));
 		
-		// determine whether the orientation lasts only one page or is persistent
-		if ((tmpPageOrientation & 0x8000) == 0x0000)
-			m_isPersistent = false;
-		else 
-			m_isPersistent = true;
-		
 		// determine whether it is portrait or landscape
 		if ((tmpPageOrientation & 0x0001) == 0x0000)
 			m_pageOrientation = PORTRAIT;
@@ -87,7 +80,7 @@ void WP3MiscellaneousGroup::parse(WP3Listener *listener)
 	switch (getSubGroup())
 	{
 	case WP3_MISCELLANEOUS_GROUP_PAGE_SIZE_OVERRIDE:
-		listener->pageFormChange(m_pageHeight, m_pageWidth, m_pageOrientation, m_isPersistent);
+		listener->pageFormChange(m_pageHeight, m_pageWidth, m_pageOrientation);
 		break;
 	default: // something else we don't support, since it isn't in the docs
 		break;

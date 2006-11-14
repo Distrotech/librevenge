@@ -162,11 +162,10 @@ void WP3StylesListener::marginChange(const uint8_t side, const uint16_t margin)
 	}
 }
 
-void WP3StylesListener::pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool /* isPersistent */)
+void WP3StylesListener::pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation)
 {
 	if (!isUndoOn())
 	{
-		// TODO: handle the isPersistent information
 		float lengthInch = (float)((double)length / (double)WPX_NUM_WPUS_PER_INCH);
 		float widthInch = (float)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
 		if (!m_currentPageHasContent)

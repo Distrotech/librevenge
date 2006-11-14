@@ -42,7 +42,6 @@ class WP3MiscellaneousGroup : public WP3VariableLengthGroup
 	uint16_t m_pageWidth;
 	uint16_t m_pageHeight;
 	WPXFormOrientation m_pageOrientation;
-	bool m_isPersistent;
 };
 
 #endif /* WP3MISCELLANEOUSGROUP_H */

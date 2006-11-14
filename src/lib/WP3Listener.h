@@ -49,7 +49,7 @@ public:
 	virtual void lineSpacingChange(const float lineSpacing) = 0;
 	virtual void attributeChange(const bool isOn, const uint8_t attribute) = 0;
 	virtual void pageMarginChange(const uint8_t side, const uint16_t margin) = 0;
-	virtual void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool isPersistent) = 0;
+	virtual void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation) = 0;
 	virtual void marginChange(const uint8_t side, const uint16_t margin) = 0;
 	virtual void indentFirstLineChange(const int16_t offset) = 0;
 	virtual void setTabs(const bool isRelative, const std::vector<WPXTabStop> tabStops) = 0;
@@ -69,7 +69,7 @@ public:
 	virtual void undoChange(const uint8_t undoType, const uint16_t undoLevel) = 0;
 	virtual void justificationChange(const uint8_t justification) = 0;
 	virtual void setTextColor(const RGBSColor * fontColor) = 0;
-	virtual void setTextFont(const WPXString fontName) = 0;
+	virtual void setTextFont(const WPXString &fontName) = 0;
 	virtual void setFontSize(const uint16_t fontSize) = 0;
 	virtual void insertPageNumber(const WPXString &pageNumber) = 0;
 	virtual void insertNoteReference(const WPXString &noteReference) = 0;

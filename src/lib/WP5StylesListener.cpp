@@ -121,7 +121,7 @@ void WP5StylesListener::pageMarginChange(const uint8_t side, const uint16_t marg
 	//}
 }
 
-void WP5StylesListener::pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool /* isPersistent */)
+void WP5StylesListener::pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation)
 {
 	//if (!isUndoOn())
 	//{

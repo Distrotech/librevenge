@@ -67,7 +67,7 @@ public:
 	void spacingAfterParagraphChange(const float /* spacingRelative */, const float /* spacingAbsolute */) {}
 	void justificationChange(const uint8_t /* justification */) {}
 	void pageMarginChange(const uint8_t side, const uint16_t margin);
-	void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool isPersistent);
+	void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation);
 	void marginChange(const uint8_t side, const uint16_t margin);
 	void paragraphMarginChange(const uint8_t /* side */, const int16_t /* margin */) {}
 	void indentFirstLineChange(const int16_t /* offset */) {}

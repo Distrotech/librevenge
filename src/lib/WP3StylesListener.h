@@ -47,7 +47,7 @@ public:
 	void lineSpacingChange(const float /* lineSpacing */) {}
 	void justificationChange(const uint8_t /* justification */) {}
 	void pageMarginChange(const uint8_t side, const uint16_t margin);
-	void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool isPersistent);
+	void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation);
 	void marginChange(const uint8_t side, const uint16_t margin);
 	void indentFirstLineChange(const int16_t /* offset */) {}
 	void setTabs(const bool /* isRelative */, const std::vector<WPXTabStop> /* tabStops */) {}
@@ -68,7 +68,7 @@ public:
  	void endTable() {}
 	void undoChange(const uint8_t undoType, const uint16_t undoLevel);
 	void setTextColor(const RGBSColor * /* fontColor */) {}
-	void setTextFont(const WPXString /* fontName */) {}
+	void setTextFont(const WPXString& /* fontName */) {}
 	void setFontSize(const uint16_t /* fontSize */) {}
 	void insertPageNumber(const WPXString & /* pageNumber */) {}
 	void insertNoteReference(const WPXString & /* noteReference */) {}

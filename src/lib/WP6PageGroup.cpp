@@ -97,7 +97,7 @@ void WP6PageGroup::parse(WP6Listener *listener)
 		listener->suppressPageCharacteristics(m_suppressedCode);
 		break;
 	case WP6_PAGE_GROUP_FORM:
-		listener->pageFormChange(m_formLength, m_formWidth, m_formOrientation, true);
+		listener->pageFormChange(m_formLength, m_formWidth, m_formOrientation);
 		break;
 	default: // something else we don't support, since it isn't in the docs
 		break;

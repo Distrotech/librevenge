@@ -70,8 +70,7 @@ public:
 	virtual void attributeChange(const bool isOn, const uint8_t attribute) = 0;
 	virtual void spacingAfterParagraphChange(const float spacingRelative, const float spacingAbsolute) = 0;
 	virtual void pageMarginChange(const uint8_t side, const uint16_t margin) = 0;
-	virtual void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation,
-				const bool isPersistent) = 0;
+	virtual void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation) = 0;
 	virtual void marginChange(const uint8_t side, const uint16_t margin) = 0;
 	virtual void paragraphMarginChange(const uint8_t side, const int16_t margin) = 0;
 	virtual void indentFirstLineChange(const int16_t offset) = 0;

@@ -528,7 +528,7 @@ void WP3ContentListener::setTextColor(const RGBSColor *fontColor)
 	}
 }
 
-void WP3ContentListener::setTextFont(const WPXString fontName)
+void WP3ContentListener::setTextFont(const WPXString &fontName)
 {
 	if (!isUndoOn())
 	{

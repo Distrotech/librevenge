@@ -43,7 +43,7 @@ public:
 	virtual ~WP5Listener() {};
 
 	virtual void startDocument() = 0;
-	virtual void setFont(const WPXString fontName, const float fontSize) = 0;
+	virtual void setFont(const WPXString &fontName, const float fontSize) = 0;
 	virtual void insertCharacter(const uint16_t character) = 0;
 	virtual void insertTab(const uint8_t tabType, float tabPosition) = 0;
 	virtual void insertEOL() = 0;
@@ -53,7 +53,7 @@ public:
 	virtual void characterColorChange(const uint8_t red, const uint8_t green, const uint8_t blue) = 0;
 	virtual void attributeChange(const bool isOn, const uint8_t attribute) = 0;
 	virtual void pageMarginChange(const uint8_t side, const uint16_t margin) = 0;
-	virtual void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation, const bool isPersistent) = 0;
+	virtual void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation) = 0;
 	virtual void marginChange(const uint8_t side, const uint16_t margin) = 0;
 	virtual void endDocument() = 0;
 
@@ -68,7 +68,7 @@ public:
 				const bool useCellAttributes, const uint32_t cellAttributes) = 0;
  	virtual void endTable() = 0;
 
-	virtual void insertNoteReference(const WPXString noteReference) = 0;
+	virtual void insertNoteReference(const WPXString &noteReference) = 0;
 	virtual void insertNote(const WPXNoteType noteType, const WP5SubDocument *subDocument) = 0;
 	virtual void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, WP5SubDocument *subDocument) = 0;
 	virtual void suppressPageCharacteristics(const uint8_t suppressCode) = 0;
