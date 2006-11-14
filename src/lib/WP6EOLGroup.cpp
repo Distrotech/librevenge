@@ -26,10 +26,9 @@
  */
 
 #include "WP6EOLGroup.h"
-#include "WPXListener.h"
+#include "WP6Listener.h"
 #include "libwpd_internal.h"
 
-#include "WP6Parser.h" // for TableException
 #include "WP6FillStylePacket.h" // for the fill packet
 
 WP6EOLGroup::WP6EOLGroup(WPXInputStream *input) :	
@@ -47,8 +46,8 @@ WP6EOLGroup::WP6EOLGroup(WPXInputStream *input) :
 	m_cellJustification(0),
 	m_cellVerticalAlign(TOP),
 	
-	m_cellFgColor(NULL),
-	m_cellBgColor(NULL),
+	m_cellFgColor(0),
+	m_cellBgColor(0),
 	m_cellBorderColor(new RGBSColor(0x00,0x00,0x00,0x64)),
 	
 	m_cellBorders(0x00),

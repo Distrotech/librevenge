@@ -28,6 +28,7 @@
 #include "WP5ExtendedCharacterGroup.h"
 #include "WP5FileStructure.h"
 #include "libwpd_internal.h"
+#include "WP5Listener.h"
 
 WP5ExtendedCharacterGroup::WP5ExtendedCharacterGroup(WPXInputStream *input, uint8_t groupID) :
 	WP5FixedLengthGroup(groupID),

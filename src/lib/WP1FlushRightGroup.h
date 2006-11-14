@@ -26,7 +26,6 @@
 #define WP1FLUSHRIGHTGROUP_H
 
 #include "WP1FixedLengthGroup.h"
-#include "WP1SubDocument.h"
 
 class WP1FlushRightGroup : public WP1FixedLengthGroup
 {

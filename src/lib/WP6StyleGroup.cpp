@@ -24,6 +24,8 @@
  */
 
 #include "WP6StyleGroup.h"
+#include "WP6Listener.h"
+#include "WP6FileStructure.h"
 #include "libwpd_internal.h"
 
 WP6StyleGroup_GlobalOnSubGroup::WP6StyleGroup_GlobalOnSubGroup(WPXInputStream *input)
@@ -39,7 +41,7 @@ void WP6StyleGroup_GlobalOnSubGroup::parse(WP6Listener *listener, const uint8_t 
 
 WP6StyleGroup::WP6StyleGroup(WPXInputStream *input) :
 	WP6VariableLengthGroup(),
-	m_subGroupData(NULL)
+	m_subGroupData(0)
 {
 	_read(input);
 }

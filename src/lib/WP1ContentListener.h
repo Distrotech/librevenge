@@ -28,9 +28,9 @@
 #define WP1CONTENTLISTENER_H
 
 #include "WP1Listener.h"
-#include "WP1SubDocument.h"
 #include "WPXContentListener.h"
-#include "WPXHLListenerImpl.h"
+
+class WP1SubDocument;
 
 typedef struct _WP1ContentParsingState WP1ContentParsingState;
 struct _WP1ContentParsingState

@@ -33,7 +33,7 @@
 _WP3ContentParsingState::_WP3ContentParsingState():
 	m_colSpan(1),
 	m_rowSpan(1),
-	m_cellFillColor(NULL)
+	m_cellFillColor(0)
 {
 	m_textBuffer.clear();
 	m_noteReference.clear();
@@ -207,7 +207,7 @@ void WP3ContentListener::insertCell()
 		
 		RGBSColor tmpCellBorderColor(0x00, 0x00, 0x00, 0x64);
 		_openTableCell((uint8_t)m_parseState->m_colSpan, (uint8_t)m_parseState->m_rowSpan, 0x00000000,       
-				 m_parseState->m_cellFillColor, NULL, &tmpCellBorderColor, TOP);
+				 m_parseState->m_cellFillColor, 0, &tmpCellBorderColor, TOP);
 		DELETEP(m_parseState->m_cellFillColor);
 
 		m_ps->m_isCellWithoutParagraph = true;

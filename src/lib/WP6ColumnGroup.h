@@ -27,6 +27,11 @@
 #define WP6COLUMNGROUP_H
 
 #include "WP6VariableLengthGroup.h"
+#include <vector>
+#include "libwpd_internal.h"
+
+class WPXInputStream;
+class WP6Listener;
 
 class WP6ColumnGroup : public WP6VariableLengthGroup
 {

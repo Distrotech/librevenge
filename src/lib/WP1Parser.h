@@ -28,9 +28,9 @@
 #define WP1PARSER_H
 
 #include "WPXParser.h"
-#include "WP1Listener.h"
 
 class WPXHLListenerImpl;
+class WP1Listener;
 
 class WP1Parser : public WPXParser
 {

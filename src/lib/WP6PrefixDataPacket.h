@@ -25,8 +25,8 @@
 
 #ifndef WP6PREFIXDATAPACKET_H
 #define WP6PREFIXDATAPACKET_H
-#include <stdlib.h>
 #include "WPXParser.h"
+#include "libwpd_types.h"
 
 class WP6Listener;
 class WP6PrefixIndice;
@@ -38,7 +38,7 @@ public:
 	WP6PrefixDataPacket(WPXInputStream * input);	
 	virtual ~WP6PrefixDataPacket() {}
 	virtual void parse(WP6Listener * /* listener */) const {}
-	virtual WP6SubDocument * getSubDocument() const { return NULL; }
+	virtual WP6SubDocument * getSubDocument() const { return 0; }
 
 	static WP6PrefixDataPacket * constructPrefixDataPacket(WPXInputStream * input, WP6PrefixIndice *prefixIndice);
 

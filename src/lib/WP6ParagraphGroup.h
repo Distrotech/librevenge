@@ -27,7 +27,8 @@
 #define WP6PARAGRAPHGROUP_H
 
 #include "WP6VariableLengthGroup.h"
-// #include <vector>
+#include "WP6FileStructure.h"
+#include <vector>
 
 class WP6ParagraphGroup_LineSpacingSubGroup : public WP6VariableLengthGroup_SubGroup
 {

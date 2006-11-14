@@ -25,12 +25,13 @@
 #ifndef WPXCONTENTLISTENER_H
 #define WPXCONTENTLISTENER_H
 
-#include "WPXHLListenerImpl.h"
 #include "WPXTable.h"
 #include "WPXPropertyListVector.h"
+#include "WPXPropertyList.h"
 #include "libwpd_internal.h"
 #include "WPXSubDocument.h"
 #include "WPXPageSpan.h"
+#include "WPXHLListenerImpl.h"
 #include "WPXListener.h"
 #include <vector>
 #include <list>

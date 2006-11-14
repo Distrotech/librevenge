@@ -26,6 +26,7 @@
 
 #include "WP3SingleByteFunction.h"
 #include "libwpd_internal.h"
+#include "WP3Listener.h"
 
 WP3SingleByteFunction * WP3SingleByteFunction::constructSingleByteFunction(WPXInputStream * /* input */, uint8_t groupID)
 {
@@ -49,7 +50,7 @@ WP3SingleByteFunction * WP3SingleByteFunction::constructSingleByteFunction(WPXIn
 		
 	default:
 		// should not happen
-		return NULL;
+		return 0;
 		}
 }
 

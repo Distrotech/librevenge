@@ -26,7 +26,6 @@
 #ifndef WP42PART_H
 #define WP42PART_H
 
-#include "WPXPart.h"
 #include "WPXParser.h"
 #include "WP42Listener.h"
 

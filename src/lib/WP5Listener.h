@@ -27,14 +27,11 @@
 #ifndef WP5LISTENER_H
 #define WP5LISTENER_H
 
-#include "WP5PrefixData.h"
-//#include "WP5SubDocument.h"
-#include "WPXPageSpan.h"
-#include "WPXHLListenerImpl.h"
-#include <list>
-#include <vector>
+#include "libwpd_internal.h"
 
 class WP5SubDocument;
+class WP5PrefixData;
+class WP5GeneralPacketData;
 
 class WP5Listener
 {

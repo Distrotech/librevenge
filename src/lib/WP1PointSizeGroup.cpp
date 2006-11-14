@@ -24,7 +24,6 @@
 
 #include "WP1PointSizeGroup.h"
 #include "libwpd_internal.h"
-#include <string>
 
 WP1PointSizeGroup::WP1PointSizeGroup(WPXInputStream *input, uint8_t group) :
 	WP1FixedLengthGroup(group),

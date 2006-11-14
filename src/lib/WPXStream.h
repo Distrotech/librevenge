@@ -49,7 +49,7 @@ public:
 	/**
 	Extracts a \c PerfectOffice_MAIN stream from an OLE2 storage.
 	\return Should be a pointer to WPXInputStream constructed from the \c PerfectOffice_MAIN stream if it exists.
-	\return Should be a NULL pointer, if the \c PerfectOffice_MAIN stream does not exist inside the OLE2 storage
+	\return Should be 0, if the \c PerfectOffice_MAIN stream does not exist inside the OLE2 storage
 	or if the input stream is not an OLE2 storage.
 	*/
 	virtual WPXInputStream * getDocumentOLEStream() = 0;
@@ -59,7 +59,7 @@ public:
 	\param numBytes Number of bytes desired to be read.
 	\param numBytesRead Number of bytes that were possible to be read.
 	\return Should be a pointer to an array of numBytesRead bytes (uint8_t[numBytesRead]).
-	\return Optionally it could be NULL if the desired number of bytes could not be read.
+	\return Optionally it could be 0 if the desired number of bytes could not be read.
 	*/
 	const virtual uint8_t *read(size_t numBytes, size_t &numBytesRead) = 0;
 	/**

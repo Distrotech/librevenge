@@ -28,9 +28,7 @@
 #define WP1LISTENER_H
 
 #include "libwpd_internal.h"
-#include "WPXHLListenerImpl.h"
-#include "WPXPageSpan.h"
-#include <list>
+#include <vector>
 
 class WP1SubDocument;
 

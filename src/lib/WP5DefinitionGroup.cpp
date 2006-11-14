@@ -23,7 +23,7 @@
  */
 
 #include "WP5DefinitionGroup.h"
-#include "WPXListener.h"
+#include "WP5Listener.h"
 #include "libwpd_internal.h"
 
 WP5DefinitionGroup_DefineTablesSubGroup::WP5DefinitionGroup_DefineTablesSubGroup(WPXInputStream *input) :
@@ -72,7 +72,7 @@ void WP5DefinitionGroup_DefineTablesSubGroup::parse(WP5Listener *listener)
 
 WP5DefinitionGroup::WP5DefinitionGroup(WPXInputStream *input) :	
 	WP5VariableLengthGroup(),
-	m_subGroupData(NULL)
+	m_subGroupData(0)
 {
 	_read(input);
 }

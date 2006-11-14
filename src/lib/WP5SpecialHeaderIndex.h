@@ -24,7 +24,7 @@
 
 #ifndef WP5SPECIALHEADERINDEX_H
 #define WP5SPECIALHEADERINDEX_H
-#include <stdlib.h>
+#include "libwpd_types.h"
 #include "WPXStream.h"
 
 class WP5SpecialHeaderIndex

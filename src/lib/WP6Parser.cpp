@@ -47,7 +47,7 @@ WP6Parser::~WP6Parser()
 
 WP6PrefixData * WP6Parser::getPrefixData(WPXInputStream *input)
 {
-	WP6PrefixData *prefixData = NULL;
+	WP6PrefixData *prefixData = 0;
 	try
 	{
 		prefixData = new WP6PrefixData(input, ((WP6Header*)getHeader())->getNumPrefixIndices());
@@ -67,7 +67,7 @@ WP6PrefixData * WP6Parser::getPrefixData(WPXInputStream *input)
 		// TODO: Try to check packet after packet so that we try to recover at least the begining if the corruption is not at
 		//       the begining.
 		DELETEP(prefixData);
-		return NULL;
+		return 0;
 	}
 		}
 
@@ -144,7 +144,7 @@ void WP6Parser::parseDocument(WPXInputStream *input, WP6Listener *listener)
 		else 
 		{
 			WP6Part *part = WP6Part::constructPart(input, readVal);
-			if (part != NULL)
+			if (part)
 			{
 				part->parse(listener);
 				DELETEP(part);
@@ -191,7 +191,7 @@ void WP6Parser::parsePackets(WP6PrefixData *prefixData, int type, WP6Listener *l
 // information to a low-level listener
 void WP6Parser::parse(WPXHLListenerImpl *listenerImpl)
 {	
-	WP6PrefixData * prefixData = NULL;
+	WP6PrefixData * prefixData = 0;
 	std::list<WPXPageSpan> pageList;
 	WPXTableList tableList;	
 

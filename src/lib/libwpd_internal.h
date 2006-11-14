@@ -46,7 +46,7 @@
 #define WPD_CHECK_FILE_READ_ERROR(v,num_elements) if (v != num_elements) {\
  WPD_DEBUG_MSG(("X_CheckFileReadElementError: %d\n", __LINE__)); throw FileException(); }
 
-#define DELETEP(m) if (m) { delete m; m = NULL; }
+#define DELETEP(m) if (m) { delete m; m = 0; }
  
 #ifdef DEBUG
 #define WPD_DEBUG_MSG(M) printf M

@@ -28,12 +28,12 @@
 #include "WPXListener.h"
 
 WPXSubDocument::WPXSubDocument() :
-	m_stream(NULL)
+	m_stream(0)
 {
 }
 
 WPXSubDocument::WPXSubDocument(WPXInputStream *input, const int dataSize) :
-	m_stream(NULL)
+	m_stream(0)
 {
 	uint8_t *streamData = new uint8_t[dataSize];
 	for (int i=0; i<dataSize; i++)
@@ -44,7 +44,7 @@ WPXSubDocument::WPXSubDocument(WPXInputStream *input, const int dataSize) :
 }
 
 WPXSubDocument::WPXSubDocument(uint8_t * streamData, const int dataSize) :
-	m_stream(NULL)
+	m_stream(0)
 {
 	m_stream = new WPXMemoryInputStream(streamData, dataSize);
 }

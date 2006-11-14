@@ -59,7 +59,7 @@ const WPXProperty * WPXStdMapImpl::operator[](const char *name) const
 		return i->second;
 	}
 
-	return NULL;
+	return 0;
 }
 
 void WPXStdMapImpl::insert(const char *name, WPXProperty *prop)

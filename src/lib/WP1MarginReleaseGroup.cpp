@@ -24,7 +24,6 @@
 
 #include "WP1MarginReleaseGroup.h"
 #include "libwpd_internal.h"
-#include <string>
 
 WP1MarginReleaseGroup::WP1MarginReleaseGroup(WPXInputStream *input, uint8_t group) :
 	WP1FixedLengthGroup(group),

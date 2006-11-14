@@ -27,9 +27,10 @@
 #ifndef WP5PART_H
 #define WP5PART_H
 
-#include "WPXPart.h"
-#include "WPXParser.h"
-#include "WP5Listener.h"
+#include "libwpd_internal.h"
+
+class WPXInputStream;
+class WP5Listener;
 
 class WP5Part
 {

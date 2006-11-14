@@ -30,7 +30,7 @@
 
 WP6GeneralTextPacket::WP6GeneralTextPacket(WPXInputStream *input, int /* id */, uint32_t dataOffset, uint32_t dataSize): 
 	WP6PrefixDataPacket(input),
-	m_subDocument(NULL)
+	m_subDocument(0)
 {	
 	_read(input, dataOffset, dataSize);
 }
@@ -49,7 +49,7 @@ void WP6GeneralTextPacket::_readContents(WPXInputStream *input)
 	if (numTextBlocks < 1)
 	{
 		WPD_DEBUG_MSG(("WordPerfect: Number of text blocks is %i\n", numTextBlocks));
-		return; // m_subDocument will be NULL
+		return; // m_subDocument will be 0
 	}
 	
 	uint32_t *blockSizes = new uint32_t[numTextBlocks];
@@ -67,7 +67,7 @@ void WP6GeneralTextPacket::_readContents(WPXInputStream *input)
 		WPD_DEBUG_MSG(("WordPerfect: The total size of the text is %i\n", totalSize));
 		if (blockSizes)
 			delete [] blockSizes;
-		return; // m_subDocument will be NULL
+		return; // m_subDocument will be 0
 	}
 	uint8_t *streamData = new uint8_t[totalSize];
 	int streamPos = 0;

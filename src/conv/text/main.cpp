@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 	}
 	gsf_init();
 
-	GError   *err = NULL;
+	GError   *err = 0;
         char *szInputFile;
 	bool isInfo;
 
@@ -58,9 +58,9 @@ int main(int argc, char *argv[])
 	}
 
 	GsfInput * input = GSF_INPUT(gsf_input_stdio_new (szInputFile, &err));
-	if (input == NULL) 
+	if (!input) 
 	{
-		g_return_val_if_fail (err != NULL, 1);
+		g_return_val_if_fail (err != 0, 1);
 		
 		g_warning ("'%s' error: %s", szInputFile, err->message);
 		g_error_free (err);

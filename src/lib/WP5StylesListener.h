@@ -31,7 +31,6 @@
 #include "WPXStylesListener.h"
 #include <vector>
 #include <list>
-#include <set>
 #include "WPXPageSpan.h"
 #include "WPXTable.h"
 #include "WP5SubDocument.h"

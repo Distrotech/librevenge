@@ -28,7 +28,7 @@
 #include "WP3MiscellaneousGroup.h"
 #include "WP3FileStructure.h"
 #include "WPXFileStructure.h"
-#include "libwpd_internal.h"
+#include "WP3Listener.h"
 
 WP3MiscellaneousGroup::WP3MiscellaneousGroup(WPXInputStream *input) :
 	WP3VariableLengthGroup(),

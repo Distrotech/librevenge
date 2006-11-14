@@ -42,7 +42,7 @@
 
 WP6VariableLengthGroup::WP6VariableLengthGroup() :
 	m_numPrefixIDs(0),
-	m_prefixIDs(NULL)
+	m_prefixIDs(0)
 {
 }
 
@@ -141,7 +141,7 @@ void WP6VariableLengthGroup::_read(WPXInputStream *input)
 	else
 	{
 		m_numPrefixIDs = 0;
-		m_prefixIDs = NULL;
+		m_prefixIDs = 0;
 	}
 		
 	m_sizeNonDeletable = readU16(input);

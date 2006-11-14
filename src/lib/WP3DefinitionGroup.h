@@ -26,6 +26,11 @@
 #define WP3DEFINITIONGROUP_H
 
 #include "WP3VariableLengthGroup.h"
+#include "libwpd_types.h"
+#include <vector>
+
+class WPXInputStream;
+class WP3Listener;
 
 class WP3DefinitionGroup : public WP3VariableLengthGroup
 {

@@ -27,10 +27,7 @@
 #ifndef WPXLISTENER_H
 #define WPXLISTENER_H
 
-#include "libwpd_internal.h"
-#include "WPXString.h"
 #include "WPXPageSpan.h"
-#include <vector>
 #include <list>
 
 class WPXListener

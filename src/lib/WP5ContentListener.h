@@ -33,7 +33,7 @@
 #include "WPXString.h"
 #include "libwpd_internal.h"
 #include "WPXHLListenerImpl.h"
-#include "WPXListener.h"
+#// include "WPXListener.h"
 #include <vector>
 
 typedef struct _WP5ContentParsingState WP5ContentParsingState;

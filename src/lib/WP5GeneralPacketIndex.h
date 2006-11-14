@@ -24,7 +24,7 @@
 
 #ifndef WP5GENERALPACKETINDEX_H
 #define WP5GENERALPACKETINDEX_H
-#include <stdlib.h>
+#include "libwpd_types.h"
 #include "WPXStream.h"
 
 class WP5GeneralPacketIndex

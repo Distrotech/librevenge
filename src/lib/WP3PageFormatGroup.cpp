@@ -29,6 +29,7 @@
 #include "WP3FileStructure.h"
 #include "libwpd_internal.h"
 #include "libwpd_math.h"
+#include "WP3Listener.h"
 
 WP3PageFormatGroup::WP3PageFormatGroup(WPXInputStream *input) :
 	WP3VariableLengthGroup(),

@@ -25,6 +25,7 @@
 
 #include "WP3AttributeGroup.h"
 #include "libwpd_internal.h"
+#include "WP3Listener.h"
 
 WP3AttributeGroup::WP3AttributeGroup(WPXInputStream *input, uint8_t groupID)
 	: WP3FixedLengthGroup(groupID),

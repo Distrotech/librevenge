@@ -26,7 +26,8 @@
 #define WP1HEADERFOOTERGROUP_H
 
 #include "WP1VariableLengthGroup.h"
-#include "WP1SubDocument.h"
+
+class WP1SubDocument;
 
 class WP1HeaderFooterGroup : public WP1VariableLengthGroup
 {

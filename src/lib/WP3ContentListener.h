@@ -27,9 +27,7 @@
 #define WP3CONTENTLISTENER_H
 
 #include "WP3Listener.h"
-#include "WPXHLListenerImpl.h"
 #include "WPXContentListener.h"
-#include "libwpd_internal.h"
 #include "WP3SubDocument.h"
 
 typedef struct _WP3ContentParsingState WP3ContentParsingState;

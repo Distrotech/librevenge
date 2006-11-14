@@ -24,7 +24,6 @@
 
 #include "WP1FlushRightGroup.h"
 #include "libwpd_internal.h"
-#include <string>
 
 WP1FlushRightGroup::WP1FlushRightGroup(WPXInputStream *input, uint8_t group) :
 	WP1FixedLengthGroup(group)

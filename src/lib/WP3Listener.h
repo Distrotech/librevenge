@@ -26,11 +26,7 @@
 #ifndef WP3LISTENER_H
 #define WP3LISTENER_H
 
-#include "WPXHLListenerImpl.h"
 #include "libwpd_internal.h"
-#include "WPXTable.h"
-#include "WPXPageSpan.h"
-#include <list>
 #include <vector>
 
 class WP3SubDocument;

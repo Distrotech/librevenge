@@ -26,7 +26,6 @@
 #define WP1SETTABSGROUP_H
 
 #include "WP1VariableLengthGroup.h"
-#include "WP1SubDocument.h"
 
 class WP1SetTabsGroup : public WP1VariableLengthGroup
 {

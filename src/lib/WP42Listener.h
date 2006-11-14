@@ -27,10 +27,7 @@
 #ifndef WP42LISTENER_H
 #define WP42LISTENER_H
 
-#include "libwpd_internal.h"
-#include "WPXHLListenerImpl.h"
-#include "WPXPageSpan.h"
-#include <list>
+#include "libwpd_types.h"
 
 class WP42SubDocument;
 

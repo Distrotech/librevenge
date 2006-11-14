@@ -26,10 +26,9 @@
 #ifndef WPXPARSER_H
 #define WPXPARSER_H
 
-#include "WPXHeader.h"
-//#include "WPXListener.h"
-
 class WPXHLListenerImpl;
+class WPXHeader;
+class WPXInputStream;
 
 class WPXParser
 {

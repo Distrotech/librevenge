@@ -46,7 +46,7 @@ WP5Parser::~WP5Parser()
 
 WP5PrefixData * WP5Parser::getPrefixData(WPXInputStream *input)
 {
-	WP5PrefixData *prefixData = NULL;
+	WP5PrefixData *prefixData = 0;
 	try
 	{
 		prefixData = new WP5PrefixData(input);
@@ -115,7 +115,7 @@ void WP5Parser::parseDocument(WPXInputStream *input, WP5Listener *listener)
 		else 
 		{
 			WP5Part *part = WP5Part::constructPart(input, readVal);
-			if (part != NULL)
+			if (part)
 			{
 				part->parse(listener);
 				DELETEP(part);
@@ -129,7 +129,7 @@ void WP5Parser::parse(WPXHLListenerImpl *listenerImpl)
 	WPXInputStream *input = getInput();
 	std::list<WPXPageSpan> pageList;
 	WPXTableList tableList;	
-	WP5PrefixData * prefixData = NULL;
+	WP5PrefixData * prefixData = 0;
 	std::vector<WP5SubDocument *> subDocuments;
 	
 	try

@@ -25,6 +25,8 @@
  */
 
 #include "WP6SingleByteFunction.h"
+#include "WP6FileStructure.h"
+#include "WP6Listener.h"
 #include "libwpd_internal.h"
 
 WP6SingleByteFunction * WP6SingleByteFunction::constructSingleByteFunction(WPXInputStream * /* input */, uint8_t groupID)
@@ -80,7 +82,7 @@ WP6SingleByteFunction * WP6SingleByteFunction::constructSingleByteFunction(WPXIn
 //		case WP6_TOP_AUTO_HYPHEN:
 		default:
 			// should not happen
-			return NULL;
+			return 0;
 		}
 		
 		// search for soft page breaks and dispatch messages to that effect
@@ -152,14 +154,14 @@ void WP6TableRowFunction::parse(WP6Listener *listener)
 	// would use the multi-byte variant of this function
 	listener->insertRow(0x0000, true, false);
 	RGBSColor tmpCellBorderColor(0x00, 0x00, 0x00, 0x64);
-	listener->insertCell(1, 1, 0x00, NULL, NULL, &tmpCellBorderColor, TOP, false, 0x00000000);
+	listener->insertCell(1, 1, 0x00, 0, 0, &tmpCellBorderColor, TOP, false, 0x00000000);
 }
 
 void WP6TableCellFunction::parse(WP6Listener *listener)
 {
 	// default values
 	RGBSColor tmpCellBorderColor(0x00, 0x00, 0x00, 0x64);
-	listener->insertCell(1, 1, 0x00, NULL, NULL, &tmpCellBorderColor, TOP, false, 0x00000000);
+	listener->insertCell(1, 1, 0x00, 0, 0, &tmpCellBorderColor, TOP, false, 0x00000000);
 }
 
 void WP6TableOffFunction::parse(WP6Listener *listener)

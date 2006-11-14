@@ -26,7 +26,6 @@
 #define WP1EXTENDEDCHARACTERGROUP_H
 
 #include "WP1FixedLengthGroup.h"
-#include "WP1SubDocument.h"
 
 class WP1ExtendedCharacterGroup : public WP1FixedLengthGroup
 {

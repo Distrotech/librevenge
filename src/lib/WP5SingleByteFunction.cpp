@@ -25,6 +25,7 @@
  */
 
 #include "WP5SingleByteFunction.h"
+#include "WP5Listener.h"
 #include "libwpd_internal.h"
 
 WP5SingleByteFunction * WP5SingleByteFunction::constructSingleByteFunction(WPXInputStream * /* input */, uint8_t groupID)
@@ -57,7 +58,7 @@ WP5SingleByteFunction * WP5SingleByteFunction::constructSingleByteFunction(WPXIn
 	
 	default:
 		// should not happen
-		return NULL;
+		return 0;
 		}
 }
 

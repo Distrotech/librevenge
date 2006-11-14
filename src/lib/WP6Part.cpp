@@ -24,16 +24,13 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WPXPart.h"
 #include "WP6Part.h"
-#include "WP6Header.h"
 #include "WP6VariableLengthGroup.h"
 #include "WP6FixedLengthGroup.h"
 #include "WP6SingleByteFunction.h"
-#include "libwpd_internal.h"
 
 // constructPart: constructs a parseable low-level representation of part of the document
-// returns the part if it successfully creates the part, returns NULL if it can't
+// returns the part if it successfully creates the part, returns 0 if it can't
 // throws an exception if there is an error
 // precondition: readVal us between 0x80 and 0xFF
 WP6Part * WP6Part::constructPart(WPXInputStream *input, const uint8_t readVal)
@@ -50,7 +47,7 @@ WP6Part * WP6Part::constructPart(WPXInputStream *input, const uint8_t readVal)
 		if (!WP6VariableLengthGroup::isGroupConsistent(input, readVal))
 		{
 			WPD_DEBUG_MSG(("WordPerfect: Consistency Check (variable length) failed; ignoring this byte\n"));
-			return NULL;
+			return 0;
 		}
 		WPD_DEBUG_MSG(("WordPerfect: constructVariableLengthGroup(input, val=0x%.2x)\n", readVal));
 		return WP6VariableLengthGroup::constructVariableLengthGroup(input, readVal);
@@ -61,12 +58,12 @@ WP6Part * WP6Part::constructPart(WPXInputStream *input, const uint8_t readVal)
 		if (!WP6FixedLengthGroup::isGroupConsistent(input, readVal))
 		{
 			WPD_DEBUG_MSG(("WordPerfect: Consistency Check (fixed length) failed; ignoring this byte\n"));
-			return NULL;
+			return 0;
 		}
 		WPD_DEBUG_MSG(("WordPerfect: constructFixedLengthGroup(input, val=0x%.2x)\n", readVal));
 		return WP6FixedLengthGroup::constructFixedLengthGroup(input, readVal);
 	}
 
-	WPD_DEBUG_MSG(("WordPerfect: Returning NULL from constructPart\n"));
-	return NULL;
+	WPD_DEBUG_MSG(("WordPerfect: Returning 0 from constructPart\n"));
+	return 0;
 }

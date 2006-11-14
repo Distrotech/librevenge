@@ -47,7 +47,7 @@ WP5GeneralPacketData * WP5GeneralPacketData::constructGeneralPacketData(WPXInput
 		return new WP5FontNameStringPoolPacket(input, packetIndex->getID(), packetIndex->getDataOffset(), 
 							packetIndex->getDataSize());
 	default:
-		return NULL;
+		return 0;
 	}
 }
 

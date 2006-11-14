@@ -93,5 +93,5 @@ const WP5GeneralPacketData * WP5PrefixData::getGeneralPacketData(const int type)
 	if (Iter != m_generalPacketData.end())
 		return static_cast<const WP5GeneralPacketData *>(Iter->second);
 	else
-		return NULL;
+		return 0;
 }

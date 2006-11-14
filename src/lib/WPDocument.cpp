@@ -23,8 +23,6 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include <stdlib.h>
-#include <string.h>
 #include "WPDocument.h"
 #include "WPXHeader.h"
 #include "WPXParser.h"
@@ -65,13 +63,13 @@ WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input, bool part
 {
 	WPDConfidence confidence = WPD_CONFIDENCE_NONE;
 
-	WPXHeader *header = NULL;
+	WPXHeader *header = 0;
 
 	WPD_DEBUG_MSG(("WPDocument::isFileFormatSupported()\n"));
 
 	// by-pass the OLE stream (if it exists) and returns the (sub) stream with the
 	// WordPerfect document.
-	WPXInputStream *document = NULL;
+	WPXInputStream *document = 0;
 	bool isDocumentOLE = false;
 
 	// BIG BIG NOTE: very unsafe on partial content!!!
@@ -142,7 +140,7 @@ WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input, bool part
 			
 
 		// dispose of the reference to the ole input stream, if we allocated one
-		if (document != NULL && isDocumentOLE)
+		if (document && isDocumentOLE)
 			DELETEP(document);
 
 		return confidence;
@@ -152,7 +150,7 @@ WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input, bool part
 		WPD_DEBUG_MSG(("File Exception trapped\n"));
 
 		// dispose of the reference to the ole input stream, if we allocated one
-		if (document != NULL && isDocumentOLE)
+		if (document && isDocumentOLE)
 			DELETEP(document);
 
 		return WPD_CONFIDENCE_NONE;
@@ -162,7 +160,7 @@ WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input, bool part
 		WPD_DEBUG_MSG(("Unknown Exception trapped\n"));
 
 		// dispose of the reference to the ole input stream, if we allocated one
-		if (document != NULL && isDocumentOLE)
+		if (document && isDocumentOLE)
 			DELETEP(document);
 
 		return WPD_CONFIDENCE_NONE;
@@ -178,12 +176,12 @@ WPXHLListenerImpl class implementation when needed. This is often commonly calle
 */
 WPDResult WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerImpl)
 {
-	WPXParser *parser = NULL;
+	WPXParser *parser = 0;
 
 	// by-pass the OLE stream (if it exists) and returns the (sub) stream with the
 	// WordPerfect document.
 
-	WPXInputStream *document = NULL;
+	WPXInputStream *document = 0;
 	bool isDocumentOLE = false;
 
 	WPD_DEBUG_MSG(("WPDocument::parse()\n"));
@@ -301,7 +299,7 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerIm
 	}
 
 	DELETEP(parser);
-	if (document != NULL && isDocumentOLE)
+	if (document && isDocumentOLE)
 		DELETEP(document);
 
 	return error;

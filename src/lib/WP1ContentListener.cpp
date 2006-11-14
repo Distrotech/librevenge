@@ -27,8 +27,9 @@
 #include "WP1ContentListener.h"
 #include "WP1FileStructure.h"
 #include "libwpd_internal.h"
+#include "WP1SubDocument.h"
 
-#define WP1_NUM_TEXT_COLUMS_PER_INCH 12
+// #define WP1_NUM_TEXT_COLUMS_PER_INCH 12
 
 _WP1ContentParsingState::_WP1ContentParsingState() :
 	m_numDeferredTabs(0),

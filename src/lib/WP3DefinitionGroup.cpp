@@ -28,6 +28,7 @@
 #include "WPXFileStructure.h"
 #include "libwpd_internal.h"
 #include "libwpd_math.h"
+#include "WP3Listener.h"
 
 WP3DefinitionGroup::WP3DefinitionGroup(WPXInputStream *input) :
 	WP3VariableLengthGroup()

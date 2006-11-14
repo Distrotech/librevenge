@@ -27,11 +27,7 @@
 #ifndef WP1PART_H
 #define WP1PART_H
 
-#include "WPXPart.h"
-#include "WPXParser.h"
 #include "WP1Listener.h"
-
-class WP1LLListener;
 
 class WP1Part
 {

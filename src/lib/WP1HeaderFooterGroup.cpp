@@ -24,12 +24,12 @@
 
 #include "WP1HeaderFooterGroup.h"
 #include "libwpd_internal.h"
-#include <vector>
+#include "WP1SubDocument.h"
 
 WP1HeaderFooterGroup::WP1HeaderFooterGroup(WPXInputStream *input, uint8_t group) :
 	WP1VariableLengthGroup(group),
 	m_definition(0),
-	m_subDocument(NULL)
+	m_subDocument(0)
 {
 	_read(input);
 }

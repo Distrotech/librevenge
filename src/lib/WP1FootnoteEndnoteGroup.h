@@ -26,8 +26,9 @@
 #define WP1FOOTNOTEENDNOTEGROUP_H
 
 #include "WP1VariableLengthGroup.h"
-#include "WP1SubDocument.h"
 #include "libwpd_internal.h"
+
+class WP1SubDocument;
 
 class WP1FootnoteEndnoteGroup : public WP1VariableLengthGroup
 {

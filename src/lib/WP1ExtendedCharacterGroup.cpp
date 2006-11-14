@@ -24,7 +24,6 @@
 
 #include "WP1ExtendedCharacterGroup.h"
 #include "libwpd_internal.h"
-#include <string>
 
 WP1ExtendedCharacterGroup::WP1ExtendedCharacterGroup(WPXInputStream *input, uint8_t group) :
 	WP1FixedLengthGroup(group),

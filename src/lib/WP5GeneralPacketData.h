@@ -22,10 +22,10 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP6PREFIXDATAPACKET_H
-#define WP6PREFIXDATAPACKET_H
-#include <stdlib.h>
+#ifndef WP5GENERALPACKETDATA_H
+#define WP5GENERALPACKETDATA_H
 #include "WPXParser.h"
+#include "libwpd_types.h"
 
 class WP5GeneralPacketIndex;
 
@@ -42,4 +42,4 @@ protected:
  	virtual void _read(WPXInputStream *input, uint32_t dataOffset, uint32_t dataSize);
 };
 
-#endif /* WP6PREFIXDATAPACKET_H */
+#endif /* WP5GENERALPACKETDATA_H */

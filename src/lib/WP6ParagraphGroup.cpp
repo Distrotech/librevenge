@@ -27,10 +27,12 @@
 #include "WP6ParagraphGroup.h"
 #include "libwpd_internal.h"
 #include "WPXFileStructure.h"
+#include "WP6FileStructure.h"
+#include "WP6Listener.h"
 
 WP6ParagraphGroup::WP6ParagraphGroup(WPXInputStream *input) :
 	WP6VariableLengthGroup(),
-	m_subGroupData(NULL)
+	m_subGroupData(0)
 {
 	_read(input);
 }

@@ -26,7 +26,6 @@
 #define WP1POINTSIZEGROUP_H
 
 #include "WP1FixedLengthGroup.h"
-#include "WP1SubDocument.h"
 
 class WP1PointSizeGroup : public WP1FixedLengthGroup
 {

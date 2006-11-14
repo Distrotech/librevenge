@@ -29,7 +29,7 @@
 WP42HeaderFooterGroup::WP42HeaderFooterGroup(WPXInputStream *input, uint8_t group) :
 	WP42MultiByteFunctionGroup(group),
 	m_definition(0),
-	m_subDocument(NULL)
+	m_subDocument(0)
 {
 	_read(input);
 }

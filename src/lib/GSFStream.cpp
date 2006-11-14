@@ -31,7 +31,7 @@
 GSFInputStream::GSFInputStream(GsfInput *input) :
 	WPXInputStream(true),
 	m_input(input),
-	m_ole(NULL)
+	m_ole(0)
 {
 	g_object_ref(G_OBJECT(input));
 }
@@ -46,9 +46,9 @@ GSFInputStream::~GSFInputStream()
 
 const uint8_t * GSFInputStream::read(size_t numBytes, size_t &numBytesRead)
 {
-	const uint8_t *buf = gsf_input_read(m_input, numBytes, NULL);
+	const uint8_t *buf = gsf_input_read(m_input, numBytes, 0);
 
-	if (buf == NULL)
+	if (!buf)
 		numBytesRead = 0;
 	else
 		numBytesRead = numBytes;
@@ -75,9 +75,9 @@ int GSFInputStream::seek(long offset, WPX_SEEK_TYPE seekType)
 bool GSFInputStream::isOLEStream()
 {
 	if (!m_ole)
-		m_ole = GSF_INFILE(gsf_infile_msole_new (m_input, NULL)); 
+		m_ole = GSF_INFILE(gsf_infile_msole_new (m_input, 0)); 
 
-	if (m_ole != NULL)
+	if (m_ole)
 		return true;
 
 	return false;
@@ -85,10 +85,10 @@ bool GSFInputStream::isOLEStream()
 
 WPXInputStream * GSFInputStream::getDocumentOLEStream()
 {
-	WPXInputStream *documentStream = NULL;
+	WPXInputStream *documentStream = 0;
 
 	if (!m_ole)
-		m_ole = GSF_INFILE(gsf_infile_msole_new (m_input, NULL)); 
+		m_ole = GSF_INFILE(gsf_infile_msole_new (m_input, 0)); 
 
 	if (m_ole)
 	{

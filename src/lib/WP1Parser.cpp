@@ -26,15 +26,13 @@
 
 #include "WP1Parser.h"
 #include "WP1Part.h"
-#include "WPXHeader.h"
 #include "libwpd_internal.h"
-#include "WPXTable.h"
 #include "WP1FileStructure.h"
 #include "WP1StylesListener.h"
 #include "WP1ContentListener.h"
 
 WP1Parser::WP1Parser(WPXInputStream *input) :
-	WPXParser(input, NULL)
+	WPXParser(input, 0)
 {
 }
 
@@ -171,7 +169,7 @@ void WP1Parser::parseDocument(WPXInputStream *input, WP1Listener *listener)
 		else if (readVal >= (uint8_t)0xC0 && readVal <= (uint8_t)0xFE)
 		{
 			WP1Part *part = WP1Part::constructPart(input, readVal);
-			if (part != NULL)
+			if (part)
 			{
 				part->parse(listener);
 				DELETEP(part);

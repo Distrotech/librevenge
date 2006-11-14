@@ -25,6 +25,7 @@
  */
 
 #include "WP6HighlightGroup.h"
+#include "WP6Listener.h"
 #include "libwpd_internal.h"
 
 WP6HighlightGroup::WP6HighlightGroup(WPXInputStream *input, uint8_t groupID)

@@ -26,7 +26,9 @@
 #define WP1MARGINRESETGROUP_H
 
 #include "WP1FixedLengthGroup.h"
-#include "WP1SubDocument.h"
+
+class WPXInputStream;
+class WP1Listener;
 
 class WP1MarginResetGroup : public WP1FixedLengthGroup
 {

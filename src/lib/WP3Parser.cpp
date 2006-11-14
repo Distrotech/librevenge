@@ -77,7 +77,7 @@ void WP3Parser::parseDocument(WPXInputStream *input, WP3Listener *listener)
 		else 
 		{
 			WP3Part *part = WP3Part::constructPart(input, readVal);
-			if (part != NULL)
+			if (part)
 			{
 				part->parse(listener);
 				DELETEP(part);

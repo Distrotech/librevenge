@@ -27,6 +27,7 @@
 #include "WP6TabGroup.h"
 #include "libwpd_internal.h"
 #include "WPXFileStructure.h"
+#include "WP6Listener.h"
 
 WP6TabGroup::WP6TabGroup(WPXInputStream *input) :
 	WP6VariableLengthGroup(),

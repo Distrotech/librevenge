@@ -37,7 +37,7 @@ WP5StylesListener::WP5StylesListener(std::list<WPXPageSpan> &pageList, WPXTableL
 	m_currentPage(WPXPageSpan()),
 	m_nextPage(WPXPageSpan()),
 	m_tableList(tableList),
-	m_currentTable(NULL), 
+	m_currentTable(0), 
 	m_tempMarginLeft(1.0f),
 	m_tempMarginRight(1.0f),
 	m_currentPageHasContent(false),
@@ -89,7 +89,7 @@ void WP5StylesListener::insertBreak(const uint8_t breakType)
 				}
 				else
 					m_currentPage.setHeaderFooter((*HFiter).getType(), (*HFiter).getInternalType(),
-						(*HFiter).getOccurence(), NULL, (*HFiter).getTableList());	
+						(*HFiter).getOccurence(), 0, (*HFiter).getTableList());	
 			}
 			m_nextPage = WPXPageSpan();
 			m_currentPageHasContent = false;
@@ -217,7 +217,7 @@ void WP5StylesListener::headerFooterGroup(const uint8_t headerFooterType, const 
 					_handleSubDocument(subDocument, true, tableList);
 				}
 				else
-					m_currentPage.setHeaderFooter(wpxType, headerFooterType, wpxOccurence, NULL, tableList);
+					m_currentPage.setHeaderFooter(wpxType, headerFooterType, wpxOccurence, 0, tableList);
 			}
 		}
 		m_currentPageHasContent = tempCurrentPageHasContent;

@@ -28,9 +28,10 @@
 #include "WP5FileStructure.h"
 #include "WPXFileStructure.h"
 #include "libwpd_internal.h"
+#include "WP5PrefixData.h"
 
 WP5Listener::WP5Listener() :
-	m_prefixData(NULL)
+	m_prefixData(0)
 {
 }
 
@@ -39,5 +40,5 @@ const WP5GeneralPacketData * WP5Listener::getGeneralPacketData(const int type) c
 	if (m_prefixData)
 		return m_prefixData->getGeneralPacketData(type); 
 	else
-		return NULL;
+		return 0;
 }

@@ -25,6 +25,8 @@
  */
 
 #include "WP6CharacterGroup.h"
+#include "WP6FileStructure.h"
+#include "WP6Listener.h"
 #include "libwpd_internal.h"
 
 /*************************************************************************
@@ -227,7 +229,7 @@ void WP6CharacterGroup_TableColumnSubGroup::parse(WP6Listener *listener, const u
 
 WP6CharacterGroup::WP6CharacterGroup(WPXInputStream *input) :
 	WP6VariableLengthGroup(),
-	m_subGroupData(NULL)
+	m_subGroupData(0)
 {
 	_read(input);
 }

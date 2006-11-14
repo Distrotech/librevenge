@@ -30,6 +30,7 @@
 #include "WPXFileStructure.h"
 #include "libwpd_internal.h"
 #include "WP6SubDocument.h"
+#include "WP6PrefixDataPacket.h"
 
 // WP6StylesListener: creates intermediate table and page span representations, given a
 // sequence of messages passed to it by the parser.
@@ -39,7 +40,7 @@ WP6StylesListener::WP6StylesListener(std::list<WPXPageSpan> &pageList, WPXTableL
 	WPXStylesListener(pageList),
 	m_currentPage(WPXPageSpan()),
 	m_tableList(tableList), 
-	m_currentTable(NULL),
+	m_currentTable(0),
 	m_tempMarginLeft(1.0f),
 	m_tempMarginRight(1.0f),
 	m_currentPageHasContent(false),
@@ -189,8 +190,8 @@ void WP6StylesListener::headerFooterGroup(const uint8_t headerFooterType, const 
 
 			WPXTableList tableList; 
 			m_currentPage.setHeaderFooter(wpxType, headerFooterType, wpxOccurence,
-						((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : NULL), tableList);
-			_handleSubDocument(((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : NULL), true, tableList);
+						((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : 0), tableList);
+			_handleSubDocument(((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : 0), true, tableList);
 		}
 		m_currentPageHasContent = tempCurrentPageHasContent;
 	}
@@ -269,7 +270,7 @@ void WP6StylesListener::noteOn(const uint16_t textPID)
 	if (!isUndoOn()) 
 	{
 		m_currentPageHasContent = true; 		
-		_handleSubDocument(((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : NULL), false, m_tableList);
+		_handleSubDocument(((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : 0), false, m_tableList);
 	}
 }
 

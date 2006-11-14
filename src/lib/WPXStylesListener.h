@@ -25,11 +25,8 @@
 #ifndef WPXSTYLESLISTENER_H
 #define WPXSTYLESLISTENER_H
 
-#include "libwpd_internal.h"
 #include "WPXPageSpan.h"
 #include "WPXListener.h"
-#include "WPXPageSpan.h"
-#include <vector>
 #include <list>
 
 class WPXStylesListener : protected WPXListener

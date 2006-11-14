@@ -26,7 +26,7 @@
 
 #include "WP5PageFormatGroup.h"
 #include "WP5FileStructure.h"
-#include "libwpd_internal.h"
+#include "WP5Listener.h"
 
 WP5PageFormatGroup::WP5PageFormatGroup(WPXInputStream *input) :
 	WP5VariableLengthGroup(),

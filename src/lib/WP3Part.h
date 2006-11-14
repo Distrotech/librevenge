@@ -26,9 +26,10 @@
 #ifndef WP3PART_H
 #define WP3PART_H
 
-#include "WPXPart.h"
-#include "WPXParser.h"
-#include "WP3Listener.h"
+#include "libwpd_types.h"
+
+class WPXInputStream;
+class WP3Listener;
 
 class WP3Part
 {
@@ -39,4 +40,4 @@ class WP3Part
 	virtual void parse(WP3Listener *listener) = 0;
 };
 
-#endif /* WP5PART_H */
+#endif /* WP3PART_H */

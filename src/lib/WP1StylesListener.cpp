@@ -25,7 +25,6 @@
  */
  
 #include "WP1StylesListener.h"
-#include "WPXTable.h"
 #include "WP1FileStructure.h"
 #include "WPXFileStructure.h"
 #include "libwpd_internal.h"
@@ -89,7 +88,7 @@ void WP1StylesListener::insertBreak(const uint8_t breakType)
 				else
 				{
 					m_currentPage.setHeaderFooter((*HFiter).getType(), (*HFiter).getInternalType(),
-						(*HFiter).getOccurence(), NULL, (*HFiter).getTableList());
+						(*HFiter).getOccurence(), 0, (*HFiter).getTableList());
 				}	
 			}
 			m_nextPage = WPXPageSpan();
@@ -213,7 +212,7 @@ void WP1StylesListener::headerFooterGroup(const uint8_t headerFooterDefinition, 
 				_handleSubDocument(subDocument, true, tableList);
 			}
 			else
-				m_currentPage.setHeaderFooter(wpxType, headerFooterType, wpxOccurence, NULL, tableList);
+				m_currentPage.setHeaderFooter(wpxType, headerFooterType, wpxOccurence, 0, tableList);
 		}
 		m_currentPageHasContent = tempCurrentPageHasContent;
 	}

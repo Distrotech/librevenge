@@ -32,7 +32,7 @@ _WPXContentParsingState::_WPXContentParsingState() :
 	m_fontSize(12.0f/*WP6_DEFAULT_FONT_SIZE*/), // FIXME ME!!!!!!!!!!!!!!!!!!! HELP WP6_DEFAULT_FONT_SIZE
 	m_fontName(new WPXString(/*WP6_DEFAULT_FONT_NAME*/"Times New Roman")), // EN PAS DEFAULT FONT AAN VOOR WP5/6/etc
 	m_fontColor(new RGBSColor(0x00,0x00,0x00,0x64)), //Set default to black. Maybe once it will change, but for the while...
-	m_highlightColor(NULL),
+	m_highlightColor(0),
 
 	m_isParagraphColumnBreak(false),
 	m_isParagraphPageBreak(false),
@@ -810,7 +810,7 @@ void WPXContentListener::_closeTableRow()
 				// m_ps->m_currentTableCol++;
 				// Fill the table row untill the end with empty cells
 				RGBSColor tmpCellBorderColor(0x00, 0x00, 0x00, 0x64);
-				_openTableCell(1, 1, 0xFF, NULL, NULL, &tmpCellBorderColor, TOP);
+				_openTableCell(1, 1, 0xFF, 0, 0, &tmpCellBorderColor, TOP);
 				_closeTableCell();
 			}
 			else
@@ -1093,7 +1093,7 @@ WPXString WPXContentListener::_mergeColorsToString(const RGBSColor *fgColor, con
 	WPXString tmpColor;
 	RGBSColor tmpFgColor, tmpBgColor;
 
-	if (fgColor != NULL) {
+	if (fgColor) {
 		tmpFgColor.m_r = fgColor->m_r;
 		tmpFgColor.m_g = fgColor->m_g;
 		tmpFgColor.m_b = fgColor->m_b;
@@ -1103,7 +1103,7 @@ WPXString WPXContentListener::_mergeColorsToString(const RGBSColor *fgColor, con
 		tmpFgColor.m_r = tmpFgColor.m_g = tmpFgColor.m_b = 0xFF;
 		tmpFgColor.m_s = 0x64; // 100%
 	}
-	if (bgColor != NULL) {
+	if (bgColor) {
 		tmpBgColor.m_r = bgColor->m_r;
 		tmpBgColor.m_g = bgColor->m_g;
 		tmpBgColor.m_b = bgColor->m_b;

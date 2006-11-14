@@ -183,7 +183,6 @@ libwpd_0_8_la_SOURCES = \
 	WPXMemoryStream.cpp \
 	WPXPageSpan.cpp \
 	WPXParser.cpp \
-	WPXPart.cpp \
 	WPXProperty.cpp \
 	WPXPropertyList.cpp \
 	WPXPropertyListVector.cpp \
@@ -337,7 +336,6 @@ libwpd_0_8_la_SOURCES = \
 	WPXMemoryStream.h \
 	WPXPageSpan.h \
 	WPXParser.h \
-	WPXPart.h \
 	WPXProperty.h \
 	WPXPropertyList.h \
 	WPXPropertyListVector.h \

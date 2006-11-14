@@ -26,7 +26,6 @@
 
 #ifndef WPXPAGE_H
 #define WPXPAGE_H
-#include "libwpd.h"
 #include "WPXFileStructure.h"
 #include <vector>
 #include "WPXTable.h"

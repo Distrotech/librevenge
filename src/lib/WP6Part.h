@@ -27,10 +27,10 @@
 #ifndef WP6PART_H
 #define WP6PART_H
 
-#include "WPXPart.h"
-#include "WPXParser.h"
-#include "WP6Listener.h"
-#include "WP6FileStructure.h"
+#include "libwpd_internal.h"
+
+class WPXInputStream;
+class WP6Listener;
 
 class WP6Part
 {

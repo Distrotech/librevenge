@@ -25,8 +25,8 @@
 
 #ifndef WP6PREFIXINDICE_H
 #define WP6PREFIXINDICE_H
-#include <stdlib.h>
 #include "WPXStream.h"
+#include "libwpd_types.h"
 
 class WP6PrefixIndice
 {
@@ -44,7 +44,7 @@ class WP6PrefixIndice
 	int m_id;
 	uint8_t m_type;
  	uint8_t m_flags;
- 	uint16_t	m_useCount;
+ 	uint16_t m_useCount;
  	uint16_t m_hideCount;
  	uint32_t m_dataSize;
  	uint32_t m_dataOffset;

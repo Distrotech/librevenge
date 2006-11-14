@@ -1,3 +1,5 @@
+EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
+
 PRJ=..$/..$/..$/..$/..$/..
 
 PRJNAME=libwpd
@@ -158,7 +160,6 @@ SLOFILES= \
 	$(SLO)$/WPXMemoryStream.obj \
 	$(SLO)$/WPXPageSpan.obj \
 	$(SLO)$/WPXParser.obj \
-	$(SLO)$/WPXPart.obj \
 	$(SLO)$/WPXProperty.obj \
 	$(SLO)$/WPXPropertyList.obj \
 	$(SLO)$/WPXPropertyListVector.obj \

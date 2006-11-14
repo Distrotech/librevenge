@@ -26,7 +26,6 @@
 #define WP1TOPMARGINGROUP_H
 
 #include "WP1FixedLengthGroup.h"
-#include "WP1SubDocument.h"
 
 class WP1TopMarginGroup : public WP1FixedLengthGroup
 {

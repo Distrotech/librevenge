@@ -29,7 +29,7 @@
 
 WP5FootnoteEndnoteGroup::WP5FootnoteEndnoteGroup(WPXInputStream *input) :
 	WP5VariableLengthGroup(),
-	m_subDocument(NULL),
+	m_subDocument(0),
 	m_noteReference()
 {
 	_read(input);

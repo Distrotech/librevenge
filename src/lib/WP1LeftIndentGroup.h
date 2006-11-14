@@ -26,7 +26,6 @@
 #define WP1LEFTINDENTGROUP_H
 
 #include "WP1FixedLengthGroup.h"
-#include "WP1SubDocument.h"
 
 class WP1LeftIndentGroup : public WP1FixedLengthGroup
 {

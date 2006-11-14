@@ -24,7 +24,6 @@
 
 #include "WP1BottomMarginGroup.h"
 #include "libwpd_internal.h"
-#include <string>
 
 WP1BottomMarginGroup::WP1BottomMarginGroup(WPXInputStream *input, uint8_t group) :
 	WP1FixedLengthGroup(group),

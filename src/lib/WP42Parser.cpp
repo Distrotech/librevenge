@@ -34,7 +34,7 @@
 #include "WP42ContentListener.h"
 
 WP42Parser::WP42Parser(WPXInputStream *input) :
-	WPXParser(input, NULL)
+	WPXParser(input, 0)
 {
 }
 
@@ -151,7 +151,7 @@ void WP42Parser::parseDocument(WPXInputStream *input, WP42Listener *listener)
 		else if (readVal >= (uint8_t)0xC0 && readVal <= (uint8_t)0xFE)
 		{
 			WP42Part *part = WP42Part::constructPart(input, readVal);
-			if (part != NULL)
+			if (part)
 			{
 				part->parse(listener);
 				DELETEP(part);

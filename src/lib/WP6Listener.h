@@ -27,17 +27,13 @@
 #ifndef WP6LISTENER_H
 #define WP6LISTENER_H
  
-#include "WPXPageSpan.h"
-#include "WPXHLListenerImpl.h"
-#include "WP6FileStructure.h"
-
-#include "WP6PrefixDataPacket.h"
+#include "libwpd_internal.h"
 #include <vector>
-#include <list>
 
 class WPXString;
 class WP6DefaultInitialFontPacket;
 class WP6PrefixData;
+class WP6PrefixDataPacket;
 
 enum WP6OutlineLocation { paragraphGroup, indexHeader };
 

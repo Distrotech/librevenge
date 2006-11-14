@@ -27,6 +27,7 @@
 #include "WP3FileStructure.h"
 #include "libwpd_internal.h"
 #include "libwpd_math.h"
+#include "WP3Listener.h"
 
 WP3FontGroup::WP3FontGroup(WPXInputStream *input) :
 	WP3VariableLengthGroup(),

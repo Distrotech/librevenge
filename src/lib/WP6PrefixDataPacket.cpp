@@ -68,7 +68,7 @@ WP6PrefixDataPacket * WP6PrefixDataPacket::constructPrefixDataPacket(WPXInputStr
 						 prefixIndice->getDataOffset(), 
 						 prefixIndice->getDataSize());
 	default:
-		return NULL;
+		return 0;
 	}
 }
 

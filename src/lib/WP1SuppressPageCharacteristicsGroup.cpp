@@ -24,7 +24,6 @@
 
 #include "WP1SuppressPageCharacteristicsGroup.h"
 #include "libwpd_internal.h"
-#include <string>
 
 WP1SuppressPageCharacteristicsGroup::WP1SuppressPageCharacteristicsGroup(WPXInputStream *input, uint8_t group) :
 	WP1FixedLengthGroup(group),

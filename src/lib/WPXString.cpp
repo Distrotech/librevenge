@@ -28,7 +28,6 @@
 
 #include <string>
 #include <stdarg.h>
-//#include <string.h>
 #include <stdio.h>
 
 static int g_static_utf8_strlen (const char *p);
@@ -134,7 +133,7 @@ void WPXString::sprintf(const char *format, ...)
 	va_list args;
 
 	int bufsize = FIRST_BUF_SIZE;
-	char * buf = NULL;
+	char * buf = 0;
 
 	while(true)
 	{
@@ -201,7 +200,7 @@ bool WPXString::operator==(const WPXString &str)
 
 WPXString::Iter::Iter(const WPXString &str) :
 	m_pos(0),
-	m_curChar(NULL)
+	m_curChar(0)
 {
 	m_buf = static_cast<void *>(new std::string(str.cstr()));
 
@@ -244,9 +243,9 @@ bool WPXString::Iter::last()
 
 const char * WPXString::Iter::operator()() const
 { 
-	if (m_pos == (-1)) return NULL; 
+	if (m_pos == (-1)) return 0; 
 
-	delete [] m_curChar; m_curChar = NULL;
+	if (m_curChar) delete [] m_curChar; m_curChar = 0;
 	int32_t charLength =(int32_t) (g_static_utf8_next_char(&(static_cast<std::string *>(m_buf)->c_str()[m_pos])) - 
 				       &(static_cast<std::string *>(m_buf)->c_str()[m_pos]));
 	m_curChar = new char[charLength+1];
@@ -261,7 +260,7 @@ const char * WPXString::Iter::operator()() const
 
 void appendUCS4(WPXString &str, uint32_t ucs4)
 {
-	int charLength = g_static_unichar_to_utf8(ucs4, NULL);
+	int charLength = g_static_unichar_to_utf8(ucs4, 0);
 	char *utf8 = new(char[charLength+1]);
 	utf8[charLength] = '\0';
 	g_static_unichar_to_utf8(ucs4, utf8);
@@ -277,7 +276,7 @@ void appendUCS4(WPXString &str, uint32_t ucs4)
  *
  * @c: a ISO10646 character code
  * @outbuf: output buffer, must have at least 6 bytes of space.
- *       If %NULL, the length will be computed and returned
+ *       If %0, the length will be computed and returned
  *       and nothing will be written to @outbuf.
  * 
  * Converts a single character to UTF-8.
@@ -349,7 +348,7 @@ int
 g_static_utf8_strlen (const char *p)
 {
 	long len = 0;
-	if (p == NULL)
+	if (!p)
 		return 0;
 
 	while (*p)

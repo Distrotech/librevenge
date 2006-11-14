@@ -35,12 +35,12 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 	
-	GError   *err = NULL;
+	GError   *err = 0;
 	GsfInput * input;
 	input = GSF_INPUT(gsf_input_stdio_new (argv[1], &err));
-	if (input == NULL) 
+	if (!input) 
 	{
-		g_return_val_if_fail (err != NULL, 1);
+		g_return_val_if_fail (err != 0, 1);
 		
 		g_warning ("'%s' error: %s", argv[1], err->message);
 		g_error_free (err);

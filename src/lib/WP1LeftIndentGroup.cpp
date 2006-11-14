@@ -24,7 +24,6 @@
 
 #include "WP1LeftIndentGroup.h"
 #include "libwpd_internal.h"
-#include <string>
 
 WP1LeftIndentGroup::WP1LeftIndentGroup(WPXInputStream *input, uint8_t group) :
 	WP1FixedLengthGroup(group),

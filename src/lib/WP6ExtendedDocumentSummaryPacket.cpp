@@ -31,7 +31,7 @@
 WP6ExtendedDocumentSummaryPacket::WP6ExtendedDocumentSummaryPacket(WPXInputStream *input, int /* id */, uint32_t dataOffset, uint32_t dataSize) :
 	WP6PrefixDataPacket(input),
 	m_dataSize(dataSize),
-	m_stream(NULL)
+	m_stream(0)
 {	
 	if (dataSize > 0)
 		_read(input, dataOffset, dataSize);

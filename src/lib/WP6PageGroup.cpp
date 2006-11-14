@@ -25,6 +25,8 @@
  */
 
 #include "WP6PageGroup.h"
+#include "WP6FileStructure.h"
+#include "WP6Listener.h"
 #include "libwpd_internal.h"
 
 WP6PageGroup::WP6PageGroup(WPXInputStream *input) :
