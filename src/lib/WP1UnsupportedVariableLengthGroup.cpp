@@ -33,7 +33,7 @@ WP1UnsupportedVariableLengthGroup::WP1UnsupportedVariableLengthGroup(WPXInputStr
 	_read(input);
 }
 
-void WP1UnsupportedVariableLengthGroup::_readContents(WPXInputStream *input)
+void WP1UnsupportedVariableLengthGroup::_readContents(WPXInputStream * /* input */)
 {
 	WPD_DEBUG_MSG(("WordPerfect: Handling an unsupported variable length group\n"));
 };
