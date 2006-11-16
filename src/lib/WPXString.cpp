@@ -30,6 +30,11 @@
 #include <stdarg.h>
 #include <stdio.h>
 
+#define FIRST_BUF_SIZE 128
+#ifdef _MSC_VER
+#define vsnprintf _vsnprintf
+#endif
+
 static int g_static_utf8_strlen (const char *p);
 static int g_static_unichar_to_utf8 (uint32_t c,  char *outbuf);
 
@@ -60,6 +65,7 @@ WPXString::~WPXString()
 WPXString::WPXString()
 {
 	m_buf = static_cast<void *>(new std::string());
+	static_cast<std::string *>(m_buf)->reserve(FIRST_BUF_SIZE);
 }
 
 WPXString::WPXString(const WPXString &stringBuf)
@@ -74,6 +80,7 @@ WPXString::WPXString(const WPXString &stringBuf, bool escapeXML)
 	{
 		m_buf = static_cast<void *>(new std::string());
 		int len = static_cast<std::string*>(stringBuf.m_buf)->length(); // strlen(stringBuf.cstr()); // want to use standard strlen
+		static_cast<std::string *>(m_buf)->reserve(2*len);
 		const char *p = stringBuf.cstr();
 		const char *end = p + len; 
 		while (p != end)
@@ -123,21 +130,16 @@ const char * WPXString::cstr() const
     return static_cast<std::string *>(m_buf)->c_str();
 }
 
-#define FIRST_BUF_SIZE 128;
-#ifdef _MSC_VER
-#define vsnprintf _vsnprintf
-#endif
-
 void WPXString::sprintf(const char *format, ...)
 {
 	va_list args;
 
 	int bufsize = FIRST_BUF_SIZE;
-	char * buf = 0;
+	char firstBuffer[FIRST_BUF_SIZE];
+	char * buf = firstBuffer;
 
 	while(true)
 	{
-			buf = new char[bufsize];
 			va_start(args, format);
 			int outsize = vsnprintf(buf, bufsize, format, args);
 			va_end(args);
@@ -149,12 +151,17 @@ void WPXString::sprintf(const char *format, ...)
 			else
 				break;
 
-			delete [] buf;
+			if (buf != firstBuffer)
+			{
+				delete [] buf;
+				buf = new char[bufsize];
+			}
 	}
 
 	clear();
 	append(buf);
-	delete [] buf;
+	if (buf != firstBuffer)
+		delete [] buf;
 }
 
 void WPXString::append(const WPXString &s)
@@ -169,7 +176,7 @@ void WPXString::append(const char *s)
 
 void WPXString::append(const char c)
 {
-	*(static_cast<std::string *>(m_buf)) += c;
+	static_cast<std::string *>(m_buf)->append(1, c);
 }
 
 void WPXString::clear()
