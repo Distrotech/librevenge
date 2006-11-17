@@ -649,10 +649,6 @@ SOURCE=..\..\src\lib\WPXParser.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXPart.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\lib\WPXProperty.cpp
 # End Source File
 # Begin Source File
@@ -1266,10 +1262,6 @@ SOURCE=..\..\src\lib\WPXPageSpan.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WPXParser.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\lib\WPXPart.h
 # End Source File
 # Begin Source File
 
