@@ -268,7 +268,7 @@ const char * WPXString::Iter::operator()() const
 void appendUCS4(WPXString &str, uint32_t ucs4)
 {
 	int charLength = g_static_unichar_to_utf8(ucs4, 0);
-	char *utf8 = new(char[charLength+1]);
+	char *utf8 = new char[charLength+1];
 	utf8[charLength] = '\0';
 	g_static_unichar_to_utf8(ucs4, utf8);
 	str.append(utf8);
