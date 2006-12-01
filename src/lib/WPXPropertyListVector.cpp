@@ -27,35 +27,31 @@
 #include "WPXPropertyList.h"
 #include <vector>
 
-WPXPropertyListVectorImpl::~WPXPropertyListVectorImpl()
-{
-}
-
-class WPXStdPropertyListVectorImpl : public WPXPropertyListVectorImpl
+class WPXPropertyListVectorImpl
 {
 friend class WPXPropertyListVector;
 public:
-	WPXStdPropertyListVectorImpl(const std::vector<WPXPropertyList> &_vector) : m_vector(_vector) {}
-	WPXStdPropertyListVectorImpl() {}
-	virtual void append(const WPXPropertyList &elem) { m_vector.push_back(elem); }
-	virtual size_t count() const { return m_vector.size(); }
+	WPXPropertyListVectorImpl(const std::vector<WPXPropertyList> &_vector) : m_vector(_vector) {}
+	WPXPropertyListVectorImpl() {}
+	void append(const WPXPropertyList &elem) { m_vector.push_back(elem); }
+	size_t count() const { return m_vector.size(); }
 	std::vector<WPXPropertyList> m_vector;
 };
 
-class WPXStdPropertyListVectorIterImpl : public WPXPropertyListVectorIterImpl
+class WPXPropertyListVectorIterImpl
 {
 public:
-        WPXStdPropertyListVectorIterImpl(std::vector<WPXPropertyList> * vect) { 
+        WPXPropertyListVectorIterImpl(std::vector<WPXPropertyList> * vect) { 
                 m_vector = vect; 
                 m_iter = m_vector->begin(); 
                 m_imaginaryFirst = false; 
 	}
-	virtual ~WPXStdPropertyListVectorIterImpl() {}
-	virtual void rewind() { 
+	~WPXPropertyListVectorIterImpl() {}
+	void rewind() { 
                 m_iter = m_vector->begin(); 
                 m_imaginaryFirst = true; 
         }
-	virtual bool next() { 
+	bool next() { 
                 if (!m_imaginaryFirst && m_iter != m_vector->end()) 
                         m_iter++; 
                 m_imaginaryFirst = false; 
@@ -63,12 +59,12 @@ public:
 			return true; 
                 return false; 
         }
-	virtual bool last() {
+	bool last() {
                 if (m_iter == m_vector->end()) 
                         return true; 
                 return false;
         }
-	virtual const WPXPropertyList & operator()() const { return (*m_iter); }
+	const WPXPropertyList & operator()() const { return (*m_iter); }
 
 private:
         std::vector<WPXPropertyList> * m_vector;
@@ -78,13 +74,13 @@ private:
 
 WPXPropertyListVector::WPXPropertyListVector(const WPXPropertyListVector &vect)
 {
-        WPXStdPropertyListVectorImpl *vectorImpl = static_cast<WPXStdPropertyListVectorImpl* >(vect.m_impl);
-        m_impl = new WPXStdPropertyListVectorImpl(vectorImpl->m_vector);
+        WPXPropertyListVectorImpl *vectorImpl = static_cast<WPXPropertyListVectorImpl* >(vect.m_impl);
+        m_impl = new WPXPropertyListVectorImpl(vectorImpl->m_vector);
 }
 
 WPXPropertyListVector::WPXPropertyListVector()
 {
-        m_impl = new WPXStdPropertyListVectorImpl;
+        m_impl = new WPXPropertyListVectorImpl;
 }
 
 WPXPropertyListVector::~WPXPropertyListVector()
@@ -104,8 +100,8 @@ size_t WPXPropertyListVector::count() const
 
 WPXPropertyListVector::Iter::Iter(const WPXPropertyListVector &vect) 
 {
-        WPXStdPropertyListVectorImpl *vectorImpl = static_cast<WPXStdPropertyListVectorImpl* >(vect.m_impl);
-        m_iterImpl = new WPXStdPropertyListVectorIterImpl(&(vectorImpl->m_vector));
+        WPXPropertyListVectorImpl *vectorImpl = static_cast<WPXPropertyListVectorImpl* >(vect.m_impl);
+        m_iterImpl = new WPXPropertyListVectorIterImpl(&(vectorImpl->m_vector));
 }
 
 WPXPropertyListVector::Iter::~Iter() 
@@ -131,8 +127,4 @@ bool WPXPropertyListVector::Iter::last()
 const WPXPropertyList & WPXPropertyListVector::Iter::operator()() const
 {
         return (*m_iterImpl)();
-}
-
-WPXPropertyListVectorIterImpl::~WPXPropertyListVectorIterImpl()
-{
 }

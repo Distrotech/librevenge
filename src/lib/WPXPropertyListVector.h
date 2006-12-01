@@ -29,28 +29,13 @@
 
 class WPXPropertyList;
 
+class WPXPropertyListVectorImpl;
+class WPXPropertyListVectorIterImpl;
+
 // NOTE: this class is meant to be used in libwpd's headers (to work around symbol problems 
 // when different versions of the STL are in use), and should not be used inside your application
 // (it will only slow it down with a pointless layer of abstraction)
  
-class WPXPropertyListVectorImpl
-{
-public:
-	virtual ~WPXPropertyListVectorImpl();
-	virtual void append(const WPXPropertyList &propList) = 0;
-	virtual size_t count() const = 0;
-};
-
-class WPXPropertyListVectorIterImpl
-{
-public:
-	virtual ~WPXPropertyListVectorIterImpl();
-	virtual void rewind() = 0;
-	virtual bool next() = 0;
-	virtual bool last() = 0;
-	virtual const WPXPropertyList & operator()() const = 0;
-};
-
 class WPXPropertyListVector
 {
 public:
