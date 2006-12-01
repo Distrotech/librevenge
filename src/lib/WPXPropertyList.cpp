@@ -27,30 +27,30 @@
 #include <map>
 #include <string>
 
-class WPXStdMapImpl : public WPXMapImpl
+class WPXMapImpl
 {
 public:
-	WPXStdMapImpl() {}
-	virtual ~WPXStdMapImpl();
-	virtual void insert(const char *name, WPXProperty *property);
-	virtual const WPXProperty * operator[](const char *name) const;
-	virtual void remove(const char *name);
-	virtual void clear();
+	WPXMapImpl() {}
+	~WPXMapImpl();
+	void insert(const char *name, WPXProperty *property);
+	const WPXProperty * operator[](const char *name) const;
+	void remove(const char *name);
+	void clear();
 
 private:
 	mutable std::map<std::string, WPXProperty *> m_map;
 
-	friend class WPXStdMapIterImpl;
+	friend class WPXMapIterImpl;
 };
 
-WPXStdMapImpl::~WPXStdMapImpl()
+WPXMapImpl::~WPXMapImpl()
 {
 	for (std::map<std::string, WPXProperty *>::iterator iter = m_map.begin();
 	     iter != m_map.end();
 	     iter++) { delete iter->second; } 
 }
 
-const WPXProperty * WPXStdMapImpl::operator[](const char *name) const
+const WPXProperty * WPXMapImpl::operator[](const char *name) const
 {
 	std::map<std::string, WPXProperty *>::iterator i;
 	const std::string s(name);
@@ -62,18 +62,18 @@ const WPXProperty * WPXStdMapImpl::operator[](const char *name) const
 	return 0;
 }
 
-void WPXStdMapImpl::insert(const char *name, WPXProperty *prop)
+void WPXMapImpl::insert(const char *name, WPXProperty *prop)
 {
 	m_map[name] = prop;
 }
 
-void WPXStdMapImpl::remove(const char *name)
+void WPXMapImpl::remove(const char *name)
 {
 	// FIXME: delete element?
 	m_map.erase(name);
 }
 
-void WPXStdMapImpl::clear()
+void WPXMapImpl::clear()
 {
 	for (std::map<std::string, WPXProperty *>::iterator iter = m_map.begin();
 	     iter != m_map.end();
@@ -83,12 +83,12 @@ void WPXStdMapImpl::clear()
 }
 
 WPXPropertyList::WPXPropertyList() :
-	m_mapImpl(new WPXStdMapImpl())
+	m_mapImpl(new WPXMapImpl())
 {
 }
 
 WPXPropertyList::WPXPropertyList(const WPXPropertyList &propList) :
-	m_mapImpl(new WPXStdMapImpl())
+	m_mapImpl(new WPXMapImpl())
 {
         WPXPropertyList::Iter i(propList);
         for (i.rewind(); i.next(); )
@@ -154,15 +154,15 @@ void WPXPropertyList::clear()
 	m_mapImpl->clear();
 }
 
-class WPXStdMapIterImpl : public WPXMapIterImpl
+class WPXMapIterImpl
 {
 public:
-	WPXStdMapIterImpl(const WPXStdMapImpl *impl);
-	virtual void rewind();
-	virtual bool next();
-	virtual bool last();
-	virtual const WPXProperty * operator()() const;
-	virtual const char * key();
+	WPXMapIterImpl(const WPXMapImpl *impl);
+	void rewind();
+	bool next();
+	bool last();
+	const WPXProperty * operator()() const;
+	const char * key();
 
 private:
 	bool m_imaginaryFirst;
@@ -171,21 +171,21 @@ private:
 };
 
 
-WPXStdMapIterImpl::WPXStdMapIterImpl(const WPXStdMapImpl *impl)
+WPXMapIterImpl::WPXMapIterImpl(const WPXMapImpl *impl)
 {
 	m_map = &(impl->m_map);
 	m_iter = impl->m_map.begin();
 	m_imaginaryFirst = false;
 }
 
-void WPXStdMapIterImpl::rewind()
+void WPXMapIterImpl::rewind()
 {
     // rewind to an imaginary element that preceeds the first one
     m_imaginaryFirst = true;
     m_iter = m_map->begin(); 
 }
 
-bool WPXStdMapIterImpl::next()
+bool WPXMapIterImpl::next()
 {
     if (!m_imaginaryFirst) 
         m_iter++; 
@@ -196,7 +196,7 @@ bool WPXStdMapIterImpl::next()
     return true; 
 }
 
-bool WPXStdMapIterImpl::last()
+bool WPXMapIterImpl::last()
 {
 	if (m_iter == m_map->end()) 
 		return true;
@@ -204,12 +204,12 @@ bool WPXStdMapIterImpl::last()
 	return false;
 }
 
-const WPXProperty * WPXStdMapIterImpl::operator()() const
+const WPXProperty * WPXMapIterImpl::operator()() const
 {
 	return m_iter->second;
 }
 
-const char * WPXStdMapIterImpl::key()
+const char * WPXMapIterImpl::key()
 {
 	return m_iter->first.c_str();
 }
@@ -217,7 +217,7 @@ const char * WPXStdMapIterImpl::key()
 WPXPropertyList::Iter::Iter(const WPXPropertyList &propList) 
 {
 	WPXMapImpl *impl = propList.m_mapImpl;
-	m_iterImpl = new WPXStdMapIterImpl(static_cast<WPXStdMapImpl *>(impl));
+	m_iterImpl = new WPXMapIterImpl(static_cast<WPXMapImpl *>(impl));
 }
 
 WPXPropertyList::Iter::~Iter() 

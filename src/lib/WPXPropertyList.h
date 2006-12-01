@@ -30,28 +30,8 @@
 // we use the pimpl pattern so we don't expose any STL symbols to the rest of 
 // the world.. yes, this is quite annoying.
 
-class WPXMapImpl
-{
-public:
-	virtual ~WPXMapImpl() {}
-	virtual void insert(const char *name, WPXProperty *property) = 0;
-	virtual const WPXProperty * operator[](const char *name) const = 0;
-	virtual void remove(const char *name) = 0;
-	virtual void clear() = 0;
-
-	friend class WPXMapIterImpl;
-};
-
-class WPXMapIterImpl
-{
-public:
-	virtual ~WPXMapIterImpl() {}
-	virtual void rewind() = 0;
-	virtual bool next() = 0;
-	virtual bool last() = 0;
-	virtual const WPXProperty * operator()() const = 0;
-	virtual const char * key() = 0;
-};
+class WPXMapImpl;
+class WPXMapIterImpl;
 
 class WPXPropertyList
 {

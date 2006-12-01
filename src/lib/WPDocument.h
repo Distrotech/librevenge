@@ -44,8 +44,6 @@ class WPDocument
 public:
 	static WPDConfidence isFileFormatSupported(WPXInputStream *input, bool partialContent);
 	static WPDResult parse(WPXInputStream *input, WPXHLListenerImpl *listenerImpl);
-	//static void parse(WPXInputStream *input, WPXHLListenerImpl *listenerImpl, WPXFileType fileType);
-	//WPXFileType getFileType(WPXInputStream *input)
 };
 
 #endif /* WPDOCUMENT_H */
