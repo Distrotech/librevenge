@@ -40,14 +40,14 @@ public:
 	virtual void startDocument();
 	virtual void endDocument();
 
-	virtual void openPageSpan(const WPXPropertyList &propList);
-	virtual void closePageSpan();
+	virtual void openPageSpan(const WPXPropertyList & /* propList */) {}
+	virtual void closePageSpan() {}
 	virtual void openHeader(const WPXPropertyList &propList);
 	virtual void closeHeader();
 	virtual void openFooter(const WPXPropertyList &propList);
 	virtual void closeFooter();
 
-	virtual void openSection(const WPXPropertyList &propList, const WPXPropertyListVector &columns) {}
+	virtual void openSection(const WPXPropertyList & /* propList */, const WPXPropertyListVector & /* columns */) {}
 	virtual void closeSection() {}
 	virtual void openParagraph(const WPXPropertyList &propList, const WPXPropertyListVector &tabStops);
 	virtual void closeParagraph();
@@ -58,8 +58,8 @@ public:
 	virtual void insertText(const WPXString &text);
 	virtual void insertLineBreak();
 
-	virtual void defineOrderedListLevel(const WPXPropertyList &propList) {}
-	virtual void defineUnorderedListLevel(const WPXPropertyList &propList) {}
+	virtual void defineOrderedListLevel(const WPXPropertyList & /* propList */) {}
+	virtual void defineUnorderedListLevel(const WPXPropertyList & /* propList */) {}
 	virtual void openOrderedListLevel(const WPXPropertyList &propList);
 	virtual void openUnorderedListLevel(const WPXPropertyList &propList);
 	virtual void closeOrderedListLevel();
@@ -78,7 +78,7 @@ public:
 	virtual void closeTableRow();
 	virtual void openTableCell(const WPXPropertyList &propList);
 	virtual void closeTableCell();
-	virtual void insertCoveredTableCell(const WPXPropertyList &propList) {}
+	virtual void insertCoveredTableCell(const WPXPropertyList & /* propList */) {}
 	virtual void closeTable();
 
 private:

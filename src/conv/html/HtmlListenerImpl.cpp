@@ -77,15 +77,7 @@ void HtmlListenerImpl::endDocument()
 	printf("</html>\n");
 }
 
-void HtmlListenerImpl::openPageSpan(const WPXPropertyList &propList)
-{
-}
-
-void HtmlListenerImpl::closePageSpan()
-{
-}
-
-void HtmlListenerImpl::openHeader(const WPXPropertyList &propList)
+void HtmlListenerImpl::openHeader(const WPXPropertyList & /* propList */)
 {
 	m_ignore = true;
 }
@@ -96,7 +88,7 @@ void HtmlListenerImpl::closeHeader()
 }
 
 
-void HtmlListenerImpl::openFooter(const WPXPropertyList &propList)
+void HtmlListenerImpl::openFooter(const WPXPropertyList & /* propList */)
 {
 	m_ignore = true;
 }
@@ -106,7 +98,7 @@ void HtmlListenerImpl::closeFooter()
 	m_ignore = false;
 }
 
-void HtmlListenerImpl::openParagraph(const WPXPropertyList &propList, const WPXPropertyListVector &tabStops)
+void HtmlListenerImpl::openParagraph(const WPXPropertyList &propList, const WPXPropertyListVector & /* tabStops */)
 {
 	if (!m_ignore)
 	{
@@ -115,7 +107,7 @@ void HtmlListenerImpl::openParagraph(const WPXPropertyList &propList, const WPXP
 		if (propList["fo:text-align"])
 		{
 
-			if (propList["fo:text-align"]->getStr() == "end") // stupid OOo convention..
+			if (propList["fo:text-align"]->getStr() == WPXString("end")) // stupid OOo convention..
 				printf("text-align:right;");
 			else
 				printf("text-align:%s;", propList["fo:text-align"]->getStr().cstr());
@@ -151,7 +143,7 @@ void HtmlListenerImpl::openSpan(const WPXPropertyList &propList)
 			printf("font-weight: %s;", propList["fo:font-weight"]->getStr().cstr());
 		if (propList["fo:font-style"])
 			printf("font-style: %s;", propList["fo:font-style"]->getStr().cstr());
-		if (propList["style:text-crossing-out"] && propList["style:text-crossing-out"]->getStr() == "single-line")
+		if (propList["style:text-crossing-out"] && propList["style:text-crossing-out"]->getStr() == WPXString("single-line"))
 			printf("text-decoration:line-through;");
 		if (propList["style:text-underline"]) // don't know if double underline is possible
 			printf("text-decoration:underline;");
@@ -202,7 +194,7 @@ void HtmlListenerImpl::insertText(const WPXString &text)
 	}
 }
 
-void HtmlListenerImpl::openOrderedListLevel(const WPXPropertyList &propList)
+void HtmlListenerImpl::openOrderedListLevel(const WPXPropertyList & /* propList */)
 {
 	if (!m_ignore)
 	{
@@ -218,7 +210,7 @@ void HtmlListenerImpl::closeOrderedListLevel()
 	}
 }
 
-void HtmlListenerImpl::openUnorderedListLevel(const WPXPropertyList &propList)
+void HtmlListenerImpl::openUnorderedListLevel(const WPXPropertyList & /* propList */)
 {
 	if (!m_ignore)
 	{
@@ -235,7 +227,7 @@ void HtmlListenerImpl::closeUnorderedListLevel()
 }
 
 
-void HtmlListenerImpl::openListElement(const WPXPropertyList &propList, const WPXPropertyListVector &tabStops)
+void HtmlListenerImpl::openListElement(const WPXPropertyList & /* propList */, const WPXPropertyListVector &/* tabStops */)
 {
 	if (!m_ignore)
 	{
@@ -291,7 +283,7 @@ void HtmlListenerImpl::closeEndnote()
 	}
 }
 
-void HtmlListenerImpl::openTable(const WPXPropertyList &propList, const WPXPropertyListVector &columns)
+void HtmlListenerImpl::openTable(const WPXPropertyList & /* propList */, const WPXPropertyListVector & /* columns */)
 {
 	if (!m_ignore)
 	{
@@ -300,7 +292,7 @@ void HtmlListenerImpl::openTable(const WPXPropertyList &propList, const WPXPrope
 	}
 }
 
-void HtmlListenerImpl::openTableRow(const WPXPropertyList &propList)
+void HtmlListenerImpl::openTableRow(const WPXPropertyList & /* propList */)
 {
 	if (!m_ignore)
 	{
