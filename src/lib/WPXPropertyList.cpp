@@ -1,6 +1,7 @@
 /* libwpd
  * Copyright (C) 2004 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2005 Net Integration Technologies (http://www.net-itech.com)
+ * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
