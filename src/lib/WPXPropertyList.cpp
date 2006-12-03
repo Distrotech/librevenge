@@ -65,12 +65,23 @@ const WPXProperty * WPXMapImpl::operator[](const char *name) const
 
 void WPXMapImpl::insert(const char *name, WPXProperty *prop)
 {
+	WPXProperty *tmpProp = 0;
+	const std::string s(name);
+	std::map<std::string, WPXProperty *>::iterator i = m_map.find(s);
+	if (i != m_map.end()) {
+		tmpProp = i->second;
+	}
 	m_map[name] = prop;
+	if (tmpProp) delete tmpProp;
 }
 
 void WPXMapImpl::remove(const char *name)
 {
-	// FIXME: delete element?
+	const std::string s(name);
+	std::map<std::string, WPXProperty *>::iterator i = m_map.find(s);
+	if (i != m_map.end()) {
+		if (i->second) delete (i->second);
+	}
 	m_map.erase(name);
 }
 
