@@ -28,6 +28,7 @@
 #include "WPXStream.h"
 #include <stdio.h>
 #include <string>
+#include <algorithm>
 #include "WPXString.h"
 
 /* Various functions/defines that need not/should not be exported externally */

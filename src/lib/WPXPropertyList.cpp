@@ -70,6 +70,9 @@ void WPXMapImpl::insert(const char *name, WPXProperty *prop)
 	std::map<std::string, WPXProperty *>::iterator i = m_map.find(s);
 	if (i != m_map.end()) {
 		tmpProp = i->second;
+		i->second = prop;
+		delete tmpProp;
+		return;
 	}
 	m_map[name] = prop;
 	if (tmpProp) delete tmpProp;
