@@ -96,6 +96,7 @@ struct _WP6ContentParsingState
 	bool m_putativeListElementHasDisplayReferenceNumber;
 
 	int m_noteTextPID;
+	int m_numNestedNotes;
 
 	uint16_t m_leaderCharacter;
 	uint8_t m_leaderNumSpaces;

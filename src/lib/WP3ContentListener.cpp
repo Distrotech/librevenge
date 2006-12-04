@@ -568,7 +568,7 @@ void WP3ContentListener::insertNoteReference(const WPXString &noteReference)
 
 void WP3ContentListener::insertNote(const WPXNoteType noteType, WP3SubDocument *subDocument)
 {
-	if (!isUndoOn())
+	if (!isUndoOn() && !m_ps->m_isNote)
 	{
 		_closeSpan();
 		m_ps->m_isNote = true;

@@ -356,7 +356,7 @@ void WP5ContentListener::setFont(const WPXString &fontName, const float fontSize
 
 void WP5ContentListener::insertNoteReference(const WPXString &noteReference)
 {
-	if (!isUndoOn())
+	if (!isUndoOn() && !m_ps->m_isNote)
 	{
 		m_parseState->m_noteReference = noteReference;
 	}

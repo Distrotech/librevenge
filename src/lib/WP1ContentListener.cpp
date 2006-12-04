@@ -130,7 +130,7 @@ void WP1ContentListener::insertEOL()
 
 void WP1ContentListener::insertNote(const WPXNoteType noteType, WP1SubDocument *subDocument)
 {
-	if (!isUndoOn())
+	if (!isUndoOn() && !m_ps->m_isNote)
 	{
 		_closeSpan();
 		m_ps->m_isNote = true;

@@ -120,6 +120,7 @@ _WP6ContentParsingState::_WP6ContentParsingState(WPXTableList tableList, int nex
 	m_putativeListElementHasDisplayReferenceNumber(false),
 	
 	m_noteTextPID(0),
+	m_numNestedNotes(0),
 
 	m_leaderCharacter('.'),
 	m_leaderNumSpaces(0)
@@ -962,6 +963,12 @@ void WP6ContentListener::noteOn(const uint16_t textPID)
 {
 	if (!isUndoOn())
 	{
+		if (m_ps->m_isNote)
+		{
+			m_parseState->m_numNestedNotes++;
+			return;
+		}
+
 		_closeSpan();
 		m_parseState->m_styleStateSequence.setCurrentState(DOCUMENT_NOTE);
 		// save a reference to the text PID, we want to parse
@@ -975,13 +982,20 @@ void WP6ContentListener::noteOff(const WPXNoteType noteType)
 {
 	if (!isUndoOn())
 	{
+		if (m_parseState->m_numNestedNotes > 0)
+		{
+			m_parseState->m_numNestedNotes--;
+			return;
+		}
+
 		m_parseState->m_styleStateSequence.setCurrentState(NORMAL);
 		WPXNumberingType numberingType = _extractWPXNumberingTypeFromBuf(m_parseState->m_numberText, ARABIC);
 		int number = _extractDisplayReferenceNumberFromBuf(m_parseState->m_numberText, numberingType);
 		m_parseState->m_numberText.clear(); // we do not need the text version of the number anymore
 
 		WPXPropertyList propList;
-		propList.insert("libwpd:number", number);
+		if (number)
+			propList.insert("libwpd:number", number);
 
 		if (noteType == FOOTNOTE)
 			m_listenerImpl->openFootnote(propList);
@@ -997,6 +1011,7 @@ void WP6ContentListener::noteOff(const WPXNoteType noteType)
 		else
 			m_listenerImpl->closeEndnote();
 		m_ps->m_isNote = false;
+		m_parseState->m_numNestedNotes = 0;
 	}
 }
 
@@ -1168,6 +1183,7 @@ void WP6ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, c
 	WP6ContentParsingState *oldParseState = m_parseState;
 	
 	m_parseState = new WP6ContentParsingState(tableList, nextTableIndice);
+	m_parseState->m_numNestedNotes = oldParseState->m_numNestedNotes;
 
 	if (isHeaderFooter)
 	{
@@ -1198,6 +1214,7 @@ void WP6ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, c
 	// if we are in a foot/endNote, the nextTableIndice sequence has to be maintained
 	if (!isHeaderFooter)
 		oldParseState->m_nextTableIndice = m_parseState->m_nextTableIndice;
+	oldParseState->m_numNestedNotes = m_parseState->m_numNestedNotes;
 
 	// restore our old parsing state
 	delete m_parseState;
