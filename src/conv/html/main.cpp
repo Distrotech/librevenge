@@ -44,6 +44,7 @@ int main(int argc, char *argv[])
 		
 		g_warning ("'%s' error: %s", argv[1], err->message);
 		g_error_free (err);
+		gsf_shutdown();
 		return 1;
 	}
 	
@@ -54,6 +55,8 @@ int main(int argc, char *argv[])
 	{
 		printf("ERROR: Unsupported file format!\n");
 		delete gsfInput;
+		g_object_unref (input);
+		gsf_shutdown();
 		return 1;
 	}
 
@@ -72,7 +75,7 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "ERROR: Unknown Error!\n");
 
 	delete gsfInput;
-	g_object_unref (G_OBJECT (input));
+	g_object_unref (input);
 	gsf_shutdown();
 
 	if (error != WPD_OK)

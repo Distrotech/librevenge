@@ -130,7 +130,9 @@ WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input, bool part
 					// unhandled file type
 					confidence = WPD_CONFIDENCE_NONE;
 					break;
-			}						
+			}
+			if (header->getDocumentEncryption())
+				confidence = WPD_CONFIDENCE_NONE; // do not handle password protected documents						
 			DELETEP(header);
 		}
 		else
@@ -202,7 +204,7 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerIm
 	{
 		WPXHeader *header = WPXHeader::constructHeader(document);
 
-		if (header)
+		if (header && !header->getDocumentEncryption())
 		{
 			switch (header->getFileType())
 			{
@@ -248,6 +250,11 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerIm
 			}
 
 			DELETEP(parser); // deletes the header as well
+		}
+		else if (header && header->getDocumentEncryption())
+		{
+			DELETEP(header);
+			throw UnsupportedEncryptionException();
 		}
 		else
 		{
