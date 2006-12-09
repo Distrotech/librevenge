@@ -53,9 +53,7 @@ WPXMapImpl::~WPXMapImpl()
 
 const WPXProperty * WPXMapImpl::operator[](const char *name) const
 {
-	std::map<std::string, WPXProperty *>::iterator i;
-	const std::string s(name);
-	i = m_map.find(s);
+	std::map<std::string, WPXProperty *>::iterator i = m_map.find(name);
 	if (i != m_map.end()) {
 		return i->second;
 	}
@@ -65,27 +63,23 @@ const WPXProperty * WPXMapImpl::operator[](const char *name) const
 
 void WPXMapImpl::insert(const char *name, WPXProperty *prop)
 {
-	WPXProperty *tmpProp = 0;
-	const std::string s(name);
-	std::map<std::string, WPXProperty *>::iterator i = m_map.find(s);
-	if (i != m_map.end()) {
-		tmpProp = i->second;
+	std::map<std::string, WPXProperty *>::iterator i = m_map.lower_bound(name);
+	if (i != m_map.end() && !(m_map.key_comp()(name, i->first))) {
+		WPXProperty *tmpProp = i->second;
 		i->second = prop;
 		delete tmpProp;
 		return;
 	}
-	m_map[name] = prop;
-	if (tmpProp) delete tmpProp;
+	m_map.insert(i, std::map<std::string, WPXProperty *>::value_type(name, prop));
 }
 
 void WPXMapImpl::remove(const char *name)
 {
-	const std::string s(name);
-	std::map<std::string, WPXProperty *>::iterator i = m_map.find(s);
+	std::map<std::string, WPXProperty *>::iterator i = m_map.find(name);
 	if (i != m_map.end()) {
 		if (i->second) delete (i->second);
+		m_map.erase(i);
 	}
-	m_map.erase(name);
 }
 
 void WPXMapImpl::clear()
