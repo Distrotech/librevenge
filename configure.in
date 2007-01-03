@@ -204,6 +204,7 @@ src/conv/text/wpd2text.rc
 src/lib/Makefile
 src/lib/libwpd.rc
 src/lib/libwpd-stream.rc
+src/test/Makefile
 docs/Makefile
 docs/doxygen/Makefile
 build/Makefile

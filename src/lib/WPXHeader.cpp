@@ -54,7 +54,7 @@ WPXHeader * WPXHeader::constructHeader(WPXInputStream *input)
 	char fileMagic[4];
 	/* check the magic */
 	input->seek(WPX_HEADER_MAGIC_OFFSET - input->tell(), WPX_SEEK_CUR);
-	for (int i=0; i<3 /* FIXME: && not EOF */; i++)
+	for (int i=0; i<3 && !input->atEOS(); i++)
 		fileMagic[i] = readU8(input);
 	fileMagic[3] = '\0';
 	

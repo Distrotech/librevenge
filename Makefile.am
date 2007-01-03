@@ -32,6 +32,9 @@ rpm: dist
 zip: all install
 	sh libwpd-zip
 
+check: all
+	cd src/test && make check
+
 if WITH_LIBWPD_DOCS
 install-data-local:
 	mkdir -p $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@
