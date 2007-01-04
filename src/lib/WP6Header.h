@@ -38,7 +38,7 @@ class WP6Header : public WPXHeader
 	const uint16_t getNumPrefixIndices() const { return m_numPrefixIndices; }
 
 protected:
-	void _readndexInformation(WPXInputStream *input);
+	void _readIndexInformation(WPXInputStream *input);
 		
 private:
 	uint16_t m_indexHeaderOffset;

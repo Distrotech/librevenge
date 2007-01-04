@@ -46,7 +46,7 @@ WP6Header::WP6Header(WPXInputStream * input, uint32_t documentOffset, uint8_t pr
 	WPD_DEBUG_MSG(("WordPerfect: Index Header Position = 0x%x \n",(int)m_indexHeaderOffset));
 }
 
-void WP6Header::_readndexInformation(WPXInputStream *input)
+void WP6Header::_readIndexInformation(WPXInputStream *input)
 {
 	// read the Index Header (Header #0)
 	// skip the Flags = 2 and the Reserved byte = 0

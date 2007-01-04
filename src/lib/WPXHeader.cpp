@@ -51,12 +51,11 @@ WPXHeader * WPXHeader::constructHeader(WPXInputStream *input)
 {
 	WPD_DEBUG_MSG(("WPXHeader::constructHeader()\n"));
 	
-	char fileMagic[4];
+	char fileMagic[4] = { 0, 0, 0, 0 };
 	/* check the magic */
 	input->seek(WPX_HEADER_MAGIC_OFFSET - input->tell(), WPX_SEEK_CUR);
 	for (int i=0; i<3 && !input->atEOS(); i++)
 		fileMagic[i] = readU8(input);
-	fileMagic[3] = '\0';
 	
 	if ( strcmp(fileMagic, "WPC") )
 	{

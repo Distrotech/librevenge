@@ -36,7 +36,7 @@ WP61Header::WP61Header(WPXInputStream * input, uint32_t documentOffset,  uint8_t
 
 	WPD_DEBUG_MSG(("WordPerfect: Document End Position = 0x%x \n",(int)m_documentSize));
 
-	_readndexInformation(input);
+	_readIndexInformation(input);
 }
 
 WP61Header::~WP61Header()
