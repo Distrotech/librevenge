@@ -72,16 +72,15 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6Listener *listener) const
 			return;
 
 		WPXString name;
-		uint16_t wpChar;
+		uint16_t wpChar = 0;
 		if (!m_stream->atEOS())
 			wpChar = readU16(m_stream);
 		for (; wpChar != 0 && !m_stream->atEOS(); wpChar = readU16(m_stream))
 		{
-			uint8_t character = (wpChar & 0xFF);
-			uint8_t characterSet = (wpChar & 0xFF00) >> 8;
+			uint8_t character = (uint8_t)(wpChar & 0x00FF);
+			uint8_t characterSet = (uint8_t)((wpChar >> 8) & 0x00FF);
 			const uint16_t *chars;
-			int len;
-			len = extendedCharacterWP6ToUCS2(character,
+			int len = extendedCharacterWP6ToUCS2(character,
 						      characterSet, &chars);
 			for (int j = 0; j < len; j++)
 				appendUCS4(name, (uint32_t)chars[j]);
@@ -108,11 +107,10 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6Listener *listener) const
 				wpChar = readU16(m_stream);
 			for (; wpChar != 0 && !m_stream->atEOS(); wpChar = readU16(m_stream))
 			{				
-				uint8_t character = (wpChar & 0xFF);
-				uint8_t characterSet = (wpChar & 0xFF00) >> 8;
+				uint8_t character = (uint8_t)(wpChar & 0x00FF);
+				uint8_t characterSet = (uint8_t)((wpChar >> 8) & 0x00FF);
 				const uint16_t *chars;
-				int len;
-				len = extendedCharacterWP6ToUCS2(character,
+				int len = extendedCharacterWP6ToUCS2(character,
 						      characterSet, &chars);
 				for (int j = 0; j < len; j++)
 					appendUCS4(data, (uint32_t)chars[j]);

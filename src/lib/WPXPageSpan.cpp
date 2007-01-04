@@ -91,7 +91,7 @@ WPXPageSpan::WPXPageSpan(const WPXPageSpan &page) :
 	m_headerFooterList(page.getHeaderFooterList()),
 	m_pageSpan(page.getPageSpan())
 {
-	for (int i=0; i<WPX_NUM_HEADER_FOOTER_TYPES; i++)
+	for (uint8_t i=0; i<WPX_NUM_HEADER_FOOTER_TYPES; i++)
 		m_isHeaderFooterSuppressed[i] = page.getHeaderFooterSuppression(i);	
 }
 
@@ -206,7 +206,7 @@ bool operator==(const WPXPageSpan &page1, const WPXPageSpan &page2)
 		return false;
 
 
-	for (int i=0; i<WPX_NUM_HEADER_FOOTER_TYPES; i++) {
+	for (uint8_t i=0; i<WPX_NUM_HEADER_FOOTER_TYPES; i++) {
 		if (page1.getHeaderFooterSuppression(i) != page2.getHeaderFooterSuppression(i))
 			return false;
 	}

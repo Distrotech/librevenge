@@ -87,16 +87,13 @@ void WP6FontDescriptorPacket::_readContents(WPXInputStream *input)
 		   int lastTokenPosition=0;
 		   for (uint16_t i=0; i<(m_fontNameLength/2); i++) 
 		   {
-			   uint8_t characterSet;
-			   uint8_t character;
-			   int len;
-			   const uint16_t *chars;
 			   uint16_t charWord = readU16(input);
 
-			   characterSet = (charWord & 0xFF00) >> 8;
-			   character = (charWord & 0xFF);
+			   uint8_t characterSet = (uint8_t)((charWord >> 8) & 0x00FF);
+			   uint8_t character = (uint8_t)(charWord & 0xFF);
 			   
-			   len = extendedCharacterWP6ToUCS2(character, characterSet, &chars);
+			   const uint16_t *chars;
+			   extendedCharacterWP6ToUCS2(character, characterSet, &chars);
 			   /* We are only using ascii characters here, and
 			    * if we have more than one character, that's
 			    * going to be an international character, so
@@ -130,7 +127,7 @@ void WP6FontDescriptorPacket::_readContents(WPXInputStream *input)
 				   if (stringPosition > 0 && !strcmp(FONT_WEIGHT_STRINGS[k], &m_fontName[stringPosition])) 
 				   {
 					   m_fontName[stringPosition-1]='\0';
-					   tempLength = stringPosition-1;
+					   tempLength = (uint16_t)(stringPosition-1);
 					   break;
 				   }
 			   }
@@ -141,7 +138,7 @@ void WP6FontDescriptorPacket::_readContents(WPXInputStream *input)
 				   if (!strcmp(USELESS_WP_POSTFIX, &m_fontName[stringPosition])) 
 				   {
 					   m_fontName[stringPosition]='\0';
-					   tempLength = stringPosition - 1;
+					   tempLength = (uint16_t)(stringPosition - 1);
 				   }
 			   }
 			   // also consume any whitespace at the end of the font..

@@ -38,8 +38,8 @@ WP6CharacterGroup_SetAlignmentCharacterSubGroup::WP6CharacterGroup_SetAlignmentC
 	m_characterSet(0)
 {
 	uint16_t charWord = readU16(input);
-	m_characterSet = (charWord & 0xFF00) >> 8;
-	m_character = (charWord & 0xFF);
+	m_characterSet = (uint8_t)((charWord >> 8) & 0x00FF);
+	m_character = (uint8_t)(charWord & 0x00FF);
 }
 
 void WP6CharacterGroup_SetAlignmentCharacterSubGroup::parse(WP6Listener *listener, const uint8_t /* numPrefixIDs */,
@@ -134,8 +134,8 @@ WP6CharacterGroup_SetDotLeaderCharactersSubGroup::WP6CharacterGroup_SetDotLeader
 	m_numberOfSpaces(0)
 {
 	uint16_t charWord = readU16(input);
-	m_characterSet = (charWord & 0xFF00) >> 8;
-	m_character = (charWord & 0xFF);
+	m_characterSet = (uint8_t)((charWord >> 8) & 0x00FF);
+	m_character = (uint8_t)(charWord & 0x00FF);
 	m_numberOfSpaces = readU8(input);
 }
 

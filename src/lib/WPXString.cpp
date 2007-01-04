@@ -87,10 +87,10 @@ WPXString::WPXString(const WPXString &stringBuf, bool escapeXML)
 
 	if (escapeXML)
 	{
-		int len = stringBuf.m_stringImpl->m_buf.length(); // strlen(stringBuf.cstr()); // want to use standard strlen
-		m_stringImpl->m_buf.reserve(2*len);
+		int tmpLen = stringBuf.m_stringImpl->m_buf.length();
+		m_stringImpl->m_buf.reserve(2*tmpLen);
 		const char *p = stringBuf.cstr();
-		const char *end = p + len; 
+		const char *end = p + tmpLen; 
 		while (p != end)
 		{
 			const char *next = g_static_utf8_next_char(p);
@@ -304,9 +304,8 @@ int
 g_static_unichar_to_utf8 (uint32_t c,
 			  char   *outbuf)
 {
-	unsigned int len = 0;    
-	int first;
-	int i;
+	uint8_t len = 1;    
+	uint8_t first = 0;
     
 	if (c < 0x80)
 	{
@@ -341,12 +340,12 @@ g_static_unichar_to_utf8 (uint32_t c,
     
 	if (outbuf)
 	{
-		for (i = len - 1; i > 0; --i)
+		for (uint8_t i = len - 1; i > 0; --i)
 		{
-			outbuf[i] = (c & 0x3f) | 0x80;
+			outbuf[i] = (char)((c & 0x3f) | 0x80);
 			c >>= 6;
 		}
-		outbuf[0] = c | first;
+		outbuf[0] = (char)(c | first);
 	}
     
 	return len;

@@ -71,7 +71,7 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input, bool parti
 				// variable length function group
 				
 				// skip over all the bytes in the group, and scan for the closing gate
-				uint8_t readNextVal;
+				uint8_t readNextVal = 0;
 				while (!input->atEOS())
 				{
 					readNextVal = readU8(input);
@@ -80,7 +80,7 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input, bool parti
 				}
 
 				// when passed the complete file, we don't allow for open groups when we've reached EOF
-				if (!partialContent && input->atEOS() && (readNextVal != readVal))
+				if ((readNextVal == 0) || (!partialContent && input->atEOS() && (readNextVal != readVal)))
 					return WPD_CONFIDENCE_NONE;
 				
 				functionGroupCount++;

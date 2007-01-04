@@ -1076,7 +1076,7 @@ int _extractDisplayReferenceNumberFromBuf(const WPXString &buf, const WPXNumberi
 			throw ParseException();
 		char c = buf.cstr()[0];
 		if (listType==LOWERCASE)
-			c = toupper(c);
+			c = (char)toupper(c);
 		return (c - 64);
 	}
 	else if (listType == ARABIC)

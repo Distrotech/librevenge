@@ -37,7 +37,7 @@ protected:
 	virtual ~WPXListener();
 
 	bool isUndoOn() { return m_isUndoOn; }
-	void setUndoOn(bool isUndoOn) { m_isUndoOn = isUndoOn; }
+	void setUndoOn(bool isOn) { m_isUndoOn = isOn; }
 
 	std::list<WPXPageSpan> &m_pageList;
 	

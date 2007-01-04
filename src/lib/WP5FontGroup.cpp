@@ -70,7 +70,7 @@ void WP5FontGroup::parse(WP5Listener *listener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling a Font group\n"));
 	
-	uint16_t tmpFontNameOffset;
+	int tmpFontNameOffset;
 	float tmpFontSize = 12.0f;
 	WPXString tmpFontName("Times New Roman");
 

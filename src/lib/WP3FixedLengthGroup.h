@@ -31,7 +31,7 @@
 class WP3FixedLengthGroup : public WP3Part
 {
  public:
-	WP3FixedLengthGroup(int groupID);
+	WP3FixedLengthGroup(const uint8_t groupID);
 	static WP3FixedLengthGroup * constructFixedLengthGroup(WPXInputStream *input, uint8_t const groupID);
 
 	static bool isGroupConsistent(WPXInputStream *input, const uint8_t groupID);

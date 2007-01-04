@@ -42,7 +42,7 @@ class WP6PrefixData
 	const WP6PrefixDataPacket *getPrefixDataPacket(const int prefixID) const;
 	std::pair< MPDP_CIter, MPDP_CIter > * getPrefixDataPacketsOfType(const int type) const;
 
-	const uint16_t getDefaultInitialFontPID() const { return m_defaultInitialFontPID; }
+	const uint16_t getDefaultInitialFontPID() const { return (uint16_t)m_defaultInitialFontPID; }
 
  private:
 	DPH m_prefixDataPacketHash;

@@ -31,7 +31,7 @@
 #include "WP3UndoGroup.h"
 #include "libwpd_internal.h"
 
-WP3FixedLengthGroup::WP3FixedLengthGroup(int groupID)
+WP3FixedLengthGroup::WP3FixedLengthGroup(const uint8_t groupID)
 	: m_group(groupID)
 {
 }

@@ -118,10 +118,9 @@ WP6ParagraphGroup_TabSetSubGroup::WP6ParagraphGroup_TabSetSubGroup(WPXInputStrea
 	uint8_t tmp_repetitionCount = 0;
 	WPXTabStop tmp_tabStop;
 	uint8_t tmp_numTabStops = readU8(input);
-	bool tmp_usePreWP9LeaderMethod;
-	uint8_t tmp_tabType;
-	int i;
-	for (i = 0; i < tmp_numTabStops; i++)
+	bool tmp_usePreWP9LeaderMethod = false;
+	uint8_t tmp_tabType = 0;
+	for (int i = 0; i < tmp_numTabStops; i++)
 	{
 		tmp_tabType = readU8(input);
 		if ((tmp_tabType & 0x80) != 0)

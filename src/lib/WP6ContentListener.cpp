@@ -512,8 +512,9 @@ void WP6ContentListener::fontChange(const uint16_t matchedFontPointSize, const u
 		}
 		if (fontPID)
 		{
-			const WP6FontDescriptorPacket *fontDescriptorPacket = 0;
-			if ((fontDescriptorPacket = dynamic_cast<const WP6FontDescriptorPacket *>(WP6Listener::getPrefixDataPacket(fontPID)))) {
+			const WP6FontDescriptorPacket *fontDescriptorPacket = 
+				dynamic_cast<const WP6FontDescriptorPacket *>(WP6Listener::getPrefixDataPacket(fontPID));
+			if (fontDescriptorPacket) {
 				*(m_ps->m_fontName) = fontDescriptorPacket->getFontName();
 			}
 		}
@@ -1002,7 +1003,7 @@ void WP6ContentListener::noteOff(const WPXNoteType noteType)
 		else
 			m_listenerImpl->openEndnote(propList);
 
-		uint16_t textPID = m_parseState->m_noteTextPID;
+		uint16_t textPID = (uint16_t)m_parseState->m_noteTextPID;
 		handleSubDocument(((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : 0), 
 				false, m_parseState->m_tableList, m_parseState->m_nextTableIndice);
 
