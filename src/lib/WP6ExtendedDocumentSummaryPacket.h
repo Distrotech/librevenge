@@ -40,7 +40,7 @@ class WP6ExtendedDocumentSummaryPacket : public WP6PrefixDataPacket
 	void parse(WP6Listener *listener) const;
 
  private:              
-	uint16_t m_dataSize;
+	uint32_t m_dataSize;
 	mutable WPXMemoryInputStream *m_stream;
 	
 };

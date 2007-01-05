@@ -48,10 +48,10 @@ void WP6ExtendedDocumentSummaryPacket::_readContents(WPXInputStream *input)
 	if (m_dataSize <= 0)
 		return;
 	uint8_t *streamData = new uint8_t[m_dataSize];
-	for(int i=0; i<m_dataSize; i++)
+	for(unsigned i=0; i<(unsigned)m_dataSize; i++)
 		streamData[i] = readU8(input);
 	
-	m_stream = new WPXMemoryInputStream(streamData, m_dataSize);
+	m_stream = new WPXMemoryInputStream(streamData, (size_t)m_dataSize);
 }
 
 void WP6ExtendedDocumentSummaryPacket::parse(WP6Listener *listener) const
@@ -60,7 +60,7 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6Listener *listener) const
 		return;
 	uint16_t groupLength = 0;
 
-	for (int i=0; i < m_dataSize && !m_stream->atEOS(); i+=groupLength)
+	for (unsigned i=0; i < (unsigned)m_dataSize && !m_stream->atEOS(); i+=groupLength)
 	{
 		groupLength = readU16(m_stream);
 		if ((groupLength <= 0) || m_stream->atEOS())

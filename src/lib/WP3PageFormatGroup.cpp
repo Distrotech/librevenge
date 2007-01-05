@@ -91,7 +91,7 @@ void WP3PageFormatGroup::_readContents(WPXInputStream *input)
 
 		m_isRelative = (readU8(input) & 0x01);
 
-		while ((tmpTabType = read8(input)) != (int8_t)0xff)
+		while ((tmpTabType = read8(input)) & 0xff != 0xff)
 		{
 			tmpTabPosition = fixedPointToFloat(readU32(input, true)) / 72.0f;
 
