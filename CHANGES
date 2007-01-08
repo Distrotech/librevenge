@@ -1,4 +1,18 @@
 CHANGES:
+0.8.7 - 0.8.8
+- Add unit tests for the stream class (Fridrich & Andrew Ziem)
+- Ignore foot/endnotes that are referenced inside other foot/endnotes (Fridrich);
+  fixes http://www.openoffice.org/issues/show_bug.cgi?id=71487
+- Handle graciously unsupported password-protected documents; (Fridrich)
+  fixes http://www.openoffice.org/issues/show_bug.cgi?id=72307
+- Remove warnings on main OpenOffice.org platforms (Fridrich)
+- Remove some potential memory leaks in the WPXPropertyList class and optimize
+  the WPXPropertyList subscription operator (Fridrich)
+- When possible, pass WPXStrings by reference instead of passing them by copy
+  (Fridrich)
+- Refactor WPXString to not cast from and to void*; refactor WPXPropertyList and
+  WPXPropertyListVector classes as to save a bunch of virtual calls (Fridrich)
+
 0.8.6 - 0.8.7
 - Revert the alignment fix, in order to mimick the way WP for Mac renders
   the documents (Fridrich)
