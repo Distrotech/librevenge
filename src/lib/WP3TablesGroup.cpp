@@ -51,10 +51,11 @@ void WP3TablesGroup::_readContents(WPXInputStream *input)
 	// this group can contain different kinds of data, thus we need to read
 	// the contents accordingly
 	uint8_t i;
+	long startPosition = 0;
 	switch (getSubGroup())
 	{
 	case WP3_TABLES_GROUP_TABLE_FUNCTION:
-		long startPosition = input->tell();
+		startPosition = input->tell();
 		input->seek(71, WPX_SEEK_CUR);
 		m_tableMode = readU8(input);
 		m_offsetFromLeftEdge = readU32(input, true);
