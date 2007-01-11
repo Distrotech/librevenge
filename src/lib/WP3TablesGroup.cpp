@@ -64,10 +64,12 @@ void WP3TablesGroup::_readContents(WPXInputStream *input)
 		m_rightGutterSpacing = readU32(input, true);
 		input->seek(3, WPX_SEEK_CUR);
 		m_numColumns = readU8(input);
-		if ((input->tell() - startPosition + m_numColumns*10) > (getSize() - 8))
-			throw FileException();	
+		if (((input->tell() - startPosition + m_numColumns*10) > (getSize() - 4)) || (m_numColumns > 32))
+			throw FileException();
 		for (i=0; i<m_numColumns; i++)
 		{
+			if (input->atEOS())
+				throw FileException();
 			m_columnMode[i] = readU8(input);
 			m_numberFormat[i] = readU8(input);
 			m_columnWidth[i] = readU32(input, true);
@@ -123,7 +125,7 @@ void WP3TablesGroup::parse(WP3Listener *listener)
 	{
 	case WP3_TABLES_GROUP_TABLE_FUNCTION:
 		listener->defineTable(m_tableMode, fixedPointToWPUs(m_offsetFromLeftEdge));
-		for (i=0; i<m_numColumns; i++)
+		for (i=0; i<m_numColumns && i <= 32; i++)
 			listener->addTableColumnDefinition(fixedPointToWPUs(m_columnWidth[i]), fixedPointToWPUs(m_leftGutterSpacing),
 								fixedPointToWPUs(m_rightGutterSpacing), 0, LEFT);
 		listener->startTable();

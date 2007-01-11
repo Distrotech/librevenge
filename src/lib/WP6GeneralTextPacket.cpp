@@ -59,7 +59,7 @@ void WP6GeneralTextPacket::_readContents(WPXInputStream *input)
 
 	for(i=0; i<numTextBlocks; i++)
 	{
-		if ((input->tell() - startPosition + 4) > getDataSize())
+		if ((input->tell() - startPosition + 4) > getDataSize() || input->atEOS())
 			throw FileException();
 		blockSizes[i] = readU32(input);
 		totalSize += blockSizes[i];
@@ -76,7 +76,7 @@ void WP6GeneralTextPacket::_readContents(WPXInputStream *input)
 	int streamPos = 0;
 	for(i=0; i<numTextBlocks; i++) 
 	{
-		if ((input->tell() - startPosition + blockSizes[i]) > getDataSize())
+		if ((input->tell() - startPosition + blockSizes[i]) > getDataSize() || input->atEOS())
 			throw FileException();
 		for (unsigned int j=0; j<blockSizes[i]; j++)
 		{
