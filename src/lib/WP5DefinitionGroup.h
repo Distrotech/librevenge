@@ -31,7 +31,7 @@
 class WP5DefinitionGroup_DefineTablesSubGroup : public WP5VariableLengthGroup_SubGroup
 {
 public:
-	WP5DefinitionGroup_DefineTablesSubGroup(WPXInputStream *input);
+	WP5DefinitionGroup_DefineTablesSubGroup(WPXInputStream *input, uint16_t subGroupSize);
 	void parse(WP5Listener *listener);
 
 private:
@@ -58,7 +58,6 @@ protected:
 
 private:
 	WP5VariableLengthGroup_SubGroup * m_subGroupData;
-
 };
 
 #endif /* WP5DEFINITIONGROUP_H */

@@ -26,7 +26,7 @@
 #include "WP5Listener.h"
 #include "libwpd_internal.h"
 
-WP5DefinitionGroup_DefineTablesSubGroup::WP5DefinitionGroup_DefineTablesSubGroup(WPXInputStream *input) :
+WP5DefinitionGroup_DefineTablesSubGroup::WP5DefinitionGroup_DefineTablesSubGroup(WPXInputStream *input, uint16_t subGroupSize) :
 	WP5VariableLengthGroup_SubGroup(),
 	m_position(0),
 	m_numColumns(0),
@@ -34,6 +34,7 @@ WP5DefinitionGroup_DefineTablesSubGroup::WP5DefinitionGroup_DefineTablesSubGroup
 	m_leftGutter(0),
 	m_rightGutter(0)
 {
+	long startPosition = input->tell();
 	// Skip useless old values to read the old column number
 	input->seek(2, WPX_SEEK_CUR);
 	m_numColumns = readU16(input);
@@ -50,6 +51,8 @@ WP5DefinitionGroup_DefineTablesSubGroup::WP5DefinitionGroup_DefineTablesSubGroup
 	input->seek(10, WPX_SEEK_CUR);
 	m_leftOffset = readU16(input);
 	int i;
+	if ((input->tell() - startPosition + m_numColumns*5) > (subGroupSize - 4))
+		throw FileException();
 	for (i=0; i < m_numColumns; i++)
 		m_columnWidth[i] = readU16(input);
 	for (i=0; i < m_numColumns; i++)
@@ -88,7 +91,7 @@ void WP5DefinitionGroup::_readContents(WPXInputStream *input)
 	switch(getSubGroup())
 	{
 		case WP5_TOP_DEFINITION_GROUP_DEFINE_TABLES:
-			m_subGroupData = new WP5DefinitionGroup_DefineTablesSubGroup(input);
+			m_subGroupData = new WP5DefinitionGroup_DefineTablesSubGroup(input, getSize());
 			break;
 		default:
 			break;

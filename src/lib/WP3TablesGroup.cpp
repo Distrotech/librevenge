@@ -54,6 +54,7 @@ void WP3TablesGroup::_readContents(WPXInputStream *input)
 	switch (getSubGroup())
 	{
 	case WP3_TABLES_GROUP_TABLE_FUNCTION:
+		long startPosition = input->tell();
 		input->seek(71, WPX_SEEK_CUR);
 		m_tableMode = readU8(input);
 		m_offsetFromLeftEdge = readU32(input, true);
@@ -63,6 +64,8 @@ void WP3TablesGroup::_readContents(WPXInputStream *input)
 		m_rightGutterSpacing = readU32(input, true);
 		input->seek(3, WPX_SEEK_CUR);
 		m_numColumns = readU8(input);
+		if ((input->tell() - startPosition + m_numColumns*10) > (getSize() - 8))
+			throw FileException();	
 		for (i=0; i<m_numColumns; i++)
 		{
 			m_columnMode[i] = readU8(input);

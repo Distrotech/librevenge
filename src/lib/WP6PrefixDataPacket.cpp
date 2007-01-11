@@ -35,7 +35,8 @@
 #include "libwpd.h"
 #include "libwpd_internal.h"
 
-WP6PrefixDataPacket::WP6PrefixDataPacket(WPXInputStream * /* input */)
+WP6PrefixDataPacket::WP6PrefixDataPacket(WPXInputStream * /* input */) :
+	m_dataSize(0)
 {
 }
 
@@ -74,7 +75,9 @@ WP6PrefixDataPacket * WP6PrefixDataPacket::constructPrefixDataPacket(WPXInputStr
 
 void WP6PrefixDataPacket::_read(WPXInputStream *input, uint32_t dataOffset, uint32_t dataSize)
 {
-	if (!dataSize)
+	m_dataSize = dataSize;
+
+	if (!m_dataSize)
 		return;
 
 	input->seek(dataOffset, WPX_SEEK_SET);
