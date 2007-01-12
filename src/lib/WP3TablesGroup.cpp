@@ -65,7 +65,7 @@ void WP3TablesGroup::_readContents(WPXInputStream *input)
 		m_rightGutterSpacing = readU32(input, true);
 		input->seek(3, WPX_SEEK_CUR);
 		m_numColumns = readU8(input);
-		if (((input->tell() - startPosition + m_numColumns*10) > (getSize() - 4)) || (m_numColumns > 32))
+		if ((m_numColumns > 32) || ((input->tell() - startPosition + m_numColumns*10) > (getSize() - 4)))
 			throw FileException();
 		for (i=0; i<m_numColumns; i++)
 		{

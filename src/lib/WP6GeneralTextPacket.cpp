@@ -54,7 +54,7 @@ void WP6GeneralTextPacket::_readContents(WPXInputStream *input)
 	}
 	
 	uint32_t *blockSizes = new uint32_t[numTextBlocks];
-	int totalSize = 0;
+	unsigned int totalSize = 0;
 	unsigned int i;
 
 	for(i=0; i<numTextBlocks; i++)
@@ -62,7 +62,10 @@ void WP6GeneralTextPacket::_readContents(WPXInputStream *input)
 		if ((input->tell() - startPosition + 4) > getDataSize() || input->atEOS())
 			throw FileException();
 		blockSizes[i] = readU32(input);
-		totalSize += blockSizes[i];
+		unsigned int newTotalSize = totalSize + blockSizes[i];
+		if (newTotalSize < totalSize)
+			throw FileException();
+		totalSize = newTotalSize;
 	}	
 
 	if (totalSize <= 0)

@@ -51,14 +51,26 @@ WP5DefinitionGroup_DefineTablesSubGroup::WP5DefinitionGroup_DefineTablesSubGroup
 	input->seek(10, WPX_SEEK_CUR);
 	m_leftOffset = readU16(input);
 	int i;
-	if ((input->tell() - startPosition + m_numColumns*5) > (subGroupSize - 4))
+	if ((m_numColumns > 32) || ((input->tell() - startPosition + m_numColumns*5) > (subGroupSize - 4)))
 		throw FileException();
 	for (i=0; i < m_numColumns; i++)
+	{
+		if (input->atEOS())
+			throw FileException();
 		m_columnWidth[i] = readU16(input);
+	}
 	for (i=0; i < m_numColumns; i++)
+	{
+		if (input->atEOS())
+			throw FileException();
 		m_attributeBits[i] = readU16(input);
+	}
 	for (i=0; i < m_numColumns; i++)
+	{
+		if (input->atEOS())
+			throw FileException();
 		m_columnAlignment[i] = readU8(input);
+	}
 }
 
 void WP5DefinitionGroup_DefineTablesSubGroup::parse(WP5Listener *listener)

@@ -46,6 +46,13 @@ WP1Part * WP1Part::constructPart(WPXInputStream *input, uint8_t readVal)
 	}
 	else if (WP1_FUNCTION_GROUP_SIZE[readVal-0xC0] == -1)
 	{
+		// Should not happen because the heuristics would not recognize this file as a well formed WP1 file,
+		// Nonetheless if we ever change the parts using the heuristics, this will be a check useful to have
+		if (!WP1VariableLengthGroup::isGroupConsistent(input, readVal))
+		{
+			WPD_DEBUG_MSG(("WordPerfect: Consistency Check (variable length) failed; ignoring this byte\n"));
+			return 0;
+		}
 		WPD_DEBUG_MSG(("WordPerfect: constructVariableLengthGroup\n"));
 		return WP1VariableLengthGroup::constructVariableLengthGroup(input, readVal);
 	}

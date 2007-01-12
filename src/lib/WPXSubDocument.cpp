@@ -38,6 +38,8 @@ WPXSubDocument::WPXSubDocument(WPXInputStream *input, const int dataSize) :
 	uint8_t *streamData = new uint8_t[dataSize];
 	for (int i=0; i<dataSize; i++)
 	{
+		if (input->atEOS())
+			throw FileException();
 		streamData[i] = readU8(input);
 	}
 	m_stream = new WPXMemoryInputStream(streamData, dataSize);

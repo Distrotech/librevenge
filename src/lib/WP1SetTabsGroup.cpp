@@ -39,7 +39,7 @@ WP1SetTabsGroup::~WP1SetTabsGroup()
 void WP1SetTabsGroup::_readContents(WPXInputStream *input)
 {
 	// Skip first the old condensed tab table
-	while (readU8(input) != 0xff)
+	while (readU8(input) != 0xff && !input->atEOS())
 		input->seek(2, WPX_SEEK_CUR);
 
 	// Now read the new condensed tab table
@@ -49,6 +49,8 @@ void WP1SetTabsGroup::_readContents(WPXInputStream *input)
 
 	while (((tmpTabType = read8(input)) & 0xff) != 0xff)
 	{
+		if (input->atEOS())
+			throw FileException();
 		tmpTabPosition = (float)((double)readU16(input, true) / 72.0f);
 
 		if (tmpTabType < 0)
