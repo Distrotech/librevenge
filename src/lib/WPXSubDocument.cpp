@@ -32,7 +32,7 @@ WPXSubDocument::WPXSubDocument() :
 {
 }
 
-WPXSubDocument::WPXSubDocument(WPXInputStream *input, const int dataSize) :
+WPXSubDocument::WPXSubDocument(WPXInputStream *input, const unsigned dataSize) :
 	m_stream(0)
 {
 	uint8_t *streamData = new uint8_t[dataSize];
@@ -45,7 +45,7 @@ WPXSubDocument::WPXSubDocument(WPXInputStream *input, const int dataSize) :
 	m_stream = new WPXMemoryInputStream(streamData, dataSize);
 }
 
-WPXSubDocument::WPXSubDocument(uint8_t * streamData, const int dataSize) :
+WPXSubDocument::WPXSubDocument(uint8_t * streamData, const unsigned dataSize) :
 	m_stream(0)
 {
 	m_stream = new WPXMemoryInputStream(streamData, dataSize);

@@ -23,7 +23,7 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 #include <string.h>
-
+#include <limits>
 #include "WP6FontDescriptorPacket.h"
 #include "libwpd_internal.h"
 
@@ -69,9 +69,9 @@ void WP6FontDescriptorPacket::_readContents(WPXInputStream *input)
 
    m_fontNameLength = readU16(input); 
 
-   // TODO: re-do sanity checking
-   //if(m_fontNameLength < WP_FONT_NAME_MAX_LENGTH)
-   //{	
+
+   if (m_fontNameLength > (std::numeric_limits<uint16_t>::max() / 2))
+	m_fontNameLength = (std::numeric_limits<uint16_t>::max() / 2);
    if (m_fontNameLength == 0) 
 	   {
 		   m_fontName = new char[1];

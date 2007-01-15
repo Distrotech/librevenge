@@ -33,8 +33,8 @@ class WPXSubDocument
 {
 public:
 	WPXSubDocument();
-	WPXSubDocument(WPXInputStream *input, const int dataSize);
-	WPXSubDocument(uint8_t * streamData, const int dataSize);
+	WPXSubDocument(WPXInputStream *input, const unsigned dataSize);
+	WPXSubDocument(uint8_t * streamData, const unsigned dataSize);
 	virtual ~WPXSubDocument();
 	WPXMemoryInputStream *getStream() const { return m_stream;}
 

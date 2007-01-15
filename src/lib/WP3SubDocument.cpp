@@ -26,7 +26,7 @@
 #include "WP3Parser.h"
 #include "libwpd_internal.h"
 
-WP3SubDocument::WP3SubDocument(WPXInputStream *input, const int dataSize) :
+WP3SubDocument::WP3SubDocument(WPXInputStream *input, const unsigned dataSize) :
 	WPXSubDocument(input, dataSize)
 {
 }

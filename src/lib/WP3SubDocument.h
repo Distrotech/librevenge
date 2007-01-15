@@ -32,7 +32,7 @@
 class WP3SubDocument : public WPXSubDocument
 {
 public:
-	WP3SubDocument(WPXInputStream *input, const int dataSize);
+	WP3SubDocument(WPXInputStream *input, const unsigned dataSize);
 	void parse(WP3Listener *listener) const;
 
 };

@@ -24,6 +24,7 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 #include <string.h>
+#include <limits>
 
 #include "WP6ExtendedDocumentSummaryPacket.h"
 #include "libwpd_internal.h"
@@ -47,6 +48,8 @@ void WP6ExtendedDocumentSummaryPacket::_readContents(WPXInputStream *input)
 {
 	if (m_dataSize <= 0)
 		return;
+	if (m_dataSize > (std::numeric_limits<uint32_t>::max() / 2))
+		m_dataSize = (std::numeric_limits<uint32_t>::max() / 2);
 	uint8_t *streamData = new uint8_t[m_dataSize];
 	for(unsigned i=0; i<(unsigned)m_dataSize; i++)
 		streamData[i] = readU8(input);

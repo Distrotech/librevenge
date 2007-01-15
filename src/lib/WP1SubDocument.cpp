@@ -26,7 +26,7 @@
 #include "WP1Parser.h"
 #include "libwpd_internal.h"
 
-WP1SubDocument::WP1SubDocument(WPXInputStream *input, const int dataSize) :
+WP1SubDocument::WP1SubDocument(WPXInputStream *input, const unsigned dataSize) :
 	WPXSubDocument(input, dataSize)
 {
 }

@@ -26,7 +26,7 @@
 #include "WP5Parser.h"
 #include "libwpd_internal.h"
 
-WP5SubDocument::WP5SubDocument(WPXInputStream *input, const int dataSize) :
+WP5SubDocument::WP5SubDocument(WPXInputStream *input, const unsigned dataSize) :
 	WPXSubDocument(input, dataSize)
 {
 }
