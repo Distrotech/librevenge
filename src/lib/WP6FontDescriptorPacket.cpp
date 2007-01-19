@@ -70,8 +70,8 @@ void WP6FontDescriptorPacket::_readContents(WPXInputStream *input)
    m_fontNameLength = readU16(input); 
 
 
-   if (m_fontNameLength > (std::numeric_limits<uint16_t>::max() / 2))
-	m_fontNameLength = (std::numeric_limits<uint16_t>::max() / 2);
+   if (m_fontNameLength > ((std::numeric_limits<uint16_t>::max)() / 2))
+	m_fontNameLength = ((std::numeric_limits<uint16_t>::max)() / 2);
    if (m_fontNameLength == 0) 
 	   {
 		   m_fontName = new char[1];
