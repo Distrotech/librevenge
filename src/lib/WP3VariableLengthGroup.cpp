@@ -36,6 +36,7 @@
 #include "WP3FootnoteEndnoteGroup.h"
 #include "WP3TablesGroup.h"
 #include "libwpd_internal.h"
+#include <limits>
 
 WP3VariableLengthGroup::WP3VariableLengthGroup()
 {
@@ -72,11 +73,18 @@ WP3VariableLengthGroup * WP3VariableLengthGroup::constructVariableLengthGroup(WP
 bool WP3VariableLengthGroup::isGroupConsistent(WPXInputStream *input, const uint8_t group)
 {
 	uint32_t startPosition = input->tell();
+	if (startPosition > ((std::numeric_limits<unsigned long>::max)() / 2))
+		return false;
 
 	try
 	{
 		uint8_t subGroup = readU8(input);
 		uint16_t size = readU16(input, true);
+		if (startPosition + size < startPosition)
+		{
+			input->seek(startPosition, WPX_SEEK_SET);
+			return false;
+		}
 
 		if (input->seek((startPosition + size - 1 - input->tell()), WPX_SEEK_CUR) || input->atEOS())
 		{

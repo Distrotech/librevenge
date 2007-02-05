@@ -27,6 +27,7 @@
 #include "WP1Heuristics.h"
 #include "WP1FileStructure.h"
 #include "libwpd_internal.h"
+#include <limits>
 
 WPDConfidence WP1Heuristics::isWP1FileFormat(WPXInputStream *input, bool partialContent)
 {
@@ -75,6 +76,8 @@ WPDConfidence WP1Heuristics::isWP1FileFormat(WPXInputStream *input, bool partial
 				//   that we observed in variable length WP1 functions 
 				
 				long functionLength = readU32(input, true);
+				if (functionLength > ((std::numeric_limits<uint32_t>::max)() / 2))
+					return WPD_CONFIDENCE_NONE;
 				long closingFunctionLength = 0;
 				WPD_DEBUG_MSG(("WP1Heuristics functionLength = 0x%.8x\n", (unsigned int)functionLength));
 
