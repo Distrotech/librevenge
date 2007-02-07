@@ -44,11 +44,11 @@ void WP3FootnoteEndnoteGroup::_readContents(WPXInputStream *input)
 	int tmpSizeOfNote = getSize() - 8;
 	input->seek(25, WPX_SEEK_CUR);
 	tmpSizeOfNote -= 25;
-	int tmpNumOfPages = readU16(input, true);
+	unsigned tmpNumOfPages = readU16(input, true);
 	tmpSizeOfNote -= 2;
 	input->seek(4*tmpNumOfPages, WPX_SEEK_CUR);
 	tmpSizeOfNote -= 4*tmpNumOfPages;
-	int tmpNumBreakTableEntries = readU16(input, true);
+	unsigned tmpNumBreakTableEntries = readU16(input, true);
 	tmpSizeOfNote -= 2;
 	input->seek(6*tmpNumBreakTableEntries, WPX_SEEK_CUR);
 	tmpSizeOfNote -= 6*tmpNumBreakTableEntries;
@@ -57,7 +57,8 @@ void WP3FootnoteEndnoteGroup::_readContents(WPXInputStream *input)
 	// actual subdocument. tmpSizeOfNote should give the size in bytes of the
 	// subdocument
 
-	m_subDocument = new WP3SubDocument(input, tmpSizeOfNote);
+	if (tmpSizeOfNote > 0)
+		m_subDocument = new WP3SubDocument(input, tmpSizeOfNote);
 }
 
 void WP3FootnoteEndnoteGroup::parse(WP3Listener *listener)
