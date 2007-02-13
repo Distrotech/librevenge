@@ -1113,7 +1113,7 @@ void WP6ContentListener::startTable()
 
 void WP6ContentListener::insertRow(const uint16_t rowHeight, const bool isMinimumHeight, const bool isHeaderRow)
 {
-	if (!isUndoOn())
+	if (!isUndoOn() && m_ps->m_isTableOpened)
 	{
 		_flushText();
 		float rowHeightInch = (float)((double) rowHeight / (double)WPX_NUM_WPUS_PER_INCH);
@@ -1126,7 +1126,7 @@ void WP6ContentListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan
 					const RGBSColor * cellBorderColor, const WPXVerticalAlignment cellVerticalAlignment, 
 					const bool useCellAttributes, const uint32_t cellAttributes)
 {
-	if (!isUndoOn())
+	if (!isUndoOn() && m_ps->m_isTableOpened)
 	{
 		if (m_ps->m_currentTableRow < 0) // cell without a row, invalid
 		{

@@ -241,12 +241,13 @@ void WP6StylesListener::endTable()
 	if (!isUndoOn())
 	{
 		m_isTableDefined = false;
+		m_currentTable = 0;
 	}
 }
 
 void WP6StylesListener::insertRow(const uint16_t /* rowHeight */, const bool /* isMinimumHeight */, const bool /* isHeaderRow */)
 {
-	if (!isUndoOn()) 
+	if (!isUndoOn() && m_currentTable) 
 	{
 		m_currentPageHasContent = true;
 		m_currentTable->insertRow();
@@ -258,7 +259,7 @@ void WP6StylesListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan,
 				const RGBSColor * /* cellBorderColor */, const WPXVerticalAlignment /* cellVerticalAlignment */, 
 				const bool /* useCellAttributes */, const uint32_t /* cellAttributes */)
 {
-	if (!isUndoOn())
+	if (!isUndoOn() && m_currentTable)
 	{
 		m_currentPageHasContent = true;
 		m_currentTable->insertCell(colSpan, rowSpan, borderBits);
