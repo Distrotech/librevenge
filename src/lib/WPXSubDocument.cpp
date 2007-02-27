@@ -36,7 +36,7 @@ WPXSubDocument::WPXSubDocument(WPXInputStream *input, const unsigned dataSize) :
 	m_stream(0)
 {
 	uint8_t *streamData = new uint8_t[dataSize];
-	for (int i=0; i<dataSize; i++)
+	for (unsigned i=0; i<dataSize; i++)
 	{
 		if (input->atEOS())
 			throw FileException();

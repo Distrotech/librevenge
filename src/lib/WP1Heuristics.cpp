@@ -75,7 +75,7 @@ WPDConfidence WP1Heuristics::isWP1FileFormat(WPXInputStream *input, bool partial
 				//   <function code>{function length}...{function length}<function code>
 				//   that we observed in variable length WP1 functions 
 				
-				long functionLength = readU32(input, true);
+				unsigned long functionLength = readU32(input, true);
 				if (functionLength > ((std::numeric_limits<uint32_t>::max)() / 2))
 					return WPD_CONFIDENCE_NONE;
 				long closingFunctionLength = 0;
