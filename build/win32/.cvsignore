@@ -7,6 +7,6 @@ Release
 *.ncb
 *.opt
 *.plg
-*.vcproj
+*.vcproj*
 *.sln
 *.suo
