@@ -1,4 +1,10 @@
 CHANGES:
+0.8.8 - 0.8.9
+- Fix http://qa.openoffice.org/issues/show_bug.cgi?id=74134, a bug in WP1 document
+  type detection where we could try to seek to a negative place in document (Fridrich)
+- Fix a regression wrt. 0.8.7 preventing the conversion of tab table in
+  WP1 and WP3 file-format (Fridrich)
+
 0.8.7 - 0.8.8
 - Add unit tests for the stream class (Fridrich & Andrew Ziem)
 - Ignore foot/endnotes that are referenced inside other foot/endnotes (Fridrich);
