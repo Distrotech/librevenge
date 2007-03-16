@@ -4,6 +4,10 @@ CHANGES:
   type detection where we could try to seek to a negative place in document (Fridrich)
 - Fix a regression wrt. 0.8.7 preventing the conversion of tab table in
   WP1 and WP3 file-format (Fridrich)
+- Fixed several overflow bugs reported by iDefense. An attacker could create a
+  carefully crafted Word Perfect file that could cause an application linked with
+  libwpd, such as OpenOffice, to crash or possibly execute arbitrary code if the
+  file was opened by a victim. (CVE-2007-0002) (iDefense's Sean Larsson, Fridrich)
 
 0.8.7 - 0.8.8
 - Add unit tests for the stream class (Fridrich & Andrew Ziem)
