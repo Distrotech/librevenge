@@ -41,6 +41,7 @@ Includes and definitions for developing with libwpd.
 %if %{!?_without_docs:1}%{?_without_docs:0}
 %package docs
 Requires: libwpd
+BuildRequires: doxygen
 Summary: Documentation of libwpd API
 Group: Development/Documentation
 
