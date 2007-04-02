@@ -55,7 +55,7 @@ Documentation of libwpd API for developing with libwpd
 %setup -q -n %{name}-%{version}
 
 %build
-./configure --prefix=%{_prefix} --exec-prefix=%{_prefix} \
+./configure --prefix=%{_prefix} --exec-prefix=%{_prefix} --libdir=%{_libdir} \
 	%{?_without_stream:--without-stream} \
 	%{?_with_debug:--enable-debug}  \
 	%{?_without_docs:--without-docs}
