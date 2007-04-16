@@ -78,7 +78,9 @@ WPDConfidence WP1Heuristics::isWP1FileFormat(WPXInputStream *input, bool partial
 				unsigned long functionLength = readU32(input, true);
 				if (functionLength > ((std::numeric_limits<uint32_t>::max)() / 2))
 					return WPD_CONFIDENCE_NONE;
-				long closingFunctionLength = 0;
+				if (functionLength == 0)
+					return WPD_CONFIDENCE_NONE;
+				unsigned long closingFunctionLength = 0;
 				WPD_DEBUG_MSG(("WP1Heuristics functionLength = 0x%.8x\n", (unsigned int)functionLength));
 
 				input->seek(functionLength, WPX_SEEK_CUR);
