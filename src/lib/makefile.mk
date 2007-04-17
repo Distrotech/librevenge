@@ -7,9 +7,7 @@ TARGET=wpdlib
 ENABLE_EXCEPTIONS=TRUE
 LIBTARGET=NO
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 .IF "$(GUI)"=="WNT"
 CFLAGS+=-GR
