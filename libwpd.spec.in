@@ -66,6 +66,7 @@ Documentation of libwpd API for developing with libwpd
 umask 022
 
 %__make DESTDIR=$RPM_BUILD_ROOT install
+%__rm -rf $RPM_BUILD_ROOT%{_libdir}/*.la
 
 %clean
 %__rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/file.list.%{name}
@@ -83,7 +84,7 @@ umask 022
 %files devel
 %defattr(644,root,root,755)
 %{_libdir}/libwpd*-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.so
-%{_libdir}/libwpd*-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.*a
+#%{_libdir}/libwpd*-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.*a
 %{_libdir}/pkgconfig/libwpd*-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.pc
 %{_includedir}/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@/libwpd
 
