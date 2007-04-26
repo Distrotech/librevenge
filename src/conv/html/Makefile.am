@@ -6,9 +6,9 @@ endif
 
 bin_PROGRAMS = $(target_wpd2html)
 
-AM_CXXFLAGS = $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS) -I$(top_srcdir)/src/lib/
+AM_CXXFLAGS = $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS) -I$(top_srcdir)/src/lib
 
-wpd2html_LDFLAGS = -L../../lib/
+wpd2html_LDFLAGS = -L../../lib
 wpd2html_DEPENDENCIES = @WPD2HTML_WIN32_RESOURCE@
 wpd2html_LDADD = -lwpd-0.8 -lwpd-stream-0.8 $(LIBWPD_LIBS) @WPD2HTML_WIN32_RESOURCE@
 
