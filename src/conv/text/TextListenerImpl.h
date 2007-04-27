@@ -26,7 +26,6 @@
 #ifndef TEXTLISTENERIMPL_H
 #define TEXTLISTENERIMPL_H
 
-#include <glib.h>
 #include "WPXHLListenerImpl.h"
 
 class TextListenerImpl : public WPXHLListenerImpl
