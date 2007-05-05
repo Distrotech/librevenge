@@ -70,7 +70,7 @@ WP6EOLGroup::~WP6EOLGroup()
 void WP6EOLGroup::_readContents(WPXInputStream *input)
 {
 	WPD_DEBUG_MSG(("WordPerfect: EOL Group: Reading Embedded Sub-Function Data\n"));
-	unsigned int startPosition = input->tell();
+	long startPosition = input->tell();
 	uint16_t sizeDeletableSubFunctionData = readU16(input);		
 	WPD_DEBUG_MSG(("WordPerfect: EOL Group: Size of Deletable Sub-Function Data: %ld,  Size of Deletable and Non-deletable sub-function data: %ld\n", (long) sizeDeletableSubFunctionData, (long) getSizeNonDeletable()));
 	if ((long)sizeDeletableSubFunctionData > (long)getSizeNonDeletable())

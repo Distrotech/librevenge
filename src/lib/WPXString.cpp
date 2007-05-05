@@ -286,7 +286,7 @@ void appendUCS4(WPXString &str, uint32_t ucs4)
 	delete[] utf8;
 }
 
-/**
+/*
  * g_static_unichar_to_utf8:
  *
  * stolen from glib 2.4.1
@@ -299,7 +299,7 @@ void appendUCS4(WPXString &str, uint32_t ucs4)
  * Converts a single character to UTF-8.
  * 
  * Return value: number of bytes written
- **/
+ */
 int
 g_static_unichar_to_utf8 (uint32_t c,
 			  char   *outbuf)
@@ -351,15 +351,14 @@ g_static_unichar_to_utf8 (uint32_t c,
 	return len;
 }
 
-/**
+/*
  * g_static_utf8_strlen:
  * @p: pointer to the start of a UTF-8 encoded string.
-
  * 
  * Returns the length of the string in characters.
  *
  * Return value: the length of the string in characters
- **/
+ */
 int
 g_static_utf8_strlen (const char *p)
 {

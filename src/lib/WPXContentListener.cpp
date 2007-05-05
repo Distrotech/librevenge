@@ -507,6 +507,8 @@ void WPXContentListener::_getTabStops(WPXPropertyListVector &tabStops)
 			position -= m_ps->m_leftMarginByTabs;
 		else
 			position -= m_ps->m_paragraphMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_pageMarginLeft;
+		if (position < 0.00005f && position > -0.00005f)
+			position = 0.0f;
 		tmpTabStop.insert("style:position", position);
 		
 

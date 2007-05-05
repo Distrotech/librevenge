@@ -23,11 +23,9 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include <gsf/gsf-utils.h>
-#include <gsf/gsf-input-stdio.h>
 #include <stdio.h>
 #include "libwpd.h"
-#include "GSFStream.h"
+#include "WPXStreamImplementation.h"
 #include "RawListener.h"
 
 int main(int argc, char *argv[])
@@ -40,7 +38,6 @@ int main(int argc, char *argv[])
 		printf("Usage: wpd2raw [OPTION] <WordPerfect Document>\n");
 		return -1;
 	}
-	gsf_init();
 
 	if (!strcmp(argv[1], "--callgraph"))
 	{
@@ -65,33 +62,18 @@ int main(int argc, char *argv[])
 	else
 		file = argv[1];
 		
-	
-	GError   *err = 0;
-	GsfInput * input = GSF_INPUT(gsf_input_stdio_new (file, &err));
-	if (!input) 
-	{
-		g_return_val_if_fail (err != 0, 1);
-		
-		g_warning ("'%s' error: %s", file, err->message);
-		g_error_free (err);
-		gsf_shutdown();
-		return 1;
-	}
+	WPXInputStream* input = new WPXFileStream(file);
 
-	GSFInputStream *gsfInput = new GSFInputStream(input);
-
-	WPDConfidence confidence = WPDocument::isFileFormatSupported(gsfInput, false);
+	WPDConfidence confidence = WPDocument::isFileFormatSupported(input, false);
 	if (confidence == WPD_CONFIDENCE_NONE || confidence == WPD_CONFIDENCE_POOR)
 	{
 		printf("ERROR: Unsupported file format!\n");
-		delete gsfInput; 
-		g_object_unref(input);
-		gsf_shutdown();
+		delete input; 
 		return 1;
 	}
 	
 	RawListenerImpl listenerImpl(printIndentLevel);
- 	WPDResult error = WPDocument::parse(gsfInput, static_cast<WPXHLListenerImpl *>(&listenerImpl));
+ 	WPDResult error = WPDocument::parse(input, static_cast<WPXHLListenerImpl *>(&listenerImpl));
 
 	if (error == WPD_FILE_ACCESS_ERROR)
 		fprintf(stderr, "ERROR: File Exception!\n");
@@ -104,9 +86,7 @@ int main(int argc, char *argv[])
 	else if (error != WPD_OK)
 		fprintf(stderr, "ERROR: Unknown Error!\n");
 
-	delete gsfInput;
-	g_object_unref (input);
-	gsf_shutdown();
+	delete input;
 
 	if (error != WPD_OK)
 		return 1;

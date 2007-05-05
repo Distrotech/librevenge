@@ -28,9 +28,12 @@ Smokey Ardisson <alqahira@mindspring.com>		WordPerfect 6+ Arabic
 							Characters Mapping
 Kamran Khan <sum1_abi@yahoo.com>			Audit libwpd with more than 46k
 							documents and help to improve
-							considerably libwpd stability
+							considerably libwpd stability.
 Andrew Ziem <ahziem1@mailbolt.com>			Fix memory leak in standalone
 							WordPerfect converters.
+David Hislop <dhislop@optushome.com.au>			Build fixed on MSVC++ and project
+							files to build wpd2foo converters
+							with MSVC++ compilers.
 
 Thanks
 ------

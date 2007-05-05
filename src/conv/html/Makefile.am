@@ -15,7 +15,7 @@ wpd2html_LDADD = -lwpd-0.8 -lwpd-stream-0.8 $(LIBWPD_LIBS) @WPD2HTML_WIN32_RESOU
 wpd2html_SOURCES = \
 	HtmlListenerImpl.cpp	\
 	HtmlListenerImpl.h	\
-	main.cpp
+	wpd2html.cpp
 
 if OS_WIN32
 

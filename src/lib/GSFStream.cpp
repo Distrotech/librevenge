@@ -28,6 +28,12 @@
 #include <gsf/gsf-infile-msole.h>
 #include <gsf/gsf-input.h>
 
+/* THIS CLASS IS DEPRECATED
+   Use the WPXFileStream or WPXStringStream classes
+   from WPXStreamImplementation.cpp instead
+   THIS CLASS WILL BE REMOVED IN NEXT RELEASE CYCLE
+ */
+
 GSFInputStream::GSFInputStream(GsfInput *input) :
 	WPXInputStream(true),
 	m_input(input),
@@ -65,6 +71,7 @@ int GSFInputStream::seek(long offset, WPX_SEEK_TYPE seekType)
 		gsfSeekType = G_SEEK_CUR;
 		break;
 	case WPX_SEEK_SET:
+	default:
 		gsfSeekType = G_SEEK_SET;
 		break;
 	}

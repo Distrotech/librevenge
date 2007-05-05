@@ -3,7 +3,7 @@
  * Copyright (C) 2002-2004 Marc Maurer (uwog@uwog.net)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -19,69 +19,31 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
- * Corel Corporation or Corel Corporation Limited."
- */
- 
-#include <gsf/gsf-utils.h>
-#include <gsf/gsf-input-stdio.h>
 #include <stdio.h>
-#include <string.h>
-#include "libwpd.h"
-#include "GSFStream.h"
-#include "TextListenerImpl.h"
+#include "HtmlListenerImpl.h"
+#include "WPXStreamImplementation.h"
+#include "WPDocument.h"
 
 int main(int argc, char *argv[])
 {
 	if (argc < 2)
 	{
-		printf("Usage: wpd2text [--info] <WordPerfect Document>\n");
-		printf("Use \"--info\" to get document metadata instead\n");
-		printf("of the document itself\n");
-		return -1;
-	}
-	gsf_init();
-
-	GError   *err = 0;
-        char *szInputFile;
-	bool isInfo;
-
-        if (!strcmp(argv[1], "--info"))
-	{
-                isInfo = true;
-		szInputFile = argv[2];
-	}		
-	else
-	{
-		isInfo = false;
-                szInputFile = argv[1];
-	}
-
-	GsfInput * input = GSF_INPUT(gsf_input_stdio_new (szInputFile, &err));
-	if (!input) 
-	{
-		g_return_val_if_fail (err != 0, 1);
-		
-		g_warning ("'%s' error: %s", szInputFile, err->message);
-		g_error_free (err);
-		gsf_shutdown();
-		return 1;
-	}
-
-	GSFInputStream *gsfInput = new GSFInputStream(input);
-
-	WPDConfidence confidence = WPDocument::isFileFormatSupported(gsfInput, false);
-	if (confidence == WPD_CONFIDENCE_NONE || confidence == WPD_CONFIDENCE_POOR)
-	{
-		printf("ERROR: Unsupported file format!\n");
-		delete gsfInput;
-		g_object_unref(input);
-		gsf_shutdown();
+		printf("Usage: wpd2html <WordPerfect Document>\n");
 		return 1;
 	}
 	
-	TextListenerImpl listenerImpl(isInfo);
- 	WPDResult error = WPDocument::parse(gsfInput, static_cast<WPXHLListenerImpl *>(&listenerImpl));
+	WPXInputStream* input = new WPXFileStream(argv[1]);
+
+	WPDConfidence confidence = WPDocument::isFileFormatSupported(input, false);
+	if (confidence == WPD_CONFIDENCE_NONE || confidence == WPD_CONFIDENCE_POOR)
+	{
+		printf("ERROR: Unsupported file format!\n");
+		delete input;
+		return 1;
+	}
+
+	HtmlListenerImpl listenerImpl;
+ 	WPDResult error = WPDocument::parse(input, static_cast<WPXHLListenerImpl *>(&listenerImpl));
 
 	if (error == WPD_FILE_ACCESS_ERROR)
 		fprintf(stderr, "ERROR: File Exception!\n");
@@ -94,9 +56,7 @@ int main(int argc, char *argv[])
 	else if (error != WPD_OK)
 		fprintf(stderr, "ERROR: Unknown Error!\n");
 
-	delete gsfInput;
-	g_object_unref (input);
-	gsf_shutdown();
+	delete input;
 
 	if (error != WPD_OK)
 		return 1;

@@ -969,31 +969,11 @@ _RGBSColor::_RGBSColor()
 }
 
 _RGBSColor::_RGBSColor(uint16_t red, uint16_t green, uint16_t blue)
-	:	m_r(0),
-		m_g(0),
-		m_b(0),
-		m_s(0)
+	:	m_r((red >> 8) & 0xFF),
+		m_g((green >> 8) & 0xFF),
+		m_b((blue >> 8) & 0xFF),
+		m_s(100)
 {
-	unsigned int minRGB = red;
-	if (minRGB > green)
-		minRGB = green;
-	if (minRGB > blue)
-		minRGB = blue;
-		
-	if (minRGB >= 65535)
-	{
-		m_r = 255;
-		m_g = 255;
-		m_b = 255;
-		m_s = 100;
-	}
-	else
-	{
-		m_r = (uint8_t)rint(255*((double)(red - minRGB))/((double)(65535 - minRGB)));
-		m_g = (uint8_t)rint(255*((double)(green - minRGB))/((double)(65535 - minRGB)));
-		m_b = (uint8_t)rint(255*((double)(blue - minRGB))/((double)(65535 - minRGB)));
-		m_s = (uint8_t)rint(100*((double)(65535 - minRGB))/(double)65535);
-	}		
 }
 
 _WPXTabStop::_WPXTabStop(float position, WPXTabAlignment alignment, uint16_t leaderCharacter, uint8_t leaderNumSpaces)

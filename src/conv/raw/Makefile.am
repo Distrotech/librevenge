@@ -15,7 +15,7 @@ wpd2raw_LDADD = -lwpd-0.8 -lwpd-stream-0.8 $(LIBWPD_LIBS) @WPD2RAW_WIN32_RESOURC
 wpd2raw_SOURCES = \
 	RawListener.cpp	 \
 	RawListener.h	 \
-	main.cpp
+	wpd2raw.cpp
 
 if OS_WIN32
 

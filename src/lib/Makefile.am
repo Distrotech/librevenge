@@ -344,8 +344,12 @@ libwpd_0_8_la_SOURCES = \
 	WPXSubDocument.h \
 	WPXTable.h
 
-libwpd_stream_headers = GSFStream.h
-libwpd_stream_sources = GSFStream.cpp
+libwpd_stream_headers = GSFStream.h \
+			WPXStreamImplementation.h
+libwpd_stream_sources = GSFStream.cpp \
+			WPXStreamImplementation.cpp \
+			WPXOLEStream.cpp \
+			WPXOLEStream.h
 
 if WITH_LIBWPD_STREAM
 

@@ -28,6 +28,12 @@
 
 #include <gsf/gsf-input.h>
 
+/* THIS CLASS IS DEPRECATED
+   Use the WPXFileStream or WPXStringStream classes
+   from WPXStreamImplementation.h instead
+   THIS CLASS WILL BE REMOVED IN NEXT RELEASE CYCLE
+ */
+
 class GSFInputStream : public WPXInputStream
 {
 public:

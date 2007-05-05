@@ -14,7 +14,7 @@ wpd2text_LDADD = -lwpd-0.8 -lwpd-stream-0.8 $(LIBWPD_LIBS) @WPD2TEXT_WIN32_RESOU
 wpd2text_SOURCES = \
 	TextListenerImpl.cpp \
 	TextListenerImpl.h \
-	main.cpp
+	wpd2text.cpp
 
 if OS_WIN32
 

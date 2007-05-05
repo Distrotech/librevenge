@@ -137,8 +137,8 @@ class WPXHLListenerImpl
 	\li \c fo:font-variant (small-caps, if present)
 	\li \c style:font-name The name of the font used in the span, a text string in ascii
 	\li \c fo:font-size The size of the font used in the span, in points (72 points per inch)
-	\li \c fo:color The color of the font used in the span (encoded in hex: #RRGGBB)
-	\li \c style:text-background-color The background color of the text in the span
+	\li \c fo:color The color of the font used in the span (encoded in hex: \#RRGGBB)
+	\li \c style:text-background-color The background color of the text in the span (encoded in hex: \#RRGGBB)
 	*/
 	virtual void openSpan(const WPXPropertyList &propList) = 0;
 	/**
@@ -293,7 +293,7 @@ class WPXHLListenerImpl
 	\li \c fo:border-right Properties of the right border of the cell
 	\li \c fo:border-top Properties of the top border of the cell
 	\li \c fo:border-bottom Properties of the bottom border of the cell
-	\li \c fo:background-color Color of the cell
+	\li \c fo:background-color Color of the cell (encoded in hex: \#RRGGBB)
 	\li \c fo:vertical-align Vertical alignment of the content in the cell (top, middle, or bottom)
 	*/
  	virtual void openTableCell(const WPXPropertyList &propList) = 0;

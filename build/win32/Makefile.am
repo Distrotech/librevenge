@@ -3,4 +3,7 @@ EXTRA_DIST = \
 	lt-compile-resource \
 	libwpdstream.dsp \
 	libwpd.dsp \
-	libwpd.dsw
+	libwpd.dsw \
+	wpd2html.dsp \
+	wpd2raw.dsp \
+	wpd2text.dsp
