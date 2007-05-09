@@ -82,11 +82,12 @@ WPXPropertyListVector::WPXPropertyListVector(const WPXPropertyListVector &vect) 
 WPXPropertyListVector::WPXPropertyListVector() :
 	m_impl(new WPXPropertyListVectorImpl)
 {
-        m_impl = new WPXPropertyListVectorImpl;
 }
 
 WPXPropertyListVector::~WPXPropertyListVector()
 {
+	if (m_impl)
+		delete m_impl;
 }
 
 void WPXPropertyListVector::append(const WPXPropertyList &elem)
