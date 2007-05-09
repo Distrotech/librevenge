@@ -29,7 +29,7 @@
 #include <gsf/gsf-input.h>
 
 /* THIS CLASS IS DEPRECATED
-   Use the WPXFileStream or WPXStringStream classes
+   Use the WPXFileStream or ()Stream classes
    from WPXStreamImplementation.h instead
    THIS CLASS WILL BE REMOVED IN NEXT RELEASE CYCLE
  */
@@ -49,6 +49,8 @@ public:
 	virtual bool atEOS() { return (bool)(gsf_input_eof(m_input) != 0); }
 
 private:
+	GSFInputStream(const GSFInputStream&);
+	GSFInputStream& operator=(const GSFInputStream&);
 	GsfInput *m_input;
 	GsfInfile *m_ole;
 };

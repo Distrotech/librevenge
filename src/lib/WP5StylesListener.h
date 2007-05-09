@@ -75,6 +75,8 @@ protected:
 	void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
 
 private:
+	WP5StylesListener(const WP5StylesListener&);
+	WP5StylesListener& operator=(const WP5StylesListener&);
 	WPXPageSpan m_currentPage, m_nextPage;
 
 	WPXTableList m_tableList;

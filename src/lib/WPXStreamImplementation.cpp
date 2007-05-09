@@ -39,6 +39,9 @@ public:
 	std::stringstream buffer;
 	unsigned long streamSize;
 	uint8_t *buf;
+private:
+	WPXFileStreamPrivate(const WPXFileStreamPrivate&);
+	WPXFileStreamPrivate& operator=(const WPXFileStreamPrivate&);
 };
 
 class WPXStringStreamPrivate
@@ -49,6 +52,9 @@ public:
 	std::stringstream buffer;
 	unsigned long streamSize;
 	uint8_t *buf;
+private:
+	WPXStringStreamPrivate(const WPXStringStreamPrivate&);
+	WPXStringStreamPrivate& operator=(const WPXStringStreamPrivate&);
 };
 
 WPXFileStreamPrivate::WPXFileStreamPrivate() :
@@ -79,10 +85,9 @@ WPXStringStreamPrivate::~WPXStringStreamPrivate()
 }
 
 WPXFileStream::WPXFileStream(const char* filename) :
-	WPXInputStream(true)
+	WPXInputStream(true),
+	d(new WPXFileStreamPrivate)
 {
-	d = new WPXFileStreamPrivate;
-	
 	d->file.open( filename, std::ios::binary | std::ios::in );
 	d->file.seekg( 0, std::ios::end );
 	d->streamSize = (d->file.good() ? (unsigned long)d->file.tellg() : (unsigned long)-1L);
@@ -220,9 +225,9 @@ WPXInputStream* WPXFileStream::getDocumentOLEStream()
 }
 
 WPXStringStream::WPXStringStream(const char *data, const unsigned int dataSize) :
-	WPXInputStream(true)
+	WPXInputStream(true),
+	d(new WPXStringStreamPrivate(std::string(data, dataSize)))
 {
-	d = new WPXStringStreamPrivate(std::string(data, dataSize));
 	d->buffer.seekg( 0, std::ios::end );
 	d->streamSize = (d->buffer.good() ? (unsigned long)d->buffer.tellg() : (unsigned long)-1L);
 	if (d->streamSize == (unsigned long)-1)

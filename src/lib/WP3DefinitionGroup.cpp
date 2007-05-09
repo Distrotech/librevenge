@@ -31,7 +31,11 @@
 #include "WP3Listener.h"
 
 WP3DefinitionGroup::WP3DefinitionGroup(WPXInputStream *input) :
-	WP3VariableLengthGroup()
+	WP3VariableLengthGroup(),
+	m_colType(0),
+	m_numColumns(0),
+	m_isFixedWidth(),
+	m_columnWidth()
 {
 	_read(input);
 }

@@ -58,6 +58,8 @@ protected:
 	const uint16_t getSizeNonDeletable() const { return m_sizeNonDeletable; }
 
 private:
+	WP6VariableLengthGroup(const WP6VariableLengthGroup&);
+	WP6VariableLengthGroup& operator=(const WP6VariableLengthGroup&);
 	uint8_t m_subGroup;
 	uint16_t m_size;
 	uint8_t m_flags;

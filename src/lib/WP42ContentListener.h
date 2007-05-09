@@ -64,6 +64,8 @@ protected:
 	void _changeList() {};
 
 private:
+	WP42ContentListener(const WP42ContentListener&);
+	WP42ContentListener& operator=(const WP42ContentListener&);
 	WP42ContentParsingState *m_parseState;
 	std::vector<WP42SubDocument *> &m_subDocuments;
 };

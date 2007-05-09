@@ -115,7 +115,6 @@ public:
 private:
 	uint16_t m_outlineHash;
 	uint8_t m_numberingMethods[WP6_NUM_LIST_LEVELS];
-	uint8_t m_outlineFlags;
 	uint8_t m_tabBehaviourFlag;
 };
 
@@ -127,6 +126,8 @@ class WP6ParagraphGroup : public WP6VariableLengthGroup
 	void _readContents(WPXInputStream *input);
 	void parse(WP6Listener *listener);
 private:
+	WP6ParagraphGroup(const WP6ParagraphGroup&);
+	WP6ParagraphGroup& operator=(const WP6ParagraphGroup&);
 	WP6VariableLengthGroup_SubGroup *m_subGroupData;
 };
 

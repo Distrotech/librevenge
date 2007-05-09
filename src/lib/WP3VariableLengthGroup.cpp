@@ -38,7 +38,9 @@
 #include "libwpd_internal.h"
 #include <limits>
 
-WP3VariableLengthGroup::WP3VariableLengthGroup()
+WP3VariableLengthGroup::WP3VariableLengthGroup() :
+	m_subGroup(0),
+	m_size(0)
 {
 }
 

@@ -34,8 +34,27 @@ const char *FONT_WEIGHT_STRINGS[] = {	"Bold", "bold", "Demi", "demi", "Extended"
 const char * USELESS_WP_POSTFIX = "-WP";
 #define countElements(a) ((sizeof(a) / sizeof(a[0])))
 
-WP6FontDescriptorPacket::WP6FontDescriptorPacket(WPXInputStream *input, int /* id */, uint32_t dataOffset, uint32_t dataSize) 
-	: WP6PrefixDataPacket(input)
+WP6FontDescriptorPacket::WP6FontDescriptorPacket(WPXInputStream *input, int /* id */, uint32_t dataOffset, uint32_t dataSize) : 
+	WP6PrefixDataPacket(input),
+	m_characterWidth(0),
+	m_ascenderHeight(0),
+	m_xHeight(0),
+	m_descenderHeight(0),
+	m_italicsAdjust(0),
+	m_primaryFamilyId(0),
+	m_primaryFamilyMemberId(0),
+	m_scriptingSystem(0),
+	m_primaryCharacterSet(0),
+	m_width(0),
+	m_weight(0),
+	m_attributes(0),
+	m_generalCharacteristics(0),
+	m_classification(0),
+	m_fill(0),
+	m_fontType(0),
+	m_fontSourceFileType(0),
+	m_fontNameLength(0),
+	m_fontName(0)
 {
 	_read(input, dataOffset, dataSize);
 }

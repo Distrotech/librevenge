@@ -29,7 +29,9 @@
 #include "libwpd_internal.h"
 
 WP6Header::WP6Header(WPXInputStream * input, uint32_t documentOffset, uint8_t productType, uint8_t fileType, uint8_t majorVersion, uint8_t minorVersion, uint16_t documentEncryption) :
-	WPXHeader(input, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption)
+	WPXHeader(input, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption),
+	m_indexHeaderOffset(0),
+	m_numPrefixIndices(0)
 {
 	input->seek(WP6_HEADER_INDEX_HEADER_POINTER_OFFSET, WPX_SEEK_SET);
 	m_indexHeaderOffset = readU16(input);

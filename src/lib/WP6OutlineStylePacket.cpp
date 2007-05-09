@@ -27,8 +27,14 @@
 #include "WP6OutlineStylePacket.h"
 #include "libwpd_internal.h"
 
-WP6OutlineStylePacket::WP6OutlineStylePacket(WPXInputStream *input, int /* id */, uint32_t dataOffset, uint32_t dataSize) 
-	: WP6PrefixDataPacket(input)
+WP6OutlineStylePacket::WP6OutlineStylePacket(WPXInputStream *input, int /* id */, uint32_t dataOffset, uint32_t dataSize) : 
+	WP6PrefixDataPacket(input),
+	m_numPIDs(0),
+	m_nonDeletableInfoSize(0),
+	m_outlineHash(0),
+	m_numberingMethods(),
+	m_outlineFlags(0),
+	m_tabBehaviourFlag(0)
 {
 	_read(input, dataOffset, dataSize);
 }
@@ -39,21 +45,19 @@ WP6OutlineStylePacket::~WP6OutlineStylePacket()
 
 void WP6OutlineStylePacket::_readContents(WPXInputStream *input)
 {
-	unsigned i;
-
 	m_numPIDs = readU16(input);
+	input->seek(2 * WP6_NUM_LIST_LEVELS, WPX_SEEK_CUR);
+#if 0
 	for (i=0; i<WP6_NUM_LIST_LEVELS; i++) 
 		m_paragraphStylePIDs[i] = readU16(input); // seemingly useless
+#endif
 	m_outlineFlags = readU8(input);
 	m_outlineHash = readU16(input);
-	for (i=0; i<WP6_NUM_LIST_LEVELS; i++)  
+	for (unsigned i=0; i<WP6_NUM_LIST_LEVELS; i++)  
 		m_numberingMethods[i] = readU8(input);
 	m_tabBehaviourFlag = readU8(input);
 	
 	WPD_DEBUG_MSG(("WordPerfect: Read Outline Style Packet (numPrefixIDs: %i, outlineHash: %i, outlineFlags: %i, tab behaviour flag: %i)\n", (int) m_numPIDs, (int) m_outlineHash, (int) m_outlineFlags, (int) m_tabBehaviourFlag));
-	WPD_DEBUG_MSG(("WordPerfect: Read Outline Style Packet (m_paragraphStylePIDs: %i %i %i %i %i %i %i %i)\n", 
-		       m_paragraphStylePIDs[0], m_paragraphStylePIDs[1], m_paragraphStylePIDs[2], m_paragraphStylePIDs[3],
-		       m_paragraphStylePIDs[4], m_paragraphStylePIDs[5], m_paragraphStylePIDs[6], m_paragraphStylePIDs[7]));
 	WPD_DEBUG_MSG(("WordPerfect: Read Outline Style Packet (m_numberingMethods: %i %i %i %i %i %i %i %i)\n", 
 		       m_numberingMethods[0], m_numberingMethods[1], m_numberingMethods[2], m_numberingMethods[3],
 		       m_numberingMethods[4], m_numberingMethods[5], m_numberingMethods[6], m_numberingMethods[7]));

@@ -34,8 +34,8 @@
 WP5StylesListener::WP5StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, std::vector<WP5SubDocument *> &subDocuments) : 
 	WP5Listener(),
 	WPXStylesListener(pageList),
-	m_currentPage(WPXPageSpan()),
-	m_nextPage(WPXPageSpan()),
+	m_currentPage(),
+	m_nextPage(),
 	m_tableList(tableList),
 	m_currentTable(0), 
 	m_tempMarginLeft(1.0f),

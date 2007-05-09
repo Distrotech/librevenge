@@ -40,7 +40,9 @@ public:
 	void parse(WP6Listener *listener) const;
 	WP6SubDocument * getSubDocument() const { return m_subDocument;}
 
-private:              
+private:
+	WP6GeneralTextPacket(const WP6GeneralTextPacket&);             
+	WP6GeneralTextPacket& operator=(const WP6GeneralTextPacket&);             
 	WP6SubDocument * m_subDocument;
 	
 };

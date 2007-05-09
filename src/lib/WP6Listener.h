@@ -104,6 +104,8 @@ public:
 	const WP6PrefixDataPacket * getPrefixDataPacket(const int prefixID) const;
 		
 private:
+	WP6Listener(const WP6Listener&);
+	WP6Listener& operator=(const WP6Listener&);
 	WP6PrefixData *m_prefixData;
 };
 

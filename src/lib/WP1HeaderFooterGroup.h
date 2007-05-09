@@ -38,6 +38,8 @@ public:
 	void parse(WP1Listener *listener);
 
 private:
+	WP1HeaderFooterGroup(const WP1HeaderFooterGroup&);
+	WP1HeaderFooterGroup& operator=(const WP1HeaderFooterGroup&);
 	uint8_t m_definition;
 	WP1SubDocument *m_subDocument;
 };

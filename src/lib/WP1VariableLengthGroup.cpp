@@ -33,8 +33,9 @@
 #include "libwpd_internal.h"
 #include <limits>
 
-WP1VariableLengthGroup::WP1VariableLengthGroup(uint8_t group)
-	: m_group(group)
+WP1VariableLengthGroup::WP1VariableLengthGroup(uint8_t group) :
+	m_group(group),
+	m_size(0)
 {
 }
 

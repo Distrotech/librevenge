@@ -33,7 +33,6 @@
 #include "WPXString.h"
 #include "libwpd_internal.h"
 #include "WPXHLListenerImpl.h"
-#// include "WPXListener.h"
 #include <vector>
 
 typedef struct _WP5ContentParsingState WP5ContentParsingState;
@@ -94,6 +93,8 @@ protected:
 	void _changeList() {};
 
 private:
+	WP5ContentListener(const WP5ContentListener&);
+	WP5ContentListener& operator=(const WP5ContentListener&);
 	WP5ContentParsingState *m_parseState;
 	std::vector<WP5SubDocument *> &m_subDocuments;
 	float m_defaultFontSize;

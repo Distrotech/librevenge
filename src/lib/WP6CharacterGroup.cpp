@@ -56,7 +56,8 @@ void WP6CharacterGroup_SetAlignmentCharacterSubGroup::parse(WP6Listener *listene
  * WP6CharacterGroup_ColorSubGroup
  *************************************************************************/
 
-WP6CharacterGroup_ColorSubGroup::WP6CharacterGroup_ColorSubGroup(WPXInputStream *input)
+WP6CharacterGroup_ColorSubGroup::WP6CharacterGroup_ColorSubGroup(WPXInputStream *input) :
+	m_red(0), m_green(0), m_blue(0)
 {
 	m_red = readU8(input);
 	m_green = readU8(input);
@@ -73,7 +74,8 @@ void WP6CharacterGroup_ColorSubGroup::parse(WP6Listener *listener, const uint8_t
  * WP6CharacterGroup_CharacterShadingChangeSubGroup
  *************************************************************************/
 
-WP6CharacterGroup_CharacterShadingChangeSubGroup::WP6CharacterGroup_CharacterShadingChangeSubGroup(WPXInputStream *input)
+WP6CharacterGroup_CharacterShadingChangeSubGroup::WP6CharacterGroup_CharacterShadingChangeSubGroup(WPXInputStream *input) :
+	m_shading(0)
 {
 	m_shading = readU8(input);
 	WPD_DEBUG_MSG(("WordPerfect: Character Group Character Shading Change subgroup info (shading: %i)\n", m_shading));
@@ -89,7 +91,8 @@ void WP6CharacterGroup_CharacterShadingChangeSubGroup::parse(WP6Listener *listen
  * WP6CharacterGroup_FontFaceChangeSubGroups
  *************************************************************************/
 
-WP6CharacterGroup_FontFaceChangeSubGroup::WP6CharacterGroup_FontFaceChangeSubGroup(WPXInputStream *input)
+WP6CharacterGroup_FontFaceChangeSubGroup::WP6CharacterGroup_FontFaceChangeSubGroup(WPXInputStream *input) :
+	m_oldMatchedPointSize(0), m_hash(0), m_matchedFontIndex(0), m_matchedFontPointSize(0)
 {
 	m_oldMatchedPointSize = readU16(input);
 	m_hash = readU16(input);
@@ -110,7 +113,8 @@ void WP6CharacterGroup_FontFaceChangeSubGroup::parse(WP6Listener *listener, cons
  * WP6CharacterGroup_FontSizeChangeSubGroups
  *************************************************************************/
 
-WP6CharacterGroup_FontSizeChangeSubGroup::WP6CharacterGroup_FontSizeChangeSubGroup(WPXInputStream *input)
+WP6CharacterGroup_FontSizeChangeSubGroup::WP6CharacterGroup_FontSizeChangeSubGroup(WPXInputStream *input) :
+	m_desiredFontPointSize(0)
 {
 	m_desiredFontPointSize = readU16(input);
 	WPD_DEBUG_MSG(("WordPerfect: Character Group Font Size Change subgroup info (desired font point size: %i\n", m_desiredFontPointSize));
@@ -154,7 +158,8 @@ void WP6CharacterGroup_SetDotLeaderCharactersSubGroup::parse(WP6Listener *listen
  * WP6CharacterGroup_ParagraphNumberOnSubGroup
  *************************************************************************/
 
-WP6CharacterGroup_ParagraphNumberOnSubGroup::WP6CharacterGroup_ParagraphNumberOnSubGroup(WPXInputStream *input)
+WP6CharacterGroup_ParagraphNumberOnSubGroup::WP6CharacterGroup_ParagraphNumberOnSubGroup(WPXInputStream *input) :
+	m_outlineHash(0), m_level(0), m_flag(0)
 {
 	m_outlineHash = readU16(input);
 	m_level = readU8(input);
@@ -171,7 +176,8 @@ void WP6CharacterGroup_ParagraphNumberOnSubGroup::parse(WP6Listener *listener, c
  * WP6CharacterGroup_TableDefinitionOnSubGroup
  *************************************************************************/
 
-WP6CharacterGroup_TableDefinitionOnSubGroup::WP6CharacterGroup_TableDefinitionOnSubGroup(WPXInputStream *input)
+WP6CharacterGroup_TableDefinitionOnSubGroup::WP6CharacterGroup_TableDefinitionOnSubGroup(WPXInputStream *input) :
+	m_flags(0), m_position(0), m_leftOffset(0)
 {
 	m_flags = readU8(input);
 	m_position = readU8(input);
@@ -204,13 +210,16 @@ void WP6CharacterGroup_TableDefinitionOffSubGroup::parse(WP6Listener *listener, 
  * WP6CharacterGroup_TableColumnSubGroup
  *************************************************************************/
 
-WP6CharacterGroup_TableColumnSubGroup::WP6CharacterGroup_TableColumnSubGroup(WPXInputStream *input)
+WP6CharacterGroup_TableColumnSubGroup::WP6CharacterGroup_TableColumnSubGroup(WPXInputStream *input) :
+	m_flags(0), m_width(0), m_leftGutter(0), m_rightGutter(0),
+	m_attributes(0), m_alignment(0), m_absPosFromRight(0), m_numberType(0),
+	m_currencyIndex(0)
 {
 	m_flags = readU8(input);
 	m_width = readU16(input);
 
 	m_leftGutter = readU16(input);
-	m_rigthGutter = readU16(input);
+	m_rightGutter = readU16(input);
 	m_attributes = (readU32(input) & 0x0003FFFF);
 	m_alignment = (readU8(input) & 0x07);
 	m_absPosFromRight = readU16(input);
@@ -220,7 +229,7 @@ WP6CharacterGroup_TableColumnSubGroup::WP6CharacterGroup_TableColumnSubGroup(WPX
 
 void WP6CharacterGroup_TableColumnSubGroup::parse(WP6Listener *listener, const uint8_t /* numPrefixIDs */, uint16_t const * /* prefixIDs */) const
 {
-	listener->addTableColumnDefinition(m_width, m_leftGutter, m_rigthGutter, m_attributes, m_alignment);
+	listener->addTableColumnDefinition(m_width, m_leftGutter, m_rightGutter, m_attributes, m_alignment);
 }
 
 /*************************************************************************

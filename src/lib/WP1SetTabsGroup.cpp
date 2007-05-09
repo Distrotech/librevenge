@@ -27,7 +27,8 @@
 #include <vector>
 
 WP1SetTabsGroup::WP1SetTabsGroup(WPXInputStream *input, uint8_t group) :
-	WP1VariableLengthGroup(group)
+	WP1VariableLengthGroup(group),
+	m_tabStops(std::vector<WPXTabStop>())
 {
 	_read(input);
 }

@@ -37,6 +37,8 @@ public:
 	void parse(WP42Listener *listener);
 
 private:
+	WP42HeaderFooterGroup(const WP42HeaderFooterGroup&);
+	WP42HeaderFooterGroup& operator=(const WP42HeaderFooterGroup&);
 	uint8_t m_definition;
 	WP42SubDocument *m_subDocument;
 };

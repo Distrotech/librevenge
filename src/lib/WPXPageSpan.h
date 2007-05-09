@@ -43,6 +43,7 @@ public:
 			const uint8_t internalType, const WPXSubDocument * subDocument);
 	WPXHeaderFooter(const WPXHeaderFooter &headerFooter);
 	~WPXHeaderFooter();
+	WPXHeaderFooter& operator=(const WPXHeaderFooter &headerFooter);
 	const WPXHeaderFooterType getType() const { return m_type; }
 	const WPXHeaderFooterOccurence getOccurence() const { return m_occurence; }
 	const uint8_t getInternalType() const { return m_internalType; }

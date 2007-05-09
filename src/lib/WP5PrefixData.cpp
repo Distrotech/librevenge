@@ -27,7 +27,8 @@
 #include "WP5SpecialHeaderIndex.h"
 #include "libwpd_internal.h"
 
-WP5PrefixData::WP5PrefixData(WPXInputStream *input)
+WP5PrefixData::WP5PrefixData(WPXInputStream *input) :
+	m_generalPacketData()
 {
 	std::vector<WP5GeneralPacketIndex> prefixIndexVector;
 	int id = 0;

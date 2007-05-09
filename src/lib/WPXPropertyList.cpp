@@ -31,7 +31,7 @@
 class WPXMapImpl
 {
 public:
-	WPXMapImpl() {}
+	WPXMapImpl() : m_map() {}
 	~WPXMapImpl();
 	void insert(const char *name, WPXProperty *property);
 	const WPXProperty * operator[](const char *name) const;
@@ -153,6 +153,16 @@ void WPXPropertyList::remove(const char * name)
 	m_mapImpl->remove(name);
 }
 
+const WPXPropertyList& WPXPropertyList::operator=(const WPXPropertyList& propList)
+{
+        WPXPropertyList::Iter i(propList);
+        for (i.rewind(); i.next(); )
+        {
+            insert(i.key(), i()->clone());
+        }
+        return *this;
+}
+
 const WPXProperty * WPXPropertyList::operator[](const char *name) const
 {
 	return (*m_mapImpl)[name];
@@ -180,11 +190,11 @@ private:
 };
 
 
-WPXMapIterImpl::WPXMapIterImpl(const WPXMapImpl *impl)
+WPXMapIterImpl::WPXMapIterImpl(const WPXMapImpl *impl) :
+	m_imaginaryFirst(false),
+	m_iter(impl->m_map.begin()),
+	m_map(&impl->m_map)
 {
-	m_map = &(impl->m_map);
-	m_iter = impl->m_map.begin();
-	m_imaginaryFirst = false;
 }
 
 void WPXMapIterImpl::rewind()
@@ -223,10 +233,9 @@ const char * WPXMapIterImpl::key()
 	return m_iter->first.c_str();
 }
 
-WPXPropertyList::Iter::Iter(const WPXPropertyList &propList) 
+WPXPropertyList::Iter::Iter(const WPXPropertyList &propList) :
+	m_iterImpl(new WPXMapIterImpl(static_cast<WPXMapImpl *>(propList.m_mapImpl)))
 {
-	WPXMapImpl *impl = propList.m_mapImpl;
-	m_iterImpl = new WPXMapIterImpl(static_cast<WPXMapImpl *>(impl));
 }
 
 WPXPropertyList::Iter::~Iter() 

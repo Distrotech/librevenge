@@ -28,8 +28,10 @@
 #include "libwpd_internal.h"
 #include "WP3Listener.h"
 
-WP3UndoGroup::WP3UndoGroup(WPXInputStream *input, uint8_t groupID)
-	: WP3FixedLengthGroup(groupID)
+WP3UndoGroup::WP3UndoGroup(WPXInputStream *input, uint8_t groupID) :
+	WP3FixedLengthGroup(groupID),
+	m_undoType(0),
+	m_undoLevel(0)
 {
 	_read(input);
 }

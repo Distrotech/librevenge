@@ -39,7 +39,7 @@ public:
 
 private:
 	uint16_t m_packetType;
-	std::vector<int> fontNameOffset;
-	std::vector<float> fontSize;
+	std::vector<int> m_fontNameOffset;
+	std::vector<float> m_fontSize;
 };
 #endif /* WP5LISTFONTSUSEDPACKET_H */

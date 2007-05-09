@@ -74,6 +74,8 @@ public:
 	const WP5GeneralPacketData * getGeneralPacketData(const int type) const;
 
 private:
+	WP5Listener(const WP5Listener&);
+	WP5Listener& operator=(const WP5Listener&);
 	WP5PrefixData *m_prefixData;
 };
 

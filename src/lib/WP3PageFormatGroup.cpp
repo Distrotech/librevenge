@@ -37,6 +37,7 @@ WP3PageFormatGroup::WP3PageFormatGroup(WPXInputStream *input) :
 	m_rightMargin(0),
 	m_lineSpacing(1.0f),
 	m_isRelative(false),
+	m_tabStops(),
 	m_topMargin(0),
 	m_bottomMargin(0),
 	m_justification(0),

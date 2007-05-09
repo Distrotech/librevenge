@@ -57,6 +57,8 @@ protected:
 	virtual void _readContents(WPXInputStream *input);
 
 private:
+	WP5DefinitionGroup(const WP5DefinitionGroup&);
+	WP5DefinitionGroup& operator=(const WP5DefinitionGroup&);
 	WP5VariableLengthGroup_SubGroup * m_subGroupData;
 };
 

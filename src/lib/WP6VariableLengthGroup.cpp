@@ -41,8 +41,12 @@
 
 
 WP6VariableLengthGroup::WP6VariableLengthGroup() :
+	m_subGroup(0),
+	m_size(0),
+	m_flags(0),
 	m_numPrefixIDs(0),
-	m_prefixIDs(0)
+	m_prefixIDs(0),
+	m_sizeNonDeletable(0)
 {
 }
 

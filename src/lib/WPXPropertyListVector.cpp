@@ -33,7 +33,7 @@ class WPXPropertyListVectorImpl
 friend class WPXPropertyListVector;
 public:
 	WPXPropertyListVectorImpl(const std::vector<WPXPropertyList> &_vector) : m_vector(_vector) {}
-	WPXPropertyListVectorImpl() {}
+	WPXPropertyListVectorImpl() : m_vector() {}
 	void append(const WPXPropertyList &elem) { m_vector.push_back(elem); }
 	size_t count() const { return m_vector.size(); }
 	std::vector<WPXPropertyList> m_vector;
@@ -42,11 +42,10 @@ public:
 class WPXPropertyListVectorIterImpl
 {
 public:
-        WPXPropertyListVectorIterImpl(std::vector<WPXPropertyList> * vect) { 
-                m_vector = vect; 
-                m_iter = m_vector->begin(); 
-                m_imaginaryFirst = false; 
-	}
+        WPXPropertyListVectorIterImpl(std::vector<WPXPropertyList> * vect) :
+        	m_vector(vect),
+        	m_iter(m_vector->begin()),
+        	m_imaginaryFirst(false) {}
 	~WPXPropertyListVectorIterImpl() {}
 	void rewind() { 
                 m_iter = m_vector->begin(); 
@@ -68,25 +67,26 @@ public:
 	const WPXPropertyList & operator()() const { return (*m_iter); }
 
 private:
+	WPXPropertyListVectorIterImpl(const WPXPropertyListVectorIterImpl&);
+	WPXPropertyListVectorIterImpl& operator=(const WPXPropertyListVectorIterImpl&);
         std::vector<WPXPropertyList> * m_vector;
         std::vector<WPXPropertyList>::iterator m_iter;
         bool m_imaginaryFirst;
 };
 
-WPXPropertyListVector::WPXPropertyListVector(const WPXPropertyListVector &vect)
+WPXPropertyListVector::WPXPropertyListVector(const WPXPropertyListVector &vect) :
+	m_impl(new WPXPropertyListVectorImpl(static_cast<WPXPropertyListVectorImpl*>(vect.m_impl)->m_vector))
 {
-        WPXPropertyListVectorImpl *vectorImpl = static_cast<WPXPropertyListVectorImpl* >(vect.m_impl);
-        m_impl = new WPXPropertyListVectorImpl(vectorImpl->m_vector);
 }
 
-WPXPropertyListVector::WPXPropertyListVector()
+WPXPropertyListVector::WPXPropertyListVector() :
+	m_impl(new WPXPropertyListVectorImpl)
 {
         m_impl = new WPXPropertyListVectorImpl;
 }
 
 WPXPropertyListVector::~WPXPropertyListVector()
 {
-	delete m_impl;
 }
 
 void WPXPropertyListVector::append(const WPXPropertyList &elem)
@@ -99,10 +99,9 @@ size_t WPXPropertyListVector::count() const
         return m_impl->count();
 }
 
-WPXPropertyListVector::Iter::Iter(const WPXPropertyListVector &vect) 
+WPXPropertyListVector::Iter::Iter(const WPXPropertyListVector &vect) :
+	m_iterImpl(new WPXPropertyListVectorIterImpl(&(static_cast<WPXPropertyListVectorImpl* >(vect.m_impl)->m_vector)))
 {
-        WPXPropertyListVectorImpl *vectorImpl = static_cast<WPXPropertyListVectorImpl* >(vect.m_impl);
-        m_iterImpl = new WPXPropertyListVectorIterImpl(&(vectorImpl->m_vector));
 }
 
 WPXPropertyListVector::Iter::~Iter() 

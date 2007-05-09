@@ -65,7 +65,7 @@ void WP5Parser::parse(WPXInputStream *input, WP5Listener *listener)
 	
 	input->seek(getHeader()->getDocumentOffset(), WPX_SEEK_SET);	
 	
-	WPD_DEBUG_MSG(("WordPerfect: Starting document body parse (position = %ld)\n",(long)input->tell()));
+	WPD_DEBUG_MSG(("WordPerfect: Starting document body parse (position = %ld)\n", (long)input->tell()));
 	
 	parseDocument(input, listener);
 	

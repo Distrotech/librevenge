@@ -39,6 +39,8 @@ public:
 	void parse(WP1Listener *listener);
 
 private:
+	WP1FootnoteEndnoteGroup(const WP1FootnoteEndnoteGroup&);
+	WP1FootnoteEndnoteGroup& operator=(const WP1FootnoteEndnoteGroup&);
 	WPXNoteType m_noteType;
 	uint16_t m_noteNumber;
 	WP1SubDocument *m_subDocument;

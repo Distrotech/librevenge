@@ -51,7 +51,7 @@ const int STATE_MEMORY = 3;
 class WP6StyleStateSequence
 {
 public:
-	WP6StyleStateSequence() { clear(); }
+	WP6StyleStateSequence() : m_stateSequence(), m_currentState(), m_previousState() { clear(); }
 	void setCurrentState(WP6StyleState state) { for (int i=(STATE_MEMORY-1); i>0; i--) m_stateSequence[i] = m_stateSequence[i-1]; m_stateSequence[0]=state; }
 	const WP6StyleState getCurrentState() const { return m_stateSequence[0]; /*currentState;*/ }
 	const WP6StyleState getPreviousState() const { return m_stateSequence[1]; /*m_previousState;*/ }
@@ -102,6 +102,9 @@ struct _WP6ContentParsingState
 	uint8_t m_leaderNumSpaces;
 	std::vector<WPXTabStop> m_tempTabStops;
 	std::vector<bool> m_tempUsePreWP9LeaderMethod;
+private:
+	_WP6ContentParsingState(const _WP6ContentParsingState&);
+	_WP6ContentParsingState& operator=(const _WP6ContentParsingState&);
 };
 
 struct _WP6ListLevel
@@ -203,6 +206,8 @@ protected:
 	void _changeList();
 
 private:
+	WP6ContentListener(const WP6ContentListener&);
+	WP6ContentListener& operator=(const WP6ContentListener&);
 	WP6ContentParsingState *m_parseState;
 
 	std::map<uint16_t,WP6OutlineDefinition *> m_outlineDefineHash;

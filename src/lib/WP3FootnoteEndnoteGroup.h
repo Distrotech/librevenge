@@ -38,6 +38,8 @@ class WP3FootnoteEndnoteGroup : public WP3VariableLengthGroup
 	void parse(WP3Listener *listener);
 
  private:
+ 	WP3FootnoteEndnoteGroup(const WP3FootnoteEndnoteGroup&);
+ 	WP3FootnoteEndnoteGroup& operator=(const WP3FootnoteEndnoteGroup&);
 	WP3SubDocument *m_subDocument;
 };
 

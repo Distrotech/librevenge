@@ -30,7 +30,9 @@
 #include "WP3Listener.h"
 
 WP3DisplayGroup::WP3DisplayGroup(WPXInputStream *input) :
-	WP3VariableLengthGroup()	
+	WP3VariableLengthGroup(),
+	m_noteReference(),
+	m_pageNumber()	
 {
 	_read(input);
 }

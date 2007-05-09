@@ -26,8 +26,9 @@
 #include "WP5AttributeGroup.h"
 #include "libwpd_internal.h"
 
-WP5AttributeGroup::WP5AttributeGroup(WPXInputStream *input, uint8_t groupID)
-	: WP5FixedLengthGroup(groupID)
+WP5AttributeGroup::WP5AttributeGroup(WPXInputStream *input, uint8_t groupID) :
+	WP5FixedLengthGroup(groupID),
+	m_attribute(0)
 {
 	_read(input);
 }

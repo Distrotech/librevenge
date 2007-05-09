@@ -36,6 +36,8 @@ class WP6FontDescriptorPacket : public WP6PrefixDataPacket
 	const char *getFontName() const { return m_fontName; }
 
  private:
+	WP6FontDescriptorPacket(const WP6FontDescriptorPacket&);
+	WP6FontDescriptorPacket& operator=(const WP6FontDescriptorPacket&);
 	uint16_t m_characterWidth;
 	uint16_t m_ascenderHeight;
 	uint16_t m_xHeight;

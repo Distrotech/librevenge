@@ -49,22 +49,27 @@ _WPXContentParsingState::_WPXContentParsingState() :
 	m_isSpanOpened(false),
 	m_isParagraphOpened(false),
 	m_isListElementOpened(false),
-
+	
+	m_numRowsToSkip(),
+	m_tableDefinition(),
 	m_currentTableCol(0),
 	m_currentTableRow(0),
 	m_currentTableCellNumberInRow(0),
 	m_isTableOpened(false),
 	m_isTableRowOpened(false),
+	m_isTableColumnOpened(false),
 	m_isTableCellOpened(false),
 	m_wasHeaderRow(false),
 	m_isCellWithoutParagraph(false),
 	m_cellAttributeBits(0x00000000),
 	m_paragraphJustificationBeforeTable(WPX_PARAGRAPH_JUSTIFICATION_LEFT),
-
+	
+	m_nextPageSpanIter(),
 	m_numPagesRemainingInSpan(0),
 
 	m_sectionAttributesChanged(false),
 	m_numColumns(1),
+	m_textColumns(),
 	m_isTextColumnWithoutParagraph(false),
 
 	m_pageFormLength(11.0f),
@@ -96,7 +101,11 @@ _WPXContentParsingState::_WPXContentParsingState() :
 	m_currentListLevel(0),
 
 	m_alignmentCharacter('.'),
+	m_tabStops(),
 	m_isTabPositionRelative(false),
+	
+	m_subDocuments(),
+	
 	m_inSubDocument(false),
 	m_isNote(false)
 {
@@ -112,7 +121,8 @@ _WPXContentParsingState::~_WPXContentParsingState()
 WPXContentListener::WPXContentListener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl) :
 	WPXListener(pageList),
 	m_ps(new WPXContentParsingState),
-	m_listenerImpl(listenerImpl)
+	m_listenerImpl(listenerImpl),
+	m_metaData()
 {
 	m_ps->m_nextPageSpanIter = pageList.begin();
 }
@@ -722,7 +732,7 @@ void WPXContentListener::_openTable()
  	float tableWidth = 0.0f;
 	WPXPropertyListVector columns;
  	typedef std::vector<WPXColumnDefinition>::const_iterator CDVIter;
- 	for (CDVIter iter = m_ps->m_tableDefinition.columns.begin(); iter != m_ps->m_tableDefinition.columns.end(); iter++)
+ 	for (CDVIter iter = m_ps->m_tableDefinition.m_columns.begin(); iter != m_ps->m_tableDefinition.m_columns.end(); iter++)
  	{
 		WPXPropertyList column;
 		// The "style:rel-width" is expressed in twips (1440 twips per inch) and includes the left and right Gutter
@@ -853,7 +863,6 @@ static void addBorderProps(const char *border, bool borderOn, const WPXString &b
 	else
 		props.sprintf("0.0inch");
 	propList.insert(borderStyle.cstr(), props);
-	WPXString borderOff;
 }
 
 void WPXContentListener::_openTableCell(const uint8_t colSpan, const uint8_t rowSpan, const uint8_t borderBits,  

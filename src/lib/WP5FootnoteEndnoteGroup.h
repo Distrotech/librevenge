@@ -39,6 +39,8 @@ class WP5FootnoteEndnoteGroup : public WP5VariableLengthGroup
 	void parse(WP5Listener *listener);
 
  private:
+ 	WP5FootnoteEndnoteGroup(const WP5FootnoteEndnoteGroup&);
+ 	WP5FootnoteEndnoteGroup& operator=(const WP5FootnoteEndnoteGroup&);
 	WP5SubDocument *m_subDocument;
 	WPXString m_noteReference;
 	

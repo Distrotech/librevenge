@@ -28,7 +28,8 @@
 #include "libwpd_internal.h"
 
 WP6HeaderFooterGroup::WP6HeaderFooterGroup(WPXInputStream *input) :
-	WP6VariableLengthGroup()
+	WP6VariableLengthGroup(),
+	m_occurenceBits(0)
 {
 	_read(input);
 }

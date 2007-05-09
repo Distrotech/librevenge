@@ -35,7 +35,9 @@
 #include "WP5TableEOLGroup.h"
 #include "WP5TableEOPGroup.h"
 
-WP5VariableLengthGroup::WP5VariableLengthGroup()
+WP5VariableLengthGroup::WP5VariableLengthGroup() :
+	m_subGroup(0),
+	m_size(0)
 {
 }
 

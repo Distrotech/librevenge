@@ -164,9 +164,11 @@ WPXTableList::WPXTableList() :
 }
 
 WPXTableList::WPXTableList(const WPXTableList &tableList) :
-	m_tableList(tableList.get())
+	m_tableList(tableList.get()),
+	m_refCount(tableList.getRef())
 {
-	acquire(tableList.getRef(), tableList.get());
+	if (m_refCount) 
+		(*m_refCount)++; 
 }
 
 WPXTableList & WPXTableList::operator=(const WPXTableList & tableList)

@@ -31,7 +31,13 @@
 
 WP6PageGroup::WP6PageGroup(WPXInputStream *input) :
 	WP6VariableLengthGroup(),
-	m_margin(0)
+	m_margin(0),
+	m_marginType(0),
+	m_suppressedCode(0),
+	m_formLength(0),
+	m_formWidth(0),
+	m_formType(0),
+	m_formOrientation(PORTRAIT)
 {
 	_read(input);
 }

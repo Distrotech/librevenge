@@ -39,7 +39,9 @@ class WP6ExtendedDocumentSummaryPacket : public WP6PrefixDataPacket
 	void _readContents(WPXInputStream *input);
 	void parse(WP6Listener *listener) const;
 
- private:              
+ private:
+ 	WP6ExtendedDocumentSummaryPacket(const WP6ExtendedDocumentSummaryPacket&);            
+ 	WP6ExtendedDocumentSummaryPacket& operator=(const WP6ExtendedDocumentSummaryPacket&);            
 	uint32_t m_dataSize;
 	mutable WPXMemoryInputStream *m_stream;
 	

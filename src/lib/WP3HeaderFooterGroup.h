@@ -37,6 +37,8 @@ public:
 	void parse(WP3Listener *listener);
 
 private:
+	WP3HeaderFooterGroup(const WP3HeaderFooterGroup&);
+	WP3HeaderFooterGroup& operator=(const WP3HeaderFooterGroup&);
 	uint8_t m_definition;
 	WP3SubDocument *m_subDocument;	
 };

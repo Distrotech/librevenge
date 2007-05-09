@@ -27,8 +27,9 @@
 #include "WP5Parser.h"
 #include "libwpd_internal.h"
 
-WP5FontNameStringPoolPacket::WP5FontNameStringPoolPacket(WPXInputStream *input, int /* id */, uint32_t dataOffset, uint32_t dataSize) 
-	: WP5GeneralPacketData(input)
+WP5FontNameStringPoolPacket::WP5FontNameStringPoolPacket(WPXInputStream *input, int /* id */, uint32_t dataOffset, uint32_t dataSize) :
+	WP5GeneralPacketData(input),
+	m_fontNameString()
 {	
 	_read(input, dataOffset, dataSize);
 }

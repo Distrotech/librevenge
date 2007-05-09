@@ -30,16 +30,15 @@
 #include "libwpd_internal.h"
 #include "WP5SubDocument.h"
 
-_WP5ContentParsingState::_WP5ContentParsingState()
+_WP5ContentParsingState::_WP5ContentParsingState() :
+	m_textBuffer(),
+	m_noteReference(),
+	m_tableList()
 {
-	m_textBuffer.clear();
-	m_noteReference.clear();
 }
 
 _WP5ContentParsingState::~_WP5ContentParsingState()
 {
-	m_textBuffer.clear();
-	m_noteReference.clear();
 }
 
 WP5ContentListener::WP5ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP5SubDocument*> &subDocuments, WPXHLListenerImpl *listenerImpl) :
@@ -121,8 +120,8 @@ void WP5ContentListener::defineTable(const uint8_t position, const uint16_t left
 		m_ps->m_tableDefinition.m_leftOffset = (float)((double)leftOffset / (double)WPX_NUM_WPUS_PER_INCH) - m_ps->m_paragraphMarginLeft;
 
 		// remove all the old column information
-		m_ps->m_tableDefinition.columns.clear();
-		m_ps->m_tableDefinition.columnsProperties.clear();
+		m_ps->m_tableDefinition.m_columns.clear();
+		m_ps->m_tableDefinition.m_columnsProperties.clear();
 		m_ps->m_numRowsToSkip.clear();
 	}
 }
@@ -139,13 +138,13 @@ void WP5ContentListener::addTableColumnDefinition(const uint32_t width, const ui
 		colDef.m_rightGutter = (float)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
 
 		// add the new column definition to our table definition
-		m_ps->m_tableDefinition.columns.push_back(colDef);
+		m_ps->m_tableDefinition.m_columns.push_back(colDef);
 		
 		WPXColumnProperties colProp;
 		colProp.m_attributes = attributes;
 		colProp.m_alignment = alignment;
 		
-		m_ps->m_tableDefinition.columnsProperties.push_back(colProp);
+		m_ps->m_tableDefinition.m_columnsProperties.push_back(colProp);
 
 		// initialize the variable that tells us how many columns to skip
 		m_ps->m_numRowsToSkip.push_back(0);
@@ -199,8 +198,8 @@ void WP5ContentListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan
 		if (useCellAttributes)
 			m_ps->m_cellAttributeBits = cellAttributes;
 		else
-			m_ps->m_cellAttributeBits = m_ps->m_tableDefinition.columnsProperties[m_ps->m_currentTableCol-1].m_attributes;
-		justificationChange(m_ps->m_tableDefinition.columnsProperties[m_ps->m_currentTableCol-1].m_alignment);
+			m_ps->m_cellAttributeBits = m_ps->m_tableDefinition.m_columnsProperties[m_ps->m_currentTableCol-1].m_attributes;
+		justificationChange(m_ps->m_tableDefinition.m_columnsProperties[m_ps->m_currentTableCol-1].m_alignment);
 	}
 }
 

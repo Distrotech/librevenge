@@ -49,7 +49,6 @@ void WP5ExtendedCharacterGroup::parse(WP5Listener *listener)
 	const uint16_t *chars;
 	int len = extendedCharacterWP5ToUCS2(m_character,
 				  	m_characterSet, &chars);
-	int i;
-	for (i = 0; i < len; i++)
+	for (int i = 0; i < len; i++)
 		listener->insertCharacter(chars[i]);
 }

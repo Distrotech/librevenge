@@ -93,6 +93,8 @@ class AllocTable
 class DirEntry
 {
   public:
+    DirEntry() : valid(false), name(), dir(false), size(0), start(0),
+    	prev(0), next(0), child(0) {};
     bool valid;            // false if invalid (should be skipped)
     std::string name;      // the name, not in unicode anymore 
     bool dir;              // true if directory   
@@ -216,18 +218,17 @@ static const unsigned char wpsole_magic[] =
 
 // =========== Header ==========
 
-libwpd::Header::Header()
+libwpd::Header::Header() :
+	b_shift(9),
+	s_shift(6),
+	num_bat(0),
+	dirent_start(0),
+	threshold(4096),
+	sbat_start(0),
+	num_sbat(0),
+	mbat_start(0),
+	num_mbat(0)
 {
-  b_shift = 9;
-  s_shift = 6;
-  num_bat = 0;
-  dirent_start = 0;
-  threshold = 4096;
-  sbat_start = 0;
-  num_sbat = 0;
-  mbat_start = 0;
-  num_mbat = 0;
-
   for( unsigned i = 0; i < 8; i++ )
     id[i] = wpsole_magic[i];
   for( unsigned j=0; j<109; j++ )
@@ -274,9 +275,10 @@ const unsigned libwpd::AllocTable::Eof = 0xfffffffe;
 const unsigned libwpd::AllocTable::Bat = 0xfffffffd;
 const unsigned libwpd::AllocTable::MetaBat = 0xfffffffc;
 
-libwpd::AllocTable::AllocTable()
+libwpd::AllocTable::AllocTable() :
+	blockSize(4096),
+	data()
 {
-  blockSize = 4096;
   // initial size
   resize( 128 );
 }
@@ -382,7 +384,8 @@ void libwpd::AllocTable::load( const unsigned char* buffer, unsigned len )
 
 const unsigned libwpd::DirTree::End = 0xffffffff;
 
-libwpd::DirTree::DirTree()
+libwpd::DirTree::DirTree() :
+	entries()
 {
   clear();
 }
@@ -595,17 +598,17 @@ void libwpd::DirTree::load( unsigned char* buffer, unsigned size )
 // =========== StorageIO ==========
 
 libwpd::StorageIO::StorageIO( libwpd::Storage* st, const std::stringstream &memorystream ) :
-	buf( memorystream.str(), std::ios::binary | std::ios::in )
+	storage(st),
+	buf( memorystream.str(), std::ios::binary | std::ios::in ),
+	result(libwpd::Storage::Ok),
+	bufsize(0),
+	header(new libwpd::Header()),
+	dirtree(new libwpd::DirTree()),
+	bbat(new libwpd::AllocTable()),
+	sbat(new libwpd::AllocTable()),
+	sb_blocks(),
+	streams()
 {
-  storage = st;
-  result = libwpd::Storage::Ok;
-  
-  header = new libwpd::Header();
-  dirtree = new libwpd::DirTree();
-  bbat = new libwpd::AllocTable();
-  sbat = new libwpd::AllocTable();
-  
-  bufsize = 0;
   bbat->blockSize = 1 << header->b_shift;
   sbat->blockSize = 1 << header->s_shift;
 }
@@ -832,23 +835,24 @@ unsigned long libwpd::StorageIO::loadSmallBlock( unsigned long block,
 
 // =========== StreamIO ==========
 
-libwpd::StreamIO::StreamIO( libwpd::StorageIO* s, libwpd::DirEntry* e)
+libwpd::StreamIO::StreamIO( libwpd::StorageIO* s, libwpd::DirEntry* e) :
+	io(s),
+	entry(e),
+	fullName(),
+	eof(false),
+	fail(false),
+	blocks(),
+	m_pos(0),
+	cache_data(0),
+	cache_size(4096),
+	cache_pos(0)
 {
-  io = s;
-  entry = e;
-  eof = false;
-  fail = false;
-  
-  m_pos = 0;
-
   if( entry->size >= io->header->threshold ) 
     blocks = io->bbat->follow( entry->start );
   else
     blocks = io->sbat->follow( entry->start );
 
   // prepare cache
-  cache_pos = 0;
-  cache_size = 4096; // optimal ?
   cache_data = new unsigned char[cache_size];
   updateCache();
 }
@@ -962,9 +966,9 @@ void libwpd::StreamIO::updateCache()
 
 // =========== Storage ==========
 
-libwpd::Storage::Storage( const std::stringstream &memorystream )
+libwpd::Storage::Storage( const std::stringstream &memorystream ) :
+	io(new StorageIO( this, memorystream ))
 {
-  io = new StorageIO( this, memorystream );
 }
 
 libwpd::Storage::~Storage()
@@ -984,9 +988,9 @@ bool libwpd::Storage::isOLEStream()
 
 // =========== Stream ==========
 
-libwpd::Stream::Stream( libwpd::Storage* storage, const std::string& name )
+libwpd::Stream::Stream( libwpd::Storage* storage, const std::string& name ) :
+	io(storage->io->streamIO( name ))
 {
-  io = storage->io->streamIO( name );
 }
 
 // FIXME tell parent we're gone

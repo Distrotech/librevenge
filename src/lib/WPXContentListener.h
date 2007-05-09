@@ -40,10 +40,11 @@
 typedef struct _WPXTableDefinition WPXTableDefinition;
 struct _WPXTableDefinition
 {
+	_WPXTableDefinition() : m_positionBits(0), m_leftOffset(0.0f), m_columns(), m_columnsProperties() {};
 	uint8_t m_positionBits;
 	float m_leftOffset;
-	std::vector < WPXColumnDefinition > columns;
-	std::vector < WPXColumnProperties > columnsProperties;
+	std::vector < WPXColumnDefinition > m_columns;
+	std::vector < WPXColumnProperties > m_columnsProperties;
 };
 
 typedef struct _WPXContentParsingState WPXContentParsingState;
@@ -132,6 +133,10 @@ struct _WPXContentParsingState
 
 	bool m_inSubDocument;
 	bool m_isNote;
+
+private:
+	_WPXContentParsingState(const _WPXContentParsingState&);
+	_WPXContentParsingState& operator=(const _WPXContentParsingState&);
 };
 
 class WPXContentListener : public WPXListener
@@ -187,6 +192,8 @@ protected:
 	float _movePositionToFirstColumn(float position);
 
 private:
+	WPXContentListener(const WPXContentListener&);
+	WPXContentListener& operator=(const WPXContentListener&);
 	WPXString _colorToString(const RGBSColor * color);
 	WPXString _mergeColorsToString(const RGBSColor *fgColor, const RGBSColor *bgColor);
 };

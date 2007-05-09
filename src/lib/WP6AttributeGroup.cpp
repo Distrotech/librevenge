@@ -27,8 +27,9 @@
 #include "WP6Listener.h"
 #include "libwpd_internal.h"
 
-WP6AttributeGroup::WP6AttributeGroup(WPXInputStream *input, uint8_t groupID)
-	: WP6FixedLengthGroup(groupID)
+WP6AttributeGroup::WP6AttributeGroup(WPXInputStream *input, uint8_t groupID) :
+	WP6FixedLengthGroup(groupID),
+	m_attribute(0)
 {
 	_read(input);
 }

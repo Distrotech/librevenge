@@ -47,7 +47,8 @@
 RawListenerImpl::RawListenerImpl(bool printCallgraphScore) :
 	m_indent(0),
 	m_callbackMisses(0),
-	m_printCallgraphScore(printCallgraphScore)
+	m_printCallgraphScore(printCallgraphScore),
+	m_callStack()
 {
 }
 

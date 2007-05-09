@@ -28,7 +28,8 @@
 #include "WP6FileStructure.h"
 #include "libwpd_internal.h"
 
-WP6StyleGroup_GlobalOnSubGroup::WP6StyleGroup_GlobalOnSubGroup(WPXInputStream *input)
+WP6StyleGroup_GlobalOnSubGroup::WP6StyleGroup_GlobalOnSubGroup(WPXInputStream *input) :
+	m_hash(0), m_systemStyleNumber(0)
 {
 	m_hash = readU16(input);
 	m_systemStyleNumber = readU8(input);

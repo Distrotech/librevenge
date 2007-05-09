@@ -32,6 +32,7 @@
 WP3FontGroup::WP3FontGroup(WPXInputStream *input) :
 	WP3VariableLengthGroup(),
 	m_fontColor(),
+	m_fontName(),
 	m_fontSize(0)
 {
 	_read(input);

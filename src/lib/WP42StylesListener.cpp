@@ -33,8 +33,8 @@
 WP42StylesListener::WP42StylesListener(std::list<WPXPageSpan> &pageList, std::vector<WP42SubDocument *> &subDocuments) : 
 	WP42Listener(),
 	WPXStylesListener(pageList),
-	m_currentPage(WPXPageSpan()),
-	m_nextPage(WPXPageSpan()),
+	m_currentPage(),
+	m_nextPage(),
 	m_subDocuments(subDocuments),
 	m_tempMarginLeft(1.0f),
 	m_tempMarginRight(1.0f),

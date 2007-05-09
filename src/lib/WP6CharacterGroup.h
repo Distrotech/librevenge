@@ -140,7 +140,7 @@ private:
 	uint8_t m_flags;
 	uint16_t m_width;
 	uint16_t m_leftGutter;
-	uint16_t m_rigthGutter;
+	uint16_t m_rightGutter;
 	uint32_t m_attributes;
 	uint8_t m_alignment;
 	uint16_t m_absPosFromRight;
@@ -157,6 +157,8 @@ class WP6CharacterGroup : public WP6VariableLengthGroup
 	void parse(WP6Listener *listener);
 
  private:
+ 	WP6CharacterGroup(const WP6CharacterGroup&);
+ 	WP6CharacterGroup& operator=(const WP6CharacterGroup&);
 	WP6VariableLengthGroup_SubGroup *m_subGroupData;
 
 };

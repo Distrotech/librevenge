@@ -61,6 +61,7 @@ static const int8_t g_static_utf8_skip_data[256] = {
 class WPXStringImpl
 {
 public:
+	WPXStringImpl() : m_buf() {}
 	std::string m_buf;
 };
 
@@ -69,22 +70,21 @@ WPXString::~WPXString()
 	delete m_stringImpl;
 }
 
-WPXString::WPXString()
+WPXString::WPXString() :
+	m_stringImpl(new WPXStringImpl)
 {
-	m_stringImpl = new WPXStringImpl;
 	m_stringImpl->m_buf.reserve(FIRST_BUF_SIZE);
 }
 
-WPXString::WPXString(const WPXString &stringBuf)
+WPXString::WPXString(const WPXString &stringBuf) :
+	m_stringImpl(new WPXStringImpl)
 {
-	m_stringImpl = new WPXStringImpl;
 	m_stringImpl->m_buf = stringBuf.m_stringImpl->m_buf;
 }
 
-WPXString::WPXString(const WPXString &stringBuf, bool escapeXML) 
+WPXString::WPXString(const WPXString &stringBuf, bool escapeXML) :
+	m_stringImpl(new WPXStringImpl) 
 {
-	m_stringImpl = new WPXStringImpl;
-
 	if (escapeXML)
 	{
 		int tmpLen = stringBuf.m_stringImpl->m_buf.length();
@@ -128,9 +128,9 @@ WPXString::WPXString(const WPXString &stringBuf, bool escapeXML)
 		m_stringImpl->m_buf = stringBuf.m_stringImpl->m_buf;
 }
 
-WPXString::WPXString(const char *str)
+WPXString::WPXString(const char *str) :
+	m_stringImpl(new WPXStringImpl)
 {
-	m_stringImpl = new WPXStringImpl;
 	m_stringImpl->m_buf = std::string(str);
 }
 
@@ -215,12 +215,11 @@ bool WPXString::operator==(const WPXString &str)
 }
 
 WPXString::Iter::Iter(const WPXString &str) :
+	m_stringImpl(new WPXStringImpl),
 	m_pos(0),
 	m_curChar(0)
 {
-	m_stringImpl = new WPXStringImpl;
 	m_stringImpl->m_buf = str.cstr();
-
 }
 
 WPXString::Iter::~Iter()

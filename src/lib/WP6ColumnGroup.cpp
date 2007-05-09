@@ -31,7 +31,12 @@
 
 WP6ColumnGroup::WP6ColumnGroup(WPXInputStream *input) :
 	WP6VariableLengthGroup(),
-	m_margin(0)
+	m_margin(0),
+	m_colType(0),
+	m_numColumns(0),
+	m_rowSpacing(0.0f),
+	m_isFixedWidth(),
+	m_columnWidth()
 {
 	_read(input);
 }

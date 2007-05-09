@@ -48,7 +48,8 @@ WPXHeaderFooter::WPXHeaderFooter(const WPXHeaderFooterType headerFooterType, con
 	m_type(headerFooterType),
 	m_occurence(occurence),
 	m_internalType(internalType),
-	m_subDocument(subDocument)
+	m_subDocument(subDocument),
+	m_tableList()
 {
 }
 
@@ -59,6 +60,16 @@ WPXHeaderFooter::WPXHeaderFooter(const WPXHeaderFooter &headerFooter) :
 	m_subDocument(headerFooter.getSubDocument()),
 	m_tableList(headerFooter.getTableList())
 {
+}
+
+WPXHeaderFooter& WPXHeaderFooter::operator=(const WPXHeaderFooter &headerFooter)
+{
+	m_type = headerFooter.getType();
+	m_occurence = headerFooter.getOccurence();
+	m_internalType = headerFooter.getInternalType();
+	m_subDocument = headerFooter.getSubDocument();
+	m_tableList = headerFooter.getTableList();
+	return *this;
 }
 
 WPXHeaderFooter::~WPXHeaderFooter()
@@ -74,6 +85,7 @@ WPXPageSpan::WPXPageSpan() :
 	m_marginRight(1.0f),
 	m_marginTop(WPX_DEFAULT_PAGE_MARGIN_TOP),
 	m_marginBottom(WPX_DEFAULT_PAGE_MARGIN_BOTTOM),
+	m_headerFooterList(),
 	m_pageSpan(1)
 {
 	for (int i=0; i<WPX_NUM_HEADER_FOOTER_TYPES; i++)

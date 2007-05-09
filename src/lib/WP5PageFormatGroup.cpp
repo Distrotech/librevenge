@@ -38,7 +38,8 @@ WP5PageFormatGroup::WP5PageFormatGroup(WPXInputStream *input) :
 	m_justification(0),
 	m_suppressCode(0),
 	m_formLength(0),
-	m_formWidth(0)
+	m_formWidth(0),
+	m_formOrientation(PORTRAIT)
 {
 	_read(input);
 }

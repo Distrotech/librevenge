@@ -28,8 +28,10 @@
 #include "WP6Parser.h"
 #include "libwpd_internal.h"
 
-WP6FillStylePacket::WP6FillStylePacket(WPXInputStream *input, int /* id */, uint32_t dataOffset, uint32_t dataSize) 
-	: WP6PrefixDataPacket(input)
+WP6FillStylePacket::WP6FillStylePacket(WPXInputStream *input, int /* id */, uint32_t dataOffset, uint32_t dataSize) : 
+	WP6PrefixDataPacket(input),
+	m_fgColor(0xff, 0xff, 0xff),
+	m_bgColor(0xff, 0xff, 0xff)
 {	
 	_read(input, dataOffset, dataSize);
 }

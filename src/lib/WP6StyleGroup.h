@@ -48,6 +48,8 @@ public:
 	void parse(WP6Listener *listener);
 
 private:
+	WP6StyleGroup(const WP6StyleGroup&);
+	WP6StyleGroup& operator=(const WP6StyleGroup&);
 	WP6VariableLengthGroup_SubGroup *m_subGroupData;
 };
 

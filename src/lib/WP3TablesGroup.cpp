@@ -37,7 +37,10 @@ WP3TablesGroup::WP3TablesGroup(WPXInputStream *input) :
 	m_leftGutterSpacing(0),
 	m_bottomGutterSpacing(0),
 	m_rightGutterSpacing(0),
-	m_numColumns(0)
+	m_numColumns(0),
+	m_colSpan(0),
+	m_rowSpan(0),
+	m_cellFillColor(RGBSColor(0xff, 0xff, 0xff))
 {
 	_read(input);
 }

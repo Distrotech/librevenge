@@ -40,6 +40,9 @@ struct _WP1ContentParsingState
 	WPXString m_textBuffer;
 	int m_numDeferredTabs;
 	int m_footNoteNumber, m_endNoteNumber;
+private:
+	_WP1ContentParsingState(const _WP1ContentParsingState&);
+	_WP1ContentParsingState& operator=(const _WP1ContentParsingState&);
 };
 
 class WP1ContentListener : public WP1Listener, protected WPXContentListener
@@ -84,6 +87,8 @@ protected:
 private:
 	WP1ContentParsingState *m_parseState;
 	std::vector<WP1SubDocument *> &m_subDocuments;
+	WP1ContentListener(const WP1ContentListener&);
+	WP1ContentListener& operator=(WP1ContentListener&);
 };
 
 #endif /* WP1LISTENER_H */

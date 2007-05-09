@@ -101,6 +101,12 @@ void WP6OutlineDefinition::_updateNumberingMethods(const WP6OutlineLocation /* o
 }
 
 _WP6ContentParsingState::_WP6ContentParsingState(WPXTableList tableList, int nextTableIndice) :
+	m_bodyText(),
+	m_textBeforeNumber(),
+	m_textBeforeDisplayReference(),
+	m_numberText(),
+	m_textAfterDisplayReference(),
+	m_textAfterNumber(),
 	m_paragraphMarginBottomRelative(1.0f),
 	m_paragraphMarginBottomAbsolute(0.0f),
 
@@ -113,9 +119,13 @@ _WP6ContentParsingState::_WP6ContentParsingState(WPXTableList tableList, int nex
 	m_currentTable(0),
 
 	m_nextTableIndice(nextTableIndice),
+	
+	m_listLevelStack(),
+	m_listTypeStack(),
 
 	m_currentOutlineHash(0),
 	m_oldListLevel(0),
+	m_styleStateSequence(),
 	m_putativeListElementHasParagraphNumber(false),
 	m_putativeListElementHasDisplayReferenceNumber(false),
 	
@@ -123,7 +133,10 @@ _WP6ContentParsingState::_WP6ContentParsingState(WPXTableList tableList, int nex
 	m_numNestedNotes(0),
 
 	m_leaderCharacter('.'),
-	m_leaderNumSpaces(0)
+	m_leaderNumSpaces(0),
+
+	m_tempTabStops(),
+	m_tempUsePreWP9LeaderMethod()
 
 {
 }
@@ -136,7 +149,8 @@ _WP6ContentParsingState::~_WP6ContentParsingState()
 WP6ContentListener::WP6ContentListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, WPXHLListenerImpl *listenerImpl) :
 	WP6Listener(),
 	WPXContentListener(pageList, listenerImpl),
-	m_parseState(new WP6ContentParsingState(tableList))
+	m_parseState(new WP6ContentParsingState(tableList)),
+	m_outlineDefineHash()
 {
 }
 
@@ -1054,8 +1068,8 @@ void WP6ContentListener::defineTable(const uint8_t position, const uint16_t left
 		m_ps->m_tableDefinition.m_leftOffset = (float)((double)leftOffset / (double)WPX_NUM_WPUS_PER_INCH) - m_ps->m_paragraphMarginLeft;
 
 		// remove all the old column information
-		m_ps->m_tableDefinition.columns.clear();
-		m_ps->m_tableDefinition.columnsProperties.clear();
+		m_ps->m_tableDefinition.m_columns.clear();
+		m_ps->m_tableDefinition.m_columnsProperties.clear();
 
 		// pull a table definition off of our stack
 		m_parseState->m_currentTable = m_parseState->m_tableList[m_parseState->m_nextTableIndice++];
@@ -1080,9 +1094,9 @@ void WP6ContentListener::addTableColumnDefinition(const uint32_t width, const ui
 		colProp.m_alignment = alignment;
 		
 		// add the new column definition to our table definition
-		m_ps->m_tableDefinition.columns.push_back(colDef);
+		m_ps->m_tableDefinition.m_columns.push_back(colDef);
 		
-		m_ps->m_tableDefinition.columnsProperties.push_back(colProp);
+		m_ps->m_tableDefinition.m_columnsProperties.push_back(colProp);
 
 		// initialize the variable that tells us how many columns to skip
 		m_ps->m_numRowsToSkip.push_back(0);
@@ -1161,8 +1175,8 @@ void WP6ContentListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan
 		if (useCellAttributes)
 			m_ps->m_cellAttributeBits = cellAttributes;
 		else
-			m_ps->m_cellAttributeBits = m_ps->m_tableDefinition.columnsProperties[m_ps->m_currentTableCol-1].m_attributes;
-		justificationChange(m_ps->m_tableDefinition.columnsProperties[m_ps->m_currentTableCol-1].m_alignment);
+			m_ps->m_cellAttributeBits = m_ps->m_tableDefinition.m_columnsProperties[m_ps->m_currentTableCol-1].m_attributes;
+		justificationChange(m_ps->m_tableDefinition.m_columnsProperties[m_ps->m_currentTableCol-1].m_alignment);
 	}
 }
 

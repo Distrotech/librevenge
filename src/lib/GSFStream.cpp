@@ -29,7 +29,7 @@
 #include <gsf/gsf-input.h>
 
 /* THIS CLASS IS DEPRECATED
-   Use the WPXFileStream or WPXStringStream classes
+   Use the WPXFileStream or ()Stream classes
    from WPXStreamImplementation.cpp instead
    THIS CLASS WILL BE REMOVED IN NEXT RELEASE CYCLE
  */

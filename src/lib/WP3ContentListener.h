@@ -42,6 +42,9 @@ struct _WP3ContentParsingState
 	WPXString m_noteReference;
 
 	WPXTableList m_tableList;
+private:
+	_WP3ContentParsingState(const _WP3ContentParsingState&);
+	_WP3ContentParsingState& operator=(const _WP3ContentParsingState&);
 };
 
 class WP3ContentListener : public WP3Listener, protected WPXContentListener
@@ -96,6 +99,8 @@ protected:
 	void _changeList() {};
 
 private:
+	WP3ContentListener(const WP3ContentListener&);
+	WP3ContentListener& operator=(const WP3ContentListener&);
 	WP3ContentParsingState *m_parseState;
 	std::vector<WP3SubDocument *> &m_subDocuments;
 };

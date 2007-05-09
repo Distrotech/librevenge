@@ -32,8 +32,8 @@
 WP1StylesListener::WP1StylesListener(std::list<WPXPageSpan> &pageList, std::vector<WP1SubDocument *> &subDocuments) : 
 	WP1Listener(),
 	WPXStylesListener(pageList),
-	m_currentPage(WPXPageSpan()),
-	m_nextPage(WPXPageSpan()),
+	m_currentPage(),
+	m_nextPage(),
 	m_subDocuments(subDocuments),
 	m_tempMarginLeft(1.0f),
 	m_tempMarginRight(1.0f),

@@ -27,6 +27,7 @@
 
 WP5HeaderFooterGroup::WP5HeaderFooterGroup(WPXInputStream *input) :
 	WP5VariableLengthGroup(),
+	m_occurenceBits(0),
 	m_subDocument(0)
 {
 	_read(input);

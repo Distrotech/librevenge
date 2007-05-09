@@ -31,6 +31,8 @@
 #include "libwpd_internal.h"
 
 WP6PrefixData::WP6PrefixData(WPXInputStream *input, const int numPrefixIndices) :
+	m_prefixDataPacketHash(),
+	m_prefixDataPacketTypeHash(),
 	m_defaultInitialFontPID((-1))
 {
 	uint16_t i;

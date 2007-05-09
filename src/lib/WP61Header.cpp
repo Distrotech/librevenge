@@ -28,8 +28,10 @@
 #include "WP6FileStructure.h" 
 #include "libwpd_internal.h"
 
-WP61Header::WP61Header(WPXInputStream * input, uint32_t documentOffset,  uint8_t productType, uint8_t fileType, uint8_t majorVersion, uint8_t minorVersion, uint16_t documentEncryption)
-	:	WP6Header(input, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption)
+WP61Header::WP61Header(WPXInputStream * input, uint32_t documentOffset, uint8_t productType,
+	uint8_t fileType, uint8_t majorVersion, uint8_t minorVersion, uint16_t documentEncryption) :
+	WP6Header(input, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption),
+	m_documentSize(0)
 {
 	input->seek(WP6_HEADER_DOCUMENT_SIZE_OFFSET, WPX_SEEK_SET);
 	m_documentSize = readU32(input);

@@ -39,7 +39,6 @@ class WP6OutlineStylePacket : public WP6PrefixDataPacket
 
  private:              
 	uint16_t m_numPIDs;
-	uint16_t m_paragraphStylePIDs[WP6_NUM_LIST_LEVELS]; // seemingly useless
 	uint16_t m_nonDeletableInfoSize;
 	uint16_t m_outlineHash;
 	uint8_t m_numberingMethods[WP6_NUM_LIST_LEVELS];

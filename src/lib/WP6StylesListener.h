@@ -110,6 +110,8 @@ protected:
 	void _changeList() {}
 
 private:
+	WP6StylesListener(const WP6StylesListener&);
+	WP6StylesListener& operator=(const WP6StylesListener&);
 	WPXPageSpan m_currentPage;
 
 	WPXTableList m_tableList;
