@@ -967,8 +967,9 @@ void libwpd::StreamIO::updateCache()
 // =========== Storage ==========
 
 libwpd::Storage::Storage( const std::stringstream &memorystream ) :
-	io(new StorageIO( this, memorystream ))
+	io(NULL)
 {
+	io = new StorageIO( this, memorystream );
 }
 
 libwpd::Storage::~Storage()
