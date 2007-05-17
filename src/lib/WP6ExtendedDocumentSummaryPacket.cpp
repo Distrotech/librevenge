@@ -90,7 +90,10 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6Listener *listener) const
 		} 
 		
 		if (tagID == WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_CREATION_DATE ||
-		    tagID == WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_DATE_COMPLETED)
+		    tagID == WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_DATE_COMPLETED ||
+		    tagID == WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_RECORDED_DATE ||
+		    tagID == WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_REVISION_DATE ||
+		    tagID == WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_VERSION_DATE)
 		{
 			uint16_t year = readU16(m_stream);
 			uint8_t month = readU8(m_stream);
@@ -101,7 +104,7 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6Listener *listener) const
 			uint8_t dayOfWeek = readU8(m_stream);
 			uint8_t timeZone = readU8(m_stream);
 			uint8_t unused = readU8(m_stream);
-			listener->setDate(year, month, day, hour, minute, second, dayOfWeek, timeZone, unused);
+			listener->setDate(tagID, year, month, day, hour, minute, second, dayOfWeek, timeZone, unused);
 		}
 		else
 		{

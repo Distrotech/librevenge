@@ -44,10 +44,12 @@ class WP6StylesListener : public WP6Listener, protected WPXStylesListener
 public:
 	WP6StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList);
 
-	void setDate(const uint16_t /* year */, const uint8_t /* month */, const uint8_t /* day */,
-		const uint8_t /* hour */, const uint8_t /* minute */, const uint8_t /* second */,
-		const uint8_t /* dayOfWeek */, const uint8_t /* timeZone */, const uint8_t /* unused */) {}
-	void setExtendedInformation(const uint16_t /* type */, const WPXString & /* data */) {}
+	void setDate(const uint16_t type, const uint16_t year, 
+                     const uint8_t month, const uint8_t day, 
+                     const uint8_t hour, const uint8_t minute, 
+                     const uint8_t second, const uint8_t dayOfWeek, 
+                     const uint8_t timeZone, const uint8_t unused) {}
+	void setExtendedInformation(const uint16_t type, const WPXString &data) {}
 	void startDocument() {}
 	void setAlignmentCharacter(const uint16_t /* character */) {}
 	void setLeaderCharacter(const uint16_t /* character */, const uint8_t /* numberOfSpaces */) {}

@@ -39,6 +39,7 @@
 
 #include <assert.h>
 #include <algorithm>
+#include <time.h>
 
 #define WP6_DEFAULT_FONT_SIZE 12.0f
 #define WP6_DEFAULT_FONT_NAME "Times New Roman"
@@ -164,6 +165,74 @@ WP6ContentListener::~WP6ContentListener()
 	delete m_parseState;
 }
 
+void WP6ContentListener::setDate(const uint16_t type, const uint16_t year, 
+				 const uint8_t month, const uint8_t day, 
+				 const uint8_t hour, const uint8_t minute, 
+				 const uint8_t second, const uint8_t dayOfWeek, 
+				 const uint8_t timeZone, const uint8_t unused)
+{
+        #define DATEBUFLEN 100  // length of buffer allocated for strftime()
+        #define WPMONDAYOFFSET  1       // WP week starts Monday, tm_wday on Sunday
+        #define TMMONTHOFFSET   1       // tm_mon is [0,11], i.e. months since January
+        #define TMYEAROFFSET    1900    // tm_year is days since 1900
+        #define DAYSINWEEK      7       // I hate magic numbers buried in code :-)
+        char    dateBuffer[DATEBUFLEN];    // points to buffer allocated for strftime()
+        int     retVal;         // return value from strftime()
+        struct  tm      m_tm;   // passed to strftime();
+        const char    *dateFormat = "%Y-%m-%dT%H:%M:%S";
+			// This date format is ALMOST the "Complete date plus hours, minutes and 
+			// seconds" format described at http://www.w3.org/TR/NOTE-datetime, i.e.
+			// YYYY-MM-DDThh:mm:ssTZD (eg 1997-07-16T19:20:30+01:00), but without TZD.
+			// WordPerfect does not use the timeZone field, so we don't know the offset
+        WPXString dateStr;      // filled in and passed to m_metaData.insert()
+
+        m_tm.tm_sec       = second;
+        m_tm.tm_min       = minute;
+        m_tm.tm_hour      = hour;
+        m_tm.tm_mday      = day;
+        m_tm.tm_mon       = month - TMMONTHOFFSET;
+        m_tm.tm_year      = year - TMYEAROFFSET;
+        m_tm.tm_wday      = (dayOfWeek + WPMONDAYOFFSET) % DAYSINWEEK;
+        m_tm.tm_yday      = 0;
+        m_tm.tm_isdst     = -1;
+
+        retVal = strftime(dateBuffer, DATEBUFLEN, dateFormat, &m_tm);
+        if (retVal <= 0) {
+                // error - date wouldn't fit in buffer
+                dateStr.sprintf("ERROR: %d character buffer too short for date", DATEBUFLEN);
+        }
+        else {
+                dateStr.sprintf("%s", dateBuffer);
+        }
+
+	switch (type)
+	{
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_CREATION_DATE):
+			m_metaData.insert("dcterms:created", dateStr);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_DATE_COMPLETED):
+			// output two forms until we decide which to use
+			m_metaData.insert("libwpd:completed-date", dateStr);
+			m_metaData.insert("dcterms:available", dateStr);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_RECORDED_DATE):
+			m_metaData.insert("libwpd:recorded-date", dateStr);
+			break;
+		// NOTE: Revision Date is not set in WP Document Summary
+		// and sometimes contains non-zero data, so it's confusing.
+		// WordPerfect actually uses the file modification time
+		// to display Revision Date in Properties.
+		//case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_REVISION_DATE):
+		//	m_metaData.insert("libwpd:revision-date", dateStr);
+		//	break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_VERSION_DATE):
+			// output two forms until we decide which to use
+			m_metaData.insert("libwpd:version-date", dateStr);
+			m_metaData.insert("dcterms:issued", dateStr);
+			break;
+	}
+}
+
 void WP6ContentListener::setExtendedInformation(const uint16_t type, const WPXString &data)
 {
 	switch (type)
@@ -187,7 +256,7 @@ void WP6ContentListener::setExtendedInformation(const uint16_t type, const WPXSt
 			m_metaData.insert("dc:language", data);
 			break;
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_ABSTRACT):
-			m_metaData.insert("libwpd:abstract", data);
+			m_metaData.insert("dcterms:abstract", data);
 			break;
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_DESCRIPTIVE_NAME):
 			m_metaData.insert("libwpd:descriptive-name", data);
@@ -195,6 +264,119 @@ void WP6ContentListener::setExtendedInformation(const uint16_t type, const WPXSt
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_DESCRIPTIVE_TYPE):
 			m_metaData.insert("libwpd:descriptive-type", data);
 			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_ACCOUNT):
+			m_metaData.insert("libwpd:account", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_ADDRESS):
+			m_metaData.insert("libwpd:address", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_ATTACHMENTS):
+			m_metaData.insert("libwpd:attachments", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_AUTHORIZATION):
+			m_metaData.insert("libwpd:authorization", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_BILL_TO):
+			m_metaData.insert("libwpd:bill-to", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_BLIND_COPY):
+			m_metaData.insert("libwpd:blind-copy", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_CARBON_COPY):
+			m_metaData.insert("libwpd:carbon-copy", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_CHECKED_BY):
+			m_metaData.insert("libwpd:checked-by", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_CLIENT):
+			m_metaData.insert("libwpd:client", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_COMMENTS):
+			m_metaData.insert("libwpd:comments", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_DEPARTMENT):
+			m_metaData.insert("libwpd:department", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_DESTINATION):
+			m_metaData.insert("libwpd:destination", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_DISPOSITION):
+			m_metaData.insert("libwpd:disposition", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_DIVISION):
+			m_metaData.insert("libwpd:division", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_DOCUMENT_NUMBER):
+			m_metaData.insert("libwpd:document-number", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_EDITOR):
+			m_metaData.insert("libwpd:editor", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_FORWARD_TO):
+			m_metaData.insert("libwpd:forward-to", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_GROUP):
+			m_metaData.insert("libwpd:group", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_MAIL_STOP):
+			m_metaData.insert("libwpd:mail-stop", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_MATTER):
+			m_metaData.insert("libwpd:matter", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_OFFICE):
+			m_metaData.insert("libwpd:office", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_OWNER):
+			m_metaData.insert("libwpd:owner", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_PROJECT):
+			m_metaData.insert("libwpd:project", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_PURPOSE):
+			m_metaData.insert("libwpd:purpose", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_RECEIVED_FROM):
+			m_metaData.insert("libwpd:received-from", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_RECORDED_BY):
+			m_metaData.insert("libwpd:recorded-by", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_REFERENCE):
+			m_metaData.insert("libwpd:reference", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_REVISION_NOTES):
+			m_metaData.insert("libwpd:revision-notes", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_REVISION_NUMBER):
+			m_metaData.insert("libwpd:revision-number", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_SECTION):
+			m_metaData.insert("libwpd:section", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_SECURITY):
+			m_metaData.insert("libwpd:security", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_SOURCE):
+			m_metaData.insert("dc:source", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_STATUS):
+			m_metaData.insert("libwpd:status", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_TELEPHONE_NUMBER):
+			m_metaData.insert("libwpd:telephone-number", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_TYPIST):
+			m_metaData.insert("libwpd:typist", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_VERSION_NOTES):
+			m_metaData.insert("libwpd:version-notes", data);
+			break;
+		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_VERSION_NUMBER):
+			m_metaData.insert("libwpd:version-number", data);
+			break;
+		default:
+		        break;
 	}
 }
 
