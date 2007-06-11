@@ -238,5 +238,6 @@ int _extractDisplayReferenceNumberFromBuf(const WPXString &buf, const WPXNumberi
 WPXNumberingType _extractWPXNumberingTypeFromBuf(const WPXString &buf, const WPXNumberingType putativeWPXNumberingType);
 WPXString _numberingTypeToString(WPXNumberingType t);
 extern const uint16_t macintoshCharacterMap[];
+WPXString doubleToString(const double value);
 
 #endif /* LIBWPD_INTERNAL_H */

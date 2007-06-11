@@ -24,6 +24,7 @@
  */
 
 #include "WPXProperty.h"
+#include "libwpd_internal.h"
 
 class WPXStringProperty : public WPXProperty
 {
@@ -201,8 +202,8 @@ WPXInchProperty::WPXInchProperty(const float val) :
 
 WPXString WPXInchProperty::getStr() const 
 { 
-	WPXString str; 
-	str.sprintf("%.04finch", getFloat()); 
+	WPXString str = doubleToString(getFloat()); 
+	str.append("inch"); 
 	return str; 
 }
 
@@ -218,8 +219,8 @@ WPXPercentProperty::WPXPercentProperty(const float val) :
 
 WPXString WPXPercentProperty::getStr() const
 {
-	WPXString str; 
-	str.sprintf("%.04f%%", getFloat()*100.0f); 
+	WPXString str = doubleToString(getFloat()*100.0f); 
+	str.append("%"); 
 	return str; 
 }
 

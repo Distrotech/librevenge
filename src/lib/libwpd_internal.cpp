@@ -25,6 +25,8 @@
 #include "libwpd_internal.h"
 #include "WPXStream.h"
 #include <ctype.h>
+#include <locale.h>
+#include <string>
 
 uint8_t readU8(WPXInputStream *input)
 {
@@ -1153,3 +1155,20 @@ const uint16_t macintoshCharacterMap[] =
   0xf8ff, 0x00d2, 0x00da, 0x00db, 0x00d9, 0x0131, 0x02c6, 0x02dc,
   0x00af, 0x02d8, 0x02d9, 0x02da, 0x00b8, 0x02dd, 0x02db, 0x02c7
 };
+
+WPXString doubleToString(const double value)
+{
+  WPXString tempString;
+  tempString.sprintf("%.4f", value);
+  std::string decimalPoint(localeconv()->decimal_point);
+  if ((decimalPoint.size() == 0) || (decimalPoint == "."))
+    return tempString;
+  std::string stringValue(tempString.cstr());
+  if (!stringValue.empty())
+  {
+    unsigned pos;
+    while ((pos = stringValue.find(decimalPoint)) != std::string::npos)
+          stringValue.replace(pos,decimalPoint.size(),".");
+  }
+  return WPXString(stringValue.c_str());
+}
