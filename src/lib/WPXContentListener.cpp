@@ -630,13 +630,15 @@ void WPXContentListener::_openSpan()
 
 	WPXPropertyList propList;
  	if (attributeBits & WPX_SUPERSCRIPT_BIT) {
-		WPXString sSuperScript;
-		sSuperScript.sprintf("super %f%%", WPX_DEFAULT_SUPER_SUB_SCRIPT);
+		WPXString sSuperScript("super ");
+		sSuperScript.append(doubleToString(WPX_DEFAULT_SUPER_SUB_SCRIPT));
+		sSuperScript.append("%");
 		propList.insert("style:text-position", sSuperScript);
 	}
  	else if (attributeBits & WPX_SUBSCRIPT_BIT) {
-		WPXString sSubScript;
-		sSubScript.sprintf("sub %f%%", WPX_DEFAULT_SUPER_SUB_SCRIPT);
+		WPXString sSubScript("sub ");
+		sSubScript.append(doubleToString(WPX_DEFAULT_SUPER_SUB_SCRIPT));
+		sSubScript.append("%");
 		propList.insert("style:text-position", sSubScript);
 	}
 	if (attributeBits & WPX_ITALICS_BIT)
@@ -859,7 +861,11 @@ static void addBorderProps(const char *border, bool borderOn, const WPXString &b
 	borderStyle.sprintf("fo:border-%s", border);
 	WPXString props;
 	if (borderOn)
-		props.sprintf("%finch solid %s", WPX_DEFAULT_TABLE_BORDER_WIDTH, borderColor.cstr());
+	{
+	  props.append(doubleToString(WPX_DEFAULT_TABLE_BORDER_WIDTH));
+	  props.append("inch solid ");
+	  props.append(borderColor);
+	}
 	else
 		props.sprintf("0.0inch");
 	propList.insert(borderStyle.cstr(), props);
