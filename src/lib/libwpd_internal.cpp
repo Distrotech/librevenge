@@ -1166,7 +1166,7 @@ WPXString doubleToString(const double value)
   std::string stringValue(tempString.cstr());
   if (!stringValue.empty())
   {
-    int pos;
+    std::string::size_type pos;
     while ((pos = stringValue.find(decimalPoint)) != std::string::npos)
           stringValue.replace(pos,decimalPoint.size(),".");
   }
