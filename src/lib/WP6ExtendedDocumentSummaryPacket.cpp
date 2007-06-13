@@ -65,8 +65,15 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6Listener *listener) const
 
 	for (unsigned i=0; i < (unsigned)m_dataSize && !m_stream->atEOS(); i+=groupLength)
 	{
-		groupLength = readU16(m_stream);
-		if ((groupLength <= 0) || m_stream->atEOS())
+		try
+		{
+			groupLength = readU16(m_stream);
+		}
+		catch (FileException)
+		{
+			return;
+		}
+		if ((groupLength == 0) || m_stream->atEOS())
 			return;
 		uint16_t tagID = readU16(m_stream);
 		if (m_stream->atEOS())
@@ -95,16 +102,23 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6Listener *listener) const
 		    tagID == WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_REVISION_DATE ||
 		    tagID == WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_VERSION_DATE)
 		{
-			uint16_t year = readU16(m_stream);
-			uint8_t month = readU8(m_stream);
-			uint8_t day = readU8(m_stream);
-			uint8_t hour = readU8(m_stream);
-			uint8_t minute = readU8(m_stream);
-			uint8_t second = readU8(m_stream);
-			uint8_t dayOfWeek = readU8(m_stream);
-			uint8_t timeZone = readU8(m_stream);
-			uint8_t unused = readU8(m_stream);
-			listener->setDate(tagID, year, month, day, hour, minute, second, dayOfWeek, timeZone, unused);
+			try
+			{
+				uint16_t year = readU16(m_stream);
+				uint8_t month = readU8(m_stream);
+				uint8_t day = readU8(m_stream);
+				uint8_t hour = readU8(m_stream);
+				uint8_t minute = readU8(m_stream);
+				uint8_t second = readU8(m_stream);
+				uint8_t dayOfWeek = readU8(m_stream);
+				uint8_t timeZone = readU8(m_stream);
+				uint8_t unused = readU8(m_stream);
+				listener->setDate(tagID, year, month, day, hour, minute, second, dayOfWeek, timeZone, unused);
+			}
+			catch (FileException)
+			{
+				return;
+			}
 		}
 		else
 		{
