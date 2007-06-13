@@ -208,7 +208,7 @@ void WP6ContentListener::setDate(const uint16_t type, const uint16_t year,
 	switch (type)
 	{
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_CREATION_DATE):
-			m_metaData.insert("dcterms:created", dateStr);
+			m_metaData.insert("meta:creation-date", dateStr);
 			break;
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_DATE_COMPLETED):
 			// output two forms until we decide which to use
@@ -238,7 +238,7 @@ void WP6ContentListener::setExtendedInformation(const uint16_t type, const WPXSt
 	switch (type)
 	{
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_AUTHOR):
-			m_metaData.insert("dc:creator", data);
+			m_metaData.insert("meta:initial-creator", data);
 			break;
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_SUBJECT):
 			m_metaData.insert("dc:subject", data);
@@ -250,13 +250,13 @@ void WP6ContentListener::setExtendedInformation(const uint16_t type, const WPXSt
 			m_metaData.insert("dc:type", data);
 			break;
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_KEYWORDS):
-			m_metaData.insert("libwpd:keywords", data);
+			m_metaData.insert("meta:keyword", data);
 			break;
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_LANGUAGE):
 			m_metaData.insert("dc:language", data);
 			break;
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_ABSTRACT):
-			m_metaData.insert("dcterms:abstract", data);
+			m_metaData.insert("dc:description", data);
 			break;
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_DESCRIPTIVE_NAME):
 			m_metaData.insert("libwpd:descriptive-name", data);
@@ -367,7 +367,7 @@ void WP6ContentListener::setExtendedInformation(const uint16_t type, const WPXSt
 			m_metaData.insert("libwpd:telephone-number", data);
 			break;
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_TYPIST):
-			m_metaData.insert("libwpd:typist", data);
+			m_metaData.insert("dc:creator", data);
 			break;
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_VERSION_NOTES):
 			m_metaData.insert("libwpd:version-notes", data);
