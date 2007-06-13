@@ -27,11 +27,19 @@
 #include <stdarg.h>
 #include "RawListener.h"
 
+#ifdef _U
+#undef _U
+#endif
+
 #define _U(M, L) \
 	if (!m_printCallgraphScore) \
 			__iuprintf M; \
 	else \
 		m_callStack.push(L);
+
+#ifdef _D
+#undef _D
+#endif
 
 #define _D(M, L) \
 	if (!m_printCallgraphScore) \

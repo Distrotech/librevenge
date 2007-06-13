@@ -737,10 +737,10 @@ libwpd::StreamIO* libwpd::StorageIO::streamIO( const std::string& name )
   if( !entry ) return (libwpd::StreamIO*)0;
   if( entry->dir ) return (libwpd::StreamIO*)0;
 
-  libwpd::StreamIO* result = new libwpd::StreamIO( this, entry );
-  result->fullName = name;
+  libwpd::StreamIO* res = new libwpd::StreamIO( this, entry );
+  res->fullName = name;
   
-  return result;
+  return res;
 }
 
 unsigned long libwpd::StorageIO::loadBigBlocks( std::vector<unsigned long> blocks,
@@ -791,7 +791,7 @@ unsigned long libwpd::StorageIO::loadSmallBlocks( std::vector<unsigned long> blo
   if( maxlen == 0 ) return 0;
 
   // our own local buffer
-  unsigned char* buf = new unsigned char[ bbat->blockSize ];
+  unsigned char* tmpBuf = new unsigned char[ bbat->blockSize ];
 
   // read small block one by one
   unsigned long bytes = 0;
@@ -804,17 +804,17 @@ unsigned long libwpd::StorageIO::loadSmallBlocks( std::vector<unsigned long> blo
     unsigned long bbindex = pos / bbat->blockSize;
     if( bbindex >= sb_blocks.size() ) break;
 
-    loadBigBlock( sb_blocks[ bbindex ], buf, bbat->blockSize );
+    loadBigBlock( sb_blocks[ bbindex ], tmpBuf, bbat->blockSize );
 
     // copy the data
     unsigned offset = pos % bbat->blockSize;
     unsigned long p = (maxlen-bytes < bbat->blockSize-offset ) ? maxlen-bytes :  bbat->blockSize-offset;
     p = (sbat->blockSize<p ) ? sbat->blockSize : p;
-    memcpy( data + bytes, buf + offset, p );
+    memcpy( data + bytes, tmpBuf + offset, p );
     bytes += p;
   }
   
-  delete[] buf;
+  delete[] tmpBuf;
 
   return bytes;
 }
