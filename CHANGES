@@ -1,4 +1,13 @@
 CHANGES:
+0.8.9 - 0.8.10
+- Fix a locale dependency in our float to string conversion (Fridrich)
+- Enhance our reading of document meta data for WP6 (David Hislop)
+- Fix some sillies and be gracious with documents with corrupted prefix packets (Fridrich)
+- Prevent the heuristic typedetection from throwing (Fridrich)
+- Add a new stream implementation based on C++ streams, rendering libgsf dependency
+  very optional; deprecate GSFInputStream (Fridrich)
+- Allow building of wpd2foo tools by Micro$oft Visual studio (David Hislop, Fridrich)
+
 0.8.8 - 0.8.9
 - Fix http://qa.openoffice.org/issues/show_bug.cgi?id=74134, a bug in WP1 document
   type detection where we could try to seek to a negative place in document (Fridrich)
