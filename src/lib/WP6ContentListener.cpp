@@ -169,7 +169,7 @@ void WP6ContentListener::setDate(const uint16_t type, const uint16_t year,
 				 const uint8_t month, const uint8_t day, 
 				 const uint8_t hour, const uint8_t minute, 
 				 const uint8_t second, const uint8_t dayOfWeek, 
-				 const uint8_t timeZone, const uint8_t unused)
+				 const uint8_t /* timeZone */, const uint8_t /* unused */)
 {
         #define DATEBUFLEN 100  // length of buffer allocated for strftime()
         #define WPMONDAYOFFSET  1       // WP week starts Monday, tm_wday on Sunday
