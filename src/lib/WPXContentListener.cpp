@@ -862,12 +862,12 @@ static void addBorderProps(const char *border, bool borderOn, const WPXString &b
 	WPXString props;
 	if (borderOn)
 	{
-	  props.append(doubleToString(WPX_DEFAULT_TABLE_BORDER_WIDTH));
-	  props.append("inch solid ");
+	  props.append(doubleToString(2.54 * WPX_DEFAULT_TABLE_BORDER_WIDTH));
+	  props.append("cm solid ");
 	  props.append(borderColor);
 	}
 	else
-		props.sprintf("0.0inch");
+		props.sprintf("0.0cm");
 	propList.insert(borderStyle.cstr(), props);
 }
 
