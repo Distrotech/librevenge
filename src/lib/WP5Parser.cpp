@@ -124,7 +124,7 @@ void WP5Parser::parseDocument(WPXInputStream *input, WP5Listener *listener)
 	}
 }
 
-void WP5Parser::parse(WPXHLListenerImpl *listenerImpl)
+void WP5Parser::parse(WPXDocumentInterface *listenerImpl)
 {
 	WPXInputStream *input = getInput();
 	std::list<WPXPageSpan> pageList;

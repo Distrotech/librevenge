@@ -42,7 +42,7 @@ This document contains both the libwpd API specification and the normal libwpd
 documentation.
 \section api_docs libwpd API documentation
 The external libwpd API is provided by the WPDocument class. This class, combined
-with the WPXHLListenerImpl class, are the only two classes that will be of interest
+with the WPXDocumentInterface class, are the only two classes that will be of interest
 for the application programmer using libwpd.
 \section lib_docs libwpd documentation
 If you are interrested in the structure of libwpd itself, this whole document
@@ -75,7 +75,7 @@ WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input, bool part
 	// BIG BIG NOTE: very unsafe on partial content!!!
 	if (input->isOLEStream())
 	{
-		document = input->getDocumentOLEStream();
+		document = input->getDocumentOLEStream("PerfectOffice_MAIN");
 		if (document)
 			isDocumentOLE = true;
 		else
@@ -171,12 +171,12 @@ WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input, bool part
 
 /**
 Parses the input stream content. It will make callbacks to the functions provided by a
-WPXHLListenerImpl class implementation when needed. This is often commonly called the
+WPXDocumentInterface class implementation when needed. This is often commonly called the
 'main parsing routine'.
 \param input The input stream
 \param listenerImpl A WPXListener implementation
 */
-WPDResult WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerImpl)
+WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *listenerImpl)
 {
 	WPXParser *parser = 0;
 
@@ -189,7 +189,7 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXHLListenerImpl *listenerIm
 	WPD_DEBUG_MSG(("WPDocument::parse()\n"));
 	if (input->isOLEStream())
 	{
-		document = input->getDocumentOLEStream();
+		document = input->getDocumentOLEStream("PerfectOffice_MAIN");
 		if (document)
 			isDocumentOLE = true;
 		else

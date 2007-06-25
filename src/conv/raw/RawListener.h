@@ -25,7 +25,7 @@
 
 #ifndef RAWLISTENERIMPL_H
 #define RAWLISTENERIMPL_H
-#include "WPXHLListenerImpl.h"
+#include "WPXDocumentInterface.h"
 #include <stack>
 
 using namespace std;
@@ -47,7 +47,7 @@ enum ListenerCallback {
 	LC_OPEN_TABLE_CELL
 };
 
-class RawListenerImpl : public WPXHLListenerImpl
+class RawListenerImpl : public WPXDocumentInterface
 {
 public:
 	RawListenerImpl(bool printCallgraphScore);

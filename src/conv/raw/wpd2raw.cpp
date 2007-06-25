@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
 	}
 	
 	RawListenerImpl listenerImpl(printIndentLevel);
- 	WPDResult error = WPDocument::parse(input, static_cast<WPXHLListenerImpl *>(&listenerImpl));
+ 	WPDResult error = WPDocument::parse(input, static_cast<WPXDocumentInterface *>(&listenerImpl));
 
 	if (error == WPD_FILE_ACCESS_ERROR)
 		fprintf(stderr, "ERROR: File Exception!\n");

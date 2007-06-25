@@ -35,7 +35,7 @@
 #include <map>
 #include <vector>
 
-class WPXHLListenerImpl;
+class WPXDocumentInterface;
 class WPXTable;
 
 enum WP6StyleState { NORMAL, DOCUMENT_NOTE, DOCUMENT_NOTE_GLOBAL,
@@ -133,7 +133,7 @@ private:
 class WP6ContentListener : public WP6Listener, protected WPXContentListener
 {
 public:
-	WP6ContentListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, WPXHLListenerImpl *listenerImpl);
+	WP6ContentListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, WPXDocumentInterface *listenerImpl);
 	~WP6ContentListener();
 
 	void startDocument() { WPXContentListener::startDocument(); };

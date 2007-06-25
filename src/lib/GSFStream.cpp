@@ -90,7 +90,7 @@ bool GSFInputStream::isOLEStream()
 	return false;
 }
 
-WPXInputStream * GSFInputStream::getDocumentOLEStream()
+WPXInputStream * GSFInputStream::getDocumentOLEStream(const char *name)
 {
 	WPXInputStream *documentStream = 0;
 
@@ -99,7 +99,7 @@ WPXInputStream * GSFInputStream::getDocumentOLEStream()
 
 	if (m_ole)
 	{
-		GsfInput *document = gsf_infile_child_by_name(m_ole, "PerfectOffice_MAIN");
+		GsfInput *document = gsf_infile_child_by_name(m_ole, name);
 		if (document) 
 		{
 			documentStream = new GSFInputStream(document);

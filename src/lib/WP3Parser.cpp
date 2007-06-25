@@ -86,7 +86,7 @@ void WP3Parser::parseDocument(WPXInputStream *input, WP3Listener *listener)
 	}
 }
 
-void WP3Parser::parse(WPXHLListenerImpl *listenerImpl)
+void WP3Parser::parse(WPXDocumentInterface *listenerImpl)
 {
 	WPXInputStream *input = getInput();
 	std::list<WPXPageSpan> pageList;

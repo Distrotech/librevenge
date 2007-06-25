@@ -26,7 +26,7 @@
 #ifndef WPXPARSER_H
 #define WPXPARSER_H
 
-class WPXHLListenerImpl;
+class WPXDocumentInterface;
 class WPXHeader;
 class WPXInputStream;
 
@@ -36,7 +36,7 @@ public:
 	WPXParser(WPXInputStream * input, WPXHeader *header);
 	virtual ~WPXParser();
 
-	virtual void parse(WPXHLListenerImpl *listenerImpl) = 0;
+	virtual void parse(WPXDocumentInterface *listenerImpl) = 0;
 
 protected:
 	WPXHeader * getHeader() { return m_header; }

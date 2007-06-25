@@ -24,8 +24,8 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WPXHLLISTENERIMPL_H
-#define WPXHLLISTENERIMPL_H
+#ifndef WPXDOCUMENTINTERFACEIMPL_H
+#define WPXDOCUMENTINTERFACEIMPL_H
 #include "WPXPropertyList.h"
 #include "WPXPropertyListVector.h"
 
@@ -35,9 +35,11 @@ the parser. An application using this library should implement all the function
 definitions listed here.
 */
 
-class WPXHLListenerImpl
+class WPXDocumentInterface
 {
  public:
+ 	virtual ~WPXDocumentInterface() {}
+	
 	/** 
 	Called when all document metadata should be set. This is always the first callback made.
 	\param propList Property list for the metadata. May contain:
@@ -312,9 +314,6 @@ class WPXHLListenerImpl
 	Called when the current table is closed
 	*/
  	virtual void closeTable() = 0;
-
-protected:
-	~WPXHLListenerImpl() {}
 };
 
-#endif /* WPXHLLISTENERIMPL_H */
+#endif /* WPXDOCUMENTINTERFACEIMPL_H */

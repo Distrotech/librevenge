@@ -26,9 +26,9 @@
 #ifndef TEXTLISTENERIMPL_H
 #define TEXTLISTENERIMPL_H
 
-#include "WPXHLListenerImpl.h"
+#include "WPXDocumentInterface.h"
 
-class TextListenerImpl : public WPXHLListenerImpl
+class TextListenerImpl : public WPXDocumentInterface
 {
 public:
 	TextListenerImpl(const bool isInfo=false);

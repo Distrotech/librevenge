@@ -27,9 +27,9 @@
 #ifndef HTMLLISTENERIMPL_H
 #define HTMLLISTENERIMPL_H
 
-#include "WPXHLListenerImpl.h"
+#include "WPXDocumentInterface.h"
 
-class HtmlListenerImpl : public WPXHLListenerImpl
+class HtmlListenerImpl : public WPXDocumentInterface
 {
 public:
 	HtmlListenerImpl();

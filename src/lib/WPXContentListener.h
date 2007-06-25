@@ -31,7 +31,7 @@
 #include "libwpd_internal.h"
 #include "WPXSubDocument.h"
 #include "WPXPageSpan.h"
-#include "WPXHLListenerImpl.h"
+#include "WPXDocumentInterface.h"
 #include "WPXListener.h"
 #include <vector>
 #include <list>
@@ -143,7 +143,7 @@ private:
 class WPXContentListener : public WPXListener
 {
 protected:
-	WPXContentListener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl);
+	WPXContentListener(std::list<WPXPageSpan> &pageList, WPXDocumentInterface *listenerImpl);
 	virtual ~WPXContentListener();
 
 	void startDocument();
@@ -154,7 +154,7 @@ protected:
 	void justificationChange(const uint8_t justification);
 
 	WPXContentParsingState *m_ps; // parse state
-	WPXHLListenerImpl * m_listenerImpl;
+	WPXDocumentInterface * m_listenerImpl;
 	WPXPropertyList m_metaData;
 
 	virtual void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice) = 0;

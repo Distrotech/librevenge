@@ -189,7 +189,7 @@ void WP6Parser::parsePackets(WP6PrefixData *prefixData, int type, WP6Listener *l
 
 // WP6Parser::parse() reads AND parses a wordperfect document, passing any retrieved low-level
 // information to a low-level listener
-void WP6Parser::parse(WPXHLListenerImpl *listenerImpl)
+void WP6Parser::parse(WPXDocumentInterface *listenerImpl)
 {	
 	WP6PrefixData * prefixData = 0;
 	std::list<WPXPageSpan> pageList;

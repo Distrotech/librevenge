@@ -32,7 +32,7 @@
 #include "WP5SubDocument.h"
 #include "WPXString.h"
 #include "libwpd_internal.h"
-#include "WPXHLListenerImpl.h"
+#include "WPXDocumentInterface.h"
 #include <vector>
 
 typedef struct _WP5ContentParsingState WP5ContentParsingState;
@@ -49,7 +49,7 @@ struct _WP5ContentParsingState
 class WP5ContentListener : public WP5Listener, protected WPXContentListener
 {
 public:
-	WP5ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP5SubDocument *> &subDocuments, WPXHLListenerImpl *listenerImpl);
+	WP5ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP5SubDocument *> &subDocuments, WPXDocumentInterface *listenerImpl);
 	~WP5ContentListener();
 
 	void startDocument() { WPXContentListener::startDocument(); };

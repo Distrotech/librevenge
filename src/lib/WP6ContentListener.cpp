@@ -27,7 +27,7 @@
 #include <ctype.h>
 #include "libwpd_math.h"
 #include "WP6ContentListener.h"
-#include "WPXHLListenerImpl.h"
+#include "WPXDocumentInterface.h"
 #include "WP6FileStructure.h"
 #include "WPXFileStructure.h"
 #include "WP6FontDescriptorPacket.h"
@@ -147,7 +147,7 @@ _WP6ContentParsingState::~_WP6ContentParsingState()
 	// FIXME: erase current fontname
 }
 
-WP6ContentListener::WP6ContentListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, WPXHLListenerImpl *listenerImpl) :
+WP6ContentListener::WP6ContentListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, WPXDocumentInterface *listenerImpl) :
 	WP6Listener(),
 	WPXContentListener(pageList, listenerImpl),
 	m_parseState(new WP6ContentParsingState(tableList)),

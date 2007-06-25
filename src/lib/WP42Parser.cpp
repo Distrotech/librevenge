@@ -162,7 +162,7 @@ void WP42Parser::parseDocument(WPXInputStream *input, WP42Listener *listener)
 	}
 }
 
-void WP42Parser::parse(WPXHLListenerImpl *listenerImpl)
+void WP42Parser::parse(WPXDocumentInterface *listenerImpl)
 {
 	WPXInputStream *input = getInput();
 	std::list<WPXPageSpan> pageList;

@@ -28,7 +28,7 @@
 
 #include "WPXParser.h"
 
-class WPXHLListenerImpl;
+class WPXDocumentInterface;
 class WP5Listener;
 class WP5PrefixData;
 
@@ -38,7 +38,7 @@ public:
 	WP5Parser(WPXInputStream *input, WPXHeader *header);
 	~WP5Parser();
 	
-	void parse(WPXHLListenerImpl *listenerImpl);
+	void parse(WPXDocumentInterface *listenerImpl);
 	
 	static void parseDocument(WPXInputStream *input, WP5Listener *listener);
 

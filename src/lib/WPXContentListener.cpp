@@ -119,7 +119,7 @@ _WPXContentParsingState::~_WPXContentParsingState()
 	DELETEP(m_highlightColor);
 }
 
-WPXContentListener::WPXContentListener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl) :
+WPXContentListener::WPXContentListener(std::list<WPXPageSpan> &pageList, WPXDocumentInterface *listenerImpl) :
 	WPXListener(pageList),
 	m_ps(new WPXContentParsingState),
 	m_listenerImpl(listenerImpl),

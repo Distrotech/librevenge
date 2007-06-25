@@ -180,7 +180,7 @@ void WP1Parser::parseDocument(WPXInputStream *input, WP1Listener *listener)
 	}
 }
 
-void WP1Parser::parse(WPXHLListenerImpl *listenerImpl)
+void WP1Parser::parse(WPXDocumentInterface *listenerImpl)
 {
 	WPXInputStream *input = getInput();
 	std::list<WPXPageSpan> pageList;

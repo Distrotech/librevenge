@@ -31,7 +31,7 @@
 
 class WP6PrefixData;
 class WP6Listener;
-class WPXHLListenerImpl;
+class WPXDocumentInterface;
 
 class WP6Parser : public WPXParser
 {
@@ -39,7 +39,7 @@ public:
 	WP6Parser(WPXInputStream *input, WPXHeader *header);
 	~WP6Parser();
 
-	void parse(WPXHLListenerImpl *listenerImpl);
+	void parse(WPXDocumentInterface *listenerImpl);
 
 	static void parseDocument(WPXInputStream *stream, WP6Listener *listener);
 

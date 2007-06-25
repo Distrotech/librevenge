@@ -44,7 +44,7 @@ _WP1ContentParsingState::~_WP1ContentParsingState()
 }
 
 
-WP1ContentListener::WP1ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP1SubDocument *> &subDocuments, WPXHLListenerImpl *listenerImpl) :
+WP1ContentListener::WP1ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP1SubDocument *> &subDocuments, WPXDocumentInterface *listenerImpl) :
 	WP1Listener(),
 	WPXContentListener(pageList, listenerImpl),
 	m_parseState(new WP1ContentParsingState),

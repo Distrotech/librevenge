@@ -219,11 +219,6 @@ WPXInputStream* WPXFileStream::getDocumentOLEStream(const char * name)
 	return new WPXStringStream((const char *)(d->buf), tmpLength);
 }
 
-WPXInputStream* WPXFileStream::getDocumentOLEStream()
-{
-	return getDocumentOLEStream("PerfectOffice_MAIN");
-}
-
 WPXStringStream::WPXStringStream(const char *data, const unsigned int dataSize) :
 	WPXInputStream(true),
 	d(new WPXStringStreamPrivate(std::string(data, dataSize)))
@@ -351,9 +346,4 @@ WPXInputStream* WPXStringStream::getDocumentOLEStream(const char * name)
 
 	delete tmpStorage;
 	return new WPXStringStream((const char *)(d->buf), tmpLength);
-}
-
-WPXInputStream* WPXStringStream::getDocumentOLEStream()
-{
-	return getDocumentOLEStream("PerfectOffice_MAIN");
 }

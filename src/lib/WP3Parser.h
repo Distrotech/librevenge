@@ -27,7 +27,7 @@
 
 #include "WPXParser.h"
 
-class WPXHLListenerImpl;
+class WPXDocumentInterface;
 class WP3Listener;
 
 class WP3Parser : public WPXParser
@@ -36,7 +36,7 @@ public:
 	WP3Parser(WPXInputStream *input, WPXHeader *header);
 	~WP3Parser();
 
-	void parse(WPXHLListenerImpl *listenerImpl);
+	void parse(WPXDocumentInterface *listenerImpl);
 	
 	static void parseDocument(WPXInputStream *input, WP3Listener *listener);
 
