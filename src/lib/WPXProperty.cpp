@@ -202,8 +202,8 @@ WPXInchProperty::WPXInchProperty(const float val) :
 
 WPXString WPXInchProperty::getStr() const 
 { 
-	WPXString str = doubleToString(2.54 * getFloat()); 
-	str.append("cm"); 
+	WPXString str = doubleToString(getFloat()); 
+	str.append("in"); 
 	return str; 
 }
 

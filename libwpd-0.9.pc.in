@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@
+Description: A library for reading and writing Corel WordPerfect(tm) documents
+Version: @VERSION@
+Libs: -L${libdir} -lwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@
+Cflags: -I${includedir}/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@

@@ -86,6 +86,7 @@ struct _WPXContentParsingState
 	bool m_isTableCellOpened;
 	bool m_wasHeaderRow;
 	bool m_isCellWithoutParagraph;
+	bool m_isRowWithoutCell;
 	uint32_t m_cellAttributeBits;
 	uint8_t m_paragraphJustificationBeforeTable;
 	

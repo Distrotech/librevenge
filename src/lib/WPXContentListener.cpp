@@ -61,6 +61,7 @@ _WPXContentParsingState::_WPXContentParsingState() :
 	m_isTableCellOpened(false),
 	m_wasHeaderRow(false),
 	m_isCellWithoutParagraph(false),
+	m_isRowWithoutCell(false),
 	m_cellAttributeBits(0x00000000),
 	m_paragraphJustificationBeforeTable(WPX_PARAGRAPH_JUSTIFICATION_LEFT),
 	
@@ -181,11 +182,11 @@ void WPXContentListener::_openSection()
 		propList.insert("fo:margin-right", m_ps->m_sectionMarginRight);
 		if (m_ps->m_numColumns > 1)
 		{
-			propList.insert("fo:margin-bottom", 1.0f);
+			propList.insert("libwpd:margin-bottom", 1.0f);
 			propList.insert("text:dont-balance-text-columns", false);
 		}
 		else
-			propList.insert("fo:margin-bottom", 0.0f);
+			propList.insert("libwpd:margin-bottom", 0.0f);
 
 		WPXPropertyListVector columns;
  		typedef std::vector<WPXColumnDefinition>::const_iterator CDVIter;
@@ -194,8 +195,8 @@ void WPXContentListener::_openSection()
 			WPXPropertyList column;
 			// The "style:rel-width" is expressed in twips (1440 twips per inch) and includes the left and right Gutter
 			column.insert("style:rel-width", (*iter).m_width * 1440.0f, TWIP);
-			column.insert("fo:margin-left", (*iter).m_leftGutter);
-			column.insert("fo:margin-right", (*iter).m_rightGutter);
+			column.insert("fo:start-indent", (*iter).m_leftGutter);
+			column.insert("fo:end-indent", (*iter).m_rightGutter);
 			columns.append(column);
 		}
 		if (!m_ps->m_isSectionOpened)
@@ -508,7 +509,7 @@ void WPXContentListener::_getTabStops(WPXPropertyListVector &tabStops)
 		{
 			WPXString sLeader;
 			sLeader.sprintf("%c", m_ps->m_tabStops[i].m_leaderCharacter);
-			tmpTabStop.insert("style:leader-char", sLeader);
+			tmpTabStop.insert("style:leader-text", sLeader);
 		}
 
 		// position
@@ -646,11 +647,11 @@ void WPXContentListener::_openSpan()
 	if (attributeBits & WPX_BOLD_BIT)
 		propList.insert("fo:font-weight", "bold");
 	if (attributeBits & WPX_STRIKEOUT_BIT)
-		propList.insert("style:text-crossing-out", "single-line");
+		propList.insert("style:text-line-through-type", "single");
 	if (attributeBits & WPX_DOUBLE_UNDERLINE_BIT) 
-		propList.insert("style:text-underline", "double");
+		propList.insert("style:text-underline-type", "double");
  	else if (attributeBits & WPX_UNDERLINE_BIT) 
-		propList.insert("style:text-underline", "single");
+		propList.insert("style:text-underline-type", "single");
 	if (attributeBits & WPX_OUTLINE_BIT) 
 		propList.insert("style:text-outline", "true");
 	if (attributeBits & WPX_SMALL_CAPS_BIT) 
@@ -810,6 +811,7 @@ void WPXContentListener::_openTableRow(const float height, const bool isMinimumH
 	m_listenerImpl->openTableRow(propList);
 
 	m_ps->m_isTableRowOpened = true;
+	m_ps->m_isRowWithoutCell = true;
 	m_ps->m_currentTableRow++;
 }
 
@@ -833,6 +835,13 @@ void WPXContentListener::_closeTableRow()
 
 		if (m_ps->m_isTableCellOpened)
 			_closeTableCell();
+		// FIXME: this will need some love so that we actually insert covered cells with proper attributes
+		if (m_ps->m_isRowWithoutCell)
+		{
+			m_ps->m_isRowWithoutCell = false;
+			WPXPropertyList tmpBlankList;
+			m_listenerImpl->insertCoveredTableCell(tmpBlankList);
+		}
 		m_listenerImpl->closeTableRow();
 	}
 	m_ps->m_isTableRowOpened = false;
@@ -862,12 +871,12 @@ static void addBorderProps(const char *border, bool borderOn, const WPXString &b
 	WPXString props;
 	if (borderOn)
 	{
-	  props.append(doubleToString(2.54 * WPX_DEFAULT_TABLE_BORDER_WIDTH));
-	  props.append("cm solid ");
+	  props.append(doubleToString(WPX_DEFAULT_TABLE_BORDER_WIDTH));
+	  props.append("in solid ");
 	  props.append(borderColor);
 	}
 	else
-		props.sprintf("0.0cm");
+		props.sprintf("0.0in");
 	propList.insert(borderStyle.cstr(), props);
 }
 
@@ -901,13 +910,13 @@ void WPXContentListener::_openTableCell(const uint8_t colSpan, const uint8_t row
 	switch (cellVerticalAlignment)
 	{
 	case TOP:
-		propList.insert("fo:vertical-align", "top");
+		propList.insert("style:vertical-align", "top");
 		break;
 	case MIDDLE:
-		propList.insert("fo:vertical-align", "middle");
+		propList.insert("style:vertical-align", "middle");
 		break;
 	case BOTTOM:
-		propList.insert("fo:vertical-align", "bottom");
+		propList.insert("style:vertical-align", "bottom");
 		break;
 	case FULL: // full not in XSL-fo?
 	default:

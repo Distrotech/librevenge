@@ -3,9 +3,9 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
                                                                        
-Name: libwpd-stream-0.8
+Name: libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@
 Description: GSFStream support for libwpd, a library for reading and writing Corel WordPerfect(tm) documents
 Version: @VERSION@
-Requires: glib-2.0 libgsf-1 libwpd-0.8
-Libs: -L${libdir} -lwpd-stream-0.8
-Cflags: -I${includedir}/libwpd-0.8
+Requires: glib-2.0 libgsf-1 libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@
+Libs: -L${libdir} -lwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@
+Cflags: -I${includedir}/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@

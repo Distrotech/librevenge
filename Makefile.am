@@ -1,10 +1,10 @@
 pkgconfdir = $(libdir)/pkgconfig
 
 if WITH_LIBWPD_STREAM
-LIBWPD_STREAM_PC = libwpd-stream-0.8.pc
+LIBWPD_STREAM_PC = libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.pc
 endif
 
-pkgconf_DATA = libwpd-0.8.pc $(LIBWPD_STREAM_PC)
+pkgconf_DATA = libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.pc $(LIBWPD_STREAM_PC)
 
 SUBDIRS = src build docs autopackage
 
@@ -12,7 +12,7 @@ EXTRA_DIST = \
 	autogen.sh	\
 	libwpd.spec	\
 	libwpd.spec.in	\
-	libwpd-*.pc.in	\
+	libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.pc.in	\
 	libwpd-zip.in	\
 	CHANGES		\
 	COPYING		\

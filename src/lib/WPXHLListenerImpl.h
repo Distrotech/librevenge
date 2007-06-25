@@ -117,7 +117,7 @@ class WPXHLListenerImpl
 	\li \c fo:break-before Whether this paragraph should be placed in a new column or page (the value is set to column or page if so)
 	\param tabStops List of tabstop definitions for the paragraph. If the list is empty, default tabstop definition should be used. Each tab stop may contain:
 	\li \c style:type Type of tab (left, right, center, char, or .)
-	\li \c style:leader-char The leader character
+	\li \c style:leader-text The leader character
 	\li \c style:position Position of the tab
 	*/
 	virtual void openParagraph(const WPXPropertyList &propList, const WPXPropertyListVector &tabStops) = 0;
@@ -131,8 +131,8 @@ class WPXHLListenerImpl
 	\param propList Property list for the span. May contain:
 	\li \c fo:font-style Font style (italic or normal)
 	\li \c fo:font-weight Font style (bold or normal)
-	\li \c style:text-crossing-out (single-line, if present)
-	\li \c style:text-underline (double or single)
+	\li \c style:text-line-through-type (double or single, if present)
+	\li \c style:text-underline-type (double or single, if present)
 	\li \c style:text-outline (true or false)
 	\li \c fo:font-variant (small-caps, if present)
 	\li \c style:font-name The name of the font used in the span, a text string in ascii
@@ -148,12 +148,12 @@ class WPXHLListenerImpl
 	/**
 	Called when a new section is opened
 	\param propList Property list for the section. May contain: 
-	\li \c fo:margin-bottom  Extra space to add after the section, in inches 
+	\li \c libwpd:margin-bottom  Extra space to add after the section, in inches 
 	\li \c text:dont-balance-text-columns Whether or not to balance text columns
 	\param columns List of definitions of each column: left gutter, right gutter, and width (includes the gutters). Empty if there is only one column in the section. Each column may contain:
 	\li \c style:rel-width
-	\li \c fo:margin-left The left indentation of the margin, in inches
-	\li \c fo:margin-right The right indentation of the margin, in inches
+	\li \c fo:start-indent The left indentation of the margin, in inches
+	\li \c fo:end-indent The right indentation of the margin, in inches
 	*/
 	virtual void openSection(const WPXPropertyList &propList, const WPXPropertyListVector &columns) = 0;
 	/**
@@ -231,7 +231,7 @@ class WPXHLListenerImpl
 	\li \c fo:break-before Whether this paragraph should be placed in a new column or page (the value is set to column or page if so)
 	\param tabStops List of tabstop definitions for the paragraph. If the list is empty, default tabstop definition should be used. Each tab stop may contain:
 	\li \c style:type Type of tab (left, right, center, char, or .)
-	\li \c style:leader-char The leader character
+	\li \c style:leader-text The leader character
 	\li \c style:position Position of the tab
 	*/
 	virtual void openListElement(const WPXPropertyList &propList, const WPXPropertyListVector &tabStops) = 0;
@@ -294,7 +294,7 @@ class WPXHLListenerImpl
 	\li \c fo:border-top Properties of the top border of the cell
 	\li \c fo:border-bottom Properties of the bottom border of the cell
 	\li \c fo:background-color Color of the cell (encoded in hex: \#RRGGBB)
-	\li \c fo:vertical-align Vertical alignment of the content in the cell (top, middle, or bottom)
+	\li \c style:vertical-align Vertical alignment of the content in the cell (top, middle, or bottom)
 	*/
  	virtual void openTableCell(const WPXPropertyList &propList) = 0;
 	/**
