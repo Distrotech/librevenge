@@ -121,6 +121,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP5FootnoteEndnoteGroup.cpp \
 	WP5GeneralPacketData.cpp \
 	WP5GeneralPacketIndex.cpp \
+	WP5GraphicsInformationPacket.cpp \
 	WP5Header.cpp \
 	WP5HeaderFooterGroup.cpp \
 	WP5Listener.cpp \
@@ -273,6 +274,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP5FootnoteEndnoteGroup.h \
 	WP5GeneralPacketData.h \
 	WP5GeneralPacketIndex.h \
+	WP5GraphicsInformationPacket.h \
 	WP5Header.h \
 	WP5HeaderFooterGroup.h \
 	WP5Listener.h \

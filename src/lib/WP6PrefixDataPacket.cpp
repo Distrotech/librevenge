@@ -71,11 +71,11 @@ WP6PrefixDataPacket * WP6PrefixDataPacket::constructPrefixDataPacket(WPXInputStr
 						 prefixIndice->getDataOffset(), 
 						 prefixIndice->getDataSize());
 	case WP6_INDEX_HEADER_GRAPHICS_FILENAME:
-		return new WP6GraphicsFilename(input, prefixIndice->getID(), 
+		return new WP6GraphicsFilename(input, prefixIndice->getID(), prefixIndice->getFlags(), 
 						 prefixIndice->getDataOffset(), 
 						 prefixIndice->getDataSize());
 	case WP6_INDEX_HEADER_GRAPHICS_CACHED_FILE_DATA:
-		return new WP6GraphicsCachedFileData(input, prefixIndice->getID(), 
+		return new WP6GraphicsCachedFileData(input, prefixIndice->getID(),
 						 prefixIndice->getDataOffset(), 
 						 prefixIndice->getDataSize());
 	default:

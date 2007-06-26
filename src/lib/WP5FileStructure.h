@@ -50,6 +50,7 @@ extern int WP5_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16];
 /* Genearal data packet list */
 #define WP50_LIST_FONTS_USED_PACKET 0x02
 #define WP5_FONT_NAME_STRING_POOL_PACKET 0x07
+#define WP5_GRAPHICS_INFORMATION_PACKET 0x08
 #define WP51_LIST_FONTS_USED_PACKET 0x0F
 
 /* Main function group list  */

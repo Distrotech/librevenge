@@ -27,20 +27,24 @@
 #include "WP6PrefixDataPacket.h"
 #include "WP6FileStructure.h"
 #include "WPXMemoryStream.h"
-#include "WP6SubDocument.h"
 #include "WP6Listener.h"
+#include <vector>
 
 class WP6GraphicsFilename : public WP6PrefixDataPacket
 {
 public:
-	WP6GraphicsFilename(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize);
+	WP6GraphicsFilename(WPXInputStream *input, int id, const uint8_t flags, uint32_t dataOffset, uint32_t dataSize);
 	~WP6GraphicsFilename();
 	void _readContents(WPXInputStream *input);
-	void parse(WP6Listener *listener) const;
+	void parse(WP6Listener *listener) const {}
+	const std::vector<uint16_t> &getChildIds() const { return m_childIds; }
+	
 
 private:
 	WP6GraphicsFilename(const WP6GraphicsFilename&);             
-	WP6GraphicsFilename& operator=(const WP6GraphicsFilename&);             
+	WP6GraphicsFilename& operator=(const WP6GraphicsFilename&);
+	std::vector<uint16_t> m_childIds;
+	const uint8_t m_flags;           
 	
 };
 #endif /* WP6GRAPHICSFILENAME_H */

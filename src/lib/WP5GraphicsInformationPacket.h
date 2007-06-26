@@ -1,5 +1,5 @@
 /* libwpd
- * Copyright (C) 2007 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,30 +21,22 @@
 /* "This product is not manufactured, approved, or supported by 
  * Corel Corporation or Corel Corporation Limited."
  */
-#include <string.h>
 
-#include "WP6GraphicsFilename.h"
-#include "WP6Parser.h"
-#include "libwpd_internal.h"
+#ifndef WP5GRAPHICSINFORMATIONPACKET_H
+#define WP5GRAPHICSINFORMATIONPACKET_H
+#include "WP5GeneralPacketData.h"
+#include "WPXMemoryStream.h"
+#include <vector>
 
-WP6GraphicsFilename::WP6GraphicsFilename(WPXInputStream *input, int /* id */, const uint8_t flags, uint32_t dataOffset, uint32_t dataSize): 
-	WP6PrefixDataPacket(input),
-	m_childIds(),
-	m_flags(flags)
-{	
-	_read(input, dataOffset, dataSize);
-}
-
-WP6GraphicsFilename::~WP6GraphicsFilename()
+class WP5GraphicsInformationPacket : public WP5GeneralPacketData
 {
-}
+public:
+	WP5GraphicsInformationPacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize);
+	~WP5GraphicsInformationPacket();
+	void _readContents(WPXInputStream *input, uint32_t dataSize);
+	const std::vector<WPXInputStream *> &getImages() const { return m_images; }
 
-void WP6GraphicsFilename::_readContents(WPXInputStream *input)
-{
-	if ((m_flags && 0x01) == 0x00)
-		return;
-	uint16_t tmpNumChildIds = readU16(input);
-	for (uint16_t i = 0; i < tmpNumChildIds; i++)
-		m_childIds.push_back(readU16(input));
-}
-
+private:
+	std::vector<WPXInputStream *> m_images;
+};
+#endif /* WP5GRAPHICSINFORMATIONPACKET_H */

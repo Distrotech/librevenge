@@ -34,6 +34,7 @@ class WP6PrefixIndice
 	WP6PrefixIndice(WPXInputStream * input, int id);	
 	const int getID() const { return m_id; }
 	const uint8_t getType() const { return m_type; }
+	const uint8_t getFlags() const { return m_flags; }
 	const uint32_t getDataSize() const { return m_dataSize; }
 	const uint32_t getDataOffset() const { return m_dataOffset; }
 

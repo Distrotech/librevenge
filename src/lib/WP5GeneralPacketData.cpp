@@ -28,6 +28,7 @@
 #include "WP5FileStructure.h"
 #include "WP5ListFontsUsedPacket.h"
 #include "WP5FontNameStringPoolPacket.h"
+#include "WP5GraphicsInformationPacket.h"
 #include "libwpd.h"
 #include "libwpd_internal.h"
 
@@ -46,6 +47,9 @@ WP5GeneralPacketData * WP5GeneralPacketData::constructGeneralPacketData(WPXInput
 	case WP5_FONT_NAME_STRING_POOL_PACKET:
 		return new WP5FontNameStringPoolPacket(input, packetIndex->getID(), packetIndex->getDataOffset(), 
 							packetIndex->getDataSize());
+	case WP5_GRAPHICS_INFORMATION_PACKET:
+		return new WP5GraphicsInformationPacket(input, packetIndex->getID(), packetIndex->getDataOffset(),
+			packetIndex->getDataSize());
 	default:
 		return 0;
 	}
