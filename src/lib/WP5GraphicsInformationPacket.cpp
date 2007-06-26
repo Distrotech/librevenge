@@ -41,7 +41,6 @@ WP5GraphicsInformationPacket::~WP5GraphicsInformationPacket()
 void WP5GraphicsInformationPacket::_readContents(WPXInputStream *input, uint32_t dataSize)
 {
 	uint16_t tmpImagesCount = readU16(input);
-	printf("I have %i images\n", tmpImagesCount);
 	std::vector<uint32_t> tmpImagesSizes;
 	for (uint16_t i = 0; i < tmpImagesCount; i++)
 		tmpImagesSizes.push_back(readU32(input));
@@ -51,19 +50,20 @@ void WP5GraphicsInformationPacket::_readContents(WPXInputStream *input, uint32_t
 		printf("offset of image %i is 0x%x\n", j, input->tell());
 		uint8_t *tmpData = new uint8_t[tmpImagesSizes[j]+16];
 		
-		// Here we create a file header, since it looks like the embedded files do not contain it.
-		tmpData[0] = 0xff; tmpData[1] = 0x57; tmpData[2] = 0x50; tmpData[3] = 0x43;
-		tmpData[4] = 0x10; tmpData[5] = 0x00; tmpData[6] = 0x00; tmpData[7] = 0x00;
-		tmpData[8] = 0x01; tmpData[9] = 0x16; tmpData[10] = 0x01; tmpData[11] = 0x00;
-		tmpData[12] = 0x00; tmpData[13] = 0x00; tmpData[14] = 0x00; tmpData[15] = 0x00;
-		
 		for (uint32_t k = 0; k < tmpImagesSizes[j]; k++)
-			tmpData[k+16] = readU8(input);
+			tmpData[k] = readU8(input);
 #if 0
 		WPXString filename;
 		filename.sprintf("binarydump%.4x.wpg", j);
 		FILE *f = fopen(filename.cstr(), "w");
-		for (uint32_t l = 0; l < tmpImagesSizes[j] + 16; l++)
+
+		// Here we create a file header, since it looks like the embedded files do not contain it
+		fprintf(f, "%c%c%c%c", 0xff, 0x57, 0x50, 0x43);
+		fprintf(f, "%c%c%c%c", 0x10, 0, 0, 0);
+		fprintf(f, "%c%c%c%c", 0x01, 0x16, 0x01, 0);
+		fprintf(f, "%c%c%c%c", 0, 0, 0, 0);
+
+		for (uint32_t l = 0; l < tmpImagesSizes[j]; l++)
 			fprintf(f, "%c", tmpData[l]);
 		fclose(f);
 #endif
