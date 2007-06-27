@@ -35,6 +35,7 @@
 #include "WP6DisplayNumberReferenceGroup.h"
 #include "WP6StyleGroup.h"
 #include "WP6TabGroup.h"
+#include "WP6BoxGroup.h"
 #include "WP6UnsupportedVariableLengthGroup.h"
 
 #include "libwpd_internal.h"
@@ -80,6 +81,8 @@ WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(WP
 		return new WP6StyleGroup(input);
 	case WP6_TOP_TAB_GROUP:
 		return new WP6TabGroup(input);
+	case WP6_TOP_BOX_GROUP:
+		return new WP6BoxGroup(input);
 	default:
 		// this is an unhandled group, just skip it
 		return new WP6UnsupportedVariableLengthGroup(input);

@@ -111,6 +111,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP42SuppressPageCharacteristicsGroup.cpp \
 	WP42UnsupportedMultiByteFunctionGroup.cpp \
 	WP5AttributeGroup.cpp \
+	WP5BoxGroup.cpp \
 	WP5ContentListener.cpp \
 	WP5DefinitionGroup.cpp \
 	WP5ExtendedCharacterGroup.cpp \
@@ -140,6 +141,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP5UnsupportedVariableLengthGroup.cpp \
 	WP5VariableLengthGroup.cpp \
 	WP6AttributeGroup.cpp \
+	WP6BoxGroup.cpp \
 	WP6CharacterGroup.cpp \
 	WP6ColumnGroup.cpp \
 	WP6ContentListener.cpp \
@@ -264,6 +266,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP42SuppressPageCharacteristicsGroup.h \
 	WP42UnsupportedMultiByteFunctionGroup.h \
 	WP5AttributeGroup.h \
+	WP5BoxGroup.h \
 	WP5ContentListener.h \
 	WP5DefinitionGroup.h \
 	WP5ExtendedCharacterGroup.h \
@@ -294,6 +297,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP5VariableLengthGroup.h \
 	WP6FileStructure.h \
 	WP6AttributeGroup.h \
+	WP6BoxGroup.h \
 	WP6CharacterGroup.h \
 	WP6ColumnGroup.h \
 	WP6ContentListener.h \
