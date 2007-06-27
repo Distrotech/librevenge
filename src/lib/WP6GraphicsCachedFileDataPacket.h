@@ -22,27 +22,27 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP6GRAPHICSCACHEDFILEDATA_H
-#define WP6GRAPHICSCACHEDFILEDATA_H
+#ifndef WP6GRAPHICSCACHEDFILEDATAPACKET_H
+#define WP6GRAPHICSCACHEDFILEDATAPACKET_H
 #include "WP6PrefixDataPacket.h"
 #include "WP6FileStructure.h"
 #include "WPXMemoryStream.h"
 #include "WP6Listener.h"
 
-class WP6GraphicsCachedFileData : public WP6PrefixDataPacket
+class WP6GraphicsCachedFileDataPacket : public WP6PrefixDataPacket
 {
 public:
-	WP6GraphicsCachedFileData(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize);
-	~WP6GraphicsCachedFileData();
+	WP6GraphicsCachedFileDataPacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize);
+	~WP6GraphicsCachedFileDataPacket();
 	void _readContents(WPXInputStream *input);
 	void parse(WP6Listener *listener) const {}
-	WPXInputStream *getGraphicsStream() { return m_stream; }
+	const WPXInputStream *getGraphicsStream() const { return m_stream; }
 
 private:
-	WP6GraphicsCachedFileData(const WP6GraphicsCachedFileData&);             
-	WP6GraphicsCachedFileData& operator=(const WP6GraphicsCachedFileData&);
+	WP6GraphicsCachedFileDataPacket(const WP6GraphicsCachedFileDataPacket&);             
+	WP6GraphicsCachedFileDataPacket& operator=(const WP6GraphicsCachedFileDataPacket&);
 	int m_id;
 	WPXMemoryInputStream *m_stream;            
 	
 };
-#endif /* WP6GRAPHICSCACHEDFILEDATA_H */
+#endif /* WP6GRAPHICSCACHEDFILEDATAPACKET_H */

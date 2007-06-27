@@ -194,6 +194,7 @@ public:
 				const RGBSColor * cellBorderColor, const WPXVerticalAlignment cellVerticalAlignment, 
 				const bool useCellAttributes, const uint32_t cellAttributes);
  	void endTable();
+	void insertGraphicsData(const uint16_t packetId, const uint8_t anchoredTo);
 
 	void undoChange(const uint8_t undoType, const uint16_t undoLevel);
 

@@ -78,6 +78,7 @@ public:
 	virtual void closeTableCell() {}
 	virtual void insertCoveredTableCell(const WPXPropertyList & /* propList */) {}
 	virtual void closeTable() {}
+	virtual void insertGraphics(const WPXInputStream *graphicsData) {};
 
 private:
 	unsigned int m_currentListLevel;

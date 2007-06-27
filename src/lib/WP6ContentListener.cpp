@@ -31,6 +31,7 @@
 #include "WP6FileStructure.h"
 #include "WPXFileStructure.h"
 #include "WP6FontDescriptorPacket.h"
+#include "WP6GraphicsCachedFileDataPacket.h"
 #include "WP6DefaultInitialFontPacket.h"
 #include "libwpd_internal.h"
 #include "WP6SubDocument.h"
@@ -613,10 +614,10 @@ void WP6ContentListener::insertTab(const uint8_t tabType, float tabPosition)
 			case WP6_TAB_GROUP_FLUSH_RIGHT:
 			case WP6_TAB_GROUP_RIGHT_TAB:
 			case WP6_TAB_GROUP_DECIMAL_TAB:
-				m_listenerImpl->insertTab();
+				m_documentInterface->insertTab();
 				break;
 			case WP6_TAB_GROUP_BAR_TAB:
-				m_listenerImpl->insertTab();
+				m_documentInterface->insertTab();
 				insertCharacter('|');  // We emulate the bar tab
 				break;
 			
@@ -641,7 +642,7 @@ void WP6ContentListener::handleLineBreak()
 			else
 				_flushText();
 
-			m_listenerImpl->insertLineBreak();
+			m_documentInterface->insertLineBreak();
 		}
 	}
 }
@@ -1195,18 +1196,18 @@ void WP6ContentListener::noteOff(const WPXNoteType noteType)
 			propList.insert("libwpd:number", number);
 
 		if (noteType == FOOTNOTE)
-			m_listenerImpl->openFootnote(propList);
+			m_documentInterface->openFootnote(propList);
 		else
-			m_listenerImpl->openEndnote(propList);
+			m_documentInterface->openEndnote(propList);
 
 		uint16_t textPID = (uint16_t)m_parseState->m_noteTextPID;
 		handleSubDocument(((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : 0), 
 				false, m_parseState->m_tableList, m_parseState->m_nextTableIndice);
 
 		if (noteType == FOOTNOTE)
-			m_listenerImpl->closeFootnote();
+			m_documentInterface->closeFootnote();
 		else
-			m_listenerImpl->closeEndnote();
+			m_documentInterface->closeEndnote();
 		m_ps->m_isNote = false;
 		m_parseState->m_numNestedNotes = 0;
 	}
@@ -1374,6 +1375,12 @@ void WP6ContentListener::endTable()
 	}
 }
 
+void WP6ContentListener::insertGraphicsData(const uint16_t packetId, const uint8_t anchoredTo)
+{
+	if (const WP6GraphicsCachedFileDataPacket *gcfdPacket = dynamic_cast<const WP6GraphicsCachedFileDataPacket *>(this->getPrefixDataPacket(packetId))) 
+		m_documentInterface->insertGraphics(gcfdPacket->getGraphicsStream());
+}
+
 void WP6ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice)
 {
 	// save our old parsing state on our "stack"
@@ -1444,44 +1451,44 @@ void WP6ContentListener::_flushText()
 	
 	if (m_parseState->m_textBeforeNumber.len())
 	{
-		m_listenerImpl->insertText(m_parseState->m_textBeforeNumber);
+		m_documentInterface->insertText(m_parseState->m_textBeforeNumber);
 		m_parseState->m_textBeforeNumber.clear();
 	}
 	
 	if (m_parseState->m_textBeforeDisplayReference.len())
 	{
-		m_listenerImpl->insertText(m_parseState->m_textBeforeDisplayReference);
+		m_documentInterface->insertText(m_parseState->m_textBeforeDisplayReference);
 		m_parseState->m_textBeforeDisplayReference.clear();
 	}
 	
 	if (m_parseState->m_numberText.len())
 	{
-		m_listenerImpl->insertText(m_parseState->m_numberText);
+		m_documentInterface->insertText(m_parseState->m_numberText);
 		m_parseState->m_numberText.clear();
 	}
 	
 	if (m_parseState->m_textAfterDisplayReference.len())
 	{
-		m_listenerImpl->insertText(m_parseState->m_textAfterDisplayReference);
+		m_documentInterface->insertText(m_parseState->m_textAfterDisplayReference);
 		m_parseState->m_textAfterDisplayReference.clear();
 	}
 	
 	if (m_parseState->m_textAfterNumber.len())
 	{
-		m_listenerImpl->insertText(m_parseState->m_textAfterNumber);
+		m_documentInterface->insertText(m_parseState->m_textAfterNumber);
 		m_parseState->m_textAfterNumber.clear();
 	}
 	
 	if (m_parseState->m_numListExtraTabs > 0)
 	{
 		for (; m_parseState->m_numListExtraTabs > 0; m_parseState->m_numListExtraTabs--)
-			m_listenerImpl->insertTab();
+			m_documentInterface->insertTab();
 		m_parseState->m_numListExtraTabs = 0;
 	}
 
 	if (m_parseState->m_bodyText.len())
 	{
-		m_listenerImpl->insertText(m_parseState->m_bodyText);
+		m_documentInterface->insertText(m_parseState->m_bodyText);
 		m_parseState->m_bodyText.clear();
 	}
 	
@@ -1533,7 +1540,7 @@ void WP6ContentListener::_handleListChange(const uint16_t outlineHash)
 			propList.insert("text:min-label-width", m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent - m_ps->m_listReferencePosition);
 			propList.insert("text:space-before", m_ps->m_listReferencePosition - m_ps->m_listBeginPosition);
 			
-			m_listenerImpl->defineOrderedListLevel(propList);
+			m_documentInterface->defineOrderedListLevel(propList);
 		}
 		else
 		{
@@ -1541,7 +1548,7 @@ void WP6ContentListener::_handleListChange(const uint16_t outlineHash)
 			propList.insert("text:min-label-width", m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent - m_ps->m_listReferencePosition);
 			propList.insert("text:space-before", m_ps->m_listReferencePosition - m_ps->m_listBeginPosition);
 			
-			m_listenerImpl->defineUnorderedListLevel(propList);
+			m_documentInterface->defineUnorderedListLevel(propList);
 		}
 		for (int i=(oldListLevel+1); i<=m_ps->m_currentListLevel; i++)
 		{
@@ -1554,12 +1561,12 @@ void WP6ContentListener::_handleListChange(const uint16_t outlineHash)
 
 			if (m_parseState->m_putativeListElementHasDisplayReferenceNumber)
 			{
-				m_listenerImpl->openOrderedListLevel(propList2);
+				m_documentInterface->openOrderedListLevel(propList2);
 				m_parseState->m_listTypeStack.push(ORDERED);
 			}
 			else
 			{
-				m_listenerImpl->openUnorderedListLevel(propList2);
+				m_documentInterface->openUnorderedListLevel(propList2);
 				m_parseState->m_listTypeStack.push(UNORDERED);
 			}
 		}
@@ -1581,9 +1588,9 @@ void WP6ContentListener::_handleListChange(const uint16_t outlineHash)
 			// a priori and I hate writing lame excuses like this, so we might want to
 			// change this at some point
 			if (tmpListType == UNORDERED)
-				m_listenerImpl->closeUnorderedListLevel();
+				m_documentInterface->closeUnorderedListLevel();
 			else
-				m_listenerImpl->closeOrderedListLevel();
+				m_documentInterface->closeOrderedListLevel();
 		}
 	}
 

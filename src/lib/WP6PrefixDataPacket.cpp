@@ -32,8 +32,8 @@
 #include "WP6ExtendedDocumentSummaryPacket.h"
 #include "WP6OutlineStylePacket.h"
 #include "WP6FileStructure.h"
-#include "WP6GraphicsFilename.h"
-#include "WP6GraphicsCachedFileData.h"
+#include "WP6GraphicsFilenamePacket.h"
+#include "WP6GraphicsCachedFileDataPacket.h"
 #include "libwpd.h"
 #include "libwpd_internal.h"
 
@@ -71,11 +71,11 @@ WP6PrefixDataPacket * WP6PrefixDataPacket::constructPrefixDataPacket(WPXInputStr
 						 prefixIndice->getDataOffset(), 
 						 prefixIndice->getDataSize());
 	case WP6_INDEX_HEADER_GRAPHICS_FILENAME:
-		return new WP6GraphicsFilename(input, prefixIndice->getID(), prefixIndice->getFlags(), 
+		return new WP6GraphicsFilenamePacket(input, prefixIndice->getID(), prefixIndice->getFlags(), 
 						 prefixIndice->getDataOffset(), 
 						 prefixIndice->getDataSize());
 	case WP6_INDEX_HEADER_GRAPHICS_CACHED_FILE_DATA:
-		return new WP6GraphicsCachedFileData(input, prefixIndice->getID(),
+		return new WP6GraphicsCachedFileDataPacket(input, prefixIndice->getID(),
 						 prefixIndice->getDataOffset(), 
 						 prefixIndice->getDataSize());
 	default:

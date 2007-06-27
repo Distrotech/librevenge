@@ -156,8 +156,8 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP6FontDescriptorPacket.cpp \
 	WP6FootnoteEndnoteGroup.cpp \
 	WP6GeneralTextPacket.cpp \
-	WP6GraphicsCachedFileData.cpp \
-	WP6GraphicsFilename.cpp \
+	WP6GraphicsCachedFileDataPacket.cpp \
+	WP6GraphicsFilenamePacket.cpp \
 	WP6Header.cpp \
 	WP60Header.cpp \
 	WP61Header.cpp \
@@ -311,8 +311,8 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP6FontDescriptorPacket.h \
 	WP6FootnoteEndnoteGroup.h \
 	WP6GeneralTextPacket.h \
-	WP6GraphicsCachedFileData.h \
-	WP6GraphicsFilename.h \
+	WP6GraphicsCachedFileDataPacket.h \
+	WP6GraphicsFilenamePacket.h \
 	WP6Header.h \
 	WP60Header.h \
 	WP61Header.h \

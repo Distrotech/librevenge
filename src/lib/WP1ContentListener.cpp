@@ -68,7 +68,7 @@ void WP1ContentListener::insertCharacter(const uint16_t character)
 			_openSpan();
 		for (;m_parseState->m_numDeferredTabs > 0; m_parseState->m_numDeferredTabs--)
 		{
-			m_listenerImpl->insertTab();
+			m_documentInterface->insertTab();
 		}
 		appendUCS4(m_parseState->m_textBuffer, (uint32_t)character);
 	}
@@ -82,7 +82,7 @@ void WP1ContentListener::insertExtendedCharacter(const uint8_t extendedCharacter
 			_openSpan();
 		for (;m_parseState->m_numDeferredTabs > 0; m_parseState->m_numDeferredTabs--)
 		{
-			m_listenerImpl->insertTab();
+			m_documentInterface->insertTab();
 		}
 		if (extendedCharacter <= 0x20)
 			appendUCS4(m_parseState->m_textBuffer, (uint32_t)0x20);
@@ -104,7 +104,7 @@ void WP1ContentListener::insertTab()
 			else
 				_flushText();
 
-			m_listenerImpl->insertTab();
+			m_documentInterface->insertTab();
 		}
 	}
 }
@@ -117,7 +117,7 @@ void WP1ContentListener::insertEOL()
 			_openSpan();
 		for (;m_parseState->m_numDeferredTabs > 0; m_parseState->m_numDeferredTabs--)
 		{
-			m_listenerImpl->insertTab();
+			m_documentInterface->insertTab();
 		}
 
 		if (m_ps->m_isParagraphOpened)
@@ -139,21 +139,21 @@ void WP1ContentListener::insertNote(const WPXNoteType noteType, WP1SubDocument *
 		if (noteType == FOOTNOTE)
 		{
 			propList.insert("libwpd:number", ++(m_parseState->m_footNoteNumber));
-			m_listenerImpl->openFootnote(propList);
+			m_documentInterface->openFootnote(propList);
 		}
 		else
 		{
 			propList.insert("libwpd:number", ++(m_parseState->m_endNoteNumber));
-			m_listenerImpl->openEndnote(propList);
+			m_documentInterface->openEndnote(propList);
 		}
 
 		WPXTableList tableList;
 		handleSubDocument(subDocument, false, tableList, 0);
 
 		if (noteType == FOOTNOTE)
-			m_listenerImpl->closeFootnote();
+			m_documentInterface->closeFootnote();
 		else
-			m_listenerImpl->closeEndnote();
+			m_documentInterface->closeEndnote();
 		m_ps->m_isNote = false;
 	}
 }
@@ -400,6 +400,6 @@ void WP1ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, c
 void WP1ContentListener::_flushText()
 {
 	if (m_parseState->m_textBuffer.len())
-		m_listenerImpl->insertText(m_parseState->m_textBuffer);
+		m_documentInterface->insertText(m_parseState->m_textBuffer);
 	m_parseState->m_textBuffer.clear();
 }

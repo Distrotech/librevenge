@@ -23,39 +23,28 @@
  */
 #include <string.h>
 
-#include "WP6GraphicsCachedFileData.h"
+#include "WP6GraphicsFilenamePacket.h"
 #include "WP6Parser.h"
 #include "libwpd_internal.h"
-#include "WPXMemoryStream.h"
-#include "WPXString.h"
 
-WP6GraphicsCachedFileData::WP6GraphicsCachedFileData(WPXInputStream *input, int  id, uint32_t dataOffset, uint32_t dataSize): 
+WP6GraphicsFilenamePacket::WP6GraphicsFilenamePacket(WPXInputStream *input, int /* id */, const uint8_t flags, uint32_t dataOffset, uint32_t dataSize): 
 	WP6PrefixDataPacket(input),
-	m_id(id),
-	m_stream(0)
+	m_childIds(),
+	m_flags(flags)
 {	
 	_read(input, dataOffset, dataSize);
 }
 
-WP6GraphicsCachedFileData::~WP6GraphicsCachedFileData()
+WP6GraphicsFilenamePacket::~WP6GraphicsFilenamePacket()
 {
-	if (m_stream)
-		delete m_stream;
 }
 
-void WP6GraphicsCachedFileData::_readContents(WPXInputStream *input)
+void WP6GraphicsFilenamePacket::_readContents(WPXInputStream *input)
 {
-	uint32_t tmpDataSize = getDataSize();
-	uint8_t *tmpData = new uint8_t[tmpDataSize];
-	for (uint32_t i = 0; i < tmpDataSize; i++)
-		tmpData[i] = readU8(input);
-#if 0
-	WPXString filename;
-	filename.sprintf("binarydump%.4x.wpg", m_id);
-	FILE *f = fopen(filename.cstr(), "w");
-	for (uint32_t j = 0; j < tmpDataSize; j++)
-		fprintf(f, "%c", tmpData[j]);
-	fclose(f);
-#endif
-	m_stream = new WPXMemoryInputStream(tmpData, tmpDataSize);
+	if ((m_flags && 0x01) == 0x00)
+		return;
+	uint16_t tmpNumChildIds = readU16(input);
+	for (uint16_t i = 0; i < tmpNumChildIds; i++)
+		m_childIds.push_back(readU16(input));
 }
+

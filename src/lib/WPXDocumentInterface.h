@@ -35,6 +35,8 @@ the parser. An application using this library should implement all the function
 definitions listed here.
 */
 
+class WPXInputStream;
+
 class WPXDocumentInterface
 {
  public:
@@ -314,6 +316,8 @@ class WPXDocumentInterface
 	Called when the current table is closed
 	*/
  	virtual void closeTable() = 0;
+	
+	virtual void insertGraphics(const WPXInputStream *graphicsStream) = 0;
 };
 
 #endif /* WPXDOCUMENTINTERFACEIMPL_H */

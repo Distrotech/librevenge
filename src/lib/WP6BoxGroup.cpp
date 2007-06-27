@@ -28,6 +28,7 @@
 #include "libwpd_internal.h"
 #include "WP6FileStructure.h"
 #include "WPXFileStructure.h"
+#include "WP6GraphicsFilenamePacket.h"
 
 WP6BoxGroup::WP6BoxGroup(WPXInputStream *input) :
 	WP6VariableLengthGroup()
@@ -59,13 +60,30 @@ void WP6BoxGroup::parse(WP6Listener *listener)
 	if (getFlags() & 0x40)  // Ignore function flag
 		return;
 		
+	std::vector<uint16_t> graphicsDataIds;
+	std::vector<uint16_t>::iterator gdiIter;
+	for (int i=0; i<getNumPrefixIDs(); i++)
+	{
+		if (const WP6GraphicsFilenamePacket *gfPacket = dynamic_cast<const WP6GraphicsFilenamePacket *>(listener->getPrefixDataPacket(getPrefixIDs()[i]))) 
+		{
+			graphicsDataIds = gfPacket->getChildIds();
+			break;
+		}
+	}
+	
 	switch (getSubGroup())
 	{
 		case WP6_BOX_GROUP_CHARACTER_ANCHORED_BOX:
+			for (gdiIter = graphicsDataIds.begin(); gdiIter != graphicsDataIds.end(); gdiIter++)
+				listener->insertGraphicsData((*gdiIter), WPX_CHARACTER);
 			break;
 		case WP6_BOX_GROUP_PARAGRAPH_ANCHORED_BOX:
+			for (gdiIter = graphicsDataIds.begin(); gdiIter != graphicsDataIds.end(); gdiIter++)
+				listener->insertGraphicsData((*gdiIter), WPX_PARAGRAPH);
 			break;
 		case WP6_BOX_GROUP_PAGE_ANCHORED_BOX:
+			for (gdiIter = graphicsDataIds.begin(); gdiIter != graphicsDataIds.end(); gdiIter++)
+				listener->insertGraphicsData((*gdiIter), WPX_PAGE);
 			break;
 		case WP6_BOX_GROUP_GRAPHICS_RULE:
 			break;

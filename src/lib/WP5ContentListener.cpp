@@ -75,7 +75,7 @@ void WP5ContentListener::insertTab(const uint8_t /* tabType */, float /* tabPosi
 	else
 		_flushText();
 
-	m_listenerImpl->insertTab();
+	m_documentInterface->insertTab();
 }
 
 void WP5ContentListener::insertEOL()
@@ -375,16 +375,16 @@ void WP5ContentListener::insertNote(const WPXNoteType noteType, const WP5SubDocu
 		propList.insert("libwpd:number", number);
 
 		if (noteType == FOOTNOTE)
-			m_listenerImpl->openFootnote(propList);
+			m_documentInterface->openFootnote(propList);
 		else
-			m_listenerImpl->openEndnote(propList);
+			m_documentInterface->openEndnote(propList);
 
 		handleSubDocument(subDocument, false, m_parseState->m_tableList, 0);
 
 		if (noteType == FOOTNOTE)
-			m_listenerImpl->closeFootnote();
+			m_documentInterface->closeFootnote();
 		else
-			m_listenerImpl->closeEndnote();
+			m_documentInterface->closeEndnote();
 		m_ps->m_isNote = false;
 	}
 }
@@ -447,7 +447,7 @@ void WP5ContentListener::setDefaultFont(const WPXString &fontName, const float f
 void WP5ContentListener::_flushText()
 {
 	if (m_parseState->m_textBuffer.len())
-		m_listenerImpl->insertText(m_parseState->m_textBuffer);
+		m_documentInterface->insertText(m_parseState->m_textBuffer);
 	m_parseState->m_textBuffer.clear();
 }
 

@@ -122,7 +122,7 @@ _WPXContentParsingState::~_WPXContentParsingState()
 WPXContentListener::WPXContentListener(std::list<WPXPageSpan> &pageList, WPXDocumentInterface *listenerImpl) :
 	WPXListener(pageList),
 	m_ps(new WPXContentParsingState),
-	m_listenerImpl(listenerImpl),
+	m_documentInterface(listenerImpl),
 	m_metaData()
 {
 	m_ps->m_nextPageSpanIter = pageList.begin();
@@ -140,9 +140,9 @@ void WPXContentListener::startDocument()
 		// FIXME: this is stupid, we should store a property list filled with the relevant metadata
 		// and then pass that directly..
 
-		m_listenerImpl->setDocumentMetaData(m_metaData);
+		m_documentInterface->setDocumentMetaData(m_metaData);
 
-		m_listenerImpl->startDocument();
+		m_documentInterface->startDocument();
 	}
 	
 	m_ps->m_isDocumentStarted = true;
@@ -166,7 +166,7 @@ void WPXContentListener::endDocument()
 	// close the document nice and tight
 	_closeSection();
 	_closePageSpan();
-	m_listenerImpl->endDocument();
+	m_documentInterface->endDocument();
 }
 
 void WPXContentListener::_openSection()
@@ -200,7 +200,7 @@ void WPXContentListener::_openSection()
 			columns.append(column);
 		}
 		if (!m_ps->m_isSectionOpened)
-			m_listenerImpl->openSection(propList, columns);
+			m_documentInterface->openSection(propList, columns);
 
 		m_ps->m_sectionAttributesChanged = false;
 		m_ps->m_isSectionOpened = true;
@@ -217,7 +217,7 @@ void WPXContentListener::_closeSection()
 			_closeListElement();
 		_changeList();
 
-		m_listenerImpl->closeSection();
+		m_documentInterface->closeSection();
 
 		m_ps->m_sectionAttributesChanged = false;
 		m_ps->m_isSectionOpened = false;
@@ -270,7 +270,7 @@ void WPXContentListener::_openPageSpan()
 	propList.insert("fo:margin-bottom", currentPage.getMarginBottom());
 	
 	if (!m_ps->m_isPageSpanOpened)
-		m_listenerImpl->openPageSpan(propList);
+		m_documentInterface->openPageSpan(propList);
 
 	m_ps->m_isPageSpanOpened = true;
 
@@ -319,15 +319,15 @@ void WPXContentListener::_openPageSpan()
 			}
 
 			if ((*iter).getType() == HEADER)
-				m_listenerImpl->openHeader(propList); 
+				m_documentInterface->openHeader(propList); 
 			else
-				m_listenerImpl->openFooter(propList); 
+				m_documentInterface->openFooter(propList); 
 
 			handleSubDocument((*iter).getSubDocument(), true, (*iter).getTableList(), 0);
 			if ((*iter).getType() == HEADER)
-				m_listenerImpl->closeHeader();
+				m_documentInterface->closeHeader();
 			else
-				m_listenerImpl->closeFooter(); 
+				m_documentInterface->closeFooter(); 
 
 			WPD_DEBUG_MSG(("Header Footer Element: type: %i occurence: %i\n",
 				       (*iter).getType(), (*iter).getOccurence()));
@@ -360,7 +360,7 @@ void WPXContentListener::_closePageSpan()
 		if (m_ps->m_isSectionOpened)
 			_closeSection();
 
-		m_listenerImpl->closePageSpan();
+		m_documentInterface->closePageSpan();
 	}
 	
 	m_ps->m_isPageSpanOpened = false;
@@ -390,7 +390,7 @@ void WPXContentListener::_openParagraph()
 		_appendParagraphProperties(propList);
 
 		if (!m_ps->m_isParagraphOpened)
-			m_listenerImpl->openParagraph(propList, tabStops);
+			m_documentInterface->openParagraph(propList, tabStops);
 
 		_resetParagraphState();
 	}
@@ -537,7 +537,7 @@ void WPXContentListener::_closeParagraph()
 		if (m_ps->m_isSpanOpened)
 			_closeSpan();
 
-		m_listenerImpl->closeParagraph();
+		m_documentInterface->closeParagraph();
 	}
 
 	m_ps->m_isParagraphOpened = false;
@@ -561,7 +561,7 @@ void WPXContentListener::_openListElement()
 		_getTabStops(tabStops);
 
 		if (!m_ps->m_isListElementOpened)
-			m_listenerImpl->openListElement(propList, tabStops);
+			m_documentInterface->openListElement(propList, tabStops);
 		_resetParagraphState(true);
 	}
 }
@@ -573,7 +573,7 @@ void WPXContentListener::_closeListElement()
 		if (m_ps->m_isSpanOpened)
 			_closeSpan();
 
-		m_listenerImpl->closeListElement();
+		m_documentInterface->closeListElement();
 	}
 	
 	m_ps->m_isListElementOpened = false;
@@ -676,7 +676,7 @@ void WPXContentListener::_openSpan()
 		propList.insert("style:text-background-color", _colorToString(m_ps->m_highlightColor));
 
 	if (!m_ps->m_isSpanOpened)
-		m_listenerImpl->openSpan(propList);
+		m_documentInterface->openSpan(propList);
 
 	m_ps->m_isSpanOpened = true;
 }
@@ -687,7 +687,7 @@ void WPXContentListener::_closeSpan()
 	{
 		_flushText();
 
-		m_listenerImpl->closeSpan();
+		m_documentInterface->closeSpan();
 	}
 	
 	m_ps->m_isSpanOpened = false;
@@ -746,7 +746,7 @@ void WPXContentListener::_openTable()
  	}
 	propList.insert("style:width", tableWidth);
 
-	m_listenerImpl->openTable(propList, columns);
+	m_documentInterface->openTable(propList, columns);
 	m_ps->m_isTableOpened = true;
 
 	m_ps->m_currentTableRow = (-1);
@@ -761,7 +761,7 @@ void WPXContentListener::_closeTable()
 		if (m_ps->m_isTableRowOpened)
 			_closeTableRow();
 
-		m_listenerImpl->closeTable();
+		m_documentInterface->closeTable();
 	}
 
 	m_ps->m_currentTableRow = (-1);
@@ -808,7 +808,7 @@ void WPXContentListener::_openTableRow(const float height, const bool isMinimumH
 	else
 		propList.insert("libwpd:is-header-row", false);		
 
-	m_listenerImpl->openTableRow(propList);
+	m_documentInterface->openTableRow(propList);
 
 	m_ps->m_isTableRowOpened = true;
 	m_ps->m_isRowWithoutCell = true;
@@ -840,9 +840,9 @@ void WPXContentListener::_closeTableRow()
 		{
 			m_ps->m_isRowWithoutCell = false;
 			WPXPropertyList tmpBlankList;
-			m_listenerImpl->insertCoveredTableCell(tmpBlankList);
+			m_documentInterface->insertCoveredTableCell(tmpBlankList);
 		}
-		m_listenerImpl->closeTableRow();
+		m_documentInterface->closeTableRow();
 	}
 	m_ps->m_isTableRowOpened = false;
 }
@@ -923,7 +923,7 @@ void WPXContentListener::_openTableCell(const uint8_t colSpan, const uint8_t row
 		break;
 	}
 	propList.insert("fo:background-color", _mergeColorsToString(cellFgColor, cellBgColor));
-	m_listenerImpl->openTableCell(propList);
+	m_documentInterface->openTableCell(propList);
 	m_ps->m_currentTableCellNumberInRow++;
 	m_ps->m_isTableCellOpened = true;
 	m_ps->m_isCellWithoutParagraph = true;
@@ -954,7 +954,7 @@ void WPXContentListener::_closeTableCell()
 		_changeList();
 		m_ps->m_cellAttributeBits = 0x00000000;
 
-		m_listenerImpl->closeTableCell();
+		m_documentInterface->closeTableCell();
 	}
 	m_ps->m_isTableCellOpened = false;
 }

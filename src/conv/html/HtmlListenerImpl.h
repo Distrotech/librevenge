@@ -80,6 +80,8 @@ public:
 	virtual void closeTableCell();
 	virtual void insertCoveredTableCell(const WPXPropertyList & /* propList */) {}
 	virtual void closeTable();
+	virtual void insertGraphics(const WPXInputStream *graphicsData);
+
 
 private:
 	bool m_ignore;

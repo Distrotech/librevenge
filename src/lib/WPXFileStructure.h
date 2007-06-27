@@ -45,4 +45,8 @@
 #define WPX_WATERMARK_A 0x04
 #define WPX_WATERMARK_B 0x05
 
+#define WPX_CHARACTER 0x00
+#define WPX_PARAGRAPH 0x01
+#define WPX_PAGE 0x01
+
 #endif /* WPXFILESTRUCTURE_H */

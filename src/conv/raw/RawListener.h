@@ -97,6 +97,7 @@ public:
 	virtual void closeTableCell();
 	virtual void insertCoveredTableCell(const WPXPropertyList &propList);
  	virtual void closeTable();
+	virtual void insertGraphics(const WPXInputStream *graphicsData) {};
 
 private:
 	int m_indent;

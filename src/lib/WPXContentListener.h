@@ -154,7 +154,7 @@ protected:
 	void justificationChange(const uint8_t justification);
 
 	WPXContentParsingState *m_ps; // parse state
-	WPXDocumentInterface * m_listenerImpl;
+	WPXDocumentInterface * m_documentInterface;
 	WPXPropertyList m_metaData;
 
 	virtual void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice) = 0;

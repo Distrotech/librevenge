@@ -76,7 +76,7 @@ void WP42ContentListener::insertTab(const uint8_t /* tabType */, float /* tabPos
 		else
 			_flushText();
 
-		m_listenerImpl->insertTab();
+		m_documentInterface->insertTab();
 	}
 }
 
@@ -199,6 +199,6 @@ void WP42ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, 
 void WP42ContentListener::_flushText()
 {
 	if (m_parseState->m_textBuffer.len())
-		m_listenerImpl->insertText(m_parseState->m_textBuffer);
+		m_documentInterface->insertText(m_parseState->m_textBuffer);
 	m_parseState->m_textBuffer.clear();
 }

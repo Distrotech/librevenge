@@ -21,30 +21,30 @@
 /* "This product is not manufactured, approved, or supported by 
  * Corel Corporation or Corel Corporation Limited."
  */
-#include <string.h>
 
-#include "WP6GraphicsFilename.h"
-#include "WP6Parser.h"
-#include "libwpd_internal.h"
+#ifndef WP6GRAPHICSFILENAMEPACKET_H
+#define WP6GRAPHICSFILENAMEPACKET_H
+#include "WP6PrefixDataPacket.h"
+#include "WP6FileStructure.h"
+#include "WPXMemoryStream.h"
+#include "WP6Listener.h"
+#include <vector>
 
-WP6GraphicsFilename::WP6GraphicsFilename(WPXInputStream *input, int /* id */, const uint8_t flags, uint32_t dataOffset, uint32_t dataSize): 
-	WP6PrefixDataPacket(input),
-	m_childIds(),
-	m_flags(flags)
-{	
-	_read(input, dataOffset, dataSize);
-}
-
-WP6GraphicsFilename::~WP6GraphicsFilename()
+class WP6GraphicsFilenamePacket : public WP6PrefixDataPacket
 {
-}
+public:
+	WP6GraphicsFilenamePacket(WPXInputStream *input, int id, const uint8_t flags, uint32_t dataOffset, uint32_t dataSize);
+	~WP6GraphicsFilenamePacket();
+	void _readContents(WPXInputStream *input);
+	void parse(WP6Listener *listener) const {}
+	const std::vector<uint16_t> &getChildIds() const { return m_childIds; }
+	
 
-void WP6GraphicsFilename::_readContents(WPXInputStream *input)
-{
-	if ((m_flags && 0x01) == 0x00)
-		return;
-	uint16_t tmpNumChildIds = readU16(input);
-	for (uint16_t i = 0; i < tmpNumChildIds; i++)
-		m_childIds.push_back(readU16(input));
-}
-
+private:
+	WP6GraphicsFilenamePacket(const WP6GraphicsFilenamePacket&);             
+	WP6GraphicsFilenamePacket& operator=(const WP6GraphicsFilenamePacket&);
+	std::vector<uint16_t> m_childIds;
+	const uint8_t m_flags;           
+	
+};
+#endif /* WP6GRAPHICSFILENAMEPACKET_H */
