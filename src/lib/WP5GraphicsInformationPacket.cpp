@@ -47,7 +47,6 @@ void WP5GraphicsInformationPacket::_readContents(WPXInputStream *input, uint32_t
 
 	for (uint16_t j = 0; j < tmpImagesCount; j++)
 	{
-		printf("offset of image %i is 0x%x\n", j, input->tell());
 		uint8_t *tmpData = new uint8_t[tmpImagesSizes[j]+16];
 		
 		for (uint32_t k = 0; k < tmpImagesSizes[j]; k++)
