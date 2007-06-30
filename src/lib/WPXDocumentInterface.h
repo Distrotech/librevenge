@@ -316,8 +316,19 @@ class WPXDocumentInterface
 	Called when the current table is closed
 	*/
  	virtual void closeTable() = 0;
+	/**
+	Called when a positioned box should be opened
+	\param propList Defines a set of properties for the box. May contain:
+	\li \c ???? ?????
+	*/
+	virtual void openBox(const WPXPropertyList &propList) = 0;
+	/**
+	Called when the current positioned box is closed
+	*/
+	virtual void closeBox() = 0;
 	
-	virtual void insertGraphics(const WPXInputStream *graphicsStream) = 0;
+	virtual void insertBinaryObject(const WPXPropertyList &propList, const WPXInputStream *objectStream) = 0;
+	virtual void insertBinaryObject(const WPXPropertyList &propList, const WPXString &objectBase64) = 0;
 };
 
 #endif /* WPXDOCUMENTINTERFACEIMPL_H */

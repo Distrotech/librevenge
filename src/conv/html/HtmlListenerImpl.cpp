@@ -343,7 +343,3 @@ void HtmlListenerImpl::closeTable()
 		printf("</table>\n");
 	}
 }
-
-void HtmlListenerImpl::insertGraphics(const WPXInputStream *graphicsData)
-{
-}

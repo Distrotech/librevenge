@@ -1378,7 +1378,13 @@ void WP6ContentListener::endTable()
 void WP6ContentListener::insertGraphicsData(const uint16_t packetId, const uint8_t anchoredTo)
 {
 	if (const WP6GraphicsCachedFileDataPacket *gcfdPacket = dynamic_cast<const WP6GraphicsCachedFileDataPacket *>(this->getPrefixDataPacket(packetId))) 
-		m_documentInterface->insertGraphics(gcfdPacket->getGraphicsStream());
+	{
+		WPXPropertyList propList;
+		m_documentInterface->openBox(propList);
+		propList.insert("libwpd:mimetype", "image/x-wpg");
+		m_documentInterface->insertBinaryObject(propList, gcfdPacket->getGraphicsStream());
+		m_documentInterface->closeBox();
+	}
 }
 
 void WP6ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice)
