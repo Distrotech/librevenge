@@ -1295,10 +1295,6 @@ SOURCE=..\..\src\lib\WPXHeader.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXHLListenerImpl.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\lib\WPXListener.h
 # End Source File
 # Begin Source File
