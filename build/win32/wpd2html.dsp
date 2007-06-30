@@ -52,8 +52,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 libwpd-stream-0.8.lib libwpd-0.8.lib /nologo /subsystem:console /machine:IX86 /out:"Release\bin\wpd2html.exe" /libpath:"Release\lib"
-# ADD LINK32 libwpd-stream-0.8.lib libwpd-0.8.lib /nologo /subsystem:console /machine:IX86 /out:"Release\bin\wpd2html.exe" /libpath:"Release\lib"
+# ADD BASE LINK32 libwpd-stream-0.9.lib libwpd-0.9.lib /nologo /subsystem:console /machine:IX86 /out:"Release\bin\wpd2html.exe" /libpath:"Release\lib"
+# ADD LINK32 libwpd-stream-0.9.lib libwpd-0.9.lib /nologo /subsystem:console /machine:IX86 /out:"Release\bin\wpd2html.exe" /libpath:"Release\lib"
 # SUBTRACT LINK32 /nodefaultlib
 
 !ELSEIF  "$(CFG)" == "wpd2html - Win32 Debug"
@@ -80,8 +80,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 libwpd-stream-0.8.lib libwpd-0.8.lib /nologo /subsystem:console /debug /machine:IX86 /out:"Debug\bin\wpd2html.exe" /libpath:"Debug\lib"
-# ADD LINK32 libwpd-0.8.lib libwpd-stream-0.8.lib /nologo /subsystem:console /debug /machine:IX86 /out:"Debug\bin\wpd2html.exe" /libpath:"Debug\lib"
+# ADD BASE LINK32 libwpd-stream-0.9.lib libwpd-0.9.lib /nologo /subsystem:console /debug /machine:IX86 /out:"Debug\bin\wpd2html.exe" /libpath:"Debug\lib"
+# ADD LINK32 libwpd-0.9.lib libwpd-stream-0.9.lib /nologo /subsystem:console /debug /machine:IX86 /out:"Debug\bin\wpd2html.exe" /libpath:"Debug\lib"
 # SUBTRACT LINK32 /nodefaultlib
 
 !ENDIF 
