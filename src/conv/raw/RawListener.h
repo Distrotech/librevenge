@@ -101,8 +101,7 @@ public:
 	virtual void openBox(const WPXPropertyList & /* propList */) {}
 	virtual void closeBox() {}
 	
-	virtual void insertBinaryObject(const WPXPropertyList & /* propList */, const WPXInputStream * /* objectStream */) {}
-	virtual void insertBinaryObject(const WPXPropertyList & /* propList */, const WPXString & /* objectBase64 */) {}
+	virtual void insertBinaryObject(const WPXPropertyList & /* propList */, const WPXBinaryData * /* object */) {}
 
 private:
 	int m_indent;

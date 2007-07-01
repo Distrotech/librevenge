@@ -27,7 +27,7 @@
 #define WP6GRAPHICSCACHEDFILEDATAPACKET_H
 #include "WP6PrefixDataPacket.h"
 #include "WP6FileStructure.h"
-#include "WPXMemoryStream.h"
+#include "WPXBinaryData.h"
 #include "WP6Listener.h"
 
 class WP6GraphicsCachedFileDataPacket : public WP6PrefixDataPacket
@@ -37,13 +37,13 @@ public:
 	~WP6GraphicsCachedFileDataPacket();
 	void _readContents(WPXInputStream *input);
 	void parse(WP6Listener *listener) const {}
-	const WPXInputStream *getGraphicsStream() const { return m_stream; }
+	const WPXBinaryData *getBinaryObject() const { return m_object; }
 
 private:
 	WP6GraphicsCachedFileDataPacket(const WP6GraphicsCachedFileDataPacket&);             
 	WP6GraphicsCachedFileDataPacket& operator=(const WP6GraphicsCachedFileDataPacket&);
 	int m_id;
-	WPXMemoryInputStream *m_stream;            
+	WPXBinaryData *m_object;            
 	
 };
 #endif /* WP6GRAPHICSCACHEDFILEDATAPACKET_H */

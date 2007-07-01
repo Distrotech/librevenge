@@ -1382,7 +1382,7 @@ void WP6ContentListener::insertGraphicsData(const uint16_t packetId, const uint8
 		WPXPropertyList propList;
 		m_documentInterface->openBox(propList);
 		propList.insert("libwpd:mimetype", "image/x-wpg");
-		m_documentInterface->insertBinaryObject(propList, gcfdPacket->getGraphicsStream());
+		m_documentInterface->insertBinaryObject(propList, gcfdPacket->getBinaryObject());
 		m_documentInterface->closeBox();
 	}
 }

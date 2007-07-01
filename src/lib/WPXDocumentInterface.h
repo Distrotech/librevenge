@@ -35,6 +35,7 @@ the parser. An application using this library should implement all the function
 definitions listed here.
 */
 
+class WPXBinaryData;
 class WPXInputStream;
 
 class WPXDocumentInterface
@@ -327,8 +328,7 @@ class WPXDocumentInterface
 	*/
 	virtual void closeBox() = 0;
 	
-	virtual void insertBinaryObject(const WPXPropertyList &propList, const WPXInputStream *objectStream) = 0;
-	virtual void insertBinaryObject(const WPXPropertyList &propList, const WPXString &objectBase64) = 0;
+	virtual void insertBinaryObject(const WPXPropertyList &propList, const WPXBinaryData *object) = 0;
 };
 
 #endif /* WPXDOCUMENTINTERFACEIMPL_H */

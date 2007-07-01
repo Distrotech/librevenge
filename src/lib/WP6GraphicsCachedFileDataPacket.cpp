@@ -33,15 +33,15 @@
 WP6GraphicsCachedFileDataPacket::WP6GraphicsCachedFileDataPacket(WPXInputStream *input, int  id, uint32_t dataOffset, uint32_t dataSize): 
 	WP6PrefixDataPacket(input),
 	m_id(id),
-	m_stream(0)
+	m_object(0)
 {	
 	_read(input, dataOffset, dataSize);
 }
 
 WP6GraphicsCachedFileDataPacket::~WP6GraphicsCachedFileDataPacket()
 {
-	if (m_stream)
-		delete m_stream;
+	if (m_object)
+		delete m_object;
 }
 
 void WP6GraphicsCachedFileDataPacket::_readContents(WPXInputStream *input)
@@ -58,5 +58,5 @@ void WP6GraphicsCachedFileDataPacket::_readContents(WPXInputStream *input)
 		fprintf(f, "%c", tmpData[j]);
 	fclose(f);
 #endif
-	m_stream = new WPXMemoryInputStream(tmpData, tmpDataSize);
+	m_object = new WPXBinaryData(tmpData, tmpDataSize);
 }

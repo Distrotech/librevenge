@@ -31,8 +31,17 @@ endif
 
 lib_LTLIBRARIES = libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.la $(target_libwpd_stream)
 libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_includedir = $(includedir)/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@/libwpd
-libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_include_HEADERS = libwpd.h libwpd_types.h WPXStream.h WPXProperty.h WPXPropertyList.h \
-WPXString.h WPXPropertyListVector.h WPDocument.h WPXDocumentInterface.h
+libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_include_HEADERS = \
+	libwpd.h \
+	libwpd_types.h \
+	WPDocument.h \
+	WPXBinaryData.h \
+	WPXDocumentInterface.h \
+	WPXProperty.h \
+	WPXPropertyList.h \
+	WPXPropertyListVector.h \
+	WPXStream.h \
+	WPXString.h
 
 INCLUDES = -I$(srcdir)
 
@@ -182,6 +191,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP6UnsupportedVariableLengthGroup.cpp \
 	WP6VariableLengthGroup.cpp \
 	WPDocument.cpp \
+	WPXBinaryData.cpp \
 	WPXContentListener.cpp \
 	WPXHeader.cpp \
 	WPXListener.cpp \

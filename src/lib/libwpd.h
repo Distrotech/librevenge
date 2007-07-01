@@ -28,5 +28,6 @@
 
 #include "WPXDocumentInterface.h"
 #include "WPDocument.h"
+#include "WPXBinaryData.h"
 
 #endif /* LIBWPD_H */
