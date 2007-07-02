@@ -1379,6 +1379,11 @@ void WP6ContentListener::insertGraphicsData(const uint16_t packetId, const uint8
 {
 	if (const WP6GraphicsCachedFileDataPacket *gcfdPacket = dynamic_cast<const WP6GraphicsCachedFileDataPacket *>(this->getPrefixDataPacket(packetId))) 
 	{
+		if (!m_ps->m_isSpanOpened)
+			_openSpan();
+		else
+			_flushText();
+
 		WPXPropertyList propList;
 		m_documentInterface->openBox(propList);
 		propList.insert("libwpd:mimetype", "image/x-wpg");
