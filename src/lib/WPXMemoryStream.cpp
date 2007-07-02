@@ -31,22 +31,16 @@ WPXMemoryInputStream::WPXMemoryInputStream(uint8_t *data, size_t size) :
 	WPXInputStream(false),
 	m_offset(0),
 	m_size(size),
-	m_data(data),
-	m_tmpBuf(0)
+	m_data(data)
 {
 }
 
 WPXMemoryInputStream::~WPXMemoryInputStream()
 {
-	if (m_tmpBuf)
-		delete [] m_tmpBuf;
 }
 
 const uint8_t * WPXMemoryInputStream::read(size_t numBytes, size_t &numBytesRead)
 {
-	if (m_tmpBuf)
-		delete [] m_tmpBuf;
-	m_tmpBuf = 0;
 	int numBytesToRead;
 
 	if ((m_offset+numBytes) < m_size)
@@ -59,14 +53,10 @@ const uint8_t * WPXMemoryInputStream::read(size_t numBytes, size_t &numBytesRead
 	if (numBytesToRead == 0)
 		return 0;
 
-	m_tmpBuf = new uint8_t[numBytesToRead];
-	for (size_t i=0; (long)i<(long)numBytesToRead; i++)
-	{
-		m_tmpBuf[i] = m_data[m_offset];
-		m_offset++;
-	}
-
-	return m_tmpBuf;
+	long oldOffset = m_offset;
+	m_offset += numBytesToRead;
+	
+	return &m_data[oldOffset];
 }
 
 int WPXMemoryInputStream::seek(long offset, WPX_SEEK_TYPE seekType)

@@ -44,7 +44,6 @@ private:
 	long m_offset;
 	size_t m_size;
 	uint8_t *m_data;
-	uint8_t *m_tmpBuf;
 	WPXMemoryInputStream(const WPXMemoryInputStream&);
 	WPXMemoryInputStream& operator=(const WPXMemoryInputStream&);
 };
