@@ -72,13 +72,13 @@ bool WP6FixedLengthGroup::isGroupConsistent(WPXInputStream *input, const uint8_t
 
 	try
 	{
-		int size = WP6_FIXED_LENGTH_FUNCTION_GROUP_SIZE[groupID-0xF0];
-		if (input->seek((startPosition + size - 2 - input->tell()), WPX_SEEK_CUR) || input->atEOS())
+		uint32_t size = WP6_FIXED_LENGTH_FUNCTION_GROUP_SIZE[groupID-0xF0];
+		if (input->seek((startPosition + size - 2 - (uint32_t)input->tell()), WPX_SEEK_CUR) || input->atEOS())
 		{
 			input->seek(startPosition, WPX_SEEK_SET);
 			return false;
 		}
-		if (groupID != readU8(input))
+		if (input->atEOS() || groupID != readU8(input))
 		{
 			input->seek(startPosition, WPX_SEEK_SET);
 			return false;

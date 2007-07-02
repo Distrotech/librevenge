@@ -30,13 +30,26 @@
 
 WP5GraphicsInformationPacket::WP5GraphicsInformationPacket(WPXInputStream *input, int /* id */, uint32_t dataOffset, uint32_t dataSize) :
 	WP5GeneralPacketData(input),
-	m_images()
+	m_images(),
+	m_data()
 {	
 	_read(input, dataOffset, dataSize);
 }
 
 WP5GraphicsInformationPacket::~WP5GraphicsInformationPacket()
 {
+	for (std::vector<uint8_t *>::iterator iter1 = m_data.begin(); iter1 != m_data.end(); iter1++)
+	{
+		if ((*iter1))
+			delete [] (*iter1);
+		(*iter1) = 0;
+	}
+	for (std::vector<WPXInputStream *>::iterator iter2 = m_images.begin(); iter2 != m_images.end(); iter2++)
+	{
+		if ((*iter2))
+			delete (*iter2);
+		(*iter2) = 0;
+	}
 }
 
 void WP5GraphicsInformationPacket::_readContents(WPXInputStream *input, uint32_t dataSize)
@@ -48,7 +61,7 @@ void WP5GraphicsInformationPacket::_readContents(WPXInputStream *input, uint32_t
 
 	for (uint16_t j = 0; j < tmpImagesCount; j++)
 	{
-		uint8_t *tmpData = new uint8_t[tmpImagesSizes[j]+16];
+		uint8_t *tmpData = new uint8_t[tmpImagesSizes[j]];
 		
 		for (uint32_t k = 0; k < tmpImagesSizes[j]; k++)
 			tmpData[k] = readU8(input);
@@ -68,5 +81,6 @@ void WP5GraphicsInformationPacket::_readContents(WPXInputStream *input, uint32_t
 		fclose(f);
 #endif
 		m_images.push_back( new WPXMemoryInputStream(tmpData, tmpImagesSizes[j]) );
+		m_data.push_back(tmpData);
 	}
 }

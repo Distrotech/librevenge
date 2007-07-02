@@ -43,6 +43,7 @@ class WP6ExtendedDocumentSummaryPacket : public WP6PrefixDataPacket
  	WP6ExtendedDocumentSummaryPacket(const WP6ExtendedDocumentSummaryPacket&);            
  	WP6ExtendedDocumentSummaryPacket& operator=(const WP6ExtendedDocumentSummaryPacket&);            
 	uint32_t m_dataSize;
+	uint8_t *m_streamData;
 	mutable WPXMemoryInputStream *m_stream;
 	
 };

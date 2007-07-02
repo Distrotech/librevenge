@@ -26,33 +26,40 @@
 #include "WP3Parser.h"
 #include "libwpd_internal.h"
 #include "WPXListener.h"
+#include <string.h> 
 
 WPXSubDocument::WPXSubDocument() :
-	m_stream(0)
+	m_stream(0),
+	m_streamData(0)
 {
 }
 
 WPXSubDocument::WPXSubDocument(WPXInputStream *input, const unsigned dataSize) :
-	m_stream(0)
+	m_stream(0),
+	m_streamData(new uint8_t[dataSize])
 {
-	uint8_t *streamData = new uint8_t[dataSize];
-	for (unsigned i=0; i<dataSize; i++)
+	unsigned i=0;
+	for (; i<dataSize; i++)
 	{
 		if (input->atEOS())
-			throw FileException();
-		streamData[i] = readU8(input);
+			break;
+		m_streamData[i] = readU8(input);
 	}
-	m_stream = new WPXMemoryInputStream(streamData, dataSize);
+	m_stream = new WPXMemoryInputStream(m_streamData, i);
 }
 
 WPXSubDocument::WPXSubDocument(uint8_t * streamData, const unsigned dataSize) :
-	m_stream(0)
+	m_stream(0),
+	m_streamData(0)
 {
-	m_stream = new WPXMemoryInputStream(streamData, dataSize);
+	if (streamData)
+		m_stream = new WPXMemoryInputStream(streamData, dataSize);
 }
 
 WPXSubDocument::~WPXSubDocument()
 {
 	if (m_stream)
 		delete m_stream;
+	if (m_streamData)
+		delete [] m_streamData;
 }

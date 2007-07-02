@@ -40,8 +40,6 @@ WPXMemoryInputStream::~WPXMemoryInputStream()
 {
 	if (m_tmpBuf)
 		delete [] m_tmpBuf;
-	if (m_data)
-		delete [] m_data;
 }
 
 const uint8_t * WPXMemoryInputStream::read(size_t numBytes, size_t &numBytesRead)

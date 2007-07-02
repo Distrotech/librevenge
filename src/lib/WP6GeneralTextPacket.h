@@ -44,6 +44,7 @@ private:
 	WP6GeneralTextPacket(const WP6GeneralTextPacket&);             
 	WP6GeneralTextPacket& operator=(const WP6GeneralTextPacket&);             
 	WP6SubDocument * m_subDocument;
+	uint8_t *m_streamData;
 	
 };
 #endif /* WP6GENERALTEXTPACKET_H */

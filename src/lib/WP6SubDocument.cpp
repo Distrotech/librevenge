@@ -34,6 +34,8 @@ WP6SubDocument::WP6SubDocument(uint8_t * streamData, const unsigned dataSize) :
 void WP6SubDocument::parse(WP6Listener *listener) const
 {
 	WPXMemoryInputStream *tmpStream = getStream();
+	if (!tmpStream)
+		return;
 	tmpStream->seek(0, WPX_SEEK_SET);
 	WP6Parser::parseDocument(tmpStream, listener);
 }

@@ -43,7 +43,8 @@ private:
 	WP6GraphicsCachedFileDataPacket(const WP6GraphicsCachedFileDataPacket&);             
 	WP6GraphicsCachedFileDataPacket& operator=(const WP6GraphicsCachedFileDataPacket&);
 	int m_id;
-	WPXBinaryData *m_object;            
+	WPXBinaryData *m_object;
+	uint8_t *m_data;           
 	
 };
 #endif /* WP6GRAPHICSCACHEDFILEDATAPACKET_H */

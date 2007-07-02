@@ -34,6 +34,8 @@ WP3SubDocument::WP3SubDocument(WPXInputStream *input, const unsigned dataSize) :
 void WP3SubDocument::parse(WP3Listener *listener) const
 {
 	WPXMemoryInputStream *tmpStream = getStream();
+	if (!tmpStream)
+		return;
 	tmpStream->seek(0, WPX_SEEK_SET);
 	WP3Parser::parseDocument(tmpStream, listener);
 }

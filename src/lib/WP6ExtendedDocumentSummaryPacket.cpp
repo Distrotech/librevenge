@@ -32,6 +32,7 @@
 WP6ExtendedDocumentSummaryPacket::WP6ExtendedDocumentSummaryPacket(WPXInputStream *input, int /* id */, uint32_t dataOffset, uint32_t dataSize) :
 	WP6PrefixDataPacket(input),
 	m_dataSize(dataSize),
+	m_streamData(0),
 	m_stream(0)
 {	
 	if (dataSize > 0)
@@ -42,6 +43,8 @@ WP6ExtendedDocumentSummaryPacket::~WP6ExtendedDocumentSummaryPacket()
 {
 	if (m_stream)
 		DELETEP(m_stream);
+	if (m_streamData)
+		delete [] m_streamData;
 }
 
 void WP6ExtendedDocumentSummaryPacket::_readContents(WPXInputStream *input)
@@ -50,11 +53,11 @@ void WP6ExtendedDocumentSummaryPacket::_readContents(WPXInputStream *input)
 		return;
 	if (m_dataSize > ((std::numeric_limits<uint32_t>::max)() / 2))
 		m_dataSize = ((std::numeric_limits<uint32_t>::max)() / 2);
-	uint8_t *streamData = new uint8_t[m_dataSize];
+	m_streamData = new uint8_t[m_dataSize];
 	for(unsigned i=0; i<(unsigned)m_dataSize; i++)
-		streamData[i] = readU8(input);
+		m_streamData[i] = readU8(input);
 	
-	m_stream = new WPXMemoryInputStream(streamData, (size_t)m_dataSize);
+	m_stream = new WPXMemoryInputStream(m_streamData, (size_t)m_dataSize);
 }
 
 void WP6ExtendedDocumentSummaryPacket::parse(WP6Listener *listener) const

@@ -30,7 +30,8 @@
 
 WP6GeneralTextPacket::WP6GeneralTextPacket(WPXInputStream *input, int /* id */, uint32_t dataOffset, uint32_t dataSize): 
 	WP6PrefixDataPacket(input),
-	m_subDocument(0)
+	m_subDocument(0),
+	m_streamData(0)
 {	
 	_read(input, dataOffset, dataSize);
 }
@@ -39,6 +40,8 @@ WP6GeneralTextPacket::~WP6GeneralTextPacket()
 {
 	if (m_subDocument)
 		delete m_subDocument;
+	if (m_streamData)
+		delete [] m_streamData;
 }
 
 void WP6GeneralTextPacket::_readContents(WPXInputStream *input)
@@ -54,8 +57,8 @@ void WP6GeneralTextPacket::_readContents(WPXInputStream *input)
 	}
 	
 	uint32_t *blockSizes = new uint32_t[numTextBlocks];
-	unsigned int totalSize = 0;
-	unsigned int i;
+	unsigned totalSize = 0;
+	unsigned i;
 
 	for(i=0; i<numTextBlocks; i++)
 	{
@@ -77,22 +80,23 @@ void WP6GeneralTextPacket::_readContents(WPXInputStream *input)
 			delete [] blockSizes;
 		return; // m_subDocument will be 0
 	}
-	uint8_t *streamData = new uint8_t[totalSize];
-	int streamPos = 0;
+	m_streamData = new uint8_t[totalSize];
+	unsigned streamPos = 0;
 	for(i=0; i<numTextBlocks; i++) 
 	{
 		if ((input->tell() - startPosition + blockSizes[i]) > getDataSize() || input->atEOS())
 			throw FileException();
 		for (unsigned int j=0; j<blockSizes[i]; j++)
 		{
-			streamData[streamPos] = readU8(input);
+			m_streamData[streamPos] = readU8(input);
 			streamPos++;
 		}
 	}
 	if (blockSizes)
 		delete [] blockSizes;
 
-	m_subDocument = new WP6SubDocument(streamData, totalSize);
+	if (totalSize)
+		m_subDocument = new WP6SubDocument(m_streamData, totalSize);
 }
 
 void WP6GeneralTextPacket::parse(WP6Listener *listener) const

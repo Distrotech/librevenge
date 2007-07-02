@@ -33,13 +33,17 @@
 WP6GraphicsCachedFileDataPacket::WP6GraphicsCachedFileDataPacket(WPXInputStream *input, int  id, uint32_t dataOffset, uint32_t dataSize): 
 	WP6PrefixDataPacket(input),
 	m_id(id),
-	m_object(0)
+	m_object(0),
+	m_data(0)
 {	
 	_read(input, dataOffset, dataSize);
 }
 
 WP6GraphicsCachedFileDataPacket::~WP6GraphicsCachedFileDataPacket()
 {
+	if (m_data)
+		delete [] m_data;
+	m_data = 0;
 	if (m_object)
 		delete m_object;
 }
@@ -47,16 +51,16 @@ WP6GraphicsCachedFileDataPacket::~WP6GraphicsCachedFileDataPacket()
 void WP6GraphicsCachedFileDataPacket::_readContents(WPXInputStream *input)
 {
 	uint32_t tmpDataSize = getDataSize();
-	uint8_t *tmpData = new uint8_t[tmpDataSize];
+	m_data = new uint8_t[tmpDataSize];
 	for (uint32_t i = 0; i < tmpDataSize; i++)
-		tmpData[i] = readU8(input);
+		m_data[i] = readU8(input);
 #if 0
 	WPXString filename;
 	filename.sprintf("binarydump%.4x.wpg", m_id);
 	FILE *f = fopen(filename.cstr(), "w");
 	for (uint32_t j = 0; j < tmpDataSize; j++)
-		fprintf(f, "%c", tmpData[j]);
+		fprintf(f, "%c", m_data[j]);
 	fclose(f);
 #endif
-	m_object = new WPXBinaryData(tmpData, tmpDataSize);
+	m_object = new WPXBinaryData(m_data, tmpDataSize);
 }

@@ -39,5 +39,6 @@ public:
 
 private:
 	std::vector<WPXInputStream *> m_images;
+	std::vector<uint8_t *> m_data;
 };
 #endif /* WP5GRAPHICSINFORMATIONPACKET_H */

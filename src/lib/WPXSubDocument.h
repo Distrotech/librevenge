@@ -40,6 +40,7 @@ public:
 
 private:              
 	WPXMemoryInputStream *m_stream;
+	uint8_t *m_streamData;
 	WPXSubDocument(const WPXSubDocument&);
 	WPXSubDocument& operator=(const WPXSubDocument&);
 	
