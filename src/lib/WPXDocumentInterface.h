@@ -320,14 +320,25 @@ class WPXDocumentInterface
 	/**
 	Called when a positioned box should be opened
 	\param propList Defines a set of properties for the box. May contain:
-	\li \c ???? ?????
+	\li \c text:anchor-type How the Box is anchored (page, frame, paragraph, char, as-char)
+	\li \c svg:x Horizontal position of the box (in inches)
+	\li \c svg:y Vertical position of the box (in inches)
+	\li \c style:horizontal-pos Horizontal alignment of the box (left, center, right, from-left, inside, outside, from-inside)
+	\li \c style:horizontal-rel From where the position of the box is measured (page, page-content, page-start-margin, page-end-margin, frame, frame-content, frame-start-margin, frame-end-margin, paragraph, paragraph-content, paragraph-start-margin, paragraph-end-margin, char)
+	\li \c svg:width Width of the box (in inches)
+	\li \c svg:height Height of the box (in inches)
 	*/
 	virtual void openBox(const WPXPropertyList &propList) = 0;
 	/**
 	Called when the current positioned box is closed
 	*/
 	virtual void closeBox() = 0;
-	
+	/**
+	Called when a binary object should be inserted
+	\param propList Defines a set of properties for the object. May contain:
+	\li \c libwpd:mimetype The mimetype of the object
+	\param object Pointer to the binary object
+	*/
 	virtual void insertBinaryObject(const WPXPropertyList &propList, const WPXBinaryData *object) = 0;
 };
 
