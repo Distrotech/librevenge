@@ -138,11 +138,11 @@ void WPXPropertyList::insert(const char * name, const WPXString &val)
 
 void WPXPropertyList::insert(const char * name, const float val, const WPXUnit units)
 { 
-	if (units == INCH)
+	if (units == WPX_INCH)
 		m_mapImpl->insert(name, WPXPropertyFactory::newInchProp(val));
-	else if (units == PERCENT)
+	else if (units == WPX_PERCENT)
 		m_mapImpl->insert(name, WPXPropertyFactory::newPercentProp(val));
-	else if (units == POINT)		
+	else if (units == WPX_POINT)		
 		m_mapImpl->insert(name, WPXPropertyFactory::newPointProp(val));
 	else
 		m_mapImpl->insert(name, WPXPropertyFactory::newTwipProp(val));

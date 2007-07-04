@@ -44,7 +44,7 @@ WP5GraphicsInformationPacket::~WP5GraphicsInformationPacket()
 			delete [] (*iter1);
 		(*iter1) = 0;
 	}
-	for (std::vector<WPXInputStream *>::iterator iter2 = m_images.begin(); iter2 != m_images.end(); iter2++)
+	for (std::vector<WPXBinaryData *>::iterator iter2 = m_images.begin(); iter2 != m_images.end(); iter2++)
 	{
 		if ((*iter2))
 			delete (*iter2);
@@ -80,7 +80,7 @@ void WP5GraphicsInformationPacket::_readContents(WPXInputStream *input, uint32_t
 			fprintf(f, "%c", tmpData[l]);
 		fclose(f);
 #endif
-		m_images.push_back( new WPXMemoryInputStream(tmpData, tmpImagesSizes[j]) );
+		m_images.push_back( new WPXBinaryData(tmpData, tmpImagesSizes[j]) );
 		m_data.push_back(tmpData);
 	}
 }

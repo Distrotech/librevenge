@@ -27,6 +27,7 @@
 #define WP5GRAPHICSINFORMATIONPACKET_H
 #include "WP5GeneralPacketData.h"
 #include "WPXMemoryStream.h"
+#include "WPXBinaryData.h"
 #include <vector>
 
 class WP5GraphicsInformationPacket : public WP5GeneralPacketData
@@ -35,10 +36,10 @@ public:
 	WP5GraphicsInformationPacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize);
 	~WP5GraphicsInformationPacket();
 	void _readContents(WPXInputStream *input, uint32_t dataSize);
-	const std::vector<WPXInputStream *> &getImages() const { return m_images; }
+	const std::vector<WPXBinaryData *> &getImages() const { return m_images; }
 
 private:
-	std::vector<WPXInputStream *> m_images;
+	std::vector<WPXBinaryData *> m_images;
 	std::vector<uint8_t *> m_data;
 };
 #endif /* WP5GRAPHICSINFORMATIONPACKET_H */

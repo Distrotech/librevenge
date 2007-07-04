@@ -194,7 +194,7 @@ void WPXContentListener::_openSection()
 		{
 			WPXPropertyList column;
 			// The "style:rel-width" is expressed in twips (1440 twips per inch) and includes the left and right Gutter
-			column.insert("style:rel-width", (*iter).m_width * 1440.0f, TWIP);
+			column.insert("style:rel-width", (*iter).m_width * 1440.0f, WPX_TWIP);
 			column.insert("fo:start-indent", (*iter).m_leftGutter);
 			column.insert("fo:end-indent", (*iter).m_rightGutter);
 			columns.append(column);
@@ -474,7 +474,7 @@ void WPXContentListener::_appendParagraphProperties(WPXPropertyList &propList, c
 	}
 	propList.insert("fo:margin-top", m_ps->m_paragraphMarginTop);
 	propList.insert("fo:margin-bottom", m_ps->m_paragraphMarginBottom);
-	propList.insert("fo:line-height", m_ps->m_paragraphLineSpacing, PERCENT);
+	propList.insert("fo:line-height", m_ps->m_paragraphLineSpacing, WPX_PERCENT);
 	if (m_ps->m_isParagraphColumnBreak)
 		propList.insert("fo:break-before", "column");
 	else if (m_ps->m_isParagraphPageBreak)
@@ -663,7 +663,7 @@ void WPXContentListener::_openSpan()
 
 	if (m_ps->m_fontName)
 		propList.insert("style:font-name", m_ps->m_fontName->cstr());
-	propList.insert("fo:font-size", fontSizeChange*m_ps->m_fontSize, POINT);
+	propList.insert("fo:font-size", fontSizeChange*m_ps->m_fontSize, WPX_POINT);
 
 	// Here we give the priority to the redline bit over the font color. This is how WordPerfect behaves:
 	// redline overrides font color even if the color is changed when redline was already defined.
