@@ -61,7 +61,6 @@ _WPXContentParsingState::_WPXContentParsingState() :
 	m_isTableCellOpened(false),
 	m_wasHeaderRow(false),
 	m_isCellWithoutParagraph(false),
-	m_isRowWithoutCell(false),
 	m_cellAttributeBits(0x00000000),
 	m_paragraphJustificationBeforeTable(WPX_PARAGRAPH_JUSTIFICATION_LEFT),
 	
@@ -119,10 +118,10 @@ _WPXContentParsingState::~_WPXContentParsingState()
 	DELETEP(m_highlightColor);
 }
 
-WPXContentListener::WPXContentListener(std::list<WPXPageSpan> &pageList, WPXDocumentInterface *listenerImpl) :
+WPXContentListener::WPXContentListener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl) :
 	WPXListener(pageList),
 	m_ps(new WPXContentParsingState),
-	m_documentInterface(listenerImpl),
+	m_listenerImpl(listenerImpl),
 	m_metaData()
 {
 	m_ps->m_nextPageSpanIter = pageList.begin();
@@ -140,9 +139,9 @@ void WPXContentListener::startDocument()
 		// FIXME: this is stupid, we should store a property list filled with the relevant metadata
 		// and then pass that directly..
 
-		m_documentInterface->setDocumentMetaData(m_metaData);
+		m_listenerImpl->setDocumentMetaData(m_metaData);
 
-		m_documentInterface->startDocument();
+		m_listenerImpl->startDocument();
 	}
 	
 	m_ps->m_isDocumentStarted = true;
@@ -166,7 +165,7 @@ void WPXContentListener::endDocument()
 	// close the document nice and tight
 	_closeSection();
 	_closePageSpan();
-	m_documentInterface->endDocument();
+	m_listenerImpl->endDocument();
 }
 
 void WPXContentListener::_openSection()
@@ -182,11 +181,11 @@ void WPXContentListener::_openSection()
 		propList.insert("fo:margin-right", m_ps->m_sectionMarginRight);
 		if (m_ps->m_numColumns > 1)
 		{
-			propList.insert("libwpd:margin-bottom", 1.0f);
+			propList.insert("fo:margin-bottom", 1.0f);
 			propList.insert("text:dont-balance-text-columns", false);
 		}
 		else
-			propList.insert("libwpd:margin-bottom", 0.0f);
+			propList.insert("fo:margin-bottom", 0.0f);
 
 		WPXPropertyListVector columns;
  		typedef std::vector<WPXColumnDefinition>::const_iterator CDVIter;
@@ -194,13 +193,13 @@ void WPXContentListener::_openSection()
 		{
 			WPXPropertyList column;
 			// The "style:rel-width" is expressed in twips (1440 twips per inch) and includes the left and right Gutter
-			column.insert("style:rel-width", (*iter).m_width * 1440.0f, WPX_TWIP);
-			column.insert("fo:start-indent", (*iter).m_leftGutter);
-			column.insert("fo:end-indent", (*iter).m_rightGutter);
+			column.insert("style:rel-width", (*iter).m_width * 1440.0f, TWIP);
+			column.insert("fo:margin-left", (*iter).m_leftGutter);
+			column.insert("fo:margin-right", (*iter).m_rightGutter);
 			columns.append(column);
 		}
 		if (!m_ps->m_isSectionOpened)
-			m_documentInterface->openSection(propList, columns);
+			m_listenerImpl->openSection(propList, columns);
 
 		m_ps->m_sectionAttributesChanged = false;
 		m_ps->m_isSectionOpened = true;
@@ -217,7 +216,7 @@ void WPXContentListener::_closeSection()
 			_closeListElement();
 		_changeList();
 
-		m_documentInterface->closeSection();
+		m_listenerImpl->closeSection();
 
 		m_ps->m_sectionAttributesChanged = false;
 		m_ps->m_isSectionOpened = false;
@@ -270,7 +269,7 @@ void WPXContentListener::_openPageSpan()
 	propList.insert("fo:margin-bottom", currentPage.getMarginBottom());
 	
 	if (!m_ps->m_isPageSpanOpened)
-		m_documentInterface->openPageSpan(propList);
+		m_listenerImpl->openPageSpan(propList);
 
 	m_ps->m_isPageSpanOpened = true;
 
@@ -299,7 +298,8 @@ void WPXContentListener::_openPageSpan()
 	std::vector<WPXHeaderFooter> headerFooterList = currentPage.getHeaderFooterList();
 	for (std::vector<WPXHeaderFooter>::iterator iter = headerFooterList.begin(); iter != headerFooterList.end(); iter++)
 	{
-		if (!currentPage.getHeaderFooterSuppression((*iter).getInternalType()))
+		if (((*iter).getOccurence() != NEVER) && ((*iter).getInternalType() != DUMMY_INTERNAL_HEADER_FOOTER)
+			&& !currentPage.getHeaderFooterSuppression((*iter).getInternalType()))
 		{
 			propList.clear();
 			switch ((*iter).getOccurence())
@@ -319,15 +319,17 @@ void WPXContentListener::_openPageSpan()
 			}
 
 			if ((*iter).getType() == HEADER)
-				m_documentInterface->openHeader(propList); 
+				m_listenerImpl->openHeader(propList); 
 			else
-				m_documentInterface->openFooter(propList); 
+				m_listenerImpl->openFooter(propList); 
 
+			WPD_DEBUG_MSG(("Header Footer Element: Starting to parse the subDocument\n"));
 			handleSubDocument((*iter).getSubDocument(), true, (*iter).getTableList(), 0);
+			WPD_DEBUG_MSG(("Header Footer Element: End of the subDocument parsing\n"));
 			if ((*iter).getType() == HEADER)
-				m_documentInterface->closeHeader();
+				m_listenerImpl->closeHeader();
 			else
-				m_documentInterface->closeFooter(); 
+				m_listenerImpl->closeFooter(); 
 
 			WPD_DEBUG_MSG(("Header Footer Element: type: %i occurence: %i\n",
 				       (*iter).getType(), (*iter).getOccurence()));
@@ -360,7 +362,7 @@ void WPXContentListener::_closePageSpan()
 		if (m_ps->m_isSectionOpened)
 			_closeSection();
 
-		m_documentInterface->closePageSpan();
+		m_listenerImpl->closePageSpan();
 	}
 	
 	m_ps->m_isPageSpanOpened = false;
@@ -390,7 +392,7 @@ void WPXContentListener::_openParagraph()
 		_appendParagraphProperties(propList);
 
 		if (!m_ps->m_isParagraphOpened)
-			m_documentInterface->openParagraph(propList, tabStops);
+			m_listenerImpl->openParagraph(propList, tabStops);
 
 		_resetParagraphState();
 	}
@@ -474,7 +476,7 @@ void WPXContentListener::_appendParagraphProperties(WPXPropertyList &propList, c
 	}
 	propList.insert("fo:margin-top", m_ps->m_paragraphMarginTop);
 	propList.insert("fo:margin-bottom", m_ps->m_paragraphMarginBottom);
-	propList.insert("fo:line-height", m_ps->m_paragraphLineSpacing, WPX_PERCENT);
+	propList.insert("fo:line-height", m_ps->m_paragraphLineSpacing, PERCENT);
 	if (m_ps->m_isParagraphColumnBreak)
 		propList.insert("fo:break-before", "column");
 	else if (m_ps->m_isParagraphPageBreak)
@@ -509,7 +511,7 @@ void WPXContentListener::_getTabStops(WPXPropertyListVector &tabStops)
 		{
 			WPXString sLeader;
 			sLeader.sprintf("%c", m_ps->m_tabStops[i].m_leaderCharacter);
-			tmpTabStop.insert("style:leader-text", sLeader);
+			tmpTabStop.insert("style:leader-char", sLeader);
 		}
 
 		// position
@@ -537,7 +539,7 @@ void WPXContentListener::_closeParagraph()
 		if (m_ps->m_isSpanOpened)
 			_closeSpan();
 
-		m_documentInterface->closeParagraph();
+		m_listenerImpl->closeParagraph();
 	}
 
 	m_ps->m_isParagraphOpened = false;
@@ -561,7 +563,7 @@ void WPXContentListener::_openListElement()
 		_getTabStops(tabStops);
 
 		if (!m_ps->m_isListElementOpened)
-			m_documentInterface->openListElement(propList, tabStops);
+			m_listenerImpl->openListElement(propList, tabStops);
 		_resetParagraphState(true);
 	}
 }
@@ -573,7 +575,7 @@ void WPXContentListener::_closeListElement()
 		if (m_ps->m_isSpanOpened)
 			_closeSpan();
 
-		m_documentInterface->closeListElement();
+		m_listenerImpl->closeListElement();
 	}
 	
 	m_ps->m_isListElementOpened = false;
@@ -592,10 +594,10 @@ void WPXContentListener::_openSpan()
 
 	if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
 		_changeList();
-		if (m_ps->m_currentListLevel == 0)
-			_openParagraph();
-		else
-			_openListElement();
+	if (m_ps->m_currentListLevel == 0)
+		_openParagraph();
+	else
+		_openListElement();
 	
 	// The behaviour of WP6+ is following: if an attribute bit is set in the cell attributes, we cannot
 	// unset it; if it is set, we can set or unset it
@@ -647,11 +649,11 @@ void WPXContentListener::_openSpan()
 	if (attributeBits & WPX_BOLD_BIT)
 		propList.insert("fo:font-weight", "bold");
 	if (attributeBits & WPX_STRIKEOUT_BIT)
-		propList.insert("style:text-line-through-type", "single");
+		propList.insert("style:text-crossing-out", "single-line");
 	if (attributeBits & WPX_DOUBLE_UNDERLINE_BIT) 
-		propList.insert("style:text-underline-type", "double");
+		propList.insert("style:text-underline", "double");
  	else if (attributeBits & WPX_UNDERLINE_BIT) 
-		propList.insert("style:text-underline-type", "single");
+		propList.insert("style:text-underline", "single");
 	if (attributeBits & WPX_OUTLINE_BIT) 
 		propList.insert("style:text-outline", "true");
 	if (attributeBits & WPX_SMALL_CAPS_BIT) 
@@ -663,7 +665,7 @@ void WPXContentListener::_openSpan()
 
 	if (m_ps->m_fontName)
 		propList.insert("style:font-name", m_ps->m_fontName->cstr());
-	propList.insert("fo:font-size", fontSizeChange*m_ps->m_fontSize, WPX_POINT);
+	propList.insert("fo:font-size", fontSizeChange*m_ps->m_fontSize, POINT);
 
 	// Here we give the priority to the redline bit over the font color. This is how WordPerfect behaves:
 	// redline overrides font color even if the color is changed when redline was already defined.
@@ -676,7 +678,7 @@ void WPXContentListener::_openSpan()
 		propList.insert("style:text-background-color", _colorToString(m_ps->m_highlightColor));
 
 	if (!m_ps->m_isSpanOpened)
-		m_documentInterface->openSpan(propList);
+		m_listenerImpl->openSpan(propList);
 
 	m_ps->m_isSpanOpened = true;
 }
@@ -687,7 +689,7 @@ void WPXContentListener::_closeSpan()
 	{
 		_flushText();
 
-		m_documentInterface->closeSpan();
+		m_listenerImpl->closeSpan();
 	}
 	
 	m_ps->m_isSpanOpened = false;
@@ -746,7 +748,7 @@ void WPXContentListener::_openTable()
  	}
 	propList.insert("style:width", tableWidth);
 
-	m_documentInterface->openTable(propList, columns);
+	m_listenerImpl->openTable(propList, columns);
 	m_ps->m_isTableOpened = true;
 
 	m_ps->m_currentTableRow = (-1);
@@ -761,7 +763,7 @@ void WPXContentListener::_closeTable()
 		if (m_ps->m_isTableRowOpened)
 			_closeTableRow();
 
-		m_documentInterface->closeTable();
+		m_listenerImpl->closeTable();
 	}
 
 	m_ps->m_currentTableRow = (-1);
@@ -808,10 +810,9 @@ void WPXContentListener::_openTableRow(const float height, const bool isMinimumH
 	else
 		propList.insert("libwpd:is-header-row", false);		
 
-	m_documentInterface->openTableRow(propList);
+	m_listenerImpl->openTableRow(propList);
 
 	m_ps->m_isTableRowOpened = true;
-	m_ps->m_isRowWithoutCell = true;
 	m_ps->m_currentTableRow++;
 }
 
@@ -835,14 +836,7 @@ void WPXContentListener::_closeTableRow()
 
 		if (m_ps->m_isTableCellOpened)
 			_closeTableCell();
-		// FIXME: this will need some love so that we actually insert covered cells with proper attributes
-		if (m_ps->m_isRowWithoutCell)
-		{
-			m_ps->m_isRowWithoutCell = false;
-			WPXPropertyList tmpBlankList;
-			m_documentInterface->insertCoveredTableCell(tmpBlankList);
-		}
-		m_documentInterface->closeTableRow();
+		m_listenerImpl->closeTableRow();
 	}
 	m_ps->m_isTableRowOpened = false;
 }
@@ -872,11 +866,11 @@ static void addBorderProps(const char *border, bool borderOn, const WPXString &b
 	if (borderOn)
 	{
 	  props.append(doubleToString(WPX_DEFAULT_TABLE_BORDER_WIDTH));
-	  props.append("in solid ");
+	  props.append("inch solid ");
 	  props.append(borderColor);
 	}
 	else
-		props.sprintf("0.0in");
+		props.sprintf("0.0inch");
 	propList.insert(borderStyle.cstr(), props);
 }
 
@@ -910,20 +904,20 @@ void WPXContentListener::_openTableCell(const uint8_t colSpan, const uint8_t row
 	switch (cellVerticalAlignment)
 	{
 	case TOP:
-		propList.insert("style:vertical-align", "top");
+		propList.insert("fo:vertical-align", "top");
 		break;
 	case MIDDLE:
-		propList.insert("style:vertical-align", "middle");
+		propList.insert("fo:vertical-align", "middle");
 		break;
 	case BOTTOM:
-		propList.insert("style:vertical-align", "bottom");
+		propList.insert("fo:vertical-align", "bottom");
 		break;
 	case FULL: // full not in XSL-fo?
 	default:
 		break;
 	}
 	propList.insert("fo:background-color", _mergeColorsToString(cellFgColor, cellBgColor));
-	m_documentInterface->openTableCell(propList);
+	m_listenerImpl->openTableCell(propList);
 	m_ps->m_currentTableCellNumberInRow++;
 	m_ps->m_isTableCellOpened = true;
 	m_ps->m_isCellWithoutParagraph = true;
@@ -954,7 +948,7 @@ void WPXContentListener::_closeTableCell()
 		_changeList();
 		m_ps->m_cellAttributeBits = 0x00000000;
 
-		m_documentInterface->closeTableCell();
+		m_listenerImpl->closeTableCell();
 	}
 	m_ps->m_isTableCellOpened = false;
 }

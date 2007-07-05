@@ -32,6 +32,8 @@
 #include "libwpd_internal.h"
 #include "WPXSubDocument.h"
 
+const uint8_t DUMMY_INTERNAL_HEADER_FOOTER = 16;
+
 // intermediate page representation class: for internal use only (by the high-level content/styles listeners). should not be exported.
 
 class WPXHeaderFooter

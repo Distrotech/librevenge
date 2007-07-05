@@ -30,7 +30,6 @@
 
 const float WPX_DEFAULT_PAGE_MARGIN_TOP = 1.0f;
 const float WPX_DEFAULT_PAGE_MARGIN_BOTTOM = 1.0f;
-const uint8_t DUMMY_INTERNAL_HEADER_FOOTER = 16;
 
 // precondition: 0 <= headerFooterType <= 3 (i.e.: we don't handle watermarks here)
 WPXHeaderFooter::WPXHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence occurence, 
