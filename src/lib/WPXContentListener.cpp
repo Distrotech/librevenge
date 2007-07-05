@@ -299,7 +299,8 @@ void WPXContentListener::_openPageSpan()
 	std::vector<WPXHeaderFooter> headerFooterList = currentPage.getHeaderFooterList();
 	for (std::vector<WPXHeaderFooter>::iterator iter = headerFooterList.begin(); iter != headerFooterList.end(); iter++)
 	{
-		if (!currentPage.getHeaderFooterSuppression((*iter).getInternalType()))
+		if (((*iter).getOccurence() != NEVER) && ((*iter).getInternalType() != DUMMY_INTERNAL_HEADER_FOOTER)
+			&& !currentPage.getHeaderFooterSuppression((*iter).getInternalType()))
 		{
 			propList.clear();
 			switch ((*iter).getOccurence())
@@ -323,7 +324,9 @@ void WPXContentListener::_openPageSpan()
 			else
 				m_documentInterface->openFooter(propList); 
 
+			WPD_DEBUG_MSG(("Header Footer Element: Starting to parse the subDocument\n"));
 			handleSubDocument((*iter).getSubDocument(), true, (*iter).getTableList(), 0);
+			WPD_DEBUG_MSG(("Header Footer Element: End of the subDocument parsing\n"));
 			if ((*iter).getType() == HEADER)
 				m_documentInterface->closeHeader();
 			else
@@ -592,10 +595,10 @@ void WPXContentListener::_openSpan()
 
 	if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
 		_changeList();
-		if (m_ps->m_currentListLevel == 0)
-			_openParagraph();
-		else
-			_openListElement();
+	if (m_ps->m_currentListLevel == 0)
+		_openParagraph();
+	else
+		_openListElement();
 	
 	// The behaviour of WP6+ is following: if an attribute bit is set in the cell attributes, we cannot
 	// unset it; if it is set, we can set or unset it

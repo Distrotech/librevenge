@@ -208,7 +208,12 @@ void WP5StylesListener::headerFooterGroup(const uint8_t headerFooterType, const 
 			WPXTableList tableList;
 			
 			if ((wpxType == HEADER) && tempCurrentPageHasContent)
-				m_nextPage.setHeaderFooter(wpxType, headerFooterType, wpxOccurence, subDocument, tableList);
+			{
+				if (wpxOccurence != NEVER)
+					m_nextPage.setHeaderFooter(wpxType, headerFooterType, wpxOccurence, subDocument, tableList);
+				else
+					m_nextPage.setHeaderFooter(wpxType, headerFooterType, wpxOccurence, 0, tableList);
+			}
 			else /* FOOTER || !tempCurrentPageHasContent */
 			{
 				if (wpxOccurence != NEVER)
