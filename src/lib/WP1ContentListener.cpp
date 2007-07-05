@@ -131,7 +131,14 @@ void WP1ContentListener::insertNote(const WPXNoteType noteType, WP1SubDocument *
 {
 	if (!isUndoOn() && !m_ps->m_isNote)
 	{
-		_closeSpan();
+		if (!m_ps->m_isParagraphOpened)
+			_openParagraph();
+		else
+		{
+			_flushText();
+			_closeSpan();
+		}
+
 		m_ps->m_isNote = true;
 
 		WPXPropertyList propList;

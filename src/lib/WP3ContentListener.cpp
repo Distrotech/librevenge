@@ -569,7 +569,13 @@ void WP3ContentListener::insertNote(const WPXNoteType noteType, WP3SubDocument *
 {
 	if (!isUndoOn() && !m_ps->m_isNote)
 	{
-		_closeSpan();
+		if (!m_ps->m_isParagraphOpened)
+			_openParagraph();
+		else
+		{
+			_flushText();
+			_closeSpan();
+		}
 		m_ps->m_isNote = true;
 		WPXNumberingType numberingType = _extractWPXNumberingTypeFromBuf(m_parseState->m_noteReference, ARABIC);
 		int number = _extractDisplayReferenceNumberFromBuf(m_parseState->m_noteReference, numberingType);

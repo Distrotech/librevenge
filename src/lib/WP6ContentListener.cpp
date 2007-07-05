@@ -1167,7 +1167,13 @@ void WP6ContentListener::noteOn(const uint16_t textPID)
 			return;
 		}
 
-		_closeSpan();
+		if (!m_ps->m_isParagraphOpened)
+			_openParagraph();
+		else
+		{
+			_flushText();
+			_closeSpan();
+		}
 		m_parseState->m_styleStateSequence.setCurrentState(DOCUMENT_NOTE);
 		// save a reference to the text PID, we want to parse
 		// the packet after we're through with the footnote ref.
