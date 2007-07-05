@@ -27,11 +27,10 @@
 #include <ctype.h>
 #include "libwpd_math.h"
 #include "WP6ContentListener.h"
-#include "WPXDocumentInterface.h"
+#include "WPXHLListenerImpl.h"
 #include "WP6FileStructure.h"
 #include "WPXFileStructure.h"
 #include "WP6FontDescriptorPacket.h"
-#include "WP6GraphicsCachedFileDataPacket.h"
 #include "WP6DefaultInitialFontPacket.h"
 #include "libwpd_internal.h"
 #include "WP6SubDocument.h"
@@ -148,7 +147,7 @@ _WP6ContentParsingState::~_WP6ContentParsingState()
 	// FIXME: erase current fontname
 }
 
-WP6ContentListener::WP6ContentListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, WPXDocumentInterface *listenerImpl) :
+WP6ContentListener::WP6ContentListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, WPXHLListenerImpl *listenerImpl) :
 	WP6Listener(),
 	WPXContentListener(pageList, listenerImpl),
 	m_parseState(new WP6ContentParsingState(tableList)),
@@ -170,7 +169,7 @@ void WP6ContentListener::setDate(const uint16_t type, const uint16_t year,
 				 const uint8_t month, const uint8_t day, 
 				 const uint8_t hour, const uint8_t minute, 
 				 const uint8_t second, const uint8_t dayOfWeek, 
-				 const uint8_t /* timeZone */, const uint8_t /* unused */)
+				 const uint8_t timeZone, const uint8_t unused)
 {
         #define DATEBUFLEN 100  // length of buffer allocated for strftime()
         #define WPMONDAYOFFSET  1       // WP week starts Monday, tm_wday on Sunday
@@ -614,10 +613,10 @@ void WP6ContentListener::insertTab(const uint8_t tabType, float tabPosition)
 			case WP6_TAB_GROUP_FLUSH_RIGHT:
 			case WP6_TAB_GROUP_RIGHT_TAB:
 			case WP6_TAB_GROUP_DECIMAL_TAB:
-				m_documentInterface->insertTab();
+				m_listenerImpl->insertTab();
 				break;
 			case WP6_TAB_GROUP_BAR_TAB:
-				m_documentInterface->insertTab();
+				m_listenerImpl->insertTab();
 				insertCharacter('|');  // We emulate the bar tab
 				break;
 			
@@ -642,7 +641,7 @@ void WP6ContentListener::handleLineBreak()
 			else
 				_flushText();
 
-			m_documentInterface->insertLineBreak();
+			m_listenerImpl->insertLineBreak();
 		}
 	}
 }
@@ -1167,7 +1166,13 @@ void WP6ContentListener::noteOn(const uint16_t textPID)
 			return;
 		}
 
-		_closeSpan();
+		if (!m_ps->m_isParagraphOpened)
+			_openParagraph();
+		else
+		{
+			_flushText();
+			_closeSpan();
+		}
 		m_parseState->m_styleStateSequence.setCurrentState(DOCUMENT_NOTE);
 		// save a reference to the text PID, we want to parse
 		// the packet after we're through with the footnote ref.
@@ -1196,18 +1201,18 @@ void WP6ContentListener::noteOff(const WPXNoteType noteType)
 			propList.insert("libwpd:number", number);
 
 		if (noteType == FOOTNOTE)
-			m_documentInterface->openFootnote(propList);
+			m_listenerImpl->openFootnote(propList);
 		else
-			m_documentInterface->openEndnote(propList);
+			m_listenerImpl->openEndnote(propList);
 
 		uint16_t textPID = (uint16_t)m_parseState->m_noteTextPID;
 		handleSubDocument(((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : 0), 
 				false, m_parseState->m_tableList, m_parseState->m_nextTableIndice);
 
 		if (noteType == FOOTNOTE)
-			m_documentInterface->closeFootnote();
+			m_listenerImpl->closeFootnote();
 		else
-			m_documentInterface->closeEndnote();
+			m_listenerImpl->closeEndnote();
 		m_ps->m_isNote = false;
 		m_parseState->m_numNestedNotes = 0;
 	}
@@ -1375,23 +1380,6 @@ void WP6ContentListener::endTable()
 	}
 }
 
-void WP6ContentListener::insertGraphicsData(const uint16_t packetId, const uint8_t anchoredTo)
-{
-	if (const WP6GraphicsCachedFileDataPacket *gcfdPacket = dynamic_cast<const WP6GraphicsCachedFileDataPacket *>(this->getPrefixDataPacket(packetId))) 
-	{
-		if (!m_ps->m_isSpanOpened)
-			_openSpan();
-		else
-			_flushText();
-
-		WPXPropertyList propList;
-		m_documentInterface->openBox(propList);
-		propList.insert("libwpd:mimetype", "image/x-wpg");
-		m_documentInterface->insertBinaryObject(propList, gcfdPacket->getBinaryObject());
-		m_documentInterface->closeBox();
-	}
-}
-
 void WP6ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice)
 {
 	// save our old parsing state on our "stack"
@@ -1462,44 +1450,44 @@ void WP6ContentListener::_flushText()
 	
 	if (m_parseState->m_textBeforeNumber.len())
 	{
-		m_documentInterface->insertText(m_parseState->m_textBeforeNumber);
+		m_listenerImpl->insertText(m_parseState->m_textBeforeNumber);
 		m_parseState->m_textBeforeNumber.clear();
 	}
 	
 	if (m_parseState->m_textBeforeDisplayReference.len())
 	{
-		m_documentInterface->insertText(m_parseState->m_textBeforeDisplayReference);
+		m_listenerImpl->insertText(m_parseState->m_textBeforeDisplayReference);
 		m_parseState->m_textBeforeDisplayReference.clear();
 	}
 	
 	if (m_parseState->m_numberText.len())
 	{
-		m_documentInterface->insertText(m_parseState->m_numberText);
+		m_listenerImpl->insertText(m_parseState->m_numberText);
 		m_parseState->m_numberText.clear();
 	}
 	
 	if (m_parseState->m_textAfterDisplayReference.len())
 	{
-		m_documentInterface->insertText(m_parseState->m_textAfterDisplayReference);
+		m_listenerImpl->insertText(m_parseState->m_textAfterDisplayReference);
 		m_parseState->m_textAfterDisplayReference.clear();
 	}
 	
 	if (m_parseState->m_textAfterNumber.len())
 	{
-		m_documentInterface->insertText(m_parseState->m_textAfterNumber);
+		m_listenerImpl->insertText(m_parseState->m_textAfterNumber);
 		m_parseState->m_textAfterNumber.clear();
 	}
 	
 	if (m_parseState->m_numListExtraTabs > 0)
 	{
 		for (; m_parseState->m_numListExtraTabs > 0; m_parseState->m_numListExtraTabs--)
-			m_documentInterface->insertTab();
+			m_listenerImpl->insertTab();
 		m_parseState->m_numListExtraTabs = 0;
 	}
 
 	if (m_parseState->m_bodyText.len())
 	{
-		m_documentInterface->insertText(m_parseState->m_bodyText);
+		m_listenerImpl->insertText(m_parseState->m_bodyText);
 		m_parseState->m_bodyText.clear();
 	}
 	
@@ -1551,7 +1539,7 @@ void WP6ContentListener::_handleListChange(const uint16_t outlineHash)
 			propList.insert("text:min-label-width", m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent - m_ps->m_listReferencePosition);
 			propList.insert("text:space-before", m_ps->m_listReferencePosition - m_ps->m_listBeginPosition);
 			
-			m_documentInterface->defineOrderedListLevel(propList);
+			m_listenerImpl->defineOrderedListLevel(propList);
 		}
 		else
 		{
@@ -1559,7 +1547,7 @@ void WP6ContentListener::_handleListChange(const uint16_t outlineHash)
 			propList.insert("text:min-label-width", m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent - m_ps->m_listReferencePosition);
 			propList.insert("text:space-before", m_ps->m_listReferencePosition - m_ps->m_listBeginPosition);
 			
-			m_documentInterface->defineUnorderedListLevel(propList);
+			m_listenerImpl->defineUnorderedListLevel(propList);
 		}
 		for (int i=(oldListLevel+1); i<=m_ps->m_currentListLevel; i++)
 		{
@@ -1572,12 +1560,12 @@ void WP6ContentListener::_handleListChange(const uint16_t outlineHash)
 
 			if (m_parseState->m_putativeListElementHasDisplayReferenceNumber)
 			{
-				m_documentInterface->openOrderedListLevel(propList2);
+				m_listenerImpl->openOrderedListLevel(propList2);
 				m_parseState->m_listTypeStack.push(ORDERED);
 			}
 			else
 			{
-				m_documentInterface->openUnorderedListLevel(propList2);
+				m_listenerImpl->openUnorderedListLevel(propList2);
 				m_parseState->m_listTypeStack.push(UNORDERED);
 			}
 		}
@@ -1599,9 +1587,9 @@ void WP6ContentListener::_handleListChange(const uint16_t outlineHash)
 			// a priori and I hate writing lame excuses like this, so we might want to
 			// change this at some point
 			if (tmpListType == UNORDERED)
-				m_documentInterface->closeUnorderedListLevel();
+				m_listenerImpl->closeUnorderedListLevel();
 			else
-				m_documentInterface->closeOrderedListLevel();
+				m_listenerImpl->closeOrderedListLevel();
 		}
 	}
 

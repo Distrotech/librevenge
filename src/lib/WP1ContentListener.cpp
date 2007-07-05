@@ -44,7 +44,7 @@ _WP1ContentParsingState::~_WP1ContentParsingState()
 }
 
 
-WP1ContentListener::WP1ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP1SubDocument *> &subDocuments, WPXDocumentInterface *listenerImpl) :
+WP1ContentListener::WP1ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP1SubDocument *> &subDocuments, WPXHLListenerImpl *listenerImpl) :
 	WP1Listener(),
 	WPXContentListener(pageList, listenerImpl),
 	m_parseState(new WP1ContentParsingState),
@@ -68,7 +68,7 @@ void WP1ContentListener::insertCharacter(const uint16_t character)
 			_openSpan();
 		for (;m_parseState->m_numDeferredTabs > 0; m_parseState->m_numDeferredTabs--)
 		{
-			m_documentInterface->insertTab();
+			m_listenerImpl->insertTab();
 		}
 		appendUCS4(m_parseState->m_textBuffer, (uint32_t)character);
 	}
@@ -82,7 +82,7 @@ void WP1ContentListener::insertExtendedCharacter(const uint8_t extendedCharacter
 			_openSpan();
 		for (;m_parseState->m_numDeferredTabs > 0; m_parseState->m_numDeferredTabs--)
 		{
-			m_documentInterface->insertTab();
+			m_listenerImpl->insertTab();
 		}
 		if (extendedCharacter <= 0x20)
 			appendUCS4(m_parseState->m_textBuffer, (uint32_t)0x20);
@@ -104,7 +104,7 @@ void WP1ContentListener::insertTab()
 			else
 				_flushText();
 
-			m_documentInterface->insertTab();
+			m_listenerImpl->insertTab();
 		}
 	}
 }
@@ -117,7 +117,7 @@ void WP1ContentListener::insertEOL()
 			_openSpan();
 		for (;m_parseState->m_numDeferredTabs > 0; m_parseState->m_numDeferredTabs--)
 		{
-			m_documentInterface->insertTab();
+			m_listenerImpl->insertTab();
 		}
 
 		if (m_ps->m_isParagraphOpened)
@@ -131,7 +131,14 @@ void WP1ContentListener::insertNote(const WPXNoteType noteType, WP1SubDocument *
 {
 	if (!isUndoOn() && !m_ps->m_isNote)
 	{
-		_closeSpan();
+		if (!m_ps->m_isParagraphOpened)
+			_openParagraph();
+		else
+		{
+			_flushText();
+			_closeSpan();
+		}
+
 		m_ps->m_isNote = true;
 
 		WPXPropertyList propList;
@@ -139,21 +146,21 @@ void WP1ContentListener::insertNote(const WPXNoteType noteType, WP1SubDocument *
 		if (noteType == FOOTNOTE)
 		{
 			propList.insert("libwpd:number", ++(m_parseState->m_footNoteNumber));
-			m_documentInterface->openFootnote(propList);
+			m_listenerImpl->openFootnote(propList);
 		}
 		else
 		{
 			propList.insert("libwpd:number", ++(m_parseState->m_endNoteNumber));
-			m_documentInterface->openEndnote(propList);
+			m_listenerImpl->openEndnote(propList);
 		}
 
 		WPXTableList tableList;
 		handleSubDocument(subDocument, false, tableList, 0);
 
 		if (noteType == FOOTNOTE)
-			m_documentInterface->closeFootnote();
+			m_listenerImpl->closeFootnote();
 		else
-			m_documentInterface->closeEndnote();
+			m_listenerImpl->closeEndnote();
 		m_ps->m_isNote = false;
 	}
 }
@@ -400,6 +407,6 @@ void WP1ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, c
 void WP1ContentListener::_flushText()
 {
 	if (m_parseState->m_textBuffer.len())
-		m_documentInterface->insertText(m_parseState->m_textBuffer);
+		m_listenerImpl->insertText(m_parseState->m_textBuffer);
 	m_parseState->m_textBuffer.clear();
 }

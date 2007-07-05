@@ -45,7 +45,7 @@ _WP3ContentParsingState::~_WP3ContentParsingState()
 	DELETEP(m_cellFillColor);
 }
 
-WP3ContentListener::WP3ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP3SubDocument *>&subDocuments, WPXDocumentInterface *listenerImpl) :
+WP3ContentListener::WP3ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP3SubDocument *>&subDocuments, WPXHLListenerImpl *listenerImpl) :
 	WP3Listener(),
 	WPXContentListener(pageList, listenerImpl),
 	m_parseState(new WP3ContentParsingState),
@@ -81,7 +81,7 @@ void WP3ContentListener::insertTab(const uint8_t /* tabType */, float /* tabPosi
 			_openSpan();
 		else
 			_flushText();
-		m_documentInterface->insertTab();
+		m_listenerImpl->insertTab();
 	}
 }
 
@@ -569,7 +569,13 @@ void WP3ContentListener::insertNote(const WPXNoteType noteType, WP3SubDocument *
 {
 	if (!isUndoOn() && !m_ps->m_isNote)
 	{
-		_closeSpan();
+		if (!m_ps->m_isParagraphOpened)
+			_openParagraph();
+		else
+		{
+			_flushText();
+			_closeSpan();
+		}
 		m_ps->m_isNote = true;
 		WPXNumberingType numberingType = _extractWPXNumberingTypeFromBuf(m_parseState->m_noteReference, ARABIC);
 		int number = _extractDisplayReferenceNumberFromBuf(m_parseState->m_noteReference, numberingType);
@@ -579,16 +585,16 @@ void WP3ContentListener::insertNote(const WPXNoteType noteType, WP3SubDocument *
 		propList.insert("libwpd:number", number);
 
 		if (noteType == FOOTNOTE)
-			m_documentInterface->openFootnote(propList);
+			m_listenerImpl->openFootnote(propList);
 		else
-			m_documentInterface->openEndnote(propList);
+			m_listenerImpl->openEndnote(propList);
 
 		handleSubDocument(subDocument, false, m_parseState->m_tableList, 0);
 
 		if (noteType == FOOTNOTE)
-			m_documentInterface->closeFootnote();
+			m_listenerImpl->closeFootnote();
 		else
-			m_documentInterface->closeEndnote();
+			m_listenerImpl->closeEndnote();
 		m_ps->m_isNote = false;
 	}
 }
@@ -664,6 +670,6 @@ void WP3ContentListener::_openParagraph()
 void WP3ContentListener::_flushText()
 {
 	if (m_parseState->m_textBuffer.len())
-		m_documentInterface->insertText(m_parseState->m_textBuffer);
+		m_listenerImpl->insertText(m_parseState->m_textBuffer);
 	m_parseState->m_textBuffer.clear();
 }
