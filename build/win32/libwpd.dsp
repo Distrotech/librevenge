@@ -647,6 +647,10 @@ SOURCE=..\..\src\lib\WPDocument.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WPXBinaryData.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WPXContentListener.cpp
 # End Source File
 # Begin Source File
@@ -1276,6 +1280,10 @@ SOURCE=..\..\src\lib\WP6VariableLengthGroup.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WPDocument.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WPXBinaryData.h
 # End Source File
 # Begin Source File
 
