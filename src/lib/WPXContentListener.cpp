@@ -299,8 +299,7 @@ void WPXContentListener::_openPageSpan()
 	std::vector<WPXHeaderFooter> headerFooterList = currentPage.getHeaderFooterList();
 	for (std::vector<WPXHeaderFooter>::iterator iter = headerFooterList.begin(); iter != headerFooterList.end(); iter++)
 	{
-		if (((*iter).getOccurence() != NEVER) && ((*iter).getInternalType() != DUMMY_INTERNAL_HEADER_FOOTER)
-			&& !currentPage.getHeaderFooterSuppression((*iter).getInternalType()))
+		if (((*iter).getOccurence() != NEVER) && !currentPage.getHeaderFooterSuppression((*iter).getInternalType()))
 		{
 			propList.clear();
 			switch ((*iter).getOccurence())
