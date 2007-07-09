@@ -97,11 +97,40 @@ WPXString readCString(WPXInputStream *input)
 // the ascii map appears stupid, but we need the const 16-bit data for now
 static const uint16_t asciiMap[] =
 {
-	  0,   1,   2,   3,   4,   5,   6,   7,
-	  8,   9,  10,  11,  12,  13,  14,  15,
-	 16,  17,  18,  19,  20,  21,  22,  23,
-	 24,  25,  26,  27,  28,  29,  30,  31,
-	 32,  33,  34,  35,  36,  37,  38,  39,
+	  0,
+	229, // lower case 'a' with a small circle
+	197, // upper case 'a' with a small circle
+	230, // lower case 'ae'
+	198, // upper case 'ae'
+	228, // lower case 'a' with diathesis
+	196, // upper case 'a' with diathesis
+	225, // lower case 'a' with acute
+	224, // lower case 'a' with grave
+	226, // lower case 'a' with circonflex
+	227, // lower case 'a' with tilde
+	195, // upper case 'a' with tilde
+	231, // lower case 'c' with hook
+	199, // upper case 'c' with hook
+	235, // lower case 'e' with diathesis
+	233, // lower case 'e' with acute
+	201, // upper case 'e' with acute
+	232, // lower case 'e' with grave
+	234, // lower case 'e' with circonflex
+	237, // lower case 'i' with acute
+	241, // lower case 'n' with tilde
+	209, // upper case 'n' with tilde
+	248, // lower case 'o' with stroke
+	216, // upper case 'o' with stroke
+	245, // lower case 'o' with tilde
+	213, // upper case 'o' with tilde
+	246, // lower case 'o' with diathesis
+	214, // upper case 'o' with diathesis
+	252, // lower case 'u' with diathesis
+	220, // upper case 'u' with diathesis
+	250, // lower case 'u' with acute
+	249, // lower case 'u' with grave
+	223, // double s
+	      33,  34,  35,  36,  37,  38,  39,
 	 40,  41,  42,  43,  44,  45,  46,  47,
 	 48,  49,  50,  51,  52,  53,  54,  55,
 	 56,  57,  58,  59,  60,  61,  62,  63,
@@ -504,6 +533,8 @@ int extendedCharacterWP6ToUCS2(uint8_t character,
 
 	if (characterSet == 0)
 	{
+		if (character == 0)
+		return 0;
 		// if characterset == 0, we have ascii. note that this is different from the doc. body
 		// this is not documented in the file format specifications
 		*chars = &asciiMap[character];
