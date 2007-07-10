@@ -97,7 +97,7 @@ WPXString readCString(WPXInputStream *input)
 // the ascii map appears stupid, but we need the const 16-bit data for now
 static const uint16_t asciiMap[] =
 {
-	  0,
+	 32,
 	229, // lower case 'a' with a small circle
 	197, // upper case 'a' with a small circle
 	230, // lower case 'ae'
@@ -533,8 +533,6 @@ int extendedCharacterWP6ToUCS2(uint8_t character,
 
 	if (characterSet == 0)
 	{
-		if (character == 0)
-		return 0;
 		// if characterset == 0, we have ascii. note that this is different from the doc. body
 		// this is not documented in the file format specifications
 		*chars = &asciiMap[character];
