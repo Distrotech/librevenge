@@ -54,7 +54,7 @@ void WP6GraphicsCachedFileDataPacket::_readContents(WPXInputStream *input)
 	m_data = new uint8_t[tmpDataSize];
 	for (uint32_t i = 0; i < tmpDataSize; i++)
 		m_data[i] = readU8(input);
-#if 1
+#if 0
 	WPXString filename;
 	filename.sprintf("binarydump%.4x.wpg", m_id);
 	FILE *f = fopen(filename.cstr(), "w");
