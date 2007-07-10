@@ -158,7 +158,7 @@ void WP6FontDescriptorPacket::_readContents(WPXInputStream *input)
 				   if (!strcmp(USELESS_WP_POSTFIX, &m_fontName[stringPosition])) 
 				   {
 					   m_fontName[stringPosition]='\0';
-					   tempLength = (uint16_t)(stringPosition - 1);
+					   tempLength = (uint16_t)(stringPosition);
 				   }
 			   }
 			   // also consume any whitespace at the end of the font..

@@ -97,40 +97,7 @@ WPXString readCString(WPXInputStream *input)
 // the ascii map appears stupid, but we need the const 16-bit data for now
 static const uint16_t asciiMap[] =
 {
-	 32,
-	229, // lower case 'a' with a small circle
-	197, // upper case 'a' with a small circle
-	230, // lower case 'ae'
-	198, // upper case 'ae'
-	228, // lower case 'a' with diathesis
-	196, // upper case 'a' with diathesis
-	225, // lower case 'a' with acute
-	224, // lower case 'a' with grave
-	226, // lower case 'a' with circonflex
-	227, // lower case 'a' with tilde
-	195, // upper case 'a' with tilde
-	231, // lower case 'c' with hook
-	199, // upper case 'c' with hook
-	235, // lower case 'e' with diathesis
-	233, // lower case 'e' with acute
-	201, // upper case 'e' with acute
-	232, // lower case 'e' with grave
-	234, // lower case 'e' with circonflex
-	237, // lower case 'i' with acute
-	241, // lower case 'n' with tilde
-	209, // upper case 'n' with tilde
-	248, // lower case 'o' with stroke
-	216, // upper case 'o' with stroke
-	245, // lower case 'o' with tilde
-	213, // upper case 'o' with tilde
-	246, // lower case 'o' with diathesis
-	214, // upper case 'o' with diathesis
-	252, // lower case 'u' with diathesis
-	220, // upper case 'u' with diathesis
-	250, // lower case 'u' with acute
-	249, // lower case 'u' with grave
-	223, // double s
-	      33,  34,  35,  36,  37,  38,  39,
+	 32,  33,  34,  35,  36,  37,  38,  39,
 	 40,  41,  42,  43,  44,  45,  46,  47,
 	 48,  49,  50,  51,  52,  53,  54,  55,
 	 56,  57,  58,  59,  60,  61,  62,  63,
@@ -141,23 +108,7 @@ static const uint16_t asciiMap[] =
 	 96,  97,  98,  99, 100, 101, 102, 103,
 	104, 105, 106, 107, 108, 109, 110, 111,
 	112, 113, 114, 115, 116, 117, 118, 119,
-	120, 121, 122, 123, 124, 125, 126, 127,
-	128, 129, 130, 131, 132, 133, 134, 135,
-	136, 137, 138, 139, 140, 141, 142, 143,
-	144, 145, 146, 147, 148, 149, 150, 151,
-	152, 153, 154, 155, 156, 157, 158, 159,
-	160, 161, 162, 163, 164, 165, 166, 167,
-	168, 169, 170, 171, 172, 173, 174, 175,
-	176, 177, 178, 179, 180, 181, 182, 183,
-	184, 185, 186, 187, 188, 189, 190, 191,
-	192, 193, 194, 195, 196, 197, 198, 199,
-	200, 201, 202, 203, 204, 205, 206, 207,
-	208, 209, 210, 211, 212, 213, 214, 215,
-	216, 217, 218, 219, 220, 221, 222, 223,
-	224, 225, 226, 227, 228, 229, 230, 231,
-	232, 233, 234, 235, 236, 237, 238, 239,
-	240, 241, 242, 243, 244, 245, 246, 247,
-	248, 249, 250, 251, 252, 253, 254, 255,
+	120, 121, 122, 123, 124, 125, 126
 };
 
 /* WP6 Extended Character -> Unicode (UCS2) Mappings by Ariya Hidayat <ariyahidayat@yahoo.de> for the
@@ -535,7 +486,10 @@ int extendedCharacterWP6ToUCS2(uint8_t character,
 	{
 		// if characterset == 0, we have ascii. note that this is different from the doc. body
 		// this is not documented in the file format specifications
-		*chars = &asciiMap[character];
+		if (character >= 0x20 && character < 0x7F)
+			*chars = &asciiMap[character - 0x20];
+		else
+			*chars = &asciiMap[0x00];
 		return 1;
 	}
 
@@ -545,77 +499,77 @@ int extendedCharacterWP6ToUCS2(uint8_t character,
 		if (character < WP6_NUM_MULTINATIONAL_CHARACTERS)
 			*chars = &multinationalWP6[character];
 		else
-			*chars = &asciiMap[32];
+			*chars = &asciiMap[0x00];
 		return 1;
 		
 	case WP6_PHONETIC_SYMBOL_CHARACTER_SET:
 		if (character < WP6_NUM_PHONETIC_CHARACTERS)
 			*chars = &phoneticWP6[character];
 		else
-			*chars = &asciiMap[32];
+			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP6_BOX_DRAWING_CHARACTER_SET:
 		if (character < WP6_NUM_BOX_DRAWING_CHARACTERS)
 			*chars = &boxdrawingWP6[character];
 		else
-			*chars = &asciiMap[32];
+			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP6_TYPOGRAPHIC_SYMBOL_CHARACTER_SET:
 		if (character < WP6_NUM_TYPOGRAPHIC_CHARACTERS)
 			*chars = &typographicWP6[character];
 		else
-			*chars = &asciiMap[32];
+			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP6_ICONIC_SYMBOL_CHARACTER_SET:
 		if (character < WP6_NUM_ICONIC_CHARACTERS)
 			*chars = &iconicWP6[character];
 		else
-			*chars = &asciiMap[32];
+			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP6_MATH_SCIENTIFIC_CHARACTER_SET:
 		if (character < WP6_NUM_MATH_SCIENTIFIC_CHARACTERS)
 			*chars = &mathWP6[character];
 		else
-			*chars = &asciiMap[32];
+			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP6_MATH_SCIENTIFIC_EXTENDED_CHARACTER_SET:
 		if (character < WP6_NUM_MATH_SCIENTIFIC_EXTENDED_CHARACTERS)
 			*chars = &mathextWP6[character];
 		else
-			*chars = &asciiMap[32];
+			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP6_GREEK_CHARACTER_SET:
 		if (character < WP6_NUM_GREEK_CHARACTERS)
 			*chars = &greekWP6[character];
 		else
-			*chars = &asciiMap[32];
+			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP6_HEBREW_CHARACTER_SET:
 		if (character < WP6_NUM_HEBREW_CHARACTERS)
 			*chars = &hebrewWP6[character];
 		else
-			*chars = &asciiMap[32];
+			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP6_CYRILLIC_CHARACTER_SET:
 		if (character < WP6_NUM_CYRILLIC_CHARACTERS)
 			*chars = &cyrillicWP6[character];
 		else
-			*chars = &asciiMap[32];
+			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP6_JAPANESE_CHARACTER_SET:
 		if (character < WP6_NUM_JAPANESE_CHARACTERS)
 			*chars = &japaneseWP6[character];
 		else
-			*chars = &asciiMap[32];
+			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP6_TIBETAN_CHARACTER_SET:
@@ -626,7 +580,7 @@ int extendedCharacterWP6ToUCS2(uint8_t character,
 			return i;
 		}
 		else {
-			*chars = &asciiMap[32];
+			*chars = &asciiMap[0x00];
 			return 1;
 		}
 
@@ -634,19 +588,19 @@ int extendedCharacterWP6ToUCS2(uint8_t character,
 		if (character < WP6_NUM_ARABIC_CHARACTERS)
 			*chars = &arabicWP6[character];
 		else
-			*chars = &asciiMap[32];
+			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP6_ARABIC_SCRIPT_CHARACTER_SET:
 		if (character < WP6_NUM_ARABIC_SCRIPT_CHARACTERS)
 			*chars = &arabicScriptWP6[character];
 		else
-			*chars = &asciiMap[32];
+			*chars = &asciiMap[0x00];
 		return 1;
 	}
 
 	// last resort: return whitespace
-	*chars = &asciiMap[32];
+	*chars = &asciiMap[0x00];
 	return 1;
 }
 
@@ -878,7 +832,10 @@ int extendedCharacterWP5ToUCS2(uint8_t character,
 	{
 		// if characterset == 0, we have ascii. note that this is different from the doc. body
 		// this is not documented in the file format specifications
-		*chars = &asciiMap[character];
+		if (character >= 0x20 && character < 0x7F)
+			*chars = &asciiMap[character - 0x20];
+		else
+			*chars = &asciiMap[0x00];
 		return 1;
 	}
 
@@ -888,63 +845,63 @@ int extendedCharacterWP5ToUCS2(uint8_t character,
 		if (character < WP5_NUM_INTERNATIONAL_1_CHARACTERS)
 			*chars = &international1WP5[character];
 		else
-			*chars = &asciiMap[32];
+			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP5_INTERNATIONAL_2_CHARACTER_SET:
 		if (character < WP5_NUM_INTERNATIONAL_2_CHARACTERS)
 			*chars = &international2WP5[character];
 		else
-			*chars = &asciiMap[32];
+			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP5_BOX_DRAWING_CHARACTER_SET:
 		if (character < WP5_NUM_BOX_DRAWING_CHARACTERS)
 			*chars = &boxdrawingWP5[character];
 		else
-			*chars = &asciiMap[32];
+			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP5_TYPOGRAPHIC_SYMBOL_CHARACTER_SET:
 		if (character < WP5_NUM_TYPOGRAPHIC_CHARACTERS)
 			*chars = &typographicWP5[character];
 		else
-			*chars = &asciiMap[32];
+			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP5_ICONIC_SYMBOL_CHARACTER_SET:
 		if (character < WP5_NUM_ICONIC_CHARACTERS)
 			*chars = &iconicWP5[character];
 		else
-			*chars = &asciiMap[32];
+			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP5_MATH_SCIENTIFIC_CHARACTER_SET:
 		if (character < WP5_NUM_MATH_SCIENTIFIC_CHARACTERS)
 			*chars = &mathWP5[character];
 		else
-			*chars = &asciiMap[32];
+			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP5_MATH_SCIENTIFIC_EXTENDED_CHARACTER_SET:
 		if (character < WP5_NUM_MATH_SCIENTIFIC_EXTENDED_CHARACTERS)
 			*chars = &mathextWP5[character];
 		else
-			*chars = &asciiMap[32];
+			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP5_GREEK_CHARACTER_SET:
 		if (character < WP5_NUM_GREEK_CHARACTERS)
 			*chars = &greekWP5[character];
 		else
-			*chars = &asciiMap[32];
+			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP5_HEBREW_CHARACTER_SET:
 		if (character < WP5_NUM_HEBREW_CHARACTERS)
 			*chars = &hebrewWP5[character];
 		else
-			*chars = &asciiMap[32];
+			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP5_CYRILLIC_CHARACTER_SET:
@@ -956,12 +913,12 @@ int extendedCharacterWP5ToUCS2(uint8_t character,
 		if (character < WP5_NUM_JAPANESE_CHARACTERS)
 			*chars = &japaneseWP5[character];
 		else
-			*chars = &asciiMap[32];
+			*chars = &asciiMap[0x00];
 		return 1;
 	}
 
 	// last resort: return whitespace
-	*chars = &asciiMap[32];
+	*chars = &asciiMap[0x00];
 	return 1;
 }
 

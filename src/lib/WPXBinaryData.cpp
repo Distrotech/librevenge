@@ -119,7 +119,7 @@ const WPXString WPXBinaryData::getBase64Data() const
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 	char tempCharsToEncode[3];
 	const size_t len = size();
-	int i = 0; int j = 0; size_t modifiedLen;
+	size_t i = 0; unsigned j = 0; size_t modifiedLen;
 	if (len % 3)
 		modifiedLen = 3 * ((size_t)(len / 3) + 1);
 	else
