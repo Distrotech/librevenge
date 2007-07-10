@@ -110,6 +110,8 @@ void WP6FontDescriptorPacket::_readContents(WPXInputStream *input)
 
 			   uint8_t characterSet = (uint8_t)((charWord >> 8) & 0x00FF);
 			   uint8_t character = (uint8_t)(charWord & 0xFF);
+			   if (character == 0x00 && characterSet == 0x00)
+			   	break;
 			   
 			   const uint16_t *chars;
 			   extendedCharacterWP6ToUCS2(character, characterSet, &chars);
