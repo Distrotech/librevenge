@@ -112,7 +112,6 @@ void WP6FontDescriptorPacket::_readContents(WPXInputStream *input)
 			   uint8_t character = (uint8_t)(charWord & 0xFF);
 			   if (character == 0x00 && characterSet == 0x00)
 			   	break;
-			   
 			   const uint16_t *chars;
 			   extendedCharacterWP6ToUCS2(character, characterSet, &chars);
 			   /* We are only using ascii characters here, and
@@ -147,8 +146,8 @@ void WP6FontDescriptorPacket::_readContents(WPXInputStream *input)
 			   {
 				   if (stringPosition > 0 && !strcmp(FONT_WEIGHT_STRINGS[k], &m_fontName[stringPosition])) 
 				   {
-					   m_fontName[stringPosition-1]='\0';
-					   tempLength = (uint16_t)(stringPosition-1);
+					   m_fontName[stringPosition]='\0';
+					   tempLength = (uint16_t)(stringPosition);
 					   break;
 				   }
 			   }
