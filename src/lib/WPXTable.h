@@ -62,6 +62,7 @@ public:
 	std::vector<WPXTableCell *>  _getCellsRightAdjacent(int i, int j);
 
 	const std::vector< std::vector<WPXTableCell *> >& getRows() const { return m_tableRows; }
+	const bool isEmpty() const { return m_tableRows.size() == 0; }
 
 private:
 	std::vector< std::vector<WPXTableCell *> > m_tableRows;

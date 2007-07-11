@@ -26,6 +26,7 @@
 #ifndef WP6FONTDESCRIPTORPACKET_H
 #define WP6FONTDESCRIPTORPACKET_H
 #include "WP6PrefixDataPacket.h"
+#include "WPXString.h"
 
 class WP6FontDescriptorPacket : public WP6PrefixDataPacket
 {
@@ -33,7 +34,7 @@ class WP6FontDescriptorPacket : public WP6PrefixDataPacket
 	WP6FontDescriptorPacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize);
 	~WP6FontDescriptorPacket();
 	void _readContents(WPXInputStream *input);
-	const char *getFontName() const { return m_fontName; }
+	const char *getFontName() const { return m_fontName.cstr(); }
 
  private:
 	WP6FontDescriptorPacket(const WP6FontDescriptorPacket&);
@@ -59,6 +60,6 @@ class WP6FontDescriptorPacket : public WP6PrefixDataPacket
 
 	uint16_t m_fontNameLength;
 
-	char *m_fontName; 
+	WPXString m_fontName; 
 };
 #endif

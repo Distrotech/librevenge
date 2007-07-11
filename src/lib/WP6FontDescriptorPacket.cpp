@@ -27,7 +27,7 @@
 #include "WP6FontDescriptorPacket.h"
 #include "libwpd_internal.h"
 
-const char *FONT_WEIGHT_STRINGS[] = {	"Bold", "bold", "Demi", "demi", "Extended", "extended",
+const char * FONT_WEIGHT_STRINGS [] = {	"Bold", "bold", "Demi", "demi", "Extended", "extended",
 					"Extra", "extra", "Headline", "headline", "Light", "light",
 					"Medium", "medium", "Normal", "normal", "Regular", "regular",
 					"Standaard", "standaard", "Standard", "standard" };
@@ -54,14 +54,13 @@ WP6FontDescriptorPacket::WP6FontDescriptorPacket(WPXInputStream *input, int /* i
 	m_fontType(0),
 	m_fontSourceFileType(0),
 	m_fontNameLength(0),
-	m_fontName(0)
+	m_fontName()
 {
 	_read(input, dataOffset, dataSize);
 }
 
 WP6FontDescriptorPacket::~WP6FontDescriptorPacket()
 {
-	delete [] m_fontName;
 }
 
 void WP6FontDescriptorPacket::_readContents(WPXInputStream *input)
@@ -91,16 +90,8 @@ void WP6FontDescriptorPacket::_readContents(WPXInputStream *input)
 
    if (m_fontNameLength > ((std::numeric_limits<uint16_t>::max)() / 2))
 	m_fontNameLength = ((std::numeric_limits<uint16_t>::max)() / 2);
-   if (m_fontNameLength == 0) 
+   if (m_fontNameLength) 
 	   {
-		   m_fontName = new char[1];
-		   m_fontName[0]='\0';
-	   }
-   
-   else 
-	   {
-		   m_fontName = new char[m_fontNameLength];
-
 		   uint16_t tempLength=0;
 		   int numTokens=0;
 		   int lastTokenPosition=0;
@@ -110,9 +101,10 @@ void WP6FontDescriptorPacket::_readContents(WPXInputStream *input)
 
 			   uint8_t characterSet = (uint8_t)((charWord >> 8) & 0x00FF);
 			   uint8_t character = (uint8_t)(charWord & 0xFF);
-			   
+			   if (character == 0x00 && characterSet == 0x00)
+			   	break;
 			   const uint16_t *chars;
-			   extendedCharacterWP6ToUCS2(character, characterSet, &chars);
+			   int len = extendedCharacterWP6ToUCS2(character, characterSet, &chars);
 			   /* We are only using ascii characters here, and
 			    * if we have more than one character, that's
 			    * going to be an international character, so
@@ -120,54 +112,42 @@ void WP6FontDescriptorPacket::_readContents(WPXInputStream *input)
 			    * characters returned - we assume that just one
 			    * character was returned.
 			    */
-			   if (chars[0] == 0x20) {
-				   m_fontName[tempLength]=' ';
-				   tempLength++;
-				   numTokens++;
-				   lastTokenPosition=tempLength;
-			   }
-			   else if (chars[0] != 0x00 && chars[0] < 0x7F) {
-				   m_fontName[tempLength]=(char) chars[0];
-				   tempLength++;
-			   }
+
+			   for (int j = 0; j < len; j++)
+			   	appendUCS4(m_fontName, (uint32_t)chars[j]);
 		   }
-		   m_fontName[tempLength]='\0';
-		   // TODO/HACK: probably should create a proper static function for doing this
-		   // consume the last token (by replacing the first char with a null-terminator) if its a weight signifier
-		   // also remove annoying -WP postfix
-		   // (NB: not all wp fonts are terminated by weight, just enough of them to make this annoying)
-		   // NB: also this is O(n^2). Could be a performance hotspot.
-		   WPD_DEBUG_MSG(("WordPerfect: stripping font name (original: %s)\n", m_fontName));
-		   for (int stringPosition=(tempLength-1); stringPosition>=0; stringPosition--)
+
+		   WPD_DEBUG_MSG(("WordPerfect: stripping font name (original: %s)\n", m_fontName.cstr()));
+		   std::string stringValue(m_fontName.cstr());
+		   std::string::size_type pos;
+		   for (unsigned k = 0; k < countElements(FONT_WEIGHT_STRINGS); k++)
 		   {
-			   unsigned int k;			   
-			   for (k=0; k<countElements(FONT_WEIGHT_STRINGS); k++) 
-			   {
-				   if (stringPosition > 0 && !strcmp(FONT_WEIGHT_STRINGS[k], &m_fontName[stringPosition])) 
-				   {
-					   m_fontName[stringPosition-1]='\0';
-					   tempLength = (uint16_t)(stringPosition-1);
-					   break;
-				   }
-			   }
-			   // SPECIAL CASE: eliminate the -WP postfix (if it's there), which isn't spaced out from
-			   // the rest of the font
-			   if (k==countElements(FONT_WEIGHT_STRINGS))
-			   {
-				   if (!strcmp(USELESS_WP_POSTFIX, &m_fontName[stringPosition])) 
-				   {
-					   m_fontName[stringPosition]='\0';
-					   tempLength = (uint16_t)(stringPosition - 1);
-				   }
-			   }
-			   // also consume any whitespace at the end of the font..
-			   while ((tempLength - 1) > 0 && m_fontName[tempLength-1] == ' ')
-			   {
-				   m_fontName[tempLength-1] = '\0';
-			   }
+		   	if (!stringValue.empty())
+    				while ((pos = stringValue.find(FONT_WEIGHT_STRINGS[k])) != std::string::npos)
+          				stringValue.replace(pos, strlen(FONT_WEIGHT_STRINGS[k]),"");
 		   }
-		   WPD_DEBUG_MSG(("WordPerfect: stripping font name (final: %s)\n", m_fontName));
+		   
+		   // SPECIAL CASE: eliminate the -WP postfix (if it's there), which isn't spaced out from
+		   // the rest of the font
+		   if (!stringValue.empty())
+		   	while ((pos = stringValue.find(USELESS_WP_POSTFIX)) != std::string::npos)
+				stringValue.replace(pos, strlen(USELESS_WP_POSTFIX), "");
+
+		   // also consume any whitespace at the end of the font.
+		   if (!stringValue.empty())
+		   	while ((pos = stringValue.find("  ")) != std::string::npos)
+				stringValue.replace(pos, strlen("  "), " ");
+		   if (!stringValue.empty())
+		   	while ((pos = stringValue.find(" ", stringValue.size() - 1)) != std::string::npos)
+				stringValue.replace(pos, strlen(" "), "");
+		   if (!stringValue.empty())
+		   	while ((pos = stringValue.find("-", stringValue.size() - 1)) != std::string::npos)
+				stringValue.replace(pos, strlen("-"), "");
+		
+		   m_fontName = WPXString(stringValue.c_str());
+
+		   WPD_DEBUG_MSG(("WordPerfect: stripping font name (final: %s)\n", m_fontName.cstr()));
 	   }
-   WPD_DEBUG_MSG(("WordPerfect: Read Font (primary family id: %i, family member id: %i, font type: %i, font source file type: %i font name length: %i, font name: %s)\n", (int) m_primaryFamilyId, (int) m_primaryFamilyMemberId, (int) m_fontType, (int) m_fontSourceFileType, (int) m_fontNameLength, m_fontName));
+   WPD_DEBUG_MSG(("WordPerfect: Read Font (primary family id: %i, family member id: %i, font type: %i, font source file type: %i font name length: %i, font name: %s)\n", (int) m_primaryFamilyId, (int) m_primaryFamilyMemberId, (int) m_fontType, (int) m_fontSourceFileType, (int) m_fontNameLength, m_fontName.cstr()));
 
 }
