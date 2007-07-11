@@ -1310,7 +1310,9 @@ void WP6ContentListener::startTable()
 			_openSection();
 			m_ps->m_sectionAttributesChanged = false;
 		}
-		_openTable();
+		if (!m_parseState->m_currentTable->isEmpty())
+			_openTable();
+			
 	}
 }
 
