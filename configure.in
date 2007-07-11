@@ -49,18 +49,11 @@ dnl stream
 dnl
 test_stream=true
 AC_ARG_WITH(stream,
-	[  --without-stream        Do not build GSFStream support],
+	[  --without-stream        Do not build the input stream implementation],
 	if test "x$withval" = xno; then
 		test_stream=false
 	fi
 )
-
-if  test "x$test_stream" = xtrue ; then
-    PKG_CHECK_MODULES(LIBWPD,[
-    glib-2.0 >= 2.0.0
-    libgsf-1 >= 1.6.0
-    ])
-fi
 
 AM_CONDITIONAL(WITH_LIBWPD_STREAM, $test_stream )
 
@@ -188,11 +181,7 @@ fi
 CFLAGS="$CFLAGS -Wall -Werror -pedantic"
 CXXFLAGS="$CXXFLAGS -Wall -Werror -pedantic"
 
-LIBWPD_CXXFLAGS="$LIBWPD_CFLAGS"
-
-AC_SUBST(LIBWPD_CXXFLAGS)
 AC_SUBST(DEBUG_CXXFLAGS)
-AC_SUBST(LIBWPD_LIBS)
 
 AC_OUTPUT([
 Makefile

@@ -6,10 +6,10 @@ endif
 
 bin_PROGRAMS = $(target_wpd2text)
 
-AM_CXXFLAGS = -I$(top_srcdir)/src/lib $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS)
+AM_CXXFLAGS = -I$(top_srcdir)/src/lib $(DEBUG_CXXFLAGS)
 
 wpd2text_DEPENDENCIES = @WPD2TEXT_WIN32_RESOURCE@ 
-wpd2text_LDADD = ../../lib/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.la ../../lib/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.la $(LIBWPD_LIBS) @WPD2TEXT_WIN32_RESOURCE@ 
+wpd2text_LDADD = ../../lib/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.la ../../lib/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.la @WPD2TEXT_WIN32_RESOURCE@ 
 wpd2text_SOURCES = \
 	TextListenerImpl.cpp \
 	TextListenerImpl.h \

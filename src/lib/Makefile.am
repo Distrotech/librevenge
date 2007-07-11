@@ -45,7 +45,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_include_HEADERS = \
 
 INCLUDES = -I$(srcdir)
 
-AM_CXXFLAGS = $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS)
+AM_CXXFLAGS = $(DEBUG_CXXFLAGS)
 
 libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_LIBADD  = @LIBWPD_WIN32_RESOURCE@
 libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_DEPENDENCIES = @LIBWPD_WIN32_RESOURCE@
@@ -364,9 +364,9 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WPXSubDocument.h \
 	WPXTable.h
 
-libwpd_stream_headers = GSFStream.h \
+libwpd_stream_headers = \
 			WPXStreamImplementation.h
-libwpd_stream_sources = GSFStream.cpp \
+libwpd_stream_sources = \
 			WPXStreamImplementation.cpp \
 			WPXOLEStream.cpp \
 			WPXOLEStream.h
@@ -376,7 +376,7 @@ if WITH_LIBWPD_STREAM
 libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_includedir = $(includedir)/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@/libwpd
 libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_include_HEADERS = $(libwpd_stream_headers)
 
-libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_LIBADD  = $(LIBWPD_LIBS) @LIBWPD_STREAM_WIN32_RESOURCE@
+libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_LIBADD  = @LIBWPD_STREAM_WIN32_RESOURCE@
 libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_DEPENDENCIES = @LIBWPD_STREAM_WIN32_RESOURCE@
 libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic $(no_undefined)
 libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = $(libwpd_stream_sources)

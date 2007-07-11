@@ -6,10 +6,10 @@ endif
 
 bin_PROGRAMS = $(target_wpd2html)
 
-AM_CXXFLAGS = -I$(top_srcdir)/src/lib $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS)
+AM_CXXFLAGS = -I$(top_srcdir)/src/lib $(DEBUG_CXXFLAGS)
 
 wpd2html_DEPENDENCIES = @WPD2HTML_WIN32_RESOURCE@
-wpd2html_LDADD = ../../lib/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.la ../../lib/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.la $(LIBWPD_LIBS) @WPD2HTML_WIN32_RESOURCE@
+wpd2html_LDADD = ../../lib/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.la ../../lib/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.la @WPD2HTML_WIN32_RESOURCE@
 
 wpd2html_SOURCES = \
 	HtmlListenerImpl.cpp	\
