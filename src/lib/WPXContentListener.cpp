@@ -675,7 +675,7 @@ void WPXContentListener::_openSpan()
 	else if (m_ps->m_fontColor)
 		propList.insert("fo:color", _colorToString(m_ps->m_fontColor));
 	if (m_ps->m_highlightColor)
-		propList.insert("style:text-background-color", _colorToString(m_ps->m_highlightColor));
+		propList.insert("fo:background-color", _colorToString(m_ps->m_highlightColor));
 
 	if (!m_ps->m_isSpanOpened)
 		m_documentInterface->openSpan(propList);

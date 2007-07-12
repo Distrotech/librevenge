@@ -106,13 +106,15 @@ WPXString getPropString(const WPXPropertyList &propList)
 	WPXPropertyList::Iter i(propList);
 	if (!i.last()) 
 	{
-		WPXString prop;
-		prop.sprintf("%s: %s", i.key(), i()->getStr().cstr());
-		propString.append(prop);
+		propString.append(i.key());
+		propString.append(": ");
+		propString.append(i()->getStr().cstr());
 		for (; i.next(); )
 		{
-			prop.sprintf(", %s: %s", i.key(), i()->getStr().cstr());
-			propString.append(prop);
+			propString.append(", ");
+			propString.append(i.key());
+			propString.append(": ");
+			propString.append(i()->getStr().cstr());
 		}
 	}
 

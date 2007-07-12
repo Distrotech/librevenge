@@ -143,7 +143,7 @@ class WPXDocumentInterface
 	\li \c style:font-name The name of the font used in the span, a text string in ascii
 	\li \c fo:font-size The size of the font used in the span, in points (72 points per inch)
 	\li \c fo:color The color of the font used in the span (encoded in hex: \#RRGGBB)
-	\li \c style:text-background-color The background color of the text in the span (encoded in hex: \#RRGGBB)
+	\li \c fo:background-color The background color of the text in the span (encoded in hex: \#RRGGBB)
 	*/
 	virtual void openSpan(const WPXPropertyList &propList) = 0;
 	/**
