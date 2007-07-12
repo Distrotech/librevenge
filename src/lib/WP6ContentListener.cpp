@@ -201,6 +201,7 @@ void WP6ContentListener::setDate(const uint16_t type, const uint16_t year,
         if (retVal <= 0) {
                 // error - date wouldn't fit in buffer
                 dateStr.sprintf("ERROR: %d character buffer too short for date", DATEBUFLEN);
+		return; // don't continue, because we cannot trust the data here
         }
         else {
                 dateStr.sprintf("%s", dateBuffer);

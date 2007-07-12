@@ -116,7 +116,8 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6Listener *listener) const
 				uint8_t dayOfWeek = readU8(m_stream);
 				uint8_t timeZone = readU8(m_stream);
 				uint8_t unused = readU8(m_stream);
-				listener->setDate(tagID, year, month, day, hour, minute, second, dayOfWeek, timeZone, unused);
+				if (month > 0)
+					listener->setDate(tagID, year, month, day, hour, minute, second, dayOfWeek, timeZone, unused);
 			}
 			catch (FileException)
 			{
