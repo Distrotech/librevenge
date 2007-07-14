@@ -116,7 +116,7 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6Listener *listener) const
 				uint8_t dayOfWeek = readU8(m_stream);
 				uint8_t timeZone = readU8(m_stream);
 				uint8_t unused = readU8(m_stream);
-				if (month > 0)
+				if (month > 0 && day > 0 && year >= 1900)
 					listener->setDate(tagID, year, month, day, hour, minute, second, dayOfWeek, timeZone, unused);
 			}
 			catch (FileException)
@@ -138,8 +138,9 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6Listener *listener) const
 						      characterSet, &chars);
 				for (int j = 0; j < len; j++)
 					appendUCS4(data, (uint32_t)chars[j]);
-			} 
-			listener->setExtendedInformation(tagID, data);
+			}
+			if (data.len())
+				listener->setExtendedInformation(tagID, data);
 		}
 		m_stream->seek((i+groupLength), WPX_SEEK_SET);
 	}

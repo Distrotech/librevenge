@@ -213,8 +213,6 @@ void WP6ContentListener::setDate(const uint16_t type, const uint16_t year,
 			m_metaData.insert("meta:creation-date", dateStr);
 			break;
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_DATE_COMPLETED):
-			// output two forms until we decide which to use
-			m_metaData.insert("libwpd:completed-date", dateStr);
 			m_metaData.insert("dcterms:available", dateStr);
 			break;
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_RECORDED_DATE):
@@ -228,8 +226,6 @@ void WP6ContentListener::setDate(const uint16_t type, const uint16_t year,
 		//	m_metaData.insert("libwpd:revision-date", dateStr);
 		//	break;
 		case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_VERSION_DATE):
-			// output two forms until we decide which to use
-			m_metaData.insert("libwpd:version-date", dateStr);
 			m_metaData.insert("dcterms:issued", dateStr);
 			break;
 	}
