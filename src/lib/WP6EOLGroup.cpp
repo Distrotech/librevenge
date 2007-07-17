@@ -164,20 +164,15 @@ void WP6EOLGroup::_readContents(WPXInputStream *input)
 			case WP6_EOL_GROUP_CELL_SPANNING_INFORMATION:
 				WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_SPANNING_INFORMATION\n"));
 				numBytesToSkip = WP6_EOL_GROUP_CELL_SPANNING_INFORMATION_SIZE;
-				uint8_t numCellsSpannedHorizontally;
-				uint8_t numCellsSpannedVertically;
-				numCellsSpannedHorizontally = readU8(input);
-				numCellsSpannedVertically = readU8(input);
+				m_colSpan = readU8(input);
+				m_rowSpan = readU8(input);
 				WPD_DEBUG_MSG(("WordPerfect: num cells spanned (h:%ld, v:%ld)\n", 
 						   (long) numCellsSpannedHorizontally, (long) numCellsSpannedVertically));
-				if (numCellsSpannedHorizontally >= 128)
-					m_boundFromLeft = true;
-				else
-					m_colSpan = numCellsSpannedHorizontally;
-				if (numCellsSpannedVertically >= 128)
+				if (m_colSpan >= 128) // WP allows only tables with up to 64 columns, so this makes sense
 					m_boundFromAbove = true;
-				else
-					m_rowSpan = numCellsSpannedVertically;
+				// This is bogus because WP allows cells to span more then 128 rows. That is why this has no effect whatsoever
+				if (m_rowSpan >= 128)
+					m_boundFromLeft = true;
 				break;
 			case WP6_EOL_GROUP_CELL_FILL_COLORS:
 				WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_FILL_COLORS\n"));
@@ -306,7 +301,7 @@ void WP6EOLGroup::parse(WP6Listener *listener)
 			break;
 		case WP6_EOL_GROUP_TABLE_CELL: // Table Cell
 			WPD_DEBUG_MSG(("WordPerfect: EOL group: table cell\n"));
-			if (!m_boundFromLeft && !m_boundFromAbove)
+			if (!m_boundFromAbove)
 			{
 				listener->insertCell(m_colSpan, m_rowSpan, m_cellBorders, cellFgColor, cellBgColor,
 					cellBorderColor, m_cellVerticalAlign, m_useCellAttributes, m_cellAttributes);
@@ -324,7 +319,7 @@ void WP6EOLGroup::parse(WP6Listener *listener)
 			
 			listener->insertRow(m_rowHeight, m_isMinimumHeight, m_isHeaderRow);
 			// the cellBorders variable already represent the cell border bits as well
-			if (!m_boundFromLeft && !m_boundFromAbove)
+			if (!m_boundFromAbove)  // if m_boundFromLeft is true here, the documentation is lying because this is the first cell in the row
 			{
 				listener->insertCell(m_colSpan, m_rowSpan, m_cellBorders, cellFgColor, cellBgColor,
 					cellBorderColor, m_cellVerticalAlign, m_useCellAttributes, m_cellAttributes);
