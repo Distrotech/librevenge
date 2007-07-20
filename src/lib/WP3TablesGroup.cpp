@@ -129,7 +129,7 @@ void WP3TablesGroup::parse(WP3Listener *listener)
 	{
 	case WP3_TABLES_GROUP_TABLE_FUNCTION:
 		listener->defineTable(m_tableMode, fixedPointToWPUs(m_offsetFromLeftEdge));
-		for (i=0; i<m_numColumns && i <= 32; i++)
+		for (i=0; i<m_numColumns && i < 32; i++)
 			listener->addTableColumnDefinition(fixedPointToWPUs(m_columnWidth[i]), fixedPointToWPUs(m_leftGutterSpacing),
 								fixedPointToWPUs(m_rightGutterSpacing), 0, LEFT);
 		listener->startTable();
