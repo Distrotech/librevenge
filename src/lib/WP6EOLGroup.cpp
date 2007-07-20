@@ -167,7 +167,7 @@ void WP6EOLGroup::_readContents(WPXInputStream *input)
 				m_colSpan = readU8(input);
 				m_rowSpan = readU8(input);
 				WPD_DEBUG_MSG(("WordPerfect: num cells spanned (h:%ld, v:%ld)\n", 
-						   (long) numCellsSpannedHorizontally, (long) numCellsSpannedVertically));
+						   (long) m_colSpan, (long) m_rowSpan));
 				if (m_colSpan >= 128) // WP allows only tables with up to 64 columns, so this makes sense
 					m_boundFromAbove = true;
 				// This is bogus because WP allows cells to span more then 128 rows. That is why this has no effect whatsoever
