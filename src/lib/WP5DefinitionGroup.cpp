@@ -79,7 +79,7 @@ void WP5DefinitionGroup_DefineTablesSubGroup::parse(WP5Listener *listener)
 	listener->endTable();
 
 	listener->defineTable(m_position, m_leftOffset);
-	for (int i=0; i < m_numColumns; i++)
+	for (int i=0; i < m_numColumns && i < 32; i++)
 		listener->addTableColumnDefinition(m_columnWidth[i], m_leftGutter, m_rightGutter, m_attributeBits[i], m_columnAlignment[i]);
 	listener->startTable();
 }
