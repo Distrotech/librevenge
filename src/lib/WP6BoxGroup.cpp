@@ -51,56 +51,88 @@ void WP6BoxGroup::_readContents(WPXInputStream *input)
 			if (tmpOverrideFlags & WP6_BOX_GROUP_BOX_COUNTER_DATA_BIT)
 			{
 				long tmpEndOfData = readU16(input) + input->tell();
+#ifdef DEBUG
 				uint16_t tmpOverrideFlags = readU16(input);
+#else
+				readU16(input);
+#endif
 				WPD_DEBUG_MSG(("WP6BoxGroup: parsing Box counter data -- override flags: 0x%x\n", tmpOverrideFlags));
 				input->seek(tmpEndOfData, WPX_SEEK_SET); 
 			}
 			if (tmpOverrideFlags & WP6_BOX_GROUP_BOX_POSITIONING_DATA_BIT)
 			{
 				long tmpEndOfData = readU16(input) + input->tell();
+#ifdef DEBUG
 				uint16_t tmpOverrideFlags = readU16(input);
+#else
+				readU16(input);
+#endif
 				WPD_DEBUG_MSG(("WP6BoxGroup: parsing Box positioning data -- override flags: 0x%x\n", tmpOverrideFlags));
 				input->seek(tmpEndOfData, WPX_SEEK_SET); 
 			}
 			if (tmpOverrideFlags & WP6_BOX_GROUP_BOX_CONTENT_DATA_BIT)
 			{
 				long tmpEndOfData = readU16(input) + input->tell();
+#ifdef DEBUG
 				uint16_t tmpOverrideFlags = readU16(input);
+#else
+				readU16(input);
+#endif
 				WPD_DEBUG_MSG(("WP6BoxGroup: parsing Box content data -- override flags: 0x%x\n", tmpOverrideFlags));
 				input->seek(tmpEndOfData, WPX_SEEK_SET); 
 			}
 			if (tmpOverrideFlags & WP6_BOX_GROUP_BOX_CAPTION_DATA_BIT)
 			{
 				long tmpEndOfData = readU16(input) + input->tell();
+#ifdef DEBUG
 				uint16_t tmpOverrideFlags = readU16(input);
+#else
+				readU16(input);
+#endif
 				WPD_DEBUG_MSG(("WP6BoxGroup: parsing Box caption data -- override flags: 0x%x\n", tmpOverrideFlags));
 				input->seek(tmpEndOfData, WPX_SEEK_SET); 
 			}
 			if (tmpOverrideFlags & WP6_BOX_GROUP_BOX_BORDER_DATA_BIT)
 			{
 				long tmpEndOfData = readU16(input) + input->tell();
+#ifdef DEBUG
 				uint16_t tmpOverrideFlags = readU16(input);
+#else
+				readU16(input);
+#endif
 				WPD_DEBUG_MSG(("WP6BoxGroup: parsing Box border data -- override flags: 0x%x\n", tmpOverrideFlags));
 				input->seek(tmpEndOfData, WPX_SEEK_SET); 
 			}
 			if (tmpOverrideFlags & WP6_BOX_GROUP_BOX_FILL_DATA_BIT)
 			{
 				long tmpEndOfData = readU16(input) + input->tell();
+#ifdef DEBUG
 				uint16_t tmpOverrideFlags = readU16(input);
+#else
+				readU16(input);
+#endif
 				WPD_DEBUG_MSG(("WP6BoxGroup: parsing Box fill data -- override flags: 0x%x\n", tmpOverrideFlags));
 				input->seek(tmpEndOfData, WPX_SEEK_SET); 
 			}
 			if (tmpOverrideFlags & WP6_BOX_GROUP_BOX_BOX_WRAPPING_DATA_BIT)
 			{
 				long tmpEndOfData = readU16(input) + input->tell();
+#ifdef DEBUG
 				uint16_t tmpOverrideFlags = readU16(input);
+#else
+				readU16(input);
+#endif
 				WPD_DEBUG_MSG(("WP6BoxGroup: parsing Box wrapping data -- override flags: 0x%x\n", tmpOverrideFlags));
 				input->seek(tmpEndOfData, WPX_SEEK_SET); 
 			}
 			if (tmpOverrideFlags & WP6_BOX_GROUP_BOX_BOX_HYPERTEXT_WRAPPING_DATA_BIT)
 			{
 				long tmpEndOfData = readU16(input) + input->tell();
+#ifdef DEBUG
 				uint16_t tmpOverrideFlags = readU16(input);
+#else
+				readU16(input);
+#endif
 				WPD_DEBUG_MSG(("WP6BoxGroup: parsing Box hypertext wrapping data -- override flags: 0x%x\n", tmpOverrideFlags));
 				input->seek(tmpEndOfData, WPX_SEEK_SET); 
 			}
@@ -111,14 +143,22 @@ void WP6BoxGroup::_readContents(WPXInputStream *input)
 			if (tmpOverrideFlags & WP6_BOX_GROUP_BOX_GROUPING_DATA_BIT)
 			{
 				long tmpEndOfData = readU16(input) + input->tell();
+#ifdef DEBUG
 				uint16_t tmpOverrideFlags = readU16(input);
+#else
+				readU16(input);
+#endif
 				WPD_DEBUG_MSG(("WP6BoxGroup: parsing Box grouping data -- override flags: 0x%x\n", tmpOverrideFlags));
 				input->seek(tmpEndOfData, WPX_SEEK_SET); 
 			}
 			if (tmpOverrideFlags & WP6_BOX_GROUP_BOX_DRAW_OBJECT_DATA_BIT)
 			{
 				long tmpEndOfData = readU16(input) + input->tell();
+#ifdef DEBUG
 				uint16_t tmpOverrideFlags = readU16(input);
+#else
+				readU16(input);
+#endif
 				WPD_DEBUG_MSG(("WP6BoxGroup: parsing Box draw object data -- override flags: 0x%x\n", tmpOverrideFlags));
 				input->seek(tmpEndOfData, WPX_SEEK_SET); 
 			}
