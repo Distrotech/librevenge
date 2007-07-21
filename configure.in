@@ -176,10 +176,10 @@ if test x"$native_win32" = xyes; then
       AC_MSG_RESULT([${msnative_struct}])
     fi
   fi
+else
+  CFLAGS="$CFLAGS -Wall -Werror -pedantic"
+  CXXFLAGS="$CXXFLAGS -Wall -Werror -pedantic"
 fi
-
-CFLAGS="$CFLAGS -Wall -Werror -pedantic"
-CXXFLAGS="$CXXFLAGS -Wall -Werror -pedantic"
 
 AC_SUBST(DEBUG_CXXFLAGS)
 
