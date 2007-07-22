@@ -551,6 +551,10 @@ SOURCE=..\..\src\lib\WP6GeneralTextPacket.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP6GraphicsBoxStylePacket.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP6GraphicsCachedFileDataPacket.cpp
 # End Source File
 # Begin Source File
@@ -624,6 +628,10 @@ SOURCE=..\..\src\lib\WP6SubDocument.cpp
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP6TabGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP6TableStylePacket.cpp
 # End Source File
 # Begin Source File
 
@@ -1183,6 +1191,10 @@ SOURCE=..\..\src\lib\WP6GeneralTextPacket.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP6GraphicsBoxStylePacket.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP6GraphicsCachedFileDataPacket.h
 # End Source File
 # Begin Source File
@@ -1256,6 +1268,10 @@ SOURCE=..\..\src\lib\WP6SubDocument.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP6TabGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP6TableStylePacket.h
 # End Source File
 # Begin Source File
 
