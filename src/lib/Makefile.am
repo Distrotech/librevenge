@@ -165,6 +165,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP6FontDescriptorPacket.cpp \
 	WP6FootnoteEndnoteGroup.cpp \
 	WP6GeneralTextPacket.cpp \
+	WP6GraphicsBoxStylePacket.cpp \
 	WP6GraphicsCachedFileDataPacket.cpp \
 	WP6GraphicsFilenamePacket.cpp \
 	WP6Header.cpp \
@@ -186,6 +187,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP6StylesListener.cpp \
 	WP6SubDocument.cpp \
 	WP6TabGroup.cpp \
+	WP6TableStylePacket.cpp \
 	WP6UndoGroup.cpp \
 	WP6UnsupportedFixedLengthGroup.cpp \
 	WP6UnsupportedVariableLengthGroup.cpp \
@@ -321,6 +323,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP6FontDescriptorPacket.h \
 	WP6FootnoteEndnoteGroup.h \
 	WP6GeneralTextPacket.h \
+	WP6GraphicsBoxStylePacket.h \
 	WP6GraphicsCachedFileDataPacket.h \
 	WP6GraphicsFilenamePacket.h \
 	WP6Header.h \
@@ -341,7 +344,8 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP6StyleGroup.h \
 	WP6StylesListener.h \
 	WP6SubDocument.h \
-	WP6TabGroup.h	 \
+	WP6TabGroup.h \
+	WP6TableStylePacket.h \
 	WP6TibetanMap.h \
 	WP6UndoGroup.h \
 	WP6UnsupportedFixedLengthGroup.h \

@@ -1,6 +1,7 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
+ * Copyright (C) 2007 Fridrich Strba (fridrich_strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -32,6 +33,8 @@
 #include "WP6ExtendedDocumentSummaryPacket.h"
 #include "WP6OutlineStylePacket.h"
 #include "WP6FileStructure.h"
+#include "WP6GraphicsBoxStylePacket.h"
+#include "WP6TableStylePacket.h"
 #include "WP6GraphicsFilenamePacket.h"
 #include "WP6GraphicsCachedFileDataPacket.h"
 #include "libwpd.h"
@@ -48,36 +51,34 @@ WP6PrefixDataPacket * WP6PrefixDataPacket::constructPrefixDataPacket(WPXInputStr
 	{
 	case WP6_INDEX_HEADER_INITIAL_FONT:			
 		return new WP6DefaultInitialFontPacket(input, prefixIndice->getID(), 
-						       prefixIndice->getDataOffset(), 
-						       prefixIndice->getDataSize());
+				prefixIndice->getDataOffset(), prefixIndice->getDataSize());
 	case WP6_INDEX_HEADER_GENERAL_WORDPERFECT_TEXT:
 		return new WP6GeneralTextPacket(input, prefixIndice->getID(), 
-						prefixIndice->getDataOffset(), 
-						prefixIndice->getDataSize());
+				prefixIndice->getDataOffset(), prefixIndice->getDataSize());
 	case WP6_INDEX_HEADER_DESIRED_FONT_DESCRIPTOR_POOL:
 		return new WP6FontDescriptorPacket(input, prefixIndice->getID(), 
-						   prefixIndice->getDataOffset(), 
-						   prefixIndice->getDataSize());
+				prefixIndice->getDataOffset(), prefixIndice->getDataSize());
 	case WP6_INDEX_HEADER_FILL_STYLE:
 		return new WP6FillStylePacket(input, prefixIndice->getID(), 
-					      prefixIndice->getDataOffset(), 
-					      prefixIndice->getDataSize());
+				prefixIndice->getDataOffset(), prefixIndice->getDataSize());
 	case WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY:
 		return new WP6ExtendedDocumentSummaryPacket(input, prefixIndice->getID(), 
-							    prefixIndice->getDataOffset(), 
-							    prefixIndice->getDataSize());
+				prefixIndice->getDataOffset(), prefixIndice->getDataSize());
 	case WP6_INDEX_HEADER_OUTLINE_STYLE:
 		return new WP6OutlineStylePacket(input, prefixIndice->getID(), 
-						 prefixIndice->getDataOffset(), 
-						 prefixIndice->getDataSize());
+				prefixIndice->getDataOffset(), prefixIndice->getDataSize());
 	case WP6_INDEX_HEADER_GRAPHICS_FILENAME:
 		return new WP6GraphicsFilenamePacket(input, prefixIndice->getID(), prefixIndice->getFlags(), 
-						 prefixIndice->getDataOffset(), 
-						 prefixIndice->getDataSize());
+				prefixIndice->getDataOffset(), prefixIndice->getDataSize());
 	case WP6_INDEX_HEADER_GRAPHICS_CACHED_FILE_DATA:
 		return new WP6GraphicsCachedFileDataPacket(input, prefixIndice->getID(),
-						 prefixIndice->getDataOffset(), 
-						 prefixIndice->getDataSize());
+				prefixIndice->getDataOffset(), prefixIndice->getDataSize());
+	case WP6_INDEX_HEADER_GRAPHICS_BOX_STYLE:
+		return new WP6GraphicsBoxStylePacket(input, prefixIndice->getID(),
+				prefixIndice->getDataOffset(), prefixIndice->getDataSize());
+	case WP6_INDEX_HEADER_TABLE_STYLE:
+		return new WP6TableStylePacket(input, prefixIndice->getID(),
+				prefixIndice->getDataOffset(), prefixIndice->getDataSize());
 	default:
 		return 0;
 	}
