@@ -40,8 +40,8 @@ RSC=rc.exe
 # PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /GX /O2 /I "glib-2.0" /I "..\lib\glib-2.0\include" /I "libgsf-1" /I "libxml2" /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /I "glib-2.0" /I "..\lib\glib-2.0\include" /I "libgsf-1" /I "libxml2" /D "NDEBUG" /D "WIN32" /D "_LIB" /FD /c
+# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_LIB" /YX /FD /c
+# ADD CPP /nologo /MT /W3 /GX /O2 /D "NDEBUG" /D "WIN32" /D "_LIB" /FD /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x809 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
@@ -64,8 +64,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /I "glib-2.0" /I "..\lib\glib-2.0\include" /I "libgsf-1" /I "libxml2" /D "WIN32" /D "_DEBUG" /D "DEBUG" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MTd /W3 /GX /ZI /Od /I "glib-2.0" /I "..\lib\glib-2.0\include" /I "libgsf-1" /I "libxml2" /D "_DEBUG" /D "DEBUG" /D "WIN32" /D "_LIB" /FD /GZ /c
+# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "DEBUG" /D "_LIB" /YX /FD /GZ /c
+# ADD CPP /nologo /MTd /W3 /GX /ZI /Od /D "_DEBUG" /D "DEBUG" /D "WIN32" /D "_LIB" /FD /GZ /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x809 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
@@ -87,10 +87,6 @@ LIB32=link.exe -lib
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=..\..\src\lib\GSFStream.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\lib\WPXOLEStream.cpp
 # End Source File
 # Begin Source File
@@ -101,10 +97,6 @@ SOURCE=..\..\src\lib\WPXStreamImplementation.cpp
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
-# Begin Source File
-
-SOURCE=..\..\src\lib\GSFStream.h
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\src\lib\WPXOLEStream.h
