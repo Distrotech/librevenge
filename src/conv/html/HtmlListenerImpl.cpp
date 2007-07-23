@@ -283,6 +283,22 @@ void HtmlListenerImpl::closeEndnote()
 	}
 }
 
+void HtmlListenerImpl::openComment(const WPXPropertyList &propList)
+{
+	if (!m_ignore)
+	{
+		printf("<p/>");
+	}
+}
+
+void HtmlListenerImpl::closeComment()
+{
+	if (!m_ignore)
+	{
+		printf("<p/>\n");
+	}
+}
+
 void HtmlListenerImpl::openTable(const WPXPropertyList & /* propList */, const WPXPropertyListVector & /* columns */)
 {
 	if (!m_ignore)

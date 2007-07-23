@@ -251,7 +251,11 @@ class WPXDocumentInterface
 	\li \c libwpd:number The footnote's number
 	*/
 	virtual void openFootnote(const WPXPropertyList &propList) = 0;
+	/**
+	Called when a footnote should be closed
+	*/
 	virtual void closeFootnote() = 0;
+
 	/**
 	Called when a endnote should be opened (a sub-document will be placed inside of it)
 	\param propList Defines a set of properties for the endnote. May contain:
@@ -262,6 +266,16 @@ class WPXDocumentInterface
 	Called when a endnote should be closed
 	*/
 	virtual void closeEndnote() = 0;
+
+	/**
+	Called when a comment or annotation should be opened (a sub-document will be placed inside of it)
+	\param propList Defines a set of properties for the endnote.
+	*/
+	virtual void openComment(const WPXPropertyList &propList) = 0;
+	/**
+	Called when a comment or annotation should be closed
+	*/
+	virtual void closeComment() = 0;
 
 	/**
 	Called when a table should be opened

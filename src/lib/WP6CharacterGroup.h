@@ -148,6 +148,16 @@ private:
 	uint8_t m_currencyIndex;
 };
 
+class WP6CharacterGroup_CommentSubGroup : public WP6VariableLengthGroup_SubGroup
+{
+public:
+	WP6CharacterGroup_CommentSubGroup(WPXInputStream *input);
+	void parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
+
+private:
+
+};
+
 class WP6CharacterGroup : public WP6VariableLengthGroup
 {
  public:

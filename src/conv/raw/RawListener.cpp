@@ -316,6 +316,17 @@ void RawListenerImpl::closeEndnote()
 	_D(("closeEndnote()\n"), LC_OPEN_ENDNOTE);
 }
 
+void RawListenerImpl::openComment(const WPXPropertyList &propList)
+{
+	_U(("openComment(%s)\n", getPropString(propList).cstr()),
+	   LC_OPEN_COMMENT);
+}
+
+void RawListenerImpl::closeComment()
+{
+	_D(("closeComment()\n"), LC_OPEN_COMMENT);
+}
+
 void RawListenerImpl::openTable(const WPXPropertyList &propList, const WPXPropertyListVector &columns)
 {
 	_U(("openTable(%s, columns: %s)\n", getPropString(propList).cstr(), getPropString(columns).cstr()), LC_OPEN_TABLE);

@@ -1380,7 +1380,7 @@ void WP6ContentListener::endTable()
 	}
 }
 
-void WP6ContentListener::insertGraphicsData(const uint16_t packetId, const uint8_t anchoredTo)
+void WP6ContentListener::insertGraphicsData(const uint16_t packetId, const uint8_t /* anchoredTo */)
 {
 	if (const WP6GraphicsCachedFileDataPacket *gcfdPacket = dynamic_cast<const WP6GraphicsCachedFileDataPacket *>(this->getPrefixDataPacket(packetId))) 
 	{
@@ -1394,6 +1394,32 @@ void WP6ContentListener::insertGraphicsData(const uint16_t packetId, const uint8
 		propList.insert("libwpd:mimetype", "image/x-wpg");
 		m_documentInterface->insertBinaryObject(propList, gcfdPacket->getBinaryObject());
 		m_documentInterface->closeBox();
+	}
+}
+
+void WP6ContentListener::commentAnnotation(const uint16_t textPID)
+{
+	if (!isUndoOn())
+	{
+		if (!m_ps->m_isParagraphOpened)
+			_openParagraph();
+		else
+		{
+			_flushText();
+			_closeSpan();
+		}
+
+		WPXPropertyList propList;
+		m_documentInterface->openComment(propList);
+		
+		m_ps->m_isNote = false;
+
+		handleSubDocument(((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : 0), 
+				false, m_parseState->m_tableList, m_parseState->m_nextTableIndice);
+
+		m_ps->m_isNote = false;
+
+		m_documentInterface->closeComment();
 	}
 }
 

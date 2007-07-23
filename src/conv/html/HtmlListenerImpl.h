@@ -71,6 +71,8 @@ public:
 	virtual void closeFootnote();
 	virtual void openEndnote(const WPXPropertyList &propList);
 	virtual void closeEndnote();
+	virtual void openComment(const WPXPropertyList &propList);
+	virtual void closeComment();
 
 
 	virtual void openTable(const WPXPropertyList &propList, const WPXPropertyListVector &columns);

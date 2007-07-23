@@ -44,7 +44,8 @@ enum ListenerCallback {
 	LC_OPEN_ENDNOTE,
 	LC_OPEN_TABLE,
 	LC_OPEN_TABLE_ROW,
-	LC_OPEN_TABLE_CELL
+	LC_OPEN_TABLE_CELL,
+	LC_OPEN_COMMENT
 };
 
 class RawListenerImpl : public WPXDocumentInterface
@@ -89,6 +90,8 @@ public:
 	virtual void closeFootnote();
 	virtual void openEndnote(const WPXPropertyList &propList);
 	virtual void closeEndnote();
+	virtual void openComment(const WPXPropertyList &propList);
+	virtual void closeComment();
 
  	virtual void openTable(const WPXPropertyList &propList, const WPXPropertyListVector &columns);
  	virtual void openTableRow(const WPXPropertyList &propList);

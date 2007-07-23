@@ -28,7 +28,9 @@
 #include "WP6Parser.h"
 
 WP6CommentAnnotationPacket::WP6CommentAnnotationPacket(WPXInputStream *input, int  /* id */, uint32_t dataOffset, uint32_t dataSize): 
-	WP6PrefixDataPacket(input)
+	WP6PrefixDataPacket(input),
+	m_textPID(0),
+	m_flags(0)
 {	
 	_read(input, dataOffset, dataSize);
 }
@@ -37,6 +39,11 @@ WP6CommentAnnotationPacket::~WP6CommentAnnotationPacket()
 {
 }
 
-void WP6CommentAnnotationPacket::_readContents(WPXInputStream * /* input */)
+void WP6CommentAnnotationPacket::_readContents(WPXInputStream * input)
 {
+	uint16_t tmpNumPrefixIDs = readU16(input);
+	if (tmpNumPrefixIDs != 0x0001)
+		return;
+	m_textPID = readU16(input);
+	m_flags = readU8(input);
 }

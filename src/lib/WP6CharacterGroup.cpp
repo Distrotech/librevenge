@@ -28,6 +28,7 @@
 #include "WP6FileStructure.h"
 #include "WP6Listener.h"
 #include "libwpd_internal.h"
+#include "WP6CommentAnnotationPacket.h"
 
 /*************************************************************************
  * WP6CharacterGroup_SetAlignmentCharacterSubGroup
@@ -233,6 +234,30 @@ void WP6CharacterGroup_TableColumnSubGroup::parse(WP6Listener *listener, const u
 }
 
 /*************************************************************************
+ * WP6CharacterGroup_CommentSubGroup
+ *************************************************************************/
+
+WP6CharacterGroup_CommentSubGroup::WP6CharacterGroup_CommentSubGroup(WPXInputStream * /* input */)
+{	
+}
+
+void WP6CharacterGroup_CommentSubGroup::parse(WP6Listener * listener, const uint8_t numPrefixIDs,
+							uint16_t const *prefixIDs) const
+{
+	uint16_t textPID = 0;
+	for (uint8_t i=0; i<numPrefixIDs; i++)
+	{
+		if (const WP6CommentAnnotationPacket *caPacket = dynamic_cast<const WP6CommentAnnotationPacket *>(listener->getPrefixDataPacket(prefixIDs[i]))) 
+		{
+			textPID = caPacket->getTextPID();
+			break;
+		}
+	}
+	if (textPID)
+		listener->commentAnnotation(textPID);
+}
+
+/*************************************************************************
  * WP6CharacterGroup
  *************************************************************************/
 
@@ -284,6 +309,9 @@ void WP6CharacterGroup::_readContents(WPXInputStream *input)
 		case WP6_CHARACTER_GROUP_TABLE_COLUMN:
 			m_subGroupData = new WP6CharacterGroup_TableColumnSubGroup(input);
 			break;
+		case WP6_CHARACTER_GROUP_COMMENT:
+			m_subGroupData = new WP6CharacterGroup_CommentSubGroup(input);
+			break;
 		default:
 			break;
 	}
@@ -302,6 +330,7 @@ void WP6CharacterGroup::parse(WP6Listener *listener)
 		case WP6_CHARACTER_GROUP_CHARACTER_SHADING_CHANGE:
 		case WP6_CHARACTER_GROUP_SET_DOT_LEADER_CHARACTERS:
 		case WP6_CHARACTER_GROUP_PARAGRAPH_NUMBER_ON:
+		case WP6_CHARACTER_GROUP_COMMENT:
 			m_subGroupData->parse(listener, getNumPrefixIDs(), getPrefixIDs());
 			break;
 		case WP6_CHARACTER_GROUP_PARAGRAPH_NUMBER_OFF:
