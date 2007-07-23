@@ -179,8 +179,10 @@ if test x"$native_win32" = xyes; then
   CFLAGS="$CFLAGS -Wall -pedantic"
   CXXFLAGS="$CXXFLAGS -Wall -pedantic"
 else
-  CFLAGS="$CFLAGS -Wall -Werror -pedantic"
-  CXXFLAGS="$CXXFLAGS -Wall -Werror -pedantic"
+  if test x"$GCC" = xyes; then
+    CFLAGS="$CFLAGS -Wall -Werror -pedantic"
+    CXXFLAGS="$CXXFLAGS -Wall -Werror -pedantic"
+  fi
 fi
 
 AC_SUBST(DEBUG_CXXFLAGS)
