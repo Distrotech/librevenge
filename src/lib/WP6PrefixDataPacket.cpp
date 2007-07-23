@@ -26,6 +26,7 @@
 
 #include "WP6PrefixDataPacket.h"
 #include "WP6PrefixIndice.h"
+#include "WP6CommentAnnotationPacket.h"
 #include "WP6GeneralTextPacket.h"
 #include "WP6FontDescriptorPacket.h"
 #include "WP6FillStylePacket.h"
@@ -78,6 +79,9 @@ WP6PrefixDataPacket * WP6PrefixDataPacket::constructPrefixDataPacket(WPXInputStr
 				prefixIndice->getDataOffset(), prefixIndice->getDataSize());
 	case WP6_INDEX_HEADER_TABLE_STYLE:
 		return new WP6TableStylePacket(input, prefixIndice->getID(),
+				prefixIndice->getDataOffset(), prefixIndice->getDataSize());
+	case WP6_INDEX_HEADER_COMMENT_ANNOTATION:
+		return new WP6CommentAnnotationPacket(input, prefixIndice->getID(),
 				prefixIndice->getDataOffset(), prefixIndice->getDataSize());
 	default:
 		return 0;

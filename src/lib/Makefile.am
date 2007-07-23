@@ -153,6 +153,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP6BoxGroup.cpp \
 	WP6CharacterGroup.cpp \
 	WP6ColumnGroup.cpp \
+	WP6CommentAnnotationPacket.cpp \
 	WP6ContentListener.cpp \
 	WP6DefaultInitialFontPacket.cpp \
 	WP6DisplayNumberReferenceGroup.cpp \
@@ -312,6 +313,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP6BoxGroup.h \
 	WP6CharacterGroup.h \
 	WP6ColumnGroup.h \
+	WP6CommentAnnotationPacket.h \
 	WP6ContentListener.h \
 	WP6DefaultInitialFontPacket.h \
 	WP6DisplayNumberReferenceGroup.h \
