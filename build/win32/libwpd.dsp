@@ -503,6 +503,10 @@ SOURCE=..\..\src\lib\WP6ColumnGroup.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP6CommentAnnotationPacket.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP6ContentListener.cpp
 # End Source File
 # Begin Source File
@@ -713,10 +717,6 @@ SOURCE=..\..\src\lib\WPXTable.cpp
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
-# Begin Source File
-
-SOURCE=..\..\src\lib\GSFStream.h
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\src\lib\libwpd.h
@@ -1140,6 +1140,10 @@ SOURCE=..\..\src\lib\WP6CharacterGroup.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP6ColumnGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP6CommentAnnotationPacket.h
 # End Source File
 # Begin Source File
 
