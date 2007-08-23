@@ -1,4 +1,12 @@
 CHANGES:
+0.8.10 - 0.8.11
+- Fix incorrect conversion of tables with cells spanning more then 127 rows due to
+  incorrect information in the file-format (Fridrich)
+- Fix incorrect reading of font name information in prefix packets (Fridrich)
+- Fixing http://bugzilla.abisource.com bug #10957: Bad -L flags in Makefile.am break
+  compiling if different libwpd version is already installed (Daniel Mack)
+- Fixing http://bugzilla.abisource.com bug #10958: Risky -I ordering (Daniel Mack)
+
 0.8.9 - 0.8.10
 - Fix a locale dependency in our float to string conversion (Fridrich)
 - Enhance our reading of document meta data for WP6 (David Hislop)
