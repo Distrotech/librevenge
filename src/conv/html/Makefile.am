@@ -9,7 +9,7 @@ bin_PROGRAMS = $(target_wpd2html)
 AM_CXXFLAGS = -I$(top_srcdir)/src/lib $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS)
 
 wpd2html_DEPENDENCIES = @WPD2HTML_WIN32_RESOURCE@
-wpd2html_LDADD = ../../lib/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.la ../../lib/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.la $(LIBWPD_LIBS) @WPD2HTML_WIN32_RESOURCE@
+wpd2html_LDADD = ../../lib/libwpd-0.8.la ../../lib/libwpd-stream-0.8.la $(LIBWPD_LIBS) @WPD2HTML_WIN32_RESOURCE@
 
 wpd2html_SOURCES = \
 	HtmlListenerImpl.cpp	\
@@ -19,7 +19,8 @@ wpd2html_SOURCES = \
 if OS_WIN32
 
 @WPD2HTML_WIN32_RESOURCE@ : wpd2html.rc
-	$(top_srcdir)/build/win32/lt-compile-resource wpd2html.rc @WPD2HTML_WIN32_RESOURCE@
+	chmod +x $(top_srcdir)/build/win32/*compile-resource
+	WINDRES=@WINDRES@ $(top_srcdir)/build/win32/lt-compile-resource wpd2html.rc @WPD2HTML_WIN32_RESOURCE@
 endif
 
 # Include the wpd2html_SOURCES in case we build a tarball without stream

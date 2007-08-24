@@ -12,10 +12,10 @@ if OS_WIN32
 version_info = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) -avoid-version
 
 install-libtool-import-lib:
-	$(INSTALL) .libs/libwpd*-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll.a $(DESTDIR)$(libdir)
+	$(INSTALL) .libs/libwpd*-0.8.dll.a $(DESTDIR)$(libdir)
 
 uninstall-libtool-import-lib:
-	-rm $(DESTDIR)$(libdir)/libwpd*-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll.a
+	-rm $(DESTDIR)$(libdir)/libwpd*-0.8.dll.a
 
 else
 version_info = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
@@ -24,33 +24,24 @@ uninstall-libtool-import-lib:
 endif
 
 if WITH_LIBWPD_STREAM
-target_libwpd_stream = libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.la
+target_libwpd_stream = libwpd-stream-0.8.la
 else
 target_libwpd_stream =
 endif
 
-lib_LTLIBRARIES = libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.la $(target_libwpd_stream)
-libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_includedir = $(includedir)/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@/libwpd
-libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_include_HEADERS = \
-	libwpd.h \
-	libwpd_types.h \
-	WPDocument.h \
-	WPXBinaryData.h \
-	WPXDocumentInterface.h \
-	WPXProperty.h \
-	WPXPropertyList.h \
-	WPXPropertyListVector.h \
-	WPXStream.h \
-	WPXString.h
+lib_LTLIBRARIES = libwpd-0.8.la $(target_libwpd_stream)
+libwpd_0_8_includedir = $(includedir)/libwpd-0.8/libwpd
+libwpd_0_8_include_HEADERS = libwpd.h libwpd_types.h WPXStream.h WPXProperty.h WPXPropertyList.h \
+WPXString.h WPXPropertyListVector.h WPDocument.h WPXHLListenerImpl.h
 
 INCLUDES = -I$(srcdir)
 
 AM_CXXFLAGS = $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS)
 
-libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_LIBADD  = @LIBWPD_WIN32_RESOURCE@
-libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_DEPENDENCIES = @LIBWPD_WIN32_RESOURCE@
-libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic $(no_undefined)
-libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
+libwpd_0_8_la_LIBADD  = @LIBWPD_WIN32_RESOURCE@
+libwpd_0_8_la_DEPENDENCIES = @LIBWPD_WIN32_RESOURCE@
+libwpd_0_8_la_LDFLAGS = $(version_info) -export-dynamic $(no_undefined)
+libwpd_0_8_la_SOURCES = \
 	libwpd_internal.cpp \
 	libwpd_math.cpp \
 	WP1BottomMarginGroup.cpp \
@@ -120,7 +111,6 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP42SuppressPageCharacteristicsGroup.cpp \
 	WP42UnsupportedMultiByteFunctionGroup.cpp \
 	WP5AttributeGroup.cpp \
-	WP5BoxGroup.cpp \
 	WP5ContentListener.cpp \
 	WP5DefinitionGroup.cpp \
 	WP5ExtendedCharacterGroup.cpp \
@@ -131,7 +121,6 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP5FootnoteEndnoteGroup.cpp \
 	WP5GeneralPacketData.cpp \
 	WP5GeneralPacketIndex.cpp \
-	WP5GraphicsInformationPacket.cpp \
 	WP5Header.cpp \
 	WP5HeaderFooterGroup.cpp \
 	WP5Listener.cpp \
@@ -150,7 +139,6 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP5UnsupportedVariableLengthGroup.cpp \
 	WP5VariableLengthGroup.cpp \
 	WP6AttributeGroup.cpp \
-	WP6BoxGroup.cpp \
 	WP6CharacterGroup.cpp \
 	WP6ColumnGroup.cpp \
 	WP6ContentListener.cpp \
@@ -165,8 +153,6 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP6FontDescriptorPacket.cpp \
 	WP6FootnoteEndnoteGroup.cpp \
 	WP6GeneralTextPacket.cpp \
-	WP6GraphicsCachedFileDataPacket.cpp \
-	WP6GraphicsFilenamePacket.cpp \
 	WP6Header.cpp \
 	WP60Header.cpp \
 	WP61Header.cpp \
@@ -191,7 +177,6 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP6UnsupportedVariableLengthGroup.cpp \
 	WP6VariableLengthGroup.cpp \
 	WPDocument.cpp \
-	WPXBinaryData.cpp \
 	WPXContentListener.cpp \
 	WPXHeader.cpp \
 	WPXListener.cpp \
@@ -276,7 +261,6 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP42SuppressPageCharacteristicsGroup.h \
 	WP42UnsupportedMultiByteFunctionGroup.h \
 	WP5AttributeGroup.h \
-	WP5BoxGroup.h \
 	WP5ContentListener.h \
 	WP5DefinitionGroup.h \
 	WP5ExtendedCharacterGroup.h \
@@ -287,7 +271,6 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP5FootnoteEndnoteGroup.h \
 	WP5GeneralPacketData.h \
 	WP5GeneralPacketIndex.h \
-	WP5GraphicsInformationPacket.h \
 	WP5Header.h \
 	WP5HeaderFooterGroup.h \
 	WP5Listener.h \
@@ -307,7 +290,6 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP5VariableLengthGroup.h \
 	WP6FileStructure.h \
 	WP6AttributeGroup.h \
-	WP6BoxGroup.h \
 	WP6CharacterGroup.h \
 	WP6ColumnGroup.h \
 	WP6ContentListener.h \
@@ -321,8 +303,6 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP6FontDescriptorPacket.h \
 	WP6FootnoteEndnoteGroup.h \
 	WP6GeneralTextPacket.h \
-	WP6GraphicsCachedFileDataPacket.h \
-	WP6GraphicsFilenamePacket.h \
 	WP6Header.h \
 	WP60Header.h \
 	WP61Header.h \
@@ -351,7 +331,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WPXContentListener.h \
 	WPXHeader.h \
 	WPXFileStructure.h \
-	WPXDocumentInterface.h \
+	WPXHLListenerImpl.h \
 	WPXListener.h \
 	WPXMemoryStream.h \
 	WPXPageSpan.h \
@@ -373,23 +353,25 @@ libwpd_stream_sources = GSFStream.cpp \
 
 if WITH_LIBWPD_STREAM
 
-libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_includedir = $(includedir)/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@/libwpd
-libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_include_HEADERS = $(libwpd_stream_headers)
+libwpd_stream_0_8_includedir = $(includedir)/libwpd-0.8/libwpd
+libwpd_stream_0_8_include_HEADERS = $(libwpd_stream_headers)
 
-libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_LIBADD  = $(LIBWPD_LIBS) @LIBWPD_STREAM_WIN32_RESOURCE@
-libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_DEPENDENCIES = @LIBWPD_STREAM_WIN32_RESOURCE@
-libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic $(no_undefined)
-libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = $(libwpd_stream_sources)
+libwpd_stream_0_8_la_LIBADD  = $(LIBWPD_LIBS) @LIBWPD_STREAM_WIN32_RESOURCE@
+libwpd_stream_0_8_la_DEPENDENCIES = @LIBWPD_STREAM_WIN32_RESOURCE@
+libwpd_stream_0_8_la_LDFLAGS = $(version_info) -export-dynamic $(no_undefined)
+libwpd_stream_0_8_la_SOURCES = $(libwpd_stream_sources)
 
 endif
 
 if OS_WIN32
 
 @LIBWPD_WIN32_RESOURCE@ : libwpd.rc
-	$(top_srcdir)/build/win32/lt-compile-resource libwpd.rc @LIBWPD_WIN32_RESOURCE@
+	chmod +x $(top_srcdir)/build/win32/*compile-resource
+	WINDRES=@WINDRES@ $(top_srcdir)/build/win32/lt-compile-resource libwpd.rc @LIBWPD_WIN32_RESOURCE@
 
 @LIBWPD_STREAM_WIN32_RESOURCE@ : libwpd-stream.rc
-	$(top_srcdir)/build/win32/lt-compile-resource libwpd-stream.rc @LIBWPD_STREAM_WIN32_RESOURCE@
+	chmod +x $(top_srcdir)/build/win32/*compile-resource
+	WINDRES=@WINDRES@ $(top_srcdir)/build/win32/lt-compile-resource libwpd-stream.rc @LIBWPD_STREAM_WIN32_RESOURCE@
 endif
 
 

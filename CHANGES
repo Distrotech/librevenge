@@ -6,6 +6,8 @@ CHANGES:
 - Fixing http://bugzilla.abisource.com bug #10957: Bad -L flags in Makefile.am break
   compiling if different libwpd version is already installed (Daniel Mack)
 - Fixing http://bugzilla.abisource.com bug #10958: Risky -I ordering (Daniel Mack)
+- Making a proper release win32 (MinGW) binaries crosscompilation on Linux possible and
+  smooth (Fridrich)
 
 0.8.9 - 0.8.10
 - Fix a locale dependency in our float to string conversion (Fridrich)

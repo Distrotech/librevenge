@@ -2,27 +2,29 @@
 
 # Build runtime and developer zipfiles for libwpd on Win32.
 
-ZIP=libwpd-@WPD_VERSION@.zip
-DEVZIP=libwpd-dev-@WPD_VERSION@.zip
+ZIP=libwpd-@WPD_VERSION@-MinGW.zip
+DEVZIP=libwpd-devel-@WPD_VERSION@-MinGW.zip
 
-cd @prefix@
+cd $DESTDIR@prefix@
 
-DLLDIR=lib
 [ -f bin/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll ] && \
 [ -f bin/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll ] && \
-DLLDIR=bin
 
-strip --strip-all \
-$DLLDIR/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll \
-$DLLDIR/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll
+@STRIP@ --strip-all \
+bin/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll \
+bin/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll
 
-rm $ZIP
+upx --best \
+bin/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll \
+bin/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll
+
+rm -f $ZIP
 zip $ZIP -@ <<EOF
-$DLLDIR/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll
-$DLLDIR/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll
+bin/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll
+bin/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll
 EOF
 
-rm $DEVZIP
+rm -f $DEVZIP
 zip -r $DEVZIP -@ <<EOF
 include/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@
 lib/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll.a
