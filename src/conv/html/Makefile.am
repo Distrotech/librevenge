@@ -19,7 +19,8 @@ wpd2html_SOURCES = \
 if OS_WIN32
 
 @WPD2HTML_WIN32_RESOURCE@ : wpd2html.rc
-	$(top_srcdir)/build/win32/lt-compile-resource wpd2html.rc @WPD2HTML_WIN32_RESOURCE@
+	chmod +x $(top_srcdir)/build/win32/*compile-resource
+	WINDRES=@WINDRES@ $(top_srcdir)/build/win32/lt-compile-resource wpd2html.rc @WPD2HTML_WIN32_RESOURCE@
 endif
 
 # Include the wpd2html_SOURCES in case we build a tarball without stream

@@ -30,7 +30,7 @@ rpm: dist
 	@rm -f $(PACKAGE)-$(VERSION).tar.gz
 
 zip: all install
-	sh libwpd-zip
+	sh libwpd-zip 
 
 check: all
 	cd src/test && make check

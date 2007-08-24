@@ -3,7 +3,7 @@
 # Script to create the BUILDNUMBER used by compile-resource. This script
 # needs the script createBuildNumber.pl to be in the same directory.
 
-{ ./createBuildNumber.pl \
+{ perl ./createBuildNumber.pl \
 	src/lib/libwpd-build.stamp \
 	src/lib/libwpd-stream-build.stamp \
 	src/conv/html/wpd2html-build.stamp \

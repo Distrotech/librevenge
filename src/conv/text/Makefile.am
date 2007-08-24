@@ -18,7 +18,8 @@ wpd2text_SOURCES = \
 if OS_WIN32
 
 @WPD2TEXT_WIN32_RESOURCE@ : wpd2text.rc
-	$(top_srcdir)/build/win32/lt-compile-resource wpd2text.rc @WPD2TEXT_WIN32_RESOURCE@
+	chmod +x $(top_srcdir)/build/win32/*compile-resource
+	WINDRES=@WINDRES@ $(top_srcdir)/build/win32/lt-compile-resource wpd2text.rc @WPD2TEXT_WIN32_RESOURCE@
 endif
 
 # Include the wpd2text_SOURCES in case we build a tarball without stream
