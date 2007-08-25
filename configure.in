@@ -73,8 +73,8 @@ AC_ARG_WITH(docs,
 )
 
 if test "x$test_docs" = xtrue; then
-	AC_CHECK_TOOL(DOXYGEN, doxygen, no)
-	if test "$DOXYGEN" = no; then
+	AC_PATH_PROG(DOXYGEN, doxygen)
+	if test -z "$DOXYGEN"; then
 		AC_MSG_WARN([*** Could not find doxygen in your PATH.])
 		AC_MSG_WARN([*** The documentation will not be built.])
 		test_docs=false
