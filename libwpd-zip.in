@@ -16,7 +16,7 @@ DLLDIR=bin
 $DLLDIR/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll \
 $DLLDIR/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll
 
-upx --best \
+upx -qqq --best \
 $DLLDIR/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll \
 $DLLDIR/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll
 
