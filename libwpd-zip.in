@@ -7,21 +7,23 @@ DEVZIP=libwpd-devel-@WPD_VERSION@-MinGW.zip
 
 cd $DESTDIR@prefix@
 
+DLLDIR=lib
 [ -f bin/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll ] && \
 [ -f bin/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll ] && \
+DLLDIR=bin
 
 @STRIP@ --strip-all \
-bin/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll \
-bin/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll
+$DLLDIR/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll \
+$DLLDIR/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll
 
 upx --best \
-bin/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll \
-bin/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll
+$DLLDIR/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll \
+$DLLDIR/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll
 
 rm -f $ZIP
 zip $ZIP -@ <<EOF
-bin/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll
-bin/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll
+$DLLDIR/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll
+$DLLDIR/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll
 EOF
 
 rm -f $DEVZIP
