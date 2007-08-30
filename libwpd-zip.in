@@ -28,13 +28,13 @@ bin/wpd2raw.exe \
 bin/wpd2text.exe
 
 rm -f $ZIP
-zip $ZIP -@ <<EOF
+zip -q -r $ZIP -@ <<EOF
 $DLLDIR/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll
 $DLLDIR/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll
 EOF
 
 rm -f $DEVZIP
-zip -r $DEVZIP -@ <<EOF
+zip -q -r $DEVZIP -@ <<EOF
 include/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@
 lib/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll.a
 lib/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.a
@@ -45,7 +45,7 @@ lib/pkgconfig/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.pc
 EOF
 
 rm -f $TOOLSZIP
-zip -r -j $TOOLSZIP -@ <<EOF
+zip -q -r -j $TOOLSZIP -@ <<EOF
 bin/wpd2html.exe
 bin/wpd2raw.exe
 bin/wpd2text.exe

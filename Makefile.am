@@ -29,7 +29,7 @@ rpm: dist
 	rpmbuild -ta $(PACKAGE)-$(VERSION).tar.gz
 	@rm -f $(PACKAGE)-$(VERSION).tar.gz
 
-zip: all install
+zip: install
 	sh libwpd-zip 
 
 check: all

@@ -77,26 +77,6 @@ AC_ARG_WITH(stream,
 
 AM_CONDITIONAL(WITH_LIBWPD_STREAM, $test_stream )
 
-test_docs=true
-AC_ARG_WITH(docs,
-	[  --without-docs          Do not build documentation],
-	if test "x$withval" = xno; then
-		test_docs=false
-	fi
-)
-
-if test "x$test_docs" = xtrue; then
-	AC_PATH_PROG(DOXYGEN, doxygen)
-	if test -z "$DOXYGEN"; then
-		AC_MSG_WARN([*** Could not find doxygen in your PATH.])
-		AC_MSG_WARN([*** The documentation will not be built.])
-		test_docs=false
-	fi
-fi
-
-AM_CONDITIONAL(WITH_LIBWPD_DOCS, $test_docs )
-
-
 AC_MSG_CHECKING([for native Win32])
 case "$host" in
   *-*-mingw*)
@@ -123,6 +103,29 @@ AC_SUBST(LIBWPD_STREAM_WIN32_RESOURCE)
 AC_SUBST(WPD2HTML_WIN32_RESOURCE)
 AC_SUBST(WPD2TEXT_WIN32_RESOURCE)
 AC_SUBST(WPD2RAW_WIN32_RESOURCE)
+
+test_docs=true
+if test "$native_win32" = yes; then
+	test_docs=false
+fi
+AC_ARG_WITH(docs,
+	[  --without-docs          Do not build documentation],
+	if test "x$withval" = xno; then
+		test_docs=false
+	fi
+)
+
+if test "x$test_docs" = xtrue; then
+	AC_PATH_PROG(DOXYGEN, doxygen)
+	if test -z "$DOXYGEN"; then
+		AC_MSG_WARN([*** Could not find doxygen in your PATH.])
+		AC_MSG_WARN([*** The documentation will not be built.])
+		test_docs=false
+	fi
+fi
+
+AM_CONDITIONAL(WITH_LIBWPD_DOCS, $test_docs )
+
 
 AC_MSG_CHECKING([for Win32 platform in general])
 case "$host" in
