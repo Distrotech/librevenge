@@ -13,7 +13,7 @@ URL: http://libwpd.sf.net/
 BuildRoot: %{_tmppath}/%{name}-%{version}-buildroot
 License: LGPL
 Requires: glib2 >= 2.0.0, libgsf >= 1.6.0
-BuildRequires: glib2-devel >= 2.0.0, libgsf-devel >= 1.6.0
+BuildRequires: glib2-devel >= 2.0.0, libgsf-devel >= 1.6.0, gcc-c++, libstdc++-devel
 
 %description
 Library that handles Word Perfect documents.

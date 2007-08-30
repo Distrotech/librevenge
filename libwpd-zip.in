@@ -4,7 +4,7 @@
 
 ZIP=libwpd-@WPD_VERSION@-MinGW.zip
 DEVZIP=libwpd-devel-@WPD_VERSION@-MinGW.zip
-TOOLSZIP=libwpd-tools-@WPD_VERSION@-MinGW.zip
+TOOLSZIP=libwpd-tools-@WPD_VERSION@.zip
 
 cd $DESTDIR@prefix@
 
