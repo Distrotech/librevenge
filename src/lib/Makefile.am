@@ -391,12 +391,12 @@ endif
 
 if OS_WIN32
 
-@LIBWPD_WIN32_RESOURCE@ : libwpd.rc
+@LIBWPD_WIN32_RESOURCE@ : libwpd.rc $(libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_OBJECTS)
 	chmod +x $(top_srcdir)/build/win32/*compile-resource
 	WINDRES=@WINDRES@ $(top_srcdir)/build/win32/lt-compile-resource libwpd.rc @LIBWPD_WIN32_RESOURCE@
 
-@LIBWPD_STREAM_WIN32_RESOURCE@ : libwpd-stream.rc
-	chmod +x $(top_srcdir)/build/win32/*compile-resource
+@LIBWPD_STREAM_WIN32_RESOURCE@ : libwpd-stream.rc $(libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_OBJECTS)
+	chmod +x $(top_srcdir)/build/win32/*compile-resource && \
 	WINDRES=@WINDRES@ $(top_srcdir)/build/win32/lt-compile-resource libwpd-stream.rc @LIBWPD_STREAM_WIN32_RESOURCE@
 endif
 

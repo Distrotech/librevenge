@@ -4,6 +4,7 @@
 
 ZIP=libwpd-@WPD_VERSION@-MinGW.zip
 DEVZIP=libwpd-devel-@WPD_VERSION@-MinGW.zip
+TOOLSZIP=libwpd-tools-@WPD_VERSION@-MinGW.zip
 
 cd $DESTDIR@prefix@
 
@@ -14,11 +15,17 @@ DLLDIR=bin
 
 @STRIP@ --strip-all \
 $DLLDIR/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll \
-$DLLDIR/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll
+$DLLDIR/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll \
+bin/wpd2html.exe \
+bin/wpd2raw.exe \
+bin/wpd2text.exe
 
 upx -qqq --best \
 $DLLDIR/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll \
-$DLLDIR/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll
+$DLLDIR/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll \
+bin/wpd2html.exe \
+bin/wpd2raw.exe \
+bin/wpd2text.exe
 
 rm -f $ZIP
 zip $ZIP -@ <<EOF
@@ -35,4 +42,11 @@ lib/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll.a
 lib/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.a
 lib/pkgconfig/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.pc
 lib/pkgconfig/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.pc
+EOF
+
+rm -f $TOOLSZIP
+zip -r -j $TOOLSZIP -@ <<EOF
+bin/wpd2html.exe
+bin/wpd2raw.exe
+bin/wpd2text.exe
 EOF
