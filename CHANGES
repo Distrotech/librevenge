@@ -1,4 +1,10 @@
 CHANGES:
+0.8.11 - 0.8.12
+- Enable building of statically linked tools even when a shared library is built
+  (Robert Staudinger, Fridrich Strba)
+- Package also the tools automatically (Fridrich)
+- Do not build doxygen documentation on win32 unless explicitely asked for it (Fridrich)
+
 0.8.10 - 0.8.11
 - Fix incorrect conversion of tables with cells spanning more then 127 rows due to
   incorrect information in the file-format (Fridrich)

@@ -9,7 +9,12 @@ bin_PROGRAMS = $(target_wpd2html)
 AM_CXXFLAGS = -I$(top_srcdir)/src/lib $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS)
 
 wpd2html_DEPENDENCIES = @WPD2HTML_WIN32_RESOURCE@
-wpd2html_LDADD = ../../lib/libwpd-0.8.la ../../lib/libwpd-stream-0.8.la $(LIBWPD_LIBS) @WPD2HTML_WIN32_RESOURCE@
+
+if STATIC_TOOLS
+wpd2html_LDADD = ../../lib/@WPD_OBJDIR@/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.a ../../lib/@WPD_OBJDIR@/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.a @WPD2HTML_WIN32_RESOURCE@
+else
+wpd2html_LDADD = ../../lib/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.la ../../lib/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.la @WPD2HTML_WIN32_RESOURCE@
+endif
 
 wpd2html_SOURCES = \
 	HtmlListenerImpl.cpp	\
@@ -18,8 +23,8 @@ wpd2html_SOURCES = \
 
 if OS_WIN32
 
-@WPD2HTML_WIN32_RESOURCE@ : wpd2html.rc
-	chmod +x $(top_srcdir)/build/win32/*compile-resource
+@WPD2HTML_WIN32_RESOURCE@ : wpd2html.rc $(wpd2html_OBJECTS)
+	chmod +x $(top_srcdir)/build/win32/*compile-resource && \
 	WINDRES=@WINDRES@ $(top_srcdir)/build/win32/lt-compile-resource wpd2html.rc @WPD2HTML_WIN32_RESOURCE@
 endif
 
