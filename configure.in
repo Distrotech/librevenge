@@ -60,8 +60,7 @@ fi
 
 AC_PROG_LIBTOOL
 
-WPD_OBJDIR=$objdir
-AC_SUBST(WPD_OBJDIR)
+AC_SUBST(WPD_OBJDIR, [$objdir])
 
 dnl ***********************************************************************************
 
