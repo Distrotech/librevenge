@@ -121,6 +121,9 @@ AC_ARG_WITH(docs,
 	if test "x$withval" = xno; then
 		test_docs=false
 	fi
+	if test "x$withval" = xyes; then
+		test_docs=true
+	fi
 )
 
 if test "x$test_docs" = xtrue; then
