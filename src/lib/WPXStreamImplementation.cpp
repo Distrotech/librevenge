@@ -108,6 +108,9 @@ const uint8_t *WPXFileStream::read(size_t numBytes, size_t &numBytesRead)
 {
 	numBytesRead = 0;
 	
+	if (numBytes == 0)
+		return 0;
+	
 	if (numBytes < 0 || atEOS() || numBytes > (std::numeric_limits<unsigned long>::max)()/2)
 		return 0;
 
@@ -241,6 +244,9 @@ WPXStringStream::~WPXStringStream()
 const uint8_t *WPXStringStream::read(size_t numBytes, size_t &numBytesRead)
 {
 	numBytesRead = 0;
+	
+	if (numBytes == 0)
+		return 0;
 	
 	if (numBytes < 0 || atEOS() || numBytes > (std::numeric_limits<unsigned long>::max)()/2)
 		return 0;

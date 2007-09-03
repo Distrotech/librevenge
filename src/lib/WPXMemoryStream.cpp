@@ -41,6 +41,11 @@ WPXMemoryInputStream::~WPXMemoryInputStream()
 
 const uint8_t * WPXMemoryInputStream::read(size_t numBytes, size_t &numBytesRead)
 {
+	numBytesRead = 0;
+
+	if (numBytes == 0)
+		return 0;
+	
 	int numBytesToRead;
 
 	if ((m_offset+numBytes) < m_size)
