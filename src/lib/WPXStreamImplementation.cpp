@@ -108,6 +108,9 @@ const uint8_t *WPXFileStream::read(size_t numBytes, size_t &numBytesRead)
 {
 	numBytesRead = 0;
 	
+	if (0 == numBytes)
+		return 0;
+	
 	if (numBytes < 0 || atEOS() || numBytes > (std::numeric_limits<unsigned long>::max)()/2)
 		return 0;
 
@@ -219,6 +222,11 @@ WPXInputStream* WPXFileStream::getDocumentOLEStream(const char * name)
 	return new WPXStringStream((const char *)(d->buf), tmpLength);
 }
 
+WPXInputStream* WPXFileStream::getDocumentOLEStream()
+{
+	return getDocumentOLEStream("PerfectOffice_MAIN");
+}
+
 WPXStringStream::WPXStringStream(const char *data, const unsigned int dataSize) :
 	WPXInputStream(true),
 	d(new WPXStringStreamPrivate(std::string(data, dataSize)))
@@ -241,6 +249,9 @@ WPXStringStream::~WPXStringStream()
 const uint8_t *WPXStringStream::read(size_t numBytes, size_t &numBytesRead)
 {
 	numBytesRead = 0;
+	
+	if (0 == numBytes)
+		return 0;
 	
 	if (numBytes < 0 || atEOS() || numBytes > (std::numeric_limits<unsigned long>::max)()/2)
 		return 0;
@@ -346,4 +357,9 @@ WPXInputStream* WPXStringStream::getDocumentOLEStream(const char * name)
 
 	delete tmpStorage;
 	return new WPXStringStream((const char *)(d->buf), tmpLength);
+}
+
+WPXInputStream* WPXStringStream::getDocumentOLEStream()
+{
+	return getDocumentOLEStream("PerfectOffice_MAIN");
 }

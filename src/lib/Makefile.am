@@ -12,10 +12,12 @@ if OS_WIN32
 version_info = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) -avoid-version
 
 install-libtool-import-lib:
-	$(INSTALL) .libs/libwpd*-0.8.dll.a $(DESTDIR)$(libdir)
+	$(INSTALL) @WPD_OBJDIR@/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll.a $(DESTDIR)$(libdir)
+	$(INSTALL) @WPD_OBJDIR@/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll.a $(DESTDIR)$(libdir)
 
 uninstall-libtool-import-lib:
-	-rm $(DESTDIR)$(libdir)/libwpd*-0.8.dll.a
+	-rm $(DESTDIR)$(libdir)/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll.a
+	-rm $(DESTDIR)$(libdir)/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll.a
 
 else
 version_info = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
@@ -24,24 +26,24 @@ uninstall-libtool-import-lib:
 endif
 
 if WITH_LIBWPD_STREAM
-target_libwpd_stream = libwpd-stream-0.8.la
+target_libwpd_stream = libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.la
 else
 target_libwpd_stream =
 endif
 
-lib_LTLIBRARIES = libwpd-0.8.la $(target_libwpd_stream)
-libwpd_0_8_includedir = $(includedir)/libwpd-0.8/libwpd
-libwpd_0_8_include_HEADERS = libwpd.h libwpd_types.h WPXStream.h WPXProperty.h WPXPropertyList.h \
+lib_LTLIBRARIES = libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.la $(target_libwpd_stream)
+libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_includedir = $(includedir)/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@/libwpd
+libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_include_HEADERS = libwpd.h libwpd_types.h WPXStream.h WPXProperty.h WPXPropertyList.h \
 WPXString.h WPXPropertyListVector.h WPDocument.h WPXHLListenerImpl.h
 
 INCLUDES = -I$(srcdir)
 
 AM_CXXFLAGS = $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS)
 
-libwpd_0_8_la_LIBADD  = @LIBWPD_WIN32_RESOURCE@
-libwpd_0_8_la_DEPENDENCIES = @LIBWPD_WIN32_RESOURCE@
-libwpd_0_8_la_LDFLAGS = $(version_info) -export-dynamic $(no_undefined)
-libwpd_0_8_la_SOURCES = \
+libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_LIBADD  = @LIBWPD_WIN32_RESOURCE@
+libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_DEPENDENCIES = @LIBWPD_WIN32_RESOURCE@
+libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic $(no_undefined)
+libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	libwpd_internal.cpp \
 	libwpd_math.cpp \
 	WP1BottomMarginGroup.cpp \
@@ -353,13 +355,13 @@ libwpd_stream_sources = GSFStream.cpp \
 
 if WITH_LIBWPD_STREAM
 
-libwpd_stream_0_8_includedir = $(includedir)/libwpd-0.8/libwpd
-libwpd_stream_0_8_include_HEADERS = $(libwpd_stream_headers)
+libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_includedir = $(includedir)/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@/libwpd
+libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_include_HEADERS = $(libwpd_stream_headers)
 
-libwpd_stream_0_8_la_LIBADD  = $(LIBWPD_LIBS) @LIBWPD_STREAM_WIN32_RESOURCE@
-libwpd_stream_0_8_la_DEPENDENCIES = @LIBWPD_STREAM_WIN32_RESOURCE@
-libwpd_stream_0_8_la_LDFLAGS = $(version_info) -export-dynamic $(no_undefined)
-libwpd_stream_0_8_la_SOURCES = $(libwpd_stream_sources)
+libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_LIBADD  = $(LIBWPD_LIBS) @LIBWPD_STREAM_WIN32_RESOURCE@
+libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_DEPENDENCIES = @LIBWPD_STREAM_WIN32_RESOURCE@
+libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic $(no_undefined)
+libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = $(libwpd_stream_sources)
 
 endif
 

@@ -52,11 +52,14 @@ GSFInputStream::~GSFInputStream()
 
 const uint8_t * GSFInputStream::read(size_t numBytes, size_t &numBytesRead)
 {
+	numBytesRead = 0;
+	
+	if (0 == numBytes)
+		return 0;
+
 	const uint8_t *buf = gsf_input_read(m_input, numBytes, 0);
 
-	if (!buf)
-		numBytesRead = 0;
-	else
+	if (buf)
 		numBytesRead = numBytes;
 
 	return buf;
@@ -90,7 +93,7 @@ bool GSFInputStream::isOLEStream()
 	return false;
 }
 
-WPXInputStream * GSFInputStream::getDocumentOLEStream(const char *name)
+WPXInputStream * GSFInputStream::getDocumentOLEStream()
 {
 	WPXInputStream *documentStream = 0;
 
@@ -99,7 +102,7 @@ WPXInputStream * GSFInputStream::getDocumentOLEStream(const char *name)
 
 	if (m_ole)
 	{
-		GsfInput *document = gsf_infile_child_by_name(m_ole, name);
+		GsfInput *document = gsf_infile_child_by_name(m_ole, "PerfectOffice_MAIN");
 		if (document) 
 		{
 			documentStream = new GSFInputStream(document);

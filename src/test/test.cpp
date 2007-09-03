@@ -91,11 +91,11 @@ void Test::testStream(void)
 	input = new GSFInputStream(pGsfInput);
 
 	CPPUNIT_ASSERT_EQUAL ( false, input->isOLEStream() );
-	CPPUNIT_ASSERT_EQUAL ( (WPXInputStream*) NULL, input->getDocumentOLEStream("foo") );
+	CPPUNIT_ASSERT_EQUAL ( (WPXInputStream*) NULL, input->getDocumentOLEStream() );
 
 	// test read()
 	input->seek(0, WPX_SEEK_SET);
-	CPPUNIT_ASSERT ( NULL != input->read(0, numBytesRead)  );
+	CPPUNIT_ASSERT ( NULL == input->read(0, numBytesRead)  );
 	CPPUNIT_ASSERT_EQUAL ( (size_t) 0, numBytesRead );
 	CPPUNIT_ASSERT_EQUAL ( (long int) 0 , input->tell() );
 	CPPUNIT_ASSERT ( NULL != input->read(1, numBytesRead)  );
@@ -159,11 +159,11 @@ void Test::testStream(void)
 	input = new WPXFileStream(TMP_FILENAME);
 
 	CPPUNIT_ASSERT_EQUAL ( false, input->isOLEStream() );
-	CPPUNIT_ASSERT_EQUAL ( (WPXInputStream*) NULL, input->getDocumentOLEStream("foo") );
+	CPPUNIT_ASSERT_EQUAL ( (WPXInputStream*) NULL, input->getDocumentOLEStream() );
 
 	// test read()
 	input->seek(0, WPX_SEEK_SET);
-	CPPUNIT_ASSERT ( NULL != input->read(0, numBytesRead)  );
+	CPPUNIT_ASSERT ( NULL == input->read(0, numBytesRead)  );
 	CPPUNIT_ASSERT_EQUAL ( (size_t) 0, numBytesRead );
 	CPPUNIT_ASSERT_EQUAL ( (long int) 0 , input->tell() );
 	CPPUNIT_ASSERT ( NULL != input->read(1, numBytesRead)  );
@@ -225,11 +225,11 @@ void Test::testStream(void)
 	input = new WPXStringStream("\1\2\3\4\0\5\6\7", 8);
 
 	CPPUNIT_ASSERT_EQUAL ( false, input->isOLEStream() );
-	CPPUNIT_ASSERT_EQUAL ( (WPXInputStream*) NULL, input->getDocumentOLEStream("foo") );
+	CPPUNIT_ASSERT_EQUAL ( (WPXInputStream*) NULL, input->getDocumentOLEStream() );
 
 	// test read()
 	input->seek(0, WPX_SEEK_SET);
-	CPPUNIT_ASSERT ( NULL != input->read(0, numBytesRead)  );
+	CPPUNIT_ASSERT ( NULL == input->read(0, numBytesRead)  );
 	CPPUNIT_ASSERT_EQUAL ( (size_t) 0, numBytesRead );
 	CPPUNIT_ASSERT_EQUAL ( (long int) 0 , input->tell() );
 	CPPUNIT_ASSERT ( NULL != input->read(1, numBytesRead)  );
@@ -292,11 +292,11 @@ void Test::testStream(void)
 	input = new WPXMemoryInputStream((uint8_t *)"\1\2\3\4\0\5\6\7", 8);
 
 	CPPUNIT_ASSERT_EQUAL ( false, input->isOLEStream() );
-	CPPUNIT_ASSERT_EQUAL ( (WPXInputStream*) NULL, input->getDocumentOLEStream("foo") );
+	CPPUNIT_ASSERT_EQUAL ( (WPXInputStream*) NULL, input->getDocumentOLEStream() );
 
 	// test read()
 	input->seek(0, WPX_SEEK_SET);
-	CPPUNIT_ASSERT ( NULL != input->read(0, numBytesRead)  );
+	CPPUNIT_ASSERT ( NULL == input->read(0, numBytesRead)  );
 	CPPUNIT_ASSERT_EQUAL ( (size_t) 0, numBytesRead );
 	CPPUNIT_ASSERT_EQUAL ( (long int) 0 , input->tell() );
 	CPPUNIT_ASSERT ( NULL != input->read(1, numBytesRead)  );

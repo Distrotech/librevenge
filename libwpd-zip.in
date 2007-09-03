@@ -10,7 +10,6 @@ cd $DESTDIR@prefix@
 
 DLLDIR=lib
 [ -f bin/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll ] && \
-[ -f bin/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll ] && \
 DLLDIR=bin
 
 @STRIP@ --strip-all \
