@@ -9,19 +9,19 @@ pkgconf_DATA = libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.pc $(LIBWPD_STREAM
 SUBDIRS = src build docs autopackage
 
 EXTRA_DIST = \
-	autogen.sh	\
-	libwpd.spec	\
-	libwpd.spec.in	\
-	libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.pc.in	\
-	libwpd-zip.in	\
-	CHANGES		\
-	COPYING		\
-	CREDITS		\
-	HACKING		\
-	INSTALL		\
-	README		\
+	autogen.sh \
+	libwpd.spec \
+	libwpd.spec.in \
+	libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.pc.in \
+	libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.pc.in \
+	libwpd-zip.in \
+	CHANGES \
+	COPYING \
+	CREDITS \
+	HACKING \
+	INSTALL \
+	README \
 	TODO
-
 distclean-local:
 	rm -rf *.cache *~
 
