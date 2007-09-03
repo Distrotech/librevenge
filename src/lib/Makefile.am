@@ -12,10 +12,12 @@ if OS_WIN32
 version_info = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) -avoid-version
 
 install-libtool-import-lib:
-	$(INSTALL) .libs/libwpd*-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll.a $(DESTDIR)$(libdir)
+	$(INSTALL) @WPD_OBJDIR@/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll.a $(DESTDIR)$(libdir)
+	$(INSTALL) @WPD_OBJDIR@/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll.a $(DESTDIR)$(libdir)
 
 uninstall-libtool-import-lib:
-	-rm $(DESTDIR)$(libdir)/libwpd*-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll.a
+	-rm -f $(DESTDIR)$(libdir)/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll.a
+	-rm -f $(DESTDIR)$(libdir)/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll.a
 
 else
 version_info = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
