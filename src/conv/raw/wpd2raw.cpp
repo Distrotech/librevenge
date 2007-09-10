@@ -27,6 +27,7 @@
 #include "libwpd.h"
 #include "WPXStreamImplementation.h"
 #include "RawListener.h"
+#include <string.h>
 
 int main(int argc, char *argv[])
 {
@@ -73,7 +74,7 @@ int main(int argc, char *argv[])
 	}
 	
 	RawListenerImpl listenerImpl(printIndentLevel);
- 	WPDResult error = WPDocument::parse(input, static_cast<WPXDocumentInterface *>(&listenerImpl));
+ 	WPDResult error = WPDocument::parse(input, static_cast<WPXHLListenerImpl *>(&listenerImpl));
 
 	if (error == WPD_FILE_ACCESS_ERROR)
 		fprintf(stderr, "ERROR: File Exception!\n");

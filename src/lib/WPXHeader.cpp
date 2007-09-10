@@ -31,6 +31,8 @@
 #include "WP61Header.h"
 #include "WPXFileStructure.h"
 #include "libwpd_internal.h"
+
+#include <string.h>
 	
 WPXHeader::WPXHeader(WPXInputStream * /* input */, uint32_t documentOffset, uint8_t productType,
 			uint8_t fileType, uint8_t majorVersion, uint8_t minorVersion, uint16_t documentEncryption) :

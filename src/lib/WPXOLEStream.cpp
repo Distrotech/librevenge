@@ -37,7 +37,7 @@
 #include <vector>
 
 #include "WPXOLEStream.h"
-// #include "libwpg_utils.h"
+#include <string.h>
 
 namespace libwpd
 {
