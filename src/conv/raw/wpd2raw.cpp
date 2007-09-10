@@ -27,6 +27,7 @@
 #include "libwpd.h"
 #include "WPXStreamImplementation.h"
 #include "RawListener.h"
+#include <string.h>
 
 int main(int argc, char *argv[])
 {
