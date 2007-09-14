@@ -40,7 +40,7 @@ public:
  	WP6EOLGroup(const WP6EOLGroup&);
  	WP6EOLGroup& operator=(const WP6EOLGroup&);
 	uint8_t m_colSpan, m_rowSpan;
-	bool m_boundFromLeft, m_boundFromAbove;
+	bool m_boundFromAbove;
 
  	bool m_useCellAttributes, m_useCellJustification;
 	bool m_ignoreInCalculations, m_cellIsLocked;
