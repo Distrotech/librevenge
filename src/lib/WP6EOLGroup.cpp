@@ -35,7 +35,6 @@ WP6EOLGroup::WP6EOLGroup(WPXInputStream *input) :
 	WP6VariableLengthGroup(),
 	m_colSpan(1),
 	m_rowSpan(1),
-	m_boundFromLeft(false),
 	m_boundFromAbove(false),
 	
 	m_useCellAttributes(false),
@@ -166,13 +165,9 @@ void WP6EOLGroup::_readContents(WPXInputStream *input)
 				numBytesToSkip = WP6_EOL_GROUP_CELL_SPANNING_INFORMATION_SIZE;
 				m_colSpan = readU8(input);
 				m_rowSpan = readU8(input);
-				WPD_DEBUG_MSG(("WordPerfect: num cells spanned (h:%ld, v:%ld)\n", 
-						   (long) numCellsSpannedHorizontally, (long) numCellsSpannedVertically));
-				if (m_colSpan >= 128) // WP allows only tables with up to 64 columns, so this makes sense
+				WPD_DEBUG_MSG(("WordPerfect: num cells spanned (h:%ld, v:%ld)\n", (long) m_colSpan, (long) m_rowSpan));
+				if (m_colSpan >= 128)
 					m_boundFromAbove = true;
-				// This is bogus because WP allows cells to span more then 128 rows. That is why this has no effect whatsoever
-				if (m_rowSpan >= 128)
-					m_boundFromLeft = true;
 				break;
 			case WP6_EOL_GROUP_CELL_FILL_COLORS:
 				WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_FILL_COLORS\n"));
