@@ -53,6 +53,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP1FileStructure.cpp \
 	WP1FixedLengthGroup.cpp \
 	WP1FlushRightGroup.cpp \
+	WP1FontIdGroup.cpp \
 	WP1FootnoteEndnoteGroup.cpp \
 	WP1HeaderFooterGroup.cpp \
 	WP1Heuristics.cpp \
@@ -203,6 +204,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP1FileStructure.h \
 	WP1FixedLengthGroup.h \
 	WP1FlushRightGroup.h \
+	WP1FontIdGroup.h \
 	WP1FootnoteEndnoteGroup.h \
 	WP1HeaderFooterGroup.h \
 	WP1Heuristics.h \

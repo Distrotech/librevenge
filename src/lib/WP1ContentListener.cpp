@@ -219,6 +219,135 @@ void WP1ContentListener::fontPointSize(const uint8_t pointSize)
 	}
 }
 
+void WP1ContentListener::fontId(const uint16_t fontId)
+{
+	if (!isUndoOn())
+	{
+		_closeSpan();
+		
+		switch (fontId)
+		{
+		case 0x0002:
+		case 0xFF02:
+			*m_ps->m_fontName = "New York";
+			break;
+		case 0x0003:
+		case 0xFF03:
+			*m_ps->m_fontName = "Geneva";
+			break;
+		case 0x0004:
+		case 0xFF04:
+			*m_ps->m_fontName = "Monaco";
+			break;
+		case 0x000D:
+		case 0xFF0D:
+			*m_ps->m_fontName = "Zanf Dingbats";
+			break;
+		case 0x0010:
+		case 0xFF10:
+			*m_ps->m_fontName = "Palatino";
+			break;
+		case 0x0014:
+		case 0xFF14:
+			*m_ps->m_fontName = "Times";
+			break;
+		case 0x0015:
+		case 0xFF15:
+			*m_ps->m_fontName = "Helvetica";
+			break;
+		case 0x0016:
+		case 0xFF16:
+			*m_ps->m_fontName = "Courier";
+			break;
+		case 0x0017:
+		case 0xFF17:
+			*m_ps->m_fontName = "Symbol";
+			break;
+		case 0x07D2:
+			*m_ps->m_fontName = "Charcoal";
+			break;
+		case 0x0B07:
+			*m_ps->m_fontName = "EngraversGothic BT Regular";
+			break;
+		case 0x0B48:
+			*m_ps->m_fontName = "Swiss721 BlkEx BT Black";
+			break;
+		case 0x0DB0:
+			*m_ps->m_fontName = "GeoSla703 Lt BT Light Italic";
+			break;
+		case 0x0DBF:
+			*m_ps->m_fontName = "Humanst521 Lt BT Light Italic";
+			break;
+		case 0x0DC0:
+			*m_ps->m_fontName = "Humanst521 Cn BT Bold";
+			break;
+		case 0x0EC8:
+			*m_ps->m_fontName = "Arrus BT Bold";
+			break;
+		case 0x0EC9:
+			*m_ps->m_fontName = "Arrus BT Bold Italic";
+			break;
+		case 0x0ECA:
+			*m_ps->m_fontName = "Arrus Blk BT Black";
+			break;
+		case 0x0ECB:
+			*m_ps->m_fontName = "Arrus Blk BT Black Italic";
+			break;
+		case 0x0ECC:
+			*m_ps->m_fontName = "Arrus BT Italic";
+			break;
+		case 0x0ECD:
+			*m_ps->m_fontName = "Arrus BT Roman";
+			break;
+		case 0x0F7C:
+			*m_ps->m_fontName = "OzHandicraft BT Roman";
+			break;
+		case 0x12ED:
+			*m_ps->m_fontName = "BernhardMod BT Italic";
+			break;
+		case 0x12EE:
+			*m_ps->m_fontName = "BernhardMod BT Bold";
+			break;
+		case 0x12EF:
+			*m_ps->m_fontName = "BernhardMod BT Bold Italic";
+			break;
+		case 0x3275:
+			*m_ps->m_fontName = "Ribbon131 Bd BT Bold";
+			break;
+		case 0x3B98:
+			*m_ps->m_fontName = "Blackletter686 BT Regular";
+			break;
+		case 0x3BA2:
+			*m_ps->m_fontName = "Brush738 BT Regular";
+			break;
+		case 0x3BCF:
+			*m_ps->m_fontName = "BernhardMod BT Roman";
+			break;
+		case 0x3BF4:
+			*m_ps->m_fontName = "CaslonOpnface BT Regular";
+			break;
+		case 0x3C86:
+			*m_ps->m_fontName = "Onyx BT Regular";
+			break;
+		case 0x3C3F:
+			*m_ps->m_fontName = "GeoSla703 Lt BT Light";
+			break;
+		case 0x3C4A:
+			*m_ps->m_fontName = "Humanst521 Lt BT Light";
+			break;
+		case 0x3C4C:
+			*m_ps->m_fontName = "Humanst521 Cn BT Regular";
+			break;
+		case 0x3FFF:
+			*m_ps->m_fontName = "Chicago";
+			break;
+		default:
+			*m_ps->m_fontName = "Geneva";
+			break;
+		}
+	}
+}
+
 void WP1ContentListener::marginReset(const uint16_t leftMargin, const uint16_t rightMargin)
 {
 	if (!isUndoOn())

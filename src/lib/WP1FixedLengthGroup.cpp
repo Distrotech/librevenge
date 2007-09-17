@@ -34,6 +34,7 @@
 #include "WP1ExtendedCharacterGroup.h"
 #include "WP1PointSizeGroup.h"
 #include "WP1LeftIndentGroup.h"
+#include "WP1FontIdGroup.h"
 #include "WP1LeftRightIndentGroup.h"
 #include "WP1JustificationGroup.h"
 #include "WP1SpacingResetGroup.h"
@@ -63,6 +64,8 @@ WP1FixedLengthGroup * WP1FixedLengthGroup::constructFixedLengthGroup(WPXInputStr
 			return new WP1SuppressPageCharacteristicsGroup(input, group);
 		case WP1_LEFT_RIGHT_INDENT_GROUP:
 			return new WP1LeftRightIndentGroup(input, group);
+		case WP1_FONT_ID_GROUP:
+			return new WP1FontIdGroup(input, group);
 		case WP1_MARGIN_RELEASE_GROUP:
 			return new WP1MarginReleaseGroup(input, group);
 		case WP1_CENTER_TEXT_GROUP:
