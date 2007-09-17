@@ -78,3 +78,8 @@ void WP3EOPFunction::parse(WP3Listener *listener)
 {
 	listener->insertBreak(WPX_PAGE_BREAK);
 }
+
+void WP3CondensedTabFunction::parse(WP3Listener *listener)
+{
+	// listener->insertCondensedTab();
+}

@@ -65,4 +65,10 @@ public:
 	void parse(WP3Listener *listener);	
 };
 
+class WP3CondensedTabFunction : public WP3SingleByteFunction
+{
+public:
+	void parse(WP3Listener *listener);
+};
+
 #endif /* WP3SINGLEBYTEFUNCTION_H */
