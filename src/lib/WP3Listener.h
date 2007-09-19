@@ -39,7 +39,8 @@ public:
 
 	virtual void startDocument() = 0;
 	virtual void insertCharacter(const uint16_t character) = 0;
-	virtual void insertTab(const uint8_t tabType, float tabPosition) = 0;
+	virtual void insertTab() = 0;
+	virtual void insertTab(const uint8_t tabType, const float tabPosition) = 0;
 	virtual void insertBreak(const uint8_t breakType) = 0;
 	virtual void insertEOL() = 0;
 	virtual void lineSpacingChange(const float lineSpacing) = 0;
@@ -72,6 +73,11 @@ public:
 	virtual void insertNote(const WPXNoteType noteType, WP3SubDocument *subDocument) = 0;
 	virtual void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, WP3SubDocument *subDocument) = 0;
 	virtual void suppressPage(const uint16_t suppressCode) = 0;
+	virtual void backTab() = 0;
+	virtual void leftIndent() = 0;
+	virtual void leftIndent(const float offset) = 0;
+	virtual void leftRightIndent() = 0;
+	virtual void leftRightIndent(const float offset) = 0;
 };
 
 #endif /* WP3LISTENER_H */

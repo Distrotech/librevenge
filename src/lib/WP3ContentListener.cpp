@@ -29,6 +29,7 @@
 #include "libwpd_internal.h"
 #include "WP3SubDocument.h"
 #include <algorithm>
+#include <limits>
 
 _WP3ContentParsingState::_WP3ContentParsingState():
 	m_colSpan(1),
@@ -73,16 +74,41 @@ void WP3ContentListener::insertCharacter(const uint16_t character)
 	}
 }
 
-void WP3ContentListener::insertTab(const uint8_t /* tabType */, float /* tabPosition */)
+void WP3ContentListener::insertTab()
 {
         if (!isUndoOn())
 	{
-		if (!m_ps->m_isSpanOpened)
-			_openSpan();
+		if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
+		{
+			if (m_ps->m_tabStops.empty() || (_getNextTabStop() == (std::numeric_limits<float>::min)()))
+				m_ps->m_textIndentByTabs += 0.5f;
+			else
+				m_ps->m_textIndentByTabs = _getNextTabStop() - (m_ps->m_leftMarginByTabs  + m_ps->m_textIndentByParagraphIndentChange);
+
+			m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange
+				+ m_ps->m_textIndentByTabs;
+			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
+				+ m_ps->m_leftMarginByParagraphMarginChange + m_ps->m_leftMarginByTabs;
+			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
+				+ m_ps->m_rightMarginByParagraphMarginChange + m_ps->m_rightMarginByTabs;
+			
+			m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent;
+		}
 		else
-			_flushText();
+		{
+			if (!m_ps->m_isSpanOpened)
+				_openSpan();
+			else
+				_flushText();
+		}
 		m_listenerImpl->insertTab();
 	}
+}
+
+void WP3ContentListener::insertTab(const uint8_t /* tabType */, const float /* tabPosition */)
+{
+	if (!isUndoOn())
+		insertTab();
 }
 
 void WP3ContentListener::insertEOL()
@@ -599,6 +625,128 @@ void WP3ContentListener::insertNote(const WPXNoteType noteType, WP3SubDocument *
 	}
 }
 
+void WP3ContentListener::backTab()
+{
+	if (!isUndoOn() && !m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
+	{
+		if (m_ps->m_tabStops.empty() || (_getPreviousTabStop() == (std::numeric_limits<float>::max)()))
+			m_ps->m_textIndentByTabs -= 0.5f;
+		else
+			m_ps->m_textIndentByTabs = _getPreviousTabStop() - (m_ps->m_leftMarginByTabs  + m_ps->m_textIndentByParagraphIndentChange);
+
+		m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange
+			+ m_ps->m_textIndentByTabs;
+		m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
+			+ m_ps->m_leftMarginByParagraphMarginChange + m_ps->m_leftMarginByTabs;
+		m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
+			+ m_ps->m_rightMarginByParagraphMarginChange + m_ps->m_rightMarginByTabs;
+			
+		m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent;
+	}
+}
+
+void WP3ContentListener::leftIndent()
+{
+	if (!isUndoOn())
+	{
+		if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
+		{
+			if (m_ps->m_tabStops.empty() || (_getNextTabStop() == (std::numeric_limits<float>::min)()))
+				m_ps->m_leftMarginByTabs += 0.5f;
+			else
+				m_ps->m_leftMarginByTabs = _getNextTabStop() - (m_ps->m_textIndentByTabs + m_ps->m_textIndentByParagraphIndentChange);
+
+			m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange
+				+ m_ps->m_textIndentByTabs;
+			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
+				+ m_ps->m_leftMarginByParagraphMarginChange + m_ps->m_leftMarginByTabs;
+			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
+				+ m_ps->m_rightMarginByParagraphMarginChange + m_ps->m_rightMarginByTabs;
+			
+			m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent;
+		}
+		else
+			insertTab();
+	}
+}
+
+void WP3ContentListener::leftIndent(const float offset)
+{
+	if (!isUndoOn())
+	{
+		if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
+		{
+			if (offset == 0.0f)
+				m_ps->m_leftMarginByTabs += 0.5f;
+			else
+				m_ps->m_leftMarginByTabs += (offset / 72.0);
+
+			m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange
+				+ m_ps->m_textIndentByTabs;
+			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
+				+ m_ps->m_leftMarginByParagraphMarginChange + m_ps->m_leftMarginByTabs;
+			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
+				+ m_ps->m_rightMarginByParagraphMarginChange + m_ps->m_rightMarginByTabs;
+			
+			m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent;
+		}
+		else
+			insertTab();
+	}
+}
+
+void WP3ContentListener::leftRightIndent()
+{
+	if (!isUndoOn())
+	{
+		if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
+		{
+			if (m_ps->m_tabStops.empty() || (_getNextTabStop() == (std::numeric_limits<float>::min)()))
+				m_ps->m_leftMarginByTabs += 0.5f;
+			else
+				m_ps->m_leftMarginByTabs = _getNextTabStop() - (m_ps->m_textIndentByTabs + m_ps->m_textIndentByParagraphIndentChange);
+			
+			m_ps->m_rightMarginByTabs = m_ps->m_leftMarginByTabs;
+			m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange
+				+ m_ps->m_textIndentByTabs;
+			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
+				+ m_ps->m_leftMarginByParagraphMarginChange + m_ps->m_leftMarginByTabs;
+			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
+				+ m_ps->m_rightMarginByParagraphMarginChange + m_ps->m_rightMarginByTabs;
+			
+			m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent;
+		}
+		else
+			insertTab();
+	}
+}
+
+void WP3ContentListener::leftRightIndent(const float offset)
+{
+	if (!isUndoOn())
+	{
+		if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
+		{
+			if (offset == 0.0f)
+				m_ps->m_leftMarginByTabs += 0.5f;
+			else
+				m_ps->m_leftMarginByTabs += (offset / 72.0);
+
+			m_ps->m_rightMarginByTabs = m_ps->m_leftMarginByTabs;
+			m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange
+				+ m_ps->m_textIndentByTabs;
+			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
+				+ m_ps->m_leftMarginByParagraphMarginChange + m_ps->m_leftMarginByTabs;
+			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
+				+ m_ps->m_rightMarginByParagraphMarginChange + m_ps->m_rightMarginByTabs;
+			
+			m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent;
+		}
+		else
+			insertTab();
+	}
+}
+
 void WP3ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter,
 						WPXTableList /* tableList */, int /* nextTableIndice */)
 {
@@ -672,4 +820,28 @@ void WP3ContentListener::_flushText()
 	if (m_parseState->m_textBuffer.len())
 		m_listenerImpl->insertText(m_parseState->m_textBuffer);
 	m_parseState->m_textBuffer.clear();
+}
+
+const float WP3ContentListener::_getNextTabStop() const
+{
+	for (std::vector<WPXTabStop>::const_iterator iter = m_ps->m_tabStops.begin(); iter != (m_ps->m_tabStops.end() - 1); iter++)
+	{
+		if (iter->m_position == (m_ps->m_leftMarginByTabs + m_ps->m_textIndentByTabs + m_ps->m_textIndentByParagraphIndentChange))
+			return (iter+1)->m_position;
+		if (iter->m_position > (m_ps->m_leftMarginByTabs + m_ps->m_textIndentByTabs + m_ps->m_textIndentByParagraphIndentChange))
+			return iter->m_position;
+	}
+	return (std::numeric_limits<float>::min)();
+}
+
+const float WP3ContentListener::_getPreviousTabStop() const
+{
+	for (std::vector<WPXTabStop>::const_reverse_iterator iter = m_ps->m_tabStops.rbegin(); iter != (m_ps->m_tabStops.rend() - 1); iter++)
+	{
+		if (iter->m_position == (m_ps->m_leftMarginByTabs + m_ps->m_textIndentByTabs + m_ps->m_textIndentByParagraphIndentChange))
+			return (iter+1)->m_position;
+		if (iter->m_position < (m_ps->m_leftMarginByTabs + m_ps->m_textIndentByTabs + m_ps->m_textIndentByParagraphIndentChange))
+			return iter->m_position;
+	}
+	return (std::numeric_limits<float>::max)();
 }

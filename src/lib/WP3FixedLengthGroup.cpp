@@ -28,6 +28,8 @@
 #include "WP3AttributeGroup.h"
 #include "WP3UnsupportedFixedLengthGroup.h"
 #include "WP3ExtendedCharacterGroup.h"
+#include "WP3TabGroup.h"
+#include "WP3IndentGroup.h"
 #include "WP3UndoGroup.h"
 #include "libwpd_internal.h"
 
@@ -42,6 +44,12 @@ WP3FixedLengthGroup * WP3FixedLengthGroup::constructFixedLengthGroup(WPXInputStr
 	{
 		case WP3_EXTENDED_CHARACTER_GROUP:
 			return new WP3ExtendedCharacterGroup(input, groupID);
+		
+		case WP3_TAB_GROUP:
+			return new WP3TabGroup(input, groupID);
+		
+		case WP3_INDENT_GROUP:
+			return new WP3IndentGroup(input, groupID);
 			
 		case WP3_UNDO_GROUP:
 			return new WP3UndoGroup(input, groupID);

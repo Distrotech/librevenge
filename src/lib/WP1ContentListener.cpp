@@ -241,7 +241,7 @@ void WP1ContentListener::fontId(const uint16_t fontId)
 			break;
 		case 0x000D:
 		case 0xFF0D:
-			*m_ps->m_fontName = "Zanf Dingbats";
+			*m_ps->m_fontName = "Zapf Dingbats";
 			break;
 		case 0x0010:
 		case 0xFF10:

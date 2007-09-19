@@ -26,6 +26,7 @@ SLOFILES= \
 	$(SLO)$/WP1FileStructure.obj \
 	$(SLO)$/WP1FixedLengthGroup.obj \
 	$(SLO)$/WP1FlushRightGroup.obj \
+	$(SLO)$/WP1FontIdGroup.obj \
 	$(SLO)$/WP1FootnoteEndnoteGroup.obj \
 	$(SLO)$/WP1HeaderFooterGroup.obj \
 	$(SLO)$/WP1Heuristics.obj \
@@ -59,6 +60,7 @@ SLOFILES= \
 	$(SLO)$/WP3FootnoteEndnoteGroup.obj \
 	$(SLO)$/WP3Header.obj \
 	$(SLO)$/WP3HeaderFooterGroup.obj \
+	$(SLO)$/WP3IndentGroup.obj \
 	$(SLO)$/WP3Listener.obj \
 	$(SLO)$/WP3MiscellaneousGroup.obj \
 	$(SLO)$/WP3PageFormatGroup.obj \
@@ -67,6 +69,7 @@ SLOFILES= \
 	$(SLO)$/WP3SingleByteFunction.obj \
 	$(SLO)$/WP3StylesListener.obj \
 	$(SLO)$/WP3SubDocument.obj \
+	$(SLO)$/WP3TabGroup.obj \
 	$(SLO)$/WP3TablesGroup.obj \
 	$(SLO)$/WP3UndoGroup.obj \
 	$(SLO)$/WP3UnsupportedFixedLengthGroup.obj \

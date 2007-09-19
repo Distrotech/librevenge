@@ -65,4 +65,22 @@ public:
 	void parse(WP3Listener *listener);	
 };
 
+class WP3CondensedBackTabFunction : public WP3SingleByteFunction
+{
+public:
+	void parse(WP3Listener *listener);
+};
+
+class WP3CondensedIndentFunction : public WP3SingleByteFunction
+{
+public:
+	void parse(WP3Listener *listener);
+};
+
+class WP3CondensedLRIndentFunction : public WP3SingleByteFunction
+{
+public:
+	void parse(WP3Listener *listener);
+};
+
 #endif /* WP3SINGLEBYTEFUNCTION_H */
