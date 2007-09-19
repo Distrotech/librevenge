@@ -65,6 +65,12 @@ public:
 	void parse(WP3Listener *listener);	
 };
 
+class WP3CondensedTabFunction : public WP3SingleByteFunction
+{
+public:
+	void parse(WP3Listener *listener);
+};
+
 class WP3CondensedBackTabFunction : public WP3SingleByteFunction
 {
 public:
