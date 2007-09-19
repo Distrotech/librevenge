@@ -100,8 +100,8 @@ void WP3ContentListener::insertTab()
 				_openSpan();
 			else
 				_flushText();
+			m_listenerImpl->insertTab();
 		}
-		m_listenerImpl->insertTab();
 	}
 }
 
