@@ -96,6 +96,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP3FootnoteEndnoteGroup.cpp \
 	WP3Header.cpp \
 	WP3HeaderFooterGroup.cpp \
+	WP3IndentGroup.cpp \
 	WP3Listener.cpp \
 	WP3MiscellaneousGroup.cpp \
 	WP3PageFormatGroup.cpp \
@@ -104,6 +105,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP3SingleByteFunction.cpp \
 	WP3StylesListener.cpp \
 	WP3SubDocument.cpp \
+	WP3TabGroup.cpp \
 	WP3TablesGroup.cpp \
 	WP3UndoGroup.cpp \
 	WP3UnsupportedFixedLengthGroup.cpp \
@@ -256,6 +258,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP3FootnoteEndnoteGroup.h \
 	WP3Header.h \
 	WP3HeaderFooterGroup.h \
+	WP3IndentGroup.h \
 	WP3Listener.h \
 	WP3MiscellaneousGroup.h \
 	WP3PageFormatGroup.h \
@@ -264,6 +267,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP3SingleByteFunction.h \
 	WP3StylesListener.h \
 	WP3SubDocument.h \
+	WP3TabGroup.h \
 	WP3TablesGroup.h \
 	WP3UndoGroup.h \
 	WP3UnsupportedFixedLengthGroup.h \

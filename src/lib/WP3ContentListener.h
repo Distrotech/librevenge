@@ -55,7 +55,8 @@ public:
 
 	void startDocument() { WPXContentListener::startDocument(); };
 	void insertCharacter(const uint16_t character);
-	void insertTab(const uint8_t tabType, float tabPosition);
+	void insertTab();
+	void insertTab(const uint8_t tabType, const float tabPosition);
 	void insertBreak(const uint8_t breakType) { WPXContentListener::insertBreak(breakType); };
 	void insertEOL();
 	void attributeChange(const bool isOn, const uint8_t attribute);
@@ -90,6 +91,11 @@ public:
 	void insertNote(const WPXNoteType noteType, WP3SubDocument *subDocument);
 	void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, WP3SubDocument *subDocument);
 	void suppressPage(const uint16_t /* suppressCode */) {};
+	void backTab();
+	void leftIndent();
+	void leftIndent(const float offset);
+	void leftRightIndent();
+	void leftRightIndent(const float offset);
 	
 protected:
 	void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
@@ -103,6 +109,8 @@ private:
 	WP3ContentListener& operator=(const WP3ContentListener&);
 	WP3ContentParsingState *m_parseState;
 	std::vector<WP3SubDocument *> &m_subDocuments;
+	const float _getNextTabStop() const;
+	const float _getPreviousTabStop() const;
 };
 
 #endif /* WP3CONTENTLISTENER_H */

@@ -39,6 +39,18 @@ WP3SingleByteFunction * WP3SingleByteFunction::constructSingleByteFunction(WPXIn
 	case 0x81: // condensed hard page
 		return new WP3EOPFunction();
 
+	case 0x82: // condensed tab
+		return new WP3CondensedTabFunction();
+
+	case 0x83: // condensed back-tab
+		return new WP3CondensedBackTabFunction();
+	
+	case 0x84: // condensed indent
+		return new WP3CondensedIndentFunction();
+		
+	case 0x85: // condensed left-right indent
+		return new WP3CondensedLRIndentFunction();
+
 	case 0x96: // hard hyphen in line
 		return new WP3HyphenFunction();
 
@@ -81,5 +93,20 @@ void WP3EOPFunction::parse(WP3Listener *listener)
 
 void WP3CondensedTabFunction::parse(WP3Listener *listener)
 {
-	// listener->insertCondensedTab();
+	listener->insertTab();
+}
+
+void WP3CondensedBackTabFunction::parse(WP3Listener *listener)
+{
+	listener->backTab();	
+}
+
+void WP3CondensedIndentFunction::parse(WP3Listener *listener)
+{
+	listener->leftIndent();
+}
+
+void WP3CondensedLRIndentFunction::parse(WP3Listener *listener)
+{
+	listener->leftRightIndent();
 }
