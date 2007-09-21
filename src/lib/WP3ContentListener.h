@@ -109,8 +109,6 @@ private:
 	WP3ContentListener& operator=(const WP3ContentListener&);
 	WP3ContentParsingState *m_parseState;
 	std::vector<WP3SubDocument *> &m_subDocuments;
-	const float _getNextTabStop() const;
-	const float _getPreviousTabStop() const;
 };
 
 #endif /* WP3CONTENTLISTENER_H */

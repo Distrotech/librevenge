@@ -29,7 +29,9 @@
 
 WP3TabGroup::WP3TabGroup(WPXInputStream *input, uint8_t groupID) :
 	WP3FixedLengthGroup(groupID),
-	m_subGroup(0)
+	m_subGroup(0),
+	m_modeType(0),
+	m_position(0.0f)
 {
 	_read(input);
 }
@@ -37,6 +39,8 @@ WP3TabGroup::WP3TabGroup(WPXInputStream *input, uint8_t groupID) :
 void WP3TabGroup::_readContents(WPXInputStream *input)
 {
 	m_subGroup = readU8(input);
+	m_modeType = readU8(input);
+	m_position = fixedPointToFloat(readU32(input, true)) / 72.0f;
 }
 
 void WP3TabGroup::parse(WP3Listener *listener)
@@ -46,10 +50,23 @@ void WP3TabGroup::parse(WP3Listener *listener)
 	case WP3_TAB_GROUP_TAB:
 		listener->insertTab();
 		break;
+	case WP3_TAB_GROUP_CENTER:
+	case WP3_TAB_GROUP_FLUSH_RIGHT:
+		listener->insertTab(m_subGroup, m_position);
+		break;
 	case WP3_TAB_GROUP_BACK_TAB:
 		listener->backTab();
+		break;
 	case WP3_TAB_GROUP_CHARACTER_KERNING:
 		listener->insertCharacter(0x0020);
+		break;
+	case WP3_TAB_GROUP_BAR_TAB:
+		listener->insertTab();
+		listener->insertCharacter('|');
+		break;
+	case WP3_TAB_GROUP_FIXED_TAB:
+		listener->insertTab();
+		break;
 	default:
 		break;
 	}

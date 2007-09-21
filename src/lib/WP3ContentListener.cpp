@@ -80,11 +80,10 @@ void WP3ContentListener::insertTab()
 	{
 		if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
 		{
-			if (m_ps->m_tabStops.empty() || (_getNextTabStop() == (std::numeric_limits<float>::min)()))
+			if (m_ps->m_tabStops.empty() || (_getNextTabStop() == (std::numeric_limits<float>::max)()))
 				m_ps->m_textIndentByTabs += 0.5f;
 			else
 				m_ps->m_textIndentByTabs = _getNextTabStop() - (m_ps->m_leftMarginByTabs  + m_ps->m_textIndentByParagraphIndentChange);
-
 			m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange
 				+ m_ps->m_textIndentByTabs;
 			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
@@ -105,10 +104,28 @@ void WP3ContentListener::insertTab()
 	}
 }
 
-void WP3ContentListener::insertTab(const uint8_t /* tabType */, const float /* tabPosition */)
+void WP3ContentListener::insertTab(const uint8_t tabType, const float /* tabPosition */)
 {
 	if (!isUndoOn())
-		insertTab();
+	{
+		if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
+		{
+			switch (tabType)
+			{
+			case WP3_TAB_GROUP_CENTER:
+				m_ps->m_tempParagraphJustification = WPX_PARAGRAPH_JUSTIFICATION_CENTER;
+				return;
+			case WP3_TAB_GROUP_FLUSH_RIGHT:
+				m_ps->m_tempParagraphJustification = WPX_PARAGRAPH_JUSTIFICATION_RIGHT;
+				return;
+			default:
+				insertTab();
+				return;
+			}
+		}
+		else
+			insertTab();
+	}
 }
 
 void WP3ContentListener::insertEOL()
@@ -820,28 +837,4 @@ void WP3ContentListener::_flushText()
 	if (m_parseState->m_textBuffer.len())
 		m_listenerImpl->insertText(m_parseState->m_textBuffer);
 	m_parseState->m_textBuffer.clear();
-}
-
-const float WP3ContentListener::_getNextTabStop() const
-{
-	for (std::vector<WPXTabStop>::const_iterator iter = m_ps->m_tabStops.begin(); iter != (m_ps->m_tabStops.end() - 1); iter++)
-	{
-		if (iter->m_position == (m_ps->m_leftMarginByTabs + m_ps->m_textIndentByTabs + m_ps->m_textIndentByParagraphIndentChange))
-			return (iter+1)->m_position;
-		if (iter->m_position > (m_ps->m_leftMarginByTabs + m_ps->m_textIndentByTabs + m_ps->m_textIndentByParagraphIndentChange))
-			return iter->m_position;
-	}
-	return (std::numeric_limits<float>::min)();
-}
-
-const float WP3ContentListener::_getPreviousTabStop() const
-{
-	for (std::vector<WPXTabStop>::const_reverse_iterator iter = m_ps->m_tabStops.rbegin(); iter != (m_ps->m_tabStops.rend() - 1); iter++)
-	{
-		if (iter->m_position == (m_ps->m_leftMarginByTabs + m_ps->m_textIndentByTabs + m_ps->m_textIndentByParagraphIndentChange))
-			return (iter+1)->m_position;
-		if (iter->m_position < (m_ps->m_leftMarginByTabs + m_ps->m_textIndentByTabs + m_ps->m_textIndentByParagraphIndentChange))
-			return iter->m_position;
-	}
-	return (std::numeric_limits<float>::max)();
 }

@@ -31,7 +31,7 @@
 #include "libwpd_internal.h"
 #include "WPXSubDocument.h"
 #include "WPXPageSpan.h"
-#include "WPXDocumentInterface.h"
+#include "WPXHLListenerImpl.h"
 #include "WPXListener.h"
 #include <vector>
 #include <list>
@@ -86,7 +86,6 @@ struct _WPXContentParsingState
 	bool m_isTableCellOpened;
 	bool m_wasHeaderRow;
 	bool m_isCellWithoutParagraph;
-	bool m_isRowWithoutCell;
 	uint32_t m_cellAttributeBits;
 	uint8_t m_paragraphJustificationBeforeTable;
 	
@@ -143,7 +142,7 @@ private:
 class WPXContentListener : public WPXListener
 {
 protected:
-	WPXContentListener(std::list<WPXPageSpan> &pageList, WPXDocumentInterface *listenerImpl);
+	WPXContentListener(std::list<WPXPageSpan> &pageList, WPXHLListenerImpl *listenerImpl);
 	virtual ~WPXContentListener();
 
 	void startDocument();
@@ -154,7 +153,7 @@ protected:
 	void justificationChange(const uint8_t justification);
 
 	WPXContentParsingState *m_ps; // parse state
-	WPXDocumentInterface * m_documentInterface;
+	WPXHLListenerImpl * m_listenerImpl;
 	WPXPropertyList m_metaData;
 
 	virtual void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice) = 0;
@@ -192,6 +191,8 @@ protected:
 
 	float _movePositionToFirstColumn(float position);
 
+	const float _getNextTabStop() const;
+	const float _getPreviousTabStop() const;
 private:
 	WPXContentListener(const WPXContentListener&);
 	WPXContentListener& operator=(const WPXContentListener&);
