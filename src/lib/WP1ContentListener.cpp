@@ -239,6 +239,34 @@ void WP1ContentListener::fontId(const uint16_t fontId)
 		case 0xFF04:
 			*m_ps->m_fontName = "Monaco";
 			break;
+		case 0x0005:
+		case 0xFF05:
+			*m_ps->m_fontName = "Venice";
+			break;
+		case 0x0006:
+		case 0xFF06:
+			*m_ps->m_fontName = "London";
+			break;
+		case 0x0007:
+		case 0xFF07:
+			*m_ps->m_fontName = "Athens";
+			break;
+		case 0x0008:
+		case 0xFF08:
+			*m_ps->m_fontName = "San Francisco";
+			break;
+		case 0x0009:
+		case 0xFF09:
+			*m_ps->m_fontName = "Toronto";
+			break;
+		case 0x000B:
+		case 0xFF0B:
+			*m_ps->m_fontName = "Cairo";
+			break;
+		case 0x000C:
+		case 0xFF0C:
+			*m_ps->m_fontName = "Los Angeles";
+			break;
 		case 0x000D:
 		case 0xFF0D:
 			*m_ps->m_fontName = "Zapf Dingbats";
@@ -262,6 +290,10 @@ void WP1ContentListener::fontId(const uint16_t fontId)
 		case 0x0017:
 		case 0xFF17:
 			*m_ps->m_fontName = "Symbol";
+			break;
+		case 0x0018:
+		case 0xFF18:
+			*m_ps->m_fontName = "Mobile";
 			break;
 		case 0x07D2:
 			*m_ps->m_fontName = "Charcoal";

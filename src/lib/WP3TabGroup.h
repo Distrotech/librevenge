@@ -39,6 +39,8 @@ public:
 
  private:
  	uint8_t m_subGroup;
+	uint8_t m_modeType;
+	float m_position;
 };
 
 #endif /* WP3TABGROUP_H */

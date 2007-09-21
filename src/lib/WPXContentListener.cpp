@@ -1097,6 +1097,34 @@ void WPXContentListener::justificationChange(const uint8_t justification)
 	}
 }
 
+const float WPXContentListener::_getNextTabStop() const
+{
+	for (std::vector<WPXTabStop>::const_iterator iter = m_ps->m_tabStops.begin(); iter != (m_ps->m_tabStops.end() - 1); iter++)
+	{
+		if (iter->m_position  - (m_ps->m_isTabPositionRelative ? 0 : m_ps->m_pageMarginLeft)
+			== (m_ps->m_leftMarginByTabs + m_ps->m_textIndentByTabs + m_ps->m_textIndentByParagraphIndentChange))
+			return (iter+1)->m_position - (m_ps->m_isTabPositionRelative ? 0 : m_ps->m_pageMarginLeft);
+		if (iter->m_position - (m_ps->m_isTabPositionRelative ? 0 : m_ps->m_pageMarginLeft)
+			> (m_ps->m_leftMarginByTabs + m_ps->m_textIndentByTabs + m_ps->m_textIndentByParagraphIndentChange))
+			return iter->m_position - (m_ps->m_isTabPositionRelative ? 0 : m_ps->m_pageMarginLeft);
+	}
+	return (std::numeric_limits<float>::min)();
+}
+
+const float WPXContentListener::_getPreviousTabStop() const
+{
+	for (std::vector<WPXTabStop>::const_reverse_iterator iter = m_ps->m_tabStops.rbegin(); iter != (m_ps->m_tabStops.rend() - 1); iter++)
+	{
+		if (iter->m_position- (m_ps->m_isTabPositionRelative ? 0 : m_ps->m_pageMarginLeft)
+			== (m_ps->m_leftMarginByTabs + m_ps->m_textIndentByTabs + m_ps->m_textIndentByParagraphIndentChange))
+			return (iter+1)->m_position - (m_ps->m_isTabPositionRelative ? 0 : m_ps->m_pageMarginLeft);
+		if (iter->m_position - (m_ps->m_isTabPositionRelative ? 0 : m_ps->m_pageMarginLeft)
+			< (m_ps->m_leftMarginByTabs + m_ps->m_textIndentByTabs + m_ps->m_textIndentByParagraphIndentChange))
+			return iter->m_position - (m_ps->m_isTabPositionRelative ? 0 : m_ps->m_pageMarginLeft);
+	}
+	return (std::numeric_limits<float>::max)();
+}
+
 WPXString WPXContentListener::_colorToString(const RGBSColor * color)
 {
 	WPXString tmpString;

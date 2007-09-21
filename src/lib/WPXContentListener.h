@@ -192,6 +192,8 @@ protected:
 
 	float _movePositionToFirstColumn(float position);
 
+	const float _getNextTabStop() const;
+	const float _getPreviousTabStop() const;
 private:
 	WPXContentListener(const WPXContentListener&);
 	WPXContentListener& operator=(const WPXContentListener&);
