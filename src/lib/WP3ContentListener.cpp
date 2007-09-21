@@ -673,6 +673,9 @@ void WP3ContentListener::leftIndent()
 			else
 				m_ps->m_leftMarginByTabs = _getNextTabStop() - (m_ps->m_textIndentByTabs + m_ps->m_textIndentByParagraphIndentChange);
 
+			if (m_ps->m_paragraphTextIndent != 0.0f)
+				m_ps->m_textIndentByTabs -= m_ps->m_paragraphTextIndent;
+
 			m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange
 				+ m_ps->m_textIndentByTabs;
 			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
@@ -697,6 +700,9 @@ void WP3ContentListener::leftIndent(const float offset)
 				m_ps->m_leftMarginByTabs += 0.5f;
 			else
 				m_ps->m_leftMarginByTabs += (offset / 72.0);
+
+			if (m_ps->m_paragraphTextIndent != 0.0f)
+				m_ps->m_textIndentByTabs -= m_ps->m_paragraphTextIndent;
 
 			m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange
 				+ m_ps->m_textIndentByTabs;
@@ -723,7 +729,11 @@ void WP3ContentListener::leftRightIndent()
 			else
 				m_ps->m_leftMarginByTabs = _getNextTabStop() - (m_ps->m_textIndentByTabs + m_ps->m_textIndentByParagraphIndentChange);
 			
+			if (m_ps->m_paragraphTextIndent != 0.0f)
+				m_ps->m_textIndentByTabs -= m_ps->m_paragraphTextIndent;
+
 			m_ps->m_rightMarginByTabs = m_ps->m_leftMarginByTabs;
+
 			m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange
 				+ m_ps->m_textIndentByTabs;
 			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
@@ -749,7 +759,11 @@ void WP3ContentListener::leftRightIndent(const float offset)
 			else
 				m_ps->m_leftMarginByTabs += (offset / 72.0);
 
+			if (m_ps->m_paragraphTextIndent != 0.0f)
+				m_ps->m_textIndentByTabs -= m_ps->m_paragraphTextIndent;
+
 			m_ps->m_rightMarginByTabs = m_ps->m_leftMarginByTabs;
+
 			m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange
 				+ m_ps->m_textIndentByTabs;
 			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
