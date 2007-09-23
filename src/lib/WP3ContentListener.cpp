@@ -699,7 +699,7 @@ void WP3ContentListener::leftIndent(const float offset)
 			if (offset == 0.0f)
 				m_ps->m_leftMarginByTabs += 0.5f;
 			else
-				m_ps->m_leftMarginByTabs += (offset / 72.0);
+				m_ps->m_leftMarginByTabs += (offset / 72.0f);
 
 			if (m_ps->m_paragraphTextIndent != 0.0f)
 				m_ps->m_textIndentByTabs -= m_ps->m_paragraphTextIndent;
@@ -757,7 +757,7 @@ void WP3ContentListener::leftRightIndent(const float offset)
 			if (offset == 0.0f)
 				m_ps->m_leftMarginByTabs += 0.5f;
 			else
-				m_ps->m_leftMarginByTabs += (offset / 72.0);
+				m_ps->m_leftMarginByTabs += (offset / 72.0f);
 
 			if (m_ps->m_paragraphTextIndent != 0.0f)
 				m_ps->m_textIndentByTabs -= m_ps->m_paragraphTextIndent;

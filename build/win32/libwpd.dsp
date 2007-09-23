@@ -123,6 +123,10 @@ SOURCE=..\..\src\lib\WP1FlushRightGroup.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP1FontIdGroup.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP1FootnoteEndnoteGroup.cpp
 # End Source File
 # Begin Source File
@@ -255,6 +259,10 @@ SOURCE=..\..\src\lib\WP3HeaderFooterGroup.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP3IndentGroup.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP3Listener.cpp
 # End Source File
 # Begin Source File
@@ -284,6 +292,10 @@ SOURCE=..\..\src\lib\WP3StylesListener.cpp
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP3SubDocument.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3TabGroup.cpp
 # End Source File
 # Begin Source File
 
@@ -763,6 +775,10 @@ SOURCE=..\..\src\lib\WP1FlushRightGroup.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP1FontIdGroup.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP1FootnoteEndnoteGroup.h
 # End Source File
 # Begin Source File
@@ -895,6 +911,10 @@ SOURCE=..\..\src\lib\WP3HeaderFooterGroup.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP3IndentGroup.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP3Listener.h
 # End Source File
 # Begin Source File
@@ -924,6 +944,10 @@ SOURCE=..\..\src\lib\WP3StylesListener.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP3SubDocument.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3TabGroup.h
 # End Source File
 # Begin Source File
 
