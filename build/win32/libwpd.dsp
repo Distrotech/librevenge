@@ -50,7 +50,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"Release\lib\libwpd-0.9.lib"
+# ADD LIB32 /nologo /out:"Release\lib\libwpd-0.8.lib"
 
 !ELSEIF  "$(CFG)" == "libwpd - Win32 Debug"
 
@@ -74,7 +74,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"Debug\lib\libwpd-0.9.lib"
+# ADD LIB32 /nologo /out:"Debug\lib\libwpd-0.8.lib"
 
 !ENDIF 
 
@@ -120,6 +120,10 @@ SOURCE=..\..\src\lib\WP1FixedLengthGroup.cpp
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP1FlushRightGroup.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1FontIdGroup.cpp
 # End Source File
 # Begin Source File
 
@@ -255,6 +259,10 @@ SOURCE=..\..\src\lib\WP3HeaderFooterGroup.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP3IndentGroup.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP3Listener.cpp
 # End Source File
 # Begin Source File
@@ -284,6 +292,10 @@ SOURCE=..\..\src\lib\WP3StylesListener.cpp
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP3SubDocument.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3TabGroup.cpp
 # End Source File
 # Begin Source File
 
@@ -363,10 +375,6 @@ SOURCE=..\..\src\lib\WP5AttributeGroup.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WP5BoxGroup.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\lib\WP5ContentListener.cpp
 # End Source File
 # Begin Source File
@@ -404,10 +412,6 @@ SOURCE=..\..\src\lib\WP5GeneralPacketData.cpp
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP5GeneralPacketIndex.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\lib\WP5GraphicsInformationPacket.cpp
 # End Source File
 # Begin Source File
 
@@ -491,10 +495,6 @@ SOURCE=..\..\src\lib\WP6AttributeGroup.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WP6BoxGroup.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\lib\WP6CharacterGroup.cpp
 # End Source File
 # Begin Source File
@@ -548,14 +548,6 @@ SOURCE=..\..\src\lib\WP6FootnoteEndnoteGroup.cpp
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP6GeneralTextPacket.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\lib\WP6GraphicsCachedFileDataPacket.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\lib\WP6GraphicsFilenamePacket.cpp
 # End Source File
 # Begin Source File
 
@@ -703,10 +695,6 @@ SOURCE=..\..\src\lib\WPXTable.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\..\src\lib\GSFStream.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\lib\libwpd.h
 # End Source File
 # Begin Source File
@@ -748,6 +736,10 @@ SOURCE=..\..\src\lib\WP1FixedLengthGroup.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP1FlushRightGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1FontIdGroup.h
 # End Source File
 # Begin Source File
 
@@ -883,6 +875,10 @@ SOURCE=..\..\src\lib\WP3HeaderFooterGroup.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP3IndentGroup.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP3Listener.h
 # End Source File
 # Begin Source File
@@ -912,6 +908,10 @@ SOURCE=..\..\src\lib\WP3StylesListener.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP3SubDocument.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3TabGroup.h
 # End Source File
 # Begin Source File
 
@@ -991,10 +991,6 @@ SOURCE=..\..\src\lib\WP5AttributeGroup.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WP5BoxGroup.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\lib\WP5ContentListener.h
 # End Source File
 # Begin Source File
@@ -1032,10 +1028,6 @@ SOURCE=..\..\src\lib\WP5GeneralPacketData.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP5GeneralPacketIndex.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\lib\WP5GraphicsInformationPacket.h
 # End Source File
 # Begin Source File
 
@@ -1119,10 +1111,6 @@ SOURCE=..\..\src\lib\WP6AttributeGroup.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WP6BoxGroup.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\lib\WP6CharacterGroup.h
 # End Source File
 # Begin Source File
@@ -1176,14 +1164,6 @@ SOURCE=..\..\src\lib\WP6FootnoteEndnoteGroup.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP6GeneralTextPacket.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\lib\WP6GraphicsCachedFileDataPacket.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\lib\WP6GraphicsFilenamePacket.h
 # End Source File
 # Begin Source File
 
@@ -1283,15 +1263,15 @@ SOURCE=..\..\src\lib\WPXContentListener.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXDocumentInterface.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\lib\WPXFileStructure.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\lib\WPXHeader.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WPXHLListenerImpl.h
 # End Source File
 # Begin Source File
 
