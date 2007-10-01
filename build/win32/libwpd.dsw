@@ -3,7 +3,7 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
-Project: "libwpd"=.\libwpd.dsp - Package Owner=<4>
+Project: "libwpd"=".\libwpd.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -15,7 +15,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "libwpdstream"=.\libwpdstream.dsp - Package Owner=<4>
+Project: "libwpdstream"=".\libwpdstream.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -23,32 +23,11 @@ Package=<5>
 
 Package=<4>
 {{{
-    Begin Project Dependency
-    Project_Dep_Name libwpd
-    End Project Dependency
 }}}
 
 ###############################################################################
 
-Project: "wpd2html"=.\wpd2html.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name libwpd
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name libwpdstream
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "wpd2raw"=.\wpd2raw.dsp - Package Owner=<4>
+Project: "wpd2html"=".\wpd2html.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -66,7 +45,25 @@ Package=<4>
 
 ###############################################################################
 
-Project: "wpd2text"=.\wpd2text.dsp - Package Owner=<4>
+Project: "wpd2raw"=".\wpd2raw.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libwpd
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name libwpdstream
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "wpd2text"=".\wpd2text.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
