@@ -1,4 +1,7 @@
 #!/bin/sh
+TESTLIBTOOLIZE="glibtoolize libtoolize"
+
+LIBTOOLIZEFOUND="0"
 
 aclocal --version > /dev/null 2> /dev/null || {
     echo "error: aclocal not found"
@@ -9,13 +12,28 @@ automake --version > /dev/null 2> /dev/null || {
     exit 1
 }
 
+for i in $TESTLIBTOOLIZE; do
+	if which $i > /dev/null 2>&1; then
+		LIBTOOLIZE=$i
+		LIBTOOLIZEFOUND="1"
+		break
+	fi
+done
+
+if [ "$LIBTOOLIZEFOUND" = "0" ]; then
+	echo "$0: need libtoolize tool to build writerperfect" >&2
+	exit 1
+fi
+
 amcheck=`automake --version | grep 'automake (GNU automake) 1.5'`
 if test "x$amcheck" = "xautomake (GNU automake) 1.5"; then
     echo "warning: you appear to be using automake 1.5"
     echo "         this version has a bug - GNUmakefile.am dependencies are not generated"
 fi
 
-libtoolize --force --copy || {
+rm -rf autom4te*.cache
+
+$LIBTOOLIZE --force --copy || {
     echo "error: libtoolize failed"
     exit 1
 }
