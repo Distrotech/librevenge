@@ -1,7 +1,8 @@
 /* libwpd
  * Copyright (C) 2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
- * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (C) 2005-2007 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (C) 2007 Novell, Inc. (http://www.novell.com)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -70,6 +71,7 @@ extern int WP5_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16];
 /* Page Format Group */
 #define WP5_TOP_PAGE_FORMAT_GROUP_LEFT_RIGHT_MARGIN_SET 0x01
 #define WP5_TOP_PAGE_FORMAT_GROUP_SPACING_SET 0x02
+#define WP5_TOP_PAGE_FORMAT_GROUP_TAB_SET 0x04
 #define WP5_TOP_PAGE_FORMAT_GROUP_TOP_BOTTOM_MARGIN_SET 0x05
 #define WP5_TOP_PAGE_FORMAT_GROUP_JUSTIFICATION 0x06
 #define WP5_TOP_PAGE_FORMAT_GROUP_SUPPRESS_PAGE_CHARACTERISTICS 0x07

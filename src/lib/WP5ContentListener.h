@@ -1,7 +1,8 @@
 /* libwpd
  * Copyright (C) 2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
- * Copyright (C) 2005-2006 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (C) 2005-2007 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (C) 2007 Novell, Inc. (http://www.novell.com)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -54,6 +55,7 @@ public:
 
 	void startDocument() { WPXContentListener::startDocument(); };
 	void setFont(const WPXString &fontName, const float fontSize);
+	void setTabs(const std::vector<WPXTabStop> &tabStops, const uint16_t tabOffset);
 	void insertCharacter(const uint16_t character);
 	void insertTab(const uint8_t tabType, float tabPosition);
 	void insertEOL();
