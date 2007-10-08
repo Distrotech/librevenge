@@ -28,6 +28,8 @@
 #include "WP5FileStructure.h"
 #include "WP5AttributeGroup.h"
 #include "WP5ExtendedCharacterGroup.h"
+#include "WP5TabGroup.h"
+#include "WP5IndentGroup.h"
 #include "WP5UnsupportedFixedLengthGroup.h"
 #include "libwpd_internal.h"
 
@@ -43,6 +45,12 @@ WP5FixedLengthGroup * WP5FixedLengthGroup::constructFixedLengthGroup(WPXInputStr
 		case WP5_TOP_EXTENDED_CHARACTER:
 			return new WP5ExtendedCharacterGroup(input, groupID);
 			
+		case WP5_TOP_TAB_GROUP:
+			return new WP5TabGroup(input, groupID);
+		
+		case WP5_TOP_INDENT_GROUP:
+			return new WP5IndentGroup(input, groupID);
+		
 		case WP5_TOP_ATTRIBUTE_ON:
 			return new WP5AttributeOnGroup(input, groupID);
 			

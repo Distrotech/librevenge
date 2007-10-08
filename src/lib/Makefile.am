@@ -139,6 +139,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP5GraphicsInformationPacket.cpp \
 	WP5Header.cpp \
 	WP5HeaderFooterGroup.cpp \
+	WP5IndentGroup.cpp \
 	WP5Listener.cpp \
 	WP5ListFontsUsedPacket.cpp \
 	WP5PageFormatGroup.cpp \
@@ -149,6 +150,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP5SpecialHeaderIndex.cpp \
 	WP5StylesListener.cpp \
 	WP5SubDocument.cpp \
+	WP5TabGroup.cpp \
 	WP5TableEOLGroup.cpp \
 	WP5TableEOPGroup.cpp \
 	WP5UnsupportedFixedLengthGroup.cpp \
@@ -301,6 +303,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP5GraphicsInformationPacket.h \
 	WP5Header.h \
 	WP5HeaderFooterGroup.h \
+	WP5IndentGroup.h \
 	WP5Listener.h \
 	WP5ListFontsUsedPacket.h \
 	WP5PageFormatGroup.h \
@@ -311,6 +314,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP5SpecialHeaderIndex.h \
 	WP5StylesListener.h \
 	WP5SubDocument.h \
+	WP5TabGroup.h \
 	WP5TableEOLGroup.h \
 	WP5TableEOPGroup.h \
 	WP5UnsupportedFixedLengthGroup.h \
