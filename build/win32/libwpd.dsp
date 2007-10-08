@@ -423,6 +423,10 @@ SOURCE=..\..\src\lib\WP5HeaderFooterGroup.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP5IndentGroup.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP5Listener.cpp
 # End Source File
 # Begin Source File
@@ -460,6 +464,10 @@ SOURCE=..\..\src\lib\WP5StylesListener.cpp
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP5SubDocument.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5TabGroup.cpp
 # End Source File
 # Begin Source File
 
@@ -1039,6 +1047,10 @@ SOURCE=..\..\src\lib\WP5HeaderFooterGroup.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP5IndentGroup.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP5Listener.h
 # End Source File
 # Begin Source File
@@ -1076,6 +1088,10 @@ SOURCE=..\..\src\lib\WP5StylesListener.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP5SubDocument.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP5TabGroup.h
 # End Source File
 # Begin Source File
 
