@@ -513,6 +513,7 @@ void WPXContentListener::_getTabStops(WPXPropertyListVector &tabStops)
 			WPXString sLeader;
 			sLeader.sprintf("%c", m_ps->m_tabStops[i].m_leaderCharacter);
 			tmpTabStop.insert("style:leader-text", sLeader);
+			tmpTabStop.insert("style:leader-style", "solid");
 		}
 
 		// position
