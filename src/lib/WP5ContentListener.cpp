@@ -1,7 +1,8 @@
 /* libwpd
  * Copyright (C) 2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
- * Copyright (C) 2005-2006 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (C) 2005-2007 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (C) 2007 Novell, Inc. (http://www.novell.com)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -352,6 +353,16 @@ void WP5ContentListener::setFont(const WPXString &fontName, const float fontSize
 		m_ps->m_fontSize = fontSize;
 	}
 }
+
+void WP5ContentListener::setTabs(const std::vector<WPXTabStop> &tabStops, const uint16_t tabOffset)
+{
+	if (!isUndoOn())
+	{
+		m_ps->m_isTabPositionRelative = ((tabOffset & 0xffff) != 0xffff);
+		m_ps->m_tabStops = tabStops;
+	}
+}
+
 
 void WP5ContentListener::insertNoteReference(const WPXString &noteReference)
 {

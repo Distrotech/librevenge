@@ -1,7 +1,8 @@
 /* libwpd
  * Copyright (C) 2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
- * Copyright (C) 2005-2006 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (C) 2005-2007 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (C) 2007 Novell, Inc. (http://www.novell.com)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -32,7 +33,7 @@
 #include "WP5SubDocument.h"
 #include "WPXString.h"
 #include "libwpd_internal.h"
-#include "WPXDocumentInterface.h"
+#include "WPXHLListenerImpl.h"
 #include <vector>
 
 typedef struct _WP5ContentParsingState WP5ContentParsingState;
@@ -49,11 +50,12 @@ struct _WP5ContentParsingState
 class WP5ContentListener : public WP5Listener, protected WPXContentListener
 {
 public:
-	WP5ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP5SubDocument *> &subDocuments, WPXDocumentInterface *listenerImpl);
+	WP5ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP5SubDocument *> &subDocuments, WPXHLListenerImpl *listenerImpl);
 	~WP5ContentListener();
 
 	void startDocument() { WPXContentListener::startDocument(); };
 	void setFont(const WPXString &fontName, const float fontSize);
+	void setTabs(const std::vector<WPXTabStop> &tabStops, const uint16_t tabOffset);
 	void insertCharacter(const uint16_t character);
 	void insertTab(const uint8_t tabType, float tabPosition);
 	void insertEOL();

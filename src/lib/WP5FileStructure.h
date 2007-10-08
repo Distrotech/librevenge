@@ -1,7 +1,8 @@
 /* libwpd
  * Copyright (C) 2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
- * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (C) 2005-2007 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (C) 2007 Novell, Inc. (http://www.novell.com)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -50,7 +51,6 @@ extern int WP5_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16];
 /* Genearal data packet list */
 #define WP50_LIST_FONTS_USED_PACKET 0x02
 #define WP5_FONT_NAME_STRING_POOL_PACKET 0x07
-#define WP5_GRAPHICS_INFORMATION_PACKET 0x08
 #define WP51_LIST_FONTS_USED_PACKET 0x0F
 
 /* Main function group list  */
@@ -63,13 +63,13 @@ extern int WP5_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16];
 #define WP5_TOP_FORMAT_GROUP 0xD4
 #define WP5_TOP_HEADER_FOOTER_GROUP 0xD5
 #define WP5_TOP_FOOTNOTE_ENDNOTE_GROUP 0xD6
-#define WP5_TOP_BOX_GROUP 0xDA
 #define WP5_TOP_TABLE_EOL_GROUP 0xDC
 #define WP5_TOP_TABLE_EOP_GROUP 0xDD
 
 /* Page Format Group */
 #define WP5_TOP_PAGE_FORMAT_GROUP_LEFT_RIGHT_MARGIN_SET 0x01
 #define WP5_TOP_PAGE_FORMAT_GROUP_SPACING_SET 0x02
+#define WP5_TOP_PAGE_FORMAT_GROUP_TAB_SET 0x04
 #define WP5_TOP_PAGE_FORMAT_GROUP_TOP_BOTTOM_MARGIN_SET 0x05
 #define WP5_TOP_PAGE_FORMAT_GROUP_JUSTIFICATION 0x06
 #define WP5_TOP_PAGE_FORMAT_GROUP_SUPPRESS_PAGE_CHARACTERISTICS 0x07
@@ -104,16 +104,6 @@ extern int WP5_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16];
 /* Footnote Endnote Group */
 #define WP5_FOOTNOTE_ENDNOTE_GROUP_FOOTNOTE 0x00
 #define WP5_FOOTNOTE_ENDNOTE_GROUP_ENDNOTE 0x01
-
-/* Box Group */
-#define WP5_TOP_BOX_GROUP_FIGURE 0x00
-#define WP5_TOP_BOX_GROUP_TABLE 0x01
-#define WP5_TOP_BOX_GROUP_TEXT_BOX 0x02
-#define WP5_TOP_BOX_GROUP_USER_DEFINED_BOX 0x03
-#define WP5_TOP_BOX_GROUP_EQUATION 0x04
-#define WP5_TOP_BOX_GROUP_HORIZONTAL_LINE 0x05
-#define WP5_TOP_BOX_GROUP_VERTICAL_LINE 0x06
-
 
 /* Definition Group */
 #define WP5_TOP_DEFINITION_GROUP_DEFINE_TABLES 0x0B

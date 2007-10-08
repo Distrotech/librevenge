@@ -1,7 +1,8 @@
 /* libwpd
  * Copyright (C) 2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
- * Copyright (C) 2005-2006 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (C) 2005-2007 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (C) 2007 Novell, Inc. (http://www.novell.com)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,6 +29,7 @@
 #define WP5LISTENER_H
 
 #include "libwpd_internal.h"
+#include <vector>
 
 class WP5SubDocument;
 class WP5PrefixData;
@@ -41,6 +43,7 @@ public:
 
 	virtual void startDocument() = 0;
 	virtual void setFont(const WPXString &fontName, const float fontSize) = 0;
+	virtual void setTabs(const std::vector<WPXTabStop>& tabStops, const uint16_t tabOffset) = 0;
 	virtual void insertCharacter(const uint16_t character) = 0;
 	virtual void insertTab(const uint8_t tabType, float tabPosition) = 0;
 	virtual void insertEOL() = 0;

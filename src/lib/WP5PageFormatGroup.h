@@ -1,6 +1,8 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
+ * Copyright (C) 2007 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (C) 2007 Novell, Inc. (http://www.novell.com)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -27,6 +29,7 @@
 #define WP5PAGEFORMATGROUP_H
 
 #include "WP5VariableLengthGroup.h"
+#include <vector>
 
 class WP5PageFormatGroup : public WP5VariableLengthGroup
 {
@@ -42,6 +45,9 @@ class WP5PageFormatGroup : public WP5VariableLengthGroup
 	uint16_t m_rightMargin;
 	// variable needed for subgroup 2 (Spacing Set)
 	float m_lineSpacing;
+	// variables needed for subbroup 4 (Tab Set)
+	std::vector<WPXTabStop> m_tabStops;
+	uint16_t m_marginOffset;	
 	// variables needed for subgroup 5 (Top/Bottom Margin Set)
 	uint16_t m_topMargin;
 	uint16_t m_bottomMargin;
