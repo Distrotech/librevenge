@@ -27,17 +27,25 @@
 #include "WP5FileStructure.h"
 #include "libwpd_internal.h"
 #include "WP5Listener.h"
+#include "WPXFileStructure.h"
 
 WP5IndentGroup::WP5IndentGroup(WPXInputStream *input, uint8_t groupID) :
-	WP5FixedLengthGroup(groupID)
+	WP5FixedLengthGroup(groupID),
+	m_indentType(0),
+	m_indentPosition(0.0f)
 {
 	_read(input);
 }
 
-void WP5IndentGroup::_readContents(WPXInputStream * /* input */)
+void WP5IndentGroup::_readContents(WPXInputStream *input)
 {
+	m_indentType = readU8(input);
+	input->seek(4, WPX_SEEK_CUR);
+	uint16_t tmpIndentWPU = readU16(input);
+	m_indentPosition = (double)tmpIndentWPU/(double)WPX_NUM_WPUS_PER_INCH;
 }
 
-void WP5IndentGroup::parse(WP5Listener * /* listener */)
+void WP5IndentGroup::parse(WP5Listener *listener)
 {
+	listener->insertIndent(m_indentType, m_indentPosition);
 }

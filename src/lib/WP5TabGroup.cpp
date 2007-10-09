@@ -27,17 +27,25 @@
 #include "WP5FileStructure.h"
 #include "libwpd_internal.h"
 #include "WP5Listener.h"
+#include "WPXFileStructure.h"
 
 WP5TabGroup::WP5TabGroup(WPXInputStream *input, uint8_t groupID) :
-	WP5FixedLengthGroup(groupID)
+	WP5FixedLengthGroup(groupID),
+	m_tabType(0),
+	m_tabPosition(0.0f)
 {
 	_read(input);
 }
 
-void WP5TabGroup::_readContents(WPXInputStream * /* input */)
+void WP5TabGroup::_readContents(WPXInputStream *input)
 {
+	m_tabType = readU8(input);
+	input->seek(2, WPX_SEEK_CUR);
+	uint16_t tmpTabPosition = readU16(input);
+	m_tabPosition = (double)tmpTabPosition/(double)WPX_NUM_WPUS_PER_INCH;
 }
 
-void WP5TabGroup::parse(WP5Listener * /* listener */)
+void WP5TabGroup::parse(WP5Listener *listener)
 {
+	listener->insertTab(m_tabType, m_tabPosition);
 }
