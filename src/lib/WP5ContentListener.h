@@ -57,7 +57,8 @@ public:
 	void setFont(const WPXString &fontName, const float fontSize);
 	void setTabs(const std::vector<WPXTabStop> &tabStops, const uint16_t tabOffset);
 	void insertCharacter(const uint16_t character);
-	void insertTab(const uint8_t tabType, float tabPosition);
+	void insertTab(const uint8_t tabType, const float tabPosition);
+	void insertIndent(const uint8_t indentType, const float indentPosition);
 	void insertEOL();
 	void insertBreak(const uint8_t breakType) { WPXContentListener::insertBreak(breakType); };
 	void lineSpacingChange(const float lineSpacing) { WPXContentListener::lineSpacingChange(lineSpacing); };

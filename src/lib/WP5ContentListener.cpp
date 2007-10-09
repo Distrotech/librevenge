@@ -69,14 +69,24 @@ void WP5ContentListener::insertCharacter(const uint16_t character)
 	appendUCS4(m_parseState->m_textBuffer, (uint32_t)character);
 }
 
-void WP5ContentListener::insertTab(const uint8_t /* tabType */, float /* tabPosition */)
+void WP5ContentListener::insertTab(const uint8_t /* tabType */, const float /* tabPosition */)
 {
-	if (!m_ps->m_isSpanOpened)
-		_openSpan();
-	else
-		_flushText();
+	if (!isUndoOn())
+	{
+		if (!m_ps->m_isSpanOpened)
+			_openSpan();
+		else
+			_flushText();
 
-	m_listenerImpl->insertTab();
+		m_listenerImpl->insertTab();
+	}
+}
+
+void WP5ContentListener::insertIndent(const uint8_t indentType, const float indentPosition)
+{
+	if (!isUndoOn())
+	{
+	}
 }
 
 void WP5ContentListener::insertEOL()

@@ -35,8 +35,12 @@ public:
 	WP5TabGroup(WPXInputStream *input, uint8_t groupID);	
 	void parse(WP5Listener *listener);
 	
- protected:
+protected:
 	void _readContents(WPXInputStream *input);
+
+private:
+	uint8_t m_tabType;
+	float m_tabPosition;
 
 };
 
