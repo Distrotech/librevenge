@@ -69,23 +69,154 @@ void WP5ContentListener::insertCharacter(const uint16_t character)
 	appendUCS4(m_parseState->m_textBuffer, (uint32_t)character);
 }
 
-void WP5ContentListener::insertTab(const uint8_t /* tabType */, const float /* tabPosition */)
+void WP5ContentListener::insertTab(const uint8_t tabType, const float tabPosition)
 {
+	bool tmpHasTabPositionInformation = true;
+	if (tabPosition >= (float)((double)0xFFFE/(double)WPX_NUM_WPUS_PER_INCH) || tabPosition == 0.0f)
+		tmpHasTabPositionInformation = false;
+
 	if (!isUndoOn())
 	{
-		if (!m_ps->m_isSpanOpened)
-			_openSpan();
-		else
-			_flushText();
+		switch ((tabType & 0xE8) >> 3)
+		{
+		case WP5_TAB_GROUP_CENTER_TAB:
+		case WP5_TAB_GROUP_RIGHT_TAB:
+		case WP5_TAB_GROUP_DECIMAL_TAB:
+			if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
+				if (m_ps->m_currentListLevel == 0)
+					_openParagraph();
+				else
+					_openListElement();
+			break;
 
-		m_documentInterface->insertTab();
+		default:
+			break;
+		}
+
+		// Following tabs are converted as formating if the paragraph is not opened
+		if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
+		{
+			switch ((tabType & 0xE8) >> 3)
+			{
+			case WP5_TAB_GROUP_CENTER_ON_MARGINS:
+			case WP5_TAB_GROUP_CENTER_ON_CURRENT_POSITION:
+				m_ps->m_tempParagraphJustification = WPX_PARAGRAPH_JUSTIFICATION_CENTER;
+				break;
+
+			case WP5_TAB_GROUP_FLUSH_RIGHT:
+				m_ps->m_tempParagraphJustification = WPX_PARAGRAPH_JUSTIFICATION_RIGHT;
+				break;
+
+			case WP5_TAB_GROUP_LEFT_TAB: // converted as first line indent
+				if (!tmpHasTabPositionInformation)
+					m_ps->m_textIndentByTabs += 0.5f;
+				else
+					m_ps->m_textIndentByTabs = tabPosition - m_ps->m_paragraphMarginLeft - m_ps->m_pageMarginLeft 
+						- m_ps->m_sectionMarginLeft - m_ps->m_textIndentByParagraphIndentChange;
+				break;
+
+			case WP5_TAB_GROUP_BACK_TAB: // converted as hanging indent
+				if (!tmpHasTabPositionInformation)
+					m_ps->m_textIndentByTabs -= 0.5f;
+				else
+					m_ps->m_textIndentByTabs = tabPosition - m_ps->m_paragraphMarginLeft - m_ps->m_pageMarginLeft
+						- m_ps->m_sectionMarginLeft - m_ps->m_textIndentByParagraphIndentChange;
+				break;
+
+			default:
+				break;
+			}
+			m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange
+				+ m_ps->m_textIndentByTabs;
+			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
+				+ m_ps->m_leftMarginByParagraphMarginChange + m_ps->m_leftMarginByTabs;
+			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
+				+ m_ps->m_rightMarginByParagraphMarginChange + m_ps->m_rightMarginByTabs;
+			
+			m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent;
+
+		}
+		else
+		{
+			if (!m_ps->m_isSpanOpened)
+				_openSpan();
+			else
+				_flushText();
+
+			switch ((tabType & 0xF8) >> 3)
+			{
+			case WP5_TAB_GROUP_LEFT_TAB:
+			case WP5_TAB_GROUP_CENTER_ON_MARGINS:
+			case WP5_TAB_GROUP_CENTER_ON_CURRENT_POSITION:
+			case WP5_TAB_GROUP_CENTER_TAB:
+			case WP5_TAB_GROUP_FLUSH_RIGHT:
+			case WP5_TAB_GROUP_RIGHT_TAB:
+			case WP5_TAB_GROUP_DECIMAL_TAB:
+				m_documentInterface->insertTab();
+				break;
+			
+			default:
+				break;
+			}
+		}
 	}
 }
 
 void WP5ContentListener::insertIndent(const uint8_t indentType, const float indentPosition)
 {
+	bool tmpHasIndentPositionInformation = true;
+	if (indentPosition >= (float)((double)0xFFFE/(double)WPX_NUM_WPUS_PER_INCH) || indentPosition == 0.0f)
+		tmpHasIndentPositionInformation = false;
+
 	if (!isUndoOn())
 	{
+		if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
+		{
+			switch (indentType & 0x01)
+			{
+			case WP5_INDENT_GROUP_LEFT_INDENT:  // converted as left paragraph margin offset
+				if (!tmpHasIndentPositionInformation)
+					m_ps->m_leftMarginByTabs += 0.5f;
+				else
+					m_ps->m_leftMarginByTabs = indentPosition - m_ps->m_pageMarginLeft - m_ps->m_sectionMarginRight
+						- m_ps->m_leftMarginByPageMarginChange - m_ps->m_leftMarginByParagraphMarginChange;
+				if (m_ps->m_paragraphTextIndent != 0.0f)
+					m_ps->m_textIndentByTabs -= m_ps->m_paragraphTextIndent;
+				break;
+
+			case WP5_INDENT_GROUP_LEFT_RIGHT_INDENT: // converted as left and right paragraph margin offset
+				if (!tmpHasIndentPositionInformation)
+					m_ps->m_leftMarginByTabs += 0.5f;
+				else
+					m_ps->m_leftMarginByTabs = indentPosition - m_ps->m_pageMarginLeft - m_ps->m_sectionMarginLeft
+						- m_ps->m_leftMarginByPageMarginChange - m_ps->m_leftMarginByParagraphMarginChange;
+				m_ps->m_rightMarginByTabs = m_ps->m_leftMarginByTabs;
+				if (m_ps->m_paragraphTextIndent != 0.0f)
+					m_ps->m_textIndentByTabs -= m_ps->m_paragraphTextIndent;
+				break;	
+				
+			default:
+				break;
+			}
+			m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange
+				+ m_ps->m_textIndentByTabs;
+			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
+				+ m_ps->m_leftMarginByParagraphMarginChange + m_ps->m_leftMarginByTabs;
+			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
+				+ m_ps->m_rightMarginByParagraphMarginChange + m_ps->m_rightMarginByTabs;
+			
+			m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent;
+
+		}
+		else
+		{
+			if (!m_ps->m_isSpanOpened)
+				_openSpan();
+			else
+				_flushText();
+
+			m_documentInterface->insertTab();
+		}
 	}
 }
 
