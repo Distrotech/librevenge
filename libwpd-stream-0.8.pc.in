@@ -1,0 +1,11 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+                                                                       
+Name: libwpd-stream-0.8
+Description: Input stream implementations for libwpd, a library for reading and writing Corel WordPerfect(tm) documents
+Version: @VERSION@
+Requires: glib-2.0 libgsf-1 libwpd-0.8
+Libs: -L${libdir} -lwpd-stream-0.8
+Cflags: -I${includedir}/libwpd-0.8
