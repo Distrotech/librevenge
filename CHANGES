@@ -1,4 +1,20 @@
 CHANGES:
+0.8.x - 0.9.0
+- Conversion of annotations/comments in WP6 parser (Fridrich)
+
+0.8.11 - 0.8.12
+- Enable building of statically linked tools even when a shared library is built,
+  useful for scripting the creation of win32 release packages (Robert Staudinger,
+  Fridrich Strba)
+- Package also the tools automatically for win32 (Fridrich) 
+- Do not build doxygen documentation on win32 unless explicitely asked for it (Fridrich)
+- Convert Tab Set function for WP5 parser (Fridrich)
+- Basic conversion of tabulators and indents in WP3 parser (Smokey Ardisson, Fridrich)
+- Basic conversion of tabulators and indents in WP5 parser (Fridrich)
+- Convert the most usual Macintosh fonts from fontId to font name in WP1 parser
+  (Hubert Figuiere, Fridrich)
+- Fix compilation with the upcoming gcc 4.3 (Rene Engelhard, Fridrich)
+
 0.8.10 - 0.8.11
 - Fix incorrect conversion of tables with cells spanning more then 127 rows due to
   incorrect information in the file-format (Fridrich)
