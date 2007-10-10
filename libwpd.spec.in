@@ -4,7 +4,7 @@
 %define  release     %{?CUSTOM_RELEASE} %{!?CUSTOM_RELEASE:%RELEASE}
 
 Name: %{name}
-Summary: Library for reading and converting WordPerfect(tm) documents.
+Summary: Library for reading and converting WordPerfect(tm) documents
 Version: %{version}
 Release: %{release}
 Source: %{name}-%{version}.tar.gz
