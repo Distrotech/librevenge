@@ -89,6 +89,7 @@ SLOFILES= \
 	$(SLO)$/WP42SuppressPageCharacteristicsGroup.obj \
 	$(SLO)$/WP42UnsupportedMultiByteFunctionGroup.obj \
 	$(SLO)$/WP5AttributeGroup.obj \
+	$(SLO)$/WP5BoxGroup.obj \
 	$(SLO)$/WP5ContentListener.obj \
 	$(SLO)$/WP5DefinitionGroup.obj \
 	$(SLO)$/WP5ExtendedCharacterGroup.obj \
@@ -99,8 +100,10 @@ SLOFILES= \
 	$(SLO)$/WP5FootnoteEndnoteGroup.obj \
 	$(SLO)$/WP5GeneralPacketData.obj \
 	$(SLO)$/WP5GeneralPacketIndex.obj \
+	$(SLO)$/WP5GraphicsInformationPacket.obj \
 	$(SLO)$/WP5Header.obj \
 	$(SLO)$/WP5HeaderFooterGroup.obj \
+	$(SLO)$/WP5IndentGroup.obj \
 	$(SLO)$/WP5Listener.obj \
 	$(SLO)$/WP5ListFontsUsedPacket.obj \
 	$(SLO)$/WP5PageFormatGroup.obj \
@@ -111,14 +114,19 @@ SLOFILES= \
 	$(SLO)$/WP5SpecialHeaderIndex.obj \
 	$(SLO)$/WP5StylesListener.obj \
 	$(SLO)$/WP5SubDocument.obj \
+	$(SLO)$/WP5TabGroup.obj \
 	$(SLO)$/WP5TableEOLGroup.obj \
 	$(SLO)$/WP5TableEOPGroup.obj \
 	$(SLO)$/WP5UnsupportedFixedLengthGroup.obj \
 	$(SLO)$/WP5UnsupportedVariableLengthGroup.obj \
 	$(SLO)$/WP5VariableLengthGroup.obj \
+	$(SLO)$/WP60Header.obj \
+	$(SLO)$/WP61Header.obj \
 	$(SLO)$/WP6AttributeGroup.obj \
+	$(SLO)$/WP6BoxGroup.obj \
 	$(SLO)$/WP6CharacterGroup.obj \
 	$(SLO)$/WP6ColumnGroup.obj \
+	$(SLO)$/WP6CommentAnnotationPacket.obj \
 	$(SLO)$/WP6ContentListener.obj \
 	$(SLO)$/WP6DefaultInitialFontPacket.obj \
 	$(SLO)$/WP6DisplayNumberReferenceGroup.obj \
@@ -131,30 +139,33 @@ SLOFILES= \
 	$(SLO)$/WP6FontDescriptorPacket.obj \
 	$(SLO)$/WP6FootnoteEndnoteGroup.obj \
 	$(SLO)$/WP6GeneralTextPacket.obj \
+	$(SLO)$/WP6GraphicsBoxStylePacket.obj \
+	$(SLO)$/WP6GraphicsCachedFileDataPacket.obj \
+	$(SLO)$/WP6GraphicsFilenamePacket.obj \
 	$(SLO)$/WP6Header.obj \
-	$(SLO)$/WP60Header.obj \
-	$(SLO)$/WP61Header.obj \
 	$(SLO)$/WP6HeaderFooterGroup.obj \
 	$(SLO)$/WP6HighlightGroup.obj \
 	$(SLO)$/WP6Listener.obj \
-	$(SLO)$/WP6Parser.obj \
 	$(SLO)$/WP6OutlineStylePacket.obj \
 	$(SLO)$/WP6PageGroup.obj \
 	$(SLO)$/WP6ParagraphGroup.obj \
+	$(SLO)$/WP6Parser.obj \
 	$(SLO)$/WP6Part.obj \
 	$(SLO)$/WP6PrefixData.obj \
-	$(SLO)$/WP6PrefixIndice.obj \
 	$(SLO)$/WP6PrefixDataPacket.obj \
+	$(SLO)$/WP6PrefixIndice.obj \
 	$(SLO)$/WP6SingleByteFunction.obj \
 	$(SLO)$/WP6StyleGroup.obj \
 	$(SLO)$/WP6StylesListener.obj \
 	$(SLO)$/WP6SubDocument.obj \
 	$(SLO)$/WP6TabGroup.obj \
+	$(SLO)$/WP6TableStylePacket.obj \
 	$(SLO)$/WP6UndoGroup.obj \
 	$(SLO)$/WP6UnsupportedFixedLengthGroup.obj \
 	$(SLO)$/WP6UnsupportedVariableLengthGroup.obj \
 	$(SLO)$/WP6VariableLengthGroup.obj \
 	$(SLO)$/WPDocument.obj \
+	$(SLO)$/WPXBinaryData.obj \
 	$(SLO)$/WPXContentListener.obj \
 	$(SLO)$/WPXHeader.obj \
 	$(SLO)$/WPXListener.obj \
