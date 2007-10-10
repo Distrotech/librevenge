@@ -101,6 +101,7 @@ SLOFILES= \
 	$(SLO)$/WP5GeneralPacketIndex.obj \
 	$(SLO)$/WP5Header.obj \
 	$(SLO)$/WP5HeaderFooterGroup.obj \
+	$(SLO)$/WP5IndentGroup.obj \
 	$(SLO)$/WP5Listener.obj \
 	$(SLO)$/WP5ListFontsUsedPacket.obj \
 	$(SLO)$/WP5PageFormatGroup.obj \
@@ -111,11 +112,14 @@ SLOFILES= \
 	$(SLO)$/WP5SpecialHeaderIndex.obj \
 	$(SLO)$/WP5StylesListener.obj \
 	$(SLO)$/WP5SubDocument.obj \
+	$(SLO)$/WP5TabGroup.obj \
 	$(SLO)$/WP5TableEOLGroup.obj \
 	$(SLO)$/WP5TableEOPGroup.obj \
 	$(SLO)$/WP5UnsupportedFixedLengthGroup.obj \
 	$(SLO)$/WP5UnsupportedVariableLengthGroup.obj \
 	$(SLO)$/WP5VariableLengthGroup.obj \
+	$(SLO)$/WP60Header.obj \
+	$(SLO)$/WP61Header.obj \
 	$(SLO)$/WP6AttributeGroup.obj \
 	$(SLO)$/WP6CharacterGroup.obj \
 	$(SLO)$/WP6ColumnGroup.obj \
@@ -132,19 +136,17 @@ SLOFILES= \
 	$(SLO)$/WP6FootnoteEndnoteGroup.obj \
 	$(SLO)$/WP6GeneralTextPacket.obj \
 	$(SLO)$/WP6Header.obj \
-	$(SLO)$/WP60Header.obj \
-	$(SLO)$/WP61Header.obj \
 	$(SLO)$/WP6HeaderFooterGroup.obj \
 	$(SLO)$/WP6HighlightGroup.obj \
 	$(SLO)$/WP6Listener.obj \
-	$(SLO)$/WP6Parser.obj \
 	$(SLO)$/WP6OutlineStylePacket.obj \
 	$(SLO)$/WP6PageGroup.obj \
 	$(SLO)$/WP6ParagraphGroup.obj \
+	$(SLO)$/WP6Parser.obj \
 	$(SLO)$/WP6Part.obj \
 	$(SLO)$/WP6PrefixData.obj \
-	$(SLO)$/WP6PrefixIndice.obj \
 	$(SLO)$/WP6PrefixDataPacket.obj \
+	$(SLO)$/WP6PrefixIndice.obj \
 	$(SLO)$/WP6SingleByteFunction.obj \
 	$(SLO)$/WP6StyleGroup.obj \
 	$(SLO)$/WP6StylesListener.obj \
