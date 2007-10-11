@@ -26,21 +26,21 @@
  */
 
 #include <stdio.h>
-#include "HtmlListenerImpl.h"
+#include "HtmlDocumentGenerator.h"
 
 // use the BELL code to represent a TAB for now
 #define UCS_TAB 0x0009
 
-HtmlListenerImpl::HtmlListenerImpl() :
+HtmlDocumentGenerator::HtmlDocumentGenerator() :
 	m_ignore(false)
 {
 }
 
-HtmlListenerImpl::~HtmlListenerImpl()
+HtmlDocumentGenerator::~HtmlDocumentGenerator()
 {
 }
 
-void HtmlListenerImpl::setDocumentMetaData(const WPXPropertyList &propList)
+void HtmlDocumentGenerator::setDocumentMetaData(const WPXPropertyList &propList)
 {
 	if (propList["author"])
 		printf("<meta name=\"author\" content=\"%s\">\n", propList["author"]->getStr().cstr());
@@ -60,7 +60,7 @@ void HtmlListenerImpl::setDocumentMetaData(const WPXPropertyList &propList)
 		printf("<meta name=\"descriptive-type\" content=\"%s\">\n", propList["descriptive-type"]->getStr().cstr());
 }
 
-void HtmlListenerImpl::startDocument()
+void HtmlDocumentGenerator::startDocument()
 {
 	printf("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\" \"http://www.w3.org/TR/REC-html40/loose.dtd\">\n");
 	printf("<html>\n");
@@ -70,35 +70,35 @@ void HtmlListenerImpl::startDocument()
 	printf("<body>\n");
 }
 
-void HtmlListenerImpl::endDocument()
+void HtmlDocumentGenerator::endDocument()
 {
 	printf("\n");
 	printf("</body>\n");
 	printf("</html>\n");
 }
 
-void HtmlListenerImpl::openHeader(const WPXPropertyList & /* propList */)
+void HtmlDocumentGenerator::openHeader(const WPXPropertyList & /* propList */)
 {
 	m_ignore = true;
 }
 
-void HtmlListenerImpl::closeHeader()
+void HtmlDocumentGenerator::closeHeader()
 {
 	m_ignore = false;
 }
 
 
-void HtmlListenerImpl::openFooter(const WPXPropertyList & /* propList */)
+void HtmlDocumentGenerator::openFooter(const WPXPropertyList & /* propList */)
 {
 	m_ignore = true;
 }
 
-void HtmlListenerImpl::closeFooter()
+void HtmlDocumentGenerator::closeFooter()
 {
 	m_ignore = false;
 }
 
-void HtmlListenerImpl::openParagraph(const WPXPropertyList &propList, const WPXPropertyListVector & /* tabStops */)
+void HtmlDocumentGenerator::openParagraph(const WPXPropertyList &propList, const WPXPropertyListVector & /* tabStops */)
 {
 	if (!m_ignore)
 	{
@@ -121,7 +121,7 @@ void HtmlListenerImpl::openParagraph(const WPXPropertyList &propList, const WPXP
 	}
 }
 
-void HtmlListenerImpl::closeParagraph()
+void HtmlDocumentGenerator::closeParagraph()
 {
 	if (!m_ignore)
 	{
@@ -129,7 +129,7 @@ void HtmlListenerImpl::closeParagraph()
 	}
 }
 
-void HtmlListenerImpl::openSpan(const WPXPropertyList &propList)
+void HtmlDocumentGenerator::openSpan(const WPXPropertyList &propList)
 {
 	if (!m_ignore)
 	{
@@ -158,7 +158,7 @@ void HtmlListenerImpl::openSpan(const WPXPropertyList &propList)
 	}
 }
 
-void HtmlListenerImpl::closeSpan()
+void HtmlDocumentGenerator::closeSpan()
 {
 	if (!m_ignore)
 	{
@@ -166,7 +166,7 @@ void HtmlListenerImpl::closeSpan()
 	}
 }
 
-void HtmlListenerImpl::insertTab()
+void HtmlDocumentGenerator::insertTab()
 {
 	if (!m_ignore)
 	{
@@ -175,7 +175,7 @@ void HtmlListenerImpl::insertTab()
 	}
 }
 
-void HtmlListenerImpl::insertLineBreak()
+void HtmlDocumentGenerator::insertLineBreak()
 {
 	if (!m_ignore)
 	{
@@ -184,7 +184,7 @@ void HtmlListenerImpl::insertLineBreak()
 	}
 }
 
-void HtmlListenerImpl::insertText(const WPXString &text)
+void HtmlDocumentGenerator::insertText(const WPXString &text)
 {
 	if (!m_ignore)
 	{
@@ -194,7 +194,7 @@ void HtmlListenerImpl::insertText(const WPXString &text)
 	}
 }
 
-void HtmlListenerImpl::openOrderedListLevel(const WPXPropertyList & /* propList */)
+void HtmlDocumentGenerator::openOrderedListLevel(const WPXPropertyList & /* propList */)
 {
 	if (!m_ignore)
 	{
@@ -202,7 +202,7 @@ void HtmlListenerImpl::openOrderedListLevel(const WPXPropertyList & /* propList 
 	}
 }
 
-void HtmlListenerImpl::closeOrderedListLevel()
+void HtmlDocumentGenerator::closeOrderedListLevel()
 {
 	if (!m_ignore)
 	{
@@ -210,7 +210,7 @@ void HtmlListenerImpl::closeOrderedListLevel()
 	}
 }
 
-void HtmlListenerImpl::openUnorderedListLevel(const WPXPropertyList & /* propList */)
+void HtmlDocumentGenerator::openUnorderedListLevel(const WPXPropertyList & /* propList */)
 {
 	if (!m_ignore)
 	{
@@ -218,7 +218,7 @@ void HtmlListenerImpl::openUnorderedListLevel(const WPXPropertyList & /* propLis
 	}
 }
 
-void HtmlListenerImpl::closeUnorderedListLevel()
+void HtmlDocumentGenerator::closeUnorderedListLevel()
 {
 	if (!m_ignore)
 	{
@@ -227,7 +227,7 @@ void HtmlListenerImpl::closeUnorderedListLevel()
 }
 
 
-void HtmlListenerImpl::openListElement(const WPXPropertyList & /* propList */, const WPXPropertyListVector &/* tabStops */)
+void HtmlDocumentGenerator::openListElement(const WPXPropertyList & /* propList */, const WPXPropertyListVector &/* tabStops */)
 {
 	if (!m_ignore)
 	{
@@ -235,7 +235,7 @@ void HtmlListenerImpl::openListElement(const WPXPropertyList & /* propList */, c
 	}
 }
 
-void HtmlListenerImpl::closeListElement()
+void HtmlDocumentGenerator::closeListElement()
 {
 	if (!m_ignore)
 	{
@@ -243,7 +243,7 @@ void HtmlListenerImpl::closeListElement()
 	}
 }
 
-void HtmlListenerImpl::openFootnote(const WPXPropertyList &propList)
+void HtmlDocumentGenerator::openFootnote(const WPXPropertyList &propList)
 {
 	if (!m_ignore)
 	{
@@ -255,7 +255,7 @@ void HtmlListenerImpl::openFootnote(const WPXPropertyList &propList)
 	}
 }
 
-void HtmlListenerImpl::closeFootnote()
+void HtmlDocumentGenerator::closeFootnote()
 {
 	if (!m_ignore)
 	{
@@ -263,7 +263,7 @@ void HtmlListenerImpl::closeFootnote()
 	}
 }
 
-void HtmlListenerImpl::openEndnote(const WPXPropertyList &propList)
+void HtmlDocumentGenerator::openEndnote(const WPXPropertyList &propList)
 {
 	if (!m_ignore)
 	{
@@ -275,7 +275,7 @@ void HtmlListenerImpl::openEndnote(const WPXPropertyList &propList)
 	}
 }
 
-void HtmlListenerImpl::closeEndnote()
+void HtmlDocumentGenerator::closeEndnote()
 {
 	if (!m_ignore)
 	{
@@ -283,7 +283,7 @@ void HtmlListenerImpl::closeEndnote()
 	}
 }
 
-void HtmlListenerImpl::openComment(const WPXPropertyList &propList)
+void HtmlDocumentGenerator::openComment(const WPXPropertyList &propList)
 {
 	if (!m_ignore)
 	{
@@ -291,7 +291,7 @@ void HtmlListenerImpl::openComment(const WPXPropertyList &propList)
 	}
 }
 
-void HtmlListenerImpl::closeComment()
+void HtmlDocumentGenerator::closeComment()
 {
 	if (!m_ignore)
 	{
@@ -299,7 +299,7 @@ void HtmlListenerImpl::closeComment()
 	}
 }
 
-void HtmlListenerImpl::openTable(const WPXPropertyList & /* propList */, const WPXPropertyListVector & /* columns */)
+void HtmlDocumentGenerator::openTable(const WPXPropertyList & /* propList */, const WPXPropertyListVector & /* columns */)
 {
 	if (!m_ignore)
 	{
@@ -308,7 +308,7 @@ void HtmlListenerImpl::openTable(const WPXPropertyList & /* propList */, const W
 	}
 }
 
-void HtmlListenerImpl::openTableRow(const WPXPropertyList & /* propList */)
+void HtmlDocumentGenerator::openTableRow(const WPXPropertyList & /* propList */)
 {
 	if (!m_ignore)
 	{
@@ -316,7 +316,7 @@ void HtmlListenerImpl::openTableRow(const WPXPropertyList & /* propList */)
 	}
 }
 
-void HtmlListenerImpl::closeTableRow()
+void HtmlDocumentGenerator::closeTableRow()
 {
 	if (!m_ignore)
 	{
@@ -324,7 +324,7 @@ void HtmlListenerImpl::closeTableRow()
 	}
 }
 
-void HtmlListenerImpl::openTableCell(const WPXPropertyList &propList)
+void HtmlDocumentGenerator::openTableCell(const WPXPropertyList &propList)
 {
 	if (!m_ignore)
 	{
@@ -343,7 +343,7 @@ void HtmlListenerImpl::openTableCell(const WPXPropertyList &propList)
 	}
 }
 
-void HtmlListenerImpl::closeTableCell()
+void HtmlDocumentGenerator::closeTableCell()
 {
 	if (!m_ignore)
 	{
@@ -351,7 +351,7 @@ void HtmlListenerImpl::closeTableCell()
 	}
 }
 
-void HtmlListenerImpl::closeTable()
+void HtmlDocumentGenerator::closeTable()
 {
 	if (!m_ignore)
 	{

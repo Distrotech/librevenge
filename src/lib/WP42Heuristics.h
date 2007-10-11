@@ -32,7 +32,7 @@
 class WP42Heuristics
 {
 public:
-	static WPDConfidence isWP42FileFormat(WPXInputStream *input, bool partialContent);
+	static WPDConfidence isWP42FileFormat(WPXInputStream *input);
 };
 
 #endif /* WP42HEURISTICS_H */

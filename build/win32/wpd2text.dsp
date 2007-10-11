@@ -95,11 +95,25 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 # Begin Source File
 
-SOURCE=..\..\src\conv\text\TextListenerImpl.cpp
+SOURCE=..\..\src\conv\text\TextDocumentGenerator.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\conv\text\wpd2text.cpp
+DEP_CPP_WPD2T=\
+	"..\..\src\conv\text\TextDocumentGenerator.h"\
+	"..\..\src\lib\libwpd.h"\
+	"..\..\src\lib\libwpd_types.h"\
+	"..\..\src\lib\WPDocument.h"\
+	"..\..\src\lib\WPXBinaryData.h"\
+	"..\..\src\lib\WPXDocumentInterface.h"\
+	"..\..\src\lib\WPXProperty.h"\
+	"..\..\src\lib\WPXPropertyList.h"\
+	"..\..\src\lib\WPXPropertyListVector.h"\
+	"..\..\src\lib\WPXStream.h"\
+	"..\..\src\lib\WPXStreamImplementation.h"\
+	"..\..\src\lib\WPXString.h"\
+	
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -107,7 +121,7 @@ SOURCE=..\..\src\conv\text\wpd2text.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl;inc;xsd"
 # Begin Source File
 
-SOURCE=..\..\src\conv\text\TextListenerImpl.h
+SOURCE=..\..\src\conv\text\TextDocumentGenerator.h
 # End Source File
 # End Group
 # End Target

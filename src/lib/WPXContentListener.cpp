@@ -120,10 +120,10 @@ _WPXContentParsingState::~_WPXContentParsingState()
 	DELETEP(m_highlightColor);
 }
 
-WPXContentListener::WPXContentListener(std::list<WPXPageSpan> &pageList, WPXDocumentInterface *listenerImpl) :
+WPXContentListener::WPXContentListener(std::list<WPXPageSpan> &pageList, WPXDocumentInterface *documentInterface) :
 	WPXListener(pageList),
 	m_ps(new WPXContentParsingState),
-	m_documentInterface(listenerImpl),
+	m_documentInterface(documentInterface),
 	m_metaData()
 {
 	m_ps->m_nextPageSpanIter = pageList.begin();

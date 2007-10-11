@@ -95,7 +95,7 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 # Begin Source File
 
-SOURCE=..\..\src\conv\raw\RawListener.cpp
+SOURCE=..\..\src\conv\raw\RawDocumentGenerator.cpp
 # End Source File
 # Begin Source File
 
@@ -107,7 +107,7 @@ SOURCE=..\..\src\conv\raw\wpd2raw.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl;inc;xsd"
 # Begin Source File
 
-SOURCE=..\..\src\conv\raw\RawListenerImpl.h
+SOURCE=..\..\src\conv\raw\RawDocumentGenerator.h
 # End Source File
 # End Group
 # End Target

@@ -29,7 +29,7 @@
 #include "libwpd_internal.h"
 #include <limits>
 
-WPDConfidence WP1Heuristics::isWP1FileFormat(WPXInputStream *input, bool partialContent)
+WPDConfidence WP1Heuristics::isWP1FileFormat(WPXInputStream *input)
 {
 	try
 	{
@@ -101,7 +101,7 @@ WPDConfidence WP1Heuristics::isWP1FileFormat(WPXInputStream *input, bool partial
 					}
 
 					// when passed the complete file, we don't allow for open groups when we've reached EOF
-					if (!partialContent && input->atEOS() && (closingGate != readVal))
+					if (input->atEOS() && (closingGate != readVal))
 						return WPD_CONFIDENCE_NONE;
 				
 					functionGroupCount++;
@@ -113,7 +113,7 @@ WPDConfidence WP1Heuristics::isWP1FileFormat(WPXInputStream *input, bool partial
 					// seek to the position where the closing gate should be
 					int res = input->seek(WP1_FUNCTION_GROUP_SIZE[readVal-0xC0]-2, WPX_SEEK_CUR);
 					// when passed the complete file, we should be able to do that
-					if (!partialContent && res)
+					if (res)
 						return WPD_CONFIDENCE_NONE;
 				
 					// read the closing gate

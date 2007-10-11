@@ -48,7 +48,7 @@ private:
 class WP1ContentListener : public WP1Listener, protected WPXContentListener
 {
 public:
-	WP1ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP1SubDocument *> &subDocuments, WPXDocumentInterface *listenerImpl);
+	WP1ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP1SubDocument *> &subDocuments, WPXDocumentInterface *documentInterface);
 	~WP1ContentListener();
 
 	void startDocument() { WPXContentListener::startDocument(); }

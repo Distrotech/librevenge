@@ -46,9 +46,9 @@ _WP3ContentParsingState::~_WP3ContentParsingState()
 	DELETEP(m_cellFillColor);
 }
 
-WP3ContentListener::WP3ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP3SubDocument *>&subDocuments, WPXDocumentInterface *listenerImpl) :
+WP3ContentListener::WP3ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP3SubDocument *>&subDocuments, WPXDocumentInterface *documentInterface) :
 	WP3Listener(),
-	WPXContentListener(pageList, listenerImpl),
+	WPXContentListener(pageList, documentInterface),
 	m_parseState(new WP3ContentParsingState),
 	m_subDocuments(subDocuments)
 {

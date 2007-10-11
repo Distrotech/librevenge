@@ -37,7 +37,7 @@ public:
 	WP42Parser(WPXInputStream *input);
 	~WP42Parser();
 
-	void parse(WPXDocumentInterface *listenerImpl);
+	void parse(WPXDocumentInterface *documentInterface);
 
 	static void parseDocument(WPXInputStream *input, WP42Listener *listener);
 

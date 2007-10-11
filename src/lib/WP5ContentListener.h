@@ -50,7 +50,7 @@ struct _WP5ContentParsingState
 class WP5ContentListener : public WP5Listener, protected WPXContentListener
 {
 public:
-	WP5ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP5SubDocument *> &subDocuments, WPXDocumentInterface *listenerImpl);
+	WP5ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP5SubDocument *> &subDocuments, WPXDocumentInterface *documentInterface);
 	~WP5ContentListener();
 
 	void startDocument() { WPXContentListener::startDocument(); };

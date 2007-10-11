@@ -18,8 +18,8 @@ wpd2text_LDADD = ../../lib/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.la ../
 endif
  
 wpd2text_SOURCES = \
-	TextListenerImpl.cpp \
-	TextListenerImpl.h \
+	TextDocumentGenerator.cpp \
+	TextDocumentGenerator.h \
 	wpd2text.cpp
 
 if OS_WIN32

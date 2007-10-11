@@ -39,7 +39,7 @@ public:
 	WP6Parser(WPXInputStream *input, WPXHeader *header);
 	~WP6Parser();
 
-	void parse(WPXDocumentInterface *listenerImpl);
+	void parse(WPXDocumentInterface *documentInterface);
 
 	static void parseDocument(WPXInputStream *stream, WP6Listener *listener);
 

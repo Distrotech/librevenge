@@ -95,7 +95,7 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 # Begin Source File
 
-SOURCE=..\..\src\conv\html\HtmlListenerImpl.cpp
+SOURCE=..\..\src\conv\html\HtmlDocumentGenerator.cpp
 # End Source File
 # Begin Source File
 
@@ -107,7 +107,7 @@ SOURCE=..\..\src\conv\html\wpd2html.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl;inc;xsd"
 # Begin Source File
 
-SOURCE=..\..\src\conv\html\HtmlListenerImpl.h
+SOURCE=..\..\src\conv\html\HtmlDocumentGenerator.h
 # End Source File
 # End Group
 # End Target

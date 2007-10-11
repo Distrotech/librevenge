@@ -43,7 +43,7 @@ struct _WP42ContentParsingState
 class WP42ContentListener : public WP42Listener, protected WPXContentListener
 {
 public:
-	WP42ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP42SubDocument *> &subDocuments, WPXDocumentInterface *listenerImpl);
+	WP42ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP42SubDocument *> &subDocuments, WPXDocumentInterface *documentInterface);
 	~WP42ContentListener();
 
 	void startDocument() { WPXContentListener::startDocument(); }

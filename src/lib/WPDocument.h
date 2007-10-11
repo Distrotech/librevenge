@@ -42,8 +42,8 @@ WordPerfect documents.
 class WPDocument
 {
 public:
-	static WPDConfidence isFileFormatSupported(WPXInputStream *input, bool partialContent);
-	static WPDResult parse(WPXInputStream *input, WPXDocumentInterface *listenerImpl);
+	static WPDConfidence isFileFormatSupported(WPXInputStream *input);
+	static WPDResult parse(WPXInputStream *input, WPXDocumentInterface *documentInterface);
 };
 
 #endif /* WPDOCUMENT_H */

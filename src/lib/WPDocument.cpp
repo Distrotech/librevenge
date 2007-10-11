@@ -54,12 +54,10 @@ the full 100%.
 /**
 Analyzes the content of an input stream to see if it can be parsed
 \param input The input stream
-\param partialContent A boolean which states if the content from the input stream
-represents the full contents of a WordPerfect file, or just the first X bytes
 \return A confidence value which represents the likelyhood that the content from
 the input stream can be parsed
 */
-WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input, bool partialContent)
+WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input)
 {
 	WPDConfidence confidence = WPD_CONFIDENCE_NONE;
 
@@ -72,28 +70,19 @@ WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input, bool part
 	WPXInputStream *document = 0;
 	bool isDocumentOLE = false;
 
-	// BIG BIG NOTE: very unsafe on partial content!!!
 	if (input->isOLEStream())
 	{
 		document = input->getDocumentOLEStream("PerfectOffice_MAIN");
 		if (document)
 			isDocumentOLE = true;
 		else
-		{
-			if (partialContent)
-				return WPD_CONFIDENCE_LIKELY; // HACK: too high, but for now, we'll live with it
-			else
-				return WPD_CONFIDENCE_NONE;
-		}
+			return WPD_CONFIDENCE_NONE;
 	}
 	else
 		document = input;
 
 	try
 	{
-		// NOTE: even when passed partial content, we for now just assume that
-		// we can extract the header from it. We could also read the major version
-		// and the preceding -1 WPC stuff manually.
 		header = WPXHeader::constructHeader(document);
 		if (header)
 		{
@@ -136,9 +125,9 @@ WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input, bool part
 			DELETEP(header);
 		}
 		else
-			confidence = WP1Heuristics::isWP1FileFormat(input, partialContent);
+			confidence = WP1Heuristics::isWP1FileFormat(input);
 			if (confidence != WPD_CONFIDENCE_EXCELLENT)
-				confidence = LIBWPD_MAX(confidence, WP42Heuristics::isWP42FileFormat(input, partialContent));
+				confidence = LIBWPD_MAX(confidence, WP42Heuristics::isWP42FileFormat(input));
 			
 
 		// dispose of the reference to the ole input stream, if we allocated one
@@ -174,9 +163,9 @@ Parses the input stream content. It will make callbacks to the functions provide
 WPXDocumentInterface class implementation when needed. This is often commonly called the
 'main parsing routine'.
 \param input The input stream
-\param listenerImpl A WPXListener implementation
+\param documentInterface A WPXListener implementation
 */
-WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *listenerImpl)
+WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *documentInterface)
 {
 	WPXParser *parser = 0;
 
@@ -214,12 +203,12 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *listene
 						case 0x00: // WP5
 							WPD_DEBUG_MSG(("WordPerfect: Using the WP5 parser.\n"));
 							parser = new WP5Parser(document, header);
-							parser->parse(listenerImpl);
+							parser->parse(documentInterface);
 							break;
 						case 0x02: // WP6
 							WPD_DEBUG_MSG(("WordPerfect: Using the WP6 parser.\n"));
 							parser = new WP6Parser(document, header);
-							parser->parse(listenerImpl);
+							parser->parse(documentInterface);
 							break;
 						default:
 							// unhandled file format
@@ -235,7 +224,7 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *listene
 						case 0x04: // WP Mac 3.5e
 							WPD_DEBUG_MSG(("WordPerfect: Using the WP3 parser.\n"));
 							parser = new WP3Parser(document, header);
-							parser->parse(listenerImpl);
+							parser->parse(documentInterface);
 							break;
 						default:
 							// unhandled file format
@@ -262,20 +251,20 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *listene
 			// header which can be used to determine which parser to instanciate.
 			// Use heuristics to determine with some certainty if we are dealing with
 			// a file in the WP4.2 format or WP Mac 1.x format.
-			if (WP1Heuristics::isWP1FileFormat(document, false) != WPD_CONFIDENCE_NONE)
+			if (WP1Heuristics::isWP1FileFormat(document) != WPD_CONFIDENCE_NONE)
 			{
 				WPD_DEBUG_MSG(("WordPerfect: Mostly likely the file format is WP Mac 1.x.\n\n"));
 				WPD_DEBUG_MSG(("WordPerfect: Using the WP Mac 1.x parser.\n\n"));
 				parser = new WP1Parser(document);
-				parser->parse(listenerImpl);
+				parser->parse(documentInterface);
 				DELETEP(parser);
 			}
-			else if (WP42Heuristics::isWP42FileFormat(document, false) != WPD_CONFIDENCE_NONE)
+			else if (WP42Heuristics::isWP42FileFormat(document) != WPD_CONFIDENCE_NONE)
 			{
 				WPD_DEBUG_MSG(("WordPerfect: Mostly likely the file format is WP4.2.\n\n"));
 				WPD_DEBUG_MSG(("WordPerfect: Using the WP4.2 parser.\n\n"));
 				parser = new WP42Parser(document);
-				parser->parse(listenerImpl);
+				parser->parse(documentInterface);
 				DELETEP(parser);
 			}
 			else

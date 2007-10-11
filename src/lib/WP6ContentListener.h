@@ -133,7 +133,7 @@ private:
 class WP6ContentListener : public WP6Listener, protected WPXContentListener
 {
 public:
-	WP6ContentListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, WPXDocumentInterface *listenerImpl);
+	WP6ContentListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, WPXDocumentInterface *documentInterface);
 	~WP6ContentListener();
 
 	void startDocument() { WPXContentListener::startDocument(); };

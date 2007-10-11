@@ -148,9 +148,9 @@ _WP6ContentParsingState::~_WP6ContentParsingState()
 	// FIXME: erase current fontname
 }
 
-WP6ContentListener::WP6ContentListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, WPXDocumentInterface *listenerImpl) :
+WP6ContentListener::WP6ContentListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, WPXDocumentInterface *documentInterface) :
 	WP6Listener(),
-	WPXContentListener(pageList, listenerImpl),
+	WPXContentListener(pageList, documentInterface),
 	m_parseState(new WP6ContentParsingState(tableList)),
 	m_outlineDefineHash()
 {

@@ -28,7 +28,7 @@
 #include "WP42FileStructure.h"
 #include "libwpd_internal.h"
 
-WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input, bool partialContent)
+WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input)
 {
 	try
 	{
@@ -82,7 +82,7 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input, bool parti
 					}
 
 					// when passed the complete file, we don't allow for open groups when we've reached EOF
-					if ((readNextVal == 0) || (!partialContent && input->atEOS() && (readNextVal != readVal)))
+					if ((readNextVal == 0) || (input->atEOS() && (readNextVal != readVal)))
 						return WPD_CONFIDENCE_NONE;
 				
 					functionGroupCount++;
@@ -94,7 +94,7 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input, bool parti
 					// seek to the position where the closing gate should be
 					int res = input->seek(WP42_FUNCTION_GROUP_SIZE[readVal-0xC0]-2, WPX_SEEK_CUR);
 					// when passed the complete file, we should be able to do that
-					if (!partialContent && res)
+					if (res)
 						return WPD_CONFIDENCE_NONE;
 				
 					// read the closing gate

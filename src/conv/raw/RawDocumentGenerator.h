@@ -1,7 +1,6 @@
 /* libwpd
- * Copyright (C) 2002-2005 William Lachance (wrlach@gmail.com)
- * Copyright (C) 2005 Net Integration Technologies (http://www.net-itech.com)
- * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
+ * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
+ * Copyright (C) 2002-2004 Marc Maurer (uwog@uwog.net)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,42 +23,62 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef HTMLLISTENERIMPL_H
-#define HTMLLISTENERIMPL_H
-
+#ifndef RAWLISTENERIMPL_H
+#define RAWLISTENERIMPL_H
 #include "WPXDocumentInterface.h"
+#include <stack>
 
-class HtmlListenerImpl : public WPXDocumentInterface
+using namespace std;
+
+enum ListenerCallback {
+	LC_START_DOCUMENT = 0,
+	LC_OPEN_PAGE_SPAN,
+	LC_OPEN_HEADER_FOOTER,
+	LC_OPEN_PARAGRAPH,
+	LC_OPEN_SPAN,
+	LC_OPEN_SECTION,
+	LC_OPEN_ORDERED_LIST_LEVEL,
+	LC_OPEN_UNORDERED_LIST_LEVEL,
+	LC_OPEN_LIST_ELEMENT,
+	LC_OPEN_FOOTNOTE,
+	LC_OPEN_ENDNOTE,
+	LC_OPEN_TABLE,
+	LC_OPEN_TABLE_ROW,
+	LC_OPEN_TABLE_CELL,
+	LC_OPEN_COMMENT
+};
+
+class RawDocumentGenerator : public WPXDocumentInterface
 {
 public:
-	HtmlListenerImpl();
-	virtual ~HtmlListenerImpl();
+	RawDocumentGenerator(bool printCallgraphScore);
+	virtual ~RawDocumentGenerator();
 
  	virtual void setDocumentMetaData(const WPXPropertyList &propList);
 
 	virtual void startDocument();
 	virtual void endDocument();
 
-	virtual void openPageSpan(const WPXPropertyList & /* propList */) {}
-	virtual void closePageSpan() {}
+	virtual void openPageSpan(const WPXPropertyList &propList);
+	virtual void closePageSpan();
 	virtual void openHeader(const WPXPropertyList &propList);
 	virtual void closeHeader();
 	virtual void openFooter(const WPXPropertyList &propList);
 	virtual void closeFooter();
 
-	virtual void openSection(const WPXPropertyList & /* propList */, const WPXPropertyListVector & /* columns */) {}
-	virtual void closeSection() {}
 	virtual void openParagraph(const WPXPropertyList &propList, const WPXPropertyListVector &tabStops);
 	virtual void closeParagraph();
 	virtual void openSpan(const WPXPropertyList &propList);
 	virtual void closeSpan();
+	virtual void openSection(const WPXPropertyList &propList, const WPXPropertyListVector &columns);
+	virtual void closeSection();
 
 	virtual void insertTab();
 	virtual void insertText(const WPXString &text);
-	virtual void insertLineBreak();
+ 	virtual void insertLineBreak();
 
-	virtual void defineOrderedListLevel(const WPXPropertyList & /* propList */) {}
-	virtual void defineUnorderedListLevel(const WPXPropertyList & /* propList */) {}
+	virtual void defineOrderedListLevel(const WPXPropertyList &propList);
+	virtual void defineUnorderedListLevel(const WPXPropertyList &propList);
 	virtual void openOrderedListLevel(const WPXPropertyList &propList);
 	virtual void openUnorderedListLevel(const WPXPropertyList &propList);
 	virtual void closeOrderedListLevel();
@@ -74,14 +93,13 @@ public:
 	virtual void openComment(const WPXPropertyList &propList);
 	virtual void closeComment();
 
-
-	virtual void openTable(const WPXPropertyList &propList, const WPXPropertyListVector &columns);
-	virtual void openTableRow(const WPXPropertyList &propList);
+ 	virtual void openTable(const WPXPropertyList &propList, const WPXPropertyListVector &columns);
+ 	virtual void openTableRow(const WPXPropertyList &propList);
 	virtual void closeTableRow();
-	virtual void openTableCell(const WPXPropertyList &propList);
+ 	virtual void openTableCell(const WPXPropertyList &propList);
 	virtual void closeTableCell();
-	virtual void insertCoveredTableCell(const WPXPropertyList & /* propList */) {}
-	virtual void closeTable();
+	virtual void insertCoveredTableCell(const WPXPropertyList &propList);
+ 	virtual void closeTable();
 
 	virtual void openBox(const WPXPropertyList & /* propList */) {}
 	virtual void closeBox() {}
@@ -89,8 +107,18 @@ public:
 	virtual void insertBinaryObject(const WPXPropertyList & /* propList */, const WPXBinaryData * /* object */) {}
 
 private:
-	bool m_ignore;
+	int m_indent;
+	int m_callbackMisses;
+	bool m_printCallgraphScore;
+	stack<ListenerCallback> m_callStack;
+
+	void __indentUp() { m_indent++; }
+	void __indentDown() { if (m_indent > 0) m_indent--; }
+
+	void __iprintf(const char *format, ...);
+	void __iuprintf(const char *format, ...);
+	void __idprintf(const char *format, ...);
 
 };
 
-#endif /* HTMLLISTENERIMPL_H */
+#endif /* RAWLISTENERIMPL_H */

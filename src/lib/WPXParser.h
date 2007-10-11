@@ -36,7 +36,7 @@ public:
 	WPXParser(WPXInputStream * input, WPXHeader *header);
 	virtual ~WPXParser();
 
-	virtual void parse(WPXDocumentInterface *listenerImpl) = 0;
+	virtual void parse(WPXDocumentInterface *documentInterface) = 0;
 
 protected:
 	WPXHeader * getHeader() { return m_header; }

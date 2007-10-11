@@ -18,8 +18,8 @@ wpd2html_LDADD = ../../lib/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.la ../
 endif
 
 wpd2html_SOURCES = \
-	HtmlListenerImpl.cpp	\
-	HtmlListenerImpl.h	\
+	HtmlDocumentGenerator.cpp	\
+	HtmlDocumentGenerator.h	\
 	wpd2html.cpp
 
 if OS_WIN32

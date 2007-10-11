@@ -189,7 +189,7 @@ void WP6Parser::parsePackets(WP6PrefixData *prefixData, int type, WP6Listener *l
 
 // WP6Parser::parse() reads AND parses a wordperfect document, passing any retrieved low-level
 // information to a low-level listener
-void WP6Parser::parse(WPXDocumentInterface *listenerImpl)
+void WP6Parser::parse(WPXDocumentInterface *documentInterface)
 {	
 	WP6PrefixData * prefixData = 0;
 	std::list<WPXPageSpan> pageList;
@@ -225,7 +225,7 @@ void WP6Parser::parse(WPXDocumentInterface *listenerImpl)
 
 		// second pass: here is where we actually send the messages to the target app
 		// that are necessary to emit the body of the target document
-		WP6ContentListener listener(pageList, tableList, listenerImpl);
+		WP6ContentListener listener(pageList, tableList, documentInterface);
 		listener.setPrefixData(prefixData);
 
 		// get the relevant initial prefix packets out of storage and tell them to parse

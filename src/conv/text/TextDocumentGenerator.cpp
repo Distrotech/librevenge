@@ -24,21 +24,21 @@
  */
 
 #include <stdio.h>
-#include "TextListenerImpl.h"
+#include "TextDocumentGenerator.h"
 
 // use the BELL code to represent a TAB for now
 #define UCS_TAB 0x0009 
 
-TextListenerImpl::TextListenerImpl(const bool isInfo) :
+TextDocumentGenerator::TextDocumentGenerator(const bool isInfo) :
 	m_isInfo(isInfo)
 {
 }
 
-TextListenerImpl::~TextListenerImpl()
+TextDocumentGenerator::~TextDocumentGenerator()
 {
 }
 
-void TextListenerImpl::setDocumentMetaData(const WPXPropertyList &propList)
+void TextDocumentGenerator::setDocumentMetaData(const WPXPropertyList &propList)
 {
 	if (!m_isInfo)
 		return;
@@ -49,28 +49,28 @@ void TextListenerImpl::setDocumentMetaData(const WPXPropertyList &propList)
 	}	
 }
 
-void TextListenerImpl::closeParagraph()
+void TextDocumentGenerator::closeParagraph()
 {
 	if (m_isInfo)
 		return;
 	printf("\n");
 }
 
-void TextListenerImpl::insertTab()
+void TextDocumentGenerator::insertTab()
 {
 	if (m_isInfo)
 		return;
 	printf("%c", UCS_TAB);
 }
 
-void TextListenerImpl::insertText(const WPXString &text)
+void TextDocumentGenerator::insertText(const WPXString &text)
 {
 	if (m_isInfo)
 		return;
 	printf("%s", text.cstr());
 }
 
-void TextListenerImpl::insertLineBreak()
+void TextDocumentGenerator::insertLineBreak()
 {
 	if (m_isInfo)
 		return;

@@ -42,9 +42,9 @@ _WP5ContentParsingState::~_WP5ContentParsingState()
 {
 }
 
-WP5ContentListener::WP5ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP5SubDocument*> &subDocuments, WPXDocumentInterface *listenerImpl) :
+WP5ContentListener::WP5ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP5SubDocument*> &subDocuments, WPXDocumentInterface *documentInterface) :
 	WP5Listener(),
-	WPXContentListener(pageList, listenerImpl),
+	WPXContentListener(pageList, documentInterface),
 	m_parseState(new WP5ContentParsingState),
 	m_subDocuments(subDocuments),
 	m_defaultFontSize(12.0f),

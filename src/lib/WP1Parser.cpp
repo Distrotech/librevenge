@@ -180,7 +180,7 @@ void WP1Parser::parseDocument(WPXInputStream *input, WP1Listener *listener)
 	}
 }
 
-void WP1Parser::parse(WPXDocumentInterface *listenerImpl)
+void WP1Parser::parse(WPXDocumentInterface *documentInterface)
 {
 	WPXInputStream *input = getInput();
 	std::list<WPXPageSpan> pageList;
@@ -211,7 +211,7 @@ void WP1Parser::parse(WPXDocumentInterface *listenerImpl)
 
 		// second pass: here is where we actually send the messages to the target app
 		// that are necessary to emit the body of the target document
-		WP1ContentListener listener(pageList, subDocuments, listenerImpl);
+		WP1ContentListener listener(pageList, subDocuments, documentInterface);
 		parse(input, &listener);
 
 		// cleanup section: free the used resources

@@ -20,7 +20,7 @@
  */
 
 #include <stdio.h>
-#include "HtmlListenerImpl.h"
+#include "HtmlDocumentGenerator.h"
 #include "WPXStreamImplementation.h"
 #include "WPDocument.h"
 
@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 	
 	WPXInputStream* input = new WPXFileStream(argv[1]);
 
-	WPDConfidence confidence = WPDocument::isFileFormatSupported(input, false);
+	WPDConfidence confidence = WPDocument::isFileFormatSupported(input);
 	if (confidence == WPD_CONFIDENCE_NONE || confidence == WPD_CONFIDENCE_POOR)
 	{
 		printf("ERROR: Unsupported file format!\n");
@@ -42,8 +42,8 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	HtmlListenerImpl listenerImpl;
- 	WPDResult error = WPDocument::parse(input, static_cast<WPXDocumentInterface *>(&listenerImpl));
+	HtmlDocumentGenerator documentGenerator;
+ 	WPDResult error = WPDocument::parse(input, static_cast<WPXDocumentInterface *>(&documentGenerator));
 
 	if (error == WPD_FILE_ACCESS_ERROR)
 		fprintf(stderr, "ERROR: File Exception!\n");

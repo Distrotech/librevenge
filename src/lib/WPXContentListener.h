@@ -143,7 +143,7 @@ private:
 class WPXContentListener : public WPXListener
 {
 protected:
-	WPXContentListener(std::list<WPXPageSpan> &pageList, WPXDocumentInterface *listenerImpl);
+	WPXContentListener(std::list<WPXPageSpan> &pageList, WPXDocumentInterface *documentInterface);
 	virtual ~WPXContentListener();
 
 	void startDocument();

@@ -28,11 +28,11 @@
 
 #include "WPXDocumentInterface.h"
 
-class TextListenerImpl : public WPXDocumentInterface
+class TextDocumentGenerator : public WPXDocumentInterface
 {
 public:
-	TextListenerImpl(const bool isInfo=false);
-	virtual ~TextListenerImpl();
+	TextDocumentGenerator(const bool isInfo=false);
+	virtual ~TextDocumentGenerator();
 
  	virtual void setDocumentMetaData(const WPXPropertyList &propList);
 

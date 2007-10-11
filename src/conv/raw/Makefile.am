@@ -18,8 +18,8 @@ wpd2raw_LDADD = ../../lib/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.la ../.
 endif
 
 wpd2raw_SOURCES = \
-	RawListener.cpp	 \
-	RawListener.h	 \
+	RawDocumentGenerator.cpp	 \
+	RawDocumentGenerator.h	 \
 	wpd2raw.cpp
 
 if OS_WIN32

@@ -33,7 +33,7 @@
 class WP1Heuristics
 {
 public:
-	static WPDConfidence isWP1FileFormat(WPXInputStream *input, bool partialContent);
+	static WPDConfidence isWP1FileFormat(WPXInputStream *input);
 };
 
 #endif /* WP1HEURISTICS_H */
