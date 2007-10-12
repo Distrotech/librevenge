@@ -1,5 +1,6 @@
 /* libwpd
  * Copyright (C) 2007 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (C) 2007 Novell Inc. (http://www.novell.com)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,6 +28,7 @@
 #include "WP6PrefixDataPacket.h"
 #include "WP6Listener.h"
 #include "WPXStream.h"
+#include "WPXString.h"
 
 class WP6GraphicsBoxStylePacket : public WP6PrefixDataPacket
 {
@@ -39,5 +41,16 @@ public:
 private:
 	WP6GraphicsBoxStylePacket(const WP6GraphicsBoxStylePacket&);             
 	WP6GraphicsBoxStylePacket& operator=(const WP6GraphicsBoxStylePacket&);
+	bool m_isLibraryStyle;
+	WPXString m_boxStyleName;
+	uint8_t m_anchorValue, m_overlapFlag, m_autoFlag;
+	uint8_t m_hAlignType, m_hAlign;
+	uint16_t m_hOffset;
+	uint8_t m_vAlignType, m_vAlign;
+	uint16_t m_vOffset;
+	uint8_t m_widthFlag;
+	uint16_t m_width;
+	uint8_t m_heightFlag;
+	uint16_t m_height;
 };
 #endif /* WP6GRAPHICSBOXSTYLEPACKET_H */
