@@ -226,5 +226,8 @@ void WP6GraphicsBoxStylePacket::_readContents(WPXInputStream *input)
 			WPD_DEBUG_MSG(("\n        "));
 		WPD_DEBUG_MSG(("%.2x ", readU8(input)));
 	}
+#else
+	input->seek(tmpStartOfBoxData + tmpSizeOfBoxData, WPX_SEEK_SET);
 #endif
+
 }

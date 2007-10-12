@@ -275,6 +275,24 @@ void WP6StylesListener::noteOn(const uint16_t textPID)
 	}
 }
 
+void WP6StylesListener::insertTextBox(const WP6SubDocument *subDocument, const uint8_t /* anchoredTo */)
+{
+	if (!isUndoOn() && subDocument)
+	{
+		m_currentPageHasContent = true;
+		_handleSubDocument(subDocument, false, m_tableList);
+	}
+}
+
+void WP6StylesListener::commentAnnotation(const uint16_t textPID)
+{
+	if (!isUndoOn()) 
+	{
+		m_currentPageHasContent = true; 		
+		_handleSubDocument(((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : 0), false, m_tableList);
+	}
+}
+
 void WP6StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList,
 						int /* nextTableIndice */)
 {
