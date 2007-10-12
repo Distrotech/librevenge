@@ -218,6 +218,7 @@ void WP6GraphicsBoxStylePacket::_readContents(WPXInputStream *input)
 	
 	// Dumping hexadecimally the rest of the packet
 	
+#ifdef DEBUG
 	unsigned tmpCurrentPosition = input->tell();
 	for (unsigned i = 0; i < tmpStartOfBoxData + tmpSizeOfBoxData - tmpCurrentPosition; i++)
 	{
@@ -225,4 +226,5 @@ void WP6GraphicsBoxStylePacket::_readContents(WPXInputStream *input)
 			WPD_DEBUG_MSG(("\n        "));
 		WPD_DEBUG_MSG(("%.2x ", readU8(input)));
 	}
+#endif
 }
