@@ -327,6 +327,17 @@ void RawDocumentGenerator::closeComment()
 	_D(("closeComment()\n"), LC_OPEN_COMMENT);
 }
 
+void RawDocumentGenerator::openTextBox(const WPXPropertyList &propList)
+{
+	_U(("openTextBox(%s)\n", getPropString(propList).cstr()),
+	  LC_OPEN_TEXT_BOX);
+}
+
+void RawDocumentGenerator::closeTextBox()
+{
+	_D(("closeTextBox()\n"), LC_OPEN_TEXT_BOX);
+}
+	
 void RawDocumentGenerator::openTable(const WPXPropertyList &propList, const WPXPropertyListVector &columns)
 {
 	_U(("openTable(%s, columns: %s)\n", getPropString(propList).cstr(), getPropString(columns).cstr()), LC_OPEN_TABLE);
@@ -362,4 +373,20 @@ void RawDocumentGenerator::insertCoveredTableCell(const WPXPropertyList &propLis
 void RawDocumentGenerator::closeTable()
 {
 	_D(("closeTable()\n"), LC_OPEN_TABLE);
+}
+
+void RawDocumentGenerator::openFrame(const WPXPropertyList &propList)
+{
+	_U(("openFrame(%s)\n", getPropString(propList).cstr()),
+	  LC_OPEN_FRAME);
+}
+
+void RawDocumentGenerator::closeFrame()
+{
+	_D(("closeFrame()\n"), LC_OPEN_FRAME);
+}
+	
+void RawDocumentGenerator::insertBinaryObject(const WPXPropertyList & propList, const WPXBinaryData * /* object */)
+{
+	__iprintf("insertBinaryObject(%s)\n", getPropString(propList).cstr());
 }

@@ -1382,6 +1382,9 @@ void WP6ContentListener::endTable()
 
 void WP6ContentListener::insertGraphicsData(const uint16_t packetId, const uint8_t /* anchoredTo */)
 {
+	if (isUndoOn())
+		return;
+
 	if (const WP6GraphicsCachedFileDataPacket *gcfdPacket = dynamic_cast<const WP6GraphicsCachedFileDataPacket *>(this->getPrefixDataPacket(packetId))) 
 	{
 		if (!m_ps->m_isSpanOpened)
@@ -1390,12 +1393,37 @@ void WP6ContentListener::insertGraphicsData(const uint16_t packetId, const uint8
 			_flushText();
 
 		WPXPropertyList propList;
-		m_documentInterface->openBox(propList);
+		m_documentInterface->openFrame(propList);
 		propList.insert("libwpd:mimetype", "image/x-wpg");
 		m_documentInterface->insertBinaryObject(propList, gcfdPacket->getBinaryObject());
-		m_documentInterface->closeBox();
+		m_documentInterface->closeFrame();
 	}
 }
+
+void WP6ContentListener::insertTextBox(const WP6SubDocument *subDocument, const uint8_t /* anchoredTo */)
+{
+	if (!isUndoOn() && subDocument)
+	{
+		if (!m_ps->m_isSpanOpened)
+			_openSpan();
+		else
+			_flushText();
+
+		WPXPropertyList propList;
+		m_documentInterface->openFrame(propList);
+		m_documentInterface->openTextBox(propList);
+		
+		m_ps->m_isNote = true;
+
+		handleSubDocument(subDocument, false, m_parseState->m_tableList, m_parseState->m_nextTableIndice);
+
+		m_ps->m_isNote = false;
+
+		m_documentInterface->closeTextBox();
+		m_documentInterface->closeFrame();
+	}
+}
+	
 
 void WP6ContentListener::commentAnnotation(const uint16_t textPID)
 {
@@ -1412,7 +1440,7 @@ void WP6ContentListener::commentAnnotation(const uint16_t textPID)
 		WPXPropertyList propList;
 		m_documentInterface->openComment(propList);
 		
-		m_ps->m_isNote = false;
+		m_ps->m_isNote = true;
 
 		handleSubDocument(((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : 0), 
 				false, m_parseState->m_tableList, m_parseState->m_nextTableIndice);

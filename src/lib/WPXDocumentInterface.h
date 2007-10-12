@@ -269,13 +269,23 @@ class WPXDocumentInterface
 
 	/**
 	Called when a comment or annotation should be opened (a sub-document will be placed inside of it)
-	\param propList Defines a set of properties for the endnote.
+	\param propList Defines a set of properties for the comment or annotation.
 	*/
 	virtual void openComment(const WPXPropertyList &propList) = 0;
 	/**
 	Called when a comment or annotation should be closed
 	*/
 	virtual void closeComment() = 0;
+
+	/**
+	Called when a text box should be opened (a sub-document will be placed inside of it)
+	\param propList Defines a set of properties for the text box.
+	*/
+	virtual void openTextBox(const WPXPropertyList &propList) = 0;
+	/**
+	Called when a text box should be closed
+	*/
+	virtual void closeTextBox() = 0;
 
 	/**
 	Called when a table should be opened
@@ -342,11 +352,11 @@ class WPXDocumentInterface
 	\li \c svg:width Width of the box (in inches)
 	\li \c svg:height Height of the box (in inches)
 	*/
-	virtual void openBox(const WPXPropertyList &propList) = 0;
+	virtual void openFrame(const WPXPropertyList &propList) = 0;
 	/**
 	Called when the current positioned box is closed
 	*/
-	virtual void closeBox() = 0;
+	virtual void closeFrame() = 0;
 	/**
 	Called when a binary object should be inserted
 	\param propList Defines a set of properties for the object. May contain:

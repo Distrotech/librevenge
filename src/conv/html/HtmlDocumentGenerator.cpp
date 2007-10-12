@@ -299,6 +299,22 @@ void HtmlDocumentGenerator::closeComment()
 	}
 }
 
+void HtmlDocumentGenerator::openTextBox(const WPXPropertyList &propList)
+{
+	if (!m_ignore)
+	{
+		printf("<p/>");
+	}
+}
+
+void HtmlDocumentGenerator::closeTextBox()
+{
+	if (!m_ignore)
+	{
+		printf("<p/>\n");
+	}
+}
+
 void HtmlDocumentGenerator::openTable(const WPXPropertyList & /* propList */, const WPXPropertyListVector & /* columns */)
 {
 	if (!m_ignore)

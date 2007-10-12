@@ -34,6 +34,7 @@ class WPXString;
 class WP6DefaultInitialFontPacket;
 class WP6PrefixData;
 class WP6PrefixDataPacket;
+class WP6SubDocument;
 
 enum WP6OutlineLocation { paragraphGroup, indexHeader };
 
@@ -102,6 +103,7 @@ public:
 
 	virtual void undoChange(const uint8_t undoType, const uint16_t undoLevel) = 0;
 	virtual void insertGraphicsData(const uint16_t packetId, const uint8_t anchoredTo) = 0;
+	virtual void insertTextBox(const WP6SubDocument *subDocument, const uint8_t anchoredTo) = 0;
 	virtual void commentAnnotation(const uint16_t textPID) = 0;
 
 	void setPrefixData(WP6PrefixData *prefixData) { m_prefixData = prefixData; }
