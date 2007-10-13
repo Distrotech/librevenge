@@ -150,24 +150,21 @@ const uint8_t *WPXFileStream::read(size_t numBytes, size_t &numBytesRead)
 		numBytes = d->streamSize - curpos;
 	}
 
-	if ((numBytes < BUFFER_MAX) && (BUFFER_MAX < d->streamSize - curpos))
+	if (numBytes < BUFFER_MAX)
 	{
-		d->readBuffer = new uint8_t[BUFFER_MAX];
-		d->file.read((char *)(d->readBuffer), BUFFER_MAX);
-		d->readBufferLength = BUFFER_MAX;
-	}
-	else if ((numBytes < BUFFER_MAX) && (BUFFER_MAX >= d->streamSize - curpos))
-	{
-		d->readBuffer = new uint8_t[d->streamSize - curpos];
-		d->file.read((char *)(d->readBuffer), d->streamSize - curpos);
-		d->readBufferLength = d->streamSize - curpos;
+		if (BUFFER_MAX < d->streamSize - curpos)
+			d->readBufferLength = BUFFER_MAX;
+		else /* BUFFER_MAX >= d->streamSize - curpos */
+			d->readBufferLength = d->streamSize - curpos;
 	}
 	else
-	{
-		d->readBuffer = new uint8_t[numBytes];
-		d->file.read((char *)(d->readBuffer), numBytes);
 		d->readBufferLength = numBytes;
-	}
+	
+	d->file.seekg(d->readBufferLength, std::ios::cur);
+	d->file.seekg(curpos, std::ios::beg);
+	
+	d->readBuffer = new uint8_t[d->readBufferLength];
+	d->file.read((char *)(d->readBuffer), d->readBufferLength);
 	
 	if (!d->file.good())
 		d->file.clear();
