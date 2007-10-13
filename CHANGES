@@ -1,6 +1,8 @@
 CHANGES:
 0.8.x - 0.9.0
 - Conversion of annotations/comments in WP6 parser (Fridrich)
+
+0.8.12 - 0.8.13
 - Implement readahead in the WPXStreamImplementation class (Jan Holesovsky, Fridrich)
 
 0.8.11 - 0.8.12
