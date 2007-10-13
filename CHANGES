@@ -1,6 +1,7 @@
 CHANGES:
 0.8.x - 0.9.0
 - Conversion of annotations/comments in WP6 parser (Fridrich)
+- Implement readahead in the WPXStreamImplementation class (Jan Holesovsky, Fridrich)
 
 0.8.11 - 0.8.12
 - Enable building of statically linked tools even when a shared library is built,
