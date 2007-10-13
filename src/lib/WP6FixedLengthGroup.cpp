@@ -72,13 +72,13 @@ bool WP6FixedLengthGroup::isGroupConsistent(WPXInputStream *input, const uint8_t
 
 	try
 	{
-		uint32_t size = WP6_FIXED_LENGTH_FUNCTION_GROUP_SIZE[groupID-0xF0];
+		int size = WP6_FIXED_LENGTH_FUNCTION_GROUP_SIZE[groupID-0xF0];
 		if (input->seek((startPosition + size - 2 - (uint32_t)input->tell()), WPX_SEEK_CUR) || input->atEOS())
 		{
 			input->seek(startPosition, WPX_SEEK_SET);
 			return false;
 		}
-		if (input->atEOS() || groupID != readU8(input))
+		if (groupID != readU8(input))
 		{
 			input->seek(startPosition, WPX_SEEK_SET);
 			return false;
@@ -101,9 +101,9 @@ void WP6FixedLengthGroup::_read(WPXInputStream *input)
 
 	if (m_group >= 0xF0) // just an extra safety check
 	{
-		int size = WP6_FIXED_LENGTH_FUNCTION_GROUP_SIZE[m_group-0xF0];
+		uint32_t size = WP6_FIXED_LENGTH_FUNCTION_GROUP_SIZE[m_group-0xF0];
 		input->seek((startPosition + size - 2 - input->tell()), WPX_SEEK_CUR);
-		if (m_group != readU8(input))
+		if (input->atEOS() || m_group != readU8(input))
 		{
 			WPD_DEBUG_MSG(("WordPerfect: Possible corruption detected: bailing out!\n"));
 			throw FileException();
