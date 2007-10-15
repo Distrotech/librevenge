@@ -114,7 +114,7 @@ WPXFileStream::~WPXFileStream()
 	delete d;
 }
 
-#define BUFFER_MAX 1024
+#define BUFFER_MAX 8192
 
 const uint8_t *WPXFileStream::read(size_t numBytes, size_t &numBytesRead)
 {
