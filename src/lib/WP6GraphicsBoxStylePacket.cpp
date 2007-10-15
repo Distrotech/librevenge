@@ -31,9 +31,7 @@ WP6GraphicsBoxStylePacket::WP6GraphicsBoxStylePacket(WPXInputStream *input, int 
 	WP6PrefixDataPacket(input),
 	m_isLibraryStyle(false),
 	m_boxStyleName(),
-	m_anchorValue(0),
-	m_overlapFlag(0),
-	m_autoFlag(0),
+	m_generalPositioningFlags(0),
 	m_hAlignType(0),
 	m_hAlign(0),
 	m_hOffset(0),
@@ -41,7 +39,11 @@ WP6GraphicsBoxStylePacket::WP6GraphicsBoxStylePacket(WPXInputStream *input, int 
 	m_vAlign(0),
 	m_vOffset(0),
 	m_widthFlag(0),
-	m_heightFlag(0)
+	m_heightFlag(0),
+	m_contentType(0),
+	m_contentHAlign(0),
+	m_contentVAlign(0),
+	m_contentPreserveAspectRatio(true)
 {	
 	_read(input, dataOffset, dataSize);
 }
@@ -125,12 +127,10 @@ void WP6GraphicsBoxStylePacket::_readContents(WPXInputStream *input)
 	unsigned tmpBoxPositioningDataPosition = input->tell();
 	input->seek(1, WPX_SEEK_CUR);
 
-	uint8_t tmpGeneralPositioningFlags = readU8(input);
-	m_anchorValue = tmpGeneralPositioningFlags & 0x07;
-	m_overlapFlag = (tmpGeneralPositioningFlags & 0x10) >> 4;
-	m_autoFlag = (tmpGeneralPositioningFlags & 0x20) >> 5;
+	m_generalPositioningFlags = readU8(input);
+	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Positioning data (general positioning flags: 0x%.2x)\n", m_generalPositioningFlags));
 	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Positioning data (anchor value: %i) (page offset bit: %i) (overlap flag: %i) (auto flag: %i)\n",
-		m_anchorValue, (tmpGeneralPositioningFlags & 0x08) >> 3, m_overlapFlag, m_autoFlag));
+		m_generalPositioningFlags & 0x07, (m_generalPositioningFlags & 0x08) >> 3, (m_generalPositioningFlags & 0x10) >> 4, (m_generalPositioningFlags & 0x20) >> 5));
 
 	uint8_t tmpHorizontalPositionFlags = readU8(input);
 	m_hAlignType = tmpHorizontalPositionFlags & 0x03;
@@ -138,7 +138,7 @@ void WP6GraphicsBoxStylePacket::_readContents(WPXInputStream *input)
 	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Horizontal position (horizontal alignment type: %i) (horizontal alignment: %i)\n",
 		m_hAlignType, m_hAlign));
 		
-	m_hOffset = readU16(input);
+	m_hOffset = (int16_t)readU16(input);
 	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Horizontal Offset (%i)\n", m_hOffset));
 	
 #ifdef DEBUG
@@ -156,7 +156,7 @@ void WP6GraphicsBoxStylePacket::_readContents(WPXInputStream *input)
 	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Vertical position (vertical alignment type: %i) (vertical alignment: %i) (vertical effect: %i)\n",
 		m_vAlignType, m_vAlign, (tmpVerticalPositionFlags & 0x20) >> 5));
 
-	m_vOffset = readU16(input);
+	m_vOffset = (int16_t)readU16(input);
 	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Vertical Offset (%i)\n", m_vOffset));
 	
 	m_widthFlag = readU8(input) & 0x01;
@@ -178,6 +178,16 @@ void WP6GraphicsBoxStylePacket::_readContents(WPXInputStream *input)
 	uint16_t tmpSizeOfBoxContentData = readU16(input);
 	unsigned tmpBoxContentDataPosition = input->tell();
 	input->seek(1, WPX_SEEK_CUR);
+	
+	m_contentType = readU8(input);
+	uint8_t tmpContentAlignFlags = readU8(input);
+	m_contentHAlign = tmpContentAlignFlags & 0x03;
+	m_contentVAlign = (tmpContentAlignFlags & 0xC0) >> 2;
+	m_contentPreserveAspectRatio = ((tmpContentAlignFlags & 0x10) == 0x00);
+
+	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Content Type (%i)\n", m_contentType));
+	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Content Alignment (horizontal: 0x%.2x) (vertical: 0x%.2x) (preserve aspect ratio: %s)\n",
+		m_contentHAlign, m_contentVAlign, m_contentPreserveAspectRatio ? "true" : "false"));
 	
 	input->seek(tmpSizeOfBoxContentData + tmpBoxContentDataPosition, WPX_SEEK_SET);
 	

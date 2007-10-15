@@ -43,14 +43,16 @@ private:
 	WP6GraphicsBoxStylePacket& operator=(const WP6GraphicsBoxStylePacket&);
 	bool m_isLibraryStyle;
 	WPXString m_boxStyleName;
-	uint8_t m_anchorValue, m_overlapFlag, m_autoFlag;
+	uint8_t m_generalPositioningFlags;
 	uint8_t m_hAlignType, m_hAlign;
-	uint16_t m_hOffset;
+	int16_t m_hOffset;
 	uint8_t m_vAlignType, m_vAlign;
-	uint16_t m_vOffset;
+	int16_t m_vOffset;
 	uint8_t m_widthFlag;
 	uint16_t m_width;
 	uint8_t m_heightFlag;
 	uint16_t m_height;
+	uint8_t m_contentType, m_contentHAlign, m_contentVAlign;
+	bool m_contentPreserveAspectRatio;
 };
 #endif /* WP6GRAPHICSBOXSTYLEPACKET_H */

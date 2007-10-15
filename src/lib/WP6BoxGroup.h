@@ -35,10 +35,14 @@ class WP6Listener;
 
 class WP6BoxGroup : public WP6VariableLengthGroup
 {
- public:
+public:
 	WP6BoxGroup(WPXInputStream *input);	
 	void _readContents(WPXInputStream *input);
 	void parse(WP6Listener *listener);
+
+private:
+	bool m_isBoxContentType;
+	uint8_t m_boxContentType;	
 };
 
 #endif /* WP6BOXGROUP_H */

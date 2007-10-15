@@ -30,9 +30,12 @@ s *
 #include "WPXFileStructure.h"
 #include "WP6GraphicsFilenamePacket.h"
 #include "WP6GeneralTextPacket.h"
+#include "WP6GraphicsBoxStylePacket.h"
 
 WP6BoxGroup::WP6BoxGroup(WPXInputStream *input) :
-	WP6VariableLengthGroup()
+	WP6VariableLengthGroup(),
+	m_isBoxContentType(false),
+	m_boxContentType(0x00)
 {
 	_read(input);
 }
@@ -63,23 +66,63 @@ void WP6BoxGroup::_readContents(WPXInputStream *input)
 			if (tmpOverrideFlags & WP6_BOX_GROUP_BOX_POSITIONING_DATA_BIT)
 			{
 				long tmpEndOfData = readU16(input) + input->tell();
-#ifdef DEBUG
+
 				uint16_t tmpOverrideFlags = readU16(input);
-#else
-				readU16(input);
-#endif
+
+				if (tmpOverrideFlags & 0x8000)
+					input->seek(2, WPX_SEEK_CUR);
+				if (tmpOverrideFlags & 0x4000)
+				{
+					WPD_DEBUG_MSG(("Box general positioning flags (mask: 0x%.2x) (data: 0x%.2x)\n", readU8(input), readU8(input)));
+				}
+				if (tmpOverrideFlags & 0x2000)
+				{
+					WPD_DEBUG_MSG(("Box horizontal positioning flags: 0x%.2x\n", readU8(input)));
+					WPD_DEBUG_MSG(("Box horizontal offset: %i\n", (int16_t)readU16(input)));
+					WPD_DEBUG_MSG(("Box left column: %i, right column: %i\n", readU8(input), readU8(input)));
+				}
+				if (tmpOverrideFlags & 0x1000)
+				{
+					WPD_DEBUG_MSG(("Box vertical positioning flags: 0x%.2x\n", readU8(input)));
+					WPD_DEBUG_MSG(("Box vertical offset: %i\n", (int16_t)readU16(input)));
+				}
+				if (tmpOverrideFlags & 0x0800)
+				{
+					WPD_DEBUG_MSG(("Box width flags: 0x%.2x\n", readU8(input)));
+					WPD_DEBUG_MSG(("Box width value: %i\n", readU16(input)));
+				}
+				if (tmpOverrideFlags & 0x0400)
+				{
+					WPD_DEBUG_MSG(("Box height flags: 0x%.2x\n", readU8(input)));
+					WPD_DEBUG_MSG(("Box height value: %i\n", readU16(input)));
+				}
+				if (tmpOverrideFlags & 0x0200)
+				{
+					WPD_DEBUG_MSG(("Box z-order flags: 0x%.2x\n", readU8(input)));
+				}
 				WPD_DEBUG_MSG(("WP6BoxGroup: parsing Box positioning data -- override flags: 0x%x\n", tmpOverrideFlags));
 				input->seek(tmpEndOfData, WPX_SEEK_SET); 
 			}
 			if (tmpOverrideFlags & WP6_BOX_GROUP_BOX_CONTENT_DATA_BIT)
 			{
 				long tmpEndOfData = readU16(input) + input->tell();
-#ifdef DEBUG
+
 				uint16_t tmpOverrideFlags = readU16(input);
-#else
-				readU16(input);
-#endif
+
+				if (tmpOverrideFlags & 0x8000)
+					input->seek(2, WPX_SEEK_CUR);
+
+				if (tmpOverrideFlags & 0x4000)
+				{
+					m_isBoxContentType = true;
+					m_boxContentType = readU8(input);
+				}
+				
 				WPD_DEBUG_MSG(("WP6BoxGroup: parsing Box content data -- override flags: 0x%x\n", tmpOverrideFlags));
+
+				if (m_isBoxContentType)
+					WPD_DEBUG_MSG(("WP6BoxGroup: parsing Box content data -- content type: 0x%.2x\n", m_boxContentType));
+
 				input->seek(tmpEndOfData, WPX_SEEK_SET); 
 			}
 			if (tmpOverrideFlags & WP6_BOX_GROUP_BOX_CAPTION_DATA_BIT)
