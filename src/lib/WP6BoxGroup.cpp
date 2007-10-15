@@ -34,7 +34,7 @@ s *
 
 WP6BoxGroup::WP6BoxGroup(WPXInputStream *input) :
 	WP6VariableLengthGroup(),
-	m_isBoxContentType(false),
+	m_hasBoxContentType(false),
 	m_boxContentType(0x00)
 {
 	_read(input);
@@ -114,13 +114,13 @@ void WP6BoxGroup::_readContents(WPXInputStream *input)
 
 				if (tmpOverrideFlags & 0x4000)
 				{
-					m_isBoxContentType = true;
+					m_hasBoxContentType = true;
 					m_boxContentType = readU8(input);
 				}
 				
 				WPD_DEBUG_MSG(("WP6BoxGroup: parsing Box content data -- override flags: 0x%x\n", tmpOverrideFlags));
 
-				if (m_isBoxContentType)
+				if (m_hasBoxContentType)
 					WPD_DEBUG_MSG(("WP6BoxGroup: parsing Box content data -- content type: 0x%.2x\n", m_boxContentType));
 
 				input->seek(tmpEndOfData, WPX_SEEK_SET); 
@@ -221,48 +221,66 @@ void WP6BoxGroup::parse(WP6Listener *listener)
 
 	if (getFlags() & 0x40)  // Ignore function flag
 		return;
-		
+
+	if (getSubGroup() != WP6_BOX_GROUP_CHARACTER_ANCHORED_BOX && getSubGroup() != WP6_BOX_GROUP_PARAGRAPH_ANCHORED_BOX &&
+		getSubGroup() != WP6_BOX_GROUP_PAGE_ANCHORED_BOX)  // Don't handle Graphics Rule for the while
+		return;	
+
+	const WP6GraphicsBoxStylePacket *gbsPacket = 0;
+	for (int j=0; j<getNumPrefixIDs(); j++)
+		if ((gbsPacket = dynamic_cast<const WP6GraphicsBoxStylePacket *>(listener->getPrefixDataPacket(getPrefixIDs()[j]))))
+			break;
+	
+	uint8_t tmpContentType = 0;
+	if (gbsPacket)
+		tmpContentType = gbsPacket->getContentType();
+	if (m_hasBoxContentType)
+		tmpContentType = m_boxContentType;
+	
+	if (tmContentType != 0x01 || tmpContentType != 0x03)
+		return;
+
 	std::vector<uint16_t> graphicsDataIds;
 	std::vector<uint16_t>::iterator gdiIter;
 	WP6SubDocument *subDocument = 0;
+
 	for (int i=0; i<getNumPrefixIDs(); i++)
 	{
-		if (const WP6GraphicsFilenamePacket *gfPacket = dynamic_cast<const WP6GraphicsFilenamePacket *>(listener->getPrefixDataPacket(getPrefixIDs()[i]))) 
-		{
-			graphicsDataIds = gfPacket->getChildIds();
-			break;
-		}
-		if (const WP6GeneralTextPacket *gtPacket = dynamic_cast<const WP6GeneralTextPacket *>(listener->getPrefixDataPacket(getPrefixIDs()[i])))
-		{
-			subDocument = gtPacket->getSubDocument();
-			break;
-		}
-			
+		if (tmpContentType == 0x03)
+			if (const WP6GraphicsFilenamePacket *gfPacket = dynamic_cast<const WP6GraphicsFilenamePacket *>(listener->getPrefixDataPacket(getPrefixIDs()[i]))) 
+			{
+				graphicsDataIds = gfPacket->getChildIds();
+				break;
+			}
+		if (tmpContentType == 0x01)
+			if (const WP6GeneralTextPacket *gtPacket = dynamic_cast<const WP6GeneralTextPacket *>(listener->getPrefixDataPacket(getPrefixIDs()[i])))
+			{
+				subDocument = gtPacket->getSubDocument();
+				break;
+			}
 	}
 	
+	uint8_t tmpAnchoringType = 0;
 	switch (getSubGroup())
 	{
 		case WP6_BOX_GROUP_CHARACTER_ANCHORED_BOX:
-			for (gdiIter = graphicsDataIds.begin(); gdiIter != graphicsDataIds.end(); gdiIter++)
-				listener->insertGraphicsData((*gdiIter), WPX_CHARACTER);
-			if (subDocument)
-				listener->insertTextBox(subDocument, WPX_CHARACTER);
+			tmpAnchoringType = WPX_CHARACTER;
 			break;
 		case WP6_BOX_GROUP_PARAGRAPH_ANCHORED_BOX:
-			for (gdiIter = graphicsDataIds.begin(); gdiIter != graphicsDataIds.end(); gdiIter++)
-				listener->insertGraphicsData((*gdiIter), WPX_PARAGRAPH);
-			if (subDocument)
-				listener->insertTextBox(subDocument, WPX_PARAGRAPH);
+			tmpAnchoringType = WPX_PARAGRAPH;
 			break;
 		case WP6_BOX_GROUP_PAGE_ANCHORED_BOX:
-			for (gdiIter = graphicsDataIds.begin(); gdiIter != graphicsDataIds.end(); gdiIter++)
-				listener->insertGraphicsData((*gdiIter), WPX_PAGE);
-			if (subDocument)
-				listener->insertTextBox(subDocument, WPX_PAGE);
+			tmpAnchoringType = WPX_PAGE;
 			break;
 		case WP6_BOX_GROUP_GRAPHICS_RULE:
-			break;
 		default: /* something else we don't support, since it isn't in the docs */
 			break;
 	}
+	
+	if (tmpContentType == 0x03)
+		for (gdiIter = graphicsDataIds.begin(); gdiIter != graphicsDataIds.end(); gdiIter++)
+			listener->insertGraphicsData((*gdiIter), tmpAnchoringType);
+
+	if ((tmpContentType == 0x01) && (subDocument))
+		listener->insertTextBox(subDocument, tmpAnchoringType);
 }

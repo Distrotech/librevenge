@@ -80,13 +80,9 @@ const WP6PrefixDataPacket * WP6PrefixData::getPrefixDataPacket(const int prefixI
 		return 0;
 }
 
-std::pair<MPDP_CIter, MPDP_CIter> * WP6PrefixData::getPrefixDataPacketsOfType(const int type) const
+std::pair<MPDP_CIter, MPDP_CIter> WP6PrefixData::getPrefixDataPacketsOfType(const int type) const
 {
- 	std::pair<MPDP_CIter, MPDP_CIter> *typePair = new std::pair<MPDP_CIter, MPDP_CIter>;
 	std::pair<MPDP_CIter, MPDP_CIter> tempPair = m_prefixDataPacketTypeHash.equal_range(type);
 
- 	typePair->first = tempPair.first;
- 	typePair->second = tempPair.second;
-
- 	return typePair;
+ 	return tempPair;
 }

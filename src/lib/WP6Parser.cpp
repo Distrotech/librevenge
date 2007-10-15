@@ -158,14 +158,11 @@ void WP6Parser::parsePacket(WP6PrefixData *prefixData, int type, WP6Listener *li
 	if (!prefixData)
 		return;
 
-	std::pair< MPDP_CIter, MPDP_CIter > * typeIterPair;
-	typeIterPair = prefixData->getPrefixDataPacketsOfType(type); 
-	if (typeIterPair->first != typeIterPair->second) 
+	std::pair< MPDP_CIter, MPDP_CIter > typeIterPair = prefixData->getPrefixDataPacketsOfType(type); 
+	if (typeIterPair.first != typeIterPair.second) 
 	{
-		typeIterPair->first->second->parse(listener);
+		typeIterPair.first->second->parse(listener);
 	}
-
-	DELETEP(typeIterPair);
 }
 
 void WP6Parser::parsePackets(WP6PrefixData *prefixData, int type, WP6Listener *listener)
@@ -173,18 +170,13 @@ void WP6Parser::parsePackets(WP6PrefixData *prefixData, int type, WP6Listener *l
 	if (!prefixData)
 		return;
 
-	std::pair< MPDP_CIter, MPDP_CIter > * typeIterPair;
-
-	typeIterPair = prefixData->getPrefixDataPacketsOfType(type);
-	for (MPDP_CIter iter=typeIterPair->first; 
-	     iter != typeIterPair->second; 
+	std::pair< MPDP_CIter, MPDP_CIter > typeIterPair = prefixData->getPrefixDataPacketsOfType(type);
+	for (MPDP_CIter iter=typeIterPair.first; 
+	     iter != typeIterPair.second; 
 	     iter++) 
 	{
 		iter->second->parse(listener);
 	}
-
-	DELETEP(typeIterPair);
-
 }
 
 // WP6Parser::parse() reads AND parses a wordperfect document, passing any retrieved low-level

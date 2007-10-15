@@ -37,6 +37,7 @@ public:
 	~WP6GraphicsBoxStylePacket();
 	void _readContents(WPXInputStream *input);
 	void parse(WP6Listener *listener) const {}
+	const uint8_t getContentType() const { return m_contentType; }
 
 private:
 	WP6GraphicsBoxStylePacket(const WP6GraphicsBoxStylePacket&);             

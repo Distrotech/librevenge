@@ -41,7 +41,7 @@ public:
 	void parse(WP6Listener *listener);
 
 private:
-	bool m_isBoxContentType;
+	bool m_hasBoxContentType;
 	uint8_t m_boxContentType;	
 };
 
