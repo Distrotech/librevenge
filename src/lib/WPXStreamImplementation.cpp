@@ -1,5 +1,7 @@
 /* libwpd
  * Copyright (C) 2006 Ariya Hidayat (ariya@kde.org)
+ * Copyright (C) 2007 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (C) 2007 Novell, Inc. (http://www.novell.com)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -185,26 +187,21 @@ long WPXFileStream::tell()
 
 int WPXFileStream::seek(long offset, WPX_SEEK_TYPE seekType)
 {
-
-	if (seekType == WPX_SEEK_SET)
-	{
-		if (offset < 0)
-			offset = 0;
-		else if (offset > (long)d->streamSize)
-			offset = (long)d->streamSize;
-	}
-
 	if (seekType == WPX_SEEK_CUR)
+		offset += tell();
+
+	if (offset < 0)
+		offset = 0;
+	if (offset > (long)d->streamSize)
+		offset = (long)d->streamSize;
+	
+	if (d->file.good() && offset < d->file.tellg() && (unsigned long)offset >= (unsigned long)d->file.tellg() - d->readBufferLength)
 	{
-		if (tell() + offset < 0)
-			offset = 0;
-		else if (tell() + offset > (long)d->streamSize)
-			offset = (long)d->streamSize;
-		else
-			offset += tell();
+		d->readBufferPos = offset + d->readBufferLength - d->file.tellg();
+		return 0;
 	}
 	
-	if (d->readBuffer)
+	if (d->readBuffer) // seeking outside of the buffer, so invalidate the buffer
 	{
 		d->file.seekg(d->readBufferPos - d->readBufferLength, std::ios::cur);
 		delete [] d->readBuffer;
