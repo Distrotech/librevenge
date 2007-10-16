@@ -1393,6 +1393,8 @@ void WP6ContentListener::boxOn(const uint8_t anchoringType, const uint8_t genera
 		_flushText();
 
 	WPXPropertyList propList;
+	propList.insert("svg:height", (float)((double)height/(double)WPX_NUM_WPUS_PER_INCH));
+	propList.insert("svg:width", (float)((double)width/(double)WPX_NUM_WPUS_PER_INCH));
 	m_documentInterface->openFrame(propList);	
 }
 
