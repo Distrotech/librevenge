@@ -37,6 +37,18 @@ public:
 	~WP6GraphicsBoxStylePacket();
 	void _readContents(WPXInputStream *input);
 	void parse(WP6Listener *listener) const {}
+
+	const uint8_t getGeneralPositioningFlags() const { return m_generalPositioningFlags; }
+	const uint8_t getHorizontalPositioningFlags() const { return m_horizontalPositioningFlags; }
+	const int16_t getHorizontalOffset() const { return m_horizontalOffset; }
+	const uint8_t getLeftColumn() const { return m_leftColumn; }
+	const uint8_t getRightColumn() const { return m_rightColumn; }
+	const uint8_t getVerticalPositioningFlags() const { return m_verticalPositioningFlags; }
+	const int16_t getVerticalOffset() const { return m_verticalOffset; }
+	const uint8_t getWidthFlags() const { return m_widthFlags; }
+	const uint16_t getWidth() const { return m_width; }
+	const uint8_t getHeightFlags() const { return m_heightFlags; }
+	const uint16_t getHeight() const { return m_height; }
 	const uint8_t getContentType() const { return m_contentType; }
 
 private:
@@ -45,13 +57,14 @@ private:
 	bool m_isLibraryStyle;
 	WPXString m_boxStyleName;
 	uint8_t m_generalPositioningFlags;
-	uint8_t m_hAlignType, m_hAlign;
-	int16_t m_hOffset;
-	uint8_t m_vAlignType, m_vAlign;
-	int16_t m_vOffset;
-	uint8_t m_widthFlag;
+	uint8_t m_horizontalPositioningFlags;
+	int16_t m_horizontalOffset;
+	uint8_t m_leftColumn, m_rightColumn;
+	uint8_t m_verticalPositioningFlags;
+	int16_t m_verticalOffset;
+	uint8_t m_widthFlags;
 	uint16_t m_width;
-	uint8_t m_heightFlag;
+	uint8_t m_heightFlags;
 	uint16_t m_height;
 	uint8_t m_contentType, m_contentHAlign, m_contentVAlign;
 	bool m_contentPreserveAspectRatio;

@@ -1380,37 +1380,48 @@ void WP6ContentListener::endTable()
 	}
 }
 
-void WP6ContentListener::insertGraphicsData(const uint16_t packetId, const uint8_t /* anchoredTo */)
+void WP6ContentListener::boxOn(const uint8_t anchoringType, const uint8_t generalPositioningFlags, const uint8_t horizontalPositioningFlags,
+		const int16_t horizontalOffset, const uint8_t leftColumn, const uint8_t rightColumn, const uint8_t verticalPositioningFlags,
+		const int16_t verticalOffset, const uint8_t widthFlags, const uint16_t width, const uint8_t heightFlags, const uint16_t height)
+{
+	if (isUndoOn())
+		return;
+
+	if (!m_ps->m_isSpanOpened)
+		_openSpan();
+	else
+		_flushText();
+
+	WPXPropertyList propList;
+	m_documentInterface->openFrame(propList);	
+}
+
+void WP6ContentListener::boxOff()
+{
+	if (!isUndoOn())
+	{
+		m_documentInterface->closeFrame();
+	}
+}
+
+void WP6ContentListener::insertGraphicsData(const uint16_t packetId)
 {
 	if (isUndoOn())
 		return;
 
 	if (const WP6GraphicsCachedFileDataPacket *gcfdPacket = dynamic_cast<const WP6GraphicsCachedFileDataPacket *>(this->getPrefixDataPacket(packetId))) 
 	{
-		if (!m_ps->m_isSpanOpened)
-			_openSpan();
-		else
-			_flushText();
-
 		WPXPropertyList propList;
-		m_documentInterface->openFrame(propList);
 		propList.insert("libwpd:mimetype", "image/x-wpg");
 		m_documentInterface->insertBinaryObject(propList, gcfdPacket->getBinaryObject());
-		m_documentInterface->closeFrame();
 	}
 }
 
-void WP6ContentListener::insertTextBox(const WP6SubDocument *subDocument, const uint8_t /* anchoredTo */)
+void WP6ContentListener::insertTextBox(const WP6SubDocument *subDocument)
 {
 	if (!isUndoOn() && subDocument)
 	{
-		if (!m_ps->m_isSpanOpened)
-			_openSpan();
-		else
-			_flushText();
-
 		WPXPropertyList propList;
-		m_documentInterface->openFrame(propList);
 		m_documentInterface->openTextBox(propList);
 		
 		m_ps->m_isNote = true;
@@ -1420,7 +1431,6 @@ void WP6ContentListener::insertTextBox(const WP6SubDocument *subDocument, const 
 		m_ps->m_isNote = false;
 
 		m_documentInterface->closeTextBox();
-		m_documentInterface->closeFrame();
 	}
 }
 	

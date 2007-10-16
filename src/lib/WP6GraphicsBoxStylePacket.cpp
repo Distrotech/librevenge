@@ -31,16 +31,16 @@ WP6GraphicsBoxStylePacket::WP6GraphicsBoxStylePacket(WPXInputStream *input, int 
 	WP6PrefixDataPacket(input),
 	m_isLibraryStyle(false),
 	m_boxStyleName(),
-	m_generalPositioningFlags(0),
-	m_hAlignType(0),
-	m_hAlign(0),
-	m_hOffset(0),
-	m_vAlignType(0),
-	m_vAlign(0),
-	m_vOffset(0),
-	m_widthFlag(0),
-	m_heightFlag(0),
-	m_contentType(0),
+	m_generalPositioningFlags(0x00),
+	m_horizontalPositioningFlags(0x00),
+	m_horizontalOffset(0),
+	m_verticalPositioningFlags(0x00),
+	m_verticalOffset(0),
+	m_widthFlags(0x00),
+	m_width(0),
+	m_heightFlags(0x00),
+	m_height(0),
+	m_contentType(0x00),
 	m_contentHAlign(0),
 	m_contentVAlign(0),
 	m_contentPreserveAspectRatio(true)
@@ -132,40 +132,32 @@ void WP6GraphicsBoxStylePacket::_readContents(WPXInputStream *input)
 	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Positioning data (anchor value: %i) (page offset bit: %i) (overlap flag: %i) (auto flag: %i)\n",
 		m_generalPositioningFlags & 0x07, (m_generalPositioningFlags & 0x08) >> 3, (m_generalPositioningFlags & 0x10) >> 4, (m_generalPositioningFlags & 0x20) >> 5));
 
-	uint8_t tmpHorizontalPositionFlags = readU8(input);
-	m_hAlignType = tmpHorizontalPositionFlags & 0x03;
-	m_hAlign = (tmpHorizontalPositionFlags & 0x1C) >> 2;
+	m_horizontalPositioningFlags = readU8(input);
 	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Horizontal position (horizontal alignment type: %i) (horizontal alignment: %i)\n",
-		m_hAlignType, m_hAlign));
+		tmpHorizontalPositioningFlags & 0x03, (tmpHorizontalPositioningFlags & 0x1C) >> 2));
 		
-	m_hOffset = (int16_t)readU16(input);
-	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Horizontal Offset (%i)\n", m_hOffset));
+	m_horizontalOffset = (int16_t)readU16(input);
+	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Horizontal Offset (%i)\n", m_horizontalOffset));
 	
-#ifdef DEBUG
-	uint8_t tmpLeftColumn = readU8(input);
-	uint8_t tmpRightColumn = readU8(input);
-#else
-	readU8(input);
-	readU8(input);
-#endif
-	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Horizontal position (between columns %i and %i)\n", tmpLeftColumn, tmpRightColumn));
-	
-	uint8_t tmpVerticalPositionFlags = readU8(input);
-	m_vAlignType = tmpVerticalPositionFlags & 0x03;
-	m_vAlign = (tmpVerticalPositionFlags & 0x1C) >> 2;
-	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Vertical position (vertical alignment type: %i) (vertical alignment: %i) (vertical effect: %i)\n",
-		m_vAlignType, m_vAlign, (tmpVerticalPositionFlags & 0x20) >> 5));
+	m_leftColumn = readU8(input);
+	m_rightColumn = readU8(input);
 
-	m_vOffset = (int16_t)readU16(input);
-	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Vertical Offset (%i)\n", m_vOffset));
+	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Horizontal position (between columns %i and %i)\n", m_leftColumn, m_rightColumn));
 	
-	m_widthFlag = readU8(input) & 0x01;
+	m_verticalPositioningFlags = readU8(input);
+	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Vertical position (vertical alignment type: %i) (vertical alignment: %i) (vertical effect: %i)\n",
+		tmpVerticalPositioningFlags & 0x03, (tmpVerticalPositioningFlags & 0x1C) >> 2, (tmpVerticalPositionFlags & 0x20) >> 5));
+
+	m_verticalOffset = (int16_t)readU16(input);
+	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Vertical Offset (%i)\n", m_verticalOffset));
+	
+	m_widthFlags = readU8(input) & 0x01;
 	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Width Flags: 0x%.2x\n", m_widthFlag));
 	
 	m_width = readU16(input);
 	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Width: %i\n", m_width));
 	
-	m_heightFlag = readU8(input) & 0x01;
+	m_heightFlags = readU8(input) & 0x01;
 	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Height Flags: 0x%.2x\n", m_heightFlag));
 	
 	m_height = readU16(input);

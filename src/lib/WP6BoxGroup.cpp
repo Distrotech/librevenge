@@ -34,6 +34,22 @@ s *
 
 WP6BoxGroup::WP6BoxGroup(WPXInputStream *input) :
 	WP6VariableLengthGroup(),
+	m_generalPositioningFlagsMask(0x00),
+	m_generalPositioningFlagsData(0x00),
+	m_hasHorizontalPositioning(false),
+	m_horizontalPositioningFlags(0x00),
+	m_horizontalOffset(0),
+	m_leftColumn(0),
+	m_rightColumn(0),
+	m_hasVerticalPositioning(false),
+	m_verticalPositioningFlags(0x00),
+	m_verticalOffset(0),
+	m_hasWidthInformation(false),
+	m_widthFlags(0x00),
+	m_width(0),
+	m_hasHeightInformation(false),
+	m_hasZOrderInformation(false),
+	m_zOrderFlags(0x00),
 	m_hasBoxContentType(false),
 	m_boxContentType(0x00)
 {
@@ -73,32 +89,51 @@ void WP6BoxGroup::_readContents(WPXInputStream *input)
 					input->seek(2, WPX_SEEK_CUR);
 				if (tmpOverrideFlags & 0x4000)
 				{
-					WPD_DEBUG_MSG(("Box general positioning flags (mask: 0x%.2x) (data: 0x%.2x)\n", readU8(input), readU8(input)));
+					m_generalPositioningFlagsMask = readU8(input);
+					m_generalPositioningFlagsData = readU8(input);
+					WPD_DEBUG_MSG(("Box general positioning flags (mask: 0x%.2x) (data: 0x%.2x)\n",
+						m_generalPositioningFlagsMask, m_generalPositioningFlagsData));
 				}
 				if (tmpOverrideFlags & 0x2000)
 				{
-					WPD_DEBUG_MSG(("Box horizontal positioning flags: 0x%.2x\n", readU8(input)));
-					WPD_DEBUG_MSG(("Box horizontal offset: %i\n", (int16_t)readU16(input)));
-					WPD_DEBUG_MSG(("Box left column: %i, right column: %i\n", readU8(input), readU8(input)));
+					m_hasHorizontalPositioning = true;
+					m_horizontalPositioningFlags = readU8(input);
+					m_horizontalOffset = (int16_t)readU16(input);
+					m_leftColumn = readU8(input);
+					m_rightColumn = readU8(input);
+					WPD_DEBUG_MSG(("Box horizontal positioning flags: 0x%.2x\n", m_horizontalPositioningFlags));
+					WPD_DEBUG_MSG(("Box horizontal offset: %i\n", m_horizontalOffset));
+					WPD_DEBUG_MSG(("Box left column: %i, right column: %i\n", m_leftColumn, m_rightColumn));
 				}
 				if (tmpOverrideFlags & 0x1000)
 				{
-					WPD_DEBUG_MSG(("Box vertical positioning flags: 0x%.2x\n", readU8(input)));
-					WPD_DEBUG_MSG(("Box vertical offset: %i\n", (int16_t)readU16(input)));
+					m_hasVerticalPositioning = true;
+					m_verticalPositioningFlags = readU8(input);
+					m_verticalOffset = (int16_t)readU16(input);
+					WPD_DEBUG_MSG(("Box vertical positioning flags: 0x%.2x\n", m_verticalPositioningFlags));
+					WPD_DEBUG_MSG(("Box vertical offset: %i\n", m_verticalOffset));
 				}
 				if (tmpOverrideFlags & 0x0800)
 				{
-					WPD_DEBUG_MSG(("Box width flags: 0x%.2x\n", readU8(input)));
-					WPD_DEBUG_MSG(("Box width value: %i\n", readU16(input)));
+					m_hasWidthInformation = true;
+					m_widthFlags = readU8(input);
+					m_width = readU16(input);
+					WPD_DEBUG_MSG(("Box width flags: 0x%.2x\n", m_widthFlags));
+					WPD_DEBUG_MSG(("Box width value: %i\n", m_width));
 				}
 				if (tmpOverrideFlags & 0x0400)
 				{
-					WPD_DEBUG_MSG(("Box height flags: 0x%.2x\n", readU8(input)));
-					WPD_DEBUG_MSG(("Box height value: %i\n", readU16(input)));
+					m_hasHeightInformation = true;
+					m_heightFlags = readU8(input);
+					m_height = readU16(input);
+					WPD_DEBUG_MSG(("Box height flags: 0x%.2x\n", m_heightFlags));
+					WPD_DEBUG_MSG(("Box height value: %i\n", m_height));
 				}
 				if (tmpOverrideFlags & 0x0200)
 				{
-					WPD_DEBUG_MSG(("Box z-order flags: 0x%.2x\n", readU8(input)));
+					m_hasZOrderInformation = true;
+					m_zOrderFlags = readU8(input);
+					WPD_DEBUG_MSG(("Box z-order flags: 0x%.2x\n", m_zOrderFlags));
 				}
 				WPD_DEBUG_MSG(("WP6BoxGroup: parsing Box positioning data -- override flags: 0x%x\n", tmpOverrideFlags));
 				input->seek(tmpEndOfData, WPX_SEEK_SET); 
@@ -117,12 +152,12 @@ void WP6BoxGroup::_readContents(WPXInputStream *input)
 					m_hasBoxContentType = true;
 					m_boxContentType = readU8(input);
 				}
-				
+#ifdef DEBUG
 				WPD_DEBUG_MSG(("WP6BoxGroup: parsing Box content data -- override flags: 0x%x\n", tmpOverrideFlags));
 
 				if (m_hasBoxContentType)
 					WPD_DEBUG_MSG(("WP6BoxGroup: parsing Box content data -- content type: 0x%.2x\n", m_boxContentType));
-
+#endif
 				input->seek(tmpEndOfData, WPX_SEEK_SET); 
 			}
 			if (tmpOverrideFlags & WP6_BOX_GROUP_BOX_CAPTION_DATA_BIT)
@@ -222,8 +257,8 @@ void WP6BoxGroup::parse(WP6Listener *listener)
 	if (getFlags() & 0x40)  // Ignore function flag
 		return;
 
-	if (getSubGroup() != WP6_BOX_GROUP_CHARACTER_ANCHORED_BOX && getSubGroup() != WP6_BOX_GROUP_PARAGRAPH_ANCHORED_BOX &&
-		getSubGroup() != WP6_BOX_GROUP_PAGE_ANCHORED_BOX)  // Don't handle Graphics Rule for the while
+	if ((getSubGroup() != WP6_BOX_GROUP_CHARACTER_ANCHORED_BOX ) && (getSubGroup() != WP6_BOX_GROUP_PARAGRAPH_ANCHORED_BOX) &&
+		(getSubGroup() != WP6_BOX_GROUP_PAGE_ANCHORED_BOX))  // Don't handle Graphics Rule for the while
 		return;	
 
 	const WP6GraphicsBoxStylePacket *gbsPacket = 0;
@@ -237,13 +272,14 @@ void WP6BoxGroup::parse(WP6Listener *listener)
 	if (m_hasBoxContentType)
 		tmpContentType = m_boxContentType;
 	
-	if (tmContentType != 0x01 || tmpContentType != 0x03)
+	if (tmpContentType != 0x01 && tmpContentType != 0x03)
 		return;
 
 	std::vector<uint16_t> graphicsDataIds;
 	std::vector<uint16_t>::iterator gdiIter;
 	WP6SubDocument *subDocument = 0;
 
+	// Get the box content
 	for (int i=0; i<getNumPrefixIDs(); i++)
 	{
 		if (tmpContentType == 0x03)
@@ -260,6 +296,7 @@ void WP6BoxGroup::parse(WP6Listener *listener)
 			}
 	}
 	
+	// Get the box anchoring
 	uint8_t tmpAnchoringType = 0;
 	switch (getSubGroup())
 	{
@@ -277,10 +314,59 @@ void WP6BoxGroup::parse(WP6Listener *listener)
 			break;
 	}
 	
-	if (tmpContentType == 0x03)
-		for (gdiIter = graphicsDataIds.begin(); gdiIter != graphicsDataIds.end(); gdiIter++)
-			listener->insertGraphicsData((*gdiIter), tmpAnchoringType);
+	// Get the box general positioning
+	uint8_t tmpGeneralPositioningFlags = 0;
+	if (gbsPacket)
+		tmpGeneralPositioningFlags = (gbsPacket->getGeneralPositioningFlags() & (~ m_generalPositioningFlagsMask)) |
+			(m_generalPositioningFlagsData & m_generalPositioningFlagsMask);
+	else  // here we did not manage to get the packet. Let's try to go with the override information
+		tmpGeneralPositioningFlags = (m_generalPositioningFlagsData & m_generalPositioningFlagsMask);
 
+	// Get the box horizontal position
+	if (gbsPacket && !m_hasHorizontalPositioning)
+	{
+		m_horizontalPositioningFlags = gbsPacket->getHorizontalPositioningFlags();
+		m_horizontalOffset = gbsPacket->getHorizontalOffset();
+		m_leftColumn = gbsPacket->getLeftColumn();
+		m_rightColumn = gbsPacket->getRightColumn();
+	}
+	
+	// Get the box vertical position
+	if (gbsPacket && !m_hasVerticalPositioning)
+	{
+		m_verticalPositioningFlags = gbsPacket->getVerticalPositioningFlags();
+		m_verticalOffset = gbsPacket->getVerticalOffset();
+	}
+	
+	// Get the box width
+	if (gbsPacket && !m_hasWidthInformation)
+	{
+		m_widthFlags = gbsPacket->getWidthFlags();
+		m_width = gbsPacket->getWidth();
+	}
+	
+	// Get the box height
+	if (gbsPacket && !m_hasHeightInformation)
+	{
+		m_heightFlags = gbsPacket->getHeightFlags();
+		m_height = gbsPacket->getHeight();
+	}
+	
+	// Send the box information to the listener and start box
+	listener->boxOn(tmpAnchoringType, tmpGeneralPositioningFlags, m_horizontalPositioningFlags, m_horizontalOffset, m_leftColumn, m_rightColumn,
+		m_verticalPositioningFlags, m_verticalOffset, m_widthFlags, m_width, m_heightFlags, m_height);
+
+	// Send the content according to its kind
+	if (tmpContentType == 0x03)
+	{
+		for (gdiIter = graphicsDataIds.begin(); gdiIter != graphicsDataIds.end(); gdiIter++)
+			listener->insertGraphicsData((*gdiIter));
+	}
 	if ((tmpContentType == 0x01) && (subDocument))
-		listener->insertTextBox(subDocument, tmpAnchoringType);
+	{
+		listener->insertTextBox(subDocument);
+	}
+
+	// End the box
+	listener->boxOff();
 }

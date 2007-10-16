@@ -102,8 +102,13 @@ public:
  	virtual void endTable() = 0;
 
 	virtual void undoChange(const uint8_t undoType, const uint16_t undoLevel) = 0;
-	virtual void insertGraphicsData(const uint16_t packetId, const uint8_t anchoredTo) = 0;
-	virtual void insertTextBox(const WP6SubDocument *subDocument, const uint8_t anchoredTo) = 0;
+	virtual void boxOn(const uint8_t anchoringType, const uint8_t generalPositioningFlags, const uint8_t horizontalPositioningFlags,
+		const int16_t horizontalOffset, const uint8_t leftColumn, const uint8_t rightColumn,
+		const uint8_t verticalPositioningFlags, const int16_t verticalOffset, const uint8_t widthFlags, const uint16_t width,
+		const uint8_t heightFlags, const uint16_t height) = 0;
+	virtual void boxOff() = 0;
+	virtual void insertGraphicsData(const uint16_t packetId) = 0;
+	virtual void insertTextBox(const WP6SubDocument *subDocument) = 0;
 	virtual void commentAnnotation(const uint16_t textPID) = 0;
 
 	void setPrefixData(WP6PrefixData *prefixData) { m_prefixData = prefixData; }

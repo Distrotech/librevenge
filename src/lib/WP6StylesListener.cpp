@@ -275,7 +275,7 @@ void WP6StylesListener::noteOn(const uint16_t textPID)
 	}
 }
 
-void WP6StylesListener::insertTextBox(const WP6SubDocument *subDocument, const uint8_t /* anchoredTo */)
+void WP6StylesListener::insertTextBox(const WP6SubDocument *subDocument)
 {
 	if (!isUndoOn() && subDocument)
 	{
