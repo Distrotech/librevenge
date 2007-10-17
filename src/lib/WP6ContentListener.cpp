@@ -1412,14 +1412,13 @@ void WP6ContentListener::boxOn(const uint8_t /* anchoringType */, const uint8_t 
 	
 	switch (generalPositioningFlags & 0x03)
 	{
-	case 0x00:
-		propList.insert("text:anchor-type", "page");
-		propList.insert("text:anchor-page-number", m_ps->m_currentPageNumber);
+	case 0x00: // Page anchored
+		propList.insert("text:anchor-type", "char"); // ugly workaround to remediate OOo's wrong implementation of ODF
 		break;
-	case 0x01:
+	case 0x01: // Paragraph anchored
 		propList.insert("text:anchor-type", "paragraph");
 		break;
-	case 0x02:
+	case 0x02: // Character anchored
 		propList.insert("text:anchor-type", "as-char");
 		break;
 	default:
@@ -1507,6 +1506,9 @@ void WP6ContentListener::boxOn(const uint8_t /* anchoringType */, const uint8_t 
 		if (propList["style:vertical-rel"] && !(propList["style:vertical-rel"]->getStr() == "baseline"))
 			propList.insert("style:vertical-rel", "line");
 	
+	if (propList["text:anchor-tyte"] && propList["text:anchor-type"]->getStr() == "page")
+		propList.insert("text:anchor-page-number", m_ps->m_currentPageNumber);
+
 	m_documentInterface->openFrame(propList);	
 }
 
