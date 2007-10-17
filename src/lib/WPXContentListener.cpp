@@ -68,6 +68,7 @@ _WPXContentParsingState::_WPXContentParsingState() :
 	
 	m_nextPageSpanIter(),
 	m_numPagesRemainingInSpan(0),
+	m_currentPageNumber(1),
 
 	m_sectionAttributesChanged(false),
 	m_numColumns(1),
@@ -1047,6 +1048,8 @@ void WPXContentListener::insertBreak(const uint8_t breakType)
 			    else
 				m_ps->m_isPageSpanBreakDeferred = true;
 			}
+			m_ps->m_currentPageNumber++;
+			break;
 		default:
 			break;
 		}

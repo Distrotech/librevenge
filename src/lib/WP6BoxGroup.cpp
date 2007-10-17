@@ -354,7 +354,7 @@ void WP6BoxGroup::parse(WP6Listener *listener)
 	
 	// Send the box information to the listener and start box
 	listener->boxOn(tmpAnchoringType, tmpGeneralPositioningFlags, m_horizontalPositioningFlags, m_horizontalOffset, m_leftColumn, m_rightColumn,
-		m_verticalPositioningFlags, m_verticalOffset, m_widthFlags, m_width, m_heightFlags, m_height);
+		m_verticalPositioningFlags, m_verticalOffset, m_widthFlags, m_width, m_heightFlags, m_height, tmpContentType);
 
 	// Send the content according to its kind
 	if (tmpContentType == 0x03)

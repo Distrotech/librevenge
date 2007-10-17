@@ -92,6 +92,7 @@ struct _WPXContentParsingState
 	
 	std::list<WPXPageSpan>::iterator m_nextPageSpanIter;
 	int m_numPagesRemainingInSpan;
+	int m_currentPageNumber;
 
 	bool m_sectionAttributesChanged;
 	int m_numColumns;

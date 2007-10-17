@@ -1380,9 +1380,10 @@ void WP6ContentListener::endTable()
 	}
 }
 
-void WP6ContentListener::boxOn(const uint8_t anchoringType, const uint8_t generalPositioningFlags, const uint8_t horizontalPositioningFlags,
+void WP6ContentListener::boxOn(const uint8_t /* anchoringType */, const uint8_t generalPositioningFlags, const uint8_t horizontalPositioningFlags,
 		const int16_t horizontalOffset, const uint8_t leftColumn, const uint8_t rightColumn, const uint8_t verticalPositioningFlags,
-		const int16_t verticalOffset, const uint8_t widthFlags, const uint16_t width, const uint8_t heightFlags, const uint16_t height)
+		const int16_t verticalOffset, const uint8_t widthFlags, const uint16_t width, const uint8_t heightFlags, const uint16_t height,
+		const uint8_t boxContentType)
 {
 	if (isUndoOn())
 		return;
@@ -1393,8 +1394,119 @@ void WP6ContentListener::boxOn(const uint8_t anchoringType, const uint8_t genera
 		_flushText();
 
 	WPXPropertyList propList;
-	propList.insert("svg:height", (float)((double)height/(double)WPX_NUM_WPUS_PER_INCH));
-	propList.insert("svg:width", (float)((double)width/(double)WPX_NUM_WPUS_PER_INCH));
+
+	if ((heightFlags & 0x01) && (boxContentType == 0x01))
+		propList.insert("style:rel-height", "scale");
+	else
+		propList.insert("svg:height", (float)((double)height/(double)WPX_NUM_WPUS_PER_INCH));
+
+	if ((widthFlags & 0x01)  && (boxContentType == 0x01))
+		propList.insert("style:rel-width", "scale");
+	else
+		propList.insert("svg:width", (float)((double)width/(double)WPX_NUM_WPUS_PER_INCH));
+
+	if (horizontalOffset)
+		propList.insert("svg:x", (float)((double)horizontalOffset/(double)WPX_NUM_WPUS_PER_INCH));
+	if (verticalOffset)
+		propList.insert("svg:y", (float)((double)verticalOffset/(double)WPX_NUM_WPUS_PER_INCH));
+	
+	switch (generalPositioningFlags & 0x03)
+	{
+	case 0x00:
+		propList.insert("text:anchor-type", "page");
+		propList.insert("text:anchor-page-number", m_ps->m_currentPageNumber);
+		break;
+	case 0x01:
+		propList.insert("text:anchor-type", "paragraph");
+		break;
+	case 0x02:
+		propList.insert("text:anchor-type", "as-char");
+		break;
+	default:
+		break;
+	}
+		
+	switch (horizontalPositioningFlags & 0x03)
+	{
+	case 0x00:
+		propList.insert("style:horizontal-rel", "page");
+		if (horizontalOffset)
+			propList.insert("style:horizontal-pos", "from-left");
+		else
+			propList.insert("style:horizontal-pos", "left");
+		break;
+	case 0x01:
+	case 0x02:
+		switch ((horizontalPositioningFlags & 0x1C) >> 2)
+		{
+		case 0x00:
+			propList.insert("style:horizontal-rel", "page-content");
+			propList.insert("style:horizontal-pos", "from-left");
+			propList.insert("svg:x", (float)((double)horizontalOffset/(double)WPX_NUM_WPUS_PER_INCH)
+				+ m_ps->m_leftMarginByPageMarginChange + m_ps->m_sectionMarginLeft);
+			break;
+		case 0x01:
+			propList.insert("style:horizontal-rel", "page-end-margin");
+			propList.insert("style:horizontal-pos", "from-left");
+			propList.insert("svg:x", (float)((double)horizontalOffset/(double)WPX_NUM_WPUS_PER_INCH)
+				- (float)((double)width/(double)WPX_NUM_WPUS_PER_INCH)
+				- m_ps->m_rightMarginByPageMarginChange - m_ps->m_sectionMarginRight);
+			break;
+		case 0x02:
+			propList.insert("style:horizontal-rel", "page-content");
+			propList.insert("style:horizontal-pos", "center");
+			break;
+		case 0x03:
+			break;
+		default:
+			break;
+		}
+		break;
+	default:
+		break;
+	}
+	
+	switch (verticalPositioningFlags & 0x03)
+	{
+	case 0x00:
+		propList.insert("style:vertical-rel", "page");
+		propList.insert("style:vertical-pos", "from-top");
+		break;
+	case 0x01:
+		propList.insert("style:vertical-rel", "page-content");
+		switch((verticalPositioningFlags & 0x1C) >> 2)
+		{
+		case 0x00:
+			propList.insert("style:vertical-pos", "from-top");
+			break;
+		case 0x01:
+			propList.insert("style:vertical-pos", "bottom");
+			break;
+		case 0x02:
+			propList.insert("style:vertical-pos", "middle");
+			break;
+		case 0x03:
+			propList.insert("style:vertical-rel", "baseline");
+			propList.insert("style:vertical-pos", "from-top");
+			break;
+		default:
+			break;
+		}
+		break;
+	default:
+		break;
+	}
+	
+	if ((generalPositioningFlags & 0x03) == 0x01)
+	{
+		propList.insert("style:vertical-rel", "paragraph");
+		propList.insert("style:vertical-pos", "from-top");
+	}
+	
+	if ((generalPositioningFlags & 0x03) == 0x02)
+		if (propList["style:vertical-rel"] && !(propList["style:vertical-rel"]->getStr() == "baseline"))
+			propList.insert("style:vertical-rel", "line");
+	
 	m_documentInterface->openFrame(propList);	
 }
 

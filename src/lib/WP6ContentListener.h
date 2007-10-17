@@ -197,7 +197,7 @@ public:
 	void boxOn(const uint8_t anchoringType, const uint8_t generalPositioningFlags, const uint8_t horizontalPositioningFlags,
 		const int16_t horizontalOffset, const uint8_t leftColumn, const uint8_t rightColumn,
 		const uint8_t verticalPositioningFlags, const int16_t verticalOffset, const uint8_t widthFlags, const uint16_t width,
-		const uint8_t heightFlags, const uint16_t height);
+		const uint8_t heightFlags, const uint16_t height, const uint8_t boxContentType);
 	void boxOff();
 	void insertGraphicsData(const uint16_t packetId);
 	void insertTextBox(const WP6SubDocument *subDocument);
