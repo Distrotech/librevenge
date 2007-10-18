@@ -51,7 +51,9 @@ WP6BoxGroup::WP6BoxGroup(WPXInputStream *input) :
 	m_hasZOrderInformation(false),
 	m_zOrderFlags(0x00),
 	m_hasBoxContentType(false),
-	m_boxContentType(0x00)
+	m_boxContentType(0x00),
+	m_nativeWidth(0),
+	m_nativeHeight(0)
 {
 	_read(input);
 }

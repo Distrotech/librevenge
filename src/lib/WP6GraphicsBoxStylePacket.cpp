@@ -43,7 +43,9 @@ WP6GraphicsBoxStylePacket::WP6GraphicsBoxStylePacket(WPXInputStream *input, int 
 	m_contentType(0x00),
 	m_contentHAlign(0),
 	m_contentVAlign(0),
-	m_contentPreserveAspectRatio(true)
+	m_contentPreserveAspectRatio(true),
+	m_nativeWidth(0),
+	m_nativeHeight(0)
 {	
 	_read(input, dataOffset, dataSize);
 }

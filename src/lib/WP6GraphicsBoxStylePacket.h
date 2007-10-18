@@ -50,6 +50,8 @@ public:
 	const uint8_t getHeightFlags() const { return m_heightFlags; }
 	const uint16_t getHeight() const { return m_height; }
 	const uint8_t getContentType() const { return m_contentType; }
+	const uint16_t getNativeWidth() const { return m_nativeWidth; }
+	const uint16_t getNativeHeidht() const { return m_nativeHeight; }
 
 private:
 	WP6GraphicsBoxStylePacket(const WP6GraphicsBoxStylePacket&);             
@@ -68,5 +70,6 @@ private:
 	uint16_t m_height;
 	uint8_t m_contentType, m_contentHAlign, m_contentVAlign;
 	bool m_contentPreserveAspectRatio;
+	uint16_t m_nativeWidth, m_nativeHeight;
 };
 #endif /* WP6GRAPHICSBOXSTYLEPACKET_H */

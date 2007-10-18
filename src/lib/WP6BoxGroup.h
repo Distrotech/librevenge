@@ -59,6 +59,7 @@ private:
 	uint8_t m_zOrderFlags;
 	bool m_hasBoxContentType;
 	uint8_t m_boxContentType;
+	uint16_t m_nativeWidth, m_nativeHeight;
 };
 
 #endif /* WP6BOXGROUP_H */
