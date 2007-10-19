@@ -57,7 +57,7 @@ public:
 	Tries to read a given number of bytes starting from the current position inside the input stream.
 	\param numBytes Number of bytes desired to be read.
 	\param numBytesRead Number of bytes that were possible to be read.
-	\return Should be a pointer to an array of numBytesRead bytes (uint8_t[numBytesRead]).
+	\return Should be a pointer to an array of numBytesRead bytes (unsigned char[numBytesRead]).
 	\return Optionally it could be 0 if the desired number of bytes could not be read.
 	*/
 	const virtual unsigned char *read(size_t numBytes, size_t &numBytesRead) = 0;
