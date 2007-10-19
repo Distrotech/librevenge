@@ -25,7 +25,6 @@
 #ifndef WPXSTREAM_H
 #define WPXSTREAM_H
 #include <stdio.h>
-#include "libwpd_types.h"
 
 enum WPX_SEEK_TYPE
 {
@@ -61,7 +60,7 @@ public:
 	\return Should be a pointer to an array of numBytesRead bytes (uint8_t[numBytesRead]).
 	\return Optionally it could be 0 if the desired number of bytes could not be read.
 	*/
-	const virtual uint8_t *read(size_t numBytes, size_t &numBytesRead) = 0;
+	const virtual unsigned char *read(size_t numBytes, size_t &numBytesRead) = 0;
 	/**
 	Moves to the next location inside the input stream.
 	\param offset The offset of the location inside the input stream to move to.

@@ -40,8 +40,8 @@ public:
 	std::fstream file;
 	std::stringstream buffer;
 	unsigned long streamSize;
-	uint8_t *buf;
-	uint8_t *readBuffer;
+	unsigned char *buf;
+	unsigned char *readBuffer;
 	unsigned long readBufferLength;
 	unsigned long readBufferPos;
 private:
@@ -56,7 +56,7 @@ public:
 	~WPXStringStreamPrivate();
 	std::stringstream buffer;
 	unsigned long streamSize;
-	uint8_t *buf;
+	unsigned char *buf;
 private:
 	WPXStringStreamPrivate(const WPXStringStreamPrivate&);
 	WPXStringStreamPrivate& operator=(const WPXStringStreamPrivate&);
@@ -116,7 +116,7 @@ WPXFileStream::~WPXFileStream()
 
 #define BUFFER_MAX 65536
 
-const uint8_t *WPXFileStream::read(size_t numBytes, size_t &numBytesRead)
+const unsigned char *WPXFileStream::read(size_t numBytes, size_t &numBytesRead)
 {
 	numBytesRead = 0;
 	
@@ -128,7 +128,7 @@ const uint8_t *WPXFileStream::read(size_t numBytes, size_t &numBytesRead)
 	if (d->readBuffer && (d->readBufferPos + numBytes > d->readBufferPos)
 		&& (d->readBufferPos + numBytes <= d->readBufferLength))
 	{
-		const uint8_t *pTmp = d->readBuffer + d->readBufferPos;
+		const unsigned char *pTmp = d->readBuffer + d->readBufferPos;
 		d->readBufferPos += numBytes;
 		numBytesRead = numBytes;
 		return pTmp;
@@ -165,7 +165,7 @@ const uint8_t *WPXFileStream::read(size_t numBytes, size_t &numBytesRead)
 	d->file.seekg(d->readBufferLength, std::ios::cur);
 	d->file.seekg(curpos, std::ios::beg);
 	
-	d->readBuffer = new uint8_t[d->readBufferLength];
+	d->readBuffer = new unsigned char[d->readBufferLength];
 	d->file.read((char *)(d->readBuffer), d->readBufferLength);
 	
 	if (!d->file.good())
@@ -177,7 +177,7 @@ const uint8_t *WPXFileStream::read(size_t numBytes, size_t &numBytesRead)
 	numBytesRead = numBytes;
 		
 	d->readBufferPos += numBytesRead;
-	return const_cast<const uint8_t*>( d->readBuffer );
+	return const_cast<const unsigned char*>( d->readBuffer );
 }
 
 long WPXFileStream::tell()
@@ -265,7 +265,7 @@ WPXInputStream* WPXFileStream::getDocumentOLEStream(const char * name)
 	
 	if (d->buf)
 		delete [] d->buf;
-	d->buf = new uint8_t[tmpStream.size()];
+	d->buf = new unsigned char[tmpStream.size()];
 
 	unsigned long tmpLength;
 	tmpLength = tmpStream.read((unsigned char *)(d->buf), tmpStream.size());
@@ -303,7 +303,7 @@ WPXStringStream::~WPXStringStream()
 	delete d;
 }
 
-const uint8_t *WPXStringStream::read(size_t numBytes, size_t &numBytesRead)
+const unsigned char *WPXStringStream::read(size_t numBytes, size_t &numBytesRead)
 {
 	numBytesRead = 0;
 	
@@ -325,7 +325,7 @@ const uint8_t *WPXStringStream::read(size_t numBytes, size_t &numBytesRead)
 
 	if (d->buf)
 		delete [] d->buf;
-	d->buf = new uint8_t[numBytes];
+	d->buf = new unsigned char[numBytes];
 
 	if(d->buffer.good())
 	{
@@ -398,7 +398,7 @@ WPXInputStream* WPXStringStream::getDocumentOLEStream(const char * name)
 	
 	if (d->buf)
 		delete [] d->buf;
-	d->buf = new uint8_t[tmpStream.size()];
+	d->buf = new unsigned char[tmpStream.size()];
 	unsigned long tmpLength;
 	tmpLength = tmpStream.read((unsigned char *)(d->buf), tmpStream.size());
 

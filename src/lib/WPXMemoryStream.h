@@ -29,13 +29,13 @@
 class WPXMemoryInputStream : public WPXInputStream
 {
 public:
-	WPXMemoryInputStream(uint8_t *data, size_t size);
+	WPXMemoryInputStream(unsigned char *data, size_t size);
 	virtual ~WPXMemoryInputStream();
 
 	virtual bool isOLEStream() { return false; }
 	virtual WPXInputStream * getDocumentOLEStream(const char* name) { return 0; }
 	
-	const virtual uint8_t *read(size_t numBytes, size_t &numBytesRead);
+	virtual const unsigned char *read(size_t numBytes, size_t &numBytesRead);
 	virtual int seek(long offset, WPX_SEEK_TYPE seekType);
 	virtual long tell();
 	virtual bool atEOS();
@@ -43,7 +43,7 @@ public:
 private:
 	long m_offset;
 	size_t m_size;
-	uint8_t *m_data;
+	unsigned char *m_data;
 	WPXMemoryInputStream(const WPXMemoryInputStream&);
 	WPXMemoryInputStream& operator=(const WPXMemoryInputStream&);
 };

@@ -32,7 +32,7 @@ public:
 	explicit WPXFileStream(const char* filename);
 	~WPXFileStream();
 	
-	const uint8_t *read(size_t numBytes, size_t &numBytesRead);
+	const unsigned char *read(size_t numBytes, size_t &numBytesRead);
 	long tell();
 	int seek(long offset, WPX_SEEK_TYPE seekType);
 	bool atEOS();
@@ -54,7 +54,7 @@ public:
 	WPXStringStream(const char *data, const unsigned int dataSize);
 	~WPXStringStream();
 
-	const uint8_t *read(size_t numBytes, size_t &numBytesRead);
+	const unsigned char *read(size_t numBytes, size_t &numBytesRead);
 	long tell();
 	int seek(long offset, WPX_SEEK_TYPE seekType);
 	bool atEOS();

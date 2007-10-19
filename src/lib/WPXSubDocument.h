@@ -26,6 +26,7 @@
 #define WPXSUBDOCUMENT_H
 
 #include "WPXMemoryStream.h"
+#include "libwpd_types.h"
 
 class WPXListener;
 

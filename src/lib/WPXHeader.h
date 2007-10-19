@@ -27,6 +27,7 @@
 #define WPXHEADER_H
 
 #include "WPXStream.h"
+#include "libwpd_types.h"
 
 class WPXHeader
 {
