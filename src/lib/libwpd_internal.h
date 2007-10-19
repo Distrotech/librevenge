@@ -30,6 +30,7 @@
 #include <string>
 #include <algorithm>
 #include "WPXString.h"
+#include "libwpd_types.h"
 
 /* Various functions/defines that need not/should not be exported externally */
 
