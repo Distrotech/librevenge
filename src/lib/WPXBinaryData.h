@@ -25,10 +25,11 @@
 #ifndef WPXBINARYDATA_H
 #define WPXBINARYDATA_H
 
-#include "WPXStream.h"
 #include "WPXString.h"
+#include <stdio.h>
 
 class WPXBinaryDataImpl;
+class WPXInputStream;
 
 class WPXBinaryData
 {

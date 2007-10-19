@@ -24,6 +24,7 @@
 
 #include "WPXBinaryData.h"
 #include "WPXMemoryStream.h"
+#include "WPXStream.h"
 #include "libwpd_internal.h"
 
 #include <vector>

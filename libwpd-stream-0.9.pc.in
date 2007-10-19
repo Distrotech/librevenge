@@ -6,6 +6,5 @@ includedir=@includedir@
 Name: libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@
 Description: Sample Input stream implementation for libwpd, a library for reading and writing Corel WordPerfect(tm) documents
 Version: @VERSION@
-Requires: libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@
 Libs: -L${libdir} -lwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@
 Cflags: -I${includedir}/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@

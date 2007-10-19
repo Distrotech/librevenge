@@ -1391,10 +1391,6 @@ SOURCE=..\..\src\lib\WPXPropertyListVector.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXStream.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\lib\WPXString.h
 # End Source File
 # Begin Source File

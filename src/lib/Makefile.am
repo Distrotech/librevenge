@@ -41,7 +41,6 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_include_HEADERS = \
 	WPXProperty.h \
 	WPXPropertyList.h \
 	WPXPropertyListVector.h \
-	WPXStream.h \
 	WPXString.h
 
 INCLUDES = -I$(srcdir)
@@ -382,6 +381,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WPXTable.h
 
 libwpd_stream_headers = \
+			WPXStream.h \
 			WPXStreamImplementation.h
 libwpd_stream_sources = \
 			WPXStreamImplementation.cpp \

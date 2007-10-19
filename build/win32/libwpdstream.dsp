@@ -103,6 +103,10 @@ SOURCE=..\..\src\lib\WPXOLEStream.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WPXStream.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WPXStreamImplementation.h
 # End Source File
 # End Group
