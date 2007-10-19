@@ -1383,7 +1383,7 @@ void WP6ContentListener::endTable()
 void WP6ContentListener::boxOn(const uint8_t /* anchoringType */, const uint8_t generalPositioningFlags, const uint8_t horizontalPositioningFlags,
 		const int16_t horizontalOffset, const uint8_t leftColumn, const uint8_t rightColumn, const uint8_t verticalPositioningFlags,
 		const int16_t verticalOffset, const uint8_t widthFlags, const uint16_t width, const uint8_t heightFlags, const uint16_t height,
-		const uint8_t boxContentType)
+		const uint8_t boxContentType, const uint16_t nativeWidth, const uint16_t nativeHeight)
 {
 	if (isUndoOn())
 		return;
@@ -1395,15 +1395,40 @@ void WP6ContentListener::boxOn(const uint8_t /* anchoringType */, const uint8_t 
 
 	WPXPropertyList propList;
 
-	if ((heightFlags & 0x01) && (boxContentType == 0x01))
+	if (heightFlags & 0x01)
 		propList.insert("style:rel-height", "scale");
 	else
 		propList.insert("svg:height", (float)((double)height/(double)WPX_NUM_WPUS_PER_INCH));
 
-	if ((widthFlags & 0x01)  && (boxContentType == 0x01))
+	if (widthFlags & 0x01)
 		propList.insert("style:rel-width", "scale");
 	else
 		propList.insert("svg:width", (float)((double)width/(double)WPX_NUM_WPUS_PER_INCH));
+
+	if (boxContentType != 0x01)
+	{
+		propList.insert("svg:height", (float)((double)height/(double)WPX_NUM_WPUS_PER_INCH));
+		propList.insert("svg:width", (float)((double)width/(double)WPX_NUM_WPUS_PER_INCH));
+	}
+		
+	if ((boxContentType == 0x03) && nativeWidth && nativeHeight)
+	{
+		
+		if ((heightFlags & 0x01) && (widthFlags & 0x01))
+		{
+			propList.insert("svg:height", (float)((double)nativeHeight/(double)WPX_NUM_WPUS_PER_INCH));
+			propList.insert("svg:width", (float)((double)nativeWidth/(double)WPX_NUM_WPUS_PER_INCH));
+		}
+		else
+		{
+			if (heightFlags & 0x01)
+				propList.insert("svg:height", (float)((double)width * (double)nativeHeight /
+					((double)nativeWidth * (double)WPX_NUM_WPUS_PER_INCH)));
+			if (widthFlags & 0x01)
+				propList.insert("svg:width", (float)((double)height * (double)nativeWidth /
+					((double)nativeHeight * (double)WPX_NUM_WPUS_PER_INCH)));
+		}
+	} 
 
 	if (horizontalOffset)
 		propList.insert("svg:x", (float)((double)horizontalOffset/(double)WPX_NUM_WPUS_PER_INCH));

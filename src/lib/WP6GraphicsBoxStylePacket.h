@@ -51,7 +51,7 @@ public:
 	const uint16_t getHeight() const { return m_height; }
 	const uint8_t getContentType() const { return m_contentType; }
 	const uint16_t getNativeWidth() const { return m_nativeWidth; }
-	const uint16_t getNativeHeidht() const { return m_nativeHeight; }
+	const uint16_t getNativeHeight() const { return m_nativeHeight; }
 
 private:
 	WP6GraphicsBoxStylePacket(const WP6GraphicsBoxStylePacket&);             

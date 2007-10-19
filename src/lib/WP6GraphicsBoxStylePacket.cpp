@@ -182,6 +182,27 @@ void WP6GraphicsBoxStylePacket::_readContents(WPXInputStream *input)
 	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Content Type (%i)\n", m_contentType));
 	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Content Alignment (horizontal: 0x%.2x) (vertical: 0x%.2x) (preserve aspect ratio: %s)\n",
 		m_contentHAlign, m_contentVAlign, m_contentPreserveAspectRatio ? "true" : "false"));
+		
+	switch (m_contentType)
+	{
+	case 0x03:
+		{
+			uint16_t tmpGraphicsRenderingInfoSize = readU16(input);
+			unsigned tmpGraphicsRenderingInfoBegin = input->tell();
+			if (0x01 == (readU8(input) & 0xFF))
+			{
+				m_nativeWidth = readU16(input);
+				m_nativeHeight = readU16(input);
+			}
+			else
+				input->seek(4, WPX_SEEK_CUR);
+
+			input->seek(tmpGraphicsRenderingInfoSize + tmpGraphicsRenderingInfoBegin, WPX_SEEK_CUR);
+		}
+		break;
+	default:
+		break;
+	}
 	
 	input->seek(tmpSizeOfBoxContentData + tmpBoxContentDataPosition, WPX_SEEK_SET);
 	

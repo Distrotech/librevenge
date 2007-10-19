@@ -154,6 +154,25 @@ void WP6BoxGroup::_readContents(WPXInputStream *input)
 					m_hasBoxContentType = true;
 					m_boxContentType = readU8(input);
 				}
+
+				if (tmpOverrideFlags & 0x2000) // content rendering information
+				{
+					if (m_hasBoxContentType && (m_boxContentType == 0x03)) // Image
+					{
+						uint16_t tmpImageContentOverrideSize = readU16(input);
+						unsigned tmpImageContentOverrideStart = input->tell();
+						uint16_t tmpImageContentOverrideFlags = readU16(input);
+						
+						if (tmpImageContentOverrideFlags & 0x8000)
+							input->seek(2, WPX_SEEK_CUR);
+						if (tmpImageContentOverrideFlags & 0x4000)
+						{
+							m_nativeWidth = readU16(input);
+							m_nativeHeight = readU16(input);
+						}
+						input->seek(tmpImageContentOverrideStart + tmpImageContentOverrideSize, WPX_SEEK_SET);
+					}
+				}
 #ifdef DEBUG
 				WPD_DEBUG_MSG(("WP6BoxGroup: parsing Box content data -- override flags: 0x%x\n", tmpOverrideFlags));
 
@@ -276,6 +295,11 @@ void WP6BoxGroup::parse(WP6Listener *listener)
 	
 	if (tmpContentType != 0x01 && tmpContentType != 0x03)
 		return;
+		
+	if (!m_nativeWidth)
+		m_nativeWidth = gbsPacket->getNativeWidth();
+	if (!m_nativeHeight)
+		m_nativeHeight = gbsPacket->getNativeHeight();
 
 	std::vector<uint16_t> graphicsDataIds;
 	std::vector<uint16_t>::iterator gdiIter;
@@ -356,7 +380,7 @@ void WP6BoxGroup::parse(WP6Listener *listener)
 	
 	// Send the box information to the listener and start box
 	listener->boxOn(tmpAnchoringType, tmpGeneralPositioningFlags, m_horizontalPositioningFlags, m_horizontalOffset, m_leftColumn, m_rightColumn,
-		m_verticalPositioningFlags, m_verticalOffset, m_widthFlags, m_width, m_heightFlags, m_height, tmpContentType);
+		m_verticalPositioningFlags, m_verticalOffset, m_widthFlags, m_width, m_heightFlags, m_height, tmpContentType, m_nativeWidth, m_nativeHeight);
 
 	// Send the content according to its kind
 	if (tmpContentType == 0x03)
