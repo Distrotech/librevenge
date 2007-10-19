@@ -381,6 +381,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WPXTable.h
 
 libwpd_stream_headers = \
+			libwpd-stream.h \
 			WPXStream.h \
 			WPXStreamImplementation.h
 libwpd_stream_sources = \
@@ -390,7 +391,7 @@ libwpd_stream_sources = \
 
 if WITH_LIBWPD_STREAM
 
-libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_includedir = $(includedir)/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@/libwpd
+libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_includedir = $(includedir)/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@/libwpd-stream
 libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_include_HEADERS = $(libwpd_stream_headers)
 
 libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_LIBADD  = @LIBWPD_STREAM_WIN32_RESOURCE@
