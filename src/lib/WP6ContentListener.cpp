@@ -1439,9 +1439,87 @@ void WP6ContentListener::boxOn(const uint8_t /* anchoringType */, const uint8_t 
 	{
 	case 0x00: // Page anchored
 		propList.insert("text:anchor-type", "char"); // ugly workaround to remediate OOo's wrong implementation of ODF
+		switch (horizontalPositioningFlags & 0x03)
+		{
+		case 0x00:
+			propList.insert("style:horizontal-rel", "page");
+			if (horizontalOffset)
+				propList.insert("style:horizontal-pos", "from-left");
+			else
+				propList.insert("style:horizontal-pos", "left");
+			break;
+		case 0x01:
+		case 0x02:
+			switch ((horizontalPositioningFlags & 0x1C) >> 2)
+			{
+			case 0x00:
+				propList.insert("style:horizontal-rel", "page-content");
+				propList.insert("style:horizontal-pos", "from-left");
+				propList.insert("svg:x", (float)((double)horizontalOffset/(double)WPX_NUM_WPUS_PER_INCH)
+					+ m_ps->m_leftMarginByPageMarginChange + m_ps->m_sectionMarginLeft);
+				break;
+			case 0x01:
+				propList.insert("style:horizontal-rel", "page-end-margin");
+				propList.insert("style:horizontal-pos", "from-left");
+				propList.insert("svg:x", (float)((double)horizontalOffset/(double)WPX_NUM_WPUS_PER_INCH)
+					- (float)((double)width/(double)WPX_NUM_WPUS_PER_INCH)
+					- m_ps->m_rightMarginByPageMarginChange - m_ps->m_sectionMarginRight);
+				break;
+			case 0x02:
+				propList.insert("style:horizontal-rel", "page-content");
+				propList.insert("style:horizontal-pos", "center");
+				break;
+			case 0x03:
+				break;
+			default:
+				break;
+			}
+			break;
+		default:
+			break;
+		}
 		break;
 	case 0x01: // Paragraph anchored
 		propList.insert("text:anchor-type", "paragraph");
+		switch (horizontalPositioningFlags & 0x03)
+		{
+		case 0x00:
+			propList.insert("style:horizontal-rel", "page");
+			if (horizontalOffset)
+				propList.insert("style:horizontal-pos", "from-left");
+			else
+				propList.insert("style:horizontal-pos", "left");
+			break;
+		case 0x01:
+		case 0x02:
+			switch ((horizontalPositioningFlags & 0x1C) >> 2)
+			{
+			case 0x00:
+				propList.insert("style:horizontal-rel", "page-content");
+				propList.insert("style:horizontal-pos", "from-left");
+				propList.insert("svg:x", (float)((double)horizontalOffset/(double)WPX_NUM_WPUS_PER_INCH)
+					+ m_ps->m_leftMarginByPageMarginChange + m_ps->m_sectionMarginLeft);
+				break;
+			case 0x01:
+				propList.insert("style:horizontal-rel", "page-end-margin");
+				propList.insert("style:horizontal-pos", "from-left");
+				propList.insert("svg:x", (float)((double)horizontalOffset/(double)WPX_NUM_WPUS_PER_INCH)
+					- (float)((double)width/(double)WPX_NUM_WPUS_PER_INCH)
+					- m_ps->m_rightMarginByPageMarginChange - m_ps->m_sectionMarginRight);
+				break;
+			case 0x02:
+				propList.insert("style:horizontal-rel", "page-content");
+				propList.insert("style:horizontal-pos", "center");
+				break;
+			case 0x03:
+				break;
+			default:
+				break;
+			}
+			break;
+		default:
+			break;
+		}
 		break;
 	case 0x02: // Character anchored
 		propList.insert("text:anchor-type", "as-char");

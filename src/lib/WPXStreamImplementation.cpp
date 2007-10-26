@@ -224,6 +224,9 @@ bool WPXFileStream::atEOS()
 
 bool WPXFileStream::isOLEStream()
 {
+	if (!d->file.good())
+		return false;
+
 	if (d->readBuffer)
 	{
 		d->file.seekg(d->readBufferPos - d->readBufferLength, std::ios::cur);
@@ -245,6 +248,9 @@ bool WPXFileStream::isOLEStream()
 
 WPXInputStream* WPXFileStream::getDocumentOLEStream(const char * name)
 {
+	if (!d->file.good())
+		return (WPXInputStream*)0;
+
 	if (d->readBuffer)
 	{
 		d->file.seekg(d->readBufferPos - d->readBufferLength, std::ios::cur);
@@ -375,6 +381,9 @@ bool WPXStringStream::atEOS()
 
 bool WPXStringStream::isOLEStream()
 {
+	if (!d->buffer.good())
+		return false;
+
 	Storage tmpStorage( d->buffer );
 	if (tmpStorage.isOLEStream())
 	{
@@ -387,6 +396,9 @@ bool WPXStringStream::isOLEStream()
 
 WPXInputStream* WPXStringStream::getDocumentOLEStream(const char * name)
 {
+	if (!d->buffer.good())
+		return false;
+
 	Storage *tmpStorage = new Storage( d->buffer );
 	Stream tmpStream( tmpStorage, name );
 	if (!tmpStorage || (tmpStorage->result() != Storage::Ok)  || !tmpStream.size())
