@@ -78,7 +78,6 @@
 
 // add more of these as needed for byteswapping
 // (the 8-bit functions are just there to make things consistent)
-int8_t read8(WPXInputStream *input); 
 uint8_t readU8(WPXInputStream *input); 
 uint16_t readU16(WPXInputStream *input, bool bigendian=false);
 uint32_t readU32(WPXInputStream *input, bool bigendian=false);

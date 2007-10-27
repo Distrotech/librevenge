@@ -48,7 +48,7 @@ void WP1SetTabsGroup::_readContents(WPXInputStream *input)
 	float tmpTabPosition = 0.0f;
 	WPXTabStop tmpTabStop = WPXTabStop();
 
-	while (((tmpTabType = read8(input)) & 0xff) != 0xff)
+	while (((tmpTabType = (int8_t)readU8(input)) & 0xff) != 0xff)
 	{
 		if (input->atEOS())
 			throw FileException();

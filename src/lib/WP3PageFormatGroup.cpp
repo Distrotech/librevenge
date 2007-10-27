@@ -92,7 +92,7 @@ void WP3PageFormatGroup::_readContents(WPXInputStream *input)
 
 		m_isRelative = (readU8(input) & 0x01);
 
-		while (((tmpTabType = read8(input)) & 0xff) != 0xff)
+		while ((tmpTabType = (int8_t)readU8(input))  != (int8_t)0xff)
 		{
 			if (input->atEOS())
 				throw FileException();

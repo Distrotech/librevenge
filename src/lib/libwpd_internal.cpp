@@ -39,17 +39,6 @@ uint8_t readU8(WPXInputStream *input)
 	return WPD_LE_GET_GUINT8(p);
 }
 
-int8_t read8(WPXInputStream *input)
-{
-	size_t numBytesRead;
-	int8_t const * p = (int8_t const *) input->read(sizeof(int8_t), numBytesRead);
-
-  	if (!p || numBytesRead != sizeof(int8_t))
-  		throw FileException();
-
-	return (int8_t)*(p);
-}
-
 uint16_t readU16(WPXInputStream *input, bool bigendian)
 {
 	size_t numBytesRead;
