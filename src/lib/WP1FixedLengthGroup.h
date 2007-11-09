@@ -43,7 +43,7 @@ class WP1FixedLengthGroup : public WP1Part
 	void _read(WPXInputStream *input);
  	virtual void _readContents(WPXInputStream * /* input */) {};
 
-	const uint8_t getGroup() const { return m_group; }
+	uint8_t getGroup() const { return m_group; }
 
  private:
 	uint8_t m_group;

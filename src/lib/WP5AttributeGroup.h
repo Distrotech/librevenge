@@ -34,7 +34,7 @@ class WP5AttributeGroup : public WP5FixedLengthGroup
  public:
 	WP5AttributeGroup(WPXInputStream *input, uint8_t groupID);	
 	virtual void parse(WP5Listener *listener) = 0;
-	const uint8_t getAttribute() const { return m_attribute; }
+	uint8_t getAttribute() const { return m_attribute; }
 	
  protected:
 	virtual void _readContents(WPXInputStream *input);

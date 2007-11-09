@@ -31,10 +31,10 @@ class WP5SpecialHeaderIndex
 {
  public:
 	WP5SpecialHeaderIndex(WPXInputStream * input);	
-	const uint16_t getType() const { return m_type; }
-	const uint16_t getNumOfIndexes() const { return m_numOfIndexes; }
-	const uint16_t getIndexBlockSize() const { return m_indexBlockSize; }
-	const uint32_t getNextBlockOffset() const { return m_nextBlockOffset; }
+	uint16_t getType() const { return m_type; }
+	uint16_t getNumOfIndexes() const { return m_numOfIndexes; }
+	uint16_t getIndexBlockSize() const { return m_indexBlockSize; }
+	uint32_t getNextBlockOffset() const { return m_nextBlockOffset; }
 
  protected:
  	void _read(WPXInputStream *input);

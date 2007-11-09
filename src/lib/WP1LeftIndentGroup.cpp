@@ -46,5 +46,5 @@ void WP1LeftIndentGroup::_readContents(WPXInputStream *input)
 void WP1LeftIndentGroup::parse(WP1Listener *listener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling the Left Indent group\n"));
-	listener->leftIndent(m_newLeftMargin - m_oldLeftMargin);
+	listener->leftIndent((uint16_t)(m_newLeftMargin - m_oldLeftMargin));
 }

@@ -47,8 +47,7 @@ void WP6CharacterGroup_SetAlignmentCharacterSubGroup::parse(WP6Listener *listene
 				uint16_t const * /* prefixIDs */) const
 {
 	const uint16_t *chars;
-	int len;
-	len = extendedCharacterWP6ToUCS2(m_character, m_characterSet, &chars);
+	extendedCharacterWP6ToUCS2(m_character, m_characterSet, &chars);
 	WPD_DEBUG_MSG(("WordPerfect: Parsing Set Alignment Character (alignment character: 0x%.4x)\n", chars[0]));
 	listener->setAlignmentCharacter(chars[0]);
 }
@@ -148,8 +147,7 @@ void WP6CharacterGroup_SetDotLeaderCharactersSubGroup::parse(WP6Listener *listen
 								uint16_t const * /* prefixIDs */) const
 {
 	const uint16_t *chars;
-	int len;
-	len = extendedCharacterWP6ToUCS2(m_character, m_characterSet, &chars);
+	extendedCharacterWP6ToUCS2(m_character, m_characterSet, &chars);
 	WPD_DEBUG_MSG(("WordPerfect: Parsing Set Dot Leader Characters (leader character: 0x%.4x), (number of spaces: %i)\n",
 			chars[0], m_numberOfSpaces));
 	listener->setLeaderCharacter(chars[0], m_numberOfSpaces);

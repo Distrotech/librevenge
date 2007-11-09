@@ -44,9 +44,9 @@ public:
 	WPXHeaderFooter(const WPXHeaderFooter &headerFooter);
 	~WPXHeaderFooter();
 	WPXHeaderFooter& operator=(const WPXHeaderFooter &headerFooter);
-	const WPXHeaderFooterType getType() const { return m_type; }
-	const WPXHeaderFooterOccurence getOccurence() const { return m_occurence; }
-	const uint8_t getInternalType() const { return m_internalType; }
+	WPXHeaderFooterType getType() const { return m_type; }
+	WPXHeaderFooterOccurence getOccurence() const { return m_occurence; }
+	uint8_t getInternalType() const { return m_internalType; }
 	const WPXSubDocument * getSubDocument() const { return m_subDocument; }
 	WPXTableList getTableList() const { return m_tableList; }
 
@@ -66,15 +66,15 @@ public:
 	WPXPageSpan(const WPXPageSpan &page);
 	virtual ~WPXPageSpan();
 
-	const bool getHeaderFooterSuppression(const uint8_t headerFooterType) const { if (headerFooterType <= WPX_FOOTER_B) return m_isHeaderFooterSuppressed[headerFooterType]; return false; }
-	const float getFormLength() const { return m_formLength; }
-	const float getFormWidth() const { return m_formWidth; }
-	const WPXFormOrientation getFormOrientation() const { return m_formOrientation; }
-	const float getMarginLeft() const { return m_marginLeft; }
- 	const float getMarginRight() const { return m_marginRight; }
- 	const float getMarginTop() const { return m_marginTop; }
- 	const float getMarginBottom() const { return m_marginBottom; }
-	const int getPageSpan() const { return m_pageSpan; }
+	bool getHeaderFooterSuppression(const uint8_t headerFooterType) const { if (headerFooterType <= WPX_FOOTER_B) return m_isHeaderFooterSuppressed[headerFooterType]; return false; }
+	float getFormLength() const { return m_formLength; }
+	float getFormWidth() const { return m_formWidth; }
+	WPXFormOrientation getFormOrientation() const { return m_formOrientation; }
+	float getMarginLeft() const { return m_marginLeft; }
+ 	float getMarginRight() const { return m_marginRight; }
+ 	float getMarginTop() const { return m_marginTop; }
+ 	float getMarginBottom() const { return m_marginBottom; }
+	int getPageSpan() const { return m_pageSpan; }
 	const std::vector<WPXHeaderFooter> & getHeaderFooterList() const { return m_headerFooterList; }
 
 	void setHeaderFooter(const WPXHeaderFooterType type, const uint8_t headerFooterType, const WPXHeaderFooterOccurence occurence, 

@@ -33,7 +33,7 @@ class WP6AttributeGroup : public WP6FixedLengthGroup
  public:
 	WP6AttributeGroup(WPXInputStream *input, uint8_t groupID);	
 	virtual void parse(WP6Listener *listener) = 0;
-	const uint8_t getAttribute() const { return m_attribute; }
+	uint8_t getAttribute() const { return m_attribute; }
 	
  protected:
 	void _readContents(WPXInputStream *input);

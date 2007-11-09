@@ -100,4 +100,28 @@ public:
 	void parse(WP6Listener *listener);	
 };
 
+class WP6TableOffAtSoftEOPFunction : public WP6SingleByteFunction
+{
+public:
+	void parse(WP6Listener *listener);
+};
+
+class WP6TableRowAtSoftEOPFunction : public WP6SingleByteFunction
+{
+public:
+	void parse(WP6Listener *listener);
+};
+
+class WP6TableRowAtEOPFunction : public WP6SingleByteFunction
+{
+public:
+	void parse(WP6Listener *listener);
+};
+
+class WP6TableRowAtEOCFunction : public WP6SingleByteFunction
+{
+public:
+	void parse(WP6Listener *listener);
+};
+
 #endif /* WP6SINGLEBYTEFUNCTION_H */

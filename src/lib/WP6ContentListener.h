@@ -53,8 +53,8 @@ class WP6StyleStateSequence
 public:
 	WP6StyleStateSequence() : m_stateSequence(), m_currentState(), m_previousState() { clear(); }
 	void setCurrentState(WP6StyleState state) { for (int i=(STATE_MEMORY-1); i>0; i--) m_stateSequence[i] = m_stateSequence[i-1]; m_stateSequence[0]=state; }
-	const WP6StyleState getCurrentState() const { return m_stateSequence[0]; /*currentState;*/ }
-	const WP6StyleState getPreviousState() const { return m_stateSequence[1]; /*m_previousState;*/ }
+	WP6StyleState getCurrentState() const { return m_stateSequence[0]; /*currentState;*/ }
+	WP6StyleState getPreviousState() const { return m_stateSequence[1]; /*m_previousState;*/ }
 	void clear() { m_stateSequence.clear(); for (int i=0; i<STATE_MEMORY; i++) m_stateSequence.push_back(NORMAL); }
 
 private:

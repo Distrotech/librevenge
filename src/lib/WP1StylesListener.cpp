@@ -181,10 +181,10 @@ void WP1StylesListener::headerFooterGroup(const uint8_t headerFooterDefinition, 
 	{
 		bool tempCurrentPageHasContent = m_currentPageHasContent;
 
-		uint8_t headerFooterType = (headerFooterDefinition & 0x03);
+		uint8_t headerFooterType = (uint8_t)(headerFooterDefinition & 0x03);
 		WPXHeaderFooterType wpxType = ((headerFooterType <= WPX_HEADER_B) ? HEADER : FOOTER);
 
-		uint8_t occurenceBits = ((headerFooterDefinition & 0x1C) >> 2);
+		uint8_t occurenceBits = (uint8_t)((headerFooterDefinition & 0x1C) >> 2);
 
 		WPD_DEBUG_MSG(("WordPerfect: headerFooterGroup (headerFooterType: %i, occurenceBits: %i)\n", 
 			       headerFooterType, occurenceBits));

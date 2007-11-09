@@ -43,8 +43,8 @@ class WP1VariableLengthGroup : public WP1Part
 	void _read(WPXInputStream *input);
  	virtual void _readContents(WPXInputStream *input) = 0;
 
-	const uint8_t getGroup() const { return m_group; }
-	const uint32_t getSize() const { return m_size; }
+	uint8_t getGroup() const { return m_group; }
+	uint32_t getSize() const { return m_size; }
 
  private:
 	uint8_t m_group;

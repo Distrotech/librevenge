@@ -36,7 +36,7 @@ public:
 	WP6GraphicsCachedFileDataPacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize);
 	~WP6GraphicsCachedFileDataPacket();
 	void _readContents(WPXInputStream *input);
-	void parse(WP6Listener *listener) const {}
+	void parse(WP6Listener * /* listener */) const {}
 	const WPXBinaryData *getBinaryObject() const { return m_object; }
 
 private:

@@ -33,79 +33,71 @@ WP6SingleByteFunction * WP6SingleByteFunction::constructSingleByteFunction(WPXIn
 {
 
 	switch (groupID) 
-		{
-		case WP6_TOP_SOFT_EOL:
-		case WP6_TOP_SOFT_EOL_AT_EOC:
-		case WP6_TOP_SOFT_EOL_AT_EOC_AT_EOP:
-		case WP6_TOP_SOFT_SPACE:
-			return new WP6SpaceFunction();
-		
-		case WP6_TOP_HARD_SPACE:
-			return new WP6HardSpaceFunction();
+	{
+	case WP6_TOP_SOFT_EOL:
+	case WP6_TOP_SOFT_EOL_AT_EOC:
+	case WP6_TOP_SOFT_EOL_AT_EOC_AT_EOP:
+	case WP6_TOP_SOFT_SPACE:
+		return new WP6SpaceFunction();
 
-		case WP6_TOP_SOFT_HYPHEN_IN_LINE:
-		case WP6_TOP_SOFT_HYPHEN_AT_EOL:
-			return new WP6SoftHyphenFunction();		
-	
-		case WP6_TOP_HARD_HYPHEN:
-			return new WP6HyphenFunction();
+	case WP6_TOP_HARD_SPACE:
+		return new WP6HardSpaceFunction();
 
-		case WP6_TOP_HARD_EOL:
-		case WP6_TOP_HARD_EOL_AT_EOC:
-		case WP6_TOP_HARD_EOL_AT_EOC_AT_EOP:
-		case WP6_TOP_DORMANT_HARD_RETURN:
-		case WP6_TOP_DELETABLE_HARD_EOL:
-		case WP6_TOP_DELETABLE_HARD_EOL_AT_EOC:
-		case WP6_TOP_DELETABLE_HARD_EOL_AT_EOC_AT_EOP:
-			return new WP6EOLFunction();
+	case WP6_TOP_SOFT_HYPHEN_IN_LINE:
+	case WP6_TOP_SOFT_HYPHEN_AT_EOL:
+		return new WP6SoftHyphenFunction();		
 
-		case WP6_TOP_TABLE_OFF_AT_EOC_AT_EOP:
-		case WP6_TOP_TABLE_OFF_AT_EOC:
-		case WP6_TOP_TABLE_OFF:
-			return new WP6TableOffFunction();
+	case WP6_TOP_HARD_HYPHEN:
+		return new WP6HyphenFunction();
 
-		case WP6_TOP_TABLE_ROW_AT_HARD_EOP:
-		case WP6_TOP_TABLE_ROW_AT_HARD_EOC_AT_HARD_EOP:
-		case WP6_TOP_TABLE_ROW_AT_HARD_EOC:
-		case WP6_TOP_TABLE_ROW_AT_EOC_AT_EOP:
-		case WP6_TOP_TABLE_ROW_AT_EOC:
-		case WP6_TOP_TABLE_ROW:
-			return new WP6TableRowFunction();
+	case WP6_TOP_HARD_EOL:
+	case WP6_TOP_HARD_EOL_AT_EOC:
+	case WP6_TOP_HARD_EOL_AT_EOC_AT_EOP:
+	case WP6_TOP_DORMANT_HARD_RETURN:
+	case WP6_TOP_DELETABLE_HARD_EOL:
+	case WP6_TOP_DELETABLE_HARD_EOL_AT_EOC:
+	case WP6_TOP_DELETABLE_HARD_EOL_AT_EOC_AT_EOP:
+		return new WP6EOLFunction();
 
-		case WP6_TOP_TABLE_CELL:
-			return new WP6TableCellFunction();
+	case WP6_TOP_TABLE_OFF_AT_EOC:
+	case WP6_TOP_TABLE_OFF:
+		return new WP6TableOffFunction();
 
-		// Add the remaining cases here
-//		case WP6_TOP_DELETABLE_SOFT_EOL:
-//		case WP6_TOP_DELETABLE_SOFT_EOL_AT_EOC:
-//		case WP6_TOP_DELETABLE_SOFT_EOL_AT_EOC_AT_EOP:
-//		case WP6_TOP_AUTO_HYPHEN:
-		default:
-			// should not happen
-			return 0;
-		}
-		
-		// search for soft page breaks and dispatch messages to that effect
-		switch(groupID)
-		{
-		case WP6_TOP_HARD_EOC:
-		case WP6_TOP_HARD_EOC_AT_EOP:
-		case WP6_TOP_DELETABLE_HARD_EOC:
-		case WP6_TOP_DELETABLE_HARD_EOC_AT_EOP:
-		case WP6_TOP_TABLE_ROW_AT_HARD_EOC:
-			return new WP6EOCFunction();
+	case WP6_TOP_TABLE_OFF_AT_EOC_AT_EOP:
+		return new WP6TableOffAtSoftEOPFunction();			    
 
-		case WP6_TOP_HARD_EOP:
-		case WP6_TOP_TABLE_ROW_AT_HARD_EOP:
-		case WP6_TOP_TABLE_ROW_AT_HARD_EOC_AT_HARD_EOP:
-		case WP6_TOP_DELETABLE_HARD_EOP:
-			return new WP6EOPFunction();
+	case WP6_TOP_TABLE_ROW_AT_EOC:
+	case WP6_TOP_TABLE_ROW:
+		return new WP6TableRowFunction();
 
-		case WP6_TOP_TABLE_OFF_AT_EOC_AT_EOP:
-		case WP6_TOP_TABLE_ROW_AT_EOC_AT_EOP:
-			return new WP6SoftEOPFunction();			    
-		}
-		
+	case WP6_TOP_TABLE_ROW_AT_HARD_EOC:
+		return new WP6TableRowAtEOCFunction();
+
+	case WP6_TOP_TABLE_ROW_AT_EOC_AT_EOP:
+		return new WP6TableRowAtSoftEOPFunction();
+
+	case WP6_TOP_TABLE_ROW_AT_HARD_EOP:
+	case WP6_TOP_TABLE_ROW_AT_HARD_EOC_AT_HARD_EOP:
+		return new WP6TableRowAtEOPFunction();
+
+	case WP6_TOP_TABLE_CELL:
+		return new WP6TableCellFunction();
+
+	case WP6_TOP_HARD_EOC:
+	case WP6_TOP_HARD_EOC_AT_EOP:
+	case WP6_TOP_DELETABLE_HARD_EOC:
+	case WP6_TOP_DELETABLE_HARD_EOC_AT_EOP:
+		return new WP6EOCFunction();
+
+	case WP6_TOP_HARD_EOP:
+	case WP6_TOP_DELETABLE_HARD_EOP:
+		return new WP6EOPFunction();
+
+	// Add the remaining cases here
+	default:
+		// should not happen
+		return 0;
+	}
 }
 
 void WP6SpaceFunction::parse(WP6Listener *listener)
@@ -168,3 +160,40 @@ void WP6TableOffFunction::parse(WP6Listener *listener)
 {
 	listener->endTable();
 }
+
+void WP6TableOffAtSoftEOPFunction::parse(WP6Listener *listener)
+{
+	listener->endTable();
+	listener->insertBreak(WPX_SOFT_PAGE_BREAK);
+}
+
+void WP6TableRowAtSoftEOPFunction::parse(WP6Listener *listener)
+{
+	// use default values: if they were not default values, WordPerfect
+	// would use the multi-byte variant of this function
+	listener->insertRow(0x0000, true, false);
+	RGBSColor tmpCellBorderColor(0x00, 0x00, 0x00, 0x64);
+	listener->insertCell(1, 1, 0x00, 0, 0, &tmpCellBorderColor, TOP, false, 0x00000000);
+	listener->insertBreak(WPX_SOFT_PAGE_BREAK);
+}
+
+void WP6TableRowAtEOPFunction::parse(WP6Listener *listener)
+{
+	// use default values: if they were not default values, WordPerfect
+	// would use the multi-byte variant of this function
+	listener->insertRow(0x0000, true, false);
+	RGBSColor tmpCellBorderColor(0x00, 0x00, 0x00, 0x64);
+	listener->insertCell(1, 1, 0x00, 0, 0, &tmpCellBorderColor, TOP, false, 0x00000000);
+	listener->insertBreak(WPX_PAGE_BREAK);
+}
+
+void WP6TableRowAtEOCFunction::parse(WP6Listener *listener)
+{
+	// use default values: if they were not default values, WordPerfect
+	// would use the multi-byte variant of this function
+	listener->insertRow(0x0000, true, false);
+	RGBSColor tmpCellBorderColor(0x00, 0x00, 0x00, 0x64);
+	listener->insertCell(1, 1, 0x00, 0, 0, &tmpCellBorderColor, TOP, false, 0x00000000);
+	listener->insertBreak(WPX_COLUMN_BREAK);
+}
+

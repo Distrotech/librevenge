@@ -98,9 +98,9 @@ void WPXBinaryData::clear()
 	m_binaryDataImpl->m_buf.clear();
 }
 
-const size_t WPXBinaryData::size() const
+size_t WPXBinaryData::size() const
 { 
-	return (const size_t)m_binaryDataImpl->m_buf.size(); 
+	return (size_t)m_binaryDataImpl->m_buf.size(); 
 }
 
 WPXBinaryData& WPXBinaryData::operator=(const WPXBinaryData &dataBuf)

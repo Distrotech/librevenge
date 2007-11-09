@@ -1102,7 +1102,7 @@ void WPXContentListener::justificationChange(const uint8_t justification)
 	}
 }
 
-const float WPXContentListener::_getNextTabStop() const
+float WPXContentListener::_getNextTabStop() const
 {
 	for (std::vector<WPXTabStop>::const_iterator iter = m_ps->m_tabStops.begin(); iter != (m_ps->m_tabStops.end() - 1); iter++)
 	{
@@ -1120,7 +1120,7 @@ const float WPXContentListener::_getNextTabStop() const
 	return (std::numeric_limits<float>::min)();
 }
 
-const float WPXContentListener::_getPreviousTabStop() const
+float WPXContentListener::_getPreviousTabStop() const
 {
 	for (std::vector<WPXTabStop>::reverse_iterator riter = m_ps->m_tabStops.rbegin(); riter != (m_ps->m_tabStops.rend() - 1); riter++)
 	{

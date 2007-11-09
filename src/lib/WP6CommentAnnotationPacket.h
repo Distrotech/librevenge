@@ -34,9 +34,9 @@ public:
 	WP6CommentAnnotationPacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize);
 	~WP6CommentAnnotationPacket();
 	void _readContents(WPXInputStream *input);
-	void parse(WP6Listener *listener) const {}
-	const uint8_t getAnnotationFlag() const { return m_flags; }
-	const uint16_t getTextPID() const { return m_textPID; }
+	void parse(WP6Listener * /*listener*/) const {}
+	uint8_t getAnnotationFlag() const { return m_flags; }
+	uint16_t getTextPID() const { return m_textPID; }
 
 private:
 	WP6CommentAnnotationPacket(const WP6CommentAnnotationPacket&);             

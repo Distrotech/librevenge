@@ -41,7 +41,7 @@ class WP42MultiByteFunctionGroup : public WP42Part
 	void _read(WPXInputStream *input);
  	virtual void _readContents(WPXInputStream *input) = 0;
 
-	const uint8_t getGroup() const { return m_group; }
+	uint8_t getGroup() const { return m_group; }
 
  private:
 	uint8_t m_group;

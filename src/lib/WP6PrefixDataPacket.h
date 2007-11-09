@@ -39,7 +39,7 @@ public:
 	virtual ~WP6PrefixDataPacket() {}
 	virtual void parse(WP6Listener * /* listener */) const {}
 	virtual WP6SubDocument * getSubDocument() const { return 0; }
-	const uint32_t getDataSize() const { return m_dataSize; }
+	uint32_t getDataSize() const { return m_dataSize; }
 
 	static WP6PrefixDataPacket * constructPrefixDataPacket(WPXInputStream * input, WP6PrefixIndice *prefixIndice);
 

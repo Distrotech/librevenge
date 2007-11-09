@@ -31,10 +31,10 @@ class WP5GeneralPacketIndex
 {
  public:
 	WP5GeneralPacketIndex(WPXInputStream * input, int id);	
-	const int getID() const { return m_id; }
-	const uint16_t getType() const { return m_type; }
-	const uint32_t getDataSize() const { return m_dataSize; }
-	const uint32_t getDataOffset() const { return m_dataOffset; }
+	int getID() const { return m_id; }
+	uint16_t getType() const { return m_type; }
+	uint32_t getDataSize() const { return m_dataSize; }
+	uint32_t getDataOffset() const { return m_dataOffset; }
 
  protected:
  	void _read(WPXInputStream *input);

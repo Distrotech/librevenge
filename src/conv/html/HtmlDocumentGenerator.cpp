@@ -283,7 +283,7 @@ void HtmlDocumentGenerator::closeEndnote()
 	}
 }
 
-void HtmlDocumentGenerator::openComment(const WPXPropertyList &propList)
+void HtmlDocumentGenerator::openComment(const WPXPropertyList & /*propList*/)
 {
 	if (!m_ignore)
 	{
@@ -299,7 +299,7 @@ void HtmlDocumentGenerator::closeComment()
 	}
 }
 
-void HtmlDocumentGenerator::openTextBox(const WPXPropertyList &propList)
+void HtmlDocumentGenerator::openTextBox(const WPXPropertyList & /*propList*/)
 {
 	if (!m_ignore)
 	{

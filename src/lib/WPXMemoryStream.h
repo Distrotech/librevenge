@@ -33,7 +33,7 @@ public:
 	virtual ~WPXMemoryInputStream();
 
 	virtual bool isOLEStream() { return false; }
-	virtual WPXInputStream * getDocumentOLEStream(const char* name) { return 0; }
+	virtual WPXInputStream * getDocumentOLEStream(const char*) { return 0; }
 	
 	virtual const unsigned char *read(size_t numBytes, size_t &numBytesRead);
 	virtual int seek(long offset, WPX_SEEK_TYPE seekType);

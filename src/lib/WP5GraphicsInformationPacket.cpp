@@ -52,7 +52,7 @@ WP5GraphicsInformationPacket::~WP5GraphicsInformationPacket()
 	}
 }
 
-void WP5GraphicsInformationPacket::_readContents(WPXInputStream *input, uint32_t dataSize)
+void WP5GraphicsInformationPacket::_readContents(WPXInputStream *input, uint32_t /* dataSize */)
 {
 	uint16_t tmpImagesCount = readU16(input);
 	std::vector<uint32_t> tmpImagesSizes;

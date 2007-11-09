@@ -204,6 +204,12 @@ WPXString& WPXString::operator=(const WPXString &stringBuf)
 	return *this;
 }
 
+WPXString& WPXString::operator=(const char *s)
+{
+	m_stringImpl->m_buf = std::string(s);
+	return *this;
+}
+
 bool WPXString::operator==(const char *str)
 {
 	return (m_stringImpl->m_buf == str);
@@ -339,7 +345,7 @@ g_static_unichar_to_utf8 (uint32_t c,
     
 	if (outbuf)
 	{
-		for (uint8_t i = len - 1; i > 0; --i)
+		for (uint8_t i = (uint8_t)(len - 1); i > 0; --i)
 		{
 			outbuf[i] = (char)((c & 0x3f) | 0x80);
 			c >>= 6;

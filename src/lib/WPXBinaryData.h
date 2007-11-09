@@ -45,7 +45,7 @@ public:
 	void append(const unsigned char c);
 	void clear();
 	
-	const size_t size() const;
+	size_t size() const;
 	const unsigned char *getDataBuffer() const;
 	const WPXString getBase64Data() const;
 	const WPXInputStream *getDataStream() const;

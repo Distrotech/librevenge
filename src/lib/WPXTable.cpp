@@ -102,14 +102,14 @@ void WPXTable::_makeCellBordersConsistent(WPXTableCell *cell, std::vector<WPXTab
 		{
 			for (VTCIter iter = adjacentCells.begin(); iter != adjacentCells.end(); iter++) 
 			{
-				(*iter)->m_borderBits |= adjacencyBitBoundCells;
+				(*iter)->m_borderBits |= (uint8_t)(adjacencyBitBoundCells & 0xff);
 			}
 		}
 		// otherwise we can get the same effect by bottom border from
 		// this cell-- if the adjacent cells have/don't have borders, this will be
 		// picked up automatically
 		else
-			cell->m_borderBits |= adjacencyBitCell;
+			cell->m_borderBits |= (uint8_t)(adjacencyBitCell & 0xff);
 	}
 }
 

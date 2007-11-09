@@ -208,7 +208,7 @@ void WP3ContentListener::addTableColumnDefinition(const uint32_t width, const ui
 		
 		m_ps->m_tableDefinition.m_columnsProperties.push_back(colProp);
 		
-		// initialize the variable that tells us how many columns to skip
+		// initialize the variable that tells us how many row to skip
 		m_ps->m_numRowsToSkip.push_back(0);
 	}
 }

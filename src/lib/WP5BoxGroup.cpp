@@ -35,7 +35,7 @@ WP5BoxGroup::WP5BoxGroup(WPXInputStream *input) :
 	_read(input);
 }
 
-void WP5BoxGroup::_readContents(WPXInputStream *input)
+void WP5BoxGroup::_readContents(WPXInputStream * /* input */)
 {
 	switch(getSubGroup())
 	{
@@ -46,7 +46,7 @@ void WP5BoxGroup::_readContents(WPXInputStream *input)
 	}	
 }
 
-void WP5BoxGroup::parse(WP5Listener *listener)
+void WP5BoxGroup::parse(WP5Listener * /* listener */)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling a Box group\n"));
 

@@ -127,7 +127,4 @@ WPXHeader * WPXHeader::constructHeader(WPXInputStream *input)
 			WPD_DEBUG_MSG(("WordPerfect: Unsupported file type: %d\n", fileType));
 			return 0;
 	}
-	
-
-	return 0;
 }

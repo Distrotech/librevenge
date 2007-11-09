@@ -50,8 +50,8 @@ protected:
 	void _read(WPXInputStream *input);
  	virtual void _readContents(WPXInputStream * /* input */) {} // we don't always need more information than that provided generically
 
-	const uint8_t getSubGroup() const { return m_subGroup; }
-	const uint16_t getSize() const { return m_size; }
+	uint8_t getSubGroup() const { return m_subGroup; }
+	uint16_t getSize() const { return m_size; }
 
 private:
 	uint8_t m_subGroup;

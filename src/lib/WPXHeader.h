@@ -37,12 +37,12 @@ class WPXHeader
 
 	static WPXHeader * constructHeader(WPXInputStream *input);
 		
-	const uint32_t getDocumentOffset() const { return m_documentOffset; }
-	const uint8_t getProductType() const { return m_productType; }
-	const uint8_t getFileType() const { return m_fileType; }
-	const uint8_t getMajorVersion() const { return m_majorVersion; }
-	const uint8_t getMinorVersion() const { return m_minorVersion; }
-	const uint16_t getDocumentEncryption() const { return m_documentEncryption; }
+	uint32_t getDocumentOffset() const { return m_documentOffset; }
+	uint8_t getProductType() const { return m_productType; }
+	uint8_t getFileType() const { return m_fileType; }
+	uint8_t getMajorVersion() const { return m_majorVersion; }
+	uint8_t getMinorVersion() const { return m_minorVersion; }
+	uint16_t getDocumentEncryption() const { return m_documentEncryption; }
 
  private:	
 	uint32_t m_documentOffset;

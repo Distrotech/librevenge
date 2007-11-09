@@ -1381,7 +1381,7 @@ void WP6ContentListener::endTable()
 }
 
 void WP6ContentListener::boxOn(const uint8_t /* anchoringType */, const uint8_t generalPositioningFlags, const uint8_t horizontalPositioningFlags,
-		const int16_t horizontalOffset, const uint8_t leftColumn, const uint8_t rightColumn, const uint8_t verticalPositioningFlags,
+		const int16_t horizontalOffset, const uint8_t /* leftColumn */, const uint8_t /* rightColumn */, const uint8_t verticalPositioningFlags,
 		const int16_t verticalOffset, const uint8_t widthFlags, const uint16_t width, const uint8_t heightFlags, const uint16_t height,
 		const uint8_t boxContentType, const uint16_t nativeWidth, const uint16_t nativeHeight)
 {

@@ -37,7 +37,7 @@ public:
 	WP6GraphicsFilenamePacket(WPXInputStream *input, int id, const uint8_t flags, uint32_t dataOffset, uint32_t dataSize);
 	~WP6GraphicsFilenamePacket();
 	void _readContents(WPXInputStream *input);
-	void parse(WP6Listener *listener) const {}
+	void parse(WP6Listener * /*listener */) const {}
 	const std::vector<uint16_t> &getChildIds() const { return m_childIds; }
 	
 

@@ -37,7 +37,7 @@ public:
 
 	static bool isGroupConsistent(WPXInputStream *input, const uint8_t groupID);
 
-	const uint8_t getGroup() const { return m_group; } 
+	uint8_t getGroup() const { return m_group; } 
  
 protected:
 	void _read(WPXInputStream *input);

@@ -49,7 +49,7 @@ public:
                      const uint8_t /* hour */, const uint8_t /* minute */, 
                      const uint8_t /* second */, const uint8_t /* dayOfWeek */, 
                      const uint8_t /* timeZone */, const uint8_t /* unused */) {}
-	void setExtendedInformation(const uint16_t type, const WPXString &data) {}
+	void setExtendedInformation(const uint16_t /* type */, const WPXString & /*data*/) {}
 	void startDocument() {}
 	void setAlignmentCharacter(const uint16_t /* character */) {}
 	void setLeaderCharacter(const uint16_t /* character */, const uint8_t /* numberOfSpaces */) {}

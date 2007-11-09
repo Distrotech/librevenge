@@ -316,7 +316,7 @@ const unsigned char *WPXStringStream::read(size_t numBytes, size_t &numBytesRead
 	if (numBytes == 0)
 		return 0;
 	
-	if (numBytes < 0 || atEOS() || numBytes > (std::numeric_limits<unsigned long>::max)()/2)
+	if (atEOS() || numBytes > (std::numeric_limits<unsigned long>::max)()/2)
 		return 0;
 
 	unsigned long curpos = d->buffer.tellg();

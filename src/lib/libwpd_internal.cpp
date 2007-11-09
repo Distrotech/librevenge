@@ -946,9 +946,9 @@ _RGBSColor::_RGBSColor()
 }
 
 _RGBSColor::_RGBSColor(uint16_t red, uint16_t green, uint16_t blue)
-	:	m_r((red >> 8) & 0xFF),
-		m_g((green >> 8) & 0xFF),
-		m_b((blue >> 8) & 0xFF),
+	:	m_r((uint8_t)((red >> 8) & 0xFF)),
+		m_g((uint8_t)((green >> 8) & 0xFF)),
+		m_b((uint8_t)((blue >> 8) & 0xFF)),
 		m_s(100)
 {
 }
