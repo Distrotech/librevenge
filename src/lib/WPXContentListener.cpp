@@ -81,6 +81,8 @@ _WPXContentParsingState::_WPXContentParsingState() :
 
 	m_pageMarginLeft(1.0f),
 	m_pageMarginRight(1.0f),
+	m_pageMarginTop(1.0f),
+	m_pageMarginBottom(1.0f),
 
 	m_paragraphMarginLeft(0.0f),
 	m_paragraphMarginRight(0.0f),
@@ -279,6 +281,8 @@ void WPXContentListener::_openPageSpan()
 	m_ps->m_pageFormWidth = currentPage.getFormWidth();
 	m_ps->m_pageMarginLeft = currentPage.getMarginLeft();
 	m_ps->m_pageMarginRight = currentPage.getMarginRight();
+	m_ps->m_pageMarginTop = currentPage.getMarginTop();
+	m_ps->m_pageMarginBottom = currentPage.getMarginBottom();
 
 	// Hack to be sure that the paragraph margins are consistent even if the page margin changes
 	// Compute new values

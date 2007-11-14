@@ -105,6 +105,8 @@ struct _WPXContentParsingState
 
 	float m_pageMarginLeft;
 	float m_pageMarginRight;
+	float m_pageMarginTop;
+	float m_pageMarginBottom;
 	float m_paragraphMarginLeft;  // resulting paragraph margin that is one of the paragraph
 	float m_paragraphMarginRight; // properties
 	float m_paragraphMarginTop;

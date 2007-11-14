@@ -970,10 +970,12 @@ void WP6ContentListener::columnChange(const WPXTextColumnType /* columnType */, 
 		if ((m_ps->m_numColumns > 1 && oldColumnNum <= 1) || (m_ps->m_numColumns <= 1 && oldColumnNum > 1))
 		{
 			m_ps->m_paragraphMarginLeft -= m_ps->m_leftMarginByPageMarginChange;
+			m_ps->m_listReferencePosition -= m_ps->m_leftMarginByPageMarginChange;
 			m_ps->m_paragraphMarginRight -= m_ps->m_rightMarginByPageMarginChange;
 			std::swap(m_ps->m_leftMarginByPageMarginChange, m_ps->m_sectionMarginLeft);
 			std::swap(m_ps->m_rightMarginByPageMarginChange, m_ps->m_sectionMarginRight);
 			m_ps->m_paragraphMarginLeft += m_ps->m_leftMarginByPageMarginChange;
+			m_ps->m_listReferencePosition += m_ps->m_leftMarginByPageMarginChange;
 			m_ps->m_paragraphMarginRight += m_ps->m_rightMarginByPageMarginChange;
 		}
 	}
@@ -1405,7 +1407,7 @@ void WP6ContentListener::boxOn(const uint8_t /* anchoringType */, const uint8_t 
 	else
 		propList.insert("svg:width", (float)((double)width/(double)WPX_NUM_WPUS_PER_INCH));
 
-	if (boxContentType != 0x01)
+	if (boxContentType != 0x01) // This seems to work for the text boxes only
 	{
 		propList.insert("svg:height", (float)((double)height/(double)WPX_NUM_WPUS_PER_INCH));
 		propList.insert("svg:width", (float)((double)width/(double)WPX_NUM_WPUS_PER_INCH));
@@ -1432,9 +1434,7 @@ void WP6ContentListener::boxOn(const uint8_t /* anchoringType */, const uint8_t 
 
 	if (horizontalOffset)
 		propList.insert("svg:x", (float)((double)horizontalOffset/(double)WPX_NUM_WPUS_PER_INCH));
-	if (verticalOffset)
-		propList.insert("svg:y", (float)((double)verticalOffset/(double)WPX_NUM_WPUS_PER_INCH));
-	
+
 	switch (generalPositioningFlags & 0x03)
 	{
 	case 0x00: // Page anchored
@@ -1568,14 +1568,23 @@ void WP6ContentListener::boxOn(const uint8_t /* anchoringType */, const uint8_t 
 		break;
 	}
 	
+	if (verticalOffset)
+		propList.insert("svg:y", (float)((double)verticalOffset/(double)WPX_NUM_WPUS_PER_INCH));
+	
 	switch (verticalPositioningFlags & 0x03)
 	{
 	case 0x00:
 		propList.insert("style:vertical-rel", "page");
 		propList.insert("style:vertical-pos", "from-top");
+		// we have to remediate the workaround with alignment
+		// once fixed, remove this hack !!!
+		propList.insert("svg:y", (float)(((double)verticalOffset/(double)WPX_NUM_WPUS_PER_INCH) - m_ps->m_pageMarginTop));
 		break;
 	case 0x01:
-		propList.insert("style:vertical-rel", "page-content");
+	        if (!(generalPositioningFlags & 0x03))
+			propList.insert("style:vertical-rel", "page-content");
+		else if ((generalPositioningFlags & 0x03) == 0x02)
+			propList.insert("style:vertical-rel", "paragraph");
 		switch((verticalPositioningFlags & 0x1C) >> 2)
 		{
 		case 0x00:
@@ -1588,7 +1597,10 @@ void WP6ContentListener::boxOn(const uint8_t /* anchoringType */, const uint8_t 
 			propList.insert("style:vertical-pos", "middle");
 			break;
 		case 0x03:
-			propList.insert("style:vertical-rel", "baseline");
+			if ((generalPositioningFlags & 0x03) == 0x02)
+				propList.insert("style:vertical-rel", "line");
+			else
+				propList.insert("style:vertical-rel", "baseline");
 			propList.insert("style:vertical-pos", "from-top");
 			break;
 		default:
@@ -1599,18 +1611,8 @@ void WP6ContentListener::boxOn(const uint8_t /* anchoringType */, const uint8_t 
 		break;
 	}
 	
-	if ((generalPositioningFlags & 0x03) == 0x01)
-	{
-		propList.insert("style:vertical-rel", "paragraph");
-		propList.insert("style:vertical-pos", "from-top");
-	}
-	
-	if ((generalPositioningFlags & 0x03) == 0x02)
-		if (propList["style:vertical-rel"] && !(propList["style:vertical-rel"]->getStr() == "baseline"))
-			propList.insert("style:vertical-rel", "line");
-	
-	if (propList["text:anchor-tyte"] && propList["text:anchor-type"]->getStr() == "page")
-		propList.insert("text:anchor-page-number", m_ps->m_currentPageNumber);
+/*	if (propList["text:anchor-type"] && propList["text:anchor-type"]->getStr() == "page")
+		propList.insert("text:anchor-page-number", m_ps->m_currentPageNumber); */
 
 	m_documentInterface->openFrame(propList);	
 }
