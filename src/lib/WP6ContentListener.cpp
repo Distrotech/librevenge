@@ -972,10 +972,12 @@ void WP6ContentListener::columnChange(const WPXTextColumnType /* columnType */, 
 		if ((m_ps->m_numColumns > 1 && oldColumnNum <= 1) || (m_ps->m_numColumns <= 1 && oldColumnNum > 1))
 		{
 			m_ps->m_paragraphMarginLeft -= m_ps->m_leftMarginByPageMarginChange;
+			m_ps->m_listReferencePosition -= m_ps->m_leftMarginByPageMarginChange;
 			m_ps->m_paragraphMarginRight -= m_ps->m_rightMarginByPageMarginChange;
 			std::swap(m_ps->m_leftMarginByPageMarginChange, m_ps->m_sectionMarginLeft);
 			std::swap(m_ps->m_rightMarginByPageMarginChange, m_ps->m_sectionMarginRight);
 			m_ps->m_paragraphMarginLeft += m_ps->m_leftMarginByPageMarginChange;
+			m_ps->m_listReferencePosition += m_ps->m_leftMarginByPageMarginChange;
 			m_ps->m_paragraphMarginRight += m_ps->m_rightMarginByPageMarginChange;
 		}
 	}
