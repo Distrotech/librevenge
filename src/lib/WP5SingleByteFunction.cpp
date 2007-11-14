@@ -59,7 +59,7 @@ WP5SingleByteFunction * WP5SingleByteFunction::constructSingleByteFunction(WPXIn
 	default:
 		// should not happen
 		return 0;
-		}
+	}
 }
 
 void WP5EOLFunction::parse(WP5Listener *listener)

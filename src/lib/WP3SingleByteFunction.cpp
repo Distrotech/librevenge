@@ -63,7 +63,7 @@ WP3SingleByteFunction * WP3SingleByteFunction::constructSingleByteFunction(WPXIn
 	default:
 		// should not happen
 		return 0;
-		}
+	}
 }
 
 void WP3HardSpaceFunction::parse(WP3Listener *listener)
