@@ -29,33 +29,47 @@
 #include "WPXStreamImplementation.h"
 #include "TextDocumentGenerator.h"
 
+int printUsage()
+{
+	printf("Usage: wpd2text [OPTION] <WordPerfect Document>\n");
+	printf("\n");
+	printf("Options:\n");
+	printf("--info                Display document metadata instead of the text\n");
+	printf("--help                Shows this help message\n");
+	printf("--password <password> Try to decrypt password protected document\n");
+	return -1;
+}
+
 int main(int argc, char *argv[])
 {
 	if (argc < 2)
+		return printUsage();
+
+	char *szInputFile = 0;
+	bool isInfo = false;
+	char *password = 0;
+
+	for (int i = 1; i < argc; i++)
 	{
-		printf("Usage: wpd2text [--info] <WordPerfect Document>\n");
-		printf("Use \"--info\" to get document metadata instead\n");
-		printf("of the document itself\n");
-		return -1;
+		if (!strcmp(argv[i], "--password"))
+		{
+		    if (i < argc - 1)
+				password = argv[++i];
+		}
+		else if (!strcmp(argv[i], "--info"))
+			isInfo = true;
+		else if (!szInputFile && strncmp(argv[i], "--", 2))
+			szInputFile = argv[i];
+		else
+			return printUsage();
 	}
-
-        char *szInputFile;
-	bool isInfo;
-
-        if (!strcmp(argv[1], "--info"))
-	{
-                isInfo = true;
-		szInputFile = argv[2];
-	}		
-	else
-	{
-		isInfo = false;
-                szInputFile = argv[1];
-	}
-
+	
+	if (!szInputFile)
+		return printUsage();
+	
 	WPXInputStream* input = new WPXFileStream(szInputFile);
 
-	WPDConfidence confidence = WPDocument::isFileFormatSupported(input, 0);
+	WPDConfidence confidence = WPDocument::isFileFormatSupported(input, password);
 	if (confidence == WPD_CONFIDENCE_NONE || confidence == WPD_CONFIDENCE_POOR)
 	{
 		printf("ERROR: Unsupported file format!\n");
@@ -64,7 +78,7 @@ int main(int argc, char *argv[])
 	}
 	
 	TextDocumentGenerator documentGenerator(isInfo);
- 	WPDResult error = WPDocument::parse(input, &documentGenerator, 0);
+ 	WPDResult error = WPDocument::parse(input, &documentGenerator, password);
 
 	if (error == WPD_FILE_ACCESS_ERROR)
 		fprintf(stderr, "ERROR: File Exception!\n");

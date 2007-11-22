@@ -29,43 +29,47 @@
 #include "RawDocumentGenerator.h"
 #include <string.h>
 
+int printUsage()
+{
+	printf("Usage: wpd2raw [OPTION] <WordPerfect Document>\n");
+	printf("\n");
+	printf("Options:\n");
+	printf("--callgraph           Display the call graph nesting level\n");
+	printf("--help                Shows this help message\n");
+	printf("--password <password> Try to decrypt password protected document\n");
+	return -1;
+}
+
 int main(int argc, char *argv[])
 {
 	bool printIndentLevel = false;
 	char *file = 0;
+	char *password = 0;
 	
 	if (argc < 2)
+		return printUsage();
+
+	for (int i = 1; i < argc; i++)
 	{
-		printf("Usage: wpd2raw [OPTION] <WordPerfect Document>\n");
-		return -1;
+		if (!strcmp(argv[i], "--password"))
+		{
+		    if (i < argc - 1)
+				password = argv[++i];
+		}
+		else if (!strcmp(argv[i], "--callgraph"))
+			printIndentLevel = true;
+		else if (!file && strncmp(argv[i], "--", 2))
+			file = argv[i];
+		else
+			return printUsage();
 	}
 
-	if (!strcmp(argv[1], "--callgraph"))
-	{
-		if (argc == 2)
-		{
-			printf("Usage: wpd2raw [OPTION] <WordPerfect Document>\n");
-			return -1;
-		}
-			
-		printIndentLevel = true;
-		file = argv[2];
-	}
-	else if (!strcmp(argv[1], "--help"))
-	{
-		printf("Usage: wpd2raw [OPTION] <WordPerfect Document>\n");
-		printf("\n");
-		printf("Options:\n");
-		printf("--callgraph		    Display the call graph nesting level\n");
-		printf("--help              Shows this help message\n");
-		return 0;
-	}
-	else
-		file = argv[1];
+	if (!file)
+		return printUsage();
 		
 	WPXInputStream* input = new WPXFileStream(file);
 
-	WPDConfidence confidence = WPDocument::isFileFormatSupported(input, 0);
+	WPDConfidence confidence = WPDocument::isFileFormatSupported(input, password);
 	if (confidence == WPD_CONFIDENCE_NONE || confidence == WPD_CONFIDENCE_POOR)
 	{
 		printf("ERROR: Unsupported file format!\n");
@@ -74,7 +78,7 @@ int main(int argc, char *argv[])
 	}
 	
 	RawDocumentGenerator documentGenerator(printIndentLevel);
- 	WPDResult error = WPDocument::parse(input, &documentGenerator, 0);
+ 	WPDResult error = WPDocument::parse(input, &documentGenerator, password);
 
 	if (error == WPD_FILE_ACCESS_ERROR)
 		fprintf(stderr, "ERROR: File Exception!\n");

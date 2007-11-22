@@ -23,18 +23,45 @@
 #include "HtmlDocumentGenerator.h"
 #include "WPXStreamImplementation.h"
 #include "WPDocument.h"
+#include <string.h>
+
+int printUsage()
+{
+	printf("Usage: wpd2html [OPTION] <WordPerfect Document>\n");
+	printf("\n");
+	printf("Options:\n");
+	printf("--help                Shows this help message\n");
+	printf("--password <password> Try to decrypt password protected document\n");
+	return -1;
+}
 
 int main(int argc, char *argv[])
 {
 	if (argc < 2)
-	{
-		printf("Usage: wpd2html <WordPerfect Document>\n");
-		return 1;
-	}
+		return printUsage();
 	
-	WPXInputStream* input = new WPXFileStream(argv[1]);
+	char *file = 0;
+	char *password = 0;
+	
+	for (int i = 1; i < argc; i++)
+	{
+		if (!strcmp(argv[i], "--password"))
+		{
+		    if (i < argc - 1)
+				password = argv[++i];
+		}
+		else if (!file && strncmp(argv[i], "--", 2))
+			file = argv[i];
+		else
+			return printUsage();
+	}
 
-	WPDConfidence confidence = WPDocument::isFileFormatSupported(input, 0);
+	if (!file)
+		return printUsage();
+		
+	WPXInputStream* input = new WPXFileStream(file);
+
+	WPDConfidence confidence = WPDocument::isFileFormatSupported(input, password);
 	if (confidence == WPD_CONFIDENCE_NONE || confidence == WPD_CONFIDENCE_POOR)
 	{
 		printf("ERROR: Unsupported file format!\n");
@@ -43,7 +70,7 @@ int main(int argc, char *argv[])
 	}
 
 	HtmlDocumentGenerator documentGenerator;
- 	WPDResult error = WPDocument::parse(input, &documentGenerator, 0);
+ 	WPDResult error = WPDocument::parse(input, &documentGenerator, password);
 
 	if (error == WPD_FILE_ACCESS_ERROR)
 		fprintf(stderr, "ERROR: File Exception!\n");

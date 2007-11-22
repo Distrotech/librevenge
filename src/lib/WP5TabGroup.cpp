@@ -42,7 +42,7 @@ void WP5TabGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption
 	m_tabType = readU8(input, encryption);
 	input->seek(2, WPX_SEEK_CUR);
 	uint16_t tmpTabPosition = readU16(input, encryption);
-	m_tabPosition = (double)tmpTabPosition/(double)WPX_NUM_WPUS_PER_INCH;
+	m_tabPosition = (float)((double)tmpTabPosition/(double)WPX_NUM_WPUS_PER_INCH);
 }
 
 void WP5TabGroup::parse(WP5Listener *listener)
