@@ -28,17 +28,17 @@
 #include "WP6FileStructure.h" 
 #include "libwpd_internal.h"
 
-WP61Header::WP61Header(WPXInputStream * input, uint32_t documentOffset, uint8_t productType,
+WP61Header::WP61Header(WPXInputStream * input, WPXEncryption *encryption, uint32_t documentOffset, uint8_t productType,
 	uint8_t fileType, uint8_t majorVersion, uint8_t minorVersion, uint16_t documentEncryption) :
-	WP6Header(input, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption),
+	WP6Header(input, encryption, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption),
 	m_documentSize(0)
 {
 	input->seek(WP6_HEADER_DOCUMENT_SIZE_OFFSET, WPX_SEEK_SET);
-	m_documentSize = readU32(input);
+	m_documentSize = readU32(input, encryption);
 
 	WPD_DEBUG_MSG(("WordPerfect: Document End Position = 0x%x \n",(int)m_documentSize));
 
-	_readIndexInformation(input);
+	_readIndexInformation(input, encryption);
 }
 
 WP61Header::~WP61Header()

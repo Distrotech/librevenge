@@ -30,7 +30,7 @@
 class WP1CenterTextGroup : public WP1FixedLengthGroup
 {
 public:
-	WP1CenterTextGroup(WPXInputStream *input, uint8_t group);
+	WP1CenterTextGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group);
 	~WP1CenterTextGroup();	
 	void parse(WP1Listener *listener);
 };

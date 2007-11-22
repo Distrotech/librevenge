@@ -26,20 +26,20 @@
 #include "WP5AttributeGroup.h"
 #include "libwpd_internal.h"
 
-WP5AttributeGroup::WP5AttributeGroup(WPXInputStream *input, uint8_t groupID) :
+WP5AttributeGroup::WP5AttributeGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID) :
 	WP5FixedLengthGroup(groupID),
 	m_attribute(0)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
-void WP5AttributeGroup::_readContents(WPXInputStream *input)
+void WP5AttributeGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
-	m_attribute = readU8(input);
+	m_attribute = readU8(input, encryption);
 }
 
-WP5AttributeOnGroup::WP5AttributeOnGroup(WPXInputStream *input, uint8_t groupID)
-	: WP5AttributeGroup(input, groupID)
+WP5AttributeOnGroup::WP5AttributeOnGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID)
+	: WP5AttributeGroup(input, encryption, groupID)
 {
 }
 
@@ -48,8 +48,8 @@ void WP5AttributeOnGroup::parse(WP5Listener *listener)
 	listener->attributeChange(true, getAttribute());
 }
 
-WP5AttributeOffGroup::WP5AttributeOffGroup(WPXInputStream *input, uint8_t groupID)
-	: WP5AttributeGroup(input, groupID)
+WP5AttributeOffGroup::WP5AttributeOffGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID)
+	: WP5AttributeGroup(input, encryption, groupID)
 {
 }
 

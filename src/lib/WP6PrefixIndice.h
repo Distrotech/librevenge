@@ -28,10 +28,12 @@
 #include "WPXStream.h"
 #include "libwpd_types.h"
 
+class WPXEncryption;
+
 class WP6PrefixIndice
 {
  public:
-	WP6PrefixIndice(WPXInputStream * input, int id);	
+	WP6PrefixIndice(WPXInputStream * input, WPXEncryption *encryption, int id);	
 	int getID() const { return m_id; }
 	uint8_t getType() const { return m_type; }
 	uint8_t getFlags() const { return m_flags; }
@@ -39,7 +41,7 @@ class WP6PrefixIndice
 	uint32_t getDataOffset() const { return m_dataOffset; }
 
  protected:
- 	void _read(WPXInputStream *input);
+ 	void _read(WPXInputStream *input, WPXEncryption *encryption);
  
  private:
 	int m_id;

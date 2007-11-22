@@ -29,14 +29,14 @@
 #include "WP6ExtendedDocumentSummaryPacket.h"
 #include "libwpd_internal.h"
 
-WP6ExtendedDocumentSummaryPacket::WP6ExtendedDocumentSummaryPacket(WPXInputStream *input, int /* id */, uint32_t dataOffset, uint32_t dataSize) :
-	WP6PrefixDataPacket(input),
+WP6ExtendedDocumentSummaryPacket::WP6ExtendedDocumentSummaryPacket(WPXInputStream *input, WPXEncryption *encryption, int /* id */, uint32_t dataOffset, uint32_t dataSize) :
+	WP6PrefixDataPacket(input, encryption),
 	m_dataSize(dataSize),
 	m_streamData(0),
 	m_stream(0)
 {	
 	if (dataSize > 0)
-		_read(input, dataOffset, dataSize);
+		_read(input, encryption, dataOffset, dataSize);
 }
 
 WP6ExtendedDocumentSummaryPacket::~WP6ExtendedDocumentSummaryPacket()
@@ -47,7 +47,7 @@ WP6ExtendedDocumentSummaryPacket::~WP6ExtendedDocumentSummaryPacket()
 		delete [] m_streamData;
 }
 
-void WP6ExtendedDocumentSummaryPacket::_readContents(WPXInputStream *input)
+void WP6ExtendedDocumentSummaryPacket::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	if (m_dataSize <= 0)
 		return;
@@ -55,7 +55,7 @@ void WP6ExtendedDocumentSummaryPacket::_readContents(WPXInputStream *input)
 		m_dataSize = ((std::numeric_limits<uint32_t>::max)() / 2);
 	m_streamData = new uint8_t[m_dataSize];
 	for(unsigned i=0; i<(unsigned)m_dataSize; i++)
-		m_streamData[i] = readU8(input);
+		m_streamData[i] = readU8(input, encryption);
 	
 	m_stream = new WPXMemoryInputStream(m_streamData, (size_t)m_dataSize);
 }
@@ -70,7 +70,7 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6Listener *listener) const
 	{
 		try
 		{
-			groupLength = readU16(m_stream);
+			groupLength = readU16(m_stream, 0);
 		}
 		catch (FileException)
 		{
@@ -78,7 +78,7 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6Listener *listener) const
 		}
 		if ((groupLength == 0) || m_stream->atEOS())
 			return;
-		uint16_t tagID = readU16(m_stream);
+		uint16_t tagID = readU16(m_stream, 0);
 		if (m_stream->atEOS())
 			return;
 		if (m_stream->seek(2, WPX_SEEK_CUR))
@@ -87,8 +87,8 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6Listener *listener) const
 		WPXString name;
 		uint16_t wpChar = 0;
 		if (!m_stream->atEOS())
-			wpChar = readU16(m_stream);
-		for (; wpChar != 0 && !m_stream->atEOS(); wpChar = readU16(m_stream))
+			wpChar = readU16(m_stream, 0);
+		for (; wpChar != 0 && !m_stream->atEOS(); wpChar = readU16(m_stream, 0))
 		{
 			uint8_t character = (uint8_t)(wpChar & 0x00FF);
 			uint8_t characterSet = (uint8_t)((wpChar >> 8) & 0x00FF);
@@ -107,15 +107,15 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6Listener *listener) const
 		{
 			try
 			{
-				uint16_t year = readU16(m_stream);
-				uint8_t month = readU8(m_stream);
-				uint8_t day = readU8(m_stream);
-				uint8_t hour = readU8(m_stream);
-				uint8_t minute = readU8(m_stream);
-				uint8_t second = readU8(m_stream);
-				uint8_t dayOfWeek = readU8(m_stream);
-				uint8_t timeZone = readU8(m_stream);
-				uint8_t unused = readU8(m_stream);
+				uint16_t year = readU16(m_stream, 0);
+				uint8_t month = readU8(m_stream, 0);
+				uint8_t day = readU8(m_stream, 0);
+				uint8_t hour = readU8(m_stream, 0);
+				uint8_t minute = readU8(m_stream, 0);
+				uint8_t second = readU8(m_stream, 0);
+				uint8_t dayOfWeek = readU8(m_stream, 0);
+				uint8_t timeZone = readU8(m_stream, 0);
+				uint8_t unused = readU8(m_stream, 0);
 				if (month > 0 && day > 0 && year >= 1900)
 					listener->setDate(tagID, year, month, day, hour, minute, second, dayOfWeek, timeZone, unused);
 			}
@@ -128,8 +128,8 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6Listener *listener) const
 		{
 			WPXString data;
 			if (!m_stream->atEOS())
-				wpChar = readU16(m_stream);
-			for (; wpChar != 0 && !m_stream->atEOS(); wpChar = readU16(m_stream))
+				wpChar = readU16(m_stream, 0);
+			for (; wpChar != 0 && !m_stream->atEOS(); wpChar = readU16(m_stream, 0))
 			{				
 				uint8_t character = (uint8_t)(wpChar & 0x00FF);
 				uint8_t characterSet = (uint8_t)((wpChar >> 8) & 0x00FF);

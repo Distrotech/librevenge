@@ -25,29 +25,29 @@
 #include "WP5HeaderFooterGroup.h"
 #include "libwpd_internal.h"
 
-WP5HeaderFooterGroup::WP5HeaderFooterGroup(WPXInputStream *input) :
+WP5HeaderFooterGroup::WP5HeaderFooterGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	WP5VariableLengthGroup(),
 	m_occurenceBits(0),
 	m_subDocument(0)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
 WP5HeaderFooterGroup::~WP5HeaderFooterGroup()
 {
 }
 
-void WP5HeaderFooterGroup::_readContents(WPXInputStream *input)
+void WP5HeaderFooterGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	int tmpSubDocumentLength = getSize() - 26;
 	WPD_DEBUG_MSG(("WordPerfect: reading HeaderFooter group. SubDocument size: %i\n", tmpSubDocumentLength));
 	input->seek(7, WPX_SEEK_CUR);
-	m_occurenceBits = readU8(input);
+	m_occurenceBits = readU8(input, encryption);
 	if (m_occurenceBits)
 	{
 		input->seek(10, WPX_SEEK_CUR);
 		if (tmpSubDocumentLength)
-			m_subDocument = new WP5SubDocument(input, tmpSubDocumentLength);
+			m_subDocument = new WP5SubDocument(input, encryption, tmpSubDocumentLength);
 	}
 }
 

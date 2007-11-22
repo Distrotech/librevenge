@@ -35,8 +35,8 @@ const char * FONT_WEIGHT_STRINGS [] = {	"Bold", "bold", "Demi", "demi", "Extende
 const char * USELESS_WP_POSTFIX = "-WP";
 #define countElements(a) ((sizeof(a) / sizeof(a[0])))
 
-WP6FontDescriptorPacket::WP6FontDescriptorPacket(WPXInputStream *input, int /* id */, uint32_t dataOffset, uint32_t dataSize) : 
-	WP6PrefixDataPacket(input),
+WP6FontDescriptorPacket::WP6FontDescriptorPacket(WPXInputStream *input, WPXEncryption *encryption, int /* id */, uint32_t dataOffset, uint32_t dataSize) : 
+	WP6PrefixDataPacket(input, encryption),
 	m_characterWidth(0),
 	m_ascenderHeight(0),
 	m_xHeight(0),
@@ -57,36 +57,36 @@ WP6FontDescriptorPacket::WP6FontDescriptorPacket(WPXInputStream *input, int /* i
 	m_fontNameLength(0),
 	m_fontName()
 {
-	_read(input, dataOffset, dataSize);
+	_read(input, encryption, dataOffset, dataSize);
 }
 
 WP6FontDescriptorPacket::~WP6FontDescriptorPacket()
 {
 }
 
-void WP6FontDescriptorPacket::_readContents(WPXInputStream *input)
+void WP6FontDescriptorPacket::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	// short sized characteristics
-	m_characterWidth = readU16(input);
-	m_ascenderHeight = readU16(input);
-	m_xHeight = readU16(input);
-	m_descenderHeight = readU16(input);
-	m_italicsAdjust = readU16(input);
+	m_characterWidth = readU16(input, encryption);
+	m_ascenderHeight = readU16(input, encryption);
+	m_xHeight = readU16(input, encryption);
+	m_descenderHeight = readU16(input, encryption);
+	m_italicsAdjust = readU16(input, encryption);
 	// byte sized characteristics
-	m_primaryFamilyMemberId = readU8(input);
-	m_primaryFamilyId = readU8(input);
-	m_scriptingSystem = readU8(input);
-	m_primaryCharacterSet = readU8(input);
-	m_width = readU8(input);
-	m_weight = readU8(input);
-	m_attributes = readU8(input);
-	m_generalCharacteristics = readU8(input);
-	m_classification = readU8(input);
-	m_fill = readU8(input);
-	m_fontType = readU8(input);
-	m_fontSourceFileType = readU8(input);
+	m_primaryFamilyMemberId = readU8(input, encryption);
+	m_primaryFamilyId = readU8(input, encryption);
+	m_scriptingSystem = readU8(input, encryption);
+	m_primaryCharacterSet = readU8(input, encryption);
+	m_width = readU8(input, encryption);
+	m_weight = readU8(input, encryption);
+	m_attributes = readU8(input, encryption);
+	m_generalCharacteristics = readU8(input, encryption);
+	m_classification = readU8(input, encryption);
+	m_fill = readU8(input, encryption);
+	m_fontType = readU8(input, encryption);
+	m_fontSourceFileType = readU8(input, encryption);
 
-	m_fontNameLength = readU16(input); 
+	m_fontNameLength = readU16(input, encryption); 
 
 
 	if (m_fontNameLength > ((std::numeric_limits<uint16_t>::max)() / 2))
@@ -95,7 +95,7 @@ void WP6FontDescriptorPacket::_readContents(WPXInputStream *input)
 	{
 		for (uint16_t i=0; i<(m_fontNameLength/2); i++) 
 		{
-			uint16_t charWord = readU16(input);
+			uint16_t charWord = readU16(input, encryption);
 			uint8_t characterSet = (uint8_t)((charWord >> 8) & 0x00FF);
 			uint8_t character = (uint8_t)(charWord & 0xFF);
 

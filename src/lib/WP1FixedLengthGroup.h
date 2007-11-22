@@ -35,13 +35,13 @@ class WP1FixedLengthGroup : public WP1Part
 	WP1FixedLengthGroup(uint8_t group); // WP1FixedLengthGroup should _never_ be constructed, only its inherited classes
 	virtual ~WP1FixedLengthGroup() {}
 	
-	static WP1FixedLengthGroup * constructFixedLengthGroup(WPXInputStream *input, uint8_t group);
+	static WP1FixedLengthGroup * constructFixedLengthGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group);
 
-	static bool isGroupConsistent(WPXInputStream *input, const uint8_t groupID);
+	static bool isGroupConsistent(WPXInputStream *input, WPXEncryption *encryption, const uint8_t groupID);
 
  protected:
-	void _read(WPXInputStream *input);
- 	virtual void _readContents(WPXInputStream * /* input */) {};
+	void _read(WPXInputStream *input, WPXEncryption *encryption);
+ 	virtual void _readContents(WPXInputStream * /* input */, WPXEncryption * /* encryption */) {};
 
 	uint8_t getGroup() const { return m_group; }
 

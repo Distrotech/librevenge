@@ -25,20 +25,20 @@
 #include "WP1SuppressPageCharacteristicsGroup.h"
 #include "libwpd_internal.h"
 
-WP1SuppressPageCharacteristicsGroup::WP1SuppressPageCharacteristicsGroup(WPXInputStream *input, uint8_t group) :
+WP1SuppressPageCharacteristicsGroup::WP1SuppressPageCharacteristicsGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group) :
 	WP1FixedLengthGroup(group),
 	m_suppressCode(0)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
 WP1SuppressPageCharacteristicsGroup::~WP1SuppressPageCharacteristicsGroup()
 {
 }
 
-void WP1SuppressPageCharacteristicsGroup::_readContents(WPXInputStream *input)
+void WP1SuppressPageCharacteristicsGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
-	m_suppressCode = readU8(input);
+	m_suppressCode = readU8(input, encryption);
 }
 
 void WP1SuppressPageCharacteristicsGroup::parse(WP1Listener *listener)

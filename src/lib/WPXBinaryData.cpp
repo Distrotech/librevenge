@@ -64,12 +64,12 @@ WPXBinaryData::WPXBinaryData(const unsigned char *buffer, const size_t bufferSiz
 		m_binaryDataImpl->m_buf[i] = buffer[i];
 }
 
-WPXBinaryData::WPXBinaryData(const WPXInputStream *input, const size_t inputSize) :
+WPXBinaryData::WPXBinaryData(const WPXInputStream *input, WPXEncryption *encryption, const size_t inputSize) :
 	m_binaryDataImpl(new WPXBinaryDataImpl)
 {
 	m_binaryDataImpl->m_buf = std::vector<unsigned char> (inputSize);
 	for (size_t i = 0; i < inputSize; i++)
-		m_binaryDataImpl->m_buf[i] = (unsigned char)readU8(const_cast<WPXInputStream *>(input));
+		m_binaryDataImpl->m_buf[i] = (unsigned char)readU8(const_cast<WPXInputStream *>(input), encryption);
 }
 
 void WPXBinaryData::append(const WPXBinaryData &data)

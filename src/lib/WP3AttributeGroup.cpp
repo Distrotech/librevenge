@@ -27,18 +27,18 @@
 #include "libwpd_internal.h"
 #include "WP3Listener.h"
 
-WP3AttributeGroup::WP3AttributeGroup(WPXInputStream *input, uint8_t groupID)
+WP3AttributeGroup::WP3AttributeGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID)
 	: WP3FixedLengthGroup(groupID),
 	m_attribute(0),
 	m_state(0)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
-void WP3AttributeGroup::_readContents(WPXInputStream *input)
+void WP3AttributeGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
-	m_attribute = readU8(input);
-	m_state = readU8(input);
+	m_attribute = readU8(input, encryption);
+	m_state = readU8(input, encryption);
 }
 
 void WP3AttributeGroup::parse(WP3Listener *listener)

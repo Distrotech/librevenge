@@ -38,32 +38,32 @@ WP3FixedLengthGroup::WP3FixedLengthGroup(const uint8_t groupID)
 {
 }
 
-WP3FixedLengthGroup * WP3FixedLengthGroup::constructFixedLengthGroup(WPXInputStream *input, const uint8_t groupID)
+WP3FixedLengthGroup * WP3FixedLengthGroup::constructFixedLengthGroup(WPXInputStream *input, WPXEncryption *encryption, const uint8_t groupID)
 {
 	switch (groupID) 
 	{
 		case WP3_EXTENDED_CHARACTER_GROUP:
-			return new WP3ExtendedCharacterGroup(input, groupID);
+			return new WP3ExtendedCharacterGroup(input, encryption, groupID);
 		
 		case WP3_TAB_GROUP:
-			return new WP3TabGroup(input, groupID);
+			return new WP3TabGroup(input, encryption, groupID);
 		
 		case WP3_INDENT_GROUP:
-			return new WP3IndentGroup(input, groupID);
+			return new WP3IndentGroup(input, encryption, groupID);
 			
 		case WP3_UNDO_GROUP:
-			return new WP3UndoGroup(input, groupID);
+			return new WP3UndoGroup(input, encryption, groupID);
 			
 		case WP3_ATTRIBUTE_GROUP:
-			return new WP3AttributeGroup(input, groupID);
+			return new WP3AttributeGroup(input, encryption, groupID);
 			
 		// Add the remaining cases here
 		default:
-			return new WP3UnsupportedFixedLengthGroup(input, groupID);
+			return new WP3UnsupportedFixedLengthGroup(input, encryption, groupID);
 	}
 }
 
-bool WP3FixedLengthGroup::isGroupConsistent(WPXInputStream *input, const uint8_t groupID)
+bool WP3FixedLengthGroup::isGroupConsistent(WPXInputStream *input, WPXEncryption *encryption, const uint8_t groupID)
 {
 	uint32_t startPosition = input->tell();
 
@@ -75,7 +75,7 @@ bool WP3FixedLengthGroup::isGroupConsistent(WPXInputStream *input, const uint8_t
 			input->seek(startPosition, WPX_SEEK_SET);
 			return false;
 		}
-		if (groupID != readU8(input))
+		if (groupID != readU8(input, encryption))
 		{
 			input->seek(startPosition, WPX_SEEK_SET);
 			return false;
@@ -91,16 +91,16 @@ bool WP3FixedLengthGroup::isGroupConsistent(WPXInputStream *input, const uint8_t
 	}
 }
 
-void WP3FixedLengthGroup::_read(WPXInputStream *input)
+void WP3FixedLengthGroup::_read(WPXInputStream *input, WPXEncryption *encryption)
 {
 	uint32_t startPosition = input->tell();
-	_readContents(input);
+	_readContents(input, encryption);
 	
 	if (m_group >= 0xC0 && m_group <= 0xCF) // just an extra safety check
 	{
 		int size = WP3_FIXED_LENGTH_FUNCTION_GROUP_SIZE[m_group-0xC0];
 		input->seek((startPosition + size - 2 - input->tell()), WPX_SEEK_CUR);
-		if (m_group != readU8(input))
+		if (m_group != readU8(input, encryption))
 		{
 			WPD_DEBUG_MSG(("WordPerfect: Possible corruption detected. Bailing out!\n"));
 			throw FileException();

@@ -28,12 +28,12 @@
 #include "WP6Parser.h"
 #include "libwpd_internal.h"
 
-WP6GeneralTextPacket::WP6GeneralTextPacket(WPXInputStream *input, int /* id */, uint32_t dataOffset, uint32_t dataSize): 
-	WP6PrefixDataPacket(input),
+WP6GeneralTextPacket::WP6GeneralTextPacket(WPXInputStream *input, WPXEncryption *encryption, int /* id */, uint32_t dataOffset, uint32_t dataSize): 
+	WP6PrefixDataPacket(input, encryption),
 	m_subDocument(0),
 	m_streamData(0)
 {	
-	_read(input, dataOffset, dataSize);
+	_read(input, encryption, dataOffset, dataSize);
 }
 
 WP6GeneralTextPacket::~WP6GeneralTextPacket()
@@ -44,10 +44,10 @@ WP6GeneralTextPacket::~WP6GeneralTextPacket()
 		delete [] m_streamData;
 }
 
-void WP6GeneralTextPacket::_readContents(WPXInputStream *input)
+void WP6GeneralTextPacket::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	long startPosition = input->tell();
-	uint16_t numTextBlocks = readU16(input);
+	uint16_t numTextBlocks = readU16(input, encryption);
 	input->seek(4, WPX_SEEK_CUR);
 
 	if (numTextBlocks < 1)
@@ -66,7 +66,7 @@ void WP6GeneralTextPacket::_readContents(WPXInputStream *input)
 			throw FileException();
 		if ((unsigned long)(input->tell() - startPosition + 4) > (unsigned long)getDataSize() || input->atEOS())
 			throw FileException();
-		blockSizes[i] = readU32(input);
+		blockSizes[i] = readU32(input, encryption);
 		unsigned int newTotalSize = totalSize + blockSizes[i];
 		if (newTotalSize < totalSize)
 			throw FileException();
@@ -88,7 +88,7 @@ void WP6GeneralTextPacket::_readContents(WPXInputStream *input)
 			throw FileException();
 		for (unsigned int j=0; j<blockSizes[i]; j++)
 		{
-			m_streamData[streamPos] = readU8(input);
+			m_streamData[streamPos] = readU8(input, encryption);
 			streamPos++;
 		}
 	}

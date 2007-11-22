@@ -31,8 +31,8 @@
 #include "libwpd_internal.h"
 #include "WPXTable.h"
 
-WP3Parser::WP3Parser(WPXInputStream *input, WPXHeader *header) :
-	WPXParser(input, header)
+WP3Parser::WP3Parser(WPXInputStream *input, WPXHeader *header, WPXEncryption *encryption) :
+	WPXParser(input, header, encryption)
 {
 }
 
@@ -40,7 +40,7 @@ WP3Parser::~WP3Parser()
 {
 }
 
-void WP3Parser::parse(WPXInputStream *input, WP3Listener *listener)
+void WP3Parser::parse(WPXInputStream *input, WPXEncryption *encryption, WP3Listener *listener)
 {
 	listener->startDocument();
 	
@@ -48,18 +48,18 @@ void WP3Parser::parse(WPXInputStream *input, WP3Listener *listener)
 	
 	WPD_DEBUG_MSG(("WordPerfect: Starting document body parse (position = %ld)\n",(long)input->tell()));
 	
-	parseDocument(input, listener);
+	parseDocument(input, encryption, listener);
 	
 	listener->endDocument();		
 }
 
 // parseDocument: parses a document body (may call itself recursively, on other streams, or itself)
-void WP3Parser::parseDocument(WPXInputStream *input, WP3Listener *listener)
+void WP3Parser::parseDocument(WPXInputStream *input, WPXEncryption *encryption, WP3Listener *listener)
 {
 	while (!input->atEOS())
 	{
 		uint8_t readVal;
-		readVal = readU8(input);
+		readVal = readU8(input, encryption);
 		
 		if (readVal == 0 || readVal == 0x7F || readVal == 0xFF)
 		{
@@ -76,7 +76,7 @@ void WP3Parser::parseDocument(WPXInputStream *input, WP3Listener *listener)
 		}
 		else 
 		{
-			WP3Part *part = WP3Part::constructPart(input, readVal);
+			WP3Part *part = WP3Part::constructPart(input, encryption, readVal);
 			if (part)
 			{
 				part->parse(listener);
@@ -89,6 +89,7 @@ void WP3Parser::parseDocument(WPXInputStream *input, WP3Listener *listener)
 void WP3Parser::parse(WPXDocumentInterface *documentInterface)
 {
 	WPXInputStream *input = getInput();
+	WPXEncryption *encryption = getEncryption();
 	std::list<WPXPageSpan> pageList;
 	WPXTableList tableList;
 	std::vector<WP3SubDocument *> subDocuments;	
@@ -98,7 +99,7 @@ void WP3Parser::parse(WPXDocumentInterface *documentInterface)
 		// do a "first-pass" parse of the document
 		// gather table border information, page properties (per-page)
 		WP3StylesListener stylesListener(pageList, tableList, subDocuments);
-		parse(input, &stylesListener);
+		parse(input, encryption, &stylesListener);
 
 		// postprocess the pageList == remove duplicate page spans due to the page breaks
 		std::list<WPXPageSpan>::iterator previousPage = pageList.begin();
@@ -119,7 +120,7 @@ void WP3Parser::parse(WPXDocumentInterface *documentInterface)
 		// second pass: here is where we actually send the messages to the target app
 		// that are necessary to emit the body of the target document
 		WP3ContentListener listener(pageList, subDocuments, documentInterface); // FIXME: SHOULD BE CONTENT_LISTENER, AND SHOULD BE PASSED TABLE DATA!
-		parse(input, &listener);
+		parse(input, encryption, &listener);
 		
 		// cleanup section: free the used resources
 		for (std::vector<WP3SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); iterSubDoc++)

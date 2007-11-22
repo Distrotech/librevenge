@@ -28,10 +28,11 @@
 #include "WP6FileStructure.h" 
 #include "libwpd_internal.h"
 
-WP60Header::WP60Header(WPXInputStream * input, uint32_t documentOffset, uint8_t productType, uint8_t fileType, uint8_t majorVersion, uint8_t minorVersion, uint16_t documentEncryption)
-	:	WP6Header(input, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption)
+WP60Header::WP60Header(WPXInputStream * input, WPXEncryption *encryption, uint32_t documentOffset, uint8_t productType,
+	uint8_t fileType, uint8_t majorVersion, uint8_t minorVersion, uint16_t documentEncryption)
+	:	WP6Header(input, encryption, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption)
 {
-	_readIndexInformation(input);
+	_readIndexInformation(input, encryption);
 }
 
 WP60Header::~WP60Header()

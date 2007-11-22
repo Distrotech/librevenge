@@ -36,7 +36,7 @@ class WP42Part
  public:
 	virtual ~WP42Part() {}
 	
-	static WP42Part * constructPart(WPXInputStream *input, uint8_t readVal);
+	static WP42Part * constructPart(WPXInputStream *input, WPXEncryption *encryption, uint8_t readVal);
 	virtual void parse(WP42Listener *listener) = 0;
 };
 

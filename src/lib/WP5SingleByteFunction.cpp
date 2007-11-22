@@ -28,7 +28,7 @@
 #include "WP5Listener.h"
 #include "libwpd_internal.h"
 
-WP5SingleByteFunction * WP5SingleByteFunction::constructSingleByteFunction(WPXInputStream * /* input */, uint8_t groupID)
+WP5SingleByteFunction * WP5SingleByteFunction::constructSingleByteFunction(WPXInputStream * /* input */, WPXEncryption */* encryption */, uint8_t groupID)
 {
 
 	switch (groupID) 

@@ -41,54 +41,54 @@
 #include "libwpd.h"
 #include "libwpd_internal.h"
 
-WP6PrefixDataPacket::WP6PrefixDataPacket(WPXInputStream * /* input */) :
+WP6PrefixDataPacket::WP6PrefixDataPacket(WPXInputStream * /* input */, WPXEncryption * /* encryption */) :
 	m_dataSize(0)
 {
 }
 
-WP6PrefixDataPacket * WP6PrefixDataPacket::constructPrefixDataPacket(WPXInputStream * input, WP6PrefixIndice *prefixIndice)
+WP6PrefixDataPacket * WP6PrefixDataPacket::constructPrefixDataPacket(WPXInputStream * input, WPXEncryption *encryption, WP6PrefixIndice *prefixIndice)
 {	       
 	switch (prefixIndice->getType())
 	{
 	case WP6_INDEX_HEADER_INITIAL_FONT:			
-		return new WP6DefaultInitialFontPacket(input, prefixIndice->getID(), 
+		return new WP6DefaultInitialFontPacket(input, encryption, prefixIndice->getID(), 
 				prefixIndice->getDataOffset(), prefixIndice->getDataSize());
 	case WP6_INDEX_HEADER_GENERAL_WORDPERFECT_TEXT:
-		return new WP6GeneralTextPacket(input, prefixIndice->getID(), 
+		return new WP6GeneralTextPacket(input, encryption, prefixIndice->getID(), 
 				prefixIndice->getDataOffset(), prefixIndice->getDataSize());
 	case WP6_INDEX_HEADER_DESIRED_FONT_DESCRIPTOR_POOL:
-		return new WP6FontDescriptorPacket(input, prefixIndice->getID(), 
+		return new WP6FontDescriptorPacket(input, encryption, prefixIndice->getID(), 
 				prefixIndice->getDataOffset(), prefixIndice->getDataSize());
 	case WP6_INDEX_HEADER_FILL_STYLE:
-		return new WP6FillStylePacket(input, prefixIndice->getID(), 
+		return new WP6FillStylePacket(input, encryption, prefixIndice->getID(), 
 				prefixIndice->getDataOffset(), prefixIndice->getDataSize());
 	case WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY:
-		return new WP6ExtendedDocumentSummaryPacket(input, prefixIndice->getID(), 
+		return new WP6ExtendedDocumentSummaryPacket(input, encryption, prefixIndice->getID(), 
 				prefixIndice->getDataOffset(), prefixIndice->getDataSize());
 	case WP6_INDEX_HEADER_OUTLINE_STYLE:
-		return new WP6OutlineStylePacket(input, prefixIndice->getID(), 
+		return new WP6OutlineStylePacket(input, encryption, prefixIndice->getID(), 
 				prefixIndice->getDataOffset(), prefixIndice->getDataSize());
 	case WP6_INDEX_HEADER_GRAPHICS_FILENAME:
-		return new WP6GraphicsFilenamePacket(input, prefixIndice->getID(), prefixIndice->getFlags(), 
+		return new WP6GraphicsFilenamePacket(input, encryption, prefixIndice->getID(), prefixIndice->getFlags(), 
 				prefixIndice->getDataOffset(), prefixIndice->getDataSize());
 	case WP6_INDEX_HEADER_GRAPHICS_CACHED_FILE_DATA:
-		return new WP6GraphicsCachedFileDataPacket(input, prefixIndice->getID(),
+		return new WP6GraphicsCachedFileDataPacket(input, encryption, prefixIndice->getID(),
 				prefixIndice->getDataOffset(), prefixIndice->getDataSize());
 	case WP6_INDEX_HEADER_GRAPHICS_BOX_STYLE:
-		return new WP6GraphicsBoxStylePacket(input, prefixIndice->getID(),
+		return new WP6GraphicsBoxStylePacket(input, encryption, prefixIndice->getID(),
 				prefixIndice->getDataOffset(), prefixIndice->getDataSize());
 	case WP6_INDEX_HEADER_TABLE_STYLE:
-		return new WP6TableStylePacket(input, prefixIndice->getID(),
+		return new WP6TableStylePacket(input, encryption, prefixIndice->getID(),
 				prefixIndice->getDataOffset(), prefixIndice->getDataSize());
 	case WP6_INDEX_HEADER_COMMENT_ANNOTATION:
-		return new WP6CommentAnnotationPacket(input, prefixIndice->getID(),
+		return new WP6CommentAnnotationPacket(input, encryption, prefixIndice->getID(),
 				prefixIndice->getDataOffset(), prefixIndice->getDataSize());
 	default:
 		return 0;
 	}
 }
 
-void WP6PrefixDataPacket::_read(WPXInputStream *input, uint32_t dataOffset, uint32_t dataSize)
+void WP6PrefixDataPacket::_read(WPXInputStream *input, WPXEncryption *encryption, uint32_t dataOffset, uint32_t dataSize)
 {
 	m_dataSize = dataSize;
 
@@ -97,7 +97,7 @@ void WP6PrefixDataPacket::_read(WPXInputStream *input, uint32_t dataOffset, uint
 
 	input->seek(dataOffset, WPX_SEEK_SET);
 
-	_readContents(input);
+	_readContents(input, encryption);
 
 	// assert that we haven't surpassed the size of the packet?
 }

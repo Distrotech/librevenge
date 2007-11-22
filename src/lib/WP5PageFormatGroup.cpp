@@ -30,7 +30,7 @@
 #include "WP5Listener.h"
 #include "WPXFileStructure.h"
 
-WP5PageFormatGroup::WP5PageFormatGroup(WPXInputStream *input) :
+WP5PageFormatGroup::WP5PageFormatGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	WP5VariableLengthGroup(),
 	m_leftMargin(0),
 	m_rightMargin(0),
@@ -45,14 +45,14 @@ WP5PageFormatGroup::WP5PageFormatGroup(WPXInputStream *input) :
 	m_formWidth(0),
 	m_formOrientation(PORTRAIT)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
 WP5PageFormatGroup::~WP5PageFormatGroup()
 {
 }
 
-void WP5PageFormatGroup::_readContents(WPXInputStream *input)
+void WP5PageFormatGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	// this group can contain different kinds of data, thus we need to read
 	// the contents accordingly
@@ -61,15 +61,15 @@ void WP5PageFormatGroup::_readContents(WPXInputStream *input)
 	case WP5_TOP_PAGE_FORMAT_GROUP_LEFT_RIGHT_MARGIN_SET:
 		// skip 4 bytes (old values of no interest for us)
 		input->seek(4, WPX_SEEK_CUR);
-		m_leftMargin = readU16(input);
-		m_rightMargin = readU16(input);
+		m_leftMargin = readU16(input, encryption);
+		m_rightMargin = readU16(input, encryption);
 		WPD_DEBUG_MSG(("WordPerfect: Page format group left/right margin set (left margin: %i, right margin: %i)\n", m_leftMargin, m_rightMargin));
 		break;
 	case WP5_TOP_PAGE_FORMAT_GROUP_SPACING_SET:
 		// skip 2 bytes (old spacing of no interest for us)
 		input->seek(2, WPX_SEEK_CUR);
 		{
-			uint16_t lineSpacing = readU16(input);
+			uint16_t lineSpacing = readU16(input, encryption);
 			int8_t lineSpacingIntegerPart = (int8_t)((lineSpacing & 0xFF00) >> 8);
 			float lineSpacingFractionalPart = (float)(lineSpacing & 0x00FF)/(float)0xFF;
 			WPD_DEBUG_MSG(("WordPerfect: Page format group line spacing - integer part: %i fractional part: %f (original value: %i)\n",
@@ -83,7 +83,7 @@ void WP5PageFormatGroup::_readContents(WPXInputStream *input)
 		{
 
 			uint16_t tmpTabPosition = 0;
-			for (unsigned i=0; i < 40 && (tmpTabPosition = readU16(input)) != 0xFFFF; i++)
+			for (unsigned i=0; i < 40 && (tmpTabPosition = readU16(input, encryption)) != 0xFFFF; i++)
 			{
 				m_tabStops.push_back(WPXTabStop());
 				m_tabStops[i].m_position = (float)((double)tmpTabPosition/(double)WPX_NUM_WPUS_PER_INCH);
@@ -95,7 +95,7 @@ void WP5PageFormatGroup::_readContents(WPXInputStream *input)
 
 			for (unsigned j=0; (j < (m_tabStops.size() / 2) + (m_tabStops.size() % 2)) && (j < 20); j++)
 			{
-				uint8_t tmpTabType = readU8(input);
+				uint8_t tmpTabType = readU8(input, encryption);
 				if (j*2 < m_tabStops.size())
 				{
 					switch ((tmpTabType & 0x30) >> 4)
@@ -154,7 +154,7 @@ void WP5PageFormatGroup::_readContents(WPXInputStream *input)
 			if ((getSize() > 4) && (getSize() - 4 == 0x00D0))
 			{
 				input->seek(2, WPX_SEEK_CUR);
-				m_marginOffset = readU16(input);
+				m_marginOffset = readU16(input, encryption);
 				if (0xFFFF != (m_marginOffset & 0xFFFF))
 				{
 					for (std::vector<WPXTabStop>::iterator iter = m_tabStops.begin(); iter != m_tabStops.end(); iter++)
@@ -168,14 +168,14 @@ void WP5PageFormatGroup::_readContents(WPXInputStream *input)
 	case WP5_TOP_PAGE_FORMAT_GROUP_TOP_BOTTOM_MARGIN_SET:
 		// skip 4 bytes (old values of no interest for us)
 		input->seek(4, WPX_SEEK_CUR);
-		m_topMargin = readU16(input);
-		m_bottomMargin = readU16(input);
+		m_topMargin = readU16(input, encryption);
+		m_bottomMargin = readU16(input, encryption);
 		WPD_DEBUG_MSG(("WordPerfect: Page format group top/bottom margin set (top margin: %i, bottom margin: %i)\n", m_topMargin, m_bottomMargin));
 		break;
 	case WP5_TOP_PAGE_FORMAT_GROUP_JUSTIFICATION:
 		// skip 1 byte (old justification of no interest for us)
 		input->seek(1, WPX_SEEK_CUR);
-		m_justification = readU8(input);
+		m_justification = readU8(input, encryption);
 		// WP6 and WP3 have one more category of justification
 		// Following hack allows us to use the same function for the three parsers
 		if (m_justification == 0x04)
@@ -185,17 +185,17 @@ void WP5PageFormatGroup::_readContents(WPXInputStream *input)
 	case WP5_TOP_PAGE_FORMAT_GROUP_SUPPRESS_PAGE_CHARACTERISTICS:
 		// skip 1 byte (old suppress code)
 		input->seek(1, WPX_SEEK_CUR);
-		m_suppressCode = readU8(input);
+		m_suppressCode = readU8(input, encryption);
 		break;
 	case WP5_TOP_PAGE_FORMAT_GROUP_FORM:
 		uint8_t tmpOrientation;
 		// skip to the new DESIRED values (99 - 4)
 		input->seek(95, WPX_SEEK_CUR);
-		m_formLength = readU16(input); // New DESIRED length
-		m_formWidth = readU16(input); // New DESIRED width
+		m_formLength = readU16(input, encryption); // New DESIRED length
+		m_formWidth = readU16(input, encryption); // New DESIRED width
 		// skipp to the orientation value (193 - 103)
 		input->seek(90, WPX_SEEK_CUR);
-		tmpOrientation = readU8(input); // New EFFECTIVE orientation
+		tmpOrientation = readU8(input, encryption); // New EFFECTIVE orientation
 		switch (tmpOrientation)
 		{
 		case 0x01:

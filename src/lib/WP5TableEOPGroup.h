@@ -31,9 +31,9 @@
 class WP5TableEOPGroup : public WP5VariableLengthGroup
 {
  public:
-	WP5TableEOPGroup(WPXInputStream *input);	
+	WP5TableEOPGroup(WPXInputStream *input, WPXEncryption *encryption);	
 	~WP5TableEOPGroup();
-	void _readContents(WPXInputStream *input);
+	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 	void parse(WP5Listener *listener);
 
 };

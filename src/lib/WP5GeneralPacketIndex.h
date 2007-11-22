@@ -27,17 +27,19 @@
 #include "libwpd_types.h"
 #include "WPXStream.h"
 
+class WPXEncryption;
+
 class WP5GeneralPacketIndex
 {
  public:
-	WP5GeneralPacketIndex(WPXInputStream * input, int id);	
+	WP5GeneralPacketIndex(WPXInputStream * input, WPXEncryption *encryption, int id);	
 	int getID() const { return m_id; }
 	uint16_t getType() const { return m_type; }
 	uint32_t getDataSize() const { return m_dataSize; }
 	uint32_t getDataOffset() const { return m_dataOffset; }
 
  protected:
- 	void _read(WPXInputStream *input);
+ 	void _read(WPXInputStream *input, WPXEncryption *encryption);
  
  private:
 	int m_id;

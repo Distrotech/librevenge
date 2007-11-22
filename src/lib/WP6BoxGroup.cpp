@@ -32,7 +32,7 @@ s *
 #include "WP6GeneralTextPacket.h"
 #include "WP6GraphicsBoxStylePacket.h"
 
-WP6BoxGroup::WP6BoxGroup(WPXInputStream *input) :
+WP6BoxGroup::WP6BoxGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	WP6VariableLengthGroup(),
 	m_generalPositioningFlagsMask(0x00),
 	m_generalPositioningFlagsData(0x00),
@@ -55,10 +55,10 @@ WP6BoxGroup::WP6BoxGroup(WPXInputStream *input) :
 	m_nativeWidth(0),
 	m_nativeHeight(0)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
-void WP6BoxGroup::_readContents(WPXInputStream *input)
+void WP6BoxGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	switch (getSubGroup())	
 	{
@@ -69,40 +69,40 @@ void WP6BoxGroup::_readContents(WPXInputStream *input)
 			input->seek(14, WPX_SEEK_CUR); // reserved for future use
 			input->seek(2, WPX_SEEK_CUR); // total size of override and wrap rectangle data for box
 			input->seek(2, WPX_SEEK_CUR); // total size of override data
-			uint16_t tmpOverrideFlags = readU16(input);
+			uint16_t tmpOverrideFlags = readU16(input, encryption);
 			if (tmpOverrideFlags & WP6_BOX_GROUP_BOX_COUNTER_DATA_BIT)
 			{
-				long tmpEndOfData = readU16(input) + input->tell();
+				long tmpEndOfData = readU16(input, encryption) + input->tell();
 #ifdef DEBUG
-				uint16_t tmpOverrideFlags = readU16(input);
+				uint16_t tmpOverrideFlags = readU16(input, encryption);
 #else
-				readU16(input);
+				readU16(input, encryption);
 #endif
 				WPD_DEBUG_MSG(("WP6BoxGroup: parsing Box counter data -- override flags: 0x%x\n", tmpOverrideFlags));
 				input->seek(tmpEndOfData, WPX_SEEK_SET); 
 			}
 			if (tmpOverrideFlags & WP6_BOX_GROUP_BOX_POSITIONING_DATA_BIT)
 			{
-				long tmpEndOfData = readU16(input) + input->tell();
+				long tmpEndOfData = readU16(input, encryption) + input->tell();
 
-				uint16_t tmpOverrideFlags = readU16(input);
+				uint16_t tmpOverrideFlags = readU16(input, encryption);
 
 				if (tmpOverrideFlags & 0x8000)
 					input->seek(2, WPX_SEEK_CUR);
 				if (tmpOverrideFlags & 0x4000)
 				{
-					m_generalPositioningFlagsMask = readU8(input);
-					m_generalPositioningFlagsData = readU8(input);
+					m_generalPositioningFlagsMask = readU8(input, encryption);
+					m_generalPositioningFlagsData = readU8(input, encryption);
 					WPD_DEBUG_MSG(("Box general positioning flags (mask: 0x%.2x) (data: 0x%.2x)\n",
 						m_generalPositioningFlagsMask, m_generalPositioningFlagsData));
 				}
 				if (tmpOverrideFlags & 0x2000)
 				{
 					m_hasHorizontalPositioning = true;
-					m_horizontalPositioningFlags = readU8(input);
-					m_horizontalOffset = (int16_t)readU16(input);
-					m_leftColumn = readU8(input);
-					m_rightColumn = readU8(input);
+					m_horizontalPositioningFlags = readU8(input, encryption);
+					m_horizontalOffset = (int16_t)readU16(input, encryption);
+					m_leftColumn = readU8(input, encryption);
+					m_rightColumn = readU8(input, encryption);
 					WPD_DEBUG_MSG(("Box horizontal positioning flags: 0x%.2x\n", m_horizontalPositioningFlags));
 					WPD_DEBUG_MSG(("Box horizontal offset: %i\n", m_horizontalOffset));
 					WPD_DEBUG_MSG(("Box left column: %i, right column: %i\n", m_leftColumn, m_rightColumn));
@@ -110,31 +110,31 @@ void WP6BoxGroup::_readContents(WPXInputStream *input)
 				if (tmpOverrideFlags & 0x1000)
 				{
 					m_hasVerticalPositioning = true;
-					m_verticalPositioningFlags = readU8(input);
-					m_verticalOffset = (int16_t)readU16(input);
+					m_verticalPositioningFlags = readU8(input, encryption);
+					m_verticalOffset = (int16_t)readU16(input, encryption);
 					WPD_DEBUG_MSG(("Box vertical positioning flags: 0x%.2x\n", m_verticalPositioningFlags));
 					WPD_DEBUG_MSG(("Box vertical offset: %i\n", m_verticalOffset));
 				}
 				if (tmpOverrideFlags & 0x0800)
 				{
 					m_hasWidthInformation = true;
-					m_widthFlags = readU8(input);
-					m_width = readU16(input);
+					m_widthFlags = readU8(input, encryption);
+					m_width = readU16(input, encryption);
 					WPD_DEBUG_MSG(("Box width flags: 0x%.2x\n", m_widthFlags));
 					WPD_DEBUG_MSG(("Box width value: %i\n", m_width));
 				}
 				if (tmpOverrideFlags & 0x0400)
 				{
 					m_hasHeightInformation = true;
-					m_heightFlags = readU8(input);
-					m_height = readU16(input);
+					m_heightFlags = readU8(input, encryption);
+					m_height = readU16(input, encryption);
 					WPD_DEBUG_MSG(("Box height flags: 0x%.2x\n", m_heightFlags));
 					WPD_DEBUG_MSG(("Box height value: %i\n", m_height));
 				}
 				if (tmpOverrideFlags & 0x0200)
 				{
 					m_hasZOrderInformation = true;
-					m_zOrderFlags = readU8(input);
+					m_zOrderFlags = readU8(input, encryption);
 					WPD_DEBUG_MSG(("Box z-order flags: 0x%.2x\n", m_zOrderFlags));
 				}
 				WPD_DEBUG_MSG(("WP6BoxGroup: parsing Box positioning data -- override flags: 0x%x\n", tmpOverrideFlags));
@@ -142,9 +142,9 @@ void WP6BoxGroup::_readContents(WPXInputStream *input)
 			}
 			if (tmpOverrideFlags & WP6_BOX_GROUP_BOX_CONTENT_DATA_BIT)
 			{
-				long tmpEndOfData = readU16(input) + input->tell();
+				long tmpEndOfData = readU16(input, encryption) + input->tell();
 
-				uint16_t tmpOverrideFlags = readU16(input);
+				uint16_t tmpOverrideFlags = readU16(input, encryption);
 
 				if (tmpOverrideFlags & 0x8000)
 					input->seek(2, WPX_SEEK_CUR);
@@ -152,23 +152,23 @@ void WP6BoxGroup::_readContents(WPXInputStream *input)
 				if (tmpOverrideFlags & 0x4000)
 				{
 					m_hasBoxContentType = true;
-					m_boxContentType = readU8(input);
+					m_boxContentType = readU8(input, encryption);
 				}
 
 				if (tmpOverrideFlags & 0x2000) // content rendering information
 				{
 					if (m_hasBoxContentType && (m_boxContentType == 0x03)) // Image
 					{
-						uint16_t tmpImageContentOverrideSize = readU16(input);
+						uint16_t tmpImageContentOverrideSize = readU16(input, encryption);
 						unsigned tmpImageContentOverrideStart = input->tell();
-						uint16_t tmpImageContentOverrideFlags = readU16(input);
+						uint16_t tmpImageContentOverrideFlags = readU16(input, encryption);
 						
 						if (tmpImageContentOverrideFlags & 0x8000)
 							input->seek(2, WPX_SEEK_CUR);
 						if (tmpImageContentOverrideFlags & 0x4000)
 						{
-							m_nativeWidth = readU16(input);
-							m_nativeHeight = readU16(input);
+							m_nativeWidth = readU16(input, encryption);
+							m_nativeHeight = readU16(input, encryption);
 						}
 						input->seek(tmpImageContentOverrideStart + tmpImageContentOverrideSize, WPX_SEEK_SET);
 					}
@@ -183,55 +183,55 @@ void WP6BoxGroup::_readContents(WPXInputStream *input)
 			}
 			if (tmpOverrideFlags & WP6_BOX_GROUP_BOX_CAPTION_DATA_BIT)
 			{
-				long tmpEndOfData = readU16(input) + input->tell();
+				long tmpEndOfData = readU16(input, encryption) + input->tell();
 #ifdef DEBUG
-				uint16_t tmpOverrideFlags = readU16(input);
+				uint16_t tmpOverrideFlags = readU16(input, encryption);
 #else
-				readU16(input);
+				readU16(input, encryption);
 #endif
 				WPD_DEBUG_MSG(("WP6BoxGroup: parsing Box caption data -- override flags: 0x%x\n", tmpOverrideFlags));
 				input->seek(tmpEndOfData, WPX_SEEK_SET); 
 			}
 			if (tmpOverrideFlags & WP6_BOX_GROUP_BOX_BORDER_DATA_BIT)
 			{
-				long tmpEndOfData = readU16(input) + input->tell();
+				long tmpEndOfData = readU16(input, encryption) + input->tell();
 #ifdef DEBUG
-				uint16_t tmpOverrideFlags = readU16(input);
+				uint16_t tmpOverrideFlags = readU16(input, encryption);
 #else
-				readU16(input);
+				readU16(input, encryption);
 #endif
 				WPD_DEBUG_MSG(("WP6BoxGroup: parsing Box border data -- override flags: 0x%x\n", tmpOverrideFlags));
 				input->seek(tmpEndOfData, WPX_SEEK_SET); 
 			}
 			if (tmpOverrideFlags & WP6_BOX_GROUP_BOX_FILL_DATA_BIT)
 			{
-				long tmpEndOfData = readU16(input) + input->tell();
+				long tmpEndOfData = readU16(input, encryption) + input->tell();
 #ifdef DEBUG
-				uint16_t tmpOverrideFlags = readU16(input);
+				uint16_t tmpOverrideFlags = readU16(input, encryption);
 #else
-				readU16(input);
+				readU16(input, encryption);
 #endif
 				WPD_DEBUG_MSG(("WP6BoxGroup: parsing Box fill data -- override flags: 0x%x\n", tmpOverrideFlags));
 				input->seek(tmpEndOfData, WPX_SEEK_SET); 
 			}
 			if (tmpOverrideFlags & WP6_BOX_GROUP_BOX_BOX_WRAPPING_DATA_BIT)
 			{
-				long tmpEndOfData = readU16(input) + input->tell();
+				long tmpEndOfData = readU16(input, encryption) + input->tell();
 #ifdef DEBUG
-				uint16_t tmpOverrideFlags = readU16(input);
+				uint16_t tmpOverrideFlags = readU16(input, encryption);
 #else
-				readU16(input);
+				readU16(input, encryption);
 #endif
 				WPD_DEBUG_MSG(("WP6BoxGroup: parsing Box wrapping data -- override flags: 0x%x\n", tmpOverrideFlags));
 				input->seek(tmpEndOfData, WPX_SEEK_SET); 
 			}
 			if (tmpOverrideFlags & WP6_BOX_GROUP_BOX_BOX_HYPERTEXT_WRAPPING_DATA_BIT)
 			{
-				long tmpEndOfData = readU16(input) + input->tell();
+				long tmpEndOfData = readU16(input, encryption) + input->tell();
 #ifdef DEBUG
-				uint16_t tmpOverrideFlags = readU16(input);
+				uint16_t tmpOverrideFlags = readU16(input, encryption);
 #else
-				readU16(input);
+				readU16(input, encryption);
 #endif
 				WPD_DEBUG_MSG(("WP6BoxGroup: parsing Box hypertext wrapping data -- override flags: 0x%x\n", tmpOverrideFlags));
 				input->seek(tmpEndOfData, WPX_SEEK_SET); 
@@ -242,22 +242,22 @@ void WP6BoxGroup::_readContents(WPXInputStream *input)
 			}
 			if (tmpOverrideFlags & WP6_BOX_GROUP_BOX_GROUPING_DATA_BIT)
 			{
-				long tmpEndOfData = readU16(input) + input->tell();
+				long tmpEndOfData = readU16(input, encryption) + input->tell();
 #ifdef DEBUG
-				uint16_t tmpOverrideFlags = readU16(input);
+				uint16_t tmpOverrideFlags = readU16(input, encryption);
 #else
-				readU16(input);
+				readU16(input, encryption);
 #endif
 				WPD_DEBUG_MSG(("WP6BoxGroup: parsing Box grouping data -- override flags: 0x%x\n", tmpOverrideFlags));
 				input->seek(tmpEndOfData, WPX_SEEK_SET); 
 			}
 			if (tmpOverrideFlags & WP6_BOX_GROUP_BOX_DRAW_OBJECT_DATA_BIT)
 			{
-				long tmpEndOfData = readU16(input) + input->tell();
+				long tmpEndOfData = readU16(input, encryption) + input->tell();
 #ifdef DEBUG
-				uint16_t tmpOverrideFlags = readU16(input);
+				uint16_t tmpOverrideFlags = readU16(input, encryption);
 #else
-				readU16(input);
+				readU16(input, encryption);
 #endif
 				WPD_DEBUG_MSG(("WP6BoxGroup: parsing Box draw object data -- override flags: 0x%x\n", tmpOverrideFlags));
 				input->seek(tmpEndOfData, WPX_SEEK_SET); 

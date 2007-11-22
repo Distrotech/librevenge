@@ -32,7 +32,7 @@
 class WP5SubDocument : public WPXSubDocument
 {
 public:
-	WP5SubDocument(WPXInputStream *input, const unsigned dataSize);
+	WP5SubDocument(WPXInputStream *input, WPXEncryption *encryption, const unsigned dataSize);
 	void parse(WP5Listener *listener) const;
 
 };

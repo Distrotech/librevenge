@@ -29,15 +29,15 @@
 #include "WPXFileStructure.h"
 #include "WP6Listener.h"
 
-WP6TabGroup::WP6TabGroup(WPXInputStream *input) :
+WP6TabGroup::WP6TabGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	WP6VariableLengthGroup(),
 	m_position(0.0f),
 	m_ignoreFunction(false)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
-void WP6TabGroup::_readContents(WPXInputStream *input)
+void WP6TabGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	uint16_t tempPosition = 0xFFFF;
 	if ((getFlags() & 0x40) == 0x40) // 0x40 is "ignore function" flag
@@ -52,19 +52,19 @@ void WP6TabGroup::_readContents(WPXInputStream *input)
 	/* Left aligned tabs contain  the position of the tab as a word (uint16_t) in WPUs
 	 * from left edge of the paper just after the size of "non-deletable" */
 	{
-		tempPosition = readU16(input);
+		tempPosition = readU16(input, encryption);
 	}
 	else if ((getSize() >= 12) && (getSize() <= 18)) // Minimum size of the function if the position information is present
 	/* This case might be fully included in the previous condition, but I am not sure;
 	 * so leaving it in for the while */
 	{
 		input->seek((getSize() - 12), WPX_SEEK_CUR);
-		tempPosition = readU16(input);
+		tempPosition = readU16(input, encryption);
 	}
 	else if (getSize() > 18)
 	{
 		input->seek(6, WPX_SEEK_CUR);
-		tempPosition = readU16(input);
+		tempPosition = readU16(input, encryption);
 	}
 	// If we got a tempPosition of 0, it means, the information in WPUs is not there (WP6 for DOS??).
 	// We will have to dig a bit more to see whether we can get the information from the screen units ???

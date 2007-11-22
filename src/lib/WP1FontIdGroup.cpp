@@ -25,22 +25,22 @@
 #include "WP1FontIdGroup.h"
 #include "libwpd_internal.h"
 
-WP1FontIdGroup::WP1FontIdGroup(WPXInputStream *input, uint8_t group) :
+WP1FontIdGroup::WP1FontIdGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group) :
 	WP1FixedLengthGroup(group),
 	m_oldFontId(0),
 	m_newFontId(0)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
 WP1FontIdGroup::~WP1FontIdGroup()
 {
 }
 
-void WP1FontIdGroup::_readContents(WPXInputStream *input)
+void WP1FontIdGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
-	m_oldFontId = readU16(input, true);
-	m_newFontId = readU16(input, true);
+	m_oldFontId = readU16(input, encryption, true);
+	m_newFontId = readU16(input, encryption, true);
 }
 
 void WP1FontIdGroup::parse(WP1Listener *listener)

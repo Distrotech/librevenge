@@ -35,7 +35,7 @@
 // throws an exception if there is an error
 // precondition: readVal us between 0xC0 and 0xFE
 // TODO: check the precondition :D
-WP1Part * WP1Part::constructPart(WPXInputStream *input, uint8_t readVal)
+WP1Part * WP1Part::constructPart(WPXInputStream *input, WPXEncryption *encryption, uint8_t readVal)
 {	
 	WPD_DEBUG_MSG(("WordPerfect: Offset: %i, ConstructPart(readVal: 0x%2x)\n", (unsigned int)input->tell(), readVal));
 
@@ -48,17 +48,17 @@ WP1Part * WP1Part::constructPart(WPXInputStream *input, uint8_t readVal)
 	{
 		// Should not happen because the heuristics would not recognize this file as a well formed WP1 file,
 		// Nonetheless if we ever change the parts using the heuristics, this will be a check useful to have
-		if (!WP1VariableLengthGroup::isGroupConsistent(input, readVal))
+		if (!WP1VariableLengthGroup::isGroupConsistent(input, encryption, readVal))
 		{
 			WPD_DEBUG_MSG(("WordPerfect: Consistency Check (variable length) failed; ignoring this byte\n"));
 			return 0;
 		}
 		WPD_DEBUG_MSG(("WordPerfect: constructVariableLengthGroup\n"));
-		return WP1VariableLengthGroup::constructVariableLengthGroup(input, readVal);
+		return WP1VariableLengthGroup::constructVariableLengthGroup(input, encryption, readVal);
 	}
 	else
 	{
 		WPD_DEBUG_MSG(("WordPerfect: constructFixedLengthGroup\n"));
-		return WP1FixedLengthGroup::constructFixedLengthGroup(input, readVal);
+		return WP1FixedLengthGroup::constructFixedLengthGroup(input, encryption, readVal);
 	}
 }

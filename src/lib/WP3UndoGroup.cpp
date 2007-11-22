@@ -28,18 +28,18 @@
 #include "libwpd_internal.h"
 #include "WP3Listener.h"
 
-WP3UndoGroup::WP3UndoGroup(WPXInputStream *input, uint8_t groupID) :
+WP3UndoGroup::WP3UndoGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID) :
 	WP3FixedLengthGroup(groupID),
 	m_undoType(0),
 	m_undoLevel(0)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
-void WP3UndoGroup::_readContents(WPXInputStream *input)
+void WP3UndoGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
-	m_undoType = readU8(input);
-	m_undoLevel = readU16(input, true);
+	m_undoType = readU8(input, encryption);
+	m_undoLevel = readU16(input, encryption, true);
 }
 
 void WP3UndoGroup::parse(WP3Listener *listener)

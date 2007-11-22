@@ -32,7 +32,7 @@
 class WP5SingleByteFunction : public WP5Part
 {
  public:
-	static WP5SingleByteFunction * constructSingleByteFunction(WPXInputStream *input, uint8_t groupID);
+	static WP5SingleByteFunction * constructSingleByteFunction(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);
 };
 
 class WP5EOLFunction : public WP5SingleByteFunction

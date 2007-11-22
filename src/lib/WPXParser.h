@@ -29,24 +29,27 @@
 class WPXDocumentInterface;
 class WPXHeader;
 class WPXInputStream;
+class WPXEncryption;
 
 class WPXParser
 {
 public:
-	WPXParser(WPXInputStream * input, WPXHeader *header);
-	virtual ~WPXParser();
+	WPXParser(WPXInputStream *input, WPXHeader *header, WPXEncryption *encryption);
+	virtual ~WPXParser() {}
 
 	virtual void parse(WPXDocumentInterface *documentInterface) = 0;
 
 protected:
 	WPXHeader * getHeader() { return m_header; }
 	WPXInputStream * getInput() { return m_input; }
+	WPXEncryption * getEncryption() { return m_encryption; }
 	
 private:
 	WPXParser(const WPXParser&);
 	WPXParser& operator=(const WPXParser&);
 	WPXInputStream * m_input;
 	WPXHeader * m_header;
+	WPXEncryption * m_encryption;
 };
 
 #endif /* WPXPARSER_H */

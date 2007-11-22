@@ -32,7 +32,7 @@
 class WP3SingleByteFunction : public WP3Part
 {
  public:
-	static WP3SingleByteFunction * constructSingleByteFunction(WPXInputStream *input, uint8_t groupID);
+	static WP3SingleByteFunction * constructSingleByteFunction(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);
 };
 
 class WP3HardSpaceFunction : public WP3SingleByteFunction

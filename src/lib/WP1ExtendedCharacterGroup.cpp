@@ -25,20 +25,20 @@
 #include "WP1ExtendedCharacterGroup.h"
 #include "libwpd_internal.h"
 
-WP1ExtendedCharacterGroup::WP1ExtendedCharacterGroup(WPXInputStream *input, uint8_t group) :
+WP1ExtendedCharacterGroup::WP1ExtendedCharacterGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group) :
 	WP1FixedLengthGroup(group),
 	m_extendedCharacter(0)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
 WP1ExtendedCharacterGroup::~WP1ExtendedCharacterGroup()
 {
 }
 
-void WP1ExtendedCharacterGroup::_readContents(WPXInputStream *input)
+void WP1ExtendedCharacterGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
-	m_extendedCharacter = readU8(input);
+	m_extendedCharacter = readU8(input, encryption);
 }
 
 void WP1ExtendedCharacterGroup::parse(WP1Listener *listener)

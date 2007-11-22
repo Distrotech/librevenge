@@ -30,9 +30,9 @@
 class WP1PointSizeGroup : public WP1FixedLengthGroup
 {
 public:
-	WP1PointSizeGroup(WPXInputStream *input, uint8_t group);
-	~WP1PointSizeGroup();	
-	void _readContents(WPXInputStream *input);
+	WP1PointSizeGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group);
+	~WP1PointSizeGroup();
+	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 	void parse(WP1Listener *listener);
 
 private:

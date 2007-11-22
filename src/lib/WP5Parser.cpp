@@ -35,8 +35,8 @@
 #include "WP5ListFontsUsedPacket.h"
 #include "WP5FontNameStringPoolPacket.h"
 
-WP5Parser::WP5Parser(WPXInputStream *input, WPXHeader *header) :
-	WPXParser(input, header)
+WP5Parser::WP5Parser(WPXInputStream *input, WPXHeader *header, WPXEncryption *encryption) :
+	WPXParser(input, header, encryption)
 {
 }
 
@@ -44,12 +44,12 @@ WP5Parser::~WP5Parser()
 {
 }
 
-WP5PrefixData * WP5Parser::getPrefixData(WPXInputStream *input)
+WP5PrefixData * WP5Parser::getPrefixData(WPXInputStream *input, WPXEncryption *encryption)
 {
 	WP5PrefixData *prefixData = 0;
 	try
 	{
-		prefixData = new WP5PrefixData(input);
+		prefixData = new WP5PrefixData(input, encryption);
 		return prefixData;
 	}
 	catch(FileException)
@@ -59,7 +59,7 @@ WP5PrefixData * WP5Parser::getPrefixData(WPXInputStream *input)
 	}
 }
 
-void WP5Parser::parse(WPXInputStream *input, WP5Listener *listener)
+void WP5Parser::parse(WPXInputStream *input, WPXEncryption *encryption, WP5Listener *listener)
 {
 	listener->startDocument();
 	
@@ -67,18 +67,18 @@ void WP5Parser::parse(WPXInputStream *input, WP5Listener *listener)
 	
 	WPD_DEBUG_MSG(("WordPerfect: Starting document body parse (position = %ld)\n", (long)input->tell()));
 	
-	parseDocument(input, listener);
+	parseDocument(input, encryption, listener);
 	
 	listener->endDocument();		
 }
 
 // parseDocument: parses a document body (may call itself recursively, on other streams, or itself)
-void WP5Parser::parseDocument(WPXInputStream *input, WP5Listener *listener)
+void WP5Parser::parseDocument(WPXInputStream *input, WPXEncryption *encryption, WP5Listener *listener)
 {
 	while (!input->atEOS())
 	{
 		uint8_t readVal;
-		readVal = readU8(input);
+		readVal = readU8(input, encryption);
 		
 		if (readVal == 0 || readVal == 0x7F || readVal == 0xFF)
 		{
@@ -114,7 +114,7 @@ void WP5Parser::parseDocument(WPXInputStream *input, WP5Listener *listener)
 		}
 		else 
 		{
-			WP5Part *part = WP5Part::constructPart(input, readVal);
+			WP5Part *part = WP5Part::constructPart(input, encryption, readVal);
 			if (part)
 			{
 				part->parse(listener);
@@ -127,6 +127,7 @@ void WP5Parser::parseDocument(WPXInputStream *input, WP5Listener *listener)
 void WP5Parser::parse(WPXDocumentInterface *documentInterface)
 {
 	WPXInputStream *input = getInput();
+	WPXEncryption *encryption = getEncryption();
 	std::list<WPXPageSpan> pageList;
 	WPXTableList tableList;	
 	WP5PrefixData * prefixData = 0;
@@ -134,12 +135,12 @@ void WP5Parser::parse(WPXDocumentInterface *documentInterface)
 	
 	try
  	{
-		prefixData = getPrefixData(input);
+		prefixData = getPrefixData(input, encryption);
 
 		// do a "first-pass" parse of the document
 		// gather table border information, page properties (per-page)
 		WP5StylesListener stylesListener(pageList, tableList, subDocuments);
-		parse(input, &stylesListener);
+		parse(input, encryption, &stylesListener);
 
 		// postprocess the pageList == remove duplicate page spans due to the page breaks
 		std::list<WPXPageSpan>::iterator previousPage = pageList.begin();
@@ -192,7 +193,7 @@ void WP5Parser::parse(WPXDocumentInterface *documentInterface)
 		// FIXME: UGLY, UGLY, UGLY!!! FIND A BETTER WAY TO ACHIEVE THE SAME
 		
 
-		parse(input, &listener);
+		parse(input, encryption, &listener);
 		
 		// cleanup section: free the used resources
 		delete prefixData;

@@ -30,6 +30,7 @@
 
 class WPXBinaryDataImpl;
 class WPXInputStream;
+class WPXEncryption;
 
 class WPXBinaryData
 {
@@ -37,7 +38,7 @@ public:
 	WPXBinaryData();
 	WPXBinaryData(const WPXBinaryData &);
 	WPXBinaryData(const unsigned char *buffer, const size_t bufferSize);
-	WPXBinaryData(const WPXInputStream *input, const size_t inputSize);
+	WPXBinaryData(const WPXInputStream *input, WPXEncryption *encryption, const size_t inputSize);
 	~WPXBinaryData();
 
 	void append(const WPXBinaryData &data);

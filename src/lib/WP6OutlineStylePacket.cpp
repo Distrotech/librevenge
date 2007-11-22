@@ -27,8 +27,8 @@
 #include "WP6OutlineStylePacket.h"
 #include "libwpd_internal.h"
 
-WP6OutlineStylePacket::WP6OutlineStylePacket(WPXInputStream *input, int /* id */, uint32_t dataOffset, uint32_t dataSize) : 
-	WP6PrefixDataPacket(input),
+WP6OutlineStylePacket::WP6OutlineStylePacket(WPXInputStream *input, WPXEncryption *encryption, int /* id */, uint32_t dataOffset, uint32_t dataSize) : 
+	WP6PrefixDataPacket(input, encryption),
 	m_numPIDs(0),
 	m_nonDeletableInfoSize(0),
 	m_outlineHash(0),
@@ -36,26 +36,26 @@ WP6OutlineStylePacket::WP6OutlineStylePacket(WPXInputStream *input, int /* id */
 	m_outlineFlags(0),
 	m_tabBehaviourFlag(0)
 {
-	_read(input, dataOffset, dataSize);
+	_read(input, encryption, dataOffset, dataSize);
 }
 
 WP6OutlineStylePacket::~WP6OutlineStylePacket()
 {
 }
 
-void WP6OutlineStylePacket::_readContents(WPXInputStream *input)
+void WP6OutlineStylePacket::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
-	m_numPIDs = readU16(input);
+	m_numPIDs = readU16(input, encryption);
 	input->seek(2 * WP6_NUM_LIST_LEVELS, WPX_SEEK_CUR);
 #if 0
 	for (i=0; i<WP6_NUM_LIST_LEVELS; i++) 
-		m_paragraphStylePIDs[i] = readU16(input); // seemingly useless
+		m_paragraphStylePIDs[i] = readU16(input, encryption); // seemingly useless
 #endif
-	m_outlineFlags = readU8(input);
-	m_outlineHash = readU16(input);
+	m_outlineFlags = readU8(input, encryption);
+	m_outlineHash = readU16(input, encryption);
 	for (unsigned i=0; i<WP6_NUM_LIST_LEVELS; i++)  
-		m_numberingMethods[i] = readU8(input);
-	m_tabBehaviourFlag = readU8(input);
+		m_numberingMethods[i] = readU8(input, encryption);
+	m_tabBehaviourFlag = readU8(input, encryption);
 	
 	WPD_DEBUG_MSG(("WordPerfect: Read Outline Style Packet (numPrefixIDs: %i, outlineHash: %i, outlineFlags: %i, tab behaviour flag: %i)\n", (int) m_numPIDs, (int) m_outlineHash, (int) m_outlineFlags, (int) m_tabBehaviourFlag));
 	WPD_DEBUG_MSG(("WordPerfect: Read Outline Style Packet (m_numberingMethods: %i %i %i %i %i %i %i %i)\n", 

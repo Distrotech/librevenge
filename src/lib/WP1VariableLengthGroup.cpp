@@ -39,29 +39,29 @@ WP1VariableLengthGroup::WP1VariableLengthGroup(uint8_t group) :
 {
 }
 
-WP1VariableLengthGroup * WP1VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, uint8_t group)
+WP1VariableLengthGroup * WP1VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group)
 {
 	switch (group)
 	{
 		case WP1_SET_TABS_GROUP:
-			return new WP1SetTabsGroup(input, group);
+			return new WP1SetTabsGroup(input, encryption, group);
 		case WP1_HEADER_FOOTER_GROUP:
-			return new WP1HeaderFooterGroup(input, group);
+			return new WP1HeaderFooterGroup(input, encryption, group);
 		case WP1_FOOTNOTE_ENDNOTE_GROUP:
-			return new WP1FootnoteEndnoteGroup(input, group);
+			return new WP1FootnoteEndnoteGroup(input, encryption, group);
 		default:
 			// this is an unhandled group, just skip it
-			return new WP1UnsupportedVariableLengthGroup(input, group);
+			return new WP1UnsupportedVariableLengthGroup(input, encryption, group);
 	}
 }
 
-bool WP1VariableLengthGroup::isGroupConsistent(WPXInputStream *input, const uint8_t group)
+bool WP1VariableLengthGroup::isGroupConsistent(WPXInputStream *input, WPXEncryption *encryption, const uint8_t group)
 {
 	uint32_t startPosition = input->tell();
 
 	try
 	{
-		uint32_t size = readU32(input, true);
+		uint32_t size = readU32(input, encryption, true);
 		if (size > ((std::numeric_limits<uint32_t>::max)() / 2))
 			return false;
 
@@ -70,12 +70,12 @@ bool WP1VariableLengthGroup::isGroupConsistent(WPXInputStream *input, const uint
 			input->seek(startPosition, WPX_SEEK_SET);
 			return false;
 		}
-		if (size != readU32(input, true))
+		if (size != readU32(input, encryption, true))
 		{
 			input->seek(startPosition, WPX_SEEK_SET);
 			return false;
 		}
-		if (group != readU8(input))
+		if (group != readU8(input, encryption))
 		{
 			input->seek(startPosition, WPX_SEEK_SET);
 			return false;
@@ -91,20 +91,20 @@ bool WP1VariableLengthGroup::isGroupConsistent(WPXInputStream *input, const uint
 	}
 }
 
-void WP1VariableLengthGroup::_read(WPXInputStream *input)
+void WP1VariableLengthGroup::_read(WPXInputStream *input, WPXEncryption *encryption)
 {
 	uint32_t startPosition = input->tell();
 
 	WPD_DEBUG_MSG(("WordPerfect: handling a variable length group\n"));	
 	
-	m_size = readU32(input, true); // the length is the number of data bytes minus 4 (ie. the function codes)
+	m_size = readU32(input, encryption, true); // the length is the number of data bytes minus 4 (ie. the function codes)
 
 	if (m_size + startPosition < startPosition)
 		throw FileException(); 
 	
 	WPD_DEBUG_MSG(("WordPerfect: Read variable group header (start_position: %i, size: %i)\n", startPosition, m_size));
 	
-	_readContents(input);
+	_readContents(input, encryption);
 	
 	if ((m_size + startPosition + 4 < m_size + startPosition) ||
 		(m_size + startPosition + 4) > ((std::numeric_limits<uint32_t>::max)() / 2))
@@ -112,12 +112,12 @@ void WP1VariableLengthGroup::_read(WPXInputStream *input)
 	
 	input->seek(startPosition + m_size + 4, WPX_SEEK_SET);
 
-	if (m_size != readU32(input, true))
+	if (m_size != readU32(input, encryption, true))
 	{
 		WPD_DEBUG_MSG(("WordPerfect: Possible corruption detected. Bailing out!\n"));
 		throw FileException();
 	}
-	if (m_group != readU8(input))
+	if (m_group != readU8(input, encryption))
 	{
 		WPD_DEBUG_MSG(("WordPerfect: Possible corruption detected. Bailing out!\n"));
 		throw FileException();

@@ -31,8 +31,8 @@ WP42SubDocument::WP42SubDocument(uint8_t * streamData, const unsigned dataSize) 
 {
 }
 
-WP42SubDocument::WP42SubDocument(WPXInputStream *input, const unsigned dataSize) :
-	WPXSubDocument(input, dataSize)
+WP42SubDocument::WP42SubDocument(WPXInputStream *input, WPXEncryption *encryption, const unsigned dataSize) :
+	WPXSubDocument(input, encryption, dataSize)
 {
 }
 
@@ -42,6 +42,6 @@ void WP42SubDocument::parse(WP42Listener *listener) const
 	if (!tmpStream)
 		return;
 	tmpStream->seek(0, WPX_SEEK_SET);
-	listener->marginReset(readU8(tmpStream), readU8(tmpStream));
-	WP42Parser::parseDocument(tmpStream, listener);
+	listener->marginReset(readU8(tmpStream, 0), readU8(tmpStream, 0));
+	WP42Parser::parseDocument(tmpStream, 0, listener);
 }

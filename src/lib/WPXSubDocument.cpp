@@ -34,7 +34,7 @@ WPXSubDocument::WPXSubDocument() :
 {
 }
 
-WPXSubDocument::WPXSubDocument(WPXInputStream *input, const unsigned dataSize) :
+WPXSubDocument::WPXSubDocument(WPXInputStream *input, WPXEncryption *encryption, const unsigned dataSize) :
 	m_stream(0),
 	m_streamData(new uint8_t[dataSize])
 {
@@ -43,7 +43,7 @@ WPXSubDocument::WPXSubDocument(WPXInputStream *input, const unsigned dataSize) :
 	{
 		if (input->atEOS())
 			break;
-		m_streamData[i] = readU8(input);
+		m_streamData[i] = readU8(input, encryption);
 	}
 	m_stream = new WPXMemoryInputStream(m_streamData, i);
 }

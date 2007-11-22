@@ -57,58 +57,58 @@ WP6VariableLengthGroup::~WP6VariableLengthGroup()
 		delete [] m_prefixIDs;
 }
 
-WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, const uint8_t groupID)
+WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, WPXEncryption *encryption, const uint8_t groupID)
 {
 	switch (groupID)
 	{
 	case WP6_TOP_PAGE_GROUP:
-		return new WP6PageGroup(input);
+		return new WP6PageGroup(input, encryption);
 	case WP6_TOP_EOL_GROUP: 
-		return new WP6EOLGroup(input);
+		return new WP6EOLGroup(input, encryption);
 	case WP6_TOP_CHARACTER_GROUP:
-		return new WP6CharacterGroup(input);
+		return new WP6CharacterGroup(input, encryption);
 	case WP6_TOP_COLUMN_GROUP:
-		return new WP6ColumnGroup(input);
+		return new WP6ColumnGroup(input, encryption);
 	case WP6_TOP_PARAGRAPH_GROUP:
-		return new WP6ParagraphGroup(input);
+		return new WP6ParagraphGroup(input, encryption);
 	case WP6_TOP_FOOTNOTE_ENDNOTE_GROUP:
-		return new WP6FootnoteEndnoteGroup(input);
+		return new WP6FootnoteEndnoteGroup(input, encryption);
 	case WP6_TOP_HEADER_FOOTER_GROUP:
-		return new WP6HeaderFooterGroup(input);
+		return new WP6HeaderFooterGroup(input, encryption);
 	case WP6_TOP_DISPLAY_NUMBER_REFERENCE_GROUP:
-		return new WP6DisplayNumberReferenceGroup(input);
+		return new WP6DisplayNumberReferenceGroup(input, encryption);
 	case WP6_TOP_STYLE_GROUP:
-		return new WP6StyleGroup(input);
+		return new WP6StyleGroup(input, encryption);
 	case WP6_TOP_TAB_GROUP:
-		return new WP6TabGroup(input);
+		return new WP6TabGroup(input, encryption);
 	case WP6_TOP_BOX_GROUP:
-		return new WP6BoxGroup(input);
+		return new WP6BoxGroup(input, encryption);
 	default:
 		// this is an unhandled group, just skip it
-		return new WP6UnsupportedVariableLengthGroup(input);
+		return new WP6UnsupportedVariableLengthGroup(input, encryption);
 	}
 }
 
-bool WP6VariableLengthGroup::isGroupConsistent(WPXInputStream *input, const uint8_t groupID)
+bool WP6VariableLengthGroup::isGroupConsistent(WPXInputStream *input, WPXEncryption *encryption, const uint8_t groupID)
 {
 	uint32_t startPosition = input->tell();
 
 	try
 	{
 		input->seek(1, WPX_SEEK_CUR);
-		uint16_t size = readU16(input);
+		uint16_t size = readU16(input, encryption);
 
 		if (input->seek((startPosition + size - 4 - input->tell()), WPX_SEEK_CUR) || input->atEOS())
 		{
 			input->seek(startPosition, WPX_SEEK_SET);
 			return false;
 		}
-		if (size != readU16(input))
+		if (size != readU16(input, encryption))
 		{
 			input->seek(startPosition, WPX_SEEK_SET);
 			return false;
 		}
-		if (groupID != readU8(input))
+		if (groupID != readU8(input, encryption))
 		{
 			input->seek(startPosition, WPX_SEEK_SET);
 			return false;
@@ -124,24 +124,24 @@ bool WP6VariableLengthGroup::isGroupConsistent(WPXInputStream *input, const uint
 	}
 }
 
-void WP6VariableLengthGroup::_read(WPXInputStream *input)
+void WP6VariableLengthGroup::_read(WPXInputStream *input, WPXEncryption *encryption)
 {
 	uint32_t startPosition = input->tell();
 	
-	m_subGroup = readU8(input);
-	m_size = readU16(input);
-	m_flags = readU8(input);
+	m_subGroup = readU8(input, encryption);
+	m_size = readU16(input, encryption);
+	m_flags = readU8(input, encryption);
 
 	if (m_flags & WP6_VARIABLE_GROUP_PREFIX_ID_BIT)
 	{
-		m_numPrefixIDs = readU8(input);
+		m_numPrefixIDs = readU8(input, encryption);
 		
 		if (m_numPrefixIDs > 0)
 		{
 			m_prefixIDs = new uint16_t[m_numPrefixIDs];
 			for (uint32_t i = 0; i < m_numPrefixIDs; i++)
 			{
-				m_prefixIDs[i] = readU16(input);		
+				m_prefixIDs[i] = readU16(input, encryption);		
 			}
 		}	
 	}	
@@ -151,7 +151,7 @@ void WP6VariableLengthGroup::_read(WPXInputStream *input)
 		m_prefixIDs = 0;
 	}
 		
-	m_sizeNonDeletable = readU16(input);
+	m_sizeNonDeletable = readU16(input, encryption);
 	if (m_sizeNonDeletable > m_size)
 	{
 		WPD_DEBUG_MSG(("WordPerfect: Possible corruption detected, bailing out!\n"));
@@ -160,11 +160,11 @@ void WP6VariableLengthGroup::_read(WPXInputStream *input)
 
 	WPD_DEBUG_MSG(("WordPerfect: Read variable group header (start_position: %i, sub_group: %i, size: %i, flags: %i, num_prefix_ids: %i, size_non_deletable: %i)\n", startPosition, m_subGroup, m_size, m_flags, m_numPrefixIDs, m_sizeNonDeletable));
 
-	_readContents(input);
+	_readContents(input, encryption);
 
 	input->seek((startPosition + m_size - 4 - input->tell()), WPX_SEEK_CUR);
 
-	if (m_size != readU16(input))
+	if (m_size != readU16(input, encryption))
 	{
 		WPD_DEBUG_MSG(("WordPerfect: Possible corruption detected, bailing out!\n"));
 		throw FileException();

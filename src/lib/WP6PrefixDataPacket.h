@@ -35,17 +35,17 @@ class WP6SubDocument;
 class WP6PrefixDataPacket
 {
 public:
-	WP6PrefixDataPacket(WPXInputStream * input);	
+	WP6PrefixDataPacket(WPXInputStream * input, WPXEncryption *encryption);	
 	virtual ~WP6PrefixDataPacket() {}
 	virtual void parse(WP6Listener * /* listener */) const {}
 	virtual WP6SubDocument * getSubDocument() const { return 0; }
 	uint32_t getDataSize() const { return m_dataSize; }
 
-	static WP6PrefixDataPacket * constructPrefixDataPacket(WPXInputStream * input, WP6PrefixIndice *prefixIndice);
+	static WP6PrefixDataPacket * constructPrefixDataPacket(WPXInputStream * input, WPXEncryption *encryption, WP6PrefixIndice *prefixIndice);
 
 protected:
-	virtual void _readContents(WPXInputStream *input) = 0;
- 	void _read(WPXInputStream *input, uint32_t dataOffset, uint32_t dataSize);
+	virtual void _readContents(WPXInputStream *input, WPXEncryption *encryption) = 0;
+ 	void _read(WPXInputStream *input, WPXEncryption *encryption, uint32_t dataOffset, uint32_t dataSize);
 
 private:
 	uint32_t m_dataSize;

@@ -32,9 +32,9 @@
 class WP5FontNameStringPoolPacket : public WP5GeneralPacketData
 {
 public:
-	WP5FontNameStringPoolPacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize);
+	WP5FontNameStringPoolPacket(WPXInputStream *input, WPXEncryption *encryption, int id, uint32_t dataOffset, uint32_t dataSize);
 	~WP5FontNameStringPoolPacket();
-	void _readContents(WPXInputStream *input, uint32_t dataSize);
+	void _readContents(WPXInputStream *input, WPXEncryption *encryption, uint32_t dataSize);
 	WPXString getFontName(const unsigned int offset) const;
 
 private:

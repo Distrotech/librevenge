@@ -27,20 +27,20 @@
 #include "WP3Listener.h"
 #include "libwpd_internal.h"
 
-WP3TabGroup::WP3TabGroup(WPXInputStream *input, uint8_t groupID) :
+WP3TabGroup::WP3TabGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID) :
 	WP3FixedLengthGroup(groupID),
 	m_subGroup(0),
 	m_modeType(0),
 	m_position(0.0f)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
-void WP3TabGroup::_readContents(WPXInputStream *input)
+void WP3TabGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
-	m_subGroup = readU8(input);
-	m_modeType = readU8(input);
-	m_position = fixedPointToFloat(readU32(input, true)) / 72.0f;
+	m_subGroup = readU8(input, encryption);
+	m_modeType = readU8(input, encryption);
+	m_position = fixedPointToFloat(readU32(input, encryption, true)) / 72.0f;
 }
 
 void WP3TabGroup::parse(WP3Listener *listener)

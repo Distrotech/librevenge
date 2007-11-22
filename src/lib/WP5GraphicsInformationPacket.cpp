@@ -28,12 +28,12 @@
 #include "WP5Parser.h"
 #include "libwpd_internal.h"
 
-WP5GraphicsInformationPacket::WP5GraphicsInformationPacket(WPXInputStream *input, int /* id */, uint32_t dataOffset, uint32_t dataSize) :
-	WP5GeneralPacketData(input),
+WP5GraphicsInformationPacket::WP5GraphicsInformationPacket(WPXInputStream *input, WPXEncryption *encryption, int /* id */, uint32_t dataOffset, uint32_t dataSize) :
+	WP5GeneralPacketData(),
 	m_images(),
 	m_data()
 {	
-	_read(input, dataOffset, dataSize);
+	_read(input, encryption, dataOffset, dataSize);
 }
 
 WP5GraphicsInformationPacket::~WP5GraphicsInformationPacket()
@@ -52,19 +52,19 @@ WP5GraphicsInformationPacket::~WP5GraphicsInformationPacket()
 	}
 }
 
-void WP5GraphicsInformationPacket::_readContents(WPXInputStream *input, uint32_t /* dataSize */)
+void WP5GraphicsInformationPacket::_readContents(WPXInputStream *input, WPXEncryption *encryption, uint32_t /* dataSize */)
 {
-	uint16_t tmpImagesCount = readU16(input);
+	uint16_t tmpImagesCount = readU16(input, encryption);
 	std::vector<uint32_t> tmpImagesSizes;
 	for (uint16_t i = 0; i < tmpImagesCount; i++)
-		tmpImagesSizes.push_back(readU32(input));
+		tmpImagesSizes.push_back(readU32(input, encryption));
 
 	for (uint16_t j = 0; j < tmpImagesCount; j++)
 	{
 		uint8_t *tmpData = new uint8_t[tmpImagesSizes[j]];
 		
 		for (uint32_t k = 0; k < tmpImagesSizes[j]; k++)
-			tmpData[k] = readU8(input);
+			tmpData[k] = readU8(input, encryption);
 #if 0
 		WPXString filename;
 		filename.sprintf("binarydump%.4x.wpg", j);

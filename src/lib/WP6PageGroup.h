@@ -31,9 +31,9 @@
 class WP6PageGroup : public WP6VariableLengthGroup
 {
  public:
-	WP6PageGroup(WPXInputStream *input);	
+	WP6PageGroup(WPXInputStream *input, WPXEncryption *encryption);	
 	~WP6PageGroup();
-	void _readContents(WPXInputStream *input);
+	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 	void parse(WP6Listener *listener);
 
  private:

@@ -31,8 +31,8 @@
 class WP6HeaderFooterGroup : public WP6VariableLengthGroup
 {
 public:
-	WP6HeaderFooterGroup(WPXInputStream *input);	
-	void _readContents(WPXInputStream *input);
+	WP6HeaderFooterGroup(WPXInputStream *input, WPXEncryption *encryption);	
+	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 	void parse(WP6Listener *listener);
 private:
 	uint8_t m_occurenceBits;

@@ -31,8 +31,8 @@
 class WP6FootnoteEndnoteGroup : public WP6VariableLengthGroup
 {
  public:
-	WP6FootnoteEndnoteGroup(WPXInputStream *input);	
-	void _readContents(WPXInputStream *input);
+	WP6FootnoteEndnoteGroup(WPXInputStream *input, WPXEncryption *encryption);	
+	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 	void parse(WP6Listener *listener);
 };
 

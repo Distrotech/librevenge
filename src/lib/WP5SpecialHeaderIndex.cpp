@@ -25,23 +25,23 @@
 #include "WP5SpecialHeaderIndex.h"
 #include "libwpd_internal.h"
 
-WP5SpecialHeaderIndex::WP5SpecialHeaderIndex(WPXInputStream * input) :
+WP5SpecialHeaderIndex::WP5SpecialHeaderIndex(WPXInputStream * input, WPXEncryption *encryption) :
 	  m_type(0),
 	  m_numOfIndexes(0),
 	  m_indexBlockSize(0),
 	  m_nextBlockOffset(0)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
-void WP5SpecialHeaderIndex::_read(WPXInputStream *input)
+void WP5SpecialHeaderIndex::_read(WPXInputStream *input, WPXEncryption *encryption)
 {
-	m_type = readU16(input);
+	m_type = readU16(input, encryption);
 	
-	m_numOfIndexes = readU16(input);
+	m_numOfIndexes = readU16(input, encryption);
 
-	m_indexBlockSize = readU16(input);
-	m_nextBlockOffset = readU32(input);
+	m_indexBlockSize = readU16(input, encryption);
+	m_nextBlockOffset = readU32(input, encryption);
 
 	WPD_DEBUG_MSG(("Special Header Index (type: %i, number of indexes: %i, index block size: %i, next block offset: %i)\n",
 			m_type, m_numOfIndexes, m_indexBlockSize, m_nextBlockOffset));

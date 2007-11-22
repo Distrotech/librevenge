@@ -29,17 +29,17 @@
 #include "WP5Listener.h"
 #include "libwpd_internal.h"
 
-WP5TableEOPGroup::WP5TableEOPGroup(WPXInputStream *input) :
+WP5TableEOPGroup::WP5TableEOPGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	WP5VariableLengthGroup()
 {
-	_read(input);
+	_read(input, encryption);
 }
 
 WP5TableEOPGroup::~WP5TableEOPGroup()
 {
 }
 
-void WP5TableEOPGroup::_readContents(WPXInputStream * /* input */)
+void WP5TableEOPGroup::_readContents(WPXInputStream * /* input */, WPXEncryption * /* encryption */)
 {
 	switch (getSubGroup())
 	{

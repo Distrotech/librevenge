@@ -27,24 +27,24 @@
 #include "WP5Parser.h"
 #include "libwpd_internal.h"
 
-WP5FontNameStringPoolPacket::WP5FontNameStringPoolPacket(WPXInputStream *input, int /* id */, uint32_t dataOffset, uint32_t dataSize) :
-	WP5GeneralPacketData(input),
+WP5FontNameStringPoolPacket::WP5FontNameStringPoolPacket(WPXInputStream *input, WPXEncryption *encryption, int /* id */, uint32_t dataOffset, uint32_t dataSize) :
+	WP5GeneralPacketData(),
 	m_fontNameString()
 {	
-	_read(input, dataOffset, dataSize);
+	_read(input, encryption, dataOffset, dataSize);
 }
 
 WP5FontNameStringPoolPacket::~WP5FontNameStringPoolPacket()
 {
 }
 
-void WP5FontNameStringPoolPacket::_readContents(WPXInputStream *input, uint32_t dataSize)
+void WP5FontNameStringPoolPacket::_readContents(WPXInputStream *input, WPXEncryption *encryption, uint32_t dataSize)
 {
 	unsigned int tmpInitialOffset = input->tell();
 	while ((long)input->tell() < (long)(tmpInitialOffset + dataSize))
 	{
 		unsigned int offset = input->tell() - tmpInitialOffset;
-		WPXString fontName = readCString(input);
+		WPXString fontName = readCString(input, encryption);
 		m_fontNameString[offset] = fontName;
 	}
 	

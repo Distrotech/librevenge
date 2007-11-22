@@ -34,7 +34,7 @@ class WP1Part
  public:
 	virtual ~WP1Part() {}
 	
-	static WP1Part * constructPart(WPXInputStream *input, uint8_t readVal);
+	static WP1Part * constructPart(WPXInputStream *input, WPXEncryption *encryption, uint8_t readVal);
 	virtual void parse(WP1Listener *listener) = 0;
 };
 

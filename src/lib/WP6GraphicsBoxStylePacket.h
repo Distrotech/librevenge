@@ -33,9 +33,9 @@
 class WP6GraphicsBoxStylePacket : public WP6PrefixDataPacket
 {
 public:
-	WP6GraphicsBoxStylePacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize);
+	WP6GraphicsBoxStylePacket(WPXInputStream *input, WPXEncryption *encryption, int id, uint32_t dataOffset, uint32_t dataSize);
 	~WP6GraphicsBoxStylePacket();
-	void _readContents(WPXInputStream *input);
+	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 	void parse(WP6Listener * /*listener*/) const {}
 
 	uint8_t getGeneralPositioningFlags() const { return m_generalPositioningFlags; }

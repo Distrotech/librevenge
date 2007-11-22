@@ -687,6 +687,10 @@ SOURCE=..\..\src\lib\WPXContentListener.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WPXEncryption.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WPXHeader.cpp
 # End Source File
 # Begin Source File
@@ -1352,6 +1356,10 @@ SOURCE=..\..\src\lib\WPXContentListener.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WPXDocumentInterface.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WPXEncryption.h
 # End Source File
 # Begin Source File
 

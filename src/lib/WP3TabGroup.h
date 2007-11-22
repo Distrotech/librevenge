@@ -31,11 +31,11 @@
 class WP3TabGroup : public WP3FixedLengthGroup
 {
 public:
-	WP3TabGroup(WPXInputStream *input, uint8_t groupID);	
+	WP3TabGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);	
 	void parse(WP3Listener *listener);
 	
  protected:
-	void _readContents(WPXInputStream *input);
+	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 
  private:
  	uint8_t m_subGroup;

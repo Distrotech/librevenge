@@ -29,7 +29,7 @@
 #include "WP6FileStructure.h"
 #include "WPXFileStructure.h"
 
-WP6ColumnGroup::WP6ColumnGroup(WPXInputStream *input) :
+WP6ColumnGroup::WP6ColumnGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	WP6VariableLengthGroup(),
 	m_margin(0),
 	m_colType(0),
@@ -38,10 +38,10 @@ WP6ColumnGroup::WP6ColumnGroup(WPXInputStream *input) :
 	m_isFixedWidth(),
 	m_columnWidth()
 {
-	_read(input);
+	_read(input, encryption);
 }
 
-void WP6ColumnGroup::_readContents(WPXInputStream *input)
+void WP6ColumnGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	// this group can contain different kinds of data, thus we need to read
 	// the contents accordingly	
@@ -50,26 +50,26 @@ void WP6ColumnGroup::_readContents(WPXInputStream *input)
 		case 0: // Left Margin Set
 		case 1: // Right Margin Set
 			{
-				m_margin = readU16(input);
+				m_margin = readU16(input, encryption);
 				WPD_DEBUG_MSG(("WordPerfect: Read column group margin size (margin: %i)\n", m_margin));
 			}
 			break;
 		case 2:
 			{
-				m_colType = readU8(input);
-				uint32_t tmpRowSpacing = readU32(input);
+				m_colType = readU8(input, encryption);
+				uint32_t tmpRowSpacing = readU32(input, encryption);
 				int16_t tmpRowSpacingIntegerPart = (int16_t)((tmpRowSpacing & 0xffff0000) >> 16);
 				float tmpRowSpacingFractionalPart = (float)((double)(tmpRowSpacing & 0xffff)/(double)0x10000);
 				m_rowSpacing = (float)tmpRowSpacingIntegerPart + tmpRowSpacingFractionalPart;
-				m_numColumns = readU8(input);
+				m_numColumns = readU8(input, encryption);
 				uint8_t tmpDefinition;
 				uint16_t tmpWidth;
 				if (m_numColumns > 1)
 				{
 					for (int i=0; i<((2*m_numColumns)-1); i++)
 					{
-						tmpDefinition = readU8(input);
-						tmpWidth = readU16(input);
+						tmpDefinition = readU8(input, encryption);
+						tmpWidth = readU16(input, encryption);
 						if ((tmpDefinition & 0x01) == 0x01)
 						{
 							m_isFixedWidth.push_back(true);

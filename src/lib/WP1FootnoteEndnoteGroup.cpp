@@ -26,13 +26,13 @@
 #include "libwpd_internal.h"
 #include "WP1SubDocument.h"
 
-WP1FootnoteEndnoteGroup::WP1FootnoteEndnoteGroup(WPXInputStream *input, uint8_t group) :
+WP1FootnoteEndnoteGroup::WP1FootnoteEndnoteGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group) :
 	WP1VariableLengthGroup(group),
 	m_noteType(FOOTNOTE),
 	m_noteNumber(0),
 	m_subDocument(0)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
 WP1FootnoteEndnoteGroup::~WP1FootnoteEndnoteGroup()
@@ -41,22 +41,22 @@ WP1FootnoteEndnoteGroup::~WP1FootnoteEndnoteGroup()
 		delete m_subDocument;
 }
 
-void WP1FootnoteEndnoteGroup::_readContents(WPXInputStream *input)
+void WP1FootnoteEndnoteGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	int tmpSubDocumentSize = getSize() - 29;	
-	uint8_t tmpNoteDefinition = readU8(input);
+	uint8_t tmpNoteDefinition = readU8(input, encryption);
 	if (tmpNoteDefinition & 0x02)
 	{
 		m_noteType = ENDNOTE;
 		tmpSubDocumentSize = getSize() - 27;
 	}
 
-	m_noteNumber = readU16(input, true);
+	m_noteNumber = readU16(input, encryption, true);
 	input->seek(getSize() - tmpSubDocumentSize - 3, WPX_SEEK_CUR);
 
 	WPD_DEBUG_MSG(("WP1SubDocument subDocumentSize = %i\n", tmpSubDocumentSize));
 	if (tmpSubDocumentSize)
-		m_subDocument = new WP1SubDocument(input, tmpSubDocumentSize);
+		m_subDocument = new WP1SubDocument(input, encryption, tmpSubDocumentSize);
 }
 
 void WP1FootnoteEndnoteGroup::parse(WP1Listener *listener)

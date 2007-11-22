@@ -25,21 +25,21 @@
 #include "WP1PointSizeGroup.h"
 #include "libwpd_internal.h"
 
-WP1PointSizeGroup::WP1PointSizeGroup(WPXInputStream *input, uint8_t group) :
+WP1PointSizeGroup::WP1PointSizeGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group) :
 	WP1FixedLengthGroup(group),
 	m_pointSize(0)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
 WP1PointSizeGroup::~WP1PointSizeGroup()
 {
 }
 
-void WP1PointSizeGroup::_readContents(WPXInputStream *input)
+void WP1PointSizeGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	input->seek(1, WPX_SEEK_CUR);
-	m_pointSize = readU8(input);
+	m_pointSize = readU8(input, encryption);
 }
 
 void WP1PointSizeGroup::parse(WP1Listener *listener)

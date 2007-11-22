@@ -34,6 +34,7 @@
 #include "WP5Parser.h"
 #include "WP6Parser.h"
 #include "WPXStream.h"
+#include "WPXEncryption.h"
 #include "libwpd_internal.h"
 
 /**
@@ -57,7 +58,7 @@ Analyzes the content of an input stream to see if it can be parsed
 \return A confidence value which represents the likelyhood that the content from
 the input stream can be parsed
 */
-WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input)
+WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input, const char *password)
 {
 	WPDConfidence confidence = WPD_CONFIDENCE_NONE;
 
@@ -83,7 +84,7 @@ WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input)
 
 	try
 	{
-		header = WPXHeader::constructHeader(document);
+		header = WPXHeader::constructHeader(document, 0);
 		if (header)
 		{
 			switch (header->getFileType())
@@ -121,13 +122,24 @@ WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input)
 					break;
 			}
 			if (header->getDocumentEncryption())
-				confidence = WPD_CONFIDENCE_NONE; // do not handle password protected documents						
+				if (!password)
+					confidence = WPD_CONFIDENCE_UNSUPPORTED_ENCRYPTION;
+				else if (header->getMajorVersion() == 0x02)  // we don't know how to decrypt WP6 documents for the while
+					confidence = WPD_CONFIDENCE_UNSUPPORTED_ENCRYPTION;
+				else
+				{
+					WPXEncryption encryption(password);
+					if (encryption.getCheckSum() == header->getDocumentEncryption())
+						confidence = WPD_CONFIDENCE_EXCELLENT;
+					else
+						confidence = WPD_CONFIDENCE_WRONG_PASSWORD;
+				}
 			DELETEP(header);
 		}
 		else
-			confidence = WP1Heuristics::isWP1FileFormat(input);
+			confidence = WP1Heuristics::isWP1FileFormat(input, password);
 			if (confidence != WPD_CONFIDENCE_EXCELLENT)
-				confidence = LIBWPD_MAX(confidence, WP42Heuristics::isWP42FileFormat(input));
+				confidence = LIBWPD_MAX(confidence, WP42Heuristics::isWP42FileFormat(input, password));
 			
 
 		// dispose of the reference to the ole input stream, if we allocated one
@@ -165,9 +177,12 @@ WPXDocumentInterface class implementation when needed. This is often commonly ca
 \param input The input stream
 \param documentInterface A WPXListener implementation
 */
-WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *documentInterface)
+WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *documentInterface, const char *password)
 {
 	WPXParser *parser = 0;
+	WPXEncryption *encryption = 0;
+	if (password)
+		encryption = new WPXEncryption(password);
 
 	// by-pass the OLE stream (if it exists) and returns the (sub) stream with the
 	// WordPerfect document.
@@ -191,10 +206,18 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *documen
 
 	try
 	{
-		WPXHeader *header = WPXHeader::constructHeader(document);
-
-		if (header && !header->getDocumentEncryption())
+		WPXHeader *header = WPXHeader::constructHeader(document, 0);
+		
+		
+		if (header && (!header->getDocumentEncryption() ||
+			(header->getDocumentEncryption() && encryption && header->getDocumentEncryption() == encryption->getCheckSum() )))
 		{
+			if (!header->getDocumentEncryption() && encryption)
+			{
+				delete encryption;
+				encryption = 0;
+			}
+
 			switch (header->getFileType())
 			{
 				case 0x0a: // WordPerfect File
@@ -202,12 +225,23 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *documen
 					{
 						case 0x00: // WP5
 							WPD_DEBUG_MSG(("WordPerfect: Using the WP5 parser.\n"));
-							parser = new WP5Parser(document, header);
+							if (encryption)
+							{
+								delete encryption;
+								encryption = new WPXEncryption(password, 16);
+							}
+							parser = new WP5Parser(document, header, encryption);
 							parser->parse(documentInterface);
 							break;
 						case 0x02: // WP6
 							WPD_DEBUG_MSG(("WordPerfect: Using the WP6 parser.\n"));
-							parser = new WP6Parser(document, header);
+							if (encryption)
+						 	{
+								delete encryption;
+								encryption = 0;
+								throw UnsupportedEncryptionException();
+							}
+							parser = new WP6Parser(document, header, encryption);
 							parser->parse(documentInterface);
 							break;
 						default:
@@ -223,7 +257,12 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *documen
 						case 0x03: // WP Mac 3.0-3.5
 						case 0x04: // WP Mac 3.5e
 							WPD_DEBUG_MSG(("WordPerfect: Using the WP3 parser.\n"));
-							parser = new WP3Parser(document, header);
+							if (encryption)
+							{
+								delete encryption;
+								encryption = new WPXEncryption(password, header->getDocumentOffset());
+							}
+							parser = new WP3Parser(document, header, encryption);
 							parser->parse(documentInterface);
 							break;
 						default:
@@ -237,11 +276,13 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *documen
 					WPD_DEBUG_MSG(("WordPerfect: Unsupported file type.\n"));
 					break;
 			}
-
-			DELETEP(parser); // deletes the header as well
+			DELETEP(parser);
+			DELETEP(header);
 		}
 		else if (header && header->getDocumentEncryption())
 		{
+			if (encryption)
+				delete encryption;
 			DELETEP(header);
 			throw UnsupportedEncryptionException();
 		}
@@ -251,19 +292,30 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *documen
 			// header which can be used to determine which parser to instanciate.
 			// Use heuristics to determine with some certainty if we are dealing with
 			// a file in the WP4.2 format or WP Mac 1.x format.
-			if (WP1Heuristics::isWP1FileFormat(document) != WPD_CONFIDENCE_NONE)
+			if (WP1Heuristics::isWP1FileFormat(document, password) == WPD_CONFIDENCE_EXCELLENT)
 			{
 				WPD_DEBUG_MSG(("WordPerfect: Mostly likely the file format is WP Mac 1.x.\n\n"));
 				WPD_DEBUG_MSG(("WordPerfect: Using the WP Mac 1.x parser.\n\n"));
-				parser = new WP1Parser(document);
+				if (encryption)
+				{
+					delete encryption;
+					encryption = new WPXEncryption(password, 6);
+				}
+				parser = new WP1Parser(document, encryption);
 				parser->parse(documentInterface);
 				DELETEP(parser);
 			}
-			else if (WP42Heuristics::isWP42FileFormat(document) != WPD_CONFIDENCE_NONE)
+			else if (WP42Heuristics::isWP42FileFormat(document, password) == WPD_CONFIDENCE_EXCELLENT)
 			{
 				WPD_DEBUG_MSG(("WordPerfect: Mostly likely the file format is WP4.2.\n\n"));
 				WPD_DEBUG_MSG(("WordPerfect: Using the WP4.2 parser.\n\n"));
-				parser = new WP42Parser(document);
+				if (encryption)
+				{
+					delete encryption;
+					encryption = new WPXEncryption(password, 6);
+					input->seek(6, WPX_SEEK_SET);
+				}
+				parser = new WP42Parser(document, encryption);
 				parser->parse(documentInterface);
 				DELETEP(parser);
 			}

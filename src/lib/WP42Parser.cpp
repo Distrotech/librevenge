@@ -33,8 +33,8 @@
 #include "WP42StylesListener.h"
 #include "WP42ContentListener.h"
 
-WP42Parser::WP42Parser(WPXInputStream *input) :
-	WPXParser(input, 0)
+WP42Parser::WP42Parser(WPXInputStream *input, WPXEncryption *encryption) :
+	WPXParser(input, 0, encryption)
 {
 }
 
@@ -42,7 +42,7 @@ WP42Parser::~WP42Parser()
 {
 }
 
-void WP42Parser::parse(WPXInputStream *input, WP42Listener *listener)
+void WP42Parser::parse(WPXInputStream *input, WPXEncryption *encryption, WP42Listener *listener)
 {
 	listener->startDocument();
 
@@ -50,18 +50,18 @@ void WP42Parser::parse(WPXInputStream *input, WP42Listener *listener)
 
 	WPD_DEBUG_MSG(("WordPerfect: Starting document body parse (position = %ld)\n",(long)input->tell()));
 
-	parseDocument(input, listener);
+	parseDocument(input, encryption, listener);
 
 	listener->endDocument();
 }
 
 // parseDocument: parses a document body (may call itself recursively, on other streams, or itself)
-void WP42Parser::parseDocument(WPXInputStream *input, WP42Listener *listener)
+void WP42Parser::parseDocument(WPXInputStream *input, WPXEncryption *encryption, WP42Listener *listener)
 {
 	while (!input->atEOS())
 	{
 		uint8_t readVal;
-		readVal = readU8(input);
+		readVal = readU8(input, encryption);
 
 		if (readVal < (uint8_t)0x20)
 		{
@@ -150,7 +150,7 @@ void WP42Parser::parseDocument(WPXInputStream *input, WP42Listener *listener)
 		}
 		else if (readVal >= (uint8_t)0xC0 && readVal <= (uint8_t)0xFE)
 		{
-			WP42Part *part = WP42Part::constructPart(input, readVal);
+			WP42Part *part = WP42Part::constructPart(input, encryption, readVal);
 			if (part)
 			{
 				part->parse(listener);
@@ -165,6 +165,7 @@ void WP42Parser::parseDocument(WPXInputStream *input, WP42Listener *listener)
 void WP42Parser::parse(WPXDocumentInterface *documentInterface)
 {
 	WPXInputStream *input = getInput();
+	WPXEncryption *encryption = getEncryption();
 	std::list<WPXPageSpan> pageList;
 	std::vector<WP42SubDocument *> subDocuments;	
 	
@@ -173,7 +174,7 @@ void WP42Parser::parse(WPXDocumentInterface *documentInterface)
 		// do a "first-pass" parse of the document
 		// gather table border information, page properties (per-page)
 		WP42StylesListener stylesListener(pageList, subDocuments);
-		parse(input, &stylesListener);
+		parse(input, encryption, &stylesListener);
 
 		// postprocess the pageList == remove duplicate page spans due to the page breaks
 		std::list<WPXPageSpan>::iterator previousPage = pageList.begin();
@@ -194,7 +195,7 @@ void WP42Parser::parse(WPXDocumentInterface *documentInterface)
 		// second pass: here is where we actually send the messages to the target app
 		// that are necessary to emit the body of the target document
 		WP42ContentListener listener(pageList, subDocuments, documentInterface);
-		parse(input, &listener);
+		parse(input, encryption, &listener);
 
 		// cleanup section: free the used resources
 		for (std::vector<WP42SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); iterSubDoc++)

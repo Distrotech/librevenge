@@ -30,18 +30,18 @@
 #include "libwpd_internal.h"
 #include "WP5Listener.h"
 
-WP5ExtendedCharacterGroup::WP5ExtendedCharacterGroup(WPXInputStream *input, uint8_t groupID) :
+WP5ExtendedCharacterGroup::WP5ExtendedCharacterGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID) :
 	WP5FixedLengthGroup(groupID),
 	m_character(0),
 	m_characterSet(0)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
-void WP5ExtendedCharacterGroup::_readContents(WPXInputStream *input)
+void WP5ExtendedCharacterGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
-	m_character = readU8(input);
-	m_characterSet = readU8(input);
+	m_character = readU8(input, encryption);
+	m_characterSet = readU8(input, encryption);
 }
 
 void WP5ExtendedCharacterGroup::parse(WP5Listener *listener)

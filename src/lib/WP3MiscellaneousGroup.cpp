@@ -30,20 +30,20 @@
 #include "WPXFileStructure.h"
 #include "WP3Listener.h"
 
-WP3MiscellaneousGroup::WP3MiscellaneousGroup(WPXInputStream *input) :
+WP3MiscellaneousGroup::WP3MiscellaneousGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	WP3VariableLengthGroup(),
 	m_pageWidth(0),
 	m_pageHeight(0),
 	m_pageOrientation(PORTRAIT)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
 WP3MiscellaneousGroup::~WP3MiscellaneousGroup()
 {
 }
 
-void WP3MiscellaneousGroup::_readContents(WPXInputStream *input)
+void WP3MiscellaneousGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	// this group can contain different kinds of data, thus we need to read
 	// the contents accordingly
@@ -56,9 +56,9 @@ void WP3MiscellaneousGroup::_readContents(WPXInputStream *input)
 		input->seek(20, WPX_SEEK_CUR);
 		
 		// read the new values
-		tmpPageOrientation = readU16(input, true);
-		m_pageWidth = fixedPointToWPUs(readU32(input, true));
-		m_pageHeight = fixedPointToWPUs(readU32(input, true));
+		tmpPageOrientation = readU16(input, encryption, true);
+		m_pageWidth = fixedPointToWPUs(readU32(input, encryption, true));
+		m_pageHeight = fixedPointToWPUs(readU32(input, encryption, true));
 		
 		// determine whether it is portrait or landscape
 		if ((tmpPageOrientation & 0x0001) == 0x0000)

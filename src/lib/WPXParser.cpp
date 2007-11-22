@@ -25,15 +25,12 @@
 
 #include "WPXParser.h"
 #include "WPXHeader.h"
+#include "WPXEncryption.h"
 #include "libwpd_internal.h"
 
-WPXParser::WPXParser(WPXInputStream *input, WPXHeader *header) :
+WPXParser::WPXParser(WPXInputStream *input, WPXHeader *header, WPXEncryption *encryption) :
 	m_input(input),
-	m_header(header)
+	m_header(header),
+	m_encryption(encryption)
 {
-}
-
-WPXParser::~WPXParser()
-{
-	DELETEP(m_header);
 }

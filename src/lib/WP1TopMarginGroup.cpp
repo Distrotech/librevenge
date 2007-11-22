@@ -25,21 +25,21 @@
 #include "WP1TopMarginGroup.h"
 #include "libwpd_internal.h"
 
-WP1TopMarginGroup::WP1TopMarginGroup(WPXInputStream *input, uint8_t group) :
+WP1TopMarginGroup::WP1TopMarginGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group) :
 	WP1FixedLengthGroup(group),
 	m_topMargin(0)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
 WP1TopMarginGroup::~WP1TopMarginGroup()
 {
 }
 
-void WP1TopMarginGroup::_readContents(WPXInputStream *input)
+void WP1TopMarginGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	input->seek(2, WPX_SEEK_CUR);
-	m_topMargin = readU16(input,true);
+	m_topMargin = readU16(input, encryption, true);
 }
 
 void WP1TopMarginGroup::parse(WP1Listener *listener)

@@ -28,7 +28,7 @@
 #include "libwpd.h"
 #include "libwpd_internal.h"
 
-WP6PrefixIndice::WP6PrefixIndice(WPXInputStream * input, int id)
+WP6PrefixIndice::WP6PrefixIndice(WPXInputStream * input, WPXEncryption *encryption, int id)
 	: m_id(id),
 	  m_type(0),
 	  m_flags(0),
@@ -38,18 +38,18 @@ WP6PrefixIndice::WP6PrefixIndice(WPXInputStream * input, int id)
 	  m_dataOffset(0),
 	  m_hasChildren(false)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
-void WP6PrefixIndice::_read(WPXInputStream *input)
+void WP6PrefixIndice::_read(WPXInputStream *input, WPXEncryption *encryption)
 {
-	m_flags = readU8(input);
-	m_type = readU8(input);
+	m_flags = readU8(input, encryption);
+	m_type = readU8(input, encryption);
 
-	m_useCount = readU16(input);
-	m_hideCount = readU16(input);
-	m_dataSize = readU32(input);
-	m_dataOffset = readU32(input);
+	m_useCount = readU16(input, encryption);
+	m_hideCount = readU16(input, encryption);
+	m_dataSize = readU32(input, encryption);
+	m_dataOffset = readU32(input, encryption);
 
 	WPD_DEBUG_MSG(("Prefix Packet (type: %i, data size: %i, data offset: %i)\n", m_type, m_dataSize, m_dataOffset));
 	

@@ -35,17 +35,17 @@ class WP5PrefixData;
 class WP5Parser : public WPXParser
 {
 public:
-	WP5Parser(WPXInputStream *input, WPXHeader *header);
+	WP5Parser(WPXInputStream *input, WPXHeader *header, WPXEncryption *encryption);
 	~WP5Parser();
 	
 	void parse(WPXDocumentInterface *documentInterface);
 	
-	static void parseDocument(WPXInputStream *input, WP5Listener *listener);
+	static void parseDocument(WPXInputStream *input, WPXEncryption *encryption, WP5Listener *listener);
 
 private:
-	WP5PrefixData * getPrefixData(WPXInputStream *input);
+	WP5PrefixData * getPrefixData(WPXInputStream *input, WPXEncryption *encryption);
 
-	void parse(WPXInputStream *input, WP5Listener *listener);
+	void parse(WPXInputStream *input, WPXEncryption *encryption, WP5Listener *listener);
 };
 
 #endif /* WP5PARSER_H */

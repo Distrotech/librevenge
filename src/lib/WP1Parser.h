@@ -35,15 +35,15 @@ class WP1Listener;
 class WP1Parser : public WPXParser
 {
 public:
-	WP1Parser(WPXInputStream *input);
+	WP1Parser(WPXInputStream *input, WPXEncryption *encryption);
 	~WP1Parser();
 
 	void parse(WPXDocumentInterface *documentInterface);
 
-	static void parseDocument(WPXInputStream *input, WP1Listener *listener);
+	static void parseDocument(WPXInputStream *input, WPXEncryption *encryption, WP1Listener *listener);
 
 private:
-	void parse(WPXInputStream *input, WP1Listener *listener);
+	void parse(WPXInputStream *input, WPXEncryption *encryption, WP1Listener *listener);
 };
 
 #endif /* WP1PARSER_H */

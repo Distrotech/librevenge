@@ -36,8 +36,8 @@
 #include "WP6DefaultInitialFontPacket.h"
 #include "WPXTable.h"
 
-WP6Parser::WP6Parser(WPXInputStream *input, WPXHeader *header) :
-	WPXParser(input, header)
+WP6Parser::WP6Parser(WPXInputStream *input, WPXHeader *header, WPXEncryption *encryption) :
+	WPXParser(input, header, encryption)
 {
 }
 
@@ -45,12 +45,12 @@ WP6Parser::~WP6Parser()
 {
 }
 
-WP6PrefixData * WP6Parser::getPrefixData(WPXInputStream *input)
+WP6PrefixData * WP6Parser::getPrefixData(WPXInputStream *input, WPXEncryption *encryption)
 {
 	WP6PrefixData *prefixData = 0;
 	try
 	{
-		prefixData = new WP6PrefixData(input, ((WP6Header*)getHeader())->getNumPrefixIndices());
+		prefixData = new WP6PrefixData(input, encryption, ((WP6Header*)getHeader())->getNumPrefixIndices());
 		return prefixData;
 	}
 	catch(FileException)
@@ -71,7 +71,7 @@ WP6PrefixData * WP6Parser::getPrefixData(WPXInputStream *input)
 	}
 		}
 
-void WP6Parser::parse(WPXInputStream *input, WP6Listener *listener)
+void WP6Parser::parse(WPXInputStream *input, WPXEncryption *encryption, WP6Listener *listener)
 {
 	listener->startDocument();
 	
@@ -79,7 +79,7 @@ void WP6Parser::parse(WPXInputStream *input, WP6Listener *listener)
 	
 	WPD_DEBUG_MSG(("WordPerfect: Starting document body parse (position = %ld)\n",(long)input->tell()));
 	
-	parseDocument(input, listener);
+	parseDocument(input, encryption, listener);
 	
 	listener->endDocument();		
 }
@@ -121,12 +121,12 @@ static const uint16_t extendedInternationalCharacterMap[] =
 };
 
 // parseDocument: parses a document body (may call itself recursively, on other streams, or itself)
-void WP6Parser::parseDocument(WPXInputStream *input, WP6Listener *listener)
+void WP6Parser::parseDocument(WPXInputStream *input, WPXEncryption *encryption, WP6Listener *listener)
 {
 	while (!input->atEOS())
 	{
 		uint8_t readVal;
-		readVal = readU8(input);
+		readVal = readU8(input, encryption);
 		
 		if (readVal == (uint8_t)0x00)
 		{
@@ -143,7 +143,7 @@ void WP6Parser::parseDocument(WPXInputStream *input, WP6Listener *listener)
 		}
 		else 
 		{
-			WP6Part *part = WP6Part::constructPart(input, readVal);
+			WP6Part *part = WP6Part::constructPart(input, encryption, readVal);
 			if (part)
 			{
 				part->parse(listener);
@@ -188,16 +188,17 @@ void WP6Parser::parse(WPXDocumentInterface *documentInterface)
 	WPXTableList tableList;	
 
 	WPXInputStream *input = getInput();
+	WPXEncryption *encryption = getEncryption();
 	
 	try
  	{
-		prefixData = getPrefixData(input);
+		prefixData = getPrefixData(input, encryption);
 		
 		// do a "first-pass" parse of the document
 		// gather table border information, page properties (per-page)
 		WP6StylesListener stylesListener(pageList, tableList);
 		stylesListener.setPrefixData(prefixData);
-		parse(input, &stylesListener);
+		parse(input, encryption, &stylesListener);
 		
 		// postprocess the pageList == remove duplicate page spans due to the page breaks
 		std::list<WPXPageSpan>::iterator previousPage = pageList.begin();
@@ -226,7 +227,7 @@ void WP6Parser::parse(WPXDocumentInterface *documentInterface)
 		parsePacket(prefixData, WP6_INDEX_HEADER_INITIAL_FONT, &listener);
 		parsePackets(prefixData, WP6_INDEX_HEADER_OUTLINE_STYLE, &listener);
 
-		parse(input, static_cast<WP6Listener *>(&listener));
+		parse(input, encryption, &listener);
 
 		// cleanup section: free the used resources
 		delete prefixData;

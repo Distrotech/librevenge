@@ -29,7 +29,7 @@
 #include "WP5Listener.h"
 #include "libwpd_internal.h"
 
-WP5TableEOLGroup::WP5TableEOLGroup(WPXInputStream *input) :
+WP5TableEOLGroup::WP5TableEOLGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	WP5VariableLengthGroup(),
 	m_cellVerticalAlignment(0),
 	m_useCellAttributes(false),
@@ -41,34 +41,34 @@ WP5TableEOLGroup::WP5TableEOLGroup(WPXInputStream *input) :
 	m_cellAttributes(0),
 	m_cellJustification(0)	
 {
-	_read(input);
+	_read(input, encryption);
 }
 
 WP5TableEOLGroup::~WP5TableEOLGroup()
 {
 }
 
-void WP5TableEOLGroup::_readContents(WPXInputStream *input)
+void WP5TableEOLGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	uint8_t tmpFlags, tmpColumnSpanning;
 	switch (getSubGroup())
 	{
 	case WP5_TABLE_EOL_GROUP_BEGINNING_OF_COLUMN_AT_EOL:
-		tmpFlags = readU8(input);
+		tmpFlags = readU8(input, encryption);
 		if ((tmpFlags & 0x01) == 0x01)
 			m_useCellJustification = true;
 		if ((tmpFlags & 0x02) == 0x02)
 			m_useCellAttributes = true;
 		m_cellVerticalAlignment = ((tmpFlags & 0x0C) >> 2);
-		m_columnNumber = readU8(input);
-		tmpColumnSpanning = readU8(input);
+		m_columnNumber = readU8(input, encryption);
+		tmpColumnSpanning = readU8(input, encryption);
 		m_colSpan = tmpColumnSpanning & 0x7F;
 		if ((tmpColumnSpanning & 0x80) == 0x80)
 			m_spannedFromAbove = true;
-		m_rowSpan = readU8(input);
+		m_rowSpan = readU8(input, encryption);
 		input->seek(4, WPX_SEEK_CUR);
-		m_cellAttributes = readU16(input);
-		m_cellJustification = readU8(input);
+		m_cellAttributes = readU16(input, encryption);
+		m_cellJustification = readU8(input, encryption);
 		break;
 	case WP5_TABLE_EOL_GROUP_BEGINNING_OF_ROW_AT_EOL:
 		break;

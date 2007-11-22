@@ -31,8 +31,8 @@
 #include "WP1StylesListener.h"
 #include "WP1ContentListener.h"
 
-WP1Parser::WP1Parser(WPXInputStream *input) :
-	WPXParser(input, 0)
+WP1Parser::WP1Parser(WPXInputStream *input, WPXEncryption *encryption) :
+	WPXParser(input, 0, encryption)
 {
 }
 
@@ -40,26 +40,29 @@ WP1Parser::~WP1Parser()
 {
 }
 
-void WP1Parser::parse(WPXInputStream *input, WP1Listener *listener)
+void WP1Parser::parse(WPXInputStream *input, WPXEncryption *encryption, WP1Listener *listener)
 {
 	listener->startDocument();
 
-	input->seek(0, WPX_SEEK_SET);
+	if (encryption)
+		input->seek(6, WPX_SEEK_SET);
+	else
+		input->seek(0, WPX_SEEK_SET);
 
 	WPD_DEBUG_MSG(("WordPerfect: Starting document body parse (position = %ld)\n",(long)input->tell()));
 
-	parseDocument(input, listener);
+	parseDocument(input, encryption, listener);
 
 	listener->endDocument();
 }
 
 // parseDocument: parses a document body (may call itself recursively, on other streams, or itself)
-void WP1Parser::parseDocument(WPXInputStream *input, WP1Listener *listener)
+void WP1Parser::parseDocument(WPXInputStream *input, WPXEncryption *encryption, WP1Listener *listener)
 {
 	while (!input->atEOS())
 	{
 		uint8_t readVal;
-		readVal = readU8(input);
+		readVal = readU8(input, encryption);
 
 		if (readVal < (uint8_t)0x20)
 		{
@@ -168,7 +171,7 @@ void WP1Parser::parseDocument(WPXInputStream *input, WP1Listener *listener)
 		}
 		else if (readVal >= (uint8_t)0xC0 && readVal <= (uint8_t)0xFE)
 		{
-			WP1Part *part = WP1Part::constructPart(input, readVal);
+			WP1Part *part = WP1Part::constructPart(input, encryption, readVal);
 			if (part)
 			{
 				part->parse(listener);
@@ -183,6 +186,7 @@ void WP1Parser::parseDocument(WPXInputStream *input, WP1Listener *listener)
 void WP1Parser::parse(WPXDocumentInterface *documentInterface)
 {
 	WPXInputStream *input = getInput();
+	WPXEncryption *encryption = getEncryption();
 	std::list<WPXPageSpan> pageList;
 	std::vector<WP1SubDocument *> subDocuments;	
 	
@@ -191,7 +195,7 @@ void WP1Parser::parse(WPXDocumentInterface *documentInterface)
 		// do a "first-pass" parse of the document
 		// gather table border information, page properties (per-page)
 		WP1StylesListener stylesListener(pageList, subDocuments);
-		parse(input, &stylesListener);
+		parse(input, encryption, &stylesListener);
 
 		// postprocess the pageList == remove duplicate page spans due to the page breaks
 		std::list<WPXPageSpan>::iterator previousPage = pageList.begin();
@@ -212,7 +216,7 @@ void WP1Parser::parse(WPXDocumentInterface *documentInterface)
 		// second pass: here is where we actually send the messages to the target app
 		// that are necessary to emit the body of the target document
 		WP1ContentListener listener(pageList, subDocuments, documentInterface);
-		parse(input, &listener);
+		parse(input, encryption, &listener);
 
 		// cleanup section: free the used resources
 		for (std::vector<WP1SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); iterSubDoc++)

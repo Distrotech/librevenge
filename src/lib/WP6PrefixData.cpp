@@ -30,7 +30,7 @@
 #include "WP6DefaultInitialFontPacket.h"
 #include "libwpd_internal.h"
 
-WP6PrefixData::WP6PrefixData(WPXInputStream *input, const int numPrefixIndices) :
+WP6PrefixData::WP6PrefixData(WPXInputStream *input, WPXEncryption *encryption, const int numPrefixIndices) :
 	m_prefixDataPacketHash(),
 	m_prefixDataPacketTypeHash(),
 	m_defaultInitialFontPID((-1))
@@ -41,13 +41,13 @@ WP6PrefixData::WP6PrefixData(WPXInputStream *input, const int numPrefixIndices) 
 	for (i=1; i<numPrefixIndices; i++)
 	{
 		WPD_DEBUG_MSG(("WordPerfect: constructing prefix indice 0x%x\n", i));
-		prefixIndiceArray[(i-1)] = new WP6PrefixIndice(input, i);
+		prefixIndiceArray[(i-1)] = new WP6PrefixIndice(input, encryption, i);
 	}
 	
 	for (i=1; i<numPrefixIndices; i++) 
 	{
 		WPD_DEBUG_MSG(("WordPerfect: constructing prefix packet 0x%x\n", i));
-		WP6PrefixDataPacket *prefixDataPacket = WP6PrefixDataPacket::constructPrefixDataPacket(input, prefixIndiceArray[(i-1)]);
+		WP6PrefixDataPacket *prefixDataPacket = WP6PrefixDataPacket::constructPrefixDataPacket(input, encryption, prefixIndiceArray[(i-1)]);
 		if (prefixDataPacket) {
 			m_prefixDataPacketHash[i] = prefixDataPacket;
 			m_prefixDataPacketTypeHash.insert(::std::map<int, WP6PrefixDataPacket *>::value_type(prefixIndiceArray[i-1]->getType(), prefixDataPacket));

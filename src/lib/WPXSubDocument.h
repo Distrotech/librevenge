@@ -29,12 +29,13 @@
 #include "libwpd_types.h"
 
 class WPXListener;
+class WPXEncryption;
 
 class WPXSubDocument
 {
 public:
 	WPXSubDocument();
-	WPXSubDocument(WPXInputStream *input, const unsigned dataSize);
+	WPXSubDocument(WPXInputStream *input, WPXEncryption *encryption, const unsigned dataSize);
 	WPXSubDocument(uint8_t * streamData, const unsigned dataSize);
 	virtual ~WPXSubDocument();
 	WPXMemoryInputStream *getStream() const { return m_stream;}

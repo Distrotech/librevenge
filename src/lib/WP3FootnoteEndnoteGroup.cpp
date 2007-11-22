@@ -27,11 +27,11 @@
 #include "WP3FileStructure.h"
 #include "WP3Parser.h"
 
-WP3FootnoteEndnoteGroup::WP3FootnoteEndnoteGroup(WPXInputStream *input) :
+WP3FootnoteEndnoteGroup::WP3FootnoteEndnoteGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	WP3VariableLengthGroup(),
 	m_subDocument(0)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
 WP3FootnoteEndnoteGroup::~WP3FootnoteEndnoteGroup()
@@ -39,16 +39,16 @@ WP3FootnoteEndnoteGroup::~WP3FootnoteEndnoteGroup()
 	delete m_subDocument;
 }
 
-void WP3FootnoteEndnoteGroup::_readContents(WPXInputStream *input)
+void WP3FootnoteEndnoteGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	int tmpSizeOfNote = getSize() - 8;
 	input->seek(25, WPX_SEEK_CUR);
 	tmpSizeOfNote -= 25;
-	unsigned tmpNumOfPages = readU16(input, true);
+	unsigned tmpNumOfPages = readU16(input, encryption, true);
 	tmpSizeOfNote -= 2;
 	input->seek(4*tmpNumOfPages, WPX_SEEK_CUR);
 	tmpSizeOfNote -= 4*tmpNumOfPages;
-	unsigned tmpNumBreakTableEntries = readU16(input, true);
+	unsigned tmpNumBreakTableEntries = readU16(input, encryption, true);
 	tmpSizeOfNote -= 2;
 	input->seek(6*tmpNumBreakTableEntries, WPX_SEEK_CUR);
 	tmpSizeOfNote -= 6*tmpNumBreakTableEntries;
@@ -58,7 +58,7 @@ void WP3FootnoteEndnoteGroup::_readContents(WPXInputStream *input)
 	// subdocument
 
 	if (tmpSizeOfNote > 0)
-		m_subDocument = new WP3SubDocument(input, tmpSizeOfNote);
+		m_subDocument = new WP3SubDocument(input, encryption, tmpSizeOfNote);
 }
 
 void WP3FootnoteEndnoteGroup::parse(WP3Listener *listener)

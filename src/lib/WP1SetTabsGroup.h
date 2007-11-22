@@ -30,9 +30,9 @@
 class WP1SetTabsGroup : public WP1VariableLengthGroup
 {
 public:
-	WP1SetTabsGroup(WPXInputStream *input, uint8_t group);
+	WP1SetTabsGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group);
 	~WP1SetTabsGroup();	
-	void _readContents(WPXInputStream *input);
+	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 	void parse(WP1Listener *listener);
 
 private:

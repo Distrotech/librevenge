@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 	
 	WPXInputStream* input = new WPXFileStream(argv[1]);
 
-	WPDConfidence confidence = WPDocument::isFileFormatSupported(input);
+	WPDConfidence confidence = WPDocument::isFileFormatSupported(input, 0);
 	if (confidence == WPD_CONFIDENCE_NONE || confidence == WPD_CONFIDENCE_POOR)
 	{
 		printf("ERROR: Unsupported file format!\n");
@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
 	}
 
 	HtmlDocumentGenerator documentGenerator;
- 	WPDResult error = WPDocument::parse(input, static_cast<WPXDocumentInterface *>(&documentGenerator));
+ 	WPDResult error = WPDocument::parse(input, &documentGenerator, 0);
 
 	if (error == WPD_FILE_ACCESS_ERROR)
 		fprintf(stderr, "ERROR: File Exception!\n");

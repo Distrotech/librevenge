@@ -26,8 +26,8 @@
 #include "WP3Parser.h"
 #include "libwpd_internal.h"
 
-WP3SubDocument::WP3SubDocument(WPXInputStream *input, const unsigned dataSize) :
-	WPXSubDocument(input, dataSize)
+WP3SubDocument::WP3SubDocument(WPXInputStream *input, WPXEncryption *encryption, const unsigned dataSize) :
+	WPXSubDocument(input, encryption, dataSize)
 {
 }
 
@@ -37,5 +37,5 @@ void WP3SubDocument::parse(WP3Listener *listener) const
 	if (!tmpStream)
 		return;
 	tmpStream->seek(0, WPX_SEEK_SET);
-	WP3Parser::parseDocument(tmpStream, listener);
+	WP3Parser::parseDocument(tmpStream, 0, listener);
 }

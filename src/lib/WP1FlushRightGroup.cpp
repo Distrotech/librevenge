@@ -25,10 +25,10 @@
 #include "WP1FlushRightGroup.h"
 #include "libwpd_internal.h"
 
-WP1FlushRightGroup::WP1FlushRightGroup(WPXInputStream *input, uint8_t group) :
+WP1FlushRightGroup::WP1FlushRightGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group) :
 	WP1FixedLengthGroup(group)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
 WP1FlushRightGroup::~WP1FlushRightGroup()

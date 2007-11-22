@@ -34,9 +34,9 @@
 class WP5PageFormatGroup : public WP5VariableLengthGroup
 {
  public:
-	WP5PageFormatGroup(WPXInputStream *input);	
+	WP5PageFormatGroup(WPXInputStream *input, WPXEncryption *encryption);	
 	~WP5PageFormatGroup();
-	void _readContents(WPXInputStream *input);
+	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 	void parse(WP5Listener *listener);
 
  private:

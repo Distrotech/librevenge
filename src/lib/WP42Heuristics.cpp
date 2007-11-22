@@ -28,10 +28,37 @@
 #include "WP42FileStructure.h"
 #include "libwpd_internal.h"
 
-WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input)
+WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input, const char *password)
 {
+	input->seek(0, WPX_SEEK_SET);
+	WPXEncryption *encryption = 0;
 	try
 	{
+		if (password)
+		{
+			encryption = new WPXEncryption(password, 6);
+			if (readU8(input, 0) != 0xFE || readU8(input, 0) != 0xFF ||
+				readU8(input, 0) != 0x61 || readU8(input, 0) != 0x61 ||
+				readU16(input, 0) != encryption->getCheckSum())
+			{
+				delete encryption;
+				encryption = 0;
+				input->seek(0, WPX_SEEK_SET);
+				return WPD_CONFIDENCE_WRONG_PASSWORD;
+			}
+			input->seek(6, WPX_SEEK_SET);
+		}
+		else
+		{
+			if (readU8(input, 0) == 0xFE && readU8(input, 0) == 0xFF &&
+				readU8(input, 0) == 0x61 && readU8(input, 0) == 0x61 &&
+				readU16(input,0) != 0x0000)
+			{
+				return WPD_CONFIDENCE_UNSUPPORTED_ENCRYPTION;
+			}
+			input->seek(0, WPX_SEEK_SET);
+		}
+				
 		int functionGroupCount = 0;
 	
 		WPD_DEBUG_MSG(("WP42Heuristics::isWP42FileFormat()\n"));
@@ -40,7 +67,7 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input)
 	
 		while (!input->atEOS())
 		{
-			uint8_t readVal = readU8(input);
+			uint8_t readVal = readU8(input, encryption);
 
 			WPD_DEBUG_MSG(("WP42Heuristics, Offset 0x%.8x, value 0x%.2x\n", (unsigned int)(input->tell() - 1), readVal));
 		
@@ -60,6 +87,8 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input)
 			else if (readVal >= (uint8_t)0xFF)
 			{
 				// special codes that should not be found as separate functions
+				if (encryption)
+					delete encryption;
 				return WPD_CONFIDENCE_NONE;
 			}
 			else 
@@ -76,14 +105,18 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input)
 					uint8_t readNextVal = 0;
 					while (!input->atEOS())
 					{
-						readNextVal = readU8(input);
+						readNextVal = readU8(input, encryption);
 						if (readNextVal == readVal)
 							break;
 					}
 
 					// when passed the complete file, we don't allow for open groups when we've reached EOF
 					if ((readNextVal == 0) || (input->atEOS() && (readNextVal != readVal)))
+					{
+						if (encryption)
+							delete encryption;
 						return WPD_CONFIDENCE_NONE;
+					}
 				
 					functionGroupCount++;
 				}
@@ -95,13 +128,21 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input)
 					int res = input->seek(WP42_FUNCTION_GROUP_SIZE[readVal-0xC0]-2, WPX_SEEK_CUR);
 					// when passed the complete file, we should be able to do that
 					if (res)
+					{
+						if (encryption)
+							delete encryption;
 						return WPD_CONFIDENCE_NONE;
+					}
 				
 					// read the closing gate
-					uint8_t readNextVal = readU8(input);
+					uint8_t readNextVal = readU8(input, encryption);
 					if (readNextVal != readVal)
+					{
+						if (encryption)
+							delete encryption;
 						return WPD_CONFIDENCE_NONE;
-				
+					}
+
 					functionGroupCount++;
 				}
 			}
@@ -112,12 +153,22 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input)
 		this would be the case when passed a plaintext file for example, which libwpd is not
 		supposed to handle. */
 		if (!functionGroupCount)
+		{
+			if (encryption)
+			{
+				delete encryption;
+				return WPD_CONFIDENCE_EXCELLENT;
+			}
 			return WPD_CONFIDENCE_POOR;
-	
+		}
+		if (encryption)
+			delete encryption;
 		return WPD_CONFIDENCE_EXCELLENT;
 	}
 	catch (...)
 	{
+		if (encryption)
+			delete encryption;
 		return WPD_CONFIDENCE_NONE;
 	}
 }

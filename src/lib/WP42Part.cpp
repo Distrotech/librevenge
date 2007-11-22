@@ -34,7 +34,7 @@
 // throws an exception if there is an error
 // precondition: readVal us between 0xC0 and 0xFF
 // TODO: check the precondition :D
-WP42Part * WP42Part::constructPart(WPXInputStream *input, uint8_t readVal)
+WP42Part * WP42Part::constructPart(WPXInputStream *input, WPXEncryption *encryption, uint8_t readVal)
 {	
 	WPD_DEBUG_MSG(("WordPerfect: Offset: %i, ConstructPart(readVal: 0x%2x)\n", (unsigned int)input->tell(), readVal));
 
@@ -45,5 +45,5 @@ WP42Part * WP42Part::constructPart(WPXInputStream *input, uint8_t readVal)
 	}
 	
 	WPD_DEBUG_MSG(("WordPerfect: constructMultiByteFunctionGroup(input, val)\n"));
-	return WP42MultiByteFunctionGroup::constructMultiByteFunctionGroup(input, readVal);
+	return WP42MultiByteFunctionGroup::constructMultiByteFunctionGroup(input, encryption, readVal);
 }

@@ -25,23 +25,23 @@
 #include "WP1MarginResetGroup.h"
 #include "libwpd_internal.h"
 
-WP1MarginResetGroup::WP1MarginResetGroup(WPXInputStream *input, uint8_t group) :
+WP1MarginResetGroup::WP1MarginResetGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group) :
 	WP1FixedLengthGroup(group),
 	m_leftMargin(0),
 	m_rightMargin(0)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
 WP1MarginResetGroup::~WP1MarginResetGroup()
 {
 }
 
-void WP1MarginResetGroup::_readContents(WPXInputStream *input)
+void WP1MarginResetGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	input->seek(4, WPX_SEEK_CUR);
-	m_leftMargin = readU16(input, true);
-	m_rightMargin = readU16(input, true);
+	m_leftMargin = readU16(input, encryption, true);
+	m_rightMargin = readU16(input, encryption, true);
 }
 
 void WP1MarginResetGroup::parse(WP1Listener *listener)

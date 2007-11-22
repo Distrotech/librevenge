@@ -31,11 +31,11 @@
 class WP3IndentGroup : public WP3FixedLengthGroup
 {
 public:
-	WP3IndentGroup(WPXInputStream *input, uint8_t groupID);	
+	WP3IndentGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);	
 	void parse(WP3Listener *listener);
 	
  protected:
-	void _readContents(WPXInputStream *input);
+	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 
  private:
  	uint8_t m_subGroup;

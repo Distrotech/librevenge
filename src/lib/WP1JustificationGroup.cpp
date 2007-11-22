@@ -25,21 +25,21 @@
 #include "WP1JustificationGroup.h"
 #include "libwpd_internal.h"
 
-WP1JustificationGroup::WP1JustificationGroup(WPXInputStream *input, uint8_t group) :
+WP1JustificationGroup::WP1JustificationGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group) :
 	WP1FixedLengthGroup(group),
 	m_justification(0)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
 WP1JustificationGroup::~WP1JustificationGroup()
 {
 }
 
-void WP1JustificationGroup::_readContents(WPXInputStream *input)
+void WP1JustificationGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	input->seek(1, WPX_SEEK_CUR);
-	m_justification = readU8(input);
+	m_justification = readU8(input, encryption);
 }
 
 void WP1JustificationGroup::parse(WP1Listener *listener)

@@ -28,21 +28,25 @@
 #include <locale.h>
 #include <string>
 
-uint8_t readU8(WPXInputStream *input)
+uint8_t readU8(WPXInputStream *input, WPXEncryption *encryption)
 {
 	size_t numBytesRead;
-	uint8_t const * p = input->read(sizeof(uint8_t), numBytesRead);
-	
+	uint8_t const * p = (encryption ?
+		encryption->readAndDecrypt(input, sizeof(uint8_t), numBytesRead) :
+		input->read(sizeof(uint8_t), numBytesRead));
+
   	if (!p || numBytesRead != sizeof(uint8_t))
   		throw FileException();
 
 	return WPD_LE_GET_GUINT8(p);
 }
 
-uint16_t readU16(WPXInputStream *input, bool bigendian)
+uint16_t readU16(WPXInputStream *input, WPXEncryption *encryption, bool bigendian)
 {
 	size_t numBytesRead;
-	uint16_t const *val = (uint16_t const *)input->read(sizeof(uint16_t), numBytesRead);
+	uint16_t const *val = (uint16_t const *)(encryption ?
+		encryption->readAndDecrypt(input, sizeof(uint16_t), numBytesRead) :
+		input->read(sizeof(uint16_t), numBytesRead));
 
 	if (!val || numBytesRead != sizeof(uint16_t))
   		throw FileException();
@@ -52,10 +56,12 @@ uint16_t readU16(WPXInputStream *input, bool bigendian)
 	return WPD_LE_GET_GUINT16(val);
 }
 
-uint32_t readU32(WPXInputStream *input, bool bigendian)
+uint32_t readU32(WPXInputStream *input, WPXEncryption *encryption, bool bigendian)
 {
 	size_t numBytesRead;
-	uint32_t const *val = (uint32_t const *)input->read(sizeof(uint32_t), numBytesRead);
+	uint32_t const *val = (uint32_t const *)(encryption ?
+		encryption->readAndDecrypt(input, sizeof(uint32_t), numBytesRead) :
+		input->read(sizeof(uint32_t), numBytesRead));
 
 	if (!val || numBytesRead != sizeof(uint32_t))
   		throw FileException();
@@ -65,20 +71,20 @@ uint32_t readU32(WPXInputStream *input, bool bigendian)
 	return WPD_LE_GET_GUINT32(val);
 }
 
-WPXString readPascalString(WPXInputStream *input)
+WPXString readPascalString(WPXInputStream *input, WPXEncryption *encryption)
 {
-	int pascalStringLength = readU8(input);
+	int pascalStringLength = readU8(input, encryption);
 	WPXString tmpString;
 	for (int i=0; i<pascalStringLength; i++)
-		tmpString.append((char)readU8(input));
+		tmpString.append((char)readU8(input, encryption));
 	return tmpString;
 }
 
-WPXString readCString(WPXInputStream *input)
+WPXString readCString(WPXInputStream *input, WPXEncryption *encryption)
 {
 	WPXString tmpString;
 	char character;
-	while ((character = (char)readU8(input)) != '\0')
+	while ((character = (char)readU8(input, encryption)) != '\0')
 		tmpString.append(character);
 	return tmpString;
 }

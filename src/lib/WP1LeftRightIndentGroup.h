@@ -30,9 +30,9 @@
 class WP1LeftRightIndentGroup : public WP1FixedLengthGroup
 {
 public:
-	WP1LeftRightIndentGroup(WPXInputStream *input, uint8_t group);
+	WP1LeftRightIndentGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group);
 	~WP1LeftRightIndentGroup();	
-	void _readContents(WPXInputStream *input);
+	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 	void parse(WP1Listener *listener);
 
 private:

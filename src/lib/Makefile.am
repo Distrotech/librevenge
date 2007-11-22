@@ -201,6 +201,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WPDocument.cpp \
 	WPXBinaryData.cpp \
 	WPXContentListener.cpp \
+	WPXEncryption.cpp \
 	WPXHeader.cpp \
 	WPXListener.cpp \
 	WPXMemoryStream.cpp \
@@ -365,6 +366,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP6VariableLengthGroup.h \
 	WPDocument.h \
 	WPXContentListener.h \
+	WPXEncryption.h \
 	WPXHeader.h \
 	WPXFileStructure.h \
 	WPXDocumentInterface.h \

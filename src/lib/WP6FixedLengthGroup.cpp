@@ -38,35 +38,35 @@ WP6FixedLengthGroup::WP6FixedLengthGroup(uint8_t groupID)
 {
 }
 
-WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(WPXInputStream *input, uint8_t groupID)
+WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID)
 {
 	switch (groupID)
 	{
 		case WP6_TOP_EXTENDED_CHARACTER:
-			return new WP6ExtendedCharacterGroup(input, groupID);
+			return new WP6ExtendedCharacterGroup(input, encryption, groupID);
 
 		case WP6_TOP_UNDO_GROUP:
-			return new WP6UndoGroup(input, groupID);
+			return new WP6UndoGroup(input, encryption, groupID);
 
 		case WP6_TOP_ATTRIBUTE_ON:
-			return new WP6AttributeOnGroup(input, groupID);
+			return new WP6AttributeOnGroup(input, encryption, groupID);
 
 		case WP6_TOP_ATTRIBUTE_OFF:
-			return new WP6AttributeOffGroup(input, groupID);
+			return new WP6AttributeOffGroup(input, encryption, groupID);
 
 		case WP6_TOP_HIGHLIGHT_ON:
-			return new WP6HighlightOnGroup(input, groupID);
+			return new WP6HighlightOnGroup(input, encryption, groupID);
 
 		case WP6_TOP_HIGHLIGHT_OFF:
-			return new WP6HighlightOffGroup(input, groupID);
+			return new WP6HighlightOffGroup(input, encryption, groupID);
 
 		// Add the remaining cases here
 		default:
-			return new WP6UnsupportedFixedLengthGroup(input, groupID);
+			return new WP6UnsupportedFixedLengthGroup(input, encryption, groupID);
 	}
 }
 
-bool WP6FixedLengthGroup::isGroupConsistent(WPXInputStream *input, const uint8_t groupID)
+bool WP6FixedLengthGroup::isGroupConsistent(WPXInputStream *input, WPXEncryption *encryption, const uint8_t groupID)
 {
 	uint32_t startPosition = input->tell();
 
@@ -78,7 +78,7 @@ bool WP6FixedLengthGroup::isGroupConsistent(WPXInputStream *input, const uint8_t
 			input->seek(startPosition, WPX_SEEK_SET);
 			return false;
 		}
-		if (input->atEOS() || groupID != readU8(input))
+		if (input->atEOS() || groupID != readU8(input, encryption))
 		{
 			input->seek(startPosition, WPX_SEEK_SET);
 			return false;
@@ -94,16 +94,16 @@ bool WP6FixedLengthGroup::isGroupConsistent(WPXInputStream *input, const uint8_t
 	}
 }
 
-void WP6FixedLengthGroup::_read(WPXInputStream *input)
+void WP6FixedLengthGroup::_read(WPXInputStream *input, WPXEncryption *encryption)
 {
 	uint32_t startPosition = input->tell();
-	_readContents(input);
+	_readContents(input, encryption);
 
 	if (m_group >= 0xF0) // just an extra safety check
 	{
 		int size = WP6_FIXED_LENGTH_FUNCTION_GROUP_SIZE[m_group-0xF0];
 		input->seek((startPosition + size - 2 - input->tell()), WPX_SEEK_CUR);
-		if (m_group != readU8(input))
+		if (m_group != readU8(input, encryption))
 		{
 			WPD_DEBUG_MSG(("WordPerfect: Possible corruption detected: bailing out!\n"));
 			throw FileException();

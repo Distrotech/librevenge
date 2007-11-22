@@ -31,9 +31,9 @@
 class WP5HeaderFooterGroup : public WP5VariableLengthGroup
 {
 public:
-	WP5HeaderFooterGroup(WPXInputStream *input);
+	WP5HeaderFooterGroup(WPXInputStream *input, WPXEncryption *encryption);
 	~WP5HeaderFooterGroup();	
-	void _readContents(WPXInputStream *input);
+	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 	void parse(WP5Listener *listener);
 
 private:

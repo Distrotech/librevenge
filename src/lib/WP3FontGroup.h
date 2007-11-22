@@ -32,9 +32,9 @@
 class WP3FontGroup : public WP3VariableLengthGroup
 {
  public:
-	WP3FontGroup(WPXInputStream *input);	
+	WP3FontGroup(WPXInputStream *input, WPXEncryption *encryption);	
 	~WP3FontGroup();
-	void _readContents(WPXInputStream *input);
+	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 	void parse(WP3Listener *listener);
 
  private:

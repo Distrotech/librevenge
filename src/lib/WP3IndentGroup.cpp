@@ -27,18 +27,18 @@
 #include "WP3Listener.h"
 #include "libwpd_internal.h"
 
-WP3IndentGroup::WP3IndentGroup(WPXInputStream *input, uint8_t groupID) :
+WP3IndentGroup::WP3IndentGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID) :
 	WP3FixedLengthGroup(groupID),
 	m_subGroup(0),
 	m_offset(0.0f)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
-void WP3IndentGroup::_readContents(WPXInputStream *input)
+void WP3IndentGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
-	m_subGroup = readU8(input);
-	m_offset = fixedPointToFloat(readU32(input, true));
+	m_subGroup = readU8(input, encryption);
+	m_offset = fixedPointToFloat(readU32(input, encryption, true));
 }
 
 void WP3IndentGroup::parse(WP3Listener *listener)

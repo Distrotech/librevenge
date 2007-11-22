@@ -34,11 +34,11 @@
  * WP6CharacterGroup_SetAlignmentCharacterSubGroup
  *************************************************************************/
 
-WP6CharacterGroup_SetAlignmentCharacterSubGroup::WP6CharacterGroup_SetAlignmentCharacterSubGroup(WPXInputStream *input) :
+WP6CharacterGroup_SetAlignmentCharacterSubGroup::WP6CharacterGroup_SetAlignmentCharacterSubGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	m_character(0),
 	m_characterSet(0)
 {
-	uint16_t charWord = readU16(input);
+	uint16_t charWord = readU16(input, encryption);
 	m_characterSet = (uint8_t)((charWord >> 8) & 0x00FF);
 	m_character = (uint8_t)(charWord & 0x00FF);
 }
@@ -56,12 +56,12 @@ void WP6CharacterGroup_SetAlignmentCharacterSubGroup::parse(WP6Listener *listene
  * WP6CharacterGroup_ColorSubGroup
  *************************************************************************/
 
-WP6CharacterGroup_ColorSubGroup::WP6CharacterGroup_ColorSubGroup(WPXInputStream *input) :
+WP6CharacterGroup_ColorSubGroup::WP6CharacterGroup_ColorSubGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	m_red(0), m_green(0), m_blue(0)
 {
-	m_red = readU8(input);
-	m_green = readU8(input);
-	m_blue = readU8(input);
+	m_red = readU8(input, encryption);
+	m_green = readU8(input, encryption);
+	m_blue = readU8(input, encryption);
 	WPD_DEBUG_MSG(("WordPerfect: Character Group Color subgroup info (red: %i, green: %i, blue: %i)\n", m_red, m_green, m_blue));
 }
 
@@ -74,10 +74,10 @@ void WP6CharacterGroup_ColorSubGroup::parse(WP6Listener *listener, const uint8_t
  * WP6CharacterGroup_CharacterShadingChangeSubGroup
  *************************************************************************/
 
-WP6CharacterGroup_CharacterShadingChangeSubGroup::WP6CharacterGroup_CharacterShadingChangeSubGroup(WPXInputStream *input) :
+WP6CharacterGroup_CharacterShadingChangeSubGroup::WP6CharacterGroup_CharacterShadingChangeSubGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	m_shading(0)
 {
-	m_shading = readU8(input);
+	m_shading = readU8(input, encryption);
 	WPD_DEBUG_MSG(("WordPerfect: Character Group Character Shading Change subgroup info (shading: %i)\n", m_shading));
 }
 
@@ -91,13 +91,13 @@ void WP6CharacterGroup_CharacterShadingChangeSubGroup::parse(WP6Listener *listen
  * WP6CharacterGroup_FontFaceChangeSubGroups
  *************************************************************************/
 
-WP6CharacterGroup_FontFaceChangeSubGroup::WP6CharacterGroup_FontFaceChangeSubGroup(WPXInputStream *input) :
+WP6CharacterGroup_FontFaceChangeSubGroup::WP6CharacterGroup_FontFaceChangeSubGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	m_oldMatchedPointSize(0), m_hash(0), m_matchedFontIndex(0), m_matchedFontPointSize(0)
 {
-	m_oldMatchedPointSize = readU16(input);
-	m_hash = readU16(input);
-	m_matchedFontIndex = readU16(input);
-	m_matchedFontPointSize = readU16(input);
+	m_oldMatchedPointSize = readU16(input, encryption);
+	m_hash = readU16(input, encryption);
+	m_matchedFontIndex = readU16(input, encryption);
+	m_matchedFontPointSize = readU16(input, encryption);
 	WPD_DEBUG_MSG(("WordPerfect: Character Group Font Face Change subgroup info (old matched point size: %i, hash: %i, matched font index: %i, matched font point size: %i\n", m_oldMatchedPointSize, m_hash, m_matchedFontIndex, m_matchedFontPointSize));
 }
 
@@ -113,10 +113,10 @@ void WP6CharacterGroup_FontFaceChangeSubGroup::parse(WP6Listener *listener, cons
  * WP6CharacterGroup_FontSizeChangeSubGroups
  *************************************************************************/
 
-WP6CharacterGroup_FontSizeChangeSubGroup::WP6CharacterGroup_FontSizeChangeSubGroup(WPXInputStream *input) :
+WP6CharacterGroup_FontSizeChangeSubGroup::WP6CharacterGroup_FontSizeChangeSubGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	m_desiredFontPointSize(0)
 {
-	m_desiredFontPointSize = readU16(input);
+	m_desiredFontPointSize = readU16(input, encryption);
 	WPD_DEBUG_MSG(("WordPerfect: Character Group Font Size Change subgroup info (desired font point size: %i\n", m_desiredFontPointSize));
 }
 
@@ -132,15 +132,15 @@ void WP6CharacterGroup_FontSizeChangeSubGroup::parse(WP6Listener *listener, cons
  * WP6CharacterGroup_SetDotLeaderCharactersSubGroup
  *************************************************************************/
 
-WP6CharacterGroup_SetDotLeaderCharactersSubGroup::WP6CharacterGroup_SetDotLeaderCharactersSubGroup(WPXInputStream *input) :
+WP6CharacterGroup_SetDotLeaderCharactersSubGroup::WP6CharacterGroup_SetDotLeaderCharactersSubGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	m_character(0),
 	m_characterSet(0),
 	m_numberOfSpaces(0)
 {
-	uint16_t charWord = readU16(input);
+	uint16_t charWord = readU16(input, encryption);
 	m_characterSet = (uint8_t)((charWord >> 8) & 0x00FF);
 	m_character = (uint8_t)(charWord & 0x00FF);
-	m_numberOfSpaces = readU8(input);
+	m_numberOfSpaces = readU8(input, encryption);
 }
 
 void WP6CharacterGroup_SetDotLeaderCharactersSubGroup::parse(WP6Listener *listener, const uint8_t /* numPrefixIDs */,
@@ -157,12 +157,12 @@ void WP6CharacterGroup_SetDotLeaderCharactersSubGroup::parse(WP6Listener *listen
  * WP6CharacterGroup_ParagraphNumberOnSubGroup
  *************************************************************************/
 
-WP6CharacterGroup_ParagraphNumberOnSubGroup::WP6CharacterGroup_ParagraphNumberOnSubGroup(WPXInputStream *input) :
+WP6CharacterGroup_ParagraphNumberOnSubGroup::WP6CharacterGroup_ParagraphNumberOnSubGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	m_outlineHash(0), m_level(0), m_flag(0)
 {
-	m_outlineHash = readU16(input);
-	m_level = readU8(input);
-	m_flag = readU8(input);
+	m_outlineHash = readU16(input, encryption);
+	m_level = readU8(input, encryption);
+	m_flag = readU8(input, encryption);
 }
 
 void WP6CharacterGroup_ParagraphNumberOnSubGroup::parse(WP6Listener *listener, const uint8_t /* numPrefixIDs */,
@@ -175,12 +175,12 @@ void WP6CharacterGroup_ParagraphNumberOnSubGroup::parse(WP6Listener *listener, c
  * WP6CharacterGroup_TableDefinitionOnSubGroup
  *************************************************************************/
 
-WP6CharacterGroup_TableDefinitionOnSubGroup::WP6CharacterGroup_TableDefinitionOnSubGroup(WPXInputStream *input) :
+WP6CharacterGroup_TableDefinitionOnSubGroup::WP6CharacterGroup_TableDefinitionOnSubGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	m_flags(0), m_position(0), m_leftOffset(0)
 {
-	m_flags = readU8(input);
-	m_position = readU8(input);
-	m_leftOffset = readU16(input);
+	m_flags = readU8(input, encryption);
+	m_position = readU8(input, encryption);
+	m_leftOffset = readU16(input, encryption);
 	// TODO: add the remaining table properties here
 }
 
@@ -194,7 +194,7 @@ void WP6CharacterGroup_TableDefinitionOnSubGroup::parse(WP6Listener *listener, c
  * WP6CharacterGroup_TableDefinitionOffSubGroup
  *************************************************************************/
 
-WP6CharacterGroup_TableDefinitionOffSubGroup::WP6CharacterGroup_TableDefinitionOffSubGroup(WPXInputStream * /* input */)
+WP6CharacterGroup_TableDefinitionOffSubGroup::WP6CharacterGroup_TableDefinitionOffSubGroup(WPXInputStream * /* input */, WPXEncryption * /* encryption */)
 {
 }
 
@@ -209,21 +209,21 @@ void WP6CharacterGroup_TableDefinitionOffSubGroup::parse(WP6Listener *listener, 
  * WP6CharacterGroup_TableColumnSubGroup
  *************************************************************************/
 
-WP6CharacterGroup_TableColumnSubGroup::WP6CharacterGroup_TableColumnSubGroup(WPXInputStream *input) :
+WP6CharacterGroup_TableColumnSubGroup::WP6CharacterGroup_TableColumnSubGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	m_flags(0), m_width(0), m_leftGutter(0), m_rightGutter(0),
 	m_attributes(0), m_alignment(0), m_absPosFromRight(0), m_numberType(0),
 	m_currencyIndex(0)
 {
-	m_flags = readU8(input);
-	m_width = readU16(input);
+	m_flags = readU8(input, encryption);
+	m_width = readU16(input, encryption);
 
-	m_leftGutter = readU16(input);
-	m_rightGutter = readU16(input);
-	m_attributes = (readU32(input) & 0x0003FFFF);
-	m_alignment = (readU8(input) & 0x07);
-	m_absPosFromRight = readU16(input);
-	m_numberType = readU16(input);
-	m_currencyIndex = readU8(input);
+	m_leftGutter = readU16(input, encryption);
+	m_rightGutter = readU16(input, encryption);
+	m_attributes = (readU32(input, encryption) & 0x0003FFFF);
+	m_alignment = (readU8(input, encryption) & 0x07);
+	m_absPosFromRight = readU16(input, encryption);
+	m_numberType = readU16(input, encryption);
+	m_currencyIndex = readU8(input, encryption);
 }
 
 void WP6CharacterGroup_TableColumnSubGroup::parse(WP6Listener *listener, const uint8_t /* numPrefixIDs */, uint16_t const * /* prefixIDs */) const
@@ -235,7 +235,7 @@ void WP6CharacterGroup_TableColumnSubGroup::parse(WP6Listener *listener, const u
  * WP6CharacterGroup_CommentSubGroup
  *************************************************************************/
 
-WP6CharacterGroup_CommentSubGroup::WP6CharacterGroup_CommentSubGroup(WPXInputStream * /* input */)
+WP6CharacterGroup_CommentSubGroup::WP6CharacterGroup_CommentSubGroup(WPXInputStream * /* input */, WPXEncryption * /* encryption */)
 {	
 }
 
@@ -259,11 +259,11 @@ void WP6CharacterGroup_CommentSubGroup::parse(WP6Listener * listener, const uint
  * WP6CharacterGroup
  *************************************************************************/
 
-WP6CharacterGroup::WP6CharacterGroup(WPXInputStream *input) :
+WP6CharacterGroup::WP6CharacterGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	WP6VariableLengthGroup(),
 	m_subGroupData(0)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
 WP6CharacterGroup::~WP6CharacterGroup()
@@ -271,44 +271,44 @@ WP6CharacterGroup::~WP6CharacterGroup()
 	delete m_subGroupData;
 }
 
-void WP6CharacterGroup::_readContents(WPXInputStream *input)
+void WP6CharacterGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	// this group can contain different kinds of data, thus we need to read
 	// the contents accordingly
 	switch (getSubGroup())
 	{
 		case WP6_CHARACTER_GROUP_FONT_FACE_CHANGE:
-			m_subGroupData = new WP6CharacterGroup_FontFaceChangeSubGroup(input);
+			m_subGroupData = new WP6CharacterGroup_FontFaceChangeSubGroup(input, encryption);
 			break;
 		case WP6_CHARACTER_GROUP_FONT_SIZE_CHANGE:
-			m_subGroupData = new WP6CharacterGroup_FontSizeChangeSubGroup(input);
+			m_subGroupData = new WP6CharacterGroup_FontSizeChangeSubGroup(input, encryption);
 			break;
 		case WP6_CHARACTER_GROUP_SET_ALIGNMENT_CHARACTER:
-			m_subGroupData = new WP6CharacterGroup_SetAlignmentCharacterSubGroup(input);
+			m_subGroupData = new WP6CharacterGroup_SetAlignmentCharacterSubGroup(input, encryption);
 			break;
 		case WP6_CHARACTER_GROUP_COLOR:
-			m_subGroupData = new WP6CharacterGroup_ColorSubGroup(input);
+			m_subGroupData = new WP6CharacterGroup_ColorSubGroup(input, encryption);
 			break;
 		case WP6_CHARACTER_GROUP_CHARACTER_SHADING_CHANGE:
-			m_subGroupData = new WP6CharacterGroup_CharacterShadingChangeSubGroup(input);
+			m_subGroupData = new WP6CharacterGroup_CharacterShadingChangeSubGroup(input, encryption);
 			break;
 		case WP6_CHARACTER_GROUP_SET_DOT_LEADER_CHARACTERS:
-			m_subGroupData = new WP6CharacterGroup_SetDotLeaderCharactersSubGroup(input);
+			m_subGroupData = new WP6CharacterGroup_SetDotLeaderCharactersSubGroup(input, encryption);
 			break;
 		case WP6_CHARACTER_GROUP_PARAGRAPH_NUMBER_ON:
-			m_subGroupData = new WP6CharacterGroup_ParagraphNumberOnSubGroup(input);
+			m_subGroupData = new WP6CharacterGroup_ParagraphNumberOnSubGroup(input, encryption);
 			break;
 		case WP6_CHARACTER_GROUP_TABLE_DEFINITION_ON:
-			m_subGroupData = new WP6CharacterGroup_TableDefinitionOnSubGroup(input);
+			m_subGroupData = new WP6CharacterGroup_TableDefinitionOnSubGroup(input, encryption);
 			break;
 		case WP6_CHARACTER_GROUP_TABLE_DEFINITION_OFF:
-			m_subGroupData = new WP6CharacterGroup_TableDefinitionOffSubGroup(input);
+			m_subGroupData = new WP6CharacterGroup_TableDefinitionOffSubGroup(input, encryption);
 			break;
 		case WP6_CHARACTER_GROUP_TABLE_COLUMN:
-			m_subGroupData = new WP6CharacterGroup_TableColumnSubGroup(input);
+			m_subGroupData = new WP6CharacterGroup_TableColumnSubGroup(input, encryption);
 			break;
 		case WP6_CHARACTER_GROUP_COMMENT:
-			m_subGroupData = new WP6CharacterGroup_CommentSubGroup(input);
+			m_subGroupData = new WP6CharacterGroup_CommentSubGroup(input, encryption);
 			break;
 		default:
 			break;

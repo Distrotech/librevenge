@@ -25,8 +25,8 @@
 #include "WP3UnsupportedFixedLengthGroup.h"
 #include "libwpd_internal.h"
 
-WP3UnsupportedFixedLengthGroup::WP3UnsupportedFixedLengthGroup(WPXInputStream *input, uint8_t groupID)
+WP3UnsupportedFixedLengthGroup::WP3UnsupportedFixedLengthGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID)
 	: WP3FixedLengthGroup(groupID)
 {
-	_read(input);
+	_read(input, encryption);
 }

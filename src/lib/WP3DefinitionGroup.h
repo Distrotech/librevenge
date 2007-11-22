@@ -35,9 +35,9 @@ class WP3Listener;
 class WP3DefinitionGroup : public WP3VariableLengthGroup
 {
  public:
-	WP3DefinitionGroup(WPXInputStream *input);	
+	WP3DefinitionGroup(WPXInputStream *input, WPXEncryption *encryption);	
 	~WP3DefinitionGroup();
-	void _readContents(WPXInputStream *input);
+	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 	void parse(WP3Listener *listener);
 
  private:

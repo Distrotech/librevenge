@@ -29,13 +29,13 @@
 #include "WP5PrefixData.h"
 #include "WP5Listener.h"
 
-WP5BoxGroup::WP5BoxGroup(WPXInputStream *input) :	
+WP5BoxGroup::WP5BoxGroup(WPXInputStream *input, WPXEncryption *encryption) :	
 	WP5VariableLengthGroup()
 {
-	_read(input);
+	_read(input, encryption);
 }
 
-void WP5BoxGroup::_readContents(WPXInputStream * /* input */)
+void WP5BoxGroup::_readContents(WPXInputStream * /* input */, WPXEncryption * /* encryption */)
 {
 	switch(getSubGroup())
 	{

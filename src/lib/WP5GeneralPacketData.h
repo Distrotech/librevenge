@@ -32,14 +32,14 @@ class WP5GeneralPacketIndex;
 class WP5GeneralPacketData
 {
 public:
-	WP5GeneralPacketData(WPXInputStream * input);	
+	WP5GeneralPacketData();	
 	virtual ~WP5GeneralPacketData() {}
 
-	static WP5GeneralPacketData * constructGeneralPacketData(WPXInputStream * input, WP5GeneralPacketIndex *packetIndex);
+	static WP5GeneralPacketData * constructGeneralPacketData(WPXInputStream * input, WPXEncryption *encryption, WP5GeneralPacketIndex *packetIndex);
 
 protected:
-	virtual void _readContents(WPXInputStream *input, uint32_t dataSize) = 0;
- 	virtual void _read(WPXInputStream *input, uint32_t dataOffset, uint32_t dataSize);
+	virtual void _readContents(WPXInputStream *input, WPXEncryption *encryption, uint32_t dataSize) = 0;
+ 	virtual void _read(WPXInputStream *input, WPXEncryption *encryption, uint32_t dataOffset, uint32_t dataSize);
 };
 
 #endif /* WP5GENERALPACKETDATA_H */

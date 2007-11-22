@@ -30,9 +30,9 @@
 class WP1SuppressPageCharacteristicsGroup : public WP1FixedLengthGroup
 {
 public:
-	WP1SuppressPageCharacteristicsGroup(WPXInputStream *input, uint8_t group);
+	WP1SuppressPageCharacteristicsGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group);
 	~WP1SuppressPageCharacteristicsGroup();	
-	void _readContents(WPXInputStream *input);
+	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 	void parse(WP1Listener *listener);
 
 private:

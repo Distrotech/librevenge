@@ -26,8 +26,8 @@
 #include "WP5Parser.h"
 #include "libwpd_internal.h"
 
-WP5SubDocument::WP5SubDocument(WPXInputStream *input, const unsigned dataSize) :
-	WPXSubDocument(input, dataSize)
+WP5SubDocument::WP5SubDocument(WPXInputStream *input, WPXEncryption *encryption, const unsigned dataSize) :
+	WPXSubDocument(input, encryption, dataSize)
 {
 }
 
@@ -37,5 +37,5 @@ void WP5SubDocument::parse(WP5Listener *listener) const
 	if (!tmpStream)
 		return;
 	tmpStream->seek(0, WPX_SEEK_SET);
-	WP5Parser::parseDocument(tmpStream, listener);
+	WP5Parser::parseDocument(tmpStream, 0, listener);
 }

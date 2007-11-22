@@ -26,27 +26,27 @@
 #include "libwpd_internal.h"
 #include "WP1SubDocument.h"
 
-WP1HeaderFooterGroup::WP1HeaderFooterGroup(WPXInputStream *input, uint8_t group) :
+WP1HeaderFooterGroup::WP1HeaderFooterGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group) :
 	WP1VariableLengthGroup(group),
 	m_definition(0),
 	m_subDocument(0)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
 WP1HeaderFooterGroup::~WP1HeaderFooterGroup()
 {
 }
 
-void WP1HeaderFooterGroup::_readContents(WPXInputStream *input)
+void WP1HeaderFooterGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
-	m_definition = readU8(input);
+	m_definition = readU8(input, encryption);
 
 	int tmpSubDocumentSize = getSize() - 0x13;
 	input->seek(18, WPX_SEEK_CUR);
 	WPD_DEBUG_MSG(("WP1SubDocument subDocumentSize = %i\n", tmpSubDocumentSize));
 	if (tmpSubDocumentSize)
-		m_subDocument = new WP1SubDocument(input, tmpSubDocumentSize);
+		m_subDocument = new WP1SubDocument(input, encryption, tmpSubDocumentSize);
 }
 
 void WP1HeaderFooterGroup::parse(WP1Listener *listener)

@@ -27,13 +27,13 @@
 #include "WP6DefaultInitialFontPacket.h"
 #include "libwpd_internal.h"
 
-WP6DefaultInitialFontPacket::WP6DefaultInitialFontPacket(WPXInputStream *input, int /* id */, uint32_t dataOffset, uint32_t dataSize) : 
-	WP6PrefixDataPacket(input),
+WP6DefaultInitialFontPacket::WP6DefaultInitialFontPacket(WPXInputStream *input, WPXEncryption *encryption, int /* id */, uint32_t dataOffset, uint32_t dataSize) : 
+	WP6PrefixDataPacket(input, encryption),
 	m_numPrefixIDs(0),
 	m_initialFontDescriptorPID(0),
 	m_pointSize(0)
 {
-	_read(input, dataOffset, dataSize);
+	_read(input, encryption, dataOffset, dataSize);
 }
 
 void WP6DefaultInitialFontPacket::parse(WP6Listener *listener) const
@@ -41,11 +41,11 @@ void WP6DefaultInitialFontPacket::parse(WP6Listener *listener) const
 	listener->fontChange(getPointSize(), getInitialFontDescriptorPID());
 }
 
-void WP6DefaultInitialFontPacket::_readContents(WPXInputStream *input)
+void WP6DefaultInitialFontPacket::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
-   m_numPrefixIDs = readU16(input);
-   m_initialFontDescriptorPID = readU16(input);
-   m_pointSize = readU16(input);
+   m_numPrefixIDs = readU16(input, encryption);
+   m_initialFontDescriptorPID = readU16(input, encryption);
+   m_pointSize = readU16(input, encryption);
    WPD_DEBUG_MSG(("WordPerfect: Read default initial font packet (initial font descriptor pid: %i, point size: %i)\n", 
 		  (int) m_initialFontDescriptorPID, (int) m_pointSize));
 }

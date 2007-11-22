@@ -31,9 +31,9 @@
 class WP3DisplayGroup : public WP3VariableLengthGroup
 {
  public:
-	WP3DisplayGroup(WPXInputStream *input);	
+	WP3DisplayGroup(WPXInputStream *input, WPXEncryption *encryption);	
 	~WP3DisplayGroup();
-	void _readContents(WPXInputStream *input);
+	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 	void parse(WP3Listener *listener);
 
  private:

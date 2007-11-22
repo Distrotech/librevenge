@@ -26,7 +26,7 @@
 #include "WP5Listener.h"
 #include "libwpd_internal.h"
 
-WP5DefinitionGroup_DefineTablesSubGroup::WP5DefinitionGroup_DefineTablesSubGroup(WPXInputStream *input, uint16_t subGroupSize) :
+WP5DefinitionGroup_DefineTablesSubGroup::WP5DefinitionGroup_DefineTablesSubGroup(WPXInputStream *input, WPXEncryption *encryption, uint16_t subGroupSize) :
 	WP5VariableLengthGroup_SubGroup(),
 	m_position(0),
 	m_numColumns(0),
@@ -37,19 +37,19 @@ WP5DefinitionGroup_DefineTablesSubGroup::WP5DefinitionGroup_DefineTablesSubGroup
 	long startPosition = input->tell();
 	// Skip useless old values to read the old column number
 	input->seek(2, WPX_SEEK_CUR);
-	m_numColumns = readU16(input);
+	m_numColumns = readU16(input, encryption);
 	// Skip to new values
 	input->seek(20+(5*m_numColumns), WPX_SEEK_CUR);
 	// Read the new values
-	uint8_t tmpFlags = readU8(input);
+	uint8_t tmpFlags = readU8(input, encryption);
 	m_position = tmpFlags & 0x07;
 	input->seek(1, WPX_SEEK_CUR);
-	m_numColumns = readU16(input);
+	m_numColumns = readU16(input, encryption);
 	input->seek(4, WPX_SEEK_CUR);
-	m_leftGutter = readU16(input);
-	m_rightGutter = readU16(input);
+	m_leftGutter = readU16(input, encryption);
+	m_rightGutter = readU16(input, encryption);
 	input->seek(10, WPX_SEEK_CUR);
-	m_leftOffset = readU16(input);
+	m_leftOffset = readU16(input, encryption);
 	int i;
 	if ((m_numColumns > 32) || ((input->tell() - startPosition + m_numColumns*5) > (subGroupSize - 4)))
 		throw FileException();
@@ -57,19 +57,19 @@ WP5DefinitionGroup_DefineTablesSubGroup::WP5DefinitionGroup_DefineTablesSubGroup
 	{
 		if (input->atEOS())
 			throw FileException();
-		m_columnWidth[i] = readU16(input);
+		m_columnWidth[i] = readU16(input, encryption);
 	}
 	for (i=0; i < m_numColumns; i++)
 	{
 		if (input->atEOS())
 			throw FileException();
-		m_attributeBits[i] = readU16(input);
+		m_attributeBits[i] = readU16(input, encryption);
 	}
 	for (i=0; i < m_numColumns; i++)
 	{
 		if (input->atEOS())
 			throw FileException();
-		m_columnAlignment[i] = readU8(input);
+		m_columnAlignment[i] = readU8(input, encryption);
 	}
 }
 
@@ -85,11 +85,11 @@ void WP5DefinitionGroup_DefineTablesSubGroup::parse(WP5Listener *listener)
 }
 
 
-WP5DefinitionGroup::WP5DefinitionGroup(WPXInputStream *input) :	
+WP5DefinitionGroup::WP5DefinitionGroup(WPXInputStream *input, WPXEncryption *encryption) :	
 	WP5VariableLengthGroup(),
 	m_subGroupData(0)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
 WP5DefinitionGroup::~WP5DefinitionGroup()
@@ -98,12 +98,12 @@ WP5DefinitionGroup::~WP5DefinitionGroup()
 		delete m_subGroupData;
 }
 
-void WP5DefinitionGroup::_readContents(WPXInputStream *input)
+void WP5DefinitionGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	switch(getSubGroup())
 	{
 		case WP5_TOP_DEFINITION_GROUP_DEFINE_TABLES:
-			m_subGroupData = new WP5DefinitionGroup_DefineTablesSubGroup(input, getSize());
+			m_subGroupData = new WP5DefinitionGroup_DefineTablesSubGroup(input, encryption, getSize());
 			break;
 		default:
 			break;

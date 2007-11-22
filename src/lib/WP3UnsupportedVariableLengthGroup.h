@@ -33,7 +33,7 @@
 class WP3UnsupportedVariableLengthGroup : public WP3VariableLengthGroup
 {
 public:
-	WP3UnsupportedVariableLengthGroup(WPXInputStream *input);
+	WP3UnsupportedVariableLengthGroup(WPXInputStream *input, WPXEncryption *encryption);
 	void parse(WP3Listener * /* listener */) {}
 };
 

@@ -30,7 +30,7 @@
 #include "libwpd_internal.h"
 #include "libwpd_math.h"
 
-WP3TablesGroup::WP3TablesGroup(WPXInputStream *input) :
+WP3TablesGroup::WP3TablesGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	m_tableMode(0),
 	m_offsetFromLeftEdge(0),
 	m_topGutterSpacing(0),
@@ -42,14 +42,14 @@ WP3TablesGroup::WP3TablesGroup(WPXInputStream *input) :
 	m_rowSpan(0),
 	m_cellFillColor(RGBSColor(0xff, 0xff, 0xff))
 {
-	_read(input);
+	_read(input, encryption);
 }
 
 WP3TablesGroup::~WP3TablesGroup()
 {
 }
 
-void WP3TablesGroup::_readContents(WPXInputStream *input)
+void WP3TablesGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	// this group can contain different kinds of data, thus we need to read
 	// the contents accordingly
@@ -60,29 +60,29 @@ void WP3TablesGroup::_readContents(WPXInputStream *input)
 	case WP3_TABLES_GROUP_TABLE_FUNCTION:
 		startPosition = input->tell();
 		input->seek(71, WPX_SEEK_CUR);
-		m_tableMode = readU8(input);
-		m_offsetFromLeftEdge = readU32(input, true);
-		m_topGutterSpacing = readU32(input, true);
-		m_leftGutterSpacing = readU32(input, true);
-		m_bottomGutterSpacing = readU32(input, true);
-		m_rightGutterSpacing = readU32(input, true);
+		m_tableMode = readU8(input, encryption);
+		m_offsetFromLeftEdge = readU32(input, encryption, true);
+		m_topGutterSpacing = readU32(input, encryption, true);
+		m_leftGutterSpacing = readU32(input, encryption, true);
+		m_bottomGutterSpacing = readU32(input, encryption, true);
+		m_rightGutterSpacing = readU32(input, encryption, true);
 		input->seek(3, WPX_SEEK_CUR);
-		m_numColumns = readU8(input);
+		m_numColumns = readU8(input, encryption);
 		if ((m_numColumns > 32) || ((input->tell() - startPosition + m_numColumns*10) > (getSize() - 4)))
 			throw FileException();
 		for (i=0; i<m_numColumns; i++)
 		{
 			if (input->atEOS())
 				throw FileException();
-			m_columnMode[i] = readU8(input);
-			m_numberFormat[i] = readU8(input);
-			m_columnWidth[i] = readU32(input, true);
-			m_rightOffsetForDecimalAlign[i] = readU32(input, true);
+			m_columnMode[i] = readU8(input, encryption);
+			m_numberFormat[i] = readU8(input, encryption);
+			m_columnWidth[i] = readU32(input, encryption, true);
+			m_rightOffsetForDecimalAlign[i] = readU32(input, encryption, true);
 		}		
 		break;
 	case WP3_TABLES_GROUP_SET_TABLE_CELL_SPAN:
-		m_colSpan = readU16(input, true);
-		m_rowSpan = readU16(input, true);
+		m_colSpan = readU16(input, encryption, true);
+		m_rowSpan = readU16(input, encryption, true);
 		m_colSpan++; m_rowSpan++;
 		break;
 	case WP3_TABLES_GROUP_SET_TABLE_CELL_TOP_LINE:
@@ -103,9 +103,9 @@ void WP3TablesGroup::_readContents(WPXInputStream *input)
 		break;
 	case WP3_TABLES_GROUP_SET_TABLE_CELL_FILL_COLOR_PATTERN:
 		{
-			uint16_t tmpRed = readU16(input, true);
-			uint16_t tmpGreen = readU16(input, true);
-			uint16_t tmpBlue = readU16(input, true);
+			uint16_t tmpRed = readU16(input, encryption, true);
+			uint16_t tmpGreen = readU16(input, encryption, true);
+			uint16_t tmpBlue = readU16(input, encryption, true);
 			m_cellFillColor = RGBSColor(tmpRed, tmpGreen, tmpBlue);
 		}
 		break;

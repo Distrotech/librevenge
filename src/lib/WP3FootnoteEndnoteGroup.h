@@ -32,9 +32,9 @@
 class WP3FootnoteEndnoteGroup : public WP3VariableLengthGroup
 {
  public:
-	WP3FootnoteEndnoteGroup(WPXInputStream *input);	
+	WP3FootnoteEndnoteGroup(WPXInputStream *input, WPXEncryption *encryption);	
 	~WP3FootnoteEndnoteGroup();
-	void _readContents(WPXInputStream *input);
+	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 	void parse(WP3Listener *listener);
 
  private:

@@ -28,7 +28,7 @@
 
 
 WPXMemoryInputStream::WPXMemoryInputStream(unsigned char *data, size_t size) :
-	WPXInputStream(false),
+	WPXInputStream(),
 	m_offset(0),
 	m_size(size),
 	m_data(data)

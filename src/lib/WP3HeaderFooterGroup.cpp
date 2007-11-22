@@ -26,30 +26,30 @@
 #include "libwpd_internal.h"
 #include "WP3FileStructure.h"
 
-WP3HeaderFooterGroup::WP3HeaderFooterGroup(WPXInputStream *input) :
+WP3HeaderFooterGroup::WP3HeaderFooterGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	WP3VariableLengthGroup(),
 	m_definition(0),
 	m_subDocument(0)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
 WP3HeaderFooterGroup::~WP3HeaderFooterGroup()
 {
 }
 
-void WP3HeaderFooterGroup::_readContents(WPXInputStream *input)
+void WP3HeaderFooterGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	if (getSubGroup() <= WP3_HEADER_FOOTER_GROUP_FOOTER_B)  // omit watermarks for the while
 	{
 		input->seek(14, WPX_SEEK_CUR);
-		uint16_t tmpSubDocumentLength = readU16(input, true);  // read first the old subdocument length
+		uint16_t tmpSubDocumentLength = readU16(input, encryption, true);  // read first the old subdocument length
 		input->seek(tmpSubDocumentLength, WPX_SEEK_CUR);  // and skip the old subdocument
-		m_definition = readU8(input);
+		m_definition = readU8(input, encryption);
 		input->seek(4, WPX_SEEK_CUR);
-		tmpSubDocumentLength = readU16(input, true);
+		tmpSubDocumentLength = readU16(input, encryption, true);
 		if (tmpSubDocumentLength)
-			m_subDocument = new WP3SubDocument(input, tmpSubDocumentLength);
+			m_subDocument = new WP3SubDocument(input, encryption, tmpSubDocumentLength);
 	}
 }
 

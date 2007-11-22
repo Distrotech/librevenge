@@ -26,8 +26,9 @@
 #include "WP3Header.h"
 #include "libwpd_internal.h"
 
-WP3Header::WP3Header(WPXInputStream * input, uint32_t documentOffset, uint8_t productType, uint8_t fileType, uint8_t majorVersion, uint8_t minorVersion, uint16_t documentEncryption) :
-	WPXHeader(input, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption)
+WP3Header::WP3Header(WPXInputStream * input, WPXEncryption *encryption, uint32_t documentOffset, uint8_t productType,
+	uint8_t fileType, uint8_t majorVersion, uint8_t minorVersion, uint16_t documentEncryption) :
+	WPXHeader(input, encryption, documentOffset, productType, fileType, majorVersion, minorVersion, documentEncryption)
 {
 	// nothing to do here really...
 }

@@ -37,28 +37,28 @@ WP42MultiByteFunctionGroup::WP42MultiByteFunctionGroup(uint8_t group)
 {
 }
 
-WP42MultiByteFunctionGroup * WP42MultiByteFunctionGroup::constructMultiByteFunctionGroup(WPXInputStream *input, uint8_t group)
+WP42MultiByteFunctionGroup * WP42MultiByteFunctionGroup::constructMultiByteFunctionGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group)
 {
 	switch (group)
 	{
 		case WP42_MARGIN_RESET_GROUP:
-			return new WP42MarginResetGroup(input, group);
+			return new WP42MarginResetGroup(input, encryption, group);
 		case WP42_SUPPRESS_PAGE_CHARACTERISTICS_GROUP:
-			return new WP42SuppressPageCharacteristicsGroup(input, group);
+			return new WP42SuppressPageCharacteristicsGroup(input, encryption, group);
 		case WP42_HEADER_FOOTER_GROUP:
-			return new WP42HeaderFooterGroup(input, group);
+			return new WP42HeaderFooterGroup(input, encryption, group);
 		default:
 			// this is an unhandled group, just skip it
-			return new WP42UnsupportedMultiByteFunctionGroup(input, group);
+			return new WP42UnsupportedMultiByteFunctionGroup(input, encryption, group);
 	}
 }
 
-void WP42MultiByteFunctionGroup::_read(WPXInputStream *input)
+void WP42MultiByteFunctionGroup::_read(WPXInputStream *input, WPXEncryption *encryption)
 {
-	_readContents(input);
+	_readContents(input, encryption);
 	
 	// skip over the remaining bytes of the group, if any
-	while (!input->atEOS() && (readU8(input) != m_group));// getGroup()));
-	// IMPORTANT: if the class that implements _readContent(input) already reads the closing gate,
+	while (!input->atEOS() && (readU8(input, encryption) != m_group));// getGroup()));
+	// IMPORTANT: if the class that implements _readContent(input, encryption) already reads the closing gate,
 	// IMPORTANT: it is necessary to make an input->seek(-1, WPX_SEEK_CUR) for this function to work well.
 }

@@ -31,7 +31,7 @@
 #include "WP5FontNameStringPoolPacket.h"
 #include "WP5Listener.h"
 
-WP5FontGroup::WP5FontGroup(WPXInputStream *input) :	
+WP5FontGroup::WP5FontGroup(WPXInputStream *input, WPXEncryption *encryption) :	
 	WP5VariableLengthGroup(),
 	m_red(0),
 	m_green(0),
@@ -39,26 +39,26 @@ WP5FontGroup::WP5FontGroup(WPXInputStream *input) :
 	m_fontNumber(0),
 	m_fontSize(-1)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
-void WP5FontGroup::_readContents(WPXInputStream *input)
+void WP5FontGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	switch(getSubGroup())
 	{
 		case WP5_TOP_FONT_GROUP_COLOR:
 			input->seek(3, WPX_SEEK_CUR);
-			m_red = readU8(input);
-			m_green = readU8(input);
-			m_blue = readU8(input);
+			m_red = readU8(input, encryption);
+			m_green = readU8(input, encryption);
+			m_blue = readU8(input, encryption);
 			break;
 		case WP5_TOP_FONT_GROUP_FONT_CHANGE:
 			input->seek(25, WPX_SEEK_CUR);
-			m_fontNumber = readU8(input);
+			m_fontNumber = readU8(input, encryption);
 			if (getSize() >= 36)
 			{
 				input->seek(2, WPX_SEEK_CUR);
-				m_fontSize = (float)(readU16(input) / 50);
+				m_fontSize = (float)(readU16(input, encryption) / 50);
 			}
 			break;
 		default:

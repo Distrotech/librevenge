@@ -28,11 +28,11 @@
 #include "WP6FileStructure.h"
 #include "libwpd_internal.h"
 
-WP6StyleGroup_GlobalOnSubGroup::WP6StyleGroup_GlobalOnSubGroup(WPXInputStream *input) :
+WP6StyleGroup_GlobalOnSubGroup::WP6StyleGroup_GlobalOnSubGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	m_hash(0), m_systemStyleNumber(0)
 {
-	m_hash = readU16(input);
-	m_systemStyleNumber = readU8(input);
+	m_hash = readU16(input, encryption);
+	m_systemStyleNumber = readU8(input, encryption);
 }
 
 void WP6StyleGroup_GlobalOnSubGroup::parse(WP6Listener *listener, const uint8_t /* numPrefixIDs */, uint16_t const * /* prefixIDs */) const
@@ -40,11 +40,11 @@ void WP6StyleGroup_GlobalOnSubGroup::parse(WP6Listener *listener, const uint8_t 
 	listener->globalOn(m_systemStyleNumber);
 }
 
-WP6StyleGroup::WP6StyleGroup(WPXInputStream *input) :
+WP6StyleGroup::WP6StyleGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	WP6VariableLengthGroup(),
 	m_subGroupData(0)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
 WP6StyleGroup::~WP6StyleGroup()
@@ -54,14 +54,14 @@ WP6StyleGroup::~WP6StyleGroup()
 
 }
 
-void WP6StyleGroup::_readContents(WPXInputStream *input)
+void WP6StyleGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	// this group can contain different kinds of data, thus we need to read
 	// the contents accordingly
 	switch (getSubGroup())	
 	{
 	case WP6_STYLE_GROUP_GLOBAL_ON:
-		m_subGroupData = new WP6StyleGroup_GlobalOnSubGroup(input);
+		m_subGroupData = new WP6StyleGroup_GlobalOnSubGroup(input, encryption);
 		break;
 	}
 }

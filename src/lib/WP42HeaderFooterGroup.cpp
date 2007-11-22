@@ -26,33 +26,33 @@
 #include "libwpd_internal.h"
 #include <vector>
 
-WP42HeaderFooterGroup::WP42HeaderFooterGroup(WPXInputStream *input, uint8_t group) :
+WP42HeaderFooterGroup::WP42HeaderFooterGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group) :
 	WP42MultiByteFunctionGroup(group),
 	m_definition(0),
 	m_subDocument(0)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
 WP42HeaderFooterGroup::~WP42HeaderFooterGroup()
 {
 }
 
-void WP42HeaderFooterGroup::_readContents(WPXInputStream *input)
+void WP42HeaderFooterGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	input->seek(4, WPX_SEEK_CUR);
 	unsigned int tmpStartPosition = input->tell();
-	while (readU8(input) != 0xD1);
+	while (readU8(input, encryption) != 0xD1);
 	input->seek(-3, WPX_SEEK_CUR);
 	int tmpSubDocumentSize = 0;
-	if (readU8(input) == 0xFF)
+	if (readU8(input, encryption) == 0xFF)
 		tmpSubDocumentSize=input->tell() - tmpStartPosition -1;
 	WPD_DEBUG_MSG(("WP42SubDocument startPosition = %i; SubDocumentSize = %i\n", tmpStartPosition, tmpSubDocumentSize));
 	input->seek(1, WPX_SEEK_CUR);
-	m_definition = readU8(input);
+	m_definition = readU8(input, encryption);
 	input->seek(tmpStartPosition, WPX_SEEK_SET);
 	if (tmpSubDocumentSize > 2)
-		m_subDocument = new WP42SubDocument(input, tmpSubDocumentSize);
+		m_subDocument = new WP42SubDocument(input, encryption, tmpSubDocumentSize);
 }
 
 void WP42HeaderFooterGroup::parse(WP42Listener *listener)

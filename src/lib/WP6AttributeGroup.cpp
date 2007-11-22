@@ -27,20 +27,20 @@
 #include "WP6Listener.h"
 #include "libwpd_internal.h"
 
-WP6AttributeGroup::WP6AttributeGroup(WPXInputStream *input, uint8_t groupID) :
+WP6AttributeGroup::WP6AttributeGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID) :
 	WP6FixedLengthGroup(groupID),
 	m_attribute(0)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
-void WP6AttributeGroup::_readContents(WPXInputStream *input)
+void WP6AttributeGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
-	m_attribute = readU8(input);
+	m_attribute = readU8(input, encryption);
 }
 
-WP6AttributeOnGroup::WP6AttributeOnGroup(WPXInputStream *input, uint8_t groupID)
-	: WP6AttributeGroup(input, groupID)
+WP6AttributeOnGroup::WP6AttributeOnGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID)
+	: WP6AttributeGroup(input, encryption, groupID)
 {
 }
 
@@ -50,8 +50,8 @@ void WP6AttributeOnGroup::parse(WP6Listener *listener)
 	listener->attributeChange(true, getAttribute());
 }
 
-WP6AttributeOffGroup::WP6AttributeOffGroup(WPXInputStream *input, uint8_t groupID)
-	: WP6AttributeGroup(input, groupID)
+WP6AttributeOffGroup::WP6AttributeOffGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID)
+	: WP6AttributeGroup(input, encryption, groupID)
 {
 }
 

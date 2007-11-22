@@ -27,13 +27,13 @@
 #include "WP1UnsupportedFixedLengthGroup.h"
 #include "libwpd_internal.h"
 
-WP1UnsupportedFixedLengthGroup::WP1UnsupportedFixedLengthGroup(WPXInputStream *input, uint8_t group) :
+WP1UnsupportedFixedLengthGroup::WP1UnsupportedFixedLengthGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group) :
 	WP1FixedLengthGroup(group)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
-void WP1UnsupportedFixedLengthGroup::_readContents(WPXInputStream * /* input */)
+void WP1UnsupportedFixedLengthGroup::_readContents(WPXInputStream * /* input */, WPXEncryption * /* encryption */)
 {
 	WPD_DEBUG_MSG(("WordPerfect: Handling an unsupported fixed length group\n"));
 }

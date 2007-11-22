@@ -30,6 +30,7 @@
 #include <string>
 #include <algorithm>
 #include "WPXString.h"
+#include "WPXEncryption.h"
 #include "libwpd_types.h"
 
 /* Various functions/defines that need not/should not be exported externally */
@@ -78,12 +79,12 @@
 
 // add more of these as needed for byteswapping
 // (the 8-bit functions are just there to make things consistent)
-uint8_t readU8(WPXInputStream *input); 
-uint16_t readU16(WPXInputStream *input, bool bigendian=false);
-uint32_t readU32(WPXInputStream *input, bool bigendian=false);
+uint8_t readU8(WPXInputStream *input, WPXEncryption *encryption); 
+uint16_t readU16(WPXInputStream *input, WPXEncryption *encryption, bool bigendian=false);
+uint32_t readU32(WPXInputStream *input, WPXEncryption *encryption, bool bigendian=false);
 
-WPXString readPascalString(WPXInputStream *input);
-WPXString readCString(WPXInputStream *input);
+WPXString readPascalString(WPXInputStream *input, WPXEncryption *encryption);
+WPXString readCString(WPXInputStream *input, WPXEncryption *encryption);
 
 void appendUCS4(WPXString &str, uint32_t ucs4);
 

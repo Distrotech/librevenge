@@ -30,11 +30,11 @@
 class WP5BoxGroup : public WP5VariableLengthGroup
 {
 public:
-	WP5BoxGroup(WPXInputStream *input);	
+	WP5BoxGroup(WPXInputStream *input, WPXEncryption *encryption);	
 	void parse(WP5Listener *listener);
 	
 protected:
-	void _readContents(WPXInputStream *input);
+	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 
 };
 

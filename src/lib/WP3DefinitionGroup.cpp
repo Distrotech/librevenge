@@ -30,14 +30,14 @@
 #include "libwpd_math.h"
 #include "WP3Listener.h"
 
-WP3DefinitionGroup::WP3DefinitionGroup(WPXInputStream *input) :
+WP3DefinitionGroup::WP3DefinitionGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	WP3VariableLengthGroup(),
 	m_colType(0),
 	m_numColumns(0),
 	m_isFixedWidth(),
 	m_columnWidth()
 {
-	_read(input);
+	_read(input, encryption);
 }
 
 WP3DefinitionGroup::~WP3DefinitionGroup()
@@ -45,7 +45,7 @@ WP3DefinitionGroup::~WP3DefinitionGroup()
 	// fixme delete the font name
 }
 
-void WP3DefinitionGroup::_readContents(WPXInputStream *input)
+void WP3DefinitionGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	// this group can contain different kinds of data, thus we need to read
 	// the contents accordingly
@@ -53,15 +53,15 @@ void WP3DefinitionGroup::_readContents(WPXInputStream *input)
 	{
 	case WP3_DEFINITION_GROUP_SET_COLUMNS:
 		{
-			uint8_t tmpColType = readU8(input);
+			uint8_t tmpColType = readU8(input, encryption);
 			if (tmpColType)
 			{
-				uint8_t tmpNumColumns = readU8(input);
+				uint8_t tmpNumColumns = readU8(input, encryption);
 				if (tmpNumColumns)
 					input->seek(((2*tmpNumColumns) - 1), WPX_SEEK_CUR);
 			}
 
-			m_colType = readU8(input);
+			m_colType = readU8(input, encryption);
 			if (!m_colType)
 			{
 				m_numColumns = 1;
@@ -70,20 +70,20 @@ void WP3DefinitionGroup::_readContents(WPXInputStream *input)
 			}
 			else
 			{
-				m_numColumns = readU8(input);
+				m_numColumns = readU8(input, encryption);
 				if (m_numColumns > 1)
 				{
 					for (int i=0; i<((2*m_numColumns)-1); i++)
 					{
 						if (i%2)
 						{
-							uint32_t tmpSpaceBetweenColumns = readU32(input, true);
+							uint32_t tmpSpaceBetweenColumns = readU32(input, encryption, true);
 							m_isFixedWidth.push_back(true);
 							m_columnWidth.push_back((float)((double)fixedPointToWPUs(tmpSpaceBetweenColumns)/(double)WPX_NUM_WPUS_PER_INCH));
 						}
 						else
 						{
-							uint16_t tmpSizeOfColumn = readU16(input, true);
+							uint16_t tmpSizeOfColumn = readU16(input, encryption, true);
 							m_isFixedWidth.push_back(false);
 							m_columnWidth.push_back((float)((double)tmpSizeOfColumn/(double)0x10000));
 						}

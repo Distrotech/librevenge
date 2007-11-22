@@ -33,15 +33,15 @@ class WP3Listener;
 class WP3Parser : public WPXParser
 {
 public:
-	WP3Parser(WPXInputStream *input, WPXHeader *header);
+	WP3Parser(WPXInputStream *input, WPXHeader *header, WPXEncryption *encryption);
 	~WP3Parser();
 
 	void parse(WPXDocumentInterface *documentInterface);
 	
-	static void parseDocument(WPXInputStream *input, WP3Listener *listener);
+	static void parseDocument(WPXInputStream *input, WPXEncryption *encryption, WP3Listener *listener);
 
 private:
-	void parse(WPXInputStream *input, WP3Listener *listener);
+	void parse(WPXInputStream *input, WPXEncryption *encryption, WP3Listener *listener);
 };
 
 #endif /* WP3PARSER_H */

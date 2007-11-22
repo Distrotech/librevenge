@@ -36,17 +36,17 @@ class WPXDocumentInterface;
 class WP6Parser : public WPXParser
 {
 public:
-	WP6Parser(WPXInputStream *input, WPXHeader *header);
+	WP6Parser(WPXInputStream *input, WPXHeader *header, WPXEncryption *encryption);
 	~WP6Parser();
 
 	void parse(WPXDocumentInterface *documentInterface);
 
-	static void parseDocument(WPXInputStream *stream, WP6Listener *listener);
+	static void parseDocument(WPXInputStream *input, WPXEncryption *encryption, WP6Listener *listener);
 
 private:
-	WP6PrefixData * getPrefixData(WPXInputStream *input);
+	WP6PrefixData * getPrefixData(WPXInputStream *input, WPXEncryption *encryption);
 
-	void parse(WPXInputStream *stream, WP6Listener *listener);
+	void parse(WPXInputStream *input, WPXEncryption *encryption, WP6Listener *listener);
 
 	void parsePacket(WP6PrefixData *prefixData, int type, WP6Listener *listener);
 	void parsePackets(WP6PrefixData *prefixData, int type, WP6Listener *listener);

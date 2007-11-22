@@ -27,13 +27,13 @@
 #include "WP1UnsupportedVariableLengthGroup.h"
 #include "libwpd_internal.h"
 
-WP1UnsupportedVariableLengthGroup::WP1UnsupportedVariableLengthGroup(WPXInputStream *input, uint8_t group) :
+WP1UnsupportedVariableLengthGroup::WP1UnsupportedVariableLengthGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group) :
 	WP1VariableLengthGroup(group)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
-void WP1UnsupportedVariableLengthGroup::_readContents(WPXInputStream * /* input */)
+void WP1UnsupportedVariableLengthGroup::_readContents(WPXInputStream * /* input */, WPXEncryption * /* encryption */)
 {
 	WPD_DEBUG_MSG(("WordPerfect: Handling an unsupported variable length group\n"));
 }

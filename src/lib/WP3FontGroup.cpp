@@ -29,20 +29,20 @@
 #include "libwpd_math.h"
 #include "WP3Listener.h"
 
-WP3FontGroup::WP3FontGroup(WPXInputStream *input) :
+WP3FontGroup::WP3FontGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	WP3VariableLengthGroup(),
 	m_fontColor(),
 	m_fontName(),
 	m_fontSize(0)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
 WP3FontGroup::~WP3FontGroup()
 {
 }
 
-void WP3FontGroup::_readContents(WPXInputStream *input)
+void WP3FontGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	// this group can contain different kinds of data, thus we need to read
 	// the contents accordingly
@@ -51,19 +51,19 @@ void WP3FontGroup::_readContents(WPXInputStream *input)
 	case WP3_FONT_GROUP_SET_TEXT_COLOR:
 		input->seek(6, WPX_SEEK_CUR);
 		{
-			uint16_t tmpRed = readU16(input, true);
-			uint16_t tmpGreen = readU16(input, true);
-			uint16_t tmpBlue = readU16(input, true);
+			uint16_t tmpRed = readU16(input, encryption, true);
+			uint16_t tmpGreen = readU16(input, encryption, true);
+			uint16_t tmpBlue = readU16(input, encryption, true);
 			m_fontColor = RGBSColor(tmpRed, tmpGreen, tmpBlue);
 		}
 		break;		
 	case WP3_FONT_GROUP_SET_TEXT_FONT:
 		input->seek(12, WPX_SEEK_CUR);
-		m_fontName = readPascalString(input);
+		m_fontName = readPascalString(input, encryption);
 		break;
 	case WP3_FONT_GROUP_SET_FONT_SIZE:
 		input->seek(2, WPX_SEEK_CUR);
-		m_fontSize = readU16(input, true);
+		m_fontSize = readU16(input, encryption, true);
 		break;
 	default: /* something else we don't support, since it isn't in the docs */
 		break;

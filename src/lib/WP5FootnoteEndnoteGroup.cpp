@@ -27,12 +27,12 @@
 #include "WP5FileStructure.h"
 #include "WP5Parser.h"
 
-WP5FootnoteEndnoteGroup::WP5FootnoteEndnoteGroup(WPXInputStream *input) :
+WP5FootnoteEndnoteGroup::WP5FootnoteEndnoteGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	WP5VariableLengthGroup(),
 	m_subDocument(0),
 	m_noteReference()
 {
-	_read(input);
+	_read(input, encryption);
 }
 
 WP5FootnoteEndnoteGroup::~WP5FootnoteEndnoteGroup()
@@ -40,16 +40,16 @@ WP5FootnoteEndnoteGroup::~WP5FootnoteEndnoteGroup()
 	delete m_subDocument;
 }
 
-void WP5FootnoteEndnoteGroup::_readContents(WPXInputStream *input)
+void WP5FootnoteEndnoteGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	int tmpSizeOfNote = getSize() - 8;
-	uint8_t tmpFlags = readU8(input);
+	uint8_t tmpFlags = readU8(input, encryption);
 	tmpSizeOfNote -= 1;
-	int tmpNumOfNote = readU16(input);
+	int tmpNumOfNote = readU16(input, encryption);
 	tmpSizeOfNote -= 2;
 	if (getSubGroup() == WP5_FOOTNOTE_ENDNOTE_GROUP_FOOTNOTE)
 	{
-		int tmpNumOfAdditionalPages = readU8(input);
+		int tmpNumOfAdditionalPages = readU8(input, encryption);
 		tmpSizeOfNote -= 1;
 		input->seek(2*(tmpNumOfAdditionalPages+1) + 9, WPX_SEEK_CUR);
 		tmpSizeOfNote -= 2*(tmpNumOfAdditionalPages+1) + 9;
@@ -60,7 +60,7 @@ void WP5FootnoteEndnoteGroup::_readContents(WPXInputStream *input)
 		tmpSizeOfNote -= 4;
 	}		
 	
-	m_subDocument = new WP5SubDocument(input, tmpSizeOfNote);
+	m_subDocument = new WP5SubDocument(input, encryption, tmpSizeOfNote);
 	if (tmpFlags & 0x80)
 		m_noteReference.sprintf("%c", tmpNumOfNote);
 	else

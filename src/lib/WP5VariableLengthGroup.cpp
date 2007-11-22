@@ -42,58 +42,58 @@ WP5VariableLengthGroup::WP5VariableLengthGroup() :
 {
 }
 
-WP5VariableLengthGroup * WP5VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, const uint8_t group)
+WP5VariableLengthGroup * WP5VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, WPXEncryption *encryption, const uint8_t group)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling a variable length group Ox%x\n", group));	
 	switch (group)
 	{
 		case WP5_TOP_DEFINITION_GROUP:
-			return new WP5DefinitionGroup(input);
+			return new WP5DefinitionGroup(input, encryption);
 		case WP5_TOP_PAGE_FORMAT_GROUP:
-			return new WP5PageFormatGroup(input);
+			return new WP5PageFormatGroup(input, encryption);
 		case WP5_TOP_HEADER_FOOTER_GROUP:
-			return new WP5HeaderFooterGroup(input);
+			return new WP5HeaderFooterGroup(input, encryption);
 		case WP5_TOP_FONT_GROUP:
-			return new WP5FontGroup(input);
+			return new WP5FontGroup(input, encryption);
 		case WP5_TOP_FOOTNOTE_ENDNOTE_GROUP:
-			return new WP5FootnoteEndnoteGroup(input);
+			return new WP5FootnoteEndnoteGroup(input, encryption);
 		case WP5_TOP_BOX_GROUP:
-			return new WP5BoxGroup(input);
+			return new WP5BoxGroup(input, encryption);
 		case WP5_TOP_TABLE_EOL_GROUP:
-			return new WP5TableEOLGroup(input);
+			return new WP5TableEOLGroup(input, encryption);
 		case WP5_TOP_TABLE_EOP_GROUP:
-			return new WP5TableEOPGroup(input);
+			return new WP5TableEOPGroup(input, encryption);
 		default:
 			// this is an unhandled group, just skip it
-			return new WP5UnsupportedVariableLengthGroup(input);
+			return new WP5UnsupportedVariableLengthGroup(input, encryption);
 	}
 }
 
-bool WP5VariableLengthGroup::isGroupConsistent(WPXInputStream *input, const uint8_t group)
+bool WP5VariableLengthGroup::isGroupConsistent(WPXInputStream *input, WPXEncryption *encryption, const uint8_t group)
 {
 	uint32_t startPosition = input->tell();
 
 	try
 	{
-		uint8_t subGroup = readU8(input);
-		uint16_t size = readU16(input);
+		uint8_t subGroup = readU8(input, encryption);
+		uint16_t size = readU16(input, encryption);
 
 		if (input->seek((startPosition + size - 1 - input->tell()), WPX_SEEK_CUR) || input->atEOS())
 		{
 			input->seek(startPosition, WPX_SEEK_SET);
 			return false;
 		}
-		if (size != readU16(input))
+		if (size != readU16(input, encryption))
 		{
 			input->seek(startPosition, WPX_SEEK_SET);
 			return false;
 		}
-		if (subGroup != readU8(input))
+		if (subGroup != readU8(input, encryption))
 		{
 			input->seek(startPosition, WPX_SEEK_SET);
 			return false;
 		}
-		if (group != readU8(input))
+		if (group != readU8(input, encryption))
 		{
 			input->seek(startPosition, WPX_SEEK_SET);
 			return false;
@@ -109,25 +109,25 @@ bool WP5VariableLengthGroup::isGroupConsistent(WPXInputStream *input, const uint
 	}
 }
 
-void WP5VariableLengthGroup::_read(WPXInputStream *input)
+void WP5VariableLengthGroup::_read(WPXInputStream *input, WPXEncryption *encryption)
 {
 	uint32_t startPosition = input->tell();
 
-	m_subGroup = readU8(input);
-	m_size = readU16(input) + 4; // the length is the number of data bytes minus 4 (ie. the function codes)
+	m_subGroup = readU8(input, encryption);
+	m_size = readU16(input, encryption) + 4; // the length is the number of data bytes minus 4 (ie. the function codes)
 	
 	WPD_DEBUG_MSG(("WordPerfect: Read variable group header (start_position: %i, sub_group: 0x%2x, size: %i)\n", startPosition, m_subGroup, m_size));
 
-	_readContents(input);
+	_readContents(input, encryption);
 
 	input->seek((startPosition + m_size - 5 - input->tell()), WPX_SEEK_CUR);
 
-	if (m_size != (readU16(input) + 4))
+	if (m_size != (readU16(input, encryption) + 4))
 	{
 		WPD_DEBUG_MSG(("WordPerfect: Possible corruption detected. Bailing out!\n"));
 		throw FileException();
 	}
-	if (m_subGroup != readU8(input))
+	if (m_subGroup != readU8(input, encryption))
 	{
 		WPD_DEBUG_MSG(("WordPerfect: Possible corruption detected. Bailing out!\n"));
 		throw FileException();

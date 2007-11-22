@@ -27,16 +27,16 @@
 #include "WP6TableStylePacket.h"
 #include "WP6Parser.h"
 
-WP6TableStylePacket::WP6TableStylePacket(WPXInputStream *input, int  /* id */, uint32_t dataOffset, uint32_t dataSize): 
-	WP6PrefixDataPacket(input)
+WP6TableStylePacket::WP6TableStylePacket(WPXInputStream *input, WPXEncryption *encryption, int  /* id */, uint32_t dataOffset, uint32_t dataSize): 
+	WP6PrefixDataPacket(input, encryption)
 {	
-	_read(input, dataOffset, dataSize);
+	_read(input, encryption, dataOffset, dataSize);
 }
 
 WP6TableStylePacket::~WP6TableStylePacket()
 {
 }
 
-void WP6TableStylePacket::_readContents(WPXInputStream * /* input */)
+void WP6TableStylePacket::_readContents(WPXInputStream * /* input */, WPXEncryption * /* encryption */)
 {
 }

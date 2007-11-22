@@ -26,21 +26,21 @@
 #include "libwpd_internal.h"
 #include <vector>
 
-WP1SetTabsGroup::WP1SetTabsGroup(WPXInputStream *input, uint8_t group) :
+WP1SetTabsGroup::WP1SetTabsGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group) :
 	WP1VariableLengthGroup(group),
 	m_tabStops(std::vector<WPXTabStop>())
 {
-	_read(input);
+	_read(input, encryption);
 }
 
 WP1SetTabsGroup::~WP1SetTabsGroup()
 {
 }
 
-void WP1SetTabsGroup::_readContents(WPXInputStream *input)
+void WP1SetTabsGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	// Skip first the old condensed tab table
-	while (readU8(input) != 0xff && !input->atEOS())
+	while (readU8(input, encryption) != 0xff && !input->atEOS())
 		input->seek(2, WPX_SEEK_CUR);
 
 	// Now read the new condensed tab table
@@ -48,11 +48,11 @@ void WP1SetTabsGroup::_readContents(WPXInputStream *input)
 	float tmpTabPosition = 0.0f;
 	WPXTabStop tmpTabStop = WPXTabStop();
 
-	while (((tmpTabType = (int8_t)readU8(input)) & 0xff) != 0xff)
+	while (((tmpTabType = (int8_t)readU8(input, encryption)) & 0xff) != 0xff)
 	{
 		if (input->atEOS())
 			throw FileException();
-		tmpTabPosition = (float)((double)readU16(input, true) / 72.0f);
+		tmpTabPosition = (float)((double)readU16(input, encryption, true) / 72.0f);
 
 		if (tmpTabType < 0)
 		{

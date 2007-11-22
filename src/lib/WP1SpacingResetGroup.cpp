@@ -25,21 +25,21 @@
 #include "WP1SpacingResetGroup.h"
 #include "libwpd_internal.h"
 
-WP1SpacingResetGroup::WP1SpacingResetGroup(WPXInputStream *input, uint8_t group) :
+WP1SpacingResetGroup::WP1SpacingResetGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group) :
 	WP1FixedLengthGroup(group),
 	m_spacing(2)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
 WP1SpacingResetGroup::~WP1SpacingResetGroup()
 {
 }
 
-void WP1SpacingResetGroup::_readContents(WPXInputStream *input)
+void WP1SpacingResetGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	input->seek(1, WPX_SEEK_CUR);
-	m_spacing = readU8(input);
+	m_spacing = readU8(input, encryption);
 }
 
 void WP1SpacingResetGroup::parse(WP1Listener *listener)

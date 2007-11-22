@@ -33,9 +33,9 @@
 class WP5GraphicsInformationPacket : public WP5GeneralPacketData
 {
 public:
-	WP5GraphicsInformationPacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize);
+	WP5GraphicsInformationPacket(WPXInputStream *input, WPXEncryption *encryption, int id, uint32_t dataOffset, uint32_t dataSize);
 	~WP5GraphicsInformationPacket();
-	void _readContents(WPXInputStream *input, uint32_t dataSize);
+	void _readContents(WPXInputStream *input, WPXEncryption *encryption, uint32_t dataSize);
 	const std::vector<WPXBinaryData *> &getImages() const { return m_images; }
 
 private:

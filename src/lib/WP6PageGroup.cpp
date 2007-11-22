@@ -29,7 +29,7 @@
 #include "WP6Listener.h"
 #include "libwpd_internal.h"
 
-WP6PageGroup::WP6PageGroup(WPXInputStream *input) :
+WP6PageGroup::WP6PageGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	WP6VariableLengthGroup(),
 	m_margin(0),
 	m_marginType(0),
@@ -39,14 +39,14 @@ WP6PageGroup::WP6PageGroup(WPXInputStream *input) :
 	m_formType(0),
 	m_formOrientation(PORTRAIT)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
 WP6PageGroup::~WP6PageGroup()
 {
 }
 
-void WP6PageGroup::_readContents(WPXInputStream *input)
+void WP6PageGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	// this group can contain different kinds of data, thus we need to read
 	// the contents accordingly
@@ -54,21 +54,21 @@ void WP6PageGroup::_readContents(WPXInputStream *input)
 	{
 	case WP6_PAGE_GROUP_TOP_MARGIN_SET:
 	case WP6_PAGE_GROUP_BOTTOM_MARGIN_SET:
-		m_margin = readU16(input);
+		m_margin = readU16(input, encryption);
 		WPD_DEBUG_MSG(("WordPerfect: Read page group margin size (margin: %i)\n", m_margin));
 		break;
 	case WP6_PAGE_GROUP_SUPPRESS_PAGE_CHARACTERISTICS:
-		m_suppressedCode = readU8(input);
+		m_suppressedCode = readU8(input, encryption);
 		WPD_DEBUG_MSG(("WordPerfect: Read suppressed code (%i)\n", m_suppressedCode));
 		break;
 	case WP6_PAGE_GROUP_FORM:
 		uint8_t tmpOrientation;
 		// skip Hash values that we do not use (2+1 bytes)
 		input->seek(3, WPX_SEEK_CUR);
-		m_formLength = readU16(input);
-		m_formWidth = readU16(input);
-		m_formType = readU8(input);
-		tmpOrientation = readU8(input);
+		m_formLength = readU16(input, encryption);
+		m_formWidth = readU16(input, encryption);
+		m_formType = readU8(input, encryption);
+		tmpOrientation = readU8(input, encryption);
 		switch (tmpOrientation)
 		{
 		case 0x01:

@@ -30,13 +30,14 @@
 
 class WPXInputStream;
 class WP3Listener;
+class WPXEncryption;
 
 class WP3Part
 {
  public:
 	virtual ~WP3Part() {}
 	
-	static WP3Part * constructPart(WPXInputStream *input, const uint8_t readVal);
+	static WP3Part * constructPart(WPXInputStream *input, WPXEncryption *encryption, const uint8_t readVal);
 	virtual void parse(WP3Listener *listener) = 0;
 };
 

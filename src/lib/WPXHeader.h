@@ -29,13 +29,16 @@
 #include "WPXStream.h"
 #include "libwpd_types.h"
 
+class WPXEncryption;
+
 class WPXHeader
 {
  public:	
-	WPXHeader(WPXInputStream *input, uint32_t documentOffset, uint8_t productType, uint8_t fileType, uint8_t majorVersion, uint8_t minorVersion, uint16_t documentEncryption);
+	WPXHeader(WPXInputStream *input, WPXEncryption *encryption, uint32_t documentOffset, uint8_t productType,
+		uint8_t fileType, uint8_t majorVersion, uint8_t minorVersion, uint16_t documentEncryption);
 	virtual ~WPXHeader();
 
-	static WPXHeader * constructHeader(WPXInputStream *input);
+	static WPXHeader * constructHeader(WPXInputStream *input, WPXEncryption *encryption);
 		
 	uint32_t getDocumentOffset() const { return m_documentOffset; }
 	uint8_t getProductType() const { return m_productType; }

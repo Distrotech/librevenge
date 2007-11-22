@@ -34,15 +34,15 @@ class WPXDocumentInterface;
 class WP42Parser : public WPXParser
 {
 public:
-	WP42Parser(WPXInputStream *input);
+	WP42Parser(WPXInputStream *input, WPXEncryption *encryption);
 	~WP42Parser();
 
 	void parse(WPXDocumentInterface *documentInterface);
 
-	static void parseDocument(WPXInputStream *input, WP42Listener *listener);
+	static void parseDocument(WPXInputStream *input, WPXEncryption *encryption, WP42Listener *listener);
 
 private:
-	void parse(WPXInputStream *input, WP42Listener *listener);
+	void parse(WPXInputStream *input, WPXEncryption *encryption, WP42Listener *listener);
 };
 
 #endif /* WP42PARSER_H */

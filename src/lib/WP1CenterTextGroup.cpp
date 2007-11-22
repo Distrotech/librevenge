@@ -25,10 +25,10 @@
 #include "libwpd_internal.h"
 #include "WP1CenterTextGroup.h"
 
-WP1CenterTextGroup::WP1CenterTextGroup(WPXInputStream *input, uint8_t group) :
+WP1CenterTextGroup::WP1CenterTextGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group) :
 	WP1FixedLengthGroup(group)
 {
-	_read(input);
+	_read(input, encryption);
 }
 
 WP1CenterTextGroup::~WP1CenterTextGroup()

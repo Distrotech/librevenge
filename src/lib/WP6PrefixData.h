@@ -37,7 +37,7 @@ typedef MPDP::iterator MPDP_Iter;
 class WP6PrefixData
 {
  public:
-	WP6PrefixData(WPXInputStream *input, const int numPrefixIndices);
+	WP6PrefixData(WPXInputStream *input, WPXEncryption *encryption, const int numPrefixIndices);
 	virtual ~WP6PrefixData();
 	const WP6PrefixDataPacket *getPrefixDataPacket(const int prefixID) const;
 	std::pair< MPDP_CIter, MPDP_CIter > getPrefixDataPacketsOfType(const int type) const;

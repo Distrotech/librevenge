@@ -34,7 +34,7 @@
 
 #include <string.h>
 	
-WPXHeader::WPXHeader(WPXInputStream * /* input */, uint32_t documentOffset, uint8_t productType,
+WPXHeader::WPXHeader(WPXInputStream * /* input */, WPXEncryption * /* encryption */, uint32_t documentOffset, uint8_t productType,
 			uint8_t fileType, uint8_t majorVersion, uint8_t minorVersion, uint16_t documentEncryption) :
 	m_documentOffset(documentOffset),
 	m_productType(productType),
@@ -49,7 +49,7 @@ WPXHeader::~WPXHeader()
 {
 }
 
-WPXHeader * WPXHeader::constructHeader(WPXInputStream *input)
+WPXHeader * WPXHeader::constructHeader(WPXInputStream *input, WPXEncryption *encryption)
 {
 	WPD_DEBUG_MSG(("WPXHeader::constructHeader()\n"));
 	
@@ -57,7 +57,7 @@ WPXHeader * WPXHeader::constructHeader(WPXInputStream *input)
 	/* check the magic */
 	input->seek(WPX_HEADER_MAGIC_OFFSET - input->tell(), WPX_SEEK_CUR);
 	for (int i=0; i<3 && !input->atEOS(); i++)
-		fileMagic[i] = readU8(input);
+		fileMagic[i] = readU8(input, encryption);
 	
 	if ( strcmp(fileMagic, "WPC") )
 	{
@@ -67,17 +67,17 @@ WPXHeader * WPXHeader::constructHeader(WPXInputStream *input)
 	
 	/* get the document pointer */
 	input->seek(WPX_HEADER_DOCUMENT_POINTER_OFFSET - input->tell(), WPX_SEEK_CUR);
-	uint32_t documentOffset = readU32(input);
+	uint32_t documentOffset = readU32(input, encryption);
 
 	/* get information on product types, file types, versions */
 	input->seek(WPX_HEADER_PRODUCT_TYPE_OFFSET - input->tell(), WPX_SEEK_CUR);
-	uint8_t productType = readU8(input);
-	uint8_t fileType = readU8(input);
-	uint8_t majorVersion = readU8(input);
-	uint8_t minorVersion = readU8(input);
+	uint8_t productType = readU8(input, encryption);
+	uint8_t fileType = readU8(input, encryption);
+	uint8_t majorVersion = readU8(input, encryption);
+	uint8_t minorVersion = readU8(input, encryption);
 	
 	input->seek(WPX_HEADER_ENCRYPTION_OFFSET, WPX_SEEK_SET);
-	uint8_t documentEncryption = (uint8_t)readU16(input);		
+	uint16_t documentEncryption = readU16(input, encryption);		
 	
 	WPD_DEBUG_MSG(("WordPerfect: Product Type: %i File Type: %i Major Version: %i Minor Version: %i\n", 
 					productType, fileType, 
@@ -92,16 +92,17 @@ WPXHeader * WPXHeader::constructHeader(WPXInputStream *input)
 			switch (majorVersion)
 			{
 				case 0x00: // WP5 
-					return new WP5Header(input, documentOffset, productType, fileType,
+					documentEncryption = (((documentEncryption & 0xff00) >> 8) | ((documentEncryption & 0x00ff) << 8));
+					return new WP5Header(input, encryption, documentOffset, productType, fileType,
 								majorVersion, minorVersion, documentEncryption);
 				case 0x02: // WP6
 					switch (minorVersion)
 					{
 						case 0x00:
-							return new WP60Header(input, documentOffset, productType, fileType,
+							return new WP60Header(input, encryption, documentOffset, productType, fileType,
 										majorVersion, minorVersion, documentEncryption);
 						default: // assume this header can be parsed by a WP61 header parser
-							return new WP61Header(input, documentOffset, productType, fileType,
+							return new WP61Header(input, encryption, documentOffset, productType, fileType,
 										majorVersion, minorVersion, documentEncryption);
 					}
 				default:
@@ -116,7 +117,7 @@ WPXHeader * WPXHeader::constructHeader(WPXInputStream *input)
 				case 0x02: // WP Mac 2.x
 				case 0x03: // WP Mac 3.0-3.5
 				case 0x04: // WP Mac 3.5e
-					return new WP3Header(input, documentOffset, productType, fileType,
+					return new WP3Header(input, encryption, documentOffset, productType, fileType,
 								majorVersion, minorVersion, documentEncryption);
 				default:
 					// unhandled file format

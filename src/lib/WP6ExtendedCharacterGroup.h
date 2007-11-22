@@ -32,11 +32,11 @@
 class WP6ExtendedCharacterGroup : public WP6FixedLengthGroup
 {
 public:
-	WP6ExtendedCharacterGroup(WPXInputStream *input, uint8_t groupID);	
+	WP6ExtendedCharacterGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);	
 	void parse(WP6Listener *listener);
 	
  protected:
-	void _readContents(WPXInputStream *input);
+	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 
  private:
 	uint8_t m_character;

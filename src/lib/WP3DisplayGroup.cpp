@@ -29,30 +29,30 @@
 #include "libwpd_math.h"
 #include "WP3Listener.h"
 
-WP3DisplayGroup::WP3DisplayGroup(WPXInputStream *input) :
+WP3DisplayGroup::WP3DisplayGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	WP3VariableLengthGroup(),
 	m_noteReference(),
 	m_pageNumber()	
 {
-	_read(input);
+	_read(input, encryption);
 }
 
 WP3DisplayGroup::~WP3DisplayGroup()
 {
 }
 
-void WP3DisplayGroup::_readContents(WPXInputStream *input)
+void WP3DisplayGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	switch (getSubGroup())
 	{
 	case WP3_DISPLAY_GROUP_INSERT_PAGE_NUMBER:
 		input->seek(4, WPX_SEEK_CUR);
-		m_pageNumber = readPascalString(input);
+		m_pageNumber = readPascalString(input, encryption);
 		break;
 	case WP3_DISPLAY_GROUP_INSERT_FOOTNOTE_NUMBER:
 	case WP3_DISPLAY_GROUP_INSERT_ENDNOTE_NUMBER:
 		input->seek(4, WPX_SEEK_CUR);
-		m_noteReference = readPascalString(input);
+		m_noteReference = readPascalString(input, encryption);
 		break;
 	default:
 		break;

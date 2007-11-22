@@ -31,9 +31,9 @@
 class WP5ListFontsUsedPacket : public WP5GeneralPacketData
 {
 public:
-	WP5ListFontsUsedPacket(WPXInputStream *input, int id, uint32_t dataOffset, uint32_t dataSize, uint16_t packetType);
+	WP5ListFontsUsedPacket(WPXInputStream *input, WPXEncryption *encryption, int id, uint32_t dataOffset, uint32_t dataSize, uint16_t packetType);
 	~WP5ListFontsUsedPacket();
-	void _readContents(WPXInputStream *input, uint32_t dataSize);
+	void _readContents(WPXInputStream *input, WPXEncryption *encryption, uint32_t dataSize);
 	int getFontNameOffset(const int fontNumber) const;
 	float getFontSize(const int fontNumber) const;
 

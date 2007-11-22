@@ -37,5 +37,5 @@ void WP6SubDocument::parse(WP6Listener *listener) const
 	if (!tmpStream)
 		return;
 	tmpStream->seek(0, WPX_SEEK_SET);
-	WP6Parser::parseDocument(tmpStream, listener);
+	WP6Parser::parseDocument(tmpStream, 0, listener);
 }

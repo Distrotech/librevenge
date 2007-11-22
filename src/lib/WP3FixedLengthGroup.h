@@ -28,19 +28,21 @@
 
 #include "WP3Part.h"
 
+class WPXEncryption;
+
 class WP3FixedLengthGroup : public WP3Part
 {
  public:
 	WP3FixedLengthGroup(const uint8_t groupID);
-	static WP3FixedLengthGroup * constructFixedLengthGroup(WPXInputStream *input, uint8_t const groupID);
+	static WP3FixedLengthGroup * constructFixedLengthGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t const groupID);
 
-	static bool isGroupConsistent(WPXInputStream *input, const uint8_t groupID);
+	static bool isGroupConsistent(WPXInputStream *input, WPXEncryption *encryption, const uint8_t groupID);
 
 	uint8_t getGroup() const { return m_group; } 
  
  protected:
-	void _read(WPXInputStream *input);
-	virtual void _readContents(WPXInputStream *input) = 0; // we always read the contents in the case of a fixed length group
+	void _read(WPXInputStream *input, WPXEncryption *encryption);
+	virtual void _readContents(WPXInputStream *input, WPXEncryption *encryption) = 0; // we always read the contents in the case of a fixed length group
  private:
 	uint8_t m_group;	 
 };

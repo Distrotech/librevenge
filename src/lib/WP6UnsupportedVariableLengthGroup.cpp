@@ -26,9 +26,9 @@
 #include "WP6UnsupportedVariableLengthGroup.h"
 #include "libwpd_internal.h"
 
-WP6UnsupportedVariableLengthGroup::WP6UnsupportedVariableLengthGroup(WPXInputStream *input) :
+WP6UnsupportedVariableLengthGroup::WP6UnsupportedVariableLengthGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	WP6VariableLengthGroup()
 {
 	WPD_DEBUG_MSG(("WordPerfect: Handling an unsupported variable length group\n"));
-	_read(input);
+	_read(input, encryption);
 }

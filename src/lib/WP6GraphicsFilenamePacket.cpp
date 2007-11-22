@@ -28,24 +28,24 @@
 #include "WP6Parser.h"
 #include "libwpd_internal.h"
 
-WP6GraphicsFilenamePacket::WP6GraphicsFilenamePacket(WPXInputStream *input, int /* id */, const uint8_t flags, uint32_t dataOffset, uint32_t dataSize): 
-	WP6PrefixDataPacket(input),
+WP6GraphicsFilenamePacket::WP6GraphicsFilenamePacket(WPXInputStream *input, WPXEncryption *encryption, int /* id */, const uint8_t flags, uint32_t dataOffset, uint32_t dataSize): 
+	WP6PrefixDataPacket(input, encryption),
 	m_childIds(),
 	m_flags(flags)
 {	
-	_read(input, dataOffset, dataSize);
+	_read(input, encryption, dataOffset, dataSize);
 }
 
 WP6GraphicsFilenamePacket::~WP6GraphicsFilenamePacket()
 {
 }
 
-void WP6GraphicsFilenamePacket::_readContents(WPXInputStream *input)
+void WP6GraphicsFilenamePacket::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	if ((m_flags && 0x01) == 0x00)
 		return;
-	uint16_t tmpNumChildIds = readU16(input);
+	uint16_t tmpNumChildIds = readU16(input, encryption);
 	for (uint16_t i = 0; i < tmpNumChildIds; i++)
-		m_childIds.push_back(readU16(input));
+		m_childIds.push_back(readU16(input, encryption));
 }
 

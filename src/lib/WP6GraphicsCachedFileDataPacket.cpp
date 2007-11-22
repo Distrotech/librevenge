@@ -30,13 +30,13 @@
 #include "WPXMemoryStream.h"
 #include "WPXString.h"
 
-WP6GraphicsCachedFileDataPacket::WP6GraphicsCachedFileDataPacket(WPXInputStream *input, int  id, uint32_t dataOffset, uint32_t dataSize): 
-	WP6PrefixDataPacket(input),
+WP6GraphicsCachedFileDataPacket::WP6GraphicsCachedFileDataPacket(WPXInputStream *input, WPXEncryption *encryption, int  id, uint32_t dataOffset, uint32_t dataSize): 
+	WP6PrefixDataPacket(input, encryption),
 	m_id(id),
 	m_object(0),
 	m_data(0)
 {	
-	_read(input, dataOffset, dataSize);
+	_read(input, encryption, dataOffset, dataSize);
 }
 
 WP6GraphicsCachedFileDataPacket::~WP6GraphicsCachedFileDataPacket()
@@ -48,12 +48,12 @@ WP6GraphicsCachedFileDataPacket::~WP6GraphicsCachedFileDataPacket()
 		delete m_object;
 }
 
-void WP6GraphicsCachedFileDataPacket::_readContents(WPXInputStream *input)
+void WP6GraphicsCachedFileDataPacket::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	uint32_t tmpDataSize = getDataSize();
 	m_data = new uint8_t[tmpDataSize];
 	for (uint32_t i = 0; i < tmpDataSize; i++)
-		m_data[i] = readU8(input);
+		m_data[i] = readU8(input, encryption);
 #if 0
 	WPXString filename;
 	filename.sprintf("binarydump%.4x.wpg", m_id);

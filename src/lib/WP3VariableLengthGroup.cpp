@@ -44,35 +44,35 @@ WP3VariableLengthGroup::WP3VariableLengthGroup() :
 {
 }
 
-WP3VariableLengthGroup * WP3VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, const uint8_t group)
+WP3VariableLengthGroup * WP3VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, WPXEncryption *encryption, const uint8_t group)
 {
 	switch (group)
 	{
 		case WP3_PAGE_FORMAT_GROUP:
-			return new WP3PageFormatGroup(input);
+			return new WP3PageFormatGroup(input, encryption);
 		case WP3_END_OF_LINE_PAGE_GROUP:
-			return new WP3EndOfLinePageGroup(input);
+			return new WP3EndOfLinePageGroup(input, encryption);
 		case WP3_MISCELLANEOUS_GROUP:
-			return new WP3MiscellaneousGroup(input);
+			return new WP3MiscellaneousGroup(input, encryption);
 		case WP3_TABLES_GROUP:
-			return new WP3TablesGroup(input);
+			return new WP3TablesGroup(input, encryption);
 		case WP3_FONT_GROUP:
-			return new WP3FontGroup(input);
+			return new WP3FontGroup(input, encryption);
 		case WP3_DEFINITION_GROUP:
-			return new WP3DefinitionGroup(input);
+			return new WP3DefinitionGroup(input, encryption);
 		case WP3_HEADER_FOOTER_GROUP:
-			return new WP3HeaderFooterGroup(input);
+			return new WP3HeaderFooterGroup(input, encryption);
 		case WP3_FOOTNOTE_ENDNOTE_GROUP:
-			return new WP3FootnoteEndnoteGroup(input);
+			return new WP3FootnoteEndnoteGroup(input, encryption);
 		case WP3_DISPLAY_GROUP:
-			return new WP3DisplayGroup(input);
+			return new WP3DisplayGroup(input, encryption);
 		default:
 			// this is an unhandled group, just skip it
-			return new WP3UnsupportedVariableLengthGroup(input);
+			return new WP3UnsupportedVariableLengthGroup(input, encryption);
 	}
 }
 
-bool WP3VariableLengthGroup::isGroupConsistent(WPXInputStream *input, const uint8_t group)
+bool WP3VariableLengthGroup::isGroupConsistent(WPXInputStream *input, WPXEncryption *encryption, const uint8_t group)
 {
 	uint32_t startPosition = input->tell();
 	if (startPosition > ((std::numeric_limits<unsigned long>::max)() / 2))
@@ -80,8 +80,8 @@ bool WP3VariableLengthGroup::isGroupConsistent(WPXInputStream *input, const uint
 
 	try
 	{
-		uint8_t subGroup = readU8(input);
-		uint16_t size = readU16(input, true);
+		uint8_t subGroup = readU8(input, encryption);
+		uint16_t size = readU16(input, encryption, true);
 		if (startPosition + size < startPosition)
 		{
 			input->seek(startPosition, WPX_SEEK_SET);
@@ -93,17 +93,17 @@ bool WP3VariableLengthGroup::isGroupConsistent(WPXInputStream *input, const uint
 			input->seek(startPosition, WPX_SEEK_SET);
 			return false;
 		}
-		if (size != readU16(input, true))
+		if (size != readU16(input, encryption, true))
 		{
 			input->seek(startPosition, WPX_SEEK_SET);
 			return false;
 		}
-		if (subGroup != readU8(input))
+		if (subGroup != readU8(input, encryption))
 		{
 			input->seek(startPosition, WPX_SEEK_SET);
 			return false;
 		}
-		if (group != readU8(input))
+		if (group != readU8(input, encryption))
 		{
 			input->seek(startPosition, WPX_SEEK_SET);
 			return false;
@@ -119,27 +119,27 @@ bool WP3VariableLengthGroup::isGroupConsistent(WPXInputStream *input, const uint
 	}
 }
 
-void WP3VariableLengthGroup::_read(WPXInputStream *input)
+void WP3VariableLengthGroup::_read(WPXInputStream *input, WPXEncryption *encryption)
 {
 	uint32_t startPosition = input->tell();
 
 	WPD_DEBUG_MSG(("WordPerfect: handling a variable length group\n"));	
 	
-	m_subGroup = readU8(input);
-	m_size = readU16(input, true) + 4; // the length is the number of data bytes minus 4 (ie. the function codes)
+	m_subGroup = readU8(input, encryption);
+	m_size = readU16(input, encryption, true) + 4; // the length is the number of data bytes minus 4 (ie. the function codes)
 	
 	WPD_DEBUG_MSG(("WordPerfect: Read variable group header (start_position: %i, sub_group: 0x%x, size: %i)\n", startPosition, m_subGroup, m_size));
 	
-	_readContents(input);
+	_readContents(input, encryption);
 	
 	input->seek((startPosition + m_size - 5 - input->tell()), WPX_SEEK_CUR);
 
-	if (m_size != (readU16(input, true) + 4))
+	if (m_size != (readU16(input, encryption, true) + 4))
 	{
 		WPD_DEBUG_MSG(("WordPerfect: Possible corruption detected. Bailing out!\n"));
 		throw FileException();
 	}
-	if (m_subGroup != readU8(input))
+	if (m_subGroup != readU8(input, encryption))
 	{
 		WPD_DEBUG_MSG(("WordPerfect: Possible corruption detected. Bailing out!\n"));
 		throw FileException();

@@ -27,14 +27,14 @@
 #include "WP5SpecialHeaderIndex.h"
 #include "libwpd_internal.h"
 
-WP5PrefixData::WP5PrefixData(WPXInputStream *input) :
+WP5PrefixData::WP5PrefixData(WPXInputStream *input, WPXEncryption *encryption) :
 	m_generalPacketData()
 {
 	std::vector<WP5GeneralPacketIndex> prefixIndexVector;
 	int id = 0;
 	while (true)
 	{
-		WP5SpecialHeaderIndex shi = WP5SpecialHeaderIndex(input);
+		WP5SpecialHeaderIndex shi = WP5SpecialHeaderIndex(input, encryption);
 
 		if ((shi.getType() != 0xfffb) || (shi.getNumOfIndexes() != 5) || (shi.getIndexBlockSize() != 50))
 		{
@@ -45,7 +45,7 @@ WP5PrefixData::WP5PrefixData(WPXInputStream *input) :
 		bool tmpFoundPossibleCorruption = false;
 		for (int i=0; i<(shi.getNumOfIndexes()-1); i++)
 		{
-			WP5GeneralPacketIndex gpi = WP5GeneralPacketIndex(input, id);
+			WP5GeneralPacketIndex gpi = WP5GeneralPacketIndex(input, encryption, id);
 			if ((gpi.getType() > 0x02ff) && (gpi.getType() < 0xfffb))
 			{
 				WPD_DEBUG_MSG(("WordPerfect: detected possible prefix data corruption, ignoring this and all following packets.\n"));
@@ -73,7 +73,7 @@ WP5PrefixData::WP5PrefixData(WPXInputStream *input) :
 	for (gpiIter = prefixIndexVector.begin(); gpiIter != prefixIndexVector.end(); gpiIter++)
 	{
 		WPD_DEBUG_MSG(("WordPerfect: constructing general packet data %i\n", (*gpiIter).getID()));
-		WP5GeneralPacketData *generalPacketData = WP5GeneralPacketData::constructGeneralPacketData(input, &(*gpiIter));
+		WP5GeneralPacketData *generalPacketData = WP5GeneralPacketData::constructGeneralPacketData(input, encryption, &(*gpiIter));
 		if (generalPacketData)
 		{
 			m_generalPacketData[gpiIter->getType()] = generalPacketData;
