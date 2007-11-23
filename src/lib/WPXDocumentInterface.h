@@ -46,15 +46,57 @@ class WPXDocumentInterface
 	/** 
 	Called when all document metadata should be set. This is always the first callback made.
 	\param propList Property list for the metadata. May contain:
-	\li \c dc:author The document's author
-	\li \c dc:subject The document's subject
-	\li \c dc:publisher The document's publisher
-	\li \c dc:type The document's type
+	\li \c dc:creator
 	\li \c dc:language The document's keywords
-	\li \c libwpd:keywords The document's keywords
+	\li \c dc:publisher The document's publisher
+	\li \c dc:source
+	\li \c dc:subject The document's subject
+	\li \c dc:type The document's type
+	\li \c dcterms:available Date when the document was completed
+	\li \c dcterms:issued: Date of the version of the document
 	\li \c libwpd:abstract Abstract of the document's contents
+	\li \c libwpd:account Account
+	\li \c libwpd:address Address
+	\li \c libwpd:attachments
+	\li \c libwpd:authorization
+	\li \c libwpd:bill-to
+	\li \c libwpd:blind-copy
+	\li \c libwpd:carbon-copy
+	\li \c libwpd:checked-by
+	\li \c libwpd:client
+	\li \c libwpd:comments
+	\li \c libwpd:department
 	\li \c libwpd:descriptive-name The descriptive name for the document
 	\li \c libwpd:descriptive-type The descriptive type for the document
+	\li \c libwpd:destination
+	\li \c libwpd:disposition
+	\li \c libwpd:division
+	\li \c libwpd:document-number
+	\li \c libwpd:editor
+	\li \c libwpd:forward-to
+	\li \c libwpd:group
+	\li \c libwpd:mail-stop
+	\li \c libwpd:matter
+	\li \c libwpd:office
+	\li \c libwpd:owner
+	\li \c libwpd:project
+	\li \c libwpd:purpose
+	\li \c libwpd:received-from
+	\li \c libwpd:recorded-by
+	\li \c libwpd:recorded-date Date when the document was recorded
+	\li \c libwpd:reference
+	\li \c libwpd:revision-notes
+	\li \c libwpd:revision-number
+	\li \c libwpd:section
+	\li \c libwpd:security
+	\li \c libwpd:status
+	\li \c libwpd:telephone-number
+	\li \c libwpd:version-notes
+	\li \c libwpd:version-number
+	\li \c meta:creation-date Document creation date
+	\li \c meta:initial-creator The document's author
+	\li \c meta:keyword The document's keywords
+	\li \c 
 	*/
  	virtual void setDocumentMetaData(const WPXPropertyList &propList) = 0;
 
@@ -121,7 +163,8 @@ class WPXDocumentInterface
 	\li \c fo:line-height The amount of spacing between lines, in number of lines (1.0 is single spacing)
 	\li \c fo:break-before Whether this paragraph should be placed in a new column or page (the value is set to column or page if so)
 	\param tabStops List of tabstop definitions for the paragraph. If the list is empty, default tabstop definition should be used. Each tab stop may contain:
-	\li \c style:type Type of tab (left, right, center, char, or .)
+	\li \c style:type Type of tab (left, right, center, or char)
+	\li \c style:char Alingnment character for char aligned tabs
 	\li \c style:leader-text The leader character
 	\li \c style:position Position of the tab
 	*/
@@ -144,6 +187,8 @@ class WPXDocumentInterface
 	\li \c fo:font-size The size of the font used in the span, in points (72 points per inch)
 	\li \c fo:color The color of the font used in the span (encoded in hex: \#RRGGBB)
 	\li \c fo:background-color The background color of the text in the span (encoded in hex: \#RRGGBB)
+	\li \c style:text-blinking Whether the text should blink (true or false)
+	\li \c fo:text-shadow
 	*/
 	virtual void openSpan(const WPXPropertyList &propList) = 0;
 	/**
@@ -152,7 +197,9 @@ class WPXDocumentInterface
 	virtual void closeSpan() = 0;
 	/**
 	Called when a new section is opened
-	\param propList Property list for the section. May contain: 
+	\param propList Property list for the section. May contain:
+	\li \c fo:margin-left The left indentation of this section, in inches
+	\li \c fo:margin-right The right indentation of this section, in inches 
 	\li \c libwpd:margin-bottom  Extra space to add after the section, in inches 
 	\li \c text:dont-balance-text-columns Whether or not to balance text columns
 	\param columns List of definitions of each column: left gutter, right gutter, and width (includes the gutters). Empty if there is only one column in the section. Each column may contain:
@@ -235,7 +282,8 @@ class WPXDocumentInterface
 	\li \c fo:line-height The amount of spacing between lines, in number of lines (1.0 is single spacing)
 	\li \c fo:break-before Whether this paragraph should be placed in a new column or page (the value is set to column or page if so)
 	\param tabStops List of tabstop definitions for the paragraph. If the list is empty, default tabstop definition should be used. Each tab stop may contain:
-	\li \c style:type Type of tab (left, right, center, char, or .)
+	\li \c style:type Type of tab (left, right, center, or char)
+	\li \c style:char Alingnment character for char aligned tabs
 	\li \c style:leader-text The leader character
 	\li \c style:position Position of the tab
 	*/
@@ -294,6 +342,7 @@ class WPXDocumentInterface
 	\li \c fo:margin-left The left indentation of the table, in inches
 	\li \c fo:margin-right The right indentation of the table, in inches
 	\li \c style:width Total width of the table, in inches
+	\li \c fo:break-before Whether this table should be placed in a new column or page (the value is set to column or page if so)
 	\param columns Column definitions for the table. May contain
 	\li \c style:column-width Width of a column, in inches
 	*/
@@ -301,7 +350,6 @@ class WPXDocumentInterface
 	/**
 	Called when a new table row is opened
 	\param propList Defines a set of properties for the table row. May contain:
-	\li \c fo:break-before Whether this table should be placed in a new column or page (the value is set to column or page if so)
 	\li \c style:row-height The row's height, in inches
 	\li \c style:min-row-height The row's minimum height, in inches
 	\li \c libwpd:is-header-row This row contains headings of columns and should repeat at every page (for tables that span several pages)
@@ -348,9 +396,13 @@ class WPXDocumentInterface
 	\li \c svg:x Horizontal position of the box (in inches)
 	\li \c svg:y Vertical position of the box (in inches)
 	\li \c style:horizontal-pos Horizontal alignment of the box (left, center, right, from-left, inside, outside, from-inside)
-	\li \c style:horizontal-rel From where the position of the box is measured (page, page-content, page-start-margin, page-end-margin, frame, frame-content, frame-start-margin, frame-end-margin, paragraph, paragraph-content, paragraph-start-margin, paragraph-end-margin, char)
+	\li \c style:horizontal-rel From where the horizontal position of the box is measured (page, page-content, page-start-margin, page-end-margin, frame, frame-content, frame-start-margin, frame-end-margin, paragraph, paragraph-content, paragraph-start-margin, paragraph-end-margin, char)
+	\li \c style:vertical-pos Vertical alignment of the box
+	\li \c style:vertical-rel From where the vertical position of the box is measured
 	\li \c svg:width Width of the box (in inches)
+	\li \c style:relative-width If the width should scale to keep the width/height ratio of the original object, this property is set to \"scale\".
 	\li \c svg:height Height of the box (in inches)
+	\li \c style:relative-height If the height should scale to keep the width/height ratio of the original object, this property is set to \"scale\".
 	*/
 	virtual void openFrame(const WPXPropertyList &propList) = 0;
 	/**

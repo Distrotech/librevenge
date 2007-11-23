@@ -38,12 +38,15 @@ public:
 	WPXEncryption(const char *password, const size_t encryptionStartOffset = 0);
 	~WPXEncryption();
 	
-	uint16_t getCheckSum();
 	const unsigned char *readAndDecrypt(WPXInputStream *input, size_t numBytes, size_t &numBytesRead);
+	uint16_t getCheckSum() const;
+	
+	void setEncryptionStartOffset(const size_t encryptionStartOffset) { m_encryptionStartOffset = encryptionStartOffset; }
+
 private:
 	unsigned char *m_buffer;
 	WPXString m_password;
-	const size_t m_encryptionStartOffset;
+	size_t m_encryptionStartOffset;
 };
 
 #endif /* WPXENCRYPTION_H */

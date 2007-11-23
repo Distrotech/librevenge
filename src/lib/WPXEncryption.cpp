@@ -48,7 +48,7 @@ WPXEncryption::~WPXEncryption()
 }
 		
 
-uint16_t WPXEncryption::getCheckSum()
+uint16_t WPXEncryption::getCheckSum() const
 {
 	if (m_password.len() <= 0)
 		return 0;

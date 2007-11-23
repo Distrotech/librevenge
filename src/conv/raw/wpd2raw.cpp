@@ -56,6 +56,8 @@ int main(int argc, char *argv[])
 		    if (i < argc - 1)
 				password = argv[++i];
 		}
+		else if (!strncmp(argv[i], "--password=", 11))
+			password = &argv[i][11];
 		else if (!strcmp(argv[i], "--callgraph"))
 			printIndentLevel = true;
 		else if (!file && strncmp(argv[i], "--", 2))

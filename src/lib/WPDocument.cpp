@@ -55,6 +55,7 @@ the full 100%.
 /**
 Analyzes the content of an input stream to see if it can be parsed
 \param input The input stream
+\param password The password used to protect the document or NULL if the document is not protected
 \return A confidence value which represents the likelyhood that the content from
 the input stream can be parsed
 */
@@ -175,7 +176,11 @@ Parses the input stream content. It will make callbacks to the functions provide
 WPXDocumentInterface class implementation when needed. This is often commonly called the
 'main parsing routine'.
 \param input The input stream
-\param documentInterface A WPXListener implementation
+\param documentInterface A WPXDocumentInterface implementation
+\param password The password used to protect the document or NULL if the document
+is not protected
+\return A value that indicates whether the conversion was successful and in case it
+was not, it indicates the reason of the error
 */
 WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *documentInterface, const char *password)
 {
