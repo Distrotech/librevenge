@@ -123,10 +123,10 @@ WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input, const cha
 					break;
 			}
 			if (header->getDocumentEncryption())
-				if (!password)
+				if (header->getMajorVersion() == 0x02)
 					confidence = WPD_CONFIDENCE_UNSUPPORTED_ENCRYPTION;
-				else if (header->getMajorVersion() == 0x02)  // we don't know how to decrypt WP6 documents for the while
-					confidence = WPD_CONFIDENCE_UNSUPPORTED_ENCRYPTION;
+				else if (!password)
+					confidence = WPD_CONFIDENCE_SUPPORTED_ENCRYPTION;
 				else
 				{
 					WPXEncryption encryption(password);

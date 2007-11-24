@@ -159,7 +159,7 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input, const char
 				delete encryption;
 				return WPD_CONFIDENCE_EXCELLENT;
 			}
-			return WPD_CONFIDENCE_POOR;
+			return WPD_CONFIDENCE_NONE;
 		}
 		if (encryption)
 			delete encryption;

@@ -209,27 +209,30 @@ struct _WPXTabStop
 
 class VersionException
 {
-	// needless to say, we could flesh this class out a bit
 };
 
 class FileException
 {
-	// needless to say, we could flesh this class out a bit
 };
 
 class ParseException
 {
-	// needless to say, we could flesh this class out a bit
 };
 
 class GenericException
 {
-	// needless to say, we could flesh this class out a bit
 };
 
 class UnsupportedEncryptionException
 {
-	// needless to say, we could flesh this class out a bit
+};
+
+class SupportedEncryptionException
+{
+};
+
+class WrongPasswordException
+{
 };
 
 // Various usefull, but cheesey functions

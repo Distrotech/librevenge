@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
 	WPXInputStream* input = new WPXFileStream(file);
 
 	WPDConfidence confidence = WPDocument::isFileFormatSupported(input, password);
-	if (confidence == WPD_CONFIDENCE_NONE || confidence == WPD_CONFIDENCE_POOR)
+	if (confidence != WPD_CONFIDENCE_EXCELLENT)
 	{
 		printf("ERROR: Unsupported file format!\n");
 		delete input; 
