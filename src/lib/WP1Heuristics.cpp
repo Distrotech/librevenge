@@ -43,13 +43,9 @@ WPDConfidence WP1Heuristics::isWP1FileFormat(WPXInputStream *input, const char *
 				readU8(input, 0) != 0x61 || readU8(input, 0) != 0x61 ||
 				readU16(input, 0, true) != encryption->getCheckSum())
 			{
-				WPD_DEBUG_MSG(("The file position is %li\n", input->tell()));
-				input->seek(-2, WPX_SEEK_CUR);
-				WPD_DEBUG_MSG(("The checksum should be 0x%.4x\n", readU16(input, 0, true)));
 				delete encryption;
 				encryption = 0;
 				input->seek(0, WPX_SEEK_SET);
-				WPD_DEBUG_MSG(("The password does not match\n"));
 				return WPD_CONFIDENCE_WRONG_PASSWORD;
 			}
 			input->seek(6, WPX_SEEK_SET);
@@ -60,7 +56,7 @@ WPDConfidence WP1Heuristics::isWP1FileFormat(WPXInputStream *input, const char *
 				readU8(input, 0) == 0x61 && readU16(input, 0, true) == 0x61 &&
 				readU16(input,0) != 0x0000)
 			{
-				return WPD_CONFIDENCE_UNSUPPORTED_ENCRYPTION;
+				return WPD_CONFIDENCE_SUPPORTED_ENCRYPTION;
 			}
 			input->seek(0, WPX_SEEK_SET);
 		}

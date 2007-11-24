@@ -54,7 +54,7 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input, const char
 				readU8(input, 0) == 0x61 && readU8(input, 0) == 0x61 &&
 				readU16(input,0) != 0x0000)
 			{
-				return WPD_CONFIDENCE_UNSUPPORTED_ENCRYPTION;
+				return WPD_CONFIDENCE_SUPPORTED_ENCRYPTION;
 			}
 			input->seek(0, WPX_SEEK_SET);
 		}
