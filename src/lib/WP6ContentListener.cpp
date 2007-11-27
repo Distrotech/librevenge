@@ -913,6 +913,8 @@ void WP6ContentListener::columnChange(const WPXTextColumnType /* columnType */, 
 {
 	if (!isUndoOn())
 	{
+		_openPageSpan(); // we need to have the right dimension, so open page span here if it is not already opened
+
 		int oldColumnNum = m_ps->m_numColumns;
 
 		// In WP, the last column ends with a hard column break code.
@@ -969,6 +971,7 @@ void WP6ContentListener::columnChange(const WPXTextColumnType /* columnType */, 
 		m_ps->m_numColumns = numColumns;
 		m_ps->m_textColumns = tmpColumnDefinition;
 		m_ps->m_isTextColumnWithoutParagraph = true;
+
 		if ((m_ps->m_numColumns > 1 && oldColumnNum <= 1) || (m_ps->m_numColumns <= 1 && oldColumnNum > 1))
 		{
 			m_ps->m_paragraphMarginLeft -= m_ps->m_leftMarginByPageMarginChange;
