@@ -59,7 +59,7 @@ Analyzes the content of an input stream to see if it can be parsed
 \return A confidence value which represents the likelyhood that the content from
 the input stream can be parsed
 */
-WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input, const char *password)
+WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input)
 {
 	WPDConfidence confidence = WPD_CONFIDENCE_NONE;
 
@@ -125,22 +125,14 @@ WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input, const cha
 			if (header->getDocumentEncryption())
 				if (header->getMajorVersion() == 0x02)
 					confidence = WPD_CONFIDENCE_UNSUPPORTED_ENCRYPTION;
-				else if (!password)
-					confidence = WPD_CONFIDENCE_SUPPORTED_ENCRYPTION;
 				else
-				{
-					WPXEncryption encryption(password);
-					if (encryption.getCheckSum() == header->getDocumentEncryption())
-						confidence = WPD_CONFIDENCE_EXCELLENT;
-					else
-						confidence = WPD_CONFIDENCE_WRONG_PASSWORD;
-				}
+					confidence = WPD_CONFIDENCE_SUPPORTED_ENCRYPTION;
 			DELETEP(header);
 		}
 		else
-			confidence = WP1Heuristics::isWP1FileFormat(input, password);
-			if (confidence != WPD_CONFIDENCE_EXCELLENT)
-				confidence = LIBWPD_MAX(confidence, WP42Heuristics::isWP42FileFormat(input, password));
+			confidence = WP1Heuristics::isWP1FileFormat(input, 0);
+			if (confidence != WPD_CONFIDENCE_EXCELLENT && confidence != WPD_CONFIDENCE_SUPPORTED_ENCRYPTION)
+				confidence = LIBWPD_MAX(confidence, WP42Heuristics::isWP42FileFormat(input, 0));
 			
 
 		// dispose of the reference to the ole input stream, if we allocated one

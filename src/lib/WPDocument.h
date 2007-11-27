@@ -27,7 +27,7 @@
 #define WPDOCUMENT_H
 
 /* The "WPD_CONFIDENCE_NONE=0" must not be removed for the type detection to work well */
-enum WPDConfidence { WPD_CONFIDENCE_NONE=0, WPD_CONFIDENCE_UNSUPPORTED_ENCRYPTION, WPD_CONFIDENCE_SUPPORTED_ENCRYPTION, WPD_CONFIDENCE_WRONG_PASSWORD, WPD_CONFIDENCE_EXCELLENT };
+enum WPDConfidence { WPD_CONFIDENCE_NONE=0, WPD_CONFIDENCE_UNSUPPORTED_ENCRYPTION, WPD_CONFIDENCE_SUPPORTED_ENCRYPTION, WPD_CONFIDENCE_EXCELLENT };
 enum WPDResult { WPD_OK, WPD_FILE_ACCESS_ERROR, WPD_PARSE_ERROR, WPD_UNSUPPORTED_ENCRYPTION_ERROR, WPD_OLE_ERROR, WPD_UNKNOWN_ERROR };
 
 class WPXDocumentInterface;
@@ -41,7 +41,7 @@ WordPerfect documents.
 class WPDocument
 {
 public:
-	static WPDConfidence isFileFormatSupported(WPXInputStream *input, const char *password);
+	static WPDConfidence isFileFormatSupported(WPXInputStream *input);
 	static WPDResult parse(WPXInputStream *input, WPXDocumentInterface *documentInterface, const char *password);
 };
 

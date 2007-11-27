@@ -36,31 +36,27 @@ WPDConfidence WP1Heuristics::isWP1FileFormat(WPXInputStream *input, const char *
 
 	try
 	{
-		if (password)
+		if (readU8(input, 0) == 0xFE && readU8(input, 0) == 0xFF &&
+			readU8(input, 0) == 0x61 && readU8(input, 0) == 0x61)
 		{
-			encryption = new WPXEncryption(password, 6);
-			if (readU8(input, 0) != 0xFE || readU8(input, 0) != 0xFF ||
-				readU8(input, 0) != 0x61 || readU8(input, 0) != 0x61 ||
-				readU16(input, 0, true) != encryption->getCheckSum())
+			if (password)
 			{
-				delete encryption;
-				encryption = 0;
-				input->seek(0, WPX_SEEK_SET);
-				return WPD_CONFIDENCE_WRONG_PASSWORD;
+				encryption = new WPXEncryption(password, 6);
+				if (readU16(input, 0, true) != encryption->getCheckSum())
+				{
+					delete encryption;
+					return WPD_CONFIDENCE_SUPPORTED_ENCRYPTION;
+				}
 			}
-			input->seek(6, WPX_SEEK_SET);
-		}
-		else
-		{
-			if (readU8(input, 0) == 0xFE && readU8(input, 0) == 0xFF &&
-				readU8(input, 0) == 0x61 && readU16(input, 0, true) == 0x61 &&
-				readU16(input,0) != 0x0000)
+			else
 			{
-				return WPD_CONFIDENCE_SUPPORTED_ENCRYPTION;
+				if (readU16(input,0) != 0x0000)
+					return WPD_CONFIDENCE_SUPPORTED_ENCRYPTION;
 			}
-			input->seek(0, WPX_SEEK_SET);
 		}
 				
+		input->seek(0, WPX_SEEK_SET);
+
 		int functionGroupCount = 0;
 	
 		WPD_DEBUG_MSG(("WP1Heuristics::isWP1FileFormat()\n"));

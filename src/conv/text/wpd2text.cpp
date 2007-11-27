@@ -69,31 +69,34 @@ int main(int argc, char *argv[])
 	if (!szInputFile)
 		return printUsage();
 	
-	WPXInputStream* input = new WPXFileStream(szInputFile);
+	WPXFileStream input(szInputFile);
 
-	WPDConfidence confidence = WPDocument::isFileFormatSupported(input, password);
-	if (confidence != WPD_CONFIDENCE_EXCELLENT)
+	WPDConfidence confidence = WPDocument::isFileFormatSupported(&input);
+	if (confidence != WPD_CONFIDENCE_EXCELLENT && confidence != WPD_CONFIDENCE_SUPPORTED_ENCRYPTION)
 	{
 		printf("ERROR: Unsupported file format!\n");
-		delete input;
+		return 1;
+	}
+	
+	if (confidence == WPD_CONFIDENCE_SUPPORTED_ENCRYPTION && !password)
+	{
+		fprintf(stderr, "ERROR: File is password protected! Use \"--password\" option!\n");
 		return 1;
 	}
 	
 	TextDocumentGenerator documentGenerator(isInfo);
- 	WPDResult error = WPDocument::parse(input, &documentGenerator, password);
+ 	WPDResult error = WPDocument::parse(&input, &documentGenerator, password);
 
 	if (error == WPD_FILE_ACCESS_ERROR)
 		fprintf(stderr, "ERROR: File Exception!\n");
 	else if (error == WPD_PARSE_ERROR)
 		fprintf(stderr, "ERROR: Parse Exception!\n");
 	else if (error == WPD_UNSUPPORTED_ENCRYPTION_ERROR)
-		fprintf(stderr, "ERROR: File is password protected!\n");
+		fprintf(stderr, "ERROR: File is password protected! (Unsupported encryption)\n");
 	else if (error == WPD_OLE_ERROR)
 		fprintf(stderr, "ERROR: File is an OLE document, but does not contain a WordPerfect stream!\n");
 	else if (error != WPD_OK)
 		fprintf(stderr, "ERROR: Unknown Error!\n");
-
-	delete input;
 
 	if (error != WPD_OK)
 		return 1;
