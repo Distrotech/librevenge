@@ -29,6 +29,41 @@
 #include "libwpd_internal.h"
 #include <limits>
 
+WPDPasswordMatch WP1Heuristics::verifyPassword(WPXInputStream *input, const char *password)
+{
+	if (!password)
+		return WPD_PASSWORD_MATCH_DONTKNOW;
+
+	input->seek(0, WPX_SEEK_SET);
+	WPXEncryption *encryption = 0;
+	try
+	{
+		if (readU8(input, 0) == 0xFE && readU8(input, 0) == 0xFF &&
+			readU8(input, 0) == 0x61 && readU8(input, 0) == 0x61)
+		{
+			encryption = new WPXEncryption(password, 6);
+			if (readU16(input, 0, true) == encryption->getCheckSum())
+			{
+				delete encryption;
+				return WPD_PASSWORD_MATCH_OK;
+			}
+			else
+			{
+				delete encryption;
+				return WPD_PASSWORD_MATCH_NONE;
+			}
+		}
+		else
+			return WPD_PASSWORD_MATCH_DONTKNOW;
+	}
+	catch (...)
+	{
+		if (encryption)
+			delete encryption;
+		return WPD_PASSWORD_MATCH_DONTKNOW;
+	}
+}
+
 WPDConfidence WP1Heuristics::isWP1FileFormat(WPXInputStream *input, const char *password)
 {
 	input->seek(0, WPX_SEEK_SET);

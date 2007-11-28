@@ -84,6 +84,12 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 	
+	if (confidence == WPD_CONFIDENCE_SUPPORTED_ENCRYPTION && password && (WPD_PASSWORD_MATCH_OK != WPDocument::verifyPassword(&input, password)))
+	{
+		fprintf(stderr, "ERROR: The password does not match, or document is not encrypted!\n");
+		return 1;
+	}
+	
 	RawDocumentGenerator documentGenerator(printIndentLevel);
  	WPDResult error = WPDocument::parse(&input, &documentGenerator, password);
 

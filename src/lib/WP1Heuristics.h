@@ -34,6 +34,7 @@ class WP1Heuristics
 {
 public:
 	static WPDConfidence isWP1FileFormat(WPXInputStream *input, const char *password = 0);
+	static WPDPasswordMatch verifyPassword(WPXInputStream *input, const char *password);
 };
 
 #endif /* WP1HEURISTICS_H */

@@ -55,7 +55,6 @@ the full 100%.
 /**
 Analyzes the content of an input stream to see if it can be parsed
 \param input The input stream
-\param password The password used to protect the document or NULL if the document is not protected
 \return A confidence value which represents the likelyhood that the content from
 the input stream can be parsed
 */
@@ -160,6 +159,86 @@ WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input)
 			DELETEP(document);
 
 		return WPD_CONFIDENCE_NONE;
+	}
+}
+
+/**
+Checks whether the given password was used to encrypt the document
+\param input The input stream
+\param password The password used to protect the document or NULL if the document is not protected
+\return A value which indicates between the given password and the password that was used to protect the document
+*/
+WPDPasswordMatch WPDocument::verifyPassword(WPXInputStream *input, const char *password)
+{
+	if (!password)
+		return WPD_PASSWORD_MATCH_DONTKNOW;
+
+	WPDPasswordMatch passwordMatch = WPD_PASSWORD_MATCH_NONE;
+	WPXEncryption encryption(password);
+
+	WPXHeader *header = 0;
+
+	WPD_DEBUG_MSG(("WPDocument::verifyPassword()\n"));
+
+	// by-pass the OLE stream (if it exists) and returns the (sub) stream with the
+	// WordPerfect document.
+	WPXInputStream *document = 0;
+	bool isDocumentOLE = false;
+
+	if (input->isOLEStream())
+	{
+		document = input->getDocumentOLEStream("PerfectOffice_MAIN");
+		if (document)
+			isDocumentOLE = true;
+		else
+			return WPD_PASSWORD_MATCH_NONE;
+	}
+	else
+		document = input;
+
+	try
+	{
+		header = WPXHeader::constructHeader(document, 0);
+		if (header)
+		{
+			if (header->getDocumentEncryption())
+				if (header->getMajorVersion() == 0x02)
+					passwordMatch = WPD_PASSWORD_MATCH_DONTKNOW;
+				else if (header->getDocumentEncryption() == encryption.getCheckSum())
+					passwordMatch = WPD_PASSWORD_MATCH_OK;
+			DELETEP(header);
+		}
+		else
+			passwordMatch = WP1Heuristics::verifyPassword(input, password);
+			if (passwordMatch == WPD_PASSWORD_MATCH_NONE)
+				passwordMatch = LIBWPD_MAX(passwordMatch, WP42Heuristics::verifyPassword(input, password));
+			
+
+		// dispose of the reference to the ole input stream, if we allocated one
+		if (document && isDocumentOLE)
+			DELETEP(document);
+
+		return passwordMatch;
+	}
+	catch (FileException)
+	{
+		WPD_DEBUG_MSG(("File Exception trapped\n"));
+
+		// dispose of the reference to the ole input stream, if we allocated one
+		if (document && isDocumentOLE)
+			DELETEP(document);
+
+		return WPD_PASSWORD_MATCH_NONE;
+	}
+	catch (...)
+	{
+		WPD_DEBUG_MSG(("Unknown Exception trapped\n"));
+
+		// dispose of the reference to the ole input stream, if we allocated one
+		if (document && isDocumentOLE)
+			DELETEP(document);
+
+		return WPD_PASSWORD_MATCH_NONE;
 	}
 }
 
