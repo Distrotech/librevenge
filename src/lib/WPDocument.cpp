@@ -60,10 +60,6 @@ the input stream can be parsed
 */
 WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input)
 {
-	WPDConfidence confidence = WPD_CONFIDENCE_NONE;
-
-	WPXHeader *header = 0;
-
 	WPD_DEBUG_MSG(("WPDocument::isFileFormatSupported()\n"));
 
 	// by-pass the OLE stream (if it exists) and returns the (sub) stream with the
@@ -84,7 +80,8 @@ WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input)
 
 	try
 	{
-		header = WPXHeader::constructHeader(document, 0);
+		WPDConfidence confidence = WPD_CONFIDENCE_NONE;
+		WPXHeader *header = WPXHeader::constructHeader(document, 0);
 		if (header)
 		{
 			switch (header->getFileType())
@@ -172,6 +169,10 @@ WPDPasswordMatch WPDocument::verifyPassword(WPXInputStream *input, const char *p
 {
 	if (!password)
 		return WPD_PASSWORD_MATCH_DONTKNOW;
+	if (!input)
+		return WPD_PASSWORD_MATCH_DONTKNOW;
+
+	input->seek(0, WPX_SEEK_SET);
 
 	WPDPasswordMatch passwordMatch = WPD_PASSWORD_MATCH_NONE;
 	WPXEncryption encryption(password);
@@ -255,6 +256,11 @@ was not, it indicates the reason of the error
 */
 WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *documentInterface, const char *password)
 {
+	if (input)
+		input->seek(0, WPX_SEEK_SET);
+	else
+		return WPD_FILE_ACCESS_ERROR;
+
 	WPXParser *parser = 0;
 	WPXEncryption *encryption = 0;
 	if (password)

@@ -76,7 +76,6 @@ public:
 	virtual void openTextBox(const WPXPropertyList &propList);
 	virtual void closeTextBox();
 
-
 	virtual void openTable(const WPXPropertyList &propList, const WPXPropertyListVector &columns);
 	virtual void openTableRow(const WPXPropertyList &propList);
 	virtual void closeTableRow();
