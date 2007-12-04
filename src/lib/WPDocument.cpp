@@ -256,15 +256,16 @@ was not, it indicates the reason of the error
 */
 WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *documentInterface, const char *password)
 {
-	if (input)
-		input->seek(0, WPX_SEEK_SET);
-	else
+	if (!input)
 		return WPD_FILE_ACCESS_ERROR;
+		
+	if (password && verifyPassword(input, password) != WPD_PASSWORD_MATCH_OK)
+		return WPD_PASSWORD_MISSMATCH_ERROR;
+		
+	input->seek(0, WPX_SEEK_SET);
 
 	WPXParser *parser = 0;
-	WPXEncryption *encryption = 0;
-	if (password)
-		encryption = new WPXEncryption(password);
+	WPXEncryption *encryption = (password) ? new WPXEncryption(password) : 0;
 
 	// by-pass the OLE stream (if it exists) and returns the (sub) stream with the
 	// WordPerfect document.
@@ -289,17 +290,9 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *documen
 	try
 	{
 		WPXHeader *header = WPXHeader::constructHeader(document, 0);
-		
-		
-		if (header && (!header->getDocumentEncryption() ||
-			(header->getDocumentEncryption() && encryption && header->getDocumentEncryption() == encryption->getCheckSum() )))
-		{
-			if (!header->getDocumentEncryption() && encryption)
-			{
-				delete encryption;
-				encryption = 0;
-			}
 
+		if (header)
+		{
 			switch (header->getFileType())
 			{
 				case 0x0a: // WordPerfect File
@@ -360,13 +353,6 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *documen
 			}
 			DELETEP(parser);
 			DELETEP(header);
-		}
-		else if (header && header->getDocumentEncryption())
-		{
-			if (encryption)
-				delete encryption;
-			DELETEP(header);
-			throw UnsupportedEncryptionException();
 		}
 		else
 		{
@@ -432,5 +418,64 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *documen
 	if (document && isDocumentOLE)
 		DELETEP(document);
 
+	return error;
+}
+
+WPDResult parseSubDocument(WPXInputStream *input, WPXDocumentInterface *documentInterface, WPDFileFormat fileFormat)
+{
+	WPXParser *parser = 0;
+	
+	WPDResult error = WPD_OK;
+
+	try
+	{
+		
+		switch (fileFormat)
+		{
+		case WPD_FILE_FORMAT_WP6:
+			parser = new WP6Parser(input, 0, 0);
+			break;
+		case WPD_FILE_FORMAT_WP5:
+			parser = new WP5Parser(input, 0, 0);
+			break;
+		case WPD_FILE_FORMAT_WP42:
+			parser = new WP42Parser(input, 0);
+			break;
+		case WPD_FILE_FORMAT_WP3:
+			parser = new WP3Parser(input, 0, 0);
+			break;
+		case WPD_FILE_FORMAT_WP1:
+			parser = new WP1Parser(input, 0);
+			break;
+		case WPD_FILE_FORMAT_UNKNOWN:
+		default:
+			DELETEP(parser);
+			return WPD_UNKNOWN_ERROR;
+		}
+		
+		if (parser)
+			parser->parseSubDocument(documentInterface);
+	}
+	catch (FileException)
+	{
+		WPD_DEBUG_MSG(("File Exception trapped\n"));
+		error = WPD_FILE_ACCESS_ERROR;
+	}
+	catch (ParseException)
+	{
+		WPD_DEBUG_MSG(("Parse Exception trapped\n"));
+		error = WPD_PARSE_ERROR;
+	}
+	catch (UnsupportedEncryptionException)
+	{
+		WPD_DEBUG_MSG(("Encrypted document exception trapped\n"));
+		error = WPD_UNSUPPORTED_ENCRYPTION_ERROR;
+	}
+	catch (...)
+	{
+		WPD_DEBUG_MSG(("Unknown Exception trapped\n"));
+		error = WPD_UNKNOWN_ERROR; 
+	}
+	DELETEP(parser);
 	return error;
 }

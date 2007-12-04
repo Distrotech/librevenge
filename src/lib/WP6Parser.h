@@ -40,6 +40,7 @@ public:
 	~WP6Parser();
 
 	void parse(WPXDocumentInterface *documentInterface);
+	void parseSubDocument(WPXDocumentInterface *documentInterface);
 
 	static void parseDocument(WPXInputStream *input, WPXEncryption *encryption, WP6Listener *listener);
 

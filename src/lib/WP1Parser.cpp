@@ -239,3 +239,33 @@ void WP1Parser::parse(WPXDocumentInterface *documentInterface)
 	}
 
 }
+
+void WP1Parser::parseSubDocument(WPXDocumentInterface *documentInterface)
+{	
+	std::list<WPXPageSpan> pageList;
+	std::vector<WP1SubDocument *> subDocuments;	
+
+	WPXInputStream *input = getInput();
+
+	try
+ 	{
+		WP1StylesListener stylesListener(pageList, subDocuments);
+		parseDocument(input, 0, &stylesListener);
+		
+		WP1ContentListener listener(pageList, subDocuments, documentInterface);
+		parseDocument(input, 0, &listener);
+
+		for (std::vector<WP1SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); iterSubDoc++)
+			if (*iterSubDoc)
+				delete (*iterSubDoc);
+	}
+	catch(FileException)
+	{
+		WPD_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
+		for (std::vector<WP1SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); iterSubDoc++)
+			if (*iterSubDoc)
+				delete (*iterSubDoc);
+
+		throw FileException();
+	}
+}

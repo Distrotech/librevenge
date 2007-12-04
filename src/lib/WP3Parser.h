@@ -37,6 +37,7 @@ public:
 	~WP3Parser();
 
 	void parse(WPXDocumentInterface *documentInterface);
+	void parseSubDocument(WPXDocumentInterface *documentInterface);
 	
 	static void parseDocument(WPXInputStream *input, WPXEncryption *encryption, WP3Listener *listener);
 

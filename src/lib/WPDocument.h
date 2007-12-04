@@ -28,8 +28,9 @@
 
 /* The "WPD_CONFIDENCE_NONE=0" must not be removed for the type detection to work well */
 enum WPDConfidence { WPD_CONFIDENCE_NONE=0, WPD_CONFIDENCE_UNSUPPORTED_ENCRYPTION, WPD_CONFIDENCE_SUPPORTED_ENCRYPTION, WPD_CONFIDENCE_EXCELLENT };
-enum WPDResult { WPD_OK, WPD_FILE_ACCESS_ERROR, WPD_PARSE_ERROR, WPD_UNSUPPORTED_ENCRYPTION_ERROR, WPD_OLE_ERROR, WPD_UNKNOWN_ERROR };
+enum WPDResult { WPD_OK, WPD_FILE_ACCESS_ERROR, WPD_PARSE_ERROR, WPD_UNSUPPORTED_ENCRYPTION_ERROR, WPD_PASSWORD_MISSMATCH_ERROR, WPD_OLE_ERROR, WPD_UNKNOWN_ERROR };
 enum WPDPasswordMatch { WPD_PASSWORD_MATCH_NONE, WPD_PASSWORD_MATCH_DONTKNOW, WPD_PASSWORD_MATCH_OK };
+enum WPDFileFormat { WPD_FILE_FORMAT_WP6, WPD_FILE_FORMAT_WP5, WPD_FILE_FORMAT_WP42, WPD_FILE_FORMAT_WP3, WPD_FILE_FORMAT_WP1, WPD_FILE_FORMAT_UNKNOWN };
 
 class WPXDocumentInterface;
 class WPXInputStream;
@@ -45,6 +46,7 @@ public:
 	static WPDConfidence isFileFormatSupported(WPXInputStream *input);
 	static WPDPasswordMatch verifyPassword(WPXInputStream *input, const char *password);
 	static WPDResult parse(WPXInputStream *input, WPXDocumentInterface *documentInterface, const char *password);
+	static WPDResult parseSubDocument(WPXInputStream *input, WPXDocumentInterface *documentInterface, WPDFileFormat fileFormat);
 };
 
 #endif /* WPDOCUMENT_H */

@@ -182,24 +182,24 @@ void WP6Parser::parsePackets(WP6PrefixData *prefixData, int type, WP6Listener *l
 // WP6Parser::parse() reads AND parses a wordperfect document, passing any retrieved low-level
 // information to a low-level listener
 void WP6Parser::parse(WPXDocumentInterface *documentInterface)
-{	
+{
 	WP6PrefixData * prefixData = 0;
 	std::list<WPXPageSpan> pageList;
 	WPXTableList tableList;	
 
 	WPXInputStream *input = getInput();
 	WPXEncryption *encryption = getEncryption();
-	
+
 	try
  	{
 		prefixData = getPrefixData(input, encryption);
-		
+
 		// do a "first-pass" parse of the document
 		// gather table border information, page properties (per-page)
 		WP6StylesListener stylesListener(pageList, tableList);
 		stylesListener.setPrefixData(prefixData);
 		parse(input, encryption, &stylesListener);
-		
+
 		// postprocess the pageList == remove duplicate page spans due to the page breaks
 		std::list<WPXPageSpan>::iterator previousPage = pageList.begin();
 		for (std::list<WPXPageSpan>::iterator Iter=pageList.begin(); Iter != pageList.end(); /* Iter++ */)
@@ -237,7 +237,29 @@ void WP6Parser::parse(WPXDocumentInterface *documentInterface)
 		WPD_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
 
 		delete prefixData;
+
+		throw FileException();
+	}
+}
+
+void WP6Parser::parseSubDocument(WPXDocumentInterface *documentInterface)
+{	
+	std::list<WPXPageSpan> pageList;
+	WPXTableList tableList;	
+
+	WPXInputStream *input = getInput();
+
+	try
+ 	{
+		WP6StylesListener stylesListener(pageList, tableList);
+		parseDocument(input, 0, &stylesListener);
 		
+		WP6ContentListener listener(pageList, tableList, documentInterface);
+		parseDocument(input, 0, &listener);
+	}
+	catch(FileException)
+	{
+		WPD_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
 		throw FileException();
 	}
 }

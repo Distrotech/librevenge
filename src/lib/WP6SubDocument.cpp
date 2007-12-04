@@ -26,6 +26,11 @@
 #include "WP6Parser.h"
 #include "libwpd_internal.h"
 
+WP6SubDocument::WP6SubDocument(WPXInputStream *input, WPXEncryption *encryption, const unsigned dataSize) :
+	WPXSubDocument(input, encryption, dataSize)
+{
+}
+
 WP6SubDocument::WP6SubDocument(uint8_t * streamData, const unsigned dataSize) :
 	WPXSubDocument(streamData, dataSize)
 {
