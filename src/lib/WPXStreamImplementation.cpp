@@ -137,7 +137,8 @@ const unsigned char *WPXFileStream::read(size_t numBytes, size_t &numBytesRead)
 	// hmm, we cannot: go back by the bytes we read ahead && invalidate the buffer
 	if (d->readBuffer)
 	{
-		d->file.seekg(d->readBufferPos - d->readBufferLength, std::ios::cur);
+		d->file.seekg((unsigned long)d->file.tellg() - d->readBufferLength, std::ios::beg);
+		d->file.seekg(d->readBufferPos, std::ios::cur);
 		delete [] d->readBuffer;
 		d->readBuffer = 0; d->readBufferPos = 0; d->readBufferLength = 0;
 	}
@@ -203,7 +204,8 @@ int WPXFileStream::seek(long offset, WPX_SEEK_TYPE seekType)
 	
 	if (d->readBuffer) // seeking outside of the buffer, so invalidate the buffer
 	{
-		d->file.seekg(d->readBufferPos - d->readBufferLength, std::ios::cur);
+		d->file.seekg((unsigned long)d->file.tellg() - d->readBufferLength, std::ios::beg);
+		d->file.seekg(d->readBufferPos, std::ios::cur);
 		delete [] d->readBuffer;
 		d->readBuffer = 0; d->readBufferPos = 0; d->readBufferLength = 0;
 	}
@@ -229,7 +231,8 @@ bool WPXFileStream::isOLEStream()
 
 	if (d->readBuffer)
 	{
-		d->file.seekg(d->readBufferPos - d->readBufferLength, std::ios::cur);
+		d->file.seekg((unsigned long)d->file.tellg() - d->readBufferLength, std::ios::beg);
+		d->file.seekg(d->readBufferPos, std::ios::cur);
 		delete [] d->readBuffer;
 		d->readBuffer = 0; d->readBufferPos = 0; d->readBufferLength = 0;
 	}
@@ -237,12 +240,9 @@ bool WPXFileStream::isOLEStream()
 	if (d->buffer.str().empty())
 		d->buffer << d->file.rdbuf();
 	Storage tmpStorage( d->buffer );
-	if (tmpStorage.isOLEStream())
-	{
-		seek(0, WPX_SEEK_SET);
-		return true;
-	}
 	seek(0, WPX_SEEK_SET);
+	if (tmpStorage.isOLEStream())
+		return true;
 	return false;
 }
 
@@ -253,7 +253,8 @@ WPXInputStream* WPXFileStream::getDocumentOLEStream(const char * name)
 
 	if (d->readBuffer)
 	{
-		d->file.seekg(d->readBufferPos - d->readBufferLength, std::ios::cur);
+		d->file.seekg((unsigned long)d->file.tellg() - d->readBufferLength, std::ios::beg);
+		d->file.seekg(d->readBufferPos, std::ios::cur);
 		delete [] d->readBuffer;
 		d->readBuffer = 0; d->readBufferPos = 0; d->readBufferLength = 0;
 	}
