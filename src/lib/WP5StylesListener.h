@@ -42,6 +42,7 @@ public:
 	WP5StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, std::vector<WP5SubDocument*> &subDocuments);
 
 	void startDocument() {}
+	void startSubDocument() {}
 	void setFont(const WPXString& /* fontName */, const float /* fontSize */) {}
 	void setTabs(const std::vector<WPXTabStop>& /* tabStops */, const uint16_t /* tabOffset */) {} 
 	void insertCharacter(const uint16_t /* character */) { /*if (!isUndoOn())*/ m_currentPageHasContent = true; }
@@ -57,6 +58,7 @@ public:
 	void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation);
 	void marginChange(const uint8_t side, const uint16_t margin);
 	void endDocument();
+	void endSubDocument();
 
 	void defineTable(const uint8_t /* position */, const uint16_t /* leftOffset */) {}
 	void addTableColumnDefinition(const uint32_t /* width */, const uint32_t /* leftGutter */, const uint32_t /* rightGutter */,

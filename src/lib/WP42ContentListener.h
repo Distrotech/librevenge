@@ -47,6 +47,7 @@ public:
 	~WP42ContentListener();
 
 	void startDocument() { WPXContentListener::startDocument(); }
+	void startSubDocument() { WPXContentListener::startSubDocument(); }
 	void insertCharacter(const uint16_t character);
 	void insertTab(const uint8_t tabType, float tabPosition);
 	void insertBreak(const uint8_t breakType) { WPXContentListener::insertBreak(breakType); }
@@ -56,6 +57,7 @@ public:
 	void headerFooterGroup(const uint8_t headerFooterDefinition, WP42SubDocument *subDocument);
 	void suppressPageCharacteristics(const uint8_t /* suppressCode */) {}
 	void endDocument() { WPXContentListener::endDocument(); };
+	void endSubDocument() { WPXContentListener::endSubDocument(); };
 
 protected:
 	void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);

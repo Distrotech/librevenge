@@ -38,6 +38,7 @@ public:
 	virtual ~WP3Listener() {}
 
 	virtual void startDocument() = 0;
+	virtual void startSubDocument() = 0;
 	virtual void insertCharacter(const uint16_t character) = 0;
 	virtual void insertTab() = 0;
 	virtual void insertTab(const uint8_t tabType, const float tabPosition) = 0;
@@ -53,6 +54,7 @@ public:
 	virtual void columnChange(const WPXTextColumnType columnType, const uint8_t numColumns, const std::vector<float> &columnWidth,
 					const std::vector<bool> &isFixedWidth) = 0;
 	virtual void endDocument() = 0;
+	virtual void endSubDocument() = 0;
 
 	virtual void defineTable(const uint8_t position, const uint16_t leftOffset) = 0;
 	virtual void addTableColumnDefinition(const uint32_t width, const uint32_t leftGutter, const uint32_t rightGutter,

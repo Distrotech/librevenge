@@ -48,6 +48,11 @@ void WP1StylesListener::endDocument()
 	insertBreak(WPX_SOFT_PAGE_BREAK); // pretend we just had a soft page break (for the last page)
 }
 
+void WP1StylesListener::endSubDocument()
+{	
+	insertBreak(WPX_SOFT_PAGE_BREAK); // pretend we just had a soft page break (for the last page)
+}
+
 void WP1StylesListener::insertBreak(const uint8_t breakType)
 {
 	if (m_isSubDocument)

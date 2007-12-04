@@ -39,6 +39,7 @@ public:
 	virtual ~WP1Listener() {};
 
 	virtual void startDocument() = 0;
+	virtual void startSubDocument() = 0;
 	virtual void insertCharacter(const uint16_t character) = 0;
 	virtual void insertExtendedCharacter(const uint8_t extendedCharacter) = 0;
 	virtual void insertTab() = 0;
@@ -64,6 +65,7 @@ public:
 	virtual void centerOn() = 0;
 	virtual void centerOff() = 0;
 	virtual void endDocument() = 0;
+	virtual void endSubDocument() = 0;
 
 };
 

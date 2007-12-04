@@ -42,6 +42,7 @@ public:
 	virtual ~WP5Listener() {};
 
 	virtual void startDocument() = 0;
+	virtual void startSubDocument() = 0;
 	virtual void setFont(const WPXString &fontName, const float fontSize) = 0;
 	virtual void setTabs(const std::vector<WPXTabStop>& tabStops, const uint16_t tabOffset) = 0;
 	virtual void insertCharacter(const uint16_t character) = 0;
@@ -57,6 +58,7 @@ public:
 	virtual void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation) = 0;
 	virtual void marginChange(const uint8_t side, const uint16_t margin) = 0;
 	virtual void endDocument() = 0;
+	virtual void endSubDocument() = 0;
 
 	virtual void defineTable(const uint8_t position, const uint16_t leftOffset) = 0;
 	virtual void addTableColumnDefinition(const uint32_t width, const uint32_t leftGutter, const uint32_t rightGutter,

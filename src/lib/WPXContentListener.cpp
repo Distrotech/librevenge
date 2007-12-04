@@ -152,6 +152,12 @@ void WPXContentListener::startDocument()
 	m_ps->m_isDocumentStarted = true;
 }
 
+void WPXContentListener::startSubDocument()
+{
+	m_ps->m_isDocumentStarted = true;
+	m_ps->m_inSubDocument = true;
+}
+
 void WPXContentListener::endDocument()
 {
 	if (!m_ps->m_isPageSpanOpened)
@@ -171,6 +177,19 @@ void WPXContentListener::endDocument()
 	_closeSection();
 	_closePageSpan();
 	m_documentInterface->endDocument();
+}
+
+void WPXContentListener::endSubDocument()
+{
+	if (m_ps->m_isTableOpened)
+		_closeTable();
+	if (m_ps->m_isParagraphOpened)
+		_closeParagraph();
+	if (m_ps->m_isListElementOpened)
+		_closeListElement();
+
+	m_ps->m_currentListLevel = 0;
+	_changeList(); // flush the list exterior
 }
 
 void WPXContentListener::_openSection()

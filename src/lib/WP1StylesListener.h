@@ -41,6 +41,7 @@ public:
 	~WP1StylesListener() {}
 
 	void startDocument() {}
+	void startSubDocument() {}
 	void insertCharacter(const uint16_t /* character */) { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void insertExtendedCharacter(const uint8_t /* extendedCharacter */) { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void insertTab() { if (!isUndoOn()) m_currentPageHasContent = true; }
@@ -66,6 +67,7 @@ public:
 	void centerOn() {}
 	void centerOff() {}
 	void endDocument();
+	void endSubDocument();
 
 protected:
 	void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);

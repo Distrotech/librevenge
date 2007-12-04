@@ -51,6 +51,7 @@ public:
                      const uint8_t /* timeZone */, const uint8_t /* unused */) {}
 	void setExtendedInformation(const uint16_t /* type */, const WPXString & /*data*/) {}
 	void startDocument() {}
+	void startSubDocument() {}
 	void setAlignmentCharacter(const uint16_t /* character */) {}
 	void setLeaderCharacter(const uint16_t /* character */, const uint8_t /* numberOfSpaces */) {}
 	void defineTabStops(const bool /* isRelative */, const std::vector<WPXTabStop> & /* tabStops */, 
@@ -91,6 +92,7 @@ public:
 	void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, const uint16_t textPID);
 	void suppressPageCharacteristics(const uint8_t suppressCode);
 	void endDocument();
+	void endSubDocument();
 
  	void defineTable(const uint8_t position, const uint16_t leftOffset);
 	void addTableColumnDefinition(const uint32_t /* width */, const uint32_t /* leftGutter */, const uint32_t /* rightGutter */,

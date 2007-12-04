@@ -229,10 +229,14 @@ void WP42Parser::parseSubDocument(WPXDocumentInterface *documentInterface)
 	try
  	{
 		WP42StylesListener stylesListener(pageList, subDocuments);
+		stylesListener.startSubDocument();
 		parseDocument(input, 0, &stylesListener);
+		stylesListener.endSubDocument();
 		
 		WP42ContentListener listener(pageList, subDocuments, documentInterface);
+		listener.startSubDocument();
 		parseDocument(input, 0, &listener);
+		listener.endSubDocument();
 		for (std::vector<WP42SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); iterSubDoc++)
 			if (*iterSubDoc)
 				delete (*iterSubDoc);

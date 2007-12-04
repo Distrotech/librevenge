@@ -38,6 +38,7 @@ public:
 	virtual ~WP42Listener() {};
 
 	virtual void startDocument() = 0;
+	virtual void startSubDocument() = 0;
 	virtual void insertCharacter(const uint16_t character) = 0;
 	virtual void insertTab(const uint8_t tabType, float tabPosition) = 0;
 	virtual void insertBreak(const uint8_t breakType) = 0;
@@ -47,7 +48,7 @@ public:
 	virtual void headerFooterGroup(const uint8_t headerFooterDefinition, WP42SubDocument *subDocument) = 0;
 	virtual void suppressPageCharacteristics(const uint8_t suppressCode) = 0;
 	virtual void endDocument() = 0;
-
+	virtual void endSubDocument() = 0;
 };
 
 #endif /* WP42LISTENER_H */

@@ -54,6 +54,7 @@ public:
 	~WP5ContentListener();
 
 	void startDocument() { WPXContentListener::startDocument(); };
+	void startSubDocument() { WPXContentListener::startSubDocument(); };
 	void setFont(const WPXString &fontName, const float fontSize);
 	void setTabs(const std::vector<WPXTabStop> &tabStops, const uint16_t tabOffset);
 	void insertCharacter(const uint16_t character);
@@ -70,6 +71,7 @@ public:
 	void marginChange(const uint8_t side, const uint16_t margin);
 	void paragraphMarginChange(const uint8_t /* side */, const int16_t /* margin */) {};
 	void endDocument() { WPXContentListener::endDocument(); };
+	void endSubDocument() { WPXContentListener::endSubDocument(); };
 
 	void defineTable(const uint8_t position, const uint16_t leftOffset);
 	void addTableColumnDefinition(const uint32_t width, const uint32_t leftGutter, const uint32_t rightGutter,

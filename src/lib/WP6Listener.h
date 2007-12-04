@@ -45,6 +45,7 @@ public:
 	virtual ~WP6Listener() {};
 
 	virtual void startDocument() = 0;
+	virtual void startSubDocument() = 0;
 	virtual void setDate(const uint16_t type, const uint16_t year, 
                      const uint8_t month, const uint8_t day, 
                      const uint8_t hour, const uint8_t minute, 
@@ -90,6 +91,7 @@ public:
 	virtual void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, const uint16_t textPID) = 0;
 	virtual void suppressPageCharacteristics(const uint8_t suppressCode) = 0;
 	virtual void endDocument() = 0;
+	virtual void endSubDocument() = 0;
  	virtual void defineTable(const uint8_t position, const uint16_t leftOffset) = 0;
 	virtual void addTableColumnDefinition(const uint32_t width, const uint32_t leftGutter, const uint32_t rightGutter,
 				const uint32_t attributes, const uint8_t alignment) = 0;

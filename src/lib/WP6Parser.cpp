@@ -252,10 +252,14 @@ void WP6Parser::parseSubDocument(WPXDocumentInterface *documentInterface)
 	try
  	{
 		WP6StylesListener stylesListener(pageList, tableList);
+		stylesListener.startSubDocument();
 		parseDocument(input, 0, &stylesListener);
+		stylesListener.endSubDocument();
 		
 		WP6ContentListener listener(pageList, tableList, documentInterface);
+		listener.startSubDocument();
 		parseDocument(input, 0, &listener);
+		listener.endSubDocument();
 	}
 	catch(FileException)
 	{

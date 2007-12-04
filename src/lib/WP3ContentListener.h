@@ -54,6 +54,7 @@ public:
 	~WP3ContentListener();
 
 	void startDocument() { WPXContentListener::startDocument(); };
+	void startSubDocument() { WPXContentListener::startSubDocument(); };
 	void insertCharacter(const uint16_t character);
 	void insertTab();
 	void insertTab(const uint8_t tabType, const float tabPosition);
@@ -69,6 +70,7 @@ public:
 	void columnChange(const WPXTextColumnType columnType, const uint8_t numColumns, const std::vector<float> &columnWidth,
 					const std::vector<bool> &isFixedWidth);
 	void endDocument() { WPXContentListener::endDocument(); };
+	void endSubDocument() { WPXContentListener::endSubDocument(); };
 
 	void defineTable(const uint8_t position, const uint16_t leftOffset);
 	void addTableColumnDefinition(const uint32_t width, const uint32_t leftGutter, const uint32_t rightGutter,

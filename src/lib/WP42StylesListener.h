@@ -40,6 +40,7 @@ public:
 	WP42StylesListener(std::list<WPXPageSpan> &pageList, std::vector<WP42SubDocument *> &subDocuments);
 
 	void startDocument() {}
+	void startSubDocument() {}
 	void insertCharacter(const uint16_t /* character */) { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void insertTab(const uint8_t /* tabType */, float /* tabPosition */) { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void insertEOL() { if (!isUndoOn()) m_currentPageHasContent = true; }
@@ -49,6 +50,7 @@ public:
 	void headerFooterGroup(const uint8_t headerFooterDefinition, WP42SubDocument *subDocument);
 	void suppressPageCharacteristics(const uint8_t suppressCode);
 	void endDocument();
+	void endSubDocument();
 
 protected:
 	void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);

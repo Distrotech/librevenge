@@ -229,10 +229,14 @@ void WP5Parser::parseSubDocument(WPXDocumentInterface *documentInterface)
 	try
  	{
 		WP5StylesListener stylesListener(pageList, tableList, subDocuments);
+		stylesListener.startSubDocument();
 		parseDocument(input, 0, &stylesListener);
+		stylesListener.endSubDocument();
 		
 		WP5ContentListener listener(pageList, subDocuments, documentInterface);
+		listener.startSubDocument();
 		parseDocument(input, 0, &listener);
+		listener.endSubDocument();
 
 		for (std::vector<WP5SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); iterSubDoc++)
 			if (*iterSubDoc)

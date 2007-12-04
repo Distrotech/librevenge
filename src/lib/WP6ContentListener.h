@@ -137,6 +137,7 @@ public:
 	~WP6ContentListener();
 
 	void startDocument() { WPXContentListener::startDocument(); };
+	void startSubDocument() { WPXContentListener::startSubDocument(); };
         void setDate(const uint16_t type, const uint16_t year, 
 		     const uint8_t month, const uint8_t day, 
 		     const uint8_t hour, const uint8_t minute, 
@@ -183,6 +184,7 @@ public:
 	void headerFooterGroup(const uint8_t /* headerFooterType */, const uint8_t /* occurenceBits */, const uint16_t /* textPID */) {}
 	void suppressPageCharacteristics(const uint8_t /* suppressCode */) {}
 	void endDocument() { WPXContentListener::endDocument(); };
+	void endSubDocument() { WPXContentListener::endSubDocument(); };
 
  	void defineTable(const uint8_t position, const uint16_t leftOffset);
 	void addTableColumnDefinition(const uint32_t width, const uint32_t leftGutter, const uint32_t rightGutter,

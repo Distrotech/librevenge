@@ -154,10 +154,14 @@ void WP3Parser::parseSubDocument(WPXDocumentInterface *documentInterface)
 	try
  	{
 		WP3StylesListener stylesListener(pageList, tableList, subDocuments);
+		stylesListener.startSubDocument();
 		parseDocument(input, 0, &stylesListener);
+		stylesListener.endSubDocument();
 		
 		WP3ContentListener listener(pageList, subDocuments, documentInterface);
+		listener.startSubDocument();
 		parseDocument(input, 0, &listener);
+		listener.endSubDocument();
 
 		for (std::vector<WP3SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); iterSubDoc++)
 			if (*iterSubDoc)

@@ -52,6 +52,7 @@ public:
 	~WP1ContentListener();
 
 	void startDocument() { WPXContentListener::startDocument(); }
+	void startSubDocument() { WPXContentListener::startSubDocument(); }
 	void insertCharacter(const uint16_t character);
 	void insertExtendedCharacter(const uint8_t extendedCharacter);
 	void insertTab();
@@ -77,6 +78,7 @@ public:
 	void centerOn();
 	void centerOff() {}
 	void endDocument() { WPXContentListener::endDocument(); };
+	void endSubDocument() { WPXContentListener::endSubDocument(); };
 
 protected:
 	using WPXContentListener::lineSpacingChange;

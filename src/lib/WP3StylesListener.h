@@ -39,6 +39,7 @@ public:
 	WP3StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, std::vector<WP3SubDocument *> &subDocuments);
 
 	void startDocument() {}
+	void startSubDocument() {}
 	void insertCharacter(const uint16_t /* character */) { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void insertTab() { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void insertTab(const uint8_t /* tabType */, const float /* tabPosition */) { if (!isUndoOn()) m_currentPageHasContent = true; }
@@ -55,6 +56,7 @@ public:
 	void columnChange(const WPXTextColumnType /* columnType */, const uint8_t /* numColumns */,
 			const std::vector<float> & /* columnWidth */, const std::vector<bool> & /* isFixedWidth */) {}
 	void endDocument();
+	void endSubDocument();
 
 	void defineTable(const uint8_t /* position */, const uint16_t /* leftOffset */) {}
 	void addTableColumnDefinition(const uint32_t /* width */, const uint32_t /* leftGutter */, const uint32_t /* rightGutter */,
