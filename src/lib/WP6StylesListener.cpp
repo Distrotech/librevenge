@@ -280,39 +280,37 @@ void WP6StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, co
 {
 	// We don't want to actual insert anything in the case of a sub-document, but we
 	// do want to capture whatever table-related information is within it..
-//	if (!isUndoOn()) 
+	std::set <const WPXSubDocument *> oldSubDocuments;
+	oldSubDocuments = m_subDocuments;
+	// prevent entering in an endless loop		
+	if ((subDocument) && (oldSubDocuments.find(subDocument) == oldSubDocuments.end()))
 	{
-		std::set <const WPXSubDocument *> oldSubDocuments;
-		oldSubDocuments = m_subDocuments;
-		// prevent entering in an endless loop		
-		if ((subDocument) && (oldSubDocuments.find(subDocument) == oldSubDocuments.end()))
+		m_subDocuments.insert(subDocument);
+		bool oldIsSubDocument = m_isSubDocument;
+		m_isSubDocument = true;
+		WPXTable *oldCurrentTable = m_currentTable;
+		if (isHeaderFooter) 
 		{
-			m_subDocuments.insert(subDocument);
-			bool oldIsSubDocument = m_isSubDocument;
-			m_isSubDocument = true;
-			if (isHeaderFooter) 
-			{
-				bool oldCurrentPageHasContent = m_currentPageHasContent;
-				WPXTable *oldCurrentTable = m_currentTable;
-				WPXTableList oldTableList = m_tableList;
-				m_tableList = tableList;
+			bool oldCurrentPageHasContent = m_currentPageHasContent;
+			WPXTableList oldTableList = m_tableList;
+			m_tableList = tableList;
 
-				if (subDocument)
-					static_cast<const WP6SubDocument *>(subDocument)->parse(this);
+			if (subDocument)
+				static_cast<const WP6SubDocument *>(subDocument)->parse(this);
+			endTable();
 
-				m_tableList = oldTableList;
-				m_currentTable = oldCurrentTable;
-				m_currentPageHasContent = oldCurrentPageHasContent;
-			}
-			else
-			{
-				if (subDocument)
-					static_cast<const WP6SubDocument *>(subDocument)->parse(this);
-			}
-			m_isSubDocument = oldIsSubDocument;
-			m_subDocuments = oldSubDocuments;
-
+			m_tableList = oldTableList;
+			m_currentPageHasContent = oldCurrentPageHasContent;
 		}
+		else
+		{
+			if (subDocument)
+				static_cast<const WP6SubDocument *>(subDocument)->parse(this);
+			endTable();
+		}
+		m_currentTable = oldCurrentTable;
+		m_isSubDocument = oldIsSubDocument;
+		m_subDocuments = oldSubDocuments;
 	}
 }
 

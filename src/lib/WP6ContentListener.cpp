@@ -1409,6 +1409,8 @@ void WP6ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, c
 		_openSpan();
 	
 	// Close the sub-document properly
+	if (m_ps->m_isTableOpened)
+		_closeTable();
 	if (m_ps->m_isParagraphOpened)
 		_closeParagraph();
 	if (m_ps->m_isListElementOpened)
