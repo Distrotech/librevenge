@@ -1645,6 +1645,14 @@ void WP6ContentListener::insertTextBox(const WP6SubDocument *subDocument)
 {
 	if (!isUndoOn() && subDocument)
 	{
+		if (!m_ps->m_isParagraphOpened)
+			_openParagraph();
+		else
+		{
+			_flushText();
+			_closeSpan();
+		}
+
 		WPXPropertyList propList;
 		m_documentInterface->openTextBox(propList);
 		
@@ -1707,6 +1715,8 @@ void WP6ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, c
 		_openSpan();
 	
 	// Close the sub-document properly
+	if (m_ps->m_isTableOpened)
+		_closeTable();
 	if (m_ps->m_isParagraphOpened)
 		_closeParagraph();
 	if (m_ps->m_isListElementOpened)
