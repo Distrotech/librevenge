@@ -137,6 +137,7 @@ struct _WPXContentParsingState
 
 	bool m_inSubDocument;
 	bool m_isNote;
+	bool m_isPositionedObject;
 
 private:
 	_WPXContentParsingState(const _WPXContentParsingState&);

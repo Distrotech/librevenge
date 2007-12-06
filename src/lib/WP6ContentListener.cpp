@@ -1648,11 +1648,11 @@ void WP6ContentListener::insertTextBox(const WP6SubDocument *subDocument)
 		WPXPropertyList propList;
 		m_documentInterface->openTextBox(propList);
 		
-		m_ps->m_isNote = true;
+		m_ps->m_isPositionedObject = true;
 
 		handleSubDocument(subDocument, false, m_parseState->m_tableList, m_parseState->m_nextTableIndice);
-
-		m_ps->m_isNote = false;
+		
+		m_ps->m_isPositionedObject = false;
 
 		m_documentInterface->closeTextBox();
 	}

@@ -112,7 +112,8 @@ _WPXContentParsingState::_WPXContentParsingState() :
 	m_subDocuments(),
 	
 	m_inSubDocument(false),
-	m_isNote(false)
+	m_isNote(false),
+	m_isPositionedObject(false)
 {
 }
 
@@ -401,7 +402,7 @@ void WPXContentListener::_openParagraph()
 		 
 	if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
 	{
-		if (!m_ps->m_isTableOpened && !m_ps->m_inSubDocument)
+		if (!m_ps->m_isTableOpened && (!m_ps->m_inSubDocument || m_ps->m_isPositionedObject))
 		{
 			if (m_ps->m_sectionAttributesChanged)
 				_closeSection();
@@ -577,10 +578,19 @@ void WPXContentListener::_closeParagraph()
 
 void WPXContentListener::_openListElement()
 {
+	if (m_ps->m_isTableOpened && !m_ps->m_isTableCellOpened)
+		return;
+		 
 	if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
 	{
-		if (!m_ps->m_isTableOpened && !m_ps->m_isSectionOpened && !m_ps->m_inSubDocument)
-			_openSection();
+		if (!m_ps->m_isTableOpened && (!m_ps->m_inSubDocument || m_ps->m_isPositionedObject))
+		{
+			if (m_ps->m_sectionAttributesChanged)
+				_closeSection();
+
+			if (!m_ps->m_isSectionOpened)
+				_openSection();
+		}
 
 		WPXPropertyList propList;
 		_appendParagraphProperties(propList, true);
@@ -1002,6 +1012,11 @@ void WPXContentListener::handleSubDocument(const WPXSubDocument *subDocument, co
 	m_ps->m_pageMarginRight = oldPS->m_pageMarginRight;
 	m_ps->m_subDocuments = oldPS->m_subDocuments;
 	m_ps->m_isNote = oldPS->m_isNote;
+	m_ps->m_isPositionedObject = oldPS->m_isPositionedObject;
+	m_ps->m_isDocumentStarted = true;
+	m_ps->m_isPageSpanOpened = true;
+	if (m_ps->m_isPositionedObject)
+		m_ps->m_sectionAttributesChanged = true;
 	// END: copy page properties into the new parsing state
 	m_ps->m_inSubDocument = true;
 	bool oldIsUndoOn = isUndoOn();
@@ -1023,6 +1038,8 @@ void WPXContentListener::handleSubDocument(const WPXSubDocument *subDocument, co
 	// restore our old parsing state
 	
 	setUndoOn(oldIsUndoOn);
+	if (m_ps->m_isPositionedObject)
+		_closeSection();
 	delete m_ps;
 	m_ps = oldPS;
 }
