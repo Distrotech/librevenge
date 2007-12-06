@@ -537,7 +537,7 @@ void WP5ContentListener::insertNote(const WPXNoteType noteType, const WP5SubDocu
 		else
 			m_documentInterface->openEndnote(propList);
 
-		handleSubDocument(subDocument, false, m_parseState->m_tableList, 0);
+		handleSubDocument(subDocument, false, false, m_parseState->m_tableList, 0);
 
 		if (noteType == FOOTNOTE)
 			m_documentInterface->closeFootnote();
@@ -548,7 +548,7 @@ void WP5ContentListener::insertNote(const WPXNoteType noteType, const WP5SubDocu
 }
 
 void WP5ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter,
-				WPXTableList /* tableList */, int /* nextTableIndice */)
+	WPXTableList /* tableList */, int /* nextTableIndice */)
 {
 	// save our old parsing state on our "stack"
 	WP5ContentParsingState *oldParseState = m_parseState;

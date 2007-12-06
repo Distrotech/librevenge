@@ -155,7 +155,7 @@ void WP1ContentListener::insertNote(const WPXNoteType noteType, WP1SubDocument *
 		}
 
 		WPXTableList tableList;
-		handleSubDocument(subDocument, false, tableList, 0);
+		handleSubDocument(subDocument, false, false, tableList, 0);
 
 		if (noteType == FOOTNOTE)
 			m_documentInterface->closeFootnote();

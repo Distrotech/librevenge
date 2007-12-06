@@ -1210,7 +1210,7 @@ void WP6ContentListener::noteOff(const WPXNoteType noteType)
 
 		uint16_t textPID = (uint16_t)m_parseState->m_noteTextPID;
 		handleSubDocument(((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : 0), 
-				false, m_parseState->m_tableList, m_parseState->m_nextTableIndice);
+				false, false, m_parseState->m_tableList, m_parseState->m_nextTableIndice);
 
 		if (noteType == FOOTNOTE)
 			m_documentInterface->closeFootnote();
@@ -1584,13 +1584,16 @@ void WP6ContentListener::boxOn(const uint8_t /* anchoringType */, const uint8_t 
 		propList.insert("svg:y", (float)(((double)verticalOffset/(double)WPX_NUM_WPUS_PER_INCH) - m_ps->m_pageMarginTop));
 		break;
 	case 0x01:
-	        if (!(generalPositioningFlags & 0x03))
+	    if ((generalPositioningFlags & 0x03) == 0x00)
 			propList.insert("style:vertical-rel", "page-content");
-		else if ((generalPositioningFlags & 0x03) == 0x02)
+		else if ((generalPositioningFlags & 0x03) == 0x01)
 			propList.insert("style:vertical-rel", "paragraph");
+		else if ((generalPositioningFlags & 0x03) == 0x02)
+			propList.insert("style:vertical-rel", "baseline");
 		switch((verticalPositioningFlags & 0x1C) >> 2)
 		{
 		case 0x00:
+		case 0x03:
 			propList.insert("style:vertical-pos", "from-top");
 			break;
 		case 0x01:
@@ -1598,13 +1601,6 @@ void WP6ContentListener::boxOn(const uint8_t /* anchoringType */, const uint8_t 
 			break;
 		case 0x02:
 			propList.insert("style:vertical-pos", "middle");
-			break;
-		case 0x03:
-			if ((generalPositioningFlags & 0x03) == 0x02)
-				propList.insert("style:vertical-rel", "line");
-			else
-				propList.insert("style:vertical-rel", "baseline");
-			propList.insert("style:vertical-pos", "from-top");
 			break;
 		default:
 			break;
@@ -1648,11 +1644,9 @@ void WP6ContentListener::insertTextBox(const WP6SubDocument *subDocument)
 		WPXPropertyList propList;
 		m_documentInterface->openTextBox(propList);
 		
-		m_ps->m_isPositionedObject = true;
-
-		handleSubDocument(subDocument, false, m_parseState->m_tableList, m_parseState->m_nextTableIndice);
-		
-		m_ps->m_isPositionedObject = false;
+		// Positioned objects like text boxes are special beasts. They can contain all hierarchical elements up
+		// to the level of sections. They cannot open or close a page span though.
+		handleSubDocument(subDocument, false, true, m_parseState->m_tableList, m_parseState->m_nextTableIndice);
 
 		m_documentInterface->closeTextBox();
 	}
@@ -1677,7 +1671,7 @@ void WP6ContentListener::commentAnnotation(const uint16_t textPID)
 		m_ps->m_isNote = true;
 
 		handleSubDocument(((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : 0), 
-				false, m_parseState->m_tableList, m_parseState->m_nextTableIndice);
+				false, false, m_parseState->m_tableList, m_parseState->m_nextTableIndice);
 
 		m_ps->m_isNote = false;
 
@@ -1685,7 +1679,8 @@ void WP6ContentListener::commentAnnotation(const uint16_t textPID)
 	}
 }
 
-void WP6ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice)
+void WP6ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter,
+	WPXTableList tableList, int nextTableIndice)
 {
 	// save our old parsing state on our "stack"
 	WP6ContentParsingState *oldParseState = m_parseState;

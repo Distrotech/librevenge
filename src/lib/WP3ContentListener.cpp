@@ -636,7 +636,7 @@ void WP3ContentListener::insertNote(const WPXNoteType noteType, WP3SubDocument *
 		else
 			m_documentInterface->openEndnote(propList);
 
-		handleSubDocument(subDocument, false, m_parseState->m_tableList, 0);
+		handleSubDocument(subDocument, false, false, m_parseState->m_tableList, 0);
 
 		if (noteType == FOOTNOTE)
 			m_documentInterface->closeFootnote();

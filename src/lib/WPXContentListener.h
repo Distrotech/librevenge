@@ -154,7 +154,7 @@ protected:
 	void startSubDocument();
 	void endDocument();
 	void endSubDocument();
-	void handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice);
+	void handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, const bool isPositionedObject, WPXTableList tableList, int nextTableIndice);
 	void insertBreak(const uint8_t breakType);
 	void lineSpacingChange(const float lineSpacing);
 	void justificationChange(const uint8_t justification);
