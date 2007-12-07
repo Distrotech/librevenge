@@ -69,7 +69,7 @@ WP6PrefixData * WP6Parser::getPrefixData(WPXInputStream *input)
 		DELETEP(prefixData);
 		return 0;
 	}
-		}
+}
 
 void WP6Parser::parse(WPXInputStream *input, WP6Listener *listener)
 {

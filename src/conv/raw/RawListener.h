@@ -25,7 +25,7 @@
 
 #ifndef RAWLISTENERIMPL_H
 #define RAWLISTENERIMPL_H
-#include "WPXDocumentInterface.h"
+#include "WPXHLListenerImpl.h"
 #include <stack>
 
 using namespace std;
@@ -47,7 +47,7 @@ enum ListenerCallback {
 	LC_OPEN_TABLE_CELL
 };
 
-class RawListenerImpl : public WPXDocumentInterface
+class RawListenerImpl : public WPXHLListenerImpl
 {
 public:
 	RawListenerImpl(bool printCallgraphScore);
@@ -98,14 +98,10 @@ public:
 	virtual void insertCoveredTableCell(const WPXPropertyList &propList);
  	virtual void closeTable();
 
-	virtual void openBox(const WPXPropertyList & /* propList */) {}
-	virtual void closeBox() {}
-	
-	virtual void insertBinaryObject(const WPXPropertyList & /* propList */, const WPXBinaryData * /* object */) {}
-
 private:
 	int m_indent;
 	int m_callbackMisses;
+	bool m_atLeastOneCallback;
 	bool m_printCallgraphScore;
 	stack<ListenerCallback> m_callStack;
 

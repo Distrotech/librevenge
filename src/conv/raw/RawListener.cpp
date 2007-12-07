@@ -32,6 +32,7 @@
 #endif
 
 #define _U(M, L) \
+	m_atLeastOneCallback = true; \
 	if (!m_printCallgraphScore) \
 			__iuprintf M; \
 	else \
@@ -42,6 +43,7 @@
 #endif
 
 #define _D(M, L) \
+	m_atLeastOneCallback = true; \
 	if (!m_printCallgraphScore) \
 			__idprintf M; \
 	else \
@@ -55,6 +57,7 @@
 RawListenerImpl::RawListenerImpl(bool printCallgraphScore) :
 	m_indent(0),
 	m_callbackMisses(0),
+	m_atLeastOneCallback(false),
 	m_printCallgraphScore(printCallgraphScore),
 	m_callStack()
 {
@@ -63,11 +66,12 @@ RawListenerImpl::RawListenerImpl(bool printCallgraphScore) :
 RawListenerImpl::~RawListenerImpl()
 {
 	if (m_printCallgraphScore)
-		printf("%d\n", (int)(m_callStack.size() + m_callbackMisses));
+		printf("%d\n", m_atLeastOneCallback ? (int)(m_callStack.size() + m_callbackMisses) : -1);
 }
 
 void RawListenerImpl::__iprintf(const char *format, ...)
 {
+	m_atLeastOneCallback = true;
 	if (m_printCallgraphScore) return;
 	
 	va_list args;
@@ -80,6 +84,7 @@ void RawListenerImpl::__iprintf(const char *format, ...)
 
 void RawListenerImpl::__iuprintf(const char *format, ...)
 {
+	m_atLeastOneCallback = true;
 	va_list args;
 	va_start(args, format);
 	for (int i=0; i<m_indent; i++)
@@ -91,6 +96,7 @@ void RawListenerImpl::__iuprintf(const char *format, ...)
 
 void RawListenerImpl::__idprintf(const char *format, ...)
 {
+	m_atLeastOneCallback = true;
 	va_list args;
 	va_start(args, format);
 	__indentDown();

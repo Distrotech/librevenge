@@ -104,8 +104,8 @@ WP6CharacterGroup_FontFaceChangeSubGroup::WP6CharacterGroup_FontFaceChangeSubGro
 void WP6CharacterGroup_FontFaceChangeSubGroup::parse(WP6Listener *listener, const uint8_t /* numPrefixIDs */, uint16_t const *prefixIDs) const
 {
 	WPD_DEBUG_MSG(("WordPerfect: FontFaceChangeSubGroup parsing\n"));
-	// TODO: check that we have 1 prefix id
-	// emit an exception otherwise
+	if (!prefixIDs)
+		return;
 	listener->fontChange(m_matchedFontPointSize, prefixIDs[0]);
 }
 
@@ -123,8 +123,8 @@ WP6CharacterGroup_FontSizeChangeSubGroup::WP6CharacterGroup_FontSizeChangeSubGro
 void WP6CharacterGroup_FontSizeChangeSubGroup::parse(WP6Listener *listener, const uint8_t /* numPrefixIDs */, uint16_t const *prefixIDs) const
 {
 	WPD_DEBUG_MSG(("WordPerfect: FontSizeChangeSubGroup parsing\n"));
-	// TODO: check that we have 1 prefix id
-	// emit an exception otherwise
+	if (!prefixIDs)
+		return;
 	listener->fontChange(m_desiredFontPointSize, prefixIDs[0]);
 }
 
