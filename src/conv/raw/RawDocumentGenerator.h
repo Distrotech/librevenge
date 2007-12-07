@@ -113,6 +113,7 @@ public:
 private:
 	int m_indent;
 	int m_callbackMisses;
+	bool m_atLeastOneCallback;
 	bool m_printCallgraphScore;
 	stack<ListenerCallback> m_callStack;
 

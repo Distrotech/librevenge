@@ -296,9 +296,9 @@ void WP6BoxGroup::parse(WP6Listener *listener)
 	if (tmpContentType != 0x01 && tmpContentType != 0x03)
 		return;
 		
-	if (!m_nativeWidth)
+	if (!m_nativeWidth && gbsPacket)
 		m_nativeWidth = gbsPacket->getNativeWidth();
-	if (!m_nativeHeight)
+	if (!m_nativeHeight && gbsPacket)
 		m_nativeHeight = gbsPacket->getNativeHeight();
 
 	std::vector<uint16_t> graphicsDataIds;
