@@ -907,7 +907,9 @@ int extendedCharacterWP5ToUCS2(uint8_t character,
 	case WP5_CYRILLIC_CHARACTER_SET:
 		if (character < WP5_NUM_CYRILLIC_CHARACTERS)
 			*chars = &cyrillicWP5[character];
-			return 1;
+		else
+			*chars = &asciiMap[0x00];
+		return 1;
 
 	case WP5_JAPANESE_CHARACTER_SET:
 		if (character < WP5_NUM_JAPANESE_CHARACTERS)
