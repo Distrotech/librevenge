@@ -337,6 +337,8 @@ void WP5ContentListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan
 		_openTableCell(colSpan, rowSpan, borderBits, cellFgColor, cellBgColor,
 					cellBorderColor, cellVerticalAlignment);
 		m_ps->m_isCellWithoutParagraph = true;
+		if (m_ps->m_currentTableCol < 1)
+			return;
 		if (useCellAttributes)
 			m_ps->m_cellAttributeBits = cellAttributes;
 		else
