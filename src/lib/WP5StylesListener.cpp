@@ -266,8 +266,9 @@ void WP5StylesListener::insertRow(const uint16_t /* rowHeight */, const bool /* 
 	if (!isUndoOn()) 
 	{
 		m_currentPageHasContent = true;
-		if (m_currentTable)
-			m_currentTable->insertRow();
+		if (!m_currentTable)
+			throw ParseException();
+		m_currentTable->insertRow();
 	}
 }
 
@@ -279,8 +280,9 @@ void WP5StylesListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan,
 	if (!isUndoOn())
 	{
 		m_currentPageHasContent = true;
-		if (m_currentTable)
-			m_currentTable->insertCell(colSpan, rowSpan, borderBits);
+		if (!m_currentTable)
+			throw ParseException();
+		m_currentTable->insertCell(colSpan, rowSpan, borderBits);
 	}
 }
 
