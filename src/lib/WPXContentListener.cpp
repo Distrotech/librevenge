@@ -821,8 +821,9 @@ void WPXContentListener::_closeTableRow()
 {
 	if (m_ps->m_isTableRowOpened)
 	{
-		while ((m_ps->m_currentTableCol >= 0) &&
-			(unsigned long)m_ps->m_currentTableCol < (unsigned long)m_ps->m_numRowsToSkip.size())
+		if (m_ps->m_currentTableCol < 0)
+			throw ParseException();
+		while ((unsigned long)m_ps->m_currentTableCol < (unsigned long)m_ps->m_numRowsToSkip.size())
 		{
 			if (!m_ps->m_numRowsToSkip[m_ps->m_currentTableCol]) // This case should not happen, but does :-(
 			{
@@ -884,8 +885,10 @@ void WPXContentListener::_openTableCell(const uint8_t colSpan, const uint8_t row
 	if (m_ps->m_isTableCellOpened)
 		_closeTableCell();
 
-	while ((m_ps->m_currentTableCol >= 0) &&
-		(unsigned long)m_ps->m_currentTableCol < (unsigned long)m_ps->m_numRowsToSkip.size() &&
+	if (m_ps->m_currentTableCol < 0)
+		throw ParseException();
+
+	while ((unsigned long)m_ps->m_currentTableCol < (unsigned long)m_ps->m_numRowsToSkip.size() &&
 		m_ps->m_numRowsToSkip[m_ps->m_currentTableCol])
 	{
 		m_ps->m_numRowsToSkip[m_ps->m_currentTableCol]--;
@@ -926,9 +929,10 @@ void WPXContentListener::_openTableCell(const uint8_t colSpan, const uint8_t row
 	m_ps->m_isTableCellOpened = true;
 	m_ps->m_isCellWithoutParagraph = true;
 
-	while ((m_ps->m_currentTableCol >= 0) &&
-		((unsigned long)m_ps->m_currentTableCol < (unsigned long)m_ps->m_numRowsToSkip.size()) &&
-		(tmpColSpan > 0))
+	if (m_ps->m_currentTableCol < 0)
+		throw ParseException();
+
+	while ((unsigned long)m_ps->m_currentTableCol < (unsigned long)m_ps->m_numRowsToSkip.size() &&(tmpColSpan > 0))
 	{
 		if (m_ps->m_numRowsToSkip[m_ps->m_currentTableCol]) // This case should not happen, but it happens in real-life documents :-(
 		{

@@ -1266,8 +1266,9 @@ void WP6ContentListener::defineTable(const uint8_t position, const uint16_t left
 
 		// pull a table definition off of our stack
 		m_parseState->m_currentTable = m_parseState->m_tableList[m_parseState->m_nextTableIndice++];
-		if (m_parseState->m_currentTable)
-			m_parseState->m_currentTable->makeBordersConsistent();
+		if (!m_parseState->m_currentTable)
+			throw ParseException();
+		m_parseState->m_currentTable->makeBordersConsistent();
 		m_ps->m_numRowsToSkip.clear();
 	}
 }
