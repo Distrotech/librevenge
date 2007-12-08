@@ -50,7 +50,7 @@ struct _WPXTableCell
 class WPXTable
 {
 public:
-	WPXTable() : m_tableRows(std::vector< std::vector<WPXTableCell *> >()) {}
+	WPXTable() : m_tableRows() {}
 	~WPXTable();
 	void insertRow();
 	void insertCell(uint8_t colSpan, uint8_t rowSpan, uint8_t borderBits);

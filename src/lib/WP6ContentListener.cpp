@@ -1264,7 +1264,8 @@ void WP6ContentListener::defineTable(const uint8_t position, const uint16_t left
 
 		// pull a table definition off of our stack
 		m_parseState->m_currentTable = m_parseState->m_tableList[m_parseState->m_nextTableIndice++];
-		m_parseState->m_currentTable->makeBordersConsistent();
+		if (m_parseState->m_currentTable)
+			m_parseState->m_currentTable->makeBordersConsistent();
 		m_ps->m_numRowsToSkip.clear();
 	}
 }
@@ -1312,6 +1313,9 @@ void WP6ContentListener::startTable()
 			_openSection();
 			m_ps->m_sectionAttributesChanged = false;
 		}
+		if (!m_parseState->m_currentTable)
+			throw ParseException();
+		
 		if (!m_parseState->m_currentTable->isEmpty())
 			_openTable();
 			

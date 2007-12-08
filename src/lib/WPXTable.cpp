@@ -27,9 +27,6 @@
 #include "WPXTable.h"
 #include "libwpd_internal.h"
 
-typedef std::vector<WPXTableCell *>::iterator VTCIter;
-typedef std::vector< std::vector<WPXTableCell *> * >::iterator VVTCIter;
-
 _WPXTableCell::_WPXTableCell(uint8_t colSpan, uint8_t rowSpan, uint8_t borderBits) :
 	m_colSpan(colSpan),
 	m_rowSpan(rowSpan),
