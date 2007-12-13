@@ -2,6 +2,20 @@ CHANGES:
 0.8.12 - 0.8.13
 - Implement readahead in the WPXStreamImplementation class (Jan Holesovsky, Fridrich)
 - Fix some memory issues properly (each class deletes what it allocated) (Fridrich)
+- Work around an issue with relative seeks backward and certain versions of libstdc++
+  in the buffered stream implementation (Fridrich, sum1)
+- Fix a problem of conversion of some page breaks due to an unreachable block in the
+  code (Fridrich)
+- Fix a crasher in a rare case of a footnote/endnote being defined in a table and the
+  footnote/endnote having itself a table (Fridrich).
+- Fix some null pointer crashes with corrupted documents in table code and in cases where
+  there is no prefix ID present (sum1, Fridrich).
+- Fix a out of bounds array in parsing WP5 extended characters with broken documents
+  (sum1).
+- Remove some abuse of pointers (Fridrich).
+- In "wpd2raw --callback", return "-1" if no one callback was called (Fridrich).
+- Fix some issues with incorrect indents in some rear cases (Fridrich).
+- Fix some signedness problems (Fridrich).
 
 0.8.11 - 0.8.12
 - Enable building of statically linked tools even when a shared library is built,
