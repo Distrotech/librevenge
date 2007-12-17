@@ -97,6 +97,8 @@ struct _WP6ContentParsingState
 
 	int m_noteTextPID;
 	int m_numNestedNotes;
+	
+	bool m_isFrameOpened;
 
 	uint16_t m_leaderCharacter;
 	uint8_t m_leaderNumSpaces;

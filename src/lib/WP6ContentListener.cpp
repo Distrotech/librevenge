@@ -134,6 +134,8 @@ _WP6ContentParsingState::_WP6ContentParsingState(WPXTableList tableList, int nex
 	m_noteTextPID(0),
 	m_numNestedNotes(0),
 
+	m_isFrameOpened(false),
+
 	m_leaderCharacter('.'),
 	m_leaderNumSpaces(0),
 
@@ -1395,9 +1397,9 @@ void WP6ContentListener::boxOn(const uint8_t /* anchoringType */, const uint8_t 
 		const int16_t verticalOffset, const uint8_t widthFlags, const uint16_t width, const uint8_t heightFlags, const uint16_t height,
 		const uint8_t boxContentType, const uint16_t nativeWidth, const uint16_t nativeHeight)
 {
-	if (isUndoOn())
+	if (isUndoOn() || (m_ps->m_isTableOpened && !m_ps->m_isTableCellOpened))
 		return;
-
+		 
 	if (!m_ps->m_isSpanOpened)
 		_openSpan();
 	else
@@ -1618,20 +1620,22 @@ void WP6ContentListener::boxOn(const uint8_t /* anchoringType */, const uint8_t 
 /*	if (propList["text:anchor-type"] && propList["text:anchor-type"]->getStr() == "page")
 		propList.insert("text:anchor-page-number", m_ps->m_currentPageNumber); */
 
-	m_documentInterface->openFrame(propList);	
+	m_documentInterface->openFrame(propList);
+	m_parseState->m_isFrameOpened = true;
 }
 
 void WP6ContentListener::boxOff()
 {
-	if (!isUndoOn())
+	if (!isUndoOn() && m_parseState->m_isFrameOpened)
 	{
 		m_documentInterface->closeFrame();
+		m_parseState->m_isFrameOpened = false;
 	}
 }
 
 void WP6ContentListener::insertGraphicsData(const uint16_t packetId)
 {
-	if (isUndoOn())
+	if (isUndoOn() || !m_parseState->m_isFrameOpened)
 		return;
 
 	if (const WP6GraphicsCachedFileDataPacket *gcfdPacket = dynamic_cast<const WP6GraphicsCachedFileDataPacket *>(this->getPrefixDataPacket(packetId))) 
@@ -1644,7 +1648,7 @@ void WP6ContentListener::insertGraphicsData(const uint16_t packetId)
 
 void WP6ContentListener::insertTextBox(const WP6SubDocument *subDocument)
 {
-	if (!isUndoOn() && subDocument)
+	if (!isUndoOn() && subDocument && m_parseState->m_isFrameOpened)
 	{
 		WPXPropertyList propList;
 		m_documentInterface->openTextBox(propList);
