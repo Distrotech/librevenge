@@ -219,13 +219,13 @@ void WP1ContentListener::fontPointSize(const uint8_t pointSize)
 	}
 }
 
-void WP1ContentListener::fontId(const uint16_t fontId)
+void WP1ContentListener::fontId(const uint16_t id)
 {
 	if (!isUndoOn())
 	{
 		_closeSpan();
 		
-		switch (fontId)
+		switch (id)
 		{
 		case 0x0002:
 		case 0xFF02:
