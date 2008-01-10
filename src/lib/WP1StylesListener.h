@@ -49,7 +49,7 @@ public:
 	void insertNote(const WPXNoteType /* noteType */, WP1SubDocument * /* subDocument */) {}
 	void attributeChange(const bool /* isOn */, const uint8_t /* attribute */) {}
 	void fontPointSize(const uint8_t /* pointSize */) {}
-	void fontId(const uint16_t /* fontId */) {}
+	void fontId(const uint16_t /* id */) {}
 	void marginReset(const uint16_t leftMargin, const uint16_t rightMargin);
 	void topMarginSet(const uint16_t topMargin);
 	void bottomMarginSet(const uint16_t bottomMargin);
