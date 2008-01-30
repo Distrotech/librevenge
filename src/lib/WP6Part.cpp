@@ -53,7 +53,7 @@ WP6Part * WP6Part::constructPart(WPXInputStream *input, const uint8_t readVal)
 		return WP6VariableLengthGroup::constructVariableLengthGroup(input, readVal);
 	}      
 
-	else if (readVal >= (uint8_t)0xF0)
+	else if (readVal >= (uint8_t)0xF0 && readVal < (uint8_t)0xFF)
 	{
 		if (!WP6FixedLengthGroup::isGroupConsistent(input, readVal))
 		{
@@ -63,6 +63,10 @@ WP6Part * WP6Part::constructPart(WPXInputStream *input, const uint8_t readVal)
 		WPD_DEBUG_MSG(("WordPerfect: constructFixedLengthGroup(input, val=0x%.2x)\n", readVal));
 		return WP6FixedLengthGroup::constructFixedLengthGroup(input, readVal);
 	}
+#ifdef DEBUG
+	else
+		WPD_DEBUG_MSG(("WordPerfect: invalid group (val=0x%2x)\n", readVal));
+#endif
 
 	WPD_DEBUG_MSG(("WordPerfect: Returning 0 from constructPart\n"));
 	return 0;
