@@ -243,8 +243,11 @@ void WP6GraphicsBoxStylePacket::_readContents(WPXInputStream *input, WPXEncrypti
 	
 	// Dumping hexadecimally the rest of the packet
 	
-#ifdef DEBUG
 	unsigned tmpCurrentPosition = input->tell();
+	if (tmpStartOfBoxData + tmpSizeOfBoxData - tmpCurrentPosition < 0)
+		throw FileException();
+
+#ifdef DEBUG
 	for (unsigned i = 0; i < tmpStartOfBoxData + tmpSizeOfBoxData - tmpCurrentPosition; i++)
 	{
 		if (i % 8 == 0)
@@ -252,7 +255,8 @@ void WP6GraphicsBoxStylePacket::_readContents(WPXInputStream *input, WPXEncrypti
 		WPD_DEBUG_MSG(("%.2x ", readU8(input, encryption)));
 	}
 #else
-	input->seek(tmpStartOfBoxData + tmpSizeOfBoxData, WPX_SEEK_SET);
+	if (input->seek(tmpStartOfBoxData + tmpSizeOfBoxData, WPX_SEEK_SET))
+		throw FileException();
 #endif
 
 }
