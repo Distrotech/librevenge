@@ -20,3 +20,5 @@ mkinstalldirs
 stamp-h1
 *.pc
 *.rc
+libwpd*.tar.gz
+libwpd*.tar.bz2

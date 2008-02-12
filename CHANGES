@@ -1,4 +1,9 @@
 CHANGES:
+0.8.13 - 0.8.14
+- Fix some warnings due to unused variables
+- Fix a warning due to a name hiding.
+- Fix two loops with corrupted documents (Thank you, sum1!)
+
 0.8.12 - 0.8.13
 - Implement readahead in the WPXStreamImplementation class (Jan Holesovsky, Fridrich)
 - Fix some memory issues properly (each class deletes what it allocated) (Fridrich)
