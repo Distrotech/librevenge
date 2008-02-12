@@ -236,6 +236,8 @@ void WP6EOLGroup::_readContents(WPXInputStream *input)
 				throw FileException();
 		}			
 		
+		if (startPosition2 + numBytesToSkip - 1 - input->tell() < 0)
+			throw FileException();
 		input->seek((startPosition2 + numBytesToSkip - 1 - input->tell()), WPX_SEEK_CUR);
 	}
 }
