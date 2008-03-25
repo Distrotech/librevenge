@@ -1372,11 +1372,14 @@ void WP6ContentListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan
 			       	m_ps->m_currentTableCellNumberInRow)->m_borderBits, cellFgColor, cellBgColor,      
 			       cellBorderColor, cellVerticalAlignment);
 
+		m_ps->m_cellAttributeBits = 0;
 		if (useCellAttributes)
 			m_ps->m_cellAttributeBits = cellAttributes;
-		else
+		else if (m_ps->m_currentTableCol > 0 && m_ps->m_tableDefinition.m_columnsProperties.size() >= (unsigned)m_ps->m_currentTableCol)
 			m_ps->m_cellAttributeBits = m_ps->m_tableDefinition.m_columnsProperties[m_ps->m_currentTableCol-1].m_attributes;
-		justificationChange(m_ps->m_tableDefinition.m_columnsProperties[m_ps->m_currentTableCol-1].m_alignment);
+
+		if (m_ps->m_currentTableCol > 0 && m_ps->m_tableDefinition.m_columnsProperties.size() >= (unsigned)m_ps->m_currentTableCol)
+			justificationChange(m_ps->m_tableDefinition.m_columnsProperties[m_ps->m_currentTableCol-1].m_alignment);
 	}
 }
 
