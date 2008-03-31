@@ -129,7 +129,8 @@ void WP6VariableLengthGroup::_read(WPXInputStream *input, WPXEncryption *encrypt
 	uint32_t startPosition = input->tell();
 	
 	m_subGroup = readU8(input, encryption);
-	m_size = readU16(input, encryption);
+	if ((m_size = readU16(input, encryption)) == 0)
+		throw FileException();
 	m_flags = readU8(input, encryption);
 
 	if (m_flags & WP6_VARIABLE_GROUP_PREFIX_ID_BIT)
