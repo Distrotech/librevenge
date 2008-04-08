@@ -167,6 +167,7 @@ SLOFILES= \
 	$(SLO)$/WPDocument.obj \
 	$(SLO)$/WPXBinaryData.obj \
 	$(SLO)$/WPXContentListener.obj \
+	$(SLO)$/WPXEncryption.obj \
 	$(SLO)$/WPXHeader.obj \
 	$(SLO)$/WPXListener.obj \
 	$(SLO)$/WPXMemoryStream.obj \
