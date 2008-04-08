@@ -1,4 +1,5 @@
 AC_INIT(src/lib/WPXParser.cpp)
+AC_PREREQ([2.59c])
 
 AM_CONFIG_HEADER(config.h)
 

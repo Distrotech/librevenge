@@ -5,13 +5,13 @@ EXTRA_DIST =	doxygen.cfg \
 if WITH_LIBWPD_DOCS
 
 install-data-am:
-	mkdir -p $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/html
-	$(INSTALL) html/*.html $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/html/
-	$(INSTALL) html/*.png $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/html/
-	$(INSTALL) html/*.css $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/html/
+	mkdir -p $(DESTDIR)$(docdir)/html
+	$(INSTALL_DATA) html/*.html $(DESTDIR)$(docdir)/html/
+	$(INSTALL_DATA) html/*.png $(DESTDIR)$(docdir)/html/
+	$(INSTALL_DATA) html/*.css $(DESTDIR)$(docdir)/html/
 
 uninstall-am:
-	-rm -rf $(DESTDIR)$(datadir)/doc/libwpd-@WPD_VERSION@/html
+	-rm -rf $(DESTDIR)$(docdir)/html
 
 all:
 	test -f header.html.in || $(LN_S) $(srcdir)/header.html.in ./
