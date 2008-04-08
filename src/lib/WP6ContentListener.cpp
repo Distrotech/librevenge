@@ -494,10 +494,12 @@ void WP6ContentListener::insertTab(const uint8_t tabType, float tabPosition)
 			case WP6_TAB_GROUP_RIGHT_TAB:
 			case WP6_TAB_GROUP_DECIMAL_TAB:
 				if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
+				{
 					if (m_ps->m_currentListLevel == 0)
 						_openParagraph();
 					else
 						_openListElement();
+				}
 				break;
 
 			default:
