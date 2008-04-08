@@ -119,10 +119,12 @@ WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input)
 					break;
 			}
 			if (header->getDocumentEncryption())
+			{
 				if (header->getMajorVersion() == 0x02)
 					confidence = WPD_CONFIDENCE_UNSUPPORTED_ENCRYPTION;
 				else
 					confidence = WPD_CONFIDENCE_SUPPORTED_ENCRYPTION;
+			}
 			DELETEP(header);
 		}
 		else
@@ -203,10 +205,12 @@ WPDPasswordMatch WPDocument::verifyPassword(WPXInputStream *input, const char *p
 		if (header)
 		{
 			if (header->getDocumentEncryption())
+			{
 				if (header->getMajorVersion() == 0x02)
 					passwordMatch = WPD_PASSWORD_MATCH_DONTKNOW;
 				else if (header->getDocumentEncryption() == encryption.getCheckSum())
 					passwordMatch = WPD_PASSWORD_MATCH_OK;
+			}
 			DELETEP(header);
 		}
 		else
