@@ -89,11 +89,11 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input, const char
 		}
 				
 		input->seek(0, WPX_SEEK_SET);
+		if (password && encryption)
+			input->seek(6, WPX_SEEK_SET);
 
 		int functionGroupCount = 0;
 	
-		WPD_DEBUG_MSG(("WP42Heuristics::isWP42FileFormat()\n"));
-		input->seek(0, WPX_SEEK_SET);
 		WPD_DEBUG_MSG(("WP42Heuristics::isWP42FileFormat()\n"));
 	
 		while (!input->atEOS())

@@ -89,12 +89,13 @@ WPDConfidence WP1Heuristics::isWP1FileFormat(WPXInputStream *input, const char *
 					return WPD_CONFIDENCE_SUPPORTED_ENCRYPTION;
 			}
 		}
-				
+		
 		input->seek(0, WPX_SEEK_SET);
+		if (password && encryption)
+			input->seek(6, WPX_SEEK_SET);	
 
 		int functionGroupCount = 0;
 	
-		WPD_DEBUG_MSG(("WP1Heuristics::isWP1FileFormat()\n"));
 		WPD_DEBUG_MSG(("WP1Heuristics::isWP1FileFormat()\n"));
 	
 		while (!input->atEOS())
