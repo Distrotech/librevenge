@@ -67,6 +67,7 @@ void WP3DisplayGroup::parse(WP3Listener *listener)
 	{
 	case WP3_DISPLAY_GROUP_INSERT_PAGE_NUMBER:
 		listener->insertPageNumber(m_pageNumber);
+		break;
 	case WP3_DISPLAY_GROUP_INSERT_FOOTNOTE_NUMBER:
 	case WP3_DISPLAY_GROUP_INSERT_ENDNOTE_NUMBER:
 		listener->insertNoteReference(m_noteReference);

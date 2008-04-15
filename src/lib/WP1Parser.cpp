@@ -163,6 +163,7 @@ void WP1Parser::parseDocument(WPXInputStream *input, WPXEncryption *encryption, 
 					break;
 				case 0xB8:
 					listener->attributeChange(false, WP1_ATTRIBUTE_SUBSCRIPT);
+					break;
 
 				default:
 					// unsupported or undocumented token, ignore

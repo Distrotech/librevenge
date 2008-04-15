@@ -250,9 +250,10 @@ void WP3PageFormatGroup::parse(WP3Listener *listener)
 
 	case WP3_PAGE_FORMAT_GROUP_SUPPRESS_PAGE:
 		listener->suppressPage(m_suppressCode);
+		break;
 
 	case WP3_PAGE_FORMAT_GROUP_INDENT_AT_BEGINNING_OF_PARAGRAPH:
-			listener->indentFirstLineChange(fixedPointToWPUs(m_indent));
+		listener->indentFirstLineChange(fixedPointToWPUs(m_indent));
 		break;
 		
 
