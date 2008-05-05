@@ -66,7 +66,7 @@ _WPXContentParsingState::_WPXContentParsingState() :
 	m_cellAttributeBits(0x00000000),
 	m_paragraphJustificationBeforeTable(WPX_PARAGRAPH_JUSTIFICATION_LEFT),
 	
-	m_nextPageSpanIter(),
+	m_currentPage(0),
 	m_numPagesRemainingInSpan(0),
 	m_currentPageNumber(1),
 
@@ -130,7 +130,6 @@ WPXContentListener::WPXContentListener(std::list<WPXPageSpan> &pageList, WPXDocu
 	m_documentInterface(documentInterface),
 	m_metaData()
 {
-	m_ps->m_nextPageSpanIter = pageList.begin();
 }
 
 WPXContentListener::~WPXContentListener()
@@ -268,20 +267,23 @@ void WPXContentListener::_openPageSpan()
 	m_ps->m_listReferencePosition += m_ps->m_pageMarginLeft;
 	m_ps->m_listBeginPosition += m_ps->m_pageMarginLeft;
 	
-	if ( m_pageList.empty() || (m_ps->m_nextPageSpanIter == m_pageList.end()))
+	if ( m_pageList.empty() || (m_ps->m_currentPage >= m_pageList.size()) )
 	{
-		WPD_DEBUG_MSG(("m_pageList.empty() || (m_ps->m_nextPageSpanIter == m_pageList.end())\n"));
+		WPD_DEBUG_MSG(("m_pageList.empty() || (m_ps->m_currentPage >= m_pageList.size())\n"));
 		throw ParseException();
 	}
 
-	WPXPageSpan currentPage = (*m_ps->m_nextPageSpanIter);
+	std::list<WPXPageSpan>::iterator currentPageSpanIter = m_pageList.begin();
+	for ( unsigned i = 0; i < m_ps->m_currentPage; i++ )
+		currentPageSpanIter++;
+
+	WPXPageSpan currentPage = (*currentPageSpanIter);
 	currentPage.makeConsistent(1);
 	
 	WPXPropertyList propList;
 	propList.insert("libwpd:num-pages", currentPage.getPageSpan());
 
-	std::list<WPXPageSpan>::iterator lastPageSpan = --m_pageList.end(); 
-	propList.insert("libwpd:is-last-page-span", ((m_ps->m_nextPageSpanIter == lastPageSpan) ? true : false));
+	propList.insert("libwpd:is-last-page-span", ((m_ps->m_currentPage + 1 == m_pageList.size()) ? true : false));
 	propList.insert("fo:page-height", currentPage.getFormLength());
 	propList.insert("fo:page-width", currentPage.getFormWidth());
 	if (currentPage.getFormOrientation() == LANDSCAPE)
@@ -378,7 +380,7 @@ void WPXContentListener::_openPageSpan()
 	m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange + m_ps->m_textIndentByTabs;
 
 	m_ps->m_numPagesRemainingInSpan = (currentPage.getPageSpan() - 1);
-	m_ps->m_nextPageSpanIter++;
+	m_ps->m_currentPage++;
 }
 
 void WPXContentListener::_closePageSpan()
