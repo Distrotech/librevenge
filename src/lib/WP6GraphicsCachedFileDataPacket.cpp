@@ -57,10 +57,13 @@ void WP6GraphicsCachedFileDataPacket::_readContents(WPXInputStream *input, WPXEn
 #if 0
 	WPXString filename;
 	filename.sprintf("binarydump%.4x.wpg", m_id);
-	FILE *f = fopen(filename.cstr(), "w");
-	for (uint32_t j = 0; j < tmpDataSize; j++)
-		fprintf(f, "%c", m_data[j]);
-	fclose(f);
+	FILE *f = fopen(filename.cstr(), "wb");
+	if (f) // don't crash when current directory is on read-only file-system
+	{
+		for (uint32_t j = 0; j < tmpDataSize; j++)
+			fprintf(f, "%c", m_data[j]);
+		fclose(f);
+	}
 #endif
 	m_object = new WPXBinaryData(m_data, tmpDataSize);
 }
