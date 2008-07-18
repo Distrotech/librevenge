@@ -505,11 +505,21 @@ void WPXContentListener::_appendParagraphProperties(WPXPropertyList &propList, c
 	propList.insert("fo:margin-top", m_ps->m_paragraphMarginTop);
 	propList.insert("fo:margin-bottom", m_ps->m_paragraphMarginBottom);
 	propList.insert("fo:line-height", m_ps->m_paragraphLineSpacing, WPX_PERCENT);
+	_insertBreakIfNecessary(propList);
+}
+
+void WPXContentListener::_insertBreakIfNecessary(WPXPropertyList &propList)
+{
 	if (m_ps->m_isParagraphPageBreak && !m_ps->m_inSubDocument) // no hard page-breaks in subdocuments
 		propList.insert("fo:break-before", "page");
 	else if (m_ps->m_isParagraphColumnBreak)
-		propList.insert("fo:break-before", "column");
-}
+	{
+		if (m_ps->m_numColumns > 1)
+			propList.insert("fo:break-before", "column");
+		else
+			propList.insert("fo:break-before", "page");
+	}
+}	
 
 void WPXContentListener::_getTabStops(WPXPropertyListVector &tabStops)
 {
@@ -765,10 +775,7 @@ void WPXContentListener::_openTable()
 	}
 
 	// cater for the possibility to have the column/page break just before the table
-	if (m_ps->m_isParagraphPageBreak && !m_ps->m_inSubDocument)  // No hard page-breaks in sub-documents
-		propList.insert("fo:break-before", "page");
-	else if (m_ps->m_isParagraphColumnBreak)
-		propList.insert("fo:break-before", "column");
+	_insertBreakIfNecessary(propList);
 	m_ps->m_isParagraphColumnBreak = false;
 	m_ps->m_isParagraphPageBreak = false;
 

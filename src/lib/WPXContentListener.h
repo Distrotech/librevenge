@@ -200,6 +200,9 @@ protected:
 
 	float _getNextTabStop() const;
 	float _getPreviousTabStop() const;
+	
+	void _insertBreakIfNecessary(WPXPropertyList &propList);
+	
 private:
 	WPXContentListener(const WPXContentListener&);
 	WPXContentListener& operator=(const WPXContentListener&);
