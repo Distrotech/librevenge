@@ -226,7 +226,9 @@ src/conv/raw/wpd2raw.rc
 src/conv/text/Makefile
 src/conv/text/wpd2text.rc
 src/lib/Makefile
+src/lib/libwpd.h
 src/lib/libwpd.rc
+src/lib/libwpd-stream.h
 src/lib/libwpd-stream.rc
 src/test/Makefile
 docs/Makefile

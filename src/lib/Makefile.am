@@ -424,10 +424,14 @@ EXTRA_DIST = \
 	$(libwpd_stream_sources) \
 	$(libwpd_stream_headers) \
 	makefile.mk \
+	libwpd.h.in \
 	libwpd.rc.in \
+	libwpd-stream.h.in \
 	libwpd-stream.rc.in
 
 # These may be in the builddir too
 BUILD_EXTRA_DIST = \
+	libwpd.h \
 	libwpd.rc \
+	libwpd-stream.h \
 	libwpd-stream.rc

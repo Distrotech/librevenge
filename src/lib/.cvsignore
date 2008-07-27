@@ -5,3 +5,5 @@
 *.rc
 Makefile
 Makefile.in
+libwpd.h
+libwpd-stream.h
