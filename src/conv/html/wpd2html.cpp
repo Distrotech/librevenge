@@ -25,6 +25,8 @@
 #include "libwpd.h"
 #include <string.h>
 
+namespace {
+
 int printUsage()
 {
 	printf("Usage: wpd2html [OPTION] <WordPerfect Document>\n");
@@ -41,6 +43,8 @@ int printVersion()
 	printf("wpd2html %s\n", LIBWPD_VERSION_STRING);
 	return 0;
 }
+
+} // anonymous namespace
 
 int main(int argc, char *argv[])
 {

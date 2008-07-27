@@ -29,6 +29,8 @@
 #include "libwpd-stream.h"
 #include "TextDocumentGenerator.h"
 
+namespace {
+
 int printUsage()
 {
 	printf("Usage: wpd2text [OPTION] <WordPerfect Document>\n");
@@ -46,6 +48,8 @@ int printVersion()
 	printf("wpd2text %s\n", LIBWPD_VERSION_STRING);
 	return 0;
 }
+
+} // anonymous namespace
 
 int main(int argc, char *argv[])
 {
