@@ -88,7 +88,7 @@ umask 022
 
 %if %{!?_without_docs:1}%{?_without_docs:0}
 %files docs
-%{_datadir}/doc/libwpd-@WPD_VERSION@/*
+%{_datadir}/*
 %endif
 
 %changelog
