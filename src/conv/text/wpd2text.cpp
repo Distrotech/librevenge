@@ -26,7 +26,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "libwpd.h"
-#include "WPXStreamImplementation.h"
+#include "libwpd-stream.h"
 #include "TextDocumentGenerator.h"
 
 int printUsage()
@@ -37,7 +37,14 @@ int printUsage()
 	printf("--info                Display document metadata instead of the text\n");
 	printf("--help                Shows this help message\n");
 	printf("--password <password> Try to decrypt password protected document\n");
+	printf("--version             Output wpd2text version\n");
 	return -1;
+}
+
+int printVersion()
+{
+	printf("wpd2text %s\n", LIBWPD_VERSION_STRING);
+	return 0;
 }
 
 int main(int argc, char *argv[])
@@ -60,9 +67,11 @@ int main(int argc, char *argv[])
 			password = &argv[i][11];
 		else if (!strcmp(argv[i], "--info"))
 			isInfo = true;
+		else if (!strcmp(argv[i], "--version"))
+			return printVersion();
 		else if (!szInputFile && strncmp(argv[i], "--", 2))
 			szInputFile = argv[i];
-		else
+		else 
 			return printUsage();
 	}
 	
