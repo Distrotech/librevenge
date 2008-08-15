@@ -42,35 +42,36 @@ public:
 
 	void startDocument() {}
 	void startSubDocument() {}
-	void insertCharacter(const uint16_t /* character */) { if (!isUndoOn()) m_currentPageHasContent = true; }
-	void insertExtendedCharacter(const uint8_t /* extendedCharacter */) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	void insertCharacter(uint16_t /* character */) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	void insertExtendedCharacter(uint8_t /* extendedCharacter */) { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void insertTab() { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void insertEOL() { if (!isUndoOn()) m_currentPageHasContent = true; }
- 	void insertBreak(const uint8_t breakType);
+ 	void insertBreak(uint8_t breakType);
 	void insertNote(const WPXNoteType /* noteType */, WP1SubDocument * /* subDocument */) {}
-	void attributeChange(const bool /* isOn */, const uint8_t /* attribute */) {}
-	void fontPointSize(const uint8_t /* pointSize */) {}
-	void fontId(const uint16_t /* id */) {}
-	void marginReset(const uint16_t leftMargin, const uint16_t rightMargin);
-	void topMarginSet(const uint16_t topMargin);
-	void bottomMarginSet(const uint16_t bottomMargin);
-	void leftIndent(const uint16_t /* leftMarginOffset */) { if (!isUndoOn()) m_currentPageHasContent = true; }
-	void leftRightIndent(const uint16_t /* leftRightMarginOffset */) { if (!isUndoOn()) m_currentPageHasContent = true; }
-	void leftMarginRelease(const uint16_t /* release */) {}
-	void setTabs(const std::vector<WPXTabStop> /* tabStops */) {}
-	void headerFooterGroup(const uint8_t headerFooterDefinition, WP1SubDocument *subDocument);
-	void suppressPageCharacteristics(const uint8_t suppressCode);
-	void justificationChange(const uint8_t /* justification */) {}
-	void lineSpacingChange(const uint8_t /* spacing */) {}
+	void attributeChange(bool /* isOn */, uint8_t /* attribute */) {}
+	void fontPointSize(uint8_t /* pointSize */) {}
+	void fontId(uint16_t /* id */) {}
+	void marginReset(uint16_t leftMargin, uint16_t rightMargin);
+	void topMarginSet(uint16_t topMargin);
+	void bottomMarginSet(uint16_t bottomMargin);
+	void leftIndent(uint16_t /* leftMarginOffset */) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	void leftRightIndent(uint16_t /* leftRightMarginOffset */) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	void leftMarginRelease(uint16_t /* release */) {}
+	void setTabs(const std::vector<WPXTabStop>& /* tabStops */) {}
+	void headerFooterGroup(uint8_t headerFooterDefinition, WP1SubDocument *subDocument);
+	void suppressPageCharacteristics(uint8_t suppressCode);
+	void justificationChange(uint8_t /* justification */) {}
+	void lineSpacingChange(uint8_t /* spacing */) {}
 	void flushRightOn() {}
 	void flushRightOff() {}
 	void centerOn() {}
 	void centerOff() {}
 	void endDocument();
 	void endSubDocument();
+	void insertPicture(uint16_t width, uint16_t height, const WPXBinaryData &binaryData) {}
 
 protected:
-	void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
+	void _handleSubDocument(const WPXSubDocument *subDocument, bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
 
 private:
 	WPXPageSpan m_currentPage, m_nextPage;

@@ -53,7 +53,7 @@ void WP1StylesListener::endSubDocument()
 	insertBreak(WPX_SOFT_PAGE_BREAK); // pretend we just had a soft page break (for the last page)
 }
 
-void WP1StylesListener::insertBreak(const uint8_t breakType)
+void WP1StylesListener::insertBreak(uint8_t breakType)
 {
 	if (m_isSubDocument)
 		return;
@@ -109,7 +109,7 @@ void WP1StylesListener::insertBreak(const uint8_t breakType)
 	}
 }
 
-void WP1StylesListener::marginReset(const uint16_t leftMargin, const uint16_t rightMargin)
+void WP1StylesListener::marginReset(uint16_t leftMargin, uint16_t rightMargin)
 {
 	if (!isUndoOn()) 
 	{		
@@ -157,7 +157,7 @@ void WP1StylesListener::marginReset(const uint16_t leftMargin, const uint16_t ri
 	}
 }
 
-void WP1StylesListener::topMarginSet(const uint16_t topMargin)
+void WP1StylesListener::topMarginSet(uint16_t topMargin)
 {
 	if (!isUndoOn()) 
 	{
@@ -167,7 +167,7 @@ void WP1StylesListener::topMarginSet(const uint16_t topMargin)
 	}
 }
 
-void WP1StylesListener::bottomMarginSet(const uint16_t bottomMargin)
+void WP1StylesListener::bottomMarginSet(uint16_t bottomMargin)
 {
 	if (!isUndoOn()) 
 	{
@@ -177,7 +177,7 @@ void WP1StylesListener::bottomMarginSet(const uint16_t bottomMargin)
 	}
 }
 
-void WP1StylesListener::headerFooterGroup(const uint8_t headerFooterDefinition, WP1SubDocument *subDocument)
+void WP1StylesListener::headerFooterGroup(uint8_t headerFooterDefinition, WP1SubDocument *subDocument)
 {
 	if (subDocument)
 		m_subDocuments.push_back(subDocument);
@@ -223,7 +223,7 @@ void WP1StylesListener::headerFooterGroup(const uint8_t headerFooterDefinition, 
 	}
 }	
 
-void WP1StylesListener::suppressPageCharacteristics(const uint8_t suppressCode)
+void WP1StylesListener::suppressPageCharacteristics(uint8_t suppressCode)
 {
 	if (!isUndoOn())
 	{
@@ -245,7 +245,7 @@ void WP1StylesListener::suppressPageCharacteristics(const uint8_t suppressCode)
 	}
 }
 
-void WP1StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter,
+void WP1StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, bool isHeaderFooter,
 						WPXTableList /* tableList */, int /* nextTableIndice */)
 {
 	if (!isUndoOn()) 

@@ -29,6 +29,7 @@
 #include "WP1SetTabsGroup.h"
 #include "WP1HeaderFooterGroup.h"
 #include "WP1FootnoteEndnoteGroup.h"
+#include "WP1PictureGroup.h"
 #include "WP1FileStructure.h"
 #include "libwpd_internal.h"
 #include <limits>
@@ -49,6 +50,8 @@ WP1VariableLengthGroup * WP1VariableLengthGroup::constructVariableLengthGroup(WP
 			return new WP1HeaderFooterGroup(input, encryption, group);
 		case WP1_FOOTNOTE_ENDNOTE_GROUP:
 			return new WP1FootnoteEndnoteGroup(input, encryption, group);
+		case WP1_PICTURE_GROUP:
+			return new WP1PictureGroup(input, encryption, group);
 		default:
 			// this is an unhandled group, just skip it
 			return new WP1UnsupportedVariableLengthGroup(input, encryption, group);

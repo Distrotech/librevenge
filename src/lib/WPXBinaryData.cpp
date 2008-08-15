@@ -75,17 +75,17 @@ WPXBinaryData::WPXBinaryData(const WPXInputStream *input, WPXEncryption *encrypt
 void WPXBinaryData::append(const WPXBinaryData &data)
 {
 	size_t previousSize = m_binaryDataImpl->m_buf.size();
-	m_binaryDataImpl->m_buf.resize(previousSize + data.m_binaryDataImpl->m_buf.size());
-	for (size_t i = previousSize; i < previousSize + data.m_binaryDataImpl->m_buf.size(); i++)
-		m_binaryDataImpl->m_buf[previousSize + i] = data.m_binaryDataImpl->m_buf[i];
+	m_binaryDataImpl->m_buf.reserve(previousSize + data.m_binaryDataImpl->m_buf.size());
+	for (size_t i = 0; i < data.m_binaryDataImpl->m_buf.size(); i++)
+		m_binaryDataImpl->m_buf.push_back(data.m_binaryDataImpl->m_buf[i]);
 }
 
 void WPXBinaryData::append(const unsigned char *buffer, const size_t bufferSize )
 {
 	size_t previousSize = m_binaryDataImpl->m_buf.size();
-	m_binaryDataImpl->m_buf.resize(previousSize + bufferSize);
-	for (size_t i = previousSize; i < previousSize + bufferSize; i++)
-		m_binaryDataImpl->m_buf[previousSize + i] = buffer[i];
+	m_binaryDataImpl->m_buf.reserve(previousSize + bufferSize);
+	for (size_t i = 0; i < bufferSize; i++)
+		m_binaryDataImpl->m_buf.push_back(buffer[i]);
 }
 
 void WPXBinaryData::append(const unsigned char c)
@@ -95,7 +95,7 @@ void WPXBinaryData::append(const unsigned char c)
 
 void WPXBinaryData::clear()
 {
-	m_binaryDataImpl->m_buf.clear();
+	m_binaryDataImpl->m_buf = std::vector<unsigned char>();
 }
 
 size_t WPXBinaryData::size() const

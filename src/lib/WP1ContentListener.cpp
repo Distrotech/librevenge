@@ -60,7 +60,7 @@ WP1ContentListener::~WP1ContentListener()
 }
 
 
-void WP1ContentListener::insertCharacter(const uint16_t character)
+void WP1ContentListener::insertCharacter(uint16_t character)
 {
 	if (!isUndoOn())
 	{
@@ -74,7 +74,7 @@ void WP1ContentListener::insertCharacter(const uint16_t character)
 	}
 }
 
-void WP1ContentListener::insertExtendedCharacter(const uint8_t extendedCharacter)
+void WP1ContentListener::insertExtendedCharacter(uint8_t extendedCharacter)
 {
 	if (!isUndoOn())
 	{
@@ -166,7 +166,7 @@ void WP1ContentListener::insertNote(const WPXNoteType noteType, WP1SubDocument *
 }
 
 
-void WP1ContentListener::attributeChange(const bool isOn, const uint8_t attribute)
+void WP1ContentListener::attributeChange(bool isOn, uint8_t attribute)
 {
 	_closeSpan();
 
@@ -209,7 +209,7 @@ void WP1ContentListener::attributeChange(const bool isOn, const uint8_t attribut
 		m_ps->m_textAttributeBits ^= textAttributeBit;
 }
 
-void WP1ContentListener::fontPointSize(const uint8_t pointSize)
+void WP1ContentListener::fontPointSize(uint8_t pointSize)
 {
 	if (!isUndoOn())
 	{
@@ -219,7 +219,7 @@ void WP1ContentListener::fontPointSize(const uint8_t pointSize)
 	}
 }
 
-void WP1ContentListener::fontId(const uint16_t id)
+void WP1ContentListener::fontId(uint16_t id)
 {
 	if (!isUndoOn())
 	{
@@ -380,7 +380,7 @@ void WP1ContentListener::fontId(const uint16_t id)
 	}
 }
 
-void WP1ContentListener::marginReset(const uint16_t leftMargin, const uint16_t rightMargin)
+void WP1ContentListener::marginReset(uint16_t leftMargin, uint16_t rightMargin)
 {
 	if (!isUndoOn())
 	{
@@ -405,7 +405,7 @@ void WP1ContentListener::marginReset(const uint16_t leftMargin, const uint16_t r
 	}
 }
 
-void WP1ContentListener::leftIndent(const uint16_t leftMarginOffset)
+void WP1ContentListener::leftIndent(uint16_t leftMarginOffset)
 {
 	if (!isUndoOn())
 	{
@@ -423,7 +423,7 @@ void WP1ContentListener::leftIndent(const uint16_t leftMarginOffset)
 	}
 }
 
-void WP1ContentListener::leftRightIndent(const uint16_t leftRightMarginOffset)
+void WP1ContentListener::leftRightIndent(uint16_t leftRightMarginOffset)
 {
 	if (!isUndoOn())
 	{
@@ -445,7 +445,7 @@ void WP1ContentListener::leftRightIndent(const uint16_t leftRightMarginOffset)
 	}
 }
 
-void WP1ContentListener::leftMarginRelease(const uint16_t release)
+void WP1ContentListener::leftMarginRelease(uint16_t release)
 {
 	if (!isUndoOn())
 	{
@@ -464,7 +464,7 @@ void WP1ContentListener::leftMarginRelease(const uint16_t release)
 	}
 }
 
-void WP1ContentListener::justificationChange(const uint8_t justification)
+void WP1ContentListener::justificationChange(uint8_t justification)
 {
 	if (!isUndoOn())
 	{
@@ -486,13 +486,13 @@ void WP1ContentListener::justificationChange(const uint8_t justification)
 	}
 }
 
-void WP1ContentListener::headerFooterGroup(const uint8_t /* headerFooterDefinition */, WP1SubDocument *subDocument)
+void WP1ContentListener::headerFooterGroup(uint8_t /* headerFooterDefinition */, WP1SubDocument *subDocument)
 {
 	if (subDocument)
 		m_subDocuments.push_back(subDocument);			
 }	
 
-void WP1ContentListener::setTabs(const std::vector<WPXTabStop> tabStops)
+void WP1ContentListener::setTabs(const std::vector<WPXTabStop> &tabStops)
 {
 	if (!isUndoOn())
 	{
@@ -529,7 +529,28 @@ void WP1ContentListener::centerOn()
 	}
 }
 
-void WP1ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool /* isHeaderFooter */,
+void WP1ContentListener::insertPicture(uint16_t width, uint16_t height, const WPXBinaryData &binaryData)
+{
+	if (!isUndoOn())
+	{
+		if (!m_ps->m_isSpanOpened)
+			_openSpan();
+
+		WPXPropertyList propList;
+		propList.insert("svg:width", (float)((double)width/72.0f));
+		propList.insert("svg:height", (float)((double)height/72.0f));
+		propList.insert("text:anchor-type", "as-char");
+		m_documentInterface->openFrame(propList);
+		
+		propList.clear();
+		propList.insert("libwpd:mimetype", "image/pict");
+		m_documentInterface->insertBinaryObject(propList, &binaryData);
+		
+		m_documentInterface->closeFrame();
+	}
+}
+
+void WP1ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, bool /* isHeaderFooter */,
 						WPXTableList /* tableList */, int /* nextTableIndice */)
 {
 	// save our old parsing state on our "stack"

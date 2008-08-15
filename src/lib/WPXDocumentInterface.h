@@ -400,9 +400,9 @@ class WPXDocumentInterface
 	\li \c style:vertical-pos Vertical alignment of the box
 	\li \c style:vertical-rel From where the vertical position of the box is measured
 	\li \c svg:width Width of the box (in inches)
-	\li \c style:relative-width If the width should scale to keep the width/height ratio of the original object, this property is set to \"scale\".
+	\li \c style:relative-width If the width should scale to keep the width/height ratio of the original object, this property is set to &quot;scale&quot;.
 	\li \c svg:height Height of the box (in inches)
-	\li \c style:relative-height If the height should scale to keep the width/height ratio of the original object, this property is set to \"scale\".
+	\li \c style:relative-height If the height should scale to keep the width/height ratio of the original object, this property is set to &quot;scale&quot;.
 	*/
 	virtual void openFrame(const WPXPropertyList &propList) = 0;
 	/**

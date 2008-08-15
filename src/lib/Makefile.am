@@ -72,6 +72,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP1MarginResetGroup.cpp \
 	WP1Parser.cpp \
 	WP1Part.cpp \
+	WP1PictureGroup.cpp \
 	WP1PointSizeGroup.cpp \
 	WP1SetTabsGroup.cpp \
 	WP1SpacingResetGroup.cpp \
@@ -237,6 +238,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP1MarginResetGroup.h \
 	WP1Parser.h \
 	WP1Part.h \
+	WP1PictureGroup.h \
 	WP1PointSizeGroup.h \
 	WP1SetTabsGroup.h \
 	WP1SpacingResetGroup.h \
