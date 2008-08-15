@@ -38,6 +38,7 @@ SLOFILES= \
 	$(SLO)$/WP1MarginResetGroup.obj \
 	$(SLO)$/WP1Parser.obj \
 	$(SLO)$/WP1Part.obj \
+	$(SLO)$/WP1PictureGroup.obj \
 	$(SLO)$/WP1PointSizeGroup.obj \
 	$(SLO)$/WP1SetTabsGroup.obj \
 	$(SLO)$/WP1SpacingResetGroup.obj \
