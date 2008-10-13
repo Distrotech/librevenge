@@ -26,6 +26,7 @@
 #define WP5BOXGROUP_H
 
 #include "WP5VariableLengthGroup.h"
+#include "WPXBinaryData.h"
 
 class WP5BoxGroup : public WP5VariableLengthGroup
 {
@@ -36,6 +37,13 @@ public:
 protected:
 	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 
+private:
+	uint16_t m_boxNumber;
+	uint8_t m_positionAndType, m_alignment;
+	uint16_t m_width, m_height, m_x, m_y;
+	uint8_t m_boxType;
+	uint16_t m_graphicsOffset;
+	const WPXBinaryData *m_data;
 };
 
 #endif /* WP5BOXGROUP_H */

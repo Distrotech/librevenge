@@ -34,6 +34,7 @@
 class WP5SubDocument;
 class WP5PrefixData;
 class WP5GeneralPacketData;
+class WPXBinaryData;
 
 class WP5Listener
 {
@@ -75,6 +76,10 @@ public:
 	virtual void insertNote(const WPXNoteType noteType, const WP5SubDocument *subDocument) = 0;
 	virtual void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, WP5SubDocument *subDocument) = 0;
 	virtual void suppressPageCharacteristics(const uint8_t suppressCode) = 0;
+
+	virtual void boxOn(uint8_t positionAndType, uint8_t alignment, uint16_t width, uint16_t height, uint16_t x, uint16_t y) = 0;
+	virtual void boxOff() = 0;
+	virtual void insertGraphicsData(const WPXBinaryData *data) = 0;
 
 	void setPrefixData(WP5PrefixData *prefixData) { m_prefixData = prefixData; }
 	const WP5GeneralPacketData * getGeneralPacketData(const int type) const;

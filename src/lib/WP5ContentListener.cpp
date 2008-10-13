@@ -34,7 +34,8 @@
 _WP5ContentParsingState::_WP5ContentParsingState() :
 	m_textBuffer(),
 	m_noteReference(),
-	m_tableList()
+	m_tableList(),
+	m_isFrameOpened(false)
 {
 }
 
@@ -599,6 +600,63 @@ void WP5ContentListener::setDefaultFont(const WPXString &fontName, const float f
 {
 	m_defaultFontName = fontName;
 	m_defaultFontSize = fontSize;
+}
+
+void WP5ContentListener::boxOn(uint8_t positionAndType, uint8_t /* alignment */, uint16_t width, uint16_t height, uint16_t x, uint16_t y)
+{
+	if (isUndoOn() || (m_ps->m_isTableOpened && !m_ps->m_isTableCellOpened))
+		return;
+		 
+	if (!m_ps->m_isSpanOpened)
+		_openSpan();
+	else
+		_flushText();
+
+	WPXPropertyList propList;
+
+	propList.insert("svg:height", (float)((double)height/(double)WPX_NUM_WPUS_PER_INCH));
+	propList.insert("svg:width", (float)((double)width/(double)WPX_NUM_WPUS_PER_INCH));
+
+	propList.insert("svg:x", (float)((double)x/(double)WPX_NUM_WPUS_PER_INCH));
+	propList.insert("svg:y", (float)((double)y/(double)WPX_NUM_WPUS_PER_INCH));
+
+	switch (positionAndType & 0x03)
+	{
+	case 0x00: // Paragraph anchored
+		propList.insert("text:anchor-type", "paragraph");
+		break;
+	case 0x01: // Page anchored
+		propList.insert("text:anchor-type", "char"); // ugly workaround to remediate OOo's wrong implementation of ODF
+		break;
+	case 0x02: // Char
+		propList.insert("text:anchor-type", "as-char");
+		break;
+	}
+	
+	m_documentInterface->openFrame(propList);
+	m_parseState->m_isFrameOpened = true;
+}
+
+void WP5ContentListener::boxOff()
+{
+	if (!isUndoOn() && m_parseState->m_isFrameOpened)
+	{
+		m_documentInterface->closeFrame();
+		m_parseState->m_isFrameOpened = false;
+	}
+}
+
+void WP5ContentListener::insertGraphicsData(const WPXBinaryData *data)
+{
+	if (isUndoOn() || !m_parseState->m_isFrameOpened)
+		return;
+
+	if (data) 
+	{
+		WPXPropertyList propList;
+		propList.insert("libwpd:mimetype", "image/x-wpg");
+		m_documentInterface->insertBinaryObject(propList, data);
+	}
 }
 
 

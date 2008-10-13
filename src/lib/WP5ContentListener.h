@@ -45,6 +45,8 @@ struct _WP5ContentParsingState
 	WPXString m_noteReference;
 
 	WPXTableList m_tableList;
+
+	bool m_isFrameOpened;
 };
 
 class WP5ContentListener : public WP5Listener, protected WPXContentListener
@@ -91,6 +93,10 @@ public:
 	
 	void setDefaultFont(const WPXString &fontName, const float fontSize);
 	
+	void boxOn(uint8_t positionAndType, uint8_t alignment, uint16_t width, uint16_t height, uint16_t x, uint16_t y);
+	virtual void boxOff();
+	virtual void insertGraphicsData(const WPXBinaryData *data);
+
 protected:
 	void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
 
