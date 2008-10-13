@@ -171,6 +171,10 @@ SOURCE=..\..\src\lib\WP1Part.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP1PictureGroup.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP1PointSizeGroup.cpp
 # End Source File
 # Begin Source File
@@ -832,6 +836,10 @@ SOURCE=..\..\src\lib\WP1Parser.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP1Part.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP1PictureGroup.h
 # End Source File
 # Begin Source File
 

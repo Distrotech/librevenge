@@ -163,7 +163,7 @@ protected:
 	WPXDocumentInterface * m_documentInterface;
 	WPXPropertyList m_metaData;
 
-	virtual void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice) = 0;
+	virtual void _handleSubDocument(const WPXSubDocument *subDocument, bool isHeaderFooter, WPXTableList tableList, int nextTableIndice) = 0;
 	virtual void _flushText() = 0;
 	virtual void _changeList() = 0;
 

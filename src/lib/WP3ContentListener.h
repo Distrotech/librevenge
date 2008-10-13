@@ -100,7 +100,7 @@ public:
 	void leftRightIndent(const float offset);
 	
 protected:
-	void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
+	void _handleSubDocument(const WPXSubDocument *subDocument, bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
 	void _openParagraph();
 
 	void _flushText();
