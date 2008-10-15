@@ -1,5 +1,7 @@
 /* libwpd
- * Copyright (C) 2004 Marc Maurer (uwog@uwog.net)
+ * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
+ * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
+ * Copyright (C) 2007 Fridrich Strba (fridrich_strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,30 +24,25 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP3PARSER_H
-#define WP3PARSER_H
+#include "WP3Resource.h"
+#include "WP3FileStructure.h"
+#include "libwpd.h"
+#include "libwpd_internal.h"
 
-#include "WPXParser.h"
-
-class WPXDocumentInterface;
-class WP3Listener;
-class WP3ResourceFork;
-
-class WP3Parser : public WPXParser
+WP3Resource::WP3Resource(uint32_t resourceType, uint32_t resourceReferenceID, const WPXString resourceName,
+		uint8_t resourceAttributes, const WPXBinaryData resourceData) :
+	m_resourceType(resourceType),
+	m_resourceReferenceID(resourceReferenceID),
+	m_resourceName(resourceName),
+	m_resourceAttributes(resourceAttributes),
+	m_resourceData(resourceData)
 {
-public:
-	WP3Parser(WPXInputStream *input, WPXHeader *header, WPXEncryption *encryption);
-	~WP3Parser();
+}
 
-	void parse(WPXDocumentInterface *documentInterface);
-	void parseSubDocument(WPXDocumentInterface *documentInterface);
-	
-	static void parseDocument(WPXInputStream *input, WPXEncryption *encryption, WP3Listener *listener);
-
-private:
-	WP3ResourceFork * getPrefixData(WPXInputStream *input, WPXEncryption *encryption);
-
-	void parse(WPXInputStream *input, WPXEncryption *encryption, WP3Listener *listener);
-};
-
-#endif /* WP3PARSER_H */
+const WPXString WP3Resource::getResourceTypeString() const
+{
+	WPXString resourceTypeString;
+	for (int j=3; j >= 0; j--)
+		resourceTypeString.append((char)((m_resourceType >> (j*8)) & 0xff));
+	return resourceTypeString;
+}

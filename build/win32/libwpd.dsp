@@ -287,6 +287,14 @@ SOURCE=..\..\src\lib\WP3Part.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP3Resource.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3ResourceFork.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP3SingleByteFunction.cpp
 # End Source File
 # Begin Source File
@@ -952,6 +960,14 @@ SOURCE=..\..\src\lib\WP3Parser.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP3Part.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3Resource.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3ResourceFork.h
 # End Source File
 # Begin Source File
 

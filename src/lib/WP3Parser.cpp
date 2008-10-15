@@ -28,6 +28,7 @@
 #include "WP3Part.h"
 #include "WP3ContentListener.h"
 #include "WP3StylesListener.h"
+#include "WP3ResourceFork.h"
 #include "libwpd_internal.h"
 #include "WPXTable.h"
 
@@ -38,6 +39,21 @@ WP3Parser::WP3Parser(WPXInputStream *input, WPXHeader *header, WPXEncryption *en
 
 WP3Parser::~WP3Parser()
 {
+}
+
+WP3ResourceFork * WP3Parser::getPrefixData(WPXInputStream *input, WPXEncryption *encryption)
+{
+	WP3ResourceFork *resourceFork = 0;
+	try
+	{
+		resourceFork = new WP3ResourceFork(input, encryption);
+		return resourceFork;
+	}
+	catch(FileException)
+	{
+		DELETEP(resourceFork);
+		throw FileException();
+	}
 }
 
 void WP3Parser::parse(WPXInputStream *input, WPXEncryption *encryption, WP3Listener *listener)
@@ -92,10 +108,13 @@ void WP3Parser::parse(WPXDocumentInterface *documentInterface)
 	WPXEncryption *encryption = getEncryption();
 	std::list<WPXPageSpan> pageList;
 	WPXTableList tableList;
+	WP3ResourceFork * resourceFork = 0;
 	std::vector<WP3SubDocument *> subDocuments;	
 	
 	try
  	{
+		resourceFork = getPrefixData(input, encryption);
+
 		// do a "first-pass" parse of the document
 		// gather table border information, page properties (per-page)
 		WP3StylesListener stylesListener(pageList, tableList, subDocuments);

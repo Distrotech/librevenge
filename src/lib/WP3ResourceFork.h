@@ -1,5 +1,5 @@
 /* libwpd
- * Copyright (C) 2004 Marc Maurer (uwog@uwog.net)
+ * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,30 +22,25 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP3PARSER_H
-#define WP3PARSER_H
+#ifndef WP3RESOURCEFORK_H
+#define WP3RESOURCEFORK_H
+#include "WP3Resource.h"
+#include <map>
+#include <vector>
 
-#include "WPXParser.h"
+class WPXInputStream;
+class WPXEncryption;
 
-class WPXDocumentInterface;
-class WP3Listener;
-class WP3ResourceFork;
-
-class WP3Parser : public WPXParser
+class WP3ResourceFork
 {
-public:
-	WP3Parser(WPXInputStream *input, WPXHeader *header, WPXEncryption *encryption);
-	~WP3Parser();
+ public:
+	WP3ResourceFork(WPXInputStream *input, WPXEncryption *encryption);
+	virtual ~WP3ResourceFork();
 
-	void parse(WPXDocumentInterface *documentInterface);
-	void parseSubDocument(WPXDocumentInterface *documentInterface);
-	
-	static void parseDocument(WPXInputStream *input, WPXEncryption *encryption, WP3Listener *listener);
+	std::pair< std::multimap<uint32_t, WP3Resource *>::const_iterator, std::multimap<uint32_t, WP3Resource *>::const_iterator > getResources(uint32_t type) const;
 
 private:
-	WP3ResourceFork * getPrefixData(WPXInputStream *input, WPXEncryption *encryption);
-
-	void parse(WPXInputStream *input, WPXEncryption *encryption, WP3Listener *listener);
+	std::multimap<uint32_t, WP3Resource *> m_resourcesMultimap;
 };
 
-#endif /* WP3PARSER_H */
+#endif /* WP3RESOURCEFORK_H */

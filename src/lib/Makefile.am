@@ -101,6 +101,8 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP3PageFormatGroup.cpp \
 	WP3Parser.cpp \
 	WP3Part.cpp \
+	WP3ResourceFork.cpp \
+	WP3Resource.cpp \
 	WP3SingleByteFunction.cpp \
 	WP3StylesListener.cpp \
 	WP3SubDocument.cpp \
@@ -267,6 +269,8 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP3PageFormatGroup.h \
 	WP3Parser.h \
 	WP3Part.h \
+	WP3ResourceFork.h \
+	WP3Resource.h \
 	WP3SingleByteFunction.h \
 	WP3StylesListener.h \
 	WP3SubDocument.h \
