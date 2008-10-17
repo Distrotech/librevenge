@@ -35,6 +35,7 @@
 #include "WP3HeaderFooterGroup.h"
 #include "WP3FootnoteEndnoteGroup.h"
 #include "WP3TablesGroup.h"
+#include "WP3WindowGroup.h"
 #include "libwpd_internal.h"
 #include <limits>
 
@@ -66,6 +67,8 @@ WP3VariableLengthGroup * WP3VariableLengthGroup::constructVariableLengthGroup(WP
 			return new WP3FootnoteEndnoteGroup(input, encryption);
 		case WP3_DISPLAY_GROUP:
 			return new WP3DisplayGroup(input, encryption);
+		case WP3_WINDOW_GROUP:
+			return new WP3WindowGroup(input, encryption);
 		default:
 			// this is an unhandled group, just skip it
 			return new WP3UnsupportedVariableLengthGroup(input, encryption);

@@ -1,3 +1,4 @@
+
 /* libwpd
  * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
@@ -24,8 +25,8 @@
 
 #include "WP3ResourceFork.h"
 #include "libwpd_internal.h"
-#include <stdio.h>
 #include <vector>
+#include <sstream>
 
 #define DEBUG_DATA
 
@@ -79,6 +80,18 @@ WP3ResourceFork::WP3ResourceFork(WPXInputStream *input, WPXEncryption *encryptio
 			WPD_DEBUG_MSG(("WP3Resource: Type 0x%.8x (%s), ID %i, name %s, attributes 0x%.2x\n", resourceType, resource->getResourceTypeString().cstr(),
 				resourceReferenceID, resourceName.cstr(), resourceAttributes));
 			input->seek(4, WPX_SEEK_CUR);
+#if 0
+			std::ostringstream filename;
+			filename << "binarydump" << m_resourcesMultimap.size() << ".bin";
+			FILE *f = fopen(filename.str().c_str(), "wb");
+			if (f)
+			{
+				WPXInputStream* tmpStream = const_cast<WPXInputStream *>(resourceData.getDataStream());
+				while (!tmpStream->atEOS())
+					fprintf(f, "%c", readU8(tmpStream, 0));
+				fclose(f);
+			}
+#endif
 		}
 		input->seek(position, WPX_SEEK_SET);
 	}

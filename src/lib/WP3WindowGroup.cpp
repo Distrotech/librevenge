@@ -1,9 +1,8 @@
 /* libwpd
- * Copyright (C) 2004 Marc Maurer (uwog@uwog.net)
- * Copyright (C) 2004-2005 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -23,10 +22,27 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
+#include "WP3WindowGroup.h"
+#include "WP3FileStructure.h"
+#include "WPXFileStructure.h"
+#include "libwpd_internal.h"
 #include "WP3Listener.h"
-#include "WP3ResourceFork.h"
 
-WP3Listener::WP3Listener() :
-	m_resourceFork()
+WP3WindowGroup::WP3WindowGroup(WPXInputStream *input, WPXEncryption *encryption) :
+	WP3VariableLengthGroup()
 {
+	_read(input, encryption);
+}
+
+WP3WindowGroup::~WP3WindowGroup()
+{
+}
+
+void WP3WindowGroup::_readContents(WPXInputStream * /* input */, WPXEncryption * /* encryption */)
+{
+}
+
+void WP3WindowGroup::parse(WP3Listener * /*listener*/)
+{
+	WPD_DEBUG_MSG(("WordPerfect: handling a Window group\n"));
 }

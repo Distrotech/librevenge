@@ -331,6 +331,10 @@ SOURCE=..\..\src\lib\WP3VariableLengthGroup.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP3WindowGroup.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP42ContentListener.cpp
 # End Source File
 # Begin Source File
@@ -1004,6 +1008,10 @@ SOURCE=..\..\src\lib\WP3UnsupportedVariableLengthGroup.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP3VariableLengthGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3WindowGroup.h
 # End Source File
 # Begin Source File
 

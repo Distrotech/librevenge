@@ -88,6 +88,14 @@ void WPXBinaryData::append(const unsigned char *buffer, const size_t bufferSize 
 		m_binaryDataImpl->m_buf.push_back(buffer[i]);
 }
 
+void WPXBinaryData::append(const WPXInputStream *input, WPXEncryption *encryption, const size_t inputSize )
+{
+	size_t previousSize = m_binaryDataImpl->m_buf.size();
+	m_binaryDataImpl->m_buf.reserve(previousSize + inputSize);
+	for (size_t i = 0; i < inputSize; i++)
+		m_binaryDataImpl->m_buf.push_back((unsigned char)readU8(const_cast<WPXInputStream *>(input), encryption));
+}
+
 void WPXBinaryData::append(const unsigned char c)
 {
 	m_binaryDataImpl->m_buf.push_back(c);

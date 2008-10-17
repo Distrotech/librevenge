@@ -43,6 +43,7 @@ public:
 
 	void append(const WPXBinaryData &data);
 	void append(const unsigned char *buffer, const size_t bufferSize);
+	void append(const WPXInputStream *input, WPXEncryption *encryption, const size_t inputSize);
 	void append(const unsigned char c);
 	void clear();
 	

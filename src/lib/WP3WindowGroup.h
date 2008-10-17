@@ -1,8 +1,8 @@
 /* libwpd
- * Copyright (C) 2004 Marc Maurer (uwog@uwog.net)
+ * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
  *  
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2 of the License, or (at your option) any later version.
  *
@@ -22,30 +22,23 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WP3PARSER_H
-#define WP3PARSER_H
+#ifndef WP3WINDOWGROUP_H
+#define WP3WINDOWGROUP_H
 
-#include "WPXParser.h"
+#include "WP3VariableLengthGroup.h"
+#include "libwpd_types.h"
+#include <vector>
 
-class WPXDocumentInterface;
+class WPXInputStream;
 class WP3Listener;
-class WP3ResourceFork;
 
-class WP3Parser : public WPXParser
+class WP3WindowGroup : public WP3VariableLengthGroup
 {
-public:
-	WP3Parser(WPXInputStream *input, WPXHeader *header, WPXEncryption *encryption);
-	~WP3Parser();
-
-	void parse(WPXDocumentInterface *documentInterface);
-	void parseSubDocument(WPXDocumentInterface *documentInterface);
-	
-	static void parseDocument(WPXInputStream *input, WPXEncryption *encryption, WP3Listener *listener);
-
-private:
-	WP3ResourceFork * getResourceFork(WPXInputStream *input, WPXEncryption *encryption);
-
-	void parse(WPXInputStream *input, WPXEncryption *encryption, WP3Listener *listener);
+ public:
+	WP3WindowGroup(WPXInputStream *input, WPXEncryption *encryption);	
+	~WP3WindowGroup();
+	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
+	void parse(WP3Listener *listener);
 };
 
-#endif /* WP3PARSER_H */
+#endif /* WP3WindowGroup_H */

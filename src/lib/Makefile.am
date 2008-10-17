@@ -112,6 +112,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP3UnsupportedFixedLengthGroup.cpp \
 	WP3UnsupportedVariableLengthGroup.cpp \
 	WP3VariableLengthGroup.cpp \
+	WP3WindowGroup.cpp \
 	WP42ContentListener.cpp \
 	WP42FileStructure.cpp \
 	WP42HeaderFooterGroup.cpp \
@@ -280,6 +281,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP3UnsupportedFixedLengthGroup.h \
 	WP3UnsupportedVariableLengthGroup.h \
 	WP3VariableLengthGroup.h \
+	WP3WindowGroup.h \
 	WP42ContentListener.h \
 	WP42FileStructure.h \
 	WP42HeaderFooterGroup.h \

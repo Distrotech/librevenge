@@ -30,6 +30,7 @@
 #include <vector>
 
 class WP3SubDocument;
+class WP3ResourceFork;
 
 class WP3Listener
 {
@@ -80,6 +81,12 @@ public:
 	virtual void leftIndent(const float offset) = 0;
 	virtual void leftRightIndent() = 0;
 	virtual void leftRightIndent(const float offset) = 0;
+
+	void setResourceFork(WP3ResourceFork *resourceFork) { m_resourceFork = resourceFork; }
+	const WP3ResourceFork *getResourceFork() const { return m_resourceFork; }
+
+private:
+	WP3ResourceFork *m_resourceFork;
 };
 
 #endif /* WP3LISTENER_H */
