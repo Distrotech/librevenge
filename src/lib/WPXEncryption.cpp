@@ -31,14 +31,18 @@
 WPXEncryption::WPXEncryption(const char *password, const size_t encryptionStartOffset) :
 	m_buffer(NULL),
 	m_password(),
-	m_encryptionStartOffset(encryptionStartOffset)
+	m_encryptionStartOffset(encryptionStartOffset),
+	m_encryptionMaskBase(0)
 {
 	if (password)
+	{
 		for (size_t i = 0; i < strlen(password); i++)
 			if (password[i] >= 'a' && password[i] <= 'z')
 				m_password.append(password[i] - 'a' + 'A');
 			else
 				m_password.append(password[i]);
+		m_encryptionMaskBase = m_password.len() + 1;
+	}
 }
 
 WPXEncryption::~WPXEncryption()
@@ -79,7 +83,7 @@ const unsigned char * WPXEncryption::readAndDecrypt(WPXInputStream *input, size_
 		else
 		{
 			size_t passwordOffset = (readStartPosition + i - m_encryptionStartOffset) % m_password.len();
-			unsigned char encryptionMask = (unsigned char)(m_password.len() + 1 + readStartPosition + i - m_encryptionStartOffset);
+			unsigned char encryptionMask = (unsigned char)(m_encryptionMaskBase + readStartPosition + i - m_encryptionStartOffset);
 			m_buffer[i] = encryptedBuffer[i] ^ ( m_password.cstr()[passwordOffset] ^ encryptionMask);
 		}
 	}

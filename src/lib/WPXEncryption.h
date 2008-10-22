@@ -41,12 +41,19 @@ public:
 	const unsigned char *readAndDecrypt(WPXInputStream *input, size_t numBytes, size_t &numBytesRead);
 	uint16_t getCheckSum() const;
 	
-	void setEncryptionStartOffset(const size_t encryptionStartOffset) { m_encryptionStartOffset = encryptionStartOffset; }
+	void setEncryptionStartOffset(size_t encryptionStartOffset) { m_encryptionStartOffset = encryptionStartOffset; }
+	size_t getEncryptionStartOffset() const { return m_encryptionStartOffset; }
+	
+	void setEncryptionMaskBase(unsigned char encryptionMaskBase) { m_encryptionMaskBase = encryptionMaskBase; }
+	unsigned char getEncryptionMaskBase() const { return m_encryptionMaskBase; }
+	
+	const WPXString& getEncryptionPassword() const { return m_password; }
 
 private:
 	unsigned char *m_buffer;
 	WPXString m_password;
 	size_t m_encryptionStartOffset;
+	unsigned char m_encryptionMaskBase;
 };
 
 #endif /* WPXENCRYPTION_H */

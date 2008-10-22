@@ -73,7 +73,29 @@ WP3ResourceFork::WP3ResourceFork(WPXInputStream *input, WPXEncryption *encryptio
 			unsigned position3 = input->tell();
 			input->seek(offsetToData, WPX_SEEK_SET);
 			uint32_t resourceDataSize = readU32(input, encryption, true);
+
+			size_t oldEncryptionOffset = 0;
+			unsigned char oldEncryptionMaskBase = 0;
+			if (encryption)
+			{
+				oldEncryptionOffset = encryption->getEncryptionStartOffset();
+				oldEncryptionMaskBase = encryption->getEncryptionMaskBase();
+				/* WBOX resource and PICT resource for the time being */
+				if (resourceType == 0x57424f58 || resourceType == 0x50494354)
+				{
+					encryption->setEncryptionStartOffset(input->tell());
+					encryption->setEncryptionMaskBase(0);
+				}
+			}
+
 			WPXBinaryData resourceData(input, encryption, (size_t)resourceDataSize);
+
+			if (encryption)
+			{
+				encryption->setEncryptionStartOffset(oldEncryptionOffset);
+				encryption->setEncryptionMaskBase(oldEncryptionMaskBase);
+			}
+
 			input->seek(position3, WPX_SEEK_SET);
 			WP3Resource *resource = new WP3Resource(resourceType, resourceReferenceID, resourceName, resourceAttributes, resourceData);
 			m_resourcesMultimap.insert(std::multimap<uint32_t, WP3Resource *>::value_type( resourceType, resource ) );
@@ -81,12 +103,31 @@ WP3ResourceFork::WP3ResourceFork(WPXInputStream *input, WPXEncryption *encryptio
 				resourceReferenceID, resourceName.cstr(), resourceAttributes));
 			input->seek(4, WPX_SEEK_CUR);
 #if 0
+			WPXInputStream *tmpBinaryStream = const_cast<WPXInputStream *>(resourceData.getDataStream());
+			int indexNumber = 0;
+			while (!tmpBinaryStream->atEOS())
+			{
+				if (!(indexNumber % 16))
+					printf("%.8x: ", indexNumber);
+				else if (!(indexNumber % 8))
+					printf("| ");
+				printf("%.2x ", readU8(tmpBinaryStream, 0));
+				indexNumber++;
+				if (!(indexNumber % 16))
+					printf("\n");
+			}
+			printf("\n");
+
 			std::ostringstream filename;
 			filename << "binarydump" << m_resourcesMultimap.size() << ".bin";
 			FILE *f = fopen(filename.str().c_str(), "wb");
+			WPXBinaryData tmpResData;
+			for (int tmpIndex = 0; tmpIndex < 512; tmpIndex++)
+				tmpResData.append((const unsigned char)0);
+			tmpResData.append(resourceData);
 			if (f)
 			{
-				WPXInputStream* tmpStream = const_cast<WPXInputStream *>(resourceData.getDataStream());
+				WPXInputStream* tmpStream = const_cast<WPXInputStream *>(tmpResData.getDataStream());
 				while (!tmpStream->atEOS())
 					fprintf(f, "%c", readU8(tmpStream, 0));
 				fclose(f);
