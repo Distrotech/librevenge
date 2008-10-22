@@ -34,11 +34,15 @@ class WP3Listener;
 
 class WP3WindowGroup : public WP3VariableLengthGroup
 {
- public:
+public:
 	WP3WindowGroup(WPXInputStream *input, WPXEncryption *encryption);	
 	~WP3WindowGroup();
 	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 	void parse(WP3Listener *listener);
+
+private:
+	float m_width, m_height;
+	uint32_t m_resourceID;
 };
 
 #endif /* WP3WindowGroup_H */

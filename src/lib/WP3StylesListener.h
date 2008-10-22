@@ -40,52 +40,53 @@ public:
 
 	void startDocument() {}
 	void startSubDocument() {}
-	void insertCharacter(const uint16_t /* character */) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	void insertCharacter(uint16_t /* character */) { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void insertTab() { if (!isUndoOn()) m_currentPageHasContent = true; }
-	void insertTab(const uint8_t /* tabType */, const float /* tabPosition */) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	void insertTab(uint8_t /* tabType */, float /* tabPosition */) { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void insertEOL() { if (!isUndoOn()) m_currentPageHasContent = true; }
- 	void insertBreak(const uint8_t breakType);
-	void attributeChange(const bool /* isOn */, const uint8_t /* attribute */) {}
-	void lineSpacingChange(const float /* lineSpacing */) {}
-	void justificationChange(const uint8_t /* justification */) {}
-	void pageMarginChange(const uint8_t side, const uint16_t margin);
-	void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation);
-	void marginChange(const uint8_t side, const uint16_t margin);
-	void indentFirstLineChange(const int16_t /* offset */) {}
-	void setTabs(const bool /* isRelative */, const std::vector<WPXTabStop> /* tabStops */) {}
-	void columnChange(const WPXTextColumnType /* columnType */, const uint8_t /* numColumns */,
+ 	void insertBreak(uint8_t breakType);
+	void attributeChange(bool /* isOn */, uint8_t /* attribute */) {}
+	void lineSpacingChange(float /* lineSpacing */) {}
+	void justificationChange(uint8_t /* justification */) {}
+	void pageMarginChange(uint8_t side, uint16_t margin);
+	void pageFormChange(uint16_t length, uint16_t width, WPXFormOrientation orientation);
+	void marginChange(uint8_t side, uint16_t margin);
+	void indentFirstLineChange(int16_t /* offset */) {}
+	void setTabs(bool /* isRelative */, const std::vector<WPXTabStop> /* tabStops */) {}
+	void columnChange(WPXTextColumnType /* columnType */, uint8_t /* numColumns */,
 			const std::vector<float> & /* columnWidth */, const std::vector<bool> & /* isFixedWidth */) {}
 	void endDocument();
 	void endSubDocument();
 
-	void defineTable(const uint8_t /* position */, const uint16_t /* leftOffset */) {}
-	void addTableColumnDefinition(const uint32_t /* width */, const uint32_t /* leftGutter */, const uint32_t /* rightGutter */,
-					const uint32_t /* attributes */, const uint8_t /* alignment */) {}
+	void defineTable(uint8_t /* position */, uint16_t /* leftOffset */) {}
+	void addTableColumnDefinition(uint32_t /* width */, uint32_t /* leftGutter */, uint32_t /* rightGutter */,
+					uint32_t /* attributes */, uint8_t /* alignment */) {}
 	void startTable();
  	void insertRow();
  	void insertCell();
  	void closeCell() {}
 	void closeRow() {}
-	void setTableCellSpan(const uint16_t /* colSpan */, const uint16_t /* rowSpan */) {}
+	void setTableCellSpan(uint16_t /* colSpan */, uint16_t /* rowSpan */) {}
 	void setTableCellFillColor(const RGBSColor * /* cellFillColor */) {}
  	void endTable() {}
-	void undoChange(const uint8_t undoType, const uint16_t undoLevel);
+	void undoChange(uint8_t undoType, uint16_t undoLevel);
 	void setTextColor(const RGBSColor * /* fontColor */) {}
 	void setTextFont(const WPXString& /* fontName */) {}
-	void setFontSize(const uint16_t /* fontSize */) {}
+	void setFontSize(uint16_t /* fontSize */) {}
 	void insertPageNumber(const WPXString & /* pageNumber */) {}
 	void insertNoteReference(const WPXString & /* noteReference */) {}
-	void insertNote(const WPXNoteType /* noteType */, WP3SubDocument * /* subDocument */) { if (!isUndoOn()) m_currentPageHasContent = true; }
-	void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, WP3SubDocument *subDocument);
-	void suppressPage(const uint16_t suppressCode);
+	void insertNote(WPXNoteType /* noteType */, WP3SubDocument * /* subDocument */) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	void headerFooterGroup(uint8_t headerFooterType, uint8_t occurenceBits, WP3SubDocument *subDocument);
+	void suppressPage(uint16_t suppressCode);
 	void backTab() { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void leftIndent() {}
-	void leftIndent(const float /* offset */) {}
+	void leftIndent(float /* offset */) {}
 	void leftRightIndent() {}
-	void leftRightIndent(const float /* offset */) {}
+	void leftRightIndent(float /* offset */) {}
+	void insertPicture(float /* height */, float /* width */, const WPXBinaryData & /* binaryData */) {}
 
 protected:
-	void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
+	void _handleSubDocument(const WPXSubDocument *subDocument, bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
 
 private:
 	WP3StylesListener(const WP3StylesListener&);

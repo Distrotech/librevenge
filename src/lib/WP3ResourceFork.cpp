@@ -31,7 +31,7 @@
 #define DEBUG_DATA
 
 WP3ResourceFork::WP3ResourceFork(WPXInputStream *input, WPXEncryption *encryption) :
-	m_resourcesMultimap()
+	m_resourcesTypeMultimap(), m_resourcesIDMultimap()
 {
 	input->seek(16, WPX_SEEK_SET);
 	uint32_t dataOffset = readU32(input, encryption, true);
@@ -81,7 +81,7 @@ WP3ResourceFork::WP3ResourceFork(WPXInputStream *input, WPXEncryption *encryptio
 				oldEncryptionOffset = encryption->getEncryptionStartOffset();
 				oldEncryptionMaskBase = encryption->getEncryptionMaskBase();
 				/* WBOX resource and PICT resource for the time being */
-				if (resourceType == 0x57424f58 || resourceType == 0x50494354)
+				if (resourceType == 0x57424f58 /* WBOX */ || resourceType == 0x50494354 /* PICT */)
 				{
 					encryption->setEncryptionStartOffset(input->tell());
 					encryption->setEncryptionMaskBase(0);
@@ -98,7 +98,8 @@ WP3ResourceFork::WP3ResourceFork(WPXInputStream *input, WPXEncryption *encryptio
 
 			input->seek(position3, WPX_SEEK_SET);
 			WP3Resource *resource = new WP3Resource(resourceType, resourceReferenceID, resourceName, resourceAttributes, resourceData);
-			m_resourcesMultimap.insert(std::multimap<uint32_t, WP3Resource *>::value_type( resourceType, resource ) );
+			m_resourcesTypeMultimap.insert(std::multimap<uint32_t, WP3Resource *>::value_type( resourceType, resource ) );
+			m_resourcesIDMultimap.insert(std::multimap<uint32_t, WP3Resource *>::value_type( resourceReferenceID, resource ) );
 			WPD_DEBUG_MSG(("WP3Resource: Type 0x%.8x (%s), ID %i, name %s, attributes 0x%.2x\n", resourceType, resource->getResourceTypeString().cstr(),
 				resourceReferenceID, resourceName.cstr(), resourceAttributes));
 			input->seek(4, WPX_SEEK_CUR);
@@ -140,4 +141,37 @@ WP3ResourceFork::WP3ResourceFork(WPXInputStream *input, WPXEncryption *encryptio
 
 WP3ResourceFork::~WP3ResourceFork()
 {
+	// delete the pointers from one of the multimaps.
 }
+
+std::pair< std::multimap<uint32_t, WP3Resource *>::const_iterator, std::multimap<uint32_t, WP3Resource *>::const_iterator > WP3ResourceFork::getResourcesByType(uint32_t type) const
+{
+	std::pair< std::multimap<uint32_t, WP3Resource *>::const_iterator, std::multimap<uint32_t, WP3Resource *>::const_iterator > tempPair
+		= m_resourcesTypeMultimap.equal_range(type);
+
+ 	return tempPair;
+}
+
+std::pair< std::multimap<uint32_t, WP3Resource *>::const_iterator, std::multimap<uint32_t, WP3Resource *>::const_iterator > WP3ResourceFork::getResourcesByID(uint32_t ID) const
+{
+	std::pair< std::multimap<uint32_t, WP3Resource *>::const_iterator, std::multimap<uint32_t, WP3Resource *>::const_iterator > tempPair
+		= m_resourcesIDMultimap.equal_range(ID);
+
+ 	return tempPair;
+}
+
+const WP3Resource * WP3ResourceFork::getResource(uint32_t type, uint32_t ID) const
+{
+	std::pair< std::multimap<uint32_t, WP3Resource *>::const_iterator, std::multimap<uint32_t, WP3Resource *>::const_iterator > tempPair
+		= m_resourcesTypeMultimap.equal_range(type);
+		
+	if (tempPair.first == m_resourcesTypeMultimap.end())
+		return NULL;
+	
+	for (std::multimap<uint32_t, WP3Resource *>::const_iterator iter = tempPair.first; iter != tempPair.second; iter++)
+		if ((*iter).second->getResourceReferenceID() == type )
+			return (*iter).second;
+	
+	return NULL;
+}
+

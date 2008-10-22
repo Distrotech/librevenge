@@ -29,7 +29,10 @@
 #include "WP3Listener.h"
 
 WP3WindowGroup::WP3WindowGroup(WPXInputStream *input, WPXEncryption *encryption) :
-	WP3VariableLengthGroup()
+	WP3VariableLengthGroup(),
+	m_width(0.0f),
+	m_height(0.0f),
+	m_resourceID(0)
 {
 	_read(input, encryption);
 }
@@ -38,8 +41,35 @@ WP3WindowGroup::~WP3WindowGroup()
 {
 }
 
-void WP3WindowGroup::_readContents(WPXInputStream * /* input */, WPXEncryption * /* encryption */)
+void WP3WindowGroup::_readContents(WPXInputStream * input, WPXEncryption * encryption)
 {
+	switch (getSubGroup())
+	{
+	case WP3_WINDOW_GROUP_FIGURE_BOX_FUNCTION:
+	case WP3_WINDOW_GROUP_TABLE_BOX_FUNCTION:
+	case WP3_WINDOW_GROUP_TEXT_BOX_FUNCTION:
+	case WP3_WINDOW_GROUP_USER_BOX_FUNCTION:
+	case WP3_WINDOW_GROUP_EQUATION_BOX_FUNCTION:
+	case WP3_WINDOW_GROUP_HTML_IMAGE_BOX_FUNCTION:
+		{
+			input->seek(14, WPX_SEEK_CUR);
+			readU16(input, encryption, true); // picture flags
+			input->seek(2, WPX_SEEK_CUR);
+			readU8(input, encryption); // left align column
+			readU8(input, encryption); // right align column
+			input->seek(8, WPX_SEEK_CUR);
+			m_width = fixedPointToFloat(readU32(input, encryption, true));
+			m_height = fixedPointToFloat(readU32(input, encryption, true));
+			m_resourceID = readU16(input, encryption, true);
+		}
+		break;
+
+	case WP3_WINDOW_GROUP_HORIZONTAL_LINE:
+		break;
+		
+	default: /* something else we don't support, since it isn't in the docs */
+		break;
+	}
 }
 
 void WP3WindowGroup::parse(WP3Listener * /*listener*/)

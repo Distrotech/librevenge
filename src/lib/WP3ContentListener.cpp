@@ -782,6 +782,27 @@ void WP3ContentListener::leftRightIndent(const float offset)
 	}
 }
 
+void WP3ContentListener::insertPicture(float height, float width, const WPXBinaryData &binaryData)
+{
+	if (!isUndoOn())
+	{
+		if (!m_ps->m_isSpanOpened)
+			_openSpan();
+
+		WPXPropertyList propList;
+		propList.insert("svg:width", (float)((double)width/72.0f));
+		propList.insert("svg:height", (float)((double)height/72.0f));
+		propList.insert("text:anchor-type", "as-char");
+		m_documentInterface->openFrame(propList);
+		
+		propList.clear();
+		propList.insert("libwpd:mimetype", "image/pict");
+		m_documentInterface->insertBinaryObject(propList, &binaryData);
+		
+		m_documentInterface->closeFrame();
+	}
+}
+
 void WP3ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter,
 						WPXTableList /* tableList */, int /* nextTableIndice */)
 {
