@@ -119,7 +119,7 @@ WP3ResourceFork::WP3ResourceFork(WPXInputStream *input, WPXEncryption *encryptio
 			}
 			printf("\n");
 #endif
-#if 1
+#if 0
 			std::ostringstream filename;
 			filename << "binarydump" << m_resourcesTypeMultimap.size() << ".bin";
 			FILE *f = fopen(filename.str().c_str(), "wb");
