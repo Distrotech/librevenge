@@ -118,9 +118,10 @@ WP3ResourceFork::WP3ResourceFork(WPXInputStream *input, WPXEncryption *encryptio
 					printf("\n");
 			}
 			printf("\n");
-
+#endif
+#if 1
 			std::ostringstream filename;
-			filename << "binarydump" << m_resourcesMultimap.size() << ".bin";
+			filename << "binarydump" << m_resourcesTypeMultimap.size() << ".bin";
 			FILE *f = fopen(filename.str().c_str(), "wb");
 			WPXBinaryData tmpResData;
 			for (int tmpIndex = 0; tmpIndex < 512; tmpIndex++)
@@ -169,7 +170,7 @@ const WP3Resource * WP3ResourceFork::getResource(uint32_t type, uint32_t ID) con
 		return NULL;
 	
 	for (std::multimap<uint32_t, WP3Resource *>::const_iterator iter = tempPair.first; iter != tempPair.second; iter++)
-		if ((*iter).second->getResourceReferenceID() == type )
+		if ((*iter).second->getResourceReferenceID() == ID )
 			return (*iter).second;
 	
 	return NULL;

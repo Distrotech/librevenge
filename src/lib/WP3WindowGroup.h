@@ -41,6 +41,7 @@ public:
 	void parse(WP3Listener *listener);
 
 private:
+	uint8_t m_boxType;
 	float m_width, m_height;
 	uint32_t m_resourceID;
 };

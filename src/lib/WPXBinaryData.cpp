@@ -127,10 +127,10 @@ const WPXString WPXBinaryData::getBase64Data() const
 	static const char* base64Chars =
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 	char tempCharsToEncode[3];
-	const size_t len = size();
-	size_t i = 0; unsigned j = 0; size_t modifiedLen;
+	const long len = size();
+	long i = 0; unsigned j = 0; long modifiedLen;
 	if (len % 3)
-		modifiedLen = 3 * ((size_t)(len / 3) + 1);
+		modifiedLen = 3 * ((long)(len / 3) + 1);
 	else
 		modifiedLen = len;
 	
@@ -145,6 +145,7 @@ const WPXString WPXBinaryData::getBase64Data() const
 			tempCharsToEncode[j++] = '\0';
 			shouldIexit = true;
 		}
+
 		if (shouldIexit)
 		{
 			if (j == 3)
