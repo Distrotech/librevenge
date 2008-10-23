@@ -92,18 +92,24 @@ void WP3WindowGroup::parse(WP3Listener * listener)
 	case WP3_WINDOW_GROUP_HTML_IMAGE_BOX_FUNCTION:
 		if (m_boxType == 0x02)
 		{
-			WPXBinaryData tmpBinaryData;
+			WPXBinaryData tmpWBOXData;
 			for (int i=0; i < 512; i++)
-				tmpBinaryData.append((const unsigned char)0);
-			if (listener->getResourceFork()->getResource(0x57424f58, m_resourceID))
+				tmpWBOXData.append((const unsigned char)0);
+			if (listener->getResourceFork()->getResource(0x57424f58, m_resourceID)) // WBOX resource
 			{
-				tmpBinaryData.append(listener->getResourceFork()->getResource(0x57424f58, m_resourceID)->getResourceData());
-				listener->insertPicture(m_height, m_width, tmpBinaryData);
+				tmpWBOXData.append(listener->getResourceFork()->getResource(0x57424f58, m_resourceID)->getResourceData());
+				listener->insertPicture(m_height, m_width, tmpWBOXData);
 			}
-			else if (listener->getResourceFork()->getResource(0x50494354, m_resourceID))
+		}
+		else if (m_boxType == 0x01 || m_boxType == 0x03)
+		{
+			WPXBinaryData tmpPICTData;
+			for (int i=0; i < 512; i++)
+				tmpPICTData.append((const unsigned char)0);
+			if (listener->getResourceFork()->getResource(0x50494354, m_resourceID)) // replacement picture in PICT format
 			{
-				tmpBinaryData.append(listener->getResourceFork()->getResource(0x50494354, m_resourceID)->getResourceData());
-				listener->insertPicture(m_height, m_width, tmpBinaryData);
+				tmpPICTData.append(listener->getResourceFork()->getResource(0x50494354, m_resourceID)->getResourceData());
+				listener->insertPicture(m_height, m_width, tmpPICTData);
 			}
 		}
 		break;

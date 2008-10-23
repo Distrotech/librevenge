@@ -149,6 +149,8 @@ void WP3Parser::parse(WPXDocumentInterface *documentInterface)
 			if (*iterSubDoc)
 				delete *iterSubDoc;
 		}
+		
+		delete resourceFork;
 	}
 	catch(FileException)
 	{
@@ -159,6 +161,8 @@ void WP3Parser::parse(WPXDocumentInterface *documentInterface)
 			if (*iterSubDoc)
 				delete *iterSubDoc;
 		}
+		
+		delete resourceFork;
 
 		throw FileException();
 	}	
