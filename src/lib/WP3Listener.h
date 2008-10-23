@@ -82,7 +82,8 @@ public:
 	virtual void leftIndent(float offset) = 0;
 	virtual void leftRightIndent() = 0;
 	virtual void leftRightIndent(float offset) = 0;
-	virtual void insertPicture(float height, float width, const WPXBinaryData &binaryData) = 0;
+	virtual void insertPicture(float height, float width, uint8_t leftColumn, uint8_t rightColumn,
+			uint16_t figureFlags, const WPXBinaryData &binaryData) = 0;
 
 	void setResourceFork(WP3ResourceFork *resourceFork) { m_resourceFork = resourceFork; }
 	const WP3ResourceFork *getResourceFork() const { return m_resourceFork; }

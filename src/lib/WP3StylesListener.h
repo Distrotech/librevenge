@@ -83,7 +83,8 @@ public:
 	void leftIndent(float /* offset */) {}
 	void leftRightIndent() {}
 	void leftRightIndent(float /* offset */) {}
-	void insertPicture(float /* height */, float /* width */, const WPXBinaryData & /* binaryData */) {}
+	void insertPicture(float /* height */, float /* width */, uint8_t /* leftColumn */, uint8_t /* rightColumn */,
+			uint16_t /* figureFlags */, const WPXBinaryData & /* binaryData */) {}
 
 protected:
 	void _handleSubDocument(const WPXSubDocument *subDocument, bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);

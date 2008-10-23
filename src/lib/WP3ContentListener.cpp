@@ -782,7 +782,8 @@ void WP3ContentListener::leftRightIndent(const float offset)
 	}
 }
 
-void WP3ContentListener::insertPicture(float height, float width, const WPXBinaryData &binaryData)
+void WP3ContentListener::insertPicture(float height, float width, uint8_t /* leftColumn */, uint8_t /* rightColumn */,
+			uint16_t /* figureFlags */, const WPXBinaryData &binaryData)
 {
 	if (!isUndoOn())
 	{
