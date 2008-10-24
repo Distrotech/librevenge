@@ -29,6 +29,7 @@
 #include "WP3Listener.h"
 #include "WP3ResourceFork.h"
 #include "WPXBinaryData.h"
+#include "WP3SubDocument.h"
 
 WP3WindowGroup::WP3WindowGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	WP3VariableLengthGroup(),
@@ -117,6 +118,13 @@ void WP3WindowGroup::parse(WP3Listener * listener)
 		}
 		else if (m_boxType == 0x00)
 		{
+			WPXBinaryData tmpWBOXData;
+			if (listener->getResourceFork()->getResource(0x57424f58, m_resourceID)) // WBOX resource
+			{
+				tmpWBOXData = listener->getResourceFork()->getResource(0x57424f58, m_resourceID)->getResourceData();
+				WP3SubDocument tmpWBOXSubDocument(const_cast< unsigned char *>(tmpWBOXData.getDataBuffer()), (unsigned)tmpWBOXData.size());
+				// listener->insertTextBox(m_height, m_width, m_leftColumn, m_rightColumn, m_figureFlags, &tmpWBOXSubDocument);
+			}
 		}
 		break;
 
