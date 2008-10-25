@@ -26,6 +26,7 @@
 #define WP3WINDOWGROUP_H
 
 #include "WP3VariableLengthGroup.h"
+#include "WP3SubDocument.h"
 #include "libwpd_types.h"
 #include <vector>
 
@@ -45,6 +46,7 @@ private:
 	uint8_t m_leftColumn, m_rightColumn, m_boxType;
 	float m_width, m_height;
 	uint32_t m_resourceID;
+	WP3SubDocument *m_subDocument, *m_caption;
 };
 
 #endif /* WP3WindowGroup_H */

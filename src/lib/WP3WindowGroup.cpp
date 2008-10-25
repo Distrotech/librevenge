@@ -29,7 +29,6 @@
 #include "WP3Listener.h"
 #include "WP3ResourceFork.h"
 #include "WPXBinaryData.h"
-#include "WP3SubDocument.h"
 
 WP3WindowGroup::WP3WindowGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	WP3VariableLengthGroup(),
@@ -39,13 +38,19 @@ WP3WindowGroup::WP3WindowGroup(WPXInputStream *input, WPXEncryption *encryption)
 	m_boxType(0xFF),
 	m_width(0.0f),
 	m_height(0.0f),
-	m_resourceID(0)
+	m_resourceID(0),
+	m_subDocument(NULL),
+	m_caption(NULL)
 {
 	_read(input, encryption);
 }
 
 WP3WindowGroup::~WP3WindowGroup()
 {
+	if (m_subDocument)
+		delete m_subDocument;
+	if (m_caption)
+		delete m_caption;
 }
 
 void WP3WindowGroup::_readContents(WPXInputStream * input, WPXEncryption * encryption)
@@ -71,6 +76,15 @@ void WP3WindowGroup::_readContents(WPXInputStream * input, WPXEncryption * encry
 			input->seek(8, WPX_SEEK_CUR);
 			m_width = fixedPointToFloat(readU32(input, encryption, true));
 			m_height = fixedPointToFloat(readU32(input, encryption, true));
+			input->seek(9, WPX_SEEK_CUR);
+			uint8_t tmpNumSubRect = readU8(input, encryption);
+			input->seek(tmpNumSubRect * 8, WPX_SEEK_CUR);
+			uint16_t tmpBoxCaptionSize = readU16(input, encryption, true);
+			if (tmpBoxCaptionSize)
+				m_caption = new WP3SubDocument(input, encryption, tmpBoxCaptionSize);
+			uint16_t tmpTextBoxLength = readU16(input, encryption, true);
+			if (tmpTextBoxLength)
+				m_subDocument = new WP3SubDocument(input, encryption, tmpTextBoxLength);
 		}
 		break;
 
@@ -118,13 +132,8 @@ void WP3WindowGroup::parse(WP3Listener * listener)
 		}
 		else if (m_boxType == 0x00)
 		{
-			WPXBinaryData tmpWBOXData;
-			if (listener->getResourceFork()->getResource(0x57424f58, m_resourceID)) // WBOX resource
-			{
-				tmpWBOXData = listener->getResourceFork()->getResource(0x57424f58, m_resourceID)->getResourceData();
-				WP3SubDocument tmpWBOXSubDocument(const_cast< unsigned char *>(tmpWBOXData.getDataBuffer()), (unsigned)tmpWBOXData.size());
-				// listener->insertTextBox(m_height, m_width, m_leftColumn, m_rightColumn, m_figureFlags, &tmpWBOXSubDocument);
-			}
+			if (m_subDocument)
+				listener->insertTextBox(m_height, m_width, m_leftColumn, m_rightColumn, m_figureFlags, m_subDocument);
 		}
 		break;
 

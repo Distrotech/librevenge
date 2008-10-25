@@ -100,6 +100,8 @@ public:
 	void leftRightIndent(float offset);
 	void insertPicture(float height, float width, uint8_t leftColumn, uint8_t rightColumn,
 			uint16_t figureFlags, const WPXBinaryData &binaryData);
+	void insertTextBox(float height, float width, uint8_t leftColumn, uint8_t rightColumn,
+			uint16_t figureFlags, WP3SubDocument *subDocument);
 	
 protected:
 	void _handleSubDocument(const WPXSubDocument *subDocument, bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
