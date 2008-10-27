@@ -612,7 +612,7 @@ void WP3ContentListener::insertNoteReference(const WPXString &noteReference)
 	}
 }
 
-void WP3ContentListener::insertNote(const WPXNoteType noteType, WP3SubDocument *subDocument)
+void WP3ContentListener::insertNote(const WPXNoteType noteType, const WP3SubDocument *subDocument)
 {
 	if (!isUndoOn() && !m_ps->m_isNote)
 	{
@@ -636,7 +636,7 @@ void WP3ContentListener::insertNote(const WPXNoteType noteType, WP3SubDocument *
 		else
 			m_documentInterface->openEndnote(propList);
 
-		handleSubDocument(subDocument, false, false, m_parseState->m_tableList, 0);
+		handleSubDocument(subDocument, WPX_SUBDOCUMENT_NOTE, m_parseState->m_tableList, 0);
 
 		if (noteType == FOOTNOTE)
 			m_documentInterface->closeFootnote();
@@ -805,7 +805,7 @@ void WP3ContentListener::insertPicture(float height, float width, uint8_t /* lef
 }
 
 void WP3ContentListener::insertTextBox(float height, float width, uint8_t /* leftColumn */, uint8_t /* rightColumn */,
-			uint16_t /* figureFlags */, WP3SubDocument * subDocument)
+			uint16_t /* figureFlags */, const WP3SubDocument * subDocument, const WP3SubDocument *caption)
 {
 	if (!isUndoOn())
 	{
@@ -821,14 +821,17 @@ void WP3ContentListener::insertTextBox(float height, float width, uint8_t /* lef
 		propList.clear();
 		propList.insert("libwpd:mimetype", "image/pict");
 
-		if (subDocument)
+		if (subDocument || caption)
 		{
 			WPXPropertyList propList;
 			m_documentInterface->openTextBox(propList);
 		
 			// Positioned objects like text boxes are special beasts. They can contain all hierarchical elements up
 			// to the level of sections. They cannot open or close a page span though.
-			handleSubDocument(subDocument, false, true, m_parseState->m_tableList, 0);
+			if (subDocument)
+				handleSubDocument(subDocument, WPX_SUBDOCUMENT_TEXT_BOX, m_parseState->m_tableList, 0);
+			if (caption)
+				handleSubDocument(caption, WPX_SUBDOCUMENT_TEXT_BOX, m_parseState->m_tableList, 0);
 
 			m_documentInterface->closeTextBox();
 		
@@ -837,18 +840,23 @@ void WP3ContentListener::insertTextBox(float height, float width, uint8_t /* lef
 	}
 }
 
-void WP3ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter,
+void WP3ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, 
 						WPXTableList /* tableList */, int /* nextTableIndice */)
 {
 	// save our old parsing state on our "stack"
 	WP3ContentParsingState *oldParseState = m_parseState;
 
 	m_parseState = new WP3ContentParsingState();
+	if (subDocumentType == WPX_SUBDOCUMENT_TEXT_BOX || subDocumentType == WPX_SUBDOCUMENT_COMMENT_ANNOTATION)
+	{
+		m_ps->m_pageMarginRight = 0.0;
+		m_ps->m_pageMarginLeft = 0.0;
+	}
 
 	bool oldIsUndoOn = isUndoOn();
 	setUndoOn(false);
 
-	if (isHeaderFooter)
+	if (subDocumentType == WPX_SUBDOCUMENT_HEADER_FOOTER)
 	{
 		marginChange(WPX_LEFT, WPX_NUM_WPUS_PER_INCH);
 		marginChange(WPX_RIGHT, WPX_NUM_WPUS_PER_INCH);

@@ -196,7 +196,7 @@ void WP6StylesListener::headerFooterGroup(const uint8_t headerFooterType, const 
 			WPXTableList tableList; 
 			m_currentPage.setHeaderFooter(wpxType, headerFooterType, wpxOccurence,
 						((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : 0), tableList);
-			_handleSubDocument(((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : 0), true, tableList);
+			_handleSubDocument(((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : 0), WPX_SUBDOCUMENT_HEADER_FOOTER, tableList);
 		}
 		m_currentPageHasContent = tempCurrentPageHasContent;
 	}
@@ -276,7 +276,7 @@ void WP6StylesListener::noteOn(const uint16_t textPID)
 	if (!isUndoOn()) 
 	{
 		m_currentPageHasContent = true; 		
-		_handleSubDocument(((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : 0), false, m_tableList);
+		_handleSubDocument(((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : 0), WPX_SUBDOCUMENT_NOTE, m_tableList);
 	}
 }
 
@@ -285,7 +285,7 @@ void WP6StylesListener::insertTextBox(const WP6SubDocument *subDocument)
 	if (!isUndoOn() && subDocument)
 	{
 		m_currentPageHasContent = true;
-		_handleSubDocument(subDocument, false, m_tableList);
+		_handleSubDocument(subDocument, WPX_SUBDOCUMENT_TEXT_BOX, m_tableList);
 	}
 }
 
@@ -294,11 +294,11 @@ void WP6StylesListener::commentAnnotation(const uint16_t textPID)
 	if (!isUndoOn()) 
 	{
 		m_currentPageHasContent = true; 		
-		_handleSubDocument(((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : 0), false, m_tableList);
+		_handleSubDocument(((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : 0), WPX_SUBDOCUMENT_COMMENT_ANNOTATION, m_tableList);
 	}
 }
 
-void WP6StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList,
+void WP6StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList,
 						int /* nextTableIndice */)
 {
 	// We don't want to actual insert anything in the case of a sub-document, but we
@@ -312,7 +312,7 @@ void WP6StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, co
 		bool oldIsSubDocument = m_isSubDocument;
 		m_isSubDocument = true;
 		WPXTable *oldCurrentTable = m_currentTable;
-		if (isHeaderFooter) 
+		if (subDocumentType == WPX_SUBDOCUMENT_HEADER_FOOTER) 
 		{
 			bool oldCurrentPageHasContent = m_currentPageHasContent;
 			WPXTableList oldTableList = m_tableList;

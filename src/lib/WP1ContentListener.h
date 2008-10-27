@@ -58,7 +58,7 @@ public:
 	void insertTab();
 	void insertBreak(uint8_t breakType) { WPXContentListener::insertBreak(breakType); }
 	void insertEOL();
-	void insertNote(const WPXNoteType noteType, WP1SubDocument *subDocument);
+	void insertNote(WPXNoteType noteType, WP1SubDocument *subDocument);
 	void attributeChange(bool isOn, uint8_t attribute);
 	void fontPointSize(uint8_t pointSize);
 	void fontId(uint16_t id);
@@ -83,7 +83,7 @@ public:
 
 protected:
 	using WPXContentListener::lineSpacingChange;
-	void _handleSubDocument(const WPXSubDocument *subDocument, bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
+	void _handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList, int nextTableIndice = 0);
 
 	void _flushText();
 	void _changeList() {};

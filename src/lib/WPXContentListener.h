@@ -137,7 +137,7 @@ struct _WPXContentParsingState
 
 	bool m_inSubDocument;
 	bool m_isNote;
-	bool m_isPositionedObject;
+	WPXSubDocumentType m_subDocumentType;
 
 private:
 	_WPXContentParsingState(const _WPXContentParsingState&);
@@ -154,7 +154,7 @@ protected:
 	void startSubDocument();
 	void endDocument();
 	void endSubDocument();
-	void handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, const bool isPositionedObject, WPXTableList tableList, int nextTableIndice);
+	void handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList, int nextTableIndice);
 	void insertBreak(const uint8_t breakType);
 	void lineSpacingChange(const float lineSpacing);
 	void justificationChange(const uint8_t justification);
@@ -163,7 +163,7 @@ protected:
 	WPXDocumentInterface * m_documentInterface;
 	WPXPropertyList m_metaData;
 
-	virtual void _handleSubDocument(const WPXSubDocument *subDocument, bool isHeaderFooter, WPXTableList tableList, int nextTableIndice) = 0;
+	virtual void _handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList, int nextTableIndice) = 0;
 	virtual void _flushText() = 0;
 	virtual void _changeList() = 0;
 

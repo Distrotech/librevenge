@@ -74,7 +74,7 @@ public:
 	virtual void setFontSize(uint16_t fontSize) = 0;
 	virtual void insertPageNumber(const WPXString &pageNumber) = 0;
 	virtual void insertNoteReference(const WPXString &noteReference) = 0;
-	virtual void insertNote(WPXNoteType noteType, WP3SubDocument *subDocument) = 0;
+	virtual void insertNote(WPXNoteType noteType, const WP3SubDocument *subDocument) = 0;
 	virtual void headerFooterGroup(uint8_t headerFooterType, uint8_t occurenceBits, WP3SubDocument *subDocument) = 0;
 	virtual void suppressPage(uint16_t suppressCode) = 0;
 	virtual void backTab() = 0;
@@ -85,7 +85,7 @@ public:
 	virtual void insertPicture(float height, float width, uint8_t leftColumn, uint8_t rightColumn,
 			uint16_t figureFlags, const WPXBinaryData &binaryData) = 0;
 	virtual void insertTextBox(float height, float width, uint8_t leftColumn, uint8_t rightColumn,
-			uint16_t figureFlags, WP3SubDocument *subDocument) = 0;
+			uint16_t figureFlags, const WP3SubDocument *subDocument, const WP3SubDocument *caption) = 0;
 
 	void setResourceFork(WP3ResourceFork *resourceFork) { m_resourceFork = resourceFork; }
 	const WP3ResourceFork *getResourceFork() const { return m_resourceFork; }

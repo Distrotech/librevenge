@@ -63,14 +63,14 @@ WP5ContentListener::~WP5ContentListener()
  public 'HLListenerImpl' functions
 *****************************************/
 
-void WP5ContentListener::insertCharacter(const uint16_t character)
+void WP5ContentListener::insertCharacter(uint16_t character)
 {
 	if (!m_ps->m_isSpanOpened)
 		_openSpan();
 	appendUCS4(m_parseState->m_textBuffer, (uint32_t)character);
 }
 
-void WP5ContentListener::insertTab(const uint8_t tabType, const float tabPosition)
+void WP5ContentListener::insertTab(uint8_t tabType, float tabPosition)
 {
 	bool tmpHasTabPositionInformation = true;
 	if (tabPosition >= (float)((double)0xFFFE/(double)WPX_NUM_WPUS_PER_INCH) || tabPosition == 0.0f)
@@ -165,7 +165,7 @@ void WP5ContentListener::insertTab(const uint8_t tabType, const float tabPositio
 	}
 }
 
-void WP5ContentListener::insertIndent(const uint8_t indentType, const float indentPosition)
+void WP5ContentListener::insertIndent(uint8_t indentType, float indentPosition)
 {
 	bool tmpHasIndentPositionInformation = true;
 	if (indentPosition >= (float)((double)0xFFFE/(double)WPX_NUM_WPUS_PER_INCH) || indentPosition == 0.0f)
@@ -236,7 +236,7 @@ void WP5ContentListener::insertEOL()
 	}
 }
 
-void WP5ContentListener::defineTable(const uint8_t position, const uint16_t leftOffset)
+void WP5ContentListener::defineTable(uint8_t position, uint16_t leftOffset)
 {
 	if (!isUndoOn())
 	{
@@ -271,8 +271,8 @@ void WP5ContentListener::defineTable(const uint8_t position, const uint16_t left
 	}
 }
 
-void WP5ContentListener::addTableColumnDefinition(const uint32_t width, const uint32_t /* leftGutter */,
-						const uint32_t /* rightGutter */, const uint32_t attributes, const uint8_t alignment)
+void WP5ContentListener::addTableColumnDefinition(uint32_t width, uint32_t /* leftGutter */,
+						uint32_t /* rightGutter */, uint32_t attributes, uint8_t alignment)
 {
 	if (!isUndoOn())
 	{
@@ -317,7 +317,7 @@ void WP5ContentListener::startTable()
 	}
 }
 
-void WP5ContentListener::insertRow(const uint16_t rowHeight, const bool isMinimumHeight, const bool isHeaderRow)
+void WP5ContentListener::insertRow(uint16_t rowHeight, bool isMinimumHeight, bool isHeaderRow)
 {
 	if (!isUndoOn())
 	{
@@ -327,10 +327,10 @@ void WP5ContentListener::insertRow(const uint16_t rowHeight, const bool isMinimu
 	}
 }
 
-void WP5ContentListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan, const uint8_t borderBits,
+void WP5ContentListener::insertCell(uint8_t colSpan, uint8_t rowSpan, uint8_t borderBits,
 			const RGBSColor * cellFgColor, const RGBSColor * cellBgColor, 
-			const RGBSColor * cellBorderColor, const WPXVerticalAlignment cellVerticalAlignment, 
-			const bool useCellAttributes, const uint32_t cellAttributes)
+			const RGBSColor * cellBorderColor, WPXVerticalAlignment cellVerticalAlignment, 
+			bool useCellAttributes, uint32_t cellAttributes)
 {
 	if (!isUndoOn())
 	{
@@ -368,7 +368,7 @@ void WP5ContentListener::endTable()
  public 'parser' functions
 *****************************************/
 
-void WP5ContentListener::attributeChange(const bool isOn, const uint8_t attribute)
+void WP5ContentListener::attributeChange(bool isOn, uint8_t attribute)
 {
 	if (!isUndoOn())
 	{
@@ -479,7 +479,7 @@ void WP5ContentListener::marginChange(uint8_t side, uint16_t margin)
 	}
 }
 
-void WP5ContentListener::characterColorChange(const uint8_t red, const uint8_t green, const uint8_t blue)
+void WP5ContentListener::characterColorChange(uint8_t red, uint8_t green, uint8_t blue)
 {
 	if (!isUndoOn())
 	{
@@ -490,7 +490,7 @@ void WP5ContentListener::characterColorChange(const uint8_t red, const uint8_t g
  	}
 }
 
-void WP5ContentListener::setFont(const WPXString &fontName, const float fontSize)
+void WP5ContentListener::setFont(const WPXString &fontName, float fontSize)
 {
 	if (!isUndoOn())
 	{
@@ -500,7 +500,7 @@ void WP5ContentListener::setFont(const WPXString &fontName, const float fontSize
 	}
 }
 
-void WP5ContentListener::setTabs(const std::vector<WPXTabStop> &tabStops, const uint16_t tabOffset)
+void WP5ContentListener::setTabs(const std::vector<WPXTabStop> &tabStops, uint16_t tabOffset)
 {
 	if (!isUndoOn())
 	{
@@ -518,7 +518,7 @@ void WP5ContentListener::insertNoteReference(const WPXString &noteReference)
 	}
 }
 
-void WP5ContentListener::insertNote(const WPXNoteType noteType, const WP5SubDocument *subDocument)
+void WP5ContentListener::insertNote(WPXNoteType noteType, const WP5SubDocument *subDocument)
 {
 	if (!isUndoOn())
 	{
@@ -542,7 +542,7 @@ void WP5ContentListener::insertNote(const WPXNoteType noteType, const WP5SubDocu
 		else
 			m_documentInterface->openEndnote(propList);
 
-		handleSubDocument(subDocument, false, false, m_parseState->m_tableList, 0);
+		handleSubDocument(subDocument, WPX_SUBDOCUMENT_NOTE, m_parseState->m_tableList, 0);
 
 		if (noteType == FOOTNOTE)
 			m_documentInterface->closeFootnote();
@@ -552,7 +552,7 @@ void WP5ContentListener::insertNote(const WPXNoteType noteType, const WP5SubDocu
 	}
 }
 
-void WP5ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter,
+void WP5ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, 
 	WPXTableList /* tableList */, int /* nextTableIndice */)
 {
 	// save our old parsing state on our "stack"
@@ -561,7 +561,7 @@ void WP5ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, c
 	m_parseState = new WP5ContentParsingState();
 	setFont(m_defaultFontName, m_defaultFontSize);
 
-	if (isHeaderFooter)
+	if (subDocumentType == WPX_SUBDOCUMENT_HEADER_FOOTER)
 	{
 		marginChange(WPX_LEFT, WPX_NUM_WPUS_PER_INCH);
 		marginChange(WPX_RIGHT, WPX_NUM_WPUS_PER_INCH);
@@ -589,14 +589,14 @@ void WP5ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, c
 	m_parseState = oldParseState;
 }
 
-void WP5ContentListener::headerFooterGroup(const uint8_t /* headerFooterType */, const uint8_t /* occurenceBits */,
+void WP5ContentListener::headerFooterGroup(uint8_t /* headerFooterType */, uint8_t /* occurenceBits */,
 						WP5SubDocument *subDocument)
 {
 	if (subDocument)
 		m_subDocuments.push_back(subDocument);
 }	
 
-void WP5ContentListener::setDefaultFont(const WPXString &fontName, const float fontSize)
+void WP5ContentListener::setDefaultFont(const WPXString &fontName, float fontSize)
 {
 	m_defaultFontName = fontName;
 	m_defaultFontSize = fontSize;

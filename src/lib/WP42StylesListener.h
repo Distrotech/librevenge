@@ -41,19 +41,19 @@ public:
 
 	void startDocument() {}
 	void startSubDocument() {}
-	void insertCharacter(const uint16_t /* character */) { if (!isUndoOn()) m_currentPageHasContent = true; }
-	void insertTab(const uint8_t /* tabType */, float /* tabPosition */) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	void insertCharacter(uint16_t /* character */) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	void insertTab(uint8_t /* tabType */, float /* tabPosition */) { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void insertEOL() { if (!isUndoOn()) m_currentPageHasContent = true; }
- 	void insertBreak(const uint8_t breakType);
-	void attributeChange(const bool /* isOn */, const uint8_t /* attribute */) {}
-	void marginReset(const uint8_t /* leftMargin */, const uint8_t /* rightMargin */) {}
-	void headerFooterGroup(const uint8_t headerFooterDefinition, WP42SubDocument *subDocument);
-	void suppressPageCharacteristics(const uint8_t suppressCode);
+ 	void insertBreak(uint8_t breakType);
+	void attributeChange(bool /* isOn */, uint8_t /* attribute */) {}
+	void marginReset(uint8_t /* leftMargin */, uint8_t /* rightMargin */) {}
+	void headerFooterGroup(uint8_t headerFooterDefinition, WP42SubDocument *subDocument);
+	void suppressPageCharacteristics(uint8_t suppressCode);
 	void endDocument();
 	void endSubDocument();
 
 protected:
-	void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
+	void _handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList, int nextTableIndice = 0);
 
 private:
 	WPXPageSpan m_currentPage, m_nextPage;

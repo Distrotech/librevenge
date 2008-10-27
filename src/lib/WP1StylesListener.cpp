@@ -88,7 +88,7 @@ void WP1StylesListener::insertBreak(uint8_t breakType)
 				{
 					m_currentPage.setHeaderFooter((*HFiter).getType(), (*HFiter).getInternalType(),
 						(*HFiter).getOccurence(), (*HFiter).getSubDocument(), (*HFiter).getTableList());
-					_handleSubDocument((*HFiter).getSubDocument(), true, (*HFiter).getTableList());
+					_handleSubDocument((*HFiter).getSubDocument(), WPX_SUBDOCUMENT_HEADER_FOOTER, (*HFiter).getTableList());
 				}
 				else
 				{
@@ -214,7 +214,7 @@ void WP1StylesListener::headerFooterGroup(uint8_t headerFooterDefinition, WP1Sub
 			if (wpxOccurence != NEVER)
 			{
 				m_currentPage.setHeaderFooter(wpxType, headerFooterType, wpxOccurence, subDocument, tableList);
-				_handleSubDocument(subDocument, true, tableList);
+				_handleSubDocument(subDocument, WPX_SUBDOCUMENT_HEADER_FOOTER, tableList);
 			}
 			else
 				m_currentPage.setHeaderFooter(wpxType, headerFooterType, wpxOccurence, 0, tableList);
@@ -245,14 +245,14 @@ void WP1StylesListener::suppressPageCharacteristics(uint8_t suppressCode)
 	}
 }
 
-void WP1StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, bool isHeaderFooter,
+void WP1StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, 
 						WPXTableList /* tableList */, int /* nextTableIndice */)
 {
 	if (!isUndoOn()) 
 	{
 		bool oldIsSubDocument = m_isSubDocument;
 		m_isSubDocument = true;
-		if (isHeaderFooter) 
+		if (subDocumentType == WPX_SUBDOCUMENT_HEADER_FOOTER) 
 		{
 			bool oldCurrentPageHasContent = m_currentPageHasContent;
 

@@ -1214,7 +1214,7 @@ void WP6ContentListener::noteOff(const WPXNoteType noteType)
 
 		uint16_t textPID = (uint16_t)m_parseState->m_noteTextPID;
 		handleSubDocument(((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : 0), 
-				false, false, m_parseState->m_tableList, m_parseState->m_nextTableIndice);
+				WPX_SUBDOCUMENT_NOTE, m_parseState->m_tableList, m_parseState->m_nextTableIndice);
 
 		if (noteType == FOOTNOTE)
 			m_documentInterface->closeFootnote();
@@ -1660,7 +1660,7 @@ void WP6ContentListener::insertTextBox(const WP6SubDocument *subDocument)
 		
 		// Positioned objects like text boxes are special beasts. They can contain all hierarchical elements up
 		// to the level of sections. They cannot open or close a page span though.
-		handleSubDocument(subDocument, false, true, m_parseState->m_tableList, m_parseState->m_nextTableIndice);
+		handleSubDocument(subDocument, WPX_SUBDOCUMENT_TEXT_BOX, m_parseState->m_tableList, m_parseState->m_nextTableIndice);
 
 		m_documentInterface->closeTextBox();
 	}
@@ -1685,7 +1685,7 @@ void WP6ContentListener::commentAnnotation(const uint16_t textPID)
 		m_ps->m_isNote = true;
 
 		handleSubDocument(((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : 0), 
-				false, false, m_parseState->m_tableList, m_parseState->m_nextTableIndice);
+				WPX_SUBDOCUMENT_COMMENT_ANNOTATION, m_parseState->m_tableList, m_parseState->m_nextTableIndice);
 
 		m_ps->m_isNote = false;
 
@@ -1693,7 +1693,7 @@ void WP6ContentListener::commentAnnotation(const uint16_t textPID)
 	}
 }
 
-void WP6ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter,
+void WP6ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, 
 	WPXTableList tableList, int nextTableIndice)
 {
 	// save our old parsing state on our "stack"
@@ -1702,7 +1702,7 @@ void WP6ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, c
 	m_parseState = new WP6ContentParsingState(tableList, nextTableIndice);
 	m_parseState->m_numNestedNotes = oldParseState->m_numNestedNotes;
 
-	if (isHeaderFooter)
+	if (subDocumentType == WPX_SUBDOCUMENT_HEADER_FOOTER)
 	{
 		// is it is Header or Footer, assume that the initial page margins are of 1 inch.
 		// This is a behaviour that I observed with WP10 -- Fridrich
@@ -1731,7 +1731,7 @@ void WP6ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, c
 #endif
 
 	// if we are in a foot/endNote, the nextTableIndice sequence has to be maintained
-	if (!isHeaderFooter)
+	if (subDocumentType != WPX_SUBDOCUMENT_HEADER_FOOTER)
 		oldParseState->m_nextTableIndice = m_parseState->m_nextTableIndice;
 	oldParseState->m_numNestedNotes = m_parseState->m_numNestedNotes;
 

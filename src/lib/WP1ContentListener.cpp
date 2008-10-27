@@ -155,7 +155,7 @@ void WP1ContentListener::insertNote(const WPXNoteType noteType, WP1SubDocument *
 		}
 
 		WPXTableList tableList;
-		handleSubDocument(subDocument, false, false, tableList, 0);
+		handleSubDocument(subDocument, WPX_SUBDOCUMENT_NOTE, tableList, 0);
 
 		if (noteType == FOOTNOTE)
 			m_documentInterface->closeFootnote();
@@ -550,7 +550,7 @@ void WP1ContentListener::insertPicture(uint16_t width, uint16_t height, const WP
 	}
 }
 
-void WP1ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, bool /* isHeaderFooter */,
+void WP1ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType /* subDocumentType */, 
 						WPXTableList /* tableList */, int /* nextTableIndice */)
 {
 	// save our old parsing state on our "stack"

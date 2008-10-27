@@ -47,7 +47,7 @@ public:
 	void insertTab() { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void insertEOL() { if (!isUndoOn()) m_currentPageHasContent = true; }
  	void insertBreak(uint8_t breakType);
-	void insertNote(const WPXNoteType /* noteType */, WP1SubDocument * /* subDocument */) {}
+	void insertNote(WPXNoteType /* noteType */, WP1SubDocument * /* subDocument */) {}
 	void attributeChange(bool /* isOn */, uint8_t /* attribute */) {}
 	void fontPointSize(uint8_t /* pointSize */) {}
 	void fontId(uint16_t /* id */) {}
@@ -71,7 +71,7 @@ public:
 	void insertPicture(uint16_t width, uint16_t height, const WPXBinaryData &binaryData) {}
 
 protected:
-	void _handleSubDocument(const WPXSubDocument *subDocument, bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
+	void _handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList, int nextTableIndice = 0);
 
 private:
 	WPXPageSpan m_currentPage, m_nextPage;

@@ -54,7 +54,7 @@ void WP42StylesListener::endSubDocument()
 	insertBreak(WPX_SOFT_PAGE_BREAK); // pretend we just had a soft page break (for the last page)
 }
 
-void WP42StylesListener::insertBreak(const uint8_t breakType)
+void WP42StylesListener::insertBreak(uint8_t breakType)
 {
 	if (m_isSubDocument)
 		return;
@@ -89,7 +89,7 @@ void WP42StylesListener::insertBreak(const uint8_t breakType)
 				{
 					m_currentPage.setHeaderFooter((*HFiter).getType(), (*HFiter).getInternalType(),
 						(*HFiter).getOccurence(), (*HFiter).getSubDocument(), (*HFiter).getTableList());
-					_handleSubDocument((*HFiter).getSubDocument(), true, (*HFiter).getTableList());
+					_handleSubDocument((*HFiter).getSubDocument(), WPX_SUBDOCUMENT_HEADER_FOOTER, (*HFiter).getTableList());
 				}
 				else
 				{
@@ -111,7 +111,7 @@ void WP42StylesListener::insertBreak(const uint8_t breakType)
 }
 
 
-void WP42StylesListener::headerFooterGroup(const uint8_t headerFooterDefinition, WP42SubDocument *subDocument)
+void WP42StylesListener::headerFooterGroup(uint8_t headerFooterDefinition, WP42SubDocument *subDocument)
 {
 	if (subDocument)
 		m_subDocuments.push_back(subDocument);
@@ -148,7 +148,7 @@ void WP42StylesListener::headerFooterGroup(const uint8_t headerFooterDefinition,
 			if (wpxOccurence != NEVER)
 			{
 				m_currentPage.setHeaderFooter(wpxType, headerFooterType, wpxOccurence, subDocument, tableList);
-				_handleSubDocument(subDocument, true, tableList);
+				_handleSubDocument(subDocument, WPX_SUBDOCUMENT_HEADER_FOOTER, tableList);
 			}
 			else
 				m_currentPage.setHeaderFooter(wpxType, headerFooterType, wpxOccurence, 0, tableList);
@@ -157,7 +157,7 @@ void WP42StylesListener::headerFooterGroup(const uint8_t headerFooterDefinition,
 	}
 }	
 
-void WP42StylesListener::suppressPageCharacteristics(const uint8_t suppressCode)
+void WP42StylesListener::suppressPageCharacteristics(uint8_t suppressCode)
 {
 	if (!isUndoOn())
 	{
@@ -184,14 +184,14 @@ void WP42StylesListener::suppressPageCharacteristics(const uint8_t suppressCode)
 	}
 }
 
-void WP42StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter,
+void WP42StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, 
 						WPXTableList /* tableList */, int /* nextTableIndice */)
 {
 	if (!isUndoOn()) 
 	{
 		bool oldIsSubDocument = m_isSubDocument;
 		m_isSubDocument = true;
-		if (isHeaderFooter) 
+		if (subDocumentType == WPX_SUBDOCUMENT_HEADER_FOOTER) 
 		{
 			bool oldCurrentPageHasContent = m_currentPageHasContent;
 

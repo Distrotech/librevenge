@@ -46,7 +46,7 @@ public:
 	virtual void insertTab() = 0;
 	virtual void insertBreak(uint8_t breakType) = 0;
 	virtual void insertEOL() = 0;
-	virtual void insertNote(const WPXNoteType noteType, WP1SubDocument *subDocument) = 0;
+	virtual void insertNote(WPXNoteType noteType, WP1SubDocument *subDocument) = 0;
 	virtual void attributeChange(bool isOn, uint8_t attribute) = 0;
 	virtual void fontPointSize(uint8_t pointSize) = 0;
 	virtual void fontId(uint16_t id) = 0;

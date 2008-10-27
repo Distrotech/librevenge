@@ -57,7 +57,7 @@ WP42ContentListener::~WP42ContentListener()
 }
 
 
-void WP42ContentListener::insertCharacter(const uint16_t character)
+void WP42ContentListener::insertCharacter(uint16_t character)
 {
 	if (!isUndoOn())
 	{
@@ -67,7 +67,7 @@ void WP42ContentListener::insertCharacter(const uint16_t character)
 	}
 }
 
-void WP42ContentListener::insertTab(const uint8_t /* tabType */, float /* tabPosition */)
+void WP42ContentListener::insertTab(uint8_t /* tabType */, float /* tabPosition */)
 {
 	if (!isUndoOn())
 	{
@@ -94,7 +94,7 @@ void WP42ContentListener::insertEOL()
 	}
 }
 
-void WP42ContentListener::attributeChange(const bool isOn, const uint8_t attribute)
+void WP42ContentListener::attributeChange(bool isOn, uint8_t attribute)
 {
 	_closeSpan();
 
@@ -141,7 +141,7 @@ void WP42ContentListener::attributeChange(const bool isOn, const uint8_t attribu
 		m_ps->m_textAttributeBits ^= textAttributeBit;
 }
 
-void WP42ContentListener::marginReset(const uint8_t /* leftMargin */, const uint8_t /* rightMargin */)
+void WP42ContentListener::marginReset(uint8_t /* leftMargin */, uint8_t /* rightMargin */)
 {
 #if 0
 	if (!isUndoOn())
@@ -154,13 +154,13 @@ void WP42ContentListener::marginReset(const uint8_t /* leftMargin */, const uint
 #endif
 }
 
-void WP42ContentListener::headerFooterGroup(const uint8_t /* headerFooterDefinition */, WP42SubDocument *subDocument)
+void WP42ContentListener::headerFooterGroup(uint8_t /* headerFooterDefinition */, WP42SubDocument *subDocument)
 {
 	if (subDocument)
 		m_subDocuments.push_back(subDocument);			
 }	
 
-void WP42ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool /* isHeaderFooter */,
+void WP42ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType /* subDocumentType */, 
 						WPXTableList /* tableList */, int /* nextTableIndice */)
 {
 	// save our old parsing state on our "stack"

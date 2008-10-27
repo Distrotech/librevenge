@@ -39,14 +39,14 @@ public:
 
 	virtual void startDocument() = 0;
 	virtual void startSubDocument() = 0;
-	virtual void insertCharacter(const uint16_t character) = 0;
-	virtual void insertTab(const uint8_t tabType, float tabPosition) = 0;
-	virtual void insertBreak(const uint8_t breakType) = 0;
+	virtual void insertCharacter(uint16_t character) = 0;
+	virtual void insertTab(uint8_t tabType, float tabPosition) = 0;
+	virtual void insertBreak(uint8_t breakType) = 0;
 	virtual void insertEOL() = 0;
-	virtual void attributeChange(const bool isOn, const uint8_t attribute) = 0;
-	virtual void marginReset(const uint8_t leftMargin, const uint8_t rightMargin) = 0;
-	virtual void headerFooterGroup(const uint8_t headerFooterDefinition, WP42SubDocument *subDocument) = 0;
-	virtual void suppressPageCharacteristics(const uint8_t suppressCode) = 0;
+	virtual void attributeChange(bool isOn, uint8_t attribute) = 0;
+	virtual void marginReset(uint8_t leftMargin, uint8_t rightMargin) = 0;
+	virtual void headerFooterGroup(uint8_t headerFooterDefinition, WP42SubDocument *subDocument) = 0;
+	virtual void suppressPageCharacteristics(uint8_t suppressCode) = 0;
 	virtual void endDocument() = 0;
 	virtual void endSubDocument() = 0;
 };

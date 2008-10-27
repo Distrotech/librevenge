@@ -132,8 +132,8 @@ void WP3WindowGroup::parse(WP3Listener * listener)
 		}
 		else if (m_boxType == 0x00)
 		{
-			if (m_subDocument)
-				listener->insertTextBox(m_height, m_width, m_leftColumn, m_rightColumn, m_figureFlags, m_subDocument);
+			if (m_subDocument || m_caption)
+				listener->insertTextBox(m_height, m_width, m_leftColumn, m_rightColumn, m_figureFlags, m_subDocument, m_caption);
 		}
 		break;
 

@@ -48,19 +48,19 @@ public:
 
 	void startDocument() { WPXContentListener::startDocument(); }
 	void startSubDocument() { WPXContentListener::startSubDocument(); }
-	void insertCharacter(const uint16_t character);
-	void insertTab(const uint8_t tabType, float tabPosition);
-	void insertBreak(const uint8_t breakType) { WPXContentListener::insertBreak(breakType); }
+	void insertCharacter(uint16_t character);
+	void insertTab(uint8_t tabType, float tabPosition);
+	void insertBreak(uint8_t breakType) { WPXContentListener::insertBreak(breakType); }
 	void insertEOL();
-	void attributeChange(const bool isOn, const uint8_t attribute);
-	void marginReset(const uint8_t leftMargin, const uint8_t rightMargin);
-	void headerFooterGroup(const uint8_t headerFooterDefinition, WP42SubDocument *subDocument);
-	void suppressPageCharacteristics(const uint8_t /* suppressCode */) {}
+	void attributeChange(bool isOn, uint8_t attribute);
+	void marginReset(uint8_t leftMargin, uint8_t rightMargin);
+	void headerFooterGroup(uint8_t headerFooterDefinition, WP42SubDocument *subDocument);
+	void suppressPageCharacteristics(uint8_t /* suppressCode */) {}
 	void endDocument() { WPXContentListener::endDocument(); };
 	void endSubDocument() { WPXContentListener::endSubDocument(); };
 
 protected:
-	void _handleSubDocument(const WPXSubDocument *subDocument, bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
+	void _handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList, int nextTableIndice = 0);
 
 	void _flushText();
 	void _changeList() {};

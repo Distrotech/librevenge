@@ -57,7 +57,7 @@ void WP5StylesListener::endSubDocument()
 	insertBreak(WPX_SOFT_PAGE_BREAK); // pretend we just had a soft page break (for the last page)
 }
 
-void WP5StylesListener::insertBreak(const uint8_t breakType)
+void WP5StylesListener::insertBreak(uint8_t breakType)
 {
 	if (m_isSubDocument)
 		return;
@@ -90,7 +90,7 @@ void WP5StylesListener::insertBreak(const uint8_t breakType)
 				{
 					m_currentPage.setHeaderFooter((*HFiter).getType(), (*HFiter).getInternalType(),
 						(*HFiter).getOccurence(), (*HFiter).getSubDocument(), (*HFiter).getTableList());
-					_handleSubDocument((*HFiter).getSubDocument(), true, (*HFiter).getTableList());
+					_handleSubDocument((*HFiter).getSubDocument(), WPX_SUBDOCUMENT_HEADER_FOOTER, (*HFiter).getTableList());
 				}
 				else
 					m_currentPage.setHeaderFooter((*HFiter).getType(), (*HFiter).getInternalType(),
@@ -109,7 +109,7 @@ void WP5StylesListener::insertBreak(const uint8_t breakType)
 	//}
 }
 
-void WP5StylesListener::pageMarginChange(const uint8_t side, const uint16_t margin)
+void WP5StylesListener::pageMarginChange(uint8_t side, uint16_t margin)
 {
 	//if (!isUndoOn()) 
 	//{
@@ -126,7 +126,7 @@ void WP5StylesListener::pageMarginChange(const uint8_t side, const uint16_t marg
 	//}
 }
 
-void WP5StylesListener::pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation)
+void WP5StylesListener::pageFormChange(uint16_t length, uint16_t width, WPXFormOrientation orientation)
 {
 	//if (!isUndoOn())
 	//{
@@ -142,7 +142,7 @@ void WP5StylesListener::pageFormChange(const uint16_t length, const uint16_t wid
 }
 
 
-void WP5StylesListener::marginChange(const uint8_t side, const uint16_t margin)
+void WP5StylesListener::marginChange(uint8_t side, uint16_t margin)
 {
 	if (!isUndoOn()) 
 	{		
@@ -187,7 +187,7 @@ void WP5StylesListener::marginChange(const uint8_t side, const uint16_t margin)
 
 }
 
-void WP5StylesListener::headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, WP5SubDocument *subDocument)
+void WP5StylesListener::headerFooterGroup(uint8_t headerFooterType, uint8_t occurenceBits, WP5SubDocument *subDocument)
 {
 	if (subDocument)
 		m_subDocuments.push_back(subDocument);
@@ -224,7 +224,7 @@ void WP5StylesListener::headerFooterGroup(const uint8_t headerFooterType, const 
 				if (wpxOccurence != NEVER)
 				{
 					m_currentPage.setHeaderFooter(wpxType, headerFooterType, wpxOccurence, subDocument, tableList);
-					_handleSubDocument(subDocument, true, tableList);
+					_handleSubDocument(subDocument, WPX_SUBDOCUMENT_HEADER_FOOTER, tableList);
 				}
 				else
 					m_currentPage.setHeaderFooter(wpxType, headerFooterType, wpxOccurence, 0, tableList);
@@ -235,7 +235,7 @@ void WP5StylesListener::headerFooterGroup(const uint8_t headerFooterType, const 
 }
 
 
-void WP5StylesListener::suppressPageCharacteristics(const uint8_t suppressCode)
+void WP5StylesListener::suppressPageCharacteristics(uint8_t suppressCode)
 {
 	if (!isUndoOn()) 
 	{			
@@ -261,7 +261,7 @@ void WP5StylesListener::startTable()
 	}
 }
 
-void WP5StylesListener::insertRow(const uint16_t /* rowHeight */, const bool /* isMinimumHeight */, const bool /* isHeaderRow */)
+void WP5StylesListener::insertRow(uint16_t /* rowHeight */, bool /* isMinimumHeight */, bool /* isHeaderRow */)
 {
 	if (!isUndoOn()) 
 	{
@@ -272,10 +272,10 @@ void WP5StylesListener::insertRow(const uint16_t /* rowHeight */, const bool /* 
 	}
 }
 
-void WP5StylesListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan, const uint8_t borderBits, 
+void WP5StylesListener::insertCell(uint8_t colSpan, uint8_t rowSpan, uint8_t borderBits, 
 				  const RGBSColor * /* cellFgColor */, const RGBSColor * /* cellBgColor */,
-				  const RGBSColor * /* cellBorderColor */, const WPXVerticalAlignment /* cellVerticalAlignment */, 
-				  const bool /* useCellAttributes */, const uint32_t /* cellAttributes */)
+				  const RGBSColor * /* cellBorderColor */, WPXVerticalAlignment /* cellVerticalAlignment */, 
+				  bool /* useCellAttributes */, uint32_t /* cellAttributes */)
 {
 	if (!isUndoOn())
 	{
@@ -286,7 +286,7 @@ void WP5StylesListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan,
 	}
 }
 
-void WP5StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter,
+void WP5StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, 
 						WPXTableList tableList, int /* nextTableIndice */)
 {
 	// We don't want to actual insert anything in the case of a sub-document, but we
@@ -295,7 +295,7 @@ void WP5StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, co
 	{
 		bool oldIsSubDocument = m_isSubDocument;
 		m_isSubDocument = true;
-		if (isHeaderFooter) 
+		if (subDocumentType == WPX_SUBDOCUMENT_HEADER_FOOTER) 
 		{
 			bool oldCurrentPageHasContent = m_currentPageHasContent;
 			WPXTable * oldCurrentTable = m_currentTable;

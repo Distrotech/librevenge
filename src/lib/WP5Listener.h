@@ -44,38 +44,38 @@ public:
 
 	virtual void startDocument() = 0;
 	virtual void startSubDocument() = 0;
-	virtual void setFont(const WPXString &fontName, const float fontSize) = 0;
-	virtual void setTabs(const std::vector<WPXTabStop>& tabStops, const uint16_t tabOffset) = 0;
-	virtual void insertCharacter(const uint16_t character) = 0;
-	virtual void insertTab(const uint8_t tabType, const float tabPosition) = 0;
-	virtual void insertIndent(const uint8_t indentType, const float indentPosition) = 0;
+	virtual void setFont(const WPXString &fontName, float fontSize) = 0;
+	virtual void setTabs(const std::vector<WPXTabStop>& tabStops, uint16_t tabOffset) = 0;
+	virtual void insertCharacter(uint16_t character) = 0;
+	virtual void insertTab(uint8_t tabType, float tabPosition) = 0;
+	virtual void insertIndent(uint8_t indentType, float indentPosition) = 0;
 	virtual void insertEOL() = 0;
-	virtual void insertBreak(const uint8_t breakType) = 0;
-	virtual void lineSpacingChange(const float lineSpacing) = 0;
-	virtual void justificationChange(const uint8_t justification) = 0;
-	virtual void characterColorChange(const uint8_t red, const uint8_t green, const uint8_t blue) = 0;
-	virtual void attributeChange(const bool isOn, const uint8_t attribute) = 0;
-	virtual void pageMarginChange(const uint8_t side, const uint16_t margin) = 0;
-	virtual void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation) = 0;
-	virtual void marginChange(const uint8_t side, const uint16_t margin) = 0;
+	virtual void insertBreak(uint8_t breakType) = 0;
+	virtual void lineSpacingChange(float lineSpacing) = 0;
+	virtual void justificationChange(uint8_t justification) = 0;
+	virtual void characterColorChange(uint8_t red, uint8_t green, uint8_t blue) = 0;
+	virtual void attributeChange(bool isOn, uint8_t attribute) = 0;
+	virtual void pageMarginChange(uint8_t side, uint16_t margin) = 0;
+	virtual void pageFormChange(uint16_t length, uint16_t width, WPXFormOrientation orientation) = 0;
+	virtual void marginChange(uint8_t side, uint16_t margin) = 0;
 	virtual void endDocument() = 0;
 	virtual void endSubDocument() = 0;
 
-	virtual void defineTable(const uint8_t position, const uint16_t leftOffset) = 0;
-	virtual void addTableColumnDefinition(const uint32_t width, const uint32_t leftGutter, const uint32_t rightGutter,
-				const uint32_t attributes, const uint8_t alignment) = 0;
+	virtual void defineTable(uint8_t position, uint16_t leftOffset) = 0;
+	virtual void addTableColumnDefinition(uint32_t width, uint32_t leftGutter, uint32_t rightGutter,
+				uint32_t attributes, uint8_t alignment) = 0;
 	virtual void startTable() = 0;
- 	virtual void insertRow(const uint16_t rowHeight, const bool isMinimumHeight, const bool isHeaderRow) = 0;
- 	virtual void insertCell(const uint8_t colSpan, const uint8_t rowSpan, const uint8_t borderBits,
+ 	virtual void insertRow(uint16_t rowHeight, bool isMinimumHeight, bool isHeaderRow) = 0;
+ 	virtual void insertCell(uint8_t colSpan, uint8_t rowSpan, uint8_t borderBits,
 				const RGBSColor * cellFgColor, const RGBSColor * cellBgColor, 
-				const RGBSColor * cellBorderColor, const WPXVerticalAlignment cellVerticalAlignment, 
-				const bool useCellAttributes, const uint32_t cellAttributes) = 0;
+				const RGBSColor * cellBorderColor, WPXVerticalAlignment cellVerticalAlignment, 
+				bool useCellAttributes, uint32_t cellAttributes) = 0;
  	virtual void endTable() = 0;
 
 	virtual void insertNoteReference(const WPXString &noteReference) = 0;
-	virtual void insertNote(const WPXNoteType noteType, const WP5SubDocument *subDocument) = 0;
-	virtual void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, WP5SubDocument *subDocument) = 0;
-	virtual void suppressPageCharacteristics(const uint8_t suppressCode) = 0;
+	virtual void insertNote(WPXNoteType noteType, const WP5SubDocument *subDocument) = 0;
+	virtual void headerFooterGroup(uint8_t headerFooterType, uint8_t occurenceBits, WP5SubDocument *subDocument) = 0;
+	virtual void suppressPageCharacteristics(uint8_t suppressCode) = 0;
 
 	virtual void boxOn(uint8_t positionAndType, uint8_t alignment, uint16_t width, uint16_t height, uint16_t x, uint16_t y) = 0;
 	virtual void boxOff() = 0;

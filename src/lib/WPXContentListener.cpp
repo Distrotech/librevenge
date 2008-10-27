@@ -113,7 +113,7 @@ _WPXContentParsingState::_WPXContentParsingState() :
 	
 	m_inSubDocument(false),
 	m_isNote(false),
-	m_isPositionedObject(false)
+	m_subDocumentType(WPX_SUBDOCUMENT_NONE)
 {
 }
 
@@ -352,7 +352,7 @@ void WPXContentListener::_openPageSpan()
 				m_documentInterface->openFooter(propList); 
 
 			WPD_DEBUG_MSG(("Header Footer Element: Starting to parse the subDocument\n"));
-			handleSubDocument((*iter).getSubDocument(), true, false, (*iter).getTableList(), 0);
+			handleSubDocument((*iter).getSubDocument(), WPX_SUBDOCUMENT_HEADER_FOOTER, (*iter).getTableList(), 0);
 			WPD_DEBUG_MSG(("Header Footer Element: End of the subDocument parsing\n"));
 			if ((*iter).getType() == HEADER)
 				m_documentInterface->closeHeader();
@@ -404,7 +404,7 @@ void WPXContentListener::_openParagraph()
 		 
 	if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
 	{
-		if (!m_ps->m_isTableOpened && (!m_ps->m_inSubDocument || m_ps->m_isPositionedObject))
+		if (!m_ps->m_isTableOpened && (!m_ps->m_inSubDocument || m_ps->m_subDocumentType == WPX_SUBDOCUMENT_TEXT_BOX))
 		{
 			if (m_ps->m_sectionAttributesChanged)
 				_closeSection();
@@ -595,7 +595,7 @@ void WPXContentListener::_openListElement()
 		 
 	if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
 	{
-		if (!m_ps->m_isTableOpened && (!m_ps->m_inSubDocument || m_ps->m_isPositionedObject))
+		if (!m_ps->m_isTableOpened && (!m_ps->m_inSubDocument || m_ps->m_subDocumentType == WPX_SUBDOCUMENT_TEXT_BOX))
 		{
 			if (m_ps->m_sectionAttributesChanged)
 				_closeSection();
@@ -1019,8 +1019,8 @@ void WPXContentListener::_closeTableCell()
 /**
 Creates an new document state. Saves the old state on a "stack".
 */
-void WPXContentListener::handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter,
-	const bool isPositionedObject, WPXTableList tableList, int nextTableIndice)
+void WPXContentListener::handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, 
+	WPXTableList tableList, int nextTableIndice)
 {
 	// save our old parsing state on our "stack"
 	WPXContentParsingState *oldPS = m_ps;
@@ -1031,11 +1031,15 @@ void WPXContentListener::handleSubDocument(const WPXSubDocument *subDocument, co
 	m_ps->m_pageMarginRight = oldPS->m_pageMarginRight;
 	m_ps->m_subDocuments = oldPS->m_subDocuments;
 	m_ps->m_isNote = oldPS->m_isNote;
-	m_ps->m_isPositionedObject = isPositionedObject;
+	m_ps->m_subDocumentType = subDocumentType;
 	m_ps->m_isDocumentStarted = true;
 	m_ps->m_isPageSpanOpened = true;
-	if (m_ps->m_isPositionedObject)
+	if (m_ps->m_subDocumentType == WPX_SUBDOCUMENT_TEXT_BOX)
+	{
+		m_ps->m_pageMarginLeft = 0.0;
+		m_ps->m_pageMarginRight = 0.0;
 		m_ps->m_sectionAttributesChanged = true;
+	}
 	// END: copy page properties into the new parsing state
 	m_ps->m_inSubDocument = true;
 	bool oldIsUndoOn = isUndoOn();
@@ -1044,9 +1048,9 @@ void WPXContentListener::handleSubDocument(const WPXSubDocument *subDocument, co
 	if ((subDocument) && (m_ps->m_subDocuments.find(subDocument) == m_ps->m_subDocuments.end()))
 	{
 		m_ps->m_subDocuments.insert(subDocument);
-		if (isHeaderFooter)
+		if (subDocumentType == WPX_SUBDOCUMENT_HEADER_FOOTER)
 			m_ps->m_isHeaderFooterWithoutParagraph = true;
-		_handleSubDocument(subDocument, isHeaderFooter, tableList, nextTableIndice);
+		_handleSubDocument(subDocument, subDocumentType, tableList, nextTableIndice);
 		if (m_ps->m_isHeaderFooterWithoutParagraph)
 		{
 			_openSpan();
@@ -1057,7 +1061,7 @@ void WPXContentListener::handleSubDocument(const WPXSubDocument *subDocument, co
 	// restore our old parsing state
 	
 	setUndoOn(oldIsUndoOn);
-	if (m_ps->m_isPositionedObject)
+	if (m_ps->m_subDocumentType == WPX_SUBDOCUMENT_TEXT_BOX)
 		_closeSection();
 	delete m_ps;
 	m_ps = oldPS;

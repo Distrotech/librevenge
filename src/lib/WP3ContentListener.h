@@ -90,7 +90,7 @@ public:
 	void setFontSize(uint16_t fontSize);
 	void insertPageNumber(const WPXString &pageNumber);
 	void insertNoteReference(const WPXString &noteReference);
-	void insertNote(WPXNoteType noteType, WP3SubDocument *subDocument);
+	void insertNote(WPXNoteType noteType, const WP3SubDocument *subDocument);
 	void headerFooterGroup(uint8_t headerFooterType, uint8_t occurenceBits, WP3SubDocument *subDocument);
 	void suppressPage(uint16_t /* suppressCode */) {};
 	void backTab();
@@ -101,10 +101,10 @@ public:
 	void insertPicture(float height, float width, uint8_t leftColumn, uint8_t rightColumn,
 			uint16_t figureFlags, const WPXBinaryData &binaryData);
 	void insertTextBox(float height, float width, uint8_t leftColumn, uint8_t rightColumn,
-			uint16_t figureFlags, WP3SubDocument *subDocument);
+			uint16_t figureFlags, const WP3SubDocument *subDocument, const WP3SubDocument *caption);
 	
 protected:
-	void _handleSubDocument(const WPXSubDocument *subDocument, bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
+	void _handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList, int nextTableIndice = 0);
 	void _openParagraph();
 
 	void _flushText();

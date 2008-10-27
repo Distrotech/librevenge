@@ -117,7 +117,7 @@ public:
 	void undoChange(const uint8_t undoType, const uint16_t undoLevel);
 
 protected:
-	void _handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter, WPXTableList tableList, int nextTableIndice = 0);
+	void _handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList, int nextTableIndice = 0);
 
 	void _flushText() {}
 	void _changeList() {}

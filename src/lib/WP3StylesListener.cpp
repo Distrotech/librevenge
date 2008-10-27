@@ -212,7 +212,7 @@ void WP3StylesListener::headerFooterGroup(const uint8_t headerFooterType, const 
 			if (wpxOccurence != NEVER)
 			{
 				m_currentPage.setHeaderFooter(wpxType, headerFooterType, wpxOccurence, subDocument, tableList);
-				_handleSubDocument(subDocument, true, tableList);
+				_handleSubDocument(subDocument, WPX_SUBDOCUMENT_HEADER_FOOTER, tableList);
 			}
 			else
 				m_currentPage.setHeaderFooter(wpxType, headerFooterType, wpxOccurence, 0, tableList);
@@ -268,13 +268,13 @@ void WP3StylesListener::insertCell()
 	}
 }
 
-void WP3StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, const bool isHeaderFooter,
+void WP3StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, 
 						WPXTableList tableList, int /* nextTableIndice */)
 {
 	bool oldIsSubDocument = m_isSubDocument;
 	m_isSubDocument = true;
 	bool oldIsUndoOn = isUndoOn();
-	if (isHeaderFooter) 
+	if (subDocumentType == WPX_SUBDOCUMENT_HEADER_FOOTER) 
 	{
 		bool oldCurrentPageHasContent = m_currentPageHasContent;
 		WPXTable * oldCurrentTable = m_currentTable;
