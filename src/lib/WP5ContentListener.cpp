@@ -655,7 +655,7 @@ void WP5ContentListener::insertGraphicsData(const WPXBinaryData *data)
 	{
 		WPXPropertyList propList;
 		propList.insert("libwpd:mimetype", "image/x-wpg");
-		m_documentInterface->insertBinaryObject(propList, data);
+		m_documentInterface->insertBinaryObject(propList, *data);
 	}
 }
 

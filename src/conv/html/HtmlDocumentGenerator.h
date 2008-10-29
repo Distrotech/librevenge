@@ -87,7 +87,7 @@ public:
 	virtual void openFrame(const WPXPropertyList & /* propList */) {}
 	virtual void closeFrame() {}
 	
-	virtual void insertBinaryObject(const WPXPropertyList & /* propList */, const WPXBinaryData * /* object */) {}
+	virtual void insertBinaryObject(const WPXPropertyList & /* propList */, const WPXBinaryData & /* object */) {}
 
 private:
 	bool m_ignore;

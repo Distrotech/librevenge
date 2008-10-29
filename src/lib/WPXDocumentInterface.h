@@ -28,6 +28,7 @@
 #define WPXDOCUMENTINTERFACEIMPL_H
 #include "WPXPropertyList.h"
 #include "WPXPropertyListVector.h"
+#include "WPXBinaryData.h"
 
 /**
 Pure virtual class containing all the callback functions that can be made by
@@ -35,7 +36,6 @@ the parser. An application using this library should implement all the function
 definitions listed here.
 */
 
-class WPXBinaryData;
 class WPXInputStream;
 
 class WPXDocumentInterface
@@ -415,7 +415,7 @@ class WPXDocumentInterface
 	\li \c libwpd:mimetype The mimetype of the object
 	\param object Pointer to the binary object
 	*/
-	virtual void insertBinaryObject(const WPXPropertyList &propList, const WPXBinaryData *object) = 0;
+	virtual void insertBinaryObject(const WPXPropertyList &propList, const WPXBinaryData &object) = 0;
 };
 
 #endif /* WPXDOCUMENTINTERFACEIMPL_H */

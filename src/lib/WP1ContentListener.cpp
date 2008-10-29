@@ -544,7 +544,7 @@ void WP1ContentListener::insertPicture(uint16_t width, uint16_t height, const WP
 		
 		propList.clear();
 		propList.insert("libwpd:mimetype", "image/pict");
-		m_documentInterface->insertBinaryObject(propList, &binaryData);
+		m_documentInterface->insertBinaryObject(propList, binaryData);
 		
 		m_documentInterface->closeFrame();
 	}

@@ -392,7 +392,7 @@ void RawDocumentGenerator::closeFrame()
 	_D(("closeFrame()\n"), LC_OPEN_FRAME);
 }
 	
-void RawDocumentGenerator::insertBinaryObject(const WPXPropertyList & propList, const WPXBinaryData * /* object */)
+void RawDocumentGenerator::insertBinaryObject(const WPXPropertyList & propList, const WPXBinaryData & /* object */)
 {
 	__iprintf("insertBinaryObject(%s)\n", getPropString(propList).cstr());
 }

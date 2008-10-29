@@ -798,7 +798,7 @@ void WP3ContentListener::insertPicture(float height, float width, uint8_t /* lef
 		
 		propList.clear();
 		propList.insert("libwpd:mimetype", "image/pict");
-		m_documentInterface->insertBinaryObject(propList, &binaryData);
+		m_documentInterface->insertBinaryObject(propList, binaryData);
 		
 		m_documentInterface->closeFrame();
 	}
