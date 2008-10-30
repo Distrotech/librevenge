@@ -425,7 +425,7 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *documen
 	return error;
 }
 
-WPDResult parseSubDocument(WPXInputStream *input, WPXDocumentInterface *documentInterface, WPDFileFormat fileFormat)
+WPDResult WPDocument::parseSubDocument(WPXInputStream *input, WPXDocumentInterface *documentInterface, WPDFileFormat fileFormat)
 {
 	WPXParser *parser = 0;
 	
