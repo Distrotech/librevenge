@@ -413,9 +413,9 @@ class WPXDocumentInterface
 	Called when a binary object should be inserted
 	\param propList Defines a set of properties for the object. May contain:
 	\li \c libwpd:mimetype The mimetype of the object
-	\param object Pointer to the binary object
+	\param data Reference to the binary object
 	*/
-	virtual void insertBinaryObject(const WPXPropertyList &propList, const WPXBinaryData &object) = 0;
+	virtual void insertBinaryObject(const WPXPropertyList &propList, const WPXBinaryData &data) = 0;
 };
 
 #endif /* WPXDOCUMENTINTERFACEIMPL_H */
