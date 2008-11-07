@@ -82,9 +82,11 @@ public:
 	virtual void leftIndent(float offset) = 0;
 	virtual void leftRightIndent() = 0;
 	virtual void leftRightIndent(float offset) = 0;
-	virtual void insertPicture(float height, float width, uint8_t leftColumn, uint8_t rightColumn,
+	virtual void insertPicture(float height, float width, float verticalOffset, float horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
 			uint16_t figureFlags, const WPXBinaryData &binaryData) = 0;
-	virtual void insertTextBox(float height, float width, uint8_t leftColumn, uint8_t rightColumn,
+	virtual void insertTextBox(float height, float width, float verticalOffset, float horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
+			uint16_t figureFlags, const WP3SubDocument *subDocument, const WP3SubDocument *caption) = 0;
+	virtual void insertWP51Table(float height, float width, float verticalOffset, float horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
 			uint16_t figureFlags, const WP3SubDocument *subDocument, const WP3SubDocument *caption) = 0;
 
 	void setResourceFork(WP3ResourceFork *resourceFork) { m_resourceFork = resourceFork; }

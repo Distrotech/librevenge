@@ -288,12 +288,12 @@ WPXInputStream* WPXFileStream::getDocumentOLEStream(const char * name)
 	}
 
 	delete tmpStorage;
-	return new WPXStringStream((const char *)(d->buf), tmpLength);
+	return new WPXStringStream((d->buf), tmpLength);
 }
 
-WPXStringStream::WPXStringStream(const char *data, const unsigned int dataSize) :
+WPXStringStream::WPXStringStream(const unsigned char *data, const unsigned int dataSize) :
 	WPXInputStream(),
-	d(new WPXStringStreamPrivate(std::string(data, dataSize)))
+	d(new WPXStringStreamPrivate(std::string((const char *)data, dataSize)))
 {
 	d->buffer.seekg( 0, std::ios::end );
 	d->streamSize = (d->buffer.good() ? (unsigned long)d->buffer.tellg() : (unsigned long)-1L);
@@ -426,5 +426,5 @@ WPXInputStream* WPXStringStream::getDocumentOLEStream(const char * name)
 	}
 
 	delete tmpStorage;
-	return new WPXStringStream((const char *)(d->buf), tmpLength);
+	return new WPXStringStream(d->buf, tmpLength);
 }

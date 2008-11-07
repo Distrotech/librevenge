@@ -38,6 +38,8 @@ WP3WindowGroup::WP3WindowGroup(WPXInputStream *input, WPXEncryption *encryption)
 	m_boxType(0xFF),
 	m_width(0.0f),
 	m_height(0.0f),
+	m_horizontalOffset(0.0f),
+	m_verticalOffset(0.0f),
 	m_resourceID(0),
 	m_subDocument(NULL),
 	m_caption(NULL)
@@ -65,7 +67,7 @@ void WP3WindowGroup::_readContents(WPXInputStream * input, WPXEncryption * encry
 	case WP3_WINDOW_GROUP_HTML_IMAGE_BOX_FUNCTION:
 		{
 			input->seek(14, WPX_SEEK_CUR);
-			readU16(input, encryption, true); // picture flags
+			m_figureFlags = readU16(input, encryption, true); // picture flags
 			input->seek(2, WPX_SEEK_CUR);
 			m_leftColumn = readU8(input, encryption); // left align column
 			m_rightColumn = readU8(input, encryption); // right align column
@@ -73,7 +75,8 @@ void WP3WindowGroup::_readContents(WPXInputStream * input, WPXEncryption * encry
 			m_boxType = readU8(input, encryption);
 			input->seek(1, WPX_SEEK_CUR);
 			m_resourceID = readU16(input, encryption, true);
-			input->seek(8, WPX_SEEK_CUR);
+			m_verticalOffset = fixedPointToFloat(readU32(input, encryption, true));
+			m_horizontalOffset = fixedPointToFloat(readU32(input, encryption, true));
 			m_width = fixedPointToFloat(readU32(input, encryption, true));
 			m_height = fixedPointToFloat(readU32(input, encryption, true));
 			input->seek(9, WPX_SEEK_CUR);
@@ -116,7 +119,7 @@ void WP3WindowGroup::parse(WP3Listener * listener)
 			if (listener->getResourceFork()->getResource(0x57424f58, m_resourceID)) // WBOX resource
 			{
 				tmpWBOXData.append(listener->getResourceFork()->getResource(0x57424f58, m_resourceID)->getResourceData());
-				listener->insertPicture(m_height, m_width, m_leftColumn, m_rightColumn, m_figureFlags, tmpWBOXData);
+				listener->insertPicture(m_height, m_width, m_verticalOffset, m_horizontalOffset, m_leftColumn, m_rightColumn, m_figureFlags, tmpWBOXData);
 			}
 		}
 		else if (m_boxType == 0x01 || m_boxType == 0x03)
@@ -127,13 +130,18 @@ void WP3WindowGroup::parse(WP3Listener * listener)
 			if (listener->getResourceFork()->getResource(0x50494354, m_resourceID)) // replacement picture in PICT format
 			{
 				tmpPICTData.append(listener->getResourceFork()->getResource(0x50494354, m_resourceID)->getResourceData());
-				listener->insertPicture(m_height, m_width, m_leftColumn, m_rightColumn, m_figureFlags, tmpPICTData);
+				listener->insertPicture(m_height, m_width, m_verticalOffset, m_horizontalOffset, m_leftColumn, m_rightColumn, m_figureFlags, tmpPICTData);
 			}
 		}
 		else if (m_boxType == 0x00)
 		{
 			if (m_subDocument || m_caption)
-				listener->insertTextBox(m_height, m_width, m_leftColumn, m_rightColumn, m_figureFlags, m_subDocument, m_caption);
+				listener->insertTextBox(m_height, m_width, m_verticalOffset, m_horizontalOffset, m_leftColumn, m_rightColumn, m_figureFlags, m_subDocument, m_caption);
+		}
+		else if (m_boxType == 0x04 || m_boxType == 0x05)
+		{
+			if (m_subDocument || m_caption)
+				listener->insertWP51Table(m_height, m_width, m_verticalOffset, m_horizontalOffset, m_leftColumn, m_rightColumn, m_figureFlags, m_subDocument, m_caption);
 		}
 		break;
 

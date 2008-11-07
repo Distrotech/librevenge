@@ -51,7 +51,7 @@ class WPXStringStreamPrivate;
 class WPXStringStream: public WPXInputStream
 {
 public:
-	WPXStringStream(const char *data, const unsigned int dataSize);
+	WPXStringStream(const unsigned char *data, const unsigned int dataSize);
 	~WPXStringStream();
 
 	const unsigned char *read(size_t numBytes, size_t &numBytesRead);

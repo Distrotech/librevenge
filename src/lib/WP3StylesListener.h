@@ -83,9 +83,11 @@ public:
 	void leftIndent(float /* offset */) {}
 	void leftRightIndent() {}
 	void leftRightIndent(float /* offset */) {}
-	void insertPicture(float /* height */, float /* width */, uint8_t /* leftColumn */, uint8_t /* rightColumn */,
+	void insertPicture(float /* height */, float /* width */, float /* verticalOffset */, float /* horizontalOffset */, uint8_t /* leftColumn */, uint8_t /* rightColumn */,
 			uint16_t /* figureFlags */, const WPXBinaryData & /* binaryData */) {}
-	void insertTextBox(float /* height */, float /* width */, uint8_t /* leftColumn */, uint8_t /* rightColumn */,
+	void insertTextBox(float /* height */, float /* width */, float /* verticalOffset */, float /* horizontalOffset */, uint8_t /* leftColumn */, uint8_t /* rightColumn */,
+			uint16_t /* figureFlags */, const WP3SubDocument * /* subDocument */, const WP3SubDocument * /* caption */) {}
+	void insertWP51Table(float /* height */, float /* width */, float /* verticalOffset */, float /* horizontalOffset */, uint8_t /* leftColumn */, uint8_t /* rightColumn */,
 			uint16_t /* figureFlags */, const WP3SubDocument * /* subDocument */, const WP3SubDocument * /* caption */) {}
 
 protected:

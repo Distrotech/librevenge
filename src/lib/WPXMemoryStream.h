@@ -39,6 +39,7 @@ public:
 	virtual int seek(long offset, WPX_SEEK_TYPE seekType);
 	virtual long tell();
 	virtual bool atEOS();
+	virtual size_t getSize() const { return m_size; };
 
 private:
 	long m_offset;

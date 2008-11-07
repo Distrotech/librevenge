@@ -28,6 +28,7 @@
 #include "WPXFileStructure.h"
 #include "libwpd_internal.h"
 #include "WP3SubDocument.h"
+#include "WPDocument.h"
 #include <algorithm>
 #include <limits>
 
@@ -782,8 +783,8 @@ void WP3ContentListener::leftRightIndent(const float offset)
 	}
 }
 
-void WP3ContentListener::insertPicture(float height, float width, uint8_t /* leftColumn */, uint8_t /* rightColumn */,
-			uint16_t /* figureFlags */, const WPXBinaryData &binaryData)
+void WP3ContentListener::insertPicture(float height, float width, float verticalOffset, float horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
+			uint16_t figureFlags, const WPXBinaryData &binaryData)
 {
 	if (!isUndoOn())
 	{
@@ -791,9 +792,7 @@ void WP3ContentListener::insertPicture(float height, float width, uint8_t /* lef
 			_openSpan();
 
 		WPXPropertyList propList;
-		propList.insert("svg:width", (float)((double)width/72.0f));
-		propList.insert("svg:height", (float)((double)height/72.0f));
-		propList.insert("text:anchor-type", "as-char");
+		_handleFrameParameters( propList, height, width, verticalOffset, horizontalOffset, leftColumn, rightColumn, figureFlags );
 		m_documentInterface->openFrame(propList);
 		
 		propList.clear();
@@ -804,8 +803,8 @@ void WP3ContentListener::insertPicture(float height, float width, uint8_t /* lef
 	}
 }
 
-void WP3ContentListener::insertTextBox(float height, float width, uint8_t /* leftColumn */, uint8_t /* rightColumn */,
-			uint16_t /* figureFlags */, const WP3SubDocument * subDocument, const WP3SubDocument *caption)
+void WP3ContentListener::insertTextBox(float height, float width, float verticalOffset, float horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
+			uint16_t figureFlags, const WP3SubDocument * subDocument, const WP3SubDocument *caption)
 {
 	if (!isUndoOn())
 	{
@@ -813,9 +812,7 @@ void WP3ContentListener::insertTextBox(float height, float width, uint8_t /* lef
 			_openSpan();
 
 		WPXPropertyList propList;
-		propList.insert("svg:width", (float)((double)width/72.0f));
-		propList.insert("svg:height", (float)((double)height/72.0f));
-		propList.insert("text:anchor-type", "as-char");
+		_handleFrameParameters( propList, height, width, verticalOffset, horizontalOffset, leftColumn, rightColumn, figureFlags );
 		m_documentInterface->openFrame(propList);
 		
 		propList.clear();
@@ -834,8 +831,122 @@ void WP3ContentListener::insertTextBox(float height, float width, uint8_t /* lef
 				handleSubDocument(caption, WPX_SUBDOCUMENT_TEXT_BOX, m_parseState->m_tableList, 0);
 
 			m_documentInterface->closeTextBox();
+		}
 		
-			m_documentInterface->closeFrame();
+		m_documentInterface->closeFrame();
+	}
+}
+
+void WP3ContentListener::insertWP51Table(float height, float width, float verticalOffset, float horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
+			uint16_t figureFlags, const WP3SubDocument * subDocument, const WP3SubDocument *caption)
+{
+	if (!isUndoOn())
+	{
+		if (!m_ps->m_isSpanOpened)
+			_openSpan();
+
+		WPXPropertyList propList;
+		_handleFrameParameters( propList, height, width, verticalOffset, horizontalOffset, leftColumn, rightColumn, figureFlags );
+		m_documentInterface->openFrame(propList);
+
+		propList.clear();
+
+		if (subDocument || caption)
+		{
+			WPXPropertyList propList;
+			m_documentInterface->openTextBox(propList);
+		
+			// Positioned objects like text boxes are special beasts. They can contain all hierarchical elements up
+			// to the level of sections. They cannot open or close a page span though.
+			if (subDocument)
+				WPDocument::parseSubDocument(subDocument->getStream(), m_documentInterface, WPD_FILE_FORMAT_WP5);
+
+			if (caption)
+				handleSubDocument(caption, WPX_SUBDOCUMENT_TEXT_BOX, m_parseState->m_tableList, 0);
+
+			m_documentInterface->closeTextBox();
+		}
+
+		m_documentInterface->closeFrame();
+	}
+}
+
+void WP3ContentListener::_handleFrameParameters( WPXPropertyList &propList, float height, float width, float verticalOffset, float horizontalOffset,
+		uint8_t /* leftColumn */, uint8_t /* rightColumn */, uint16_t figureFlags  )
+{
+	propList.insert("svg:width", (float)((double)width/72.0f));
+	propList.insert("svg:height", (float)((double)height/72.0f));
+	
+	if ( ( figureFlags & 0x0300 ) == 0x0000 ) // paragraph
+	{
+		propList.insert("text:anchor-type", "paragraph");
+		propList.insert("style:vertical-rel", "paragraph" );
+		propList.insert("style:vertical-pos", "paragraph" );
+		propList.insert("style:horizontal-rel", "paragraph");
+		switch ( figureFlags & 0x0003 )
+		{
+		case 0x01:
+			propList.insert("style:horizontal-pos", "right");
+			break;
+		case 0x02:
+			propList.insert("style:horizontal-pos", "center");
+			break;
+		case 0x03:
+			propList.insert("style:horizontal-pos", "center");
+			break;
+		case 0x00:
+		default:
+			propList.insert("style:horizontal-pos", "left");
+			break;
+		}
+		
+			
+	}
+	else if ( ( figureFlags & 0x0300 ) == 0x0100 ) // page
+	{
+		propList.insert("text:anchor-type", "char");
+	}
+	else if ( ( figureFlags & 0x0300 ) == 0x0200 ) // character
+	{
+		propList.insert("text:anchor-type", "as-char");
+		if ( ( figureFlags & 0x1c00 ) == 0x0000 )
+			propList.insert( "style:vertical-rel", "baseline" );
+		else
+			propList.insert( "style:vertical-rel", "line" );
+		switch ( ( figureFlags & 0x1c00 ) >> 10 )
+		{
+			case 0x01:
+				if ( verticalOffset == 0.0 )
+					propList.insert( "style:vertical-pos", "top" );
+				else
+				{
+					propList.insert( "style:vertical-pos", "from-top" );
+					propList.insert( "svg:y", (float)((double)verticalOffset/72.0f));
+				}
+				break;
+			case 0x02:
+				if ( verticalOffset == 0.0 )
+					propList.insert( "style:vertical-pos", "middle" );
+				else
+				{
+					propList.insert( "style:vertical-pos", "from-top" );
+					propList.insert( "svg:y", (float)((double)verticalOffset/72.0f - (double)height/(2.0f*72.0f)));
+				}
+				break;
+			case 0x00:
+			case 0x03:
+				if ( verticalOffset == 0.0 )
+					propList.insert( "style:vertical-pos", "bottom" );
+				else
+				{
+					propList.insert( "style:vertical-pos", "from-top" );
+					propList.insert( "svg:y", (float)((double)verticalOffset/72.0f - (double)height/72.0f));
+				}
+				break;
+			case 0x04:
+				break;
+			default:
+				break;
 		}
 	}
 }
