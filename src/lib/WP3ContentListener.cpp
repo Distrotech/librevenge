@@ -877,30 +877,65 @@ void WP3ContentListener::_handleFrameParameters( WPXPropertyList &propList, floa
 	propList.insert("svg:width", (float)((double)width/72.0f));
 	propList.insert("svg:height", (float)((double)height/72.0f));
 	
+	if ( figureFlags & 0x0080 )
+		propList.insert( "style:wrap", "dynamic" );
+	else
+		propList.insert( "style:wrap", "none" );
+
 	if ( ( figureFlags & 0x0300 ) == 0x0000 ) // paragraph
 	{
 		propList.insert("text:anchor-type", "paragraph");
 		propList.insert("style:vertical-rel", "paragraph" );
-		propList.insert("style:vertical-pos", "paragraph" );
 		propList.insert("style:horizontal-rel", "paragraph");
 		switch ( figureFlags & 0x0003 )
 		{
 		case 0x01:
-			propList.insert("style:horizontal-pos", "right");
+			if (horizontalOffset == 0.0)
+				propList.insert("style:horizontal-pos", "right");
+			else
+			{
+				propList.insert( "style:horizontal-pos", "from-left");
+				propList.insert( "svg:x", (float)((double)horizontalOffset/72.0f - (double)width/72.0f +
+					(float)(m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight - m_ps->m_sectionMarginLeft
+					- m_ps->m_sectionMarginRight - m_ps->m_paragraphMarginLeft - m_ps->m_paragraphMarginRight)));
+			}
 			break;
 		case 0x02:
-			propList.insert("style:horizontal-pos", "center");
+			if (horizontalOffset == 0.0)
+				propList.insert("style:horizontal-pos", "center");
+			else
+			{
+				propList.insert( "style:horizontal-pos", "from-left");
+				propList.insert( "svg:x", (float)((double)horizontalOffset/72.0f - (double)width/(2.0f*72.0f) +
+					(float)(m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight - m_ps->m_sectionMarginLeft
+					- m_ps->m_sectionMarginRight - m_ps->m_paragraphMarginLeft - m_ps->m_paragraphMarginRight)/2.0f));
+			}
 			break;
 		case 0x03:
+			propList.insert("svg:width", (float)(m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight - m_ps->m_sectionMarginLeft
+				- m_ps->m_sectionMarginRight - m_ps->m_paragraphMarginLeft - m_ps->m_paragraphMarginRight) );
 			propList.insert("style:horizontal-pos", "center");
 			break;
 		case 0x00:
 		default:
-			propList.insert("style:horizontal-pos", "left");
+			if (horizontalOffset == 0.0)
+				propList.insert("style:horizontal-pos", "left");
+			else
+			{
+				propList.insert( "style:horizontal-pos", "from-left");
+				propList.insert( "svg:x", (float)((double)horizontalOffset/72.0f));
+			}
 			break;
 		}
-		
-			
+
+		if (verticalOffset == 0.0)
+			propList.insert( "style:vertical-pos", "top" );
+		else
+		{
+			propList.insert( "style:vertical-pos", "from-top" );
+			propList.insert( "svg:y", (float)((double)verticalOffset/72.0f));
+		}
+
 	}
 	else if ( ( figureFlags & 0x0300 ) == 0x0100 ) // page
 	{
