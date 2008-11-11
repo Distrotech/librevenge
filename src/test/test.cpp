@@ -139,7 +139,7 @@ void Test::testStream(void)
 	/************************ 
 	 * Test WPXStringStream *
 	 ************************/
-	input = new WPXStringStream("\1\2\3\4\0\5\6\7", 8);
+	input = new WPXStringStream((const unsigned char *)"\1\2\3\4\0\5\6\7", 8);
 
 	CPPUNIT_ASSERT_EQUAL ( false, input->isOLEStream() );
 	CPPUNIT_ASSERT_EQUAL ( (WPXInputStream*) NULL, input->getDocumentOLEStream("foo") );
