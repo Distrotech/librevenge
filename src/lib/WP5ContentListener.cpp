@@ -602,8 +602,50 @@ void WP5ContentListener::setDefaultFont(const WPXString &fontName, float fontSiz
 	m_defaultFontSize = fontSize;
 }
 
-void WP5ContentListener::boxOn(uint8_t positionAndType, uint8_t /* alignment */, uint16_t width, uint16_t height, uint16_t x, uint16_t y)
+void WP5ContentListener::boxOn(uint8_t positionAndType, uint8_t alignment, uint16_t width, uint16_t height, uint16_t x, uint16_t y)
 {
+/*
+Paragraph:
+	- Vertical position:
+		+ offset from top of paragraph
+	- Horizontal position:
+		+ Left
+		+ Right
+		+ Centre
+		+ Full
+
+Page:
+	- Vertical position:
+		+ Full Page
+		+ Top
+		+ Centre
+		+ Bottom
+		+ Set Position
+			* Offset from the top of page
+	- Horizontal position
+		+ Margins
+			* Left
+			* Right
+			* Centre
+			* Full
+		+ Columns (Which column)
+			* Left
+			* Right
+			* Centre
+			* Full
+		+ Set Position
+			* Offset from left of page
+
+Character:
+	- Vertical position:
+		+ Top
+		+ Centre
+		+ Bottom
+		+ Baseline
+	- Horizontal Position:
+		+ N/A
+*/
+
 	if (isUndoOn() || (m_ps->m_isTableOpened && !m_ps->m_isTableCellOpened))
 		return;
 		 
@@ -617,8 +659,11 @@ void WP5ContentListener::boxOn(uint8_t positionAndType, uint8_t /* alignment */,
 	propList.insert("svg:height", (float)((double)height/(double)WPX_NUM_WPUS_PER_INCH));
 	propList.insert("svg:width", (float)((double)width/(double)WPX_NUM_WPUS_PER_INCH));
 
-	propList.insert("svg:x", (float)((double)x/(double)WPX_NUM_WPUS_PER_INCH));
-	propList.insert("svg:y", (float)((double)y/(double)WPX_NUM_WPUS_PER_INCH));
+	if ( alignment & 0x80 )
+		propList.insert( "style:wrap", "dynamic" );
+	else
+		propList.insert( "style:wrap", "none" );
+
 
 	switch (positionAndType & 0x03)
 	{
@@ -630,6 +675,116 @@ void WP5ContentListener::boxOn(uint8_t positionAndType, uint8_t /* alignment */,
 		break;
 	case 0x02: // Char
 		propList.insert("text:anchor-type", "as-char");
+		break;
+	default:
+		break;
+	}
+	
+	propList.insert("style:vertical-rel", "page-content");
+	switch ( (positionAndType &  0x1c) >> 2 )
+	{
+	case 0x00:
+		propList.insert("svg:height", (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom ) );
+		propList.insert("style:vertical-rel", "page-content" );
+		propList.insert("style:vertical-pos", "middle" );
+		break;
+	case 0x01:
+		if ( y == 0.0)
+			propList.insert("style:vertical-pos", "top" );
+		else
+		{
+			propList.insert("style:vertical-pos", "from-top" );
+			float newPosition = (float)((double)y/(double)WPX_NUM_WPUS_PER_INCH);
+			if (newPosition > (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
+				- (double)height/(double)WPX_NUM_WPUS_PER_INCH) )
+			{
+				newPosition = (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
+				- (double)height/(double)WPX_NUM_WPUS_PER_INCH);
+			}
+			propList.insert("svg:y", newPosition);
+		}
+		break;
+	case 0x02:
+		if (y == 0.0)
+			propList.insert("style:vertical-pos", "middle" );
+		else
+		{
+			propList.insert("style:vertical-pos", "from-top" );
+			float newPosition = (float)((m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
+				- (double)height/(double)WPX_NUM_WPUS_PER_INCH)/2.0f);
+			if (newPosition > (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
+				- (double)height/(double)WPX_NUM_WPUS_PER_INCH) )
+			{
+				newPosition = (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
+					- (double)height/(double)WPX_NUM_WPUS_PER_INCH);
+			}
+			propList.insert("svg:y", newPosition);
+		}
+		break;
+	case 0x03:
+		if (y == 0.0)
+			propList.insert("style:vertical-pos", "bottom" );
+		else
+		{
+			propList.insert("style:vertical-pos", "from-top" );
+			float newPosition = (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
+				- (double)height/(double)WPX_NUM_WPUS_PER_INCH + (double)y/(double)WPX_NUM_WPUS_PER_INCH);
+			if (newPosition > (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
+				- (double)height/(double)WPX_NUM_WPUS_PER_INCH) )
+			{
+				newPosition = (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
+					- (double)height/(double)WPX_NUM_WPUS_PER_INCH);
+			}
+			propList.insert("svg:y", newPosition);
+		}
+		break;
+	case 0x04:
+		propList.insert("style:vertical-rel", "page" );
+		propList.insert("style:vertical-pos", "from-top" );
+		propList.insert("svg:y", (float)((double)y/(double)WPX_NUM_WPUS_PER_INCH));
+		break;
+	default:
+		break;
+	}
+	
+	propList.insert("style:horizontal-rel", "page-content" );
+	switch ( alignment & 0x03 )
+	{
+	case 0x00:
+		if ( x == 0.0 )
+			propList.insert( "style:horizontal-pos", "left");
+		else
+		{
+			propList.insert( "style:horizontal-pos", "from-left");
+			propList.insert( "svg:x", (float)((double)x/(double)WPX_NUM_WPUS_PER_INCH));
+		}
+		break;
+	case 0x01:
+		if ( x == 0.0 )
+			propList.insert( "style:horizontal-pos", "right");
+		else
+		{
+			propList.insert( "style:horizontal-pos", "from-left");
+			propList.insert( "svg:x", (float)(m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight
+				- (double)width/(double)WPX_NUM_WPUS_PER_INCH + (double)x/(double)WPX_NUM_WPUS_PER_INCH));
+		}
+		break;
+	case 0x02:
+		if ( x == 0.0 )
+			propList.insert( "style:horizontal-pos", "center" );
+		else
+		{
+			propList.insert( "style:horizontal-pos", "from-left");
+			propList.insert( "svg:x", (float)((m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight
+				- (double)width/(double)WPX_NUM_WPUS_PER_INCH)/2.0f + (double)x/(double)WPX_NUM_WPUS_PER_INCH));
+		}
+		break;
+	case 0x03:
+		propList.insert("svg:width", (float)(m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight ) );
+		propList.insert("style:horizontal-rel", "page-content" );
+		propList.insert("style:horizontal-pos", "center" );
+		break;
+	default:
 		break;
 	}
 	

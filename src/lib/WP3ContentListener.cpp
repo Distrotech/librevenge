@@ -940,6 +940,129 @@ void WP3ContentListener::_handleFrameParameters( WPXPropertyList &propList, floa
 	else if ( ( figureFlags & 0x0300 ) == 0x0100 ) // page
 	{
 		propList.insert("text:anchor-type", "char");
+		
+		if ( ( figureFlags & 0x1f08 ) == 0x0100 ) // full page
+		{
+			propList.insert("svg:width", (float)(m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight ) );
+			propList.insert("svg:height", (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom ) );
+			propList.insert("style:vertical-rel", "page-content" );
+			propList.insert("style:vertical-pos", "middle" );
+			propList.insert("style:horizontal-rel", "page-content" );
+			propList.insert("style:horizontal-pos", "center" );
+		}
+		else if ( ( figureFlags & 0x1f08 ) == 0x1108 ) // abs. page
+		{
+			propList.insert("style:vertical-rel", "page" );
+			propList.insert("style:vertical-pos", "from-top" );
+			propList.insert("svg:y", (float)((double)verticalOffset/72.0f));
+			propList.insert("style:horizontal-rel", "page-start-margin" );
+			propList.insert("style:horizontal-pos", "from-left" );
+			propList.insert("svg:x", (float)((double)horizontalOffset/72.0f));
+		}
+		else
+		{
+			propList.insert("style:vertical-rel", "page-content" );
+			propList.insert("style:horizontal-rel", "page-content" );
+			switch ( ( figureFlags & 0x1c00 ) >> 10 )
+			{
+			case 0x00:
+				propList.insert("svg:height", (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom ) );
+				propList.insert("style:vertical-rel", "page-content" );
+				propList.insert("style:vertical-pos", "middle" );
+				break;
+			case 0x01:
+				if ( verticalOffset == 0.0)
+					propList.insert("style:vertical-pos", "top" );
+				else
+				{
+					propList.insert("style:vertical-pos", "from-top" );
+					float newPosition = (float)((double)verticalOffset/72.0f);
+					if (newPosition > (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
+						- (double)height/72.0f) )
+						newPosition = (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
+						- (double)height/72.0f);
+					propList.insert("svg:y", newPosition);
+				}
+				break;
+			case 0x02:
+				if (verticalOffset == 0.0)
+					propList.insert("style:vertical-pos", "middle" );
+				else
+				{
+					propList.insert("style:vertical-pos", "from-top" );
+					float newPosition = (float)((m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
+						- (double)height/72.0f)/2.0f);
+					if (newPosition > (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
+						- (double)height/72.0f) )
+						newPosition = (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
+						- (double)height/72.0f);
+					propList.insert("svg:y", newPosition);
+				}
+				break;
+			case 0x03:
+				if (verticalOffset == 0.0)
+					propList.insert("style:vertical-pos", "bottom" );
+				else
+				{
+					propList.insert("style:vertical-pos", "from-top" );
+					float newPosition = (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
+						- (double)height/72.0f + (double)verticalOffset/72.0f);
+					if (newPosition > (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
+						- (double)height/72.0f) )
+						newPosition = (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
+						- (double)height/72.0f);
+					propList.insert("svg:y", newPosition);
+				}
+				break;
+			case 0x04:
+				propList.insert("style:vertical-rel", "page" );
+				propList.insert("style:vertical-pos", "from-top" );
+				propList.insert("svg:y", (float)((double)verticalOffset/72.0f));
+				break;		
+			default:
+				break;
+			}
+			
+			switch ( figureFlags & 0x0003 )
+			{
+			case 0x00:
+				if ( horizontalOffset == 0.0 )
+					propList.insert( "style:horizontal-pos", "left");
+				else
+				{
+					propList.insert( "style:horizontal-pos", "from-left");
+					propList.insert( "svg:x", (float)((double)horizontalOffset/72.0f));
+				}
+				break;
+			case 0x01:
+				if ( horizontalOffset == 0.0 )
+					propList.insert( "style:horizontal-pos", "right");
+				else
+				{
+					propList.insert( "style:horizontal-pos", "from-left");
+					propList.insert( "svg:x", (float)(m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight
+						- (double)width/72.0f + (double)horizontalOffset/72.0f));
+				}
+				break;
+			case 0x02:
+				if ( horizontalOffset == 0.0 )
+					propList.insert( "style:horizontal-pos", "center" );
+				else
+				{
+					propList.insert( "style:horizontal-pos", "from-left");
+					propList.insert( "svg:x", (float)((m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight
+						- (double)width/72.0f)/2.0f + (double)horizontalOffset/72.0f));
+				}
+				break;
+			case 0x03:
+				propList.insert("svg:width", (float)(m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight ) );
+				propList.insert("style:horizontal-rel", "page-content" );
+				propList.insert("style:horizontal-pos", "center" );
+				break;
+			default:
+				break;
+			}
+		}
 	}
 	else if ( ( figureFlags & 0x0300 ) == 0x0200 ) // character
 	{
