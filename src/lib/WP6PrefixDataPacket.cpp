@@ -38,7 +38,6 @@
 #include "WP6TableStylePacket.h"
 #include "WP6GraphicsFilenamePacket.h"
 #include "WP6GraphicsCachedFileDataPacket.h"
-#include "libwpd.h"
 #include "libwpd_internal.h"
 
 WP6PrefixDataPacket::WP6PrefixDataPacket(WPXInputStream * /* input */, WPXEncryption * /* encryption */) :

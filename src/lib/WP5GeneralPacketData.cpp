@@ -29,7 +29,6 @@
 #include "WP5ListFontsUsedPacket.h"
 #include "WP5FontNameStringPoolPacket.h"
 #include "WP5GraphicsInformationPacket.h"
-#include "libwpd.h"
 #include "libwpd_internal.h"
 
 WP5GeneralPacketData::WP5GeneralPacketData()

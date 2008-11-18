@@ -22,7 +22,6 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "libwpd.h"
 #include "WP3Header.h"
 #include "libwpd_internal.h"
 

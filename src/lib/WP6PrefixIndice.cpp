@@ -25,7 +25,6 @@
 
 #include "WP6PrefixIndice.h"
 #include "WP6FileStructure.h" 
-#include "libwpd.h"
 #include "libwpd_internal.h"
 
 WP6PrefixIndice::WP6PrefixIndice(WPXInputStream * input, WPXEncryption *encryption, int id)

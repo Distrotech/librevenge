@@ -23,7 +23,6 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "libwpd.h"
 #include "WP60Header.h"
 #include "WP6FileStructure.h" 
 #include "libwpd_internal.h"

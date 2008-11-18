@@ -23,7 +23,6 @@
 
 #include "WPXStreamImplementation.h"
 #include "WPXOLEStream.h"
-#include "libwpd.h"
 
 #include <fstream>
 #include <sstream>

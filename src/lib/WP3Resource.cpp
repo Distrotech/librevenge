@@ -26,7 +26,6 @@
 
 #include "WP3Resource.h"
 #include "WP3FileStructure.h"
-#include "libwpd.h"
 #include "libwpd_internal.h"
 
 WP3Resource::WP3Resource(uint32_t resourceType, uint32_t resourceReferenceID, const WPXString resourceName,
