@@ -56,10 +56,10 @@ void WP1PictureGroup::_readContents(WPXInputStream *input, WPXEncryption *encryp
 	if (dataSize + 11 > getSize())
 		return;
 	input->seek(-2, WPX_SEEK_CUR);
-	WPXBinaryData tmpBinaryData(input, encryption, dataSize);
 	for (int i = 0; i < 512; i++)
 		m_binaryData.append((unsigned char)0);
-	m_binaryData.append(tmpBinaryData);
+	for (size_t j = 0; j < dataSize && !input->atEOS(); j++ );
+		m_binaryData.append(readU8(input, encryption));
 #if DUMP_PICTURE
 	std::ostringstream filename;
 	filename << "binarydump" << pictureId++ << ".pct";

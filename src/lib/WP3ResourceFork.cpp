@@ -89,9 +89,11 @@ WP3ResourceFork::WP3ResourceFork(WPXInputStream *input, WPXEncryption *encryptio
 					encryption->setEncryptionMaskBase(0);
 				}
 			}
-
-			WPXBinaryData resourceData(input, encryption, (size_t)resourceDataSize);
-
+	
+			WPXBinaryData resourceData;
+			for (size_t k = 0; k < (size_t)resourceDataSize && !input->atEOS(); k++)
+				resourceData.append((unsigned char)readU8(input, encryption));
+			
 			if (encryption)
 			{
 				encryption->setEncryptionStartOffset(oldEncryptionOffset);

@@ -28,9 +28,8 @@
 #include "WPXString.h"
 #include <stdio.h>
 
-class WPXBinaryDataImpl;
 class WPXInputStream;
-class WPXEncryption;
+class WPXBinaryDataImpl;
 
 class WPXBinaryData
 {
@@ -38,12 +37,10 @@ public:
 	WPXBinaryData();
 	WPXBinaryData(const WPXBinaryData &);
 	WPXBinaryData(const unsigned char *buffer, const size_t bufferSize);
-	WPXBinaryData(const WPXInputStream *input, WPXEncryption *encryption, const size_t inputSize);
 	~WPXBinaryData();
 
 	void append(const WPXBinaryData &data);
 	void append(const unsigned char *buffer, const size_t bufferSize);
-	void append(const WPXInputStream *input, WPXEncryption *encryption, const size_t inputSize);
 	void append(const unsigned char c);
 	void clear();
 	

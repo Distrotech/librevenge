@@ -26,8 +26,8 @@ uninstall-libtool-import-lib:
 endif
 
 if DEF_FILES
-export_symbols_libwpd = "-export-symbols libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.def"
-export_symbols_libwpd_stream = "-export-symbols libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.def"
+export_symbols_libwpd = -export-symbols libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.def
+export_symbols_libwpd_stream = -export-symbols libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.def
 else
 export_symbols_libwpd =
 export_symbols_libwpd_stream =
