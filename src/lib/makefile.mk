@@ -67,6 +67,8 @@ SLOFILES= \
 	$(SLO)$/WP3PageFormatGroup.obj \
 	$(SLO)$/WP3Parser.obj \
 	$(SLO)$/WP3Part.obj \
+	$(SLO)$/WP3Resource.obj \
+	$(SLO)$/WP3ResourceFork.obj \
 	$(SLO)$/WP3SingleByteFunction.obj \
 	$(SLO)$/WP3StylesListener.obj \
 	$(SLO)$/WP3SubDocument.obj \
@@ -76,6 +78,7 @@ SLOFILES= \
 	$(SLO)$/WP3UnsupportedFixedLengthGroup.obj \
 	$(SLO)$/WP3UnsupportedVariableLengthGroup.obj \
 	$(SLO)$/WP3VariableLengthGroup.obj \
+	$(SLO)$/WP3WindowGroup.obj \
 	$(SLO)$/WP42ContentListener.obj \
 	$(SLO)$/WP42FileStructure.obj \
 	$(SLO)$/WP42HeaderFooterGroup.obj \

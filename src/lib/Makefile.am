@@ -25,6 +25,14 @@ install-libtool-import-lib:
 uninstall-libtool-import-lib:
 endif
 
+if DEF_FILES
+export_symbols_libwpd = "-export-symbols libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.def"
+export_symbols_libwpd_stream = "-export-symbols libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.def"
+else
+export_symbols_libwpd =
+export_symbols_libwpd_stream =
+endif
+
 if WITH_LIBWPD_STREAM
 target_libwpd_stream = libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.la
 else
@@ -49,7 +57,7 @@ AM_CXXFLAGS = $(DEBUG_CXXFLAGS)
 
 libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_LIBADD  = @LIBWPD_WIN32_RESOURCE@
 libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_DEPENDENCIES = @LIBWPD_WIN32_RESOURCE@
-libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic $(no_undefined)
+libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic $(no_undefined) $(export_symbols_libwpd)
 libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	libwpd_internal.cpp \
 	libwpd_math.cpp \
@@ -406,7 +414,7 @@ libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_include_HEADERS = $(libwpd
 
 libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_LIBADD  = @LIBWPD_STREAM_WIN32_RESOURCE@
 libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_DEPENDENCIES = @LIBWPD_STREAM_WIN32_RESOURCE@
-libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic $(no_undefined)
+libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic $(no_undefined) $(export_symbols_libwpd_stream)
 libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = $(libwpd_stream_sources)
 
 endif
@@ -432,8 +440,10 @@ EXTRA_DIST = \
 	$(libwpd_stream_sources) \
 	$(libwpd_stream_headers) \
 	makefile.mk \
+	libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.def \
 	libwpd.h.in \
 	libwpd.rc.in \
+	libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.def \
 	libwpd-stream.h.in \
 	libwpd-stream.rc.in
 
