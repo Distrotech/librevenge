@@ -41,27 +41,30 @@ class WPXPropertyListVector
 {
 public:
 	WPXPropertyListVector(const WPXPropertyListVector &);
-        WPXPropertyListVector();
+	WPXPropertyListVector();
 	virtual ~WPXPropertyListVector();
-	virtual void append(const WPXPropertyList &elem);
-	virtual size_t count() const;
+	void append(const WPXPropertyList &elem);
+	void append(const WPXPropertyListVector &vec);
+	size_t count() const;
+	const WPXPropertyList& operator[](size_t index) const;
 
-        class Iter
-        {
-        public:
-                Iter(const WPXPropertyListVector &vect);
-                virtual ~Iter();
-                void rewind();
+	class Iter
+	{
+	public:
+		Iter(const WPXPropertyListVector &vect);
+		virtual ~Iter();
+		void rewind();
 		bool next();
 		bool last();
-                const WPXPropertyList & operator()() const;
+		const WPXPropertyList & operator()() const;
 
-        private:
-                WPXPropertyListVectorIterImpl *m_iterImpl;
+	private:
+		WPXPropertyListVectorIterImpl *m_iterImpl;
 		Iter(const Iter&);
 		Iter& operator=(const Iter&);
-        };
-        friend class WPXPropertyListVector::Iter;
+	};
+
+	friend class WPXPropertyListVector::Iter;
 
 private:
 	WPXPropertyListVectorImpl *m_impl;
