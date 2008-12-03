@@ -40,7 +40,7 @@ protected:
 
 private:
 	uint8_t m_indentType;
-	float m_indentPosition;
+	double m_indentPosition;
 };
 
 #endif /* WP5INDENTGROUP_H */

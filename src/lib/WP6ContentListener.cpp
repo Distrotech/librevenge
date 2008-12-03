@@ -42,7 +42,7 @@
 #include <algorithm>
 #include <time.h>
 
-#define WP6_DEFAULT_FONT_SIZE 12.0f
+#define WP6_DEFAULT_FONT_SIZE 12.0
 #define WP6_DEFAULT_FONT_NAME "Times New Roman"
 
 WP6OutlineDefinition::WP6OutlineDefinition(const WP6OutlineLocation outlineLocation, const uint8_t *numberingMethods,
@@ -109,8 +109,8 @@ _WP6ContentParsingState::_WP6ContentParsingState(WPXTableList tableList, int nex
 	m_numberText(),
 	m_textAfterDisplayReference(),
 	m_textAfterNumber(),
-	m_paragraphMarginBottomRelative(1.0f),
-	m_paragraphMarginBottomAbsolute(0.0f),
+	m_paragraphMarginBottomRelative(1.0),
+	m_paragraphMarginBottomAbsolute(0.0),
 
 	m_numRemovedParagraphBreaks(0),
 	
@@ -468,10 +468,10 @@ void WP6ContentListener::defineTabStops(const bool isRelative, const std::vector
 }
 
 
-void WP6ContentListener::insertTab(const uint8_t tabType, float tabPosition)
+void WP6ContentListener::insertTab(const uint8_t tabType, double tabPosition)
 {
 	bool tmpHasTabPositionInformation = true;
-	if (tabPosition >= (float)((double)0xFFFE/(double)WPX_NUM_WPUS_PER_INCH))
+	if (tabPosition >= (double)((double)0xFFFE/(double)WPX_NUM_WPUS_PER_INCH))
 		tmpHasTabPositionInformation = false;
 	else
 		tabPosition = _movePositionToFirstColumn(tabPosition);
@@ -559,7 +559,7 @@ void WP6ContentListener::insertTab(const uint8_t tabType, float tabPosition)
 						- m_ps->m_leftMarginByPageMarginChange - m_ps->m_leftMarginByParagraphMarginChange;
 				if (m_parseState->m_isListReference)
 					m_parseState->m_numListExtraTabs++;
-				if (m_ps->m_paragraphTextIndent != 0.0f)
+				if (m_ps->m_paragraphTextIndent != 0.0)
 					m_ps->m_textIndentByTabs -= m_ps->m_paragraphTextIndent;
 				break;
 
@@ -575,7 +575,7 @@ void WP6ContentListener::insertTab(const uint8_t tabType, float tabPosition)
 				// L/R Indent is symetrical from the effective paragraph margins and position indicates only
 				// the distance from the left edge
 				m_ps->m_rightMarginByTabs = m_ps->m_leftMarginByTabs;
-				if (m_ps->m_paragraphTextIndent != 0.0f)
+				if (m_ps->m_paragraphTextIndent != 0.0)
 					m_ps->m_textIndentByTabs -= m_ps->m_paragraphTextIndent;
 				break;	
 				
@@ -701,11 +701,11 @@ void WP6ContentListener::fontChange(const uint16_t matchedFontPointSize, const u
 		_closeSpan();
 		if (matchedFontPointSize)
 		{
-			m_ps->m_fontSize = (float)rint((double)((((double)matchedFontPointSize)/100.0f)*2.0f));
+			m_ps->m_fontSize = (double)rint((double)((((double)matchedFontPointSize)/100.0)*2.0));
 			// We compute the real space after paragraph in inches using the size of the font and relative spacing.
 			// We have to recompute this every change of fontSize.
 			m_ps->m_paragraphMarginBottom =
-				(float)(((m_parseState->m_paragraphMarginBottomRelative - 1.0f)*m_ps->m_fontSize)/72.0f) +
+				(double)(((m_parseState->m_paragraphMarginBottomRelative - 1.0)*m_ps->m_fontSize)/72.0) +
 				m_parseState->m_paragraphMarginBottomAbsolute;
 		}
 		if (fontPID)
@@ -790,7 +790,7 @@ void WP6ContentListener::attributeChange(const bool isOn, const uint8_t attribut
 	}
 }
 
-void WP6ContentListener::spacingAfterParagraphChange(const float spacingRelative, const float spacingAbsolute)
+void WP6ContentListener::spacingAfterParagraphChange(const double spacingRelative, const double spacingAbsolute)
 {
 	if (!isUndoOn())
 	{
@@ -800,7 +800,7 @@ void WP6ContentListener::spacingAfterParagraphChange(const float spacingRelative
 		// We have to recompute this every change of fontSize. That is why we keep the two components in
 		// m_parsingState and the following formula is to be found in the fontChange(...) function as well.
 		m_ps->m_paragraphMarginBottom =
-			(float)(((m_parseState->m_paragraphMarginBottomRelative - 1.0f)*m_ps->m_fontSize)/72.0f) +
+			(double)(((m_parseState->m_paragraphMarginBottomRelative - 1.0)*m_ps->m_fontSize)/72.0) +
 			m_parseState->m_paragraphMarginBottomAbsolute;
 		// Variable spacingAfterParagraphRelative already contains the height of the space in inches
 	}
@@ -810,20 +810,20 @@ void WP6ContentListener::marginChange(uint8_t side, uint16_t margin)
 {
 	if (!isUndoOn())
 	{
-		float marginInch = (float)((double)margin/ (double)WPX_NUM_WPUS_PER_INCH);
+		double marginInch = (double)((double)margin/ (double)WPX_NUM_WPUS_PER_INCH);
 
 		switch(side)
 		{
 		case WPX_LEFT:
 			if (m_ps->m_numColumns > 1)
 			{
-				m_ps->m_leftMarginByPageMarginChange = 0.0f;
+				m_ps->m_leftMarginByPageMarginChange = 0.0;
 				m_ps->m_sectionMarginLeft = marginInch - m_ps->m_pageMarginLeft;
 			}
 			else
 			{
 				m_ps->m_leftMarginByPageMarginChange = marginInch - m_ps->m_pageMarginLeft;
-				m_ps->m_sectionMarginLeft = 0.0f;
+				m_ps->m_sectionMarginLeft = 0.0;
 			}
 			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
 						+ m_ps->m_leftMarginByParagraphMarginChange
@@ -832,13 +832,13 @@ void WP6ContentListener::marginChange(uint8_t side, uint16_t margin)
 		case WPX_RIGHT:
 			if (m_ps->m_numColumns > 1)
 			{
-				m_ps->m_rightMarginByPageMarginChange = 0.0f;
+				m_ps->m_rightMarginByPageMarginChange = 0.0;
 				m_ps->m_sectionMarginRight = marginInch - m_ps->m_pageMarginRight;
 			}
 			else
 			{
 				m_ps->m_rightMarginByPageMarginChange = marginInch - m_ps->m_pageMarginRight;
-				m_ps->m_sectionMarginRight = 0.0f;
+				m_ps->m_sectionMarginRight = 0.0;
 			}
 			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
 						+ m_ps->m_rightMarginByParagraphMarginChange
@@ -865,7 +865,7 @@ void WP6ContentListener::paragraphMarginChange(uint8_t side, int16_t margin)
 
 		m_ps->m_currentListLevel = 0;
 
-		float marginInch = (float)((double)margin / (double)WPX_NUM_WPUS_PER_INCH);
+		double marginInch = (double)((double)margin / (double)WPX_NUM_WPUS_PER_INCH);
 		switch(side)
 		{
 		case WPX_LEFT:
@@ -897,7 +897,7 @@ void WP6ContentListener::indentFirstLineChange(int16_t offset)
 {
 	if (!isUndoOn())
 	{
-		float offsetInch = (float)((double)offset / (double)WPX_NUM_WPUS_PER_INCH);
+		double offsetInch = (double)((double)offset / (double)WPX_NUM_WPUS_PER_INCH);
 		m_ps->m_textIndentByParagraphIndentChange = offsetInch;
 		// This is necessary in case we have Indent First Line and Hard Back Tab
 		// in the same time. The Hard Back Tab applies to the current paragraph
@@ -911,7 +911,7 @@ void WP6ContentListener::indentFirstLineChange(int16_t offset)
 }
 
 void WP6ContentListener::columnChange(const WPXTextColumnType /* columnType */, const uint8_t numColumns,
-					const std::vector<float> &columnWidth, const std::vector<bool> &isFixedWidth)
+					const std::vector<double> &columnWidth, const std::vector<bool> &isFixedWidth)
 {
 	if (!isUndoOn())
 	{
@@ -924,7 +924,7 @@ void WP6ContentListener::columnChange(const WPXTextColumnType /* columnType */, 
 		m_ps->m_isParagraphColumnBreak = false;
 		m_ps->m_isTextColumnWithoutParagraph = false;
 
-		float remainingSpace = m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_sectionMarginLeft
+		double remainingSpace = m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_sectionMarginLeft
 			- m_ps->m_pageMarginRight - m_ps->m_sectionMarginRight
 			- m_ps->m_leftMarginByPageMarginChange - m_ps->m_rightMarginByPageMarginChange;
 		// determine the space that is to be divided between columns whose width is expressed in percentage of remaining space
@@ -942,14 +942,14 @@ void WP6ContentListener::columnChange(const WPXTextColumnType /* columnType */, 
 			for (i=0; i<numColumns; i++)
 			{
 				if (i == 0)
-					tmpColumn.m_leftGutter = 0.0f;
+					tmpColumn.m_leftGutter = 0.0;
 				else if (isFixedWidth[2*i-1])
 					tmpColumn.m_leftGutter = 0.5f * columnWidth[2*i-1];
 				else
 					tmpColumn.m_leftGutter = 0.5f * remainingSpace * columnWidth[2*i-1];
 				
 				if (i >= (numColumns - 1))
-					tmpColumn.m_rightGutter = 0.0f;
+					tmpColumn.m_rightGutter = 0.0;
 				else if (isFixedWidth[2*i+1])
 					tmpColumn.m_rightGutter = 0.5f * columnWidth[2*i+1];
 				else
@@ -1260,7 +1260,7 @@ void WP6ContentListener::defineTable(const uint8_t position, const uint16_t left
 			break;
 		}
 		// Note: WordPerfect has an offset from the left edge of the page. We translate it to the offset from the left margin
-		m_ps->m_tableDefinition.m_leftOffset = (float)((double)leftOffset / (double)WPX_NUM_WPUS_PER_INCH) - m_ps->m_paragraphMarginLeft;
+		m_ps->m_tableDefinition.m_leftOffset = (double)((double)leftOffset / (double)WPX_NUM_WPUS_PER_INCH) - m_ps->m_paragraphMarginLeft;
 
 		// remove all the old column information
 		m_ps->m_tableDefinition.m_columns.clear();
@@ -1282,9 +1282,9 @@ void WP6ContentListener::addTableColumnDefinition(const uint32_t width, const ui
 	{
 		// define the new column
 		WPXColumnDefinition colDef;
-		colDef.m_width = (float)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
-		colDef.m_leftGutter = (float)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
-		colDef.m_rightGutter = (float)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
+		colDef.m_width = (double)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
+		colDef.m_leftGutter = (double)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
+		colDef.m_rightGutter = (double)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
 
 		WPXColumnProperties colProp;
 		colProp.m_attributes = attributes;
@@ -1332,7 +1332,7 @@ void WP6ContentListener::insertRow(const uint16_t rowHeight, const bool isMinimu
 	if (!isUndoOn() && m_ps->m_isTableOpened)
 	{
 		_flushText();
-		float rowHeightInch = (float)((double) rowHeight / (double)WPX_NUM_WPUS_PER_INCH);
+		double rowHeightInch = (double)((double) rowHeight / (double)WPX_NUM_WPUS_PER_INCH);
 		_openTableRow(rowHeightInch, isMinimumHeight, isHeaderRow);
 	}
 }
@@ -1415,17 +1415,17 @@ void WP6ContentListener::boxOn(const uint8_t /* anchoringType */, const uint8_t 
 	if (heightFlags & 0x01)
 		propList.insert("style:rel-height", "scale");
 	else
-		propList.insert("svg:height", (float)((double)height/(double)WPX_NUM_WPUS_PER_INCH));
+		propList.insert("svg:height", (double)((double)height/(double)WPX_NUM_WPUS_PER_INCH));
 
 	if (widthFlags & 0x01)
 		propList.insert("style:rel-width", "scale");
 	else
-		propList.insert("svg:width", (float)((double)width/(double)WPX_NUM_WPUS_PER_INCH));
+		propList.insert("svg:width", (double)((double)width/(double)WPX_NUM_WPUS_PER_INCH));
 
 	if (boxContentType != 0x01) // This seems to work for the text boxes only
 	{
-		propList.insert("svg:height", (float)((double)height/(double)WPX_NUM_WPUS_PER_INCH));
-		propList.insert("svg:width", (float)((double)width/(double)WPX_NUM_WPUS_PER_INCH));
+		propList.insert("svg:height", (double)((double)height/(double)WPX_NUM_WPUS_PER_INCH));
+		propList.insert("svg:width", (double)((double)width/(double)WPX_NUM_WPUS_PER_INCH));
 	}
 		
 	if ((boxContentType == 0x03) && nativeWidth && nativeHeight)
@@ -1433,22 +1433,22 @@ void WP6ContentListener::boxOn(const uint8_t /* anchoringType */, const uint8_t 
 		
 		if ((heightFlags & 0x01) && (widthFlags & 0x01))
 		{
-			propList.insert("svg:height", (float)((double)nativeHeight/(double)WPX_NUM_WPUS_PER_INCH));
-			propList.insert("svg:width", (float)((double)nativeWidth/(double)WPX_NUM_WPUS_PER_INCH));
+			propList.insert("svg:height", (double)((double)nativeHeight/(double)WPX_NUM_WPUS_PER_INCH));
+			propList.insert("svg:width", (double)((double)nativeWidth/(double)WPX_NUM_WPUS_PER_INCH));
 		}
 		else
 		{
 			if (heightFlags & 0x01)
-				propList.insert("svg:height", (float)((double)width * (double)nativeHeight /
+				propList.insert("svg:height", (double)((double)width * (double)nativeHeight /
 					((double)nativeWidth * (double)WPX_NUM_WPUS_PER_INCH)));
 			if (widthFlags & 0x01)
-				propList.insert("svg:width", (float)((double)height * (double)nativeWidth /
+				propList.insert("svg:width", (double)((double)height * (double)nativeWidth /
 					((double)nativeHeight * (double)WPX_NUM_WPUS_PER_INCH)));
 		}
 	} 
 
 	if (horizontalOffset)
-		propList.insert("svg:x", (float)((double)horizontalOffset/(double)WPX_NUM_WPUS_PER_INCH));
+		propList.insert("svg:x", (double)((double)horizontalOffset/(double)WPX_NUM_WPUS_PER_INCH));
 
 	switch (generalPositioningFlags & 0x03)
 	{
@@ -1470,14 +1470,14 @@ void WP6ContentListener::boxOn(const uint8_t /* anchoringType */, const uint8_t 
 			case 0x00:
 				propList.insert("style:horizontal-rel", "page-content");
 				propList.insert("style:horizontal-pos", "from-left");
-				propList.insert("svg:x", (float)((double)horizontalOffset/(double)WPX_NUM_WPUS_PER_INCH)
+				propList.insert("svg:x", (double)((double)horizontalOffset/(double)WPX_NUM_WPUS_PER_INCH)
 					+ m_ps->m_leftMarginByPageMarginChange + m_ps->m_sectionMarginLeft);
 				break;
 			case 0x01:
 				propList.insert("style:horizontal-rel", "page-end-margin");
 				propList.insert("style:horizontal-pos", "from-left");
-				propList.insert("svg:x", (float)((double)horizontalOffset/(double)WPX_NUM_WPUS_PER_INCH)
-					- (float)((double)width/(double)WPX_NUM_WPUS_PER_INCH)
+				propList.insert("svg:x", (double)((double)horizontalOffset/(double)WPX_NUM_WPUS_PER_INCH)
+					- (double)((double)width/(double)WPX_NUM_WPUS_PER_INCH)
 					- m_ps->m_rightMarginByPageMarginChange - m_ps->m_sectionMarginRight);
 				break;
 			case 0x02:
@@ -1512,14 +1512,14 @@ void WP6ContentListener::boxOn(const uint8_t /* anchoringType */, const uint8_t 
 			case 0x00:
 				propList.insert("style:horizontal-rel", "page-content");
 				propList.insert("style:horizontal-pos", "from-left");
-				propList.insert("svg:x", (float)((double)horizontalOffset/(double)WPX_NUM_WPUS_PER_INCH)
+				propList.insert("svg:x", (double)((double)horizontalOffset/(double)WPX_NUM_WPUS_PER_INCH)
 					+ m_ps->m_leftMarginByPageMarginChange + m_ps->m_sectionMarginLeft);
 				break;
 			case 0x01:
 				propList.insert("style:horizontal-rel", "page-end-margin");
 				propList.insert("style:horizontal-pos", "from-left");
-				propList.insert("svg:x", (float)((double)horizontalOffset/(double)WPX_NUM_WPUS_PER_INCH)
-					- (float)((double)width/(double)WPX_NUM_WPUS_PER_INCH)
+				propList.insert("svg:x", (double)((double)horizontalOffset/(double)WPX_NUM_WPUS_PER_INCH)
+					- (double)((double)width/(double)WPX_NUM_WPUS_PER_INCH)
 					- m_ps->m_rightMarginByPageMarginChange - m_ps->m_sectionMarginRight);
 				break;
 			case 0x02:
@@ -1559,14 +1559,14 @@ void WP6ContentListener::boxOn(const uint8_t /* anchoringType */, const uint8_t 
 		case 0x00:
 			propList.insert("style:horizontal-rel", "page-content");
 			propList.insert("style:horizontal-pos", "from-left");
-			propList.insert("svg:x", (float)((double)horizontalOffset/(double)WPX_NUM_WPUS_PER_INCH)
+			propList.insert("svg:x", (double)((double)horizontalOffset/(double)WPX_NUM_WPUS_PER_INCH)
 				+ m_ps->m_leftMarginByPageMarginChange + m_ps->m_sectionMarginLeft);
 			break;
 		case 0x01:
 			propList.insert("style:horizontal-rel", "page-end-margin");
 			propList.insert("style:horizontal-pos", "from-left");
-			propList.insert("svg:x", (float)((double)horizontalOffset/(double)WPX_NUM_WPUS_PER_INCH)
-				- (float)((double)width/(double)WPX_NUM_WPUS_PER_INCH)
+			propList.insert("svg:x", (double)((double)horizontalOffset/(double)WPX_NUM_WPUS_PER_INCH)
+				- (double)((double)width/(double)WPX_NUM_WPUS_PER_INCH)
 				- m_ps->m_rightMarginByPageMarginChange - m_ps->m_sectionMarginRight);
 			break;
 		case 0x02:
@@ -1584,7 +1584,7 @@ void WP6ContentListener::boxOn(const uint8_t /* anchoringType */, const uint8_t 
 	}
 	
 	if (verticalOffset)
-		propList.insert("svg:y", (float)((double)verticalOffset/(double)WPX_NUM_WPUS_PER_INCH));
+		propList.insert("svg:y", (double)((double)verticalOffset/(double)WPX_NUM_WPUS_PER_INCH));
 	
 	switch (verticalPositioningFlags & 0x03)
 	{
@@ -1593,7 +1593,7 @@ void WP6ContentListener::boxOn(const uint8_t /* anchoringType */, const uint8_t 
 		propList.insert("style:vertical-pos", "from-top");
 		// we have to remediate the workaround with alignment
 		// once fixed, remove this hack !!!
-		propList.insert("svg:y", (float)(((double)verticalOffset/(double)WPX_NUM_WPUS_PER_INCH) - m_ps->m_pageMarginTop));
+		propList.insert("svg:y", (double)(((double)verticalOffset/(double)WPX_NUM_WPUS_PER_INCH) - m_ps->m_pageMarginTop));
 		break;
 	case 0x01:
 	    if ((generalPositioningFlags & 0x03) == 0x00)

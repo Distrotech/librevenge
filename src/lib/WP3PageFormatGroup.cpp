@@ -35,7 +35,7 @@ WP3PageFormatGroup::WP3PageFormatGroup(WPXInputStream *input, WPXEncryption *enc
 	WP3VariableLengthGroup(),
 	m_leftMargin(0),
 	m_rightMargin(0),
-	m_lineSpacing(1.0f),
+	m_lineSpacing(1.0),
 	m_isRelative(false),
 	m_tabStops(),
 	m_topMargin(0),
@@ -56,7 +56,7 @@ void WP3PageFormatGroup::_readContents(WPXInputStream *input, WPXEncryption *enc
 	// this group can contain different kinds of data, thus we need to read
 	// the contents accordingly
 	int8_t tmpTabType = 0;
-	float tmpTabPosition = 0.0f;
+	double tmpTabPosition = 0.0;
 	WPXTabStop tmpTabStop = WPXTabStop();
 
 	switch (getSubGroup())
@@ -75,7 +75,7 @@ void WP3PageFormatGroup::_readContents(WPXInputStream *input, WPXEncryption *enc
 		{
 			uint32_t lineSpacing = readU32(input, encryption, true);
 			int16_t lineSpacingIntegerPart = (int16_t)((lineSpacing & 0xFFFF0000) >> 16);
-			float lineSpacingFractionalPart = (float)((double)(lineSpacing & 0xFFFF)/(double)0xFFFF);
+			double lineSpacingFractionalPart = (double)((double)(lineSpacing & 0xFFFF)/(double)0xFFFF);
 			WPD_DEBUG_MSG(("WordPerfect: Page format group line spacing - integer part: %i fractional part: %f (original value: %i)\n",
 				       lineSpacingIntegerPart, lineSpacingFractionalPart, lineSpacing));
 			m_lineSpacing = lineSpacingIntegerPart + lineSpacingFractionalPart;
@@ -96,7 +96,7 @@ void WP3PageFormatGroup::_readContents(WPXInputStream *input, WPXEncryption *enc
 		{
 			if (input->atEOS())
 				throw FileException();
-			tmpTabPosition = fixedPointToFloat(readU32(input, encryption, true)) / 72.0f;
+			tmpTabPosition = fixedPointToDouble(readU32(input, encryption, true)) / 72.0;
 
 			if (tmpTabType < 0)
 			{

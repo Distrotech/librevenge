@@ -925,16 +925,16 @@ int extendedCharacterWP5ToUCS2(uint8_t character,
 uint16_t fixedPointToWPUs(const uint32_t fixedPointNumber)
 {
 	int16_t fixedPointNumberIntegerPart = (int16_t)((fixedPointNumber & 0xFFFF0000) >> 16);
-	float fixedPointNumberFractionalPart = (float)((double)(fixedPointNumber & 0x0000FFFF)/(double)0xFFFF);
-	uint16_t numberWPU = (uint16_t)rint((((float)fixedPointNumberIntegerPart + fixedPointNumberFractionalPart)*50)/3);
+	double fixedPointNumberFractionalPart = (double)((double)(fixedPointNumber & 0x0000FFFF)/(double)0xFFFF);
+	uint16_t numberWPU = (uint16_t)rint((((double)fixedPointNumberIntegerPart + fixedPointNumberFractionalPart)*50)/3);
 	return numberWPU;
 }
 
-float fixedPointToFloat(const uint32_t fixedPointNumber)
+double fixedPointToDouble(const uint32_t fixedPointNumber)
 {
 	int16_t fixedPointNumberIntegerPart = (int16_t)((fixedPointNumber & 0xFFFF0000) >> 16);
-	float fixedPointNumberFractionalPart = (float)((double)(fixedPointNumber & 0x0000FFFF)/(double)0xFFFF);
-	return ((float)fixedPointNumberIntegerPart + fixedPointNumberFractionalPart);
+	double fixedPointNumberFractionalPart = (double)((double)(fixedPointNumber & 0x0000FFFF)/(double)0xFFFF);
+	return ((double)fixedPointNumberIntegerPart + fixedPointNumberFractionalPart);
 }	
 
 _RGBSColor::_RGBSColor(uint8_t r, uint8_t g, uint8_t b, uint8_t s)
@@ -961,7 +961,7 @@ _RGBSColor::_RGBSColor(uint16_t red, uint16_t green, uint16_t blue)
 {
 }
 
-_WPXTabStop::_WPXTabStop(float position, WPXTabAlignment alignment, uint16_t leaderCharacter, uint8_t leaderNumSpaces)
+_WPXTabStop::_WPXTabStop(double position, WPXTabAlignment alignment, uint16_t leaderCharacter, uint8_t leaderNumSpaces)
 	:	m_position(position),
 		m_alignment(alignment),
 		m_leaderCharacter(leaderCharacter),
@@ -970,7 +970,7 @@ _WPXTabStop::_WPXTabStop(float position, WPXTabAlignment alignment, uint16_t lea
 }
 
 _WPXTabStop::_WPXTabStop()
-	:	m_position(0.0f),
+	:	m_position(0.0),
 		m_alignment(LEFT),
 		m_leaderCharacter('\0'),
 		m_leaderNumSpaces(0)
@@ -978,9 +978,9 @@ _WPXTabStop::_WPXTabStop()
 }
 
 _WPXColumnDefinition::_WPXColumnDefinition()
-	:	m_width(0.0f),
-		m_leftGutter(0.0f),
-		m_rightGutter(0.0f)
+	:	m_width(0.0),
+		m_leftGutter(0.0),
+		m_rightGutter(0.0)
 {
 }
 

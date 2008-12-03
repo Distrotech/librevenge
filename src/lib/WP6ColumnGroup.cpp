@@ -34,7 +34,7 @@ WP6ColumnGroup::WP6ColumnGroup(WPXInputStream *input, WPXEncryption *encryption)
 	m_margin(0),
 	m_colType(0),
 	m_numColumns(0),
-	m_rowSpacing(0.0f),
+	m_rowSpacing(0.0),
 	m_isFixedWidth(),
 	m_columnWidth()
 {
@@ -59,8 +59,8 @@ void WP6ColumnGroup::_readContents(WPXInputStream *input, WPXEncryption *encrypt
 				m_colType = readU8(input, encryption);
 				uint32_t tmpRowSpacing = readU32(input, encryption);
 				int16_t tmpRowSpacingIntegerPart = (int16_t)((tmpRowSpacing & 0xffff0000) >> 16);
-				float tmpRowSpacingFractionalPart = (float)((double)(tmpRowSpacing & 0xffff)/(double)0x10000);
-				m_rowSpacing = (float)tmpRowSpacingIntegerPart + tmpRowSpacingFractionalPart;
+				double tmpRowSpacingFractionalPart = (double)((double)(tmpRowSpacing & 0xffff)/(double)0x10000);
+				m_rowSpacing = (double)tmpRowSpacingIntegerPart + tmpRowSpacingFractionalPart;
 				m_numColumns = readU8(input, encryption);
 				uint8_t tmpDefinition;
 				uint16_t tmpWidth;
@@ -73,12 +73,12 @@ void WP6ColumnGroup::_readContents(WPXInputStream *input, WPXEncryption *encrypt
 						if ((tmpDefinition & 0x01) == 0x01)
 						{
 							m_isFixedWidth.push_back(true);
-							m_columnWidth.push_back((float)((double)tmpWidth/(double)WPX_NUM_WPUS_PER_INCH));
+							m_columnWidth.push_back((double)((double)tmpWidth/(double)WPX_NUM_WPUS_PER_INCH));
 						}
 						else
 						{
 							m_isFixedWidth.push_back(false);
-							m_columnWidth.push_back((float)((double)tmpWidth/(double)0x10000));
+							m_columnWidth.push_back((double)((double)tmpWidth/(double)0x10000));
 						}	
 						
 					}

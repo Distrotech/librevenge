@@ -48,7 +48,7 @@ WP5ContentListener::WP5ContentListener(std::list<WPXPageSpan> &pageList, std::ve
 	WPXContentListener(pageList, documentInterface),
 	m_parseState(new WP5ContentParsingState),
 	m_subDocuments(subDocuments),
-	m_defaultFontSize(12.0f),
+	m_defaultFontSize(12.0),
 	m_defaultFontName("Times New Roman")
 {
 }
@@ -70,10 +70,10 @@ void WP5ContentListener::insertCharacter(uint16_t character)
 	appendUCS4(m_parseState->m_textBuffer, (uint32_t)character);
 }
 
-void WP5ContentListener::insertTab(uint8_t tabType, float tabPosition)
+void WP5ContentListener::insertTab(uint8_t tabType, double tabPosition)
 {
 	bool tmpHasTabPositionInformation = true;
-	if (tabPosition >= (float)((double)0xFFFE/(double)WPX_NUM_WPUS_PER_INCH) || tabPosition == 0.0f)
+	if (tabPosition >= (double)((double)0xFFFE/(double)WPX_NUM_WPUS_PER_INCH) || tabPosition == 0.0)
 		tmpHasTabPositionInformation = false;
 
 	if (!isUndoOn())
@@ -165,10 +165,10 @@ void WP5ContentListener::insertTab(uint8_t tabType, float tabPosition)
 	}
 }
 
-void WP5ContentListener::insertIndent(uint8_t indentType, float indentPosition)
+void WP5ContentListener::insertIndent(uint8_t indentType, double indentPosition)
 {
 	bool tmpHasIndentPositionInformation = true;
-	if (indentPosition >= (float)((double)0xFFFE/(double)WPX_NUM_WPUS_PER_INCH) || indentPosition == 0.0f)
+	if (indentPosition >= (double)((double)0xFFFE/(double)WPX_NUM_WPUS_PER_INCH) || indentPosition == 0.0)
 		tmpHasIndentPositionInformation = false;
 
 	if (!isUndoOn())
@@ -183,7 +183,7 @@ void WP5ContentListener::insertIndent(uint8_t indentType, float indentPosition)
 				else
 					m_ps->m_leftMarginByTabs = indentPosition - m_ps->m_pageMarginLeft - m_ps->m_sectionMarginRight
 						- m_ps->m_leftMarginByPageMarginChange - m_ps->m_leftMarginByParagraphMarginChange;
-				if (m_ps->m_paragraphTextIndent != 0.0f)
+				if (m_ps->m_paragraphTextIndent != 0.0)
 					m_ps->m_textIndentByTabs -= m_ps->m_paragraphTextIndent;
 				break;
 
@@ -194,7 +194,7 @@ void WP5ContentListener::insertIndent(uint8_t indentType, float indentPosition)
 					m_ps->m_leftMarginByTabs = indentPosition - m_ps->m_pageMarginLeft - m_ps->m_sectionMarginLeft
 						- m_ps->m_leftMarginByPageMarginChange - m_ps->m_leftMarginByParagraphMarginChange;
 				m_ps->m_rightMarginByTabs = m_ps->m_leftMarginByTabs;
-				if (m_ps->m_paragraphTextIndent != 0.0f)
+				if (m_ps->m_paragraphTextIndent != 0.0)
 					m_ps->m_textIndentByTabs -= m_ps->m_paragraphTextIndent;
 				break;	
 				
@@ -262,7 +262,7 @@ void WP5ContentListener::defineTable(uint8_t position, uint16_t leftOffset)
 			break;
 		}
 		// Note: WordPerfect has an offset from the left edge of the page. We translate it to the offset from the left margin
-		m_ps->m_tableDefinition.m_leftOffset = (float)((double)leftOffset / (double)WPX_NUM_WPUS_PER_INCH) - m_ps->m_paragraphMarginLeft;
+		m_ps->m_tableDefinition.m_leftOffset = (double)((double)leftOffset / (double)WPX_NUM_WPUS_PER_INCH) - m_ps->m_paragraphMarginLeft;
 
 		// remove all the old column information
 		m_ps->m_tableDefinition.m_columns.clear();
@@ -278,9 +278,9 @@ void WP5ContentListener::addTableColumnDefinition(uint32_t width, uint32_t /* le
 	{
 		// define the new column
 		WPXColumnDefinition colDef;
-		colDef.m_width = (float)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
-		colDef.m_leftGutter = (float)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
-		colDef.m_rightGutter = (float)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
+		colDef.m_width = (double)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
+		colDef.m_leftGutter = (double)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
+		colDef.m_rightGutter = (double)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
 
 		// add the new column definition to our table definition
 		m_ps->m_tableDefinition.m_columns.push_back(colDef);
@@ -322,7 +322,7 @@ void WP5ContentListener::insertRow(uint16_t rowHeight, bool isMinimumHeight, boo
 	if (!isUndoOn())
 	{
 		_flushText();
-		float rowHeightInch = (float)((double) rowHeight / (double)WPX_NUM_WPUS_PER_INCH);
+		double rowHeightInch = (double)((double) rowHeight / (double)WPX_NUM_WPUS_PER_INCH);
 		_openTableRow(rowHeightInch, isMinimumHeight, isHeaderRow);
 	}
 }
@@ -440,20 +440,20 @@ void WP5ContentListener::marginChange(uint8_t side, uint16_t margin)
 {
 	if (!isUndoOn())
 	{
-		float marginInch = (float)((double)margin/ (double)WPX_NUM_WPUS_PER_INCH);
+		double marginInch = (double)((double)margin/ (double)WPX_NUM_WPUS_PER_INCH);
 
 		switch(side)
 		{
 		case WPX_LEFT:
 			if (m_ps->m_numColumns > 1)
 			{
-				m_ps->m_leftMarginByPageMarginChange = 0.0f;
+				m_ps->m_leftMarginByPageMarginChange = 0.0;
 				m_ps->m_sectionMarginLeft = marginInch - m_ps->m_pageMarginLeft;
 			}
 			else
 			{
 				m_ps->m_leftMarginByPageMarginChange = marginInch - m_ps->m_pageMarginLeft;
-				m_ps->m_sectionMarginLeft = 0.0f;
+				m_ps->m_sectionMarginLeft = 0.0;
 			}
 			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
 						+ m_ps->m_leftMarginByParagraphMarginChange
@@ -462,13 +462,13 @@ void WP5ContentListener::marginChange(uint8_t side, uint16_t margin)
 		case WPX_RIGHT:
 			if (m_ps->m_numColumns > 1)
 			{
-				m_ps->m_rightMarginByPageMarginChange = 0.0f;
+				m_ps->m_rightMarginByPageMarginChange = 0.0;
 				m_ps->m_sectionMarginRight = marginInch - m_ps->m_pageMarginRight;
 			}
 			else
 			{
 				m_ps->m_rightMarginByPageMarginChange = marginInch - m_ps->m_pageMarginRight;
-				m_ps->m_sectionMarginRight = 0.0f;
+				m_ps->m_sectionMarginRight = 0.0;
 			}
 			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
 						+ m_ps->m_rightMarginByParagraphMarginChange
@@ -490,7 +490,7 @@ void WP5ContentListener::characterColorChange(uint8_t red, uint8_t green, uint8_
  	}
 }
 
-void WP5ContentListener::setFont(const WPXString &fontName, float fontSize)
+void WP5ContentListener::setFont(const WPXString &fontName, double fontSize)
 {
 	if (!isUndoOn())
 	{
@@ -596,7 +596,7 @@ void WP5ContentListener::headerFooterGroup(uint8_t /* headerFooterType */, uint8
 		m_subDocuments.push_back(subDocument);
 }	
 
-void WP5ContentListener::setDefaultFont(const WPXString &fontName, float fontSize)
+void WP5ContentListener::setDefaultFont(const WPXString &fontName, double fontSize)
 {
 	m_defaultFontName = fontName;
 	m_defaultFontSize = fontSize;
@@ -656,8 +656,8 @@ Character:
 
 	WPXPropertyList propList;
 
-	propList.insert("svg:height", (float)((double)height/(double)WPX_NUM_WPUS_PER_INCH));
-	propList.insert("svg:width", (float)((double)width/(double)WPX_NUM_WPUS_PER_INCH));
+	propList.insert("svg:height", (double)((double)height/(double)WPX_NUM_WPUS_PER_INCH));
+	propList.insert("svg:width", (double)((double)width/(double)WPX_NUM_WPUS_PER_INCH));
 
 	if ( alignment & 0x80 )
 		propList.insert( "style:wrap", "dynamic" );
@@ -684,7 +684,7 @@ Character:
 	switch ( (positionAndType &  0x1c) >> 2 )
 	{
 	case 0x00:
-		propList.insert("svg:height", (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom ) );
+		propList.insert("svg:height", (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom ) );
 		propList.insert("style:vertical-rel", "page-content" );
 		propList.insert("style:vertical-pos", "middle" );
 		break;
@@ -694,11 +694,11 @@ Character:
 		else
 		{
 			propList.insert("style:vertical-pos", "from-top" );
-			float newPosition = (float)((double)y/(double)WPX_NUM_WPUS_PER_INCH);
-			if (newPosition > (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
+			double newPosition = (double)((double)y/(double)WPX_NUM_WPUS_PER_INCH);
+			if (newPosition > (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
 				- (double)height/(double)WPX_NUM_WPUS_PER_INCH) )
 			{
-				newPosition = (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
+				newPosition = (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
 				- (double)height/(double)WPX_NUM_WPUS_PER_INCH);
 			}
 			propList.insert("svg:y", newPosition);
@@ -710,12 +710,12 @@ Character:
 		else
 		{
 			propList.insert("style:vertical-pos", "from-top" );
-			float newPosition = (float)((m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
-				- (double)height/(double)WPX_NUM_WPUS_PER_INCH)/2.0f);
-			if (newPosition > (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
+			double newPosition = (double)((m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
+				- (double)height/(double)WPX_NUM_WPUS_PER_INCH)/2.0);
+			if (newPosition > (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
 				- (double)height/(double)WPX_NUM_WPUS_PER_INCH) )
 			{
-				newPosition = (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
+				newPosition = (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
 					- (double)height/(double)WPX_NUM_WPUS_PER_INCH);
 			}
 			propList.insert("svg:y", newPosition);
@@ -727,12 +727,12 @@ Character:
 		else
 		{
 			propList.insert("style:vertical-pos", "from-top" );
-			float newPosition = (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
+			double newPosition = (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
 				- (double)height/(double)WPX_NUM_WPUS_PER_INCH + (double)y/(double)WPX_NUM_WPUS_PER_INCH);
-			if (newPosition > (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
+			if (newPosition > (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
 				- (double)height/(double)WPX_NUM_WPUS_PER_INCH) )
 			{
-				newPosition = (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
+				newPosition = (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
 					- (double)height/(double)WPX_NUM_WPUS_PER_INCH);
 			}
 			propList.insert("svg:y", newPosition);
@@ -741,7 +741,7 @@ Character:
 	case 0x04:
 		propList.insert("style:vertical-rel", "page" );
 		propList.insert("style:vertical-pos", "from-top" );
-		propList.insert("svg:y", (float)((double)y/(double)WPX_NUM_WPUS_PER_INCH));
+		propList.insert("svg:y", (double)((double)y/(double)WPX_NUM_WPUS_PER_INCH));
 		break;
 	default:
 		break;
@@ -756,7 +756,7 @@ Character:
 		else
 		{
 			propList.insert( "style:horizontal-pos", "from-left");
-			propList.insert( "svg:x", (float)((double)x/(double)WPX_NUM_WPUS_PER_INCH));
+			propList.insert( "svg:x", (double)((double)x/(double)WPX_NUM_WPUS_PER_INCH));
 		}
 		break;
 	case 0x01:
@@ -765,7 +765,7 @@ Character:
 		else
 		{
 			propList.insert( "style:horizontal-pos", "from-left");
-			propList.insert( "svg:x", (float)(m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight
+			propList.insert( "svg:x", (double)(m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight
 				- (double)width/(double)WPX_NUM_WPUS_PER_INCH + (double)x/(double)WPX_NUM_WPUS_PER_INCH));
 		}
 		break;
@@ -775,12 +775,12 @@ Character:
 		else
 		{
 			propList.insert( "style:horizontal-pos", "from-left");
-			propList.insert( "svg:x", (float)((m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight
-				- (double)width/(double)WPX_NUM_WPUS_PER_INCH)/2.0f + (double)x/(double)WPX_NUM_WPUS_PER_INCH));
+			propList.insert( "svg:x", (double)((m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight
+				- (double)width/(double)WPX_NUM_WPUS_PER_INCH)/2.0 + (double)x/(double)WPX_NUM_WPUS_PER_INCH));
 		}
 		break;
 	case 0x03:
-		propList.insert("svg:width", (float)(m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight ) );
+		propList.insert("svg:width", (double)(m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight ) );
 		propList.insert("style:horizontal-rel", "page-content" );
 		propList.insert("style:horizontal-pos", "center" );
 		break;

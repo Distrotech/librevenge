@@ -75,8 +75,8 @@ struct _WP6ContentParsingState
 	WPXString m_textAfterDisplayReference;
 	WPXString m_textAfterNumber;
 
-	float m_paragraphMarginBottomRelative;
-	float m_paragraphMarginBottomAbsolute;
+	double m_paragraphMarginBottomRelative;
+	double m_paragraphMarginBottomAbsolute;
 
 	int m_numRemovedParagraphBreaks;
 	
@@ -151,24 +151,24 @@ public:
 	void defineTabStops(const bool isRelative, const std::vector<WPXTabStop> &tabStops, 
 				    const std::vector<bool> &usePreWP9LeaderMethods);
 	void insertCharacter(const uint16_t character);
-	void insertTab(const uint8_t tabType, float tabPosition);
+	void insertTab(const uint8_t tabType, double tabPosition);
 	void handleLineBreak();
 	void insertEOL();
 	void insertBreak(const uint8_t breakType) { WPXContentListener::insertBreak(breakType); };
-	void lineSpacingChange(const float lineSpacing) { WPXContentListener::lineSpacingChange(lineSpacing); };
+	void lineSpacingChange(const double lineSpacing) { WPXContentListener::lineSpacingChange(lineSpacing); };
 	void justificationChange(const uint8_t justification) { WPXContentListener::justificationChange(justification); };
 	void characterColorChange(const uint8_t red, const uint8_t green, const uint8_t blue);
 	void characterShadingChange(const uint8_t shading);
 	void highlightChange(const bool isOn, const RGBSColor color);
 	void fontChange(const uint16_t matchedFontPointSize, const uint16_t fontPID);
  	void attributeChange(const bool isOn, const uint8_t attribute);
-	void spacingAfterParagraphChange(const float spacingRelative, const float spacingAbsolute);
+	void spacingAfterParagraphChange(const double spacingRelative, const double spacingAbsolute);
 	void pageMarginChange(const uint8_t /* side */, const uint16_t /* margin */) {}
 	void pageFormChange(const uint16_t /* length */, const uint16_t /* width */, const WPXFormOrientation /* orientation */) {}
 	void marginChange(const uint8_t side, const uint16_t margin);
 	void paragraphMarginChange(const uint8_t side, const int16_t margin);
 	void indentFirstLineChange(const int16_t offset);
-	void columnChange(const WPXTextColumnType columnType, const uint8_t numColumns, const std::vector<float> &columnWidth,
+	void columnChange(const WPXTextColumnType columnType, const uint8_t numColumns, const std::vector<double> &columnWidth,
 				  const std::vector<bool> &isFixedWidth);
 	void updateOutlineDefinition(const WP6OutlineLocation outlineLocation, const uint16_t outlineHash,
 					     const uint8_t *numberingMethods, const uint8_t tabBehaviourFlag);

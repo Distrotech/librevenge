@@ -43,17 +43,17 @@ public:
 	virtual void startSubDocument() = 0;
 	virtual void insertCharacter(uint16_t character) = 0;
 	virtual void insertTab() = 0;
-	virtual void insertTab(uint8_t tabType, float tabPosition) = 0;
+	virtual void insertTab(uint8_t tabType, double tabPosition) = 0;
 	virtual void insertBreak(uint8_t breakType) = 0;
 	virtual void insertEOL() = 0;
-	virtual void lineSpacingChange(float lineSpacing) = 0;
+	virtual void lineSpacingChange(double lineSpacing) = 0;
 	virtual void attributeChange(bool isOn, uint8_t attribute) = 0;
 	virtual void pageMarginChange(uint8_t side, uint16_t margin) = 0;
 	virtual void pageFormChange(uint16_t length, uint16_t width, WPXFormOrientation orientation) = 0;
 	virtual void marginChange(uint8_t side, uint16_t margin) = 0;
 	virtual void indentFirstLineChange(int16_t offset) = 0;
 	virtual void setTabs(bool isRelative, const std::vector<WPXTabStop> tabStops) = 0;
-	virtual void columnChange(WPXTextColumnType columnType, uint8_t numColumns, const std::vector<float> &columnWidth,
+	virtual void columnChange(WPXTextColumnType columnType, uint8_t numColumns, const std::vector<double> &columnWidth,
 					const std::vector<bool> &isFixedWidth) = 0;
 	virtual void endDocument() = 0;
 	virtual void endSubDocument() = 0;
@@ -79,14 +79,14 @@ public:
 	virtual void suppressPage(uint16_t suppressCode) = 0;
 	virtual void backTab() = 0;
 	virtual void leftIndent() = 0;
-	virtual void leftIndent(float offset) = 0;
+	virtual void leftIndent(double offset) = 0;
 	virtual void leftRightIndent() = 0;
-	virtual void leftRightIndent(float offset) = 0;
-	virtual void insertPicture(float height, float width, float verticalOffset, float horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
+	virtual void leftRightIndent(double offset) = 0;
+	virtual void insertPicture(double height, double width, double verticalOffset, double horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
 			uint16_t figureFlags, const WPXBinaryData &binaryData) = 0;
-	virtual void insertTextBox(float height, float width, float verticalOffset, float horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
+	virtual void insertTextBox(double height, double width, double verticalOffset, double horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
 			uint16_t figureFlags, const WP3SubDocument *subDocument, const WP3SubDocument *caption) = 0;
-	virtual void insertWP51Table(float height, float width, float verticalOffset, float horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
+	virtual void insertWP51Table(double height, double width, double verticalOffset, double horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
 			uint16_t figureFlags, const WP3SubDocument *subDocument, const WP3SubDocument *caption) = 0;
 
 	void setResourceFork(WP3ResourceFork *resourceFork) { m_resourceFork = resourceFork; }

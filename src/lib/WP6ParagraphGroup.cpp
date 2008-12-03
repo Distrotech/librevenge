@@ -87,7 +87,7 @@ WP6ParagraphGroup_LineSpacingSubGroup::WP6ParagraphGroup_LineSpacingSubGroup(WPX
 {
 	uint32_t lineSpacing = readU32(input, encryption);
 	int16_t lineSpacingIntegerPart = (int16_t)((lineSpacing & 0xFFFF0000) >> 16);
-	float lineSpacingFractionalPart = (float)(lineSpacing & 0xFFFF)/(float)0xFFFF;
+	double lineSpacingFractionalPart = (double)(lineSpacing & 0xFFFF)/(double)0xFFFF;
 	WPD_DEBUG_MSG(("WordPerfect: line spacing integer part: %i fractional part: %f (original value: %i)\n",
 		       lineSpacingIntegerPart, lineSpacingFractionalPart, lineSpacing));
 	m_lineSpacing = lineSpacingIntegerPart + lineSpacingFractionalPart;
@@ -102,7 +102,7 @@ void WP6ParagraphGroup_LineSpacingSubGroup::parse(WP6Listener *listener, const u
 
 WP6ParagraphGroup_TabSetSubGroup::WP6ParagraphGroup_TabSetSubGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	m_isRelative(false),
-	m_tabAdjustValue(0.0f),
+	m_tabAdjustValue(0.0),
 	m_usePreWP9LeaderMethods(),
 	m_tabStops()
 {
@@ -111,12 +111,12 @@ WP6ParagraphGroup_TabSetSubGroup::WP6ParagraphGroup_TabSetSubGroup(WPXInputStrea
 	if (tmp_definition == 0)
 	{
 		m_isRelative = false;
-		m_tabAdjustValue = 0.0f;
+		m_tabAdjustValue = 0.0;
 	}
 	else
 	{
 		m_isRelative = true;
-		m_tabAdjustValue = (float)((double)tmp_tabAdjustValue/(double)WPX_NUM_WPUS_PER_INCH);
+		m_tabAdjustValue = (double)((double)tmp_tabAdjustValue/(double)WPX_NUM_WPUS_PER_INCH);
 	}
 	uint8_t tmp_repetitionCount = 0;
 	WPXTabStop tmp_tabStop;
@@ -191,7 +191,7 @@ WP6ParagraphGroup_TabSetSubGroup::WP6ParagraphGroup_TabSetSubGroup(WPXInputStrea
 		{
 			if (tmp_tabPosition != 0xFFFF)
 			{
-				tmp_tabStop.m_position = (float)((double)tmp_tabPosition/(double)WPX_NUM_WPUS_PER_INCH) -
+				tmp_tabStop.m_position = (double)((double)tmp_tabPosition/(double)WPX_NUM_WPUS_PER_INCH) -
 					m_tabAdjustValue;
 				m_tabStops.push_back(tmp_tabStop);
 				m_usePreWP9LeaderMethods.push_back(tmp_usePreWP9LeaderMethod);
@@ -201,7 +201,7 @@ WP6ParagraphGroup_TabSetSubGroup::WP6ParagraphGroup_TabSetSubGroup(WPXInputStrea
 		{
 			for (int k=0; k<tmp_repetitionCount; k++)
 			{
-				tmp_tabStop.m_position += (float)((double)tmp_tabPosition/(double)WPX_NUM_WPUS_PER_INCH);
+				tmp_tabStop.m_position += (double)((double)tmp_tabPosition/(double)WPX_NUM_WPUS_PER_INCH);
 				m_tabStops.push_back(tmp_tabStop);
 				m_usePreWP9LeaderMethods.push_back(tmp_usePreWP9LeaderMethod);
 			}
@@ -284,20 +284,20 @@ void WP6ParagraphGroup_JustificationModeSubGroup::parse(WP6Listener *listener, c
 
 WP6ParagraphGroup_SpacingAfterParagraphSubGroup::WP6ParagraphGroup_SpacingAfterParagraphSubGroup(WPXInputStream *input,
 	WPXEncryption *encryption, const uint16_t sizeNonDeletable) :
-	m_spacingAfterParagraphAbsolute(0.0f),
-	m_spacingAfterParagraphRelative(1.0f),
+	m_spacingAfterParagraphAbsolute(0.0),
+	m_spacingAfterParagraphRelative(1.0),
 	m_sizeNonDeletable(sizeNonDeletable)
 {
 	uint32_t spacingAfterRelative = readU32(input, encryption);
 	int16_t spacingAfterIntegerPart = (int16_t)((spacingAfterRelative & 0xFFFF0000) >> 16);
-	float spacingAfterFractionalPart = (float)(spacingAfterRelative & 0xFFFF)/(float)0xFFFF;
+	double spacingAfterFractionalPart = (double)(spacingAfterRelative & 0xFFFF)/(double)0xFFFF;
 	WPD_DEBUG_MSG(("WordPerfect: spacing after paragraph relative integer part: %i fractional part: %f (original value: %i)\n",
 				spacingAfterIntegerPart, spacingAfterFractionalPart, spacingAfterRelative));
 	m_spacingAfterParagraphRelative = spacingAfterIntegerPart + spacingAfterFractionalPart;
 	if (m_sizeNonDeletable == (uint16_t)0x06) // Let us use the optional information that is in WPUs
 	{
 		uint16_t spacingAfterAbsolute = readU16(input, encryption);
-		m_spacingAfterParagraphAbsolute = (float)((double)spacingAfterAbsolute / (double)WPX_NUM_WPUS_PER_INCH);
+		m_spacingAfterParagraphAbsolute = (double)((double)spacingAfterAbsolute / (double)WPX_NUM_WPUS_PER_INCH);
 		WPD_DEBUG_MSG(("WordPerfect: spacing after paragraph absolute: %i\n", spacingAfterAbsolute));
 	}
 }

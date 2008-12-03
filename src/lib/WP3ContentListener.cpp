@@ -81,7 +81,7 @@ void WP3ContentListener::insertTab()
 	{
 		if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
 		{
-			if (m_ps->m_tabStops.empty() || (_getNextTabStop() == (std::numeric_limits<float>::max)()))
+			if (m_ps->m_tabStops.empty() || (_getNextTabStop() == (std::numeric_limits<double>::max)()))
 				m_ps->m_textIndentByTabs += 0.5f;
 			else
 				m_ps->m_textIndentByTabs = _getNextTabStop() - (m_ps->m_leftMarginByTabs  + m_ps->m_textIndentByParagraphIndentChange);
@@ -105,7 +105,7 @@ void WP3ContentListener::insertTab()
 	}
 }
 
-void WP3ContentListener::insertTab(const uint8_t tabType, const float /* tabPosition */)
+void WP3ContentListener::insertTab(const uint8_t tabType, const double /* tabPosition */)
 {
 	if (!isUndoOn())
 	{
@@ -180,7 +180,7 @@ void WP3ContentListener::defineTable(const uint8_t position, const uint16_t left
 			break;
 		}
 		// Note: WordPerfect has an offset from the left edge of the page. We translate it to the offset from the left margin
-		m_ps->m_tableDefinition.m_leftOffset = _movePositionToFirstColumn( (float)((double)leftOffset / (double)WPX_NUM_WPUS_PER_INCH) ) - m_ps->m_paragraphMarginLeft;
+		m_ps->m_tableDefinition.m_leftOffset = _movePositionToFirstColumn( (double)((double)leftOffset / (double)WPX_NUM_WPUS_PER_INCH) ) - m_ps->m_paragraphMarginLeft;
 
 		// remove all the old column information
 		m_ps->m_tableDefinition.m_columns.clear();
@@ -196,9 +196,9 @@ void WP3ContentListener::addTableColumnDefinition(const uint32_t width, const ui
 	{
 		// define the new column
 		WPXColumnDefinition colDef;
-		colDef.m_width = (float)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
-		colDef.m_leftGutter = (float)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
-		colDef.m_rightGutter = (float)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
+		colDef.m_width = (double)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
+		colDef.m_leftGutter = (double)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
+		colDef.m_rightGutter = (double)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
 
 		// add the new column definition to our table definition
 		m_ps->m_tableDefinition.m_columns.push_back(colDef);
@@ -394,20 +394,20 @@ void WP3ContentListener::marginChange(const uint8_t side, const uint16_t margin)
 {
 	if (!isUndoOn())
 	{
-		float marginInch = (float)((double)margin/ (double)WPX_NUM_WPUS_PER_INCH);
+		double marginInch = (double)((double)margin/ (double)WPX_NUM_WPUS_PER_INCH);
 
 		switch(side)
 		{
 		case WPX_LEFT:
 			if (m_ps->m_numColumns > 1)
 			{
-				m_ps->m_leftMarginByPageMarginChange = 0.0f;
+				m_ps->m_leftMarginByPageMarginChange = 0.0;
 				m_ps->m_sectionMarginLeft = marginInch - m_ps->m_pageMarginLeft;
 			}
 			else
 			{
 				m_ps->m_leftMarginByPageMarginChange = marginInch - m_ps->m_pageMarginLeft;
-				m_ps->m_sectionMarginLeft = 0.0f;
+				m_ps->m_sectionMarginLeft = 0.0;
 			}
 			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
 						+ m_ps->m_leftMarginByParagraphMarginChange
@@ -416,13 +416,13 @@ void WP3ContentListener::marginChange(const uint8_t side, const uint16_t margin)
 		case WPX_RIGHT:
 			if (m_ps->m_numColumns > 1)
 			{
-				m_ps->m_rightMarginByPageMarginChange = 0.0f;
+				m_ps->m_rightMarginByPageMarginChange = 0.0;
 				m_ps->m_sectionMarginRight = marginInch - m_ps->m_pageMarginRight;
 			}
 			else
 			{
 				m_ps->m_rightMarginByPageMarginChange = marginInch - m_ps->m_pageMarginRight;
-				m_ps->m_sectionMarginRight = 0.0f;
+				m_ps->m_sectionMarginRight = 0.0;
 			}
 			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
 						+ m_ps->m_rightMarginByParagraphMarginChange
@@ -467,7 +467,7 @@ void WP3ContentListener::indentFirstLineChange(const int16_t offset)
 {
 	if (!isUndoOn())
 	{
-		float offsetInch = (float)((double)offset / (double)WPX_NUM_WPUS_PER_INCH);
+		double offsetInch = (double)((double)offset / (double)WPX_NUM_WPUS_PER_INCH);
 		m_ps->m_textIndentByParagraphIndentChange = offsetInch;
 		// This is necessary in case we have Indent First Line and Hard Back Tab
 		// in the same time. The Hard Back Tab applies to the current paragraph
@@ -488,7 +488,7 @@ void WP3ContentListener::setTabs(const bool isRelative, const std::vector<WPXTab
 }
 
 void WP3ContentListener::columnChange(const WPXTextColumnType /* columnType */, const uint8_t numColumns,
-					const std::vector<float> &columnWidth, const std::vector<bool> &isFixedWidth)
+					const std::vector<double> &columnWidth, const std::vector<bool> &isFixedWidth)
 {
 	if (!isUndoOn())
 	{
@@ -501,7 +501,7 @@ void WP3ContentListener::columnChange(const WPXTextColumnType /* columnType */, 
 		m_ps->m_isParagraphColumnBreak = false;
 		m_ps->m_isTextColumnWithoutParagraph = false;
 
-		float remainingSpace = m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_sectionMarginLeft
+		double remainingSpace = m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_sectionMarginLeft
 			- m_ps->m_pageMarginRight - m_ps->m_sectionMarginRight
 			- m_ps->m_leftMarginByPageMarginChange - m_ps->m_rightMarginByPageMarginChange;
 		// determine the space that is to be divided between columns whose width is expressed in percentage of remaining space
@@ -519,14 +519,14 @@ void WP3ContentListener::columnChange(const WPXTextColumnType /* columnType */, 
 			for (i=0; i<numColumns; i++)
 			{
 				if (i == 0)
-					tmpColumn.m_leftGutter = 0.0f;
+					tmpColumn.m_leftGutter = 0.0;
 				else if (isFixedWidth[2*i-1])
 					tmpColumn.m_leftGutter = 0.5f * columnWidth[2*i-1];
 				else
 					tmpColumn.m_leftGutter = 0.5f * remainingSpace * columnWidth[2*i-1];
 				
 				if (i >= (numColumns - 1))
-					tmpColumn.m_rightGutter = 0.0f;
+					tmpColumn.m_rightGutter = 0.0;
 				else if (isFixedWidth[2*i+1])
 					tmpColumn.m_rightGutter = 0.5f * columnWidth[2*i+1];
 				else
@@ -591,7 +591,7 @@ void WP3ContentListener::setFontSize(const uint16_t fontSize)
 	{
 		_closeSpan();
 		
-		m_ps->m_fontSize=float(fontSize);
+		m_ps->m_fontSize=double(fontSize);
 	}
 }
 
@@ -651,7 +651,7 @@ void WP3ContentListener::backTab()
 {
 	if (!isUndoOn() && !m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
 	{
-		if (m_ps->m_tabStops.empty() || (_getPreviousTabStop() == (std::numeric_limits<float>::max)()))
+		if (m_ps->m_tabStops.empty() || (_getPreviousTabStop() == (std::numeric_limits<double>::max)()))
 			m_ps->m_textIndentByTabs -= 0.5f;
 		else
 			m_ps->m_textIndentByTabs = _getPreviousTabStop() - (m_ps->m_leftMarginByTabs  + m_ps->m_textIndentByParagraphIndentChange);
@@ -673,12 +673,12 @@ void WP3ContentListener::leftIndent()
 	{
 		if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
 		{
-			if (m_ps->m_tabStops.empty() || (_getNextTabStop() == (std::numeric_limits<float>::min)()))
+			if (m_ps->m_tabStops.empty() || (_getNextTabStop() == (std::numeric_limits<double>::min)()))
 				m_ps->m_leftMarginByTabs += 0.5f;
 			else
 				m_ps->m_leftMarginByTabs = _getNextTabStop() - (m_ps->m_textIndentByTabs + m_ps->m_textIndentByParagraphIndentChange);
 
-			if (m_ps->m_paragraphTextIndent != 0.0f)
+			if (m_ps->m_paragraphTextIndent != 0.0)
 				m_ps->m_textIndentByTabs -= m_ps->m_paragraphTextIndent;
 
 			m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange
@@ -695,18 +695,18 @@ void WP3ContentListener::leftIndent()
 	}
 }
 
-void WP3ContentListener::leftIndent(const float offset)
+void WP3ContentListener::leftIndent(const double offset)
 {
 	if (!isUndoOn())
 	{
 		if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
 		{
-			if (offset == 0.0f)
+			if (offset == 0.0)
 				m_ps->m_leftMarginByTabs += 0.5f;
 			else
-				m_ps->m_leftMarginByTabs += (offset / 72.0f);
+				m_ps->m_leftMarginByTabs += (offset / 72.0);
 
-			if (m_ps->m_paragraphTextIndent != 0.0f)
+			if (m_ps->m_paragraphTextIndent != 0.0)
 				m_ps->m_textIndentByTabs -= m_ps->m_paragraphTextIndent;
 
 			m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange
@@ -729,12 +729,12 @@ void WP3ContentListener::leftRightIndent()
 	{
 		if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
 		{
-			if (m_ps->m_tabStops.empty() || (_getNextTabStop() == (std::numeric_limits<float>::min)()))
+			if (m_ps->m_tabStops.empty() || (_getNextTabStop() == (std::numeric_limits<double>::min)()))
 				m_ps->m_leftMarginByTabs += 0.5f;
 			else
 				m_ps->m_leftMarginByTabs = _getNextTabStop() - (m_ps->m_textIndentByTabs + m_ps->m_textIndentByParagraphIndentChange);
 			
-			if (m_ps->m_paragraphTextIndent != 0.0f)
+			if (m_ps->m_paragraphTextIndent != 0.0)
 				m_ps->m_textIndentByTabs -= m_ps->m_paragraphTextIndent;
 
 			m_ps->m_rightMarginByTabs = m_ps->m_leftMarginByTabs;
@@ -753,18 +753,18 @@ void WP3ContentListener::leftRightIndent()
 	}
 }
 
-void WP3ContentListener::leftRightIndent(const float offset)
+void WP3ContentListener::leftRightIndent(const double offset)
 {
 	if (!isUndoOn())
 	{
 		if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
 		{
-			if (offset == 0.0f)
+			if (offset == 0.0)
 				m_ps->m_leftMarginByTabs += 0.5f;
 			else
-				m_ps->m_leftMarginByTabs += (offset / 72.0f);
+				m_ps->m_leftMarginByTabs += (offset / 72.0);
 
-			if (m_ps->m_paragraphTextIndent != 0.0f)
+			if (m_ps->m_paragraphTextIndent != 0.0)
 				m_ps->m_textIndentByTabs -= m_ps->m_paragraphTextIndent;
 
 			m_ps->m_rightMarginByTabs = m_ps->m_leftMarginByTabs;
@@ -783,7 +783,7 @@ void WP3ContentListener::leftRightIndent(const float offset)
 	}
 }
 
-void WP3ContentListener::insertPicture(float height, float width, float verticalOffset, float horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
+void WP3ContentListener::insertPicture(double height, double width, double verticalOffset, double horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
 			uint16_t figureFlags, const WPXBinaryData &binaryData)
 {
 	if (!isUndoOn())
@@ -803,7 +803,7 @@ void WP3ContentListener::insertPicture(float height, float width, float vertical
 	}
 }
 
-void WP3ContentListener::insertTextBox(float height, float width, float verticalOffset, float horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
+void WP3ContentListener::insertTextBox(double height, double width, double verticalOffset, double horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
 			uint16_t figureFlags, const WP3SubDocument * subDocument, const WP3SubDocument *caption)
 {
 	if (!isUndoOn())
@@ -837,7 +837,7 @@ void WP3ContentListener::insertTextBox(float height, float width, float vertical
 	}
 }
 
-void WP3ContentListener::insertWP51Table(float height, float width, float verticalOffset, float horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
+void WP3ContentListener::insertWP51Table(double height, double width, double verticalOffset, double horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
 			uint16_t figureFlags, const WP3SubDocument * subDocument, const WP3SubDocument *caption)
 {
 	if (!isUndoOn())
@@ -871,11 +871,11 @@ void WP3ContentListener::insertWP51Table(float height, float width, float vertic
 	}
 }
 
-void WP3ContentListener::_handleFrameParameters( WPXPropertyList &propList, float height, float width, float verticalOffset, float horizontalOffset,
+void WP3ContentListener::_handleFrameParameters( WPXPropertyList &propList, double height, double width, double verticalOffset, double horizontalOffset,
 		uint8_t /* leftColumn */, uint8_t /* rightColumn */, uint16_t figureFlags  )
 {
-	propList.insert("svg:width", (float)((double)width/72.0f));
-	propList.insert("svg:height", (float)((double)height/72.0f));
+	propList.insert("svg:width", (double)((double)width/72.0));
+	propList.insert("svg:height", (double)((double)height/72.0));
 	
 	if ( figureFlags & 0x0080 )
 		propList.insert( "style:wrap", "dynamic" );
@@ -895,8 +895,8 @@ void WP3ContentListener::_handleFrameParameters( WPXPropertyList &propList, floa
 			else
 			{
 				propList.insert( "style:horizontal-pos", "from-left");
-				propList.insert( "svg:x", (float)((double)horizontalOffset/72.0f - (double)width/72.0f +
-					(float)(m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight - m_ps->m_sectionMarginLeft
+				propList.insert( "svg:x", (double)((double)horizontalOffset/72.0 - (double)width/72.0 +
+					(double)(m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight - m_ps->m_sectionMarginLeft
 					- m_ps->m_sectionMarginRight - m_ps->m_paragraphMarginLeft - m_ps->m_paragraphMarginRight)));
 			}
 			break;
@@ -906,13 +906,13 @@ void WP3ContentListener::_handleFrameParameters( WPXPropertyList &propList, floa
 			else
 			{
 				propList.insert( "style:horizontal-pos", "from-left");
-				propList.insert( "svg:x", (float)((double)horizontalOffset/72.0f - (double)width/(2.0f*72.0f) +
-					(float)(m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight - m_ps->m_sectionMarginLeft
-					- m_ps->m_sectionMarginRight - m_ps->m_paragraphMarginLeft - m_ps->m_paragraphMarginRight)/2.0f));
+				propList.insert( "svg:x", (double)((double)horizontalOffset/72.0 - (double)width/(2.0*72.0) +
+					(double)(m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight - m_ps->m_sectionMarginLeft
+					- m_ps->m_sectionMarginRight - m_ps->m_paragraphMarginLeft - m_ps->m_paragraphMarginRight)/2.0));
 			}
 			break;
 		case 0x03:
-			propList.insert("svg:width", (float)(m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight - m_ps->m_sectionMarginLeft
+			propList.insert("svg:width", (double)(m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight - m_ps->m_sectionMarginLeft
 				- m_ps->m_sectionMarginRight - m_ps->m_paragraphMarginLeft - m_ps->m_paragraphMarginRight) );
 			propList.insert("style:horizontal-pos", "center");
 			break;
@@ -923,7 +923,7 @@ void WP3ContentListener::_handleFrameParameters( WPXPropertyList &propList, floa
 			else
 			{
 				propList.insert( "style:horizontal-pos", "from-left");
-				propList.insert( "svg:x", (float)((double)horizontalOffset/72.0f));
+				propList.insert( "svg:x", (double)((double)horizontalOffset/72.0));
 			}
 			break;
 		}
@@ -933,7 +933,7 @@ void WP3ContentListener::_handleFrameParameters( WPXPropertyList &propList, floa
 		else
 		{
 			propList.insert( "style:vertical-pos", "from-top" );
-			propList.insert( "svg:y", (float)((double)verticalOffset/72.0f));
+			propList.insert( "svg:y", (double)((double)verticalOffset/72.0));
 		}
 
 	}
@@ -943,8 +943,8 @@ void WP3ContentListener::_handleFrameParameters( WPXPropertyList &propList, floa
 		
 		if ( ( figureFlags & 0x1f08 ) == 0x0100 ) // full page
 		{
-			propList.insert("svg:width", (float)(m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight ) );
-			propList.insert("svg:height", (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom ) );
+			propList.insert("svg:width", (double)(m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight ) );
+			propList.insert("svg:height", (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom ) );
 			propList.insert("style:vertical-rel", "page-content" );
 			propList.insert("style:vertical-pos", "middle" );
 			propList.insert("style:horizontal-rel", "page-content" );
@@ -954,10 +954,10 @@ void WP3ContentListener::_handleFrameParameters( WPXPropertyList &propList, floa
 		{
 			propList.insert("style:vertical-rel", "page" );
 			propList.insert("style:vertical-pos", "from-top" );
-			propList.insert("svg:y", (float)((double)verticalOffset/72.0f));
+			propList.insert("svg:y", (double)((double)verticalOffset/72.0));
 			propList.insert("style:horizontal-rel", "page-start-margin" );
 			propList.insert("style:horizontal-pos", "from-left" );
-			propList.insert("svg:x", (float)((double)horizontalOffset/72.0f));
+			propList.insert("svg:x", (double)((double)horizontalOffset/72.0));
 		}
 		else
 		{
@@ -966,7 +966,7 @@ void WP3ContentListener::_handleFrameParameters( WPXPropertyList &propList, floa
 			switch ( ( figureFlags & 0x1c00 ) >> 10 )
 			{
 			case 0x00:
-				propList.insert("svg:height", (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom ) );
+				propList.insert("svg:height", (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom ) );
 				propList.insert("style:vertical-rel", "page-content" );
 				propList.insert("style:vertical-pos", "middle" );
 				break;
@@ -976,11 +976,11 @@ void WP3ContentListener::_handleFrameParameters( WPXPropertyList &propList, floa
 				else
 				{
 					propList.insert("style:vertical-pos", "from-top" );
-					float newPosition = (float)((double)verticalOffset/72.0f);
-					if (newPosition > (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
-						- (double)height/72.0f) )
-						newPosition = (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
-						- (double)height/72.0f);
+					double newPosition = (double)((double)verticalOffset/72.0);
+					if (newPosition > (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
+						- (double)height/72.0) )
+						newPosition = (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
+						- (double)height/72.0);
 					propList.insert("svg:y", newPosition);
 				}
 				break;
@@ -990,12 +990,12 @@ void WP3ContentListener::_handleFrameParameters( WPXPropertyList &propList, floa
 				else
 				{
 					propList.insert("style:vertical-pos", "from-top" );
-					float newPosition = (float)((m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
-						- (double)height/72.0f)/2.0f);
-					if (newPosition > (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
-						- (double)height/72.0f) )
-						newPosition = (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
-						- (double)height/72.0f);
+					double newPosition = (double)((m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
+						- (double)height/72.0)/2.0);
+					if (newPosition > (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
+						- (double)height/72.0) )
+						newPosition = (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
+						- (double)height/72.0);
 					propList.insert("svg:y", newPosition);
 				}
 				break;
@@ -1005,19 +1005,19 @@ void WP3ContentListener::_handleFrameParameters( WPXPropertyList &propList, floa
 				else
 				{
 					propList.insert("style:vertical-pos", "from-top" );
-					float newPosition = (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
-						- (double)height/72.0f + (double)verticalOffset/72.0f);
-					if (newPosition > (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
-						- (double)height/72.0f) )
-						newPosition = (float)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
-						- (double)height/72.0f);
+					double newPosition = (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
+						- (double)height/72.0 + (double)verticalOffset/72.0);
+					if (newPosition > (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
+						- (double)height/72.0) )
+						newPosition = (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
+						- (double)height/72.0);
 					propList.insert("svg:y", newPosition);
 				}
 				break;
 			case 0x04:
 				propList.insert("style:vertical-rel", "page" );
 				propList.insert("style:vertical-pos", "from-top" );
-				propList.insert("svg:y", (float)((double)verticalOffset/72.0f));
+				propList.insert("svg:y", (double)((double)verticalOffset/72.0));
 				break;		
 			default:
 				break;
@@ -1031,7 +1031,7 @@ void WP3ContentListener::_handleFrameParameters( WPXPropertyList &propList, floa
 				else
 				{
 					propList.insert( "style:horizontal-pos", "from-left");
-					propList.insert( "svg:x", (float)((double)horizontalOffset/72.0f));
+					propList.insert( "svg:x", (double)((double)horizontalOffset/72.0));
 				}
 				break;
 			case 0x01:
@@ -1040,8 +1040,8 @@ void WP3ContentListener::_handleFrameParameters( WPXPropertyList &propList, floa
 				else
 				{
 					propList.insert( "style:horizontal-pos", "from-left");
-					propList.insert( "svg:x", (float)(m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight
-						- (double)width/72.0f + (double)horizontalOffset/72.0f));
+					propList.insert( "svg:x", (double)(m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight
+						- (double)width/72.0 + (double)horizontalOffset/72.0));
 				}
 				break;
 			case 0x02:
@@ -1050,12 +1050,12 @@ void WP3ContentListener::_handleFrameParameters( WPXPropertyList &propList, floa
 				else
 				{
 					propList.insert( "style:horizontal-pos", "from-left");
-					propList.insert( "svg:x", (float)((m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight
-						- (double)width/72.0f)/2.0f + (double)horizontalOffset/72.0f));
+					propList.insert( "svg:x", (double)((m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight
+						- (double)width/72.0)/2.0 + (double)horizontalOffset/72.0));
 				}
 				break;
 			case 0x03:
-				propList.insert("svg:width", (float)(m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight ) );
+				propList.insert("svg:width", (double)(m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight ) );
 				propList.insert("style:horizontal-rel", "page-content" );
 				propList.insert("style:horizontal-pos", "center" );
 				break;
@@ -1079,7 +1079,7 @@ void WP3ContentListener::_handleFrameParameters( WPXPropertyList &propList, floa
 				else
 				{
 					propList.insert( "style:vertical-pos", "from-top" );
-					propList.insert( "svg:y", (float)((double)verticalOffset/72.0f));
+					propList.insert( "svg:y", (double)((double)verticalOffset/72.0));
 				}
 				break;
 			case 0x02:
@@ -1088,7 +1088,7 @@ void WP3ContentListener::_handleFrameParameters( WPXPropertyList &propList, floa
 				else
 				{
 					propList.insert( "style:vertical-pos", "from-top" );
-					propList.insert( "svg:y", (float)((double)verticalOffset/72.0f - (double)height/(2.0f*72.0f)));
+					propList.insert( "svg:y", (double)((double)verticalOffset/72.0 - (double)height/(2.0*72.0)));
 				}
 				break;
 			case 0x00:
@@ -1098,7 +1098,7 @@ void WP3ContentListener::_handleFrameParameters( WPXPropertyList &propList, floa
 				else
 				{
 					propList.insert( "style:vertical-pos", "from-top" );
-					propList.insert( "svg:y", (float)((double)verticalOffset/72.0f - (double)height/72.0f));
+					propList.insert( "svg:y", (double)((double)verticalOffset/72.0 - (double)height/72.0));
 				}
 				break;
 			case 0x04:

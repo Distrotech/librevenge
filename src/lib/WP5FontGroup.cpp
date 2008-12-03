@@ -58,7 +58,7 @@ void WP5FontGroup::_readContents(WPXInputStream *input, WPXEncryption *encryptio
 			if (getSize() >= 36)
 			{
 				input->seek(2, WPX_SEEK_CUR);
-				m_fontSize = (float)(readU16(input, encryption) / 50);
+				m_fontSize = (double)(readU16(input, encryption) / 50);
 			}
 			break;
 		default:
@@ -71,7 +71,7 @@ void WP5FontGroup::parse(WP5Listener *listener)
 	WPD_DEBUG_MSG(("WordPerfect: handling a Font group\n"));
 	
 	int tmpFontNameOffset;
-	float tmpFontSize = 12.0f;
+	double tmpFontSize = 12.0;
 	WPXString tmpFontName("Times New Roman");
 
 	switch(getSubGroup())

@@ -123,7 +123,7 @@ int WPXStringProperty::getInt() const
 
 double WPXStringProperty::getDouble() const 
 { 
-	return 0.0f; 
+	return 0.0; 
 }
 
 WPXString WPXStringProperty::getStr() const 
@@ -219,7 +219,7 @@ WPXPercentProperty::WPXPercentProperty(const double val) :
 
 WPXString WPXPercentProperty::getStr() const
 {
-	WPXString str = doubleToString(getDouble()*100.0f); 
+	WPXString str = doubleToString(getDouble()*100.0); 
 	str.append("%"); 
 	return str; 
 }

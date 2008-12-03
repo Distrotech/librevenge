@@ -79,13 +79,13 @@ void WP3DefinitionGroup::_readContents(WPXInputStream *input, WPXEncryption *enc
 						{
 							uint32_t tmpSpaceBetweenColumns = readU32(input, encryption, true);
 							m_isFixedWidth.push_back(true);
-							m_columnWidth.push_back((float)((double)fixedPointToWPUs(tmpSpaceBetweenColumns)/(double)WPX_NUM_WPUS_PER_INCH));
+							m_columnWidth.push_back((double)((double)fixedPointToWPUs(tmpSpaceBetweenColumns)/(double)WPX_NUM_WPUS_PER_INCH));
 						}
 						else
 						{
 							uint16_t tmpSizeOfColumn = readU16(input, encryption, true);
 							m_isFixedWidth.push_back(false);
-							m_columnWidth.push_back((float)((double)tmpSizeOfColumn/(double)0x10000));
+							m_columnWidth.push_back((double)((double)tmpSizeOfColumn/(double)0x10000));
 						}
 					}
 				}

@@ -35,8 +35,8 @@ WP1StylesListener::WP1StylesListener(std::list<WPXPageSpan> &pageList, std::vect
 	m_currentPage(),
 	m_nextPage(),
 	m_subDocuments(subDocuments),
-	m_tempMarginLeft(1.0f),
-	m_tempMarginRight(1.0f),
+	m_tempMarginLeft(1.0),
+	m_tempMarginRight(1.0),
 	m_currentPageHasContent(false),
 	m_isSubDocument(false),
 	m_pageListHardPageMark(m_pageList.end())
@@ -78,7 +78,7 @@ void WP1StylesListener::insertBreak(uint8_t breakType)
 					m_pageListHardPageMark--;
 				}
 			}
-			m_currentPage = WPXPageSpan(m_pageList.back(), 0.0f, 0.0f);
+			m_currentPage = WPXPageSpan(m_pageList.back(), 0.0, 0.0);
 			m_currentPage.setPageSpan(1);
 
 			for(std::vector<WPXHeaderFooter>::const_iterator HFiter = (m_nextPage.getHeaderFooterList()).begin();
@@ -117,11 +117,11 @@ void WP1StylesListener::marginReset(uint16_t leftMargin, uint16_t rightMargin)
 			return; // do not collect L/R margin information in sub documents
 
 		std::list<WPXPageSpan>::iterator Iter;
-		float marginInch = 0.0f;
+		double marginInch = 0.0;
 
 		if (leftMargin)
 		{
-			marginInch = (float)((double)leftMargin / 72.0f);
+			marginInch = (double)((double)leftMargin / 72.0);
 			WPD_DEBUG_MSG(("Left Margin: %ipts = %.4finch\n", leftMargin, marginInch));
 			if (!m_currentPageHasContent && (m_pageListHardPageMark == m_pageList.end()))
 				m_currentPage.setMarginLeft(marginInch);
@@ -139,7 +139,7 @@ void WP1StylesListener::marginReset(uint16_t leftMargin, uint16_t rightMargin)
 
 		if (rightMargin)
 		{
-			marginInch = (float)((double)rightMargin / 72.0f);
+			marginInch = (double)((double)rightMargin / 72.0);
 			WPD_DEBUG_MSG(("Right Margin: %ipts = %.4finch\n", rightMargin, marginInch));
 			if (!m_currentPageHasContent && (m_pageListHardPageMark == m_pageList.end()))
 				m_currentPage.setMarginRight(marginInch);
@@ -162,7 +162,7 @@ void WP1StylesListener::topMarginSet(uint16_t topMargin)
 	if (!isUndoOn()) 
 	{
 		if (!topMargin) return;
-		float marginInch = (float)((double)topMargin / 72.0f);
+		double marginInch = (double)((double)topMargin / 72.0);
 		m_currentPage.setMarginTop(marginInch);
 	}
 }
@@ -172,7 +172,7 @@ void WP1StylesListener::bottomMarginSet(uint16_t bottomMargin)
 	if (!isUndoOn()) 
 	{
 		if (!bottomMargin) return;
-		float marginInch = (float)((double)bottomMargin / 72.0f);
+		double marginInch = (double)((double)bottomMargin / 72.0);
 		m_currentPage.setMarginBottom(marginInch);
 	}
 }

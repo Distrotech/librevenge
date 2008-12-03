@@ -43,16 +43,16 @@ public:
 
 	void startDocument() {}
 	void startSubDocument() {}
-	void setFont(const WPXString& /* fontName */, float /* fontSize */) {}
+	void setFont(const WPXString& /* fontName */, double /* fontSize */) {}
 	void setTabs(const std::vector<WPXTabStop>& /* tabStops */, uint16_t /* tabOffset */) {} 
 	void insertCharacter(uint16_t /* character */) { /*if (!isUndoOn())*/ m_currentPageHasContent = true; }
-	void insertTab(uint8_t /* tabType */, float /* tabPosition */) { /*if (!isUndoOn())*/ m_currentPageHasContent = true; }
-	virtual void insertIndent(uint8_t /* indentType */, float /* indentPosition */) { /*if (!isUndoOn())*/ m_currentPageHasContent = true; }
+	void insertTab(uint8_t /* tabType */, double /* tabPosition */) { /*if (!isUndoOn())*/ m_currentPageHasContent = true; }
+	virtual void insertIndent(uint8_t /* indentType */, double /* indentPosition */) { /*if (!isUndoOn())*/ m_currentPageHasContent = true; }
 	void characterColorChange(uint8_t /* red */, uint8_t /* green */, uint8_t /* blue */) {};
 	void insertEOL() { /*if (!isUndoOn())*/ m_currentPageHasContent = true; }
  	void insertBreak(uint8_t breakType);
 	void attributeChange(bool /* isOn */, uint8_t /* attribute */) {}
-	void lineSpacingChange(float /* lineSpacing */) {}
+	void lineSpacingChange(double /* lineSpacing */) {}
 	void justificationChange(uint8_t /* justification */) {}
 	void pageMarginChange(uint8_t side, uint16_t margin);
 	void pageFormChange(uint16_t length, uint16_t width, WPXFormOrientation orientation);
@@ -90,7 +90,7 @@ private:
 
 	WPXTableList m_tableList;
 	WPXTable *m_currentTable;
-	float m_tempMarginLeft, m_tempMarginRight;
+	double m_tempMarginLeft, m_tempMarginRight;
 	bool m_currentPageHasContent;
 	bool m_isSubDocument;
 	std::vector<WP5SubDocument *> &m_subDocuments;

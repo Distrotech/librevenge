@@ -57,25 +57,25 @@ public:
 	virtual void defineTabStops(const bool isRelative, const std::vector<WPXTabStop> &tabStops, 
 				    const std::vector<bool> &usePreWP9LeaderMethods) = 0;
 	virtual void insertCharacter(const uint16_t character) = 0;
-	virtual void insertTab(const uint8_t tabType, float tabPosition) = 0;
+	virtual void insertTab(const uint8_t tabType, double tabPosition) = 0;
 	virtual void handleLineBreak() = 0;
 	virtual void insertEOL() = 0;
 	virtual void insertBreak(const uint8_t breakType) = 0;
-	virtual void lineSpacingChange(const float lineSpacing) = 0;
+	virtual void lineSpacingChange(const double lineSpacing) = 0;
 	virtual void justificationChange(const uint8_t justification) = 0;
 	virtual void characterColorChange(const uint8_t red, const uint8_t green, const uint8_t blue) = 0;
 	virtual void characterShadingChange(const uint8_t shading) = 0;
 	virtual void highlightChange(const bool isOn, const RGBSColor color) = 0;
 	virtual void fontChange(const uint16_t matchedFontPointSize, const uint16_t fontPID) = 0;
 	virtual void attributeChange(const bool isOn, const uint8_t attribute) = 0;
-	virtual void spacingAfterParagraphChange(const float spacingRelative, const float spacingAbsolute) = 0;
+	virtual void spacingAfterParagraphChange(const double spacingRelative, const double spacingAbsolute) = 0;
 	virtual void pageMarginChange(const uint8_t side, const uint16_t margin) = 0;
 	virtual void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation) = 0;
 	virtual void marginChange(const uint8_t side, const uint16_t margin) = 0;
 	virtual void paragraphMarginChange(const uint8_t side, const int16_t margin) = 0;
 	virtual void indentFirstLineChange(const int16_t offset) = 0;
 	virtual void columnChange(const WPXTextColumnType columnType, const uint8_t numColumns,
-				const std::vector<float> &columnWidth, const std::vector<bool> &isFixedWidth) = 0;
+				const std::vector<double> &columnWidth, const std::vector<bool> &isFixedWidth) = 0;
 	virtual void updateOutlineDefinition(const WP6OutlineLocation outlineLocation, const uint16_t outlineHash,
 					     const uint8_t *numberingMethods, const uint8_t tabBehaviourFlag) = 0;
 	virtual void paragraphNumberOn(const uint16_t outlineHash, const uint8_t level, const uint8_t flag) = 0;

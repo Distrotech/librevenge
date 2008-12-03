@@ -48,7 +48,7 @@ WP42ContentListener::WP42ContentListener(std::list<WPXPageSpan> &pageList, std::
 {
 // Default line is 6 lpi, it means that the caracters are of 12 points
 	*(m_ps->m_fontName) = "Courier";
-	m_ps->m_fontSize = 12.0f;
+	m_ps->m_fontSize = 12.0;
 }
 
 WP42ContentListener::~WP42ContentListener() 
@@ -67,7 +67,7 @@ void WP42ContentListener::insertCharacter(uint16_t character)
 	}
 }
 
-void WP42ContentListener::insertTab(uint8_t /* tabType */, float /* tabPosition */)
+void WP42ContentListener::insertTab(uint8_t /* tabType */, double /* tabPosition */)
 {
 	if (!isUndoOn())
 	{
@@ -146,8 +146,8 @@ void WP42ContentListener::marginReset(uint8_t /* leftMargin */, uint8_t /* right
 #if 0
 	if (!isUndoOn())
 	{
-		float leftMarginInch = (float)(leftMargin/WP42_NUM_TEXT_COLUMS_PER_INCH);
-		float rightMarginInch = m_ps->m_pageFormWidth - (float)((rightMargin + 1)/WP42_NUM_TEXT_COLUMS_PER_INCH);
+		double leftMarginInch = (double)(leftMargin/WP42_NUM_TEXT_COLUMS_PER_INCH);
+		double rightMarginInch = m_ps->m_pageFormWidth - (double)((rightMargin + 1)/WP42_NUM_TEXT_COLUMS_PER_INCH);
 		m_ps->m_leftMarginByPageMarginChange = leftMarginInch - m_ps->m_pageMarginLeft;
 		m_ps->m_rightMarginByPageMarginChange = rightMarginInch - m_ps->m_pageMarginRight;
 	}

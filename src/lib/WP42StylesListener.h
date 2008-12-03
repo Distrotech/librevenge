@@ -42,7 +42,7 @@ public:
 	void startDocument() {}
 	void startSubDocument() {}
 	void insertCharacter(uint16_t /* character */) { if (!isUndoOn()) m_currentPageHasContent = true; }
-	void insertTab(uint8_t /* tabType */, float /* tabPosition */) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	void insertTab(uint8_t /* tabType */, double /* tabPosition */) { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void insertEOL() { if (!isUndoOn()) m_currentPageHasContent = true; }
  	void insertBreak(uint8_t breakType);
 	void attributeChange(bool /* isOn */, uint8_t /* attribute */) {}
@@ -58,7 +58,7 @@ protected:
 private:
 	WPXPageSpan m_currentPage, m_nextPage;
 	std::vector<WP42SubDocument *> &m_subDocuments;
-	float m_tempMarginLeft, m_tempMarginRight;
+	double m_tempMarginLeft, m_tempMarginRight;
 	bool m_currentPageHasContent;
 	bool m_isSubDocument;
 	std::list<WPXPageSpan>::iterator m_pageListHardPageMark;

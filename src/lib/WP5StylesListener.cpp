@@ -38,8 +38,8 @@ WP5StylesListener::WP5StylesListener(std::list<WPXPageSpan> &pageList, WPXTableL
 	m_nextPage(),
 	m_tableList(tableList),
 	m_currentTable(0), 
-	m_tempMarginLeft(1.0f),
-	m_tempMarginRight(1.0f),
+	m_tempMarginLeft(1.0),
+	m_tempMarginRight(1.0),
 	m_currentPageHasContent(false),
 	m_isSubDocument(false),
 	m_subDocuments(subDocuments),
@@ -80,7 +80,7 @@ void WP5StylesListener::insertBreak(uint8_t breakType)
 				if (m_pageListHardPageMark == m_pageList.end())
 					m_pageListHardPageMark--;
 			}
-			m_currentPage = WPXPageSpan(m_pageList.back(), 0.0f, 0.0f);
+			m_currentPage = WPXPageSpan(m_pageList.back(), 0.0, 0.0);
 			m_currentPage.setPageSpan(1);
 
 			for(std::vector<WPXHeaderFooter>::const_iterator HFiter = (m_nextPage.getHeaderFooterList()).begin();
@@ -113,7 +113,7 @@ void WP5StylesListener::pageMarginChange(uint8_t side, uint16_t margin)
 {
 	//if (!isUndoOn()) 
 	//{
-		float marginInch = (float)((double)margin / (double)WPX_NUM_WPUS_PER_INCH);
+		double marginInch = (double)((double)margin / (double)WPX_NUM_WPUS_PER_INCH);
 		switch(side)
 		{
 			case WPX_TOP:
@@ -130,8 +130,8 @@ void WP5StylesListener::pageFormChange(uint16_t length, uint16_t width, WPXFormO
 {
 	//if (!isUndoOn())
 	//{
-		float lengthInch = (float)((double)length / (double)WPX_NUM_WPUS_PER_INCH);
-		float widthInch = (float)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
+		double lengthInch = (double)((double)length / (double)WPX_NUM_WPUS_PER_INCH);
+		double widthInch = (double)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
 		if (!m_currentPageHasContent)
 		{
 			m_currentPage.setFormLength(lengthInch);
@@ -150,7 +150,7 @@ void WP5StylesListener::marginChange(uint8_t side, uint16_t margin)
 			return;
 
 		std::list<WPXPageSpan>::iterator Iter;
-		float marginInch = (float)((double)margin / (double)WPX_NUM_WPUS_PER_INCH);
+		double marginInch = (double)((double)margin / (double)WPX_NUM_WPUS_PER_INCH);
 		switch(side)
 		{
 			case WPX_LEFT:

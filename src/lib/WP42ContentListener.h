@@ -49,7 +49,7 @@ public:
 	void startDocument() { WPXContentListener::startDocument(); }
 	void startSubDocument() { WPXContentListener::startSubDocument(); }
 	void insertCharacter(uint16_t character);
-	void insertTab(uint8_t tabType, float tabPosition);
+	void insertTab(uint8_t tabType, double tabPosition);
 	void insertBreak(uint8_t breakType) { WPXContentListener::insertBreak(breakType); }
 	void insertEOL();
 	void attributeChange(bool isOn, uint8_t attribute);

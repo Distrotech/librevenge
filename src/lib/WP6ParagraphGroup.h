@@ -37,7 +37,7 @@ public:
 	void parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
 
 private:
-	float m_lineSpacing;
+	double m_lineSpacing;
 };
 
 class WP6ParagraphGroup_JustificationModeSubGroup : public WP6VariableLengthGroup_SubGroup
@@ -57,8 +57,8 @@ public:
 	void parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
 
 private:
-	float m_spacingAfterParagraphAbsolute;
-	float m_spacingAfterParagraphRelative;
+	double m_spacingAfterParagraphAbsolute;
+	double m_spacingAfterParagraphRelative;
 	uint16_t m_sizeNonDeletable;
 };
 
@@ -71,7 +71,7 @@ public:
 
 private:
 	bool m_isRelative;
-	float m_tabAdjustValue;
+	double m_tabAdjustValue;
 	std::vector<bool> m_usePreWP9LeaderMethods;
 	std::vector<WPXTabStop> m_tabStops;
 };

@@ -35,11 +35,11 @@ public:
 	~WP5ListFontsUsedPacket();
 	void _readContents(WPXInputStream *input, WPXEncryption *encryption, uint32_t dataSize);
 	int getFontNameOffset(const int fontNumber) const;
-	float getFontSize(const int fontNumber) const;
+	double getFontSize(const int fontNumber) const;
 
 private:
 	uint16_t m_packetType;
 	std::vector<int> m_fontNameOffset;
-	std::vector<float> m_fontSize;
+	std::vector<double> m_fontSize;
 };
 #endif /* WP5LISTFONTSUSEDPACKET_H */

@@ -32,7 +32,7 @@
 WP5TabGroup::WP5TabGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID) :
 	WP5FixedLengthGroup(groupID),
 	m_tabType(0),
-	m_tabPosition(0.0f)
+	m_tabPosition(0.0)
 {
 	_read(input, encryption);
 }
@@ -42,7 +42,7 @@ void WP5TabGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption
 	m_tabType = readU8(input, encryption);
 	input->seek(2, WPX_SEEK_CUR);
 	uint16_t tmpTabPosition = readU16(input, encryption);
-	m_tabPosition = (float)((double)tmpTabPosition/(double)WPX_NUM_WPUS_PER_INCH);
+	m_tabPosition = (double)((double)tmpTabPosition/(double)WPX_NUM_WPUS_PER_INCH);
 }
 
 void WP5TabGroup::parse(WP5Listener *listener)

@@ -44,7 +44,7 @@ class WP5PageFormatGroup : public WP5VariableLengthGroup
 	uint16_t m_leftMargin;
 	uint16_t m_rightMargin;
 	// variable needed for subgroup 2 (Spacing Set)
-	float m_lineSpacing;
+	double m_lineSpacing;
 	// variables needed for subbroup 4 (Tab Set)
 	std::vector<WPXTabStop> m_tabStops;
 	uint16_t m_marginOffset;	

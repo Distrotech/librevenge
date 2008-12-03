@@ -44,7 +44,7 @@ class WP3PageFormatGroup : public WP3VariableLengthGroup
 	uint32_t m_leftMargin;
 	uint32_t m_rightMargin;
 	// variable needed for subgroup 0x02 (Line Spacing)
-	float m_lineSpacing;
+	double m_lineSpacing;
 	// variables needed for subgroup 0x04 (Set Tabs)
 	bool m_isRelative;
 	std::vector<WPXTabStop> m_tabStops;

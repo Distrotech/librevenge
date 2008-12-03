@@ -97,7 +97,7 @@ int extendedCharacterWP5ToUCS2(uint8_t character, uint8_t characterSet,
 			    const uint16_t **chars);
 
 uint16_t fixedPointToWPUs(const uint32_t fixedPointNumber);
-float fixedPointToFloat(const uint32_t fixedPointNumber);
+double fixedPointToDouble(const uint32_t fixedPointNumber);
 
 enum WPXFileType { WP6_DOCUMENT, WP5_DOCUMENT, WP42_DOCUMENT, OTHER };
 enum WPXNumberingType { ARABIC, LOWERCASE, UPPERCASE, LOWERCASE_ROMAN, UPPERCASE_ROMAN };
@@ -183,9 +183,9 @@ typedef struct _WPXColumnDefinition WPXColumnDefinition;
 struct _WPXColumnDefinition
 {
 	_WPXColumnDefinition(); // initializes all values to 0
-	float m_width;
-	float m_leftGutter;
-	float m_rightGutter;
+	double m_width;
+	double m_leftGutter;
+	double m_rightGutter;
 };
 
 typedef struct _WPXColumnProperties WPXColumnProperties;
@@ -199,9 +199,9 @@ struct _WPXColumnProperties
 typedef struct _WPXTabStop WPXTabStop;
 struct _WPXTabStop
 {
-	_WPXTabStop(float position, WPXTabAlignment alignment, uint16_t leaderCharacter, uint8_t leaderNumSpaces);
+	_WPXTabStop(double position, WPXTabAlignment alignment, uint16_t leaderCharacter, uint8_t leaderNumSpaces);
 	_WPXTabStop();
-	float m_position;
+	double m_position;
 	WPXTabAlignment m_alignment;
 	uint16_t m_leaderCharacter;
 	uint8_t m_leaderNumSpaces;

@@ -45,7 +45,7 @@ class WP3DefinitionGroup : public WP3VariableLengthGroup
 	uint8_t m_colType;
 	uint8_t m_numColumns;
 	std::vector<bool> m_isFixedWidth;
-	std::vector<float> m_columnWidth;
+	std::vector<double> m_columnWidth;
 
 };
 

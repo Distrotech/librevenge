@@ -42,11 +42,11 @@ public:
 	void startSubDocument() {}
 	void insertCharacter(uint16_t /* character */) { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void insertTab() { if (!isUndoOn()) m_currentPageHasContent = true; }
-	void insertTab(uint8_t /* tabType */, float /* tabPosition */) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	void insertTab(uint8_t /* tabType */, double /* tabPosition */) { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void insertEOL() { if (!isUndoOn()) m_currentPageHasContent = true; }
  	void insertBreak(uint8_t breakType);
 	void attributeChange(bool /* isOn */, uint8_t /* attribute */) {}
-	void lineSpacingChange(float /* lineSpacing */) {}
+	void lineSpacingChange(double /* lineSpacing */) {}
 	void justificationChange(uint8_t /* justification */) {}
 	void pageMarginChange(uint8_t side, uint16_t margin);
 	void pageFormChange(uint16_t length, uint16_t width, WPXFormOrientation orientation);
@@ -54,7 +54,7 @@ public:
 	void indentFirstLineChange(int16_t /* offset */) {}
 	void setTabs(bool /* isRelative */, const std::vector<WPXTabStop> /* tabStops */) {}
 	void columnChange(WPXTextColumnType /* columnType */, uint8_t /* numColumns */,
-			const std::vector<float> & /* columnWidth */, const std::vector<bool> & /* isFixedWidth */) {}
+			const std::vector<double> & /* columnWidth */, const std::vector<bool> & /* isFixedWidth */) {}
 	void endDocument();
 	void endSubDocument();
 
@@ -80,14 +80,14 @@ public:
 	void suppressPage(uint16_t suppressCode);
 	void backTab() { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void leftIndent() {}
-	void leftIndent(float /* offset */) {}
+	void leftIndent(double /* offset */) {}
 	void leftRightIndent() {}
-	void leftRightIndent(float /* offset */) {}
-	void insertPicture(float /* height */, float /* width */, float /* verticalOffset */, float /* horizontalOffset */, uint8_t /* leftColumn */, uint8_t /* rightColumn */,
+	void leftRightIndent(double /* offset */) {}
+	void insertPicture(double /* height */, double /* width */, double /* verticalOffset */, double /* horizontalOffset */, uint8_t /* leftColumn */, uint8_t /* rightColumn */,
 			uint16_t /* figureFlags */, const WPXBinaryData & /* binaryData */) {}
-	void insertTextBox(float /* height */, float /* width */, float /* verticalOffset */, float /* horizontalOffset */, uint8_t /* leftColumn */, uint8_t /* rightColumn */,
+	void insertTextBox(double /* height */, double /* width */, double /* verticalOffset */, double /* horizontalOffset */, uint8_t /* leftColumn */, uint8_t /* rightColumn */,
 			uint16_t /* figureFlags */, const WP3SubDocument * /* subDocument */, const WP3SubDocument * /* caption */) {}
-	void insertWP51Table(float /* height */, float /* width */, float /* verticalOffset */, float /* horizontalOffset */, uint8_t /* leftColumn */, uint8_t /* rightColumn */,
+	void insertWP51Table(double /* height */, double /* width */, double /* verticalOffset */, double /* horizontalOffset */, uint8_t /* leftColumn */, uint8_t /* rightColumn */,
 			uint16_t /* figureFlags */, const WP3SubDocument * /* subDocument */, const WP3SubDocument * /* caption */) {}
 
 protected:
@@ -100,7 +100,7 @@ private:
 
 	WPXTableList m_tableList;
 	WPXTable *m_currentTable;
-	float m_tempMarginLeft, m_tempMarginRight;
+	double m_tempMarginLeft, m_tempMarginRight;
 	bool m_currentPageHasContent;
 	bool m_isSubDocument;
 	std::vector<WP3SubDocument *> &m_subDocuments;

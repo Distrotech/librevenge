@@ -57,14 +57,14 @@ public:
 
 	void startDocument() { WPXContentListener::startDocument(); };
 	void startSubDocument() { WPXContentListener::startSubDocument(); };
-	void setFont(const WPXString &fontName, float fontSize);
+	void setFont(const WPXString &fontName, double fontSize);
 	void setTabs(const std::vector<WPXTabStop> &tabStops, uint16_t tabOffset);
 	void insertCharacter(uint16_t character);
-	void insertTab(uint8_t tabType, float tabPosition);
-	void insertIndent(uint8_t indentType, float indentPosition);
+	void insertTab(uint8_t tabType, double tabPosition);
+	void insertIndent(uint8_t indentType, double indentPosition);
 	void insertEOL();
 	void insertBreak(uint8_t breakType) { WPXContentListener::insertBreak(breakType); };
-	void lineSpacingChange(float lineSpacing) { WPXContentListener::lineSpacingChange(lineSpacing); };
+	void lineSpacingChange(double lineSpacing) { WPXContentListener::lineSpacingChange(lineSpacing); };
 	void justificationChange(uint8_t justification) { WPXContentListener::justificationChange(justification); };
 	void characterColorChange(uint8_t red, uint8_t green, uint8_t blue);
 	void attributeChange(bool isOn, uint8_t attribute);
@@ -91,7 +91,7 @@ public:
 	void headerFooterGroup(uint8_t headerFooterType, uint8_t occurenceBits, WP5SubDocument *subDocument);
 	void suppressPageCharacteristics(uint8_t /* suppressCode */) {};
 	
-	void setDefaultFont(const WPXString &fontName, float fontSize);
+	void setDefaultFont(const WPXString &fontName, double fontSize);
 	
 	void boxOn(uint8_t positionAndType, uint8_t alignment, uint16_t width, uint16_t height, uint16_t x, uint16_t y);
 	virtual void boxOff();
@@ -108,7 +108,7 @@ private:
 	WP5ContentListener& operator=(const WP5ContentListener&);
 	WP5ContentParsingState *m_parseState;
 	std::vector<WP5SubDocument *> &m_subDocuments;
-	float m_defaultFontSize;
+	double m_defaultFontSize;
 	WPXString m_defaultFontName;
 };
 

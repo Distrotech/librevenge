@@ -29,8 +29,8 @@
 #include "WPXPageSpan.h"
 #include "libwpd_internal.h"
 
-const float WPX_DEFAULT_PAGE_MARGIN_TOP = 1.0f;
-const float WPX_DEFAULT_PAGE_MARGIN_BOTTOM = 1.0f;
+const double WPX_DEFAULT_PAGE_MARGIN_TOP = 1.0;
+const double WPX_DEFAULT_PAGE_MARGIN_BOTTOM = 1.0;
 
 const uint8_t DUMMY_INTERNAL_HEADER_FOOTER = 16;
 
@@ -80,11 +80,11 @@ WPXHeaderFooter::~WPXHeaderFooter()
 }
 
 WPXPageSpan::WPXPageSpan() :
-	m_formLength(11.0f),
+	m_formLength(11.0),
 	m_formWidth(8.5f),
 	m_formOrientation(PORTRAIT),
-	m_marginLeft(1.0f),
-	m_marginRight(1.0f),
+	m_marginLeft(1.0),
+	m_marginRight(1.0),
 	m_marginTop(WPX_DEFAULT_PAGE_MARGIN_TOP),
 	m_marginBottom(WPX_DEFAULT_PAGE_MARGIN_BOTTOM),
 	m_headerFooterList(),
@@ -111,7 +111,7 @@ WPXPageSpan::WPXPageSpan(const WPXPageSpan &page) :
 
 // NB: this is not a literal "clone" function: it is contingent on the side margins that are passed,
 // and suppression variables are not copied
-WPXPageSpan::WPXPageSpan(const WPXPageSpan &page, float paragraphMarginLeft, float paragraphMarginRight) :
+WPXPageSpan::WPXPageSpan(const WPXPageSpan &page, double paragraphMarginLeft, double paragraphMarginRight) :
 	m_formLength(page.getFormLength()),
 	m_formWidth(page.getFormWidth()),
 	m_formOrientation(page.getFormOrientation()),

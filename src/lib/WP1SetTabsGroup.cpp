@@ -45,14 +45,14 @@ void WP1SetTabsGroup::_readContents(WPXInputStream *input, WPXEncryption *encryp
 
 	// Now read the new condensed tab table
 	int8_t tmpTabType = 0;
-	float tmpTabPosition = 0.0f;
+	double tmpTabPosition = 0.0;
 	WPXTabStop tmpTabStop = WPXTabStop();
 
 	while (((tmpTabType = (int8_t)readU8(input, encryption)) & 0xff) != 0xff)
 	{
 		if (input->atEOS())
 			throw FileException();
-		tmpTabPosition = (float)((double)readU16(input, encryption, true) / 72.0f);
+		tmpTabPosition = (double)((double)readU16(input, encryption, true) / 72.0);
 
 		if (tmpTabType < 0)
 		{

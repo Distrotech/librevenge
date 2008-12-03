@@ -57,17 +57,17 @@ public:
 	void startSubDocument() { WPXContentListener::startSubDocument(); };
 	void insertCharacter(uint16_t character);
 	void insertTab();
-	void insertTab(uint8_t tabType, float tabPosition);
+	void insertTab(uint8_t tabType, double tabPosition);
 	void insertBreak(uint8_t breakType) { WPXContentListener::insertBreak(breakType); };
 	void insertEOL();
 	void attributeChange(bool isOn, uint8_t attribute);
-	void lineSpacingChange(float lineSpacing) { WPXContentListener::lineSpacingChange(lineSpacing); };
+	void lineSpacingChange(double lineSpacing) { WPXContentListener::lineSpacingChange(lineSpacing); };
 	void pageMarginChange(uint8_t /* side */, uint16_t /* margin */) {};
 	void pageFormChange(uint16_t /* length */, uint16_t /* width */, WPXFormOrientation /* orientation */) {};
 	void marginChange(uint8_t side, uint16_t margin);
 	void indentFirstLineChange(int16_t offset);
 	void setTabs(bool isRelative, const std::vector<WPXTabStop> tabStops);
-	void columnChange(WPXTextColumnType columnType, uint8_t numColumns, const std::vector<float> &columnWidth,
+	void columnChange(WPXTextColumnType columnType, uint8_t numColumns, const std::vector<double> &columnWidth,
 					const std::vector<bool> &isFixedWidth);
 	void endDocument() { WPXContentListener::endDocument(); };
 	void endSubDocument() { WPXContentListener::endSubDocument(); };
@@ -95,14 +95,14 @@ public:
 	void suppressPage(uint16_t /* suppressCode */) {};
 	void backTab();
 	void leftIndent();
-	void leftIndent(float offset);
+	void leftIndent(double offset);
 	void leftRightIndent();
-	void leftRightIndent(float offset);
-	void insertPicture(float height, float width, float verticalOffset, float horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
+	void leftRightIndent(double offset);
+	void insertPicture(double height, double width, double verticalOffset, double horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
 			uint16_t figureFlags, const WPXBinaryData &binaryData);
-	void insertTextBox(float height, float width, float verticalOffset, float horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
+	void insertTextBox(double height, double width, double verticalOffset, double horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
 			uint16_t figureFlags, const WP3SubDocument *subDocument, const WP3SubDocument *caption);
-	void insertWP51Table(float height, float width, float verticalOffset, float horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
+	void insertWP51Table(double height, double width, double verticalOffset, double horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
 			uint16_t figureFlags, const WP3SubDocument *subDocument, const WP3SubDocument *caption);
 	
 protected:
@@ -112,7 +112,7 @@ protected:
 	void _flushText();
 	void _changeList() {};
 	
-	void _handleFrameParameters( WPXPropertyList &propList, float height, float width, float verticalOffset, float horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
+	void _handleFrameParameters( WPXPropertyList &propList, double height, double width, double verticalOffset, double horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
 			uint16_t figureFlags );
 
 private:

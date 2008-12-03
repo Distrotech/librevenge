@@ -30,7 +30,7 @@
 
 _WPXContentParsingState::_WPXContentParsingState() :
 	m_textAttributeBits(0),
-	m_fontSize(12.0f/*WP6_DEFAULT_FONT_SIZE*/), // FIXME ME!!!!!!!!!!!!!!!!!!! HELP WP6_DEFAULT_FONT_SIZE
+	m_fontSize(12.0/*WP6_DEFAULT_FONT_SIZE*/), // FIXME ME!!!!!!!!!!!!!!!!!!! HELP WP6_DEFAULT_FONT_SIZE
 	m_fontName(new WPXString(/*WP6_DEFAULT_FONT_NAME*/"Times New Roman")), // EN PAS DEFAULT FONT AAN VOOR WP5/6/etc
 	m_fontColor(new RGBSColor(0x00,0x00,0x00,0x64)), //Set default to black. Maybe once it will change, but for the while...
 	m_highlightColor(0),
@@ -39,7 +39,7 @@ _WPXContentParsingState::_WPXContentParsingState() :
 	m_isParagraphPageBreak(false),
 	m_paragraphJustification(WPX_PARAGRAPH_JUSTIFICATION_LEFT),
 	m_tempParagraphJustification(0),
-	m_paragraphLineSpacing(1.0f),
+	m_paragraphLineSpacing(1.0),
 
 	m_isDocumentStarted(false),
 	m_isPageSpanOpened(false),
@@ -75,34 +75,34 @@ _WPXContentParsingState::_WPXContentParsingState() :
 	m_textColumns(),
 	m_isTextColumnWithoutParagraph(false),
 
-	m_pageFormLength(11.0f),
+	m_pageFormLength(11.0),
 	m_pageFormWidth(8.5f),
 	m_pageFormOrientation(PORTRAIT),
 
-	m_pageMarginLeft(1.0f),
-	m_pageMarginRight(1.0f),
-	m_pageMarginTop(1.0f),
-	m_pageMarginBottom(1.0f),
+	m_pageMarginLeft(1.0),
+	m_pageMarginRight(1.0),
+	m_pageMarginTop(1.0),
+	m_pageMarginBottom(1.0),
 
-	m_paragraphMarginLeft(0.0f),
-	m_paragraphMarginRight(0.0f),
-	m_paragraphMarginTop(0.0f),
-	m_paragraphMarginBottom(0.0f),
-	m_leftMarginByPageMarginChange(0.0f),
-	m_rightMarginByPageMarginChange(0.0f),
-	m_sectionMarginLeft(0.0f),
-	m_sectionMarginRight(0.0f),
-	m_leftMarginByParagraphMarginChange(0.0f),
-	m_rightMarginByParagraphMarginChange(0.0f),
-	m_leftMarginByTabs(0.0f),
-	m_rightMarginByTabs(0.0f),
+	m_paragraphMarginLeft(0.0),
+	m_paragraphMarginRight(0.0),
+	m_paragraphMarginTop(0.0),
+	m_paragraphMarginBottom(0.0),
+	m_leftMarginByPageMarginChange(0.0),
+	m_rightMarginByPageMarginChange(0.0),
+	m_sectionMarginLeft(0.0),
+	m_sectionMarginRight(0.0),
+	m_leftMarginByParagraphMarginChange(0.0),
+	m_rightMarginByParagraphMarginChange(0.0),
+	m_leftMarginByTabs(0.0),
+	m_rightMarginByTabs(0.0),
 	
-	m_listReferencePosition(0.0f),
-	m_listBeginPosition(0.0f),
+	m_listReferencePosition(0.0),
+	m_listBeginPosition(0.0),
 
-	m_paragraphTextIndent(0.0f),
-	m_textIndentByParagraphIndentChange(0.0f),
-	m_textIndentByTabs(0.0f),
+	m_paragraphTextIndent(0.0),
+	m_textIndentByParagraphIndentChange(0.0),
+	m_textIndentByTabs(0.0),
 	m_currentListLevel(0),
 
 	m_alignmentCharacter('.'),
@@ -205,11 +205,11 @@ void WPXContentListener::_openSection()
 		propList.insert("fo:margin-right", m_ps->m_sectionMarginRight);
 		if (m_ps->m_numColumns > 1)
 		{
-			propList.insert("libwpd:margin-bottom", 1.0f);
+			propList.insert("libwpd:margin-bottom", 1.0);
 			propList.insert("text:dont-balance-text-columns", false);
 		}
 		else
-			propList.insert("libwpd:margin-bottom", 0.0f);
+			propList.insert("libwpd:margin-bottom", 0.0);
 
 		WPXPropertyListVector columns;
  		typedef std::vector<WPXColumnDefinition>::const_iterator CDVIter;
@@ -217,7 +217,7 @@ void WPXContentListener::_openSection()
 		{
 			WPXPropertyList column;
 			// The "style:rel-width" is expressed in twips (1440 twips per inch) and includes the left and right Gutter
-			column.insert("style:rel-width", (*iter).m_width * 1440.0f, WPX_TWIP);
+			column.insert("style:rel-width", (*iter).m_width * 1440.0, WPX_TWIP);
 			column.insert("fo:start-indent", (*iter).m_leftGutter);
 			column.insert("fo:end-indent", (*iter).m_rightGutter);
 			columns.append(column);
@@ -442,10 +442,10 @@ void WPXContentListener::_resetParagraphState(const bool isListElement)
 	}
 	m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange + m_ps->m_leftMarginByParagraphMarginChange;
 	m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange + m_ps->m_rightMarginByParagraphMarginChange;
-	m_ps->m_leftMarginByTabs = 0.0f;
-	m_ps->m_rightMarginByTabs = 0.0f;
+	m_ps->m_leftMarginByTabs = 0.0;
+	m_ps->m_rightMarginByTabs = 0.0;
 	m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange;
-	m_ps->m_textIndentByTabs = 0.0f;
+	m_ps->m_textIndentByTabs = 0.0;
 	m_ps->m_isCellWithoutParagraph = false;
 	m_ps->m_isTextColumnWithoutParagraph = false;
 	m_ps->m_isHeaderFooterWithoutParagraph = false;
@@ -554,13 +554,13 @@ void WPXContentListener::_getTabStops(WPXPropertyListVector &tabStops)
 		}
 
 		// position
-		float position = m_ps->m_tabStops[i].m_position;
+		double position = m_ps->m_tabStops[i].m_position;
 		if (m_ps->m_isTabPositionRelative)
 			position -= m_ps->m_leftMarginByTabs;
 		else
 			position -= m_ps->m_paragraphMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_pageMarginLeft;
 		if (position < 0.00005f && position > -0.00005f)
-			position = 0.0f;
+			position = 0.0;
 		tmpTabStop.insert("style:position", position);
 		
 
@@ -633,7 +633,7 @@ void WPXContentListener::_closeListElement()
 		_closePageSpan();
 }
 
-const float WPX_DEFAULT_SUPER_SUB_SCRIPT = 58.0f; 
+const double WPX_DEFAULT_SUPER_SUB_SCRIPT = 58.0; 
 
 void WPXContentListener::_openSpan()
 {
@@ -651,7 +651,7 @@ void WPXContentListener::_openSpan()
 	// unset it; if it is set, we can set or unset it
 	uint32_t attributeBits = (m_ps->m_textAttributeBits | m_ps->m_cellAttributeBits);
 	uint8_t fontSizeAttributes;
-	float fontSizeChange;
+	double fontSizeChange;
 	// the font size attribute bits are mutually exclusive and the cell attributes prevail
 	if ((m_ps->m_cellAttributeBits & 0x0000001f) != 0x00000000)
 		fontSizeAttributes = (uint8_t)(m_ps->m_cellAttributeBits & 0x0000001f);
@@ -660,7 +660,7 @@ void WPXContentListener::_openSpan()
 	switch (fontSizeAttributes)
 	{
 	case 0x01:  // Extra large
-		fontSizeChange = 2.0f;
+		fontSizeChange = 2.0;
 		break;	
 	case 0x02: // Very large
 		fontSizeChange = 1.5f;
@@ -675,7 +675,7 @@ void WPXContentListener::_openSpan()
 		fontSizeChange = 0.6f;
 		break;
 	default: // Normal
-		fontSizeChange = 1.0f;
+		fontSizeChange = 1.0;
 		break;
 	}
 
@@ -752,7 +752,7 @@ void WPXContentListener::_openTable()
 	{
 	case WPX_TABLE_POSITION_ALIGN_WITH_LEFT_MARGIN:
 		propList.insert("table:align", "left");
-		propList.insert("fo:margin-left", 0.0f);
+		propList.insert("fo:margin-left", 0.0);
 		break;
 	case WPX_TABLE_POSITION_ALIGN_WITH_RIGHT_MARGIN:
 		propList.insert("table:align", "right");
@@ -779,7 +779,7 @@ void WPXContentListener::_openTable()
 	m_ps->m_isParagraphColumnBreak = false;
 	m_ps->m_isParagraphPageBreak = false;
 
- 	float tableWidth = 0.0f;
+ 	double tableWidth = 0.0;
 	WPXPropertyListVector columns;
  	typedef std::vector<WPXColumnDefinition>::const_iterator CDVIter;
  	for (CDVIter iter = m_ps->m_tableDefinition.m_columns.begin(); iter != m_ps->m_tableDefinition.m_columns.end(); iter++)
@@ -830,7 +830,7 @@ void WPXContentListener::_closeTable()
 		_closePageSpan();
 }
 
-void WPXContentListener::_openTableRow(const float height, const bool isMinimumHeight, const bool isHeaderRow)
+void WPXContentListener::_openTableRow(const double height, const bool isMinimumHeight, const bool isHeaderRow)
 {
 	if (m_ps->m_isTableRowOpened)
 		_closeTableRow();
@@ -840,9 +840,9 @@ void WPXContentListener::_openTableRow(const float height, const bool isMinimumH
 
 
 	WPXPropertyList propList;
-	if (isMinimumHeight && height != 0.0f) // minimum height kind of stupid if it's not set, right?
+	if (isMinimumHeight && height != 0.0) // minimum height kind of stupid if it's not set, right?
 		propList.insert("style:min-row-height", height);
-	else if (height != 0.0f) // this indicates that wordperfect didn't set a height
+	else if (height != 0.0) // this indicates that wordperfect didn't set a height
 		propList.insert("style:row-height", height);
 
 	// Only the first "Header Row" in a table is the actual "Header Row"
@@ -896,7 +896,7 @@ void WPXContentListener::_closeTableRow()
 	m_ps->m_isTableRowOpened = false;
 }
 
-const float WPX_DEFAULT_TABLE_BORDER_WIDTH = 0.0007f;
+const double WPX_DEFAULT_TABLE_BORDER_WIDTH = 0.0007f;
 
 static void addBorderProps(const char *border, bool borderOn, const WPXString &borderColor, WPXPropertyList &propList)
 {
@@ -912,7 +912,7 @@ static void addBorderProps(const char *border, bool borderOn, const WPXString &b
 		propList.insert("fo:border-left-color", borderColor);
 	}
 	else
-		propList.insert("fo:border-left-width", 0.0f);
+		propList.insert("fo:border-left-width", 0.0);
 #endif
 	
 	WPXString borderStyle;
@@ -1119,7 +1119,7 @@ void WPXContentListener::insertBreak(const uint8_t breakType)
 	}
 }
 
-void WPXContentListener::lineSpacingChange(const float lineSpacing)
+void WPXContentListener::lineSpacingChange(const double lineSpacing)
 {
 	if (!isUndoOn())
 	{
@@ -1165,40 +1165,40 @@ void WPXContentListener::justificationChange(const uint8_t justification)
 	}
 }
 
-float WPXContentListener::_getNextTabStop() const
+double WPXContentListener::_getNextTabStop() const
 {
 	for (std::vector<WPXTabStop>::const_iterator iter = m_ps->m_tabStops.begin(); iter != (m_ps->m_tabStops.end() - 1); iter++)
 	{
 		if (iter->m_position
-			- (m_ps->m_isTabPositionRelative ? 0.0f : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange))
+			- (m_ps->m_isTabPositionRelative ? 0.0 : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange))
 			== (m_ps->m_leftMarginByTabs + m_ps->m_textIndentByTabs + m_ps->m_textIndentByParagraphIndentChange))
 			return (iter+1)->m_position
-				- (m_ps->m_isTabPositionRelative ? 0.0f : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange));
+				- (m_ps->m_isTabPositionRelative ? 0.0 : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange));
 		if (iter->m_position
-			- (m_ps->m_isTabPositionRelative ? 0.0f : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange))
+			- (m_ps->m_isTabPositionRelative ? 0.0 : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange))
 			> (m_ps->m_leftMarginByTabs + m_ps->m_textIndentByTabs + m_ps->m_textIndentByParagraphIndentChange))
 			return iter->m_position
-				- (m_ps->m_isTabPositionRelative ? 0.0f : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange));
+				- (m_ps->m_isTabPositionRelative ? 0.0 : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange));
 	}
-	return (std::numeric_limits<float>::min)();
+	return (std::numeric_limits<double>::min)();
 }
 
-float WPXContentListener::_getPreviousTabStop() const
+double WPXContentListener::_getPreviousTabStop() const
 {
 	for (std::vector<WPXTabStop>::reverse_iterator riter = m_ps->m_tabStops.rbegin(); riter != (m_ps->m_tabStops.rend() - 1); riter++)
 	{
 		if (riter->m_position
-			- (m_ps->m_isTabPositionRelative ? 0.0f : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange))
+			- (m_ps->m_isTabPositionRelative ? 0.0 : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange))
 			== (m_ps->m_leftMarginByTabs + m_ps->m_textIndentByTabs + m_ps->m_textIndentByParagraphIndentChange))
 			return (riter+1)->m_position
-				- (m_ps->m_isTabPositionRelative ? 0.0f : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange));
+				- (m_ps->m_isTabPositionRelative ? 0.0 : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange));
 		if (riter->m_position 
-			- (m_ps->m_isTabPositionRelative ? 0.0f : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange))
+			- (m_ps->m_isTabPositionRelative ? 0.0 : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange))
 			< (m_ps->m_leftMarginByTabs + m_ps->m_textIndentByTabs + m_ps->m_textIndentByParagraphIndentChange))
 			return riter->m_position
-				- (m_ps->m_isTabPositionRelative ? 0.0f : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange));
+				- (m_ps->m_isTabPositionRelative ? 0.0 : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange));
 	}
-	return (std::numeric_limits<float>::max)();
+	return (std::numeric_limits<double>::max)();
 }
 
 WPXString WPXContentListener::_colorToString(const RGBSColor * color)
@@ -1207,11 +1207,11 @@ WPXString WPXContentListener::_colorToString(const RGBSColor * color)
 
 	if (color) 
 	{
-		float fontShading = (float)((float)color->m_s/100.0f); //convert the percents to float between 0 and 1
+		double fontShading = (double)((double)color->m_s/100.0); //convert the percents to double between 0 and 1
 		// Mix fontShading amount of given color with (1-fontShading) of White (#ffffff)
-		int fontRed = (int)0xFF + (int)((float)color->m_r*fontShading) - (int)((float)0xFF*fontShading);
-		int fontGreen = (int)0xFF + (int)((float)color->m_g*fontShading) - (int)((float)0xFF*fontShading);
-		int fontBlue = (int)0xFF + (int)((float)color->m_b*fontShading) - (int)((float)0xFF*fontShading);
+		int fontRed = (int)0xFF + (int)((double)color->m_r*fontShading) - (int)((double)0xFF*fontShading);
+		int fontGreen = (int)0xFF + (int)((double)color->m_g*fontShading) - (int)((double)0xFF*fontShading);
+		int fontBlue = (int)0xFF + (int)((double)color->m_b*fontShading) - (int)((double)0xFF*fontShading);
 		tmpString.sprintf("#%.2x%.2x%.2x", fontRed, fontGreen, fontBlue);
 	}
 	else
@@ -1246,23 +1246,23 @@ WPXString WPXContentListener::_mergeColorsToString(const RGBSColor *fgColor, con
 		tmpBgColor.m_s = 0x64; // 100%
 	}
 
-	float fgAmount = (float)tmpFgColor.m_s/100.0f;
-	float bgAmount = LIBWPD_MAX(((float)tmpBgColor.m_s-(float)tmpFgColor.m_s)/100.0f, 0.0f);
+	double fgAmount = (double)tmpFgColor.m_s/100.0;
+	double bgAmount = LIBWPD_MAX(((double)tmpBgColor.m_s-(double)tmpFgColor.m_s)/100.0, 0.0);
 
-	int bgRed = LIBWPD_MIN((int)(((float)tmpFgColor.m_r*fgAmount)+((float)tmpBgColor.m_r*bgAmount)), 255);
-	int bgGreen = LIBWPD_MIN((int)(((float)tmpFgColor.m_g*fgAmount)+((float)tmpBgColor.m_g*bgAmount)), 255);
-	int bgBlue = LIBWPD_MIN((int)(((float)tmpFgColor.m_b*fgAmount)+((float)tmpBgColor.m_b*bgAmount)), 255);
+	int bgRed = LIBWPD_MIN((int)(((double)tmpFgColor.m_r*fgAmount)+((double)tmpBgColor.m_r*bgAmount)), 255);
+	int bgGreen = LIBWPD_MIN((int)(((double)tmpFgColor.m_g*fgAmount)+((double)tmpBgColor.m_g*bgAmount)), 255);
+	int bgBlue = LIBWPD_MIN((int)(((double)tmpFgColor.m_b*fgAmount)+((double)tmpBgColor.m_b*bgAmount)), 255);
 
 	tmpColor.sprintf("#%.2x%.2x%.2x", bgRed, bgGreen, bgBlue);
 
 	return tmpColor;
 }
 
-float WPXContentListener::_movePositionToFirstColumn(float position)
+double WPXContentListener::_movePositionToFirstColumn(double position)
 {
 	if (m_ps->m_numColumns <= 1)
 		return position;
-	float tempSpaceRemaining = position - m_ps->m_pageMarginLeft - m_ps->m_sectionMarginLeft;
+	double tempSpaceRemaining = position - m_ps->m_pageMarginLeft - m_ps->m_sectionMarginLeft;
 	position -= m_ps->m_textColumns[0].m_leftGutter;
 	for (int i = 0; i < (int)(m_ps->m_textColumns.size() - 1); i++)
 	{

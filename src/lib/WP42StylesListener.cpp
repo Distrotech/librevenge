@@ -36,8 +36,8 @@ WP42StylesListener::WP42StylesListener(std::list<WPXPageSpan> &pageList, std::ve
 	m_currentPage(),
 	m_nextPage(),
 	m_subDocuments(subDocuments),
-	m_tempMarginLeft(1.0f),
-	m_tempMarginRight(1.0f),
+	m_tempMarginLeft(1.0),
+	m_tempMarginRight(1.0),
 	m_currentPageHasContent(false),
 	m_isSubDocument(false),
 	m_pageListHardPageMark(m_pageList.end())
@@ -79,7 +79,7 @@ void WP42StylesListener::insertBreak(uint8_t breakType)
 					m_pageListHardPageMark--;
 				}
 			}
-			m_currentPage = WPXPageSpan(m_pageList.back(), 0.0f, 0.0f);
+			m_currentPage = WPXPageSpan(m_pageList.back(), 0.0, 0.0);
 			m_currentPage.setPageSpan(1);
 
 			for(std::vector<WPXHeaderFooter>::const_iterator HFiter = (m_nextPage.getHeaderFooterList()).begin();

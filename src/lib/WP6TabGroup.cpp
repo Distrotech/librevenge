@@ -31,7 +31,7 @@
 
 WP6TabGroup::WP6TabGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	WP6VariableLengthGroup(),
-	m_position(0.0f),
+	m_position(0.0),
 	m_ignoreFunction(false)
 {
 	_read(input, encryption);
@@ -70,7 +70,7 @@ void WP6TabGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption
 	// We will have to dig a bit more to see whether we can get the information from the screen units ???
 	if (!tempPosition)
 		tempPosition = 0xFFFF;
-	m_position = (float)((double)tempPosition/(double)WPX_NUM_WPUS_PER_INCH);
+	m_position = (double)((double)tempPosition/(double)WPX_NUM_WPUS_PER_INCH);
 }
 
 void WP6TabGroup::parse(WP6Listener *listener)

@@ -51,7 +51,7 @@ WP1ContentListener::WP1ContentListener(std::list<WPXPageSpan> &pageList, std::ve
 	m_subDocuments(subDocuments)
 {
 	*(m_ps->m_fontName) = "Geneva";
-	m_ps->m_fontSize = 12.0f;
+	m_ps->m_fontSize = 12.0;
 }
 
 WP1ContentListener::~WP1ContentListener() 
@@ -215,7 +215,7 @@ void WP1ContentListener::fontPointSize(uint8_t pointSize)
 	{
 		_closeSpan();
 		
-		m_ps->m_fontSize=float(pointSize);
+		m_ps->m_fontSize=double(pointSize);
 	}
 }
 
@@ -386,7 +386,7 @@ void WP1ContentListener::marginReset(uint16_t leftMargin, uint16_t rightMargin)
 	{
 		if (leftMargin)
 		{
-			float leftMarginInch = (float)((double)leftMargin/72.0f);
+			double leftMarginInch = (double)((double)leftMargin/72.0);
 			m_ps->m_leftMarginByPageMarginChange = leftMarginInch - m_ps->m_pageMarginLeft;
 			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
 						+ m_ps->m_leftMarginByParagraphMarginChange
@@ -395,7 +395,7 @@ void WP1ContentListener::marginReset(uint16_t leftMargin, uint16_t rightMargin)
 		}
 		if (rightMargin)
 		{
-			float rightMarginInch = (float)((double)rightMargin/72.0f);
+			double rightMarginInch = (double)((double)rightMargin/72.0);
 			m_ps->m_rightMarginByPageMarginChange = rightMarginInch - m_ps->m_pageMarginRight;
 			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
 						+ m_ps->m_rightMarginByParagraphMarginChange
@@ -414,7 +414,7 @@ void WP1ContentListener::leftIndent(uint16_t leftMarginOffset)
 		else
 		{
 			m_parseState->m_numDeferredTabs = 0;
-			m_ps->m_leftMarginByTabs += (float)((double)leftMarginOffset / 72.0f);
+			m_ps->m_leftMarginByTabs += (double)((double)leftMarginOffset / 72.0);
 			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
 						+ m_ps->m_leftMarginByParagraphMarginChange
 						+ m_ps->m_leftMarginByTabs;
@@ -432,8 +432,8 @@ void WP1ContentListener::leftRightIndent(uint16_t leftRightMarginOffset)
 		else
 		{
 			m_parseState->m_numDeferredTabs = 0;
-			m_ps->m_leftMarginByTabs += (float)((double)leftRightMarginOffset / 72.0f);
-			m_ps->m_rightMarginByTabs += (float)((double)leftRightMarginOffset / 72.0f);
+			m_ps->m_leftMarginByTabs += (double)((double)leftRightMarginOffset / 72.0);
+			m_ps->m_rightMarginByTabs += (double)((double)leftRightMarginOffset / 72.0);
 			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
 						+ m_ps->m_leftMarginByParagraphMarginChange
 						+ m_ps->m_leftMarginByTabs;
@@ -453,7 +453,7 @@ void WP1ContentListener::leftMarginRelease(uint16_t release)
 		{
 			if (!m_parseState->m_numDeferredTabs)
 			{
-				m_ps->m_textIndentByTabs -= (float)((double)release / 72.0f);
+				m_ps->m_textIndentByTabs -= (double)((double)release / 72.0);
 				m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange
 					+ m_ps->m_textIndentByTabs;
 			}
@@ -537,8 +537,8 @@ void WP1ContentListener::insertPicture(uint16_t width, uint16_t height, const WP
 			_openSpan();
 
 		WPXPropertyList propList;
-		propList.insert("svg:width", (float)((double)width/72.0f));
-		propList.insert("svg:height", (float)((double)height/72.0f));
+		propList.insert("svg:width", (double)((double)width/72.0));
+		propList.insert("svg:height", (double)((double)height/72.0));
 		propList.insert("text:anchor-type", "as-char");
 		m_documentInterface->openFrame(propList);
 		

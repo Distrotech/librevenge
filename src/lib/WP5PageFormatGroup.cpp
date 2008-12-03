@@ -34,7 +34,7 @@ WP5PageFormatGroup::WP5PageFormatGroup(WPXInputStream *input, WPXEncryption *enc
 	WP5VariableLengthGroup(),
 	m_leftMargin(0),
 	m_rightMargin(0),
-	m_lineSpacing(1.0f),
+	m_lineSpacing(1.0),
 	m_tabStops(),
 	m_marginOffset(0xffff),
 	m_topMargin(0),
@@ -71,7 +71,7 @@ void WP5PageFormatGroup::_readContents(WPXInputStream *input, WPXEncryption *enc
 		{
 			uint16_t lineSpacing = readU16(input, encryption);
 			int8_t lineSpacingIntegerPart = (int8_t)((lineSpacing & 0xFF00) >> 8);
-			float lineSpacingFractionalPart = (float)(lineSpacing & 0x00FF)/(float)0xFF;
+			double lineSpacingFractionalPart = (double)(lineSpacing & 0x00FF)/(double)0xFF;
 			WPD_DEBUG_MSG(("WordPerfect: Page format group line spacing - integer part: %i fractional part: %f (original value: %i)\n",
 				       lineSpacingIntegerPart, lineSpacingFractionalPart, lineSpacing));
 			m_lineSpacing = lineSpacingIntegerPart + lineSpacingFractionalPart;
@@ -86,7 +86,7 @@ void WP5PageFormatGroup::_readContents(WPXInputStream *input, WPXEncryption *enc
 			for (unsigned i=0; i < 40 && (tmpTabPosition = readU16(input, encryption)) != 0xFFFF; i++)
 			{
 				m_tabStops.push_back(WPXTabStop());
-				m_tabStops[i].m_position = (float)((double)tmpTabPosition/(double)WPX_NUM_WPUS_PER_INCH);
+				m_tabStops[i].m_position = (double)((double)tmpTabPosition/(double)WPX_NUM_WPUS_PER_INCH);
 			}
 			if ((tmpTabPosition & 0xFFFF) == 0xFFFF)
 				input->seek((39 - m_tabStops.size()) * 2, WPX_SEEK_CUR);
@@ -158,7 +158,7 @@ void WP5PageFormatGroup::_readContents(WPXInputStream *input, WPXEncryption *enc
 				if (0xFFFF != (m_marginOffset & 0xFFFF))
 				{
 					for (std::vector<WPXTabStop>::iterator iter = m_tabStops.begin(); iter != m_tabStops.end(); iter++)
-						iter->m_position -= (float)((double)m_marginOffset/(double)WPX_NUM_WPUS_PER_INCH);
+						iter->m_position -= (double)((double)m_marginOffset/(double)WPX_NUM_WPUS_PER_INCH);
 				}
 			}
 			else

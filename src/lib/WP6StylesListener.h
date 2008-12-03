@@ -57,7 +57,7 @@ public:
 	void defineTabStops(const bool /* isRelative */, const std::vector<WPXTabStop> & /* tabStops */, 
 				    const std::vector<bool> & /* usePreWP9LeaderMethods */) {}
 	void insertCharacter(const uint16_t /* character */) { if (!isUndoOn()) m_currentPageHasContent = true; }
-	void insertTab(const uint8_t /* tabType */, float /* tabPosition */) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	void insertTab(const uint8_t /* tabType */, double /* tabPosition */) { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void handleLineBreak()  { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void insertEOL() { if (!isUndoOn()) m_currentPageHasContent = true; }
  	void insertBreak(const uint8_t breakType);
@@ -66,8 +66,8 @@ public:
 	void highlightChange(const bool /* isOn */, const RGBSColor /* color */) {}
 	void fontChange(const uint16_t /* matchedFontPointSize */, const uint16_t /* fontPID */) {}
 	void attributeChange(const bool /* isOn */, const uint8_t /* attribute */) {}
-	void lineSpacingChange(const float /* lineSpacing */) {}
-	void spacingAfterParagraphChange(const float /* spacingRelative */, const float /* spacingAbsolute */) {}
+	void lineSpacingChange(const double /* lineSpacing */) {}
+	void spacingAfterParagraphChange(const double /* spacingRelative */, const double /* spacingAbsolute */) {}
 	void justificationChange(const uint8_t /* justification */) {}
 	void pageMarginChange(const uint8_t side, const uint16_t margin);
 	void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation);
@@ -75,7 +75,7 @@ public:
 	void paragraphMarginChange(const uint8_t /* side */, const int16_t /* margin */) {}
 	void indentFirstLineChange(const int16_t /* offset */) {}
 	void columnChange(const WPXTextColumnType /* columnType */, const uint8_t /* numColumns */,
-				const std::vector<float> & /* columnWidth */, const std::vector<bool> & /* isFixedWidth */) {}
+				const std::vector<double> & /* columnWidth */, const std::vector<bool> & /* isFixedWidth */) {}
 	void updateOutlineDefinition(const WP6OutlineLocation /* outlineLocation */, const uint16_t /* outlineHash */,
 					     const uint8_t * /* numberingMethods */, const uint8_t /* tabBehaviourFlag */) {}
 
@@ -129,7 +129,7 @@ private:
 
 	WPXTableList m_tableList;
 	WPXTable * m_currentTable;
-	float m_tempMarginLeft, m_tempMarginRight;
+	double m_tempMarginLeft, m_tempMarginRight;
 	bool m_currentPageHasContent;
 	bool m_isTableDefined;
 	bool m_isSubDocument;

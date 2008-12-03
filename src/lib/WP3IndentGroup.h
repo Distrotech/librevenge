@@ -39,7 +39,7 @@ public:
 
  private:
  	uint8_t m_subGroup;
-	float m_offset;
+	double m_offset;
 };
 
 #endif /* WP3INDENTGROUP_H */

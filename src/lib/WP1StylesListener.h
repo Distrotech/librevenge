@@ -76,7 +76,7 @@ protected:
 private:
 	WPXPageSpan m_currentPage, m_nextPage;
 	std::vector<WP1SubDocument *> &m_subDocuments;
-	float m_tempMarginLeft, m_tempMarginRight;
+	double m_tempMarginLeft, m_tempMarginRight;
 	bool m_currentPageHasContent;
 	bool m_isSubDocument;
 	std::list<WPXPageSpan>::iterator m_pageListHardPageMark;

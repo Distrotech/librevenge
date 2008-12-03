@@ -41,8 +41,8 @@ WP6StylesListener::WP6StylesListener(std::list<WPXPageSpan> &pageList, WPXTableL
 	m_currentPage(),
 	m_tableList(tableList), 
 	m_currentTable(0),
-	m_tempMarginLeft(1.0f),
-	m_tempMarginRight(1.0f),
+	m_tempMarginLeft(1.0),
+	m_tempMarginRight(1.0),
 	m_currentPageHasContent(false),
 	m_isTableDefined(false),
 	m_isSubDocument(false),
@@ -83,7 +83,7 @@ void WP6StylesListener::insertBreak(const uint8_t breakType)
 				if (m_pageListHardPageMark == m_pageList.end())
 					m_pageListHardPageMark--;
 			}
-			m_currentPage = WPXPageSpan(m_pageList.back(), 0.0f, 0.0f);
+			m_currentPage = WPXPageSpan(m_pageList.back(), 0.0, 0.0);
 			m_currentPage.setPageSpan(1);
 			m_currentPageHasContent = false;
 			break;
@@ -101,7 +101,7 @@ void WP6StylesListener::pageMarginChange(const uint8_t side, const uint16_t marg
 {
 	if (!isUndoOn()) 
 	{
-		float marginInch = (float)((double)margin / (double)WPX_NUM_WPUS_PER_INCH);
+		double marginInch = (double)((double)margin / (double)WPX_NUM_WPUS_PER_INCH);
 		switch(side)
 		{
 			case WPX_TOP:
@@ -118,8 +118,8 @@ void WP6StylesListener::pageFormChange(const uint16_t length, const uint16_t wid
 {
 	if (!isUndoOn())
 	{
-		float lengthInch = (float)((double)length / (double)WPX_NUM_WPUS_PER_INCH);
-		float widthInch = (float)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
+		double lengthInch = (double)((double)length / (double)WPX_NUM_WPUS_PER_INCH);
+		double widthInch = (double)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
 		if (!m_currentPageHasContent)
 		{
 			m_currentPage.setFormLength(lengthInch);
@@ -137,7 +137,7 @@ void WP6StylesListener::marginChange(const uint8_t side, const uint16_t margin)
 			return; // do not deal with L/R margins in headers, footer and notes
 
 		std::list<WPXPageSpan>::iterator Iter;
-		float marginInch = (float)((double)margin / (double)WPX_NUM_WPUS_PER_INCH);
+		double marginInch = (double)((double)margin / (double)WPX_NUM_WPUS_PER_INCH);
 		switch(side)
 		{
 			case WPX_LEFT:

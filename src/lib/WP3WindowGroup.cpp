@@ -36,10 +36,10 @@ WP3WindowGroup::WP3WindowGroup(WPXInputStream *input, WPXEncryption *encryption)
 	m_leftColumn(0),
 	m_rightColumn(0),
 	m_boxType(0xFF),
-	m_width(0.0f),
-	m_height(0.0f),
-	m_horizontalOffset(0.0f),
-	m_verticalOffset(0.0f),
+	m_width(0.0),
+	m_height(0.0),
+	m_horizontalOffset(0.0),
+	m_verticalOffset(0.0),
 	m_resourceID(0),
 	m_subDocument(NULL),
 	m_caption(NULL)
@@ -75,10 +75,10 @@ void WP3WindowGroup::_readContents(WPXInputStream * input, WPXEncryption * encry
 			m_boxType = readU8(input, encryption);
 			input->seek(1, WPX_SEEK_CUR);
 			m_resourceID = readU16(input, encryption, true);
-			m_verticalOffset = fixedPointToFloat(readU32(input, encryption, true));
-			m_horizontalOffset = fixedPointToFloat(readU32(input, encryption, true));
-			m_width = fixedPointToFloat(readU32(input, encryption, true));
-			m_height = fixedPointToFloat(readU32(input, encryption, true));
+			m_verticalOffset = fixedPointToDouble(readU32(input, encryption, true));
+			m_horizontalOffset = fixedPointToDouble(readU32(input, encryption, true));
+			m_width = fixedPointToDouble(readU32(input, encryption, true));
+			m_height = fixedPointToDouble(readU32(input, encryption, true));
 			input->seek(9, WPX_SEEK_CUR);
 			uint8_t tmpNumSubRect = readU8(input, encryption);
 			input->seek(tmpNumSubRect * 8, WPX_SEEK_CUR);

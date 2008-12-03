@@ -47,9 +47,9 @@ class WP6ColumnGroup : public WP6VariableLengthGroup
  	// variables used for subgroup 2 (Columns)
 	uint8_t m_colType;
 	uint8_t m_numColumns;
-	float m_rowSpacing;
+	double m_rowSpacing;
 	std::vector<bool> m_isFixedWidth;
-	std::vector<float> m_columnWidth;
+	std::vector<double> m_columnWidth;
 };
 
 #endif /* WP6COLUMNGROUP_H */

@@ -44,14 +44,14 @@ public:
 
 	virtual void startDocument() = 0;
 	virtual void startSubDocument() = 0;
-	virtual void setFont(const WPXString &fontName, float fontSize) = 0;
+	virtual void setFont(const WPXString &fontName, double fontSize) = 0;
 	virtual void setTabs(const std::vector<WPXTabStop>& tabStops, uint16_t tabOffset) = 0;
 	virtual void insertCharacter(uint16_t character) = 0;
-	virtual void insertTab(uint8_t tabType, float tabPosition) = 0;
-	virtual void insertIndent(uint8_t indentType, float indentPosition) = 0;
+	virtual void insertTab(uint8_t tabType, double tabPosition) = 0;
+	virtual void insertIndent(uint8_t indentType, double indentPosition) = 0;
 	virtual void insertEOL() = 0;
 	virtual void insertBreak(uint8_t breakType) = 0;
-	virtual void lineSpacingChange(float lineSpacing) = 0;
+	virtual void lineSpacingChange(double lineSpacing) = 0;
 	virtual void justificationChange(uint8_t justification) = 0;
 	virtual void characterColorChange(uint8_t red, uint8_t green, uint8_t blue) = 0;
 	virtual void attributeChange(bool isOn, uint8_t attribute) = 0;

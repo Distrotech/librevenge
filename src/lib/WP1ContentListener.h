@@ -72,7 +72,7 @@ public:
 	void headerFooterGroup(uint8_t headerFooterDefinition, WP1SubDocument *subDocument);
 	void suppressPageCharacteristics(uint8_t /* suppressCode */) {}
 	void justificationChange(uint8_t justification);
-	void lineSpacingChange(uint8_t spacing) { WPXContentListener::lineSpacingChange((float)((double)spacing/2.0f)); }
+	void lineSpacingChange(uint8_t spacing) { WPXContentListener::lineSpacingChange((double)((double)spacing/2.0)); }
 	void flushRightOn();
 	void flushRightOff() {}
 	void centerOn();

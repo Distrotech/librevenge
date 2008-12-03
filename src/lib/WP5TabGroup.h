@@ -40,7 +40,7 @@ protected:
 
 private:
 	uint8_t m_tabType;
-	float m_tabPosition;
+	double m_tabPosition;
 
 };
 

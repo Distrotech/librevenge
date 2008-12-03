@@ -30,7 +30,7 @@
 WP3IndentGroup::WP3IndentGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID) :
 	WP3FixedLengthGroup(groupID),
 	m_subGroup(0),
-	m_offset(0.0f)
+	m_offset(0.0)
 {
 	_read(input, encryption);
 }
@@ -38,7 +38,7 @@ WP3IndentGroup::WP3IndentGroup(WPXInputStream *input, WPXEncryption *encryption,
 void WP3IndentGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	m_subGroup = readU8(input, encryption);
-	m_offset = fixedPointToFloat(readU32(input, encryption, true));
+	m_offset = fixedPointToDouble(readU32(input, encryption, true));
 }
 
 void WP3IndentGroup::parse(WP3Listener *listener)

@@ -40,9 +40,9 @@
 typedef struct _WPXTableDefinition WPXTableDefinition;
 struct _WPXTableDefinition
 {
-	_WPXTableDefinition() : m_positionBits(0), m_leftOffset(0.0f), m_columns(), m_columnsProperties() {};
+	_WPXTableDefinition() : m_positionBits(0), m_leftOffset(0.0), m_columns(), m_columnsProperties() {};
 	uint8_t m_positionBits;
-	float m_leftOffset;
+	double m_leftOffset;
 	std::vector < WPXColumnDefinition > m_columns;
 	std::vector < WPXColumnProperties > m_columnsProperties;
 };
@@ -54,7 +54,7 @@ struct _WPXContentParsingState
 	~_WPXContentParsingState();
 
 	uint32_t m_textAttributeBits;
-	float m_fontSize;
+	double m_fontSize;
 	WPXString *m_fontName;
 	RGBSColor *m_fontColor;
 	RGBSColor *m_highlightColor;
@@ -63,7 +63,7 @@ struct _WPXContentParsingState
 	bool m_isParagraphPageBreak;
 	uint8_t m_paragraphJustification;
 	uint8_t m_tempParagraphJustification; // TODO: remove this one after the tabs are properly implemented
-	float m_paragraphLineSpacing;
+	double m_paragraphLineSpacing;
 
 	bool m_isDocumentStarted;
 	bool m_isPageSpanOpened;
@@ -99,33 +99,33 @@ struct _WPXContentParsingState
 	std::vector < WPXColumnDefinition > m_textColumns;
 	bool m_isTextColumnWithoutParagraph;
 
-	float m_pageFormLength;
-	float m_pageFormWidth;
+	double m_pageFormLength;
+	double m_pageFormWidth;
 	WPXFormOrientation m_pageFormOrientation;
 
-	float m_pageMarginLeft;
-	float m_pageMarginRight;
-	float m_pageMarginTop;
-	float m_pageMarginBottom;
-	float m_paragraphMarginLeft;  // resulting paragraph margin that is one of the paragraph
-	float m_paragraphMarginRight; // properties
-	float m_paragraphMarginTop;
-	float m_paragraphMarginBottom;
-	float m_leftMarginByPageMarginChange;  // part of the margin due to the PAGE margin change
-	float m_rightMarginByPageMarginChange; // inside a page that already has content.
-	float m_sectionMarginLeft;  // In multicolumn sections, the above two will be rather interpreted
-	float m_sectionMarginRight; // as section margin change 
-	float m_leftMarginByParagraphMarginChange;  // part of the margin due to the PARAGRAPH
-	float m_rightMarginByParagraphMarginChange; // margin change (in WP6)
-	float m_leftMarginByTabs;  // part of the margin due to the LEFT or LEFT/RIGHT Indent; the
-	float m_rightMarginByTabs; // only part of the margin that is reset at the end of a paragraph
+	double m_pageMarginLeft;
+	double m_pageMarginRight;
+	double m_pageMarginTop;
+	double m_pageMarginBottom;
+	double m_paragraphMarginLeft;  // resulting paragraph margin that is one of the paragraph
+	double m_paragraphMarginRight; // properties
+	double m_paragraphMarginTop;
+	double m_paragraphMarginBottom;
+	double m_leftMarginByPageMarginChange;  // part of the margin due to the PAGE margin change
+	double m_rightMarginByPageMarginChange; // inside a page that already has content.
+	double m_sectionMarginLeft;  // In multicolumn sections, the above two will be rather interpreted
+	double m_sectionMarginRight; // as section margin change 
+	double m_leftMarginByParagraphMarginChange;  // part of the margin due to the PARAGRAPH
+	double m_rightMarginByParagraphMarginChange; // margin change (in WP6)
+	double m_leftMarginByTabs;  // part of the margin due to the LEFT or LEFT/RIGHT Indent; the
+	double m_rightMarginByTabs; // only part of the margin that is reset at the end of a paragraph
 
-	float m_listReferencePosition; // position from the left page margin of the list number/bullet
-	float m_listBeginPosition; // position from the left page margin of the beginning of the list
+	double m_listReferencePosition; // position from the left page margin of the list number/bullet
+	double m_listBeginPosition; // position from the left page margin of the beginning of the list
 
-	float m_paragraphTextIndent; // resulting first line indent that is one of the paragraph properties
-	float m_textIndentByParagraphIndentChange; // part of the indent due to the PARAGRAPH indent (WP6???)
-	float m_textIndentByTabs; // part of the indent due to the "Back Tab" or "Left Tab"
+	double m_paragraphTextIndent; // resulting first line indent that is one of the paragraph properties
+	double m_textIndentByParagraphIndentChange; // part of the indent due to the PARAGRAPH indent (WP6???)
+	double m_textIndentByTabs; // part of the indent due to the "Back Tab" or "Left Tab"
 
 	uint8_t m_currentListLevel;
 	
@@ -156,7 +156,7 @@ protected:
 	void endSubDocument();
 	void handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList, int nextTableIndice);
 	void insertBreak(const uint8_t breakType);
-	void lineSpacingChange(const float lineSpacing);
+	void lineSpacingChange(const double lineSpacing);
 	void justificationChange(const uint8_t justification);
 
 	WPXContentParsingState *m_ps; // parse state
@@ -188,7 +188,7 @@ protected:
 
 	void _openTable();
 	void _closeTable();
-	void _openTableRow(const float height, const bool isMinimumHeight, const bool isHeaderRow);
+	void _openTableRow(const double height, const bool isMinimumHeight, const bool isHeaderRow);
 	void _closeTableRow();
 	void _openTableCell(const uint8_t colSpan, const uint8_t rowSpan, const uint8_t borderBits, 
 				const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
@@ -196,10 +196,10 @@ protected:
 				const WPXVerticalAlignment cellVerticalAlignment);
 	void _closeTableCell();
 
-	float _movePositionToFirstColumn(float position);
+	double _movePositionToFirstColumn(double position);
 
-	float _getNextTabStop() const;
-	float _getPreviousTabStop() const;
+	double _getNextTabStop() const;
+	double _getPreviousTabStop() const;
 	
 	void _insertBreakIfNecessary(WPXPropertyList &propList);
 	

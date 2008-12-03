@@ -168,7 +168,7 @@ void WP5Parser::parse(WPXDocumentInterface *documentInterface)
 		// This is the quick and dirty way and maybe one could do it differently
 		// FIXME: UGLY, UGLY, UGLY!!! FIND A BETTER WAY TO ACHIEVE THE SAME
 		int tmpFontNameOffset = 0; // The default font in WP5 is at the position 0
-		float tmpFontSize = 12.0f;
+		double tmpFontSize = 12.0;
 		WPXString tmpFontName("Times New Roman");
 		bool tmpHasFontsUsedPacket = true;
 

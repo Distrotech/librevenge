@@ -32,7 +32,7 @@
 WP5IndentGroup::WP5IndentGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID) :
 	WP5FixedLengthGroup(groupID),
 	m_indentType(0),
-	m_indentPosition(0.0f)
+	m_indentPosition(0.0)
 {
 	_read(input, encryption);
 }
