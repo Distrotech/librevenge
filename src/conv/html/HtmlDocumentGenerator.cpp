@@ -142,7 +142,7 @@ void HtmlDocumentGenerator::openParagraph(const WPXPropertyList &propList, const
 		if (propList["fo:text-indent"])
 			*m_pOutputStream << "text-indent:" << propList["fo:text-indent"]->getStr().cstr() << ";";
 
-		if (propList["fo:line-height"] && propList["fo:line-height"]->getDouble() != 1.0f)
+		if (propList["fo:line-height"] && propList["fo:line-height"]->getDouble() != 1.0)
 			*m_pOutputStream << "line-height:" << propList["fo:line-height"]->getDouble() << ";";
 		*m_pOutputStream << "\">";
 	}
