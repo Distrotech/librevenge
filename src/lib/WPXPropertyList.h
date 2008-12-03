@@ -45,7 +45,7 @@ public:
 	void insert(const char * name, const int val);
 	void insert(const char * name, const bool val);
 	void insert(const char * name, const WPXString &val);
-	void insert(const char * name, const float val, const WPXUnit units = WPX_INCH); 
+	void insert(const char * name, const double val, const WPXUnit units = WPX_INCH); 
 
 	void remove(const char * name);
 	const WPXProperty * operator[](const char *name) const;

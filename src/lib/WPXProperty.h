@@ -34,7 +34,7 @@ class WPXProperty
 public:
 	virtual ~WPXProperty();
 	virtual int getInt() const = 0;
-	virtual float getFloat() const = 0;
+	virtual double getDouble() const = 0;
 	virtual WPXString getStr() const = 0;
 	virtual WPXProperty * clone() const = 0;
 };
@@ -46,9 +46,9 @@ public:
 	static WPXProperty * newStringProp(const char *str);
 	static WPXProperty * newIntProp(const int val);
 	static WPXProperty * newBoolProp(const bool val);
-	static WPXProperty * newInchProp(const float val);
-	static WPXProperty * newPercentProp(const float val);
-	static WPXProperty * newPointProp(const float val);
-	static WPXProperty * newTwipProp(const float val);
+	static WPXProperty * newInchProp(const double val);
+	static WPXProperty * newPercentProp(const double val);
+	static WPXProperty * newPointProp(const double val);
+	static WPXProperty * newTwipProp(const double val);
 };
 #endif /* WPXPROPERTY_H */

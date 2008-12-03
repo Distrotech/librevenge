@@ -136,7 +136,7 @@ void WPXPropertyList::insert(const char * name, const WPXString &val)
 	m_mapImpl->insert(name, WPXPropertyFactory::newStringProp(val));
 }
 
-void WPXPropertyList::insert(const char * name, const float val, const WPXUnit units)
+void WPXPropertyList::insert(const char * name, const double val, const WPXUnit units)
 { 
 	if (units == WPX_INCH)
 		m_mapImpl->insert(name, WPXPropertyFactory::newInchProp(val));
