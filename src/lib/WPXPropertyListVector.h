@@ -47,6 +47,7 @@ public:
 	void append(const WPXPropertyListVector &vec);
 	size_t count() const;
 	const WPXPropertyList& operator[](size_t index) const;
+	const WPXPropertyListVector& operator=(const WPXPropertyListVector&);
 
 	class Iter
 	{
@@ -68,7 +69,6 @@ public:
 
 private:
 	WPXPropertyListVectorImpl *m_impl;
-	WPXPropertyListVector& operator=(WPXPropertyListVector&);
 };
 
 #endif /* WPXPROPERTYLISTVECTOR_H */

@@ -111,6 +111,12 @@ size_t WPXPropertyListVector::count() const
 const WPXPropertyList& WPXPropertyListVector::operator[](size_t index) const
 {
 	return m_impl->operator[](index);	
+}
+
+const WPXPropertyListVector& WPXPropertyListVector::operator=(const WPXPropertyListVector &vec)
+{
+	m_impl->m_vector = vec.m_impl->m_vector;
+	return *this;
 }		
 
 WPXPropertyListVector::Iter::Iter(const WPXPropertyListVector &vect) :

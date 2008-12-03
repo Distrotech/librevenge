@@ -27,6 +27,8 @@
 #ifndef HTMLLISTENERIMPL_H
 #define HTMLLISTENERIMPL_H
 
+#include <ostream>
+#include <sstream>
 #include "WPXDocumentInterface.h"
 
 class HtmlDocumentGenerator : public WPXDocumentInterface
@@ -91,6 +93,10 @@ public:
 
 private:
 	bool m_ignore;
+	std::ostream *m_pOutputStream;
+	std::ostringstream m_footNotesStream, m_endNotesStream, m_commentsStream, m_textBoxesStream, m_dummyStream;
+	unsigned m_footNotesCount, m_endNotesCount, m_commentsCount, m_textBoxesCount;
+	unsigned m_commentNumber, m_textBoxNumber;
 
 };
 
