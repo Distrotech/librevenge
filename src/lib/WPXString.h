@@ -46,10 +46,12 @@ public:
 	void append(const char *s);
 	void append(const char c);
 	void clear();
-	WPXString& operator=(const WPXString &);
+	WPXString& operator=(const WPXString &str);
 	WPXString& operator=(const char *s);
-	bool operator==(const char *);
-	bool operator==(const WPXString &str);
+	bool operator==(const char *s) const;
+	bool operator==(const WPXString &str) const;
+	inline bool operator!=(const char *s) const { return !operator==(s); }
+	inline bool operator!=(const WPXString &str) const { return !operator==(str); }
 
 	class Iter
 	{

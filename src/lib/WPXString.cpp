@@ -210,12 +210,12 @@ WPXString& WPXString::operator=(const char *s)
 	return *this;
 }
 
-bool WPXString::operator==(const char *str)
+bool WPXString::operator==(const char *str) const
 {
 	return (m_stringImpl->m_buf == str);
 }
 
-bool WPXString::operator==(const WPXString &str)
+bool WPXString::operator==(const WPXString &str) const
 {
 	return (m_stringImpl->m_buf == str.m_stringImpl->m_buf);
 }
