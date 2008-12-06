@@ -28,15 +28,11 @@
 #define WPXPROPERTYLISTVECTOR_H
 #include <sys/types.h>
 
-class WPXPropertyList;
+#include "WPXPropertyList.h"
 
 class WPXPropertyListVectorImpl;
 class WPXPropertyListVectorIterImpl;
 
-// NOTE: this class is meant to be used in libwpd's headers (to work around symbol problems 
-// when different versions of the STL are in use), and should not be used inside your application
-// (it will only slow it down with a pointless layer of abstraction)
- 
 class WPXPropertyListVector
 {
 public:
@@ -47,7 +43,7 @@ public:
 	void append(const WPXPropertyListVector &vec);
 	size_t count() const;
 	const WPXPropertyList& operator[](size_t index) const;
-	const WPXPropertyListVector& operator=(const WPXPropertyListVector&);
+	WPXPropertyListVector& operator=(const WPXPropertyListVector& vect);
 
 	class Iter
 	{

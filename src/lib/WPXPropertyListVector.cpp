@@ -113,11 +113,11 @@ const WPXPropertyList& WPXPropertyListVector::operator[](size_t index) const
 	return m_impl->operator[](index);	
 }
 
-const WPXPropertyListVector& WPXPropertyListVector::operator=(const WPXPropertyListVector &vec)
+WPXPropertyListVector& WPXPropertyListVector::operator=(const WPXPropertyListVector &vect)
 {
-	m_impl->m_vector = vec.m_impl->m_vector;
+	m_impl->m_vector = vect.m_impl->m_vector;
 	return *this;
-}		
+}
 
 WPXPropertyListVector::Iter::Iter(const WPXPropertyListVector &vect) :
 	m_iterImpl(new WPXPropertyListVectorIterImpl(&(static_cast<WPXPropertyListVectorImpl* >(vect.m_impl)->m_vector)))
