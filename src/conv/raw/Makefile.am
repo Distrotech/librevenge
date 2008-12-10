@@ -6,7 +6,7 @@ endif
 
 bin_PROGRAMS = $(target_wpd2raw)
 
-AM_CXXFLAGS = -I$(top_srcdir)/src/lib $(DEBUG_CXXFLAGS)
+AM_CXXFLAGS = -I$(top_srcdir)/src/lib -I$(top_builddir)/src/lib $(DEBUG_CXXFLAGS)
 
 wpd2raw_DEPENDENCIES = @WPD2RAW_WIN32_RESOURCE@
 
