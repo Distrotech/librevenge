@@ -28,21 +28,20 @@
 
 #include "libwpd_types.h"
 #include "WPXString.h"
-#include <stdio.h>
 
 class WPXInputStream;
 
 class WPXEncryption
 {
 public:
-	WPXEncryption(const char *password, const size_t encryptionStartOffset = 0);
+	WPXEncryption(const char *password, const unsigned long encryptionStartOffset = 0);
 	~WPXEncryption();
 	
-	const unsigned char *readAndDecrypt(WPXInputStream *input, size_t numBytes, size_t &numBytesRead);
+	const unsigned char *readAndDecrypt(WPXInputStream *input, unsigned long numBytes, unsigned long &numBytesRead);
 	uint16_t getCheckSum() const;
 	
-	void setEncryptionStartOffset(size_t encryptionStartOffset) { m_encryptionStartOffset = encryptionStartOffset; }
-	size_t getEncryptionStartOffset() const { return m_encryptionStartOffset; }
+	void setEncryptionStartOffset(unsigned long encryptionStartOffset) { m_encryptionStartOffset = encryptionStartOffset; }
+	unsigned long getEncryptionStartOffset() const { return m_encryptionStartOffset; }
 	
 	void setEncryptionMaskBase(unsigned char encryptionMaskBase) { m_encryptionMaskBase = encryptionMaskBase; }
 	unsigned char getEncryptionMaskBase() const { return m_encryptionMaskBase; }
@@ -52,7 +51,7 @@ public:
 private:
 	unsigned char *m_buffer;
 	WPXString m_password;
-	size_t m_encryptionStartOffset;
+	unsigned long m_encryptionStartOffset;
 	unsigned char m_encryptionMaskBase;
 };
 

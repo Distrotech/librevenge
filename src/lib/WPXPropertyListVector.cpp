@@ -35,9 +35,9 @@ public:
 	WPXPropertyListVectorImpl(const std::vector<WPXPropertyList> &_vector) : m_vector(_vector) {}
 	WPXPropertyListVectorImpl() : m_vector() {}
 	void append(const WPXPropertyList &elem) { m_vector.push_back(elem); }
-	size_t count() const { return m_vector.size(); }
+	unsigned long count() const { return m_vector.size(); }
 	std::vector<WPXPropertyList> m_vector;
-	const WPXPropertyList &operator[](size_t index) const { return m_vector[index];}
+	const WPXPropertyList &operator[](unsigned long index) const { return m_vector[index];}
 };
 
 class WPXPropertyListVectorIterImpl
@@ -103,12 +103,12 @@ void WPXPropertyListVector::append(const WPXPropertyListVector &vec)
 		m_impl->append(i());
 }
 
-size_t WPXPropertyListVector::count() const
+unsigned long WPXPropertyListVector::count() const
 {
 	return m_impl->count();
 }
 
-const WPXPropertyList& WPXPropertyListVector::operator[](size_t index) const
+const WPXPropertyList& WPXPropertyListVector::operator[](unsigned long index) const
 {
 	return m_impl->operator[](index);	
 }

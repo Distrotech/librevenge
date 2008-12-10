@@ -56,27 +56,27 @@ WPXBinaryData::WPXBinaryData(const WPXBinaryData &data) :
 	m_binaryDataImpl->m_buf = data.m_binaryDataImpl->m_buf;
 }
 
-WPXBinaryData::WPXBinaryData(const unsigned char *buffer, const size_t bufferSize) :
+WPXBinaryData::WPXBinaryData(const unsigned char *buffer, const unsigned long bufferSize) :
 	m_binaryDataImpl(new WPXBinaryDataImpl)
 {
 	m_binaryDataImpl->m_buf = std::vector<unsigned char> (bufferSize);
-	for (size_t i = 0; i < bufferSize; i++)
+	for (unsigned long i = 0; i < bufferSize; i++)
 		m_binaryDataImpl->m_buf[i] = buffer[i];
 }
 
 void WPXBinaryData::append(const WPXBinaryData &data)
 {
-	size_t previousSize = m_binaryDataImpl->m_buf.size();
+	unsigned long previousSize = m_binaryDataImpl->m_buf.size();
 	m_binaryDataImpl->m_buf.reserve(previousSize + data.m_binaryDataImpl->m_buf.size());
-	for (size_t i = 0; i < data.m_binaryDataImpl->m_buf.size(); i++)
+	for (unsigned long i = 0; i < data.m_binaryDataImpl->m_buf.size(); i++)
 		m_binaryDataImpl->m_buf.push_back(data.m_binaryDataImpl->m_buf[i]);
 }
 
-void WPXBinaryData::append(const unsigned char *buffer, const size_t bufferSize )
+void WPXBinaryData::append(const unsigned char *buffer, const unsigned long bufferSize )
 {
-	size_t previousSize = m_binaryDataImpl->m_buf.size();
+	unsigned long previousSize = m_binaryDataImpl->m_buf.size();
 	m_binaryDataImpl->m_buf.reserve(previousSize + bufferSize);
-	for (size_t i = 0; i < bufferSize; i++)
+	for (unsigned long i = 0; i < bufferSize; i++)
 		m_binaryDataImpl->m_buf.push_back(buffer[i]);
 }
 
@@ -90,9 +90,9 @@ void WPXBinaryData::clear()
 	m_binaryDataImpl->m_buf = std::vector<unsigned char>();
 }
 
-size_t WPXBinaryData::size() const
+unsigned long WPXBinaryData::size() const
 { 
-	return (size_t)m_binaryDataImpl->m_buf.size(); 
+	return (unsigned long)m_binaryDataImpl->m_buf.size(); 
 }
 
 WPXBinaryData& WPXBinaryData::operator=(const WPXBinaryData &dataBuf)

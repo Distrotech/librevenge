@@ -57,7 +57,7 @@ void WP6ExtendedDocumentSummaryPacket::_readContents(WPXInputStream *input, WPXE
 	for(unsigned i=0; i<(unsigned)m_dataSize; i++)
 		m_streamData[i] = readU8(input, encryption);
 	
-	m_stream = new WPXMemoryInputStream(m_streamData, (size_t)m_dataSize);
+	m_stream = new WPXMemoryInputStream(m_streamData, (unsigned long)m_dataSize);
 }
 
 void WP6ExtendedDocumentSummaryPacket::parse(WP6Listener *listener) const

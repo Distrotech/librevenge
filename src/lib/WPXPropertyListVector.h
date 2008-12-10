@@ -26,7 +26,6 @@
 
 #ifndef WPXPROPERTYLISTVECTOR_H
 #define WPXPROPERTYLISTVECTOR_H
-#include <sys/types.h>
 
 #include "WPXPropertyList.h"
 
@@ -41,8 +40,8 @@ public:
 	virtual ~WPXPropertyListVector();
 	void append(const WPXPropertyList &elem);
 	void append(const WPXPropertyListVector &vec);
-	size_t count() const;
-	const WPXPropertyList& operator[](size_t index) const;
+	unsigned long count() const;
+	const WPXPropertyList& operator[](unsigned long index) const;
 	WPXPropertyListVector& operator=(const WPXPropertyListVector& vect);
 
 	class Iter

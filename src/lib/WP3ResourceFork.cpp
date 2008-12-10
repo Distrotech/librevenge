@@ -76,7 +76,7 @@ WP3ResourceFork::WP3ResourceFork(WPXInputStream *input, WPXEncryption *encryptio
 			input->seek(offsetToData, WPX_SEEK_SET);
 			uint32_t resourceDataSize = readU32(input, encryption, true);
 
-			size_t oldEncryptionOffset = 0;
+			unsigned long oldEncryptionOffset = 0;
 			unsigned char oldEncryptionMaskBase = 0;
 			if (encryption)
 			{
@@ -91,7 +91,7 @@ WP3ResourceFork::WP3ResourceFork(WPXInputStream *input, WPXEncryption *encryptio
 			}
 	
 			WPXBinaryData resourceData;
-			for (size_t k = 0; k < (size_t)resourceDataSize && !input->atEOS(); k++)
+			for (unsigned long k = 0; k < (unsigned long)resourceDataSize && !input->atEOS(); k++)
 				resourceData.append((unsigned char)readU8(input, encryption));
 			
 			if (encryption)

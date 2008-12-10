@@ -27,7 +27,7 @@
 #include "libwpd_internal.h"
 
 
-WPXMemoryInputStream::WPXMemoryInputStream(unsigned char *data, size_t size) :
+WPXMemoryInputStream::WPXMemoryInputStream(unsigned char *data, unsigned long size) :
 	WPXInputStream(),
 	m_offset(0),
 	m_size(size),
@@ -39,7 +39,7 @@ WPXMemoryInputStream::~WPXMemoryInputStream()
 {
 }
 
-const unsigned char * WPXMemoryInputStream::read(size_t numBytes, size_t &numBytesRead)
+const unsigned char * WPXMemoryInputStream::read(unsigned long numBytes, unsigned long &numBytesRead)
 {
 	numBytesRead = 0;
 

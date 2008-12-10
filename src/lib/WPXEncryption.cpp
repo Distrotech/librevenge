@@ -28,7 +28,7 @@
 #include "libwpd_internal.h"
 #include <string.h>
 
-WPXEncryption::WPXEncryption(const char *password, const size_t encryptionStartOffset) :
+WPXEncryption::WPXEncryption(const char *password, const unsigned long encryptionStartOffset) :
 	m_buffer(NULL),
 	m_password(),
 	m_encryptionStartOffset(encryptionStartOffset),
@@ -36,7 +36,7 @@ WPXEncryption::WPXEncryption(const char *password, const size_t encryptionStartO
 {
 	if (password)
 	{
-		for (size_t i = 0; i < strlen(password); i++)
+		for (unsigned long i = 0; i < strlen(password); i++)
 			if (password[i] >= 'a' && password[i] <= 'z')
 				m_password.append(password[i] - 'a' + 'A');
 			else
@@ -64,25 +64,25 @@ uint16_t WPXEncryption::getCheckSum() const
 	return checkSum;
 }
 
-const unsigned char * WPXEncryption::readAndDecrypt(WPXInputStream *input, size_t numBytes, size_t &numBytesRead)
+const unsigned char * WPXEncryption::readAndDecrypt(WPXInputStream *input, unsigned long numBytes, unsigned long &numBytesRead)
 {
 	if ((m_password.len() <= 0) || (m_encryptionStartOffset > input->tell() + numBytes))
 		return input->read(numBytes, numBytesRead);
 
-	size_t readStartPosition = input->tell();
-	if (readStartPosition == (size_t)-1)
+	unsigned long readStartPosition = input->tell();
+	if (readStartPosition == (unsigned long)-1)
 		return 0;
 	const unsigned char *encryptedBuffer = input->read(numBytes, numBytesRead);
 	if (m_buffer)
 		delete [] m_buffer;
 	m_buffer = new unsigned char[numBytesRead];
-	for (size_t i=0; i<numBytesRead; i++)
+	for (unsigned long i=0; i<numBytesRead; i++)
 	{
 		if (readStartPosition + i < m_encryptionStartOffset)
 			m_buffer[i] = encryptedBuffer[i];
 		else
 		{
-			size_t passwordOffset = (readStartPosition + i - m_encryptionStartOffset) % m_password.len();
+			unsigned long passwordOffset = (readStartPosition + i - m_encryptionStartOffset) % m_password.len();
 			unsigned char encryptionMask = (unsigned char)(m_encryptionMaskBase + readStartPosition + i - m_encryptionStartOffset);
 			m_buffer[i] = encryptedBuffer[i] ^ ( m_password.cstr()[passwordOffset] ^ encryptionMask);
 		}

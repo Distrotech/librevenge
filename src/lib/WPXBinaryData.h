@@ -26,7 +26,6 @@
 #define WPXBINARYDATA_H
 
 #include "WPXString.h"
-#include <stdio.h>
 
 class WPXInputStream;
 class WPXBinaryDataImpl;
@@ -36,15 +35,15 @@ class WPXBinaryData
 public:
 	WPXBinaryData();
 	WPXBinaryData(const WPXBinaryData &);
-	WPXBinaryData(const unsigned char *buffer, const size_t bufferSize);
+	WPXBinaryData(const unsigned char *buffer, const unsigned long bufferSize);
 	~WPXBinaryData();
 
 	void append(const WPXBinaryData &data);
-	void append(const unsigned char *buffer, const size_t bufferSize);
+	void append(const unsigned char *buffer, const unsigned long bufferSize);
 	void append(const unsigned char c);
 	void clear();
 	
-	size_t size() const;
+	unsigned long size() const;
 	const unsigned char *getDataBuffer() const;
 	const WPXString getBase64Data() const;
 	const WPXInputStream *getDataStream() const;

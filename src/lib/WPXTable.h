@@ -76,7 +76,7 @@ public:
 	WPXTableList & operator=(const WPXTableList & tableList);
 	virtual ~WPXTableList();
 
-	WPXTable * operator[](size_t i) { return (*m_tableList)[i]; }
+	WPXTable * operator[](unsigned long i) { return (*m_tableList)[i]; }
 	void add(WPXTable *table) { m_tableList->push_back(table); }
 
 private:

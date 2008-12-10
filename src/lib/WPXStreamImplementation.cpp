@@ -115,7 +115,7 @@ WPXFileStream::~WPXFileStream()
 
 #define BUFFER_MAX 65536
 
-const unsigned char *WPXFileStream::read(size_t numBytes, size_t &numBytesRead)
+const unsigned char *WPXFileStream::read(unsigned long numBytes, unsigned long &numBytesRead)
 {
 	numBytesRead = 0;
 	
@@ -309,7 +309,7 @@ WPXStringStream::~WPXStringStream()
 	delete d;
 }
 
-const unsigned char *WPXStringStream::read(size_t numBytes, size_t &numBytesRead)
+const unsigned char *WPXStringStream::read(unsigned long numBytes, unsigned long &numBytesRead)
 {
 	numBytesRead = 0;
 	
