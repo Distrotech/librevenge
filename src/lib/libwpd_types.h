@@ -25,7 +25,7 @@
 #ifndef LIBWPD_TYPES_H
 #define LIBWPD_TYPES_H
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || defined (__DJGPP__)
 typedef signed char int8_t;
 typedef unsigned char uint8_t;
 typedef signed short int16_t;

@@ -31,6 +31,12 @@
 #include <stdarg.h>
 #include <stdio.h>
 
+#ifdef __DJGPP__
+namespace {
+#include "vsnprintf.c"
+}
+#endif
+
 #define FIRST_BUF_SIZE 128
 #ifdef _MSC_VER
 #define vsnprintf _vsnprintf

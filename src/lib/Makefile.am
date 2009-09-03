@@ -440,6 +440,7 @@ EXTRA_DIST = \
 	$(libwpd_stream_sources) \
 	$(libwpd_stream_headers) \
 	makefile.mk \
+	vsnprintf.c \
 	libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.def \
 	libwpd.h.in \
 	libwpd.rc.in \
