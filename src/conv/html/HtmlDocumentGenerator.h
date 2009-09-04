@@ -93,8 +93,8 @@ public:
 
 private:
 	bool m_ignore;
-	std::ostream *m_pOutputStream;
-	std::ostringstream m_footNotesStream, m_endNotesStream, m_commentsStream, m_textBoxesStream, m_dummyStream;
+	std::ostringstream *m_pOutputStream;
+	std::ostringstream m_footNotesStream, m_endNotesStream, m_commentsStream, m_textBoxesStream, m_documentBodyStream, m_dummyStream;
 	unsigned m_footNotesCount, m_endNotesCount, m_commentsCount, m_textBoxesCount;
 	unsigned m_commentNumber, m_textBoxNumber;
 
