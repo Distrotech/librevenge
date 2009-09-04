@@ -1142,7 +1142,10 @@ const uint16_t macintoshCharacterMap[] =
 WPXString doubleToString(const double value)
 {
   WPXString tempString;
-  tempString.sprintf("%.4f", value);
+  if (value < 0.0001 && value > -0.0001)
+    tempString.sprintf("0.0000");
+  else
+    tempString.sprintf("%.4f", value);
   std::string decimalPoint(localeconv()->decimal_point);
   if ((decimalPoint.size() == 0) || (decimalPoint == "."))
     return tempString;
