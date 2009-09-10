@@ -34,7 +34,7 @@
 
 HtmlDocumentGenerator::HtmlDocumentGenerator() :
 	m_ignore(false),
-	m_pOutputStream(NULL),
+	m_pOutputStream(&std::cout),
 	m_footNotesCount(0),
 	m_endNotesCount(0),
 	m_commentsCount(0),
@@ -42,7 +42,6 @@ HtmlDocumentGenerator::HtmlDocumentGenerator() :
 	m_commentNumber(1),
 	m_textBoxNumber(1)
 {
-	m_pOutputStream = &m_documentBodyStream;
 }
 
 HtmlDocumentGenerator::~HtmlDocumentGenerator()
@@ -103,8 +102,6 @@ void HtmlDocumentGenerator::endDocument()
 	}
 	*m_pOutputStream << "</body>" << std::endl;
 	*m_pOutputStream << "</html>" << std::endl;
-	
-	printf("%s", m_pOutputStream->str().c_str());
 }
 
 void HtmlDocumentGenerator::openHeader(const WPXPropertyList & /* propList */)
@@ -300,7 +297,7 @@ void HtmlDocumentGenerator::closeFootnote()
 		if (!(--m_footNotesCount))
 		{
 			*m_pOutputStream << "<p/>" << std::endl;
-			m_pOutputStream = &m_documentBodyStream;
+			m_pOutputStream = &std::cout;
 		}
 	}
 }
@@ -332,7 +329,7 @@ void HtmlDocumentGenerator::closeEndnote()
 		if (!(--m_endNotesCount))
 		{
 			*m_pOutputStream << "<p/>" << std::endl;
-			m_pOutputStream = &m_documentBodyStream;
+			m_pOutputStream = &std::cout;
 		}
 	}
 }
@@ -360,7 +357,7 @@ void HtmlDocumentGenerator::closeComment()
 		if (!(--m_commentsCount))
 		{
 			*m_pOutputStream << "<p/>" << std::endl;
-			m_pOutputStream = &m_documentBodyStream;
+			m_pOutputStream = &std::cout;
 		}
 	}
 }
@@ -389,7 +386,7 @@ void HtmlDocumentGenerator::closeTextBox()
 		if (!(--m_textBoxesCount))
 		{
 			*m_pOutputStream << "<p/>" << std::endl;
-			m_pOutputStream = &m_documentBodyStream;
+			m_pOutputStream = &std::cout;
 		}
 	}
 }
