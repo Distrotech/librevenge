@@ -46,6 +46,7 @@ WP6GraphicsCachedFileDataPacket::~WP6GraphicsCachedFileDataPacket()
 	m_data = 0;
 	if (m_object)
 		delete m_object;
+	m_object = 0;
 }
 
 void WP6GraphicsCachedFileDataPacket::_readContents(WPXInputStream *input, WPXEncryption *encryption)
