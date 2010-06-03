@@ -416,6 +416,13 @@ class WPXDocumentInterface
 	\param data Reference to the binary object
 	*/
 	virtual void insertBinaryObject(const WPXPropertyList &propList, const WPXBinaryData &data) = 0;
+	/**
+	Called when a mathml object should be inserted
+	\param propList Defines a set of properties for the object.
+	\li \c libwpd:mimetype The mimetype of the object
+	\param data Reference to the string containing the equation representation
+	*/
+	virtual void insertEquation(const WPXPropertyList &propList, const WPXString &data) = 0;
 };
 
 #endif /* WPXDOCUMENTINTERFACEIMPL_H */

@@ -87,6 +87,7 @@ public:
 	virtual void closeFrame() {}
 	
 	virtual void insertBinaryObject(const WPXPropertyList & /* propList */, const WPXBinaryData & /* object */) {}
+	virtual void insertEquation(const WPXPropertyList & /* propList */, const WPXString & /* data */) {}
 
 private:
 	unsigned int m_currentListLevel;

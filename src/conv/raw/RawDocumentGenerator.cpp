@@ -247,8 +247,7 @@ void RawDocumentGenerator::insertTab()
 
 void RawDocumentGenerator::insertText(const WPXString &text)
 {
-	WPXString textUTF8(text);
-	__iprintf("insertText(text: %s)\n", textUTF8.cstr());
+	__iprintf("insertText(text: %s)\n", text.cstr());
 }
 
 void RawDocumentGenerator::insertLineBreak()
@@ -392,7 +391,12 @@ void RawDocumentGenerator::closeFrame()
 	_D(("closeFrame()\n"), LC_OPEN_FRAME);
 }
 	
-void RawDocumentGenerator::insertBinaryObject(const WPXPropertyList & propList, const WPXBinaryData & /* object */)
+void RawDocumentGenerator::insertBinaryObject(const WPXPropertyList &propList, const WPXBinaryData & /* data */)
 {
 	__iprintf("insertBinaryObject(%s)\n", getPropString(propList).cstr());
+}
+	
+void RawDocumentGenerator::insertEquation(const WPXPropertyList &propList, const WPXString &data)
+{
+	__iprintf("insertEquation(%s, text: %s)\n", getPropString(propList).cstr(), data.cstr());
 }
