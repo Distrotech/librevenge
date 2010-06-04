@@ -171,6 +171,11 @@ void RawDocumentGenerator::endDocument()
 	_D(("endDocument()\n"), LC_START_DOCUMENT);
 }
 
+void RawDocumentGenerator::definePageStyle(const WPXPropertyList &propList)
+{
+	__iprintf("definePageStyle(%s)\n", getPropString(propList).cstr());
+}
+
 void RawDocumentGenerator::openPageSpan(const WPXPropertyList &propList)
 {
 	_U(("openPageSpan(%s)\n", getPropString(propList).cstr()),
@@ -209,6 +214,11 @@ void RawDocumentGenerator::closeFooter()
 	   LC_OPEN_HEADER_FOOTER);
 }
 
+void RawDocumentGenerator::defineParagraphStyle(const WPXPropertyList &propList, const WPXPropertyListVector &tabStops)
+{
+	__iprintf("defineParagraphStyle(%s, tab-stops: %s)\n", getPropString(propList).cstr(), getPropString(tabStops).cstr());
+}
+
 void RawDocumentGenerator::openParagraph(const WPXPropertyList &propList, const WPXPropertyListVector &tabStops)
 {
 	_U(("openParagraph(%s, tab-stops: %s)\n", getPropString(propList).cstr(), getPropString(tabStops).cstr()),
@@ -220,6 +230,11 @@ void RawDocumentGenerator::closeParagraph()
 	_D(("closeParagraph()\n"), LC_OPEN_PARAGRAPH);
 }
 
+void RawDocumentGenerator::defineCharacterStyle(const WPXPropertyList &propList)
+{
+	__iprintf("defineCharacterStyle(%s)\n", getPropString(propList).cstr());
+}
+
 void RawDocumentGenerator::openSpan(const WPXPropertyList &propList)
 {
 	_U(("openSpan(%s)\n", getPropString(propList).cstr()), LC_OPEN_SPAN);
@@ -228,6 +243,11 @@ void RawDocumentGenerator::openSpan(const WPXPropertyList &propList)
 void RawDocumentGenerator::closeSpan()
 {
 	_D(("closeSpan()\n"), LC_OPEN_SPAN);
+}
+
+void RawDocumentGenerator::defineSectionStyle(const WPXPropertyList &propList, const WPXPropertyListVector &columns)
+{
+	__iprintf("defineSectionStyle(%s, columns: %s)\n", getPropString(propList).cstr(), getPropString(columns).cstr());
 }
 
 void RawDocumentGenerator::openSection(const WPXPropertyList &propList, const WPXPropertyListVector &columns)

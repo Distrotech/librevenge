@@ -61,6 +61,7 @@ public:
 	virtual void startDocument();
 	virtual void endDocument();
 
+	virtual void definePageStyle(const WPXPropertyList &propList);
 	virtual void openPageSpan(const WPXPropertyList &propList);
 	virtual void closePageSpan();
 	virtual void openHeader(const WPXPropertyList &propList);
@@ -68,10 +69,15 @@ public:
 	virtual void openFooter(const WPXPropertyList &propList);
 	virtual void closeFooter();
 
+	virtual void defineParagraphStyle(const WPXPropertyList &propList, const WPXPropertyListVector &tabStops);
 	virtual void openParagraph(const WPXPropertyList &propList, const WPXPropertyListVector &tabStops);
 	virtual void closeParagraph();
+
+	virtual void defineCharacterStyle(const WPXPropertyList &propList);
 	virtual void openSpan(const WPXPropertyList &propList);
 	virtual void closeSpan();
+
+	virtual void defineSectionStyle(const WPXPropertyList &propList, const WPXPropertyListVector &columns);
 	virtual void openSection(const WPXPropertyList &propList, const WPXPropertyListVector &columns);
 	virtual void closeSection();
 

@@ -109,6 +109,8 @@ class WPXDocumentInterface
 	*/
 	virtual void endDocument() = 0;
 
+	virtual void definePageStyle(const WPXPropertyList &propList) = 0;
+
 	/**
 	Called when a new page span is opened. This will always be called before any actual content is placed into
 	the document.
@@ -151,6 +153,8 @@ class WPXDocumentInterface
 	*/
 	virtual void closeFooter() = 0;
 
+	virtual void defineParagraphStyle(const WPXPropertyList &propList, const WPXPropertyListVector &tabStops) = 0;
+
 	/**
 	Called when a new paragraph is opened. This (or openListElement) will always be called before any text or span is placed into the document.
 	\param propList Property list for the paragraph. May contain:
@@ -174,6 +178,8 @@ class WPXDocumentInterface
 	*/
 	virtual void closeParagraph() = 0;
 	
+	virtual void defineCharacterStyle(const WPXPropertyList &propList) = 0;
+
 	/**
 	Called when a text span is opened
 	\param propList Property list for the span. May contain:
@@ -195,6 +201,9 @@ class WPXDocumentInterface
 	Called when a text span is closed
 	*/
 	virtual void closeSpan() = 0;
+
+	virtual void defineSectionStyle(const WPXPropertyList &propList, const WPXPropertyListVector &columns) = 0;
+
 	/**
 	Called when a new section is opened
 	\param propList Property list for the section. May contain:
