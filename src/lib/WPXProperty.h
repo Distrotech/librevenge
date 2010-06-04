@@ -27,7 +27,7 @@
 #define WPXPROPERTY_H
 #include "WPXString.h"
 
-enum WPXUnit { WPX_INCH, WPX_PERCENT, WPX_POINT, WPX_TWIP };
+enum WPXUnit { WPX_INCH, WPX_PERCENT, WPX_POINT, WPX_TWIP, WPX_GENERIC };
 
 class WPXProperty
 {
@@ -46,6 +46,7 @@ public:
 	static WPXProperty * newStringProp(const char *str);
 	static WPXProperty * newIntProp(const int val);
 	static WPXProperty * newBoolProp(const bool val);
+	static WPXProperty * newDoubleProp(const double val);
 	static WPXProperty * newInchProp(const double val);
 	static WPXProperty * newPercentProp(const double val);
 	static WPXProperty * newPointProp(const double val);

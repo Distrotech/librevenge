@@ -67,6 +67,8 @@ public:
 	WPXDoubleProperty(const double val);
 	virtual int getInt() const;
 	virtual double getDouble() const;
+	virtual WPXString getStr() const; 
+	virtual WPXProperty * clone() const;
 
 private:
 	double m_val;
@@ -100,6 +102,14 @@ class WPXTwipProperty : public WPXDoubleProperty
 {
 public:
 	WPXTwipProperty(const double val);
+	virtual WPXString getStr() const; 
+	virtual WPXProperty * clone() const;
+};
+
+class WPXGenericProperty : public WPXDoubleProperty
+{
+public:
+	WPXGenericProperty(const double val);
 	virtual WPXString getStr() const; 
 	virtual WPXProperty * clone() const;
 };
@@ -195,6 +205,17 @@ double WPXDoubleProperty::getDouble() const
 	return m_val; 
 }
 
+WPXString WPXDoubleProperty::getStr() const 
+{ 
+	WPXString str = doubleToString(getDouble()); 
+	return str; 
+}
+
+WPXProperty * WPXDoubleProperty::clone() const
+{
+	return new WPXDoubleProperty(getDouble());
+}
+
 WPXInchProperty::WPXInchProperty(const double val) :
 	WPXDoubleProperty(val) 
 {
@@ -281,6 +302,11 @@ WPXProperty * WPXPropertyFactory::newIntProp(const int val)
 WPXProperty * WPXPropertyFactory::newBoolProp(const bool val) 
 { 
 	return static_cast<WPXProperty *>(new WPXBoolProperty(val)); 
+}
+
+WPXProperty * WPXPropertyFactory::newDoubleProp(const double val) 
+{ 
+	return static_cast<WPXProperty *>(new WPXDoubleProperty(val)); 
 }
 
 WPXProperty * WPXPropertyFactory::newInchProp(const double val) 

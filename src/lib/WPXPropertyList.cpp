@@ -144,8 +144,10 @@ void WPXPropertyList::insert(const char * name, const double val, const WPXUnit 
 		m_mapImpl->insert(name, WPXPropertyFactory::newPercentProp(val));
 	else if (units == WPX_POINT)		
 		m_mapImpl->insert(name, WPXPropertyFactory::newPointProp(val));
-	else
+	else if (units == WPX_TWIP)
 		m_mapImpl->insert(name, WPXPropertyFactory::newTwipProp(val));
+	else if (units == WPX_GENERIC)
+		m_mapImpl->insert(name, WPXPropertyFactory::newDoubleProp(val));
 }
 
 void WPXPropertyList::remove(const char * name)
