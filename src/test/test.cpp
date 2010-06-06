@@ -67,8 +67,8 @@ void Test::tearDown(void)
 void Test::testStream(void)
 { 
 	WPXInputStream* input = 0;
-	size_t numBytesRead;
-	uint32_t u32;
+	unsigned long numBytesRead;
+	unsigned long u32;
 
 	/********************** 
 	 * Test WPXFileStream *
@@ -81,14 +81,14 @@ void Test::testStream(void)
 	// test read()
 	input->seek(0, WPX_SEEK_SET);
 	CPPUNIT_ASSERT ( NULL == input->read(0, numBytesRead)  );
-	CPPUNIT_ASSERT_EQUAL ( (size_t) 0, numBytesRead );
-	CPPUNIT_ASSERT_EQUAL ( (long int) 0 , input->tell() );
+	CPPUNIT_ASSERT_EQUAL ( (unsigned long)0, numBytesRead );
+	CPPUNIT_ASSERT_EQUAL ( (long) 0 , input->tell() );
 	CPPUNIT_ASSERT ( NULL != input->read(1, numBytesRead)  );
-	CPPUNIT_ASSERT_EQUAL ( (long int) 1 , input->tell() );
+	CPPUNIT_ASSERT_EQUAL ( (long) 1 , input->tell() );
 
 	input->seek(0, WPX_SEEK_SET);
 	CPPUNIT_ASSERT ( NULL != input->read(50, numBytesRead)  );
-	CPPUNIT_ASSERT_EQUAL ( (long int) 8 , input->tell() );
+	CPPUNIT_ASSERT_EQUAL ( (long) 8 , input->tell() );
 
 	// test readU*()
 	input->seek(0, WPX_SEEK_SET);
@@ -103,19 +103,19 @@ void Test::testStream(void)
 
 	input->seek(0, WPX_SEEK_SET);
 	u32 = readU32(input, 0);
-	CPPUNIT_ASSERT_EQUAL( (uint32_t) 0x04030201 , u32 );
+	CPPUNIT_ASSERT_EQUAL( (unsigned long) 0x04030201 , u32 );
 	u32 = readU32(input, 0);
-	CPPUNIT_ASSERT_EQUAL( (uint32_t) 0x07060500 , u32 );
+	CPPUNIT_ASSERT_EQUAL( (unsigned long) 0x07060500 , u32 );
 
 	// test seek(), tell(), atEOS()
 	input->seek(1, WPX_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL ( (long int) 1 , input->tell() );
+	CPPUNIT_ASSERT_EQUAL ( (long) 1 , input->tell() );
 
 	input->seek(0, WPX_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL ( (long int) 0 , input->tell() );
+	CPPUNIT_ASSERT_EQUAL ( (long) 0 , input->tell() );
 
 	input->seek(8, WPX_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL ( (long int) 8 , input->tell() );
+	CPPUNIT_ASSERT_EQUAL ( (long) 8 , input->tell() );
 
 	input->seek(0, WPX_SEEK_SET);
 	for (int i = 0; i < 8; i++)
@@ -125,7 +125,7 @@ void Test::testStream(void)
 	CPPUNIT_ASSERT_THROW ( readU8(input, 0), FileException );
 
 	input->seek(-1, WPX_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL ( (long int) 0, input->tell() );
+	CPPUNIT_ASSERT_EQUAL ( (long) 0, input->tell() );
 
 	input->seek(8, WPX_SEEK_SET);
 	CPPUNIT_ASSERT_EQUAL ( true, input->atEOS() );
@@ -147,14 +147,14 @@ void Test::testStream(void)
 	// test read()
 	input->seek(0, WPX_SEEK_SET);
 	CPPUNIT_ASSERT ( NULL == input->read(0, numBytesRead)  );
-	CPPUNIT_ASSERT_EQUAL ( (size_t) 0, numBytesRead );
-	CPPUNIT_ASSERT_EQUAL ( (long int) 0 , input->tell() );
+	CPPUNIT_ASSERT_EQUAL ( (unsigned long) 0, numBytesRead );
+	CPPUNIT_ASSERT_EQUAL ( (long) 0 , input->tell() );
 	CPPUNIT_ASSERT ( NULL != input->read(1, numBytesRead)  );
-	CPPUNIT_ASSERT_EQUAL ( (long int) 1 , input->tell() );
+	CPPUNIT_ASSERT_EQUAL ( (long) 1 , input->tell() );
 
 	input->seek(0, WPX_SEEK_SET);
 	CPPUNIT_ASSERT ( NULL != input->read(50, numBytesRead)  );
-	CPPUNIT_ASSERT_EQUAL ( (long int) 8 , input->tell() );
+	CPPUNIT_ASSERT_EQUAL ( (long) 8 , input->tell() );
 
 	// test readU*()
 	input->seek(0, WPX_SEEK_SET);
@@ -169,19 +169,19 @@ void Test::testStream(void)
 
 	input->seek(0, WPX_SEEK_SET);
 	u32 = readU32(input, 0);
-	CPPUNIT_ASSERT_EQUAL( (uint32_t) 0x04030201 , u32 );
+	CPPUNIT_ASSERT_EQUAL( (unsigned long) 0x04030201 , u32 );
 	u32 = readU32(input, 0);
-	CPPUNIT_ASSERT_EQUAL( (uint32_t) 0x07060500 , u32 );
+	CPPUNIT_ASSERT_EQUAL( (unsigned long) 0x07060500 , u32 );
 
 	// test seek(), tell(), atEOS()
 	input->seek(1, WPX_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL ( (long int) 1 , input->tell() );
+	CPPUNIT_ASSERT_EQUAL ( (long) 1 , input->tell() );
 
 	input->seek(0, WPX_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL ( (long int) 0 , input->tell() );
+	CPPUNIT_ASSERT_EQUAL ( (long) 0 , input->tell() );
 
 	input->seek(8, WPX_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL ( (long int) 8 , input->tell() );
+	CPPUNIT_ASSERT_EQUAL ( (long) 8 , input->tell() );
 
 	input->seek(0, WPX_SEEK_SET);
 	for (int i = 0; i < 8; i++)
@@ -191,7 +191,7 @@ void Test::testStream(void)
 	CPPUNIT_ASSERT_THROW ( readU8(input, 0), FileException );
 
 	input->seek(-1, WPX_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL ( (long int) 0, input->tell() );
+	CPPUNIT_ASSERT_EQUAL ( (long) 0, input->tell() );
 
 	input->seek(8, WPX_SEEK_SET);
 	CPPUNIT_ASSERT_EQUAL ( true, input->atEOS() );
@@ -214,14 +214,14 @@ void Test::testStream(void)
 	// test read()
 	input->seek(0, WPX_SEEK_SET);
 	CPPUNIT_ASSERT ( NULL == input->read(0, numBytesRead)  );
-	CPPUNIT_ASSERT_EQUAL ( (size_t) 0, numBytesRead );
-	CPPUNIT_ASSERT_EQUAL ( (long int) 0 , input->tell() );
+	CPPUNIT_ASSERT_EQUAL ( (unsigned long) 0, numBytesRead );
+	CPPUNIT_ASSERT_EQUAL ( (long) 0 , input->tell() );
 	CPPUNIT_ASSERT ( NULL != input->read(1, numBytesRead)  );
-	CPPUNIT_ASSERT_EQUAL ( (long int) 1 , input->tell() );
+	CPPUNIT_ASSERT_EQUAL ( (long) 1 , input->tell() );
 
 	input->seek(0, WPX_SEEK_SET);
 	CPPUNIT_ASSERT ( NULL != input->read(50, numBytesRead)  );
-	CPPUNIT_ASSERT_EQUAL ( (long int) 8 , input->tell() );
+	CPPUNIT_ASSERT_EQUAL ( (long) 8 , input->tell() );
 
 	// test readU*()
 	input->seek(0, WPX_SEEK_SET);
@@ -236,19 +236,19 @@ void Test::testStream(void)
 
 	input->seek(0, WPX_SEEK_SET);
 	u32 = readU32(input, 0);
-	CPPUNIT_ASSERT_EQUAL( (uint32_t) 0x04030201 , u32 );
+	CPPUNIT_ASSERT_EQUAL( (unsigned long) 0x04030201 , u32 );
 	u32 = readU32(input, 0);
-	CPPUNIT_ASSERT_EQUAL( (uint32_t) 0x07060500 , u32 );
+	CPPUNIT_ASSERT_EQUAL( (unsigned long) 0x07060500 , u32 );
 
 	// test seek(), tell(), atEOS()
 	input->seek(1, WPX_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL ( (long int) 1 , input->tell() );
+	CPPUNIT_ASSERT_EQUAL ( (long) 1 , input->tell() );
 
 	input->seek(0, WPX_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL ( (long int) 0 , input->tell() );
+	CPPUNIT_ASSERT_EQUAL ( (long) 0 , input->tell() );
 
 	input->seek(8, WPX_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL ( (long int) 8 , input->tell() );
+	CPPUNIT_ASSERT_EQUAL ( (long) 8 , input->tell() );
 
 	input->seek(0, WPX_SEEK_SET);
 	for (int i = 0; i < 8; i++)
@@ -258,7 +258,7 @@ void Test::testStream(void)
 	CPPUNIT_ASSERT_THROW ( readU8(input, 0), FileException );
 
 	input->seek(-1, WPX_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL ( (long int) 0, input->tell() );
+	CPPUNIT_ASSERT_EQUAL ( (long) 0, input->tell() );
 
 	input->seek(8, WPX_SEEK_SET);
 	CPPUNIT_ASSERT_EQUAL ( true, input->atEOS() );
