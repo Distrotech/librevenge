@@ -68,15 +68,17 @@ void WP5GraphicsInformationPacket::_readContents(WPXInputStream *input, WPXEncry
 #if 0
 		WPXString filename;
 		filename.sprintf("binarydump%.4x.wpg", j);
-		FILE *f = fopen(filename.cstr(), "w");
+		FILE *f = fopen(filename.cstr(), "wb");
 		if (f)
 		{
-
-			// Here we create a file header, since it looks like the embedded files do not contain it
-			fprintf(f, "%c%c%c%c", 0xff, 0x57, 0x50, 0x43);
-			fprintf(f, "%c%c%c%c", 0x10, 0, 0, 0);
-			fprintf(f, "%c%c%c%c", 0x01, 0x16, 0x01, 0);
-			fprintf(f, "%c%c%c%c", 0, 0, 0, 0);
+			if (tmpData[0]!=0xff || tmpData[1]!='W'  || tmpData[2]!='P'  || tmpData[3]!='C')
+			{
+				// Here we create a file header, since it looks like some embedded files do not contain it
+				fprintf(f, "%c%c%c%c", 0xff, 0x57, 0x50, 0x43);
+				fprintf(f, "%c%c%c%c", 0x10, 0x00, 0x00, 0x00);
+				fprintf(f, "%c%c%c%c", 0x01, 0x16, 0x01, 0x00);
+				fprintf(f, "%c%c%c%c", 0x00, 0x00, 0x00, 0x00);
+			}
 
 			for (uint32_t l = 0; l < tmpImagesSizes[j]; l++)
 				fprintf(f, "%c", tmpData[l]);
