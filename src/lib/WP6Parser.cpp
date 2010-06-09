@@ -256,6 +256,8 @@ void WP6Parser::parseSubDocument(WPXDocumentInterface *documentInterface)
 		parseDocument(input, 0, &stylesListener);
 		stylesListener.endSubDocument();
 		
+		input->seek(0, WPX_SEEK_SET);
+		
 		WP6ContentListener listener(pageList, tableList, documentInterface);
 		listener.startSubDocument();
 		parseDocument(input, 0, &listener);
