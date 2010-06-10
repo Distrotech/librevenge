@@ -712,12 +712,9 @@ void WP6ContentListener::fontChange(const uint16_t matchedFontPointSize, const u
 		{
 			const WP6FontDescriptorPacket *fontDescriptorPacket = 
 				dynamic_cast<const WP6FontDescriptorPacket *>(WP6Listener::getPrefixDataPacket(fontPID));
-			if (fontDescriptorPacket)
-			{
+			if (fontDescriptorPacket) {
 				*(m_ps->m_fontName) = fontDescriptorPacket->getFontName();
 			}
-			else if (fontName.len())
-				*(m_ps->m_fontName) = fontName;
 		}
 		else if (fontName.len())
 			*(m_ps->m_fontName) = fontName;
