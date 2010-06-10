@@ -29,6 +29,7 @@
 #include "WP6Listener.h"
 #include "libwpd_internal.h"
 #include "WP6CommentAnnotationPacket.h"
+#include "WP6FontDescriptorPacket.h"
 
 /*************************************************************************
  * WP6CharacterGroup_SetAlignmentCharacterSubGroup
@@ -92,13 +93,19 @@ void WP6CharacterGroup_CharacterShadingChangeSubGroup::parse(WP6Listener *listen
  *************************************************************************/
 
 WP6CharacterGroup_FontFaceChangeSubGroup::WP6CharacterGroup_FontFaceChangeSubGroup(WPXInputStream *input, WPXEncryption *encryption) :
-	m_oldMatchedPointSize(0), m_hash(0), m_matchedFontIndex(0), m_matchedFontPointSize(0)
+	m_oldMatchedPointSize(0), m_hash(0), m_matchedFontIndex(0), m_matchedFontPointSize(0), m_fontName()
 {
 	m_oldMatchedPointSize = readU16(input, encryption);
 	m_hash = readU16(input, encryption);
 	m_matchedFontIndex = readU16(input, encryption);
 	m_matchedFontPointSize = readU16(input, encryption);
-	WPD_DEBUG_MSG(("WordPerfect: Character Group Font Face Change subgroup info (old matched point size: %i, hash: %i, matched font index: %i, matched font point size: %i\n", m_oldMatchedPointSize, m_hash, m_matchedFontIndex, m_matchedFontPointSize));
+	WPD_DEBUG_MSG(("WordPerfect: Character Group Font Face Change subgroup info (old matched point size: %i, hash: %i, matched font index: %i, matched font point size: %i)\n", m_oldMatchedPointSize, m_hash, m_matchedFontIndex, m_matchedFontPointSize));
+
+	input->seek(22, WPX_SEEK_CUR);
+	uint16_t tmpSizeDeletable = readU16(input, encryption);
+	WP6FontDescriptorPacket::_readFontName(input, encryption, m_fontName, tmpSizeDeletable);
+	
+	WPD_DEBUG_MSG(("WordPerfect: Character Group Font Face Change subgroup info (font name length: %i, font name: %s)\n", tmpSizeDeletable, m_fontName.cstr()));
 }
 
 void WP6CharacterGroup_FontFaceChangeSubGroup::parse(WP6Listener *listener, const uint8_t /* numPrefixIDs */, uint16_t const *prefixIDs) const
@@ -106,7 +113,7 @@ void WP6CharacterGroup_FontFaceChangeSubGroup::parse(WP6Listener *listener, cons
 	WPD_DEBUG_MSG(("WordPerfect: FontFaceChangeSubGroup parsing\n"));
 	if (!prefixIDs)
 		return;
-	listener->fontChange(m_matchedFontPointSize, prefixIDs[0]);
+	listener->fontChange(m_matchedFontPointSize, prefixIDs[0], m_fontName);
 }
 
 /*************************************************************************
@@ -125,7 +132,7 @@ void WP6CharacterGroup_FontSizeChangeSubGroup::parse(WP6Listener *listener, cons
 	WPD_DEBUG_MSG(("WordPerfect: FontSizeChangeSubGroup parsing\n"));
 	if (!prefixIDs)
 		return;
-	listener->fontChange(m_desiredFontPointSize, prefixIDs[0]);
+	listener->fontChange(m_desiredFontPointSize, prefixIDs[0], WPXString());
 }
 
 /*************************************************************************

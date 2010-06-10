@@ -72,6 +72,7 @@ private:
 	uint16_t m_hash;
 	uint16_t m_matchedFontIndex;
 	uint16_t m_matchedFontPointSize;
+	WPXString m_fontName;
 };
 
 class WP6CharacterGroup_FontSizeChangeSubGroup : public WP6VariableLengthGroup_SubGroup

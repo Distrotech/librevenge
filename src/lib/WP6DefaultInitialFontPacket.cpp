@@ -38,7 +38,7 @@ WP6DefaultInitialFontPacket::WP6DefaultInitialFontPacket(WPXInputStream *input, 
 
 void WP6DefaultInitialFontPacket::parse(WP6Listener *listener) const
 {
-	listener->fontChange(getPointSize(), getInitialFontDescriptorPID());
+	listener->fontChange(getPointSize(), getInitialFontDescriptorPID(), WPXString());
 }
 
 void WP6DefaultInitialFontPacket::_readContents(WPXInputStream *input, WPXEncryption *encryption)

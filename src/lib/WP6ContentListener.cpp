@@ -694,7 +694,7 @@ void WP6ContentListener::highlightChange(const bool isOn, const RGBSColor color)
 	}
 }
 
-void WP6ContentListener::fontChange(const uint16_t matchedFontPointSize, const uint16_t fontPID)
+void WP6ContentListener::fontChange(const uint16_t matchedFontPointSize, const uint16_t fontPID, const WPXString &fontName)
 {
 	if (!isUndoOn())
 	{
@@ -712,10 +712,15 @@ void WP6ContentListener::fontChange(const uint16_t matchedFontPointSize, const u
 		{
 			const WP6FontDescriptorPacket *fontDescriptorPacket = 
 				dynamic_cast<const WP6FontDescriptorPacket *>(WP6Listener::getPrefixDataPacket(fontPID));
-			if (fontDescriptorPacket) {
+			if (fontDescriptorPacket)
+			{
 				*(m_ps->m_fontName) = fontDescriptorPacket->getFontName();
 			}
+			else if (fontName.len())
+				*(m_ps->m_fontName) = fontName;
 		}
+		else if (fontName.len())
+			*(m_ps->m_fontName) = fontName;
 	}
 }
 

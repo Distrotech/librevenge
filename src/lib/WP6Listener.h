@@ -66,7 +66,7 @@ public:
 	virtual void characterColorChange(const uint8_t red, const uint8_t green, const uint8_t blue) = 0;
 	virtual void characterShadingChange(const uint8_t shading) = 0;
 	virtual void highlightChange(const bool isOn, const RGBSColor color) = 0;
-	virtual void fontChange(const uint16_t matchedFontPointSize, const uint16_t fontPID) = 0;
+	virtual void fontChange(const uint16_t matchedFontPointSize, const uint16_t fontPID, const WPXString &fontName) = 0;
 	virtual void attributeChange(const bool isOn, const uint8_t attribute) = 0;
 	virtual void spacingAfterParagraphChange(const double spacingRelative, const double spacingAbsolute) = 0;
 	virtual void pageMarginChange(const uint8_t side, const uint16_t margin) = 0;

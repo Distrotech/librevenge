@@ -140,7 +140,7 @@ public:
 
 	void startDocument() { WPXContentListener::startDocument(); };
 	void startSubDocument() { WPXContentListener::startSubDocument(); };
-        void setDate(const uint16_t type, const uint16_t year, 
+	void setDate(const uint16_t type, const uint16_t year, 
 		     const uint8_t month, const uint8_t day, 
 		     const uint8_t hour, const uint8_t minute, 
 		     const uint8_t second, const uint8_t dayOfWeek, 
@@ -160,7 +160,7 @@ public:
 	void characterColorChange(const uint8_t red, const uint8_t green, const uint8_t blue);
 	void characterShadingChange(const uint8_t shading);
 	void highlightChange(const bool isOn, const RGBSColor color);
-	void fontChange(const uint16_t matchedFontPointSize, const uint16_t fontPID);
+	void fontChange(const uint16_t matchedFontPointSize, const uint16_t fontPID, const WPXString &fontName);
  	void attributeChange(const bool isOn, const uint8_t attribute);
 	void spacingAfterParagraphChange(const double spacingRelative, const double spacingAbsolute);
 	void pageMarginChange(const uint8_t /* side */, const uint16_t /* margin */) {}
