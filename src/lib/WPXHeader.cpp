@@ -55,7 +55,7 @@ WPXHeader * WPXHeader::constructHeader(WPXInputStream *input, WPXEncryption *enc
 	
 	char fileMagic[4] = { 0, 0, 0, 0 };
 	/* check the magic */
-	input->seek(WPX_HEADER_MAGIC_OFFSET - input->tell(), WPX_SEEK_CUR);
+	input->seek(WPX_HEADER_MAGIC_OFFSET, WPX_SEEK_SET);
 	for (int i=0; i<3 && !input->atEOS(); i++)
 		fileMagic[i] = (char)readU8(input, encryption);
 	
@@ -66,11 +66,11 @@ WPXHeader * WPXHeader::constructHeader(WPXInputStream *input, WPXEncryption *enc
 	}
 	
 	/* get the document pointer */
-	input->seek(WPX_HEADER_DOCUMENT_POINTER_OFFSET - input->tell(), WPX_SEEK_CUR);
+	input->seek(WPX_HEADER_DOCUMENT_POINTER_OFFSET, WPX_SEEK_SET);
 	uint32_t documentOffset = readU32(input, encryption);
 
 	/* get information on product types, file types, versions */
-	input->seek(WPX_HEADER_PRODUCT_TYPE_OFFSET - input->tell(), WPX_SEEK_CUR);
+	input->seek(WPX_HEADER_PRODUCT_TYPE_OFFSET, WPX_SEEK_SET);
 	uint8_t productType = readU8(input, encryption);
 	uint8_t fileType = readU8(input, encryption);
 	uint8_t majorVersion = readU8(input, encryption);

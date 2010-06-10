@@ -98,7 +98,7 @@ bool WP6VariableLengthGroup::isGroupConsistent(WPXInputStream *input, WPXEncrypt
 		input->seek(1, WPX_SEEK_CUR);
 		uint16_t size = readU16(input, encryption);
 
-		if (input->seek((startPosition + size - 4 - input->tell()), WPX_SEEK_CUR) || input->atEOS())
+		if (input->seek((startPosition + size - 4), WPX_SEEK_SET) || input->atEOS())
 		{
 			input->seek(startPosition, WPX_SEEK_SET);
 			return false;
@@ -163,7 +163,7 @@ void WP6VariableLengthGroup::_read(WPXInputStream *input, WPXEncryption *encrypt
 
 	_readContents(input, encryption);
 
-	input->seek((startPosition + m_size - 4 - input->tell()), WPX_SEEK_CUR);
+	input->seek((startPosition + m_size - 4), WPX_SEEK_SET);
 
 	if (m_size != readU16(input, encryption))
 	{
@@ -171,5 +171,5 @@ void WP6VariableLengthGroup::_read(WPXInputStream *input, WPXEncryption *encrypt
 		throw FileException();
 	}
 
-	input->seek((startPosition + m_size - 1 - input->tell()), WPX_SEEK_CUR);
+	input->seek((startPosition + m_size - 1), WPX_SEEK_SET);
 }

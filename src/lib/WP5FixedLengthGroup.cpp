@@ -70,7 +70,7 @@ bool WP5FixedLengthGroup::isGroupConsistent(WPXInputStream *input, WPXEncryption
 	try
 	{
 		int size = WP5_FIXED_LENGTH_FUNCTION_GROUP_SIZE[groupID-0xC0];
-		if (input->seek((startPosition + size - 2 - input->tell()), WPX_SEEK_CUR) || input->atEOS())
+		if (input->seek((startPosition + size - 2), WPX_SEEK_SET) || input->atEOS())
 		{
 			input->seek(startPosition, WPX_SEEK_SET);
 			return false;
@@ -99,7 +99,7 @@ void WP5FixedLengthGroup::_read(WPXInputStream *input, WPXEncryption *encryption
 	if (m_group >= 0xC0 && m_group <= 0xCF) // just an extra safety check
 	{
 		int size = WP5_FIXED_LENGTH_FUNCTION_GROUP_SIZE[m_group-0xC0];
-		input->seek((startPosition + size - 2 - input->tell()), WPX_SEEK_CUR);
+		input->seek((startPosition + size - 2), WPX_SEEK_SET);
 		if (m_group != readU8(input, encryption))
 		{
 			WPD_DEBUG_MSG(("WordPerfect: Possible corruption detected. Bailing out!\n"));
