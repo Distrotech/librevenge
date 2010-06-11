@@ -64,7 +64,7 @@ void WP1ContentListener::insertCharacter(uint16_t character)
 {
 	if (!isUndoOn())
 	{
-		uint16_t tmpCharacter = _mapSymbolFont(character);
+		uint16_t tmpCharacter = _mapNonUnicodeCharacter(character);
 
 		if (!m_ps->m_isSpanOpened)
 			_openSpan();
@@ -89,7 +89,7 @@ void WP1ContentListener::insertExtendedCharacter(uint8_t extendedCharacter)
 		if (extendedCharacter <= 0x20)
 			appendUCS4(m_parseState->m_textBuffer, (uint32_t)0x20);
 		else
-			appendUCS4(m_parseState->m_textBuffer, (uint32_t)macintoshCharacterMap[extendedCharacter - 0x20]);
+			appendUCS4(m_parseState->m_textBuffer, (uint32_t)(_mapNonUnicodeCharacter(macintoshCharacterMap[extendedCharacter - 0x20])));
 	}
 }
 

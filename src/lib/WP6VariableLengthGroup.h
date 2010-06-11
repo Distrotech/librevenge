@@ -56,6 +56,7 @@ protected:
 	uint8_t getNumPrefixIDs() const { return m_numPrefixIDs; }
 	const uint16_t * getPrefixIDs() const { return m_prefixIDs; }
 	uint16_t getSizeNonDeletable() const { return m_sizeNonDeletable; }
+	uint16_t getSizeDeletable() const { return m_sizeDeletable; }
 
 private:
 	WP6VariableLengthGroup(const WP6VariableLengthGroup&);
@@ -66,6 +67,7 @@ private:
 	uint8_t m_numPrefixIDs;
 	uint16_t *m_prefixIDs;
 	uint16_t m_sizeNonDeletable;
+	uint16_t m_sizeDeletable;
 };
 
 #endif /* WP6VARIABLELENGTHGROUP_H */

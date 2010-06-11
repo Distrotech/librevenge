@@ -92,7 +92,7 @@ void WP6CharacterGroup_CharacterShadingChangeSubGroup::parse(WP6Listener *listen
  * WP6CharacterGroup_FontFaceChangeSubGroups
  *************************************************************************/
 
-WP6CharacterGroup_FontFaceChangeSubGroup::WP6CharacterGroup_FontFaceChangeSubGroup(WPXInputStream *input, WPXEncryption *encryption) :
+WP6CharacterGroup_FontFaceChangeSubGroup::WP6CharacterGroup_FontFaceChangeSubGroup(WPXInputStream *input, WPXEncryption *encryption, uint16_t sizeDeletable) :
 	m_oldMatchedPointSize(0), m_hash(0), m_matchedFontIndex(0), m_matchedFontPointSize(0), m_fontName()
 {
 	m_oldMatchedPointSize = readU16(input, encryption);
@@ -101,11 +101,14 @@ WP6CharacterGroup_FontFaceChangeSubGroup::WP6CharacterGroup_FontFaceChangeSubGro
 	m_matchedFontPointSize = readU16(input, encryption);
 	WPD_DEBUG_MSG(("WordPerfect: Character Group Font Face Change subgroup info (old matched point size: %i, hash: %i, matched font index: %i, matched font point size: %i)\n", m_oldMatchedPointSize, m_hash, m_matchedFontIndex, m_matchedFontPointSize));
 
-	input->seek(22, WPX_SEEK_CUR);
-	uint16_t tmpSizeDeletable = readU16(input, encryption);
-	WP6FontDescriptorPacket::_readFontName(input, encryption, m_fontName, tmpSizeDeletable);
+	if (sizeDeletable > 24)
+	{
+		input->seek(22, WPX_SEEK_CUR);
+		uint16_t tmpSizeDeletable = readU16(input, encryption);
+		WP6FontDescriptorPacket::_readFontName(input, encryption, m_fontName, tmpSizeDeletable);
 	
-	WPD_DEBUG_MSG(("WordPerfect: Character Group Font Face Change subgroup info (font name length: %i, font name: %s)\n", tmpSizeDeletable, m_fontName.cstr()));
+		WPD_DEBUG_MSG(("WordPerfect: Character Group Font Face Change subgroup info (font name length: %i, font name: %s)\n", tmpSizeDeletable, m_fontName.cstr()));
+	}
 }
 
 void WP6CharacterGroup_FontFaceChangeSubGroup::parse(WP6Listener *listener, const uint8_t /* numPrefixIDs */, uint16_t const *prefixIDs) const
@@ -285,7 +288,7 @@ void WP6CharacterGroup::_readContents(WPXInputStream *input, WPXEncryption *encr
 	switch (getSubGroup())
 	{
 		case WP6_CHARACTER_GROUP_FONT_FACE_CHANGE:
-			m_subGroupData = new WP6CharacterGroup_FontFaceChangeSubGroup(input, encryption);
+			m_subGroupData = new WP6CharacterGroup_FontFaceChangeSubGroup(input, encryption, getSizeDeletable());
 			break;
 		case WP6_CHARACTER_GROUP_FONT_SIZE_CHANGE:
 			m_subGroupData = new WP6CharacterGroup_FontSizeChangeSubGroup(input, encryption);

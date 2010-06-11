@@ -203,13 +203,15 @@ protected:
 	
 	void _insertBreakIfNecessary(WPXPropertyList &propList);
 	
-	uint16_t _mapSymbolFont(uint16_t character);
+	uint16_t _mapNonUnicodeCharacter(uint16_t character);
 	
 private:
 	WPXContentListener(const WPXContentListener&);
 	WPXContentListener& operator=(const WPXContentListener&);
 	WPXString _colorToString(const RGBSColor * color);
 	WPXString _mergeColorsToString(const RGBSColor *fgColor, const RGBSColor *bgColor);
+	uint16_t _mapSymbolFontCharacter(uint16_t character);
+	uint16_t _mapDingbatsFontCharacter(uint16_t character);
 };
 
 #endif /* WPXCONTENTLISTENER_H */

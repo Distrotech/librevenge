@@ -47,7 +47,8 @@ WP6VariableLengthGroup::WP6VariableLengthGroup() :
 	m_flags(0),
 	m_numPrefixIDs(0),
 	m_prefixIDs(0),
-	m_sizeNonDeletable(0)
+	m_sizeNonDeletable(0),
+	m_sizeDeletable(0)
 {
 }
 
@@ -153,13 +154,18 @@ void WP6VariableLengthGroup::_read(WPXInputStream *input, WPXEncryption *encrypt
 	}
 		
 	m_sizeNonDeletable = readU16(input, encryption);
-	if (m_sizeNonDeletable > m_size)
+	if (m_sizeNonDeletable > m_size || (m_sizeNonDeletable & 0x8000))
 	{
 		WPD_DEBUG_MSG(("WordPerfect: Possible corruption detected, bailing out!\n"));
 		throw FileException();
-	}	
+	}
+	
+	uint32_t tmpPosition = input->tell();
+	input->seek(m_sizeNonDeletable, WPX_SEEK_CUR);
+	m_sizeDeletable = (uint16_t)(startPosition + m_size - 4 - input->tell());
+	input->seek(tmpPosition, WPX_SEEK_SET);
 
-	WPD_DEBUG_MSG(("WordPerfect: Read variable group header (start_position: %i, sub_group: %i, size: %i, flags: %i, num_prefix_ids: %i, size_non_deletable: %i)\n", startPosition, m_subGroup, m_size, m_flags, m_numPrefixIDs, m_sizeNonDeletable));
+	WPD_DEBUG_MSG(("WordPerfect: Read variable group header (start_position: %i, sub_group: %i, size: %i, flags: %i, num_prefix_ids: %i, size_non_deletable: %i, size_deletable: %i)\n", startPosition, m_subGroup, m_size, m_flags, m_numPrefixIDs, m_sizeNonDeletable, m_sizeDeletable));
 
 	_readContents(input, encryption);
 

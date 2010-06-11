@@ -412,7 +412,7 @@ void WP6ContentListener::insertCharacter(const uint16_t character)
 {
 	if (!isUndoOn())
 	{
-		uint16_t tmpCharacter = _mapSymbolFont(character);
+		uint16_t tmpCharacter = _mapNonUnicodeCharacter(character);
 
 		if (m_parseState->m_styleStateSequence.getCurrentState() == STYLE_BODY ||
 		    m_parseState->m_styleStateSequence.getCurrentState() == NORMAL)
