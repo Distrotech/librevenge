@@ -203,6 +203,8 @@ protected:
 	
 	void _insertBreakIfNecessary(WPXPropertyList &propList);
 	
+	uint16_t _mapSymbolFont(uint16_t character);
+	
 private:
 	WPXContentListener(const WPXContentListener&);
 	WPXContentListener& operator=(const WPXContentListener&);

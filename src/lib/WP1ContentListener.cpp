@@ -64,13 +64,15 @@ void WP1ContentListener::insertCharacter(uint16_t character)
 {
 	if (!isUndoOn())
 	{
+		uint16_t tmpCharacter = _mapSymbolFont(character);
+
 		if (!m_ps->m_isSpanOpened)
 			_openSpan();
 		for (;m_parseState->m_numDeferredTabs > 0; m_parseState->m_numDeferredTabs--)
 		{
 			m_documentInterface->insertTab();
 		}
-		appendUCS4(m_parseState->m_textBuffer, (uint32_t)character);
+		appendUCS4(m_parseState->m_textBuffer, (uint32_t)tmpCharacter);
 	}
 }
 
