@@ -93,7 +93,7 @@ void WP6CharacterGroup_CharacterShadingChangeSubGroup::parse(WP6Listener *listen
  *************************************************************************/
 
 WP6CharacterGroup_FontFaceChangeSubGroup::WP6CharacterGroup_FontFaceChangeSubGroup(WPXInputStream *input, WPXEncryption *encryption, uint16_t sizeDeletable) :
-	m_oldMatchedPointSize(0), m_hash(0), m_matchedFontIndex(0), m_matchedFontPointSize(0), m_fontName()
+	m_oldMatchedPointSize(0), m_hash(0), m_matchedFontIndex(0), m_matchedFontPointSize(0), m_packet(0)
 {
 	m_oldMatchedPointSize = readU16(input, encryption);
 	m_hash = readU16(input, encryption);
@@ -103,12 +103,17 @@ WP6CharacterGroup_FontFaceChangeSubGroup::WP6CharacterGroup_FontFaceChangeSubGro
 
 	if (sizeDeletable > 24)
 	{
-		input->seek(22, WPX_SEEK_CUR);
-		uint16_t tmpSizeDeletable = readU16(input, encryption);
-		WP6FontDescriptorPacket::_readFontName(input, encryption, m_fontName, tmpSizeDeletable);
+		m_packet = new WP6FontDescriptorPacket(input, encryption, 0, input->tell(), sizeDeletable);
 	
-		WPD_DEBUG_MSG(("WordPerfect: Character Group Font Face Change subgroup info (font name length: %i, font name: %s)\n", tmpSizeDeletable, m_fontName.cstr()));
+		WPD_DEBUG_MSG(("WordPerfect: Character Group Font Face Change subgroup info (font name: %s)\n", m_packet->getFontName()));
 	}
+}
+
+WP6CharacterGroup_FontFaceChangeSubGroup::~WP6CharacterGroup_FontFaceChangeSubGroup()
+{
+	if (m_packet)
+		delete m_packet;
+	m_packet = NULL;
 }
 
 void WP6CharacterGroup_FontFaceChangeSubGroup::parse(WP6Listener *listener, const uint8_t /* numPrefixIDs */, uint16_t const *prefixIDs) const
@@ -116,7 +121,7 @@ void WP6CharacterGroup_FontFaceChangeSubGroup::parse(WP6Listener *listener, cons
 	WPD_DEBUG_MSG(("WordPerfect: FontFaceChangeSubGroup parsing\n"));
 	if (!prefixIDs)
 		return;
-	listener->fontChange(m_matchedFontPointSize, prefixIDs[0], m_fontName);
+	listener->fontChange(m_matchedFontPointSize, prefixIDs[0], m_packet ? m_packet->getFontName() : WPXString());
 }
 
 /*************************************************************************

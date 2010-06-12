@@ -27,6 +27,7 @@
 #define WP6CHARACTERGROUP_H
 
 #include "WP6VariableLengthGroup.h"
+#include "WP6FontDescriptorPacket.h"
 
 class WP6CharacterGroup_SetAlignmentCharacterSubGroup: public WP6VariableLengthGroup_SubGroup
 {
@@ -65,6 +66,7 @@ class WP6CharacterGroup_FontFaceChangeSubGroup : public WP6VariableLengthGroup_S
 {
 public:
 	WP6CharacterGroup_FontFaceChangeSubGroup(WPXInputStream *input, WPXEncryption *encryption, uint16_t sizeDeletable);
+	~WP6CharacterGroup_FontFaceChangeSubGroup();
 	void parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
 
 private:
@@ -72,7 +74,7 @@ private:
 	uint16_t m_hash;
 	uint16_t m_matchedFontIndex;
 	uint16_t m_matchedFontPointSize;
-	WPXString m_fontName;
+	WP6FontDescriptorPacket *m_packet;
 };
 
 class WP6CharacterGroup_FontSizeChangeSubGroup : public WP6VariableLengthGroup_SubGroup
