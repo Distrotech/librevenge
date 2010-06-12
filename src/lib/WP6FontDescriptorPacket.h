@@ -30,15 +30,15 @@
 
 class WP6FontDescriptorPacket : public WP6PrefixDataPacket
 {
- public:
+public:
 	WP6FontDescriptorPacket(WPXInputStream *input, WPXEncryption *encryption, int id, uint32_t dataOffset, uint32_t dataSize);
 	~WP6FontDescriptorPacket();
 	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
-	const char *getFontName() const { return m_fontName.cstr(); }
+	const WPXString &getFontName() const { return m_fontName; }
 
-	static void _readFontName(WPXInputStream *input, WPXEncryption *encryption, WPXString &fontName, uint16_t fontNameLength);
+private:
+	void _readFontName(WPXInputStream *input, WPXEncryption *encryption);
 
- private:
 	WP6FontDescriptorPacket(const WP6FontDescriptorPacket&);
 	WP6FontDescriptorPacket& operator=(const WP6FontDescriptorPacket&);
 	uint16_t m_characterWidth;

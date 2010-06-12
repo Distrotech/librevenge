@@ -13,6 +13,8 @@ URL: http://libwpd.sf.net/
 BuildRoot: %{_tmppath}/%{name}-%{version}-buildroot
 License: LGPL
 BuildRequires: gcc-c++, libstdc++-devel
+Provides: %{name}-@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@-@WPD_MINOR_VERSION@
+Obsoletes: %{name}-@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@-@WPD_MINOR_VERSION@ < %{version}-%{release}
 
 %description
 Library that handles Word Perfect documents.
@@ -38,8 +40,9 @@ Includes and definitions for developing with libwpd.
 
 %if %{!?_without_docs:1}%{?_without_docs:0}
 %package docs
-Requires: libwpd
 BuildRequires: doxygen
+Provides: %{name}-devel-doc
+Obsoletes: %{name}-devel-doc < %{version}-%{release}
 Summary: Documentation of libwpd API
 Group: Development/Documentation
 
@@ -84,7 +87,7 @@ umask 022
 %{_libdir}/libwpd*-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.so
 #%{_libdir}/libwpd*-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.*a
 %{_libdir}/pkgconfig/libwpd*-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.pc
-%{_includedir}/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@/libwpd
+%{_includedir}/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@/libwpd*
 
 %if %{!?_without_docs:1}%{?_without_docs:0}
 %files docs

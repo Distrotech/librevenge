@@ -88,16 +88,16 @@ void WP6FontDescriptorPacket::_readContents(WPXInputStream *input, WPXEncryption
 
 	m_fontNameLength = readU16(input, encryption); 
 
-	_readFontName(input, encryption, m_fontName, m_fontNameLength);
+	_readFontName(input, encryption);
 }
 
-void WP6FontDescriptorPacket::_readFontName(WPXInputStream *input, WPXEncryption *encryption, WPXString &fontName, uint16_t fontNameLength)
+void WP6FontDescriptorPacket::_readFontName(WPXInputStream *input, WPXEncryption *encryption)
 {
-	if (fontNameLength > ((std::numeric_limits<uint16_t>::max)() / 2))
-	fontNameLength = ((std::numeric_limits<uint16_t>::max)() / 2);
-	if (fontNameLength) 
+	if (m_fontNameLength > ((std::numeric_limits<uint16_t>::max)() / 2))
+	m_fontNameLength = ((std::numeric_limits<uint16_t>::max)() / 2);
+	if (m_fontNameLength) 
 	{
-		for (uint16_t i=0; i<(fontNameLength/2); i++) 
+		for (uint16_t i=0; i<(m_fontNameLength/2); i++) 
 		{
 			uint16_t charWord = readU16(input, encryption);
 			uint8_t characterSet = (uint8_t)((charWord >> 8) & 0x00FF);
@@ -110,11 +110,11 @@ void WP6FontDescriptorPacket::_readFontName(WPXInputStream *input, WPXEncryption
 			int len = extendedCharacterWP6ToUCS2(character, characterSet, &chars);
 
 			for (int j = 0; j < len; j++)
-				appendUCS4(fontName, (uint32_t)chars[j]);
+				appendUCS4(m_fontName, (uint32_t)chars[j]);
 		}
 
-		WPD_DEBUG_MSG(("WordPerfect: stripping font name (original: %s)\n", fontName.cstr()));
-		std::string stringValue(fontName.cstr());
+		WPD_DEBUG_MSG(("WordPerfect: stripping font name (original: %s)\n", m_fontName.cstr()));
+		std::string stringValue(m_fontName.cstr());
 		std::string::size_type pos;
 		for (unsigned k = 0; k < countElements(FONT_WEIGHT_STRINGS); k++)
 		{
@@ -138,7 +138,7 @@ void WP6FontDescriptorPacket::_readFontName(WPXInputStream *input, WPXEncryption
 			while ((pos = stringValue.find("-", stringValue.size() - 1)) != std::string::npos)
 			stringValue.replace(pos, strlen("-"), "");
 	
-		fontName = WPXString(stringValue.c_str());
-			WPD_DEBUG_MSG(("WordPerfect: stripping font name (final: %s)\n", fontName.cstr()));
+		m_fontName = WPXString(stringValue.c_str());
+			WPD_DEBUG_MSG(("WordPerfect: stripping font name (final: %s)\n", m_fontName.cstr()));
 	}
 }
