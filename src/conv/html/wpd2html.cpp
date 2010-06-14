@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
 	WPDConfidence confidence = WPDocument::isFileFormatSupported(&input);
 	if (confidence != WPD_CONFIDENCE_EXCELLENT && confidence != WPD_CONFIDENCE_SUPPORTED_ENCRYPTION)
 	{
-		printf("ERROR: Unsupported file format!\n");
+		fprintf(stderr, "ERROR: Unsupported file format!\n");
 		return 1;
 	}
 	
