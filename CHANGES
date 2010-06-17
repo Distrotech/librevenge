@@ -1,6 +1,18 @@
 CHANGES:
 0.8.x - 0.9.0
 - Conversion of annotations/comments in WP6 parser (Fridrich)
+- Conversion of annotations/comments in WP6 parser (Fridrich)
+- fix some greek characters so that Text written in WP5.1 with Printer Polyglott
+  convert correct.
+  - replace lunate small sigma with small stigma
+  - replate one occurence of capital Sigma by lunate capital sigma
+  - replace one occurence of capital Ypsilon by small eta with tonos
+  - replace variant of small rho by rho with tonos
+
+0.8.13 - 0.8.14
+- Fix some warnings due to unused variables
+- Fix a warning due to a name hiding.
+- Fix two loops with corrupted documents (Thank you, sum1!)
 
 0.8.12 - 0.8.13
 - Implement readahead in the WPXStreamImplementation class (Jan Holesovsky, Fridrich)
