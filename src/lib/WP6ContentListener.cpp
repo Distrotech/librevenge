@@ -1037,8 +1037,8 @@ void WP6ContentListener::displayNumberReferenceGroupOn(const uint8_t subGroup, c
 	{
 		switch (subGroup)
 		{
-		case WP6_DISPLAY_NUMBER_REFERENCE_GROUP_PARAGRAPH_NUMBER_ON:
-		case WP6_DISPLAY_NUMBER_REFERENCE_GROUP_USER_DEFINED_ON:
+		case WP6_DISPLAY_NUMBER_REFERENCE_GROUP_PARAGRAPH_NUMBER_DISPLAY_ON:
+		case WP6_DISPLAY_NUMBER_REFERENCE_GROUP_USER_DEFINED_NUMBER_DISPLAY_ON:
 			// HACKISH: if we are in a paragraph style sequence we will pretend that paragraph numbering was
 			// just turned on even though it didn't happen
 			if (m_parseState->m_styleStateSequence.getCurrentState() == BEGIN_BEFORE_NUMBERING)
@@ -1056,8 +1056,8 @@ void WP6ContentListener::displayNumberReferenceGroupOn(const uint8_t subGroup, c
 			}
 			m_parseState->m_putativeListElementHasDisplayReferenceNumber = true;
 			break;
-		case WP6_DISPLAY_NUMBER_REFERENCE_GROUP_FOOTNOTE_NUMBER_ON:
-		case WP6_DISPLAY_NUMBER_REFERENCE_GROUP_ENDNOTE_NUMBER_ON:
+		case WP6_DISPLAY_NUMBER_REFERENCE_GROUP_FOOTNOTE_NUMBER_DISPLAY_ON:
+		case WP6_DISPLAY_NUMBER_REFERENCE_GROUP_ENDNOTE_NUMBER_DISPLAY_ON:
 			m_parseState->m_styleStateSequence.setCurrentState(DISPLAY_REFERENCING);
 			break;
 		}
@@ -1070,8 +1070,8 @@ void WP6ContentListener::displayNumberReferenceGroupOff(const uint8_t subGroup)
 	{
 		switch (subGroup)
 		{
-		case WP6_DISPLAY_NUMBER_REFERENCE_GROUP_PARAGRAPH_NUMBER_OFF:
-		case WP6_DISPLAY_NUMBER_REFERENCE_GROUP_USER_DEFINED_OFF:
+		case WP6_DISPLAY_NUMBER_REFERENCE_GROUP_PARAGRAPH_NUMBER_DISPLAY_OFF:
+		case WP6_DISPLAY_NUMBER_REFERENCE_GROUP_USER_DEFINED_NUMBER_DISPLAY_OFF:
 			if (m_parseState->m_styleStateSequence.getPreviousState() == BEGIN_NUMBERING_BEFORE_DISPLAY_REFERENCING)
 				m_parseState->m_styleStateSequence.setCurrentState(BEGIN_NUMBERING_AFTER_DISPLAY_REFERENCING);
 			else {
@@ -1085,8 +1085,8 @@ void WP6ContentListener::displayNumberReferenceGroupOff(const uint8_t subGroup)
 
 			}
 			break;
-		case WP6_DISPLAY_NUMBER_REFERENCE_GROUP_FOOTNOTE_NUMBER_OFF:
-		case WP6_DISPLAY_NUMBER_REFERENCE_GROUP_ENDNOTE_NUMBER_OFF:
+		case WP6_DISPLAY_NUMBER_REFERENCE_GROUP_FOOTNOTE_NUMBER_DISPLAY_OFF:
+		case WP6_DISPLAY_NUMBER_REFERENCE_GROUP_ENDNOTE_NUMBER_DISPLAY_OFF:
 			m_parseState->m_styleStateSequence.setCurrentState(m_parseState->m_styleStateSequence.getPreviousState());
 			break;
 		}
