@@ -275,6 +275,11 @@ void RawDocumentGenerator::insertLineBreak()
 	__iprintf("insertLineBreak()\n");
 }
 
+void RawDocumentGenerator::insertField(const WPXPropertyList &propList)
+{
+	__iprintf("insertField(%s)\n", getPropString(propList).cstr());
+}
+
 void RawDocumentGenerator::defineOrderedListLevel(const WPXPropertyList &propList)
 {
 	__iprintf("defineOrderedListLevel(%s)\n", getPropString(propList).cstr());
