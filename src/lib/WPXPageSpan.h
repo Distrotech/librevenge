@@ -74,6 +74,7 @@ public:
  	double getMarginRight() const { return m_marginRight; }
  	double getMarginTop() const { return m_marginTop; }
  	double getMarginBottom() const { return m_marginBottom; }
+	WPXPageNumberPosition getPageNumberPosition() const { return m_pageNumberPosition; }
 	int getPageSpan() const { return m_pageSpan; }
 	const std::vector<WPXHeaderFooter> & getHeaderFooterList() const { return m_headerFooterList; }
 
@@ -87,6 +88,7 @@ public:
  	void setMarginRight(const double marginRight) { m_marginRight = marginRight; }
  	void setMarginTop(const double marginTop) { m_marginTop = marginTop; }
  	void setMarginBottom(const double marginBottom) { m_marginBottom = marginBottom; }
+	void setPageNumberPosition(const WPXPageNumberPosition pageNumberPosition) { m_pageNumberPosition = pageNumberPosition; }
 	void setPageSpan(const int pageSpan) { m_pageSpan = pageSpan; }
 	
 	void makeConsistent(int startingPageNumber);
@@ -101,6 +103,7 @@ private:
 	WPXFormOrientation m_formOrientation;
 	double m_marginLeft, m_marginRight;
 	double m_marginTop, m_marginBottom;
+	WPXPageNumberPosition m_pageNumberPosition;
 	std::vector<WPXHeaderFooter> m_headerFooterList;
 
 	int m_pageSpan;

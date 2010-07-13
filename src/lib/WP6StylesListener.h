@@ -69,6 +69,7 @@ public:
 	void lineSpacingChange(const double /* lineSpacing */) {}
 	void spacingAfterParagraphChange(const double /* spacingRelative */, const double /* spacingAbsolute */) {}
 	void justificationChange(const uint8_t /* justification */) {}
+	void pageNumberingChange(const WPXPageNumberPosition /* page numbering position */);
 	void pageMarginChange(const uint8_t side, const uint16_t margin);
 	void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation);
 	void marginChange(const uint8_t side, const uint16_t margin);

@@ -97,6 +97,14 @@ void WP6StylesListener::insertBreak(const uint8_t breakType)
 	}
 }
 
+void WP6StylesListener::pageNumberingChange(const WPXPageNumberPosition pageNumberingPosition) 
+{
+	if (!isUndoOn()) 
+	{
+		m_currentPage.setPageNumberPosition(pageNumberingPosition);
+	}
+}
+
 void WP6StylesListener::pageMarginChange(const uint8_t side, const uint16_t margin)
 {
 	if (!isUndoOn()) 

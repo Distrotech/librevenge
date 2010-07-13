@@ -237,9 +237,9 @@ class WPXDocumentInterface
  	virtual void insertLineBreak() = 0;
 	
 	/**
-	Called when a field should be inserted
+	Called when a page number field should be inserted
 	*/
-	virtual void insertField(const WPXPropertyList &propList) = 0;
+	virtual void insertPageNumber(const WPXPropertyList &propList) = 0;
 
 	/**
 	Defines an ordered (enumerated) list level

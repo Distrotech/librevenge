@@ -247,6 +247,33 @@ void WPXContentListener::_closeSection()
 	}
 }
 
+void WPXContentListener::_insertPageNumberParagraph(WPXPageNumberPosition position) 
+{
+	WPXPropertyList propList;
+	switch (position)
+	{
+	case PAGENUMBER_POSITION_TOP_LEFT:
+	case PAGENUMBER_POSITION_BOTTOM_LEFT:
+		// doesn't require a paragraph prop - it is the default
+		propList.insert("fo:text-align", "left");
+		break;
+	case PAGENUMBER_POSITION_TOP_RIGHT:
+	case PAGENUMBER_POSITION_BOTTOM_RIGHT:
+		propList.insert("fo:text-align", "end");
+		break;
+	case PAGENUMBER_POSITION_TOP_CENTER:
+	case PAGENUMBER_POSITION_BOTTOM_CENTER:
+	default:
+		propList.insert("fo:text-align", "center");
+		break;
+	}
+
+	m_documentInterface->openParagraph(propList, WPXPropertyListVector());
+	propList.clear();
+	m_documentInterface->insertPageNumber(propList);
+	m_documentInterface->closeParagraph();	
+}
+
 void WPXContentListener::_openPageSpan()
 {
 	if (m_ps->m_isPageSpanOpened)
@@ -324,6 +351,11 @@ void WPXContentListener::_openPageSpan()
 	m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange + m_ps->m_rightMarginByParagraphMarginChange
 			+ m_ps->m_rightMarginByTabs;
 
+
+        // we insert page numbers by inserting them into the header/footer of the wordperfect document. if we don't wind up
+        // inserting a header/footer to encapsulate them inside, it will be necessary to invent one just for this purpose
+        bool pageNumberInserted = false;
+
 	std::vector<WPXHeaderFooter> headerFooterList = currentPage.getHeaderFooterList();
 	for (std::vector<WPXHeaderFooter>::iterator iter = headerFooterList.begin(); iter != headerFooterList.end(); iter++)
 	{
@@ -347,9 +379,15 @@ void WPXContentListener::_openPageSpan()
 			}
 
 			if ((*iter).getType() == HEADER)
-				m_documentInterface->openHeader(propList); 
+                        {
+				m_documentInterface->openHeader(propList);
+				if ((currentPage.getPageNumberPosition() >= PAGENUMBER_POSITION_TOP_LEFT &&
+				     currentPage.getPageNumberPosition() <= PAGENUMBER_POSITION_TOP_LEFT_AND_RIGHT) ||
+				    currentPage.getPageNumberPosition() == PAGENUMBER_POSITION_TOP_INSIDE_LEFT_AND_RIGHT)
+					_insertPageNumberParagraph(currentPage.getPageNumberPosition());
+                        }
 			else
-				m_documentInterface->openFooter(propList); 
+				m_documentInterface->openFooter(propList);
 
 			WPD_DEBUG_MSG(("Header Footer Element: Starting to parse the subDocument\n"));
 			handleSubDocument((*iter).getSubDocument(), WPX_SUBDOCUMENT_HEADER_FOOTER, (*iter).getTableList(), 0);
@@ -357,10 +395,36 @@ void WPXContentListener::_openPageSpan()
 			if ((*iter).getType() == HEADER)
 				m_documentInterface->closeHeader();
 			else
+                        {
+				if (currentPage.getPageNumberPosition() >= PAGENUMBER_POSITION_BOTTOM_LEFT &&
+				    currentPage.getPageNumberPosition() != PAGENUMBER_POSITION_TOP_INSIDE_LEFT_AND_RIGHT) 
+					_insertPageNumberParagraph(currentPage.getPageNumberPosition());
 				m_documentInterface->closeFooter(); 
+                        }
 
 			WPD_DEBUG_MSG(("Header Footer Element: type: %i occurence: %i\n",
 				       (*iter).getType(), (*iter).getOccurence()));
+		}
+	}
+
+	if (!pageNumberInserted && currentPage.getPageNumberPosition() != PAGENUMBER_POSITION_NONE)
+	{
+		if (currentPage.getPageNumberPosition() >= PAGENUMBER_POSITION_BOTTOM_LEFT && 
+		    currentPage.getPageNumberPosition() != PAGENUMBER_POSITION_TOP_INSIDE_LEFT_AND_RIGHT)
+		{		      
+			propList.clear();
+			propList.insert("libwpd:occurence", "all");
+			m_documentInterface->openFooter(propList);
+			_insertPageNumberParagraph(currentPage.getPageNumberPosition());
+			m_documentInterface->closeFooter(); 
+		}
+		else
+		{
+			propList.clear();
+			propList.insert("libwpd:occurence", "all");
+			m_documentInterface->openHeader(propList);
+			_insertPageNumberParagraph(currentPage.getPageNumberPosition());
+			m_documentInterface->closeHeader(); 
 		}
 	}
 

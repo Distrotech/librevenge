@@ -42,6 +42,20 @@ class WP6PageGroup : public WP6VariableLengthGroup
 	uint8_t m_marginType;
 	// variables needed for subgroup 2 (suppress page characteristics)
 	uint8_t m_suppressedCode;
+	// variables needed for subgroup 3 (page number position)
+	uint16_t m_pageNumberTypefaceDesc;
+	uint8_t m_pageNumberUseFlag;
+	uint16_t m_pageNumberingFontPIDCopy;
+	uint16_t m_pageNumberPointSize;
+	uint8_t m_pageNumberPosition;
+	uint16_t m_pageNumberMatchedFontIndex;
+	uint16_t m_pageNumberMatchedFontPointSize;
+	uint16_t m_pageNumberAttributes1;
+	uint16_t m_pageNumberAttributes2;
+	RGBSColor m_pageNumberColor;
+	uint16_t m_pageNumberHeight;
+	uint8_t m_pageNumberNewPagePosition;
+	
 	// variables needed for subgroup 0x11 (Form)
 	uint16_t m_formLength;
 	uint16_t m_formWidth;

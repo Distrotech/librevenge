@@ -203,6 +203,8 @@ protected:
 	
 	void _insertBreakIfNecessary(WPXPropertyList &propList);
 	
+	void _insertPageNumberParagraph(WPXPageNumberPosition position);
+
 	uint16_t _mapNonUnicodeCharacter(uint16_t character);
 	
 private:

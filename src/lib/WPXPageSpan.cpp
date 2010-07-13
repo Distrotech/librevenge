@@ -87,6 +87,7 @@ WPXPageSpan::WPXPageSpan() :
 	m_marginRight(1.0),
 	m_marginTop(WPX_DEFAULT_PAGE_MARGIN_TOP),
 	m_marginBottom(WPX_DEFAULT_PAGE_MARGIN_BOTTOM),
+	m_pageNumberPosition(PAGENUMBER_POSITION_NONE),
 	m_headerFooterList(),
 	m_pageSpan(1)
 {
@@ -102,6 +103,7 @@ WPXPageSpan::WPXPageSpan(const WPXPageSpan &page) :
 	m_marginRight(page.getMarginRight()),
 	m_marginTop(page.getMarginTop()),
 	m_marginBottom(page.getMarginBottom()),
+	m_pageNumberPosition(page.getPageNumberPosition()),
 	m_headerFooterList(page.getHeaderFooterList()),
 	m_pageSpan(page.getPageSpan())
 {
@@ -119,6 +121,7 @@ WPXPageSpan::WPXPageSpan(const WPXPageSpan &page, double paragraphMarginLeft, do
 	m_marginRight(page.getMarginRight()+paragraphMarginRight),
 	m_marginTop(page.getMarginTop()),
 	m_marginBottom(page.getMarginBottom()),
+	m_pageNumberPosition(page.getPageNumberPosition()),
 	m_headerFooterList(page.getHeaderFooterList()),
 	m_pageSpan(page.getPageSpan())
 {
@@ -219,6 +222,8 @@ bool operator==(const WPXPageSpan &page1, const WPXPageSpan &page2)
 	    (page1.getMarginTop() != page2.getMarginTop())|| (page1.getMarginBottom() != page2.getMarginBottom()))
 		return false;
 
+	if (page1.getPageNumberPosition() != page2.getPageNumberPosition()) 
+		return false;
 
 	for (uint8_t i=0; i<WPX_NUM_HEADER_FOOTER_TYPES; i++) {
 		if (page1.getHeaderFooterSuppression(i) != page2.getHeaderFooterSuppression(i))

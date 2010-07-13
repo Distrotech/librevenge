@@ -61,6 +61,23 @@ void WP6PageGroup::_readContents(WPXInputStream *input, WPXEncryption *encryptio
 		m_suppressedCode = readU8(input, encryption);
 		WPD_DEBUG_MSG(("WordPerfect: Read suppressed code (%i)\n", m_suppressedCode));
 		break;
+        case WP6_PAGE_GROUP_PAGE_NUMBER_POSITION:
+		m_pageNumberTypefaceDesc = readU16(input, encryption);
+		m_pageNumberUseFlag = readU8(input, encryption);
+		m_pageNumberingFontPIDCopy = readU16(input, encryption);
+		m_pageNumberPointSize = readU16(input, encryption);
+		m_pageNumberPosition = readU8(input, encryption);
+		m_pageNumberMatchedFontIndex = readU16(input, encryption);
+		m_pageNumberMatchedFontPointSize = readU16(input, encryption);
+		m_pageNumberAttributes1 = readU16(input, encryption);
+		m_pageNumberAttributes2 = readU16(input, encryption);
+		m_pageNumberColor.m_r = readU8(input, encryption);
+		m_pageNumberColor.m_g = readU8(input, encryption);
+		m_pageNumberColor.m_b = readU8(input, encryption);
+		m_pageNumberColor.m_s = readU8(input, encryption);
+		m_pageNumberHeight = readU16(input, encryption);
+		m_pageNumberNewPagePosition = readU8(input, encryption);
+		break;
 	case WP6_PAGE_GROUP_FORM:
 		uint8_t tmpOrientation;
 		// skip Hash values that we do not use (2+1 bytes)
@@ -95,6 +112,9 @@ void WP6PageGroup::parse(WP6Listener *listener)
 
 	switch (getSubGroup())
 	{
+        case WP6_PAGE_GROUP_PAGE_NUMBER_POSITION:
+		listener->pageNumberingChange((WPXPageNumberPosition)m_pageNumberPosition);
+		break;
 	case WP6_PAGE_GROUP_TOP_MARGIN_SET:
 		listener->pageMarginChange(WPX_TOP, m_margin);
 		break;
