@@ -1,6 +1,14 @@
 /* POLE - Portable C++ library to access OLE Storage 
    Copyright (C) 2002-2005 Ariya Hidayat <ariya@kde.org>
 
+   Performance optimization: Dmitry Fedorov
+   Copyright 2009 <www.bioimage.ucsb.edu> <www.dimin.net>
+
+   Fix for more than 236 mbat block entries : Michel Boudinot
+   Copyright 2010 <Michel.Boudinot@inaf.cnrs-gif.fr>
+
+   Version: 0.4
+
    Redistribution and use in source and binary forms, with or without 
    modification, are permitted provided that the following conditions 
    are met:
@@ -117,6 +125,7 @@ class DirTree
     int parent( unsigned index );
     std::string fullName( unsigned index );
     std::vector<unsigned> children( unsigned index );
+  unsigned find_child( unsigned index, const std::string& name );
     void load( unsigned char* buffer, unsigned len );
     void save( unsigned char* buffer );
   private:
@@ -439,6 +448,10 @@ std::string libwpd::DirTree::fullName( unsigned index )
   result.insert( 0,  "/" );
   int p = parent( index );
   DirEntry * _entry = 0;
+
+  std::vector<int> seens;
+  seens.push_back(p);
+
   while( p > 0 )
   {
     _entry = entry( p );
@@ -447,9 +460,17 @@ std::string libwpd::DirTree::fullName( unsigned index )
       result.insert( 0,  _entry->name);
       result.insert( 0,  "/" );
     }
-    --p;
-    index = p;
-    if( index <= 0 ) break;
+
+    p = parent(p);
+    if (p < 0) break;
+
+    bool ok = true;
+    // sanity check
+    for (int i = 0; i < int(seens.size()); i++) {
+      if (seens[i] == p) { ok = false; break; }
+    }
+    if (!ok) break;
+    seens.push_back(p);
   }
   return result;
 }
@@ -484,18 +505,9 @@ libwpd::DirEntry* libwpd::DirTree::entry( const std::string& name )
 
    for( it = names.begin(); it != names.end(); ++it )
    {
-     // find among the children of index
-     std::vector<unsigned> chi = children( index );
      unsigned child = 0;
-     for( unsigned i = 0; i < chi.size(); i++ )
-     {
-       libwpd::DirEntry* ce = entry( chi[i] );
-       if( ce ) 
-       if( ce->valid && ( ce->name.length()>1 ) )
-       if( ce->name == *it )
-             child = chi[i];
-     }
-     
+     // dima: performace optimisation of the previous
+     child = find_child( index, *it );
      // traverse to the child
      if( child > 0 ) index = child;
      else return (libwpd::DirEntry*)0;
@@ -505,7 +517,7 @@ libwpd::DirEntry* libwpd::DirTree::entry( const std::string& name )
 }
 
 // helper function: recursively find siblings of index
-void dirtree_find_siblings( libwpd::DirTree* dirtree, std::vector<unsigned>& result, 
+static void dirtree_find_siblings( libwpd::DirTree* dirtree, std::vector<unsigned>& result, 
   unsigned index )
 {
   libwpd::DirEntry* e = dirtree->entry( index );
@@ -536,6 +548,36 @@ void dirtree_find_siblings( libwpd::DirTree* dirtree, std::vector<unsigned>& res
       if( result[i] == next ) next = 0;
     if( next ) dirtree_find_siblings( dirtree, result, next );
   }
+}
+
+static unsigned dirtree_find_sibling( libwpd::DirTree* dirtree, unsigned index, const std::string& name ) {
+
+  unsigned count = dirtree->entryCount();
+  libwpd::DirEntry* e = dirtree->entry( index );
+  if (!e || !e->valid) return 0;
+  if (e->name == name) return index;
+
+  if (e->next>0 && e->next<count) {
+    unsigned r = dirtree_find_sibling( dirtree, e->next, name );
+    if (r>0) return r;
+  }
+
+  if (e->prev>0 && e->prev<count) {
+    unsigned r = dirtree_find_sibling( dirtree, e->prev, name );
+    if (r>0) return r;
+  }
+
+  return 0;
+}
+
+unsigned libwpd::DirTree::find_child( unsigned index, const std::string& name ) {
+  
+  unsigned count = entryCount();
+  libwpd::DirEntry* p = entry( index );
+  if (p && p->valid && p->child < count )
+    return dirtree_find_sibling( this, p->child, name );
+
+  return 0;
 }
 
 std::vector<unsigned> libwpd::DirTree::children( unsigned index )
@@ -674,14 +716,27 @@ void libwpd::StorageIO::load()
   {
     unsigned char* buffer2 = new unsigned char[ bbat->blockSize ];
     unsigned k = 109;
+    unsigned sector;
     for( unsigned r = 0; r < header->num_mbat; r++ )
     {
+      if(r == 0) // 1st meta bat location is in file header.
+        sector = header->mbat_start;
+      else      // next meta bat location is the last current block value.
+        sector = blocks[--k];
+      loadBigBlock( sector, buffer2, bbat->blockSize );
+      for( unsigned s=0; s < bbat->blockSize; s+=4 )
+      {
+        if( k >= header->num_bat ) break;
+        else  blocks[k++] = readU32( buffer2 + s );
+      }
+      /* 
       loadBigBlock( header->mbat_start+r, buffer2, bbat->blockSize );
       for( unsigned s=0; s < bbat->blockSize; s+=4 )
       {
         if( k >= header->num_bat ) break;
         else  blocks[k++] = readU32( buffer2 + s );
       }  
+      */
      }    
     delete[] buffer2;
   }
