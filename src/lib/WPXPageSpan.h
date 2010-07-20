@@ -66,6 +66,7 @@ public:
 	WPXPageSpan(const WPXPageSpan &page);
 	virtual ~WPXPageSpan();
 
+	bool getPageNumberSuppression() const { return m_isPageNumberSuppressed; }
 	bool getHeaderFooterSuppression(const uint8_t headerFooterType) const { if (headerFooterType <= WPX_FOOTER_B) return m_isHeaderFooterSuppressed[headerFooterType]; return false; }
 	double getFormLength() const { return m_formLength; }
 	double getFormWidth() const { return m_formWidth; }
@@ -80,6 +81,7 @@ public:
 
 	void setHeaderFooter(const WPXHeaderFooterType type, const uint8_t headerFooterType, const WPXHeaderFooterOccurence occurence, 
 			     const WPXSubDocument * subDocument, WPXTableList tableList);
+	void setPageNumberSuppression(const bool suppress) { m_isPageNumberSuppressed = suppress; }
 	void setHeadFooterSuppression(const uint8_t headerFooterType, const bool suppress) { m_isHeaderFooterSuppressed[headerFooterType] = suppress; }
 	void setFormLength(const double formLength) { m_formLength = formLength; }
 	void setFormWidth(const double formWidth) { m_formWidth = formWidth; }
@@ -99,6 +101,7 @@ protected:
 
 private:
 	bool m_isHeaderFooterSuppressed[WPX_NUM_HEADER_FOOTER_TYPES];
+	bool m_isPageNumberSuppressed;
 	double m_formLength, m_formWidth;
 	WPXFormOrientation m_formOrientation;
 	double m_marginLeft, m_marginRight;

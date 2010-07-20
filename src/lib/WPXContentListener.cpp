@@ -381,9 +381,10 @@ void WPXContentListener::_openPageSpan()
 			if ((*iter).getType() == HEADER)
                         {
 				m_documentInterface->openHeader(propList);
-				if ((currentPage.getPageNumberPosition() >= PAGENUMBER_POSITION_TOP_LEFT &&
+				if (!currentPage.getPageNumberSuppression() && 
+				    ((currentPage.getPageNumberPosition() >= PAGENUMBER_POSITION_TOP_LEFT &&
 				     currentPage.getPageNumberPosition() <= PAGENUMBER_POSITION_TOP_LEFT_AND_RIGHT) ||
-				    currentPage.getPageNumberPosition() == PAGENUMBER_POSITION_TOP_INSIDE_LEFT_AND_RIGHT)
+				     currentPage.getPageNumberPosition() == PAGENUMBER_POSITION_TOP_INSIDE_LEFT_AND_RIGHT))
 					_insertPageNumberParagraph(currentPage.getPageNumberPosition());
                         }
 			else
@@ -397,7 +398,8 @@ void WPXContentListener::_openPageSpan()
 			else
                         {
 				if (currentPage.getPageNumberPosition() >= PAGENUMBER_POSITION_BOTTOM_LEFT &&
-				    currentPage.getPageNumberPosition() != PAGENUMBER_POSITION_TOP_INSIDE_LEFT_AND_RIGHT) 
+				    currentPage.getPageNumberPosition() != PAGENUMBER_POSITION_TOP_INSIDE_LEFT_AND_RIGHT &&
+				    !currentPage.getPageNumberSuppression()) 
 					_insertPageNumberParagraph(currentPage.getPageNumberPosition());
 				m_documentInterface->closeFooter(); 
                         }
@@ -407,7 +409,7 @@ void WPXContentListener::_openPageSpan()
 		}
 	}
 
-	if (!pageNumberInserted && currentPage.getPageNumberPosition() != PAGENUMBER_POSITION_NONE)
+	if (!pageNumberInserted && currentPage.getPageNumberPosition() != PAGENUMBER_POSITION_NONE && !currentPage.getPageNumberSuppression())
 	{
 		if (currentPage.getPageNumberPosition() >= PAGENUMBER_POSITION_BOTTOM_LEFT && 
 		    currentPage.getPageNumberPosition() != PAGENUMBER_POSITION_TOP_INSIDE_LEFT_AND_RIGHT)

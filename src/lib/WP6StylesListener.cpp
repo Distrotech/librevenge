@@ -215,6 +215,10 @@ void WP6StylesListener::suppressPageCharacteristics(const uint8_t suppressCode)
 	if (!isUndoOn()) 
 	{			
 		WPD_DEBUG_MSG(("WordPerfect: suppressPageCharacteristics (suppressCode: %u)\n", suppressCode));
+
+		if (suppressCode & WP6_PAGE_GROUP_SUPPRESS_PAGE_NUMBER)
+			m_currentPage.setPageNumberSuppression(true);
+
 		if (suppressCode & WP6_PAGE_GROUP_SUPPRESS_HEADER_A)
 			m_currentPage.setHeadFooterSuppression(WPX_HEADER_A, true);
 		if (suppressCode & WP6_PAGE_GROUP_SUPPRESS_HEADER_B)

@@ -80,6 +80,7 @@ WPXHeaderFooter::~WPXHeaderFooter()
 }
 
 WPXPageSpan::WPXPageSpan() :
+	m_isPageNumberSuppressed(false),
 	m_formLength(11.0),
 	m_formWidth(8.5f),
 	m_formOrientation(PORTRAIT),
@@ -96,6 +97,7 @@ WPXPageSpan::WPXPageSpan() :
 }
 
 WPXPageSpan::WPXPageSpan(const WPXPageSpan &page) :
+	m_isPageNumberSuppressed(page.getPageNumberSuppression()),
 	m_formLength(page.getFormLength()),
 	m_formWidth(page.getFormWidth()),
 	m_formOrientation(page.getFormOrientation()),
@@ -225,6 +227,9 @@ bool operator==(const WPXPageSpan &page1, const WPXPageSpan &page2)
 	if (page1.getPageNumberPosition() != page2.getPageNumberPosition()) 
 		return false;
 
+	if (page1.getPageNumberSuppression() != page2.getPageNumberSuppression())
+		return false;
+	
 	for (uint8_t i=0; i<WPX_NUM_HEADER_FOOTER_TYPES; i++) {
 		if (page1.getHeaderFooterSuppression(i) != page2.getHeaderFooterSuppression(i))
 			return false;
