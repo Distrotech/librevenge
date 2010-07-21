@@ -20,3 +20,4 @@ mkinstalldirs
 stamp-h1
 *.pc
 *.rc
+*~
