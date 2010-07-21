@@ -51,6 +51,8 @@ _WPXContentParsingState::_WPXContentParsingState() :
 	m_isParagraphOpened(false),
 	m_isListElementOpened(false),
 	
+	m_firstParagraphInPageSpan(true),
+
 	m_numRowsToSkip(),
 	m_tableDefinition(),
 	m_currentTableCol(0),
@@ -430,6 +432,9 @@ void WPXContentListener::_openPageSpan()
 		}
 	}
 
+	// first paragraph in span (necessary for resetting page number)
+	m_ps->m_firstParagraphInPageSpan = true;
+
 	/* Some of this would maybe not be necessary, but it does not do any harm 
 	 * and apparently solves some troubles */
 	m_ps->m_pageFormLength = currentPage.getFormLength();
@@ -489,6 +494,7 @@ void WPXContentListener::_openParagraph()
 			m_documentInterface->openParagraph(propList, tabStops);
 
 		_resetParagraphState();
+		m_ps->m_firstParagraphInPageSpan = false;			
 	}
 }
 
@@ -571,6 +577,19 @@ void WPXContentListener::_appendParagraphProperties(WPXPropertyList &propList, c
 	propList.insert("fo:margin-top", m_ps->m_paragraphMarginTop);
 	propList.insert("fo:margin-bottom", m_ps->m_paragraphMarginBottom);
 	propList.insert("fo:line-height", m_ps->m_paragraphLineSpacing, WPX_PERCENT);
+
+	if (m_ps->m_firstParagraphInPageSpan)
+	{
+		std::list<WPXPageSpan>::iterator currentPageSpanIter = m_pageList.begin();
+		for ( unsigned i = 0; i < (m_ps->m_currentPage - 1); i++ )
+			currentPageSpanIter++;
+
+		WPXPageSpan currentPage = (*currentPageSpanIter);
+		printf("CONSIDERING page override??? %d %d\n", currentPage.getPageNumberOverriden(), currentPage.getPageNumberOverride());
+		if (currentPage.getPageNumberOverriden())
+			propList.insert("style:page-number", currentPage.getPageNumberOverride());
+	}
+
 	_insertBreakIfNecessary(propList);
 }
 

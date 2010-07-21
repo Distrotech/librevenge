@@ -75,6 +75,8 @@ struct _WPXContentParsingState
 	bool m_isParagraphOpened;
 	bool m_isListElementOpened;
 
+	bool m_firstParagraphInPageSpan;
+
 	std::vector<unsigned int> m_numRowsToSkip;
 	WPXTableDefinition m_tableDefinition;
 	int m_currentTableCol;
@@ -118,7 +120,7 @@ struct _WPXContentParsingState
 	double m_leftMarginByParagraphMarginChange;  // part of the margin due to the PARAGRAPH
 	double m_rightMarginByParagraphMarginChange; // margin change (in WP6)
 	double m_leftMarginByTabs;  // part of the margin due to the LEFT or LEFT/RIGHT Indent; the
-	double m_rightMarginByTabs; // only part of the margin that is reset at the end of a paragraph
+	double m_rightMarginByTabs; // only part of the margin that is reset at the end of a paragraph	
 
 	double m_listReferencePosition; // position from the left page margin of the list number/bullet
 	double m_listBeginPosition; // position from the left page margin of the beginning of the list

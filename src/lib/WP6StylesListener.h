@@ -92,6 +92,8 @@ public:
 	void noteOff(const WPXNoteType /* noteType */) {}
 	void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, const uint16_t textPID);
 	void suppressPageCharacteristics(const uint8_t suppressCode);
+	void setPageNumber(const uint16_t pageNumber);
+
 	void endDocument();
 	void endSubDocument();
 

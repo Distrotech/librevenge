@@ -91,6 +91,7 @@ public:
 	virtual void noteOff(const WPXNoteType noteType) = 0;
 	virtual void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, const uint16_t textPID) = 0;
 	virtual void suppressPageCharacteristics(const uint8_t suppressCode) = 0;
+	virtual void setPageNumber(const uint16_t pageNumber) = 0;
 	virtual void endDocument() = 0;
 	virtual void endSubDocument() = 0;
  	virtual void defineTable(const uint8_t position, const uint16_t leftOffset) = 0;

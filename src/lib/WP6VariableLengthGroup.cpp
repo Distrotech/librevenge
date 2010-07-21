@@ -37,6 +37,7 @@
 #include "WP6TabGroup.h"
 #include "WP6BoxGroup.h"
 #include "WP6UnsupportedVariableLengthGroup.h"
+#include "WP6SetNumberGroup.h"
 
 #include "libwpd_internal.h"
 
@@ -62,6 +63,8 @@ WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(WP
 {
 	switch (groupID)
 	{
+	case WP6_TOP_SET_NUMBER_GROUP:
+		return new WP6SetNumberGroup(input, encryption);
 	case WP6_TOP_PAGE_GROUP:
 		return new WP6PageGroup(input, encryption);
 	case WP6_TOP_EOL_GROUP: 

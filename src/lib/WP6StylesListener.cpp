@@ -230,6 +230,14 @@ void WP6StylesListener::suppressPageCharacteristics(const uint8_t suppressCode)
 	}
 }
 
+void WP6StylesListener::setPageNumber(const uint16_t pageNumber)
+{
+	if (!isUndoOn()) 
+	{			
+		m_currentPage.setPageNumber(pageNumber);
+	}
+}
+
 void WP6StylesListener::defineTable(const uint8_t /* position */, const uint16_t /* leftOffset */)
 {
 	if (!isUndoOn()) 

@@ -200,6 +200,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP6PrefixData.cpp \
 	WP6PrefixIndice.cpp \
 	WP6PrefixDataPacket.cpp \
+	WP6SetNumberGroup.cpp \
 	WP6SingleByteFunction.cpp \
 	WP6StyleGroup.cpp \
 	WP6StylesListener.cpp \
