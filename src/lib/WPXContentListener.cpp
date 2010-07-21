@@ -585,7 +585,6 @@ void WPXContentListener::_appendParagraphProperties(WPXPropertyList &propList, c
 			currentPageSpanIter++;
 
 		WPXPageSpan currentPage = (*currentPageSpanIter);
-		printf("CONSIDERING page override??? %d %d\n", currentPage.getPageNumberOverriden(), currentPage.getPageNumberOverride());
 		if (currentPage.getPageNumberOverriden())
 			propList.insert("style:page-number", currentPage.getPageNumberOverride());
 	}
