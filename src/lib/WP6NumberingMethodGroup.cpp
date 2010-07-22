@@ -57,7 +57,6 @@ void WP6NumberingMethodGroup::parse(WP6Listener *listener)
 	switch (getSubGroup())
 	{
 	case WP6_NUMBERING_METHOD_GROUP_SET_PAGE_NUMBERING_MODE:
-		printf("Set page numbering mode: %d\n", m_numberingMethod);
 		switch (m_numberingMethod) 
 		{
 		case WP6_NUMBERING_METHOD_GROUP_PAGE_NUMBERING_LOWERCASE:

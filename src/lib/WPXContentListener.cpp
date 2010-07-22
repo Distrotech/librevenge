@@ -274,7 +274,6 @@ void WPXContentListener::_insertPageNumberParagraph(WPXPageNumberPosition positi
 	m_documentInterface->openParagraph(propList, WPXPropertyListVector());
 	propList.clear();
         propList.insert("style:num-format", _numberingTypeToString(numberingType));
-	printf("num-format: %d\n", numberingType);
 	m_documentInterface->insertPageNumber(propList);
 	m_documentInterface->closeParagraph();	
 }
@@ -581,10 +580,10 @@ void WPXContentListener::_appendParagraphProperties(WPXPropertyList &propList, c
 	propList.insert("fo:margin-bottom", m_ps->m_paragraphMarginBottom);
 	propList.insert("fo:line-height", m_ps->m_paragraphLineSpacing, WPX_PERCENT);
 
-	if (m_ps->m_firstParagraphInPageSpan)
+	if (!m_ps->m_inSubDocument && m_ps->m_firstParagraphInPageSpan)
 	{
 		std::list<WPXPageSpan>::iterator currentPageSpanIter = m_pageList.begin();
-		for ( unsigned i = 0; i < (m_ps->m_currentPage - 1); i++ )
+		for ( unsigned i = 0; i < (m_ps->m_currentPage - 1); i+=(*currentPageSpanIter).getPageSpan())
 			currentPageSpanIter++;
 
 		WPXPageSpan currentPage = (*currentPageSpanIter);
