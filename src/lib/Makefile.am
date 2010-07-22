@@ -192,6 +192,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP6HeaderFooterGroup.cpp \
 	WP6HighlightGroup.cpp \
 	WP6Listener.cpp \
+	WP6NumberingMethodGroup.cpp \
 	WP6Parser.cpp \
 	WP6OutlineStylePacket.cpp \
 	WP6PageGroup.cpp \

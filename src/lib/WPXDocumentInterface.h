@@ -238,6 +238,8 @@ class WPXDocumentInterface
 	
 	/**
 	Called when a page number field should be inserted
+	\param propList Defines a set of properties for the page number. May contain:
+	\li \c style:num-format Type of page number
 	*/
 	virtual void insertPageNumber(const WPXPropertyList &propList) = 0;
 

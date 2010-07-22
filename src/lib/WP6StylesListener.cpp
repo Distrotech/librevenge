@@ -238,6 +238,14 @@ void WP6StylesListener::setPageNumber(const uint16_t pageNumber)
 	}
 }
 
+void WP6StylesListener::setPageNumberingType(const WPXNumberingType pageNumberingType)
+{
+	if (!isUndoOn()) 
+	{			
+		m_currentPage.setPageNumberingType(pageNumberingType);
+	}
+}
+
 void WP6StylesListener::defineTable(const uint8_t /* position */, const uint16_t /* leftOffset */)
 {
 	if (!isUndoOn()) 

@@ -91,6 +91,7 @@ WPXPageSpan::WPXPageSpan() :
 	m_pageNumberPosition(PAGENUMBER_POSITION_NONE),
 	m_isPageNumberOverridden(false),
 	m_pageNumberOverride(0),
+	m_pageNumberingType(ARABIC),
 	m_headerFooterList(),
 	m_pageSpan(1)
 {
@@ -110,6 +111,7 @@ WPXPageSpan::WPXPageSpan(const WPXPageSpan &page) :
 	m_pageNumberPosition(page.getPageNumberPosition()),
 	m_isPageNumberOverridden(page.getPageNumberOverriden()),
 	m_pageNumberOverride(page.getPageNumberOverride()),
+	m_pageNumberingType(page.getPageNumberingType()),
 	m_headerFooterList(page.getHeaderFooterList()),
 	m_pageSpan(page.getPageSpan())
 {
@@ -130,6 +132,7 @@ WPXPageSpan::WPXPageSpan(const WPXPageSpan &page, double paragraphMarginLeft, do
 	m_pageNumberPosition(page.getPageNumberPosition()),
 	m_isPageNumberOverridden(false),
 	m_pageNumberOverride(0),
+	m_pageNumberingType(page.getPageNumberingType()),
 	m_headerFooterList(page.getHeaderFooterList()),
 	m_pageSpan(page.getPageSpan())
 {
@@ -238,6 +241,9 @@ bool operator==(const WPXPageSpan &page1, const WPXPageSpan &page2)
 	
         if (page1.getPageNumberOverriden() != page2.getPageNumberOverriden() || 
 	    page1.getPageNumberOverride() != page2.getPageNumberOverride())
+		return false;
+
+	if (page1.getPageNumberingType() != page2.getPageNumberingType())
 		return false;
 
 	for (uint8_t i=0; i<WPX_NUM_HEADER_FOOTER_TYPES; i++) {
