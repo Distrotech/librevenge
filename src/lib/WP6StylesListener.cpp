@@ -97,11 +97,20 @@ void WP6StylesListener::insertBreak(const uint8_t breakType)
 	}
 }
 
-void WP6StylesListener::pageNumberingChange(const WPXPageNumberPosition pageNumberingPosition) 
+void WP6StylesListener::pageNumberingChange(const WPXPageNumberPosition pageNumberingPosition, const uint16_t pageNumberFontPointSize, const uint16_t pageNumberFontPID)
 {
 	if (!isUndoOn()) 
 	{
 		m_currentPage.setPageNumberPosition(pageNumberingPosition);
+
+		if (pageNumberFontPID)
+		{
+			WPXString pidFontName = WP6Listener::getFontNameForPID(pageNumberFontPID);
+			if (!!pidFontName)
+				m_currentPage.setPageNumberingFontName(pidFontName);
+		}
+
+		m_currentPage.setPageNumberingFontSize(wpuToFontPointSize(pageNumberFontPointSize));
 	}
 }
 

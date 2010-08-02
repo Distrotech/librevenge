@@ -249,8 +249,7 @@ void WPXContentListener::_closeSection()
 	}
 }
 
-void WPXContentListener::_insertPageNumberParagraph(WPXPageNumberPosition position,
-                                                    WPXNumberingType numberingType) 
+void WPXContentListener::_insertPageNumberParagraph(WPXPageNumberPosition position, WPXNumberingType numberingType, WPXString fontName, float fontSize) 
 {
 	WPXPropertyList propList;
 	switch (position)
@@ -272,9 +271,20 @@ void WPXContentListener::_insertPageNumberParagraph(WPXPageNumberPosition positi
 	}
 
 	m_documentInterface->openParagraph(propList, WPXPropertyListVector());
+
+	propList.clear();
+	propList.insert("style:font-name", fontName.cstr());
+	propList.insert("fo:font-size", fontSize, WPX_POINT);
+	m_documentInterface->openSpan(propList);
+
+                
 	propList.clear();
         propList.insert("style:num-format", _numberingTypeToString(numberingType));
 	m_documentInterface->insertPageNumber(propList);
+
+	propList.clear();
+	m_documentInterface->closeSpan();
+
 	m_documentInterface->closeParagraph();	
 }
 
@@ -389,7 +399,8 @@ void WPXContentListener::_openPageSpan()
 				    ((currentPage.getPageNumberPosition() >= PAGENUMBER_POSITION_TOP_LEFT &&
 				     currentPage.getPageNumberPosition() <= PAGENUMBER_POSITION_TOP_LEFT_AND_RIGHT) ||
 				     currentPage.getPageNumberPosition() == PAGENUMBER_POSITION_TOP_INSIDE_LEFT_AND_RIGHT))
-					_insertPageNumberParagraph(currentPage.getPageNumberPosition(), currentPage.getPageNumberingType());
+					_insertPageNumberParagraph(currentPage.getPageNumberPosition(), currentPage.getPageNumberingType(), 
+								   currentPage.getPageNumberingFontName(), currentPage.getPageNumberingFontSize());
                         }
 			else
 				m_documentInterface->openFooter(propList);
@@ -404,7 +415,8 @@ void WPXContentListener::_openPageSpan()
 				if (currentPage.getPageNumberPosition() >= PAGENUMBER_POSITION_BOTTOM_LEFT &&
 				    currentPage.getPageNumberPosition() != PAGENUMBER_POSITION_TOP_INSIDE_LEFT_AND_RIGHT &&
 				    !currentPage.getPageNumberSuppression()) 
-					_insertPageNumberParagraph(currentPage.getPageNumberPosition(), currentPage.getPageNumberingType());
+					_insertPageNumberParagraph(currentPage.getPageNumberPosition(), currentPage.getPageNumberingType(), 
+								   currentPage.getPageNumberingFontName(), currentPage.getPageNumberingFontSize());
 				m_documentInterface->closeFooter(); 
                         }
 
@@ -421,7 +433,8 @@ void WPXContentListener::_openPageSpan()
 			propList.clear();
 			propList.insert("libwpd:occurence", "all");
 			m_documentInterface->openFooter(propList);
-			_insertPageNumberParagraph(currentPage.getPageNumberPosition(), currentPage.getPageNumberingType());
+			_insertPageNumberParagraph(currentPage.getPageNumberPosition(), currentPage.getPageNumberingType(), 
+						   currentPage.getPageNumberingFontName(), currentPage.getPageNumberingFontSize());
 			m_documentInterface->closeFooter(); 
 		}
 		else
@@ -429,7 +442,8 @@ void WPXContentListener::_openPageSpan()
 			propList.clear();
 			propList.insert("libwpd:occurence", "all");
 			m_documentInterface->openHeader(propList);
-			_insertPageNumberParagraph(currentPage.getPageNumberPosition(), currentPage.getPageNumberingType());
+			_insertPageNumberParagraph(currentPage.getPageNumberPosition(), currentPage.getPageNumberingType(), 
+						   currentPage.getPageNumberingFontName(), currentPage.getPageNumberingFontSize());
 			m_documentInterface->closeHeader(); 
 		}
 	}

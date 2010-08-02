@@ -79,6 +79,8 @@ public:
 	bool getPageNumberOverriden() const { return m_isPageNumberOverridden; }
 	int getPageNumberOverride() const { return m_pageNumberOverride; }
         WPXNumberingType getPageNumberingType() const { return m_pageNumberingType; }
+        double getPageNumberingFontSize() const { return m_pageNumberingFontSize; }
+        WPXString getPageNumberingFontName() const { return m_pageNumberingFontName; }
 	int getPageSpan() const { return m_pageSpan; }
 	const std::vector<WPXHeaderFooter> & getHeaderFooterList() const { return m_headerFooterList; }
 
@@ -96,6 +98,8 @@ public:
 	void setPageNumberPosition(const WPXPageNumberPosition pageNumberPosition) { m_pageNumberPosition = pageNumberPosition; }
 	void setPageNumber(const int pageNumberOverride) { m_pageNumberOverride = pageNumberOverride; m_isPageNumberOverridden = true; } 
 	void setPageNumberingType(const WPXNumberingType pageNumberingType) { m_pageNumberingType = pageNumberingType; }
+        void setPageNumberingFontSize(const double pageNumberingFontSize) { m_pageNumberingFontSize = pageNumberingFontSize; }
+        void setPageNumberingFontName(const WPXString &pageNumberingFontName) { m_pageNumberingFontName = pageNumberingFontName; }
         void setPageSpan(const int pageSpan) { m_pageSpan = pageSpan; }
 	
 	void makeConsistent(int startingPageNumber);
@@ -115,6 +119,8 @@ private:
 	bool m_isPageNumberOverridden;
 	int m_pageNumberOverride;
         WPXNumberingType m_pageNumberingType;
+	WPXString m_pageNumberingFontName;
+	double m_pageNumberingFontSize;
 	std::vector<WPXHeaderFooter> m_headerFooterList;
 
 	int m_pageSpan;

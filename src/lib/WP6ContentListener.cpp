@@ -703,7 +703,7 @@ void WP6ContentListener::fontChange(const uint16_t matchedFontPointSize, const u
 		_closeSpan();
 		if (matchedFontPointSize)
 		{
-			m_ps->m_fontSize = (double)rint((double)((((double)matchedFontPointSize)/100.0)*2.0));
+			m_ps->m_fontSize = wpuToFontPointSize(matchedFontPointSize);
 			// We compute the real space after paragraph in inches using the size of the font and relative spacing.
 			// We have to recompute this every change of fontSize.
 			m_ps->m_paragraphMarginBottom =
@@ -712,10 +712,9 @@ void WP6ContentListener::fontChange(const uint16_t matchedFontPointSize, const u
 		}
 		if (fontPID)
 		{
-			const WP6FontDescriptorPacket *fontDescriptorPacket = 
-				dynamic_cast<const WP6FontDescriptorPacket *>(WP6Listener::getPrefixDataPacket(fontPID));
-			if (fontDescriptorPacket)
-				*(m_ps->m_fontName) = fontDescriptorPacket->getFontName();
+			WPXString pidFontName = WP6Listener::getFontNameForPID(fontPID);
+			if (!!pidFontName)
+				*(m_ps->m_fontName) = pidFontName;
 		}
 		else if (fontName.len())
 			*(m_ps->m_fontName) = fontName;

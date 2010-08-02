@@ -92,6 +92,8 @@ WPXPageSpan::WPXPageSpan() :
 	m_isPageNumberOverridden(false),
 	m_pageNumberOverride(0),
 	m_pageNumberingType(ARABIC),
+	m_pageNumberingFontName(/*WP6_DEFAULT_FONT_NAME*/"Times New Roman"), // EN PAS DEFAULT FONT AAN VOOR WP5/6/etc
+	m_pageNumberingFontSize(12.0/*WP6_DEFAULT_FONT_SIZE*/), // FIXME ME!!!!!!!!!!!!!!!!!!! HELP WP6_DEFAULT_FONT_SIZE
 	m_headerFooterList(),
 	m_pageSpan(1)
 {
@@ -112,6 +114,8 @@ WPXPageSpan::WPXPageSpan(const WPXPageSpan &page) :
 	m_isPageNumberOverridden(page.getPageNumberOverriden()),
 	m_pageNumberOverride(page.getPageNumberOverride()),
 	m_pageNumberingType(page.getPageNumberingType()),
+	m_pageNumberingFontName(page.getPageNumberingFontName()),
+	m_pageNumberingFontSize(page.getPageNumberingFontSize()),
 	m_headerFooterList(page.getHeaderFooterList()),
 	m_pageSpan(page.getPageSpan())
 {
@@ -133,6 +137,8 @@ WPXPageSpan::WPXPageSpan(const WPXPageSpan &page, double paragraphMarginLeft, do
 	m_isPageNumberOverridden(false),
 	m_pageNumberOverride(0),
 	m_pageNumberingType(page.getPageNumberingType()),
+	m_pageNumberingFontName(page.getPageNumberingFontName()),
+	m_pageNumberingFontSize(page.getPageNumberingFontSize()),
 	m_headerFooterList(page.getHeaderFooterList()),
 	m_pageSpan(page.getPageSpan())
 {
@@ -244,6 +250,10 @@ bool operator==(const WPXPageSpan &page1, const WPXPageSpan &page2)
 		return false;
 
 	if (page1.getPageNumberingType() != page2.getPageNumberingType())
+		return false;
+
+	if (page1.getPageNumberingFontName() != page2.getPageNumberingFontName() ||
+	    page1.getPageNumberingFontSize() != page2.getPageNumberingFontSize())
 		return false;
 
 	for (uint8_t i=0; i<WPX_NUM_HEADER_FOOTER_TYPES; i++) {

@@ -935,7 +935,12 @@ double fixedPointToDouble(const uint32_t fixedPointNumber)
 	int16_t fixedPointNumberIntegerPart = (int16_t)((fixedPointNumber & 0xFFFF0000) >> 16);
 	double fixedPointNumberFractionalPart = (double)((double)(fixedPointNumber & 0x0000FFFF)/(double)0xFFFF);
 	return ((double)fixedPointNumberIntegerPart + fixedPointNumberFractionalPart);
-}	
+}
+
+double wpuToFontPointSize(const uint16_t wpuNumber)
+{
+    return (double)rint((double)((((double)wpuNumber)/100.0)*2.0));
+}
 
 _RGBSColor::_RGBSColor(uint8_t r, uint8_t g, uint8_t b, uint8_t s)
 	:	m_r(r),

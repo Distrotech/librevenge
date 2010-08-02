@@ -71,7 +71,7 @@ public:
 	virtual void spacingAfterParagraphChange(const double spacingRelative, const double spacingAbsolute) = 0;
 	virtual void pageMarginChange(const uint8_t side, const uint16_t margin) = 0;
 	virtual void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation) = 0;
-	virtual void pageNumberingChange(const WPXPageNumberPosition pageNumberPosition) = 0;
+	virtual void pageNumberingChange(const WPXPageNumberPosition pageNumberPosition, const uint16_t pageNumberFontPointSize, const uint16_t pageNumberFontPID) = 0;
 	virtual void marginChange(const uint8_t side, const uint16_t margin) = 0;
 	virtual void paragraphMarginChange(const uint8_t side, const int16_t margin) = 0;
 	virtual void indentFirstLineChange(const int16_t offset) = 0;
@@ -119,6 +119,7 @@ public:
 
 	void setPrefixData(WP6PrefixData *prefixData) { m_prefixData = prefixData; }
 	const WP6PrefixDataPacket * getPrefixDataPacket(const int prefixID) const;
+        WPXString getFontNameForPID(const int prefixID) const;
 		
 private:
 	WP6Listener(const WP6Listener&);

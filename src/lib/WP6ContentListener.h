@@ -163,7 +163,7 @@ public:
 	void fontChange(const uint16_t matchedFontPointSize, const uint16_t fontPID, const WPXString &fontName);
  	void attributeChange(const bool isOn, const uint8_t attribute);
 	void spacingAfterParagraphChange(const double spacingRelative, const double spacingAbsolute);
-	void pageNumberingChange(const WPXPageNumberPosition /* page numbering position */) {}
+	void pageNumberingChange(const WPXPageNumberPosition /* page numbering position */, const uint16_t /* matchedFontPointSize */, const uint16_t /* fontPID */) {}
 	void pageMarginChange(const uint8_t /* side */, const uint16_t /* margin */) {}
 	void pageFormChange(const uint16_t /* length */, const uint16_t /* width */, const WPXFormOrientation /* orientation */) {}
 	void marginChange(const uint8_t side, const uint16_t margin);

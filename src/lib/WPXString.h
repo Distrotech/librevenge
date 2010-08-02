@@ -50,6 +50,7 @@ public:
 	WPXString& operator=(const char *s);
 	bool operator==(const char *s) const;
 	bool operator==(const WPXString &str) const;
+        bool operator!() const;
 	inline bool operator!=(const char *s) const { return !operator==(s); }
 	inline bool operator!=(const WPXString &str) const { return !operator==(str); }
 

@@ -205,7 +205,7 @@ protected:
 	
 	void _insertBreakIfNecessary(WPXPropertyList &propList);
 	
-	void _insertPageNumberParagraph(WPXPageNumberPosition position, WPXNumberingType type);
+	void _insertPageNumberParagraph(WPXPageNumberPosition position, WPXNumberingType type, WPXString fontName, float fontSize);
 
 	uint16_t _mapNonUnicodeCharacter(uint16_t character);
 	

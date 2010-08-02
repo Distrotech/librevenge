@@ -113,7 +113,10 @@ void WP6PageGroup::parse(WP6Listener *listener)
 	switch (getSubGroup())
 	{
         case WP6_PAGE_GROUP_PAGE_NUMBER_POSITION:
-		listener->pageNumberingChange((WPXPageNumberPosition)m_pageNumberPosition);
+		if (m_pageNumberUseFlag == 0 || !getNumPrefixIDs())
+			listener->pageNumberingChange((WPXPageNumberPosition)m_pageNumberPosition, 0, 0);
+		else
+			listener->pageNumberingChange((WPXPageNumberPosition)m_pageNumberPosition, m_pageNumberMatchedFontPointSize, getPrefixIDs()[0]);
 		break;
 	case WP6_PAGE_GROUP_TOP_MARGIN_SET:
 		listener->pageMarginChange(WPX_TOP, m_margin);

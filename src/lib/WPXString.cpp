@@ -220,6 +220,11 @@ bool WPXString::operator==(const WPXString &str) const
 	return (m_stringImpl->m_buf == str.m_stringImpl->m_buf);
 }
 
+bool WPXString::operator!() const 
+{
+	return (m_stringImpl->m_buf.length() == 0);
+}
+
 WPXString::Iter::Iter(const WPXString &str) :
 	m_stringImpl(new WPXStringImpl),
 	m_pos(0),
