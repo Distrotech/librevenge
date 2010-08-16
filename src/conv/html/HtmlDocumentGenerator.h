@@ -65,7 +65,7 @@ public:
 	virtual void insertTab();
 	virtual void insertText(const WPXString &text);
 	virtual void insertLineBreak();
-	virtual void insertPageNumber(const WPXPropertyList &propList) {}
+	virtual void insertField(const WPXString &type, const WPXPropertyList &propList) {}
 
 	virtual void defineOrderedListLevel(const WPXPropertyList & /* propList */) {}
 	virtual void defineUnorderedListLevel(const WPXPropertyList & /* propList */) {}

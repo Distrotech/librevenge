@@ -1059,6 +1059,10 @@ void WP6ContentListener::displayNumberReferenceGroupOn(const uint8_t subGroup, c
 		case WP6_DISPLAY_NUMBER_REFERENCE_GROUP_ENDNOTE_NUMBER_DISPLAY_ON:
 			m_parseState->m_styleStateSequence.setCurrentState(DISPLAY_REFERENCING);
 			break;
+		case WP6_DISPLAY_NUMBER_REFERENCE_GROUP_PAGE_NUMBER_DISPLAY_ON:
+		case WP6_DISPLAY_NUMBER_REFERENCE_GROUP_TOTAL_NUMBER_OF_PAGES_DISPLAY_ON:
+			m_parseState->m_styleStateSequence.setCurrentState(DISPLAY_REFERENCING);
+			break;
 		}
 	}
 }
@@ -1086,6 +1090,22 @@ void WP6ContentListener::displayNumberReferenceGroupOff(const uint8_t subGroup)
 			break;
 		case WP6_DISPLAY_NUMBER_REFERENCE_GROUP_FOOTNOTE_NUMBER_DISPLAY_OFF:
 		case WP6_DISPLAY_NUMBER_REFERENCE_GROUP_ENDNOTE_NUMBER_DISPLAY_OFF:
+			m_parseState->m_styleStateSequence.setCurrentState(m_parseState->m_styleStateSequence.getPreviousState());
+			break;
+		case WP6_DISPLAY_NUMBER_REFERENCE_GROUP_PAGE_NUMBER_DISPLAY_OFF:
+		case WP6_DISPLAY_NUMBER_REFERENCE_GROUP_TOTAL_NUMBER_OF_PAGES_DISPLAY_OFF:
+			m_parseState->m_numberText.clear();
+			_flushText();
+			_openSpan();
+			WPXPropertyList propList;
+			if (subGroup == WP6_DISPLAY_NUMBER_REFERENCE_GROUP_PAGE_NUMBER_DISPLAY_OFF) 
+			{
+				m_documentInterface->insertField(WPXString("text:page-number"), propList);
+			}
+			else // WP6_DISPLAY_NUMBER_REFERENCE_GROUP_TOTAL_NUMBER_OF_PAGES_DISPLAY_OFF
+			{
+				m_documentInterface->insertField(WPXString("text:page-count"), propList);
+			}
 			m_parseState->m_styleStateSequence.setCurrentState(m_parseState->m_styleStateSequence.getPreviousState());
 			break;
 		}

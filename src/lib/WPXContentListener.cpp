@@ -280,7 +280,7 @@ void WPXContentListener::_insertPageNumberParagraph(WPXPageNumberPosition positi
                 
 	propList.clear();
         propList.insert("style:num-format", _numberingTypeToString(numberingType));
-	m_documentInterface->insertPageNumber(propList);
+	m_documentInterface->insertField(WPXString("text:page-number"), propList);
 
 	propList.clear();
 	m_documentInterface->closeSpan();

@@ -237,11 +237,13 @@ class WPXDocumentInterface
  	virtual void insertLineBreak() = 0;
 	
 	/**
-	Called when a page number field should be inserted
-	\param propList Defines a set of properties for the page number. May contain:
-	\li \c style:num-format Type of page number
+	Called when a field should be inserted. Field types may include:
+	\li \c text:page-number Current page number
+	\li \c text:page-count Total # of pages in document
+	\param propList Defines a set of properties for the field. May contain:
+	\li \c style:num-format Type of page number (for page number)
 	*/
-	virtual void insertPageNumber(const WPXPropertyList &propList) = 0;
+	virtual void insertField(const WPXString &type, const WPXPropertyList &propList) = 0;
 
 	/**
 	Defines an ordered (enumerated) list level

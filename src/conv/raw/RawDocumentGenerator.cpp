@@ -275,9 +275,9 @@ void RawDocumentGenerator::insertLineBreak()
 	__iprintf("insertLineBreak()\n");
 }
 
-void RawDocumentGenerator::insertPageNumber(const WPXPropertyList &propList)
+void RawDocumentGenerator::insertField(const WPXString &type, const WPXPropertyList &propList)
 {
-	__iprintf("insertPageNumber(%s)\n", getPropString(propList).cstr());
+	__iprintf("insertField(%s:%s)\n", type.cstr(), getPropString(propList).cstr());
 }
 
 void RawDocumentGenerator::defineOrderedListLevel(const WPXPropertyList &propList)
