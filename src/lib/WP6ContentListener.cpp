@@ -140,7 +140,9 @@ _WP6ContentParsingState::_WP6ContentParsingState(WPXTableList tableList, int nex
 	m_leaderNumSpaces(0),
 
 	m_tempTabStops(),
-	m_tempUsePreWP9LeaderMethod()
+	m_tempUsePreWP9LeaderMethod(),
+
+	m_currentPageNumberingType(ARABIC)
 
 {
 }
@@ -1097,7 +1099,11 @@ void WP6ContentListener::displayNumberReferenceGroupOff(const uint8_t subGroup)
 			m_parseState->m_numberText.clear();
 			_flushText();
 			_openSpan();
+			// in theory the page numbering type should only apply to thepage number itself, however, I can't think of a case where you'd
+			// want the total num of pages to be in a different format plus I don't see a way of changing that. so...
 			WPXPropertyList propList;
+			propList.insert("style:num-format", _numberingTypeToString(m_parseState->m_currentPageNumberingType));
+
 			if (subGroup == WP6_DISPLAY_NUMBER_REFERENCE_GROUP_PAGE_NUMBER_DISPLAY_OFF) 
 			{
 				m_documentInterface->insertField(WPXString("text:page-number"), propList);
@@ -1244,6 +1250,14 @@ void WP6ContentListener::noteOff(const WPXNoteType noteType)
 			m_documentInterface->closeEndnote();
 		m_ps->m_isNote = false;
 		m_parseState->m_numNestedNotes = 0;
+	}
+}
+
+void WP6ContentListener::setPageNumberingType(const WPXNumberingType pageNumberingType)
+{
+	if (!isUndoOn()) 
+	{
+		m_parseState->m_currentPageNumberingType = pageNumberingType;
 	}
 }
 

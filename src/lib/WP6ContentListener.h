@@ -104,6 +104,9 @@ struct _WP6ContentParsingState
 	uint8_t m_leaderNumSpaces;
 	std::vector<WPXTabStop> m_tempTabStops;
 	std::vector<bool> m_tempUsePreWP9LeaderMethod;
+
+	WPXNumberingType m_currentPageNumberingType;
+
 private:
 	_WP6ContentParsingState(const _WP6ContentParsingState&);
 	_WP6ContentParsingState& operator=(const _WP6ContentParsingState&);
@@ -187,7 +190,7 @@ public:
 	void headerFooterGroup(const uint8_t /* headerFooterType */, const uint8_t /* occurenceBits */, const uint16_t /* textPID */) {}
 	void suppressPageCharacteristics(const uint8_t /* suppressCode */) {}
 	void setPageNumber(const uint16_t pageNumber) {}
-        void setPageNumberingType(const WPXNumberingType pageNumberingType) {}
+        void setPageNumberingType(const WPXNumberingType pageNumberingType);
 	void endDocument() { WPXContentListener::endDocument(); };
 	void endSubDocument() { WPXContentListener::endSubDocument(); };
 
