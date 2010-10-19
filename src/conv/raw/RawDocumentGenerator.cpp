@@ -277,7 +277,7 @@ void RawDocumentGenerator::insertLineBreak()
 
 void RawDocumentGenerator::insertField(const WPXString &type, const WPXPropertyList &propList)
 {
-	__iprintf("insertField(%s:%s)\n", type.cstr(), getPropString(propList).cstr());
+	__iprintf("insertField(type: %s, %s)\n", type.cstr(), getPropString(propList).cstr());
 }
 
 void RawDocumentGenerator::defineOrderedListLevel(const WPXPropertyList &propList)
