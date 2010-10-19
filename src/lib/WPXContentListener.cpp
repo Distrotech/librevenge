@@ -249,7 +249,7 @@ void WPXContentListener::_closeSection()
 	}
 }
 
-void WPXContentListener::_insertPageNumberParagraph(WPXPageNumberPosition position, WPXNumberingType numberingType, WPXString fontName, float fontSize) 
+void WPXContentListener::_insertPageNumberParagraph(WPXPageNumberPosition position, WPXNumberingType numberingType, WPXString fontName, double fontSize) 
 {
 	WPXPropertyList propList;
 	switch (position)
