@@ -76,12 +76,6 @@ WPXString::WPXString() :
 	m_stringImpl->m_buf.reserve(FIRST_BUF_SIZE);
 }
 
-WPXString::WPXString(const WPXString &stringBuf) :
-	m_stringImpl(new WPXStringImpl)
-{
-	m_stringImpl->m_buf = stringBuf.m_stringImpl->m_buf;
-}
-
 WPXString::WPXString(const WPXString &stringBuf, bool escapeXML) :
 	m_stringImpl(new WPXStringImpl) 
 {

@@ -33,8 +33,7 @@ class WPXString
 {
 public:
 	WPXString();
-	WPXString(const WPXString &);
-	WPXString(const WPXString &, bool escapeXML);
+	WPXString(const WPXString &, bool escapeXML = false);
 	WPXString(const char *str);
 	~WPXString();
 
