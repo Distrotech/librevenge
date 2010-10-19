@@ -126,6 +126,7 @@ WPXPageSpan::WPXPageSpan(const WPXPageSpan &page) :
 // NB: this is not a literal "clone" function: it is contingent on the side margins that are passed,
 // and suppression and override variables are not copied
 WPXPageSpan::WPXPageSpan(const WPXPageSpan &page, double paragraphMarginLeft, double paragraphMarginRight) :
+	m_isPageNumberSuppressed(false),
 	m_formLength(page.getFormLength()),
 	m_formWidth(page.getFormWidth()),
 	m_formOrientation(page.getFormOrientation()),
