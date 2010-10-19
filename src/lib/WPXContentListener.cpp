@@ -319,8 +319,7 @@ void WPXContentListener::_openPageSpan()
 		currentPageSpanIter++;
 
 	WPXPageSpan currentPage = (*currentPageSpanIter);
-	currentPage.makeConsistent(1);
-	
+
 	WPXPropertyList propList;
 	propList.insert("libwpd:num-pages", currentPage.getPageSpan());
 

@@ -191,18 +191,6 @@ void WPXPageSpan::setHeaderFooter(const WPXHeaderFooterType type, const uint8_t 
 	}
 }
 
-// makeConsistent: post-process page spans (i.e.: save this until all page spans are fully parsed)
-// since this is a span, not an individuated page, we have to swap header/footer odd/even paramaters
-// if we're not starting on an odd page
-// ALSO: add a left/right footer to the page, if we have one but not the other (post-processing step)
-void WPXPageSpan::makeConsistent(int startingPageNumber)
-{
-	if (!(startingPageNumber % 2))
-	{
-	// not sure whether this has any use (Fridrich) ?
-	}
-}
-
 void WPXPageSpan::_removeHeaderFooter(WPXHeaderFooterType type, WPXHeaderFooterOccurence occurence)
 {
 	for (std::vector<WPXHeaderFooter>::iterator iter = m_headerFooterList.begin(); iter != m_headerFooterList.end(); iter++) 

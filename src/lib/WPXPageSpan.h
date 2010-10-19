@@ -102,8 +102,6 @@ public:
         void setPageNumberingFontName(const WPXString &pageNumberingFontName) { m_pageNumberingFontName = pageNumberingFontName; }
         void setPageSpan(const int pageSpan) { m_pageSpan = pageSpan; }
 	
-	void makeConsistent(int startingPageNumber);
-	
 protected:
 	void _removeHeaderFooter(WPXHeaderFooterType type, WPXHeaderFooterOccurence occurence);
 	bool _containsHeaderFooter(WPXHeaderFooterType type, WPXHeaderFooterOccurence occurence);
