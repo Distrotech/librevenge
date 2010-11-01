@@ -199,7 +199,6 @@ void WP42ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, 
 
 void WP42ContentListener::_flushText()
 {
-	if (m_parseState->m_textBuffer.len())
-		m_documentInterface->insertText(m_parseState->m_textBuffer);
+	_insertText(m_parseState->m_textBuffer);
 	m_parseState->m_textBuffer.clear();
 }

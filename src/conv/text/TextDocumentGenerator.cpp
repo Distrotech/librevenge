@@ -70,6 +70,13 @@ void TextDocumentGenerator::insertText(const WPXString &text)
 	printf("%s", text.cstr());
 }
 
+void TextDocumentGenerator::insertSpace()
+{
+	if (m_isInfo)
+		return;
+	printf(" ");
+}
+
 void TextDocumentGenerator::insertLineBreak()
 {
 	if (m_isInfo)

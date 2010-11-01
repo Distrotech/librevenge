@@ -1803,31 +1803,31 @@ void WP6ContentListener::_flushText()
 	
 	if (m_parseState->m_textBeforeNumber.len())
 	{
-		m_documentInterface->insertText(m_parseState->m_textBeforeNumber);
+		_insertText(m_parseState->m_textBeforeNumber);
 		m_parseState->m_textBeforeNumber.clear();
 	}
 	
 	if (m_parseState->m_textBeforeDisplayReference.len())
 	{
-		m_documentInterface->insertText(m_parseState->m_textBeforeDisplayReference);
+            	_insertText(m_parseState->m_textBeforeDisplayReference);
 		m_parseState->m_textBeforeDisplayReference.clear();
 	}
 	
 	if (m_parseState->m_numberText.len())
 	{
-		m_documentInterface->insertText(m_parseState->m_numberText);
+		_insertText(m_parseState->m_numberText);
 		m_parseState->m_numberText.clear();
 	}
 	
 	if (m_parseState->m_textAfterDisplayReference.len())
 	{
-		m_documentInterface->insertText(m_parseState->m_textAfterDisplayReference);
+		_insertText(m_parseState->m_textAfterDisplayReference);
 		m_parseState->m_textAfterDisplayReference.clear();
 	}
 	
 	if (m_parseState->m_textAfterNumber.len())
 	{
-		m_documentInterface->insertText(m_parseState->m_textAfterNumber);
+		_insertText(m_parseState->m_textAfterNumber);
 		m_parseState->m_textAfterNumber.clear();
 	}
 	
@@ -1840,7 +1840,7 @@ void WP6ContentListener::_flushText()
 
 	if (m_parseState->m_bodyText.len())
 	{
-		m_documentInterface->insertText(m_parseState->m_bodyText);
+		_insertText(m_parseState->m_bodyText);
 		m_parseState->m_bodyText.clear();
 	}
 	

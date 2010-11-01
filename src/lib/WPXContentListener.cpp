@@ -613,6 +613,42 @@ void WPXContentListener::_appendParagraphProperties(WPXPropertyList &propList, c
 	_insertBreakIfNecessary(propList);
 }
 
+void WPXContentListener::_insertText(const WPXString &textBuffer)
+{
+	if (textBuffer.len() <= 0)
+		return;
+        
+	WPXString tmpText;
+	const char ASCII_SPACE = 0x0020;
+
+	int numConsecutiveSpaces = 0;
+        WPXString::Iter i(textBuffer);
+	for (i.rewind(); i.next();) 
+        {
+		if (*(i()) == ASCII_SPACE)
+			numConsecutiveSpaces++;
+		else
+			numConsecutiveSpaces = 0;
+
+		if (numConsecutiveSpaces > 1) 
+		{
+			if (tmpText.len() > 0) 
+			{
+				m_documentInterface->insertText(tmpText);
+				tmpText.clear();
+			}
+
+			m_documentInterface->insertSpace();
+		}
+		else 
+		{
+                        tmpText.append(i());
+		}
+	}
+
+	m_documentInterface->insertText(tmpText);
+}
+
 void WPXContentListener::_insertBreakIfNecessary(WPXPropertyList &propList)
 {
 	if (m_ps->m_isParagraphPageBreak && !m_ps->m_inSubDocument) // no hard page-breaks in subdocuments

@@ -265,6 +265,11 @@ void RawDocumentGenerator::insertTab()
 	__iprintf("insertTab()\n");
 }
 
+void RawDocumentGenerator::insertSpace()
+{
+	__iprintf("insertSpace()\n");
+}
+
 void RawDocumentGenerator::insertText(const WPXString &text)
 {
 	__iprintf("insertText(text: %s)\n", text.cstr());

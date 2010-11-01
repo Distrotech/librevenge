@@ -221,6 +221,14 @@ void HtmlDocumentGenerator::insertText(const WPXString &text)
 	}
 }
 
+void HtmlDocumentGenerator::insertSpace()
+{
+	if (!m_ignore)
+	{
+            *m_pOutputStream << "&nbsp;";
+        }
+}
+
 void HtmlDocumentGenerator::openOrderedListLevel(const WPXPropertyList & /* propList */)
 {
 	if (!m_ignore)

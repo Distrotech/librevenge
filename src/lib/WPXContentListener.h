@@ -203,6 +203,8 @@ protected:
 	double _getNextTabStop() const;
 	double _getPreviousTabStop() const;
 	
+        void _insertText(const WPXString &textBuffer);
+
 	void _insertBreakIfNecessary(WPXPropertyList &propList);
 	
 	void _insertPageNumberParagraph(WPXPageNumberPosition position, WPXNumberingType type, WPXString fontName, double fontSize);

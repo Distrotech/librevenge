@@ -227,6 +227,10 @@ class WPXDocumentInterface
 	*/
 	virtual void insertTab() = 0;
 	/**
+	Called when an explicit space should be inserted
+	*/
+	virtual void insertSpace() = 0;
+	/**
 	Called when a string of text should be inserted
 	\param text A textbuffer encoded as a UTF8 string
 	*/
