@@ -150,6 +150,7 @@ SLOFILES= \
 	$(SLO)$/WP6HeaderFooterGroup.obj \
 	$(SLO)$/WP6HighlightGroup.obj \
 	$(SLO)$/WP6Listener.obj \
+	$(SLO)$/WP6NumberingMethodGroup.obj \
 	$(SLO)$/WP6OutlineStylePacket.obj \
 	$(SLO)$/WP6PageGroup.obj \
 	$(SLO)$/WP6ParagraphGroup.obj \
@@ -158,6 +159,7 @@ SLOFILES= \
 	$(SLO)$/WP6PrefixData.obj \
 	$(SLO)$/WP6PrefixDataPacket.obj \
 	$(SLO)$/WP6PrefixIndice.obj \
+	$(SLO)$/WP6SetNumberGroup.obj \
 	$(SLO)$/WP6SingleByteFunction.obj \
 	$(SLO)$/WP6StyleGroup.obj \
 	$(SLO)$/WP6StylesListener.obj \
