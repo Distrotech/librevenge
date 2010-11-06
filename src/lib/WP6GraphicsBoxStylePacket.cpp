@@ -243,8 +243,8 @@ void WP6GraphicsBoxStylePacket::_readContents(WPXInputStream *input, WPXEncrypti
 	
 	// Dumping hexadecimally the rest of the packet
 	
-	unsigned tmpCurrentPosition = input->tell();
-	if (tmpStartOfBoxData + tmpSizeOfBoxData - tmpCurrentPosition < 0)
+	long tmpCurrentPosition = input->tell();
+	if ((long)tmpStartOfBoxData + (long)tmpSizeOfBoxData - tmpCurrentPosition < 0)
 		throw FileException();
 
 #ifdef DEBUG

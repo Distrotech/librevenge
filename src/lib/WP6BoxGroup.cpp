@@ -74,7 +74,7 @@ void WP6BoxGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption
 			{
 				long tmpEndOfData = readU16(input, encryption) + input->tell();
 #ifdef DEBUG
-				uint16_t tmpOverrideFlags = readU16(input, encryption);
+				tmpOverrideFlags = readU16(input, encryption);
 #else
 				readU16(input, encryption);
 #endif
@@ -85,7 +85,7 @@ void WP6BoxGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption
 			{
 				long tmpEndOfData = readU16(input, encryption) + input->tell();
 
-				uint16_t tmpOverrideFlags = readU16(input, encryption);
+				tmpOverrideFlags = readU16(input, encryption);
 
 				if (tmpOverrideFlags & 0x8000)
 					input->seek(2, WPX_SEEK_CUR);
@@ -144,7 +144,7 @@ void WP6BoxGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption
 			{
 				long tmpEndOfData = readU16(input, encryption) + input->tell();
 
-				uint16_t tmpOverrideFlags = readU16(input, encryption);
+				tmpOverrideFlags = readU16(input, encryption);
 
 				if (tmpOverrideFlags & 0x8000)
 					input->seek(2, WPX_SEEK_CUR);

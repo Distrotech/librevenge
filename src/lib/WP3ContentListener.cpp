@@ -817,11 +817,9 @@ void WP3ContentListener::insertTextBox(double height, double width, double verti
 		m_documentInterface->openFrame(propList);
 		
 		propList.clear();
-		propList.insert("libwpd:mimetype", "image/pict");
 
 		if (subDocument || caption)
 		{
-			WPXPropertyList propList;
 			m_documentInterface->openTextBox(propList);
 		
 			// Positioned objects like text boxes are special beasts. They can contain all hierarchical elements up
@@ -854,7 +852,6 @@ void WP3ContentListener::insertWP51Table(double height, double width, double ver
 
 		if (subDocument || caption)
 		{
-			WPXPropertyList propList;
 			m_documentInterface->openTextBox(propList);
 		
 			// Positioned objects like text boxes are special beasts. They can contain all hierarchical elements up

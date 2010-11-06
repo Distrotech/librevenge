@@ -68,7 +68,7 @@ public:
 	void centerOff() {}
 	void endDocument();
 	void endSubDocument();
-	void insertPicture(uint16_t width, uint16_t height, const WPXBinaryData &binaryData) {}
+	void insertPicture(uint16_t /* width */, uint16_t /* height */, const WPXBinaryData & /* binaryData */) {}
 
 protected:
 	void _handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList, int nextTableIndice = 0);
