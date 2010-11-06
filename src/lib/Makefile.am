@@ -363,6 +363,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP6HeaderFooterGroup.h \
 	WP6HighlightGroup.h \
 	WP6Listener.h \
+	WP6NumberingMethodGroup.h \
 	WP6OutlineStylePacket.h \
 	WP6PageGroup.h \
 	WP6ParagraphGroup.h \
@@ -371,6 +372,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP6PrefixData.h	 \
 	WP6PrefixIndice.h \
 	WP6PrefixDataPacket.h \
+	WP6SetNumberGroup.h \
 	WP6SingleByteFunction.h \
 	WP6StyleGroup.h \
 	WP6StylesListener.h \
