@@ -619,6 +619,10 @@ SOURCE=..\..\src\lib\WP6Listener.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP6NumberingMethodGroup.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP6OutlineStylePacket.cpp
 # End Source File
 # Begin Source File
@@ -648,6 +652,10 @@ SOURCE=..\..\src\lib\WP6PrefixDataPacket.cpp
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP6PrefixIndice.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP6SetNumberGroup.cpp
 # End Source File
 # Begin Source File
 
@@ -1299,6 +1307,10 @@ SOURCE=..\..\src\lib\WP6Listener.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP6NumberingMethodGroup.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP6OutlineStylePacket.h
 # End Source File
 # Begin Source File
@@ -1328,6 +1340,10 @@ SOURCE=..\..\src\lib\WP6PrefixDataPacket.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP6PrefixIndice.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP6SetNumberGroup.h
 # End Source File
 # Begin Source File
 
