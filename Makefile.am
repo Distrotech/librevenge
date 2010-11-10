@@ -15,11 +15,11 @@ EXTRA_DIST = \
 	libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.pc.in \
 	libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.pc.in \
 	libwpd-zip.in \
-	CHANGES \
 	COPYING \
 	CREDITS \
 	HACKING \
 	INSTALL \
+	NEWS \
 	README \
 	TODO
 distclean-local:
@@ -34,20 +34,6 @@ zip: install
 
 check: all
 	cd src/test && make check
-
-if WITH_LIBWPD_DOCS
-install-data-local:
-	mkdir -p $(DESTDIR)$(docdir)
-	$(INSTALL_DATA) $(srcdir)/CHANGES $(DESTDIR)$(docdir)/
-	$(INSTALL_DATA) $(srcdir)/COPYING $(DESTDIR)$(docdir)/
-	$(INSTALL_DATA) $(srcdir)/CREDITS $(DESTDIR)$(docdir)/
-	$(INSTALL_DATA) $(srcdir)/HACKING $(DESTDIR)$(docdir)/
-	$(INSTALL_DATA) $(srcdir)/INSTALL $(DESTDIR)$(docdir)/
-	$(INSTALL_DATA) $(srcdir)/README $(DESTDIR)$(docdir)/
-	$(INSTALL_DATA) $(srcdir)/TODO $(DESTDIR)$(docdir)/
-uninstall-local:
-	-rm -rf $(DESTDIR)$(docdir)
-endif
 
 dist-hook:
 	git log --date=short --pretty="format:@%cd  %an  <%ae>  [%H]%n%n%s%n%n%e%b" | sed -e "s|^\([^@]\)|\t\1|" -e "s|^@||" >$(distdir)/ChangeLog
