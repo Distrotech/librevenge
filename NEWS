@@ -1,13 +1,17 @@
 CHANGES:
 0.8.x - 0.9.0
+- Conversion of page-numbering (William)
+- Conversion of embedded images and text boxes in WP1, WP3, WP5 and WP6 documents
+  (Fridrich)
+- Conversion of password protected WP1, WP3, WP42 and WP5 documents (Fridrich)
 - Conversion of annotations/comments in WP6 parser (Fridrich)
-- Conversion of annotations/comments in WP6 parser (Fridrich)
-- fix some greek characters so that Text written in WP5.1 with Printer Polyglott
+- Fix some greek characters so that Text written in WP5.1 with Printer Polyglott
   convert correct.
-  - replace lunate small sigma with small stigma
-  - replate one occurence of capital Sigma by lunate capital sigma
-  - replace one occurence of capital Ypsilon by small eta with tonos
-  - replace variant of small rho by rho with tonos
+- Fix unicode mappings of some older Symbol and Dingbats fonts (Fridrich)
+- Drop the libgsf dependency in favour of pure C++ implementation of the WPXInputStream
+  interface (Fridrich, Ariya)
+- Fix the footnote/endnote/comment/annotation/textbox writing in wpd2html converter
+- Improve metadata parsing (David Hislop)
 
 0.8.13 - 0.8.14
 - Fix some warnings due to unused variables
