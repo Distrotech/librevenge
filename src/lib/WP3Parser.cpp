@@ -44,6 +44,14 @@ WP3Parser::~WP3Parser()
 WP3ResourceFork * WP3Parser::getResourceFork(WPXInputStream *input, WPXEncryption *encryption)
 {
 	WP3ResourceFork *resourceFork = 0;
+
+	// Certain WP2 documents actually don't contain resource fork, so check for its existence
+	if (!getHeader() || getHeader()->getDocumentOffset() <= 0x10)
+	{
+		WPD_DEBUG_MSG(("WP3Parser: Document does not contain resource fork\n"));
+		return 0;
+	}
+
 	try
 	{
 		resourceFork = new WP3ResourceFork(input, encryption);

@@ -79,6 +79,7 @@ WPXHeader * WPXHeader::constructHeader(WPXInputStream *input, WPXEncryption *enc
 	input->seek(WPX_HEADER_ENCRYPTION_OFFSET, WPX_SEEK_SET);
 	uint16_t documentEncryption = readU16(input, encryption);		
 	
+	WPD_DEBUG_MSG(("WordPerfect: Document Offset = 0x%x \n",documentOffset));		
 	WPD_DEBUG_MSG(("WordPerfect: Product Type: %i File Type: %i Major Version: %i Minor Version: %i\n", 
 					productType, fileType, 
 					majorVersion, minorVersion));	
