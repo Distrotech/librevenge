@@ -40,7 +40,7 @@ int WP1_FUNCTION_GROUP_SIZE[63] =
 	6,	
 	8,	
 	-1,	
-	3,	
+	4,	
 	6,	
 	6,	
 	3,	
