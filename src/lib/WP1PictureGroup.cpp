@@ -25,7 +25,9 @@
 #include "WP1PictureGroup.h"
 #include "libwpd_internal.h"
 
+#ifndef DUMP_PICTURE
 #define DUMP_PICTURE 0
+#endif
 
 #if DUMP_PICTURE
 static unsigned pictureId = 0;
@@ -48,17 +50,24 @@ WP1PictureGroup::~WP1PictureGroup()
 void WP1PictureGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	m_binaryData.clear();
-	input->seek(1, WPX_SEEK_CUR);
+	uint8_t tmpWhatNot = readU8(input, encryption);
+	if (tmpWhatNot)
+		input->seek(-1, WPX_SEEK_CUR);
 	m_width = readU16(input, encryption, true);
 	m_height = readU16(input, encryption, true);
-	input->seek(6, WPX_SEEK_CUR);
+	if (tmpWhatNot)
+		input->seek(8, WPX_SEEK_CUR);
+	else
+		input->seek(6, WPX_SEEK_CUR);
 	uint32_t dataSize = readU16(input, encryption, true);
+	WPD_DEBUG_MSG(("WP1PictureGroup: Offset = 0x%.4x, Width = %i, Height = %i, Data Size = 0x%.4x\n", (unsigned)input->tell(), m_width, m_height, dataSize));
 	if (dataSize + 11 > getSize())
 		return;
-	input->seek(-2, WPX_SEEK_CUR);
 	for (int i = 0; i < 512; i++)
 		m_binaryData.append((unsigned char)0);
-	for (unsigned long j = 0; j < dataSize && !input->atEOS(); j++ );
+	m_binaryData.append(((dataSize + 514) & 0xFF00)>>8);
+	m_binaryData.append(((dataSize + 514) & 0x00FF)); 
+	for (unsigned long j = 0; j < dataSize && !input->atEOS(); j++ )
 		m_binaryData.append(readU8(input, encryption));
 #if DUMP_PICTURE
 	std::ostringstream filename;
