@@ -52,16 +52,13 @@ void WP1PictureGroup::_readContents(WPXInputStream *input, WPXEncryption *encryp
 	m_binaryData.clear();
 	uint8_t tmpWhatNot = readU8(input, encryption);
 	if (tmpWhatNot)
-		input->seek(-1, WPX_SEEK_CUR);
+		input->seek(1, WPX_SEEK_CUR);
 	m_width = readU16(input, encryption, true);
 	m_height = readU16(input, encryption, true);
-	if (tmpWhatNot)
-		input->seek(8, WPX_SEEK_CUR);
-	else
-		input->seek(6, WPX_SEEK_CUR);
+	input->seek(6, WPX_SEEK_CUR);
 	uint32_t dataSize = readU16(input, encryption, true);
 	WPD_DEBUG_MSG(("WP1PictureGroup: Offset = 0x%.4x, Width = %i, Height = %i, Data Size = 0x%.4x\n", (unsigned)input->tell(), m_width, m_height, dataSize));
-	if (dataSize + 11 > getSize())
+	if (dataSize + 13 > getSize())
 		return;
 	for (int i = 0; i < 512; i++)
 		m_binaryData.append((unsigned char)0);
