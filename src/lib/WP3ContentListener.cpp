@@ -380,7 +380,7 @@ void WP3ContentListener::attributeChange(const bool isOn, const uint8_t attribut
 			m_ps->m_textAttributeBits |= textAttributeBit;
 		else
 			// reset the corresponding bit to 0 and leave the others intact
-			m_ps->m_textAttributeBits &= (~textAttributeBit);
+			m_ps->m_textAttributeBits &= ~textAttributeBit;
 	}
 }
 

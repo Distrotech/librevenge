@@ -139,7 +139,7 @@ void WP42ContentListener::attributeChange(bool isOn, uint8_t attribute)
 	if (isOn)
 		m_ps->m_textAttributeBits |= textAttributeBit;
 	else
-		m_ps->m_textAttributeBits ^= textAttributeBit;
+		m_ps->m_textAttributeBits &= ~textAttributeBit;
 }
 
 void WP42ContentListener::marginReset(uint8_t /* leftMargin */, uint8_t /* rightMargin */)

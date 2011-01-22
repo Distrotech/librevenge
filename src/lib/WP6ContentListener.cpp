@@ -790,7 +790,7 @@ void WP6ContentListener::attributeChange(const bool isOn, const uint8_t attribut
 		if (isOn)
 			m_ps->m_textAttributeBits |= textAttributeBit;
 		else
-			m_ps->m_textAttributeBits ^= textAttributeBit;
+			m_ps->m_textAttributeBits &= ~textAttributeBit;
 	}
 }
 

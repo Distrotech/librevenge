@@ -208,7 +208,7 @@ void WP1ContentListener::attributeChange(bool isOn, uint8_t attribute)
 	if (isOn)
 		m_ps->m_textAttributeBits |= textAttributeBit;
 	else
-		m_ps->m_textAttributeBits ^= textAttributeBit;
+		m_ps->m_textAttributeBits &= ~textAttributeBit;
 }
 
 void WP1ContentListener::fontPointSize(uint8_t pointSize)
