@@ -599,9 +599,6 @@ void libwpd::DirTree::load( unsigned char* buffer, unsigned size )
   {
     unsigned p = i * 128;
     
-    // would be < 32 if first char in the name isn't printable
-    unsigned prefix = 32;
-    
     // parse name of this entry, which stored as Unicode 16-bit
     std::string name;
     int name_len = readU16( buffer + 0x40+p );
@@ -609,12 +606,10 @@ void libwpd::DirTree::load( unsigned char* buffer, unsigned size )
     for( int j=0; ( buffer[j+p]) && (j<name_len); j+= 2 )
       name.append( 1, buffer[j+p] );
       
+    // would be < 32 if first char in the name isn't printable
     // first char isn't printable ? remove it...
     if( buffer[p] < 32 )
-    { 
-      prefix = buffer[0]; 
       name.erase( 0,1 ); 
-    }
     
     // 2 = file (aka stream), 1 = directory (aka storage), 5 = root
     unsigned type = buffer[ 0x42 + p];

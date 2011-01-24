@@ -37,7 +37,7 @@ public:
 	~WP5GraphicsInformationPacket();
 	void _readContents(WPXInputStream *input, WPXEncryption *encryption, uint32_t dataSize);
 	const std::vector<WPXBinaryData *> &getImages() const { return m_images; }
-	const WPXBinaryData *getImage( unsigned long imageIndex ) const { if (imageIndex < m_images.size()) return m_images[imageIndex]; return NULL; }
+	const WPXBinaryData *getImage( unsigned long imageIndex ) const { if (imageIndex < m_images.size()) return m_images[imageIndex]; return 0; }
 
 private:
 	std::vector<WPXBinaryData *> m_images;
