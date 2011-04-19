@@ -39,7 +39,7 @@ WP3DoubleByteScriptCharacterGroup::WP3DoubleByteScriptCharacterGroup(WPXInputStr
 
 void WP3DoubleByteScriptCharacterGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
-	m_scriptCharacter = readU16(input, encryption);
+	m_scriptCharacter = readU16(input, encryption, true);
 }
 
 void WP3DoubleByteScriptCharacterGroup::parse(WP3Listener *listener)
