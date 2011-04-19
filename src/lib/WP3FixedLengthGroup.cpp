@@ -28,6 +28,7 @@
 #include "WP3AttributeGroup.h"
 #include "WP3UnsupportedFixedLengthGroup.h"
 #include "WP3ExtendedCharacterGroup.h"
+#include "WP3DoubleByteScriptCharacterGroup.h"
 #include "WP3TabGroup.h"
 #include "WP3IndentGroup.h"
 #include "WP3UndoGroup.h"
@@ -56,6 +57,9 @@ WP3FixedLengthGroup * WP3FixedLengthGroup::constructFixedLengthGroup(WPXInputStr
 			
 		case WP3_ATTRIBUTE_GROUP:
 			return new WP3AttributeGroup(input, encryption, groupID);
+
+		case WP3_DOUBLE_BYTE_SCRIPT_CHARACTER_GROUP:
+			return new WP3DoubleByteScriptCharacterGroup(input, encryption, groupID);
 			
 		// Add the remaining cases here
 		default:

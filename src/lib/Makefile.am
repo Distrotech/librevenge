@@ -95,6 +95,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP3ContentListener.cpp \
 	WP3DefinitionGroup.cpp \
 	WP3DisplayGroup.cpp \
+	WP3DoubleByteScriptCharacterGroup.cpp \
 	WP3EndOfLinePageGroup.cpp \
 	WP3ExtendedCharacterGroup.cpp \
 	WP3FileStructure.cpp \
@@ -266,6 +267,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP3ContentListener.h \
 	WP3DefinitionGroup.h \
 	WP3DisplayGroup.h \
+	WP3DoubleByteScriptCharacterGroup.h \
 	WP3EndOfLinePageGroup.h \
 	WP3ExtendedCharacterGroup.h \
 	WP3FileStructure.h \
