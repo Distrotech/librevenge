@@ -44,9 +44,8 @@ void WP3DoubleByteScriptCharacterGroup::_readContents(WPXInputStream *input, WPX
 
 void WP3DoubleByteScriptCharacterGroup::parse(WP3Listener *listener)
 {
-	// We are finding the map first in the macRoman character set
-	// and only if we cannot find it, we use the WP character set
-	// map. It seems to be the behaviour of WordPerfect 3.x for Mac.
+	// We assume for the time being that the script characters are
+	// actually 16 bit Unicode characters in Big Endian.
 	if (m_scriptCharacter)
 	{
 		listener->insertCharacter(m_scriptCharacter);
