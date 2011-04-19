@@ -53,6 +53,7 @@ SLOFILES= \
 	$(SLO)$/WP3ContentListener.obj \
 	$(SLO)$/WP3DefinitionGroup.obj \
 	$(SLO)$/WP3DisplayGroup.obj \
+	$(SLO)$/WP3DoubleByteScriptCharacterGroup.obj \
 	$(SLO)$/WP3EndOfLinePageGroup.obj \
 	$(SLO)$/WP3ExtendedCharacterGroup.obj \
 	$(SLO)$/WP3FileStructure.obj \
