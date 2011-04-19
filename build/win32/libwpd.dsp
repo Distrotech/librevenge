@@ -231,6 +231,10 @@ SOURCE=..\..\src\lib\WP3DisplayGroup.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP3DoubleByteScriptCharacterGroup.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP3EndOfLinePageGroup.cpp
 # End Source File
 # Begin Source File
@@ -916,6 +920,10 @@ SOURCE=..\..\src\lib\WP3DefinitionGroup.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP3DisplayGroup.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP3DoubleByteScriptCharacterGroup.h
 # End Source File
 # Begin Source File
 
