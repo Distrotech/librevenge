@@ -139,7 +139,7 @@ unresolved symbols at runtime
   
 3.  ./configure --with-pic [all other options]
 
-     make ; su; make install
+     make ; sudo make install
      
 The above-mentioned fix is from the libwpd-1.info file of Justin F. Hallet who
 maintains the libwpd-1* packages for Fink project (http://fink.sourceforge.net).
