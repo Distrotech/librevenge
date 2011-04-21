@@ -77,6 +77,8 @@
                   (((uint8_t const *)(p))[1] << 16) |    \
                   (((uint8_t const *)(p))[0] << 24))
 
+#define WPD_NUM_ELEMENTS(array) sizeof(array)/sizeof(array[0])
+
 // add more of these as needed for byteswapping
 // (the 8-bit functions are just there to make things consistent)
 uint8_t readU8(WPXInputStream *input, WPXEncryption *encryption); 

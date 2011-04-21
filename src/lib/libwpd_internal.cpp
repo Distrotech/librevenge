@@ -491,77 +491,77 @@ int extendedCharacterWP6ToUCS2(uint8_t character,
 	switch (characterSet)
 	{
 	case WP6_MULTINATIONAL_CHARACTER_SET:
-		if (character < WP6_NUM_MULTINATIONAL_CHARACTERS)
+		if (character < WPD_NUM_ELEMENTS(multinationalWP6))
 			*chars = &multinationalWP6[character];
 		else
 			*chars = &asciiMap[0x00];
 		return 1;
 		
 	case WP6_PHONETIC_SYMBOL_CHARACTER_SET:
-		if (character < WP6_NUM_PHONETIC_CHARACTERS)
+		if (character < WPD_NUM_ELEMENTS(phoneticWP6))
 			*chars = &phoneticWP6[character];
 		else
 			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP6_BOX_DRAWING_CHARACTER_SET:
-		if (character < WP6_NUM_BOX_DRAWING_CHARACTERS)
+		if (character < WPD_NUM_ELEMENTS(boxdrawingWP6))
 			*chars = &boxdrawingWP6[character];
 		else
 			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP6_TYPOGRAPHIC_SYMBOL_CHARACTER_SET:
-		if (character < WP6_NUM_TYPOGRAPHIC_CHARACTERS)
+		if (character < WPD_NUM_ELEMENTS(typographicWP6))
 			*chars = &typographicWP6[character];
 		else
 			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP6_ICONIC_SYMBOL_CHARACTER_SET:
-		if (character < WP6_NUM_ICONIC_CHARACTERS)
+		if (character < WPD_NUM_ELEMENTS(iconicWP6))
 			*chars = &iconicWP6[character];
 		else
 			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP6_MATH_SCIENTIFIC_CHARACTER_SET:
-		if (character < WP6_NUM_MATH_SCIENTIFIC_CHARACTERS)
+		if (character < WPD_NUM_ELEMENTS(mathWP6))
 			*chars = &mathWP6[character];
 		else
 			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP6_MATH_SCIENTIFIC_EXTENDED_CHARACTER_SET:
-		if (character < WP6_NUM_MATH_SCIENTIFIC_EXTENDED_CHARACTERS)
+		if (character < WPD_NUM_ELEMENTS(mathextWP6))
 			*chars = &mathextWP6[character];
 		else
 			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP6_GREEK_CHARACTER_SET:
-		if (character < WP6_NUM_GREEK_CHARACTERS)
+		if (character < WPD_NUM_ELEMENTS(greekWP6))
 			*chars = &greekWP6[character];
 		else
 			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP6_HEBREW_CHARACTER_SET:
-		if (character < WP6_NUM_HEBREW_CHARACTERS)
+		if (character < WPD_NUM_ELEMENTS(hebrewWP6))
 			*chars = &hebrewWP6[character];
 		else
 			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP6_CYRILLIC_CHARACTER_SET:
-		if (character < WP6_NUM_CYRILLIC_CHARACTERS)
+		if (character < WPD_NUM_ELEMENTS(cyrillicWP6))
 			*chars = &cyrillicWP6[character];
 		else
 			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP6_JAPANESE_CHARACTER_SET:
-		if (character < WP6_NUM_JAPANESE_CHARACTERS)
+		if (character < WPD_NUM_ELEMENTS(japaneseWP6))
 			*chars = &japaneseWP6[character];
 		else
 			*chars = &asciiMap[0x00];
@@ -580,14 +580,14 @@ int extendedCharacterWP6ToUCS2(uint8_t character,
 		}
 
 	case WP6_ARABIC_CHARACTER_SET:
-		if (character < WP6_NUM_ARABIC_CHARACTERS)
+		if (character < WPD_NUM_ELEMENTS(arabicWP6))
 			*chars = &arabicWP6[character];
 		else
 			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP6_ARABIC_SCRIPT_CHARACTER_SET:
-		if (character < WP6_NUM_ARABIC_SCRIPT_CHARACTERS)
+		if (character < WPD_NUM_ELEMENTS(arabicScriptWP6))
 			*chars = &arabicScriptWP6[character];
 		else
 			*chars = &asciiMap[0x00];
@@ -898,91 +898,91 @@ int extendedCharacterWP5ToUCS2(uint8_t character,
 	switch (characterSet)
 	{
 	case WP5_INTERNATIONAL_1_CHARACTER_SET:
-		if (character < WP5_NUM_INTERNATIONAL_1_CHARACTERS)
+		if (character < WPD_NUM_ELEMENTS(international1WP5))
 			*chars = &international1WP5[character];
 		else
 			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP5_INTERNATIONAL_2_CHARACTER_SET:
-		if (character < WP5_NUM_INTERNATIONAL_2_CHARACTERS)
+		if (character < WPD_NUM_ELEMENTS(international2WP5))
 			*chars = &international2WP5[character];
 		else
 			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP5_BOX_DRAWING_CHARACTER_SET:
-		if (character < WP5_NUM_BOX_DRAWING_CHARACTERS)
+		if (character < WPD_NUM_ELEMENTS(boxdrawingWP5))
 			*chars = &boxdrawingWP5[character];
 		else
 			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP5_TYPOGRAPHIC_SYMBOL_CHARACTER_SET:
-		if (character < WP5_NUM_TYPOGRAPHIC_CHARACTERS)
+		if (character < WPD_NUM_ELEMENTS(typographicWP5))
 			*chars = &typographicWP5[character];
 		else
 			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP5_ICONIC_SYMBOL_CHARACTER_SET:
-		if (character < WP5_NUM_ICONIC_CHARACTERS)
+		if (character < WPD_NUM_ELEMENTS(iconicWP5))
 			*chars = &iconicWP5[character];
 		else
 			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP5_MATH_SCIENTIFIC_CHARACTER_SET:
-		if (character < WP5_NUM_MATH_SCIENTIFIC_CHARACTERS)
+		if (character < WPD_NUM_ELEMENTS(mathWP5))
 			*chars = &mathWP5[character];
 		else
 			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP5_MATH_SCIENTIFIC_EXTENDED_CHARACTER_SET:
-		if (character < WP5_NUM_MATH_SCIENTIFIC_EXTENDED_CHARACTERS)
+		if (character < WPD_NUM_ELEMENTS(mathextWP5))
 			*chars = &mathextWP5[character];
 		else
 			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP5_GREEK_CHARACTER_SET:
-		if (character < WP5_NUM_GREEK_CHARACTERS)
+		if (character < WPD_NUM_ELEMENTS(greekWP5))
 			*chars = &greekWP5[character];
 		else
 			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP5_HEBREW_CHARACTER_SET:
-		if (character < WP5_NUM_HEBREW_CHARACTERS)
+		if (character < WPD_NUM_ELEMENTS(hebrewWP5))
 			*chars = &hebrewWP5[character];
 		else
 			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP5_CYRILLIC_CHARACTER_SET:
-		if (character < WP5_NUM_CYRILLIC_CHARACTERS)
+		if (character < WPD_NUM_ELEMENTS(cyrillicWP5))
 			*chars = &cyrillicWP5[character];
 		else
 			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP5_JAPANESE_CHARACTER_SET:
-		if (character < WP5_NUM_JAPANESE_CHARACTERS)
+		if (character < WPD_NUM_ELEMENTS(japaneseWP5))
 			*chars = &japaneseWP5[character];
 		else
 			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP5_ARABIC_CHARACTER_SET:
-		if (character < WP5_NUM_ARABIC_CHARACTERS)
+		if (character < WPD_NUM_ELEMENTS(arabicWP5))
 			*chars = &arabicWP5[character];
 		else
 			*chars = &asciiMap[0x00];
 		return 1;
 
 	case WP5_ARABIC_SCRIPT_CHARACTER_SET:
-		if (character < WP5_NUM_ARABIC_SCRIPT_CHARACTERS)
+		if (character < WPD_NUM_ELEMENTS(arabicScriptWP5))
 			*chars = &arabicScriptWP5[character];
 		else
 			*chars = &asciiMap[0x00];
