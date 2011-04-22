@@ -76,7 +76,19 @@ WPXString readPascalString(WPXInputStream *input, WPXEncryption *encryption)
 	int pascalStringLength = readU8(input, encryption);
 	WPXString tmpString;
 	for (int i=0; i<pascalStringLength; i++)
-		tmpString.append((char)readU8(input, encryption));
+	{
+		uint16_t tmpChar = readU8(input, encryption);
+		if (tmpChar <= 0x7f)
+			tmpString.append((char)tmpChar);
+		else if (pascalStringLength < i++)
+		{
+			tmpChar = (tmpChar << 8) | readU8(input, encryption);
+			const uint16_t *chars;
+			int len = appleWorldScriptToUCS2(tmpChar, &chars);
+			for (int j = 0; j < len; j++)
+			appendUCS4(tmpString, (uint32_t)chars[j]);
+		}
+	}
 	return tmpString;
 }
 
