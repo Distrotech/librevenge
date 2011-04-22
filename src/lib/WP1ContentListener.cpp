@@ -89,7 +89,7 @@ void WP1ContentListener::insertExtendedCharacter(uint8_t extendedCharacter)
 		if (extendedCharacter <= 0x20)
 			appendUCS4(m_parseState->m_textBuffer, (uint32_t)0x20);
 		else
-			appendUCS4(m_parseState->m_textBuffer, (uint32_t)(_mapNonUnicodeCharacter(macintoshCharacterMap[extendedCharacter - 0x20])));
+			appendUCS4(m_parseState->m_textBuffer, (uint32_t)(_mapNonUnicodeCharacter(macRomanCharacterMap[extendedCharacter - 0x20])));
 	}
 }
 

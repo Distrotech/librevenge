@@ -80,7 +80,7 @@ WPXString readPascalString(WPXInputStream *input, WPXEncryption *encryption)
 		uint16_t tmpChar = readU8(input, encryption);
 		if (tmpChar <= 0x7f)
 			tmpString.append((char)tmpChar);
-		else if (pascalStringLength < i++)
+		else if (pascalStringLength > i++)
 		{
 			tmpChar = (tmpChar << 8) | readU8(input, encryption);
 			const uint16_t *chars;
@@ -1212,7 +1212,7 @@ WPXString _numberingTypeToString(WPXNumberingType t)
 /* Mapping of Apple's MacRoman character set in Unicode (UCS2) 
  * used in the WordPerfect Macintosh file format */
  
-const uint16_t macintoshCharacterMap[] =
+const uint16_t macRomanCharacterMap[] =
 {
   0x0020, 0x0021, 0x0022, 0x0023, 0x0024, 0x0025, 0x0026, 0x0027,
   0x0028, 0x0029, 0x002a, 0x002b, 0x002c, 0x002d, 0x002e, 0x002f,

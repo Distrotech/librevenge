@@ -53,7 +53,7 @@ void WP3ExtendedCharacterGroup::parse(WP3Listener *listener)
 	// map. It seems to be the behaviour of WordPerfect 3.x for Mac.
 	if (m_macCharacter >= 0x20)
 	{
-		listener->insertCharacter(macintoshCharacterMap[m_macCharacter - 0x20]);
+		listener->insertCharacter(macRomanCharacterMap[m_macCharacter - 0x20]);
 	}
 	else if ((m_characterSet != 0xFF) || ((m_character != 0xFE) && (m_character != 0xFF)))
 	{
