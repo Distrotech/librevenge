@@ -39,7 +39,7 @@ public:
 
 	virtual void startDocument() = 0;
 	virtual void startSubDocument() = 0;
-	virtual void insertCharacter(uint16_t character) = 0;
+	virtual void insertCharacter(uint32_t character) = 0;
 	virtual void insertTab(uint8_t tabType, double tabPosition) = 0;
 	virtual void insertBreak(uint8_t breakType) = 0;
 	virtual void insertEOL() = 0;

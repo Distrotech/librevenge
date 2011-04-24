@@ -45,7 +45,7 @@ public:
 	void startSubDocument() {}
 	void setFont(const WPXString& /* fontName */, double /* fontSize */) {}
 	void setTabs(const std::vector<WPXTabStop>& /* tabStops */, uint16_t /* tabOffset */) {} 
-	void insertCharacter(uint16_t /* character */) { /*if (!isUndoOn())*/ m_currentPageHasContent = true; }
+	void insertCharacter(uint32_t /* character */) { /*if (!isUndoOn())*/ m_currentPageHasContent = true; }
 	void insertTab(uint8_t /* tabType */, double /* tabPosition */) { /*if (!isUndoOn())*/ m_currentPageHasContent = true; }
 	virtual void insertIndent(uint8_t /* indentType */, double /* indentPosition */) { /*if (!isUndoOn())*/ m_currentPageHasContent = true; }
 	void characterColorChange(uint8_t /* red */, uint8_t /* green */, uint8_t /* blue */) {};

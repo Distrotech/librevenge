@@ -273,7 +273,7 @@ void WP6EOLGroup::parse(WP6Listener *listener)
 		case WP6_EOL_GROUP_SOFT_EOL:
 		case WP6_EOL_GROUP_SOFT_EOC:
 		case WP6_EOL_GROUP_SOFT_EOC_AT_EOP: // 0x03 (soft EOC at EOP) 
-			listener->insertCharacter((uint16_t) ' ');
+			listener->insertCharacter((uint32_t) ' ');
 			break;
 		case WP6_EOL_GROUP_DELETABLE_HARD_EOL: // 0x17 (deletable hard EOL)
 		case WP6_EOL_GROUP_DELETABLE_HARD_EOL_AT_EOC: // 0x18 (deletable hard EOL at EOC)

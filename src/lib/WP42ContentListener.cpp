@@ -57,14 +57,14 @@ WP42ContentListener::~WP42ContentListener()
 }
 
 
-void WP42ContentListener::insertCharacter(uint16_t character)
+void WP42ContentListener::insertCharacter(uint32_t character)
 {
 	if (!isUndoOn())
 	{
-		uint16_t tmpCharacter = _mapNonUnicodeCharacter(character);
+		uint32_t tmpCharacter = _mapNonUnicodeCharacter(character);
 		if (!m_ps->m_isSpanOpened)
 			_openSpan();
-		appendUCS4(m_parseState->m_textBuffer, (uint32_t)tmpCharacter);
+		appendUCS4(m_parseState->m_textBuffer, tmpCharacter);
 	}
 }
 

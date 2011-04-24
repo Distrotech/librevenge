@@ -59,7 +59,7 @@ public:
 	void startSubDocument() { WPXContentListener::startSubDocument(); };
 	void setFont(const WPXString &fontName, double fontSize);
 	void setTabs(const std::vector<WPXTabStop> &tabStops, uint16_t tabOffset);
-	void insertCharacter(uint16_t character);
+	void insertCharacter(uint32_t character);
 	void insertTab(uint8_t tabType, double tabPosition);
 	void insertIndent(uint8_t indentType, double indentPosition);
 	void insertEOL();

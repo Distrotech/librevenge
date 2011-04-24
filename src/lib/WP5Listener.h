@@ -46,7 +46,7 @@ public:
 	virtual void startSubDocument() = 0;
 	virtual void setFont(const WPXString &fontName, double fontSize) = 0;
 	virtual void setTabs(const std::vector<WPXTabStop>& tabStops, uint16_t tabOffset) = 0;
-	virtual void insertCharacter(uint16_t character) = 0;
+	virtual void insertCharacter(uint32_t character) = 0;
 	virtual void insertTab(uint8_t tabType, double tabPosition) = 0;
 	virtual void insertIndent(uint8_t indentType, double indentPosition) = 0;
 	virtual void insertEOL() = 0;

@@ -42,7 +42,7 @@ public:
 
 	void startDocument() {}
 	void startSubDocument() {}
-	void insertCharacter(uint16_t /* character */) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	void insertCharacter(uint32_t /* character */) { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void insertExtendedCharacter(uint8_t /* extendedCharacter */) { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void insertTab() { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void insertEOL() { if (!isUndoOn()) m_currentPageHasContent = true; }

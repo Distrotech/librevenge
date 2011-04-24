@@ -153,7 +153,7 @@ public:
 	void setLeaderCharacter(const uint16_t character, const uint8_t numSpaces);
 	void defineTabStops(const bool isRelative, const std::vector<WPXTabStop> &tabStops, 
 				    const std::vector<bool> &usePreWP9LeaderMethods);
-	void insertCharacter(const uint16_t character);
+	void insertCharacter(uint32_t character);
 	void insertTab(const uint8_t tabType, double tabPosition);
 	void handleLineBreak();
 	void insertEOL();

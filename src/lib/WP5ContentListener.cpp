@@ -63,12 +63,12 @@ WP5ContentListener::~WP5ContentListener()
  public 'HLListenerImpl' functions
 *****************************************/
 
-void WP5ContentListener::insertCharacter(uint16_t character)
+void WP5ContentListener::insertCharacter(uint32_t character)
 {
-	uint16_t tmpCharacter = _mapNonUnicodeCharacter(character);
+	uint32_t tmpCharacter = _mapNonUnicodeCharacter(character);
 	if (!m_ps->m_isSpanOpened)
 		_openSpan();
-	appendUCS4(m_parseState->m_textBuffer, (uint32_t)tmpCharacter);
+	appendUCS4(m_parseState->m_textBuffer, tmpCharacter);
 }
 
 void WP5ContentListener::insertTab(uint8_t tabType, double tabPosition)

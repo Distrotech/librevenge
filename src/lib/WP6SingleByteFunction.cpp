@@ -102,17 +102,17 @@ WP6SingleByteFunction * WP6SingleByteFunction::constructSingleByteFunction(WPXIn
 
 void WP6SpaceFunction::parse(WP6Listener *listener)
 {
-	listener->insertCharacter((uint16_t) ' ');
+	listener->insertCharacter((uint32_t) ' ');
 }
 
 void WP6HardSpaceFunction::parse(WP6Listener *listener)
 {
-	listener->insertCharacter((uint16_t) 0xa0);
+	listener->insertCharacter((uint32_t) 0xa0);
 }
 
 void WP6SoftHyphenFunction::parse(WP6Listener *listener)
 {
-	listener->insertCharacter((uint16_t) 0xad);
+	listener->insertCharacter((uint32_t) 0xad);
 }
 
 void WP6EOLFunction::parse(WP6Listener *listener)
@@ -137,7 +137,7 @@ void WP6SoftEOPFunction::parse(WP6Listener *listener)
 
 void WP6HyphenFunction::parse(WP6Listener *listener)
 {
-	listener->insertCharacter((uint16_t) '-');
+	listener->insertCharacter((uint32_t) '-');
 }
 
 void WP6TableRowFunction::parse(WP6Listener *listener)

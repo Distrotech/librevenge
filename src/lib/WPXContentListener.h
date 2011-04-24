@@ -209,15 +209,15 @@ protected:
 	
 	void _insertPageNumberParagraph(WPXPageNumberPosition position, WPXNumberingType type, WPXString fontName, double fontSize);
 
-	uint16_t _mapNonUnicodeCharacter(uint16_t character);
+	uint32_t _mapNonUnicodeCharacter(uint32_t character);
 	
 private:
 	WPXContentListener(const WPXContentListener&);
 	WPXContentListener& operator=(const WPXContentListener&);
 	WPXString _colorToString(const RGBSColor * color);
 	WPXString _mergeColorsToString(const RGBSColor *fgColor, const RGBSColor *bgColor);
-	uint16_t _mapSymbolFontCharacter(uint16_t character);
-	uint16_t _mapDingbatsFontCharacter(uint16_t character);
+	uint32_t _mapSymbolFontCharacter(uint32_t character);
+	uint32_t _mapDingbatsFontCharacter(uint32_t character);
 };
 
 #endif /* WPXCONTENTLISTENER_H */

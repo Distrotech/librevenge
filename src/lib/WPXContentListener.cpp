@@ -1420,7 +1420,7 @@ double WPXContentListener::_movePositionToFirstColumn(double position)
 	return position;
 }
 
-uint16_t WPXContentListener::_mapNonUnicodeCharacter(uint16_t character)
+uint32_t WPXContentListener::_mapNonUnicodeCharacter(uint32_t character)
 {
 	if (*(m_ps->m_fontName) == "Symbol")
 		return _mapSymbolFontCharacter(character);
@@ -1431,9 +1431,9 @@ uint16_t WPXContentListener::_mapNonUnicodeCharacter(uint16_t character)
 	return character;
 }
 
-uint16_t WPXContentListener::_mapSymbolFontCharacter(uint16_t character)
+uint32_t WPXContentListener::_mapSymbolFontCharacter(uint32_t character)
 {
-	static const uint16_t _symbolFontMap1 [] =
+	static const uint32_t _symbolFontMap1 [] =
 	{
 		0x0020, 0x0021, 0x2200, 0x0023, 0x2203, 0x0025, 0x0026, 0x220D, // 0x20 ..
 		0x0028, 0x0029, 0x2217, 0x002B, 0x002C, 0x2212, 0x002E, 0x002F,
@@ -1449,7 +1449,7 @@ uint16_t WPXContentListener::_mapSymbolFontCharacter(uint16_t character)
 		0x03BE, 0x03C8, 0x03B6, 0x007B, 0x007C, 0x007D, 0x223C          // .. 0x7E
 	};
 
-	static const uint16_t _symbolFontMap2 [] =
+	static const uint32_t _symbolFontMap2 [] =
 	{
 		0x20AC, 0x03D2, 0x2032, 0x2264, 0x2044, 0x221E, 0x0192, 0x2663, // 0xA0 ..
 		0x2666, 0x2665, 0x2660, 0x2194, 0x2190, 0x2191, 0x2192, 0x2193,
@@ -1472,9 +1472,9 @@ uint16_t WPXContentListener::_mapSymbolFontCharacter(uint16_t character)
 	return character;
 }
 
-uint16_t WPXContentListener::_mapDingbatsFontCharacter(uint16_t character)
+uint32_t WPXContentListener::_mapDingbatsFontCharacter(uint32_t character)
 {
-	static const uint16_t _dingbatsFontMap1 [] =
+	static const uint32_t _dingbatsFontMap1 [] =
 	{
 		0x0020, 0x2701, 0x2702, 0x2703, 0x2704, 0x260E, 0x2706, 0x2707, // 0x20 ..
 		0x2708, 0x2709, 0x261B, 0x261E, 0x270C, 0x270D, 0x270E, 0x270F,
@@ -1490,13 +1490,13 @@ uint16_t WPXContentListener::_mapDingbatsFontCharacter(uint16_t character)
 		0x2758, 0x2759, 0x275A, 0x275B, 0x275C, 0x275D, 0x275E          // .. 0x7E
 	};
 
-	static const uint16_t _dingbatsFontMap2 [] =
+	static const uint32_t _dingbatsFontMap2 [] =
 	{
 		0x2768, 0x2769, 0x276A, 0x276B, 0x276C, 0x276D, 0x276E, 0x276F, // 0x80 ..
 		0x2770, 0x2771, 0x2772, 0x2773, 0x2774, 0x2775                  // .. 0x8D
 	};
 
-	static const uint16_t _dingbatsFontMap3 [] =
+	static const uint32_t _dingbatsFontMap3 [] =
 	{
 		0x2761, 0x2762, 0x2763, 0x2764, 0x2765, 0x2766, 0x2767, 0x2663, // 0xA1 ..
 		0x2666, 0x2665, 0x2660, 0x2460, 0x2461, 0x2462, 0x2463, 0x2464,
@@ -1510,7 +1510,7 @@ uint16_t WPXContentListener::_mapDingbatsFontCharacter(uint16_t character)
 		0x27A9, 0x27AA, 0x27AB, 0x27AC, 0x27AD, 0x27AE, 0x27AF          // .. 0xEF
 	};
 
-	static const uint16_t _dingbatsFontMap4 [] =
+	static const uint32_t _dingbatsFontMap4 [] =
 	{
 		0x27B1, 0x27B2, 0x27B3, 0x27B4, 0x27B5, 0x27B6, 0x27B7, 0x27B8, // 0xF1 ..
 		0x27B9, 0x27BA, 0x27BB, 0x27BC, 0x27BD, 0x27BE                  // .. OxFE

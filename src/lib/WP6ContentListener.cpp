@@ -410,11 +410,11 @@ void WP6ContentListener::setLeaderCharacter(const uint16_t character, const uint
 	}
 }
 
-void WP6ContentListener::insertCharacter(const uint16_t character)
+void WP6ContentListener::insertCharacter(uint32_t character)
 {
 	if (!isUndoOn())
 	{
-		uint16_t tmpCharacter = _mapNonUnicodeCharacter(character);
+		uint32_t tmpCharacter = _mapNonUnicodeCharacter(character);
 
 		if (m_parseState->m_styleStateSequence.getCurrentState() == STYLE_BODY ||
 		    m_parseState->m_styleStateSequence.getCurrentState() == NORMAL)
@@ -422,34 +422,34 @@ void WP6ContentListener::insertCharacter(const uint16_t character)
 			if (!m_ps->m_isSpanOpened)
 				_openSpan();
 			m_parseState->m_isListReference = false;
-			appendUCS4(m_parseState->m_bodyText, (uint32_t)tmpCharacter);
+			appendUCS4(m_parseState->m_bodyText, tmpCharacter);
 		}
 		else if (m_parseState->m_styleStateSequence.getCurrentState() == BEGIN_BEFORE_NUMBERING)
 		{
 			m_parseState->m_isListReference = true;
-			appendUCS4(m_parseState->m_textBeforeNumber, (uint32_t)tmpCharacter);
+			appendUCS4(m_parseState->m_textBeforeNumber, tmpCharacter);
 		}
 		else if (m_parseState->m_styleStateSequence.getCurrentState() == BEGIN_NUMBERING_BEFORE_DISPLAY_REFERENCING)
 		{
 			// left delimeter (or the bullet if there is no display referencing)
-			appendUCS4(m_parseState->m_textBeforeDisplayReference, (uint32_t)tmpCharacter);
+			appendUCS4(m_parseState->m_textBeforeDisplayReference, tmpCharacter);
 			m_parseState->m_isListReference = true;
 		}
 		else if (m_parseState->m_styleStateSequence.getCurrentState() == DISPLAY_REFERENCING)
 		{
 			// the actual paragraph number (in varying forms)
-			appendUCS4(m_parseState->m_numberText, (uint32_t)tmpCharacter);
+			appendUCS4(m_parseState->m_numberText, tmpCharacter);
 			m_parseState->m_isListReference = true;
 		}
 		else if (m_parseState->m_styleStateSequence.getCurrentState() == BEGIN_NUMBERING_AFTER_DISPLAY_REFERENCING)
 		{
 			// right delimeter (if there was a display no. ref. group)
-			appendUCS4(m_parseState->m_textAfterDisplayReference, (uint32_t)tmpCharacter);
+			appendUCS4(m_parseState->m_textAfterDisplayReference, tmpCharacter);
 			m_parseState->m_isListReference = true;
 		}
 		else if (m_parseState->m_styleStateSequence.getCurrentState() == BEGIN_AFTER_NUMBERING)
 		{
-			appendUCS4(m_parseState->m_textAfterNumber, (uint32_t)tmpCharacter);
+			appendUCS4(m_parseState->m_textAfterNumber, tmpCharacter);
 			m_parseState->m_isListReference = true;
 		}
 	}

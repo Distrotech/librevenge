@@ -69,21 +69,21 @@ void WP5EOLFunction::parse(WP5Listener *listener)
 
 void WP5SpaceFunction::parse(WP5Listener *listener)
 {
-	listener->insertCharacter((uint16_t) ' ');
+	listener->insertCharacter((uint32_t) ' ');
 }
 
 void WP5HardSpaceFunction::parse(WP5Listener *listener)
 {
-	listener->insertCharacter((uint16_t) 0xa0);
+	listener->insertCharacter((uint32_t) 0xa0);
 }
 
 void WP5HyphenFunction::parse(WP5Listener *listener)
 {
-	listener->insertCharacter((uint16_t) '-');
+	listener->insertCharacter((uint32_t) '-');
 }
 
 void WP5SoftHyphenFunction::parse(WP5Listener *listener)
 {
-	listener->insertCharacter((uint16_t) 0xad);
+	listener->insertCharacter((uint32_t) 0xad);
 }
 

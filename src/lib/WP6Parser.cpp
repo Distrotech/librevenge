@@ -139,7 +139,7 @@ void WP6Parser::parseDocument(WPXInputStream *input, WPXEncryption *encryption, 
 		else if (readVal >= (uint8_t)0x21 && readVal <= (uint8_t)0x7F)
 		{
 			// normal ASCII characters
-			listener->insertCharacter( (uint16_t)readVal );
+			listener->insertCharacter( (uint32_t)readVal );
 		}
 		else 
 		{

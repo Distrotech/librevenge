@@ -68,17 +68,17 @@ WP3SingleByteFunction * WP3SingleByteFunction::constructSingleByteFunction(WPXIn
 
 void WP3HardSpaceFunction::parse(WP3Listener *listener)
 {
-	listener->insertCharacter((uint16_t) 0xa0);
+	listener->insertCharacter((uint32_t) 0xa0);
 }
 
 void WP3HyphenFunction::parse(WP3Listener *listener)
 {
-	listener->insertCharacter((uint16_t) '-');
+	listener->insertCharacter((uint32_t) '-');
 }
 
 void WP3SoftHyphenFunction::parse(WP3Listener *listener)
 {
-	listener->insertCharacter((uint16_t) 0xad);
+	listener->insertCharacter((uint32_t) 0xad);
 }
 
 void WP3EOLFunction::parse(WP3Listener *listener)

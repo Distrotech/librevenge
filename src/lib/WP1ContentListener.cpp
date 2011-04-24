@@ -60,11 +60,11 @@ WP1ContentListener::~WP1ContentListener()
 }
 
 
-void WP1ContentListener::insertCharacter(uint16_t character)
+void WP1ContentListener::insertCharacter(uint32_t character)
 {
 	if (!isUndoOn())
 	{
-		uint16_t tmpCharacter = _mapNonUnicodeCharacter(character);
+		uint32_t tmpCharacter = _mapNonUnicodeCharacter(character);
 
 		if (!m_ps->m_isSpanOpened)
 			_openSpan();
@@ -72,7 +72,7 @@ void WP1ContentListener::insertCharacter(uint16_t character)
 		{
 			m_documentInterface->insertTab();
 		}
-		appendUCS4(m_parseState->m_textBuffer, (uint32_t)tmpCharacter);
+		appendUCS4(m_parseState->m_textBuffer, tmpCharacter);
 	}
 }
 

@@ -56,7 +56,7 @@ public:
 	void setLeaderCharacter(const uint16_t /* character */, const uint8_t /* numberOfSpaces */) {}
 	void defineTabStops(const bool /* isRelative */, const std::vector<WPXTabStop> & /* tabStops */, 
 				    const std::vector<bool> & /* usePreWP9LeaderMethods */) {}
-	void insertCharacter(const uint16_t /* character */) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	void insertCharacter(uint32_t /* character */) { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void insertTab(const uint8_t /* tabType */, double /* tabPosition */) { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void handleLineBreak()  { if (!isUndoOn()) m_currentPageHasContent = true; }
 	void insertEOL() { if (!isUndoOn()) m_currentPageHasContent = true; }
