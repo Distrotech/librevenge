@@ -106,11 +106,11 @@ void WP6FontDescriptorPacket::_readFontName(WPXInputStream *input, WPXEncryption
 			if (character == 0x00 && characterSet == 0x00)
 				break;
 
-			const uint16_t *chars;
-			int len = extendedCharacterWP6ToUCS2(character, characterSet, &chars);
+			const uint32_t *chars;
+			int len = extendedCharacterWP6ToUCS4(character, characterSet, &chars);
 
 			for (int j = 0; j < len; j++)
-				appendUCS4(m_fontName, (uint32_t)chars[j]);
+				appendUCS4(m_fontName, chars[j]);
 		}
 
 		WPD_DEBUG_MSG(("WordPerfect: stripping font name (original: %s)\n", m_fontName.cstr()));

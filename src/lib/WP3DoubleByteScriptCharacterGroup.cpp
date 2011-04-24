@@ -48,8 +48,8 @@ void WP3DoubleByteScriptCharacterGroup::parse(WP3Listener *listener)
 	// actually 16 bit Unicode characters in Big Endian.
 	if (m_scriptCharacter)
 	{
-		const uint16_t *chars;
-		int len = appleWorldScriptToUCS2(m_scriptCharacter, &chars);
+		const uint32_t *chars;
+		int len = appleWorldScriptToUCS4(m_scriptCharacter, &chars);
 		for (int i = 0; i < len; i++)
 			listener->insertCharacter(chars[i]);
 	}

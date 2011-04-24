@@ -45,8 +45,8 @@ void WP6ExtendedCharacterGroup::_readContents(WPXInputStream *input, WPXEncrypti
 
 void WP6ExtendedCharacterGroup::parse(WP6Listener *listener)
 {
-	const uint16_t *chars;
-	int len = extendedCharacterWP6ToUCS2(m_character,
+	const uint32_t *chars;
+	int len = extendedCharacterWP6ToUCS4(m_character,
 					  m_characterSet, &chars);
 	int i;
 

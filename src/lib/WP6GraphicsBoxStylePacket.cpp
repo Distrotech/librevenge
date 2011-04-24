@@ -81,8 +81,8 @@ void WP6GraphicsBoxStylePacket::_readContents(WPXInputStream *input, WPXEncrypti
 			if (character == 0x00 && characterSet == 0x00)
 				break;
 
-			const uint16_t *chars;
-			int len = extendedCharacterWP6ToUCS2(character, characterSet, &chars);
+			const uint32_t *chars;
+			int len = extendedCharacterWP6ToUCS4(character, characterSet, &chars);
 
 			for (int j = 0; j < len; j++)
 				appendUCS4(m_boxStyleName, (uint32_t)chars[j]);

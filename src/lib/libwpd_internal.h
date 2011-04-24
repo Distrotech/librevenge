@@ -92,13 +92,13 @@ void appendUCS4(WPXString &str, uint32_t ucs4);
 
 // Various helper structures for the libwpd parser..
 
-int extendedCharacterWP6ToUCS2(uint8_t character, uint8_t characterSet,
-			    const uint16_t **chars);
+int extendedCharacterWP6ToUCS4(uint8_t character, uint8_t characterSet,
+			    const uint32_t **chars);
 
-int extendedCharacterWP5ToUCS2(uint8_t character, uint8_t characterSet,
-			    const uint16_t **chars);
+int extendedCharacterWP5ToUCS4(uint8_t character, uint8_t characterSet,
+			    const uint32_t **chars);
 
-int appleWorldScriptToUCS2(uint16_t character, const uint16_t **chars);
+int appleWorldScriptToUCS4(uint16_t character, const uint32_t **chars);
 
 uint16_t fixedPointToWPUs(const uint32_t fixedPointNumber);
 double fixedPointToDouble(const uint32_t fixedPointNumber);
@@ -255,7 +255,7 @@ int _extractNumericValueFromRoman(const char romanChar);
 int _extractDisplayReferenceNumberFromBuf(const WPXString &buf, const WPXNumberingType listType);
 WPXNumberingType _extractWPXNumberingTypeFromBuf(const WPXString &buf, const WPXNumberingType putativeWPXNumberingType);
 WPXString _numberingTypeToString(WPXNumberingType t);
-extern const uint16_t macRomanCharacterMap[];
+extern const uint32_t macRomanCharacterMap[];
 WPXString doubleToString(const double value);
 
 #endif /* LIBWPD_INTERNAL_H */

@@ -46,8 +46,8 @@ void WP5ExtendedCharacterGroup::_readContents(WPXInputStream *input, WPXEncrypti
 
 void WP5ExtendedCharacterGroup::parse(WP5Listener *listener)
 {
-	const uint16_t *chars;
-	int len = extendedCharacterWP5ToUCS2(m_character,
+	const uint32_t *chars;
+	int len = extendedCharacterWP5ToUCS4(m_character,
 				  	m_characterSet, &chars);
 	for (int i = 0; i < len; i++)
 		listener->insertCharacter(chars[i]);

@@ -92,11 +92,11 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6Listener *listener) const
 		{
 			uint8_t character = (uint8_t)(wpChar & 0x00FF);
 			uint8_t characterSet = (uint8_t)((wpChar >> 8) & 0x00FF);
-			const uint16_t *chars;
-			int len = extendedCharacterWP6ToUCS2(character,
+			const uint32_t *chars;
+			int len = extendedCharacterWP6ToUCS4(character,
 						      characterSet, &chars);
 			for (int j = 0; j < len; j++)
-				appendUCS4(name, (uint32_t)chars[j]);
+				appendUCS4(name, chars[j]);
 		} 
 		
 		if (tagID == WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_CREATION_DATE ||
@@ -133,11 +133,11 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6Listener *listener) const
 			{				
 				uint8_t character = (uint8_t)(wpChar & 0x00FF);
 				uint8_t characterSet = (uint8_t)((wpChar >> 8) & 0x00FF);
-				const uint16_t *chars;
-				int len = extendedCharacterWP6ToUCS2(character,
+				const uint32_t *chars;
+				int len = extendedCharacterWP6ToUCS4(character,
 						      characterSet, &chars);
 				for (int j = 0; j < len; j++)
-					appendUCS4(data, (uint32_t)chars[j]);
+					appendUCS4(data, chars[j]);
 			}
 			if (data.len())
 				listener->setExtendedInformation(tagID, data);
