@@ -484,10 +484,58 @@ static const uint32_t arabicScriptWP6[] = {
 #include "WP6TibetanMap.h"
 #include "WP6FileStructure.h"
 
+typedef struct _WPXComplexMap
+{
+	uint16_t charToMap;
+	uint32_t unicodeChars[6];
+} WPXComplexMap;
+	
+
+
+static int findSimpleMap(uint16_t character, const uint32_t **chars, const uint32_t *simpleMap, const size_t simpleMapSize)
+{
+	if ((character < simpleMapSize) && simpleMap[character]) 
+	{
+		*chars = &simpleMap[character];
+		return 1;
+	}
+
+	return 0;
+}
+
+static int findComplexMap(uint16_t character, const uint32_t **chars, const WPXComplexMap *complexMap)
+{
+	if (!complexMap)
+	{
+		*chars = &asciiMap[0x00];
+		return 1;
+	}
+	
+	int i = 0;
+	while (complexMap[i].charToMap)
+	{
+		if (complexMap[i].charToMap == character)
+			break;
+		i++;
+	}
+	
+	int j = 0;
+	for (; complexMap[i].unicodeChars[j]; j++)
+		;
+	if (j)
+	{
+		*chars = complexMap[i].unicodeChars;
+		return j;
+	}
+	
+	return 0;
+}
+
 int extendedCharacterWP6ToUCS4(uint8_t character,
 			    uint8_t characterSet, const uint32_t **chars)
 {
 	int i;
+	int retVal = 0;
 
 	if (characterSet == 0)
 	{
@@ -503,81 +551,69 @@ int extendedCharacterWP6ToUCS4(uint8_t character,
 	switch (characterSet)
 	{
 	case WP6_MULTINATIONAL_CHARACTER_SET:
-		if (character < WPD_NUM_ELEMENTS(multinationalWP6))
-			*chars = &multinationalWP6[character];
-		else
-			*chars = &asciiMap[0x00];
-		return 1;
+		if ((retVal = findSimpleMap(character, chars, multinationalWP6, WPD_NUM_ELEMENTS(multinationalWP6))))
+			return retVal;
+		break;
 		
 	case WP6_PHONETIC_SYMBOL_CHARACTER_SET:
-		if (character < WPD_NUM_ELEMENTS(phoneticWP6))
-			*chars = &phoneticWP6[character];
-		else
-			*chars = &asciiMap[0x00];
-		return 1;
+		if ((retVal = findSimpleMap(character, chars, phoneticWP6, WPD_NUM_ELEMENTS(phoneticWP6))))
+			return retVal;
+		break;
 
 	case WP6_BOX_DRAWING_CHARACTER_SET:
-		if (character < WPD_NUM_ELEMENTS(boxdrawingWP6))
-			*chars = &boxdrawingWP6[character];
-		else
-			*chars = &asciiMap[0x00];
-		return 1;
+		if ((retVal = findSimpleMap(character, chars, boxdrawingWP6, WPD_NUM_ELEMENTS(boxdrawingWP6))))
+			return retVal;
+		break;
 
 	case WP6_TYPOGRAPHIC_SYMBOL_CHARACTER_SET:
-		if (character < WPD_NUM_ELEMENTS(typographicWP6))
-			*chars = &typographicWP6[character];
-		else
-			*chars = &asciiMap[0x00];
-		return 1;
+		if ((retVal = findSimpleMap(character, chars, typographicWP6, WPD_NUM_ELEMENTS(typographicWP6))))
+			return retVal;
+		break;
 
 	case WP6_ICONIC_SYMBOL_CHARACTER_SET:
-		if (character < WPD_NUM_ELEMENTS(iconicWP6))
-			*chars = &iconicWP6[character];
-		else
-			*chars = &asciiMap[0x00];
-		return 1;
+		if ((retVal = findSimpleMap(character, chars, iconicWP6, WPD_NUM_ELEMENTS(iconicWP6))))
+			return retVal;
+		break;
 
 	case WP6_MATH_SCIENTIFIC_CHARACTER_SET:
-		if (character < WPD_NUM_ELEMENTS(mathWP6))
-			*chars = &mathWP6[character];
-		else
-			*chars = &asciiMap[0x00];
-		return 1;
+		if ((retVal = findSimpleMap(character, chars, mathWP6, WPD_NUM_ELEMENTS(mathWP6))))
+			return retVal;
+		break;
 
 	case WP6_MATH_SCIENTIFIC_EXTENDED_CHARACTER_SET:
-		if (character < WPD_NUM_ELEMENTS(mathextWP6))
-			*chars = &mathextWP6[character];
-		else
-			*chars = &asciiMap[0x00];
-		return 1;
+		if ((retVal = findSimpleMap(character, chars, mathextWP6, WPD_NUM_ELEMENTS(mathextWP6))))
+			return retVal;
+		break;
 
 	case WP6_GREEK_CHARACTER_SET:
-		if (character < WPD_NUM_ELEMENTS(greekWP6))
-			*chars = &greekWP6[character];
-		else
-			*chars = &asciiMap[0x00];
-		return 1;
+		if ((retVal = findSimpleMap(character, chars, greekWP6, WPD_NUM_ELEMENTS(greekWP6))))
+			return retVal;
+		break;
 
 	case WP6_HEBREW_CHARACTER_SET:
-		if (character < WPD_NUM_ELEMENTS(hebrewWP6))
-			*chars = &hebrewWP6[character];
-		else
-			*chars = &asciiMap[0x00];
-		return 1;
+		if ((retVal = findSimpleMap(character, chars, hebrewWP6, WPD_NUM_ELEMENTS(hebrewWP6))))
+			return retVal;
+		break;
 
 	case WP6_CYRILLIC_CHARACTER_SET:
-		if (character < WPD_NUM_ELEMENTS(cyrillicWP6))
-			*chars = &cyrillicWP6[character];
-		else
-			*chars = &asciiMap[0x00];
-		return 1;
+		if ((retVal = findSimpleMap(character, chars, cyrillicWP6, WPD_NUM_ELEMENTS(cyrillicWP6))))
+			return retVal;
+		break;
 
 	case WP6_JAPANESE_CHARACTER_SET:
-		if (character < WPD_NUM_ELEMENTS(japaneseWP6))
-			*chars = &japaneseWP6[character];
-		else
-			*chars = &asciiMap[0x00];
-		return 1;
+		if ((retVal = findSimpleMap(character, chars, japaneseWP6, WPD_NUM_ELEMENTS(japaneseWP6))))
+			return retVal;
+		break;
+
+	case WP6_ARABIC_CHARACTER_SET:
+		if ((retVal = findSimpleMap(character, chars, arabicWP6, WPD_NUM_ELEMENTS(arabicWP6))))
+			return retVal;
+		break;
+
+	case WP6_ARABIC_SCRIPT_CHARACTER_SET:
+		if ((retVal = findSimpleMap(character, chars, arabicScriptWP6, WPD_NUM_ELEMENTS(arabicScriptWP6))))
+			return retVal;
+		break;
 
 	case WP6_TIBETAN_CHARACTER_SET:
 		if (tibetanMap1[character]) {
@@ -586,24 +622,7 @@ int extendedCharacterWP6ToUCS4(uint8_t character,
 			*chars = tibetanMap1[character];
 			return i;
 		}
-		else {
-			*chars = &asciiMap[0x00];
-			return 1;
-		}
-
-	case WP6_ARABIC_CHARACTER_SET:
-		if (character < WPD_NUM_ELEMENTS(arabicWP6))
-			*chars = &arabicWP6[character];
-		else
-			*chars = &asciiMap[0x00];
-		return 1;
-
-	case WP6_ARABIC_SCRIPT_CHARACTER_SET:
-		if (character < WPD_NUM_ELEMENTS(arabicScriptWP6))
-			*chars = &arabicScriptWP6[character];
-		else
-			*chars = &asciiMap[0x00];
-		return 1;
+		break;
 	}
 
 	// last resort: return whitespace
@@ -928,6 +947,8 @@ static const uint32_t arabicScriptWP5[] = {
 int extendedCharacterWP5ToUCS4(uint8_t character,
 			    uint8_t characterSet, const uint32_t **chars)
 {
+	int retVal = 0;
+
 	if (characterSet == 0)
 	{
 		// if characterset == 0, we have ascii. note that this is different from the doc. body
@@ -942,95 +963,69 @@ int extendedCharacterWP5ToUCS4(uint8_t character,
 	switch (characterSet)
 	{
 	case WP5_INTERNATIONAL_1_CHARACTER_SET:
-		if (character < WPD_NUM_ELEMENTS(international1WP5))
-			*chars = &international1WP5[character];
-		else
-			*chars = &asciiMap[0x00];
-		return 1;
+		if ((retVal = findSimpleMap(character, chars, international1WP5, WPD_NUM_ELEMENTS(international1WP5))))
+			return retVal;
+		break;
 
 	case WP5_INTERNATIONAL_2_CHARACTER_SET:
-		if (character < WPD_NUM_ELEMENTS(international2WP5))
-			*chars = &international2WP5[character];
-		else
-			*chars = &asciiMap[0x00];
-		return 1;
+		if ((retVal = findSimpleMap(character, chars, international2WP5, WPD_NUM_ELEMENTS(international2WP5))))
+			return retVal;
+		break;
 
 	case WP5_BOX_DRAWING_CHARACTER_SET:
-		if (character < WPD_NUM_ELEMENTS(boxdrawingWP5))
-			*chars = &boxdrawingWP5[character];
-		else
-			*chars = &asciiMap[0x00];
-		return 1;
+		if ((retVal = findSimpleMap(character, chars, boxdrawingWP5, WPD_NUM_ELEMENTS(boxdrawingWP5))))
+			return retVal;
+		break;
 
 	case WP5_TYPOGRAPHIC_SYMBOL_CHARACTER_SET:
-		if (character < WPD_NUM_ELEMENTS(typographicWP5))
-			*chars = &typographicWP5[character];
-		else
-			*chars = &asciiMap[0x00];
-		return 1;
+		if ((retVal = findSimpleMap(character, chars, typographicWP5, WPD_NUM_ELEMENTS(typographicWP5))))
+			return retVal;
+		break;
 
 	case WP5_ICONIC_SYMBOL_CHARACTER_SET:
-		if (character < WPD_NUM_ELEMENTS(iconicWP5))
-			*chars = &iconicWP5[character];
-		else
-			*chars = &asciiMap[0x00];
-		return 1;
+		if ((retVal = findSimpleMap(character, chars, iconicWP5, WPD_NUM_ELEMENTS(iconicWP5))))
+			return retVal;
+		break;
 
 	case WP5_MATH_SCIENTIFIC_CHARACTER_SET:
-		if (character < WPD_NUM_ELEMENTS(mathWP5))
-			*chars = &mathWP5[character];
-		else
-			*chars = &asciiMap[0x00];
-		return 1;
+		if ((retVal = findSimpleMap(character, chars, mathWP5, WPD_NUM_ELEMENTS(mathWP5))))
+			return retVal;
+		break;
 
 	case WP5_MATH_SCIENTIFIC_EXTENDED_CHARACTER_SET:
-		if (character < WPD_NUM_ELEMENTS(mathextWP5))
-			*chars = &mathextWP5[character];
-		else
-			*chars = &asciiMap[0x00];
-		return 1;
+		if ((retVal = findSimpleMap(character, chars, mathextWP5, WPD_NUM_ELEMENTS(mathextWP5))))
+			return retVal;
+		break;
 
 	case WP5_GREEK_CHARACTER_SET:
-		if (character < WPD_NUM_ELEMENTS(greekWP5))
-			*chars = &greekWP5[character];
-		else
-			*chars = &asciiMap[0x00];
-		return 1;
+		if ((retVal = findSimpleMap(character, chars, greekWP5, WPD_NUM_ELEMENTS(greekWP5))))
+			return retVal;
+		break;
 
 	case WP5_HEBREW_CHARACTER_SET:
-		if (character < WPD_NUM_ELEMENTS(hebrewWP5))
-			*chars = &hebrewWP5[character];
-		else
-			*chars = &asciiMap[0x00];
-		return 1;
+		if ((retVal = findSimpleMap(character, chars, hebrewWP5, WPD_NUM_ELEMENTS(hebrewWP5))))
+			return retVal;
+		break;
 
 	case WP5_CYRILLIC_CHARACTER_SET:
-		if (character < WPD_NUM_ELEMENTS(cyrillicWP5))
-			*chars = &cyrillicWP5[character];
-		else
-			*chars = &asciiMap[0x00];
-		return 1;
+		if ((retVal = findSimpleMap(character, chars, cyrillicWP5, WPD_NUM_ELEMENTS(cyrillicWP5))))
+			return retVal;
+		break;
 
 	case WP5_JAPANESE_CHARACTER_SET:
-		if (character < WPD_NUM_ELEMENTS(japaneseWP5))
-			*chars = &japaneseWP5[character];
-		else
-			*chars = &asciiMap[0x00];
-		return 1;
+		if ((retVal = findSimpleMap(character, chars, japaneseWP5, WPD_NUM_ELEMENTS(japaneseWP5))))
+			return retVal;
+		break;
 
 	case WP5_ARABIC_CHARACTER_SET:
-		if (character < WPD_NUM_ELEMENTS(arabicWP5))
-			*chars = &arabicWP5[character];
-		else
-			*chars = &asciiMap[0x00];
-		return 1;
+		if ((retVal = findSimpleMap(character, chars, arabicWP5, WPD_NUM_ELEMENTS(arabicWP5))))
+			return retVal;
+		break;
 
 	case WP5_ARABIC_SCRIPT_CHARACTER_SET:
-		if (character < WPD_NUM_ELEMENTS(arabicScriptWP5))
-			*chars = &arabicScriptWP5[character];
-		else
-			*chars = &asciiMap[0x00];
-		return 1;
+		if ((retVal = findSimpleMap(character, chars, arabicScriptWP5, WPD_NUM_ELEMENTS(arabicScriptWP5))))
+			return retVal;
+		break;
 	}
 
 	// last resort: return whitespace
@@ -5285,13 +5280,7 @@ int appleWorldScriptToUCS4(uint16_t character, const uint32_t **chars)
 		0x71b9, 0x71ba, 0x72a7, 0x79a7, 0x7a00, 0x7fb2, 0x8a70, 0x0000  // 0xfdf8 - 0xfdff
 	};
 	
-	typedef struct _WorldScriptComplexMap
-	{
-		uint16_t worldScriptChar;
-		uint32_t unicodeChars[6];
-	} WorldScriptComplexMap;
-	
-	static const WorldScriptComplexMap charComplexMap[] =
+	static const WPXComplexMap charComplexMap[] =
 	{
 		{ 0x8591, { 0xF860, 0x0030, 0x002E, 0x0000 } },
 		{ 0x85AB, { 0xF862, 0x0058, 0x0049, 0x0049, 0x0049, 0x0000 } },
@@ -6234,32 +6223,16 @@ int appleWorldScriptToUCS4(uint16_t character, const uint32_t **chars)
 		return 1;
 	}
 	
-	if (charSimpleMap[character-0x8140])
-	{
-		// We found the character in the list of 1:1 mappings
-		*chars = &charSimpleMap[character-0x8140];
-		return 1;
-	}
-	
+	int retVal = 0;
+
 	// Find the entry corresponding to the WorldScript character
-	int i = 0;
-	while (charComplexMap[i].worldScriptChar)
-	{
-		if (charComplexMap[i].worldScriptChar == character)
-			break;
-		i++;
-	}
+	if ((retVal = findSimpleMap(character - 0x8140, chars, charSimpleMap, WPD_NUM_ELEMENTS(charSimpleMap))))
+		return retVal;
+
+	if ((retVal = findComplexMap(character, chars, charComplexMap)))
+		return retVal;
 	
-	int j = 0;
-	for (; charComplexMap[i].unicodeChars[j]; j++)
-		;
-	if (j)
-	{
-		*chars = charComplexMap[i].unicodeChars;
-		return j;
-	}
-	
-	// We did not find the character: return whitespace
 	*chars = &asciiMap[0x00];
 	return 1;
+
 }
