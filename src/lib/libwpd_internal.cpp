@@ -142,23 +142,24 @@ static int findComplexMap(uint16_t character, const uint32_t **chars, const WPXC
 	if (!complexMap)
 		return 0;
 	
-	int i = 0;
+	unsigned i = 0;
 	while (complexMap[i].charToMap)
 	{
 		if (complexMap[i].charToMap == character)
 			break;
 		i++;
 	}
-	
-	int j = 0;
-	for (; complexMap[i].unicodeChars[j]; j++)
-		;
-	if (j)
+	if (!(complexMap[i].charToMap) || !(complexMap[i].unicodeChars[0]))
+		return 0;
+
+	*chars = complexMap[i].unicodeChars;
+		
+	for (unsigned j = 0; j<WPD_NUM_ELEMENTS(complexMap[i].unicodeChars); j++) 
 	{
-		*chars = complexMap[i].unicodeChars;
-		return j;
+		if (!(complexMap[i].unicodeChars[j]))
+			return (int)j;
 	}
-	
+
 	return 0;
 }
 
