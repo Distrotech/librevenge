@@ -34,6 +34,7 @@ Andrew Ziem <ahziem1@mailbolt.com>			Fix memory leak in standalone
 David Hislop <dhislop@optushome.com.au>			Build fixed on MSVC++ and project
 							files to build wpd2foo converters
 							with MSVC++ compilers.
+Edward Mendelson <em36@columbia.edu>		Miscellaneous character conversion fixes.
 
 Thanks
 ------
