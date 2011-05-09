@@ -63,7 +63,7 @@ int WP42_FUNCTION_GROUP_SIZE[63] =
 	4,	
 	-1,	
 	4,	// 0XE0
-	-1,	
+	3,	
 	-1,	
 	150,	
 	6,	
