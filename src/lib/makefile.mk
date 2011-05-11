@@ -81,6 +81,7 @@ SLOFILES= \
 	$(SLO)$/WP3VariableLengthGroup.obj \
 	$(SLO)$/WP3WindowGroup.obj \
 	$(SLO)$/WP42ContentListener.obj \
+	$(SLO)$/WP42ExtendedCharacterGroup.obj \
 	$(SLO)$/WP42FileStructure.obj \
 	$(SLO)$/WP42HeaderFooterGroup.obj \
 	$(SLO)$/WP42Heuristics.obj \

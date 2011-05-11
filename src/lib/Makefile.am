@@ -123,6 +123,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP3VariableLengthGroup.cpp \
 	WP3WindowGroup.cpp \
 	WP42ContentListener.cpp \
+	WP42ExtendedCharacterGroup.cpp \
 	WP42FileStructure.cpp \
 	WP42HeaderFooterGroup.cpp \
 	WP42Heuristics.cpp \
@@ -295,6 +296,7 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP3VariableLengthGroup.h \
 	WP3WindowGroup.h \
 	WP42ContentListener.h \
+	WP42ExtendedCharacterGroup.h \
 	WP42FileStructure.h \
 	WP42HeaderFooterGroup.h \
 	WP42Heuristics.h \

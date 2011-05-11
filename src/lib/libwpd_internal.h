@@ -100,6 +100,8 @@ int extendedCharacterWP5ToUCS4(uint8_t character, uint8_t characterSet,
 
 int appleWorldScriptToUCS4(uint16_t character, const uint32_t **chars);
 
+int extendedCharacterWP42ToUCS4(uint8_t character, const uint32_t **chars);
+
 uint16_t fixedPointToWPUs(const uint32_t fixedPointNumber);
 double fixedPointToDouble(const uint32_t fixedPointNumber);
 double wpuToFontPointSize(const uint16_t wpuNumber);
