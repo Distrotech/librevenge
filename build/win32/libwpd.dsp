@@ -343,6 +343,10 @@ SOURCE=..\..\src\lib\WP42ContentListener.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\lib\WP42DefineColumnsGroup.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\lib\WP42ExtendedCharacterGroup.cpp
 # End Source File
 # Begin Source File
@@ -1036,6 +1040,10 @@ SOURCE=..\..\src\lib\WP3WindowGroup.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WP42ContentListener.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WP42DefineColumnsGroup.h
 # End Source File
 # Begin Source File
 

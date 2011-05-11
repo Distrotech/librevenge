@@ -30,6 +30,7 @@
 #include "WP42MarginResetGroup.h"
 #include "WP42SuppressPageCharacteristicsGroup.h"
 #include "WP42ExtendedCharacterGroup.h"
+#include "WP42DefineColumnsGroup.h"
 #include "WP42FileStructure.h"
 #include "libwpd_internal.h"
 
@@ -50,6 +51,9 @@ WP42MultiByteFunctionGroup * WP42MultiByteFunctionGroup::constructMultiByteFunct
 			return new WP42HeaderFooterGroup(input, encryption, group);
 		case WP42_EXTENDED_CHARACTER_GROUP:
 			return new WP42ExtendedCharacterGroup(input, encryption, group);
+		case WP42_DEFINE_COLUMNS_OLD_GROUP:
+		case WP42_DEFINE_COLUMNS_NEW_GROUP:
+			return new WP42DefineColumnsGroup(input, encryption, group);
 		default:
 			// this is an unhandled group, just skip it
 			return new WP42UnsupportedMultiByteFunctionGroup(input, encryption, group);
