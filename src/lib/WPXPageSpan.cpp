@@ -234,15 +234,15 @@ bool operator==(const WPXPageSpan &page1, const WPXPageSpan &page2)
 	if (page1.getPageNumberSuppression() != page2.getPageNumberSuppression())
 		return false;
 	
-        if (page1.getPageNumberOverriden() != page2.getPageNumberOverriden() || 
-	    page1.getPageNumberOverride() != page2.getPageNumberOverride())
+	if (page1.getPageNumberOverriden() != page2.getPageNumberOverriden() || 
+		page1.getPageNumberOverride() != page2.getPageNumberOverride())
 		return false;
 
 	if (page1.getPageNumberingType() != page2.getPageNumberingType())
 		return false;
 
 	if (page1.getPageNumberingFontName() != page2.getPageNumberingFontName() ||
-	    page1.getPageNumberingFontSize() != page2.getPageNumberingFontSize())
+		page1.getPageNumberingFontSize() != page2.getPageNumberingFontSize())
 		return false;
 
 	for (uint8_t i=0; i<WPX_NUM_HEADER_FOOTER_TYPES; i++) {
