@@ -42,7 +42,7 @@ WP42DefineColumnsGroup::~WP42DefineColumnsGroup()
 
 void WP42DefineColumnsGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
-	unsigned maxNumColumns = 0;
+	uint8_t maxNumColumns = 0;
 	switch (m_groupId)
 	{
 		case WP42_DEFINE_COLUMNS_OLD_GROUP:
