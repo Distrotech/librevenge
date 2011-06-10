@@ -1275,7 +1275,11 @@ WPXString doubleToString(const double value)
 		tempString.sprintf("0.0000");
 	else
 		tempString.sprintf("%.4f", value);
+#ifndef __ANDROID__
 	std::string decimalPoint(localeconv()->decimal_point);
+#else
+	std::string decimalPoint(".");
+#endif
 	if ((decimalPoint.size() == 0) || (decimalPoint == "."))
 		return tempString;
 	std::string stringValue(tempString.cstr());
