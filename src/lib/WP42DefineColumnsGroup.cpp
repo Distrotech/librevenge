@@ -61,7 +61,7 @@ void WP42DefineColumnsGroup::_readContents(WPXInputStream *input, WPXEncryption 
 	if (m_numColumns > maxNumColumns)
 		m_numColumns = maxNumColumns;
 	m_isParallel = ((tmpNumColumns & 0x80) != 0);
-	for (unsigned i = 0; i<2*m_numColumns; i++)
+	for (uint8_t i = 0; i<2*m_numColumns; i++)
 		m_columnsDefinition.push_back(readU8(input, encryption));
 }
 
