@@ -99,8 +99,8 @@ WPXPropertyList::WPXPropertyList() :
 WPXPropertyList::WPXPropertyList(const WPXPropertyList &propList) :
 	m_mapImpl(new WPXMapImpl())
 {
-        WPXPropertyList::Iter i(propList);
-        for (i.rewind(); i.next(); )
+	WPXPropertyList::Iter i(propList);
+	for (i.rewind(); i.next(); )
 	{
 		insert(i.key(), i()->clone());
 	}
@@ -157,12 +157,13 @@ void WPXPropertyList::remove(const char * name)
 
 const WPXPropertyList& WPXPropertyList::operator=(const WPXPropertyList& propList)
 {
-        WPXPropertyList::Iter i(propList);
-        for (i.rewind(); i.next(); )
-        {
-            insert(i.key(), i()->clone());
-        }
-        return *this;
+    clear();    
+	WPXPropertyList::Iter i(propList);
+	for (i.rewind(); i.next(); )
+	{
+		insert(i.key(), i()->clone());
+	}
+	return *this;
 }
 
 const WPXProperty * WPXPropertyList::operator[](const char *name) const
