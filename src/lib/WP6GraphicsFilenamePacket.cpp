@@ -42,7 +42,7 @@ WP6GraphicsFilenamePacket::~WP6GraphicsFilenamePacket()
 
 void WP6GraphicsFilenamePacket::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
-	if ((m_flags && 0x01) == 0x00)
+	if ((m_flags & 0x01) == 0x00)
 		return;
 	uint16_t tmpNumChildIds = readU16(input, encryption);
 	for (uint16_t i = 0; i < tmpNumChildIds; i++)
