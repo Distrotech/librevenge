@@ -397,7 +397,7 @@ bool WPXStringStream::isOLEStream()
 WPXInputStream* WPXStringStream::getDocumentOLEStream(const char * name)
 {
 	if (!d->buffer.good())
-		return false;
+		return NULL;
 
 	Storage *tmpStorage = new Storage( d->buffer );
 	Stream tmpStream( tmpStorage, name );
