@@ -15,9 +15,11 @@ libtool
 libwpd.spec
 libwpd-zip
 ltmain.sh
+m4
 missing
 mkinstalldirs
 stamp-h1
 *.pc
 *.rc
 *~
+*.tar.*

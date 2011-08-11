@@ -1,5 +1,5 @@
 AC_INIT(src/lib/WPXParser.cpp)
-AC_PREREQ([2.59c])
+AC_PREREQ([2.65])
 
 AM_CONFIG_HEADER(config.h)
 
@@ -29,7 +29,12 @@ AC_SUBST(LT_REVISION)
 AC_SUBST(LT_AGE)
 AC_SUBST(LT_CURRENT_MINUS_AGE)
 
-AM_INIT_AUTOMAKE(libwpd, $WPD_VERSION)
+AC_CONFIG_MACRO_DIR([m4])
+
+# initialize automake
+#
+AM_INIT_AUTOMAKE(libwpd, $WPD_VERSION, foreign dist-bzip2)
+m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES])
 
 AC_PROG_CC
 
@@ -39,194 +44,142 @@ AC_PROG_INSTALL
 
 AC_LIBTOOL_WIN32_DLL
 
-AC_ARG_ENABLE([static-tools],[  --enable-static-tools  Link tools statically],[
-       case "${enableval}" in
-          yes) enable_static_tools="yes" ;;
-          no)  enable_static_tools="no" ;;
-            *) AC_MSG_ERROR(bad value ${enableval} for --static-tools) ;;
-       esac
-],[
-       enable_static_tools="no"
-])
-
-AM_CONDITIONAL(STATIC_TOOLS, test x$enable_static_tools = xyes)
-
-if test x$enable_static_tools = xno; then
-	AC_DISABLE_STATIC
-fi
-
-if test x$enable_static_tools = xyes; then
-	enable_static="yes"
-fi
-
 AC_PROG_LIBTOOL
+
+AC_ARG_ENABLE([static-tools],
+	[AS_HELP_STRING([--enable-static-tools], [Link tools (binaries) statically])]
+)
+AS_IF([test "x$enable_static_tools" = "xyes"], [
+	enable_static="yes"
+], [
+	AC_DISABLE_STATIC
+])
+AM_CONDITIONAL(STATIC_TOOLS, [test "x$enable_static_tools" = "xyes"])
+
+AC_ARG_ENABLE([werror],
+	[AS_HELP_STRING([--enable-werror], [Treat all warnings as errors, usefull for development])]
+)
+AS_IF([test x"$enable_werror" = "xyes"], [
+	CFLAGS="$CFLAGS -Werror"
+	CXXFLAGS="$CXXFLAGS -Werror"
+])
 
 AC_SUBST(WPD_OBJDIR, [$objdir])
 
-dnl ***********************************************************************************
-
-dnl stream
-dnl
-test_stream=true
-AC_ARG_WITH(stream,
-	[  --without-stream        Do not build the input stream implementation],
-	if test "x$withval" = xno; then
-		test_stream=false
-	fi
+AC_ARG_WITH([stream],
+	[AS_HELP_STRING([--without-stream], [Do not build the input stream implementation])]
 )
-
-AM_CONDITIONAL(WITH_LIBWPD_STREAM, $test_stream )
+AM_CONDITIONAL(WITH_LIBWPD_STREAM, [test "x$with_stream" != "xno"])
 
 AC_MSG_CHECKING([for native Win32])
 case "$host" in
-  *-*-mingw*)
-    native_win32=yes
-    LIBWPD_WIN32_RESOURCE=libwpd-win32res.lo
-    LIBWPD_STREAM_WIN32_RESOURCE=libwpd-stream-win32res.lo
-    WPD2HTML_WIN32_RESOURCE=wpd2html-win32res.lo
-    WPD2TEXT_WIN32_RESOURCE=wpd2text-win32res.lo
-    WPD2RAW_WIN32_RESOURCE=wpd2raw-win32res.lo
-    ;;
-  *)
-    native_win32=no
-    LIBWPD_WIN32_RESOURCE=
-    LIBWPD_STREAM_WIN32_RESOURCE=
-    WPD2HTML_WIN32_RESOURCE=
-    WPD2TEXT_WIN32_RESOURCE=
-    WPD2RAW_WIN32_RESOURCE=
+	*-*-mingw*)
+		native_win32=yes
+		LIBWPD_WIN32_RESOURCE=libwpd-win32res.lo
+		LIBWPD_STREAM_WIN32_RESOURCE=libwpd-stream-win32res.lo
+		WPD2HTML_WIN32_RESOURCE=wpd2html-win32res.lo
+		WPD2TEXT_WIN32_RESOURCE=wpd2text-win32res.lo
+		WPD2RAW_WIN32_RESOURCE=wpd2raw-win32res.lo
+	;;
+	*)
+		native_win32=no
+		LIBWPD_WIN32_RESOURCE=
+		LIBWPD_STREAM_WIN32_RESOURCE=
+		WPD2HTML_WIN32_RESOURCE=
+		WPD2TEXT_WIN32_RESOURCE=
+		WPD2RAW_WIN32_RESOURCE=
     ;;
 esac
 AC_MSG_RESULT([$native_win32])
-AM_CONDITIONAL(OS_WIN32, test "$native_win32" = yes)
+AM_CONDITIONAL(OS_WIN32, [test "x$native_win32" = "xyes"])
 AC_SUBST(LIBWPD_WIN32_RESOURCE)
 AC_SUBST(LIBWPD_STREAM_WIN32_RESOURCE)
 AC_SUBST(WPD2HTML_WIN32_RESOURCE)
 AC_SUBST(WPD2TEXT_WIN32_RESOURCE)
 AC_SUBST(WPD2RAW_WIN32_RESOURCE)
 
-test_docs=true
-if test "$native_win32" = yes; then
-	test_docs=false
-fi
 AC_ARG_WITH(docs,
-	[  --without-docs          Do not build documentation],
-	if test "x$withval" = xno; then
-		test_docs=false
-	fi
-	if test "x$withval" = xyes; then
-		test_docs=true
-	fi
+	[AS_HELP_STRING([--without-docs], [Do not build documentation])]
 )
-
-if test "x$test_docs" = xtrue; then
-	AC_PATH_PROG(DOXYGEN, doxygen)
-	if test -z "$DOXYGEN"; then
+AS_IF([test "x$native_win32" = "xyes"], [with_docs=false])
+AS_IF([test "x$with_docs" != "xno"], [
+	AC_PATH_PROG(DOXYGEN, [doxygen])
+	AS_IF([test -z "$DOXYGEN"], [
 		AC_MSG_WARN([*** Could not find doxygen in your PATH.])
 		AC_MSG_WARN([*** The documentation will not be built.])
-		test_docs=false
-	fi
-fi
-
-AM_CONDITIONAL(WITH_LIBWPD_DOCS, $test_docs )
-
+		enable_docs=false
+	], [enable_docs=true])
+], [enable_docs=false])
+AM_CONDITIONAL([WITH_LIBWPD_DOCS], [test "x$enable_docs" != "xfalse"])
 
 AC_MSG_CHECKING([for Win32 platform in general])
 case "$host" in
-  *-*-mingw*|*-*-cygwin*)
-    platform_win32=yes
-    ;;
-  *)
-    platform_win32=no
-    ;;
+	*-*-mingw*|*-*-cygwin*)
+		platform_win32=yes
+	;;
+	*)
+		platform_win32=no
+	;;
 esac
-AC_MSG_RESULT($platform_win32)
-AM_CONDITIONAL(PLATFORM_WIN32, test "$platform_win32" = yes)
+AC_MSG_RESULT([$platform_win32])
+AM_CONDITIONAL(PLATFORM_WIN32, [test "x$platform_win32" = "xyes"])
 
 AC_MSG_CHECKING([for Darwin (Mac OS X) platform])
 case "$host" in
-  *-*-darwin*)
-    platform_darwin=yes
-    ;;
-  *)
-    platform_darwin=no
-    ;;
+	*-*-darwin*)
+		platform_darwin=yes
+	;;
+	*)
+		platform_darwin=no
+	;;
 esac
-AC_MSG_RESULT($platform_darwin)
-AM_CONDITIONAL(PLATFORM_DARWIN, test "$platform_darwin" = yes)
+AC_MSG_RESULT([$platform_darwin])
+AM_CONDITIONAL(PLATFORM_DARWIN, [test "x$platform_darwin" = "xyes"])
 
-AC_ARG_ENABLE(def_files,[  --enable-def-files Enable use of def files to define exported symbols on win32 ],[
-  if test x"$native_win32" = xyes; then
-    case "${enableval}" in
-       yes) def_files=yes ;;
-	   *) def_files=no ;;
-    esac
-  else
-    def_files=no
-  fi
-],[ def_files=no
+AC_ARG_ENABLE([def_files],
+	[AS_HELP_STRING([--enable-def-files], [Enable use of def files to define exported symbols on win32])]
+)
+AM_CONDITIONAL(DEF_FILES, [test "x$enable_def_files" = "xyes" -a "x$native_win32" = "xyes"])
+
+AC_ARG_ENABLE([debug],
+	[AS_HELP_STRING([--enable-debug], [Turn on debugging])]
+)
+AS_IF([test "x$enable_debug" = "xyes"], [
+	DEBUG_CXXFLAGS="-DDEBUG -g"
+], [
+	DEBUG_CXXFLAGS="-DNDEBUG"
 ])
 
-AM_CONDITIONAL(DEF_FILES, test "$def_files" = yes)
-
-
-AC_ARG_ENABLE(debug,[  --enable-debug    Turn on debugging],[
-	case "${enableval}" in
-	   yes)	debug=true ;
-		DEBUG_CXXFLAGS="-DDEBUG -g" ;;
-	    no)	debug=false ;
-		DEBUG_CXXFLAGS="-DNDEBUG" ;;
-	     *)	AC_MSG_ERROR(bad value ${enableval} for --enable-debug) ;;
-	esac
-],[	debug=false
-	DEBUG_CXXFLAGS="-DNDEBUG" 
-])
-
-# AM_CONDITIONAL(DEBUG, test x$debug = xtrue)
-
-# Courtesy of Glib: Ensure MSVC-compatible struct packing convention 
+# Courtesy of Glib: Ensure MSVC-compatible struct packing convention
 # is used when compiling for Win32 with gcc.
-# What flag to depends on gcc version: gcc3 uses "-mms-bitfields", while
-# gcc2 uses "-fnative-struct".
-if test x"$native_win32" = xyes; then
-  AC_CHECK_TOOL(WINDRES, windres)
-  if test x"$GCC" = xyes; then
-    msnative_struct=''
-    AC_MSG_CHECKING([how to get MSVC-compatible struct packing])
-    if test -z "$ac_cv_prog_CC"; then
-      our_gcc="$CC"
-    else
-      our_gcc="$ac_cv_prog_CC"
-    fi
-    case `$our_gcc --version | sed -e 's,\..*,.,' -e q` in
-      2.)
-	if $our_gcc -v --help 2>/dev/null | grep fnative-struct >/dev/null; then
-	  msnative_struct='-fnative-struct'
-	fi
-	;;
-      *)
-	if $our_gcc -v --help 2>/dev/null | grep ms-bitfields >/dev/null; then
-	  msnative_struct='-mms-bitfields'
-	fi
-	;;
-    esac
-    if test x"$msnative_struct" = x ; then
-      AC_MSG_RESULT([no way])
-      AC_MSG_WARN([produced libraries might be incompatible with MSVC-compiled code])
-    else
-      CFLAGS="$CFLAGS $msnative_struct"
-      CXXFLAGS="$CXXFLAGS $msnative_struct"
-      AC_MSG_RESULT([${msnative_struct}])
-    fi
-  fi
-  CFLAGS="$CFLAGS -Wall -pedantic"
-  CXXFLAGS="$CXXFLAGS -Wall -pedantic"
-  
-else
-  if test x"$GCC" = xyes; then
-    CFLAGS="$CFLAGS -Wall -Werror -pedantic"
-    CXXFLAGS="$CXXFLAGS -Wall -Werror -pedantic"
-  fi
-fi
+AS_IF([test "x$native_win32" = "xyes"], [
+	AC_CHECK_TOOL(WINDRES, windres)
+	AS_IF([x"$GCC" = xyes], [
+		AC_MSG_CHECKING([how to get MSVC-compatible struct packing])
+		AS_IF([test -z "$ac_cv_prog_CC"], [
+			our_gcc="$CC"
+		], [
+			our_gcc="$ac_cv_prog_CC"
+		])
+		AS_IF([$our_gcc -v --help 2>/dev/null | grep ms-bitfields >/dev/null], [
+			msnative_struct="-mms-bitfields"
+			CFLAGS="$CFLAGS $msnative_struct"
+			CXXFLAGS="$CXXFLAGS $msnative_struct"
+			AC_MSG_RESULT([${msnative_struct}])
+		], [
+			AC_MSG_RESULT([no way])
+			AC_MSG_WARN([produced libraries might be incompatible with MSVC-compiled code])
+		])
+	])
+	CFLAGS="$CFLAGS -Wall -pedantic"
+	CXXFLAGS="$CXXFLAGS -Wall -pedantic"
+], [
+	AS_IF([test x"$GCC" = xyes], [
+		# Be tough with warnings and produce less careless code
+		CFLAGS="$CFLAGS -Wall -pedantic"
+		CXXFLAGS="$CXXFLAGS -Wall -pedantic"
+	])
+])
 
 AC_SUBST(DEBUG_CXXFLAGS)
 
@@ -258,7 +211,6 @@ autopackage/Makefile
 autopackage/default.apspec
 ])
 
-case "$debug" in
-     "true" )
-        AC_MSG_RESULT([Configured with debugging symbols.]) ;;
-esac
+AS_IF([test "x$enable_debug" = "xyes"], [
+	AC_MSG_RESULT([Configured with debugging symbols.])
+])
