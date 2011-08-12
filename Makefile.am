@@ -1,3 +1,5 @@
+ACLOCAL_AMFLAGS = -I m4
+
 pkgconfdir = $(libdir)/pkgconfig
 
 if WITH_LIBWPD_STREAM
@@ -31,9 +33,6 @@ rpm: dist
 
 zip: install
 	sh libwpd-zip 
-
-check: all
-	cd src/test && make check
 
 dist-hook:
 	git log --date=short --pretty="format:@%cd  %an  <%ae>  [%H]%n%n%s%n%n%e%b" | sed -e "s|^\([^@]\)|\t\1|" -e "s|^@||" >$(distdir)/ChangeLog

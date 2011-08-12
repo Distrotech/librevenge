@@ -1,6 +1,6 @@
 target_test = test
 
-noinst_PROGRAMS = $(target_test)
+check_PROGRAMS = $(target_test)
 
 AM_CXXFLAGS = -I$(top_srcdir)/src/lib/ $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS)
 
@@ -13,7 +13,4 @@ test_LDADD = \
 test_SOURCES = \
 	test.cpp
 
-.PHONY:		check
-
-check: test
-	./test
+TESTS = $(target_test)
