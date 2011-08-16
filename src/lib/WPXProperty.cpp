@@ -31,6 +31,7 @@ class WPXStringProperty : public WPXProperty
 public:
 	WPXStringProperty(const WPXString &str);
 	WPXStringProperty(const char * str);
+	~WPXStringProperty() {}
 	virtual int getInt() const;
 	virtual double getDouble() const;
 	virtual WPXString getStr() const;
@@ -44,6 +45,7 @@ class WPXIntProperty : public WPXProperty
 {
 public:
 	WPXIntProperty(const int val);
+	~WPXIntProperty() {}
 	virtual int getInt() const;
 	virtual double getDouble() const;
 	virtual WPXString getStr() const;
@@ -57,6 +59,7 @@ class WPXBoolProperty : public WPXIntProperty
 {
 public:
 	WPXBoolProperty(const bool val);
+	~WPXBoolProperty() {}
 	virtual WPXString getStr() const;
 	virtual WPXProperty * clone() const;
 };
@@ -65,6 +68,7 @@ class WPXDoubleProperty : public WPXProperty
 {
 public:
 	WPXDoubleProperty(const double val);
+	~WPXDoubleProperty() {}
 	virtual int getInt() const;
 	virtual double getDouble() const;
 	virtual WPXString getStr() const; 
@@ -78,6 +82,7 @@ class WPXInchProperty : public WPXDoubleProperty
 {
 public:
 	WPXInchProperty(const double val);
+	~WPXInchProperty() {}
 	virtual WPXString getStr() const; 
 	virtual WPXProperty * clone() const;
 };
@@ -86,6 +91,7 @@ class WPXPercentProperty : public WPXDoubleProperty
 {
 public:
 	WPXPercentProperty(const double val);
+	~WPXPercentProperty() {};
 	virtual WPXString getStr() const; 
 	virtual WPXProperty * clone() const;
 };
@@ -94,6 +100,7 @@ class WPXPointProperty : public WPXDoubleProperty
 {
 public:
 	WPXPointProperty(const double val);
+	~WPXPointProperty() {}
 	virtual WPXString getStr() const; 
 	virtual WPXProperty * clone() const;
 };
@@ -102,6 +109,7 @@ class WPXTwipProperty : public WPXDoubleProperty
 {
 public:
 	WPXTwipProperty(const double val);
+	~WPXTwipProperty() {}
 	virtual WPXString getStr() const; 
 	virtual WPXProperty * clone() const;
 };
@@ -110,6 +118,7 @@ class WPXGenericProperty : public WPXDoubleProperty
 {
 public:
 	WPXGenericProperty(const double val);
+	~WPXGenericProperty() {}
 	virtual WPXString getStr() const; 
 	virtual WPXProperty * clone() const;
 };
