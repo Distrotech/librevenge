@@ -1,8 +1,5 @@
 # Process this file with autoconf to create configure.
 
-# ----------------------------------------------------------------------------
-# Copyright (C) 2011 Tomas 'scarabeus' Chvatal <tomas.chvatal@gmail.com>
-# ----------------------------------------------------------------------------
 AC_PREREQ([2.65])
 
 # ====================
@@ -205,7 +202,7 @@ AM_CONDITIONAL([WITH_LIBWPD_DOCS], [test "x$build_docs" != "xno"])
 AC_ARG_WITH([stream],
 	[AS_HELP_STRING([--without-stream], [Do not build the input stream implementation])],
 	[with_stream="$withval"],
-	[with_stream=no]
+	[with_stream=yes]
 )
 AM_CONDITIONAL(WITH_LIBWPD_STREAM, [test "x$with_stream" != "xno"])
 
