@@ -10,7 +10,7 @@ AC_PREREQ([2.65])
 # ====================
 m4_define([libwpd_version_major],[0])
 m4_define([libwpd_version_minor],[9])
-m4_define([libwpd_version_micro],[2])
+m4_define([libwpd_version_micro],[3])
 m4_define([libwpd_version],[libwpd_version_major.libwpd_version_minor.libwpd_version_micro])
 
 # =============
