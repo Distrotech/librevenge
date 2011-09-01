@@ -9,7 +9,7 @@ LIBTARGET=NO
 
 .INCLUDE :  settings.mk
 
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)$(COM)"=="WNTMSC"
 CFLAGS+=-GR
 .ENDIF
 .IF "$(COM)"=="GCC"
