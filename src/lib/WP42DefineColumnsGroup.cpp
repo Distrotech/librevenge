@@ -65,7 +65,7 @@ void WP42DefineColumnsGroup::_readContents(WPXInputStream *input, WPXEncryption 
 		m_columnsDefinition.push_back(readU8(input, encryption));
 }
 
-void WP42DefineColumnsGroup::parse(WP42Listener *listener)
+void WP42DefineColumnsGroup::parse(WP42Listener * /* listener */)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling an DefineColumns group\n"));
 }
