@@ -10,19 +10,8 @@ endif
 
 if OS_WIN32
 version_info = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) -avoid-version
-
-install-libtool-import-lib:
-	$(INSTALL) @WPD_OBJDIR@/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll.a $(DESTDIR)$(libdir)
-	$(INSTALL) @WPD_OBJDIR@/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll.a $(DESTDIR)$(libdir)
-
-uninstall-libtool-import-lib:
-	-rm -f $(DESTDIR)$(libdir)/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll.a
-	-rm -f $(DESTDIR)$(libdir)/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll.a
-
 else
 version_info = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
-install-libtool-import-lib:
-uninstall-libtool-import-lib:
 endif
 
 if DEF_FILES
@@ -440,10 +429,6 @@ if OS_WIN32
 	WINDRES=@WINDRES@ $(top_srcdir)/build/win32/lt-compile-resource libwpd-stream.rc @LIBWPD_STREAM_WIN32_RESOURCE@
 endif
 
-
-install-data-local: install-libtool-import-lib
-
-uninstall-local: uninstall-libtool-import-lib
 
 # Include the GSFStream.* in case we build a tarball without stream
 EXTRA_DIST = \
