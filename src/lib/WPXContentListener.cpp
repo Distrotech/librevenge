@@ -974,6 +974,9 @@ void WPXContentListener::_closeTable()
 
 void WPXContentListener::_openTableRow(const double height, const bool isMinimumHeight, const bool isHeaderRow)
 {
+	if (!m_ps->m_isTableOpened)
+		throw ParseException();
+	
 	if (m_ps->m_isTableRowOpened)
 		_closeTableRow();
 	
@@ -1075,6 +1078,9 @@ void WPXContentListener::_openTableCell(const uint8_t colSpan, const uint8_t row
 				   const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
 				   const RGBSColor * cellBorderColor, const WPXVerticalAlignment cellVerticalAlignment)
 {
+	if (!m_ps->m_isTableOpened || !m_ps->m_isTableRowOpened)
+		throw ParseException();
+	
 	uint8_t tmpColSpan = colSpan;
 	if (m_ps->m_isTableCellOpened)
 		_closeTableCell();
