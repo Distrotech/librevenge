@@ -374,7 +374,7 @@ void HtmlDocumentGenerator::openTextBox(const WPXPropertyList & /*propList*/)
 {
 	if (!m_ignore)
 	{
-		if (!m_textBoxesCount)
+		if (!m_textBoxesCount++)
 		{
 			*m_pOutputStream << "<sup>(text box: " << m_textBoxNumber << ")</sup>";
 			m_pOutputStream = &m_commentsStream;
