@@ -233,8 +233,6 @@ libwpd-0.9.pc
 libwpd-stream-0.9.pc
 libwpd.spec
 libwpd-zip
-autopackage/Makefile
-autopackage/default.apspec
 ])
 AC_OUTPUT
 

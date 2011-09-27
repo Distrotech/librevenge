@@ -8,7 +8,7 @@ endif
 
 pkgconf_DATA = libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.pc $(LIBWPD_STREAM_PC)
 
-SUBDIRS = src build docs autopackage
+SUBDIRS = src build docs
 
 EXTRA_DIST = \
 	autogen.sh \
