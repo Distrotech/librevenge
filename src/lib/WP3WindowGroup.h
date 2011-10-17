@@ -47,6 +47,9 @@ private:
 	double m_width, m_height, m_horizontalOffset, m_verticalOffset;
 	uint32_t m_resourceID;
 	WP3SubDocument *m_subDocument, *m_caption;
+	// Unimplemented to prevent compiler from creating crasher ones
+	WP3WindowGroup(const WP3WindowGroup &);
+	WP3WindowGroup &operator=(const WP3WindowGroup &);
 };
 
 #endif /* WP3WindowGroup_H */

@@ -35,6 +35,11 @@
 HtmlDocumentGenerator::HtmlDocumentGenerator() :
 	m_ignore(false),
 	m_pOutputStream(&std::cout),
+	m_footNotesStream(),
+	m_endNotesStream(),
+	m_commentsStream(),
+	m_textBoxesStream(),
+	m_dummyStream(),
 	m_footNotesCount(0),
 	m_endNotesCount(0),
 	m_commentsCount(0),

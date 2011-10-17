@@ -106,7 +106,9 @@ private:
 	std::ostringstream m_footNotesStream, m_endNotesStream, m_commentsStream, m_textBoxesStream, m_dummyStream;
 	unsigned m_footNotesCount, m_endNotesCount, m_commentsCount, m_textBoxesCount;
 	unsigned m_commentNumber, m_textBoxNumber;
-
+	// Unimplemented to prevent compiler from creating crasher ones
+	HtmlDocumentGenerator(const HtmlDocumentGenerator &);
+	HtmlDocumentGenerator &operator=(const HtmlDocumentGenerator &);
 };
 
 #endif /* HTMLLISTENERIMPL_H */

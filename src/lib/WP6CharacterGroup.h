@@ -75,6 +75,10 @@ private:
 	uint16_t m_matchedFontIndex;
 	uint16_t m_matchedFontPointSize;
 	WP6FontDescriptorPacket *m_packet;
+	// Unimplemented to prevent compiler from creating crasher ones
+	WP6CharacterGroup_FontFaceChangeSubGroup(const WP6CharacterGroup_FontFaceChangeSubGroup &);
+	WP6CharacterGroup_FontFaceChangeSubGroup &operator=(const WP6CharacterGroup_FontFaceChangeSubGroup &);
+
 };
 
 class WP6CharacterGroup_FontSizeChangeSubGroup : public WP6VariableLengthGroup_SubGroup

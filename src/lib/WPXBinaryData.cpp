@@ -38,6 +38,10 @@ public:
 	~WPXBinaryDataImpl() { if (m_stream) delete m_stream; }
 	std::vector<unsigned char> m_buf;
 	WPXMemoryInputStream *m_stream;
+private:
+	// Unimplemented to prevent compiler from creating crasher ones
+	WPXBinaryDataImpl(const WPXBinaryDataImpl &);
+	WPXBinaryDataImpl &operator=(const WPXBinaryDataImpl &);
 };
 
 WPXBinaryData::~WPXBinaryData()

@@ -32,7 +32,10 @@
 
 WP6SetNumberGroup::WP6SetNumberGroup(WPXInputStream *input, 
 				     WPXEncryption *encryption) :
-	WP6VariableLengthGroup()
+	WP6VariableLengthGroup(),
+	m_countOfLevelNumbersSetting(0x00),
+	m_startingLevelNumber(0x00),
+	m_countNumbers(0)
 {
 	_read(input, encryption);
 }

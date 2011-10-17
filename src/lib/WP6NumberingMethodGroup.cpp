@@ -32,7 +32,9 @@
 
 WP6NumberingMethodGroup::WP6NumberingMethodGroup(WPXInputStream *input, 
 				     WPXEncryption *encryption) :
-	WP6VariableLengthGroup()
+	WP6VariableLengthGroup(),
+	m_levelNumber(0x00),
+	m_numberingMethod(0x00)
 {
 	_read(input, encryption);
 }

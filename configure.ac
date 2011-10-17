@@ -142,7 +142,7 @@ AS_IF([test "x$native_win32" = "xyes"], [
 	AS_IF([test x"$GCC" = xyes], [
 		# Be tough with warnings and produce less careless code
 		CFLAGS="$CFLAGS -Wall -pedantic"
-		CXXFLAGS="$CXXFLAGS -Wall -pedantic"
+		CXXFLAGS="$CXXFLAGS -Wall -pedantic -Weffc++"
 	])
 ])
 AC_SUBST(DEBUG_CXXFLAGS)

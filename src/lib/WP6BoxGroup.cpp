@@ -48,6 +48,8 @@ WP6BoxGroup::WP6BoxGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	m_widthFlags(0x00),
 	m_width(0),
 	m_hasHeightInformation(false),
+	m_heightFlags(0x00),
+	m_height(0),
 	m_hasZOrderInformation(false),
 	m_zOrderFlags(0x00),
 	m_hasBoxContentType(false),

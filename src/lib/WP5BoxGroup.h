@@ -44,6 +44,9 @@ private:
 	uint8_t m_boxType;
 	uint16_t m_graphicsOffset;
 	const WPXBinaryData *m_data;
+	// Unimplemented to prevent compiler from creating crasher ones
+	WP5BoxGroup(const WP5BoxGroup &);
+	WP5BoxGroup &operator=(const WP5BoxGroup &);
 };
 
 #endif /* WP5BOXGROUP_H */

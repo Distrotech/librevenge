@@ -94,6 +94,9 @@ public:
 
 private:
 	WP3ResourceFork *m_resourceFork;
+	// Unimplemented to prevent compiler from creating crasher ones
+	WP3Listener(const WP3Listener &);
+	WP3Listener &operator=(const WP3Listener &);
 };
 
 #endif /* WP3LISTENER_H */

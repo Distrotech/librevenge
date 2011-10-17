@@ -34,6 +34,8 @@ WP6GraphicsBoxStylePacket::WP6GraphicsBoxStylePacket(WPXInputStream *input, WPXE
 	m_generalPositioningFlags(0x00),
 	m_horizontalPositioningFlags(0x00),
 	m_horizontalOffset(0),
+	m_leftColumn(0x00),
+	m_rightColumn(0x00),
 	m_verticalPositioningFlags(0x00),
 	m_verticalOffset(0),
 	m_widthFlags(0x00),

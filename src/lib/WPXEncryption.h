@@ -53,6 +53,9 @@ private:
 	WPXString m_password;
 	unsigned long m_encryptionStartOffset;
 	unsigned char m_encryptionMaskBase;
+	// Unimplemented to prevent compiler from creating crasher ones
+	WPXEncryption(const WPXEncryption &);
+	WPXEncryption &operator=(const WPXEncryption &);
 };
 
 #endif /* WPXENCRYPTION_H */
