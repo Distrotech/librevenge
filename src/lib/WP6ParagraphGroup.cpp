@@ -312,12 +312,11 @@ void WP6ParagraphGroup_SpacingAfterParagraphSubGroup::parse(WP6Listener *listene
 
 WP6ParagraphGroup_OutlineDefineSubGroup::WP6ParagraphGroup_OutlineDefineSubGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	m_outlineHash(0),
-	m_numberingMethods(),
 	m_tabBehaviourFlag(0)
 {
 	// NB: this is identical to WP6OutlineStylePacket::_readContents!!
 	m_outlineHash = readU16(input, encryption);
-	for (unsigned int i=0; i<WP6_NUM_LIST_LEVELS; i++)
+	for (unsigned i=0; i<WP6_NUM_LIST_LEVELS; i++)
 		m_numberingMethods[i] = readU8(input, encryption);
 	m_tabBehaviourFlag = readU8(input, encryption);
 

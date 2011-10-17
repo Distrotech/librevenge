@@ -32,10 +32,11 @@ WP6OutlineStylePacket::WP6OutlineStylePacket(WPXInputStream *input, WPXEncryptio
 	m_numPIDs(0),
 	m_nonDeletableInfoSize(0),
 	m_outlineHash(0),
-	m_numberingMethods(),
 	m_outlineFlags(0),
 	m_tabBehaviourFlag(0)
 {
+	for (unsigned i = 0; i < WP6_NUM_LIST_LEVELS; i++)
+		m_numberingMethods[i] = 0;
 	_read(input, encryption, dataOffset, dataSize);
 }
 
