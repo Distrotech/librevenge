@@ -54,7 +54,7 @@ WP1ContentListener::WP1ContentListener(std::list<WPXPageSpan> &pageList, std::ve
 	m_ps->m_fontSize = 12.0;
 }
 
-WP1ContentListener::~WP1ContentListener() 
+WP1ContentListener::~WP1ContentListener()
 {
 	delete m_parseState;
 }
@@ -68,7 +68,7 @@ void WP1ContentListener::insertCharacter(uint32_t character)
 
 		if (!m_ps->m_isSpanOpened)
 			_openSpan();
-		for (;m_parseState->m_numDeferredTabs > 0; m_parseState->m_numDeferredTabs--)
+		for (; m_parseState->m_numDeferredTabs > 0; m_parseState->m_numDeferredTabs--)
 		{
 			m_documentInterface->insertTab();
 		}
@@ -82,7 +82,7 @@ void WP1ContentListener::insertExtendedCharacter(uint8_t extendedCharacter)
 	{
 		if (!m_ps->m_isSpanOpened)
 			_openSpan();
-		for (;m_parseState->m_numDeferredTabs > 0; m_parseState->m_numDeferredTabs--)
+		for (; m_parseState->m_numDeferredTabs > 0; m_parseState->m_numDeferredTabs--)
 		{
 			m_documentInterface->insertTab();
 		}
@@ -117,7 +117,7 @@ void WP1ContentListener::insertEOL()
 	{
 		if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
 			_openSpan();
-		for (;m_parseState->m_numDeferredTabs > 0; m_parseState->m_numDeferredTabs--)
+		for (; m_parseState->m_numDeferredTabs > 0; m_parseState->m_numDeferredTabs--)
 		{
 			m_documentInterface->insertTab();
 		}
@@ -216,7 +216,7 @@ void WP1ContentListener::fontPointSize(uint8_t pointSize)
 	if (!isUndoOn())
 	{
 		_closeSpan();
-		
+
 		m_ps->m_fontSize=double(pointSize);
 	}
 }
@@ -226,7 +226,7 @@ void WP1ContentListener::fontId(uint16_t id)
 	if (!isUndoOn())
 	{
 		_closeSpan();
-		
+
 		switch (id)
 		{
 		case 0x0002:
@@ -391,8 +391,8 @@ void WP1ContentListener::marginReset(uint16_t leftMargin, uint16_t rightMargin)
 			double leftMarginInch = (double)((double)leftMargin/72.0);
 			m_ps->m_leftMarginByPageMarginChange = leftMarginInch - m_ps->m_pageMarginLeft;
 			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
-						+ m_ps->m_leftMarginByParagraphMarginChange
-						+ m_ps->m_leftMarginByTabs;
+			                              + m_ps->m_leftMarginByParagraphMarginChange
+			                              + m_ps->m_leftMarginByTabs;
 
 		}
 		if (rightMargin)
@@ -400,8 +400,8 @@ void WP1ContentListener::marginReset(uint16_t leftMargin, uint16_t rightMargin)
 			double rightMarginInch = (double)((double)rightMargin/72.0);
 			m_ps->m_rightMarginByPageMarginChange = rightMarginInch - m_ps->m_pageMarginRight;
 			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
-						+ m_ps->m_rightMarginByParagraphMarginChange
-						+ m_ps->m_rightMarginByTabs;
+			                               + m_ps->m_rightMarginByParagraphMarginChange
+			                               + m_ps->m_rightMarginByTabs;
 		}
 		m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent;
 	}
@@ -418,8 +418,8 @@ void WP1ContentListener::leftIndent(uint16_t leftMarginOffset)
 			m_parseState->m_numDeferredTabs = 0;
 			m_ps->m_leftMarginByTabs += (double)((double)leftMarginOffset / 72.0);
 			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
-						+ m_ps->m_leftMarginByParagraphMarginChange
-						+ m_ps->m_leftMarginByTabs;
+			                              + m_ps->m_leftMarginByParagraphMarginChange
+			                              + m_ps->m_leftMarginByTabs;
 		}
 		m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent;
 	}
@@ -437,11 +437,11 @@ void WP1ContentListener::leftRightIndent(uint16_t leftRightMarginOffset)
 			m_ps->m_leftMarginByTabs += (double)((double)leftRightMarginOffset / 72.0);
 			m_ps->m_rightMarginByTabs += (double)((double)leftRightMarginOffset / 72.0);
 			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
-						+ m_ps->m_leftMarginByParagraphMarginChange
-						+ m_ps->m_leftMarginByTabs;
+			                              + m_ps->m_leftMarginByParagraphMarginChange
+			                              + m_ps->m_leftMarginByTabs;
 			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
-						+ m_ps->m_rightMarginByParagraphMarginChange
-						+ m_ps->m_rightMarginByTabs;
+			                               + m_ps->m_rightMarginByParagraphMarginChange
+			                               + m_ps->m_rightMarginByTabs;
 		}
 		m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent;
 	}
@@ -457,7 +457,7 @@ void WP1ContentListener::leftMarginRelease(uint16_t release)
 			{
 				m_ps->m_textIndentByTabs -= (double)((double)release / 72.0);
 				m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange
-					+ m_ps->m_textIndentByTabs;
+				                              + m_ps->m_textIndentByTabs;
 			}
 			else
 				m_parseState->m_numDeferredTabs--;
@@ -491,8 +491,8 @@ void WP1ContentListener::justificationChange(uint8_t justification)
 void WP1ContentListener::headerFooterGroup(uint8_t /* headerFooterDefinition */, WP1SubDocument *subDocument)
 {
 	if (subDocument)
-		m_subDocuments.push_back(subDocument);			
-}	
+		m_subDocuments.push_back(subDocument);
+}
 
 void WP1ContentListener::setTabs(const std::vector<WPXTabStop> &tabStops)
 {
@@ -543,17 +543,17 @@ void WP1ContentListener::insertPicture(uint16_t width, uint16_t height, const WP
 		propList.insert("svg:height", (double)((double)height/72.0));
 		propList.insert("text:anchor-type", "as-char");
 		m_documentInterface->openFrame(propList);
-		
+
 		propList.clear();
 		propList.insert("libwpd:mimetype", "image/pict");
 		m_documentInterface->insertBinaryObject(propList, binaryData);
-		
+
 		m_documentInterface->closeFrame();
 	}
 }
 
-void WP1ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType /* subDocumentType */, 
-						WPXTableList /* tableList */, int /* nextTableIndice */)
+void WP1ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType /* subDocumentType */,
+        WPXTableList /* tableList */, int /* nextTableIndice */)
 {
 	// save our old parsing state on our "stack"
 	WP1ContentParsingState *oldParseState = m_parseState;

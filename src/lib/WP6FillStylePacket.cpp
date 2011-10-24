@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 #include <string.h>
@@ -28,11 +28,11 @@
 #include "WP6Parser.h"
 #include "libwpd_internal.h"
 
-WP6FillStylePacket::WP6FillStylePacket(WPXInputStream *input, WPXEncryption *encryption, int /* id */, uint32_t dataOffset, uint32_t dataSize) : 
+WP6FillStylePacket::WP6FillStylePacket(WPXInputStream *input, WPXEncryption *encryption, int /* id */, uint32_t dataOffset, uint32_t dataSize) :
 	WP6PrefixDataPacket(input, encryption),
 	m_fgColor(0xff, 0xff, 0xff),
 	m_bgColor(0xff, 0xff, 0xff)
-{	
+{
 	_read(input, encryption, dataOffset, dataSize);
 }
 
@@ -66,7 +66,7 @@ void WP6FillStylePacket::_readContents(WPXInputStream *input, WPXEncryption *enc
 	m_bgColor.m_b = readU8(input, encryption);
 	m_bgColor.m_s = readU8(input, encryption);
 	WPD_DEBUG_MSG(("WordPerfect: Fill Prefix Packet FG Color (%i, %i, %i, %i) BG Color (%i, %i, %i, %i)\n",
-		       m_fgColor.m_r, m_fgColor.m_g, m_fgColor.m_b, m_fgColor.m_s,
-		       m_bgColor.m_r, m_bgColor.m_g, m_bgColor.m_b, m_bgColor.m_s));
+	               m_fgColor.m_r, m_fgColor.m_g, m_fgColor.m_b, m_fgColor.m_s,
+	               m_bgColor.m_r, m_bgColor.m_g, m_bgColor.m_b, m_bgColor.m_s));
 
 }

@@ -50,7 +50,7 @@ _WPXContentParsingState::_WPXContentParsingState() :
 	m_isSpanOpened(false),
 	m_isParagraphOpened(false),
 	m_isListElementOpened(false),
-	
+
 	m_firstParagraphInPageSpan(true),
 
 	m_numRowsToSkip(),
@@ -67,7 +67,7 @@ _WPXContentParsingState::_WPXContentParsingState() :
 	m_isRowWithoutCell(false),
 	m_cellAttributeBits(0x00000000),
 	m_paragraphJustificationBeforeTable(WPX_PARAGRAPH_JUSTIFICATION_LEFT),
-	
+
 	m_currentPage(0),
 	m_numPagesRemainingInSpan(0),
 	m_currentPageNumber(1),
@@ -98,7 +98,7 @@ _WPXContentParsingState::_WPXContentParsingState() :
 	m_rightMarginByParagraphMarginChange(0.0),
 	m_leftMarginByTabs(0.0),
 	m_rightMarginByTabs(0.0),
-	
+
 	m_listReferencePosition(0.0),
 	m_listBeginPosition(0.0),
 
@@ -110,9 +110,9 @@ _WPXContentParsingState::_WPXContentParsingState() :
 	m_alignmentCharacter('.'),
 	m_tabStops(),
 	m_isTabPositionRelative(false),
-	
+
 	m_subDocuments(),
-	
+
 	m_inSubDocument(false),
 	m_isNote(false),
 	m_subDocumentType(WPX_SUBDOCUMENT_NONE)
@@ -150,7 +150,7 @@ void WPXContentListener::startDocument()
 
 		m_documentInterface->startDocument();
 	}
-	
+
 	m_ps->m_isDocumentStarted = true;
 }
 
@@ -214,8 +214,8 @@ void WPXContentListener::_openSection()
 			propList.insert("libwpd:margin-bottom", 0.0);
 
 		WPXPropertyListVector columns;
- 		typedef std::vector<WPXColumnDefinition>::const_iterator CDVIter;
-	 	for (CDVIter iter = m_ps->m_textColumns.begin(); iter != m_ps->m_textColumns.end(); iter++)
+		typedef std::vector<WPXColumnDefinition>::const_iterator CDVIter;
+		for (CDVIter iter = m_ps->m_textColumns.begin(); iter != m_ps->m_textColumns.end(); iter++)
 		{
 			WPXPropertyList column;
 			// The "style:rel-width" is expressed in twips (1440 twips per inch) and includes the left and right Gutter
@@ -249,7 +249,7 @@ void WPXContentListener::_closeSection()
 	}
 }
 
-void WPXContentListener::_insertPageNumberParagraph(WPXPageNumberPosition position, WPXNumberingType numberingType, WPXString fontName, double fontSize) 
+void WPXContentListener::_insertPageNumberParagraph(WPXPageNumberPosition position, WPXNumberingType numberingType, WPXString fontName, double fontSize)
 {
 	WPXPropertyList propList;
 	switch (position)
@@ -277,15 +277,15 @@ void WPXContentListener::_insertPageNumberParagraph(WPXPageNumberPosition positi
 	propList.insert("fo:font-size", fontSize, WPX_POINT);
 	m_documentInterface->openSpan(propList);
 
-                
+
 	propList.clear();
-        propList.insert("style:num-format", _numberingTypeToString(numberingType));
+	propList.insert("style:num-format", _numberingTypeToString(numberingType));
 	m_documentInterface->insertField(WPXString("text:page-number"), propList);
 
 	propList.clear();
 	m_documentInterface->closeSpan();
 
-	m_documentInterface->closeParagraph();	
+	m_documentInterface->closeParagraph();
 }
 
 void WPXContentListener::_openPageSpan()
@@ -307,7 +307,7 @@ void WPXContentListener::_openPageSpan()
 		m_ps->m_sectionMarginRight += m_ps->m_pageMarginRight;
 	m_ps->m_listReferencePosition += m_ps->m_pageMarginLeft;
 	m_ps->m_listBeginPosition += m_ps->m_pageMarginLeft;
-	
+
 	if ( m_pageList.empty() || (m_ps->m_currentPage >= m_pageList.size()) )
 	{
 		WPD_DEBUG_MSG(("m_pageList.empty() || (m_ps->m_currentPage >= m_pageList.size())\n"));
@@ -327,14 +327,14 @@ void WPXContentListener::_openPageSpan()
 	propList.insert("fo:page-height", currentPage.getFormLength());
 	propList.insert("fo:page-width", currentPage.getFormWidth());
 	if (currentPage.getFormOrientation() == LANDSCAPE)
-		propList.insert("style:print-orientation", "landscape"); 
+		propList.insert("style:print-orientation", "landscape");
 	else
-		propList.insert("style:print-orientation", "portrait"); 
+		propList.insert("style:print-orientation", "portrait");
 	propList.insert("fo:margin-left", currentPage.getMarginLeft());
 	propList.insert("fo:margin-right", currentPage.getMarginRight());
 	propList.insert("fo:margin-top", currentPage.getMarginTop());
 	propList.insert("fo:margin-bottom", currentPage.getMarginBottom());
-	
+
 	if (!m_ps->m_isPageSpanOpened)
 		m_documentInterface->openPageSpan(propList);
 
@@ -360,14 +360,14 @@ void WPXContentListener::_openPageSpan()
 	m_ps->m_listBeginPosition -= m_ps->m_pageMarginLeft;
 
 	m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange + m_ps->m_leftMarginByParagraphMarginChange
-			+ m_ps->m_leftMarginByTabs;
+	                              + m_ps->m_leftMarginByTabs;
 	m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange + m_ps->m_rightMarginByParagraphMarginChange
-			+ m_ps->m_rightMarginByTabs;
+	                               + m_ps->m_rightMarginByTabs;
 
 
-        // we insert page numbers by inserting them into the header/footer of the wordperfect document. if we don't wind up
-        // inserting a header/footer to encapsulate them inside, it will be necessary to invent one just for this purpose
-        bool pageNumberInserted = false;
+	// we insert page numbers by inserting them into the header/footer of the wordperfect document. if we don't wind up
+	// inserting a header/footer to encapsulate them inside, it will be necessary to invent one just for this purpose
+	bool pageNumberInserted = false;
 
 	std::vector<WPXHeaderFooter> headerFooterList = currentPage.getHeaderFooterList();
 	for (std::vector<WPXHeaderFooter>::iterator iter = headerFooterList.begin(); iter != headerFooterList.end(); iter++)
@@ -392,18 +392,18 @@ void WPXContentListener::_openPageSpan()
 			}
 
 			if ((*iter).getType() == HEADER)
-                        {
+			{
 				m_documentInterface->openHeader(propList);
-				if (!currentPage.getPageNumberSuppression() && 
-				    ((currentPage.getPageNumberPosition() >= PAGENUMBER_POSITION_TOP_LEFT &&
-				     currentPage.getPageNumberPosition() <= PAGENUMBER_POSITION_TOP_LEFT_AND_RIGHT) ||
-				     currentPage.getPageNumberPosition() == PAGENUMBER_POSITION_TOP_INSIDE_LEFT_AND_RIGHT))
-                                {
-					_insertPageNumberParagraph(currentPage.getPageNumberPosition(), currentPage.getPageNumberingType(), 
-								   currentPage.getPageNumberingFontName(), currentPage.getPageNumberingFontSize());
-                                        pageNumberInserted = true;
-                                }
-                        }
+				if (!currentPage.getPageNumberSuppression() &&
+				        ((currentPage.getPageNumberPosition() >= PAGENUMBER_POSITION_TOP_LEFT &&
+				          currentPage.getPageNumberPosition() <= PAGENUMBER_POSITION_TOP_LEFT_AND_RIGHT) ||
+				         currentPage.getPageNumberPosition() == PAGENUMBER_POSITION_TOP_INSIDE_LEFT_AND_RIGHT))
+				{
+					_insertPageNumberParagraph(currentPage.getPageNumberPosition(), currentPage.getPageNumberingType(),
+					                           currentPage.getPageNumberingFontName(), currentPage.getPageNumberingFontSize());
+					pageNumberInserted = true;
+				}
+			}
 			else
 				m_documentInterface->openFooter(propList);
 
@@ -413,50 +413,50 @@ void WPXContentListener::_openPageSpan()
 			if ((*iter).getType() == HEADER)
 				m_documentInterface->closeHeader();
 			else
-                        {
+			{
 				if (currentPage.getPageNumberPosition() >= PAGENUMBER_POSITION_BOTTOM_LEFT &&
-				    currentPage.getPageNumberPosition() != PAGENUMBER_POSITION_TOP_INSIDE_LEFT_AND_RIGHT &&
-				    !currentPage.getPageNumberSuppression()) 
-                                {
-					_insertPageNumberParagraph(currentPage.getPageNumberPosition(), currentPage.getPageNumberingType(), 
-								   currentPage.getPageNumberingFontName(), currentPage.getPageNumberingFontSize());
-                                        pageNumberInserted = true;
-                                }
-				m_documentInterface->closeFooter(); 
-                        }
+				        currentPage.getPageNumberPosition() != PAGENUMBER_POSITION_TOP_INSIDE_LEFT_AND_RIGHT &&
+				        !currentPage.getPageNumberSuppression())
+				{
+					_insertPageNumberParagraph(currentPage.getPageNumberPosition(), currentPage.getPageNumberingType(),
+					                           currentPage.getPageNumberingFontName(), currentPage.getPageNumberingFontSize());
+					pageNumberInserted = true;
+				}
+				m_documentInterface->closeFooter();
+			}
 
 			WPD_DEBUG_MSG(("Header Footer Element: type: %i occurence: %i\n",
-				       (*iter).getType(), (*iter).getOccurence()));
+			               (*iter).getType(), (*iter).getOccurence()));
 		}
 	}
 
 	if (!pageNumberInserted && currentPage.getPageNumberPosition() != PAGENUMBER_POSITION_NONE && !currentPage.getPageNumberSuppression())
 	{
-		if (currentPage.getPageNumberPosition() >= PAGENUMBER_POSITION_BOTTOM_LEFT && 
-		    currentPage.getPageNumberPosition() != PAGENUMBER_POSITION_TOP_INSIDE_LEFT_AND_RIGHT)
-		{		      
+		if (currentPage.getPageNumberPosition() >= PAGENUMBER_POSITION_BOTTOM_LEFT &&
+		        currentPage.getPageNumberPosition() != PAGENUMBER_POSITION_TOP_INSIDE_LEFT_AND_RIGHT)
+		{
 			propList.clear();
 			propList.insert("libwpd:occurence", "all");
 			m_documentInterface->openFooter(propList);
-			_insertPageNumberParagraph(currentPage.getPageNumberPosition(), currentPage.getPageNumberingType(), 
-						   currentPage.getPageNumberingFontName(), currentPage.getPageNumberingFontSize());
-			m_documentInterface->closeFooter(); 
+			_insertPageNumberParagraph(currentPage.getPageNumberPosition(), currentPage.getPageNumberingType(),
+			                           currentPage.getPageNumberingFontName(), currentPage.getPageNumberingFontSize());
+			m_documentInterface->closeFooter();
 		}
 		else
 		{
 			propList.clear();
 			propList.insert("libwpd:occurence", "all");
 			m_documentInterface->openHeader(propList);
-			_insertPageNumberParagraph(currentPage.getPageNumberPosition(), currentPage.getPageNumberingType(), 
-						   currentPage.getPageNumberingFontName(), currentPage.getPageNumberingFontSize());
-			m_documentInterface->closeHeader(); 
+			_insertPageNumberParagraph(currentPage.getPageNumberPosition(), currentPage.getPageNumberingType(),
+			                           currentPage.getPageNumberingFontName(), currentPage.getPageNumberingFontSize());
+			m_documentInterface->closeHeader();
 		}
 	}
 
 	// first paragraph in span (necessary for resetting page number)
 	m_ps->m_firstParagraphInPageSpan = true;
 
-	/* Some of this would maybe not be necessary, but it does not do any harm 
+	/* Some of this would maybe not be necessary, but it does not do any harm
 	 * and apparently solves some troubles */
 	m_ps->m_pageFormLength = currentPage.getFormLength();
 	m_ps->m_pageFormWidth = currentPage.getFormWidth();
@@ -465,9 +465,9 @@ void WPXContentListener::_openPageSpan()
 	m_ps->m_pageMarginRight = currentPage.getMarginRight();
 
 	m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange + m_ps->m_leftMarginByParagraphMarginChange
-			+ m_ps->m_leftMarginByTabs;
+	                              + m_ps->m_leftMarginByTabs;
 	m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange + m_ps->m_rightMarginByParagraphMarginChange
-			+ m_ps->m_rightMarginByTabs;
+	                               + m_ps->m_rightMarginByTabs;
 
 	m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange + m_ps->m_textIndentByTabs;
 
@@ -484,7 +484,7 @@ void WPXContentListener::_closePageSpan()
 
 		m_documentInterface->closePageSpan();
 	}
-	
+
 	m_ps->m_isPageSpanOpened = false;
 	m_ps->m_isPageSpanBreakDeferred = false;
 }
@@ -493,7 +493,7 @@ void WPXContentListener::_openParagraph()
 {
 	if (m_ps->m_isTableOpened && !m_ps->m_isTableCellOpened)
 		return;
-		 
+
 	if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
 	{
 		if (!m_ps->m_isTableOpened && (!m_ps->m_inSubDocument || m_ps->m_subDocumentType == WPX_SUBDOCUMENT_TEXT_BOX))
@@ -515,7 +515,7 @@ void WPXContentListener::_openParagraph()
 			m_documentInterface->openParagraph(propList, tabStops);
 
 		_resetParagraphState();
-		m_ps->m_firstParagraphInPageSpan = false;			
+		m_ps->m_firstParagraphInPageSpan = false;
 	}
 }
 
@@ -574,7 +574,7 @@ void WPXContentListener::_appendJustification(WPXPropertyList &propList, int jus
 void WPXContentListener::_appendParagraphProperties(WPXPropertyList &propList, const bool isListElement)
 {
 	int justification;
-	if (m_ps->m_tempParagraphJustification) 
+	if (m_ps->m_tempParagraphJustification)
 		justification = m_ps->m_tempParagraphJustification;
 	else
 		justification = m_ps->m_paragraphJustification;
@@ -617,22 +617,22 @@ void WPXContentListener::_insertText(const WPXString &textBuffer)
 {
 	if (textBuffer.len() <= 0)
 		return;
-        
+
 	WPXString tmpText;
 	const char ASCII_SPACE = 0x0020;
 
 	int numConsecutiveSpaces = 0;
-        WPXString::Iter i(textBuffer);
-	for (i.rewind(); i.next();) 
-        {
+	WPXString::Iter i(textBuffer);
+	for (i.rewind(); i.next();)
+	{
 		if (*(i()) == ASCII_SPACE)
 			numConsecutiveSpaces++;
 		else
 			numConsecutiveSpaces = 0;
 
-		if (numConsecutiveSpaces > 1) 
+		if (numConsecutiveSpaces > 1)
 		{
-			if (tmpText.len() > 0) 
+			if (tmpText.len() > 0)
 			{
 				m_documentInterface->insertText(tmpText);
 				tmpText.clear();
@@ -640,9 +640,9 @@ void WPXContentListener::_insertText(const WPXString &textBuffer)
 
 			m_documentInterface->insertSpace();
 		}
-		else 
+		else
 		{
-                        tmpText.append(i());
+			tmpText.append(i());
 		}
 	}
 
@@ -660,7 +660,7 @@ void WPXContentListener::_insertBreakIfNecessary(WPXPropertyList &propList)
 		else
 			propList.insert("fo:break-before", "page");
 	}
-}	
+}
 
 void WPXContentListener::_getTabStops(WPXPropertyListVector &tabStops)
 {
@@ -684,7 +684,7 @@ void WPXContentListener::_getTabStops(WPXPropertyListVector &tabStops)
 		default:  // Left alignment is the default and BAR is not handled in OOo
 			break;
 		}
-		
+
 		// leader character
 		if (m_ps->m_tabStops[i].m_leaderCharacter != 0x0000)
 		{
@@ -703,7 +703,7 @@ void WPXContentListener::_getTabStops(WPXPropertyListVector &tabStops)
 		if (position < 0.00005f && position > -0.00005f)
 			position = 0.0;
 		tmpTabStop.insert("style:position", position);
-		
+
 
 		/* TODO: fix situations where we have several columns or are inside a table and the tab stop
 		 *       positions are absolute (relative to the paper edge). In this case, they have to be
@@ -733,7 +733,7 @@ void WPXContentListener::_openListElement()
 {
 	if (m_ps->m_isTableOpened && !m_ps->m_isTableCellOpened)
 		return;
-		 
+
 	if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
 	{
 		if (!m_ps->m_isTableOpened && (!m_ps->m_inSubDocument || m_ps->m_subDocumentType == WPX_SUBDOCUMENT_TEXT_BOX))
@@ -766,7 +766,7 @@ void WPXContentListener::_closeListElement()
 
 		m_documentInterface->closeListElement();
 	}
-	
+
 	m_ps->m_isListElementOpened = false;
 	m_ps->m_currentListLevel = 0;
 
@@ -774,7 +774,7 @@ void WPXContentListener::_closeListElement()
 		_closePageSpan();
 }
 
-const double WPX_DEFAULT_SUPER_SUB_SCRIPT = 58.0; 
+const double WPX_DEFAULT_SUPER_SUB_SCRIPT = 58.0;
 
 void WPXContentListener::_openSpan()
 {
@@ -787,7 +787,7 @@ void WPXContentListener::_openSpan()
 		_openParagraph();
 	else
 		_openListElement();
-	
+
 	// The behaviour of WP6+ is following: if an attribute bit is set in the cell attributes, we cannot
 	// unset it; if it is set, we can set or unset it
 	uint32_t attributeBits = (m_ps->m_textAttributeBits | m_ps->m_cellAttributeBits);
@@ -802,7 +802,7 @@ void WPXContentListener::_openSpan()
 	{
 	case 0x01:  // Extra large
 		fontSizeChange = 2.0;
-		break;	
+		break;
 	case 0x02: // Very large
 		fontSizeChange = 1.5f;
 		break;
@@ -821,13 +821,15 @@ void WPXContentListener::_openSpan()
 	}
 
 	WPXPropertyList propList;
- 	if (attributeBits & WPX_SUPERSCRIPT_BIT) {
+	if (attributeBits & WPX_SUPERSCRIPT_BIT)
+	{
 		WPXString sSuperScript("super ");
 		sSuperScript.append(doubleToString(WPX_DEFAULT_SUPER_SUB_SCRIPT));
 		sSuperScript.append("%");
 		propList.insert("style:text-position", sSuperScript);
 	}
- 	else if (attributeBits & WPX_SUBSCRIPT_BIT) {
+	else if (attributeBits & WPX_SUBSCRIPT_BIT)
+	{
 		WPXString sSubScript("sub ");
 		sSubScript.append(doubleToString(WPX_DEFAULT_SUPER_SUB_SCRIPT));
 		sSubScript.append("%");
@@ -839,17 +841,17 @@ void WPXContentListener::_openSpan()
 		propList.insert("fo:font-weight", "bold");
 	if (attributeBits & WPX_STRIKEOUT_BIT)
 		propList.insert("style:text-line-through-type", "single");
-	if (attributeBits & WPX_DOUBLE_UNDERLINE_BIT) 
+	if (attributeBits & WPX_DOUBLE_UNDERLINE_BIT)
 		propList.insert("style:text-underline-type", "double");
- 	else if (attributeBits & WPX_UNDERLINE_BIT) 
+	else if (attributeBits & WPX_UNDERLINE_BIT)
 		propList.insert("style:text-underline-type", "single");
-	if (attributeBits & WPX_OUTLINE_BIT) 
+	if (attributeBits & WPX_OUTLINE_BIT)
 		propList.insert("style:text-outline", "true");
-	if (attributeBits & WPX_SMALL_CAPS_BIT) 
+	if (attributeBits & WPX_SMALL_CAPS_BIT)
 		propList.insert("fo:font-variant", "small-caps");
-	if (attributeBits & WPX_BLINK_BIT) 
+	if (attributeBits & WPX_BLINK_BIT)
 		propList.insert("style:text-blinking", "true");
-	if (attributeBits & WPX_SHADOW_BIT) 
+	if (attributeBits & WPX_SHADOW_BIT)
 		propList.insert("fo:text-shadow", "1pt 1pt");
 
 	if (m_ps->m_fontName)
@@ -881,14 +883,14 @@ void WPXContentListener::_closeSpan()
 
 		m_documentInterface->closeSpan();
 	}
-	
+
 	m_ps->m_isSpanOpened = false;
 }
 
 void WPXContentListener::_openTable()
 {
 	_closeTable();
-	
+
 	WPXPropertyList propList;
 	switch (m_ps->m_tableDefinition.m_positionBits)
 	{
@@ -904,8 +906,8 @@ void WPXContentListener::_openTable()
 		break;
 	case WPX_TABLE_POSITION_ABSOLUTE_FROM_LEFT_MARGIN:
 		propList.insert("table:align", "left");
-		propList.insert("fo:margin-left", _movePositionToFirstColumn(m_ps->m_tableDefinition.m_leftOffset) - 
-			m_ps->m_pageMarginLeft - m_ps->m_sectionMarginLeft + m_ps->m_paragraphMarginLeft);
+		propList.insert("fo:margin-left", _movePositionToFirstColumn(m_ps->m_tableDefinition.m_leftOffset) -
+		                m_ps->m_pageMarginLeft - m_ps->m_sectionMarginLeft + m_ps->m_paragraphMarginLeft);
 		break;
 	case WPX_TABLE_POSITION_FULL:
 		propList.insert("table:align", "margins");
@@ -921,18 +923,18 @@ void WPXContentListener::_openTable()
 	m_ps->m_isParagraphColumnBreak = false;
 	m_ps->m_isParagraphPageBreak = false;
 
- 	double tableWidth = 0.0;
+	double tableWidth = 0.0;
 	WPXPropertyListVector columns;
- 	typedef std::vector<WPXColumnDefinition>::const_iterator CDVIter;
- 	for (CDVIter iter = m_ps->m_tableDefinition.m_columns.begin(); iter != m_ps->m_tableDefinition.m_columns.end(); iter++)
- 	{
+	typedef std::vector<WPXColumnDefinition>::const_iterator CDVIter;
+	for (CDVIter iter = m_ps->m_tableDefinition.m_columns.begin(); iter != m_ps->m_tableDefinition.m_columns.end(); iter++)
+	{
 		WPXPropertyList column;
 		// The "style:rel-width" is expressed in twips (1440 twips per inch) and includes the left and right Gutter
 		column.insert("style:column-width", (*iter).m_width);
 		columns.append(column);
 
- 		tableWidth += (*iter).m_width;
- 	}
+		tableWidth += (*iter).m_width;
+	}
 	propList.insert("style:width", tableWidth);
 
 	m_documentInterface->openTable(propList, columns);
@@ -958,7 +960,7 @@ void WPXContentListener::_closeTable()
 	m_ps->m_currentTableCellNumberInRow = (-1);
 	m_ps->m_isTableOpened = false;
 	m_ps->m_wasHeaderRow = false;
-	
+
 	_closeParagraph();
 	_closeListElement();
 	_changeList();
@@ -966,7 +968,7 @@ void WPXContentListener::_closeTable()
 	// handle case where a section attributes changed in the middle of the table
 	if (m_ps->m_sectionAttributesChanged && !m_ps->m_inSubDocument)
 		_closeSection();
-		
+
 	// handle case where page span is closed in the middle of a table
 	if (m_ps->m_isPageSpanBreakDeferred && !m_ps->m_inSubDocument)
 		_closePageSpan();
@@ -976,10 +978,10 @@ void WPXContentListener::_openTableRow(const double height, const bool isMinimum
 {
 	if (!m_ps->m_isTableOpened)
 		throw ParseException();
-	
+
 	if (m_ps->m_isTableRowOpened)
 		_closeTableRow();
-	
+
 	m_ps->m_currentTableCol = 0;
 	m_ps->m_currentTableCellNumberInRow = 0;
 
@@ -994,11 +996,11 @@ void WPXContentListener::_openTableRow(const double height, const bool isMinimum
 	// The following "Header Row" flags are ignored
 	if (isHeaderRow & !m_ps->m_wasHeaderRow)
 	{
-		propList.insert("libwpd:is-header-row", true);		
+		propList.insert("libwpd:is-header-row", true);
 		m_ps->m_wasHeaderRow = true;
 	}
 	else
-		propList.insert("libwpd:is-header-row", false);		
+		propList.insert("libwpd:is-header-row", false);
 
 	m_documentInterface->openTableRow(propList);
 
@@ -1059,28 +1061,28 @@ static void addBorderProps(const char *border, bool borderOn, const WPXString &b
 	else
 		propList.insert("fo:border-left-width", 0.0);
 #endif
-	
+
 	WPXString borderStyle;
 	borderStyle.sprintf("fo:border-%s", border);
 	WPXString props;
 	if (borderOn)
 	{
-	  props.append(doubleToString(WPX_DEFAULT_TABLE_BORDER_WIDTH));
-	  props.append("in solid ");
-	  props.append(borderColor);
+		props.append(doubleToString(WPX_DEFAULT_TABLE_BORDER_WIDTH));
+		props.append("in solid ");
+		props.append(borderColor);
 	}
 	else
 		props.sprintf("0.0in");
 	propList.insert(borderStyle.cstr(), props);
 }
 
-void WPXContentListener::_openTableCell(const uint8_t colSpan, const uint8_t rowSpan, const uint8_t borderBits,  
-				   const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
-				   const RGBSColor * cellBorderColor, const WPXVerticalAlignment cellVerticalAlignment)
+void WPXContentListener::_openTableCell(const uint8_t colSpan, const uint8_t rowSpan, const uint8_t borderBits,
+                                        const RGBSColor *cellFgColor, const RGBSColor *cellBgColor,
+                                        const RGBSColor *cellBorderColor, const WPXVerticalAlignment cellVerticalAlignment)
 {
 	if (!m_ps->m_isTableOpened || !m_ps->m_isTableRowOpened)
 		throw ParseException();
-	
+
 	uint8_t tmpColSpan = colSpan;
 	if (m_ps->m_isTableCellOpened)
 		_closeTableCell();
@@ -1089,15 +1091,15 @@ void WPXContentListener::_openTableCell(const uint8_t colSpan, const uint8_t row
 		throw ParseException();
 
 	while ((unsigned long)m_ps->m_currentTableCol < (unsigned long)m_ps->m_numRowsToSkip.size() &&
-		m_ps->m_numRowsToSkip[m_ps->m_currentTableCol])
+	        m_ps->m_numRowsToSkip[m_ps->m_currentTableCol])
 	{
 		m_ps->m_numRowsToSkip[m_ps->m_currentTableCol]--;
 		m_ps->m_currentTableCol++;
 	}
 
 	WPXPropertyList propList;
-	propList.insert("libwpd:column", m_ps->m_currentTableCol);		
-	propList.insert("libwpd:row", m_ps->m_currentTableRow);		
+	propList.insert("libwpd:column", m_ps->m_currentTableCol);
+	propList.insert("libwpd:row", m_ps->m_currentTableRow);
 
 	propList.insert("table:number-columns-spanned", colSpan);
 	propList.insert("table:number-rows-spanned", rowSpan);
@@ -1167,8 +1169,8 @@ void WPXContentListener::_closeTableCell()
 /**
 Creates an new document state. Saves the old state on a "stack".
 */
-void WPXContentListener::handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, 
-	WPXTableList tableList, int nextTableIndice)
+void WPXContentListener::handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType,
+        WPXTableList tableList, int nextTableIndice)
 {
 	// save our old parsing state on our "stack"
 	WPXContentParsingState *oldPS = m_ps;
@@ -1207,7 +1209,7 @@ void WPXContentListener::handleSubDocument(const WPXSubDocument *subDocument, WP
 	}
 
 	// restore our old parsing state
-	
+
 	setUndoOn(oldIsUndoOn);
 	if (m_ps->m_subDocumentType == WPX_SUBDOCUMENT_TEXT_BOX)
 		_closeSection();
@@ -1223,7 +1225,7 @@ void WPXContentListener::insertBreak(const uint8_t breakType)
 		{
 		case WPX_COLUMN_BREAK:
 			if (!m_ps->m_isPageSpanOpened && !m_ps->m_inSubDocument)
-				_openSpan();				
+				_openSpan();
 			if (m_ps->m_isParagraphOpened)
 				_closeParagraph();
 			if (m_ps->m_isListElementOpened)
@@ -1233,7 +1235,7 @@ void WPXContentListener::insertBreak(const uint8_t breakType)
 			break;
 		case WPX_PAGE_BREAK:
 			if (!m_ps->m_isPageSpanOpened && !m_ps->m_inSubDocument)
-				_openSpan();				
+				_openSpan();
 			if (m_ps->m_isParagraphOpened)
 				_closeParagraph();
 			if (m_ps->m_isListElementOpened)
@@ -1254,10 +1256,10 @@ void WPXContentListener::insertBreak(const uint8_t breakType)
 				m_ps->m_numPagesRemainingInSpan--;
 			else
 			{
-			    if (!m_ps->m_isTableOpened && !m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
-				_closePageSpan();
-			    else
-				m_ps->m_isPageSpanBreakDeferred = true;
+				if (!m_ps->m_isTableOpened && !m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
+					_closePageSpan();
+				else
+					m_ps->m_isPageSpanBreakDeferred = true;
 			}
 			m_ps->m_currentPageNumber++;
 			break;
@@ -1318,15 +1320,15 @@ double WPXContentListener::_getNextTabStop() const
 	for (std::vector<WPXTabStop>::const_iterator iter = m_ps->m_tabStops.begin(); iter != (m_ps->m_tabStops.end() - 1); iter++)
 	{
 		if (iter->m_position
-			- (m_ps->m_isTabPositionRelative ? 0.0 : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange))
-			== (m_ps->m_leftMarginByTabs + m_ps->m_textIndentByTabs + m_ps->m_textIndentByParagraphIndentChange))
+		        - (m_ps->m_isTabPositionRelative ? 0.0 : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange))
+		        == (m_ps->m_leftMarginByTabs + m_ps->m_textIndentByTabs + m_ps->m_textIndentByParagraphIndentChange))
 			return (iter+1)->m_position
-				- (m_ps->m_isTabPositionRelative ? 0.0 : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange));
+			       - (m_ps->m_isTabPositionRelative ? 0.0 : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange));
 		if (iter->m_position
-			- (m_ps->m_isTabPositionRelative ? 0.0 : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange))
-			> (m_ps->m_leftMarginByTabs + m_ps->m_textIndentByTabs + m_ps->m_textIndentByParagraphIndentChange))
+		        - (m_ps->m_isTabPositionRelative ? 0.0 : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange))
+		        > (m_ps->m_leftMarginByTabs + m_ps->m_textIndentByTabs + m_ps->m_textIndentByParagraphIndentChange))
 			return iter->m_position
-				- (m_ps->m_isTabPositionRelative ? 0.0 : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange));
+			       - (m_ps->m_isTabPositionRelative ? 0.0 : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange));
 	}
 	return (std::numeric_limits<double>::min)();
 }
@@ -1336,24 +1338,24 @@ double WPXContentListener::_getPreviousTabStop() const
 	for (std::vector<WPXTabStop>::reverse_iterator riter = m_ps->m_tabStops.rbegin(); riter != (m_ps->m_tabStops.rend() - 1); riter++)
 	{
 		if (riter->m_position
-			- (m_ps->m_isTabPositionRelative ? 0.0 : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange))
-			== (m_ps->m_leftMarginByTabs + m_ps->m_textIndentByTabs + m_ps->m_textIndentByParagraphIndentChange))
+		        - (m_ps->m_isTabPositionRelative ? 0.0 : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange))
+		        == (m_ps->m_leftMarginByTabs + m_ps->m_textIndentByTabs + m_ps->m_textIndentByParagraphIndentChange))
 			return (riter+1)->m_position
-				- (m_ps->m_isTabPositionRelative ? 0.0 : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange));
-		if (riter->m_position 
-			- (m_ps->m_isTabPositionRelative ? 0.0 : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange))
-			< (m_ps->m_leftMarginByTabs + m_ps->m_textIndentByTabs + m_ps->m_textIndentByParagraphIndentChange))
+			       - (m_ps->m_isTabPositionRelative ? 0.0 : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange));
+		if (riter->m_position
+		        - (m_ps->m_isTabPositionRelative ? 0.0 : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange))
+		        < (m_ps->m_leftMarginByTabs + m_ps->m_textIndentByTabs + m_ps->m_textIndentByParagraphIndentChange))
 			return riter->m_position
-				- (m_ps->m_isTabPositionRelative ? 0.0 : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange));
+			       - (m_ps->m_isTabPositionRelative ? 0.0 : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange));
 	}
 	return (std::numeric_limits<double>::max)();
 }
 
-WPXString WPXContentListener::_colorToString(const RGBSColor * color)
+WPXString WPXContentListener::_colorToString(const RGBSColor *color)
 {
 	WPXString tmpString;
 
-	if (color) 
+	if (color)
 	{
 		double fontShading = (double)((double)color->m_s/100.0); //convert the percents to double between 0 and 1
 		// Mix fontShading amount of given color with (1-fontShading) of White (#ffffff)
@@ -1373,23 +1375,27 @@ WPXString WPXContentListener::_mergeColorsToString(const RGBSColor *fgColor, con
 	WPXString tmpColor;
 	RGBSColor tmpFgColor, tmpBgColor;
 
-	if (fgColor) {
+	if (fgColor)
+	{
 		tmpFgColor.m_r = fgColor->m_r;
 		tmpFgColor.m_g = fgColor->m_g;
 		tmpFgColor.m_b = fgColor->m_b;
 		tmpFgColor.m_s = fgColor->m_s;
 	}
-	else {
+	else
+	{
 		tmpFgColor.m_r = tmpFgColor.m_g = tmpFgColor.m_b = 0xFF;
 		tmpFgColor.m_s = 0x64; // 100%
 	}
-	if (bgColor) {
+	if (bgColor)
+	{
 		tmpBgColor.m_r = bgColor->m_r;
 		tmpBgColor.m_g = bgColor->m_g;
 		tmpBgColor.m_b = bgColor->m_b;
 		tmpBgColor.m_s = bgColor->m_s;
 	}
-	else {
+	else
+	{
 		tmpBgColor.m_r = tmpBgColor.m_g = tmpBgColor.m_b = 0xFF;
 		tmpBgColor.m_s = 0x64; // 100%
 	}
@@ -1417,7 +1423,7 @@ double WPXContentListener::_movePositionToFirstColumn(double position)
 		if ((tempSpaceRemaining -= m_ps->m_textColumns[i].m_width - m_ps->m_textColumns[i].m_rightGutter) > 0)
 		{
 			position -= m_ps->m_textColumns[i].m_width - m_ps->m_textColumns[i].m_leftGutter
-					+ m_ps->m_textColumns[i+1].m_leftGutter;
+			            + m_ps->m_textColumns[i+1].m_leftGutter;
 			tempSpaceRemaining -= m_ps->m_textColumns[i].m_rightGutter;
 		}
 		else
@@ -1521,7 +1527,7 @@ uint32_t WPXContentListener::_mapDingbatsFontCharacter(uint32_t character)
 		0x27B1, 0x27B2, 0x27B3, 0x27B4, 0x27B5, 0x27B6, 0x27B7, 0x27B8, // 0xF1 ..
 		0x27B9, 0x27BA, 0x27BB, 0x27BC, 0x27BD, 0x27BE                  // .. OxFE
 	};
-	
+
 	if (character >= 0x20 && character <= 0x7E)
 		return _dingbatsFontMap1[character - 0x20];
 	if (character >= 0x80 && character <= 0x8D)

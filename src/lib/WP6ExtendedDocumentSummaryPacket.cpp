@@ -2,7 +2,7 @@
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -20,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 #include <string.h>
@@ -34,7 +34,7 @@ WP6ExtendedDocumentSummaryPacket::WP6ExtendedDocumentSummaryPacket(WPXInputStrea
 	m_dataSize(dataSize),
 	m_streamData(0),
 	m_stream(0)
-{	
+{
 	if (dataSize > 0)
 		_read(input, encryption, dataOffset, dataSize);
 }
@@ -56,7 +56,7 @@ void WP6ExtendedDocumentSummaryPacket::_readContents(WPXInputStream *input, WPXE
 	m_streamData = new uint8_t[m_dataSize];
 	for(unsigned i=0; i<(unsigned)m_dataSize; i++)
 		m_streamData[i] = readU8(input, encryption);
-	
+
 	m_stream = new WPXMemoryInputStream(m_streamData, (unsigned long)m_dataSize);
 }
 
@@ -94,16 +94,16 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6Listener *listener) const
 			uint8_t characterSet = (uint8_t)((wpChar >> 8) & 0x00FF);
 			const uint32_t *chars;
 			int len = extendedCharacterWP6ToUCS4(character,
-						      characterSet, &chars);
+			                                     characterSet, &chars);
 			for (int j = 0; j < len; j++)
 				appendUCS4(name, chars[j]);
-		} 
-		
+		}
+
 		if (tagID == WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_CREATION_DATE ||
-		    tagID == WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_DATE_COMPLETED ||
-		    tagID == WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_RECORDED_DATE ||
-		    tagID == WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_REVISION_DATE ||
-		    tagID == WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_VERSION_DATE)
+		        tagID == WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_DATE_COMPLETED ||
+		        tagID == WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_RECORDED_DATE ||
+		        tagID == WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_REVISION_DATE ||
+		        tagID == WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_VERSION_DATE)
 		{
 			try
 			{
@@ -130,12 +130,12 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6Listener *listener) const
 			if (!m_stream->atEOS())
 				wpChar = readU16(m_stream, 0);
 			for (; wpChar != 0 && !m_stream->atEOS(); wpChar = readU16(m_stream, 0))
-			{				
+			{
 				uint8_t character = (uint8_t)(wpChar & 0x00FF);
 				uint8_t characterSet = (uint8_t)((wpChar >> 8) & 0x00FF);
 				const uint32_t *chars;
 				int len = extendedCharacterWP6ToUCS4(character,
-						      characterSet, &chars);
+				                                     characterSet, &chars);
 				for (int j = 0; j < len; j++)
 					appendUCS4(data, chars[j]);
 			}

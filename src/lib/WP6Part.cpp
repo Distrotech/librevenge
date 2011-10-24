@@ -2,7 +2,7 @@
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -20,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -33,10 +33,10 @@
 // returns the part if it successfully creates the part, returns 0 if it can't
 // throws an exception if there is an error
 // precondition: readVal us between 0x80 and 0xFF
-WP6Part * WP6Part::constructPart(WPXInputStream *input, WPXEncryption *encryption, const uint8_t readVal)
-{	
+WP6Part *WP6Part::constructPart(WPXInputStream *input, WPXEncryption *encryption, const uint8_t readVal)
+{
 	WPD_DEBUG_MSG(("WordPerfect: ConstructPart\n"));
-		
+
 	if (readVal >= (uint8_t)0x80 && readVal <= (uint8_t)0xCF)
 	{
 		WPD_DEBUG_MSG(("WordPerfect: constructSingleByteFunction(input, val=0x%.2x)\n", readVal));
@@ -51,7 +51,7 @@ WP6Part * WP6Part::constructPart(WPXInputStream *input, WPXEncryption *encryptio
 		}
 		WPD_DEBUG_MSG(("WordPerfect: constructVariableLengthGroup(input, val=0x%.2x)\n", readVal));
 		return WP6VariableLengthGroup::constructVariableLengthGroup(input, encryption, readVal);
-	}      
+	}
 
 	else if (readVal >= (uint8_t)0xF0 && readVal < (uint8_t)0xFF)
 	{

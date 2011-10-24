@@ -2,7 +2,7 @@
  * Copyright (C) 2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2003-2004 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -20,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -42,30 +42,30 @@ WP5VariableLengthGroup::WP5VariableLengthGroup() :
 {
 }
 
-WP5VariableLengthGroup * WP5VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, WPXEncryption *encryption, const uint8_t group)
+WP5VariableLengthGroup *WP5VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, WPXEncryption *encryption, const uint8_t group)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling a variable length group Ox%x\n", group));	
+	WPD_DEBUG_MSG(("WordPerfect: handling a variable length group Ox%x\n", group));
 	switch (group)
 	{
-		case WP5_TOP_DEFINITION_GROUP:
-			return new WP5DefinitionGroup(input, encryption);
-		case WP5_TOP_PAGE_FORMAT_GROUP:
-			return new WP5PageFormatGroup(input, encryption);
-		case WP5_TOP_HEADER_FOOTER_GROUP:
-			return new WP5HeaderFooterGroup(input, encryption);
-		case WP5_TOP_FONT_GROUP:
-			return new WP5FontGroup(input, encryption);
-		case WP5_TOP_FOOTNOTE_ENDNOTE_GROUP:
-			return new WP5FootnoteEndnoteGroup(input, encryption);
-		case WP5_TOP_BOX_GROUP:
-			return new WP5BoxGroup(input, encryption);
-		case WP5_TOP_TABLE_EOL_GROUP:
-			return new WP5TableEOLGroup(input, encryption);
-		case WP5_TOP_TABLE_EOP_GROUP:
-			return new WP5TableEOPGroup(input, encryption);
-		default:
-			// this is an unhandled group, just skip it
-			return new WP5UnsupportedVariableLengthGroup(input, encryption);
+	case WP5_TOP_DEFINITION_GROUP:
+		return new WP5DefinitionGroup(input, encryption);
+	case WP5_TOP_PAGE_FORMAT_GROUP:
+		return new WP5PageFormatGroup(input, encryption);
+	case WP5_TOP_HEADER_FOOTER_GROUP:
+		return new WP5HeaderFooterGroup(input, encryption);
+	case WP5_TOP_FONT_GROUP:
+		return new WP5FontGroup(input, encryption);
+	case WP5_TOP_FOOTNOTE_ENDNOTE_GROUP:
+		return new WP5FootnoteEndnoteGroup(input, encryption);
+	case WP5_TOP_BOX_GROUP:
+		return new WP5BoxGroup(input, encryption);
+	case WP5_TOP_TABLE_EOL_GROUP:
+		return new WP5TableEOLGroup(input, encryption);
+	case WP5_TOP_TABLE_EOP_GROUP:
+		return new WP5TableEOPGroup(input, encryption);
+	default:
+		// this is an unhandled group, just skip it
+		return new WP5UnsupportedVariableLengthGroup(input, encryption);
 	}
 }
 
@@ -98,7 +98,7 @@ bool WP5VariableLengthGroup::isGroupConsistent(WPXInputStream *input, WPXEncrypt
 			input->seek(startPosition, WPX_SEEK_SET);
 			return false;
 		}
-		
+
 		input->seek(startPosition, WPX_SEEK_SET);
 		return true;
 	}
@@ -115,7 +115,7 @@ void WP5VariableLengthGroup::_read(WPXInputStream *input, WPXEncryption *encrypt
 
 	m_subGroup = readU8(input, encryption);
 	m_size = readU16(input, encryption) + 4; // the length is the number of data bytes minus 4 (ie. the function codes)
-	
+
 	WPD_DEBUG_MSG(("WordPerfect: Read variable group header (start_position: %i, sub_group: 0x%2x, size: %i)\n", startPosition, m_subGroup, m_size));
 
 	_readContents(input, encryption);

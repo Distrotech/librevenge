@@ -1,7 +1,7 @@
 
 /* libwpd
  * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -38,11 +38,13 @@ WP3ResourceFork::WP3ResourceFork(WPXInputStream *input, WPXEncryption *encryptio
 	input->seek(16, WPX_SEEK_SET);
 	uint32_t dataOffset = readU32(input, encryption, true);
 	uint32_t mapOffset = readU32(input, encryption, true);
-	/* uint32_t dataLength = */ readU32(input, encryption, true);
-	/* uint32_t mapLength = */ readU32(input, encryption, true);
-	
+	/* uint32_t dataLength = */
+	readU32(input, encryption, true);
+	/* uint32_t mapLength = */
+	readU32(input, encryption, true);
+
 	input->seek(40+mapOffset, WPX_SEEK_SET);
-	
+
 	uint32_t typeOffset = readU16(input, encryption, true);
 	uint32_t nameListOffset = readU16(input, encryption, true);
 
@@ -89,11 +91,11 @@ WP3ResourceFork::WP3ResourceFork(WPXInputStream *input, WPXEncryption *encryptio
 					encryption->setEncryptionMaskBase(0);
 				}
 			}
-	
+
 			WPXBinaryData resourceData;
 			for (unsigned long k = 0; k < (unsigned long)resourceDataSize && !input->atEOS(); k++)
 				resourceData.append((unsigned char)readU8(input, encryption));
-			
+
 			if (encryption)
 			{
 				encryption->setEncryptionStartOffset(oldEncryptionOffset);
@@ -105,7 +107,7 @@ WP3ResourceFork::WP3ResourceFork(WPXInputStream *input, WPXEncryption *encryptio
 			m_resourcesTypeMultimap.insert(std::multimap<uint32_t, WP3Resource *>::value_type( resourceType, resource ) );
 			m_resourcesIDMultimap.insert(std::multimap<uint32_t, WP3Resource *>::value_type( resourceReferenceID, resource ) );
 			WPD_DEBUG_MSG(("WP3Resource: Type 0x%.8x (%s), ID %i, name %s, attributes 0x%.2x\n", resourceType, resource->getResourceTypeString().cstr(),
-				resourceReferenceID, resourceName.cstr(), resourceAttributes));
+			               resourceReferenceID, resourceName.cstr(), resourceAttributes));
 			input->seek(4, WPX_SEEK_CUR);
 #if 0
 			WPXInputStream *tmpBinaryStream = const_cast<WPXInputStream *>(resourceData.getDataStream());
@@ -133,7 +135,7 @@ WP3ResourceFork::WP3ResourceFork(WPXInputStream *input, WPXEncryption *encryptio
 			tmpResData.append(resourceData);
 			if (f)
 			{
-				WPXInputStream* tmpStream = const_cast<WPXInputStream *>(tmpResData.getDataStream());
+				WPXInputStream *tmpStream = const_cast<WPXInputStream *>(tmpResData.getDataStream());
 				while (!tmpStream->atEOS())
 					fprintf(f, "%c", readU8(tmpStream, 0));
 				fclose(f);
@@ -154,31 +156,31 @@ WP3ResourceFork::~WP3ResourceFork()
 std::pair< std::multimap<uint32_t, WP3Resource *>::const_iterator, std::multimap<uint32_t, WP3Resource *>::const_iterator > WP3ResourceFork::getResourcesByType(uint32_t type) const
 {
 	std::pair< std::multimap<uint32_t, WP3Resource *>::const_iterator, std::multimap<uint32_t, WP3Resource *>::const_iterator > tempPair
-		= m_resourcesTypeMultimap.equal_range(type);
+	= m_resourcesTypeMultimap.equal_range(type);
 
- 	return tempPair;
+	return tempPair;
 }
 
 std::pair< std::multimap<uint32_t, WP3Resource *>::const_iterator, std::multimap<uint32_t, WP3Resource *>::const_iterator > WP3ResourceFork::getResourcesByID(uint32_t ID) const
 {
 	std::pair< std::multimap<uint32_t, WP3Resource *>::const_iterator, std::multimap<uint32_t, WP3Resource *>::const_iterator > tempPair
-		= m_resourcesIDMultimap.equal_range(ID);
+	= m_resourcesIDMultimap.equal_range(ID);
 
- 	return tempPair;
+	return tempPair;
 }
 
-const WP3Resource * WP3ResourceFork::getResource(uint32_t type, uint32_t ID) const
+const WP3Resource *WP3ResourceFork::getResource(uint32_t type, uint32_t ID) const
 {
 	std::pair< std::multimap<uint32_t, WP3Resource *>::const_iterator, std::multimap<uint32_t, WP3Resource *>::const_iterator > tempPair
-		= m_resourcesTypeMultimap.equal_range(type);
-		
+	= m_resourcesTypeMultimap.equal_range(type);
+
 	if (tempPair.first == m_resourcesTypeMultimap.end())
 		return NULL;
-	
+
 	for (std::multimap<uint32_t, WP3Resource *>::const_iterator iter = tempPair.first; iter != tempPair.second; iter++)
 		if (iter->second->getResourceReferenceID() == ID )
 			return iter->second;
-	
+
 	return NULL;
 }
 

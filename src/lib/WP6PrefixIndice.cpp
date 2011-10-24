@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,15 +19,15 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
 #include "WP6PrefixIndice.h"
-#include "WP6FileStructure.h" 
+#include "WP6FileStructure.h"
 #include "libwpd_internal.h"
 
-WP6PrefixIndice::WP6PrefixIndice(WPXInputStream * input, WPXEncryption *encryption, int id)
+WP6PrefixIndice::WP6PrefixIndice(WPXInputStream *input, WPXEncryption *encryption, int id)
 	: m_id(id),
 	  m_type(0),
 	  m_flags(0),
@@ -51,7 +51,7 @@ void WP6PrefixIndice::_read(WPXInputStream *input, WPXEncryption *encryption)
 	m_dataOffset = readU32(input, encryption);
 
 	WPD_DEBUG_MSG(("Prefix Packet (type: %i, data size: %i, data offset: %i)\n", m_type, m_dataSize, m_dataOffset));
-	
+
 	if (m_flags & WP6_INDEX_HEADER_ELEMENT_CHILD_PACKET_BIT)
 		m_hasChildren = true;
 

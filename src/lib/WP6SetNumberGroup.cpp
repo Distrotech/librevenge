@@ -30,8 +30,8 @@
 #include "libwpd_internal.h"
 
 
-WP6SetNumberGroup::WP6SetNumberGroup(WPXInputStream *input, 
-				     WPXEncryption *encryption) :
+WP6SetNumberGroup::WP6SetNumberGroup(WPXInputStream *input,
+                                     WPXEncryption *encryption) :
 	WP6VariableLengthGroup(),
 	m_countOfLevelNumbersSetting(0x00),
 	m_startingLevelNumber(0x00),

@@ -2,7 +2,7 @@
  * Copyright (C) 2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -20,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -39,31 +39,31 @@ WP42MultiByteFunctionGroup::WP42MultiByteFunctionGroup(uint8_t group)
 {
 }
 
-WP42MultiByteFunctionGroup * WP42MultiByteFunctionGroup::constructMultiByteFunctionGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group)
+WP42MultiByteFunctionGroup *WP42MultiByteFunctionGroup::constructMultiByteFunctionGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group)
 {
 	switch (group)
 	{
-		case WP42_MARGIN_RESET_GROUP:
-			return new WP42MarginResetGroup(input, encryption, group);
-		case WP42_SUPPRESS_PAGE_CHARACTERISTICS_GROUP:
-			return new WP42SuppressPageCharacteristicsGroup(input, encryption, group);
-		case WP42_HEADER_FOOTER_GROUP:
-			return new WP42HeaderFooterGroup(input, encryption, group);
-		case WP42_EXTENDED_CHARACTER_GROUP:
-			return new WP42ExtendedCharacterGroup(input, encryption, group);
-		case WP42_DEFINE_COLUMNS_OLD_GROUP:
-		case WP42_DEFINE_COLUMNS_NEW_GROUP:
-			return new WP42DefineColumnsGroup(input, encryption, group);
-		default:
-			// this is an unhandled group, just skip it
-			return new WP42UnsupportedMultiByteFunctionGroup(input, encryption, group);
+	case WP42_MARGIN_RESET_GROUP:
+		return new WP42MarginResetGroup(input, encryption, group);
+	case WP42_SUPPRESS_PAGE_CHARACTERISTICS_GROUP:
+		return new WP42SuppressPageCharacteristicsGroup(input, encryption, group);
+	case WP42_HEADER_FOOTER_GROUP:
+		return new WP42HeaderFooterGroup(input, encryption, group);
+	case WP42_EXTENDED_CHARACTER_GROUP:
+		return new WP42ExtendedCharacterGroup(input, encryption, group);
+	case WP42_DEFINE_COLUMNS_OLD_GROUP:
+	case WP42_DEFINE_COLUMNS_NEW_GROUP:
+		return new WP42DefineColumnsGroup(input, encryption, group);
+	default:
+		// this is an unhandled group, just skip it
+		return new WP42UnsupportedMultiByteFunctionGroup(input, encryption, group);
 	}
 }
 
 void WP42MultiByteFunctionGroup::_read(WPXInputStream *input, WPXEncryption *encryption)
 {
 	_readContents(input, encryption);
-	
+
 	// skip over the remaining bytes of the group, if any
 	while (!input->atEOS() && (readU8(input, encryption) != m_group));// getGroup()));
 	// IMPORTANT: if the class that implements _readContent(input, encryption) already reads the closing gate,

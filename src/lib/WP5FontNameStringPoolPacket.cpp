@@ -1,6 +1,6 @@
 /* libwpd
  * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -18,7 +18,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 #include <string.h>
@@ -30,7 +30,7 @@
 WP5FontNameStringPoolPacket::WP5FontNameStringPoolPacket(WPXInputStream *input, WPXEncryption *encryption, int /* id */, uint32_t dataOffset, uint32_t dataSize) :
 	WP5GeneralPacketData(),
 	m_fontNameString()
-{	
+{
 	_read(input, encryption, dataOffset, dataSize);
 }
 
@@ -47,7 +47,7 @@ void WP5FontNameStringPoolPacket::_readContents(WPXInputStream *input, WPXEncryp
 		WPXString fontName = readCString(input, encryption);
 		m_fontNameString[offset] = fontName;
 	}
-	
+
 	for (std::map<unsigned int, WPXString>::const_iterator Iter = m_fontNameString.begin(); Iter != m_fontNameString.end(); Iter++)
 		WPD_DEBUG_MSG(("WP5 Font Name String Pool Packet: offset: %i font name: %s\n", Iter->first, (Iter->second).cstr()));
 }

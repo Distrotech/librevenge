@@ -45,7 +45,7 @@ WP6CharacterGroup_SetAlignmentCharacterSubGroup::WP6CharacterGroup_SetAlignmentC
 }
 
 void WP6CharacterGroup_SetAlignmentCharacterSubGroup::parse(WP6Listener *listener, const uint8_t /* numPrefixIDs */,
-				uint16_t const * /* prefixIDs */) const
+        uint16_t const * /* prefixIDs */) const
 {
 	const uint32_t *chars;
 	extendedCharacterWP6ToUCS4(m_character, m_characterSet, &chars);
@@ -83,7 +83,7 @@ WP6CharacterGroup_CharacterShadingChangeSubGroup::WP6CharacterGroup_CharacterSha
 }
 
 void WP6CharacterGroup_CharacterShadingChangeSubGroup::parse(WP6Listener *listener, const uint8_t /* numPrefixIDs */,
-								uint16_t const * /* prefixIDs */) const
+        uint16_t const * /* prefixIDs */) const
 {
 	listener->characterShadingChange(m_shading);
 }
@@ -104,7 +104,7 @@ WP6CharacterGroup_FontFaceChangeSubGroup::WP6CharacterGroup_FontFaceChangeSubGro
 	if (sizeDeletable > 24)
 	{
 		m_packet = new WP6FontDescriptorPacket(input, encryption, 0, input->tell(), sizeDeletable);
-	
+
 		WPD_DEBUG_MSG(("WordPerfect: Character Group Font Face Change subgroup info (font name: %s)\n", m_packet->getFontName().cstr()));
 	}
 }
@@ -159,12 +159,12 @@ WP6CharacterGroup_SetDotLeaderCharactersSubGroup::WP6CharacterGroup_SetDotLeader
 }
 
 void WP6CharacterGroup_SetDotLeaderCharactersSubGroup::parse(WP6Listener *listener, const uint8_t /* numPrefixIDs */,
-								uint16_t const * /* prefixIDs */) const
+        uint16_t const * /* prefixIDs */) const
 {
 	const uint32_t *chars;
 	extendedCharacterWP6ToUCS4(m_character, m_characterSet, &chars);
 	WPD_DEBUG_MSG(("WordPerfect: Parsing Set Dot Leader Characters (leader character: 0x%.4x), (number of spaces: %i)\n",
-			chars[0], m_numberOfSpaces));
+	               chars[0], m_numberOfSpaces));
 	listener->setLeaderCharacter(chars[0], m_numberOfSpaces);
 }
 
@@ -181,7 +181,7 @@ WP6CharacterGroup_ParagraphNumberOnSubGroup::WP6CharacterGroup_ParagraphNumberOn
 }
 
 void WP6CharacterGroup_ParagraphNumberOnSubGroup::parse(WP6Listener *listener, const uint8_t /* numPrefixIDs */,
-							uint16_t const * /* prefixIDs */) const
+        uint16_t const * /* prefixIDs */) const
 {
 	listener->paragraphNumberOn(m_outlineHash, m_level, m_flag);
 }
@@ -200,7 +200,7 @@ WP6CharacterGroup_TableDefinitionOnSubGroup::WP6CharacterGroup_TableDefinitionOn
 }
 
 void WP6CharacterGroup_TableDefinitionOnSubGroup::parse(WP6Listener *listener, const uint8_t /* numPrefixIDs */,
-							uint16_t const * /* prefixIDs */) const
+        uint16_t const * /* prefixIDs */) const
 {
 	listener->defineTable(m_position, m_leftOffset);
 }
@@ -214,7 +214,7 @@ WP6CharacterGroup_TableDefinitionOffSubGroup::WP6CharacterGroup_TableDefinitionO
 }
 
 void WP6CharacterGroup_TableDefinitionOffSubGroup::parse(WP6Listener *listener, const uint8_t /* numPrefixIDs */,
-							uint16_t const * /* prefixIDs */) const
+        uint16_t const * /* prefixIDs */) const
 {
 	// the table is degined now; start the table
 	listener->startTable();
@@ -251,16 +251,16 @@ void WP6CharacterGroup_TableColumnSubGroup::parse(WP6Listener *listener, const u
  *************************************************************************/
 
 WP6CharacterGroup_CommentSubGroup::WP6CharacterGroup_CommentSubGroup(WPXInputStream * /* input */, WPXEncryption * /* encryption */)
-{	
+{
 }
 
-void WP6CharacterGroup_CommentSubGroup::parse(WP6Listener * listener, const uint8_t numPrefixIDs,
-							uint16_t const *prefixIDs) const
+void WP6CharacterGroup_CommentSubGroup::parse(WP6Listener *listener, const uint8_t numPrefixIDs,
+        uint16_t const *prefixIDs) const
 {
 	uint16_t textPID = 0;
 	for (uint8_t i=0; i<numPrefixIDs; i++)
 	{
-		if (const WP6CommentAnnotationPacket *caPacket = dynamic_cast<const WP6CommentAnnotationPacket *>(listener->getPrefixDataPacket(prefixIDs[i]))) 
+		if (const WP6CommentAnnotationPacket *caPacket = dynamic_cast<const WP6CommentAnnotationPacket *>(listener->getPrefixDataPacket(prefixIDs[i])))
 		{
 			textPID = caPacket->getTextPID();
 			break;
@@ -292,41 +292,41 @@ void WP6CharacterGroup::_readContents(WPXInputStream *input, WPXEncryption *encr
 	// the contents accordingly
 	switch (getSubGroup())
 	{
-		case WP6_CHARACTER_GROUP_FONT_FACE_CHANGE:
-			m_subGroupData = new WP6CharacterGroup_FontFaceChangeSubGroup(input, encryption, getSizeDeletable());
-			break;
-		case WP6_CHARACTER_GROUP_FONT_SIZE_CHANGE:
-			m_subGroupData = new WP6CharacterGroup_FontSizeChangeSubGroup(input, encryption);
-			break;
-		case WP6_CHARACTER_GROUP_SET_ALIGNMENT_CHARACTER:
-			m_subGroupData = new WP6CharacterGroup_SetAlignmentCharacterSubGroup(input, encryption);
-			break;
-		case WP6_CHARACTER_GROUP_COLOR:
-			m_subGroupData = new WP6CharacterGroup_ColorSubGroup(input, encryption);
-			break;
-		case WP6_CHARACTER_GROUP_CHARACTER_SHADING_CHANGE:
-			m_subGroupData = new WP6CharacterGroup_CharacterShadingChangeSubGroup(input, encryption);
-			break;
-		case WP6_CHARACTER_GROUP_SET_DOT_LEADER_CHARACTERS:
-			m_subGroupData = new WP6CharacterGroup_SetDotLeaderCharactersSubGroup(input, encryption);
-			break;
-		case WP6_CHARACTER_GROUP_PARAGRAPH_NUMBER_ON:
-			m_subGroupData = new WP6CharacterGroup_ParagraphNumberOnSubGroup(input, encryption);
-			break;
-		case WP6_CHARACTER_GROUP_TABLE_DEFINITION_ON:
-			m_subGroupData = new WP6CharacterGroup_TableDefinitionOnSubGroup(input, encryption);
-			break;
-		case WP6_CHARACTER_GROUP_TABLE_DEFINITION_OFF:
-			m_subGroupData = new WP6CharacterGroup_TableDefinitionOffSubGroup(input, encryption);
-			break;
-		case WP6_CHARACTER_GROUP_TABLE_COLUMN:
-			m_subGroupData = new WP6CharacterGroup_TableColumnSubGroup(input, encryption);
-			break;
-		case WP6_CHARACTER_GROUP_COMMENT:
-			m_subGroupData = new WP6CharacterGroup_CommentSubGroup(input, encryption);
-			break;
-		default:
-			break;
+	case WP6_CHARACTER_GROUP_FONT_FACE_CHANGE:
+		m_subGroupData = new WP6CharacterGroup_FontFaceChangeSubGroup(input, encryption, getSizeDeletable());
+		break;
+	case WP6_CHARACTER_GROUP_FONT_SIZE_CHANGE:
+		m_subGroupData = new WP6CharacterGroup_FontSizeChangeSubGroup(input, encryption);
+		break;
+	case WP6_CHARACTER_GROUP_SET_ALIGNMENT_CHARACTER:
+		m_subGroupData = new WP6CharacterGroup_SetAlignmentCharacterSubGroup(input, encryption);
+		break;
+	case WP6_CHARACTER_GROUP_COLOR:
+		m_subGroupData = new WP6CharacterGroup_ColorSubGroup(input, encryption);
+		break;
+	case WP6_CHARACTER_GROUP_CHARACTER_SHADING_CHANGE:
+		m_subGroupData = new WP6CharacterGroup_CharacterShadingChangeSubGroup(input, encryption);
+		break;
+	case WP6_CHARACTER_GROUP_SET_DOT_LEADER_CHARACTERS:
+		m_subGroupData = new WP6CharacterGroup_SetDotLeaderCharactersSubGroup(input, encryption);
+		break;
+	case WP6_CHARACTER_GROUP_PARAGRAPH_NUMBER_ON:
+		m_subGroupData = new WP6CharacterGroup_ParagraphNumberOnSubGroup(input, encryption);
+		break;
+	case WP6_CHARACTER_GROUP_TABLE_DEFINITION_ON:
+		m_subGroupData = new WP6CharacterGroup_TableDefinitionOnSubGroup(input, encryption);
+		break;
+	case WP6_CHARACTER_GROUP_TABLE_DEFINITION_OFF:
+		m_subGroupData = new WP6CharacterGroup_TableDefinitionOffSubGroup(input, encryption);
+		break;
+	case WP6_CHARACTER_GROUP_TABLE_COLUMN:
+		m_subGroupData = new WP6CharacterGroup_TableColumnSubGroup(input, encryption);
+		break;
+	case WP6_CHARACTER_GROUP_COMMENT:
+		m_subGroupData = new WP6CharacterGroup_CommentSubGroup(input, encryption);
+		break;
+	default:
+		break;
 	}
 }
 
@@ -336,32 +336,32 @@ void WP6CharacterGroup::parse(WP6Listener *listener)
 
 	switch (getSubGroup())
 	{
-		case WP6_CHARACTER_GROUP_FONT_FACE_CHANGE:
-		case WP6_CHARACTER_GROUP_FONT_SIZE_CHANGE:
-		case WP6_CHARACTER_GROUP_SET_ALIGNMENT_CHARACTER:
-		case WP6_CHARACTER_GROUP_COLOR:
-		case WP6_CHARACTER_GROUP_CHARACTER_SHADING_CHANGE:
-		case WP6_CHARACTER_GROUP_SET_DOT_LEADER_CHARACTERS:
-		case WP6_CHARACTER_GROUP_PARAGRAPH_NUMBER_ON:
-		case WP6_CHARACTER_GROUP_COMMENT:
-			m_subGroupData->parse(listener, getNumPrefixIDs(), getPrefixIDs());
-			break;
-		case WP6_CHARACTER_GROUP_PARAGRAPH_NUMBER_OFF:
-			listener->paragraphNumberOff();
-			break;
-		case WP6_CHARACTER_GROUP_TABLE_DEFINITION_ON:
-			WPD_DEBUG_MSG(("WordPerfect: TABLE Definition ON\n"));
-			m_subGroupData->parse(listener, getNumPrefixIDs(), getPrefixIDs());
-			break;
-		case WP6_CHARACTER_GROUP_TABLE_DEFINITION_OFF:
-			WPD_DEBUG_MSG(("WordPerfect: TABLE Definition OFF\n"));
-			m_subGroupData->parse(listener, getNumPrefixIDs(), getPrefixIDs());
-			break;
-		case WP6_CHARACTER_GROUP_TABLE_COLUMN:
-			WPD_DEBUG_MSG(("WordPerfect: Table Column\n"));
-			m_subGroupData->parse(listener, getNumPrefixIDs(), getPrefixIDs());
-			break;
-		default: // something else we don't support yet
-			break;
+	case WP6_CHARACTER_GROUP_FONT_FACE_CHANGE:
+	case WP6_CHARACTER_GROUP_FONT_SIZE_CHANGE:
+	case WP6_CHARACTER_GROUP_SET_ALIGNMENT_CHARACTER:
+	case WP6_CHARACTER_GROUP_COLOR:
+	case WP6_CHARACTER_GROUP_CHARACTER_SHADING_CHANGE:
+	case WP6_CHARACTER_GROUP_SET_DOT_LEADER_CHARACTERS:
+	case WP6_CHARACTER_GROUP_PARAGRAPH_NUMBER_ON:
+	case WP6_CHARACTER_GROUP_COMMENT:
+		m_subGroupData->parse(listener, getNumPrefixIDs(), getPrefixIDs());
+		break;
+	case WP6_CHARACTER_GROUP_PARAGRAPH_NUMBER_OFF:
+		listener->paragraphNumberOff();
+		break;
+	case WP6_CHARACTER_GROUP_TABLE_DEFINITION_ON:
+		WPD_DEBUG_MSG(("WordPerfect: TABLE Definition ON\n"));
+		m_subGroupData->parse(listener, getNumPrefixIDs(), getPrefixIDs());
+		break;
+	case WP6_CHARACTER_GROUP_TABLE_DEFINITION_OFF:
+		WPD_DEBUG_MSG(("WordPerfect: TABLE Definition OFF\n"));
+		m_subGroupData->parse(listener, getNumPrefixIDs(), getPrefixIDs());
+		break;
+	case WP6_CHARACTER_GROUP_TABLE_COLUMN:
+		WPD_DEBUG_MSG(("WordPerfect: Table Column\n"));
+		m_subGroupData->parse(listener, getNumPrefixIDs(), getPrefixIDs());
+		break;
+	default: // something else we don't support yet
+		break;
 	}
 }

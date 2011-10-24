@@ -73,7 +73,7 @@ void WP5PageFormatGroup::_readContents(WPXInputStream *input, WPXEncryption *enc
 			int8_t lineSpacingIntegerPart = (int8_t)((lineSpacing & 0xFF00) >> 8);
 			double lineSpacingFractionalPart = (double)(lineSpacing & 0x00FF)/(double)0xFF;
 			WPD_DEBUG_MSG(("WordPerfect: Page format group line spacing - integer part: %i fractional part: %f (original value: %i)\n",
-				       lineSpacingIntegerPart, lineSpacingFractionalPart, lineSpacing));
+			               lineSpacingIntegerPart, lineSpacingFractionalPart, lineSpacing));
 			m_lineSpacing = lineSpacingIntegerPart + lineSpacingFractionalPart;
 		}
 		break;
@@ -150,7 +150,7 @@ void WP5PageFormatGroup::_readContents(WPXInputStream *input, WPXEncryption *enc
 				}
 			}
 			input->seek(20 - (m_tabStops.size() / 2 ) - (m_tabStops.size() % 2), WPX_SEEK_CUR);
-			
+
 			if ((getSize() > 4) && (getSize() - 4 == 0x00D0))
 			{
 				input->seek(2, WPX_SEEK_CUR);
@@ -209,7 +209,7 @@ void WP5PageFormatGroup::_readContents(WPXInputStream *input, WPXEncryption *enc
 			break;
 		}
 		WPD_DEBUG_MSG(("WordPerfect: Read form information (length: %i), (width: %i), (form orientation: %s),\n",
-				m_formLength, m_formWidth, ((m_formOrientation==PORTRAIT)?"portrait":"landscape")));
+		               m_formLength, m_formWidth, ((m_formOrientation==PORTRAIT)?"portrait":"landscape")));
 		break;
 	default: /* something else we don't support, since it isn't in the docs */
 		break;
@@ -227,11 +227,11 @@ void WP5PageFormatGroup::parse(WP5Listener *listener)
 		listener->marginChange(WPX_RIGHT, m_rightMargin);
 		break;
 	case WP5_TOP_PAGE_FORMAT_GROUP_SPACING_SET:
-	        WPD_DEBUG_MSG(("WordPerfect: parsing a line spacing change of: %f\n", m_lineSpacing));
-	        listener->lineSpacingChange(m_lineSpacing);
+		WPD_DEBUG_MSG(("WordPerfect: parsing a line spacing change of: %f\n", m_lineSpacing));
+		listener->lineSpacingChange(m_lineSpacing);
 		break;
 	case WP5_TOP_PAGE_FORMAT_GROUP_TAB_SET:
-	        WPD_DEBUG_MSG(("WordPerfect: parsing a tab set\n"));
+		WPD_DEBUG_MSG(("WordPerfect: parsing a tab set\n"));
 		listener->setTabs(m_tabStops, m_marginOffset);
 		break;
 	case WP5_TOP_PAGE_FORMAT_GROUP_TOP_BOTTOM_MARGIN_SET:

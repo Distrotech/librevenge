@@ -2,7 +2,7 @@
  * Copyright (C) 2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2003-2004 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -20,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -34,8 +34,8 @@
 // throws an exception if there is an error
 // precondition: readVal us between 0xC0 and 0xFF
 // TODO: check the precondition :D
-WP42Part * WP42Part::constructPart(WPXInputStream *input, WPXEncryption *encryption, uint8_t readVal)
-{	
+WP42Part *WP42Part::constructPart(WPXInputStream *input, WPXEncryption *encryption, uint8_t readVal)
+{
 	WPD_DEBUG_MSG(("WordPerfect: Offset: %i, ConstructPart(readVal: 0x%2x)\n", (unsigned int)input->tell(), readVal));
 
 	if (((uint8_t)0xC0 > readVal) || ((uint8_t)0xFE < readVal))
@@ -43,7 +43,7 @@ WP42Part * WP42Part::constructPart(WPXInputStream *input, WPXEncryption *encrypt
 		WPD_DEBUG_MSG(("WordPerfect: Returning 0 from constructPart\n"));
 		return 0;
 	}
-	
+
 	WPD_DEBUG_MSG(("WordPerfect: constructMultiByteFunctionGroup(input, val)\n"));
 	return WP42MultiByteFunctionGroup::constructMultiByteFunctionGroup(input, encryption, readVal);
 }

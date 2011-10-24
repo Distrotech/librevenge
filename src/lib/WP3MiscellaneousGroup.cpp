@@ -51,15 +51,15 @@ void WP3MiscellaneousGroup::_readContents(WPXInputStream *input, WPXEncryption *
 	{
 	case WP3_MISCELLANEOUS_GROUP_PAGE_SIZE_OVERRIDE:
 		uint16_t tmpPageOrientation;
-		
+
 		// skip 20 bytes of old values
 		input->seek(20, WPX_SEEK_CUR);
-		
+
 		// read the new values
 		tmpPageOrientation = readU16(input, encryption, true);
 		m_pageWidth = fixedPointToWPUs(readU32(input, encryption, true));
 		m_pageHeight = fixedPointToWPUs(readU32(input, encryption, true));
-		
+
 		// determine whether it is portrait or landscape
 		if ((tmpPageOrientation & 0x0001) == 0x0000)
 			m_pageOrientation = PORTRAIT;
@@ -67,7 +67,7 @@ void WP3MiscellaneousGroup::_readContents(WPXInputStream *input, WPXEncryption *
 			m_pageOrientation = LANDSCAPE;
 
 		break;
-		
+
 	default: /* something else we don't support, since it isn't in the docs */
 		break;
 	}

@@ -2,7 +2,7 @@
  * Copyright (C) 2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -20,10 +20,10 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
- 
+
 #include "WP5Parser.h"
 #include "WPXHeader.h"
 #include "WP5Part.h"
@@ -44,7 +44,7 @@ WP5Parser::~WP5Parser()
 {
 }
 
-WP5PrefixData * WP5Parser::getPrefixData(WPXInputStream *input, WPXEncryption *encryption)
+WP5PrefixData *WP5Parser::getPrefixData(WPXInputStream *input, WPXEncryption *encryption)
 {
 	WP5PrefixData *prefixData = 0;
 	try
@@ -62,14 +62,14 @@ WP5PrefixData * WP5Parser::getPrefixData(WPXInputStream *input, WPXEncryption *e
 void WP5Parser::parse(WPXInputStream *input, WPXEncryption *encryption, WP5Listener *listener)
 {
 	listener->startDocument();
-	
-	input->seek(getHeader()->getDocumentOffset(), WPX_SEEK_SET);	
-	
+
+	input->seek(getHeader()->getDocumentOffset(), WPX_SEEK_SET);
+
 	WPD_DEBUG_MSG(("WordPerfect: Starting document body parse (position = %ld)\n", (long)input->tell()));
-	
+
 	parseDocument(input, encryption, listener);
-	
-	listener->endDocument();		
+
+	listener->endDocument();
 }
 
 // parseDocument: parses a document body (may call itself recursively, on other streams, or itself)
@@ -79,7 +79,7 @@ void WP5Parser::parseDocument(WPXInputStream *input, WPXEncryption *encryption, 
 	{
 		uint8_t readVal;
 		readVal = readU8(input, encryption);
-		
+
 		if (readVal == 0 || readVal == 0x7F || readVal == 0xFF)
 		{
 			// do nothing: this token is meaningless and is likely just corruption
@@ -87,32 +87,32 @@ void WP5Parser::parseDocument(WPXInputStream *input, WPXEncryption *encryption, 
 		else if (readVal >= (uint8_t)0x01 && readVal <= (uint8_t)0x1F)
 		{
 			// control characters
-			
+
 			switch (readVal)
 			{
-				case 0x0A: // hard new line
-					listener->insertEOL();
-					break;
-				case 0x0B: // soft new page (convert like space)
-					listener->insertCharacter((uint32_t) ' ');
-					listener->insertBreak(WPX_SOFT_PAGE_BREAK);
-					break;
-				case 0x0C: // hard new page
-					listener->insertBreak(WPX_PAGE_BREAK);
-					break;
-				case 0x0D: // soft new line (convert like space)
-					listener->insertCharacter((uint32_t) ' ');
-					break;
-				default:
-					// unsupported or undocumented token, ignore
-					break;
+			case 0x0A: // hard new line
+				listener->insertEOL();
+				break;
+			case 0x0B: // soft new page (convert like space)
+				listener->insertCharacter((uint32_t) ' ');
+				listener->insertBreak(WPX_SOFT_PAGE_BREAK);
+				break;
+			case 0x0C: // hard new page
+				listener->insertBreak(WPX_PAGE_BREAK);
+				break;
+			case 0x0D: // soft new line (convert like space)
+				listener->insertCharacter((uint32_t) ' ');
+				break;
+			default:
+				// unsupported or undocumented token, ignore
+				break;
 			}
 		}
 		else if (readVal >= (uint8_t)0x20 && readVal <= (uint8_t)0x7E)
 		{
 			listener->insertCharacter( readVal );
 		}
-		else 
+		else
 		{
 			WP5Part *part = WP5Part::constructPart(input, encryption, readVal);
 			if (part)
@@ -120,7 +120,7 @@ void WP5Parser::parseDocument(WPXInputStream *input, WPXEncryption *encryption, 
 				part->parse(listener);
 				DELETEP(part);
 			}
-		}	
+		}
 	}
 }
 
@@ -129,12 +129,12 @@ void WP5Parser::parse(WPXDocumentInterface *documentInterface)
 	WPXInputStream *input = getInput();
 	WPXEncryption *encryption = getEncryption();
 	std::list<WPXPageSpan> pageList;
-	WPXTableList tableList;	
-	WP5PrefixData * prefixData = 0;
+	WPXTableList tableList;
+	WP5PrefixData *prefixData = 0;
 	std::vector<WP5SubDocument *> subDocuments;
-	
+
 	try
- 	{
+	{
 		prefixData = getPrefixData(input, encryption);
 
 		// do a "first-pass" parse of the document
@@ -174,27 +174,27 @@ void WP5Parser::parse(WPXDocumentInterface *documentInterface)
 
 		if (listener.getGeneralPacketData(15))
 		{
-			tmpFontSize = static_cast<const WP5ListFontsUsedPacket*>(listener.getGeneralPacketData(15))->getFontSize(0);
-			tmpFontNameOffset = static_cast<const WP5ListFontsUsedPacket*>(listener.getGeneralPacketData(15))->getFontNameOffset(0);
+			tmpFontSize = static_cast<const WP5ListFontsUsedPacket *>(listener.getGeneralPacketData(15))->getFontSize(0);
+			tmpFontNameOffset = static_cast<const WP5ListFontsUsedPacket *>(listener.getGeneralPacketData(15))->getFontNameOffset(0);
 		}
 		else if (listener.getGeneralPacketData(2))
 		{
-			tmpFontSize = static_cast<const WP5ListFontsUsedPacket*>(listener.getGeneralPacketData(2))->getFontSize(0);
-			tmpFontNameOffset = static_cast<const WP5ListFontsUsedPacket*>(listener.getGeneralPacketData(2))->getFontNameOffset(0);
+			tmpFontSize = static_cast<const WP5ListFontsUsedPacket *>(listener.getGeneralPacketData(2))->getFontSize(0);
+			tmpFontNameOffset = static_cast<const WP5ListFontsUsedPacket *>(listener.getGeneralPacketData(2))->getFontNameOffset(0);
 		}
 		else
 			tmpHasFontsUsedPacket = false;
-		
+
 		if (tmpHasFontsUsedPacket && (listener.getGeneralPacketData(7)))
-			tmpFontName = static_cast<const WP5FontNameStringPoolPacket*>(listener.getGeneralPacketData(7))->getFontName(tmpFontNameOffset);
-			
+			tmpFontName = static_cast<const WP5FontNameStringPoolPacket *>(listener.getGeneralPacketData(7))->getFontName(tmpFontNameOffset);
+
 		listener.setFont(tmpFontName, tmpFontSize);
 		listener.setDefaultFont(tmpFontName, tmpFontSize);
 		// FIXME: UGLY, UGLY, UGLY!!! FIND A BETTER WAY TO ACHIEVE THE SAME
-		
+
 
 		parse(input, encryption, &listener);
-		
+
 		// cleanup section: free the used resources
 		delete prefixData;
 		for (std::vector<WP5SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); iterSubDoc++)
@@ -215,26 +215,26 @@ void WP5Parser::parse(WPXDocumentInterface *documentInterface)
 		}
 
 		throw FileException();
-	}	
+	}
 }
 
 void WP5Parser::parseSubDocument(WPXDocumentInterface *documentInterface)
-{	
+{
 	std::list<WPXPageSpan> pageList;
-	WPXTableList tableList;	
+	WPXTableList tableList;
 	std::vector<WP5SubDocument *> subDocuments;
 
 	WPXInputStream *input = getInput();
 
 	try
- 	{
+	{
 		WP5StylesListener stylesListener(pageList, tableList, subDocuments);
 		stylesListener.startSubDocument();
 		parseDocument(input, 0, &stylesListener);
 		stylesListener.endSubDocument();
-		
+
 		input->seek(0, WPX_SEEK_SET);
-		
+
 		WP5ContentListener listener(pageList, subDocuments, documentInterface);
 		listener.startSubDocument();
 		parseDocument(input, 0, &listener);

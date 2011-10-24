@@ -38,31 +38,31 @@ WP6FixedLengthGroup::WP6FixedLengthGroup(uint8_t groupID)
 {
 }
 
-WP6FixedLengthGroup * WP6FixedLengthGroup::constructFixedLengthGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID)
+WP6FixedLengthGroup *WP6FixedLengthGroup::constructFixedLengthGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID)
 {
 	switch (groupID)
 	{
-		case WP6_TOP_EXTENDED_CHARACTER:
-			return new WP6ExtendedCharacterGroup(input, encryption, groupID);
+	case WP6_TOP_EXTENDED_CHARACTER:
+		return new WP6ExtendedCharacterGroup(input, encryption, groupID);
 
-		case WP6_TOP_UNDO_GROUP:
-			return new WP6UndoGroup(input, encryption, groupID);
+	case WP6_TOP_UNDO_GROUP:
+		return new WP6UndoGroup(input, encryption, groupID);
 
-		case WP6_TOP_ATTRIBUTE_ON:
-			return new WP6AttributeOnGroup(input, encryption, groupID);
+	case WP6_TOP_ATTRIBUTE_ON:
+		return new WP6AttributeOnGroup(input, encryption, groupID);
 
-		case WP6_TOP_ATTRIBUTE_OFF:
-			return new WP6AttributeOffGroup(input, encryption, groupID);
+	case WP6_TOP_ATTRIBUTE_OFF:
+		return new WP6AttributeOffGroup(input, encryption, groupID);
 
-		case WP6_TOP_HIGHLIGHT_ON:
-			return new WP6HighlightOnGroup(input, encryption, groupID);
+	case WP6_TOP_HIGHLIGHT_ON:
+		return new WP6HighlightOnGroup(input, encryption, groupID);
 
-		case WP6_TOP_HIGHLIGHT_OFF:
-			return new WP6HighlightOffGroup(input, encryption, groupID);
+	case WP6_TOP_HIGHLIGHT_OFF:
+		return new WP6HighlightOffGroup(input, encryption, groupID);
 
 		// Add the remaining cases here
-		default:
-			return new WP6UnsupportedFixedLengthGroup(input, encryption, groupID);
+	default:
+		return new WP6UnsupportedFixedLengthGroup(input, encryption, groupID);
 	}
 }
 
@@ -86,7 +86,7 @@ bool WP6FixedLengthGroup::isGroupConsistent(WPXInputStream *input, WPXEncryption
 			input->seek(startPosition, WPX_SEEK_SET);
 			return false;
 		}
-		
+
 		input->seek(startPosition, WPX_SEEK_SET);
 		return true;
 	}

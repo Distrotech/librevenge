@@ -35,10 +35,10 @@ WP5Listener::WP5Listener() :
 {
 }
 
-const WP5GeneralPacketData * WP5Listener::getGeneralPacketData(const int type) const
+const WP5GeneralPacketData *WP5Listener::getGeneralPacketData(const int type) const
 {
 	if (m_prefixData)
-		return m_prefixData->getGeneralPacketData(type); 
+		return m_prefixData->getGeneralPacketData(type);
 	else
 		return 0;
 }

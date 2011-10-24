@@ -1,6 +1,6 @@
 /* libwpd
  * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -18,7 +18,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -31,7 +31,7 @@ WP3SubDocument::WP3SubDocument(WPXInputStream *input, WPXEncryption *encryption,
 {
 }
 
-WP3SubDocument::WP3SubDocument(uint8_t * streamData, const unsigned dataSize) :
+WP3SubDocument::WP3SubDocument(uint8_t *streamData, const unsigned dataSize) :
 	WPXSubDocument(streamData, dataSize)
 {
 }

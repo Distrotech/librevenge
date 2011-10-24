@@ -52,8 +52,8 @@
 		if (lc != L) \
 			m_callbackMisses++; \
 		m_callStack.pop(); \
-	}	
-	
+	}
+
 RawDocumentGenerator::RawDocumentGenerator(bool printCallgraphScore) :
 	m_indent(0),
 	m_callbackMisses(0),
@@ -73,7 +73,7 @@ void RawDocumentGenerator::__iprintf(const char *format, ...)
 {
 	m_atLeastOneCallback = true;
 	if (m_printCallgraphScore) return;
-	
+
 	va_list args;
 	va_start(args, format);
 	for (int i=0; i<m_indent; i++)
@@ -110,7 +110,7 @@ WPXString getPropString(const WPXPropertyList &propList)
 {
 	WPXString propString;
 	WPXPropertyList::Iter i(propList);
-	if (!i.last()) 
+	if (!i.last())
 	{
 		propString.append(i.key());
 		propString.append(": ");
@@ -185,7 +185,7 @@ void RawDocumentGenerator::openPageSpan(const WPXPropertyList &propList)
 void RawDocumentGenerator::closePageSpan()
 {
 	_D(("closePageSpan()\n"),
-		LC_OPEN_PAGE_SPAN);
+	   LC_OPEN_PAGE_SPAN);
 }
 
 void RawDocumentGenerator::openHeader(const WPXPropertyList &propList)
@@ -320,7 +320,7 @@ void RawDocumentGenerator::closeUnorderedListLevel()
 
 void RawDocumentGenerator::openListElement(const WPXPropertyList &propList, const WPXPropertyListVector &tabStops)
 {
-	_U(("openListElement(%s, tab-stops: %s)\n", getPropString(propList).cstr(), getPropString(tabStops).cstr()), 
+	_U(("openListElement(%s, tab-stops: %s)\n", getPropString(propList).cstr(), getPropString(tabStops).cstr()),
 	   LC_OPEN_LIST_ELEMENT);
 }
 
@@ -365,14 +365,14 @@ void RawDocumentGenerator::closeComment()
 void RawDocumentGenerator::openTextBox(const WPXPropertyList &propList)
 {
 	_U(("openTextBox(%s)\n", getPropString(propList).cstr()),
-	  LC_OPEN_TEXT_BOX);
+	   LC_OPEN_TEXT_BOX);
 }
 
 void RawDocumentGenerator::closeTextBox()
 {
 	_D(("closeTextBox()\n"), LC_OPEN_TEXT_BOX);
 }
-	
+
 void RawDocumentGenerator::openTable(const WPXPropertyList &propList, const WPXPropertyListVector &columns)
 {
 	_U(("openTable(%s, columns: %s)\n", getPropString(propList).cstr(), getPropString(columns).cstr()), LC_OPEN_TABLE);
@@ -413,19 +413,19 @@ void RawDocumentGenerator::closeTable()
 void RawDocumentGenerator::openFrame(const WPXPropertyList &propList)
 {
 	_U(("openFrame(%s)\n", getPropString(propList).cstr()),
-	  LC_OPEN_FRAME);
+	   LC_OPEN_FRAME);
 }
 
 void RawDocumentGenerator::closeFrame()
 {
 	_D(("closeFrame()\n"), LC_OPEN_FRAME);
 }
-	
+
 void RawDocumentGenerator::insertBinaryObject(const WPXPropertyList &propList, const WPXBinaryData & /* data */)
 {
 	__iprintf("insertBinaryObject(%s)\n", getPropString(propList).cstr());
 }
-	
+
 void RawDocumentGenerator::insertEquation(const WPXPropertyList &propList, const WPXString &data)
 {
 	__iprintf("insertEquation(%s, text: %s)\n", getPropString(propList).cstr(), data.cstr());

@@ -2,7 +2,7 @@
  * Copyright (C) 2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -20,10 +20,10 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
- 
+
 #include "WP6StylesListener.h"
 #include "WPXTable.h"
 #include "WP6FileStructure.h"
@@ -35,11 +35,11 @@
 // WP6StylesListener: creates intermediate table and page span representations, given a
 // sequence of messages passed to it by the parser.
 
-WP6StylesListener::WP6StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList) : 
+WP6StylesListener::WP6StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList) :
 	WP6Listener(),
 	WPXStylesListener(pageList),
 	m_currentPage(),
-	m_tableList(tableList), 
+	m_tableList(tableList),
 	m_currentTable(0),
 	m_tempMarginLeft(1.0),
 	m_tempMarginRight(1.0),
@@ -52,12 +52,12 @@ WP6StylesListener::WP6StylesListener(std::list<WPXPageSpan> &pageList, WPXTableL
 }
 
 void WP6StylesListener::endDocument()
-{	
+{
 	insertBreak(WPX_SOFT_PAGE_BREAK); // pretend we just had a soft page break (for the last page)
 }
 
 void WP6StylesListener::endSubDocument()
-{	
+{
 	insertBreak(WPX_SOFT_PAGE_BREAK); // pretend we just had a soft page break (for the last page)
 }
 
@@ -67,13 +67,13 @@ void WP6StylesListener::insertBreak(const uint8_t breakType)
 		return;
 
 	if (!isUndoOn())
-	{	
-		switch (breakType) 
+	{
+		switch (breakType)
 		{
 		case WPX_PAGE_BREAK:
 		case WPX_SOFT_PAGE_BREAK:
 			if ((m_pageList.size() > 0) && (m_currentPage==m_pageList.back())
-				&& (m_pageListHardPageMark != m_pageList.end()))
+			        && (m_pageListHardPageMark != m_pageList.end()))
 			{
 				m_pageList.back().setPageSpan(m_pageList.back().getPageSpan() + 1);
 			}
@@ -99,7 +99,7 @@ void WP6StylesListener::insertBreak(const uint8_t breakType)
 
 void WP6StylesListener::pageNumberingChange(const WPXPageNumberPosition pageNumberingPosition, const uint16_t pageNumberFontPointSize, const uint16_t pageNumberFontPID)
 {
-	if (!isUndoOn()) 
+	if (!isUndoOn())
 	{
 		m_currentPage.setPageNumberPosition(pageNumberingPosition);
 
@@ -116,17 +116,17 @@ void WP6StylesListener::pageNumberingChange(const WPXPageNumberPosition pageNumb
 
 void WP6StylesListener::pageMarginChange(const uint8_t side, const uint16_t margin)
 {
-	if (!isUndoOn()) 
+	if (!isUndoOn())
 	{
 		double marginInch = (double)((double)margin / (double)WPX_NUM_WPUS_PER_INCH);
 		switch(side)
 		{
-			case WPX_TOP:
-				m_currentPage.setMarginTop(marginInch);
-				break;
-			case WPX_BOTTOM:
-				m_currentPage.setMarginBottom(marginInch);
-				break;
+		case WPX_TOP:
+			m_currentPage.setMarginTop(marginInch);
+			break;
+		case WPX_BOTTOM:
+			m_currentPage.setMarginBottom(marginInch);
+			break;
 		}
 	}
 }
@@ -157,51 +157,51 @@ void WP6StylesListener::marginChange(const uint8_t side, const uint16_t margin)
 		double marginInch = (double)((double)margin / (double)WPX_NUM_WPUS_PER_INCH);
 		switch(side)
 		{
-			case WPX_LEFT:
-				if (!m_currentPageHasContent && (m_pageListHardPageMark == m_pageList.end()))
-					m_currentPage.setMarginLeft(marginInch);
-				else if (m_currentPage.getMarginLeft() > marginInch)
+		case WPX_LEFT:
+			if (!m_currentPageHasContent && (m_pageListHardPageMark == m_pageList.end()))
+				m_currentPage.setMarginLeft(marginInch);
+			else if (m_currentPage.getMarginLeft() > marginInch)
+			{
+				// Change the margin for the current page and for all pages in the list since the last Hard Break
+				m_currentPage.setMarginLeft(marginInch);
+				for (Iter = m_pageListHardPageMark; Iter != m_pageList.end(); Iter++)
 				{
-					// Change the margin for the current page and for all pages in the list since the last Hard Break
-					m_currentPage.setMarginLeft(marginInch);
-					for (Iter = m_pageListHardPageMark; Iter != m_pageList.end(); Iter++)
-					{
-						(*Iter).setMarginLeft(marginInch);
-					}
+					(*Iter).setMarginLeft(marginInch);
 				}
-				m_tempMarginLeft = marginInch;
-				break;
-			case WPX_RIGHT:
-				if (!m_currentPageHasContent && (m_pageListHardPageMark == m_pageList.end()))
-					m_currentPage.setMarginRight(marginInch);
-				else if (m_currentPage.getMarginRight() > marginInch)
+			}
+			m_tempMarginLeft = marginInch;
+			break;
+		case WPX_RIGHT:
+			if (!m_currentPageHasContent && (m_pageListHardPageMark == m_pageList.end()))
+				m_currentPage.setMarginRight(marginInch);
+			else if (m_currentPage.getMarginRight() > marginInch)
+			{
+				// Change the margin for the current page and for all pages in the list since the last Hard Break
+				m_currentPage.setMarginRight(marginInch);
+				for (Iter = m_pageListHardPageMark; Iter != m_pageList.end(); Iter++)
 				{
-					// Change the margin for the current page and for all pages in the list since the last Hard Break
-					m_currentPage.setMarginRight(marginInch);
-					for (Iter = m_pageListHardPageMark; Iter != m_pageList.end(); Iter++)
-					{
-						(*Iter).setMarginRight(marginInch);
-					}
+					(*Iter).setMarginRight(marginInch);
 				}
-				m_tempMarginRight = marginInch;
-				break;
+			}
+			m_tempMarginRight = marginInch;
+			break;
 		}
-		
+
 	}
 
 }
 
 void WP6StylesListener::headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, const uint16_t textPID)
 {
-	if (!isUndoOn()) 
-	{			
-		WPD_DEBUG_MSG(("WordPerfect: headerFooterGroup (headerFooterType: %i, occurenceBits: %i, textPID: %i)\n", 
-			       headerFooterType, occurenceBits, textPID));
+	if (!isUndoOn())
+	{
+		WPD_DEBUG_MSG(("WordPerfect: headerFooterGroup (headerFooterType: %i, occurenceBits: %i, textPID: %i)\n",
+		               headerFooterType, occurenceBits, textPID));
 		bool tempCurrentPageHasContent = m_currentPageHasContent;
 		if (headerFooterType <= WP6_HEADER_FOOTER_GROUP_FOOTER_B) // ignore watermarks for now
 		{
 			WPXHeaderFooterType wpxType = ((headerFooterType <= WP6_HEADER_FOOTER_GROUP_HEADER_B) ? HEADER : FOOTER);
-			
+
 			WPXHeaderFooterOccurence wpxOccurence;
 			if (occurenceBits & WP6_HEADER_FOOTER_GROUP_EVEN_BIT && occurenceBits & WP6_HEADER_FOOTER_GROUP_ODD_BIT)
 				wpxOccurence = ALL;
@@ -210,9 +210,9 @@ void WP6StylesListener::headerFooterGroup(const uint8_t headerFooterType, const 
 			else
 				wpxOccurence = ODD;
 
-			WPXTableList tableList; 
+			WPXTableList tableList;
 			m_currentPage.setHeaderFooter(wpxType, headerFooterType, wpxOccurence,
-						((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : 0), tableList);
+			                              ((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : 0), tableList);
 			_handleSubDocument(((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : 0), WPX_SUBDOCUMENT_HEADER_FOOTER, tableList);
 		}
 		m_currentPageHasContent = tempCurrentPageHasContent;
@@ -221,8 +221,8 @@ void WP6StylesListener::headerFooterGroup(const uint8_t headerFooterType, const 
 
 void WP6StylesListener::suppressPageCharacteristics(const uint8_t suppressCode)
 {
-	if (!isUndoOn()) 
-	{			
+	if (!isUndoOn())
+	{
 		WPD_DEBUG_MSG(("WordPerfect: suppressPageCharacteristics (suppressCode: %u)\n", suppressCode));
 
 		if (suppressCode & WP6_PAGE_GROUP_SUPPRESS_PAGE_NUMBER)
@@ -235,30 +235,30 @@ void WP6StylesListener::suppressPageCharacteristics(const uint8_t suppressCode)
 		if (suppressCode & WP6_PAGE_GROUP_SUPPRESS_FOOTER_A)
 			m_currentPage.setHeadFooterSuppression(WPX_FOOTER_A, true);
 		if (suppressCode & WP6_PAGE_GROUP_SUPPRESS_FOOTER_B)
-			m_currentPage.setHeadFooterSuppression(WPX_FOOTER_B, true);			
+			m_currentPage.setHeadFooterSuppression(WPX_FOOTER_B, true);
 	}
 }
 
 void WP6StylesListener::setPageNumber(const uint16_t pageNumber)
 {
-	if (!isUndoOn()) 
-	{			
+	if (!isUndoOn())
+	{
 		m_currentPage.setPageNumber(pageNumber);
 	}
 }
 
 void WP6StylesListener::setPageNumberingType(const WPXNumberingType pageNumberingType)
 {
-	if (!isUndoOn()) 
-	{			
+	if (!isUndoOn())
+	{
 		m_currentPage.setPageNumberingType(pageNumberingType);
 	}
 }
 
 void WP6StylesListener::defineTable(const uint8_t /* position */, const uint16_t /* leftOffset */)
 {
-	if (!isUndoOn()) 
-	{			
+	if (!isUndoOn())
+	{
 		m_currentPageHasContent = true;
 		m_currentTable = new WPXTable();
 		m_tableList.add(m_currentTable);
@@ -268,8 +268,8 @@ void WP6StylesListener::defineTable(const uint8_t /* position */, const uint16_t
 
 void WP6StylesListener::startTable()
 {
-	if (!isUndoOn() && !m_isTableDefined) 
-	{			
+	if (!isUndoOn() && !m_isTableDefined)
+	{
 		m_currentPageHasContent = true;
 		m_currentTable = new WPXTable();
 		m_tableList.add(m_currentTable);
@@ -289,17 +289,17 @@ void WP6StylesListener::endTable()
 
 void WP6StylesListener::insertRow(const uint16_t /* rowHeight */, const bool /* isMinimumHeight */, const bool /* isHeaderRow */)
 {
-	if (!isUndoOn() && m_currentTable) 
+	if (!isUndoOn() && m_currentTable)
 	{
 		m_currentPageHasContent = true;
 		m_currentTable->insertRow();
 	}
 }
 
-void WP6StylesListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan, const uint8_t borderBits, 
-				const RGBSColor * /* cellFgColor */, const RGBSColor * /* cellBgColor */,
-				const RGBSColor * /* cellBorderColor */, const WPXVerticalAlignment /* cellVerticalAlignment */, 
-				const bool /* useCellAttributes */, const uint32_t /* cellAttributes */)
+void WP6StylesListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan, const uint8_t borderBits,
+                                   const RGBSColor * /* cellFgColor */, const RGBSColor * /* cellBgColor */,
+                                   const RGBSColor * /* cellBorderColor */, const WPXVerticalAlignment /* cellVerticalAlignment */,
+                                   const bool /* useCellAttributes */, const uint32_t /* cellAttributes */)
 {
 	if (!isUndoOn() && m_currentTable)
 	{
@@ -310,9 +310,9 @@ void WP6StylesListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan,
 
 void WP6StylesListener::noteOn(const uint16_t textPID)
 {
-	if (!isUndoOn()) 
+	if (!isUndoOn())
 	{
-		m_currentPageHasContent = true; 		
+		m_currentPageHasContent = true;
 		_handleSubDocument(((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : 0), WPX_SUBDOCUMENT_NOTE, m_tableList);
 	}
 }
@@ -328,28 +328,28 @@ void WP6StylesListener::insertTextBox(const WP6SubDocument *subDocument)
 
 void WP6StylesListener::commentAnnotation(const uint16_t textPID)
 {
-	if (!isUndoOn()) 
+	if (!isUndoOn())
 	{
-		m_currentPageHasContent = true; 		
+		m_currentPageHasContent = true;
 		_handleSubDocument(((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : 0), WPX_SUBDOCUMENT_COMMENT_ANNOTATION, m_tableList);
 	}
 }
 
 void WP6StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList,
-						int /* nextTableIndice */)
+        int /* nextTableIndice */)
 {
 	// We don't want to actual insert anything in the case of a sub-document, but we
 	// do want to capture whatever table-related information is within it..
 	std::set <const WPXSubDocument *> oldSubDocuments;
 	oldSubDocuments = m_subDocuments;
-	// prevent entering in an endless loop		
+	// prevent entering in an endless loop
 	if ((subDocument) && (oldSubDocuments.find(subDocument) == oldSubDocuments.end()))
 	{
 		m_subDocuments.insert(subDocument);
 		bool oldIsSubDocument = m_isSubDocument;
 		m_isSubDocument = true;
 		WPXTable *oldCurrentTable = m_currentTable;
-		if (subDocumentType == WPX_SUBDOCUMENT_HEADER_FOOTER) 
+		if (subDocumentType == WPX_SUBDOCUMENT_HEADER_FOOTER)
 		{
 			bool oldCurrentPageHasContent = m_currentPageHasContent;
 			WPXTableList oldTableList = m_tableList;
@@ -379,5 +379,5 @@ void WP6StylesListener::undoChange(const uint8_t undoType, const uint16_t /* und
 	if (undoType == WP6_UNDO_GROUP_INVALID_TEXT_START)
 		setUndoOn(true);
 	else if (undoType == WP6_UNDO_GROUP_INVALID_TEXT_END)
-		setUndoOn(false);		
+		setUndoOn(false);
 }

@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2004 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2004-2006 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -45,33 +45,33 @@ WP3VariableLengthGroup::WP3VariableLengthGroup() :
 {
 }
 
-WP3VariableLengthGroup * WP3VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, WPXEncryption *encryption, const uint8_t group)
+WP3VariableLengthGroup *WP3VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, WPXEncryption *encryption, const uint8_t group)
 {
 	switch (group)
 	{
-		case WP3_PAGE_FORMAT_GROUP:
-			return new WP3PageFormatGroup(input, encryption);
-		case WP3_END_OF_LINE_PAGE_GROUP:
-			return new WP3EndOfLinePageGroup(input, encryption);
-		case WP3_MISCELLANEOUS_GROUP:
-			return new WP3MiscellaneousGroup(input, encryption);
-		case WP3_TABLES_GROUP:
-			return new WP3TablesGroup(input, encryption);
-		case WP3_FONT_GROUP:
-			return new WP3FontGroup(input, encryption);
-		case WP3_DEFINITION_GROUP:
-			return new WP3DefinitionGroup(input, encryption);
-		case WP3_HEADER_FOOTER_GROUP:
-			return new WP3HeaderFooterGroup(input, encryption);
-		case WP3_FOOTNOTE_ENDNOTE_GROUP:
-			return new WP3FootnoteEndnoteGroup(input, encryption);
-		case WP3_DISPLAY_GROUP:
-			return new WP3DisplayGroup(input, encryption);
-		case WP3_WINDOW_GROUP:
-			return new WP3WindowGroup(input, encryption);
-		default:
-			// this is an unhandled group, just skip it
-			return new WP3UnsupportedVariableLengthGroup(input, encryption);
+	case WP3_PAGE_FORMAT_GROUP:
+		return new WP3PageFormatGroup(input, encryption);
+	case WP3_END_OF_LINE_PAGE_GROUP:
+		return new WP3EndOfLinePageGroup(input, encryption);
+	case WP3_MISCELLANEOUS_GROUP:
+		return new WP3MiscellaneousGroup(input, encryption);
+	case WP3_TABLES_GROUP:
+		return new WP3TablesGroup(input, encryption);
+	case WP3_FONT_GROUP:
+		return new WP3FontGroup(input, encryption);
+	case WP3_DEFINITION_GROUP:
+		return new WP3DefinitionGroup(input, encryption);
+	case WP3_HEADER_FOOTER_GROUP:
+		return new WP3HeaderFooterGroup(input, encryption);
+	case WP3_FOOTNOTE_ENDNOTE_GROUP:
+		return new WP3FootnoteEndnoteGroup(input, encryption);
+	case WP3_DISPLAY_GROUP:
+		return new WP3DisplayGroup(input, encryption);
+	case WP3_WINDOW_GROUP:
+		return new WP3WindowGroup(input, encryption);
+	default:
+		// this is an unhandled group, just skip it
+		return new WP3UnsupportedVariableLengthGroup(input, encryption);
 	}
 }
 
@@ -111,7 +111,7 @@ bool WP3VariableLengthGroup::isGroupConsistent(WPXInputStream *input, WPXEncrypt
 			input->seek(startPosition, WPX_SEEK_SET);
 			return false;
 		}
-		
+
 		input->seek(startPosition, WPX_SEEK_SET);
 		return true;
 	}
@@ -126,15 +126,15 @@ void WP3VariableLengthGroup::_read(WPXInputStream *input, WPXEncryption *encrypt
 {
 	uint32_t startPosition = input->tell();
 
-	WPD_DEBUG_MSG(("WordPerfect: handling a variable length group\n"));	
-	
+	WPD_DEBUG_MSG(("WordPerfect: handling a variable length group\n"));
+
 	m_subGroup = readU8(input, encryption);
 	m_size = readU16(input, encryption, true) + 4; // the length is the number of data bytes minus 4 (ie. the function codes)
-	
+
 	WPD_DEBUG_MSG(("WordPerfect: Read variable group header (start_position: %i, sub_group: 0x%x, size: %i)\n", startPosition, m_subGroup, m_size));
-	
+
 	_readContents(input, encryption);
-	
+
 	input->seek((startPosition + m_size - 5), WPX_SEEK_SET);
 
 	if (m_size != (readU16(input, encryption, true) + 4))
@@ -147,7 +147,7 @@ void WP3VariableLengthGroup::_read(WPXInputStream *input, WPXEncryption *encrypt
 		WPD_DEBUG_MSG(("WordPerfect: Possible corruption detected. Bailing out!\n"));
 		throw FileException();
 	}
-	
+
 	input->seek((startPosition + m_size - 1), WPX_SEEK_SET);
 
 }

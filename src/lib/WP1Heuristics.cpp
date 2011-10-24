@@ -2,7 +2,7 @@
  * Copyright (C) 2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -20,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -39,7 +39,7 @@ WPDPasswordMatch WP1Heuristics::verifyPassword(WPXInputStream *input, const char
 	try
 	{
 		if (readU8(input, 0) == 0xFE && readU8(input, 0) == 0xFF &&
-			readU8(input, 0) == 0x61 && readU8(input, 0) == 0x61)
+		        readU8(input, 0) == 0x61 && readU8(input, 0) == 0x61)
 		{
 			encryption = new WPXEncryption(password, 6);
 			if (readU16(input, 0, true) == encryption->getCheckSum())
@@ -72,7 +72,7 @@ WPDConfidence WP1Heuristics::isWP1FileFormat(WPXInputStream *input, const char *
 	try
 	{
 		if (readU8(input, 0) == 0xFE && readU8(input, 0) == 0xFF &&
-			readU8(input, 0) == 0x61 && readU8(input, 0) == 0x61)
+		        readU8(input, 0) == 0x61 && readU8(input, 0) == 0x61)
 		{
 			if (password)
 			{
@@ -89,28 +89,28 @@ WPDConfidence WP1Heuristics::isWP1FileFormat(WPXInputStream *input, const char *
 					return WPD_CONFIDENCE_SUPPORTED_ENCRYPTION;
 			}
 		}
-		
+
 		input->seek(0, WPX_SEEK_SET);
 		if (password && encryption)
-			input->seek(6, WPX_SEEK_SET);	
+			input->seek(6, WPX_SEEK_SET);
 
 		int functionGroupCount = 0;
-	
+
 		WPD_DEBUG_MSG(("WP1Heuristics::isWP1FileFormat()\n"));
-	
+
 		while (!input->atEOS())
 		{
 			uint8_t readVal = readU8(input, encryption);
 
 			WPD_DEBUG_MSG(("WP1Heuristics, Offset 0x%.8x, value 0x%.2x (%c)\n", (unsigned int)input->tell() - 1, readVal, readVal));
-		
+
 			if (readVal < (uint8_t)0x20)
 			{
 				// line breaks et al, skip
 			}
 			else if (readVal >= (uint8_t)0x20 && readVal <= (uint8_t)0x7F)
 			{
-				// normal ASCII characters, skip			
+				// normal ASCII characters, skip
 			}
 			else if (readVal >= (uint8_t)0x80 && readVal <= (uint8_t)0xBF)
 			{
@@ -124,20 +124,20 @@ WPDConfidence WP1Heuristics::isWP1FileFormat(WPXInputStream *input, const char *
 				// special codes that should not be found as separate functions
 				return WPD_CONFIDENCE_NONE;
 			}
-			else 
+			else
 			{
 				// multi character function group
 				// check that the size constrains are valid, and that every group_member
 				// is properly closed at the right place
-		
+
 				if (WP1_FUNCTION_GROUP_SIZE[readVal-0xC0] == -1)
 				{
 					// variable length function group
 
 					// We are checking following structure:
 					//   <function code>{function length}...{function length}<function code>
-					//   that we observed in variable length WP1 functions 
-				
+					//   that we observed in variable length WP1 functions
+
 					unsigned long functionLength = readU32(input, encryption, true);
 					if (functionLength > ((std::numeric_limits<uint32_t>::max)() / 2))
 					{
@@ -163,7 +163,7 @@ WPDConfidence WP1Heuristics::isWP1FileFormat(WPXInputStream *input, const char *
 							delete encryption;
 						return WPD_CONFIDENCE_NONE;
 					}
-					
+
 					uint8_t closingGate = 0;
 					if (!input->atEOS())
 					{
@@ -190,7 +190,7 @@ WPDConfidence WP1Heuristics::isWP1FileFormat(WPXInputStream *input, const char *
 				else
 				{
 					// fixed length function group
-				
+
 					// seek to the position where the closing gate should be
 					int res = input->seek(WP1_FUNCTION_GROUP_SIZE[readVal-0xC0]-2, WPX_SEEK_CUR);
 					// when passed the complete file, we should be able to do that
@@ -209,11 +209,11 @@ WPDConfidence WP1Heuristics::isWP1FileFormat(WPXInputStream *input, const char *
 							delete encryption;
 						return WPD_CONFIDENCE_NONE;
 					}
-				
+
 					functionGroupCount++;
 				}
 			}
-		}	
+		}
 
 		/* When we get here, the document is in a format that we *could* import properly.
 		However, if we didn't encounter a single WP1 function group) we need to be more carefull:

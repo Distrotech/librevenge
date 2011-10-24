@@ -50,7 +50,7 @@ WPXEncryption::~WPXEncryption()
 	if (m_buffer)
 		delete [] m_buffer;
 }
-		
+
 
 uint16_t WPXEncryption::getCheckSum() const
 {
@@ -64,7 +64,7 @@ uint16_t WPXEncryption::getCheckSum() const
 	return checkSum;
 }
 
-const unsigned char * WPXEncryption::readAndDecrypt(WPXInputStream *input, unsigned long numBytes, unsigned long &numBytesRead)
+const unsigned char *WPXEncryption::readAndDecrypt(WPXInputStream *input, unsigned long numBytes, unsigned long &numBytesRead)
 {
 	if ((m_password.len() <= 0) || (m_encryptionStartOffset > input->tell() + numBytes))
 		return input->read(numBytes, numBytesRead);

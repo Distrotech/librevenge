@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2004 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,10 +19,10 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
- 
+
 #include "WP3Parser.h"
 #include "WPXHeader.h"
 #include "WP3Part.h"
@@ -41,7 +41,7 @@ WP3Parser::~WP3Parser()
 {
 }
 
-WP3ResourceFork * WP3Parser::getResourceFork(WPXInputStream *input, WPXEncryption *encryption)
+WP3ResourceFork *WP3Parser::getResourceFork(WPXInputStream *input, WPXEncryption *encryption)
 {
 	WP3ResourceFork *resourceFork = 0;
 
@@ -67,14 +67,14 @@ WP3ResourceFork * WP3Parser::getResourceFork(WPXInputStream *input, WPXEncryptio
 void WP3Parser::parse(WPXInputStream *input, WPXEncryption *encryption, WP3Listener *listener)
 {
 	listener->startDocument();
-	
-	input->seek(getHeader()->getDocumentOffset(), WPX_SEEK_SET);	
-	
+
+	input->seek(getHeader()->getDocumentOffset(), WPX_SEEK_SET);
+
 	WPD_DEBUG_MSG(("WordPerfect: Starting document body parse (position = %ld)\n",(long)input->tell()));
-	
+
 	parseDocument(input, encryption, listener);
-	
-	listener->endDocument();		
+
+	listener->endDocument();
 }
 
 // parseDocument: parses a document body (may call itself recursively, on other streams, or itself)
@@ -84,7 +84,7 @@ void WP3Parser::parseDocument(WPXInputStream *input, WPXEncryption *encryption, 
 	{
 		uint8_t readVal;
 		readVal = readU8(input, encryption);
-		
+
 		if (readVal == 0 || readVal == 0x7F || readVal == 0xFF)
 		{
 			// FIXME: VERIFY: is this IF clause correct? (0xFF seems to be OK at least)
@@ -92,13 +92,13 @@ void WP3Parser::parseDocument(WPXInputStream *input, WPXEncryption *encryption, 
 		}
 		else if (readVal >= (uint8_t)0x01 && readVal <= (uint8_t)0x1F)
 		{
-			// control characters ?	
+			// control characters ?
 		}
 		else if (readVal >= (uint8_t)0x20 && readVal <= (uint8_t)0x7E)
 		{
 			listener->insertCharacter( readVal );
 		}
-		else 
+		else
 		{
 			WP3Part *part = WP3Part::constructPart(input, encryption, readVal);
 			if (part)
@@ -116,11 +116,11 @@ void WP3Parser::parse(WPXDocumentInterface *documentInterface)
 	WPXEncryption *encryption = getEncryption();
 	std::list<WPXPageSpan> pageList;
 	WPXTableList tableList;
-	WP3ResourceFork * resourceFork = 0;
-	std::vector<WP3SubDocument *> subDocuments;	
-	
+	WP3ResourceFork *resourceFork = 0;
+	std::vector<WP3SubDocument *> subDocuments;
+
 	try
- 	{
+	{
 		resourceFork = getResourceFork(input, encryption);
 
 		// do a "first-pass" parse of the document
@@ -150,14 +150,14 @@ void WP3Parser::parse(WPXDocumentInterface *documentInterface)
 		WP3ContentListener listener(pageList, subDocuments, documentInterface); // FIXME: SHOULD BE CONTENT_LISTENER, AND SHOULD BE PASSED TABLE DATA!
 		listener.setResourceFork(resourceFork);
 		parse(input, encryption, &listener);
-		
+
 		// cleanup section: free the used resources
 		for (std::vector<WP3SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); iterSubDoc++)
 		{
 			if (*iterSubDoc)
 				delete *iterSubDoc;
 		}
-		
+
 		delete resourceFork;
 	}
 	catch(FileException)
@@ -169,30 +169,30 @@ void WP3Parser::parse(WPXDocumentInterface *documentInterface)
 			if (*iterSubDoc)
 				delete *iterSubDoc;
 		}
-		
+
 		delete resourceFork;
 
 		throw FileException();
-	}	
+	}
 }
 
 void WP3Parser::parseSubDocument(WPXDocumentInterface *documentInterface)
-{	
+{
 	std::list<WPXPageSpan> pageList;
-	WPXTableList tableList;	
-	std::vector<WP3SubDocument *> subDocuments;	
-	
+	WPXTableList tableList;
+	std::vector<WP3SubDocument *> subDocuments;
+
 	WPXInputStream *input = getInput();
 
 	try
- 	{
+	{
 		WP3StylesListener stylesListener(pageList, tableList, subDocuments);
 		stylesListener.startSubDocument();
 		parseDocument(input, 0, &stylesListener);
 		stylesListener.endSubDocument();
-		
+
 		input->seek(0, WPX_SEEK_SET);
-		
+
 		WP3ContentListener listener(pageList, subDocuments, documentInterface);
 		listener.startSubDocument();
 		parseDocument(input, 0, &listener);

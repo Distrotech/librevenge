@@ -55,7 +55,7 @@ WP3ContentListener::WP3ContentListener(std::list<WPXPageSpan> &pageList, std::ve
 {
 }
 
-WP3ContentListener::~WP3ContentListener() 
+WP3ContentListener::~WP3ContentListener()
 {
 	delete m_parseState;
 }
@@ -78,7 +78,7 @@ void WP3ContentListener::insertCharacter(uint32_t character)
 
 void WP3ContentListener::insertTab()
 {
-        if (!isUndoOn())
+	if (!isUndoOn())
 	{
 		if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
 		{
@@ -87,12 +87,12 @@ void WP3ContentListener::insertTab()
 			else
 				m_ps->m_textIndentByTabs = _getNextTabStop() - (m_ps->m_leftMarginByTabs  + m_ps->m_textIndentByParagraphIndentChange);
 			m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange
-				+ m_ps->m_textIndentByTabs;
+			                              + m_ps->m_textIndentByTabs;
 			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
-				+ m_ps->m_leftMarginByParagraphMarginChange + m_ps->m_leftMarginByTabs;
+			                              + m_ps->m_leftMarginByParagraphMarginChange + m_ps->m_leftMarginByTabs;
 			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
-				+ m_ps->m_rightMarginByParagraphMarginChange + m_ps->m_rightMarginByTabs;
-			
+			                               + m_ps->m_rightMarginByParagraphMarginChange + m_ps->m_rightMarginByTabs;
+
 			m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent;
 		}
 		else
@@ -138,13 +138,13 @@ void WP3ContentListener::insertEOL()
 		{
 			if (!m_ps->m_isTableRowOpened)
 				insertRow();
-			
+
 			if (!m_ps->m_isTableCellOpened)
 			{
 				insertCell();
 			}
 		}
-			
+
 		if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
 			_openSpan();
 		if (m_ps->m_isParagraphOpened)
@@ -191,7 +191,7 @@ void WP3ContentListener::defineTable(const uint8_t position, const uint16_t left
 }
 
 void WP3ContentListener::addTableColumnDefinition(const uint32_t width, const uint32_t /* leftGutter */,
-						const uint32_t /* rightGutter */, const uint32_t attributes, const uint8_t alignment)
+        const uint32_t /* rightGutter */, const uint32_t attributes, const uint8_t alignment)
 {
 	if (!isUndoOn())
 	{
@@ -203,13 +203,13 @@ void WP3ContentListener::addTableColumnDefinition(const uint32_t width, const ui
 
 		// add the new column definition to our table definition
 		m_ps->m_tableDefinition.m_columns.push_back(colDef);
-		
+
 		WPXColumnProperties colProp;
 		colProp.m_attributes = attributes;
 		colProp.m_alignment = alignment;
-		
+
 		m_ps->m_tableDefinition.m_columnsProperties.push_back(colProp);
-		
+
 		// initialize the variable that tells us how many row to skip
 		m_ps->m_numRowsToSkip.push_back(0);
 	}
@@ -248,10 +248,10 @@ void WP3ContentListener::insertCell()
 	{
 		if (m_ps->m_currentTableRow < 0) // cell without a row, invalid
 			throw ParseException();
-		
+
 		RGBSColor tmpCellBorderColor(0x00, 0x00, 0x00, 0x64);
-		_openTableCell((uint8_t)m_parseState->m_colSpan, (uint8_t)m_parseState->m_rowSpan, 0x00000000,       
-				 m_parseState->m_cellFillColor, 0, &tmpCellBorderColor, TOP);
+		_openTableCell((uint8_t)m_parseState->m_colSpan, (uint8_t)m_parseState->m_rowSpan, 0x00000000,
+		               m_parseState->m_cellFillColor, 0, &tmpCellBorderColor, TOP);
 		DELETEP(m_parseState->m_cellFillColor);
 
 		m_ps->m_isCellWithoutParagraph = true;
@@ -289,7 +289,7 @@ void WP3ContentListener::setTableCellSpan(const uint16_t colSpan, const uint16_t
 	}
 }
 
-void WP3ContentListener::setTableCellFillColor(const RGBSColor * cellFillColor)
+void WP3ContentListener::setTableCellFillColor(const RGBSColor *cellFillColor)
 {
 	if (!isUndoOn())
 	{
@@ -317,7 +317,7 @@ void WP3ContentListener::endTable()
 
 void WP3ContentListener::attributeChange(const bool isOn, const uint8_t attribute)
 {
-        if (!isUndoOn())
+	if (!isUndoOn())
 	{
 		_closeSpan();
 
@@ -326,54 +326,54 @@ void WP3ContentListener::attributeChange(const bool isOn, const uint8_t attribut
 		// FIXME: handle all the possible attribute bits
 		switch (attribute)
 		{
-			case WP3_ATTRIBUTE_BOLD:
-				textAttributeBit = WPX_BOLD_BIT;
-				break;
-			case WP3_ATTRIBUTE_ITALICS:
-				textAttributeBit = WPX_ITALICS_BIT;
-				break;
-			case WP3_ATTRIBUTE_UNDERLINE:
-				textAttributeBit = WPX_UNDERLINE_BIT;
-				break;
-			case WP3_ATTRIBUTE_OUTLINE:
-				textAttributeBit = WPX_OUTLINE_BIT;
-				break;
-			case WP3_ATTRIBUTE_SHADOW:
-				textAttributeBit = WPX_SHADOW_BIT;
-				break;
-			case WP3_ATTRIBUTE_REDLINE:
-				textAttributeBit = WPX_REDLINE_BIT;
-				break;
-			case WP3_ATTRIBUTE_STRIKE_OUT:
-				textAttributeBit = WPX_STRIKEOUT_BIT;
-				break;
-			case WP3_ATTRIBUTE_SUBSCRIPT:
-				textAttributeBit = WPX_SUBSCRIPT_BIT;
-				break;
-			case WP3_ATTRIBUTE_SUPERSCRIPT:
-				textAttributeBit = WPX_SUPERSCRIPT_BIT;
-				break;
-			case WP3_ATTRIBUTE_DOUBLE_UNDERLINE:
-				textAttributeBit = WPX_DOUBLE_UNDERLINE_BIT;
-				break;
-			case WP3_ATTRIBUTE_EXTRA_LARGE:
-				textAttributeBit = WPX_EXTRA_LARGE_BIT;
-				break;
-			case WP3_ATTRIBUTE_VERY_LARGE:
-				textAttributeBit = WPX_VERY_LARGE_BIT;
-				break;
-			case WP3_ATTRIBUTE_LARGE:
-				textAttributeBit = WPX_LARGE_BIT;
-				break;
-			case WP3_ATTRIBUTE_SMALL_PRINT:
-				textAttributeBit = WPX_SMALL_PRINT_BIT;
-				break;
-			case WP3_ATTRIBUTE_FINE_PRINT:
-				textAttributeBit = WPX_FINE_PRINT_BIT;
-				break;		
-			case WP3_ATTRIBUTE_SMALL_CAPS:
-				textAttributeBit = WPX_SMALL_CAPS_BIT;
-				break;
+		case WP3_ATTRIBUTE_BOLD:
+			textAttributeBit = WPX_BOLD_BIT;
+			break;
+		case WP3_ATTRIBUTE_ITALICS:
+			textAttributeBit = WPX_ITALICS_BIT;
+			break;
+		case WP3_ATTRIBUTE_UNDERLINE:
+			textAttributeBit = WPX_UNDERLINE_BIT;
+			break;
+		case WP3_ATTRIBUTE_OUTLINE:
+			textAttributeBit = WPX_OUTLINE_BIT;
+			break;
+		case WP3_ATTRIBUTE_SHADOW:
+			textAttributeBit = WPX_SHADOW_BIT;
+			break;
+		case WP3_ATTRIBUTE_REDLINE:
+			textAttributeBit = WPX_REDLINE_BIT;
+			break;
+		case WP3_ATTRIBUTE_STRIKE_OUT:
+			textAttributeBit = WPX_STRIKEOUT_BIT;
+			break;
+		case WP3_ATTRIBUTE_SUBSCRIPT:
+			textAttributeBit = WPX_SUBSCRIPT_BIT;
+			break;
+		case WP3_ATTRIBUTE_SUPERSCRIPT:
+			textAttributeBit = WPX_SUPERSCRIPT_BIT;
+			break;
+		case WP3_ATTRIBUTE_DOUBLE_UNDERLINE:
+			textAttributeBit = WPX_DOUBLE_UNDERLINE_BIT;
+			break;
+		case WP3_ATTRIBUTE_EXTRA_LARGE:
+			textAttributeBit = WPX_EXTRA_LARGE_BIT;
+			break;
+		case WP3_ATTRIBUTE_VERY_LARGE:
+			textAttributeBit = WPX_VERY_LARGE_BIT;
+			break;
+		case WP3_ATTRIBUTE_LARGE:
+			textAttributeBit = WPX_LARGE_BIT;
+			break;
+		case WP3_ATTRIBUTE_SMALL_PRINT:
+			textAttributeBit = WPX_SMALL_PRINT_BIT;
+			break;
+		case WP3_ATTRIBUTE_FINE_PRINT:
+			textAttributeBit = WPX_FINE_PRINT_BIT;
+			break;
+		case WP3_ATTRIBUTE_SMALL_CAPS:
+			textAttributeBit = WPX_SMALL_CAPS_BIT;
+			break;
 		}
 
 		if (isOn)
@@ -386,10 +386,10 @@ void WP3ContentListener::attributeChange(const bool isOn, const uint8_t attribut
 
 void WP3ContentListener::undoChange(const uint8_t undoType, const uint16_t /* undoLevel */)
 {
-        if (undoType == 0x00) // begin invalid text
-                setUndoOn(true);
-        else if (undoType == 0x01) // end invalid text
-                setUndoOn(false);
+	if (undoType == 0x00) // begin invalid text
+		setUndoOn(true);
+	else if (undoType == 0x01) // end invalid text
+		setUndoOn(false);
 }
 
 void WP3ContentListener::marginChange(const uint8_t side, const uint16_t margin)
@@ -412,8 +412,8 @@ void WP3ContentListener::marginChange(const uint8_t side, const uint16_t margin)
 				m_ps->m_sectionMarginLeft = 0.0;
 			}
 			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
-						+ m_ps->m_leftMarginByParagraphMarginChange
-						+ m_ps->m_leftMarginByTabs;
+			                              + m_ps->m_leftMarginByParagraphMarginChange
+			                              + m_ps->m_leftMarginByTabs;
 			break;
 		case WPX_RIGHT:
 			if (m_ps->m_numColumns > 1)
@@ -427,8 +427,8 @@ void WP3ContentListener::marginChange(const uint8_t side, const uint16_t margin)
 				m_ps->m_sectionMarginRight = 0.0;
 			}
 			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
-						+ m_ps->m_rightMarginByParagraphMarginChange
-						+ m_ps->m_rightMarginByTabs;
+			                               + m_ps->m_rightMarginByParagraphMarginChange
+			                               + m_ps->m_rightMarginByTabs;
 			break;
 		}
 		m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent;
@@ -475,7 +475,7 @@ void WP3ContentListener::indentFirstLineChange(const int16_t offset)
 		// in the same time. The Hard Back Tab applies to the current paragraph
 		// only. Indent First Line applies untill an new Indent First Line code.
 		m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange
-					+ m_ps->m_textIndentByTabs;
+		                              + m_ps->m_textIndentByTabs;
 		m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent;
 	}
 }
@@ -490,7 +490,7 @@ void WP3ContentListener::setTabs(const bool isRelative, const std::vector<WPXTab
 }
 
 void WP3ContentListener::columnChange(const WPXTextColumnType /* columnType */, const uint8_t numColumns,
-					const std::vector<double> &columnWidth, const std::vector<bool> &isFixedWidth)
+                                      const std::vector<double> &columnWidth, const std::vector<bool> &isFixedWidth)
 {
 	if (!isUndoOn())
 	{
@@ -504,8 +504,8 @@ void WP3ContentListener::columnChange(const WPXTextColumnType /* columnType */, 
 		m_ps->m_isTextColumnWithoutParagraph = false;
 
 		double remainingSpace = m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_sectionMarginLeft
-			- m_ps->m_pageMarginRight - m_ps->m_sectionMarginRight
-			- m_ps->m_leftMarginByPageMarginChange - m_ps->m_rightMarginByPageMarginChange;
+		                        - m_ps->m_pageMarginRight - m_ps->m_sectionMarginRight
+		                        - m_ps->m_leftMarginByPageMarginChange - m_ps->m_rightMarginByPageMarginChange;
 		// determine the space that is to be divided between columns whose width is expressed in percentage of remaining space
 		std::vector<WPXColumnDefinition> tmpColumnDefinition;
 		tmpColumnDefinition.clear();
@@ -526,7 +526,7 @@ void WP3ContentListener::columnChange(const WPXTextColumnType /* columnType */, 
 					tmpColumn.m_leftGutter = 0.5f * columnWidth[2*i-1];
 				else
 					tmpColumn.m_leftGutter = 0.5f * remainingSpace * columnWidth[2*i-1];
-				
+
 				if (i >= (numColumns - 1))
 					tmpColumn.m_rightGutter = 0.0;
 				else if (isFixedWidth[2*i+1])
@@ -538,9 +538,9 @@ void WP3ContentListener::columnChange(const WPXTextColumnType /* columnType */, 
 					tmpColumn.m_width = columnWidth[2*i];
 				else
 					tmpColumn.m_width = remainingSpace * columnWidth[2*i];
-				
+
 				tmpColumn.m_width += tmpColumn.m_leftGutter + tmpColumn.m_rightGutter;
-				
+
 				tmpColumnDefinition.push_back(tmpColumn);
 			}
 		}
@@ -572,7 +572,7 @@ void WP3ContentListener::setTextColor(const RGBSColor *fontColor)
 	if (!isUndoOn())
 	{
 		_closeSpan();
-		
+
 		*(m_ps->m_fontColor) = *fontColor;
 	}
 }
@@ -582,7 +582,7 @@ void WP3ContentListener::setTextFont(const WPXString &fontName)
 	if (!isUndoOn())
 	{
 		_closeSpan();
-		
+
 		*(m_ps->m_fontName) = fontName;
 	}
 }
@@ -592,7 +592,7 @@ void WP3ContentListener::setFontSize(const uint16_t fontSize)
 	if (!isUndoOn())
 	{
 		_closeSpan();
-		
+
 		m_ps->m_fontSize=double(fontSize);
 	}
 }
@@ -630,7 +630,7 @@ void WP3ContentListener::insertNote(const WPXNoteType noteType, const WP3SubDocu
 		WPXNumberingType numberingType = _extractWPXNumberingTypeFromBuf(m_parseState->m_noteReference, ARABIC);
 		int number = _extractDisplayReferenceNumberFromBuf(m_parseState->m_noteReference, numberingType);
 		m_parseState->m_noteReference.clear();
-		
+
 		WPXPropertyList propList;
 		propList.insert("libwpd:number", number);
 
@@ -659,12 +659,12 @@ void WP3ContentListener::backTab()
 			m_ps->m_textIndentByTabs = _getPreviousTabStop() - (m_ps->m_leftMarginByTabs  + m_ps->m_textIndentByParagraphIndentChange);
 
 		m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange
-			+ m_ps->m_textIndentByTabs;
+		                              + m_ps->m_textIndentByTabs;
 		m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
-			+ m_ps->m_leftMarginByParagraphMarginChange + m_ps->m_leftMarginByTabs;
+		                              + m_ps->m_leftMarginByParagraphMarginChange + m_ps->m_leftMarginByTabs;
 		m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
-			+ m_ps->m_rightMarginByParagraphMarginChange + m_ps->m_rightMarginByTabs;
-			
+		                               + m_ps->m_rightMarginByParagraphMarginChange + m_ps->m_rightMarginByTabs;
+
 		m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent;
 	}
 }
@@ -684,12 +684,12 @@ void WP3ContentListener::leftIndent()
 				m_ps->m_textIndentByTabs -= m_ps->m_paragraphTextIndent;
 
 			m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange
-				+ m_ps->m_textIndentByTabs;
+			                              + m_ps->m_textIndentByTabs;
 			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
-				+ m_ps->m_leftMarginByParagraphMarginChange + m_ps->m_leftMarginByTabs;
+			                              + m_ps->m_leftMarginByParagraphMarginChange + m_ps->m_leftMarginByTabs;
 			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
-				+ m_ps->m_rightMarginByParagraphMarginChange + m_ps->m_rightMarginByTabs;
-			
+			                               + m_ps->m_rightMarginByParagraphMarginChange + m_ps->m_rightMarginByTabs;
+
 			m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent;
 		}
 		else
@@ -712,12 +712,12 @@ void WP3ContentListener::leftIndent(const double offset)
 				m_ps->m_textIndentByTabs -= m_ps->m_paragraphTextIndent;
 
 			m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange
-				+ m_ps->m_textIndentByTabs;
+			                              + m_ps->m_textIndentByTabs;
 			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
-				+ m_ps->m_leftMarginByParagraphMarginChange + m_ps->m_leftMarginByTabs;
+			                              + m_ps->m_leftMarginByParagraphMarginChange + m_ps->m_leftMarginByTabs;
 			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
-				+ m_ps->m_rightMarginByParagraphMarginChange + m_ps->m_rightMarginByTabs;
-			
+			                               + m_ps->m_rightMarginByParagraphMarginChange + m_ps->m_rightMarginByTabs;
+
 			m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent;
 		}
 		else
@@ -735,19 +735,19 @@ void WP3ContentListener::leftRightIndent()
 				m_ps->m_leftMarginByTabs += 0.5f;
 			else
 				m_ps->m_leftMarginByTabs = _getNextTabStop() - (m_ps->m_textIndentByTabs + m_ps->m_textIndentByParagraphIndentChange);
-			
+
 			if (m_ps->m_paragraphTextIndent != 0.0)
 				m_ps->m_textIndentByTabs -= m_ps->m_paragraphTextIndent;
 
 			m_ps->m_rightMarginByTabs = m_ps->m_leftMarginByTabs;
 
 			m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange
-				+ m_ps->m_textIndentByTabs;
+			                              + m_ps->m_textIndentByTabs;
 			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
-				+ m_ps->m_leftMarginByParagraphMarginChange + m_ps->m_leftMarginByTabs;
+			                              + m_ps->m_leftMarginByParagraphMarginChange + m_ps->m_leftMarginByTabs;
 			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
-				+ m_ps->m_rightMarginByParagraphMarginChange + m_ps->m_rightMarginByTabs;
-			
+			                               + m_ps->m_rightMarginByParagraphMarginChange + m_ps->m_rightMarginByTabs;
+
 			m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent;
 		}
 		else
@@ -772,12 +772,12 @@ void WP3ContentListener::leftRightIndent(const double offset)
 			m_ps->m_rightMarginByTabs = m_ps->m_leftMarginByTabs;
 
 			m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange
-				+ m_ps->m_textIndentByTabs;
+			                              + m_ps->m_textIndentByTabs;
 			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
-				+ m_ps->m_leftMarginByParagraphMarginChange + m_ps->m_leftMarginByTabs;
+			                              + m_ps->m_leftMarginByParagraphMarginChange + m_ps->m_leftMarginByTabs;
 			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
-				+ m_ps->m_rightMarginByParagraphMarginChange + m_ps->m_rightMarginByTabs;
-			
+			                               + m_ps->m_rightMarginByParagraphMarginChange + m_ps->m_rightMarginByTabs;
+
 			m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent;
 		}
 		else
@@ -786,7 +786,7 @@ void WP3ContentListener::leftRightIndent(const double offset)
 }
 
 void WP3ContentListener::insertPicture(double height, double width, double verticalOffset, double horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
-			uint16_t figureFlags, const WPXBinaryData &binaryData)
+                                       uint16_t figureFlags, const WPXBinaryData &binaryData)
 {
 	if (!isUndoOn())
 	{
@@ -796,17 +796,17 @@ void WP3ContentListener::insertPicture(double height, double width, double verti
 		WPXPropertyList propList;
 		_handleFrameParameters( propList, height, width, verticalOffset, horizontalOffset, leftColumn, rightColumn, figureFlags );
 		m_documentInterface->openFrame(propList);
-		
+
 		propList.clear();
 		propList.insert("libwpd:mimetype", "image/pict");
 		m_documentInterface->insertBinaryObject(propList, binaryData);
-		
+
 		m_documentInterface->closeFrame();
 	}
 }
 
 void WP3ContentListener::insertTextBox(double height, double width, double verticalOffset, double horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
-			uint16_t figureFlags, const WP3SubDocument * subDocument, const WP3SubDocument *caption)
+                                       uint16_t figureFlags, const WP3SubDocument *subDocument, const WP3SubDocument *caption)
 {
 	if (!isUndoOn())
 	{
@@ -816,13 +816,13 @@ void WP3ContentListener::insertTextBox(double height, double width, double verti
 		WPXPropertyList propList;
 		_handleFrameParameters( propList, height, width, verticalOffset, horizontalOffset, leftColumn, rightColumn, figureFlags );
 		m_documentInterface->openFrame(propList);
-		
+
 		propList.clear();
 
 		if (subDocument || caption)
 		{
 			m_documentInterface->openTextBox(propList);
-		
+
 			// Positioned objects like text boxes are special beasts. They can contain all hierarchical elements up
 			// to the level of sections. They cannot open or close a page span though.
 			if (subDocument)
@@ -832,13 +832,13 @@ void WP3ContentListener::insertTextBox(double height, double width, double verti
 
 			m_documentInterface->closeTextBox();
 		}
-		
+
 		m_documentInterface->closeFrame();
 	}
 }
 
 void WP3ContentListener::insertWP51Table(double height, double width, double verticalOffset, double horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
-			uint16_t figureFlags, const WP3SubDocument * subDocument, const WP3SubDocument *caption)
+        uint16_t figureFlags, const WP3SubDocument *subDocument, const WP3SubDocument *caption)
 {
 	if (!isUndoOn())
 	{
@@ -854,7 +854,7 @@ void WP3ContentListener::insertWP51Table(double height, double width, double ver
 		if (subDocument || caption)
 		{
 			m_documentInterface->openTextBox(propList);
-		
+
 			// Positioned objects like text boxes are special beasts. They can contain all hierarchical elements up
 			// to the level of sections. They cannot open or close a page span though.
 			if (subDocument)
@@ -871,11 +871,11 @@ void WP3ContentListener::insertWP51Table(double height, double width, double ver
 }
 
 void WP3ContentListener::_handleFrameParameters( WPXPropertyList &propList, double height, double width, double verticalOffset, double horizontalOffset,
-		uint8_t /* leftColumn */, uint8_t /* rightColumn */, uint16_t figureFlags  )
+        uint8_t /* leftColumn */, uint8_t /* rightColumn */, uint16_t figureFlags  )
 {
 	propList.insert("svg:width", (double)((double)width/72.0));
 	propList.insert("svg:height", (double)((double)height/72.0));
-	
+
 	if ( figureFlags & 0x0080 )
 		propList.insert( "style:wrap", "dynamic" );
 	else
@@ -895,8 +895,8 @@ void WP3ContentListener::_handleFrameParameters( WPXPropertyList &propList, doub
 			{
 				propList.insert( "style:horizontal-pos", "from-left");
 				propList.insert( "svg:x", (double)((double)horizontalOffset/72.0 - (double)width/72.0 +
-					(double)(m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight - m_ps->m_sectionMarginLeft
-					- m_ps->m_sectionMarginRight - m_ps->m_paragraphMarginLeft - m_ps->m_paragraphMarginRight)));
+				                                   (double)(m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight - m_ps->m_sectionMarginLeft
+				                                           - m_ps->m_sectionMarginRight - m_ps->m_paragraphMarginLeft - m_ps->m_paragraphMarginRight)));
 			}
 			break;
 		case 0x02:
@@ -906,13 +906,13 @@ void WP3ContentListener::_handleFrameParameters( WPXPropertyList &propList, doub
 			{
 				propList.insert( "style:horizontal-pos", "from-left");
 				propList.insert( "svg:x", (double)((double)horizontalOffset/72.0 - (double)width/(2.0*72.0) +
-					(double)(m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight - m_ps->m_sectionMarginLeft
-					- m_ps->m_sectionMarginRight - m_ps->m_paragraphMarginLeft - m_ps->m_paragraphMarginRight)/2.0));
+				                                   (double)(m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight - m_ps->m_sectionMarginLeft
+				                                           - m_ps->m_sectionMarginRight - m_ps->m_paragraphMarginLeft - m_ps->m_paragraphMarginRight)/2.0));
 			}
 			break;
 		case 0x03:
 			propList.insert("svg:width", (double)(m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight - m_ps->m_sectionMarginLeft
-				- m_ps->m_sectionMarginRight - m_ps->m_paragraphMarginLeft - m_ps->m_paragraphMarginRight) );
+			                                      - m_ps->m_sectionMarginRight - m_ps->m_paragraphMarginLeft - m_ps->m_paragraphMarginRight) );
 			propList.insert("style:horizontal-pos", "center");
 			break;
 		case 0x00:
@@ -939,7 +939,7 @@ void WP3ContentListener::_handleFrameParameters( WPXPropertyList &propList, doub
 	else if ( ( figureFlags & 0x0300 ) == 0x0100 ) // page
 	{
 		propList.insert("text:anchor-type", "char");
-		
+
 		if ( ( figureFlags & 0x1f08 ) == 0x0100 ) // full page
 		{
 			propList.insert("svg:width", (double)(m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight ) );
@@ -977,9 +977,9 @@ void WP3ContentListener::_handleFrameParameters( WPXPropertyList &propList, doub
 					propList.insert("style:vertical-pos", "from-top" );
 					double newPosition = (double)((double)verticalOffset/72.0);
 					if (newPosition > (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
-						- (double)height/72.0) )
+					                           - (double)height/72.0) )
 						newPosition = (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
-						- (double)height/72.0);
+						                       - (double)height/72.0);
 					propList.insert("svg:y", newPosition);
 				}
 				break;
@@ -990,11 +990,11 @@ void WP3ContentListener::_handleFrameParameters( WPXPropertyList &propList, doub
 				{
 					propList.insert("style:vertical-pos", "from-top" );
 					double newPosition = (double)((m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
-						- (double)height/72.0)/2.0);
+					                               - (double)height/72.0)/2.0);
 					if (newPosition > (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
-						- (double)height/72.0) )
+					                           - (double)height/72.0) )
 						newPosition = (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
-						- (double)height/72.0);
+						                       - (double)height/72.0);
 					propList.insert("svg:y", newPosition);
 				}
 				break;
@@ -1005,11 +1005,11 @@ void WP3ContentListener::_handleFrameParameters( WPXPropertyList &propList, doub
 				{
 					propList.insert("style:vertical-pos", "from-top" );
 					double newPosition = (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
-						- (double)height/72.0 + (double)verticalOffset/72.0);
+					                              - (double)height/72.0 + (double)verticalOffset/72.0);
 					if (newPosition > (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
-						- (double)height/72.0) )
+					                           - (double)height/72.0) )
 						newPosition = (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
-						- (double)height/72.0);
+						                       - (double)height/72.0);
 					propList.insert("svg:y", newPosition);
 				}
 				break;
@@ -1017,11 +1017,11 @@ void WP3ContentListener::_handleFrameParameters( WPXPropertyList &propList, doub
 				propList.insert("style:vertical-rel", "page" );
 				propList.insert("style:vertical-pos", "from-top" );
 				propList.insert("svg:y", (double)((double)verticalOffset/72.0));
-				break;		
+				break;
 			default:
 				break;
 			}
-			
+
 			switch ( figureFlags & 0x0003 )
 			{
 			case 0x00:
@@ -1040,7 +1040,7 @@ void WP3ContentListener::_handleFrameParameters( WPXPropertyList &propList, doub
 				{
 					propList.insert( "style:horizontal-pos", "from-left");
 					propList.insert( "svg:x", (double)(m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight
-						- (double)width/72.0 + (double)horizontalOffset/72.0));
+					                                   - (double)width/72.0 + (double)horizontalOffset/72.0));
 				}
 				break;
 			case 0x02:
@@ -1050,7 +1050,7 @@ void WP3ContentListener::_handleFrameParameters( WPXPropertyList &propList, doub
 				{
 					propList.insert( "style:horizontal-pos", "from-left");
 					propList.insert( "svg:x", (double)((m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight
-						- (double)width/72.0)/2.0 + (double)horizontalOffset/72.0));
+					                                    - (double)width/72.0)/2.0 + (double)horizontalOffset/72.0));
 				}
 				break;
 			case 0x03:
@@ -1072,44 +1072,44 @@ void WP3ContentListener::_handleFrameParameters( WPXPropertyList &propList, doub
 			propList.insert( "style:vertical-rel", "line" );
 		switch ( ( figureFlags & 0x1c00 ) >> 10 )
 		{
-			case 0x01:
-				if ( verticalOffset == 0.0 )
-					propList.insert( "style:vertical-pos", "top" );
-				else
-				{
-					propList.insert( "style:vertical-pos", "from-top" );
-					propList.insert( "svg:y", (double)((double)verticalOffset/72.0));
-				}
-				break;
-			case 0x02:
-				if ( verticalOffset == 0.0 )
-					propList.insert( "style:vertical-pos", "middle" );
-				else
-				{
-					propList.insert( "style:vertical-pos", "from-top" );
-					propList.insert( "svg:y", (double)((double)verticalOffset/72.0 - (double)height/(2.0*72.0)));
-				}
-				break;
-			case 0x00:
-			case 0x03:
-				if ( verticalOffset == 0.0 )
-					propList.insert( "style:vertical-pos", "bottom" );
-				else
-				{
-					propList.insert( "style:vertical-pos", "from-top" );
-					propList.insert( "svg:y", (double)((double)verticalOffset/72.0 - (double)height/72.0));
-				}
-				break;
-			case 0x04:
-				break;
-			default:
-				break;
+		case 0x01:
+			if ( verticalOffset == 0.0 )
+				propList.insert( "style:vertical-pos", "top" );
+			else
+			{
+				propList.insert( "style:vertical-pos", "from-top" );
+				propList.insert( "svg:y", (double)((double)verticalOffset/72.0));
+			}
+			break;
+		case 0x02:
+			if ( verticalOffset == 0.0 )
+				propList.insert( "style:vertical-pos", "middle" );
+			else
+			{
+				propList.insert( "style:vertical-pos", "from-top" );
+				propList.insert( "svg:y", (double)((double)verticalOffset/72.0 - (double)height/(2.0*72.0)));
+			}
+			break;
+		case 0x00:
+		case 0x03:
+			if ( verticalOffset == 0.0 )
+				propList.insert( "style:vertical-pos", "bottom" );
+			else
+			{
+				propList.insert( "style:vertical-pos", "from-top" );
+				propList.insert( "svg:y", (double)((double)verticalOffset/72.0 - (double)height/72.0));
+			}
+			break;
+		case 0x04:
+			break;
+		default:
+			break;
 		}
 	}
 }
 
-void WP3ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, 
-						WPXTableList /* tableList */, int /* nextTableIndice */)
+void WP3ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType,
+        WPXTableList /* tableList */, int /* nextTableIndice */)
 {
 	// save our old parsing state on our "stack"
 	WP3ContentParsingState *oldParseState = m_parseState;
@@ -1153,12 +1153,12 @@ void WP3ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, W
 	m_parseState = oldParseState;
 	setUndoOn(oldIsUndoOn);
 }
-	
+
 void WP3ContentListener::headerFooterGroup(const uint8_t /* headerFooterType */, const uint8_t /* occurenceBits */, WP3SubDocument *subDocument)
 {
 	if (subDocument)
-		m_subDocuments.push_back(subDocument);			
-}	
+		m_subDocuments.push_back(subDocument);
+}
 
 void WP3ContentListener::_openParagraph()
 {
@@ -1167,7 +1167,7 @@ void WP3ContentListener::_openParagraph()
 	{
 		if (!m_ps->m_isTableRowOpened)
 			insertRow();
-					
+
 		if (!m_ps->m_isTableCellOpened)
 		{
 			insertCell();

@@ -78,12 +78,13 @@ void WP3TablesGroup::_readContents(WPXInputStream *input, WPXEncryption *encrypt
 			m_numberFormat[i] = readU8(input, encryption);
 			m_columnWidth[i] = readU32(input, encryption, true);
 			m_rightOffsetForDecimalAlign[i] = readU32(input, encryption, true);
-		}		
+		}
 		break;
 	case WP3_TABLES_GROUP_SET_TABLE_CELL_SPAN:
 		m_colSpan = readU16(input, encryption, true);
 		m_rowSpan = readU16(input, encryption, true);
-		m_colSpan++; m_rowSpan++;
+		m_colSpan++;
+		m_rowSpan++;
 		break;
 	case WP3_TABLES_GROUP_SET_TABLE_CELL_TOP_LINE:
 		break;
@@ -102,13 +103,13 @@ void WP3TablesGroup::_readContents(WPXInputStream *input, WPXEncryption *encrypt
 	case WP3_TABLES_GROUP_SET_TABLE_CELL_RIGHT_LINE_COLOR:
 		break;
 	case WP3_TABLES_GROUP_SET_TABLE_CELL_FILL_COLOR_PATTERN:
-		{
-			uint16_t tmpRed = readU16(input, encryption, true);
-			uint16_t tmpGreen = readU16(input, encryption, true);
-			uint16_t tmpBlue = readU16(input, encryption, true);
-			m_cellFillColor = RGBSColor(tmpRed, tmpGreen, tmpBlue);
-		}
-		break;
+	{
+		uint16_t tmpRed = readU16(input, encryption, true);
+		uint16_t tmpGreen = readU16(input, encryption, true);
+		uint16_t tmpBlue = readU16(input, encryption, true);
+		m_cellFillColor = RGBSColor(tmpRed, tmpGreen, tmpBlue);
+	}
+	break;
 	case WP3_TABLES_GROUP_SET_TABLE_CELL_VERTICAL_ALIGNMENT:
 		break;
 	case WP3_TABLES_GROUP_SET_TABLE_CELL_MODE:
@@ -131,7 +132,7 @@ void WP3TablesGroup::parse(WP3Listener *listener)
 		listener->defineTable(m_tableMode, fixedPointToWPUs(m_offsetFromLeftEdge));
 		for (i=0; i<m_numColumns && i < 32; i++)
 			listener->addTableColumnDefinition(fixedPointToWPUs(m_columnWidth[i]), fixedPointToWPUs(m_leftGutterSpacing),
-								fixedPointToWPUs(m_rightGutterSpacing), 0, LEFT);
+			                                   fixedPointToWPUs(m_rightGutterSpacing), 0, LEFT);
 		listener->startTable();
 		break;
 	case WP3_TABLES_GROUP_SET_TABLE_CELL_SPAN:

@@ -1,6 +1,6 @@
 /* libwpd
  * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -18,7 +18,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -35,20 +35,20 @@ WP5GeneralPacketData::WP5GeneralPacketData()
 {
 }
 
-WP5GeneralPacketData * WP5GeneralPacketData::constructGeneralPacketData(WPXInputStream * input, WPXEncryption *encryption, WP5GeneralPacketIndex *packetIndex)
-{	       
+WP5GeneralPacketData *WP5GeneralPacketData::constructGeneralPacketData(WPXInputStream *input, WPXEncryption *encryption, WP5GeneralPacketIndex *packetIndex)
+{
 	switch (packetIndex->getType())
 	{
 	case WP50_LIST_FONTS_USED_PACKET:
 	case WP51_LIST_FONTS_USED_PACKET:
-		return new WP5ListFontsUsedPacket(input, encryption, packetIndex->getID(), packetIndex->getDataOffset(), 
-						packetIndex->getDataSize(), packetIndex->getType());
+		return new WP5ListFontsUsedPacket(input, encryption, packetIndex->getID(), packetIndex->getDataOffset(),
+		                                  packetIndex->getDataSize(), packetIndex->getType());
 	case WP5_FONT_NAME_STRING_POOL_PACKET:
-		return new WP5FontNameStringPoolPacket(input, encryption, packetIndex->getID(), packetIndex->getDataOffset(), 
-							packetIndex->getDataSize());
+		return new WP5FontNameStringPoolPacket(input, encryption, packetIndex->getID(), packetIndex->getDataOffset(),
+		                                       packetIndex->getDataSize());
 	case WP5_GRAPHICS_INFORMATION_PACKET:
 		return new WP5GraphicsInformationPacket(input, encryption, packetIndex->getID(), packetIndex->getDataOffset(),
-			packetIndex->getDataSize());
+		                                        packetIndex->getDataSize());
 	default:
 		return 0;
 	}

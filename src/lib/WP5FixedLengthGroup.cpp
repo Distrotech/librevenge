@@ -2,7 +2,7 @@
  * Copyright (C) 2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2004-2006 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -20,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -38,28 +38,28 @@ WP5FixedLengthGroup::WP5FixedLengthGroup(const uint8_t groupID):
 {
 }
 
-WP5FixedLengthGroup * WP5FixedLengthGroup::constructFixedLengthGroup(WPXInputStream *input, WPXEncryption *encryption, const uint8_t groupID)
+WP5FixedLengthGroup *WP5FixedLengthGroup::constructFixedLengthGroup(WPXInputStream *input, WPXEncryption *encryption, const uint8_t groupID)
 {
-	switch (groupID) 
+	switch (groupID)
 	{
-		case WP5_TOP_EXTENDED_CHARACTER:
-			return new WP5ExtendedCharacterGroup(input, encryption, groupID);
-			
-		case WP5_TOP_TAB_GROUP:
-			return new WP5TabGroup(input, encryption, groupID);
-		
-		case WP5_TOP_INDENT_GROUP:
-			return new WP5IndentGroup(input, encryption, groupID);
-		
-		case WP5_TOP_ATTRIBUTE_ON:
-			return new WP5AttributeOnGroup(input, encryption, groupID);
-			
-		case WP5_TOP_ATTRIBUTE_OFF:
-			return new WP5AttributeOffGroup(input, encryption, groupID);
-		
+	case WP5_TOP_EXTENDED_CHARACTER:
+		return new WP5ExtendedCharacterGroup(input, encryption, groupID);
+
+	case WP5_TOP_TAB_GROUP:
+		return new WP5TabGroup(input, encryption, groupID);
+
+	case WP5_TOP_INDENT_GROUP:
+		return new WP5IndentGroup(input, encryption, groupID);
+
+	case WP5_TOP_ATTRIBUTE_ON:
+		return new WP5AttributeOnGroup(input, encryption, groupID);
+
+	case WP5_TOP_ATTRIBUTE_OFF:
+		return new WP5AttributeOffGroup(input, encryption, groupID);
+
 		// Add the remaining cases here
-		default:
-			return new WP5UnsupportedFixedLengthGroup(input, encryption, groupID);
+	default:
+		return new WP5UnsupportedFixedLengthGroup(input, encryption, groupID);
 	}
 }
 
@@ -80,7 +80,7 @@ bool WP5FixedLengthGroup::isGroupConsistent(WPXInputStream *input, WPXEncryption
 			input->seek(startPosition, WPX_SEEK_SET);
 			return false;
 		}
-		
+
 		input->seek(startPosition, WPX_SEEK_SET);
 		return true;
 	}
@@ -95,7 +95,7 @@ void WP5FixedLengthGroup::_read(WPXInputStream *input, WPXEncryption *encryption
 {
 	uint32_t startPosition = input->tell();
 	_readContents(input, encryption);
-	
+
 	if (m_group >= 0xC0 && m_group <= 0xCF) // just an extra safety check
 	{
 		int size = WP5_FIXED_LENGTH_FUNCTION_GROUP_SIZE[m_group-0xC0];

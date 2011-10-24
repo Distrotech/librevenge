@@ -1,6 +1,6 @@
 /* libwpd
  * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -18,7 +18,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -31,7 +31,7 @@
 #include "WP5FontNameStringPoolPacket.h"
 #include "WP5Listener.h"
 
-WP5FontGroup::WP5FontGroup(WPXInputStream *input, WPXEncryption *encryption) :	
+WP5FontGroup::WP5FontGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	WP5VariableLengthGroup(),
 	m_red(0),
 	m_green(0),
@@ -46,66 +46,66 @@ void WP5FontGroup::_readContents(WPXInputStream *input, WPXEncryption *encryptio
 {
 	switch(getSubGroup())
 	{
-		case WP5_TOP_FONT_GROUP_COLOR:
-			input->seek(3, WPX_SEEK_CUR);
-			m_red = readU8(input, encryption);
-			m_green = readU8(input, encryption);
-			m_blue = readU8(input, encryption);
-			break;
-		case WP5_TOP_FONT_GROUP_FONT_CHANGE:
-			input->seek(25, WPX_SEEK_CUR);
-			m_fontNumber = readU8(input, encryption);
-			if (getSize() >= 36)
-			{
-				input->seek(2, WPX_SEEK_CUR);
-				m_fontSize = (double)(readU16(input, encryption) / 50);
-			}
-			break;
-		default:
-			break;
-	}	
+	case WP5_TOP_FONT_GROUP_COLOR:
+		input->seek(3, WPX_SEEK_CUR);
+		m_red = readU8(input, encryption);
+		m_green = readU8(input, encryption);
+		m_blue = readU8(input, encryption);
+		break;
+	case WP5_TOP_FONT_GROUP_FONT_CHANGE:
+		input->seek(25, WPX_SEEK_CUR);
+		m_fontNumber = readU8(input, encryption);
+		if (getSize() >= 36)
+		{
+			input->seek(2, WPX_SEEK_CUR);
+			m_fontSize = (double)(readU16(input, encryption) / 50);
+		}
+		break;
+	default:
+		break;
+	}
 }
 
 void WP5FontGroup::parse(WP5Listener *listener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling a Font group\n"));
-	
+
 	int tmpFontNameOffset;
 	double tmpFontSize = 12.0;
 	WPXString tmpFontName("Times New Roman");
 
 	switch(getSubGroup())
 	{
-		case WP5_TOP_FONT_GROUP_COLOR:
-			listener->characterColorChange(m_red, m_green, m_blue);
-			break;
-		case WP5_TOP_FONT_GROUP_FONT_CHANGE:
-			if (listener->getGeneralPacketData(15))
-			{
-				tmpFontSize = static_cast<const WP5ListFontsUsedPacket*>(listener->getGeneralPacketData(15))->getFontSize(m_fontNumber);
-				tmpFontNameOffset = static_cast<const WP5ListFontsUsedPacket*>(listener->getGeneralPacketData(15))->getFontNameOffset(m_fontNumber);
+	case WP5_TOP_FONT_GROUP_COLOR:
+		listener->characterColorChange(m_red, m_green, m_blue);
+		break;
+	case WP5_TOP_FONT_GROUP_FONT_CHANGE:
+		if (listener->getGeneralPacketData(15))
+		{
+			tmpFontSize = static_cast<const WP5ListFontsUsedPacket *>(listener->getGeneralPacketData(15))->getFontSize(m_fontNumber);
+			tmpFontNameOffset = static_cast<const WP5ListFontsUsedPacket *>(listener->getGeneralPacketData(15))->getFontNameOffset(m_fontNumber);
 
-			}
-			else if (listener->getGeneralPacketData(2))
-			{
-				tmpFontSize = static_cast<const WP5ListFontsUsedPacket*>(listener->getGeneralPacketData(2))->getFontSize(m_fontNumber);
-				tmpFontNameOffset = static_cast<const WP5ListFontsUsedPacket*>(listener->getGeneralPacketData(2))->getFontNameOffset(m_fontNumber);
-			}
-			else
-			{
-				listener->setFont(tmpFontName, tmpFontSize);
-				return;
-			}
-
-			if (listener->getGeneralPacketData(7))
-				tmpFontName = static_cast<const WP5FontNameStringPoolPacket*>(listener->getGeneralPacketData(7))->getFontName(tmpFontNameOffset);
-			if (m_fontSize >= 0)
-				tmpFontSize = m_fontSize;
-
-			WPD_DEBUG_MSG(("WP5 Parsing Font Change, fontNumber %i, fontName: %s, fontSize: %.4f\n", m_fontNumber, tmpFontName.cstr(), tmpFontSize));
+		}
+		else if (listener->getGeneralPacketData(2))
+		{
+			tmpFontSize = static_cast<const WP5ListFontsUsedPacket *>(listener->getGeneralPacketData(2))->getFontSize(m_fontNumber);
+			tmpFontNameOffset = static_cast<const WP5ListFontsUsedPacket *>(listener->getGeneralPacketData(2))->getFontNameOffset(m_fontNumber);
+		}
+		else
+		{
 			listener->setFont(tmpFontName, tmpFontSize);
-			break;
-		default:
-			break;		
+			return;
+		}
+
+		if (listener->getGeneralPacketData(7))
+			tmpFontName = static_cast<const WP5FontNameStringPoolPacket *>(listener->getGeneralPacketData(7))->getFontName(tmpFontNameOffset);
+		if (m_fontSize >= 0)
+			tmpFontSize = m_fontSize;
+
+		WPD_DEBUG_MSG(("WP5 Parsing Font Change, fontNumber %i, fontName: %s, fontSize: %.4f\n", m_fontNumber, tmpFontName.cstr(), tmpFontSize));
+		listener->setFont(tmpFontName, tmpFontSize);
+		break;
+	default:
+		break;
 	}
 }

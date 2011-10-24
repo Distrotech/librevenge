@@ -38,16 +38,16 @@
 
 class Test : public CPPUNIT_NS::TestFixture
 {
-  CPPUNIT_TEST_SUITE(Test);
-  CPPUNIT_TEST(testStream);
-  CPPUNIT_TEST_SUITE_END();
+	CPPUNIT_TEST_SUITE(Test);
+	CPPUNIT_TEST(testStream);
+	CPPUNIT_TEST_SUITE_END();
 
 public:
-  void setUp(void);
-  void tearDown(void);
+	void setUp(void);
+	void tearDown(void);
 
 protected:
-  void testStream(void);
+	void testStream(void);
 
 };
 
@@ -65,18 +65,18 @@ void Test::tearDown(void)
 }
 
 void Test::testStream(void)
-{ 
-	WPXInputStream* input = 0;
+{
+	WPXInputStream *input = 0;
 	unsigned long numBytesRead;
 	unsigned long u32;
 
-	/********************** 
+	/**********************
 	 * Test WPXFileStream *
 	 **********************/
 	input = new WPXFileStream(TMP_FILENAME);
 
 	CPPUNIT_ASSERT_EQUAL ( false, input->isOLEStream() );
-	CPPUNIT_ASSERT_EQUAL ( (WPXInputStream*) NULL, input->getDocumentOLEStream("foo") );
+	CPPUNIT_ASSERT_EQUAL ( (WPXInputStream *) NULL, input->getDocumentOLEStream("foo") );
 
 	// test read()
 	input->seek(0, WPX_SEEK_SET);
@@ -129,20 +129,20 @@ void Test::testStream(void)
 
 	input->seek(8, WPX_SEEK_SET);
 	CPPUNIT_ASSERT_EQUAL ( true, input->atEOS() );
-	
+
 	input->seek(10000, WPX_SEEK_SET);
 	CPPUNIT_ASSERT( 10000 != input->tell() );
 	CPPUNIT_ASSERT( input->atEOS() );
 
 	delete input;
 
-	/************************ 
+	/************************
 	 * Test WPXStringStream *
 	 ************************/
 	input = new WPXStringStream((const unsigned char *)"\1\2\3\4\0\5\6\7", 8);
 
 	CPPUNIT_ASSERT_EQUAL ( false, input->isOLEStream() );
-	CPPUNIT_ASSERT_EQUAL ( (WPXInputStream*) NULL, input->getDocumentOLEStream("foo") );
+	CPPUNIT_ASSERT_EQUAL ( (WPXInputStream *) NULL, input->getDocumentOLEStream("foo") );
 
 	// test read()
 	input->seek(0, WPX_SEEK_SET);
@@ -195,7 +195,7 @@ void Test::testStream(void)
 
 	input->seek(8, WPX_SEEK_SET);
 	CPPUNIT_ASSERT_EQUAL ( true, input->atEOS() );
-	
+
 	input->seek(10000, WPX_SEEK_SET);
 	CPPUNIT_ASSERT( 10000 != input->tell() );
 	CPPUNIT_ASSERT( input->atEOS() );
@@ -203,13 +203,13 @@ void Test::testStream(void)
 	delete input;
 
 
-	/************************ 
+	/************************
 	 * Test WPXMemoryInputStream *
 	 ************************/
 	input = new WPXMemoryInputStream((uint8_t *)("\1\2\3\4\0\5\6\7"), 8);
 
 	CPPUNIT_ASSERT_EQUAL ( false, input->isOLEStream() );
-	CPPUNIT_ASSERT_EQUAL ( (WPXInputStream*) NULL, input->getDocumentOLEStream("foo") );
+	CPPUNIT_ASSERT_EQUAL ( (WPXInputStream *) NULL, input->getDocumentOLEStream("foo") );
 
 	// test read()
 	input->seek(0, WPX_SEEK_SET);
@@ -262,7 +262,7 @@ void Test::testStream(void)
 
 	input->seek(8, WPX_SEEK_SET);
 	CPPUNIT_ASSERT_EQUAL ( true, input->atEOS() );
-	
+
 	input->seek(10000, WPX_SEEK_SET);
 	CPPUNIT_ASSERT( 10000 != input->tell() );
 	CPPUNIT_ASSERT( input->atEOS() );
@@ -281,11 +281,11 @@ int main( int argc, char **argv )
 
 	// Add a listener that colllects test result
 	CPPUNIT_NS::TestResultCollector result;
-	controller.addListener( &result );        
+	controller.addListener( &result );
 
 	// Add a listener that print dots as test run.
 	CPPUNIT_NS::BriefTestProgressListener progress;
-	controller.addListener( &progress );      
+	controller.addListener( &progress );
 
 	// Add the top suite to the test runner
 	CPPUNIT_NS::TestRunner runner;

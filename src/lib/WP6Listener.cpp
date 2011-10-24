@@ -2,7 +2,7 @@
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -20,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -40,7 +40,7 @@ WP6Listener::WP6Listener() :
 {
 }
 
-const WP6PrefixDataPacket * WP6Listener::getPrefixDataPacket(const int prefixID) const
+const WP6PrefixDataPacket *WP6Listener::getPrefixDataPacket(const int prefixID) const
 {
 	if (m_prefixData)
 		return m_prefixData->getPrefixDataPacket(prefixID);
@@ -50,9 +50,9 @@ const WP6PrefixDataPacket * WP6Listener::getPrefixDataPacket(const int prefixID)
 
 WPXString WP6Listener::getFontNameForPID(const int prefixID) const
 {
-	
-	const WP6FontDescriptorPacket *fontDescriptorPacket = 
-	dynamic_cast<const WP6FontDescriptorPacket *>(getPrefixDataPacket(prefixID));
+
+	const WP6FontDescriptorPacket *fontDescriptorPacket =
+	    dynamic_cast<const WP6FontDescriptorPacket *>(getPrefixDataPacket(prefixID));
 	if (fontDescriptorPacket)
 		return fontDescriptorPacket->getFontName();
 	return WPXString();

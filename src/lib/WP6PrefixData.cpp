@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002-2003 Marc Maurer (uwog@uwog.net)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -37,18 +37,19 @@ WP6PrefixData::WP6PrefixData(WPXInputStream *input, WPXEncryption *encryption, c
 {
 	uint16_t i;
 
-	WP6PrefixIndice ** prefixIndiceArray = new WP6PrefixIndice *[(numPrefixIndices-1)];
+	WP6PrefixIndice **prefixIndiceArray = new WP6PrefixIndice *[(numPrefixIndices-1)];
 	for (i=1; i<numPrefixIndices; i++)
 	{
 		WPD_DEBUG_MSG(("WordPerfect: constructing prefix indice 0x%x\n", i));
 		prefixIndiceArray[(i-1)] = new WP6PrefixIndice(input, encryption, i);
 	}
-	
-	for (i=1; i<numPrefixIndices; i++) 
+
+	for (i=1; i<numPrefixIndices; i++)
 	{
 		WPD_DEBUG_MSG(("WordPerfect: constructing prefix packet 0x%x\n", i));
 		WP6PrefixDataPacket *prefixDataPacket = WP6PrefixDataPacket::constructPrefixDataPacket(input, encryption, prefixIndiceArray[(i-1)]);
-		if (prefixDataPacket) {
+		if (prefixDataPacket)
+		{
 			m_prefixDataPacketHash[i] = prefixDataPacket;
 			m_prefixDataPacketTypeHash.insert(::std::map<int, WP6PrefixDataPacket *>::value_type(prefixIndiceArray[i-1]->getType(), prefixDataPacket));
 			if (dynamic_cast<WP6DefaultInitialFontPacket *>(prefixDataPacket))
@@ -66,12 +67,13 @@ WP6PrefixData::WP6PrefixData(WPXInputStream *input, WPXEncryption *encryption, c
 WP6PrefixData::~WP6PrefixData()
 {
 	DPH::iterator pos;
-	for (pos = m_prefixDataPacketHash.begin(); pos!=m_prefixDataPacketHash.end(); pos++) {
+	for (pos = m_prefixDataPacketHash.begin(); pos!=m_prefixDataPacketHash.end(); pos++)
+	{
 		delete(pos->second);
 	}
 }
 
-const WP6PrefixDataPacket * WP6PrefixData::getPrefixDataPacket(const int prefixID) const
+const WP6PrefixDataPacket *WP6PrefixData::getPrefixDataPacket(const int prefixID) const
 {
 	DPH::const_iterator pos = m_prefixDataPacketHash.find(prefixID);
 	if (pos != m_prefixDataPacketHash.end())
@@ -84,5 +86,5 @@ std::pair<MPDP_CIter, MPDP_CIter> WP6PrefixData::getPrefixDataPacketsOfType(cons
 {
 	std::pair<MPDP_CIter, MPDP_CIter> tempPair = m_prefixDataPacketTypeHash.equal_range(type);
 
- 	return tempPair;
+	return tempPair;
 }

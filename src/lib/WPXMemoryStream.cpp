@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2004-2005 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -39,20 +39,20 @@ WPXMemoryInputStream::~WPXMemoryInputStream()
 {
 }
 
-const unsigned char * WPXMemoryInputStream::read(unsigned long numBytes, unsigned long &numBytesRead)
+const unsigned char *WPXMemoryInputStream::read(unsigned long numBytes, unsigned long &numBytesRead)
 {
 	numBytesRead = 0;
 
 	if (numBytes == 0)
 		return 0;
-	
+
 	int numBytesToRead;
 
 	if ((m_offset+numBytes) < m_size)
 		numBytesToRead = numBytes;
 	else
 		numBytesToRead = m_size - m_offset;
-	
+
 	numBytesRead = numBytesToRead; // about as paranoid as we can be..
 
 	if (numBytesToRead == 0)
@@ -60,7 +60,7 @@ const unsigned char * WPXMemoryInputStream::read(unsigned long numBytes, unsigne
 
 	long oldOffset = m_offset;
 	m_offset += numBytesToRead;
-	
+
 	return &m_data[oldOffset];
 }
 
@@ -92,8 +92,8 @@ long WPXMemoryInputStream::tell()
 
 bool WPXMemoryInputStream::atEOS()
 {
-	if ((long)m_offset == (long)m_size) 
-		return true; 
+	if ((long)m_offset == (long)m_size)
+		return true;
 
 	return false;
 }

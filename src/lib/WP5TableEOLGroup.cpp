@@ -39,7 +39,7 @@ WP5TableEOLGroup::WP5TableEOLGroup(WPXInputStream *input, WPXEncryption *encrypt
 	m_rowSpan(0),
 	m_spannedFromAbove(false),
 	m_cellAttributes(0),
-	m_cellJustification(0)	
+	m_cellJustification(0)
 {
 	_read(input, encryption);
 }
@@ -90,7 +90,7 @@ void WP5TableEOLGroup::parse(WP5Listener *listener)
 		{
 			RGBSColor tmpCellBorderColor(0x00, 0x00, 0x00, 0x64);
 			listener->insertCell(m_colSpan, m_rowSpan, 0x00, 0, 0, &tmpCellBorderColor ,
-				TOP, m_useCellAttributes, m_cellAttributes);
+			                     TOP, m_useCellAttributes, m_cellAttributes);
 		}
 		break;
 	case WP5_TABLE_EOL_GROUP_BEGINNING_OF_ROW_AT_EOL:

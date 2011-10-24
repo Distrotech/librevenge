@@ -30,14 +30,23 @@
 
 class WPXPropertyListVectorImpl
 {
-friend class WPXPropertyListVector;
+	friend class WPXPropertyListVector;
 public:
 	WPXPropertyListVectorImpl(const std::vector<WPXPropertyList> &_vector) : m_vector(_vector) {}
 	WPXPropertyListVectorImpl() : m_vector() {}
-	void append(const WPXPropertyList &elem) { m_vector.push_back(elem); }
-	unsigned long count() const { return m_vector.size(); }
+	void append(const WPXPropertyList &elem)
+	{
+		m_vector.push_back(elem);
+	}
+	unsigned long count() const
+	{
+		return m_vector.size();
+	}
 	std::vector<WPXPropertyList> m_vector;
-	const WPXPropertyList &operator[](unsigned long index) const { return m_vector[index];}
+	const WPXPropertyList &operator[](unsigned long index) const
+	{
+		return m_vector[index];
+	}
 };
 
 class WPXPropertyListVectorIterImpl
@@ -48,35 +57,41 @@ public:
 		m_iter(m_vector->begin()),
 		m_imaginaryFirst(false) {}
 	~WPXPropertyListVectorIterImpl() {}
-	void rewind() { 
-		m_iter = m_vector->begin(); 
-		m_imaginaryFirst = true; 
+	void rewind()
+	{
+		m_iter = m_vector->begin();
+		m_imaginaryFirst = true;
 	}
-	bool next() { 
-		if (!m_imaginaryFirst && m_iter != m_vector->end()) 
-			m_iter++; 
-		m_imaginaryFirst = false; 
-		if (m_iter != m_vector->end()) 
-			return true; 
-		return false; 
-	}
-	bool last() {
-		if (m_iter == m_vector->end()) 
-			return true; 
+	bool next()
+	{
+		if (!m_imaginaryFirst && m_iter != m_vector->end())
+			m_iter++;
+		m_imaginaryFirst = false;
+		if (m_iter != m_vector->end())
+			return true;
 		return false;
 	}
-	const WPXPropertyList & operator()() const { return (*m_iter); }
+	bool last()
+	{
+		if (m_iter == m_vector->end())
+			return true;
+		return false;
+	}
+	const WPXPropertyList &operator()() const
+	{
+		return (*m_iter);
+	}
 
 private:
-	WPXPropertyListVectorIterImpl(const WPXPropertyListVectorIterImpl&);
-	WPXPropertyListVectorIterImpl& operator=(const WPXPropertyListVectorIterImpl&);
+	WPXPropertyListVectorIterImpl(const WPXPropertyListVectorIterImpl &);
+	WPXPropertyListVectorIterImpl &operator=(const WPXPropertyListVectorIterImpl &);
 	std::vector<WPXPropertyList> * m_vector;
 	std::vector<WPXPropertyList>::iterator m_iter;
 	bool m_imaginaryFirst;
 };
 
 WPXPropertyListVector::WPXPropertyListVector(const WPXPropertyListVector &vect) :
-	m_impl(new WPXPropertyListVectorImpl(static_cast<WPXPropertyListVectorImpl*>(vect.m_impl)->m_vector))
+	m_impl(new WPXPropertyListVectorImpl(static_cast<WPXPropertyListVectorImpl *>(vect.m_impl)->m_vector))
 {
 }
 
@@ -108,43 +123,43 @@ unsigned long WPXPropertyListVector::count() const
 	return m_impl->count();
 }
 
-const WPXPropertyList& WPXPropertyListVector::operator[](unsigned long index) const
+const WPXPropertyList &WPXPropertyListVector::operator[](unsigned long index) const
 {
-	return m_impl->operator[](index);	
+	return m_impl->operator[](index);
 }
 
-WPXPropertyListVector& WPXPropertyListVector::operator=(const WPXPropertyListVector &vect)
+WPXPropertyListVector &WPXPropertyListVector::operator=(const WPXPropertyListVector &vect)
 {
 	m_impl->m_vector = vect.m_impl->m_vector;
 	return *this;
 }
 
 WPXPropertyListVector::Iter::Iter(const WPXPropertyListVector &vect) :
-	m_iterImpl(new WPXPropertyListVectorIterImpl(&(static_cast<WPXPropertyListVectorImpl* >(vect.m_impl)->m_vector)))
+	m_iterImpl(new WPXPropertyListVectorIterImpl(&(static_cast<WPXPropertyListVectorImpl * >(vect.m_impl)->m_vector)))
 {
 }
 
-WPXPropertyListVector::Iter::~Iter() 
-{ 
-	 delete m_iterImpl; 
+WPXPropertyListVector::Iter::~Iter()
+{
+	delete m_iterImpl;
 }
 
-void WPXPropertyListVector::Iter::rewind() 
+void WPXPropertyListVector::Iter::rewind()
 {
 	m_iterImpl->rewind();
 }
 
-bool WPXPropertyListVector::Iter::next() 
+bool WPXPropertyListVector::Iter::next()
 {
 	return m_iterImpl->next();
 }
 
-bool WPXPropertyListVector::Iter::last() 
+bool WPXPropertyListVector::Iter::last()
 {
 	return m_iterImpl->last();
 }
 
-const WPXPropertyList & WPXPropertyListVector::Iter::operator()() const
+const WPXPropertyList &WPXPropertyListVector::Iter::operator()() const
 {
 	return (*m_iterImpl)();
 }

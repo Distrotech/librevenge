@@ -1,6 +1,6 @@
 /* libwpd
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -18,7 +18,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -45,16 +45,16 @@ void WP42DefineColumnsGroup::_readContents(WPXInputStream *input, WPXEncryption 
 	uint8_t maxNumColumns = 0;
 	switch (m_groupId)
 	{
-		case WP42_DEFINE_COLUMNS_OLD_GROUP:
-			input->seek(11, WPX_SEEK_CUR);
-			maxNumColumns = 5;
-			break;
-		case WP42_DEFINE_COLUMNS_NEW_GROUP:
-			input->seek(49, WPX_SEEK_CUR);
-			maxNumColumns = 24;
-			break;
-		default:
-			return;
+	case WP42_DEFINE_COLUMNS_OLD_GROUP:
+		input->seek(11, WPX_SEEK_CUR);
+		maxNumColumns = 5;
+		break;
+	case WP42_DEFINE_COLUMNS_NEW_GROUP:
+		input->seek(49, WPX_SEEK_CUR);
+		maxNumColumns = 24;
+		break;
+	default:
+		return;
 	}
 	uint8_t tmpNumColumns = readU8(input, encryption);
 	m_numColumns = tmpNumColumns & 0x7F;

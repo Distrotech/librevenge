@@ -1,6 +1,6 @@
 /* libwpd
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -18,7 +18,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -63,7 +63,7 @@ void WP1PictureGroup::_readContents(WPXInputStream *input, WPXEncryption *encryp
 	for (int i = 0; i < 512; i++)
 		m_binaryData.append((unsigned char)0);
 	m_binaryData.append(((dataSize + 512) & 0xFF00)>>8);
-	m_binaryData.append(((dataSize + 512) & 0x00FF)); 
+	m_binaryData.append(((dataSize + 512) & 0x00FF));
 	for (unsigned long j = 2; j < dataSize && !input->atEOS(); j++ )
 		m_binaryData.append(readU8(input, encryption));
 #if DUMP_PICTURE
@@ -72,7 +72,7 @@ void WP1PictureGroup::_readContents(WPXInputStream *input, WPXEncryption *encryp
 	FILE *f = fopen(filename.str().c_str(), "wb");
 	if (f)
 	{
-		WPXInputStream* tmpStream = const_cast<WPXInputStream *>(m_binaryData.getDataStream());
+		WPXInputStream *tmpStream = const_cast<WPXInputStream *>(m_binaryData.getDataStream());
 		while (!tmpStream->atEOS())
 			fprintf(f, "%c", readU8(tmpStream, 0));
 		fclose(f);

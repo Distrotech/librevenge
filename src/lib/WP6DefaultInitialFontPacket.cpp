@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -27,7 +27,7 @@
 #include "WP6DefaultInitialFontPacket.h"
 #include "libwpd_internal.h"
 
-WP6DefaultInitialFontPacket::WP6DefaultInitialFontPacket(WPXInputStream *input, WPXEncryption *encryption, int /* id */, uint32_t dataOffset, uint32_t dataSize) : 
+WP6DefaultInitialFontPacket::WP6DefaultInitialFontPacket(WPXInputStream *input, WPXEncryption *encryption, int /* id */, uint32_t dataOffset, uint32_t dataSize) :
 	WP6PrefixDataPacket(input, encryption),
 	m_numPrefixIDs(0),
 	m_initialFontDescriptorPID(0),
@@ -43,9 +43,9 @@ void WP6DefaultInitialFontPacket::parse(WP6Listener *listener) const
 
 void WP6DefaultInitialFontPacket::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
-   m_numPrefixIDs = readU16(input, encryption);
-   m_initialFontDescriptorPID = readU16(input, encryption);
-   m_pointSize = readU16(input, encryption);
-   WPD_DEBUG_MSG(("WordPerfect: Read default initial font packet (initial font descriptor pid: %i, point size: %i)\n", 
-		  (int) m_initialFontDescriptorPID, (int) m_pointSize));
+	m_numPrefixIDs = readU16(input, encryption);
+	m_initialFontDescriptorPID = readU16(input, encryption);
+	m_pointSize = readU16(input, encryption);
+	WPD_DEBUG_MSG(("WordPerfect: Read default initial font packet (initial font descriptor pid: %i, point size: %i)\n",
+	               (int) m_initialFontDescriptorPID, (int) m_pointSize));
 }

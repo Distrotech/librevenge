@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 #include <string.h>
@@ -28,14 +28,15 @@
 #include "libwpd_internal.h"
 #include <string>
 
-const char * FONT_WEIGHT_STRINGS [] = {	"Bold", "bold", "Demi", "demi", "Extended", "extended",
-					"Extra", "extra", "Headline", "headline", "Light", "light",
-					"Medium", "medium", "Normal", "normal", "Regular", "regular",
-					"Standaard", "standaard", "Standard", "standard" };
-const char * USELESS_WP_POSTFIX = "-WP";
+const char *FONT_WEIGHT_STRINGS [] = {	"Bold", "bold", "Demi", "demi", "Extended", "extended",
+                                        "Extra", "extra", "Headline", "headline", "Light", "light",
+                                        "Medium", "medium", "Normal", "normal", "Regular", "regular",
+                                        "Standaard", "standaard", "Standard", "standard"
+                                     };
+const char *USELESS_WP_POSTFIX = "-WP";
 #define countElements(a) ((sizeof(a) / sizeof(a[0])))
 
-WP6FontDescriptorPacket::WP6FontDescriptorPacket(WPXInputStream *input, WPXEncryption *encryption, int /* id */, uint32_t dataOffset, uint32_t dataSize) : 
+WP6FontDescriptorPacket::WP6FontDescriptorPacket(WPXInputStream *input, WPXEncryption *encryption, int /* id */, uint32_t dataOffset, uint32_t dataSize) :
 	WP6PrefixDataPacket(input, encryption),
 	m_characterWidth(0),
 	m_ascenderHeight(0),
@@ -86,7 +87,7 @@ void WP6FontDescriptorPacket::_readContents(WPXInputStream *input, WPXEncryption
 	m_fontType = readU8(input, encryption);
 	m_fontSourceFileType = readU8(input, encryption);
 
-	m_fontNameLength = readU16(input, encryption); 
+	m_fontNameLength = readU16(input, encryption);
 
 	_readFontName(input, encryption);
 }
@@ -94,10 +95,10 @@ void WP6FontDescriptorPacket::_readContents(WPXInputStream *input, WPXEncryption
 void WP6FontDescriptorPacket::_readFontName(WPXInputStream *input, WPXEncryption *encryption)
 {
 	if (m_fontNameLength > ((std::numeric_limits<uint16_t>::max)() / 2))
-	m_fontNameLength = ((std::numeric_limits<uint16_t>::max)() / 2);
-	if (m_fontNameLength) 
+		m_fontNameLength = ((std::numeric_limits<uint16_t>::max)() / 2);
+	if (m_fontNameLength)
 	{
-		for (uint16_t i=0; i<(m_fontNameLength/2); i++) 
+		for (uint16_t i=0; i<(m_fontNameLength/2); i++)
 		{
 			uint16_t charWord = readU16(input, encryption);
 			uint8_t characterSet = (uint8_t)((charWord >> 8) & 0x00FF);
@@ -120,25 +121,25 @@ void WP6FontDescriptorPacket::_readFontName(WPXInputStream *input, WPXEncryption
 		{
 			if (!stringValue.empty())
 				while ((pos = stringValue.find(FONT_WEIGHT_STRINGS[k])) != std::string::npos)
-	  				stringValue.replace(pos, strlen(FONT_WEIGHT_STRINGS[k]),"");
+					stringValue.replace(pos, strlen(FONT_WEIGHT_STRINGS[k]),"");
 		}
 		// SPECIAL CASE: eliminate the -WP postfix (if it's there), which isn't spaced out from
 		// the rest of the font
 		if (!stringValue.empty())
 			while ((pos = stringValue.find(USELESS_WP_POSTFIX)) != std::string::npos)
-			stringValue.replace(pos, strlen(USELESS_WP_POSTFIX), "");
-			// also consume any whitespace at the end of the font.
+				stringValue.replace(pos, strlen(USELESS_WP_POSTFIX), "");
+		// also consume any whitespace at the end of the font.
 		if (!stringValue.empty())
 			while ((pos = stringValue.find("  ")) != std::string::npos)
-			stringValue.replace(pos, strlen("  "), " ");
+				stringValue.replace(pos, strlen("  "), " ");
 		if (!stringValue.empty())
 			while ((pos = stringValue.find(" ", stringValue.size() - 1)) != std::string::npos)
-			stringValue.replace(pos, strlen(" "), "");
+				stringValue.replace(pos, strlen(" "), "");
 		if (!stringValue.empty())
 			while ((pos = stringValue.find("-", stringValue.size() - 1)) != std::string::npos)
-			stringValue.replace(pos, strlen("-"), "");
-	
+				stringValue.replace(pos, strlen("-"), "");
+
 		m_fontName = WPXString(stringValue.c_str());
-			WPD_DEBUG_MSG(("WordPerfect: stripping font name (final: %s)\n", m_fontName.cstr()));
+		WPD_DEBUG_MSG(("WordPerfect: stripping font name (final: %s)\n", m_fontName.cstr()));
 	}
 }

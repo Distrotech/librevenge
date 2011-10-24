@@ -2,7 +2,7 @@
  * Copyright (C) 2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -20,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -34,21 +34,21 @@
 // returns the part if it successfully creates the part, returns 0 if it can't
 // throws an exception if there is an error
 // precondition: readVal is between 0xC0 and 0xFF
-WP5Part * WP5Part::constructPart(WPXInputStream *input, WPXEncryption *encryption, const uint8_t readVal)
-{	
+WP5Part *WP5Part::constructPart(WPXInputStream *input, WPXEncryption *encryption, const uint8_t readVal)
+{
 	WPD_DEBUG_MSG(("WordPerfect: ConstructPart\n"));
 
 	if (readVal >= (uint8_t)0x80 && readVal <= (uint8_t)0xBF)
 	{
 		// single-byte function
-	
+
 		WPD_DEBUG_MSG(("WordPerfect: constructSingleByteFunction(input, val)\n"));
 		return WP5SingleByteFunction::constructSingleByteFunction(input, encryption, readVal);
-	}      
+	}
 	else if (readVal >= (uint8_t)0xC0 && readVal <= (uint8_t)0xCF)
 	{
 		// fixed length multi-byte function
-	
+
 		if (!WP5FixedLengthGroup::isGroupConsistent(input, encryption, readVal))
 		{
 			WPD_DEBUG_MSG(("WordPerfect: Consistency Check (fixed length) failed; ignoring this byte\n"));
@@ -56,11 +56,11 @@ WP5Part * WP5Part::constructPart(WPXInputStream *input, WPXEncryption *encryptio
 		}
 		WPD_DEBUG_MSG(("WordPerfect: constructFixedLengthGroup(input, val)\n"));
 		return WP5FixedLengthGroup::constructFixedLengthGroup(input, encryption, readVal);
-	}      
+	}
 	else if (readVal >= (uint8_t)0xD0)
 	{
 		// variable length multi-byte function
-	
+
 		/* check whether the function is consistent with the variable length
 		 * function definition. If not, just skip the function byte and try next position.
 		 * The documentation speaks about variable length functions from 0xD0 to 0xFF, but

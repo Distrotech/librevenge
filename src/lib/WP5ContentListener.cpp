@@ -43,7 +43,7 @@ _WP5ContentParsingState::~_WP5ContentParsingState()
 {
 }
 
-WP5ContentListener::WP5ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP5SubDocument*> &subDocuments, WPXDocumentInterface *documentInterface) :
+WP5ContentListener::WP5ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP5SubDocument *> &subDocuments, WPXDocumentInterface *documentInterface) :
 	WP5Listener(),
 	WPXContentListener(pageList, documentInterface),
 	m_parseState(new WP5ContentParsingState),
@@ -53,7 +53,7 @@ WP5ContentListener::WP5ContentListener(std::list<WPXPageSpan> &pageList, std::ve
 {
 }
 
-WP5ContentListener::~WP5ContentListener() 
+WP5ContentListener::~WP5ContentListener()
 {
 	delete m_parseState;
 }
@@ -115,8 +115,8 @@ void WP5ContentListener::insertTab(uint8_t tabType, double tabPosition)
 				if (!tmpHasTabPositionInformation)
 					m_ps->m_textIndentByTabs += 0.5f;
 				else
-					m_ps->m_textIndentByTabs = tabPosition - m_ps->m_paragraphMarginLeft - m_ps->m_pageMarginLeft 
-						- m_ps->m_sectionMarginLeft - m_ps->m_textIndentByParagraphIndentChange;
+					m_ps->m_textIndentByTabs = tabPosition - m_ps->m_paragraphMarginLeft - m_ps->m_pageMarginLeft
+					                           - m_ps->m_sectionMarginLeft - m_ps->m_textIndentByParagraphIndentChange;
 				break;
 
 			case WP5_TAB_GROUP_BACK_TAB: // converted as hanging indent
@@ -124,19 +124,19 @@ void WP5ContentListener::insertTab(uint8_t tabType, double tabPosition)
 					m_ps->m_textIndentByTabs -= 0.5f;
 				else
 					m_ps->m_textIndentByTabs = tabPosition - m_ps->m_paragraphMarginLeft - m_ps->m_pageMarginLeft
-						- m_ps->m_sectionMarginLeft - m_ps->m_textIndentByParagraphIndentChange;
+					                           - m_ps->m_sectionMarginLeft - m_ps->m_textIndentByParagraphIndentChange;
 				break;
 
 			default:
 				break;
 			}
 			m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange
-				+ m_ps->m_textIndentByTabs;
+			                              + m_ps->m_textIndentByTabs;
 			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
-				+ m_ps->m_leftMarginByParagraphMarginChange + m_ps->m_leftMarginByTabs;
+			                              + m_ps->m_leftMarginByParagraphMarginChange + m_ps->m_leftMarginByTabs;
 			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
-				+ m_ps->m_rightMarginByParagraphMarginChange + m_ps->m_rightMarginByTabs;
-			
+			                               + m_ps->m_rightMarginByParagraphMarginChange + m_ps->m_rightMarginByTabs;
+
 			m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent;
 
 		}
@@ -158,7 +158,7 @@ void WP5ContentListener::insertTab(uint8_t tabType, double tabPosition)
 			case WP5_TAB_GROUP_DECIMAL_TAB:
 				m_documentInterface->insertTab();
 				break;
-			
+
 			default:
 				break;
 			}
@@ -183,7 +183,7 @@ void WP5ContentListener::insertIndent(uint8_t indentType, double indentPosition)
 					m_ps->m_leftMarginByTabs += 0.5f;
 				else
 					m_ps->m_leftMarginByTabs = indentPosition - m_ps->m_pageMarginLeft - m_ps->m_sectionMarginRight
-						- m_ps->m_leftMarginByPageMarginChange - m_ps->m_leftMarginByParagraphMarginChange;
+					                           - m_ps->m_leftMarginByPageMarginChange - m_ps->m_leftMarginByParagraphMarginChange;
 				if (m_ps->m_paragraphTextIndent != 0.0)
 					m_ps->m_textIndentByTabs -= m_ps->m_paragraphTextIndent;
 				break;
@@ -193,22 +193,22 @@ void WP5ContentListener::insertIndent(uint8_t indentType, double indentPosition)
 					m_ps->m_leftMarginByTabs += 0.5f;
 				else
 					m_ps->m_leftMarginByTabs = indentPosition - m_ps->m_pageMarginLeft - m_ps->m_sectionMarginLeft
-						- m_ps->m_leftMarginByPageMarginChange - m_ps->m_leftMarginByParagraphMarginChange;
+					                           - m_ps->m_leftMarginByPageMarginChange - m_ps->m_leftMarginByParagraphMarginChange;
 				m_ps->m_rightMarginByTabs = m_ps->m_leftMarginByTabs;
 				if (m_ps->m_paragraphTextIndent != 0.0)
 					m_ps->m_textIndentByTabs -= m_ps->m_paragraphTextIndent;
-				break;	
-				
+				break;
+
 			default:
 				break;
 			}
 			m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange
-				+ m_ps->m_textIndentByTabs;
+			                              + m_ps->m_textIndentByTabs;
 			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
-				+ m_ps->m_leftMarginByParagraphMarginChange + m_ps->m_leftMarginByTabs;
+			                              + m_ps->m_leftMarginByParagraphMarginChange + m_ps->m_leftMarginByTabs;
 			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
-				+ m_ps->m_rightMarginByParagraphMarginChange + m_ps->m_rightMarginByTabs;
-			
+			                               + m_ps->m_rightMarginByParagraphMarginChange + m_ps->m_rightMarginByTabs;
+
 			m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent;
 
 		}
@@ -273,7 +273,7 @@ void WP5ContentListener::defineTable(uint8_t position, uint16_t leftOffset)
 }
 
 void WP5ContentListener::addTableColumnDefinition(uint32_t width, uint32_t /* leftGutter */,
-						uint32_t /* rightGutter */, uint32_t attributes, uint8_t alignment)
+        uint32_t /* rightGutter */, uint32_t attributes, uint8_t alignment)
 {
 	if (!isUndoOn())
 	{
@@ -285,11 +285,11 @@ void WP5ContentListener::addTableColumnDefinition(uint32_t width, uint32_t /* le
 
 		// add the new column definition to our table definition
 		m_ps->m_tableDefinition.m_columns.push_back(colDef);
-		
+
 		WPXColumnProperties colProp;
 		colProp.m_attributes = attributes;
 		colProp.m_alignment = alignment;
-		
+
 		m_ps->m_tableDefinition.m_columnsProperties.push_back(colProp);
 
 		// initialize the variable that tells us how many columns to skip
@@ -329,9 +329,9 @@ void WP5ContentListener::insertRow(uint16_t rowHeight, bool isMinimumHeight, boo
 }
 
 void WP5ContentListener::insertCell(uint8_t colSpan, uint8_t rowSpan, uint8_t borderBits,
-			const RGBSColor * cellFgColor, const RGBSColor * cellBgColor, 
-			const RGBSColor * cellBorderColor, WPXVerticalAlignment cellVerticalAlignment, 
-			bool useCellAttributes, uint32_t cellAttributes)
+                                    const RGBSColor *cellFgColor, const RGBSColor *cellBgColor,
+                                    const RGBSColor *cellBorderColor, WPXVerticalAlignment cellVerticalAlignment,
+                                    bool useCellAttributes, uint32_t cellAttributes)
 {
 	if (!isUndoOn())
 	{
@@ -339,7 +339,7 @@ void WP5ContentListener::insertCell(uint8_t colSpan, uint8_t rowSpan, uint8_t bo
 			throw ParseException();
 		_flushText();
 		_openTableCell(colSpan, rowSpan, borderBits, cellFgColor, cellBgColor,
-					cellBorderColor, cellVerticalAlignment);
+		               cellBorderColor, cellVerticalAlignment);
 		m_ps->m_isCellWithoutParagraph = true;
 		if (m_ps->m_currentTableCol < 1)
 			return;
@@ -380,54 +380,54 @@ void WP5ContentListener::attributeChange(bool isOn, uint8_t attribute)
 		// FIXME: handle all the possible attribute bits
 		switch (attribute)
 		{
-			case WP5_ATTRIBUTE_EXTRA_LARGE:
-				textAttributeBit = WPX_EXTRA_LARGE_BIT;
-				break;
-			case WP5_ATTRIBUTE_VERY_LARGE:
-				textAttributeBit = WPX_VERY_LARGE_BIT;
-				break;
-			case WP5_ATTRIBUTE_LARGE:
-				textAttributeBit = WPX_LARGE_BIT;
-				break;
-			case WP5_ATTRIBUTE_SMALL_PRINT:
-				textAttributeBit = WPX_SMALL_PRINT_BIT;
-				break;
-			case WP5_ATTRIBUTE_FINE_PRINT:
-				textAttributeBit = WPX_FINE_PRINT_BIT;
-				break;		
-			case WP5_ATTRIBUTE_SUPERSCRIPT:
-				textAttributeBit = WPX_SUPERSCRIPT_BIT;
-				break;
-			case WP5_ATTRIBUTE_SUBSCRIPT:
-				textAttributeBit = WPX_SUBSCRIPT_BIT;
-				break;
-			case WP5_ATTRIBUTE_OUTLINE:
-				textAttributeBit = WPX_OUTLINE_BIT;
-				break;
-			case WP5_ATTRIBUTE_ITALICS:
-				textAttributeBit = WPX_ITALICS_BIT;
-				break;
-			case WP5_ATTRIBUTE_SHADOW:
-				textAttributeBit = WPX_SHADOW_BIT;
-				break;
-			case WP5_ATTRIBUTE_REDLINE:
-				textAttributeBit = WPX_REDLINE_BIT;
-				break;
-			case WP5_ATTRIBUTE_DOUBLE_UNDERLINE:
-				textAttributeBit = WPX_DOUBLE_UNDERLINE_BIT;
-				break;
-			case WP5_ATTRIBUTE_BOLD:
-				textAttributeBit = WPX_BOLD_BIT;
-				break;
-			case WP5_ATTRIBUTE_STRIKE_OUT:
-				textAttributeBit = WPX_STRIKEOUT_BIT;
-				break;
-			case WP5_ATTRIBUTE_UNDERLINE:
-				textAttributeBit = WPX_UNDERLINE_BIT;
-				break;
-			case WP5_ATTRIBUTE_SMALL_CAPS:
-				textAttributeBit = WPX_SMALL_CAPS_BIT;
-				break;
+		case WP5_ATTRIBUTE_EXTRA_LARGE:
+			textAttributeBit = WPX_EXTRA_LARGE_BIT;
+			break;
+		case WP5_ATTRIBUTE_VERY_LARGE:
+			textAttributeBit = WPX_VERY_LARGE_BIT;
+			break;
+		case WP5_ATTRIBUTE_LARGE:
+			textAttributeBit = WPX_LARGE_BIT;
+			break;
+		case WP5_ATTRIBUTE_SMALL_PRINT:
+			textAttributeBit = WPX_SMALL_PRINT_BIT;
+			break;
+		case WP5_ATTRIBUTE_FINE_PRINT:
+			textAttributeBit = WPX_FINE_PRINT_BIT;
+			break;
+		case WP5_ATTRIBUTE_SUPERSCRIPT:
+			textAttributeBit = WPX_SUPERSCRIPT_BIT;
+			break;
+		case WP5_ATTRIBUTE_SUBSCRIPT:
+			textAttributeBit = WPX_SUBSCRIPT_BIT;
+			break;
+		case WP5_ATTRIBUTE_OUTLINE:
+			textAttributeBit = WPX_OUTLINE_BIT;
+			break;
+		case WP5_ATTRIBUTE_ITALICS:
+			textAttributeBit = WPX_ITALICS_BIT;
+			break;
+		case WP5_ATTRIBUTE_SHADOW:
+			textAttributeBit = WPX_SHADOW_BIT;
+			break;
+		case WP5_ATTRIBUTE_REDLINE:
+			textAttributeBit = WPX_REDLINE_BIT;
+			break;
+		case WP5_ATTRIBUTE_DOUBLE_UNDERLINE:
+			textAttributeBit = WPX_DOUBLE_UNDERLINE_BIT;
+			break;
+		case WP5_ATTRIBUTE_BOLD:
+			textAttributeBit = WPX_BOLD_BIT;
+			break;
+		case WP5_ATTRIBUTE_STRIKE_OUT:
+			textAttributeBit = WPX_STRIKEOUT_BIT;
+			break;
+		case WP5_ATTRIBUTE_UNDERLINE:
+			textAttributeBit = WPX_UNDERLINE_BIT;
+			break;
+		case WP5_ATTRIBUTE_SMALL_CAPS:
+			textAttributeBit = WPX_SMALL_CAPS_BIT;
+			break;
 		}
 
 		if (isOn)
@@ -457,8 +457,8 @@ void WP5ContentListener::marginChange(uint8_t side, uint16_t margin)
 				m_ps->m_sectionMarginLeft = 0.0;
 			}
 			m_ps->m_paragraphMarginLeft = m_ps->m_leftMarginByPageMarginChange
-						+ m_ps->m_leftMarginByParagraphMarginChange
-						+ m_ps->m_leftMarginByTabs;
+			                              + m_ps->m_leftMarginByParagraphMarginChange
+			                              + m_ps->m_leftMarginByTabs;
 			break;
 		case WPX_RIGHT:
 			if (m_ps->m_numColumns > 1)
@@ -472,8 +472,8 @@ void WP5ContentListener::marginChange(uint8_t side, uint16_t margin)
 				m_ps->m_sectionMarginRight = 0.0;
 			}
 			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
-						+ m_ps->m_rightMarginByParagraphMarginChange
-						+ m_ps->m_rightMarginByTabs;
+			                               + m_ps->m_rightMarginByParagraphMarginChange
+			                               + m_ps->m_rightMarginByTabs;
 			break;
 		}
 		m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent;
@@ -488,7 +488,7 @@ void WP5ContentListener::characterColorChange(uint8_t red, uint8_t green, uint8_
 		m_ps->m_fontColor->m_r = red;
 		m_ps->m_fontColor->m_g = green;
 		m_ps->m_fontColor->m_b = blue;
- 	}
+	}
 }
 
 void WP5ContentListener::setFont(const WPXString &fontName, double fontSize)
@@ -534,7 +534,7 @@ void WP5ContentListener::insertNote(WPXNoteType noteType, const WP5SubDocument *
 		WPXNumberingType numberingType = _extractWPXNumberingTypeFromBuf(m_parseState->m_noteReference, ARABIC);
 		int number = _extractDisplayReferenceNumberFromBuf(m_parseState->m_noteReference, numberingType);
 		m_parseState->m_noteReference.clear();
-		
+
 		WPXPropertyList propList;
 		propList.insert("libwpd:number", number);
 
@@ -553,8 +553,8 @@ void WP5ContentListener::insertNote(WPXNoteType noteType, const WP5SubDocument *
 	}
 }
 
-void WP5ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, 
-	WPXTableList /* tableList */, int /* nextTableIndice */)
+void WP5ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType,
+        WPXTableList /* tableList */, int /* nextTableIndice */)
 {
 	// save our old parsing state on our "stack"
 	WP5ContentParsingState *oldParseState = m_parseState;
@@ -591,11 +591,11 @@ void WP5ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, W
 }
 
 void WP5ContentListener::headerFooterGroup(uint8_t /* headerFooterType */, uint8_t /* occurenceBits */,
-						WP5SubDocument *subDocument)
+        WP5SubDocument *subDocument)
 {
 	if (subDocument)
 		m_subDocuments.push_back(subDocument);
-}	
+}
 
 void WP5ContentListener::setDefaultFont(const WPXString &fontName, double fontSize)
 {
@@ -605,51 +605,51 @@ void WP5ContentListener::setDefaultFont(const WPXString &fontName, double fontSi
 
 void WP5ContentListener::boxOn(uint8_t positionAndType, uint8_t alignment, uint16_t width, uint16_t height, uint16_t x, uint16_t y)
 {
-/*
-Paragraph:
-	- Vertical position:
-		+ offset from top of paragraph
-	- Horizontal position:
-		+ Left
-		+ Right
-		+ Centre
-		+ Full
+	/*
+	Paragraph:
+		- Vertical position:
+			+ offset from top of paragraph
+		- Horizontal position:
+			+ Left
+			+ Right
+			+ Centre
+			+ Full
 
-Page:
-	- Vertical position:
-		+ Full Page
-		+ Top
-		+ Centre
-		+ Bottom
-		+ Set Position
-			* Offset from the top of page
-	- Horizontal position
-		+ Margins
-			* Left
-			* Right
-			* Centre
-			* Full
-		+ Columns (Which column)
-			* Left
-			* Right
-			* Centre
-			* Full
-		+ Set Position
-			* Offset from left of page
+	Page:
+		- Vertical position:
+			+ Full Page
+			+ Top
+			+ Centre
+			+ Bottom
+			+ Set Position
+				* Offset from the top of page
+		- Horizontal position
+			+ Margins
+				* Left
+				* Right
+				* Centre
+				* Full
+			+ Columns (Which column)
+				* Left
+				* Right
+				* Centre
+				* Full
+			+ Set Position
+				* Offset from left of page
 
-Character:
-	- Vertical position:
-		+ Top
-		+ Centre
-		+ Bottom
-		+ Baseline
-	- Horizontal Position:
-		+ N/A
-*/
+	Character:
+		- Vertical position:
+			+ Top
+			+ Centre
+			+ Bottom
+			+ Baseline
+		- Horizontal Position:
+			+ N/A
+	*/
 
 	if (isUndoOn() || (m_ps->m_isTableOpened && !m_ps->m_isTableCellOpened))
 		return;
-		 
+
 	if (!m_ps->m_isSpanOpened)
 		_openSpan();
 	else
@@ -680,7 +680,7 @@ Character:
 	default:
 		break;
 	}
-	
+
 	propList.insert("style:vertical-rel", "page-content");
 	switch ( (positionAndType &  0x1c) >> 2 )
 	{
@@ -697,10 +697,10 @@ Character:
 			propList.insert("style:vertical-pos", "from-top" );
 			double newPosition = (double)((double)y/(double)WPX_NUM_WPUS_PER_INCH);
 			if (newPosition > (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
-				- (double)height/(double)WPX_NUM_WPUS_PER_INCH) )
+			                           - (double)height/(double)WPX_NUM_WPUS_PER_INCH) )
 			{
 				newPosition = (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
-				- (double)height/(double)WPX_NUM_WPUS_PER_INCH);
+				                       - (double)height/(double)WPX_NUM_WPUS_PER_INCH);
 			}
 			propList.insert("svg:y", newPosition);
 		}
@@ -712,12 +712,12 @@ Character:
 		{
 			propList.insert("style:vertical-pos", "from-top" );
 			double newPosition = (double)((m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
-				- (double)height/(double)WPX_NUM_WPUS_PER_INCH)/2.0);
+			                               - (double)height/(double)WPX_NUM_WPUS_PER_INCH)/2.0);
 			if (newPosition > (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
-				- (double)height/(double)WPX_NUM_WPUS_PER_INCH) )
+			                           - (double)height/(double)WPX_NUM_WPUS_PER_INCH) )
 			{
 				newPosition = (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
-					- (double)height/(double)WPX_NUM_WPUS_PER_INCH);
+				                       - (double)height/(double)WPX_NUM_WPUS_PER_INCH);
 			}
 			propList.insert("svg:y", newPosition);
 		}
@@ -729,12 +729,12 @@ Character:
 		{
 			propList.insert("style:vertical-pos", "from-top" );
 			double newPosition = (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
-				- (double)height/(double)WPX_NUM_WPUS_PER_INCH + (double)y/(double)WPX_NUM_WPUS_PER_INCH);
+			                              - (double)height/(double)WPX_NUM_WPUS_PER_INCH + (double)y/(double)WPX_NUM_WPUS_PER_INCH);
 			if (newPosition > (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
-				- (double)height/(double)WPX_NUM_WPUS_PER_INCH) )
+			                           - (double)height/(double)WPX_NUM_WPUS_PER_INCH) )
 			{
 				newPosition = (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
-					- (double)height/(double)WPX_NUM_WPUS_PER_INCH);
+				                       - (double)height/(double)WPX_NUM_WPUS_PER_INCH);
 			}
 			propList.insert("svg:y", newPosition);
 		}
@@ -747,7 +747,7 @@ Character:
 	default:
 		break;
 	}
-	
+
 	propList.insert("style:horizontal-rel", "page-content" );
 	switch ( alignment & 0x03 )
 	{
@@ -767,7 +767,7 @@ Character:
 		{
 			propList.insert( "style:horizontal-pos", "from-left");
 			propList.insert( "svg:x", (double)(m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight
-				- (double)width/(double)WPX_NUM_WPUS_PER_INCH + (double)x/(double)WPX_NUM_WPUS_PER_INCH));
+			                                   - (double)width/(double)WPX_NUM_WPUS_PER_INCH + (double)x/(double)WPX_NUM_WPUS_PER_INCH));
 		}
 		break;
 	case 0x02:
@@ -777,7 +777,7 @@ Character:
 		{
 			propList.insert( "style:horizontal-pos", "from-left");
 			propList.insert( "svg:x", (double)((m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight
-				- (double)width/(double)WPX_NUM_WPUS_PER_INCH)/2.0 + (double)x/(double)WPX_NUM_WPUS_PER_INCH));
+			                                    - (double)width/(double)WPX_NUM_WPUS_PER_INCH)/2.0 + (double)x/(double)WPX_NUM_WPUS_PER_INCH));
 		}
 		break;
 	case 0x03:
@@ -788,7 +788,7 @@ Character:
 	default:
 		break;
 	}
-	
+
 	m_documentInterface->openFrame(propList);
 	m_parseState->m_isFrameOpened = true;
 }
@@ -807,7 +807,7 @@ void WP5ContentListener::insertGraphicsData(const WPXBinaryData *data)
 	if (isUndoOn() || !m_parseState->m_isFrameOpened)
 		return;
 
-	if (data) 
+	if (data)
 	{
 		WPXPropertyList propList;
 		propList.insert("libwpd:mimetype", "image/x-wpg");

@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2002-2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002-2004 Marc Maurer (uwog@uwog.net)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,17 +19,18 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
- 
+
 #include <stdio.h>
 #include <string.h>
 #include "libwpd.h"
 #include "libwpd-stream.h"
 #include "TextDocumentGenerator.h"
 
-namespace {
+namespace
+{
 
 int printUsage()
 {
@@ -64,7 +65,7 @@ int main(int argc, char *argv[])
 	{
 		if (!strcmp(argv[i], "--password"))
 		{
-		    if (i < argc - 1)
+			if (i < argc - 1)
 				password = argv[++i];
 		}
 		else if (!strncmp(argv[i], "--password=", 11))
@@ -75,13 +76,13 @@ int main(int argc, char *argv[])
 			return printVersion();
 		else if (!szInputFile && strncmp(argv[i], "--", 2))
 			szInputFile = argv[i];
-		else 
+		else
 			return printUsage();
 	}
-	
+
 	if (!szInputFile)
 		return printUsage();
-	
+
 	WPXFileStream input(szInputFile);
 
 	WPDConfidence confidence = WPDocument::isFileFormatSupported(&input);
@@ -90,21 +91,21 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "ERROR: Unsupported file format!\n");
 		return 1;
 	}
-	
+
 	if (confidence == WPD_CONFIDENCE_SUPPORTED_ENCRYPTION && !password)
 	{
 		fprintf(stderr, "ERROR: File is password protected! Use \"--password\" option!\n");
 		return 1;
 	}
-	
+
 	if (confidence == WPD_CONFIDENCE_SUPPORTED_ENCRYPTION && password && (WPD_PASSWORD_MATCH_OK != WPDocument::verifyPassword(&input, password)))
 	{
 		fprintf(stderr, "ERROR: The password does not match, or document is not encrypted!\n");
 		return 1;
 	}
-	
+
 	TextDocumentGenerator documentGenerator(isInfo);
- 	WPDResult error = WPDocument::parse(&input, &documentGenerator, password);
+	WPDResult error = WPDocument::parse(&input, &documentGenerator, password);
 
 	if (error == WPD_FILE_ACCESS_ERROR)
 		fprintf(stderr, "ERROR: File Exception!\n");

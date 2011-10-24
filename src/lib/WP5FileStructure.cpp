@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,29 +19,29 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
 #include "WP5FileStructure.h"
 
 // size of the fixed length functiongroups 0xC0 to 0xCF
-int WP5_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16] = 
+int WP5_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16] =
 {
 	4,	// 0xC0
 	9,
-	11,	
-	3,	
-	3,	
-	5,	
-	6,	
-	7,	
-	4,	
-	5,	
-	6,	
-	6,	
-	8,	
-	10,	
-	10,	
+	11,
+	3,
+	3,
+	5,
+	6,
+	7,
+	4,
+	5,
+	6,
+	6,
+	8,
+	10,
+	10,
 	12	// 0xCF
 };

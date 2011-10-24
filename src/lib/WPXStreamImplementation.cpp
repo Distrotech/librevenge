@@ -14,8 +14,8 @@
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the 
- * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02111-1301 USA
  *
  * For further information visit http://libwpd.sourceforge.net
@@ -44,8 +44,8 @@ public:
 	unsigned long readBufferLength;
 	unsigned long readBufferPos;
 private:
-	WPXFileStreamPrivate(const WPXFileStreamPrivate&);
-	WPXFileStreamPrivate& operator=(const WPXFileStreamPrivate&);
+	WPXFileStreamPrivate(const WPXFileStreamPrivate &);
+	WPXFileStreamPrivate &operator=(const WPXFileStreamPrivate &);
 };
 
 class WPXStringStreamPrivate
@@ -57,8 +57,8 @@ public:
 	unsigned long streamSize;
 	unsigned char *buf;
 private:
-	WPXStringStreamPrivate(const WPXStringStreamPrivate&);
-	WPXStringStreamPrivate& operator=(const WPXStringStreamPrivate&);
+	WPXStringStreamPrivate(const WPXStringStreamPrivate &);
+	WPXStringStreamPrivate &operator=(const WPXStringStreamPrivate &);
 };
 
 WPXFileStreamPrivate::WPXFileStreamPrivate() :
@@ -69,7 +69,7 @@ WPXFileStreamPrivate::WPXFileStreamPrivate() :
 	readBuffer(0),
 	readBufferLength(0),
 	readBufferPos(0)
-{	
+{
 }
 
 WPXFileStreamPrivate::~WPXFileStreamPrivate()
@@ -93,7 +93,7 @@ WPXStringStreamPrivate::~WPXStringStreamPrivate()
 		delete [] buf;
 }
 
-WPXFileStream::WPXFileStream(const char* filename) :
+WPXFileStream::WPXFileStream(const char *filename) :
 	WPXInputStream(),
 	d(new WPXFileStreamPrivate)
 {
@@ -102,7 +102,7 @@ WPXFileStream::WPXFileStream(const char* filename) :
 	d->streamSize = (d->file.good() ? (unsigned long)d->file.tellg() : (unsigned long)-1L);
 	if (d->streamSize == (unsigned long)-1) // tellg() returned ERROR
 		d->streamSize = 0;
-	 // preventing possible unsigned/signed issues later by truncating the file
+	// preventing possible unsigned/signed issues later by truncating the file
 	if (d->streamSize > (std::numeric_limits<unsigned long>::max)() / 2)
 		d->streamSize = (std::numeric_limits<unsigned long>::max)() / 2;
 	d->file.seekg( 0, std::ios::beg );
@@ -118,14 +118,14 @@ WPXFileStream::~WPXFileStream()
 const unsigned char *WPXFileStream::read(unsigned long numBytes, unsigned long &numBytesRead)
 {
 	numBytesRead = 0;
-	
+
 	if (numBytes == 0 || /* atEOS() || */ numBytes > (std::numeric_limits<unsigned long>::max)()/2
-		|| !d->file.good())
+	        || !d->file.good())
 		return 0;
 
 	// can we read from the buffer?
 	if (d->readBuffer && (d->readBufferPos + numBytes > d->readBufferPos)
-		&& (d->readBufferPos + numBytes <= d->readBufferLength))
+	        && (d->readBufferPos + numBytes <= d->readBufferLength))
 	{
 		const unsigned char *pTmp = d->readBuffer + d->readBufferPos;
 		d->readBufferPos += numBytes;
@@ -139,15 +139,17 @@ const unsigned char *WPXFileStream::read(unsigned long numBytes, unsigned long &
 		d->file.seekg((unsigned long)d->file.tellg() - d->readBufferLength, std::ios::beg);
 		d->file.seekg(d->readBufferPos, std::ios::cur);
 		delete [] d->readBuffer;
-		d->readBuffer = 0; d->readBufferPos = 0; d->readBufferLength = 0;
+		d->readBuffer = 0;
+		d->readBufferPos = 0;
+		d->readBufferLength = 0;
 	}
-	
+
 	unsigned long curpos = tell();
 	if (curpos == (unsigned long)-1)  // tellg() returned ERROR
 		return 0;
 
 	if ( (curpos + numBytes < curpos) /*overflow*/ ||
-		(curpos + numBytes >= d->streamSize) ) /*reading more than available*/
+	        (curpos + numBytes >= d->streamSize) ) /*reading more than available*/
 	{
 		numBytes = d->streamSize - curpos;
 	}
@@ -161,13 +163,13 @@ const unsigned char *WPXFileStream::read(unsigned long numBytes, unsigned long &
 	}
 	else
 		d->readBufferLength = numBytes;
-	
+
 	d->file.seekg(d->readBufferLength, std::ios::cur);
 	d->file.seekg(curpos, std::ios::beg);
-	
+
 	d->readBuffer = new unsigned char[d->readBufferLength];
 	d->file.read((char *)(d->readBuffer), d->readBufferLength);
-	
+
 	if (!d->file.good())
 		d->file.clear();
 	d->readBufferPos = 0;
@@ -175,9 +177,9 @@ const unsigned char *WPXFileStream::read(unsigned long numBytes, unsigned long &
 		return 0;
 
 	numBytesRead = numBytes;
-		
+
 	d->readBufferPos += numBytesRead;
-	return const_cast<const unsigned char*>( d->readBuffer );
+	return const_cast<const unsigned char *>( d->readBuffer );
 }
 
 long WPXFileStream::tell()
@@ -194,21 +196,23 @@ int WPXFileStream::seek(long offset, WPX_SEEK_TYPE seekType)
 		offset = 0;
 	if (offset > (long)d->streamSize)
 		offset = (long)d->streamSize;
-	
+
 	if (d->file.good() && offset < d->file.tellg() && (unsigned long)offset >= (unsigned long)d->file.tellg() - d->readBufferLength)
 	{
 		d->readBufferPos = offset + d->readBufferLength - d->file.tellg();
 		return 0;
 	}
-	
+
 	if (d->readBuffer) // seeking outside of the buffer, so invalidate the buffer
 	{
 		d->file.seekg((unsigned long)d->file.tellg() - d->readBufferLength, std::ios::beg);
 		d->file.seekg(d->readBufferPos, std::ios::cur);
 		delete [] d->readBuffer;
-		d->readBuffer = 0; d->readBufferPos = 0; d->readBufferLength = 0;
+		d->readBuffer = 0;
+		d->readBufferPos = 0;
+		d->readBufferLength = 0;
 	}
-	
+
 	if(d->file.good())
 	{
 		d->file.seekg(offset, std::ios::beg);
@@ -233,9 +237,11 @@ bool WPXFileStream::isOLEStream()
 		d->file.seekg((unsigned long)d->file.tellg() - d->readBufferLength, std::ios::beg);
 		d->file.seekg(d->readBufferPos, std::ios::cur);
 		delete [] d->readBuffer;
-		d->readBuffer = 0; d->readBufferPos = 0; d->readBufferLength = 0;
+		d->readBuffer = 0;
+		d->readBufferPos = 0;
+		d->readBufferLength = 0;
 	}
-	
+
 	if (d->buffer.str().empty())
 		d->buffer << d->file.rdbuf();
 	Storage tmpStorage( d->buffer );
@@ -245,19 +251,21 @@ bool WPXFileStream::isOLEStream()
 	return false;
 }
 
-WPXInputStream* WPXFileStream::getDocumentOLEStream(const char * name)
+WPXInputStream *WPXFileStream::getDocumentOLEStream(const char *name)
 {
 	if (!d->file.good())
-		return (WPXInputStream*)0;
+		return (WPXInputStream *)0;
 
 	if (d->readBuffer)
 	{
 		d->file.seekg((unsigned long)d->file.tellg() - d->readBufferLength, std::ios::beg);
 		d->file.seekg(d->readBufferPos, std::ios::cur);
 		delete [] d->readBuffer;
-		d->readBuffer = 0; d->readBufferPos = 0; d->readBufferLength = 0;
+		d->readBuffer = 0;
+		d->readBufferPos = 0;
+		d->readBufferLength = 0;
 	}
-	
+
 	if (d->buffer.str().empty())
 		d->buffer << d->file.rdbuf();
 	Storage *tmpStorage = new Storage( d->buffer );
@@ -266,9 +274,9 @@ WPXInputStream* WPXFileStream::getDocumentOLEStream(const char * name)
 	{
 		if (tmpStorage)
 			delete tmpStorage;
-		return (WPXInputStream*)0;
+		return (WPXInputStream *)0;
 	}
-	
+
 	if (d->buf)
 		delete [] d->buf;
 	d->buf = new unsigned char[tmpStream.size()];
@@ -278,12 +286,12 @@ WPXInputStream* WPXFileStream::getDocumentOLEStream(const char * name)
 
 	// sanity check
 	if (tmpLength > tmpStream.size() || tmpLength < tmpStream.size())
-	/* something went wrong here and we do not trust the
-	   resulting buffer */
+		/* something went wrong here and we do not trust the
+		   resulting buffer */
 	{
 		if (tmpStorage)
 			delete tmpStorage;
-		return (WPXInputStream*)0;
+		return (WPXInputStream *)0;
 	}
 
 	delete tmpStorage;
@@ -298,7 +306,7 @@ WPXStringStream::WPXStringStream(const unsigned char *data, const unsigned int d
 	d->streamSize = (d->buffer.good() ? (unsigned long)d->buffer.tellg() : (unsigned long)-1L);
 	if (d->streamSize == (unsigned long)-1)
 		d->streamSize = 0;
-	 // preventing possible unsigned/signed issues later by truncating the file
+	// preventing possible unsigned/signed issues later by truncating the file
 	if (d->streamSize > (std::numeric_limits<unsigned long>::max)() / 2)
 		d->streamSize = (std::numeric_limits<unsigned long>::max)() / 2;
 	d->buffer.seekg( 0, std::ios::beg );
@@ -312,10 +320,10 @@ WPXStringStream::~WPXStringStream()
 const unsigned char *WPXStringStream::read(unsigned long numBytes, unsigned long &numBytesRead)
 {
 	numBytesRead = 0;
-	
+
 	if (numBytes == 0)
 		return 0;
-	
+
 	if (atEOS() || numBytes > (std::numeric_limits<unsigned long>::max)()/2)
 		return 0;
 
@@ -324,7 +332,7 @@ const unsigned char *WPXStringStream::read(unsigned long numBytes, unsigned long
 		return 0;
 
 	if ( (curpos + numBytes < curpos) /*overflow*/ ||
-		(curpos + numBytes > d->streamSize) ) /*reading more than available*/
+	        (curpos + numBytes > d->streamSize) ) /*reading more than available*/
 	{
 		numBytes = d->streamSize - curpos;
 	}
@@ -335,10 +343,10 @@ const unsigned char *WPXStringStream::read(unsigned long numBytes, unsigned long
 
 	if(d->buffer.good())
 	{
-		d->buffer.read((char *)(d->buf), numBytes); 
+		d->buffer.read((char *)(d->buf), numBytes);
 		numBytesRead = (long)d->buffer.tellg() - curpos;
 	}
-	
+
 	return d->buf;
 }
 
@@ -394,7 +402,7 @@ bool WPXStringStream::isOLEStream()
 	return false;
 }
 
-WPXInputStream* WPXStringStream::getDocumentOLEStream(const char * name)
+WPXInputStream *WPXStringStream::getDocumentOLEStream(const char *name)
 {
 	if (!d->buffer.good())
 		return NULL;
@@ -405,9 +413,9 @@ WPXInputStream* WPXStringStream::getDocumentOLEStream(const char * name)
 	{
 		if (tmpStorage)
 			delete tmpStorage;
-		return (WPXInputStream*)0;
+		return (WPXInputStream *)0;
 	}
-	
+
 	if (d->buf)
 		delete [] d->buf;
 	d->buf = new unsigned char[tmpStream.size()];
@@ -416,12 +424,12 @@ WPXInputStream* WPXStringStream::getDocumentOLEStream(const char * name)
 
 	// sanity check
 	if (tmpLength > tmpStream.size() || tmpLength < tmpStream.size())
-	/* something went wrong here and we do not trust the
-	   resulting buffer */
+		/* something went wrong here and we do not trust the
+		   resulting buffer */
 	{
 		if (tmpStorage)
 			delete tmpStorage;
-		return (WPXInputStream*)0;
+		return (WPXInputStream *)0;
 	}
 
 	delete tmpStorage;

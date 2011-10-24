@@ -2,7 +2,7 @@
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -20,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -60,7 +60,7 @@ WP6VariableLengthGroup::~WP6VariableLengthGroup()
 		delete [] m_prefixIDs;
 }
 
-WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, WPXEncryption *encryption, const uint8_t groupID)
+WP6VariableLengthGroup *WP6VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, WPXEncryption *encryption, const uint8_t groupID)
 {
 	switch (groupID)
 	{
@@ -70,7 +70,7 @@ WP6VariableLengthGroup * WP6VariableLengthGroup::constructVariableLengthGroup(WP
 		return new WP6SetNumberGroup(input, encryption);
 	case WP6_TOP_PAGE_GROUP:
 		return new WP6PageGroup(input, encryption);
-	case WP6_TOP_EOL_GROUP: 
+	case WP6_TOP_EOL_GROUP:
 		return new WP6EOLGroup(input, encryption);
 	case WP6_TOP_CHARACTER_GROUP:
 		return new WP6CharacterGroup(input, encryption);
@@ -120,7 +120,7 @@ bool WP6VariableLengthGroup::isGroupConsistent(WPXInputStream *input, WPXEncrypt
 			input->seek(startPosition, WPX_SEEK_SET);
 			return false;
 		}
-		
+
 		input->seek(startPosition, WPX_SEEK_SET);
 		return true;
 	}
@@ -134,7 +134,7 @@ bool WP6VariableLengthGroup::isGroupConsistent(WPXInputStream *input, WPXEncrypt
 void WP6VariableLengthGroup::_read(WPXInputStream *input, WPXEncryption *encryption)
 {
 	uint32_t startPosition = input->tell();
-	
+
 	m_subGroup = readU8(input, encryption);
 	if ((m_size = readU16(input, encryption)) == 0)
 		throw FileException();
@@ -143,29 +143,29 @@ void WP6VariableLengthGroup::_read(WPXInputStream *input, WPXEncryption *encrypt
 	if (m_flags & WP6_VARIABLE_GROUP_PREFIX_ID_BIT)
 	{
 		m_numPrefixIDs = readU8(input, encryption);
-		
+
 		if (m_numPrefixIDs > 0)
 		{
 			m_prefixIDs = new uint16_t[m_numPrefixIDs];
 			for (uint32_t i = 0; i < m_numPrefixIDs; i++)
 			{
-				m_prefixIDs[i] = readU16(input, encryption);		
+				m_prefixIDs[i] = readU16(input, encryption);
 			}
-		}	
-	}	
+		}
+	}
 	else
 	{
 		m_numPrefixIDs = 0;
 		m_prefixIDs = 0;
 	}
-		
+
 	m_sizeNonDeletable = readU16(input, encryption);
 	if (m_sizeNonDeletable > m_size || (m_sizeNonDeletable & 0x8000))
 	{
 		WPD_DEBUG_MSG(("WordPerfect: Possible corruption detected, bailing out!\n"));
 		throw FileException();
 	}
-	
+
 	uint32_t tmpPosition = input->tell();
 	input->seek(m_sizeNonDeletable, WPX_SEEK_CUR);
 	m_sizeDeletable = (uint16_t)(startPosition + m_size - 4 - input->tell());

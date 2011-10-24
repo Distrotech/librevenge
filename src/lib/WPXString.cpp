@@ -39,15 +39,16 @@
 static int g_static_utf8_strlen (const char *p);
 static int g_static_unichar_to_utf8 (uint32_t c,  char *outbuf);
 
-static const int8_t g_static_utf8_skip_data[256] = {
-  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-  2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
-  3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,5,5,6,6,1,1
+static const int8_t g_static_utf8_skip_data[256] =
+{
+	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+	2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+	3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,5,5,6,6,1,1
 };
 
 #define UTF8_LENGTH(Char)              \
@@ -77,14 +78,14 @@ WPXString::WPXString() :
 }
 
 WPXString::WPXString(const WPXString &stringBuf, bool escapeXML) :
-	m_stringImpl(new WPXStringImpl) 
+	m_stringImpl(new WPXStringImpl)
 {
 	if (escapeXML)
 	{
 		int tmpLen = stringBuf.m_stringImpl->m_buf.length();
 		m_stringImpl->m_buf.reserve(2*tmpLen);
 		const char *p = stringBuf.cstr();
-		const char *end = p + tmpLen; 
+		const char *end = p + tmpLen;
 		while (p != end)
 		{
 			const char *next = g_static_utf8_next_char(p);
@@ -107,8 +108,8 @@ WPXString::WPXString(const WPXString &stringBuf, bool escapeXML) :
 				append("&quot;");
 				break;
 			default:
-				while (p != next) 
-				{		
+				while (p != next)
+				{
 					append((*p));
 					p++;
 				}
@@ -128,9 +129,9 @@ WPXString::WPXString(const char *str) :
 	m_stringImpl->m_buf = std::string(str);
 }
 
-const char * WPXString::cstr() const
+const char *WPXString::cstr() const
 {
-    return m_stringImpl->m_buf.c_str();
+	return m_stringImpl->m_buf.c_str();
 }
 
 void WPXString::sprintf(const char *format, ...)
@@ -139,26 +140,26 @@ void WPXString::sprintf(const char *format, ...)
 
 	int bufsize = FIRST_BUF_SIZE;
 	char firstBuffer[FIRST_BUF_SIZE];
-	char * buf = firstBuffer;
+	char *buf = firstBuffer;
 
 	while(true)
 	{
-			va_start(args, format);
-			int outsize = vsnprintf(buf, bufsize, format, args);
-			va_end(args);
+		va_start(args, format);
+		int outsize = vsnprintf(buf, bufsize, format, args);
+		va_end(args);
 
-			if ((outsize == -1) || (outsize == bufsize) || (outsize == bufsize - 1))
-				bufsize = bufsize * 2;
-			else if (outsize > bufsize)
-				bufsize = outsize + 2;
-			else
-				break;
+		if ((outsize == -1) || (outsize == bufsize) || (outsize == bufsize - 1))
+			bufsize = bufsize * 2;
+		else if (outsize > bufsize)
+			bufsize = outsize + 2;
+		else
+			break;
 
-			if (buf != firstBuffer)
-			{
-				delete [] buf;
-				buf = new char[bufsize];
-			}
+		if (buf != firstBuffer)
+		{
+			delete [] buf;
+			buf = new char[bufsize];
+		}
 	}
 
 	clear();
@@ -188,17 +189,17 @@ void WPXString::clear()
 }
 
 int WPXString::len() const
-{ 
-	return g_static_utf8_strlen(cstr()); 
+{
+	return g_static_utf8_strlen(cstr());
 }
 
-WPXString& WPXString::operator=(const WPXString &stringBuf)
+WPXString &WPXString::operator=(const WPXString &stringBuf)
 {
 	m_stringImpl->m_buf = stringBuf.m_stringImpl->m_buf;
 	return *this;
 }
 
-WPXString& WPXString::operator=(const char *s)
+WPXString &WPXString::operator=(const char *s)
 {
 	m_stringImpl->m_buf = std::string(s);
 	return *this;
@@ -214,7 +215,7 @@ bool WPXString::operator==(const WPXString &str) const
 	return (m_stringImpl->m_buf == str.m_stringImpl->m_buf);
 }
 
-bool WPXString::operator!() const 
+bool WPXString::operator!() const
 {
 	return (m_stringImpl->m_buf.length() == 0);
 }
@@ -235,19 +236,19 @@ WPXString::Iter::~Iter()
 
 void WPXString::Iter::rewind()
 {
-    m_pos = (-1);
+	m_pos = (-1);
 }
 
 bool WPXString::Iter::next()
 {
 	int len = m_stringImpl->m_buf.length();
 
-	if (m_pos == (-1)) 
+	if (m_pos == (-1))
 		m_pos++;
 	else if (m_pos < len)
 	{
-		m_pos+=(int32_t) (g_static_utf8_next_char(&(m_stringImpl->m_buf.c_str()[m_pos])) - 
-				  &(m_stringImpl->m_buf.c_str()[m_pos]));
+		m_pos+=(int32_t) (g_static_utf8_next_char(&(m_stringImpl->m_buf.c_str()[m_pos])) -
+		                  &(m_stringImpl->m_buf.c_str()[m_pos]));
 	}
 
 	if (m_pos < len)
@@ -262,13 +263,14 @@ bool WPXString::Iter::last()
 	return false;
 }
 
-const char * WPXString::Iter::operator()() const
-{ 
-	if (m_pos == (-1)) return 0; 
+const char *WPXString::Iter::operator()() const
+{
+	if (m_pos == (-1)) return 0;
 
-	if (m_curChar) delete [] m_curChar; m_curChar = 0;
-	int32_t charLength =(int32_t) (g_static_utf8_next_char(&(m_stringImpl->m_buf.c_str()[m_pos])) - 
-				       &(m_stringImpl->m_buf.c_str()[m_pos]));
+	if (m_curChar) delete [] m_curChar;
+	m_curChar = 0;
+	int32_t charLength =(int32_t) (g_static_utf8_next_char(&(m_stringImpl->m_buf.c_str()[m_pos])) -
+	                               &(m_stringImpl->m_buf.c_str()[m_pos]));
 	m_curChar = new char[charLength+1];
 	for (int i=0; i<charLength; i++)
 		m_curChar[i] = m_stringImpl->m_buf[m_pos+i];
@@ -299,18 +301,18 @@ void appendUCS4(WPXString &str, uint32_t ucs4)
  * @outbuf: output buffer, must have at least 6 bytes of space.
  *       If %0, the length will be computed and returned
  *       and nothing will be written to @outbuf.
- * 
+ *
  * Converts a single character to UTF-8.
- * 
+ *
  * Return value: number of bytes written
  */
 int
 g_static_unichar_to_utf8 (uint32_t c,
-			  char   *outbuf)
+                          char   *outbuf)
 {
-	uint8_t len = 1;    
+	uint8_t len = 1;
 	uint8_t first = 0;
-    
+
 	if (c < 0x80)
 	{
 		first = 0;
@@ -341,7 +343,7 @@ g_static_unichar_to_utf8 (uint32_t c,
 		first = 0xfc;
 		len = 6;
 	}
-    
+
 	if (outbuf)
 	{
 		for (uint8_t i = (uint8_t)(len - 1); i > 0; --i)
@@ -351,14 +353,14 @@ g_static_unichar_to_utf8 (uint32_t c,
 		}
 		outbuf[0] = (char)(c | first);
 	}
-    
+
 	return len;
 }
 
 /*
  * g_static_utf8_strlen:
  * @p: pointer to the start of a UTF-8 encoded string.
- * 
+ *
  * Returns the length of the string in characters.
  *
  * Return value: the length of the string in characters

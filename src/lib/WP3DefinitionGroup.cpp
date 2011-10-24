@@ -52,46 +52,46 @@ void WP3DefinitionGroup::_readContents(WPXInputStream *input, WPXEncryption *enc
 	switch (getSubGroup())
 	{
 	case WP3_DEFINITION_GROUP_SET_COLUMNS:
+	{
+		uint8_t tmpColType = readU8(input, encryption);
+		if (tmpColType)
 		{
-			uint8_t tmpColType = readU8(input, encryption);
-			if (tmpColType)
-			{
-				uint8_t tmpNumColumns = readU8(input, encryption);
-				if (tmpNumColumns)
-					input->seek(((2*tmpNumColumns) - 1), WPX_SEEK_CUR);
-			}
+			uint8_t tmpNumColumns = readU8(input, encryption);
+			if (tmpNumColumns)
+				input->seek(((2*tmpNumColumns) - 1), WPX_SEEK_CUR);
+		}
 
-			m_colType = readU8(input, encryption);
-			if (!m_colType)
+		m_colType = readU8(input, encryption);
+		if (!m_colType)
+		{
+			m_numColumns = 1;
+			m_isFixedWidth.clear();
+			m_columnWidth.clear();
+		}
+		else
+		{
+			m_numColumns = readU8(input, encryption);
+			if (m_numColumns > 1)
 			{
-				m_numColumns = 1;
-				m_isFixedWidth.clear();
-				m_columnWidth.clear();
-			}
-			else
-			{
-				m_numColumns = readU8(input, encryption);
-				if (m_numColumns > 1)
+				for (int i=0; i<((2*m_numColumns)-1); i++)
 				{
-					for (int i=0; i<((2*m_numColumns)-1); i++)
+					if (i%2)
 					{
-						if (i%2)
-						{
-							uint32_t tmpSpaceBetweenColumns = readU32(input, encryption, true);
-							m_isFixedWidth.push_back(true);
-							m_columnWidth.push_back((double)((double)fixedPointToWPUs(tmpSpaceBetweenColumns)/(double)WPX_NUM_WPUS_PER_INCH));
-						}
-						else
-						{
-							uint16_t tmpSizeOfColumn = readU16(input, encryption, true);
-							m_isFixedWidth.push_back(false);
-							m_columnWidth.push_back((double)((double)tmpSizeOfColumn/(double)0x10000));
-						}
+						uint32_t tmpSpaceBetweenColumns = readU32(input, encryption, true);
+						m_isFixedWidth.push_back(true);
+						m_columnWidth.push_back((double)((double)fixedPointToWPUs(tmpSpaceBetweenColumns)/(double)WPX_NUM_WPUS_PER_INCH));
+					}
+					else
+					{
+						uint16_t tmpSizeOfColumn = readU16(input, encryption, true);
+						m_isFixedWidth.push_back(false);
+						m_columnWidth.push_back((double)((double)tmpSizeOfColumn/(double)0x10000));
 					}
 				}
 			}
 		}
-		break;
+	}
+	break;
 	default: /* something else we don't support, since it isn't in the docs */
 		break;
 	}
@@ -108,22 +108,22 @@ void WP3DefinitionGroup::parse(WP3Listener *listener)
 		if ((m_numColumns <= 1))
 		{
 			listener->columnChange(NEWSPAPER, 1, m_columnWidth, m_isFixedWidth); // the value "1" is bugus, the false bool gives you all the information you need here
-		} 
+		}
 		else
 		{
 			switch (m_colType)
 			{
-				case WP3_COLUMN_TYPE_NEWSPAPER:
-					listener->columnChange(NEWSPAPER, m_numColumns, m_columnWidth, m_isFixedWidth);
-					break;
-				case WP3_COLUMN_TYPE_PARALLEL:
-					listener->columnChange(PARALLEL, m_numColumns, m_columnWidth, m_isFixedWidth);
-					break;
-				case WP3_COLUMN_TYPE_EXTENDED:
-					listener->columnChange(PARALLEL_PROTECT, m_numColumns, m_columnWidth, m_isFixedWidth);
-					break;
-				default: // something else we don't support, since it isn't in the docs
-					break;
+			case WP3_COLUMN_TYPE_NEWSPAPER:
+				listener->columnChange(NEWSPAPER, m_numColumns, m_columnWidth, m_isFixedWidth);
+				break;
+			case WP3_COLUMN_TYPE_PARALLEL:
+				listener->columnChange(PARALLEL, m_numColumns, m_columnWidth, m_isFixedWidth);
+				break;
+			case WP3_COLUMN_TYPE_EXTENDED:
+				listener->columnChange(PARALLEL_PROTECT, m_numColumns, m_columnWidth, m_isFixedWidth);
+				break;
+			default: // something else we don't support, since it isn't in the docs
+				break;
 			}
 		}
 		break;

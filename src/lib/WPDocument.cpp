@@ -86,37 +86,37 @@ WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input)
 		{
 			switch (header->getFileType())
 			{
-				case 0x0a: // WordPerfect File
-					switch (header->getMajorVersion())
-					{
-						case 0x00: // WP5
-						case 0x02: // WP6+
-							confidence = WPD_CONFIDENCE_EXCELLENT;
-							break;
-						default:
-							// unhandled file format
-							confidence = WPD_CONFIDENCE_NONE;
-							break;
-					}
-					break;
-				case 0x2c: // WP Mac File
-					switch (header->getMajorVersion())
-					{
-						case 0x02: // WP Mac 2.x
-						case 0x03: // WP Mac 3.0-3.5
-						case 0x04: // WP Mac 3.5e
-							confidence = WPD_CONFIDENCE_EXCELLENT;
-							break;
-						default:
-							// unhandled file format
-							confidence = WPD_CONFIDENCE_NONE;
-							break;
-					}
+			case 0x0a: // WordPerfect File
+				switch (header->getMajorVersion())
+				{
+				case 0x00: // WP5
+				case 0x02: // WP6+
+					confidence = WPD_CONFIDENCE_EXCELLENT;
 					break;
 				default:
-					// unhandled file type
+					// unhandled file format
 					confidence = WPD_CONFIDENCE_NONE;
 					break;
+				}
+				break;
+			case 0x2c: // WP Mac File
+				switch (header->getMajorVersion())
+				{
+				case 0x02: // WP Mac 2.x
+				case 0x03: // WP Mac 3.0-3.5
+				case 0x04: // WP Mac 3.5e
+					confidence = WPD_CONFIDENCE_EXCELLENT;
+					break;
+				default:
+					// unhandled file format
+					confidence = WPD_CONFIDENCE_NONE;
+					break;
+				}
+				break;
+			default:
+				// unhandled file type
+				confidence = WPD_CONFIDENCE_NONE;
+				break;
 			}
 			if (header->getDocumentEncryption())
 			{
@@ -129,9 +129,9 @@ WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input)
 		}
 		else
 			confidence = WP1Heuristics::isWP1FileFormat(input, 0);
-			if (confidence != WPD_CONFIDENCE_EXCELLENT && confidence != WPD_CONFIDENCE_SUPPORTED_ENCRYPTION)
-				confidence = LIBWPD_MAX(confidence, WP42Heuristics::isWP42FileFormat(input, 0));
-			
+		if (confidence != WPD_CONFIDENCE_EXCELLENT && confidence != WPD_CONFIDENCE_SUPPORTED_ENCRYPTION)
+			confidence = LIBWPD_MAX(confidence, WP42Heuristics::isWP42FileFormat(input, 0));
+
 
 		// dispose of the reference to the ole input stream, if we allocated one
 		if (document && isDocumentOLE)
@@ -215,9 +215,9 @@ WPDPasswordMatch WPDocument::verifyPassword(WPXInputStream *input, const char *p
 		}
 		else
 			passwordMatch = WP1Heuristics::verifyPassword(input, password);
-			if (passwordMatch == WPD_PASSWORD_MATCH_NONE)
-				passwordMatch = LIBWPD_MAX(passwordMatch, WP42Heuristics::verifyPassword(input, password));
-			
+		if (passwordMatch == WPD_PASSWORD_MATCH_NONE)
+			passwordMatch = LIBWPD_MAX(passwordMatch, WP42Heuristics::verifyPassword(input, password));
+
 
 		// dispose of the reference to the ole input stream, if we allocated one
 		if (document && isDocumentOLE)
@@ -262,10 +262,10 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *documen
 {
 	if (!input)
 		return WPD_FILE_ACCESS_ERROR;
-		
+
 	if (password && verifyPassword(input, password) != WPD_PASSWORD_MATCH_OK)
 		return WPD_PASSWORD_MISSMATCH_ERROR;
-		
+
 	input->seek(0, WPX_SEEK_SET);
 
 	WPXParser *parser = 0;
@@ -299,61 +299,61 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *documen
 		{
 			switch (header->getFileType())
 			{
-				case 0x0a: // WordPerfect File
-					switch (header->getMajorVersion())
+			case 0x0a: // WordPerfect File
+				switch (header->getMajorVersion())
+				{
+				case 0x00: // WP5
+					WPD_DEBUG_MSG(("WordPerfect: Using the WP5 parser.\n"));
+					if (encryption)
 					{
-						case 0x00: // WP5
-							WPD_DEBUG_MSG(("WordPerfect: Using the WP5 parser.\n"));
-							if (encryption)
-							{
-								delete encryption;
-								encryption = new WPXEncryption(password, 16);
-							}
-							parser = new WP5Parser(document, header, encryption);
-							parser->parse(documentInterface);
-							break;
-						case 0x02: // WP6
-							WPD_DEBUG_MSG(("WordPerfect: Using the WP6 parser.\n"));
-							if (encryption)
-						 	{
-								delete encryption;
-								encryption = 0;
-								throw UnsupportedEncryptionException();
-							}
-							parser = new WP6Parser(document, header, encryption);
-							parser->parse(documentInterface);
-							break;
-						default:
-							// unhandled file format
-							WPD_DEBUG_MSG(("WordPerfect: Unsupported file format.\n"));
-							break;
+						delete encryption;
+						encryption = new WPXEncryption(password, 16);
 					}
+					parser = new WP5Parser(document, header, encryption);
+					parser->parse(documentInterface);
 					break;
-				case 0x2c: // WP Mac File
-					switch (header->getMajorVersion())
+				case 0x02: // WP6
+					WPD_DEBUG_MSG(("WordPerfect: Using the WP6 parser.\n"));
+					if (encryption)
 					{
-						case 0x02: // WP Mac 2.x
-						case 0x03: // WP Mac 3.0-3.5
-						case 0x04: // WP Mac 3.5e
-							WPD_DEBUG_MSG(("WordPerfect: Using the WP3 parser.\n"));
-							if (encryption)
-							{
-								delete encryption;
-								encryption = new WPXEncryption(password, header->getDocumentOffset());
-							}
-							parser = new WP3Parser(document, header, encryption);
-							parser->parse(documentInterface);
-							break;
-						default:
-							// unhandled file format
-							WPD_DEBUG_MSG(("WordPerfect: Unsupported file format.\n"));
-							break;
+						delete encryption;
+						encryption = 0;
+						throw UnsupportedEncryptionException();
 					}
+					parser = new WP6Parser(document, header, encryption);
+					parser->parse(documentInterface);
 					break;
 				default:
 					// unhandled file format
-					WPD_DEBUG_MSG(("WordPerfect: Unsupported file type.\n"));
+					WPD_DEBUG_MSG(("WordPerfect: Unsupported file format.\n"));
 					break;
+				}
+				break;
+			case 0x2c: // WP Mac File
+				switch (header->getMajorVersion())
+				{
+				case 0x02: // WP Mac 2.x
+				case 0x03: // WP Mac 3.0-3.5
+				case 0x04: // WP Mac 3.5e
+					WPD_DEBUG_MSG(("WordPerfect: Using the WP3 parser.\n"));
+					if (encryption)
+					{
+						delete encryption;
+						encryption = new WPXEncryption(password, header->getDocumentOffset());
+					}
+					parser = new WP3Parser(document, header, encryption);
+					parser->parse(documentInterface);
+					break;
+				default:
+					// unhandled file format
+					WPD_DEBUG_MSG(("WordPerfect: Unsupported file format.\n"));
+					break;
+				}
+				break;
+			default:
+				// unhandled file format
+				WPD_DEBUG_MSG(("WordPerfect: Unsupported file type.\n"));
+				break;
 			}
 			DELETEP(parser);
 			DELETEP(header);
@@ -415,7 +415,7 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *documen
 	catch (...)
 	{
 		WPD_DEBUG_MSG(("Unknown Exception trapped\n"));
-		error = WPD_UNKNOWN_ERROR; 
+		error = WPD_UNKNOWN_ERROR;
 	}
 
 	DELETEP(parser);
@@ -428,12 +428,12 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *documen
 WPDResult WPDocument::parseSubDocument(WPXInputStream *input, WPXDocumentInterface *documentInterface, WPDFileFormat fileFormat)
 {
 	WPXParser *parser = 0;
-	
+
 	WPDResult error = WPD_OK;
 
 	try
 	{
-		
+
 		switch (fileFormat)
 		{
 		case WPD_FILE_FORMAT_WP6:
@@ -456,7 +456,7 @@ WPDResult WPDocument::parseSubDocument(WPXInputStream *input, WPXDocumentInterfa
 			DELETEP(parser);
 			return WPD_UNKNOWN_ERROR;
 		}
-		
+
 		if (parser)
 			parser->parseSubDocument(documentInterface);
 	}
@@ -478,7 +478,7 @@ WPDResult WPDocument::parseSubDocument(WPXInputStream *input, WPXDocumentInterfa
 	catch (...)
 	{
 		WPD_DEBUG_MSG(("Unknown Exception trapped\n"));
-		error = WPD_UNKNOWN_ERROR; 
+		error = WPD_UNKNOWN_ERROR;
 	}
 	DELETEP(parser);
 	return error;

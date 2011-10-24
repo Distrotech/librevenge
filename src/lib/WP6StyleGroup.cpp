@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -58,7 +58,7 @@ void WP6StyleGroup::_readContents(WPXInputStream *input, WPXEncryption *encrypti
 {
 	// this group can contain different kinds of data, thus we need to read
 	// the contents accordingly
-	switch (getSubGroup())	
+	switch (getSubGroup())
 	{
 	case WP6_STYLE_GROUP_GLOBAL_ON:
 		m_subGroupData = new WP6StyleGroup_GlobalOnSubGroup(input, encryption);

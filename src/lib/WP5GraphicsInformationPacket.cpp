@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2005, 2007 Fridrich Strba (fridrich.strba@bluewin.ch)
  * Copyright (C) 2007 Novell Inc. (http://www.novell.com)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 #include <string.h>
@@ -32,7 +32,7 @@ WP5GraphicsInformationPacket::WP5GraphicsInformationPacket(WPXInputStream *input
 	WP5GeneralPacketData(),
 	m_images(),
 	m_data()
-{	
+{
 	_read(input, encryption, dataOffset, dataSize);
 }
 
@@ -62,7 +62,7 @@ void WP5GraphicsInformationPacket::_readContents(WPXInputStream *input, WPXEncry
 	for (uint16_t j = 0; j < tmpImagesCount; j++)
 	{
 		uint8_t *tmpData = new uint8_t[tmpImagesSizes[j]];
-		
+
 		for (uint32_t k = 0; k < tmpImagesSizes[j]; k++)
 			tmpData[k] = readU8(input, encryption);
 #if 0

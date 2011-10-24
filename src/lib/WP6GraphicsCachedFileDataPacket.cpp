@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2007 Fridrich Strba (fridrich.strba@bluewin.ch)
  * Copyright (C) 2007 Novell Inc. (http://www.novell.com)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 #include <string.h>
@@ -30,12 +30,12 @@
 #include "WPXMemoryStream.h"
 #include "WPXString.h"
 
-WP6GraphicsCachedFileDataPacket::WP6GraphicsCachedFileDataPacket(WPXInputStream *input, WPXEncryption *encryption, int  id, uint32_t dataOffset, uint32_t dataSize): 
+WP6GraphicsCachedFileDataPacket::WP6GraphicsCachedFileDataPacket(WPXInputStream *input, WPXEncryption *encryption, int  id, uint32_t dataOffset, uint32_t dataSize):
 	WP6PrefixDataPacket(input, encryption),
 	m_id(id),
 	m_object(0),
 	m_data(0)
-{	
+{
 	_read(input, encryption, dataOffset, dataSize);
 }
 

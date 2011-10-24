@@ -2,7 +2,7 @@
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2007 Fridrich Strba (fridrich_strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -20,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -45,56 +45,56 @@ WP6PrefixDataPacket::WP6PrefixDataPacket(WPXInputStream * /* input */, WPXEncryp
 {
 }
 
-WP6PrefixDataPacket * WP6PrefixDataPacket::constructPrefixDataPacket(WPXInputStream * input, WPXEncryption *encryption, WP6PrefixIndice *prefixIndice)
+WP6PrefixDataPacket *WP6PrefixDataPacket::constructPrefixDataPacket(WPXInputStream *input, WPXEncryption *encryption, WP6PrefixIndice *prefixIndice)
 {
 	WP6PrefixDataPacket *tmpPacket = 0;
 	try
-	{	       
+	{
 		switch (prefixIndice->getType())
 		{
-		case WP6_INDEX_HEADER_INITIAL_FONT:			
-			tmpPacket = new WP6DefaultInitialFontPacket(input, encryption, prefixIndice->getID(), 
-					prefixIndice->getDataOffset(), prefixIndice->getDataSize());
+		case WP6_INDEX_HEADER_INITIAL_FONT:
+			tmpPacket = new WP6DefaultInitialFontPacket(input, encryption, prefixIndice->getID(),
+			        prefixIndice->getDataOffset(), prefixIndice->getDataSize());
 			break;
 		case WP6_INDEX_HEADER_GENERAL_WORDPERFECT_TEXT:
-			tmpPacket = new WP6GeneralTextPacket(input, encryption, prefixIndice->getID(), 
-					prefixIndice->getDataOffset(), prefixIndice->getDataSize());
+			tmpPacket = new WP6GeneralTextPacket(input, encryption, prefixIndice->getID(),
+			                                     prefixIndice->getDataOffset(), prefixIndice->getDataSize());
 			break;
 		case WP6_INDEX_HEADER_DESIRED_FONT_DESCRIPTOR_POOL:
-			tmpPacket = new WP6FontDescriptorPacket(input, encryption, prefixIndice->getID(), 
-					prefixIndice->getDataOffset(), prefixIndice->getDataSize());
+			tmpPacket = new WP6FontDescriptorPacket(input, encryption, prefixIndice->getID(),
+			                                        prefixIndice->getDataOffset(), prefixIndice->getDataSize());
 			break;
 		case WP6_INDEX_HEADER_FILL_STYLE:
-			tmpPacket = new WP6FillStylePacket(input, encryption, prefixIndice->getID(), 
-					prefixIndice->getDataOffset(), prefixIndice->getDataSize());
+			tmpPacket = new WP6FillStylePacket(input, encryption, prefixIndice->getID(),
+			                                   prefixIndice->getDataOffset(), prefixIndice->getDataSize());
 			break;
 		case WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY:
-			tmpPacket = new WP6ExtendedDocumentSummaryPacket(input, encryption, prefixIndice->getID(), 
-					prefixIndice->getDataOffset(), prefixIndice->getDataSize());
+			tmpPacket = new WP6ExtendedDocumentSummaryPacket(input, encryption, prefixIndice->getID(),
+			        prefixIndice->getDataOffset(), prefixIndice->getDataSize());
 			break;
 		case WP6_INDEX_HEADER_OUTLINE_STYLE:
-			tmpPacket = new WP6OutlineStylePacket(input, encryption, prefixIndice->getID(), 
-					prefixIndice->getDataOffset(), prefixIndice->getDataSize());
+			tmpPacket = new WP6OutlineStylePacket(input, encryption, prefixIndice->getID(),
+			                                      prefixIndice->getDataOffset(), prefixIndice->getDataSize());
 			break;
 		case WP6_INDEX_HEADER_GRAPHICS_FILENAME:
-			tmpPacket = new WP6GraphicsFilenamePacket(input, encryption, prefixIndice->getID(), prefixIndice->getFlags(), 
-					prefixIndice->getDataOffset(), prefixIndice->getDataSize());
+			tmpPacket = new WP6GraphicsFilenamePacket(input, encryption, prefixIndice->getID(), prefixIndice->getFlags(),
+			        prefixIndice->getDataOffset(), prefixIndice->getDataSize());
 			break;
 		case WP6_INDEX_HEADER_GRAPHICS_CACHED_FILE_DATA:
 			tmpPacket = new WP6GraphicsCachedFileDataPacket(input, encryption, prefixIndice->getID(),
-					prefixIndice->getDataOffset(), prefixIndice->getDataSize());
+			        prefixIndice->getDataOffset(), prefixIndice->getDataSize());
 			break;
 		case WP6_INDEX_HEADER_GRAPHICS_BOX_STYLE:
 			tmpPacket = new WP6GraphicsBoxStylePacket(input, encryption, prefixIndice->getID(),
-					prefixIndice->getDataOffset(), prefixIndice->getDataSize());
+			        prefixIndice->getDataOffset(), prefixIndice->getDataSize());
 			break;
 		case WP6_INDEX_HEADER_TABLE_STYLE:
 			tmpPacket = new WP6TableStylePacket(input, encryption, prefixIndice->getID(),
-					prefixIndice->getDataOffset(), prefixIndice->getDataSize());
+			                                    prefixIndice->getDataOffset(), prefixIndice->getDataSize());
 			break;
 		case WP6_INDEX_HEADER_COMMENT_ANNOTATION:
 			tmpPacket = new WP6CommentAnnotationPacket(input, encryption, prefixIndice->getID(),
-					prefixIndice->getDataOffset(), prefixIndice->getDataSize());
+			        prefixIndice->getDataOffset(), prefixIndice->getDataSize());
 			break;
 		default:
 			break;;

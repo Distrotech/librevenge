@@ -3,7 +3,7 @@
  * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2002 Ariya Hidayat <ariyahidayat@yahoo.de>
  * Copyright (C) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -21,7 +21,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 

@@ -2,7 +2,7 @@
  * Copyright (C) 2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2004 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -20,16 +20,16 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
- 
+
 #include "WP1StylesListener.h"
 #include "WP1FileStructure.h"
 #include "WPXFileStructure.h"
 #include "libwpd_internal.h"
 
-WP1StylesListener::WP1StylesListener(std::list<WPXPageSpan> &pageList, std::vector<WP1SubDocument *> &subDocuments) : 
+WP1StylesListener::WP1StylesListener(std::list<WPXPageSpan> &pageList, std::vector<WP1SubDocument *> &subDocuments) :
 	WP1Listener(),
 	WPXStylesListener(pageList),
 	m_currentPage(),
@@ -44,12 +44,12 @@ WP1StylesListener::WP1StylesListener(std::list<WPXPageSpan> &pageList, std::vect
 }
 
 void WP1StylesListener::endDocument()
-{	
+{
 	insertBreak(WPX_SOFT_PAGE_BREAK); // pretend we just had a soft page break (for the last page)
 }
 
 void WP1StylesListener::endSubDocument()
-{	
+{
 	insertBreak(WPX_SOFT_PAGE_BREAK); // pretend we just had a soft page break (for the last page)
 }
 
@@ -59,14 +59,14 @@ void WP1StylesListener::insertBreak(uint8_t breakType)
 		return;
 
 	if (!isUndoOn())
-	{	
+	{
 		WPXTableList tableList;
-		switch (breakType) 
+		switch (breakType)
 		{
 		case WPX_PAGE_BREAK:
 		case WPX_SOFT_PAGE_BREAK:
 			if ((m_pageList.size() > 0) && (m_currentPage==m_pageList.back())
-				&& (m_pageListHardPageMark != m_pageList.end()))
+			        && (m_pageListHardPageMark != m_pageList.end()))
 			{
 				m_pageList.back().setPageSpan(m_pageList.back().getPageSpan() + 1);
 			}
@@ -82,19 +82,19 @@ void WP1StylesListener::insertBreak(uint8_t breakType)
 			m_currentPage.setPageSpan(1);
 
 			for(std::vector<WPXHeaderFooter>::const_iterator HFiter = (m_nextPage.getHeaderFooterList()).begin();
-				HFiter != (m_nextPage.getHeaderFooterList()).end(); HFiter++)
+			        HFiter != (m_nextPage.getHeaderFooterList()).end(); HFiter++)
 			{
 				if ((*HFiter).getOccurence() != NEVER)
 				{
 					m_currentPage.setHeaderFooter((*HFiter).getType(), (*HFiter).getInternalType(),
-						(*HFiter).getOccurence(), (*HFiter).getSubDocument(), (*HFiter).getTableList());
+					                              (*HFiter).getOccurence(), (*HFiter).getSubDocument(), (*HFiter).getTableList());
 					_handleSubDocument((*HFiter).getSubDocument(), WPX_SUBDOCUMENT_HEADER_FOOTER, (*HFiter).getTableList());
 				}
 				else
 				{
 					m_currentPage.setHeaderFooter((*HFiter).getType(), (*HFiter).getInternalType(),
-						(*HFiter).getOccurence(), 0, (*HFiter).getTableList());
-				}	
+					                              (*HFiter).getOccurence(), 0, (*HFiter).getTableList());
+				}
 			}
 			m_nextPage = WPXPageSpan();
 			m_currentPageHasContent = false;
@@ -111,8 +111,8 @@ void WP1StylesListener::insertBreak(uint8_t breakType)
 
 void WP1StylesListener::marginReset(uint16_t leftMargin, uint16_t rightMargin)
 {
-	if (!isUndoOn()) 
-	{		
+	if (!isUndoOn())
+	{
 		if (m_isSubDocument)
 			return; // do not collect L/R margin information in sub documents
 
@@ -159,7 +159,7 @@ void WP1StylesListener::marginReset(uint16_t leftMargin, uint16_t rightMargin)
 
 void WP1StylesListener::topMarginSet(uint16_t topMargin)
 {
-	if (!isUndoOn()) 
+	if (!isUndoOn())
 	{
 		if (!topMargin) return;
 		double marginInch = (double)((double)topMargin / 72.0);
@@ -169,7 +169,7 @@ void WP1StylesListener::topMarginSet(uint16_t topMargin)
 
 void WP1StylesListener::bottomMarginSet(uint16_t bottomMargin)
 {
-	if (!isUndoOn()) 
+	if (!isUndoOn())
 	{
 		if (!bottomMargin) return;
 		double marginInch = (double)((double)bottomMargin / 72.0);
@@ -191,8 +191,8 @@ void WP1StylesListener::headerFooterGroup(uint8_t headerFooterDefinition, WP1Sub
 
 		uint8_t occurenceBits = (uint8_t)((headerFooterDefinition & 0x1C) >> 2);
 
-		WPD_DEBUG_MSG(("WordPerfect: headerFooterGroup (headerFooterType: %i, occurenceBits: %i)\n", 
-			       headerFooterType, occurenceBits));
+		WPD_DEBUG_MSG(("WordPerfect: headerFooterGroup (headerFooterType: %i, occurenceBits: %i)\n",
+		               headerFooterType, occurenceBits));
 
 		WPXHeaderFooterOccurence wpxOccurence;
 
@@ -221,7 +221,7 @@ void WP1StylesListener::headerFooterGroup(uint8_t headerFooterDefinition, WP1Sub
 		}
 		m_currentPageHasContent = tempCurrentPageHasContent;
 	}
-}	
+}
 
 void WP1StylesListener::suppressPageCharacteristics(uint8_t suppressCode)
 {
@@ -245,14 +245,14 @@ void WP1StylesListener::suppressPageCharacteristics(uint8_t suppressCode)
 	}
 }
 
-void WP1StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, 
-						WPXTableList /* tableList */, int /* nextTableIndice */)
+void WP1StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType,
+        WPXTableList /* tableList */, int /* nextTableIndice */)
 {
-	if (!isUndoOn()) 
+	if (!isUndoOn())
 	{
 		bool oldIsSubDocument = m_isSubDocument;
 		m_isSubDocument = true;
-		if (subDocumentType == WPX_SUBDOCUMENT_HEADER_FOOTER) 
+		if (subDocumentType == WPX_SUBDOCUMENT_HEADER_FOOTER)
 		{
 			bool oldCurrentPageHasContent = m_currentPageHasContent;
 

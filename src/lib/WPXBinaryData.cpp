@@ -35,7 +35,10 @@ class WPXBinaryDataImpl
 {
 public:
 	WPXBinaryDataImpl() : m_buf(), m_stream(NULL) {}
-	~WPXBinaryDataImpl() { if (m_stream) delete m_stream; }
+	~WPXBinaryDataImpl()
+	{
+		if (m_stream) delete m_stream;
+	}
 	std::vector<unsigned char> m_buf;
 	WPXMemoryInputStream *m_stream;
 private:
@@ -95,35 +98,37 @@ void WPXBinaryData::clear()
 }
 
 unsigned long WPXBinaryData::size() const
-{ 
-	return (unsigned long)m_binaryDataImpl->m_buf.size(); 
+{
+	return (unsigned long)m_binaryDataImpl->m_buf.size();
 }
 
-WPXBinaryData& WPXBinaryData::operator=(const WPXBinaryData &dataBuf)
+WPXBinaryData &WPXBinaryData::operator=(const WPXBinaryData &dataBuf)
 {
 	m_binaryDataImpl->m_buf = dataBuf.m_binaryDataImpl->m_buf;
 	return *this;
 }
 
-const unsigned char * WPXBinaryData::getDataBuffer() const
+const unsigned char *WPXBinaryData::getDataBuffer() const
 {
 	return &(m_binaryDataImpl->m_buf[0]);
 }
 
 const WPXString WPXBinaryData::getBase64Data() const
 {
-	static const char* base64Chars =
-		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+	static const char *base64Chars =
+	    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 	char tempCharsToEncode[3];
 	const long len = size();
-	long i = 0; unsigned j = 0; long modifiedLen;
+	long i = 0;
+	unsigned j = 0;
+	long modifiedLen;
 	if (len % 3)
 		modifiedLen = 3 * ((long)(len / 3) + 1);
 	else
 		modifiedLen = len;
-	
+
 	bool shouldIexit = false;
-	WPXString base64;	
+	WPXString base64;
 	for (; i < modifiedLen; i++)
 	{
 		if (i < len)
@@ -148,7 +153,8 @@ const WPXString WPXBinaryData::getBase64Data() const
 			{
 				base64.append(base64Chars[(tempCharsToEncode[0] & 0xfc) >> 2]);
 				base64.append(base64Chars[((tempCharsToEncode[0] & 0x03) << 4) | ((tempCharsToEncode[1] & 0xf0) >> 4)]);
-				base64.append('='); base64.append('=');
+				base64.append('=');
+				base64.append('=');
 				break;
 			}
 		}
@@ -164,7 +170,7 @@ const WPXString WPXBinaryData::getBase64Data() const
 	return base64;
 }
 
-const WPXInputStream* WPXBinaryData::getDataStream() const
+const WPXInputStream *WPXBinaryData::getDataStream() const
 {
 	if (m_binaryDataImpl->m_stream)
 		delete (m_binaryDataImpl->m_stream);

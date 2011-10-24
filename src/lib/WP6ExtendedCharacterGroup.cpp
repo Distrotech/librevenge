@@ -2,7 +2,7 @@
  * Copyright (C) 2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2002 Ariya Hidayat <ariyahidayat@yahoo.de>
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -20,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -47,7 +47,7 @@ void WP6ExtendedCharacterGroup::parse(WP6Listener *listener)
 {
 	const uint32_t *chars;
 	int len = extendedCharacterWP6ToUCS4(m_character,
-					  m_characterSet, &chars);
+	                                     m_characterSet, &chars);
 	int i;
 
 	for (i = 0; i < len; i++)

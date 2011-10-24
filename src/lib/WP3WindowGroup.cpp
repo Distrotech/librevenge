@@ -55,7 +55,7 @@ WP3WindowGroup::~WP3WindowGroup()
 		delete m_caption;
 }
 
-void WP3WindowGroup::_readContents(WPXInputStream * input, WPXEncryption * encryption)
+void WP3WindowGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	switch (getSubGroup())
 	{
@@ -65,41 +65,41 @@ void WP3WindowGroup::_readContents(WPXInputStream * input, WPXEncryption * encry
 	case WP3_WINDOW_GROUP_USER_BOX_FUNCTION:
 	case WP3_WINDOW_GROUP_EQUATION_BOX_FUNCTION:
 	case WP3_WINDOW_GROUP_HTML_IMAGE_BOX_FUNCTION:
-		{
-			input->seek(14, WPX_SEEK_CUR);
-			m_figureFlags = readU16(input, encryption, true); // picture flags
-			input->seek(2, WPX_SEEK_CUR);
-			m_leftColumn = readU8(input, encryption); // left align column
-			m_rightColumn = readU8(input, encryption); // right align column
-			input->seek(28, WPX_SEEK_CUR);
-			m_boxType = readU8(input, encryption);
-			input->seek(1, WPX_SEEK_CUR);
-			m_resourceID = readU16(input, encryption, true);
-			m_verticalOffset = fixedPointToDouble(readU32(input, encryption, true));
-			m_horizontalOffset = fixedPointToDouble(readU32(input, encryption, true));
-			m_width = fixedPointToDouble(readU32(input, encryption, true));
-			m_height = fixedPointToDouble(readU32(input, encryption, true));
-			input->seek(9, WPX_SEEK_CUR);
-			uint8_t tmpNumSubRect = readU8(input, encryption);
-			input->seek(tmpNumSubRect * 8, WPX_SEEK_CUR);
-			uint16_t tmpBoxCaptionSize = readU16(input, encryption, true);
-			if (tmpBoxCaptionSize)
-				m_caption = new WP3SubDocument(input, encryption, tmpBoxCaptionSize);
-			uint16_t tmpTextBoxLength = readU16(input, encryption, true);
-			if (tmpTextBoxLength)
-				m_subDocument = new WP3SubDocument(input, encryption, tmpTextBoxLength);
-		}
-		break;
+	{
+		input->seek(14, WPX_SEEK_CUR);
+		m_figureFlags = readU16(input, encryption, true); // picture flags
+		input->seek(2, WPX_SEEK_CUR);
+		m_leftColumn = readU8(input, encryption); // left align column
+		m_rightColumn = readU8(input, encryption); // right align column
+		input->seek(28, WPX_SEEK_CUR);
+		m_boxType = readU8(input, encryption);
+		input->seek(1, WPX_SEEK_CUR);
+		m_resourceID = readU16(input, encryption, true);
+		m_verticalOffset = fixedPointToDouble(readU32(input, encryption, true));
+		m_horizontalOffset = fixedPointToDouble(readU32(input, encryption, true));
+		m_width = fixedPointToDouble(readU32(input, encryption, true));
+		m_height = fixedPointToDouble(readU32(input, encryption, true));
+		input->seek(9, WPX_SEEK_CUR);
+		uint8_t tmpNumSubRect = readU8(input, encryption);
+		input->seek(tmpNumSubRect * 8, WPX_SEEK_CUR);
+		uint16_t tmpBoxCaptionSize = readU16(input, encryption, true);
+		if (tmpBoxCaptionSize)
+			m_caption = new WP3SubDocument(input, encryption, tmpBoxCaptionSize);
+		uint16_t tmpTextBoxLength = readU16(input, encryption, true);
+		if (tmpTextBoxLength)
+			m_subDocument = new WP3SubDocument(input, encryption, tmpTextBoxLength);
+	}
+	break;
 
 	case WP3_WINDOW_GROUP_HORIZONTAL_LINE:
 		break;
-		
+
 	default: /* something else we don't support, since it isn't in the docs */
 		break;
 	}
 }
 
-void WP3WindowGroup::parse(WP3Listener * listener)
+void WP3WindowGroup::parse(WP3Listener *listener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling a Window group\n"));
 
@@ -147,7 +147,7 @@ void WP3WindowGroup::parse(WP3Listener * listener)
 
 	case WP3_WINDOW_GROUP_HORIZONTAL_LINE:
 		break;
-		
+
 	default:
 		break;
 	}

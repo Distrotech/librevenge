@@ -30,8 +30,8 @@
 #include "libwpd_internal.h"
 
 
-WP6NumberingMethodGroup::WP6NumberingMethodGroup(WPXInputStream *input, 
-				     WPXEncryption *encryption) :
+WP6NumberingMethodGroup::WP6NumberingMethodGroup(WPXInputStream *input,
+        WPXEncryption *encryption) :
 	WP6VariableLengthGroup(),
 	m_levelNumber(0x00),
 	m_numberingMethod(0x00)
@@ -59,7 +59,7 @@ void WP6NumberingMethodGroup::parse(WP6Listener *listener)
 	switch (getSubGroup())
 	{
 	case WP6_NUMBERING_METHOD_GROUP_SET_PAGE_NUMBERING_MODE:
-		switch (m_numberingMethod) 
+		switch (m_numberingMethod)
 		{
 		case WP6_NUMBERING_METHOD_GROUP_PAGE_NUMBERING_LOWERCASE:
 			listener->setPageNumberingType(LOWERCASE);
@@ -76,7 +76,7 @@ void WP6NumberingMethodGroup::parse(WP6Listener *listener)
 		case WP6_NUMBERING_METHOD_GROUP_PAGE_NUMBERING_ARABIC:
 		default:
 			listener->setPageNumberingType(ARABIC);
-			break;			
+			break;
 		}
 		break;
 	}

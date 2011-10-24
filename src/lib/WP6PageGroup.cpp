@@ -73,7 +73,7 @@ void WP6PageGroup::_readContents(WPXInputStream *input, WPXEncryption *encryptio
 		m_suppressedCode = readU8(input, encryption);
 		WPD_DEBUG_MSG(("WordPerfect: Read suppressed code (%i)\n", m_suppressedCode));
 		break;
-        case WP6_PAGE_GROUP_PAGE_NUMBER_POSITION:
+	case WP6_PAGE_GROUP_PAGE_NUMBER_POSITION:
 		m_pageNumberTypefaceDesc = readU16(input, encryption);
 		m_pageNumberUseFlag = readU8(input, encryption);
 		m_pageNumberingFontPIDCopy = readU16(input, encryption);
@@ -111,7 +111,7 @@ void WP6PageGroup::_readContents(WPXInputStream *input, WPXEncryption *encryptio
 			break;
 		}
 		WPD_DEBUG_MSG(("WordPerfect: Read form information (length: %i), (width: %i), (form orientation: %s),\n",
-						m_formLength, m_formWidth, ((m_formOrientation==PORTRAIT)?"portrait":"landscape")));
+		               m_formLength, m_formWidth, ((m_formOrientation==PORTRAIT)?"portrait":"landscape")));
 		break;
 	default: /* something else we don't support, since it isn't in the docs */
 		break;
@@ -124,7 +124,7 @@ void WP6PageGroup::parse(WP6Listener *listener)
 
 	switch (getSubGroup())
 	{
-        case WP6_PAGE_GROUP_PAGE_NUMBER_POSITION:
+	case WP6_PAGE_GROUP_PAGE_NUMBER_POSITION:
 		if (m_pageNumberUseFlag == 0 || !getNumPrefixIDs())
 			listener->pageNumberingChange((WPXPageNumberPosition)m_pageNumberPosition, 0, 0);
 		else

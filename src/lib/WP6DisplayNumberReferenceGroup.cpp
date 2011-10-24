@@ -2,7 +2,7 @@
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -20,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -44,7 +44,7 @@ void WP6DisplayNumberReferenceGroup::_readContents(WPXInputStream *input, WPXEnc
 void WP6DisplayNumberReferenceGroup::parse(WP6Listener *listener)
 {
 	WPD_DEBUG_MSG(("WordPerfect: handling a DisplayNumberReference group\n"));
-	
+
 	if (!(getSubGroup() % 2) || getSubGroup() == 0)
 		listener->displayNumberReferenceGroupOn(getSubGroup(), m_levelNumberToDisplay);
 	else

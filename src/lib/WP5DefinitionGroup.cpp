@@ -1,6 +1,6 @@
 /* libwpd
  * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -18,7 +18,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -85,7 +85,7 @@ void WP5DefinitionGroup_DefineTablesSubGroup::parse(WP5Listener *listener)
 }
 
 
-WP5DefinitionGroup::WP5DefinitionGroup(WPXInputStream *input, WPXEncryption *encryption) :	
+WP5DefinitionGroup::WP5DefinitionGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	WP5VariableLengthGroup(),
 	m_subGroupData(0)
 {
@@ -102,12 +102,12 @@ void WP5DefinitionGroup::_readContents(WPXInputStream *input, WPXEncryption *enc
 {
 	switch(getSubGroup())
 	{
-		case WP5_TOP_DEFINITION_GROUP_DEFINE_TABLES:
-			m_subGroupData = new WP5DefinitionGroup_DefineTablesSubGroup(input, encryption, getSize());
-			break;
-		default:
-			break;
-	}	
+	case WP5_TOP_DEFINITION_GROUP_DEFINE_TABLES:
+		m_subGroupData = new WP5DefinitionGroup_DefineTablesSubGroup(input, encryption, getSize());
+		break;
+	default:
+		break;
+	}
 }
 
 void WP5DefinitionGroup::parse(WP5Listener *listener)
@@ -116,10 +116,10 @@ void WP5DefinitionGroup::parse(WP5Listener *listener)
 
 	switch(getSubGroup())
 	{
-		case WP5_TOP_DEFINITION_GROUP_DEFINE_TABLES:
-			m_subGroupData->parse(listener);
-			break;		
-		default:
-			break;		
+	case WP5_TOP_DEFINITION_GROUP_DEFINE_TABLES:
+		m_subGroupData->parse(listener);
+		break;
+	default:
+		break;
 	}
 }

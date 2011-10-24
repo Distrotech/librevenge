@@ -65,87 +65,87 @@ void WP42Parser::parseDocument(WPXInputStream *input, WPXEncryption *encryption,
 
 		if (readVal < (uint8_t)0x20)
 		{
-			WPD_DEBUG_MSG(("Offset: %i, Handling Control Character 0x%2x\n", (unsigned int)input->tell(), readVal));			
+			WPD_DEBUG_MSG(("Offset: %i, Handling Control Character 0x%2x\n", (unsigned int)input->tell(), readVal));
 
 			switch (readVal)
 			{
-				case 0x09: // tab
-					listener->insertTab(0, 0.0);
-					break;
-				case 0x0A: // hard new line
-					listener->insertEOL();
-					break;
-				case 0x0B: // soft new page
-					listener->insertBreak(WPX_SOFT_PAGE_BREAK);
-					break;
-				case 0x0C: // hard new page
-					listener->insertBreak(WPX_PAGE_BREAK);
-					break;
-				case 0x0D: // soft new line
-					listener->insertCharacter(' ');
-					break;
-				default:
-					// unsupported or undocumented token, ignore
-					break;
+			case 0x09: // tab
+				listener->insertTab(0, 0.0);
+				break;
+			case 0x0A: // hard new line
+				listener->insertEOL();
+				break;
+			case 0x0B: // soft new page
+				listener->insertBreak(WPX_SOFT_PAGE_BREAK);
+				break;
+			case 0x0C: // hard new page
+				listener->insertBreak(WPX_PAGE_BREAK);
+				break;
+			case 0x0D: // soft new line
+				listener->insertCharacter(' ');
+				break;
+			default:
+				// unsupported or undocumented token, ignore
+				break;
 			}
 		}
 		else if (readVal >= (uint8_t)0x20 && readVal <= (uint8_t)0x7F)
 		{
-			WPD_DEBUG_MSG(("Offset: %i, Handling Ascii Character 0x%2x\n", (unsigned int)input->tell(), readVal));			
+			WPD_DEBUG_MSG(("Offset: %i, Handling Ascii Character 0x%2x\n", (unsigned int)input->tell(), readVal));
 
 			// normal ASCII characters
 			listener->insertCharacter( readVal );
 		}
 		else if (readVal >= (uint8_t)0x80 && readVal <= (uint8_t)0xBF)
 		{
-			WPD_DEBUG_MSG(("Offset: %i, Handling Single Character Function 0x%2x\n", (unsigned int)input->tell(), readVal));			
+			WPD_DEBUG_MSG(("Offset: %i, Handling Single Character Function 0x%2x\n", (unsigned int)input->tell(), readVal));
 
 			// single character function codes
 			switch (readVal)
 			{
-				case 0x92:
-					listener->attributeChange(true, WP42_ATTRIBUTE_STRIKE_OUT);
-					break;
-				case 0x93:
-					listener->attributeChange(false, WP42_ATTRIBUTE_STRIKE_OUT);
-					break;
-				case 0x94:
-					listener->attributeChange(true, WP42_ATTRIBUTE_UNDERLINE);
-					break;
-				case 0x95:
-					listener->attributeChange(false, WP42_ATTRIBUTE_UNDERLINE);
-					break;
+			case 0x92:
+				listener->attributeChange(true, WP42_ATTRIBUTE_STRIKE_OUT);
+				break;
+			case 0x93:
+				listener->attributeChange(false, WP42_ATTRIBUTE_STRIKE_OUT);
+				break;
+			case 0x94:
+				listener->attributeChange(true, WP42_ATTRIBUTE_UNDERLINE);
+				break;
+			case 0x95:
+				listener->attributeChange(false, WP42_ATTRIBUTE_UNDERLINE);
+				break;
 
-				case 0x90:
-					listener->attributeChange(true, WP42_ATTRIBUTE_REDLINE);
-					break;
-				case 0x91:
-					listener->attributeChange(false, WP42_ATTRIBUTE_REDLINE);
-					break;
+			case 0x90:
+				listener->attributeChange(true, WP42_ATTRIBUTE_REDLINE);
+				break;
+			case 0x91:
+				listener->attributeChange(false, WP42_ATTRIBUTE_REDLINE);
+				break;
 
-				case 0x9C:
-					listener->attributeChange(false, WP42_ATTRIBUTE_BOLD);
-					break;
-				case 0x9D:
-					listener->attributeChange(true, WP42_ATTRIBUTE_BOLD);
-					break;
+			case 0x9C:
+				listener->attributeChange(false, WP42_ATTRIBUTE_BOLD);
+				break;
+			case 0x9D:
+				listener->attributeChange(true, WP42_ATTRIBUTE_BOLD);
+				break;
 
-				case 0xB2:
-					listener->attributeChange(true, WP42_ATTRIBUTE_ITALICS);
-					break;
-				case 0xB3:
-					listener->attributeChange(false, WP42_ATTRIBUTE_ITALICS);
-					break;
-				case 0xB4:
-					listener->attributeChange(true, WP42_ATTRIBUTE_SHADOW);
-					break;
-				case 0xB5:
-					listener->attributeChange(false, WP42_ATTRIBUTE_SHADOW);
-					break;
+			case 0xB2:
+				listener->attributeChange(true, WP42_ATTRIBUTE_ITALICS);
+				break;
+			case 0xB3:
+				listener->attributeChange(false, WP42_ATTRIBUTE_ITALICS);
+				break;
+			case 0xB4:
+				listener->attributeChange(true, WP42_ATTRIBUTE_SHADOW);
+				break;
+			case 0xB5:
+				listener->attributeChange(false, WP42_ATTRIBUTE_SHADOW);
+				break;
 
-				default:
-					// unsupported or undocumented token, ignore
-					break;
+			default:
+				// unsupported or undocumented token, ignore
+				break;
 			}
 		}
 		else if (readVal >= (uint8_t)0xC0 && readVal <= (uint8_t)0xFE)
@@ -167,10 +167,10 @@ void WP42Parser::parse(WPXDocumentInterface *documentInterface)
 	WPXInputStream *input = getInput();
 	WPXEncryption *encryption = getEncryption();
 	std::list<WPXPageSpan> pageList;
-	std::vector<WP42SubDocument *> subDocuments;	
-	
+	std::vector<WP42SubDocument *> subDocuments;
+
 	try
- 	{
+	{
 		// do a "first-pass" parse of the document
 		// gather table border information, page properties (per-page)
 		WP42StylesListener stylesListener(pageList, subDocuments);
@@ -220,19 +220,19 @@ void WP42Parser::parse(WPXDocumentInterface *documentInterface)
 }
 
 void WP42Parser::parseSubDocument(WPXDocumentInterface *documentInterface)
-{	
+{
 	std::list<WPXPageSpan> pageList;
-	std::vector<WP42SubDocument *> subDocuments;	
+	std::vector<WP42SubDocument *> subDocuments;
 
 	WPXInputStream *input = getInput();
 
 	try
- 	{
+	{
 		WP42StylesListener stylesListener(pageList, subDocuments);
 		stylesListener.startSubDocument();
 		parseDocument(input, 0, &stylesListener);
 		stylesListener.endSubDocument();
-		
+
 		WP42ContentListener listener(pageList, subDocuments, documentInterface);
 		listener.startSubDocument();
 		parseDocument(input, 0, &listener);

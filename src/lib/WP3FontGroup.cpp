@@ -56,7 +56,7 @@ void WP3FontGroup::_readContents(WPXInputStream *input, WPXEncryption *encryptio
 			uint16_t tmpBlue = readU16(input, encryption, true);
 			m_fontColor = RGBSColor(tmpRed, tmpGreen, tmpBlue);
 		}
-		break;		
+		break;
 	case WP3_FONT_GROUP_SET_TEXT_FONT:
 		input->seek(12, WPX_SEEK_CUR);
 		m_fontName = readPascalString(input, encryption);
@@ -78,7 +78,7 @@ void WP3FontGroup::parse(WP3Listener *listener)
 	{
 	case WP3_FONT_GROUP_SET_TEXT_COLOR:
 		listener->setTextColor(&m_fontColor);
-		break;		
+		break;
 	case WP3_FONT_GROUP_SET_TEXT_FONT:
 		listener->setTextFont(m_fontName);
 		break;

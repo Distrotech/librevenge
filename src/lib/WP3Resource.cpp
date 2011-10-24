@@ -2,7 +2,7 @@
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2007 Fridrich Strba (fridrich_strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -20,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -29,7 +29,7 @@
 #include "libwpd_internal.h"
 
 WP3Resource::WP3Resource(uint32_t resourceType, uint32_t resourceReferenceID, const WPXString resourceName,
-		uint8_t resourceAttributes, const WPXBinaryData resourceData) :
+                         uint8_t resourceAttributes, const WPXBinaryData resourceData) :
 	m_resourceType(resourceType),
 	m_resourceReferenceID(resourceReferenceID),
 	m_resourceName(resourceName),

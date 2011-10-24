@@ -2,7 +2,7 @@
  * Copyright (C) 2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -20,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -40,21 +40,21 @@ WP1VariableLengthGroup::WP1VariableLengthGroup(uint8_t group) :
 {
 }
 
-WP1VariableLengthGroup * WP1VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group)
+WP1VariableLengthGroup *WP1VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group)
 {
 	switch (group)
 	{
-		case WP1_SET_TABS_GROUP:
-			return new WP1SetTabsGroup(input, encryption, group);
-		case WP1_HEADER_FOOTER_GROUP:
-			return new WP1HeaderFooterGroup(input, encryption, group);
-		case WP1_FOOTNOTE_ENDNOTE_GROUP:
-			return new WP1FootnoteEndnoteGroup(input, encryption, group);
-		case WP1_PICTURE_GROUP:
-			return new WP1PictureGroup(input, encryption, group);
-		default:
-			// this is an unhandled group, just skip it
-			return new WP1UnsupportedVariableLengthGroup(input, encryption, group);
+	case WP1_SET_TABS_GROUP:
+		return new WP1SetTabsGroup(input, encryption, group);
+	case WP1_HEADER_FOOTER_GROUP:
+		return new WP1HeaderFooterGroup(input, encryption, group);
+	case WP1_FOOTNOTE_ENDNOTE_GROUP:
+		return new WP1FootnoteEndnoteGroup(input, encryption, group);
+	case WP1_PICTURE_GROUP:
+		return new WP1PictureGroup(input, encryption, group);
+	default:
+		// this is an unhandled group, just skip it
+		return new WP1UnsupportedVariableLengthGroup(input, encryption, group);
 	}
 }
 
@@ -83,7 +83,7 @@ bool WP1VariableLengthGroup::isGroupConsistent(WPXInputStream *input, WPXEncrypt
 			input->seek(startPosition, WPX_SEEK_SET);
 			return false;
 		}
-		
+
 		input->seek(startPosition, WPX_SEEK_SET);
 		return true;
 	}
@@ -98,21 +98,21 @@ void WP1VariableLengthGroup::_read(WPXInputStream *input, WPXEncryption *encrypt
 {
 	uint32_t startPosition = input->tell();
 
-	WPD_DEBUG_MSG(("WordPerfect: handling a variable length group\n"));	
-	
+	WPD_DEBUG_MSG(("WordPerfect: handling a variable length group\n"));
+
 	m_size = readU32(input, encryption, true); // the length is the number of data bytes minus 4 (ie. the function codes)
 
 	if (m_size + startPosition < startPosition)
-		throw FileException(); 
-	
+		throw FileException();
+
 	WPD_DEBUG_MSG(("WordPerfect: Read variable group header (start_position: %i, size: %i)\n", startPosition, m_size));
-	
+
 	_readContents(input, encryption);
-	
+
 	if ((m_size + startPosition + 4 < m_size + startPosition) ||
-		(m_size + startPosition + 4) > ((std::numeric_limits<uint32_t>::max)() / 2))
-		throw FileException(); 
-	
+	        (m_size + startPosition + 4) > ((std::numeric_limits<uint32_t>::max)() / 2))
+		throw FileException();
+
 	input->seek(startPosition + m_size + 4, WPX_SEEK_SET);
 
 	if (m_size != readU32(input, encryption, true))
@@ -125,10 +125,10 @@ void WP1VariableLengthGroup::_read(WPXInputStream *input, WPXEncryption *encrypt
 		WPD_DEBUG_MSG(("WordPerfect: Possible corruption detected. Bailing out!\n"));
 		throw FileException();
 	}
-	
+
 	if ((m_size + startPosition + 9 < m_size + startPosition) ||
-		(m_size + startPosition + 9) > ((std::numeric_limits<uint32_t>::max)() / 2))
-		throw FileException(); 
+	        (m_size + startPosition + 9) > ((std::numeric_limits<uint32_t>::max)() / 2))
+		throw FileException();
 	input->seek(startPosition + m_size + 9, WPX_SEEK_SET);
 
 }

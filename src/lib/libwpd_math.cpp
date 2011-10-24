@@ -1,7 +1,7 @@
 /* libwpd
  * Copyright (C) 2003 David Mandelin (mandelin@cs.wisc.edu)
  * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -27,19 +27,19 @@
 
 #if defined(_WIN32) && !defined(__MINGW32__)
 
-double rint(double x) 
+double rint(double x)
 {
 	double y, z;
 	int n;
 
-	if(x >= 0) 
+	if(x >= 0)
 	{
 		y = x + 0.5;
 		z = floor(y);
 		n = static_cast<int>(z);
 		if (y == z && n % 2) --z;
-	} 
-	else 
+	}
+	else
 	{
 		y = x - 0.5;
 		z = ceil(y);

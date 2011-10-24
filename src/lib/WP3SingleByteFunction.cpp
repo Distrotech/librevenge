@@ -2,7 +2,7 @@
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -20,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -28,14 +28,14 @@
 #include "libwpd_internal.h"
 #include "WP3Listener.h"
 
-WP3SingleByteFunction * WP3SingleByteFunction::constructSingleByteFunction(WPXInputStream * /* input */, WPXEncryption * /* encryption */, uint8_t groupID)
+WP3SingleByteFunction *WP3SingleByteFunction::constructSingleByteFunction(WPXInputStream * /* input */, WPXEncryption * /* encryption */, uint8_t groupID)
 {
 
-	switch (groupID) 
+	switch (groupID)
 	{
 	case 0x80: // condensed hard return
 		return new WP3EOLFunction();
-		
+
 	case 0x81: // condensed hard page
 		return new WP3EOPFunction();
 
@@ -44,10 +44,10 @@ WP3SingleByteFunction * WP3SingleByteFunction::constructSingleByteFunction(WPXIn
 
 	case 0x83: // condensed back-tab
 		return new WP3CondensedBackTabFunction();
-	
+
 	case 0x84: // condensed indent
 		return new WP3CondensedIndentFunction();
-		
+
 	case 0x85: // condensed left-right indent
 		return new WP3CondensedLRIndentFunction();
 
@@ -55,11 +55,11 @@ WP3SingleByteFunction * WP3SingleByteFunction::constructSingleByteFunction(WPXIn
 		return new WP3HyphenFunction();
 
 	case 0x97: // soft hyphen in line
-		return new WP3SoftHyphenFunction();		
-	
+		return new WP3SoftHyphenFunction();
+
 	case 0xa0: // hard space
 		return new WP3HardSpaceFunction();
-		
+
 	default:
 		// should not happen
 		return 0;
@@ -98,7 +98,7 @@ void WP3CondensedTabFunction::parse(WP3Listener *listener)
 
 void WP3CondensedBackTabFunction::parse(WP3Listener *listener)
 {
-	listener->backTab();	
+	listener->backTab();
 }
 
 void WP3CondensedIndentFunction::parse(WP3Listener *listener)

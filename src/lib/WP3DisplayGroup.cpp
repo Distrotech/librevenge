@@ -32,7 +32,7 @@
 WP3DisplayGroup::WP3DisplayGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	WP3VariableLengthGroup(),
 	m_noteReference(),
-	m_pageNumber()	
+	m_pageNumber()
 {
 	_read(input, encryption);
 }
