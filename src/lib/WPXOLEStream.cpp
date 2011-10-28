@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* POLE - Portable C++ library to access OLE Storage
    Copyright (C) 2002-2005 Ariya Hidayat <ariya@kde.org>
 
@@ -1068,3 +1069,4 @@ unsigned long libwpd::Stream::read( unsigned char *data, unsigned long maxlen )
 {
 	return io ? io->read( data, maxlen ) : 0;
 }
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

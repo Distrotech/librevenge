@@ -1,7 +1,8 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -30,30 +31,34 @@
 
 class WP6AttributeGroup : public WP6FixedLengthGroup
 {
- public:
-	WP6AttributeGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);	
+public:
+	WP6AttributeGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);
 	virtual void parse(WP6Listener *listener) = 0;
-	uint8_t getAttribute() const { return m_attribute; }
-	
- protected:
+	uint8_t getAttribute() const
+	{
+		return m_attribute;
+	}
+
+protected:
 	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 
- private:
+private:
 	uint8_t m_attribute;
 };
 
 class WP6AttributeOnGroup : public WP6AttributeGroup
 {
- public:
+public:
 	WP6AttributeOnGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);
 	void parse(WP6Listener *listener);
 };
 
 class WP6AttributeOffGroup : public WP6AttributeGroup
 {
- public:
+public:
 	WP6AttributeOffGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);
 	void parse(WP6Listener *listener);
 };
 
 #endif /* WP6ATTRIBUTEGROUP_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

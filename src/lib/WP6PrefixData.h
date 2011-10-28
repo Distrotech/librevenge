@@ -1,7 +1,8 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002-2003 Marc Maurer (uwog@uwog.net)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -29,25 +30,29 @@
 #include <map>
 #include <vector>
 
-typedef std::map<int, WP6PrefixDataPacket *> DPH;	
+typedef std::map<int, WP6PrefixDataPacket *> DPH;
 typedef std::multimap<int, WP6PrefixDataPacket *> MPDP;
 typedef MPDP::const_iterator MPDP_CIter;
 typedef MPDP::iterator MPDP_Iter;
 
 class WP6PrefixData
 {
- public:
+public:
 	WP6PrefixData(WPXInputStream *input, WPXEncryption *encryption, const int numPrefixIndices);
 	virtual ~WP6PrefixData();
 	const WP6PrefixDataPacket *getPrefixDataPacket(const int prefixID) const;
 	std::pair< MPDP_CIter, MPDP_CIter > getPrefixDataPacketsOfType(const int type) const;
 
-	uint16_t getDefaultInitialFontPID() const { return (uint16_t)m_defaultInitialFontPID; }
+	uint16_t getDefaultInitialFontPID() const
+	{
+		return (uint16_t)m_defaultInitialFontPID;
+	}
 
- private:
+private:
 	DPH m_prefixDataPacketHash;
 	MPDP m_prefixDataPacketTypeHash;
 	int m_defaultInitialFontPID;
 };
 
 #endif /* WP6PREFIXDATA_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

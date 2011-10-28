@@ -1,6 +1,7 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -18,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -32,15 +33,16 @@ class WP3HeaderFooterGroup : public WP3VariableLengthGroup
 {
 public:
 	WP3HeaderFooterGroup(WPXInputStream *input, WPXEncryption *encryption);
-	~WP3HeaderFooterGroup();	
+	~WP3HeaderFooterGroup();
 	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 	void parse(WP3Listener *listener);
 
 private:
-	WP3HeaderFooterGroup(const WP3HeaderFooterGroup&);
-	WP3HeaderFooterGroup& operator=(const WP3HeaderFooterGroup&);
+	WP3HeaderFooterGroup(const WP3HeaderFooterGroup &);
+	WP3HeaderFooterGroup &operator=(const WP3HeaderFooterGroup &);
 	uint8_t m_definition;
-	WP3SubDocument *m_subDocument;	
+	WP3SubDocument *m_subDocument;
 };
 
 #endif /* WP3HEADERFOOTERGROUP_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

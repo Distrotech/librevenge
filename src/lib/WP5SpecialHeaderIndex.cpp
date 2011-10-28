@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
@@ -46,3 +47,4 @@ void WP5SpecialHeaderIndex::_read(WPXInputStream *input, WPXEncryption *encrypti
 	WPD_DEBUG_MSG(("Special Header Index (type: %i, number of indexes: %i, index block size: %i, next block offset: %i)\n",
 	               m_type, m_numOfIndexes, m_indexBlockSize, m_nextBlockOffset));
 }
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

@@ -1,6 +1,7 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -18,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -30,13 +31,13 @@
 
 class WP3TablesGroup : public WP3VariableLengthGroup
 {
- public:
-	WP3TablesGroup(WPXInputStream *input, WPXEncryption *encryption);	
+public:
+	WP3TablesGroup(WPXInputStream *input, WPXEncryption *encryption);
 	~WP3TablesGroup();
 	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 	void parse(WP3Listener *listener);
 
- private:
+private:
 	// variables needed for subgroup 1 (Table Function)
 	uint8_t m_tableMode;
 	uint32_t m_offsetFromLeftEdge;
@@ -49,13 +50,14 @@ class WP3TablesGroup : public WP3VariableLengthGroup
 	uint8_t m_numberFormat[32];
 	uint32_t m_columnWidth[32];
 	uint32_t m_rightOffsetForDecimalAlign[32];
-	
+
 	// variables needed for subgroup 2 (Set Table Cell Span)
 	uint16_t m_colSpan;
 	uint16_t m_rowSpan;
-	
+
 	// variables needed for subgroup 0x0B (Set Table Cell Fill Color/Patern)
 	RGBSColor m_cellFillColor;
 };
 
 #endif /* WP3TABLESGROUP_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

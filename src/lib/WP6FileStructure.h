@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002-2003 Marc Maurer (uwog@uwog.net)
@@ -550,3 +551,4 @@ extern int WP6_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16];
 #define WP6_UNDO_GROUP_VALID_TEXT_END 3
 
 #endif /* WP6FILESTRUCTURE_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

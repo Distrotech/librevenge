@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
@@ -41,8 +42,8 @@ struct _WP1ContentParsingState
 	int m_numDeferredTabs;
 	int m_footNoteNumber, m_endNoteNumber;
 private:
-	_WP1ContentParsingState(const _WP1ContentParsingState&);
-	_WP1ContentParsingState& operator=(const _WP1ContentParsingState&);
+	_WP1ContentParsingState(const _WP1ContentParsingState &);
+	_WP1ContentParsingState &operator=(const _WP1ContentParsingState &);
 };
 
 class WP1ContentListener : public WP1Listener, protected WPXContentListener
@@ -51,12 +52,21 @@ public:
 	WP1ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP1SubDocument *> &subDocuments, WPXDocumentInterface *documentInterface);
 	~WP1ContentListener();
 
-	void startDocument() { WPXContentListener::startDocument(); }
-	void startSubDocument() { WPXContentListener::startSubDocument(); }
+	void startDocument()
+	{
+		WPXContentListener::startDocument();
+	}
+	void startSubDocument()
+	{
+		WPXContentListener::startSubDocument();
+	}
 	void insertCharacter(uint32_t character);
 	void insertExtendedCharacter(uint8_t extendedCharacter);
 	void insertTab();
-	void insertBreak(uint8_t breakType) { WPXContentListener::insertBreak(breakType); }
+	void insertBreak(uint8_t breakType)
+	{
+		WPXContentListener::insertBreak(breakType);
+	}
 	void insertEOL();
 	void insertNote(WPXNoteType noteType, WP1SubDocument *subDocument);
 	void attributeChange(bool isOn, uint8_t attribute);
@@ -72,13 +82,22 @@ public:
 	void headerFooterGroup(uint8_t headerFooterDefinition, WP1SubDocument *subDocument);
 	void suppressPageCharacteristics(uint8_t /* suppressCode */) {}
 	void justificationChange(uint8_t justification);
-	void lineSpacingChange(uint8_t spacing) { WPXContentListener::lineSpacingChange((double)((double)spacing/2.0)); }
+	void lineSpacingChange(uint8_t spacing)
+	{
+		WPXContentListener::lineSpacingChange((double)((double)spacing/2.0));
+	}
 	void flushRightOn();
 	void flushRightOff() {}
 	void centerOn();
 	void centerOff() {}
-	void endDocument() { WPXContentListener::endDocument(); };
-	void endSubDocument() { WPXContentListener::endSubDocument(); };
+	void endDocument()
+	{
+		WPXContentListener::endDocument();
+	};
+	void endSubDocument()
+	{
+		WPXContentListener::endSubDocument();
+	};
 	void insertPicture(uint16_t width, uint16_t height, const WPXBinaryData &binaryData);
 
 protected:
@@ -91,8 +110,9 @@ protected:
 private:
 	WP1ContentParsingState *m_parseState;
 	std::vector<WP1SubDocument *> &m_subDocuments;
-	WP1ContentListener(const WP1ContentListener&);
-	WP1ContentListener& operator=(WP1ContentListener&);
+	WP1ContentListener(const WP1ContentListener &);
+	WP1ContentListener &operator=(WP1ContentListener &);
 };
 
 #endif /* WP1LISTENER_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

@@ -1,9 +1,10 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2007 Fridrich Strba (fridrich.strba@bluewin.ch)
  * Copyright (C) 2007 Novell, Inc. (http://www.novell.com)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -21,7 +22,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -33,13 +34,13 @@
 
 class WP5PageFormatGroup : public WP5VariableLengthGroup
 {
- public:
-	WP5PageFormatGroup(WPXInputStream *input, WPXEncryption *encryption);	
+public:
+	WP5PageFormatGroup(WPXInputStream *input, WPXEncryption *encryption);
 	~WP5PageFormatGroup();
 	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 	void parse(WP5Listener *listener);
 
- private:
+private:
 	// variables needed for subgroup 1 (Left/Right Margin Set)
 	uint16_t m_leftMargin;
 	uint16_t m_rightMargin;
@@ -47,7 +48,7 @@ class WP5PageFormatGroup : public WP5VariableLengthGroup
 	double m_lineSpacing;
 	// variables needed for subbroup 4 (Tab Set)
 	std::vector<WPXTabStop> m_tabStops;
-	uint16_t m_marginOffset;	
+	uint16_t m_marginOffset;
 	// variables needed for subgroup 5 (Top/Bottom Margin Set)
 	uint16_t m_topMargin;
 	uint16_t m_bottomMargin;
@@ -63,3 +64,4 @@ class WP5PageFormatGroup : public WP5VariableLengthGroup
 };
 
 #endif /* WP5PAGEFORMATGROUP_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

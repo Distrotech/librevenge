@@ -1,7 +1,8 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -30,19 +31,26 @@
 
 class WP6Header : public WPXHeader
 {
- public:
-	WP6Header(WPXInputStream * input, WPXEncryption *encryption, uint32_t documentOffset, uint8_t productType,
-		uint8_t fileType, uint8_t majorVersion, uint8_t minorVersion, uint16_t documentEncryption);
+public:
+	WP6Header(WPXInputStream *input, WPXEncryption *encryption, uint32_t documentOffset, uint8_t productType,
+	          uint8_t fileType, uint8_t majorVersion, uint8_t minorVersion, uint16_t documentEncryption);
 	virtual ~WP6Header() {};
-	
-	uint16_t getIndexHeaderOffset() const { return m_indexHeaderOffset; }
-	uint16_t getNumPrefixIndices() const { return m_numPrefixIndices; }
+
+	uint16_t getIndexHeaderOffset() const
+	{
+		return m_indexHeaderOffset;
+	}
+	uint16_t getNumPrefixIndices() const
+	{
+		return m_numPrefixIndices;
+	}
 
 protected:
 	void _readIndexInformation(WPXInputStream *input, WPXEncryption *encryption);
-		
+
 private:
 	uint16_t m_indexHeaderOffset;
 	uint16_t m_numPrefixIndices;
 };
 #endif /* _WP6HEADER_H  */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

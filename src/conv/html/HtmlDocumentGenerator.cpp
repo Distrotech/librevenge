@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2002-2004 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
@@ -464,3 +465,4 @@ void HtmlDocumentGenerator::closeTable()
 		*m_pOutputStream << "</table>" << std::endl;
 	}
 }
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

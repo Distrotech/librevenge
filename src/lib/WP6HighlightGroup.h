@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
@@ -31,30 +32,34 @@
 
 class WP6HighlightGroup : public WP6FixedLengthGroup
 {
- public:
+public:
 	WP6HighlightGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);
 	virtual void parse(WP6Listener *listener) = 0;
-	const RGBSColor getColor() const { return m_color; }
+	const RGBSColor getColor() const
+	{
+		return m_color;
+	}
 
- protected:
+protected:
 	virtual void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 
- private:
+private:
 	RGBSColor m_color;
 };
 
 class WP6HighlightOnGroup : public WP6HighlightGroup
 {
- public:
+public:
 	WP6HighlightOnGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);
 	void parse(WP6Listener *listener);
 };
 
 class WP6HighlightOffGroup : public WP6HighlightGroup
 {
- public:
+public:
 	WP6HighlightOffGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);
 	void parse(WP6Listener *listener);
 };
 
 #endif /* WP6HIGHLIGHTGROUP_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

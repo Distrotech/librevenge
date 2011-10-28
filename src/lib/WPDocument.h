@@ -1,7 +1,8 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2003-2005 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -36,7 +37,7 @@ class WPXDocumentInterface;
 class WPXInputStream;
 
 /**
-This class provides all the functions an application would need to parse 
+This class provides all the functions an application would need to parse
 WordPerfect documents.
 */
 
@@ -50,3 +51,4 @@ public:
 };
 
 #endif /* WPDOCUMENT_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

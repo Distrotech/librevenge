@@ -1,8 +1,9 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -20,7 +21,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -35,11 +36,12 @@ class WPXEncryption;
 
 class WP5Part
 {
- public:
+public:
 	virtual ~WP5Part() {}
-	
-	static WP5Part * constructPart(WPXInputStream *input, WPXEncryption *encryption, const uint8_t readVal);
+
+	static WP5Part *constructPart(WPXInputStream *input, WPXEncryption *encryption, const uint8_t readVal);
 	virtual void parse(WP5Listener *listener) = 0;
 };
 
 #endif /* WP5PART_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2004 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2005 Net Integration Technologies (http://www.net-itech.com)
@@ -28,7 +29,7 @@
 #define WPXPROPERTYLIST_H
 #include "WPXProperty.h"
 
-// we use the pimpl pattern so we don't expose any STL symbols to the rest of 
+// we use the pimpl pattern so we don't expose any STL symbols to the rest of
 // the world.. yes, this is quite annoying.
 
 class WPXMapImpl;
@@ -40,16 +41,16 @@ public:
 	WPXPropertyList();
 	WPXPropertyList(const WPXPropertyList &);
 	virtual ~WPXPropertyList();
-	void insert(const char * name, WPXProperty *prop);
-	void insert(const char * name, const char *val);
-	void insert(const char * name, const int val);
-	void insert(const char * name, const bool val);
-	void insert(const char * name, const WPXString &val);
-	void insert(const char * name, const double val, const WPXUnit units = WPX_INCH); 
+	void insert(const char *name, WPXProperty *prop);
+	void insert(const char *name, const char *val);
+	void insert(const char *name, const int val);
+	void insert(const char *name, const bool val);
+	void insert(const char *name, const WPXString &val);
+	void insert(const char *name, const double val, const WPXUnit units = WPX_INCH);
 
-	void remove(const char * name);
-	const WPXProperty * operator[](const char *name) const;
-	const WPXPropertyList& operator=(const WPXPropertyList& propList);
+	void remove(const char *name);
+	const WPXProperty *operator[](const char *name) const;
+	const WPXPropertyList &operator=(const WPXPropertyList &propList);
 	void clear();
 
 	class Iter
@@ -60,12 +61,12 @@ public:
 		void rewind();
 		bool next();
 		bool last();
-		const WPXProperty * operator()() const;
-		const char * key();
+		const WPXProperty *operator()() const;
+		const char *key();
 	private:
 		WPXMapIterImpl *m_iterImpl;
-		Iter(const Iter&);
-		Iter& operator=(const Iter&);
+		Iter(const Iter &);
+		Iter &operator=(const Iter &);
 	};
 	friend class WPXPropertyList::Iter;
 
@@ -73,3 +74,4 @@ private:
 	mutable WPXMapImpl *m_mapImpl;
 };
 #endif /* WPXPROPERTYLIST_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

@@ -1,7 +1,8 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002,2004 Marc Maurer (uwog@uwog.net)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -50,7 +51,7 @@
  WPD_DEBUG_MSG(("X_CheckFileReadElementError: %d\n", __LINE__)); throw FileException(); }
 
 #define DELETEP(m) if (m) { delete m; m = 0; }
- 
+
 #ifdef DEBUG
 #define WPD_DEBUG_MSG(M) printf M
 #else
@@ -81,7 +82,7 @@
 
 // add more of these as needed for byteswapping
 // (the 8-bit functions are just there to make things consistent)
-uint8_t readU8(WPXInputStream *input, WPXEncryption *encryption); 
+uint8_t readU8(WPXInputStream *input, WPXEncryption *encryption);
 uint16_t readU16(WPXInputStream *input, WPXEncryption *encryption, bool bigendian=false);
 uint32_t readU32(WPXInputStream *input, WPXEncryption *encryption, bool bigendian=false);
 
@@ -93,10 +94,10 @@ void appendUCS4(WPXString &str, uint32_t ucs4);
 // Various helper structures for the libwpd parser..
 
 int extendedCharacterWP6ToUCS4(uint8_t character, uint8_t characterSet,
-			    const uint32_t **chars);
+                               const uint32_t **chars);
 
 int extendedCharacterWP5ToUCS4(uint8_t character, uint8_t characterSet,
-			    const uint32_t **chars);
+                               const uint32_t **chars);
 
 int appleWorldScriptToUCS4(uint16_t character, const uint32_t **chars);
 
@@ -112,12 +113,13 @@ enum WPXNoteType { FOOTNOTE, ENDNOTE };
 enum WPXHeaderFooterType { HEADER, FOOTER };
 enum WPXHeaderFooterInternalType { HEADER_A, HEADER_B, FOOTER_A, FOOTER_B, DUMMY };
 enum WPXHeaderFooterOccurence { ODD, EVEN, ALL, NEVER };
-enum WPXPageNumberPosition { PAGENUMBER_POSITION_NONE = 0, PAGENUMBER_POSITION_TOP_LEFT, PAGENUMBER_POSITION_TOP_CENTER, 
-			     PAGENUMBER_POSITION_TOP_RIGHT, PAGENUMBER_POSITION_TOP_LEFT_AND_RIGHT, 
-			     PAGENUMBER_POSITION_BOTTOM_LEFT, PAGENUMBER_POSITION_BOTTOM_CENTER, 
-			     PAGENUMBER_POSITION_BOTTOM_RIGHT, PAGENUMBER_POSITION_BOTTOM_LEFT_AND_RIGHT, 
-			     PAGENUMBER_POSITION_TOP_INSIDE_LEFT_AND_RIGHT, 
-			     PAGENUMBER_POSITION_BOTTOM_INSIDE_LEFT_AND_RIGHT };
+enum WPXPageNumberPosition { PAGENUMBER_POSITION_NONE = 0, PAGENUMBER_POSITION_TOP_LEFT, PAGENUMBER_POSITION_TOP_CENTER,
+                             PAGENUMBER_POSITION_TOP_RIGHT, PAGENUMBER_POSITION_TOP_LEFT_AND_RIGHT,
+                             PAGENUMBER_POSITION_BOTTOM_LEFT, PAGENUMBER_POSITION_BOTTOM_CENTER,
+                             PAGENUMBER_POSITION_BOTTOM_RIGHT, PAGENUMBER_POSITION_BOTTOM_LEFT_AND_RIGHT,
+                             PAGENUMBER_POSITION_TOP_INSIDE_LEFT_AND_RIGHT,
+                             PAGENUMBER_POSITION_BOTTOM_INSIDE_LEFT_AND_RIGHT
+                           };
 
 enum WPXFormOrientation { PORTRAIT, LANDSCAPE };
 enum WPXTabAlignment { LEFT, RIGHT, CENTER, DECIMAL, BAR };
@@ -189,7 +191,7 @@ struct _RGBSColor
 	_RGBSColor(); // initializes all values to 0
 	uint8_t m_r;
 	uint8_t m_g;
- 	uint8_t m_b;
+	uint8_t m_b;
 	uint8_t m_s;
 };
 
@@ -261,3 +263,4 @@ extern const uint32_t macRomanCharacterMap[];
 WPXString doubleToString(const double value);
 
 #endif /* LIBWPD_INTERNAL_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

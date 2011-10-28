@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
@@ -62,3 +63,4 @@ void WP5GeneralPacketData::_read(WPXInputStream *input, WPXEncryption *encryptio
 
 	// assert that we haven't surpassed the size of the packet?
 }
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

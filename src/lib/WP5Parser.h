@@ -1,7 +1,8 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -37,16 +38,17 @@ class WP5Parser : public WPXParser
 public:
 	WP5Parser(WPXInputStream *input, WPXHeader *header, WPXEncryption *encryption);
 	~WP5Parser();
-	
+
 	void parse(WPXDocumentInterface *documentInterface);
 	void parseSubDocument(WPXDocumentInterface *documentInterface);
-	
+
 	static void parseDocument(WPXInputStream *input, WPXEncryption *encryption, WP5Listener *listener);
 
 private:
-	WP5PrefixData * getPrefixData(WPXInputStream *input, WPXEncryption *encryption);
+	WP5PrefixData *getPrefixData(WPXInputStream *input, WPXEncryption *encryption);
 
 	void parse(WPXInputStream *input, WPXEncryption *encryption, WP5Listener *listener);
 };
 
 #endif /* WP5PARSER_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2002-2005 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2005 Net Integration Technologies (http://www.net-itech.com)
@@ -37,12 +38,12 @@ public:
 	HtmlDocumentGenerator();
 	virtual ~HtmlDocumentGenerator();
 
- 	virtual void setDocumentMetaData(const WPXPropertyList &propList);
+	virtual void setDocumentMetaData(const WPXPropertyList &propList);
 
 	virtual void startDocument();
 	virtual void endDocument();
 
-	virtual void definePageStyle(const WPXPropertyList&) {}
+	virtual void definePageStyle(const WPXPropertyList &) {}
 	virtual void openPageSpan(const WPXPropertyList & /* propList */) {}
 	virtual void closePageSpan() {}
 	virtual void openHeader(const WPXPropertyList &propList);
@@ -50,15 +51,15 @@ public:
 	virtual void openFooter(const WPXPropertyList &propList);
 	virtual void closeFooter();
 
-	virtual void defineSectionStyle(const WPXPropertyList&, const WPXPropertyListVector&) {}
+	virtual void defineSectionStyle(const WPXPropertyList &, const WPXPropertyListVector &) {}
 	virtual void openSection(const WPXPropertyList & /* propList */, const WPXPropertyListVector & /* columns */) {}
 	virtual void closeSection() {}
 
-	virtual void defineParagraphStyle(const WPXPropertyList&, const WPXPropertyListVector&) {}
+	virtual void defineParagraphStyle(const WPXPropertyList &, const WPXPropertyListVector &) {}
 	virtual void openParagraph(const WPXPropertyList &propList, const WPXPropertyListVector &tabStops);
 	virtual void closeParagraph();
 
-	virtual void defineCharacterStyle(const WPXPropertyList&) {}
+	virtual void defineCharacterStyle(const WPXPropertyList &) {}
 	virtual void openSpan(const WPXPropertyList &propList);
 	virtual void closeSpan();
 
@@ -96,7 +97,7 @@ public:
 
 	virtual void openFrame(const WPXPropertyList & /* propList */) {}
 	virtual void closeFrame() {}
-	
+
 	virtual void insertBinaryObject(const WPXPropertyList & /* propList */, const WPXBinaryData & /* data */) {}
 	virtual void insertEquation(const WPXPropertyList & /* propList */, const WPXString & /* data */) {}
 
@@ -112,3 +113,4 @@ private:
 };
 
 #endif /* HTMLLISTENERIMPL_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
@@ -331,3 +332,4 @@ void WP6ParagraphGroup_OutlineDefineSubGroup::parse(WP6Listener *listener, const
 {
 	listener->updateOutlineDefinition(paragraphGroup, m_outlineHash, m_numberingMethods, m_tabBehaviourFlag);
 }
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

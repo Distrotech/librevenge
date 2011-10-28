@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
@@ -120,15 +121,16 @@ private:
 
 class WP6ParagraphGroup : public WP6VariableLengthGroup
 {
- public:
+public:
 	WP6ParagraphGroup(WPXInputStream *input, WPXEncryption *encryption);
 	~WP6ParagraphGroup();
 	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 	void parse(WP6Listener *listener);
 private:
-	WP6ParagraphGroup(const WP6ParagraphGroup&);
-	WP6ParagraphGroup& operator=(const WP6ParagraphGroup&);
+	WP6ParagraphGroup(const WP6ParagraphGroup &);
+	WP6ParagraphGroup &operator=(const WP6ParagraphGroup &);
 	WP6VariableLengthGroup_SubGroup *m_subGroupData;
 };
 
 #endif /* WP6PARAGRAPHGROUP_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

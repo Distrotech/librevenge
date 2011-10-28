@@ -1,8 +1,9 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -20,7 +21,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -31,38 +32,38 @@
 
 class WP3SingleByteFunction : public WP3Part
 {
- public:
-	static WP3SingleByteFunction * constructSingleByteFunction(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);
+public:
+	static WP3SingleByteFunction *constructSingleByteFunction(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);
 };
 
 class WP3HardSpaceFunction : public WP3SingleByteFunction
 {
 public:
-	void parse(WP3Listener *listener);	
+	void parse(WP3Listener *listener);
 };
 
 class WP3EOLFunction : public WP3SingleByteFunction
 {
 public:
-	void parse(WP3Listener *listener);	
+	void parse(WP3Listener *listener);
 };
 
 class WP3EOPFunction : public WP3SingleByteFunction
 {
 public:
-	void parse(WP3Listener *listener);	
+	void parse(WP3Listener *listener);
 };
 
 class WP3HyphenFunction : public WP3SingleByteFunction
 {
 public:
-	void parse(WP3Listener *listener);	
+	void parse(WP3Listener *listener);
 };
 
 class WP3SoftHyphenFunction : public WP3SingleByteFunction
 {
 public:
-	void parse(WP3Listener *listener);	
+	void parse(WP3Listener *listener);
 };
 
 class WP3CondensedTabFunction : public WP3SingleByteFunction
@@ -90,3 +91,4 @@ public:
 };
 
 #endif /* WP3SINGLEBYTEFUNCTION_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

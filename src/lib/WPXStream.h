@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2004-2005 William Lachance (wrlach@gmail.com)
  *
@@ -49,7 +50,7 @@ public:
 	\return Should be 0, if the \c PerfectOffice_MAIN stream does not exist inside the OLE2 storage
 	or if the input stream is not an OLE2 storage.
 	*/
-	virtual WPXInputStream * getDocumentOLEStream(const char *name) = 0;
+	virtual WPXInputStream *getDocumentOLEStream(const char *name) = 0;
 
 	/**
 	Tries to read a given number of bytes starting from the current position inside the input stream.
@@ -83,3 +84,4 @@ public:
 	virtual bool atEOS() = 0;
 };
 #endif
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

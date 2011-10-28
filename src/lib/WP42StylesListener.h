@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2004 Marc Maurer (uwog@uwog.net)
@@ -41,10 +42,19 @@ public:
 
 	void startDocument() {}
 	void startSubDocument() {}
-	void insertCharacter(uint32_t /* character */) { if (!isUndoOn()) m_currentPageHasContent = true; }
-	void insertTab(uint8_t /* tabType */, double /* tabPosition */) { if (!isUndoOn()) m_currentPageHasContent = true; }
-	void insertEOL() { if (!isUndoOn()) m_currentPageHasContent = true; }
- 	void insertBreak(uint8_t breakType);
+	void insertCharacter(uint32_t /* character */)
+	{
+		if (!isUndoOn()) m_currentPageHasContent = true;
+	}
+	void insertTab(uint8_t /* tabType */, double /* tabPosition */)
+	{
+		if (!isUndoOn()) m_currentPageHasContent = true;
+	}
+	void insertEOL()
+	{
+		if (!isUndoOn()) m_currentPageHasContent = true;
+	}
+	void insertBreak(uint8_t breakType);
 	void attributeChange(bool /* isOn */, uint8_t /* attribute */) {}
 	void marginReset(uint8_t /* leftMargin */, uint8_t /* rightMargin */) {}
 	void headerFooterGroup(uint8_t headerFooterDefinition, WP42SubDocument *subDocument);
@@ -65,3 +75,4 @@ private:
 };
 
 #endif /* WP42STYLESLISTENER_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

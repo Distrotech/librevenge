@@ -1,7 +1,8 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -35,16 +36,16 @@ class WP6Listener;
 
 class WP6ColumnGroup : public WP6VariableLengthGroup
 {
- public:
-	WP6ColumnGroup(WPXInputStream *input, WPXEncryption *encryption);	
+public:
+	WP6ColumnGroup(WPXInputStream *input, WPXEncryption *encryption);
 	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 	void parse(WP6Listener *listener);
 
- private:
+private:
 	// variables needed for subgroup 0 and 1 (Left/Right Margin Set)
 	uint16_t m_margin;
- 
- 	// variables used for subgroup 2 (Columns)
+
+	// variables used for subgroup 2 (Columns)
 	uint8_t m_colType;
 	uint8_t m_numColumns;
 	double m_rowSpacing;
@@ -53,3 +54,4 @@ class WP6ColumnGroup : public WP6VariableLengthGroup
 };
 
 #endif /* WP6COLUMNGROUP_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

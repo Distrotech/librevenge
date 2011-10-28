@@ -1,7 +1,8 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -30,13 +31,13 @@
 
 class WP6PageGroup : public WP6VariableLengthGroup
 {
- public:
-	WP6PageGroup(WPXInputStream *input, WPXEncryption *encryption);	
+public:
+	WP6PageGroup(WPXInputStream *input, WPXEncryption *encryption);
 	~WP6PageGroup();
 	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 	void parse(WP6Listener *listener);
 
- private:
+private:
 	// variables needed for subgroup 0 and 1 (Left/Right Margin Set)
 	uint16_t m_margin;
 	uint8_t m_marginType;
@@ -55,7 +56,7 @@ class WP6PageGroup : public WP6VariableLengthGroup
 	RGBSColor m_pageNumberColor;
 	uint16_t m_pageNumberHeight;
 	uint8_t m_pageNumberNewPagePosition;
-	
+
 	// variables needed for subgroup 0x11 (Form)
 	uint16_t m_formLength;
 	uint16_t m_formWidth;
@@ -65,3 +66,4 @@ class WP6PageGroup : public WP6VariableLengthGroup
 };
 
 #endif /* WP6PAGEGROUP_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

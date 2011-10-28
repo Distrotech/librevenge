@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
@@ -69,3 +70,4 @@ void WP42MultiByteFunctionGroup::_read(WPXInputStream *input, WPXEncryption *enc
 	// IMPORTANT: if the class that implements _readContent(input, encryption) already reads the closing gate,
 	// IMPORTANT: it is necessary to make an input->seek(-1, WPX_SEEK_CUR) for this function to work well.
 }
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

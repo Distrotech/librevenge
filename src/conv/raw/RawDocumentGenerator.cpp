@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002-2004 Marc Maurer (uwog@uwog.net)
@@ -430,3 +431,4 @@ void RawDocumentGenerator::insertEquation(const WPXPropertyList &propList, const
 {
 	__iprintf("insertEquation(%s, text: %s)\n", getPropString(propList).cstr(), data.cstr());
 }
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

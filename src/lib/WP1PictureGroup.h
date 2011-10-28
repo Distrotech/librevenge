@@ -1,6 +1,7 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -18,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -35,15 +36,16 @@ class WP1PictureGroup : public WP1VariableLengthGroup
 {
 public:
 	WP1PictureGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group);
-	~WP1PictureGroup();	
+	~WP1PictureGroup();
 	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 	void parse(WP1Listener *listener);
 
 private:
-	WP1PictureGroup(const WP1PictureGroup&);
-	WP1PictureGroup& operator=(const WP1PictureGroup&);
+	WP1PictureGroup(const WP1PictureGroup &);
+	WP1PictureGroup &operator=(const WP1PictureGroup &);
 	WPXBinaryData m_binaryData;
 	uint16_t m_width, m_height;
 };
 
 #endif /* WP1PICTUREGROUP_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

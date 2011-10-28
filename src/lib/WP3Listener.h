@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2004 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2005-2006 Fridrich Strba (fridrich.strba@bluewin.ch)
@@ -54,22 +55,22 @@ public:
 	virtual void indentFirstLineChange(int16_t offset) = 0;
 	virtual void setTabs(bool isRelative, const std::vector<WPXTabStop> tabStops) = 0;
 	virtual void columnChange(WPXTextColumnType columnType, uint8_t numColumns, const std::vector<double> &columnWidth,
-					const std::vector<bool> &isFixedWidth) = 0;
+	                          const std::vector<bool> &isFixedWidth) = 0;
 	virtual void endDocument() = 0;
 	virtual void endSubDocument() = 0;
 
 	virtual void defineTable(uint8_t position, uint16_t leftOffset) = 0;
 	virtual void addTableColumnDefinition(uint32_t width, uint32_t leftGutter, uint32_t rightGutter,
-					uint32_t attributes, uint8_t alignment) = 0;
+	                                      uint32_t attributes, uint8_t alignment) = 0;
 	virtual void startTable() = 0;
- 	virtual void closeCell() = 0;
+	virtual void closeCell() = 0;
 	virtual void closeRow() = 0;
 	virtual void setTableCellSpan(uint16_t colSpan, uint16_t rowSpan) = 0;
-	virtual void setTableCellFillColor(const RGBSColor * cellFillColor) = 0;
- 	virtual void endTable() = 0;
+	virtual void setTableCellFillColor(const RGBSColor *cellFillColor) = 0;
+	virtual void endTable() = 0;
 	virtual void undoChange(uint8_t undoType, uint16_t undoLevel) = 0;
 	virtual void justificationChange(uint8_t justification) = 0;
-	virtual void setTextColor(const RGBSColor * fontColor) = 0;
+	virtual void setTextColor(const RGBSColor *fontColor) = 0;
 	virtual void setTextFont(const WPXString &fontName) = 0;
 	virtual void setFontSize(uint16_t fontSize) = 0;
 	virtual void insertPageNumber(const WPXString &pageNumber) = 0;
@@ -83,14 +84,20 @@ public:
 	virtual void leftRightIndent() = 0;
 	virtual void leftRightIndent(double offset) = 0;
 	virtual void insertPicture(double height, double width, double verticalOffset, double horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
-			uint16_t figureFlags, const WPXBinaryData &binaryData) = 0;
+	                           uint16_t figureFlags, const WPXBinaryData &binaryData) = 0;
 	virtual void insertTextBox(double height, double width, double verticalOffset, double horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
-			uint16_t figureFlags, const WP3SubDocument *subDocument, const WP3SubDocument *caption) = 0;
+	                           uint16_t figureFlags, const WP3SubDocument *subDocument, const WP3SubDocument *caption) = 0;
 	virtual void insertWP51Table(double height, double width, double verticalOffset, double horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
-			uint16_t figureFlags, const WP3SubDocument *subDocument, const WP3SubDocument *caption) = 0;
+	                             uint16_t figureFlags, const WP3SubDocument *subDocument, const WP3SubDocument *caption) = 0;
 
-	void setResourceFork(WP3ResourceFork *resourceFork) { m_resourceFork = resourceFork; }
-	const WP3ResourceFork *getResourceFork() const { return m_resourceFork; }
+	void setResourceFork(WP3ResourceFork *resourceFork)
+	{
+		m_resourceFork = resourceFork;
+	}
+	const WP3ResourceFork *getResourceFork() const
+	{
+		return m_resourceFork;
+	}
 
 private:
 	WP3ResourceFork *m_resourceFork;
@@ -100,3 +107,4 @@ private:
 };
 
 #endif /* WP3LISTENER_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

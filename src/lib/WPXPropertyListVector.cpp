@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2005 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2005 Net Integration Technologies, Inc. (http://www.net-itech.com)
@@ -163,3 +164,4 @@ const WPXPropertyList &WPXPropertyListVector::Iter::operator()() const
 {
 	return (*m_iterImpl)();
 }
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

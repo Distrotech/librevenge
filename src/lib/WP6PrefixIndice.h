@@ -1,7 +1,8 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -32,27 +33,43 @@ class WPXEncryption;
 
 class WP6PrefixIndice
 {
- public:
-	WP6PrefixIndice(WPXInputStream * input, WPXEncryption *encryption, int id);	
-	int getID() const { return m_id; }
-	uint8_t getType() const { return m_type; }
-	uint8_t getFlags() const { return m_flags; }
-	uint32_t getDataSize() const { return m_dataSize; }
-	uint32_t getDataOffset() const { return m_dataOffset; }
+public:
+	WP6PrefixIndice(WPXInputStream *input, WPXEncryption *encryption, int id);
+	int getID() const
+	{
+		return m_id;
+	}
+	uint8_t getType() const
+	{
+		return m_type;
+	}
+	uint8_t getFlags() const
+	{
+		return m_flags;
+	}
+	uint32_t getDataSize() const
+	{
+		return m_dataSize;
+	}
+	uint32_t getDataOffset() const
+	{
+		return m_dataOffset;
+	}
 
- protected:
- 	void _read(WPXInputStream *input, WPXEncryption *encryption);
- 
- private:
+protected:
+	void _read(WPXInputStream *input, WPXEncryption *encryption);
+
+private:
 	int m_id;
 	uint8_t m_type;
- 	uint8_t m_flags;
- 	uint16_t m_useCount;
- 	uint16_t m_hideCount;
- 	uint32_t m_dataSize;
- 	uint32_t m_dataOffset;
- 
- 	bool m_hasChildren;
+	uint8_t m_flags;
+	uint16_t m_useCount;
+	uint16_t m_hideCount;
+	uint32_t m_dataSize;
+	uint32_t m_dataOffset;
+
+	bool m_hasChildren;
 };
 
 #endif /* WP6PREFIXINDICE_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

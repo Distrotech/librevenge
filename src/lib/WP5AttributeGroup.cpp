@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
@@ -57,3 +58,4 @@ void WP5AttributeOffGroup::parse(WP5Listener *listener)
 {
 	listener->attributeChange(false, getAttribute());
 }
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

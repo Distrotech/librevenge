@@ -1,7 +1,8 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -30,74 +31,74 @@
 
 class WP6SingleByteFunction : public WP6Part
 {
- public:
-	static WP6SingleByteFunction * constructSingleByteFunction(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);
+public:
+	static WP6SingleByteFunction *constructSingleByteFunction(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);
 };
 
 class WP6SpaceFunction : public WP6SingleByteFunction
 {
 public:
-	void parse(WP6Listener *listener);	
+	void parse(WP6Listener *listener);
 };
 
 class WP6HardSpaceFunction : public WP6SingleByteFunction
 {
 public:
-	void parse(WP6Listener *listener);	
+	void parse(WP6Listener *listener);
 };
 
 class WP6EOLFunction : public WP6SingleByteFunction
 {
 public:
-	void parse(WP6Listener *listener);	
+	void parse(WP6Listener *listener);
 };
 
 class WP6EOCFunction : public WP6SingleByteFunction
 {
 public:
-	void parse(WP6Listener *listener);	
+	void parse(WP6Listener *listener);
 };
 
 class WP6EOPFunction : public WP6SingleByteFunction
 {
 public:
-	void parse(WP6Listener *listener);	
+	void parse(WP6Listener *listener);
 };
 
 class WP6SoftEOPFunction : public WP6SingleByteFunction
 {
 public:
-	void parse(WP6Listener *listener);	
+	void parse(WP6Listener *listener);
 };
 
 class WP6SoftHyphenFunction : public WP6SingleByteFunction
 {
 public:
-	void parse(WP6Listener *listener);	
+	void parse(WP6Listener *listener);
 };
 
 class WP6HyphenFunction : public WP6SingleByteFunction
 {
 public:
-	void parse(WP6Listener *listener);	
+	void parse(WP6Listener *listener);
 };
 
 class WP6TableOffFunction : public WP6SingleByteFunction
 {
 public:
-	void parse(WP6Listener *listener);	
+	void parse(WP6Listener *listener);
 };
 
 class WP6TableCellFunction : public WP6SingleByteFunction
 {
 public:
-	void parse(WP6Listener *listener);	
+	void parse(WP6Listener *listener);
 };
 
 class WP6TableRowFunction : public WP6SingleByteFunction
 {
 public:
-	void parse(WP6Listener *listener);	
+	void parse(WP6Listener *listener);
 };
 
 class WP6TableOffAtSoftEOPFunction : public WP6SingleByteFunction
@@ -125,3 +126,4 @@ public:
 };
 
 #endif /* WP6SINGLEBYTEFUNCTION_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

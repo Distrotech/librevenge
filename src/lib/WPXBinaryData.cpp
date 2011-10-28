@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2007 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
@@ -176,3 +177,4 @@ const WPXInputStream *WPXBinaryData::getDataStream() const
 		delete (m_binaryDataImpl->m_stream);
 	return ((m_binaryDataImpl->m_stream) = new WPXMemoryInputStream(&(m_binaryDataImpl->m_buf[0]), m_binaryDataImpl->m_buf.size()));
 }
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

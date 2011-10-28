@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2002-2005 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2004 Net Integration Technologies (http://www.net-itech.com)
@@ -36,3 +37,4 @@ WPXListener::WPXListener(std::list<WPXPageSpan> &pageList) :
 WPXListener::~WPXListener()
 {
 }
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

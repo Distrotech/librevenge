@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2004 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2005 Net Integration Technologies (http://www.net-itech.com)
@@ -37,7 +38,7 @@ public:
 	WPXString(const char *str);
 	~WPXString();
 
-	const char * cstr() const;
+	const char *cstr() const;
 	int len() const;
 
 	void sprintf(const char *format, ...);
@@ -45,13 +46,19 @@ public:
 	void append(const char *s);
 	void append(const char c);
 	void clear();
-	WPXString& operator=(const WPXString &str);
-	WPXString& operator=(const char *s);
+	WPXString &operator=(const WPXString &str);
+	WPXString &operator=(const char *s);
 	bool operator==(const char *s) const;
 	bool operator==(const WPXString &str) const;
-        bool operator!() const;
-	inline bool operator!=(const char *s) const { return !operator==(s); }
-	inline bool operator!=(const WPXString &str) const { return !operator==(str); }
+	bool operator!() const;
+	inline bool operator!=(const char *s) const
+	{
+		return !operator==(s);
+	}
+	inline bool operator!=(const WPXString &str) const
+	{
+		return !operator==(str);
+	}
 
 	class Iter
 	{
@@ -61,16 +68,17 @@ public:
 		void rewind();
 		bool next();
 		bool last();
-		const char * operator()() const;
+		const char *operator()() const;
 	private:
-		Iter(const Iter&);
-		Iter& operator=(const Iter&);
+		Iter(const Iter &);
+		Iter &operator=(const Iter &);
 		WPXStringImpl *m_stringImpl;
 		int m_pos;
 		mutable char *m_curChar;
 	};
-		
+
 private:
 	WPXStringImpl *m_stringImpl;
 };
 #endif
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

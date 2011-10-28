@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2004 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
@@ -40,11 +41,23 @@ public:
 
 	void startDocument() {}
 	void startSubDocument() {}
-	void insertCharacter(uint32_t /* character */) { if (!isUndoOn()) m_currentPageHasContent = true; }
-	void insertTab() { if (!isUndoOn()) m_currentPageHasContent = true; }
-	void insertTab(uint8_t /* tabType */, double /* tabPosition */) { if (!isUndoOn()) m_currentPageHasContent = true; }
-	void insertEOL() { if (!isUndoOn()) m_currentPageHasContent = true; }
- 	void insertBreak(uint8_t breakType);
+	void insertCharacter(uint32_t /* character */)
+	{
+		if (!isUndoOn()) m_currentPageHasContent = true;
+	}
+	void insertTab()
+	{
+		if (!isUndoOn()) m_currentPageHasContent = true;
+	}
+	void insertTab(uint8_t /* tabType */, double /* tabPosition */)
+	{
+		if (!isUndoOn()) m_currentPageHasContent = true;
+	}
+	void insertEOL()
+	{
+		if (!isUndoOn()) m_currentPageHasContent = true;
+	}
+	void insertBreak(uint8_t breakType);
 	void attributeChange(bool /* isOn */, uint8_t /* attribute */) {}
 	void lineSpacingChange(double /* lineSpacing */) {}
 	void justificationChange(uint8_t /* justification */) {}
@@ -54,48 +67,54 @@ public:
 	void indentFirstLineChange(int16_t /* offset */) {}
 	void setTabs(bool /* isRelative */, const std::vector<WPXTabStop> /* tabStops */) {}
 	void columnChange(WPXTextColumnType /* columnType */, uint8_t /* numColumns */,
-			const std::vector<double> & /* columnWidth */, const std::vector<bool> & /* isFixedWidth */) {}
+	                  const std::vector<double> & /* columnWidth */, const std::vector<bool> & /* isFixedWidth */) {}
 	void endDocument();
 	void endSubDocument();
 
 	void defineTable(uint8_t /* position */, uint16_t /* leftOffset */) {}
 	void addTableColumnDefinition(uint32_t /* width */, uint32_t /* leftGutter */, uint32_t /* rightGutter */,
-					uint32_t /* attributes */, uint8_t /* alignment */) {}
+	                              uint32_t /* attributes */, uint8_t /* alignment */) {}
 	void startTable();
- 	void insertRow();
- 	void insertCell();
- 	void closeCell() {}
+	void insertRow();
+	void insertCell();
+	void closeCell() {}
 	void closeRow() {}
 	void setTableCellSpan(uint16_t /* colSpan */, uint16_t /* rowSpan */) {}
 	void setTableCellFillColor(const RGBSColor * /* cellFillColor */) {}
- 	void endTable() {}
+	void endTable() {}
 	void undoChange(uint8_t undoType, uint16_t undoLevel);
 	void setTextColor(const RGBSColor * /* fontColor */) {}
 	void setTextFont(const WPXString& /* fontName */) {}
 	void setFontSize(uint16_t /* fontSize */) {}
 	void insertPageNumber(const WPXString & /* pageNumber */) {}
 	void insertNoteReference(const WPXString & /* noteReference */) {}
-	void insertNote(WPXNoteType /* noteType */, const WP3SubDocument * /* subDocument */) { if (!isUndoOn()) m_currentPageHasContent = true; }
+	void insertNote(WPXNoteType /* noteType */, const WP3SubDocument * /* subDocument */)
+	{
+		if (!isUndoOn()) m_currentPageHasContent = true;
+	}
 	void headerFooterGroup(uint8_t headerFooterType, uint8_t occurenceBits, WP3SubDocument *subDocument);
 	void suppressPage(uint16_t suppressCode);
-	void backTab() { if (!isUndoOn()) m_currentPageHasContent = true; }
+	void backTab()
+	{
+		if (!isUndoOn()) m_currentPageHasContent = true;
+	}
 	void leftIndent() {}
 	void leftIndent(double /* offset */) {}
 	void leftRightIndent() {}
 	void leftRightIndent(double /* offset */) {}
 	void insertPicture(double /* height */, double /* width */, double /* verticalOffset */, double /* horizontalOffset */, uint8_t /* leftColumn */, uint8_t /* rightColumn */,
-			uint16_t /* figureFlags */, const WPXBinaryData & /* binaryData */) {}
+	                   uint16_t /* figureFlags */, const WPXBinaryData & /* binaryData */) {}
 	void insertTextBox(double /* height */, double /* width */, double /* verticalOffset */, double /* horizontalOffset */, uint8_t /* leftColumn */, uint8_t /* rightColumn */,
-			uint16_t /* figureFlags */, const WP3SubDocument * /* subDocument */, const WP3SubDocument * /* caption */) {}
+	                   uint16_t /* figureFlags */, const WP3SubDocument * /* subDocument */, const WP3SubDocument * /* caption */) {}
 	void insertWP51Table(double /* height */, double /* width */, double /* verticalOffset */, double /* horizontalOffset */, uint8_t /* leftColumn */, uint8_t /* rightColumn */,
-			uint16_t /* figureFlags */, const WP3SubDocument * /* subDocument */, const WP3SubDocument * /* caption */) {}
+	                     uint16_t /* figureFlags */, const WP3SubDocument * /* subDocument */, const WP3SubDocument * /* caption */) {}
 
 protected:
 	void _handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList, int nextTableIndice = 0);
 
 private:
-	WP3StylesListener(const WP3StylesListener&);
-	WP3StylesListener& operator=(const WP3StylesListener&);
+	WP3StylesListener(const WP3StylesListener &);
+	WP3StylesListener &operator=(const WP3StylesListener &);
 	WPXPageSpan m_currentPage;
 
 	WPXTableList m_tableList;
@@ -108,3 +127,4 @@ private:
 };
 
 #endif /* WP3STYLESLISTENER_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

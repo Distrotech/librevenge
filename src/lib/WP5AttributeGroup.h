@@ -1,7 +1,8 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -31,30 +32,34 @@
 
 class WP5AttributeGroup : public WP5FixedLengthGroup
 {
- public:
-	WP5AttributeGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);	
+public:
+	WP5AttributeGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);
 	virtual void parse(WP5Listener *listener) = 0;
-	uint8_t getAttribute() const { return m_attribute; }
-	
- protected:
+	uint8_t getAttribute() const
+	{
+		return m_attribute;
+	}
+
+protected:
 	virtual void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 
- private:
+private:
 	uint8_t m_attribute;
 };
 
 class WP5AttributeOnGroup : public WP5AttributeGroup
 {
- public:
+public:
 	WP5AttributeOnGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);
 	void parse(WP5Listener *listener);
 };
 
 class WP5AttributeOffGroup : public WP5AttributeGroup
 {
- public:
+public:
 	WP5AttributeOffGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);
 	void parse(WP5Listener *listener);
 };
 
 #endif /* WP5ATTRIBUTEGROUP_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

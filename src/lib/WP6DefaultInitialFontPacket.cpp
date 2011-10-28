@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
@@ -49,3 +50,4 @@ void WP6DefaultInitialFontPacket::_readContents(WPXInputStream *input, WPXEncryp
 	WPD_DEBUG_MSG(("WordPerfect: Read default initial font packet (initial font descriptor pid: %i, point size: %i)\n",
 	               (int) m_initialFontDescriptorPID, (int) m_pointSize));
 }
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2003 Net Integration Technologies
  * Copyright (C) 2002-2003 William Lachance (wrlach@gmail.com)
@@ -347,3 +348,4 @@ void WP6EOLGroup::parse(WP6Listener *listener)
 		listener->insertBreak(WPX_SOFT_PAGE_BREAK);
 	}
 }
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

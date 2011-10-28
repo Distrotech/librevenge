@@ -1,5 +1,6 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -17,7 +18,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -28,15 +29,16 @@
 
 class WP6SetNumberGroup : public WP6VariableLengthGroup
 {
-  public:
-	WP6SetNumberGroup(WPXInputStream *input, WPXEncryption *encryption);	
+public:
+	WP6SetNumberGroup(WPXInputStream *input, WPXEncryption *encryption);
 	~WP6SetNumberGroup();
 	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 	void parse(WP6Listener *listener);
-  private:
+private:
 	uint8_t m_countOfLevelNumbersSetting;
 	uint8_t m_startingLevelNumber;
 	uint16_t m_countNumbers;
 };
 
 #endif /* WP6SETNUMBERGROUP_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

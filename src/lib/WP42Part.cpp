@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2003-2004 Marc Maurer (uwog@uwog.net)
@@ -47,3 +48,4 @@ WP42Part *WP42Part::constructPart(WPXInputStream *input, WPXEncryption *encrypti
 	WPD_DEBUG_MSG(("WordPerfect: constructMultiByteFunctionGroup(input, val)\n"));
 	return WP42MultiByteFunctionGroup::constructMultiByteFunctionGroup(input, encryption, readVal);
 }
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

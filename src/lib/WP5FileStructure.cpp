@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
@@ -45,3 +46,4 @@ int WP5_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16] =
 	10,
 	12	// 0xCF
 };
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

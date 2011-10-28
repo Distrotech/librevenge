@@ -1,6 +1,7 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -18,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -30,21 +31,34 @@
 
 class WP5SpecialHeaderIndex
 {
- public:
-	WP5SpecialHeaderIndex(WPXInputStream * input, WPXEncryption *encryption);	
-	uint16_t getType() const { return m_type; }
-	uint16_t getNumOfIndexes() const { return m_numOfIndexes; }
-	uint16_t getIndexBlockSize() const { return m_indexBlockSize; }
-	uint32_t getNextBlockOffset() const { return m_nextBlockOffset; }
+public:
+	WP5SpecialHeaderIndex(WPXInputStream *input, WPXEncryption *encryption);
+	uint16_t getType() const
+	{
+		return m_type;
+	}
+	uint16_t getNumOfIndexes() const
+	{
+		return m_numOfIndexes;
+	}
+	uint16_t getIndexBlockSize() const
+	{
+		return m_indexBlockSize;
+	}
+	uint32_t getNextBlockOffset() const
+	{
+		return m_nextBlockOffset;
+	}
 
- protected:
- 	void _read(WPXInputStream *input, WPXEncryption *encryption);
- 
- private:
+protected:
+	void _read(WPXInputStream *input, WPXEncryption *encryption);
+
+private:
 	uint16_t m_type;
 	uint16_t m_numOfIndexes;
- 	uint16_t m_indexBlockSize;
- 	uint32_t m_nextBlockOffset;
+	uint16_t m_indexBlockSize;
+	uint32_t m_nextBlockOffset;
 };
 
 #endif /* WP5SPECIALHEADERINDEX_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

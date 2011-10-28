@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
@@ -50,3 +51,4 @@ void WP6DisplayNumberReferenceGroup::parse(WP6Listener *listener)
 	else
 		listener->displayNumberReferenceGroupOff(getSubGroup());
 }
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

@@ -1,7 +1,8 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2007 Fridrich Strba (fridrich.strba@bluewin.ch)
  * Copyright (C) 2007 Novell Inc. (http://www.novell.com)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -36,12 +37,12 @@ class WP6Listener;
 class WP6BoxGroup : public WP6VariableLengthGroup
 {
 public:
-	WP6BoxGroup(WPXInputStream *input, WPXEncryption *encryption);	
+	WP6BoxGroup(WPXInputStream *input, WPXEncryption *encryption);
 	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 	void parse(WP6Listener *listener);
 
 private:
-	uint8_t m_generalPositioningFlagsMask, m_generalPositioningFlagsData;	
+	uint8_t m_generalPositioningFlagsMask, m_generalPositioningFlagsData;
 	bool m_hasHorizontalPositioning;
 	uint8_t m_horizontalPositioningFlags;
 	int16_t m_horizontalOffset;
@@ -63,3 +64,4 @@ private:
 };
 
 #endif /* WP6BOXGROUP_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

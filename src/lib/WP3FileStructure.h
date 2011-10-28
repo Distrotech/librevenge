@@ -1,7 +1,8 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2004 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2004-2005 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -27,7 +28,7 @@
 #define WP3FILESTRUCTURE_H
 
 // size of the fixed length function groups 0xC0 to 0xCF
-extern int WP3_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16]; 
+extern int WP3_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16];
 
 /* Main function group list  */
 
@@ -178,3 +179,4 @@ extern int WP3_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16];
 #define WP3_COLUMN_TYPE_EXTENDED 0x03
 
 #endif /* WP3FILESTRUCTURE_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

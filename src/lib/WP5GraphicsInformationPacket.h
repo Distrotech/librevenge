@@ -1,7 +1,8 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
  * Copyright (C) 2007 Novell Inc. (http://www.novell.com)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -36,11 +37,19 @@ public:
 	WP5GraphicsInformationPacket(WPXInputStream *input, WPXEncryption *encryption, int id, uint32_t dataOffset, uint32_t dataSize);
 	~WP5GraphicsInformationPacket();
 	void _readContents(WPXInputStream *input, WPXEncryption *encryption, uint32_t dataSize);
-	const std::vector<WPXBinaryData *> &getImages() const { return m_images; }
-	const WPXBinaryData *getImage( unsigned long imageIndex ) const { if (imageIndex < m_images.size()) return m_images[imageIndex]; return 0; }
+	const std::vector<WPXBinaryData *> &getImages() const
+	{
+		return m_images;
+	}
+	const WPXBinaryData *getImage( unsigned long imageIndex ) const
+	{
+		if (imageIndex < m_images.size()) return m_images[imageIndex];
+		return 0;
+	}
 
 private:
 	std::vector<WPXBinaryData *> m_images;
 	std::vector<uint8_t *> m_data;
 };
 #endif /* WP5GRAPHICSINFORMATIONPACKET_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

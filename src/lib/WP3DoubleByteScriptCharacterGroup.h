@@ -1,8 +1,9 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -20,7 +21,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -33,14 +34,15 @@
 class WP3DoubleByteScriptCharacterGroup : public WP3FixedLengthGroup
 {
 public:
-	WP3DoubleByteScriptCharacterGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);	
+	WP3DoubleByteScriptCharacterGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);
 	void parse(WP3Listener *listener);
-	
- protected:
+
+protected:
 	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 
- private:
+private:
 	uint16_t m_scriptCharacter;
 };
 
 #endif /* WP3DOUBLEBYTESCRIPTCHARACTERGROUP_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

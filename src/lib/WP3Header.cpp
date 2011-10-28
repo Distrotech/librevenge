@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2004 Marc Maurer (uwog@uwog.net)
  *
@@ -31,3 +32,4 @@ WP3Header::WP3Header(WPXInputStream *input, WPXEncryption *encryption, uint32_t 
 {
 	// nothing to do here really...
 }
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

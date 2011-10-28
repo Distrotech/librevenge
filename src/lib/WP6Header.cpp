@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
@@ -58,3 +59,4 @@ void WP6Header::_readIndexInformation(WPXInputStream *input, WPXEncryption *encr
 	// ignore the 10 reserved bytes that follow (jump to the offset of the Index Header #1, where we can resume parsing)
 	input->seek(m_indexHeaderOffset + WP6_INDEX_HEADER_INDICES_POSITION, WPX_SEEK_SET);
 }
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

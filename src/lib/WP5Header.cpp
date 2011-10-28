@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
@@ -33,3 +34,4 @@ WP5Header::WP5Header(WPXInputStream *input, WPXEncryption *encryption, uint32_t 
 	input->seek(2, WPX_SEEK_CUR); // skip the reserved 2 bytes
 	// nothing to do here really...
 }
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

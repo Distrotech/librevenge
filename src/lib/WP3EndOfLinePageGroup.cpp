@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2004 Marc Maurer (uwog@uwog.net)
  *
@@ -147,3 +148,4 @@ void WP3EndOfLinePageGroup::parse(WP3Listener *listener)
 		break;
 	}
 }
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

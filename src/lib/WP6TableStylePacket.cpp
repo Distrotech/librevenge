@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2007 Fridrich Strba (fridrich.strba@bluewin.ch)
  * Copyright (C) 2007 Novell Inc. (http://www.novell.com)
@@ -40,3 +41,4 @@ WP6TableStylePacket::~WP6TableStylePacket()
 void WP6TableStylePacket::_readContents(WPXInputStream * /* input */, WPXEncryption * /* encryption */)
 {
 }
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

@@ -1,7 +1,8 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -31,15 +32,16 @@
 class WP6UndoGroup : public WP6FixedLengthGroup
 {
 public:
-	WP6UndoGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);	
+	WP6UndoGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);
 	void parse(WP6Listener *listener);
-	
- protected:
+
+protected:
 	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 
- private:
+private:
 	uint8_t m_undoType;
 	uint16_t m_undoLevel;
 
 };
 #endif /* WP6UNDOGROUP_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

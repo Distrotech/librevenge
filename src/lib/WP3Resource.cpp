@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
@@ -45,3 +46,4 @@ const WPXString WP3Resource::getResourceTypeString() const
 		resourceTypeString.append((char)((m_resourceType >> (j*8)) & 0xff));
 	return resourceTypeString;
 }
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

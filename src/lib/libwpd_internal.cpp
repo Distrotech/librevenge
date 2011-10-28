@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2002, 2005 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002, 2004 Marc Maurer (uwog@uwog.net)
@@ -6273,3 +6274,4 @@ int appleWorldScriptToUCS4(uint16_t character, const uint32_t **chars)
 	return 1;
 
 }
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

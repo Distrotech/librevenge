@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
@@ -44,3 +45,4 @@ void WP6SubDocument::parse(WP6Listener *listener) const
 	tmpStream->seek(0, WPX_SEEK_SET);
 	WP6Parser::parseDocument(tmpStream, 0, listener);
 }
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

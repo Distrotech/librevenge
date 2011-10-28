@@ -1,7 +1,8 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -31,28 +32,28 @@
 class WP6EOLGroup : public WP6VariableLengthGroup
 {
 public:
-	WP6EOLGroup(WPXInputStream *input, WPXEncryption *encryption);	
+	WP6EOLGroup(WPXInputStream *input, WPXEncryption *encryption);
 	~WP6EOLGroup();
 	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 	void parse(WP6Listener *listener);
 
- private:
- 	WP6EOLGroup(const WP6EOLGroup&);
- 	WP6EOLGroup& operator=(const WP6EOLGroup&);
+private:
+	WP6EOLGroup(const WP6EOLGroup &);
+	WP6EOLGroup &operator=(const WP6EOLGroup &);
 	uint8_t m_colSpan, m_rowSpan;
 	bool m_boundFromAbove;
 
- 	bool m_useCellAttributes, m_useCellJustification;
+	bool m_useCellAttributes, m_useCellJustification;
 	bool m_ignoreInCalculations, m_cellIsLocked;
 	uint32_t m_cellAttributes;
 	uint8_t m_cellJustification;
 	WPXVerticalAlignment m_cellVerticalAlign;
- 
+
 	// cell forground and background color
- 	RGBSColor * m_cellFgColor;
- 	RGBSColor * m_cellBgColor;
-	RGBSColor * m_cellBorderColor;
- 
+	RGBSColor *m_cellFgColor;
+	RGBSColor *m_cellBgColor;
+	RGBSColor *m_cellBorderColor;
+
 	uint8_t m_cellBorders;
 	bool m_isHeaderRow;
 	bool m_isMinimumHeight;
@@ -62,3 +63,4 @@ public:
 };
 
 #endif /* WP6EOLGROUP_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

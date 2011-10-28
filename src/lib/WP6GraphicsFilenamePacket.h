@@ -1,7 +1,8 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2007 Fridrich Strba (fridrich.strba@bluewin.ch)
  * Copyright (C) 2007 Novell Inc. (http://www.novell.com)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -38,14 +39,18 @@ public:
 	~WP6GraphicsFilenamePacket();
 	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 	void parse(WP6Listener * /*listener */) const {}
-	const std::vector<uint16_t> &getChildIds() const { return m_childIds; }
-	
+	const std::vector<uint16_t> &getChildIds() const
+	{
+		return m_childIds;
+	}
+
 
 private:
-	WP6GraphicsFilenamePacket(const WP6GraphicsFilenamePacket&);             
-	WP6GraphicsFilenamePacket& operator=(const WP6GraphicsFilenamePacket&);
+	WP6GraphicsFilenamePacket(const WP6GraphicsFilenamePacket &);
+	WP6GraphicsFilenamePacket &operator=(const WP6GraphicsFilenamePacket &);
 	std::vector<uint16_t> m_childIds;
-	const uint8_t m_flags;           
-	
+	const uint8_t m_flags;
+
 };
 #endif /* WP6GRAPHICSFILENAMEPACKET_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

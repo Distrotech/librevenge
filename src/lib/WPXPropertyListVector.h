@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2005 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2005 Net Integration Technologies, Inc. (http://www.net-itech.com)
@@ -41,8 +42,8 @@ public:
 	void append(const WPXPropertyList &elem);
 	void append(const WPXPropertyListVector &vec);
 	unsigned long count() const;
-	const WPXPropertyList& operator[](unsigned long index) const;
-	WPXPropertyListVector& operator=(const WPXPropertyListVector& vect);
+	const WPXPropertyList &operator[](unsigned long index) const;
+	WPXPropertyListVector &operator=(const WPXPropertyListVector &vect);
 
 	class Iter
 	{
@@ -52,12 +53,12 @@ public:
 		void rewind();
 		bool next();
 		bool last();
-		const WPXPropertyList & operator()() const;
+		const WPXPropertyList &operator()() const;
 
 	private:
 		WPXPropertyListVectorIterImpl *m_iterImpl;
-		Iter(const Iter&);
-		Iter& operator=(const Iter&);
+		Iter(const Iter &);
+		Iter &operator=(const Iter &);
 	};
 
 	friend class WPXPropertyListVector::Iter;
@@ -67,3 +68,4 @@ private:
 };
 
 #endif /* WPXPROPERTYLISTVECTOR_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

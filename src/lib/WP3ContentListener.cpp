@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2004 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2004-2006 Fridrich Strba (fridrich.strba@bluewin.ch)
@@ -1186,3 +1187,4 @@ void WP3ContentListener::_flushText()
 	_insertText(m_parseState->m_textBuffer);
 	m_parseState->m_textBuffer.clear();
 }
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

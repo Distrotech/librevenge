@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
@@ -85,3 +86,4 @@ void WP1PictureGroup::parse(WP1Listener *listener)
 	WPD_DEBUG_MSG(("WordPerfect: handling a Picture group\n"));
 	listener->insertPicture(m_width, m_height, m_binaryData);
 }
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

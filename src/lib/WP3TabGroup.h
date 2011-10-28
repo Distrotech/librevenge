@@ -1,6 +1,7 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2007 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -18,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -31,16 +32,17 @@
 class WP3TabGroup : public WP3FixedLengthGroup
 {
 public:
-	WP3TabGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);	
+	WP3TabGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);
 	void parse(WP3Listener *listener);
-	
- protected:
+
+protected:
 	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 
- private:
- 	uint8_t m_subGroup;
+private:
+	uint8_t m_subGroup;
 	uint8_t m_modeType;
 	double m_position;
 };
 
 #endif /* WP3TABGROUP_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

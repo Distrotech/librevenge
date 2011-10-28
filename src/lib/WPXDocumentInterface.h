@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2002-2005 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
@@ -40,10 +41,10 @@ class WPXInputStream;
 
 class WPXDocumentInterface
 {
- public:
- 	virtual ~WPXDocumentInterface() {}
-	
-	/** 
+public:
+	virtual ~WPXDocumentInterface() {}
+
+	/**
 	Called when all document metadata should be set. This is always the first callback made.
 	\param propList Property list for the metadata. May contain:
 	\li \c dc:creator
@@ -96,16 +97,16 @@ class WPXDocumentInterface
 	\li \c meta:creation-date Document creation date
 	\li \c meta:initial-creator The document's author
 	\li \c meta:keyword The document's keywords
-	\li \c 
+	\li \c
 	*/
- 	virtual void setDocumentMetaData(const WPXPropertyList &propList) = 0;
+	virtual void setDocumentMetaData(const WPXPropertyList &propList) = 0;
 
 	/**
 	Called at the start of the parsing process. This is always the second callback made.
 	*/
 	virtual void startDocument() = 0;
 	/**
-        Called at the end of the parsing process. This is always the last callback made.
+	    Called at the end of the parsing process. This is always the last callback made.
 	*/
 	virtual void endDocument() = 0;
 
@@ -133,7 +134,7 @@ class WPXDocumentInterface
 
 	/**
 	Called when a header should be opened (a sub-document will be placed inside of it).
-	\param propList Property list for the header. May contain: 
+	\param propList Property list for the header. May contain:
 	\li \c libwpd:occurrence Determines on which pages the header will occur (odd, even, or all)
 	*/
 	virtual void openHeader(const WPXPropertyList &propList) = 0;
@@ -144,7 +145,7 @@ class WPXDocumentInterface
 
 	/**
 	Called when a footer should be opened (a sub-document will be placed inside of it).
-	\param propList Property list for the footer. May contain: 
+	\param propList Property list for the footer. May contain:
 	\li \c libwpd:occurrence Determines on which pages the footer will occur (odd, even, or all)
 	*/
 	virtual void openFooter(const WPXPropertyList &propList) = 0;
@@ -177,7 +178,7 @@ class WPXDocumentInterface
 	Called when a paragraph is closed.
 	*/
 	virtual void closeParagraph() = 0;
-	
+
 	virtual void defineCharacterStyle(const WPXPropertyList &propList) = 0;
 
 	/**
@@ -208,8 +209,8 @@ class WPXDocumentInterface
 	Called when a new section is opened
 	\param propList Property list for the section. May contain:
 	\li \c fo:margin-left The left indentation of this section, in inches
-	\li \c fo:margin-right The right indentation of this section, in inches 
-	\li \c libwpd:margin-bottom  Extra space to add after the section, in inches 
+	\li \c fo:margin-right The right indentation of this section, in inches
+	\li \c libwpd:margin-bottom  Extra space to add after the section, in inches
 	\li \c text:dont-balance-text-columns Whether or not to balance text columns
 	\param columns List of definitions of each column: left gutter, right gutter, and width (includes the gutters). Empty if there is only one column in the section. Each column may contain:
 	\li \c style:rel-width
@@ -238,8 +239,8 @@ class WPXDocumentInterface
 	/**
 	Called when a line break should be inserted
 	*/
- 	virtual void insertLineBreak() = 0;
-	
+	virtual void insertLineBreak() = 0;
+
 	/**
 	Called when a field should be inserted. Field types may include:
 	\li \c text:page-number Current page number
@@ -271,16 +272,16 @@ class WPXDocumentInterface
 	\li \c text:min-label-width The distance between the bullet and the actual text, stored in inches
 	\li \c text:space-before The indentation level of the lists, stored in inches
 	*/
-	virtual void defineUnorderedListLevel(const WPXPropertyList &propList) = 0;	
+	virtual void defineUnorderedListLevel(const WPXPropertyList &propList) = 0;
 	/**
 	Called when a new ordered list level should be opened
-	\param propList Defines a set of properties for the list level. May contain:	
+	\param propList Defines a set of properties for the list level. May contain:
 	\li \c libwpd:id Which list level definition should be used
 	*/
 	virtual void openOrderedListLevel(const WPXPropertyList &propList) = 0;
 	/**
 	Called when a new unordered list level should be opened
-	\param propList Defines a set of properties for the list level. May contain:	
+	\param propList Defines a set of properties for the list level. May contain:
 	\li \c libwpd:id Which list level definition should be used
 	*/
 	virtual void openUnorderedListLevel(const WPXPropertyList &propList) = 0;
@@ -313,7 +314,7 @@ class WPXDocumentInterface
 	/**
 	Called when a list element should be closed
 	*/
-	virtual void closeListElement() = 0;       
+	virtual void closeListElement() = 0;
 
 	/**
 	Called when a footnote should be opened (a sub-document will be placed inside of it)
@@ -368,7 +369,7 @@ class WPXDocumentInterface
 	\param columns Column definitions for the table. May contain
 	\li \c style:column-width Width of a column, in inches
 	*/
- 	virtual void openTable(const WPXPropertyList &propList, const WPXPropertyListVector &columns) = 0;
+	virtual void openTable(const WPXPropertyList &propList, const WPXPropertyListVector &columns) = 0;
 	/**
 	Called when a new table row is opened
 	\param propList Defines a set of properties for the table row. May contain:
@@ -376,7 +377,7 @@ class WPXDocumentInterface
 	\li \c style:min-row-height The row's minimum height, in inches
 	\li \c libwpd:is-header-row This row contains headings of columns and should repeat at every page (for tables that span several pages)
 	*/
- 	virtual void openTableRow(const WPXPropertyList &propList) = 0;
+	virtual void openTableRow(const WPXPropertyList &propList) = 0;
 	/**
 	Called when the current table row is closed
 	*/
@@ -395,7 +396,7 @@ class WPXDocumentInterface
 	\li \c fo:background-color Color of the cell (encoded in hex: \#RRGGBB)
 	\li \c style:vertical-align Vertical alignment of the content in the cell (top, middle, or bottom)
 	*/
- 	virtual void openTableCell(const WPXPropertyList &propList) = 0;
+	virtual void openTableCell(const WPXPropertyList &propList) = 0;
 	/**
 	Called when the current table cell is closed
 	*/
@@ -410,7 +411,7 @@ class WPXDocumentInterface
 	/**
 	Called when the current table is closed
 	*/
- 	virtual void closeTable() = 0;
+	virtual void closeTable() = 0;
 	/**
 	Called when a positioned box should be opened
 	\param propList Defines a set of properties for the box. May contain:
@@ -448,3 +449,4 @@ class WPXDocumentInterface
 };
 
 #endif /* WPXDOCUMENTINTERFACEIMPL_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

@@ -1,7 +1,8 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -30,8 +31,8 @@
 
 class WP5TableEOLGroup : public WP5VariableLengthGroup
 {
- public:
-	WP5TableEOLGroup(WPXInputStream *input, WPXEncryption *encryption);	
+public:
+	WP5TableEOLGroup(WPXInputStream *input, WPXEncryption *encryption);
 	~WP5TableEOLGroup();
 	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 	void parse(WP5Listener *listener);
@@ -46,7 +47,8 @@ private:
 	uint8_t m_rowSpan;
 	bool m_spannedFromAbove;
 	uint16_t m_cellAttributes;
-	uint8_t m_cellJustification;	
+	uint8_t m_cellJustification;
 };
 
 #endif /* WP5TABLEEOLGROUP_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

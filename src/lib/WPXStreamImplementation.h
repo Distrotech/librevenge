@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2006 Ariya Hidayat (ariya@kde.org)
  *
@@ -12,8 +13,8 @@
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the 
- * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02111-1301 USA
  *
  * For further information visit http://libwpd.sourceforge.net
@@ -29,21 +30,21 @@ class WPXFileStreamPrivate;
 class WPXFileStream: public WPXInputStream
 {
 public:
-	explicit WPXFileStream(const char* filename);
+	explicit WPXFileStream(const char *filename);
 	~WPXFileStream();
-	
+
 	const unsigned char *read(unsigned long numBytes, unsigned long &numBytesRead);
 	long tell();
 	int seek(long offset, WPX_SEEK_TYPE seekType);
 	bool atEOS();
 
 	bool isOLEStream();
-	WPXInputStream *getDocumentOLEStream(const char * name);
+	WPXInputStream *getDocumentOLEStream(const char *name);
 
 private:
-	WPXFileStreamPrivate* d;
-	WPXFileStream(const WPXFileStream&); // copy is not allowed
-	WPXFileStream& operator=(const WPXFileStream&); // assignment is not allowed
+	WPXFileStreamPrivate *d;
+	WPXFileStream(const WPXFileStream &); // copy is not allowed
+	WPXFileStream &operator=(const WPXFileStream &); // assignment is not allowed
 };
 
 class WPXStringStreamPrivate;
@@ -60,12 +61,13 @@ public:
 	bool atEOS();
 
 	bool isOLEStream();
-	WPXInputStream *getDocumentOLEStream(const char * name);
+	WPXInputStream *getDocumentOLEStream(const char *name);
 
 private:
-	WPXStringStreamPrivate* d;
-	WPXStringStream(const WPXStringStream&); // copy is not allowed
-	WPXStringStream& operator=(const WPXStringStream&); // assignment is not allowed
+	WPXStringStreamPrivate *d;
+	WPXStringStream(const WPXStringStream &); // copy is not allowed
+	WPXStringStream &operator=(const WPXStringStream &); // assignment is not allowed
 };
 
 #endif // __WPXSTREAMIMPLEMENTATION_H__
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

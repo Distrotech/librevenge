@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
@@ -113,3 +114,4 @@ void WP1SetTabsGroup::parse(WP1Listener *listener)
 #endif
 	listener->setTabs(m_tabStops);
 }
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

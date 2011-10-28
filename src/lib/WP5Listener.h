@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
@@ -63,14 +64,14 @@ public:
 
 	virtual void defineTable(uint8_t position, uint16_t leftOffset) = 0;
 	virtual void addTableColumnDefinition(uint32_t width, uint32_t leftGutter, uint32_t rightGutter,
-				uint32_t attributes, uint8_t alignment) = 0;
+	                                      uint32_t attributes, uint8_t alignment) = 0;
 	virtual void startTable() = 0;
- 	virtual void insertRow(uint16_t rowHeight, bool isMinimumHeight, bool isHeaderRow) = 0;
- 	virtual void insertCell(uint8_t colSpan, uint8_t rowSpan, uint8_t borderBits,
-				const RGBSColor * cellFgColor, const RGBSColor * cellBgColor, 
-				const RGBSColor * cellBorderColor, WPXVerticalAlignment cellVerticalAlignment, 
-				bool useCellAttributes, uint32_t cellAttributes) = 0;
- 	virtual void endTable() = 0;
+	virtual void insertRow(uint16_t rowHeight, bool isMinimumHeight, bool isHeaderRow) = 0;
+	virtual void insertCell(uint8_t colSpan, uint8_t rowSpan, uint8_t borderBits,
+	                        const RGBSColor *cellFgColor, const RGBSColor *cellBgColor,
+	                        const RGBSColor *cellBorderColor, WPXVerticalAlignment cellVerticalAlignment,
+	                        bool useCellAttributes, uint32_t cellAttributes) = 0;
+	virtual void endTable() = 0;
 
 	virtual void insertNoteReference(const WPXString &noteReference) = 0;
 	virtual void insertNote(WPXNoteType noteType, const WP5SubDocument *subDocument) = 0;
@@ -81,13 +82,17 @@ public:
 	virtual void boxOff() = 0;
 	virtual void insertGraphicsData(const WPXBinaryData *data) = 0;
 
-	void setPrefixData(WP5PrefixData *prefixData) { m_prefixData = prefixData; }
-	const WP5GeneralPacketData * getGeneralPacketData(const int type) const;
+	void setPrefixData(WP5PrefixData *prefixData)
+	{
+		m_prefixData = prefixData;
+	}
+	const WP5GeneralPacketData *getGeneralPacketData(const int type) const;
 
 private:
-	WP5Listener(const WP5Listener&);
-	WP5Listener& operator=(const WP5Listener&);
+	WP5Listener(const WP5Listener &);
+	WP5Listener &operator=(const WP5Listener &);
 	WP5PrefixData *m_prefixData;
 };
 
 #endif /* WP5LISTENER_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

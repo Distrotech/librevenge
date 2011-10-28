@@ -1,7 +1,8 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -30,7 +31,7 @@
 #include "libwpd_internal.h"
 
 struct _RGBSColor;
-typedef struct _RGBSColor RGBSColor; 
+typedef struct _RGBSColor RGBSColor;
 
 class WP6FillStylePacket : public WP6PrefixDataPacket
 {
@@ -39,10 +40,17 @@ public:
 	~WP6FillStylePacket();
 	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 	void parse(WP6Listener * /* listener */) const {}
-	const RGBSColor * getFgColor() const { return &m_fgColor; }
-	const RGBSColor * getBgColor() const { return &m_bgColor; }
-private:              
+	const RGBSColor *getFgColor() const
+	{
+		return &m_fgColor;
+	}
+	const RGBSColor *getBgColor() const
+	{
+		return &m_bgColor;
+	}
+private:
 	RGBSColor m_fgColor;
 	RGBSColor m_bgColor;
 };
 #endif /* WP6FILLSTYLEPACKET_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

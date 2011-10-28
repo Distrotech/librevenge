@@ -1,6 +1,7 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -18,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -33,8 +34,9 @@ class WP3SubDocument : public WPXSubDocument
 {
 public:
 	WP3SubDocument(WPXInputStream *input, WPXEncryption *encryption, const unsigned dataSize);
-	WP3SubDocument(uint8_t * streamData, const unsigned dataSize);
+	WP3SubDocument(uint8_t *streamData, const unsigned dataSize);
 	void parse(WP3Listener *listener) const;
 
 };
 #endif /* WP3SUBDOCUMENT_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

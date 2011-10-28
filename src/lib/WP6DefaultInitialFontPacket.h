@@ -1,7 +1,8 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -29,16 +30,23 @@
 
 class WP6DefaultInitialFontPacket : public WP6PrefixDataPacket
 {
- public:
+public:
 	WP6DefaultInitialFontPacket(WPXInputStream *input, WPXEncryption *encryption, int id, uint32_t dataOffset, uint32_t dataSize);
 	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
-	uint16_t getInitialFontDescriptorPID() const { return m_initialFontDescriptorPID; }
-	uint16_t getPointSize() const { return m_pointSize; }
+	uint16_t getInitialFontDescriptorPID() const
+	{
+		return m_initialFontDescriptorPID;
+	}
+	uint16_t getPointSize() const
+	{
+		return m_pointSize;
+	}
 	void parse(WP6Listener *listener) const;
-	
- private:
+
+private:
 	uint16_t m_numPrefixIDs;
 	uint16_t m_initialFontDescriptorPID;
 	uint16_t m_pointSize;
 };
 #endif
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

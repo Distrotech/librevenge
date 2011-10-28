@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
@@ -42,7 +43,7 @@ public:
 	WP6VariableLengthGroup(); // WP6VariableLengthGroup should _never_ be constructed, only its inherited classes
 	virtual ~WP6VariableLengthGroup();
 
-	static WP6VariableLengthGroup * constructVariableLengthGroup(WPXInputStream *input, WPXEncryption *encryption, const uint8_t groupID);
+	static WP6VariableLengthGroup *constructVariableLengthGroup(WPXInputStream *input, WPXEncryption *encryption, const uint8_t groupID);
 
 	static bool isGroupConsistent(WPXInputStream *input, WPXEncryption *encryption, const uint8_t groupID);
 
@@ -50,17 +51,38 @@ protected:
 	void _read(WPXInputStream *input, WPXEncryption *encryption);
 	virtual void _readContents(WPXInputStream * /* input */, WPXEncryption * /* encryption */) {} // we don't always need more information than that provided generically
 
-	uint8_t getSubGroup() const { return m_subGroup; }
-	uint16_t getSize() const { return m_size; }
-	uint8_t getFlags() const { return m_flags; }
-	uint8_t getNumPrefixIDs() const { return m_numPrefixIDs; }
-	const uint16_t * getPrefixIDs() const { return m_prefixIDs; }
-	uint16_t getSizeNonDeletable() const { return m_sizeNonDeletable; }
-	uint16_t getSizeDeletable() const { return m_sizeDeletable; }
+	uint8_t getSubGroup() const
+	{
+		return m_subGroup;
+	}
+	uint16_t getSize() const
+	{
+		return m_size;
+	}
+	uint8_t getFlags() const
+	{
+		return m_flags;
+	}
+	uint8_t getNumPrefixIDs() const
+	{
+		return m_numPrefixIDs;
+	}
+	const uint16_t *getPrefixIDs() const
+	{
+		return m_prefixIDs;
+	}
+	uint16_t getSizeNonDeletable() const
+	{
+		return m_sizeNonDeletable;
+	}
+	uint16_t getSizeDeletable() const
+	{
+		return m_sizeDeletable;
+	}
 
 private:
-	WP6VariableLengthGroup(const WP6VariableLengthGroup&);
-	WP6VariableLengthGroup& operator=(const WP6VariableLengthGroup&);
+	WP6VariableLengthGroup(const WP6VariableLengthGroup &);
+	WP6VariableLengthGroup &operator=(const WP6VariableLengthGroup &);
 	uint8_t m_subGroup;
 	uint16_t m_size;
 	uint8_t m_flags;
@@ -71,3 +93,4 @@ private:
 };
 
 #endif /* WP6VARIABLELENGTHGROUP_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

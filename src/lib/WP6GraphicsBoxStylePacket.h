@@ -1,7 +1,8 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2007 Fridrich Strba (fridrich.strba@bluewin.ch)
  * Copyright (C) 2007 Novell Inc. (http://www.novell.com)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,7 +20,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -38,24 +39,66 @@ public:
 	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 	void parse(WP6Listener * /*listener*/) const {}
 
-	uint8_t getGeneralPositioningFlags() const { return m_generalPositioningFlags; }
-	uint8_t getHorizontalPositioningFlags() const { return m_horizontalPositioningFlags; }
-	int16_t getHorizontalOffset() const { return m_horizontalOffset; }
-	uint8_t getLeftColumn() const { return m_leftColumn; }
-	uint8_t getRightColumn() const { return m_rightColumn; }
-	uint8_t getVerticalPositioningFlags() const { return m_verticalPositioningFlags; }
-	int16_t getVerticalOffset() const { return m_verticalOffset; }
-	uint8_t getWidthFlags() const { return m_widthFlags; }
-	uint16_t getWidth() const { return m_width; }
-	uint8_t getHeightFlags() const { return m_heightFlags; }
-	uint16_t getHeight() const { return m_height; }
-	uint8_t getContentType() const { return m_contentType; }
-	uint16_t getNativeWidth() const { return m_nativeWidth; }
-	uint16_t getNativeHeight() const { return m_nativeHeight; }
+	uint8_t getGeneralPositioningFlags() const
+	{
+		return m_generalPositioningFlags;
+	}
+	uint8_t getHorizontalPositioningFlags() const
+	{
+		return m_horizontalPositioningFlags;
+	}
+	int16_t getHorizontalOffset() const
+	{
+		return m_horizontalOffset;
+	}
+	uint8_t getLeftColumn() const
+	{
+		return m_leftColumn;
+	}
+	uint8_t getRightColumn() const
+	{
+		return m_rightColumn;
+	}
+	uint8_t getVerticalPositioningFlags() const
+	{
+		return m_verticalPositioningFlags;
+	}
+	int16_t getVerticalOffset() const
+	{
+		return m_verticalOffset;
+	}
+	uint8_t getWidthFlags() const
+	{
+		return m_widthFlags;
+	}
+	uint16_t getWidth() const
+	{
+		return m_width;
+	}
+	uint8_t getHeightFlags() const
+	{
+		return m_heightFlags;
+	}
+	uint16_t getHeight() const
+	{
+		return m_height;
+	}
+	uint8_t getContentType() const
+	{
+		return m_contentType;
+	}
+	uint16_t getNativeWidth() const
+	{
+		return m_nativeWidth;
+	}
+	uint16_t getNativeHeight() const
+	{
+		return m_nativeHeight;
+	}
 
 private:
-	WP6GraphicsBoxStylePacket(const WP6GraphicsBoxStylePacket&);             
-	WP6GraphicsBoxStylePacket& operator=(const WP6GraphicsBoxStylePacket&);
+	WP6GraphicsBoxStylePacket(const WP6GraphicsBoxStylePacket &);
+	WP6GraphicsBoxStylePacket &operator=(const WP6GraphicsBoxStylePacket &);
 	bool m_isLibraryStyle;
 	WPXString m_boxStyleName;
 	uint8_t m_generalPositioningFlags;
@@ -73,3 +116,4 @@ private:
 	uint16_t m_nativeWidth, m_nativeHeight;
 };
 #endif /* WP6GRAPHICSBOXSTYLEPACKET_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

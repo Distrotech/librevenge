@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2003 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2004 Marc Maurer (uwog@uwog.net)
@@ -39,18 +40,30 @@
 class WP5StylesListener : public WP5Listener, protected WPXStylesListener
 {
 public:
-	WP5StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, std::vector<WP5SubDocument*> &subDocuments);
+	WP5StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, std::vector<WP5SubDocument *> &subDocuments);
 
 	void startDocument() {}
 	void startSubDocument() {}
 	void setFont(const WPXString& /* fontName */, double /* fontSize */) {}
-	void setTabs(const std::vector<WPXTabStop>& /* tabStops */, uint16_t /* tabOffset */) {} 
-	void insertCharacter(uint32_t /* character */) { /*if (!isUndoOn())*/ m_currentPageHasContent = true; }
-	void insertTab(uint8_t /* tabType */, double /* tabPosition */) { /*if (!isUndoOn())*/ m_currentPageHasContent = true; }
-	virtual void insertIndent(uint8_t /* indentType */, double /* indentPosition */) { /*if (!isUndoOn())*/ m_currentPageHasContent = true; }
+	void setTabs(const std::vector<WPXTabStop>& /* tabStops */, uint16_t /* tabOffset */) {}
+	void insertCharacter(uint32_t /* character */)
+	{
+		/*if (!isUndoOn())*/ m_currentPageHasContent = true;
+	}
+	void insertTab(uint8_t /* tabType */, double /* tabPosition */)
+	{
+		/*if (!isUndoOn())*/ m_currentPageHasContent = true;
+	}
+	virtual void insertIndent(uint8_t /* indentType */, double /* indentPosition */)
+	{
+		/*if (!isUndoOn())*/ m_currentPageHasContent = true;
+	}
 	void characterColorChange(uint8_t /* red */, uint8_t /* green */, uint8_t /* blue */) {};
-	void insertEOL() { /*if (!isUndoOn())*/ m_currentPageHasContent = true; }
- 	void insertBreak(uint8_t breakType);
+	void insertEOL()
+	{
+		/*if (!isUndoOn())*/ m_currentPageHasContent = true;
+	}
+	void insertBreak(uint8_t breakType);
 	void attributeChange(bool /* isOn */, uint8_t /* attribute */) {}
 	void lineSpacingChange(double /* lineSpacing */) {}
 	void justificationChange(uint8_t /* justification */) {}
@@ -62,14 +75,14 @@ public:
 
 	void defineTable(uint8_t /* position */, uint16_t /* leftOffset */) {}
 	void addTableColumnDefinition(uint32_t /* width */, uint32_t /* leftGutter */, uint32_t /* rightGutter */,
-				uint32_t /* attributes */, uint8_t /* alignment */) {}
+	                              uint32_t /* attributes */, uint8_t /* alignment */) {}
 	void startTable();
- 	void insertRow(uint16_t rowHeight, bool isMinimumHeight, bool isHeaderRow);
- 	void insertCell(uint8_t colSpan, uint8_t rowSpan, uint8_t borderBits,
-				const RGBSColor * cellFgColor, const RGBSColor * cellBgColor, 
-				const RGBSColor * cellBorderColor, WPXVerticalAlignment cellVerticalAlignment, 
-				bool useCellAttributes, uint32_t cellAttributes);
- 	void endTable() {}
+	void insertRow(uint16_t rowHeight, bool isMinimumHeight, bool isHeaderRow);
+	void insertCell(uint8_t colSpan, uint8_t rowSpan, uint8_t borderBits,
+	                const RGBSColor *cellFgColor, const RGBSColor *cellBgColor,
+	                const RGBSColor *cellBorderColor, WPXVerticalAlignment cellVerticalAlignment,
+	                bool useCellAttributes, uint32_t cellAttributes);
+	void endTable() {}
 
 	void insertNoteReference(const WPXString& /* noteReference */) {};
 	void insertNote(WPXNoteType /* noteType */, const WP5SubDocument * /* subDocument */) {};
@@ -84,8 +97,8 @@ protected:
 	void _handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList, int nextTableIndice = 0);
 
 private:
-	WP5StylesListener(const WP5StylesListener&);
-	WP5StylesListener& operator=(const WP5StylesListener&);
+	WP5StylesListener(const WP5StylesListener &);
+	WP5StylesListener &operator=(const WP5StylesListener &);
 	WPXPageSpan m_currentPage, m_nextPage;
 
 	WPXTableList m_tableList;
@@ -98,3 +111,4 @@ private:
 };
 
 #endif /* WP5STYLESLISTENER_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

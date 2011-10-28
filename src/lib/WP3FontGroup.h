@@ -1,6 +1,7 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -18,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -31,16 +32,16 @@
 
 class WP3FontGroup : public WP3VariableLengthGroup
 {
- public:
-	WP3FontGroup(WPXInputStream *input, WPXEncryption *encryption);	
+public:
+	WP3FontGroup(WPXInputStream *input, WPXEncryption *encryption);
 	~WP3FontGroup();
 	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 	void parse(WP3Listener *listener);
 
- private:
- 	/* Set Text Color */
+private:
+	/* Set Text Color */
 	RGBSColor m_fontColor;
- 	/* Set Text Font */
+	/* Set Text Font */
 	WPXString m_fontName;
 	/* Set Font Size */
 	uint16_t m_fontSize;
@@ -48,3 +49,4 @@ class WP3FontGroup : public WP3VariableLengthGroup
 };
 
 #endif /* WP3FONTGROUP_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

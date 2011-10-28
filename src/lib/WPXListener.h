@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
@@ -36,13 +37,20 @@ protected:
 	WPXListener(std::list<WPXPageSpan> &pageList);
 	virtual ~WPXListener();
 
-	bool isUndoOn() { return m_isUndoOn; }
-	void setUndoOn(bool isOn) { m_isUndoOn = isOn; }
+	bool isUndoOn()
+	{
+		return m_isUndoOn;
+	}
+	void setUndoOn(bool isOn)
+	{
+		m_isUndoOn = isOn;
+	}
 
 	std::list<WPXPageSpan> &m_pageList;
-	
+
 private:
 	bool m_isUndoOn;
 };
 
 #endif /* WPXLISTENER_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwps
  * Copyright (C) 2006 Andrew Ziem
  *
@@ -299,3 +300,4 @@ int main( int argc, char **argv )
 	// return status code
 	return result.wasSuccessful() ? 0 : 1;
 }
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

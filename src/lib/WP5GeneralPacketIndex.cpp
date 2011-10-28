@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
@@ -43,3 +44,4 @@ void WP5GeneralPacketIndex::_read(WPXInputStream *input, WPXEncryption *encrypti
 
 	WPD_DEBUG_MSG(("General Packet Index (id: %i, type: %i, data size: %u, data offset: %u)\n", m_id, m_type, m_dataSize, m_dataOffset));
 }
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

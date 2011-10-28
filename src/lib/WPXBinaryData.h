@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2007 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
@@ -42,15 +43,16 @@ public:
 	void append(const unsigned char *buffer, const unsigned long bufferSize);
 	void append(const unsigned char c);
 	void clear();
-	
+
 	unsigned long size() const;
 	const unsigned char *getDataBuffer() const;
 	const WPXString getBase64Data() const;
 	const WPXInputStream *getDataStream() const;
 
-	WPXBinaryData& operator=(const WPXBinaryData &);
+	WPXBinaryData &operator=(const WPXBinaryData &);
 
 private:
 	WPXBinaryDataImpl *m_binaryDataImpl;
 };
 #endif
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

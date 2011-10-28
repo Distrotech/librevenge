@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2005 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
@@ -83,3 +84,4 @@ double WP5ListFontsUsedPacket::getFontSize(const int fontNumber) const
 	return 0.0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

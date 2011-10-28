@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2003 David Mandelin (mandelin@cs.wisc.edu)
  * Copyright (C) 2003 Marc Maurer (uwog@uwog.net)
@@ -50,3 +51,4 @@ double rint(double x)
 }
 
 #endif
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

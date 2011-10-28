@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
@@ -91,7 +92,7 @@ struct _WPXContentParsingState
 	bool m_isRowWithoutCell;
 	uint32_t m_cellAttributeBits;
 	uint8_t m_paragraphJustificationBeforeTable;
-	
+
 	unsigned m_currentPage;
 	int m_numPagesRemainingInSpan;
 	int m_currentPageNumber;
@@ -116,11 +117,11 @@ struct _WPXContentParsingState
 	double m_leftMarginByPageMarginChange;  // part of the margin due to the PAGE margin change
 	double m_rightMarginByPageMarginChange; // inside a page that already has content.
 	double m_sectionMarginLeft;  // In multicolumn sections, the above two will be rather interpreted
-	double m_sectionMarginRight; // as section margin change 
+	double m_sectionMarginRight; // as section margin change
 	double m_leftMarginByParagraphMarginChange;  // part of the margin due to the PARAGRAPH
 	double m_rightMarginByParagraphMarginChange; // margin change (in WP6)
 	double m_leftMarginByTabs;  // part of the margin due to the LEFT or LEFT/RIGHT Indent; the
-	double m_rightMarginByTabs; // only part of the margin that is reset at the end of a paragraph	
+	double m_rightMarginByTabs; // only part of the margin that is reset at the end of a paragraph
 
 	double m_listReferencePosition; // position from the left page margin of the list number/bullet
 	double m_listBeginPosition; // position from the left page margin of the beginning of the list
@@ -130,7 +131,7 @@ struct _WPXContentParsingState
 	double m_textIndentByTabs; // part of the indent due to the "Back Tab" or "Left Tab"
 
 	uint8_t m_currentListLevel;
-	
+
 	uint16_t m_alignmentCharacter;
 	std::vector<WPXTabStop> m_tabStops;
 	bool m_isTabPositionRelative;
@@ -142,8 +143,8 @@ struct _WPXContentParsingState
 	WPXSubDocumentType m_subDocumentType;
 
 private:
-	_WPXContentParsingState(const _WPXContentParsingState&);
-	_WPXContentParsingState& operator=(const _WPXContentParsingState&);
+	_WPXContentParsingState(const _WPXContentParsingState &);
+	_WPXContentParsingState &operator=(const _WPXContentParsingState &);
 };
 
 class WPXContentListener : public WPXListener
@@ -162,7 +163,7 @@ protected:
 	void justificationChange(const uint8_t justification);
 
 	WPXContentParsingState *m_ps; // parse state
-	WPXDocumentInterface * m_documentInterface;
+	WPXDocumentInterface *m_documentInterface;
 	WPXPropertyList m_metaData;
 
 	virtual void _handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList, int nextTableIndice) = 0;
@@ -192,32 +193,33 @@ protected:
 	void _closeTable();
 	void _openTableRow(const double height, const bool isMinimumHeight, const bool isHeaderRow);
 	void _closeTableRow();
-	void _openTableCell(const uint8_t colSpan, const uint8_t rowSpan, const uint8_t borderBits, 
-				const RGBSColor * cellFgColor, const RGBSColor * cellBgColor,
-				const RGBSColor * cellBorderColor,
-				const WPXVerticalAlignment cellVerticalAlignment);
+	void _openTableCell(const uint8_t colSpan, const uint8_t rowSpan, const uint8_t borderBits,
+	                    const RGBSColor *cellFgColor, const RGBSColor *cellBgColor,
+	                    const RGBSColor *cellBorderColor,
+	                    const WPXVerticalAlignment cellVerticalAlignment);
 	void _closeTableCell();
 
 	double _movePositionToFirstColumn(double position);
 
 	double _getNextTabStop() const;
 	double _getPreviousTabStop() const;
-	
-        void _insertText(const WPXString &textBuffer);
+
+	void _insertText(const WPXString &textBuffer);
 
 	void _insertBreakIfNecessary(WPXPropertyList &propList);
-	
+
 	void _insertPageNumberParagraph(WPXPageNumberPosition position, WPXNumberingType type, WPXString fontName, double fontSize);
 
 	uint32_t _mapNonUnicodeCharacter(uint32_t character);
-	
+
 private:
-	WPXContentListener(const WPXContentListener&);
-	WPXContentListener& operator=(const WPXContentListener&);
-	WPXString _colorToString(const RGBSColor * color);
+	WPXContentListener(const WPXContentListener &);
+	WPXContentListener &operator=(const WPXContentListener &);
+	WPXString _colorToString(const RGBSColor *color);
 	WPXString _mergeColorsToString(const RGBSColor *fgColor, const RGBSColor *bgColor);
 	uint32_t _mapSymbolFontCharacter(uint32_t character);
 	uint32_t _mapDingbatsFontCharacter(uint32_t character);
 };
 
 #endif /* WPXCONTENTLISTENER_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

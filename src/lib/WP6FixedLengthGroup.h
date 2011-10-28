@@ -1,8 +1,9 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2002-2003 Marc Maurer (uwog@uwog.net)
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -20,7 +21,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -31,19 +32,23 @@
 
 class WP6FixedLengthGroup : public WP6Part
 {
- public:
+public:
 	WP6FixedLengthGroup(uint8_t groupID);
-	static WP6FixedLengthGroup * constructFixedLengthGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);
+	static WP6FixedLengthGroup *constructFixedLengthGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);
 	static bool isGroupConsistent(WPXInputStream *input, WPXEncryption *encryption, const uint8_t groupID);
 
- 	uint8_t getGroup() const { return m_group; }
- 
- protected:
+	uint8_t getGroup() const
+	{
+		return m_group;
+	}
+
+protected:
 	void _read(WPXInputStream *input, WPXEncryption *encryption);
 	virtual void _readContents(WPXInputStream *input, WPXEncryption *encryption) = 0; // we always read the contents in the case of a fixed length group
- 
- private:
-	 uint8_t m_group;
+
+private:
+	uint8_t m_group;
 };
 
 #endif /* WP6FIXEDLENGTHGROUP_H */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

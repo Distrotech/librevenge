@@ -1,6 +1,7 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* libwpd
  * Copyright (C) 2004-2005 William Lachance (wrlach@gmail.com)
- *  
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -18,7 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
@@ -32,21 +33,31 @@ public:
 	WPXMemoryInputStream(unsigned char *data, unsigned long size);
 	virtual ~WPXMemoryInputStream();
 
-	virtual bool isOLEStream() { return false; }
-	virtual WPXInputStream * getDocumentOLEStream(const char*) { return 0; }
-	
+	virtual bool isOLEStream()
+	{
+		return false;
+	}
+	virtual WPXInputStream *getDocumentOLEStream(const char *)
+	{
+		return 0;
+	}
+
 	virtual const unsigned char *read(unsigned long numBytes, unsigned long &numBytesRead);
 	virtual int seek(long offset, WPX_SEEK_TYPE seekType);
 	virtual long tell();
 	virtual bool atEOS();
-	virtual unsigned long getSize() const { return m_size; };
+	virtual unsigned long getSize() const
+	{
+		return m_size;
+	};
 
 private:
 	long m_offset;
 	unsigned long m_size;
 	unsigned char *m_data;
-	WPXMemoryInputStream(const WPXMemoryInputStream&);
-	WPXMemoryInputStream& operator=(const WPXMemoryInputStream&);
+	WPXMemoryInputStream(const WPXMemoryInputStream &);
+	WPXMemoryInputStream &operator=(const WPXMemoryInputStream &);
 };
 
 #endif
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */
