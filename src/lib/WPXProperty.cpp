@@ -268,8 +268,8 @@ WPXPointProperty::WPXPointProperty(const double val) :
 
 WPXString WPXPointProperty::getStr() const
 {
-	WPXString str;
-	str.sprintf("%ipt", getInt());
+	WPXString str = doubleToString(getDouble());
+	str.append("pt");
 	return str;
 }
 
