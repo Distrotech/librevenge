@@ -1,4 +1,12 @@
 CHANGES:
+0.9.3 - 0.9.4
+- Remove autopackage packaging that nobody uses (Fridrich)
+- Don't output points as integer. This solves some rounding issues along
+  with possibility of writing 10.5 point font size (Fridrich)
+- General improvement of code quality by buiding with -Weffc++ option (Fridrich)
+- Improvement of textbox code (Laurent Alonso)
+- Fixes of autotools Windows build (Fridrich)
+
 0.9.2 - 0.9.3
 - Improvement of arabic charset mapping (Smokey Ardisson)
 - Build system rewrite and improvement (Tomas Chvatal)
