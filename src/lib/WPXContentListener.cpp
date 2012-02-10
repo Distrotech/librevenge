@@ -1131,6 +1131,7 @@ void WPXContentListener::_openTableCell(const uint8_t colSpan, const uint8_t row
 	m_ps->m_currentTableCellNumberInRow++;
 	m_ps->m_isTableCellOpened = true;
 	m_ps->m_isCellWithoutParagraph = true;
+	m_ps->m_isRowWithoutCell = false;
 
 	if (m_ps->m_currentTableCol < 0)
 		throw ParseException();
@@ -1371,7 +1372,8 @@ WPXString WPXContentListener::_colorToString(const RGBSColor *color)
 	return tmpString;
 }
 
-WPXString WPXContentListener::_mergeColorsToString(const RGBSColor *fgColor, const RGBSColor *bgColor)
+WPXString WPXContentListener::_mergeColorsToString(const RGBSColor *fgColor,
+        const RGBSColor *bgColor)
 {
 	WPXString tmpColor;
 	RGBSColor tmpFgColor, tmpBgColor;
@@ -1388,25 +1390,13 @@ WPXString WPXContentListener::_mergeColorsToString(const RGBSColor *fgColor, con
 		tmpFgColor.m_r = tmpFgColor.m_g = tmpFgColor.m_b = 0xFF;
 		tmpFgColor.m_s = 0x64; // 100%
 	}
-	if (bgColor)
-	{
-		tmpBgColor.m_r = bgColor->m_r;
-		tmpBgColor.m_g = bgColor->m_g;
-		tmpBgColor.m_b = bgColor->m_b;
-		tmpBgColor.m_s = bgColor->m_s;
-	}
-	else
-	{
-		tmpBgColor.m_r = tmpBgColor.m_g = tmpBgColor.m_b = 0xFF;
-		tmpBgColor.m_s = 0x64; // 100%
-	}
 
 	double fgAmount = (double)tmpFgColor.m_s/100.0;
-	double bgAmount = LIBWPD_MAX(((double)tmpBgColor.m_s-(double)tmpFgColor.m_s)/100.0, 0.0);
+	double wtAmount = 255.0*(1.0-fgAmount);
 
-	int bgRed = LIBWPD_MIN((int)(((double)tmpFgColor.m_r*fgAmount)+((double)tmpBgColor.m_r*bgAmount)), 255);
-	int bgGreen = LIBWPD_MIN((int)(((double)tmpFgColor.m_g*fgAmount)+((double)tmpBgColor.m_g*bgAmount)), 255);
-	int bgBlue = LIBWPD_MIN((int)(((double)tmpFgColor.m_b*fgAmount)+((double)tmpBgColor.m_b*bgAmount)), 255);
+	int bgRed   = (int)(((double)tmpFgColor.m_r*fgAmount)+wtAmount);
+	int bgGreen = (int)(((double)tmpFgColor.m_g*fgAmount)+wtAmount);
+	int bgBlue  = (int)(((double)tmpFgColor.m_b*fgAmount)+wtAmount);
 
 	tmpColor.sprintf("#%.2x%.2x%.2x", bgRed, bgGreen, bgBlue);
 
