@@ -29,12 +29,6 @@
 #include "WPXListener.h"
 #include <string.h>
 
-WPXSubDocument::WPXSubDocument() :
-	m_stream(0),
-	m_streamData(0)
-{
-}
-
 WPXSubDocument::WPXSubDocument(WPXInputStream *input, WPXEncryption *encryption, const unsigned dataSize) :
 	m_stream(0),
 	m_streamData(new uint8_t[dataSize])

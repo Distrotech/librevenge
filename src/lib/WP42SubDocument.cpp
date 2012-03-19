@@ -27,11 +27,6 @@
 #include "WP42Parser.h"
 #include "libwpd_internal.h"
 
-WP42SubDocument::WP42SubDocument(uint8_t *streamData, const unsigned dataSize) :
-	WPXSubDocument(streamData, dataSize)
-{
-}
-
 WP42SubDocument::WP42SubDocument(WPXInputStream *input, WPXEncryption *encryption, const unsigned dataSize) :
 	WPXSubDocument(input, encryption, dataSize)
 {

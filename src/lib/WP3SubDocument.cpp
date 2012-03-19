@@ -32,12 +32,6 @@ WP3SubDocument::WP3SubDocument(WPXInputStream *input, WPXEncryption *encryption,
 {
 }
 
-WP3SubDocument::WP3SubDocument(uint8_t *streamData, const unsigned dataSize) :
-	WPXSubDocument(streamData, dataSize)
-{
-}
-
-
 void WP3SubDocument::parse(WP3Listener *listener) const
 {
 	WPXMemoryInputStream *tmpStream = getStream();

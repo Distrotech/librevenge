@@ -85,10 +85,7 @@ public:
 	void clear();
 	unsigned long count();
 	void resize( unsigned long newsize );
-	void preserve( unsigned long n );
 	void set( unsigned long index, unsigned long val );
-	unsigned unused();
-	void setChain( std::vector<unsigned long> );
 	std::vector<unsigned long> follow( unsigned long start );
 	unsigned long operator[](unsigned long index );
 	void load( const unsigned char *buffer, unsigned len );
@@ -123,9 +120,6 @@ public:
 	unsigned entryCount();
 	DirEntry *entry( unsigned index );
 	DirEntry *entry( const std::string &name );
-	int parent( unsigned index );
-	std::string fullName( unsigned index );
-	std::vector<unsigned> children( unsigned index );
 	unsigned find_child( unsigned index, const std::string &name );
 	void load( unsigned char *buffer, unsigned len );
 	void save( unsigned char *buffer );
@@ -188,7 +182,6 @@ public:
 	~StreamIO();
 	unsigned long size();
 	unsigned long tell();
-	int getch();
 	unsigned long read( unsigned char *data, unsigned long maxlen );
 	unsigned long read( unsigned long pos, unsigned char *data, unsigned long maxlen );
 
@@ -307,14 +300,6 @@ void libwpd::AllocTable::resize( unsigned long newsize )
 			data[i] = Avail;
 }
 
-// make sure there're still free blocks
-void libwpd::AllocTable::preserve( unsigned long n )
-{
-	std::vector<unsigned long> pre;
-	for( unsigned i=0; i < n; i++ )
-		pre.push_back( unused() );
-}
-
 unsigned long libwpd::AllocTable::operator[]( unsigned long index )
 {
 	unsigned long result;
@@ -326,16 +311,6 @@ void libwpd::AllocTable::set( unsigned long index, unsigned long value )
 {
 	if( index >= count() ) resize( index + 1);
 	data[ index ] = value;
-}
-
-void libwpd::AllocTable::setChain( std::vector<unsigned long> chain )
-{
-	if( chain.size() )
-	{
-		for( unsigned i=0; i<chain.size()-1; i++ )
-			set( chain[i], chain[i+1] );
-		set( chain[ chain.size()-1 ], AllocTable::Eof );
-	}
 }
 
 // TODO: optimize this with better search
@@ -368,19 +343,6 @@ std::vector<unsigned long> libwpd::AllocTable::follow( unsigned long start )
 	}
 
 	return chain;
-}
-
-unsigned libwpd::AllocTable::unused()
-{
-	// find first available block
-	for( unsigned i = 0; i < data.size(); i++ )
-		if( data[i] == Avail )
-			return i;
-
-	// completely full, so enlarge the table
-	unsigned block = data.size();
-	resize( data.size()+10 );
-	return block;
 }
 
 void libwpd::AllocTable::load( const unsigned char *buffer, unsigned len )
@@ -423,62 +385,6 @@ libwpd::DirEntry *libwpd::DirTree::entry( unsigned index )
 {
 	if( index >= entryCount() ) return (libwpd::DirEntry *) 0;
 	return &entries[ index ];
-}
-
-int libwpd::DirTree::parent( unsigned index )
-{
-	// brute-force, basically we iterate for each entries, find its children
-	// and check if one of the children is 'index'
-	for( unsigned j=0; j<entryCount(); j++ )
-	{
-		std::vector<unsigned> chi = children( j );
-		for( unsigned i=0; i<chi.size(); i++ )
-			if( chi[i] == index )
-				return j;
-	}
-
-	return -1;
-}
-
-std::string libwpd::DirTree::fullName( unsigned index )
-{
-	// don't use root name ("Root Entry"), just give "/"
-	if( index == 0 ) return "/";
-
-	std::string result = entry( index )->name;
-	result.insert( 0,  "/" );
-	int p = parent( index );
-	DirEntry *_entry = 0;
-
-	std::vector<int> seens;
-	seens.push_back(p);
-
-	while( p > 0 )
-	{
-		_entry = entry( p );
-		if (_entry->dir && _entry->valid)
-		{
-			result.insert( 0,  _entry->name);
-			result.insert( 0,  "/" );
-		}
-
-		p = parent(p);
-		if (p < 0) break;
-
-		bool ok = true;
-		// sanity check
-		for (int i = 0; i < int(seens.size()); i++)
-		{
-			if (seens[i] == p)
-			{
-				ok = false;
-				break;
-			}
-		}
-		if (!ok) break;
-		seens.push_back(p);
-	}
-	return result;
 }
 
 // given a fullname (e.g "/ObjectPool/_1020961869"), find the entry
@@ -588,17 +494,6 @@ unsigned libwpd::DirTree::find_child( unsigned index, const std::string &name )
 		return dirtree_find_sibling( this, p->child, name );
 
 	return 0;
-}
-
-std::vector<unsigned> libwpd::DirTree::children( unsigned index )
-{
-	std::vector<unsigned> result;
-
-	DirEntry *e = entry( index );
-	if( e ) if( e->valid && e->child < entryCount() )
-			dirtree_find_siblings( this, result, e->child );
-
-	return result;
 }
 
 void libwpd::DirTree::load( unsigned char *buffer, unsigned size )
@@ -921,25 +816,6 @@ libwpd::StreamIO::~StreamIO()
 unsigned long libwpd::StreamIO::tell()
 {
 	return m_pos;
-}
-
-int libwpd::StreamIO::getch()
-{
-	// past end-of-file ?
-	if( m_pos > entry->size ) return -1;
-
-	// need to update cache ?
-	if( !cache_size || ( m_pos < cache_pos ) ||
-	( m_pos >= cache_pos + cache_size ) )
-		updateCache();
-
-	// something bad if we don't get good cache
-	if( !cache_size ) return -1;
-
-	int data = cache_data[m_pos - cache_pos];
-	m_pos++;
-
-	return data;
 }
 
 unsigned long libwpd::StreamIO::read( unsigned long pos, unsigned char *data, unsigned long maxlen )
