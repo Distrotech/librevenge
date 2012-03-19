@@ -32,7 +32,7 @@
 
 #include <string>
 #include <fstream>
-#include <sstream>
+#include <vector>
 #include <list>
 
 namespace libwpd
@@ -54,7 +54,7 @@ public:
 	/**
 	 * Constructs a storage with data.
 	 **/
-	Storage( const std::stringstream &memorystream );
+	Storage( const std::vector<unsigned char> &memorystream );
 
 	/**
 	 * Destroys the storage.

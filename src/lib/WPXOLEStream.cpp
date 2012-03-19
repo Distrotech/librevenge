@@ -139,9 +139,9 @@ class StorageIO
 {
 public:
 	Storage *storage;         // owner
-	std::stringstream buf;
+	std::vector<unsigned char> buf;
+	unsigned long offset;
 	int result;               // result of operation
-	unsigned long bufsize;    // size of the buffer
 
 	Header *header;           // storage header
 	DirTree *dirtree;         // directory tree
@@ -152,7 +152,7 @@ public:
 
 	std::list<Stream *> streams;
 
-	StorageIO( Storage *storage, const std::stringstream &memorystream );
+	StorageIO( Storage *storage, const std::vector<unsigned char> &memorystream );
 	~StorageIO();
 
 	bool isOLEStream();
@@ -644,11 +644,11 @@ void libwpd::DirTree::load( unsigned char *buffer, unsigned size )
 
 // =========== StorageIO ==========
 
-libwpd::StorageIO::StorageIO( libwpd::Storage *st, const std::stringstream &memorystream ) :
+libwpd::StorageIO::StorageIO( libwpd::Storage *st, const std::vector<unsigned char> &memorystream ) :
 	storage(st),
-	buf( memorystream.str(), std::ios::binary | std::ios::in ),
+	buf( memorystream ),
+	offset(0),
 	result(libwpd::Storage::Ok),
-	bufsize(0),
 	header(new libwpd::Header()),
 	dirtree(new libwpd::DirTree()),
 	bbat(new libwpd::AllocTable()),
@@ -684,14 +684,11 @@ void libwpd::StorageIO::load()
 	unsigned long buflen = 0;
 	std::vector<unsigned long> blocks;
 
-	// find size of input file
-	buf.seekg( 0, std::ios::end );
-	bufsize = buf.tellg();
-
 	// load header
-	buffer = new unsigned char[512];
-	buf.seekg( 0 );
-	buf.read( (char *)buffer, 512 );
+
+	buffer = new unsigned char[buf.size() < 512 ? buf.size() : 512];
+	memcpy(buffer, &buf[offset], buf.size() < 512 ? buf.size() : 512);
+	offset += buf.size() < 512 ? buf.size() : 512;
 	header->load( buffer );
 	delete[] buffer;
 
@@ -818,9 +815,9 @@ unsigned char *data, unsigned long maxlen )
 		unsigned long block = blocks[i];
 		unsigned long pos =  bbat->blockSize * ( block+1 );
 		unsigned long p = (bbat->blockSize < maxlen-bytes) ? bbat->blockSize : maxlen-bytes;
-		if( pos + p > bufsize ) p = bufsize - pos;
-		buf.seekg( pos );
-		buf.read( (char *)data + bytes, p );
+
+		if( pos + p > buf.size() ) p = buf.size() - pos;
+		memcpy(data+bytes, &buf[pos], p);
 		bytes += p;
 	}
 
@@ -851,7 +848,7 @@ unsigned char *data, unsigned long maxlen )
 	if( maxlen == 0 ) return 0;
 
 	// our own local buffer
-	unsigned char *tmpBuf = new unsigned char[ bbat->blockSize ];
+	std::vector<unsigned char> tmpBuf( bbat->blockSize );
 
 	// read small block one by one
 	unsigned long bytes = 0;
@@ -864,17 +861,15 @@ unsigned char *data, unsigned long maxlen )
 		unsigned long bbindex = pos / bbat->blockSize;
 		if( bbindex >= sb_blocks.size() ) break;
 
-		loadBigBlock( sb_blocks[ bbindex ], tmpBuf, bbat->blockSize );
+		loadBigBlock( sb_blocks[ bbindex ], &tmpBuf[0], bbat->blockSize );
 
 		// copy the data
 		unsigned offset = pos % bbat->blockSize;
 		unsigned long p = (maxlen-bytes < bbat->blockSize-offset ) ? maxlen-bytes :  bbat->blockSize-offset;
 		p = (sbat->blockSize<p ) ? sbat->blockSize : p;
-		memcpy( data + bytes, tmpBuf + offset, p );
+		memcpy( data + bytes, &tmpBuf[offset], p );
 		bytes += p;
 	}
-
-	delete[] tmpBuf;
 
 	return bytes;
 }
@@ -1026,7 +1021,7 @@ void libwpd::StreamIO::updateCache()
 
 // =========== Storage ==========
 
-libwpd::Storage::Storage( const std::stringstream &memorystream ) :
+libwpd::Storage::Storage( const std::vector<unsigned char> &memorystream ) :
 	io(NULL)
 {
 	io = new StorageIO( this, memorystream );
