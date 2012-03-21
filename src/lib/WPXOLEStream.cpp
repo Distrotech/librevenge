@@ -193,7 +193,7 @@ private:
 	unsigned long m_pos;
 
 	// simple cache system to speed-up getch()
-	unsigned char *cache_data;
+	std::vector<unsigned char> cache_data;
 	unsigned long cache_size;
 	unsigned long cache_pos;
 	void updateCache();
@@ -570,8 +570,6 @@ bool libwpd::StorageIO::isOLEStream()
 
 void libwpd::StorageIO::load()
 {
-	unsigned char *buffer = 0;
-	unsigned long buflen = 0;
 	std::vector<unsigned long> blocks;
 
 	// load header
@@ -604,7 +602,7 @@ void libwpd::StorageIO::load()
 		else blocks[j] = header->bb_blocks[j];
 	if( (header->num_bat > 109) && (header->num_mbat > 0) )
 	{
-		unsigned char *buffer2 = new unsigned char[ bbat->blockSize ];
+		std::vector<unsigned char> buffer2( bbat->blockSize );
 		unsigned k = 109;
 		unsigned sector;
 		for( unsigned r = 0; r < header->num_mbat; r++ )
@@ -613,47 +611,40 @@ void libwpd::StorageIO::load()
 				sector = header->mbat_start;
 			else      // next meta bat location is the last current block value.
 				sector = blocks[--k];
-			loadBigBlock( sector, buffer2, bbat->blockSize );
+			loadBigBlock( sector, &buffer2[0], bbat->blockSize );
 			for( unsigned s=0; s < bbat->blockSize; s+=4 )
 			{
 				if( k >= header->num_bat ) break;
-				else  blocks[k++] = readU32( buffer2 + s );
+				else  blocks[k++] = readU32( &buffer2[s] );
 			}
 		}
-		delete[] buffer2;
 	}
 
 	// load big bat
-	buflen = blocks.size()*bbat->blockSize;
-	if( buflen > 0 )
+	if( blocks.size()*bbat->blockSize > 0 )
 	{
-		buffer = new unsigned char[ buflen ];
-		loadBigBlocks( blocks, buffer, buflen );
-		bbat->load( buffer, buflen );
-		delete[] buffer;
+		std::vector<unsigned char> buffer( blocks.size()*bbat->blockSize );
+		loadBigBlocks( blocks, &buffer[0], buffer.size() );
+		bbat->load( &buffer[0], buffer.size() );
 	}
 
 	// load small bat
 	blocks.clear();
 	blocks = bbat->follow( header->sbat_start );
-	buflen = blocks.size()*bbat->blockSize;
-	if( buflen > 0 )
+	if( blocks.size()*bbat->blockSize > 0 )
 	{
-		buffer = new unsigned char[ buflen ];
-		loadBigBlocks( blocks, buffer, buflen );
-		sbat->load( buffer, buflen );
-		delete[] buffer;
+		std::vector<unsigned char> buffer( blocks.size()*bbat->blockSize );
+		loadBigBlocks( blocks, &buffer[0], buffer.size() );
+		sbat->load( &buffer[0], buffer.size() );
 	}
 
 	// load directory tree
 	blocks.clear();
 	blocks = bbat->follow( header->dirent_start );
-	buflen = blocks.size()*bbat->blockSize;
-	buffer = new unsigned char[ buflen ];
-	loadBigBlocks( blocks, buffer, buflen );
-	dirtree->load( buffer, buflen );
-	unsigned sb_start = readU32( buffer + 0x74 );
-	delete[] buffer;
+	std::vector<unsigned char> buffer(blocks.size()*bbat->blockSize);
+	loadBigBlocks( blocks, &buffer[0], buffer.size() );
+	dirtree->load( &buffer[0], buffer.size() );
+	unsigned sb_start = readU32( &buffer[0x74] );
 
 	// fetch block chain as data for small-files
 	sb_blocks = bbat->follow( sb_start ); // small files
@@ -780,7 +771,7 @@ libwpd::StreamIO::StreamIO( libwpd::StorageIO *s, libwpd::DirEntry *e) :
 	fail(false),
 	blocks(),
 	m_pos(0),
-	cache_data(0),
+	cache_data(),
 	cache_size(4096),
 	cache_pos(0)
 {
@@ -790,14 +781,13 @@ libwpd::StreamIO::StreamIO( libwpd::StorageIO *s, libwpd::DirEntry *e) :
 		blocks = io->sbat->follow( entry->start );
 
 	// prepare cache
-	cache_data = new unsigned char[cache_size];
+	cache_data = std::vector<unsigned char>(cache_size);
 	updateCache();
 }
 
 // FIXME tell parent we're gone
 libwpd::StreamIO::~StreamIO()
 {
-	delete[] cache_data;
 }
 
 unsigned long libwpd::StreamIO::tell()
@@ -820,21 +810,19 @@ unsigned long libwpd::StreamIO::read( unsigned long pos, unsigned char *data, un
 
 		if( index >= blocks.size() ) return 0;
 
-		unsigned char *buf = new unsigned char[ io->sbat->blockSize ];
+		std::vector<unsigned char> buf( io->sbat->blockSize );
 		unsigned long offset = pos % io->sbat->blockSize;
 		while( totalbytes < maxlen )
 		{
 			if( index >= blocks.size() ) break;
-			io->loadSmallBlock( blocks[index], buf, io->bbat->blockSize );
+			io->loadSmallBlock( blocks[index], &buf[0], io->bbat->blockSize );
 			unsigned long count = io->sbat->blockSize - offset;
 			if( count > maxlen-totalbytes ) count = maxlen-totalbytes;
-			memcpy( data+totalbytes, buf + offset, count );
+			memcpy( data+totalbytes, &buf[offset], count );
 			totalbytes += count;
 			offset = 0;
 			index++;
 		}
-		delete[] buf;
-
 	}
 	else
 	{
@@ -843,21 +831,19 @@ unsigned long libwpd::StreamIO::read( unsigned long pos, unsigned char *data, un
 
 		if( index >= blocks.size() ) return 0;
 
-		unsigned char *buf = new unsigned char[ io->bbat->blockSize ];
+		std::vector<unsigned char> buf( io->bbat->blockSize );
 		unsigned long offset = pos % io->bbat->blockSize;
 		while( totalbytes < maxlen )
 		{
 			if( index >= blocks.size() ) break;
-			io->loadBigBlock( blocks[index], buf, io->bbat->blockSize );
+			io->loadBigBlock( blocks[index], &buf[0], io->bbat->blockSize );
 			unsigned long count = io->bbat->blockSize - offset;
 			if( count > maxlen-totalbytes ) count = maxlen-totalbytes;
-			memcpy( data+totalbytes, buf + offset, count );
+			memcpy( data+totalbytes, &buf[offset], count );
 			totalbytes += count;
 			index++;
 			offset = 0;
 		}
-		delete [] buf;
-
 	}
 
 	return totalbytes;
@@ -873,12 +859,12 @@ unsigned long libwpd::StreamIO::read( unsigned char *data, unsigned long maxlen 
 void libwpd::StreamIO::updateCache()
 {
 	// sanity check
-	if( !cache_data ) return;
+	if( cache_data.empty() ) return;
 
 	cache_pos = m_pos - ( m_pos % cache_size );
 	unsigned long bytes = cache_size;
 	if( cache_pos + bytes > entry->size ) bytes = entry->size - cache_pos;
-	cache_size = read( cache_pos, cache_data, bytes );
+	cache_size = read( cache_pos, &cache_data[0], bytes );
 }
 
 
