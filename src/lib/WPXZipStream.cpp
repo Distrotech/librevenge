@@ -289,7 +289,6 @@ static bool findDataStream(WPXInputStream *input, CentralDirectoryEntry &entry, 
 		return false;
 	input->seek(entry.offset, WPX_SEEK_SET);
 	LocalFileHeader header;
-	printf("%x %x\n", (int)input->tell(), entry.offset);
 	if (!readLocalFileHeader(input, header))
 		return false;
 	if (!areHeadersConsistent(header, entry))
@@ -326,6 +325,8 @@ WPXInputStream *WPXZipStream::getSubstream(WPXInputStream *input, const char *na
 {
 	CentralDirectoryEntry entry;
 	if (!findDataStream(input, entry, name))
+		return 0;
+	if (!entry.compressed_size)
 		return 0;
 	unsigned long numBytesRead = 0;
 	const unsigned char *compressedData = input->read(entry.compressed_size, numBytesRead);
@@ -365,6 +366,7 @@ WPXInputStream *WPXZipStream::getSubstream(WPXInputStream *input, const char *na
 			data.clear();
 			return 0;
 		}
+		(void)inflateEnd(&strm);
 		return new WPXStringStream(&data[0], data.size());
 	}
 }
