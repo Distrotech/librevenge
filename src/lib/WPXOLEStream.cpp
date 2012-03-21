@@ -69,9 +69,7 @@ public:
 
 	Header();
 	bool valid();
-	void load( const unsigned char *buffer );
-	void save( unsigned char *buffer );
-	void debug();
+	void load( const unsigned char *buffer, unsigned long bufferSize );
 };
 
 class AllocTable
@@ -90,7 +88,6 @@ public:
 	std::vector<unsigned long> follow( unsigned long start );
 	unsigned long operator[](unsigned long index );
 	void load( const unsigned char *buffer, unsigned len );
-	void save( unsigned char *buffer );
 private:
 	std::vector<unsigned long> data;
 	AllocTable( const AllocTable & );
@@ -123,7 +120,6 @@ public:
 	DirEntry *entry( const std::string &name );
 	unsigned find_child( unsigned index, const std::string &name );
 	void load( unsigned char *buffer, unsigned len );
-	void save( unsigned char *buffer );
 private:
 	std::vector<DirEntry> entries;
 	DirTree( const DirTree & );
@@ -251,7 +247,7 @@ bool libwpd::Header::valid()
 	return true;
 }
 
-void libwpd::Header::load( const unsigned char *buffer )
+void libwpd::Header::load( const unsigned char *buffer, unsigned long bufferSize )
 {
 	b_shift      = readU16( buffer + 0x1e );
 	s_shift      = readU16( buffer + 0x20 );
@@ -265,7 +261,7 @@ void libwpd::Header::load( const unsigned char *buffer )
 
 	for( unsigned i = 0; i < 8; i++ )
 		id[i] = buffer[i];
-	for( unsigned j=0; j<109 && (0x4C+j*4 < 509); j++ )
+	for( unsigned j=0; j<109 && (0x4C+j*4 < bufferSize-3); j++ )
 		bb_blocks[j] = readU32( buffer + 0x4C+j*4 );
 }
 
@@ -582,7 +578,7 @@ void libwpd::StorageIO::load()
 	unsigned long numBytesRead = 0;
 	const unsigned char *buf = input->read(512, numBytesRead);
 
-	header->load( buf );
+	header->load( buf, numBytesRead );
 
 	// check OLE magic id
 	result = libwpd::Storage::NotOLE;
