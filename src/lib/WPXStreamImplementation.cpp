@@ -24,11 +24,14 @@
 
 #include "WPXStreamImplementation.h"
 #include "WPXOLEStream.h"
+#include "WPXZipStream.h"
 
 #include <limits>
 #include <string.h>
 
 using namespace libwpd;
+
+enum WPXStreamType { UNKNOWN, FLAT, OLE2, ZIP };
 
 class WPXFileStreamPrivate
 {
@@ -40,6 +43,7 @@ public:
 	unsigned char *readBuffer;
 	unsigned long readBufferLength;
 	unsigned long readBufferPos;
+	WPXStreamType streamType;
 private:
 	WPXFileStreamPrivate(const WPXFileStreamPrivate &);
 	WPXFileStreamPrivate &operator=(const WPXFileStreamPrivate &);
@@ -52,6 +56,7 @@ public:
 	~WPXStringStreamPrivate();
 	std::vector<unsigned char> buffer;
 	volatile long offset;
+	WPXStreamType streamType;
 private:
 	WPXStringStreamPrivate(const WPXStringStreamPrivate &);
 	WPXStringStreamPrivate &operator=(const WPXStringStreamPrivate &);
@@ -62,7 +67,8 @@ WPXFileStreamPrivate::WPXFileStreamPrivate() :
 	streamSize(0),
 	readBuffer(0),
 	readBufferLength(0),
-	readBufferPos(0)
+	readBufferPos(0),
+	streamType(UNKNOWN)
 {
 }
 
@@ -76,7 +82,8 @@ WPXFileStreamPrivate::~WPXFileStreamPrivate()
 
 WPXStringStreamPrivate::WPXStringStreamPrivate(const unsigned char *data, unsigned dataSize) :
 	buffer(dataSize),
-	offset(0)
+	offset(0),
+	streamType(UNKNOWN)
 
 {
 	memcpy(&buffer[0], data, dataSize);
@@ -223,36 +230,61 @@ bool WPXFileStream::isOLEStream()
 {
 	if (ferror(d->file))
 		return false;
-	seek(0, WPX_SEEK_CUR);
+	if (d->streamType == UNKNOWN)
+	{
+		seek(0, WPX_SEEK_CUR);
 
-	Storage tmpStorage( this );
-	if (tmpStorage.isOLEStream())
+		// Check whether it is OLE2 storage
+		Storage tmpStorage( this );
+		if (tmpStorage.isOLEStream())
+		{
+			d->streamType = OLE2;
+			return true;
+		}
+		seek(0, WPX_SEEK_CUR);
+		if (WPXZipStream::isZipFile(this))
+		{
+			d->streamType = ZIP;
+			return true;
+		}
+		d->streamType = FLAT;
+		return false;
+	}
+	else if (d->streamType == FLAT)
+		return false;
+	else
 		return true;
-	return false;
 }
 
 WPXInputStream *WPXFileStream::getDocumentOLEStream(const char *name)
 {
 	if (ferror(d->file))
-		return (WPXInputStream *)0;
-	seek(0, WPX_SEEK_SET);
+		return 0;
+	if (d->streamType == UNKNOWN && !isOLEStream())
+		return 0;
+	if (d->streamType == OLE2)
+	{
+		seek(0, WPX_SEEK_SET);
+		Storage tmpStorage( this );
+		Stream tmpStream( &tmpStorage, name );
+		if (tmpStorage.result() != Storage::Ok  || !tmpStream.size())
+			return (WPXInputStream *)0;
 
-	Storage tmpStorage( this );
-	Stream tmpStream( &tmpStorage, name );
-	if (tmpStorage.result() != Storage::Ok  || !tmpStream.size())
-		return (WPXInputStream *)0;
+		std::vector<unsigned char> buf(tmpStream.size());
+		unsigned long tmpLength;
+		tmpLength = tmpStream.read(&buf[0], tmpStream.size());
 
-	std::vector<unsigned char> tmpBuf(tmpStream.size());
+		// sanity check
+		if (tmpLength != tmpStream.size())
+			/* something went wrong here and we do not trust the
+			   resulting buffer */
+			return (WPXInputStream *)0;
 
-	unsigned long tmpLength = tmpStream.read(&tmpBuf[0], tmpStream.size());
-
-	// sanity check
-	if (tmpLength != tmpStream.size())
-		/* something went wrong here and we do not trust the
-		   resulting buffer */
-		return (WPXInputStream *)0;
-
-	return new WPXStringStream(&tmpBuf[0], tmpLength);
+		return new WPXStringStream(&buf[0], tmpLength);
+	}
+	else if (d->streamType == ZIP)
+		return WPXZipStream::getSubstream(this, name);
+	return 0;
 }
 
 WPXStringStream::WPXStringStream(const unsigned char *data, const unsigned int dataSize) :
@@ -331,36 +363,61 @@ bool WPXStringStream::isOLEStream()
 	if (d->buffer.empty())
 		return false;
 
-	Storage tmpStorage( this );
-	if (tmpStorage.isOLEStream())
+	if (d->streamType == UNKNOWN)
 	{
-		seek(0, WPX_SEEK_SET);
-		return true;
+		seek(0, WPX_SEEK_CUR);
+
+		// Check whether it is OLE2 storage
+		Storage tmpStorage( this );
+		if (tmpStorage.isOLEStream())
+		{
+			d->streamType = OLE2;
+			return true;
+		}
+		seek(0, WPX_SEEK_CUR);
+		if (WPXZipStream::isZipFile(this))
+		{
+			d->streamType = ZIP;
+			return true;
+		}
+		d->streamType = FLAT;
+		return false;
 	}
-	seek(0, WPX_SEEK_SET);
-	return false;
+	else if (d->streamType == FLAT)
+		return false;
+	else
+		return true;
 }
 
 WPXInputStream *WPXStringStream::getDocumentOLEStream(const char *name)
 {
 	if (!d->buffer.empty())
 		return 0;
+	if (d->streamType == UNKNOWN && !isOLEStream())
+		return 0;
 
-	Storage tmpStorage( this );
-	Stream tmpStream( &tmpStorage, name );
-	if (tmpStorage.result() != Storage::Ok  || !tmpStream.size())
-		return (WPXInputStream *)0;
+	if (d->streamType == OLE2)
+	{
+		seek(0, WPX_SEEK_SET);
+		Storage tmpStorage( this );
+		Stream tmpStream( &tmpStorage, name );
+		if (tmpStorage.result() != Storage::Ok  || !tmpStream.size())
+			return (WPXInputStream *)0;
 
-	std::vector<unsigned char> buf(tmpStream.size());
-	unsigned long tmpLength;
-	tmpLength = tmpStream.read(&buf[0], tmpStream.size());
+		std::vector<unsigned char> buf(tmpStream.size());
+		unsigned long tmpLength;
+		tmpLength = tmpStream.read(&buf[0], tmpStream.size());
 
-	// sanity check
-	if (tmpLength != tmpStream.size())
-		/* something went wrong here and we do not trust the
-		   resulting buffer */
-		return (WPXInputStream *)0;
+		// sanity check
+		if (tmpLength != tmpStream.size())
+			/* something went wrong here and we do not trust the
+			   resulting buffer */
+			return (WPXInputStream *)0;
 
-	return new WPXStringStream(&buf[0], tmpLength);
+		return new WPXStringStream(&buf[0], tmpLength);
+	}
+	else if (d->streamType == ZIP)
+		return WPXZipStream::getSubstream(this, name);
+	return 0;
 }
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */
