@@ -32,18 +32,6 @@ AC_PROG_MAKE_SET
 AC_PROG_LIBTOOL
 AC_LIBTOOL_WIN32_DLL
 
-# =========
-# Find zlib
-# =========
-PKG_CHECK_MODULES([ZLIB],[zlib],[],[
-    AC_CHECK_HEADER(zlib.h, [ZLIB_CFLAGS=],
-        [AC_MSG_ERROR(zlib.h not found. install zlib)], [])
-    AC_CHECK_LIB(z, inflate, [ ZLIB_LIBS=-lz ],
-        [AC_MSG_ERROR(zlib not found or functional)], [])
-])
-AC_SUBST(ZLIB_CFLAGS)
-AC_SUBST(ZLIB_LIBS)
-
 # =================================
 # Libtool/Version Makefile settings
 # =================================
@@ -217,6 +205,24 @@ AC_ARG_WITH([stream],
 	[with_stream=yes]
 )
 AM_CONDITIONAL(WITH_LIBWPD_STREAM, [test "x$with_stream" != "xno"])
+
+# =========
+# Find zlib
+# =========
+if test "x$with_stream" != "xno"; then
+PKG_CHECK_MODULES([ZLIB],[zlib],[],[
+    AC_CHECK_HEADER(zlib.h, [ZLIB_CFLAGS=],
+        [AC_MSG_ERROR(zlib.h not found. install zlib)], [])
+    AC_CHECK_LIB(z, inflate, [ ZLIB_LIBS=-lz ],
+        [AC_MSG_ERROR(zlib not found or functional)], [])
+])
+else
+ZLIB_CFLAGS=
+ZLIB_LIBS=
+fi
+AC_SUBST(ZLIB_CFLAGS)
+AC_SUBST(ZLIB_LIBS)
+
 
 # =====================
 # Prepare all .in files
