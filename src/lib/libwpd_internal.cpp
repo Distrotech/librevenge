@@ -1113,14 +1113,6 @@ _RGBSColor::_RGBSColor(uint16_t red, uint16_t green, uint16_t blue)
 {
 }
 
-_WPXTabStop::_WPXTabStop(double position, WPXTabAlignment alignment, uint16_t leaderCharacter, uint8_t leaderNumSpaces)
-	:	m_position(position),
-	    m_alignment(alignment),
-	    m_leaderCharacter(leaderCharacter),
-	    m_leaderNumSpaces(leaderNumSpaces)
-{
-}
-
 _WPXTabStop::_WPXTabStop()
 	:	m_position(0.0),
 	    m_alignment(LEFT),

@@ -31,8 +31,6 @@
 #include <vector>
 #include <sstream>
 
-#define DEBUG_DATA
-
 WP3ResourceFork::WP3ResourceFork(WPXInputStream *input, WPXEncryption *encryption) :
 	m_resourcesTypeMultimap(), m_resourcesIDMultimap()
 {
@@ -152,22 +150,6 @@ WP3ResourceFork::~WP3ResourceFork()
 	// delete the pointers from one of the multimaps.
 	for (std::multimap<uint32_t, WP3Resource *>::iterator iter = m_resourcesTypeMultimap.begin(); iter != m_resourcesTypeMultimap.end(); iter++)
 		delete iter->second;
-}
-
-std::pair< std::multimap<uint32_t, WP3Resource *>::const_iterator, std::multimap<uint32_t, WP3Resource *>::const_iterator > WP3ResourceFork::getResourcesByType(uint32_t type) const
-{
-	std::pair< std::multimap<uint32_t, WP3Resource *>::const_iterator, std::multimap<uint32_t, WP3Resource *>::const_iterator > tempPair
-	= m_resourcesTypeMultimap.equal_range(type);
-
-	return tempPair;
-}
-
-std::pair< std::multimap<uint32_t, WP3Resource *>::const_iterator, std::multimap<uint32_t, WP3Resource *>::const_iterator > WP3ResourceFork::getResourcesByID(uint32_t ID) const
-{
-	std::pair< std::multimap<uint32_t, WP3Resource *>::const_iterator, std::multimap<uint32_t, WP3Resource *>::const_iterator > tempPair
-	= m_resourcesIDMultimap.equal_range(ID);
-
-	return tempPair;
 }
 
 const WP3Resource *WP3ResourceFork::getResource(uint32_t type, uint32_t ID) const

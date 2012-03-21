@@ -215,7 +215,6 @@ struct _WPXColumnProperties
 typedef struct _WPXTabStop WPXTabStop;
 struct _WPXTabStop
 {
-	_WPXTabStop(double position, WPXTabAlignment alignment, uint16_t leaderCharacter, uint8_t leaderNumSpaces);
 	_WPXTabStop();
 	double m_position;
 	WPXTabAlignment m_alignment;

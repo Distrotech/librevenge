@@ -39,11 +39,4 @@ WP3Resource::WP3Resource(uint32_t resourceType, uint32_t resourceReferenceID, co
 {
 }
 
-const WPXString WP3Resource::getResourceTypeString() const
-{
-	WPXString resourceTypeString;
-	for (int j=3; j >= 0; j--)
-		resourceTypeString.append((char)((m_resourceType >> (j*8)) & 0xff));
-	return resourceTypeString;
-}
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

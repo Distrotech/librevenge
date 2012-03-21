@@ -41,7 +41,6 @@ public:
 	            uint8_t resourceAttributes, const WPXBinaryData m_resource);
 	virtual ~WP3Resource() {}
 
-	const WPXString getResourceTypeString() const;
 	uint32_t getResourceType() const
 	{
 		return m_resourceType;

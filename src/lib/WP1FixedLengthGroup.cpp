@@ -87,34 +87,6 @@ WP1FixedLengthGroup *WP1FixedLengthGroup::constructFixedLengthGroup(WPXInputStre
 	}
 }
 
-bool WP1FixedLengthGroup::isGroupConsistent(WPXInputStream *input, WPXEncryption *encryption, const uint8_t groupID)
-{
-	uint32_t startPosition = input->tell();
-
-	try
-	{
-		int size = WP1_FUNCTION_GROUP_SIZE[groupID-0xC0];
-		if (input->seek((startPosition + size - 2), WPX_SEEK_SET) || input->atEOS())
-		{
-			input->seek(startPosition, WPX_SEEK_SET);
-			return false;
-		}
-		if (groupID != readU8(input, encryption))
-		{
-			input->seek(startPosition, WPX_SEEK_SET);
-			return false;
-		}
-
-		input->seek(startPosition, WPX_SEEK_SET);
-		return true;
-	}
-	catch(...)
-	{
-		input->seek(startPosition, WPX_SEEK_SET);
-		return false;
-	}
-}
-
 void WP1FixedLengthGroup::_read(WPXInputStream *input, WPXEncryption *encryption)
 {
 	uint32_t startPosition = input->tell();

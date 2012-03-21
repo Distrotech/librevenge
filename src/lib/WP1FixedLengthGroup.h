@@ -38,8 +38,6 @@ public:
 
 	static WP1FixedLengthGroup *constructFixedLengthGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group);
 
-	static bool isGroupConsistent(WPXInputStream *input, WPXEncryption *encryption, const uint8_t groupID);
-
 protected:
 	void _read(WPXInputStream *input, WPXEncryption *encryption);
 	virtual void _readContents(WPXInputStream * /* input */, WPXEncryption * /* encryption */) {};

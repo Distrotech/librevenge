@@ -38,8 +38,6 @@ public:
 	WP3ResourceFork(WPXInputStream *input, WPXEncryption *encryption);
 	virtual ~WP3ResourceFork();
 
-	std::pair< std::multimap<uint32_t, WP3Resource *>::const_iterator, std::multimap<uint32_t, WP3Resource *>::const_iterator > getResourcesByType(uint32_t type) const;
-	std::pair< std::multimap<uint32_t, WP3Resource *>::const_iterator, std::multimap<uint32_t, WP3Resource *>::const_iterator > getResourcesByID(uint32_t ID) const;
 	const WP3Resource *getResource(uint32_t type, uint32_t ID) const;
 
 private:
