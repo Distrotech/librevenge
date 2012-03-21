@@ -69,7 +69,7 @@ public:
 
 	Header();
 	bool valid();
-	void load( const unsigned char *buffer, unsigned long bufferSize );
+	void load( const unsigned char *buffer, unsigned long size );
 };
 
 class AllocTable
@@ -247,8 +247,10 @@ bool libwpd::Header::valid()
 	return true;
 }
 
-void libwpd::Header::load( const unsigned char *buffer, unsigned long bufferSize )
+void libwpd::Header::load( const unsigned char *buffer, unsigned long size )
 {
+	if (size < 512)
+		return;
 	b_shift      = readU16( buffer + 0x1e );
 	s_shift      = readU16( buffer + 0x20 );
 	num_bat      = readU32( buffer + 0x2c );
@@ -261,7 +263,7 @@ void libwpd::Header::load( const unsigned char *buffer, unsigned long bufferSize
 
 	for( unsigned i = 0; i < 8; i++ )
 		id[i] = buffer[i];
-	for( unsigned j=0; j<109 && (0x4C+j*4 < bufferSize-3); j++ )
+	for( unsigned j=0; j<109; j++ )
 		bb_blocks[j] = readU32( buffer + 0x4C+j*4 );
 }
 
