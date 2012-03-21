@@ -46,6 +46,7 @@
 #include <vector>
 
 #include "WPXOLEStream.h"
+#include "WPXStream.h"
 #include <string.h>
 
 namespace libwpd
@@ -133,8 +134,7 @@ class StorageIO
 {
 public:
 	Storage *storage;         // owner
-	std::vector<unsigned char> buf;
-	unsigned long offset;
+	WPXInputStream *input;
 	int result;               // result of operation
 
 	Header *header;           // storage header
@@ -146,7 +146,7 @@ public:
 
 	std::list<Stream *> streams;
 
-	StorageIO( Storage *storage, const std::vector<unsigned char> &memorystream );
+	StorageIO( Storage *storage, WPXInputStream *is );
 	~StorageIO();
 
 	bool isOLEStream();
@@ -265,7 +265,7 @@ void libwpd::Header::load( const unsigned char *buffer )
 
 	for( unsigned i = 0; i < 8; i++ )
 		id[i] = buffer[i];
-	for( unsigned j=0; j<109; j++ )
+	for( unsigned j=0; j<109 && (0x4C+j*4 < 509); j++ )
 		bb_blocks[j] = readU32( buffer + 0x4C+j*4 );
 }
 
@@ -539,10 +539,9 @@ void libwpd::DirTree::load( unsigned char *buffer, unsigned size )
 
 // =========== StorageIO ==========
 
-libwpd::StorageIO::StorageIO( libwpd::Storage *st, const std::vector<unsigned char> &memorystream ) :
+libwpd::StorageIO::StorageIO( libwpd::Storage *st, WPXInputStream *is ) :
 	storage(st),
-	buf( memorystream ),
-	offset(0),
+	input( is ),
 	result(libwpd::Storage::Ok),
 	header(new libwpd::Header()),
 	dirtree(new libwpd::DirTree()),
@@ -580,12 +579,10 @@ void libwpd::StorageIO::load()
 	std::vector<unsigned long> blocks;
 
 	// load header
+	unsigned long numBytesRead = 0;
+	const unsigned char *buf = input->read(512, numBytesRead);
 
-	buffer = new unsigned char[buf.size() < 512 ? buf.size() : 512];
-	memcpy(buffer, &buf[offset], buf.size() < 512 ? buf.size() : 512);
-	offset += buf.size() < 512 ? buf.size() : 512;
-	header->load( buffer );
-	delete[] buffer;
+	header->load( buf );
 
 	// check OLE magic id
 	result = libwpd::Storage::NotOLE;
@@ -626,14 +623,6 @@ void libwpd::StorageIO::load()
 				if( k >= header->num_bat ) break;
 				else  blocks[k++] = readU32( buffer2 + s );
 			}
-			/*
-			loadBigBlock( header->mbat_start+r, buffer2, bbat->blockSize );
-			for( unsigned s=0; s < bbat->blockSize; s+=4 )
-			{
-			  if( k >= header->num_bat ) break;
-			  else  blocks[k++] = readU32( buffer2 + s );
-			}
-			*/
 		}
 		delete[] buffer2;
 	}
@@ -711,9 +700,11 @@ unsigned char *data, unsigned long maxlen )
 		unsigned long pos =  bbat->blockSize * ( block+1 );
 		unsigned long p = (bbat->blockSize < maxlen-bytes) ? bbat->blockSize : maxlen-bytes;
 
-		if( pos + p > buf.size() ) p = buf.size() - pos;
-		memcpy(data+bytes, &buf[pos], p);
-		bytes += p;
+		input->seek(pos, WPX_SEEK_SET);
+		unsigned long numBytesRead = 0;
+		const unsigned char *buf = input->read(p, numBytesRead);
+		memcpy(data+bytes, buf, numBytesRead);
+		bytes += numBytesRead;
 	}
 
 	return bytes;
@@ -897,10 +888,10 @@ void libwpd::StreamIO::updateCache()
 
 // =========== Storage ==========
 
-libwpd::Storage::Storage( const std::vector<unsigned char> &memorystream ) :
+libwpd::Storage::Storage( WPXInputStream *is ) :
 	io(NULL)
 {
-	io = new StorageIO( this, memorystream );
+	io = new StorageIO( this, is );
 }
 
 libwpd::Storage::~Storage()

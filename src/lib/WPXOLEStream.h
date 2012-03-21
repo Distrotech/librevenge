@@ -35,6 +35,8 @@
 #include <vector>
 #include <list>
 
+class WPXInputStream;
+
 namespace libwpd
 {
 
@@ -54,7 +56,7 @@ public:
 	/**
 	 * Constructs a storage with data.
 	 **/
-	Storage( const std::vector<unsigned char> &memorystream );
+	Storage( WPXInputStream *is );
 
 	/**
 	 * Destroys the storage.
@@ -90,7 +92,6 @@ public:
 	/**
 	 * Creates a new stream.
 	 */
-	// name must be absolute, e.g "/PerfectOffice_MAIN"
 	Stream( Storage *storage, const std::string &name );
 
 	/**

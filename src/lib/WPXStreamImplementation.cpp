@@ -225,16 +225,7 @@ bool WPXFileStream::isOLEStream()
 		return false;
 	seek(0, WPX_SEEK_CUR);
 
-	unsigned long numBytesRead;
-	const unsigned char *buffer = read(d->streamSize, numBytesRead);
-	seek(0, WPX_SEEK_SET);
-	if (numBytesRead != d->streamSize)
-		return false;
-
-	std::vector<unsigned char> buf(d->streamSize);
-	memcpy(&buf[0], buffer, d->streamSize);
-
-	Storage tmpStorage( buf );
+	Storage tmpStorage( this );
 	if (tmpStorage.isOLEStream())
 		return true;
 	return false;
@@ -244,19 +235,9 @@ WPXInputStream *WPXFileStream::getDocumentOLEStream(const char *name)
 {
 	if (ferror(d->file))
 		return (WPXInputStream *)0;
-
 	seek(0, WPX_SEEK_SET);
 
-	unsigned long numBytesRead;
-	const unsigned char *buffer = read(d->streamSize, numBytesRead);
-	seek(0, WPX_SEEK_SET);
-	if (numBytesRead != d->streamSize)
-		return (WPXInputStream *)0;
-
-	std::vector<unsigned char> buf(d->streamSize);
-	memcpy(&buf[0], buffer, d->streamSize);
-
-	Storage tmpStorage( buf );
+	Storage tmpStorage( this );
 	Stream tmpStream( &tmpStorage, name );
 	if (tmpStorage.result() != Storage::Ok  || !tmpStream.size())
 		return (WPXInputStream *)0;
@@ -350,7 +331,7 @@ bool WPXStringStream::isOLEStream()
 	if (d->buffer.empty())
 		return false;
 
-	Storage tmpStorage( d->buffer );
+	Storage tmpStorage( this );
 	if (tmpStorage.isOLEStream())
 	{
 		seek(0, WPX_SEEK_SET);
@@ -365,7 +346,7 @@ WPXInputStream *WPXStringStream::getDocumentOLEStream(const char *name)
 	if (!d->buffer.empty())
 		return 0;
 
-	Storage tmpStorage( d->buffer );
+	Storage tmpStorage( this );
 	Stream tmpStream( &tmpStorage, name );
 	if (tmpStorage.result() != Storage::Ok  || !tmpStream.size())
 		return (WPXInputStream *)0;
