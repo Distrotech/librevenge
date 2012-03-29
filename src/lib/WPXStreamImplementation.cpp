@@ -28,6 +28,8 @@
 
 #include <limits>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 using namespace libwpd;
 
@@ -95,12 +97,28 @@ WPXStringStreamPrivate::~WPXStringStreamPrivate()
 
 WPXFileStream::WPXFileStream(const char *filename) :
 	WPXInputStream(),
-	d(new WPXFileStreamPrivate)
+	d(new WPXFileStreamPrivate())
 {
 	d->file = fopen( filename, "rb" );
-	fseek(d->file, 0, SEEK_END);
-	d->streamSize = ftell(d->file);
+	if (!d->file || ferror(d->file))
+	{
+		delete d;
+		d = 0;
+		return;
+	}
 
+	struct stat status;
+	stat( filename, &status );
+	if ( !S_ISREG(status.st_mode) )
+	{
+		delete d;
+		d = 0;
+		return;
+	}
+
+	fseek(d->file, 0, SEEK_END);
+
+	d->streamSize = ftell(d->file);
 	if (d->streamSize == (unsigned long)-1)
 		d->streamSize = 0;
 	// preventing possible unsigned/signed issues later by truncating the file
@@ -111,13 +129,16 @@ WPXFileStream::WPXFileStream(const char *filename) :
 
 WPXFileStream::~WPXFileStream()
 {
-	delete d;
+	if (d)
+		delete d;
 }
 
 #define BUFFER_MAX 65536
 
 const unsigned char *WPXFileStream::read(unsigned long numBytes, unsigned long &numBytesRead)
 {
+	if (!d)
+		return 0;
 	numBytesRead = 0;
 
 	if (numBytes == 0 || /* atEOS() || */ numBytes > (std::numeric_limits<unsigned long>::max)()/2
@@ -183,11 +204,15 @@ const unsigned char *WPXFileStream::read(unsigned long numBytes, unsigned long &
 
 long WPXFileStream::tell()
 {
+	if (!d)
+		return -1L;
 	return ferror(d->file) ? -1L : (long)((long)ftell(d->file) - d->readBufferLength + d->readBufferPos);
 }
 
 int WPXFileStream::seek(long offset, WPX_SEEK_TYPE seekType)
 {
+	if (!d)
+		return -1;
 	if (seekType == WPX_SEEK_CUR)
 		offset += tell();
 
@@ -223,11 +248,15 @@ int WPXFileStream::seek(long offset, WPX_SEEK_TYPE seekType)
 
 bool WPXFileStream::atEOS()
 {
+	if (!d)
+		return true;
 	return (tell() >= (long)d->streamSize);
 }
 
 bool WPXFileStream::isOLEStream()
 {
+	if (!d)
+		return false;
 	if (ferror(d->file))
 		return false;
 	if (d->streamType == UNKNOWN)
@@ -258,6 +287,8 @@ bool WPXFileStream::isOLEStream()
 
 WPXInputStream *WPXFileStream::getDocumentOLEStream(const char *name)
 {
+	if (!d)
+		return 0;
 	if (ferror(d->file))
 		return 0;
 	if (d->streamType == UNKNOWN && !isOLEStream())

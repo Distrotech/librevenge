@@ -578,10 +578,13 @@ void libwpd::StorageIO::load()
 	unsigned long numBytesRead = 0;
 	const unsigned char *buf = input->read(512, numBytesRead);
 
+	result = libwpd::Storage::NotOLE;
+	if (numBytesRead < 512)
+		return;
+
 	header->load( buf, numBytesRead );
 
 	// check OLE magic id
-	result = libwpd::Storage::NotOLE;
 	for( unsigned i=0; i<8; i++ )
 		if( header->id[i] != wpsole_magic[i] )
 			return;
