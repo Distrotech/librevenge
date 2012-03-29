@@ -426,40 +426,6 @@ libwpd::DirEntry *libwpd::DirTree::entry( const std::string &name )
 	return entry( index );
 }
 
-// helper function: recursively find siblings of index
-static void dirtree_find_siblings( libwpd::DirTree *dirtree, std::vector<unsigned>& result,
-unsigned index )
-{
-	libwpd::DirEntry *e = dirtree->entry( index );
-	if( !e ) return;
-	if( !e->valid ) return;
-
-	// prevent infinite loop
-	for( unsigned i = 0; i < result.size(); i++ )
-		if( result[i] == index ) return;
-
-	// add myself
-	result.push_back( index );
-
-	// visit previous sibling, don't go infinitely
-	unsigned prev = e->prev;
-	if( ( prev > 0 ) && ( prev < dirtree->entryCount() ) )
-	{
-		for( unsigned i = 0; i < result.size(); i++ )
-			if( result[i] == prev ) prev = 0;
-		if( prev ) dirtree_find_siblings( dirtree, result, prev );
-	}
-
-	// visit next sibling, don't go infinitely
-	unsigned next = e->next;
-	if( ( next > 0 ) && ( next < dirtree->entryCount() ) )
-	{
-		for( unsigned i = 0; i < result.size(); i++ )
-			if( result[i] == next ) next = 0;
-		if( next ) dirtree_find_siblings( dirtree, result, next );
-	}
-}
-
 static unsigned dirtree_find_sibling( libwpd::DirTree *dirtree, unsigned index, const std::string &name )
 {
 
