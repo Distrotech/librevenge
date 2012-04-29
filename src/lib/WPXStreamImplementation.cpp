@@ -261,7 +261,7 @@ bool WPXFileStream::isOLEStream()
 		return false;
 	if (d->streamType == UNKNOWN)
 	{
-		seek(0, WPX_SEEK_CUR);
+		seek(0, WPX_SEEK_SET);
 
 		// Check whether it is OLE2 storage
 		Storage tmpStorage( this );
@@ -270,7 +270,7 @@ bool WPXFileStream::isOLEStream()
 			d->streamType = OLE2;
 			return true;
 		}
-		seek(0, WPX_SEEK_CUR);
+		seek(0, WPX_SEEK_SET);
 		if (WPXZipStream::isZipFile(this))
 		{
 			d->streamType = ZIP;
@@ -396,7 +396,7 @@ bool WPXStringStream::isOLEStream()
 
 	if (d->streamType == UNKNOWN)
 	{
-		seek(0, WPX_SEEK_CUR);
+		seek(0, WPX_SEEK_SET);
 
 		// Check whether it is OLE2 storage
 		Storage tmpStorage( this );
@@ -405,7 +405,7 @@ bool WPXStringStream::isOLEStream()
 			d->streamType = OLE2;
 			return true;
 		}
-		seek(0, WPX_SEEK_CUR);
+		seek(0, WPX_SEEK_SET);
 		if (WPXZipStream::isZipFile(this))
 		{
 			d->streamType = ZIP;

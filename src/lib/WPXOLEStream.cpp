@@ -140,8 +140,6 @@ public:
 
 	std::vector<unsigned long> sb_blocks; // blocks for "small" files
 
-	std::list<Stream *> streams;
-
 	StorageIO( Storage *storage, WPXInputStream *is );
 	~StorageIO();
 
@@ -511,8 +509,7 @@ libwpd::StorageIO::StorageIO( libwpd::Storage *st, WPXInputStream *is ) :
 	dirtree(new libwpd::DirTree()),
 	bbat(new libwpd::AllocTable()),
 	sbat(new libwpd::AllocTable()),
-	sb_blocks(),
-	streams()
+	sb_blocks()
 {
 	bbat->blockSize = 1 << header->b_shift;
 	sbat->blockSize = 1 << header->s_shift;
@@ -524,10 +521,6 @@ libwpd::StorageIO::~StorageIO()
 	delete bbat;
 	delete dirtree;
 	delete header;
-
-	std::list<libwpd::Stream *>::iterator it;
-	for( it = streams.begin(); it != streams.end(); ++it )
-		delete *it;
 }
 
 bool libwpd::StorageIO::isOLEStream()
