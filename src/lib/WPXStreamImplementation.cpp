@@ -190,7 +190,9 @@ const unsigned char *WPXFileStream::read(unsigned long numBytes, unsigned long &
 	fseek(d->file, curpos, SEEK_SET);
 
 	d->readBuffer = new unsigned char[d->readBufferLength];
-	fread((void *)(d->readBuffer), 1, d->readBufferLength, d->file);
+	unsigned long tmpNumBytes;
+	if ((tmpNumBytes = fread((void *)(d->readBuffer), 1, d->readBufferLength, d->file)) != d->readBufferLength)
+		d->readBufferLength = tmpNumBytes;
 
 	d->readBufferPos = 0;
 	if (!d->readBufferLength)
