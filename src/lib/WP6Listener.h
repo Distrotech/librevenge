@@ -43,7 +43,7 @@ class WP6Listener
 {
 public:
 	WP6Listener();
-	virtual ~WP6Listener() {};
+	virtual ~WP6Listener() {}
 
 	virtual void startDocument() = 0;
 	virtual void startSubDocument() = 0;

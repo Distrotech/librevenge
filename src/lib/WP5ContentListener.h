@@ -59,11 +59,11 @@ public:
 	void startDocument()
 	{
 		WPXContentListener::startDocument();
-	};
+	}
 	void startSubDocument()
 	{
 		WPXContentListener::startSubDocument();
-	};
+	}
 	void setFont(const WPXString &fontName, double fontSize);
 	void setTabs(const std::vector<WPXTabStop> &tabStops, uint16_t tabOffset);
 	void insertCharacter(uint32_t character);
@@ -73,29 +73,29 @@ public:
 	void insertBreak(uint8_t breakType)
 	{
 		WPXContentListener::insertBreak(breakType);
-	};
+	}
 	void lineSpacingChange(double lineSpacing)
 	{
 		WPXContentListener::lineSpacingChange(lineSpacing);
-	};
+	}
 	void justificationChange(uint8_t justification)
 	{
 		WPXContentListener::justificationChange(justification);
-	};
+	}
 	void characterColorChange(uint8_t red, uint8_t green, uint8_t blue);
 	void attributeChange(bool isOn, uint8_t attribute);
-	void pageMarginChange(uint8_t /* side */, uint16_t /* margin */) {};
-	void pageFormChange(uint16_t /* length */, uint16_t /* width */, WPXFormOrientation /* orientation */) {};
+	void pageMarginChange(uint8_t /* side */, uint16_t /* margin */) {}
+	void pageFormChange(uint16_t /* length */, uint16_t /* width */, WPXFormOrientation /* orientation */) {}
 	void marginChange(uint8_t side, uint16_t margin);
-	void paragraphMarginChange(uint8_t /* side */, int16_t /* margin */) {};
+	void paragraphMarginChange(uint8_t /* side */, int16_t /* margin */) {}
 	void endDocument()
 	{
 		WPXContentListener::endDocument();
-	};
+	}
 	void endSubDocument()
 	{
 		WPXContentListener::endSubDocument();
-	};
+	}
 
 	void defineTable(uint8_t position, uint16_t leftOffset);
 	void addTableColumnDefinition(uint32_t width, uint32_t leftGutter, uint32_t rightGutter,
@@ -111,7 +111,7 @@ public:
 	void insertNoteReference(const WPXString &noteReference);
 	void insertNote(WPXNoteType noteType, const WP5SubDocument *subDocument);
 	void headerFooterGroup(uint8_t headerFooterType, uint8_t occurenceBits, WP5SubDocument *subDocument);
-	void suppressPageCharacteristics(uint8_t /* suppressCode */) {};
+	void suppressPageCharacteristics(uint8_t /* suppressCode */) {}
 
 	void setDefaultFont(const WPXString &fontName, double fontSize);
 
@@ -123,7 +123,7 @@ protected:
 	void _handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList, int nextTableIndice = 0);
 
 	void _flushText();
-	void _changeList() {};
+	void _changeList() {}
 
 private:
 	WP5ContentListener(const WP5ContentListener &);

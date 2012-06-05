@@ -49,7 +49,7 @@ public:
 	virtual unsigned long getSize() const
 	{
 		return m_size;
-	};
+	}
 
 private:
 	long m_offset;

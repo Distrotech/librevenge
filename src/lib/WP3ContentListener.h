@@ -57,26 +57,26 @@ public:
 	void startDocument()
 	{
 		WPXContentListener::startDocument();
-	};
+	}
 	void startSubDocument()
 	{
 		WPXContentListener::startSubDocument();
-	};
+	}
 	void insertCharacter(uint32_t character);
 	void insertTab();
 	void insertTab(uint8_t tabType, double tabPosition);
 	void insertBreak(uint8_t breakType)
 	{
 		WPXContentListener::insertBreak(breakType);
-	};
+	}
 	void insertEOL();
 	void attributeChange(bool isOn, uint8_t attribute);
 	void lineSpacingChange(double lineSpacing)
 	{
 		WPXContentListener::lineSpacingChange(lineSpacing);
-	};
-	void pageMarginChange(uint8_t /* side */, uint16_t /* margin */) {};
-	void pageFormChange(uint16_t /* length */, uint16_t /* width */, WPXFormOrientation /* orientation */) {};
+	}
+	void pageMarginChange(uint8_t /* side */, uint16_t /* margin */) {}
+	void pageFormChange(uint16_t /* length */, uint16_t /* width */, WPXFormOrientation /* orientation */) {}
 	void marginChange(uint8_t side, uint16_t margin);
 	void indentFirstLineChange(int16_t offset);
 	void setTabs(bool isRelative, const std::vector<WPXTabStop> tabStops);
@@ -85,11 +85,11 @@ public:
 	void endDocument()
 	{
 		WPXContentListener::endDocument();
-	};
+	}
 	void endSubDocument()
 	{
 		WPXContentListener::endSubDocument();
-	};
+	}
 
 	void defineTable(uint8_t position, uint16_t leftOffset);
 	void addTableColumnDefinition(uint32_t width, uint32_t leftGutter, uint32_t rightGutter,
@@ -111,7 +111,7 @@ public:
 	void insertNoteReference(const WPXString &noteReference);
 	void insertNote(WPXNoteType noteType, const WP3SubDocument *subDocument);
 	void headerFooterGroup(uint8_t headerFooterType, uint8_t occurenceBits, WP3SubDocument *subDocument);
-	void suppressPage(uint16_t /* suppressCode */) {};
+	void suppressPage(uint16_t /* suppressCode */) {}
 	void backTab();
 	void leftIndent();
 	void leftIndent(double offset);
@@ -129,7 +129,7 @@ protected:
 	void _openParagraph();
 
 	void _flushText();
-	void _changeList() {};
+	void _changeList() {}
 
 	void _handleFrameParameters( WPXPropertyList &propList, double height, double width, double verticalOffset, double horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
 	                             uint16_t figureFlags );

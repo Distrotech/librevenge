@@ -40,7 +40,7 @@ public:
 
 protected:
 	void _read(WPXInputStream *input, WPXEncryption *encryption);
-	virtual void _readContents(WPXInputStream * /* input */, WPXEncryption * /* encryption */) {};
+	virtual void _readContents(WPXInputStream * /* input */, WPXEncryption * /* encryption */) {}
 
 	uint8_t getGroup() const
 	{

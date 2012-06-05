@@ -1373,7 +1373,7 @@ WPXString WPXContentListener::_colorToString(const RGBSColor *color)
 }
 
 WPXString WPXContentListener::_mergeColorsToString(const RGBSColor *fgColor,
-        const RGBSColor *bgColor)
+        const RGBSColor * /* bgColor */)
 {
 	WPXString tmpColor;
 	RGBSColor tmpFgColor, tmpBgColor;

@@ -38,7 +38,7 @@ class WP1Listener
 {
 public:
 	WP1Listener();
-	virtual ~WP1Listener() {};
+	virtual ~WP1Listener() {}
 
 	virtual void startDocument() = 0;
 	virtual void startSubDocument() = 0;

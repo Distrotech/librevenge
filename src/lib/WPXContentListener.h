@@ -41,7 +41,7 @@
 typedef struct _WPXTableDefinition WPXTableDefinition;
 struct _WPXTableDefinition
 {
-	_WPXTableDefinition() : m_positionBits(0), m_leftOffset(0.0), m_columns(), m_columnsProperties() {};
+	_WPXTableDefinition() : m_positionBits(0), m_leftOffset(0.0), m_columns(), m_columnsProperties() {}
 	uint8_t m_positionBits;
 	double m_leftOffset;
 	std::vector < WPXColumnDefinition > m_columns;

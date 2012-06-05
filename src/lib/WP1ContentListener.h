@@ -93,11 +93,11 @@ public:
 	void endDocument()
 	{
 		WPXContentListener::endDocument();
-	};
+	}
 	void endSubDocument()
 	{
 		WPXContentListener::endSubDocument();
-	};
+	}
 	void insertPicture(uint16_t width, uint16_t height, const WPXBinaryData &binaryData);
 
 protected:
@@ -105,7 +105,7 @@ protected:
 	void _handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList, int nextTableIndice = 0);
 
 	void _flushText();
-	void _changeList() {};
+	void _changeList() {}
 
 private:
 	WP1ContentParsingState *m_parseState;

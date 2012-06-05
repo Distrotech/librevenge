@@ -41,7 +41,7 @@ class WP5Listener
 {
 public:
 	WP5Listener();
-	virtual ~WP5Listener() {};
+	virtual ~WP5Listener() {}
 
 	virtual void startDocument() = 0;
 	virtual void startSubDocument() = 0;

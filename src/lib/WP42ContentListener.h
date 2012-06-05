@@ -69,17 +69,17 @@ public:
 	void endDocument()
 	{
 		WPXContentListener::endDocument();
-	};
+	}
 	void endSubDocument()
 	{
 		WPXContentListener::endSubDocument();
-	};
+	}
 
 protected:
 	void _handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList, int nextTableIndice = 0);
 
 	void _flushText();
-	void _changeList() {};
+	void _changeList() {}
 
 private:
 	WP42ContentListener(const WP42ContentListener &);

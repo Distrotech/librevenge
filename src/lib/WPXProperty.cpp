@@ -92,7 +92,7 @@ class WPXPercentProperty : public WPXDoubleProperty
 {
 public:
 	WPXPercentProperty(const double val);
-	~WPXPercentProperty() {};
+	~WPXPercentProperty() {}
 	virtual WPXString getStr() const;
 	virtual WPXProperty *clone() const;
 };

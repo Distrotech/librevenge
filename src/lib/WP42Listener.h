@@ -36,7 +36,7 @@ class WP42Listener
 {
 public:
 	WP42Listener();
-	virtual ~WP42Listener() {};
+	virtual ~WP42Listener() {}
 
 	virtual void startDocument() = 0;
 	virtual void startSubDocument() = 0;

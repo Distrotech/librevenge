@@ -58,7 +58,7 @@ public:
 	{
 		/*if (!isUndoOn())*/ m_currentPageHasContent = true;
 	}
-	void characterColorChange(uint8_t /* red */, uint8_t /* green */, uint8_t /* blue */) {};
+	void characterColorChange(uint8_t /* red */, uint8_t /* green */, uint8_t /* blue */) {}
 	void insertEOL()
 	{
 		/*if (!isUndoOn())*/ m_currentPageHasContent = true;
@@ -84,14 +84,14 @@ public:
 	                bool useCellAttributes, uint32_t cellAttributes);
 	void endTable() {}
 
-	void insertNoteReference(const WPXString& /* noteReference */) {};
-	void insertNote(WPXNoteType /* noteType */, const WP5SubDocument * /* subDocument */) {};
+	void insertNoteReference(const WPXString& /* noteReference */) {}
+	void insertNote(WPXNoteType /* noteType */, const WP5SubDocument * /* subDocument */) {}
 	void headerFooterGroup(uint8_t headerFooterType, uint8_t occurenceBits, WP5SubDocument *subDocument);
 	void suppressPageCharacteristics(uint8_t suppressCode);
 
-	void boxOn(uint8_t /* positionAndType */, uint8_t /* alignment */, uint16_t /* width */, uint16_t /* height */, uint16_t /* x */, uint16_t /* y */) {};
-	virtual void boxOff() {};
-	virtual void insertGraphicsData(const WPXBinaryData * /* data */) {};
+	void boxOn(uint8_t /* positionAndType */, uint8_t /* alignment */, uint16_t /* width */, uint16_t /* height */, uint16_t /* x */, uint16_t /* y */) {}
+	virtual void boxOff() {}
+	virtual void insertGraphicsData(const WPXBinaryData * /* data */) {}
 
 protected:
 	void _handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList, int nextTableIndice = 0);

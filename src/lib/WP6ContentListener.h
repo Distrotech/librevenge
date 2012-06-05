@@ -166,11 +166,11 @@ public:
 	void startDocument()
 	{
 		WPXContentListener::startDocument();
-	};
+	}
 	void startSubDocument()
 	{
 		WPXContentListener::startSubDocument();
-	};
+	}
 	void setDate(const uint16_t type, const uint16_t year,
 	             const uint8_t month, const uint8_t day,
 	             const uint8_t hour, const uint8_t minute,
@@ -188,15 +188,15 @@ public:
 	void insertBreak(const uint8_t breakType)
 	{
 		WPXContentListener::insertBreak(breakType);
-	};
+	}
 	void lineSpacingChange(const double lineSpacing)
 	{
 		WPXContentListener::lineSpacingChange(lineSpacing);
-	};
+	}
 	void justificationChange(const uint8_t justification)
 	{
 		WPXContentListener::justificationChange(justification);
-	};
+	}
 	void characterColorChange(const uint8_t red, const uint8_t green, const uint8_t blue);
 	void characterShadingChange(const uint8_t shading);
 	void highlightChange(const bool isOn, const RGBSColor color);
@@ -231,11 +231,11 @@ public:
 	void endDocument()
 	{
 		WPXContentListener::endDocument();
-	};
+	}
 	void endSubDocument()
 	{
 		WPXContentListener::endSubDocument();
-	};
+	}
 
 	void defineTable(const uint8_t position, const uint16_t leftOffset);
 	void addTableColumnDefinition(const uint32_t width, const uint32_t leftGutter, const uint32_t rightGutter,
