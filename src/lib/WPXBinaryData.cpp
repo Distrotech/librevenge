@@ -174,7 +174,14 @@ const WPXString WPXBinaryData::getBase64Data() const
 const WPXInputStream *WPXBinaryData::getDataStream() const
 {
 	if (m_binaryDataImpl->m_stream)
+	{
 		delete (m_binaryDataImpl->m_stream);
-	return ((m_binaryDataImpl->m_stream) = new WPXMemoryInputStream(&(m_binaryDataImpl->m_buf[0]), m_binaryDataImpl->m_buf.size()));
+		m_binaryDataImpl->m_stream = 0;
+	}
+	if (m_binaryDataImpl->m_buf.empty())
+		return 0;
+	m_binaryDataImpl->m_stream = new WPXMemoryInputStream(&(m_binaryDataImpl->m_buf[0]), m_binaryDataImpl->m_buf.size());
+	return m_binaryDataImpl->m_stream;
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */
