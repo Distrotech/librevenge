@@ -116,7 +116,7 @@ void WP3WindowGroup::parse(WP3Listener *listener)
 		{
 			WPXBinaryData tmpWBOXData;
 			for (int i=0; i < 512; i++)
-				tmpWBOXData.append((const unsigned char)0);
+				tmpWBOXData.append((unsigned char)0);
 			if (listener->getResourceFork() && listener->getResourceFork()->getResource(0x57424f58, m_resourceID)) // WBOX resource
 			{
 				tmpWBOXData.append(listener->getResourceFork()->getResource(0x57424f58, m_resourceID)->getResourceData());
@@ -127,7 +127,7 @@ void WP3WindowGroup::parse(WP3Listener *listener)
 		{
 			WPXBinaryData tmpPICTData;
 			for (int i=0; i < 512; i++)
-				tmpPICTData.append((const unsigned char)0);
+				tmpPICTData.append((unsigned char)0);
 			if (listener->getResourceFork() && listener->getResourceFork()->getResource(0x50494354, m_resourceID)) // replacement picture in PICT format
 			{
 				tmpPICTData.append(listener->getResourceFork()->getResource(0x50494354, m_resourceID)->getResourceData());
