@@ -79,7 +79,6 @@ class WPXPageSpan
 public:
 	WPXPageSpan();
 	WPXPageSpan(const WPXPageSpan &page, double paragraphMarginLeft, double paragraphMarginRight);
-	WPXPageSpan(const WPXPageSpan &page);
 	virtual ~WPXPageSpan();
 
 	bool getPageNumberSuppression() const

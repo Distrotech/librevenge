@@ -102,28 +102,6 @@ WPXPageSpan::WPXPageSpan() :
 		m_isHeaderFooterSuppressed[i]=false;
 }
 
-WPXPageSpan::WPXPageSpan(const WPXPageSpan &page) :
-	m_isPageNumberSuppressed(page.getPageNumberSuppression()),
-	m_formLength(page.getFormLength()),
-	m_formWidth(page.getFormWidth()),
-	m_formOrientation(page.getFormOrientation()),
-	m_marginLeft(page.getMarginLeft()),
-	m_marginRight(page.getMarginRight()),
-	m_marginTop(page.getMarginTop()),
-	m_marginBottom(page.getMarginBottom()),
-	m_pageNumberPosition(page.getPageNumberPosition()),
-	m_isPageNumberOverridden(page.getPageNumberOverriden()),
-	m_pageNumberOverride(page.getPageNumberOverride()),
-	m_pageNumberingType(page.getPageNumberingType()),
-	m_pageNumberingFontName(page.getPageNumberingFontName()),
-	m_pageNumberingFontSize(page.getPageNumberingFontSize()),
-	m_headerFooterList(page.getHeaderFooterList()),
-	m_pageSpan(page.getPageSpan())
-{
-	for (uint8_t i=0; i<WPX_NUM_HEADER_FOOTER_TYPES; i++)
-		m_isHeaderFooterSuppressed[i] = page.getHeaderFooterSuppression(i);
-}
-
 // NB: this is not a literal "clone" function: it is contingent on the side margins that are passed,
 // and suppression and override variables are not copied
 WPXPageSpan::WPXPageSpan(const WPXPageSpan &page, double paragraphMarginLeft, double paragraphMarginRight) :
