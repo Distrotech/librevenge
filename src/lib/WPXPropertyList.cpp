@@ -165,7 +165,7 @@ void WPXPropertyList::remove(const char *name)
 	m_mapImpl->remove(name);
 }
 
-const WPXPropertyList &WPXPropertyList::operator=(const WPXPropertyList &propList)
+WPXPropertyList &WPXPropertyList::operator=(const WPXPropertyList &propList)
 {
 	clear();
 	WPXPropertyList::Iter i(propList);
