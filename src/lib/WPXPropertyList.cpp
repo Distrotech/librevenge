@@ -28,6 +28,7 @@
 #include "WPXPropertyList.h"
 #include <map>
 #include <string>
+#include <utility>
 
 class WPXMapImpl
 {
@@ -38,6 +39,11 @@ public:
 	const WPXProperty *operator[](const char *name) const;
 	void remove(const char *name);
 	void clear();
+
+private:
+	// disable copy construction and assignment
+	WPXMapImpl(const WPXMapImpl &other);
+	WPXMapImpl& operator=(const WPXMapImpl &other);
 
 private:
 	mutable std::map<std::string, WPXProperty *> m_map;
@@ -167,12 +173,8 @@ void WPXPropertyList::remove(const char *name)
 
 WPXPropertyList &WPXPropertyList::operator=(const WPXPropertyList &propList)
 {
-	clear();
-	WPXPropertyList::Iter i(propList);
-	for (i.rewind(); i.next(); )
-	{
-		insert(i.key(), i()->clone());
-	}
+	WPXPropertyList tmp(propList);
+	swap(tmp);
 	return *this;
 }
 
@@ -184,6 +186,12 @@ const WPXProperty *WPXPropertyList::operator[](const char *name) const
 void WPXPropertyList::clear()
 {
 	m_mapImpl->clear();
+}
+
+void WPXPropertyList::swap(WPXPropertyList &other)
+{
+    using std::swap;
+    swap(m_mapImpl, other.m_mapImpl);
 }
 
 class WPXMapIterImpl

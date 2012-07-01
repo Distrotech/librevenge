@@ -52,6 +52,7 @@ public:
 	const WPXProperty *operator[](const char *name) const;
 	WPXPropertyList &operator=(const WPXPropertyList &propList);
 	void clear();
+	void swap(WPXPropertyList &other);
 
 	class Iter
 	{
