@@ -201,12 +201,12 @@ private:
 
 static inline unsigned long readU16( const unsigned char *ptr )
 {
-	return ptr[0]+(ptr[1]<<8);
+	return (unsigned long)(unsigned)(ptr[0]+(ptr[1]<<8));
 }
 
 static inline unsigned long readU32( const unsigned char *ptr )
 {
-	return ptr[0]+(ptr[1]<<8)+(ptr[2]<<16)+(ptr[3]<<24);
+	return (unsigned long)(unsigned)(ptr[0]+(ptr[1]<<8)+(ptr[2]<<16)+(ptr[3]<<24));
 }
 
 static const unsigned char wpsole_magic[] =
