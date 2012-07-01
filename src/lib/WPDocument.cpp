@@ -270,7 +270,6 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *documen
 	input->seek(0, WPX_SEEK_SET);
 
 	WPXParser *parser = 0;
-	WPXEncryption *encryption = (password) ? new WPXEncryption(password) : 0;
 
 	// by-pass the OLE stream (if it exists) and returns the (sub) stream with the
 	// WordPerfect document.
@@ -294,6 +293,7 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *documen
 
 	try
 	{
+		WPXEncryption *encryption = 0;
 		WPXHeader *header = WPXHeader::constructHeader(document, 0);
 
 		if (header)
@@ -305,20 +305,16 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *documen
 				{
 				case 0x00: // WP5
 					WPD_DEBUG_MSG(("WordPerfect: Using the WP5 parser.\n"));
-					if (encryption)
-					{
-						delete encryption;
+					if (password)
 						encryption = new WPXEncryption(password, 16);
-					}
 					parser = new WP5Parser(document, header, encryption);
 					parser->parse(documentInterface);
 					break;
 				case 0x02: // WP6
 					WPD_DEBUG_MSG(("WordPerfect: Using the WP6 parser.\n"));
-					if (encryption)
+					if (password)
 					{
-						delete encryption;
-						encryption = 0;
+						delete header;
 						throw UnsupportedEncryptionException();
 					}
 					parser = new WP6Parser(document, header, encryption);
@@ -337,11 +333,8 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *documen
 				case 0x03: // WP Mac 3.0-3.5
 				case 0x04: // WP Mac 3.5e
 					WPD_DEBUG_MSG(("WordPerfect: Using the WP3 parser.\n"));
-					if (encryption)
-					{
-						delete encryption;
+					if (password)
 						encryption = new WPXEncryption(password, header->getDocumentOffset());
-					}
 					parser = new WP3Parser(document, header, encryption);
 					parser->parse(documentInterface);
 					break;
@@ -369,11 +362,8 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *documen
 			{
 				WPD_DEBUG_MSG(("WordPerfect: Mostly likely the file format is WP Mac 1.x.\n\n"));
 				WPD_DEBUG_MSG(("WordPerfect: Using the WP Mac 1.x parser.\n\n"));
-				if (encryption)
-				{
-					delete encryption;
+				if (password)
 					encryption = new WPXEncryption(password, 6);
-				}
 				parser = new WP1Parser(document, encryption);
 				parser->parse(documentInterface);
 				DELETEP(parser);
@@ -382,9 +372,8 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *documen
 			{
 				WPD_DEBUG_MSG(("WordPerfect: Mostly likely the file format is WP4.2.\n\n"));
 				WPD_DEBUG_MSG(("WordPerfect: Using the WP4.2 parser.\n\n"));
-				if (encryption)
+				if (password)
 				{
-					delete encryption;
 					encryption = new WPXEncryption(password, 6);
 					input->seek(6, WPX_SEEK_SET);
 				}
