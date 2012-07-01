@@ -67,11 +67,14 @@ WPXHeaderFooter::WPXHeaderFooter(const WPXHeaderFooter &headerFooter) :
 
 WPXHeaderFooter &WPXHeaderFooter::operator=(const WPXHeaderFooter &headerFooter)
 {
-	m_type = headerFooter.getType();
-	m_occurence = headerFooter.getOccurence();
-	m_internalType = headerFooter.getInternalType();
-	m_subDocument = headerFooter.getSubDocument();
-	m_tableList = headerFooter.getTableList();
+	if (this != &headerFooter)
+	{
+		m_type = headerFooter.getType();
+		m_occurence = headerFooter.getOccurence();
+		m_internalType = headerFooter.getInternalType();
+		m_subDocument = headerFooter.getSubDocument();
+		m_tableList = headerFooter.getTableList();
+	}
 	return *this;
 }
 
