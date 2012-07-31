@@ -43,7 +43,9 @@ void WP42HeaderFooterGroup::_readContents(WPXInputStream *input, WPXEncryption *
 {
 	input->seek(4, WPX_SEEK_CUR);
 	unsigned int tmpStartPosition = input->tell();
-	while (readU8(input, encryption) != 0xD1);
+	while (readU8(input, encryption) != 0xD1)
+	{
+	}
 	input->seek(-3, WPX_SEEK_CUR);
 	int tmpSubDocumentSize = 0;
 	if (readU8(input, encryption) == 0xFF)
