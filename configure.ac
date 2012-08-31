@@ -23,6 +23,7 @@ AC_LANG([C++])
 # ===========================
 # Find required base packages
 # ===========================
+m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
 AC_PROG_CC
 AC_PROG_CPP
 AC_PROG_CXX
@@ -31,7 +32,6 @@ AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_LIBTOOL
 AC_LIBTOOL_WIN32_DLL
-m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
 
 # =================================
 # Libtool/Version Makefile settings
