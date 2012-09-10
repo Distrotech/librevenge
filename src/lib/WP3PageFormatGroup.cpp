@@ -56,6 +56,7 @@ void WP3PageFormatGroup::_readContents(WPXInputStream *input, WPXEncryption *enc
 {
 	// this group can contain different kinds of data, thus we need to read
 	// the contents accordingly
+	uint8_t tmpTmp = 0xff;
 	int8_t tmpTabType = 0;
 	double tmpTabPosition = 0.0;
 	WPXTabStop tmpTabStop = WPXTabStop();
@@ -93,8 +94,9 @@ void WP3PageFormatGroup::_readContents(WPXInputStream *input, WPXEncryption *enc
 
 		m_isRelative = (readU8(input, encryption) & 0x01);
 
-		while ((tmpTabType = (int8_t)readU8(input, encryption))  != (int8_t)0xff)
+		while ((tmpTmp = readU8(input, encryption)) != 0xff)
 		{
+			tmpTabType = (int8_t) tmpTmp;
 			if (input->atEOS())
 				throw FileException();
 			tmpTabPosition = fixedPointToDouble(readU32(input, encryption, true)) / 72.0;
