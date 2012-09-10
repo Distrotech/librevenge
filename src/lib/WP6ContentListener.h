@@ -53,7 +53,7 @@ const int STATE_MEMORY = 3;
 class WP6StyleStateSequence
 {
 public:
-	WP6StyleStateSequence() : m_stateSequence(), m_currentState(), m_previousState()
+	WP6StyleStateSequence() : m_stateSequence()
 	{
 		clear();
 	}
@@ -64,11 +64,11 @@ public:
 	}
 	WP6StyleState getCurrentState() const
 	{
-		return m_stateSequence[0]; /*currentState;*/
+		return m_stateSequence[0];
 	}
 	WP6StyleState getPreviousState() const
 	{
-		return m_stateSequence[1]; /*m_previousState;*/
+		return m_stateSequence[1];
 	}
 	void clear()
 	{
@@ -78,8 +78,6 @@ public:
 
 private:
 	std::vector<WP6StyleState> m_stateSequence;
-	WP6StyleState m_currentState;
-	WP6StyleState m_previousState;
 };
 
 typedef struct _WP6ContentParsingState WP6ContentParsingState;

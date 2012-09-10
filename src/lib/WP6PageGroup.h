@@ -40,7 +40,6 @@ public:
 private:
 	// variables needed for subgroup 0 and 1 (Left/Right Margin Set)
 	uint16_t m_margin;
-	uint8_t m_marginType;
 	// variables needed for subgroup 2 (suppress page characteristics)
 	uint8_t m_suppressedCode;
 	// variables needed for subgroup 3 (page number position)

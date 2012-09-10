@@ -40,7 +40,6 @@ public:
 
 private:
 	uint16_t m_numPIDs;
-	uint16_t m_nonDeletableInfoSize;
 	uint16_t m_outlineHash;
 	uint8_t m_numberingMethods[WP6_NUM_LIST_LEVELS];
 	uint8_t m_outlineFlags;

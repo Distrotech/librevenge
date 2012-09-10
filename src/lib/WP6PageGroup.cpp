@@ -33,7 +33,6 @@
 WP6PageGroup::WP6PageGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	WP6VariableLengthGroup(),
 	m_margin(0),
-	m_marginType(0),
 	m_suppressedCode(0),
 	m_pageNumberTypefaceDesc(0),
 	m_pageNumberUseFlag(0x00),

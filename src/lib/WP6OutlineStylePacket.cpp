@@ -31,7 +31,6 @@
 WP6OutlineStylePacket::WP6OutlineStylePacket(WPXInputStream *input, WPXEncryption *encryption, int /* id */, uint32_t dataOffset, uint32_t dataSize) :
 	WP6PrefixDataPacket(input, encryption),
 	m_numPIDs(0),
-	m_nonDeletableInfoSize(0),
 	m_outlineHash(0),
 	m_outlineFlags(0),
 	m_tabBehaviourFlag(0)
