@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="libwpd"
-	ProjectGUID="{37C1BDF5-2858-4D9F-AF09-C66F58BFB938}"
+	ProjectGUID="{330E414A-9C06-4A4B-9814-0C665F5DCA52}"
 	TargetFrameworkVersion="0"
 	>
 	<Platforms>

@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="wpd2raw"
-	ProjectGUID="{7D6492E4-34B9-4F2C-BE50-E7431E2E5869}"
+	ProjectGUID="{A11C84E5-19D8-44EF-BD26-50A487CEB4B2}"
 	TargetFrameworkVersion="0"
 	>
 	<Platforms>

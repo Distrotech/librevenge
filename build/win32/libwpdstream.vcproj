@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="libwpdstream"
-	ProjectGUID="{4BBACFA6-FFDA-4DB9-9207-722606426CFA}"
+	ProjectGUID="{CB848337-B6C8-4942-961B-5A9FBBF37B46}"
 	TargetFrameworkVersion="0"
 	>
 	<Platforms>
