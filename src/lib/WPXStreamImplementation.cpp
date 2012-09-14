@@ -31,6 +31,10 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#ifndef S_ISREG
+#define S_ISREG(x) (((x) & S_IFMT) == S_IFREG)
+#endif
+
 using namespace libwpd;
 
 enum WPXStreamType { UNKNOWN, FLAT, OLE2, ZIP };
