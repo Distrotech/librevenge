@@ -216,7 +216,6 @@ if test "x$with_stream" != "xno"; then
 		[with_stream="$withval"],
 		[with_stream=no]
 	)
-	AM_CONDITIONAL(BUILD_ZIP_STREAM, [test "x$with_zip_stream" = "xyes"])
 	AC_DEFINE([BUILD_ZIP_STREAM],[1],[Build the zip stream implementation])
 fi
 

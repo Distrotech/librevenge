@@ -20,6 +20,8 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
+#ifdef BUILD_ZIP_STREAM
+
 #include <string>
 #include <string.h>
 #include <stdio.h>
@@ -370,5 +372,7 @@ WPXInputStream *WPXZipStream::getSubstream(WPXInputStream *input, const char *na
 		return new WPXStringStream(&data[0], data.size());
 	}
 }
+
+#endif /* BUILD_ZIP_STREAM */
 
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */
