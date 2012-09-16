@@ -24,7 +24,9 @@
 
 #include "WPXStreamImplementation.h"
 #include "WPXOLEStream.h"
+#ifdef BUILD_ZIP_STREAM
 #include "WPXZipStream.h"
+#endif
 
 #include <limits>
 #include <string.h>
@@ -276,12 +278,14 @@ bool WPXFileStream::isOLEStream()
 			d->streamType = OLE2;
 			return true;
 		}
+#ifdef BUILD_ZIP_STREAM
 		seek(0, WPX_SEEK_SET);
 		if (WPXZipStream::isZipFile(this))
 		{
 			d->streamType = ZIP;
 			return true;
 		}
+#endif
 		d->streamType = FLAT;
 		return false;
 	}
@@ -319,8 +323,10 @@ WPXInputStream *WPXFileStream::getDocumentOLEStream(const char *name)
 
 		return new WPXStringStream(&buf[0], tmpLength);
 	}
+#ifdef BUILD_ZIP_STREAM
 	else if (d->streamType == ZIP)
 		return WPXZipStream::getSubstream(this, name);
+#endif
 	return 0;
 }
 
@@ -411,12 +417,14 @@ bool WPXStringStream::isOLEStream()
 			d->streamType = OLE2;
 			return true;
 		}
+#ifdef BUILD_ZIP_STREAM
 		seek(0, WPX_SEEK_SET);
 		if (WPXZipStream::isZipFile(this))
 		{
 			d->streamType = ZIP;
 			return true;
 		}
+#endif
 		d->streamType = FLAT;
 		return false;
 	}
@@ -453,8 +461,10 @@ WPXInputStream *WPXStringStream::getDocumentOLEStream(const char *name)
 
 		return new WPXStringStream(&buf[0], tmpLength);
 	}
+#ifdef BUILD_ZIP_STREAM
 	else if (d->streamType == ZIP)
 		return WPXZipStream::getSubstream(this, name);
+#endif
 	return 0;
 }
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

@@ -207,10 +207,23 @@ AC_ARG_WITH([stream],
 )
 AM_CONDITIONAL(WITH_LIBWPD_STREAM, [test "x$with_stream" != "xno"])
 
+# ==========
+# Zip stream
+# ==========
+if test "x$with_stream" != "xno"; then
+	AC_ARG_WITH([zip-stream],
+		[AS_HELP_STRING([--with-zip-stream], [Build the zip stream implementation])],
+		[with_stream="$withval"],
+		[with_stream=no]
+	)
+	AM_CONDITIONAL(BUILD_ZIP_STREAM, [test "x$with_zip_stream" = "xyes"])
+	AC_DEFINE([BUILD_ZIP_STREAM],[1],[Build the zip stream implementation])
+fi
+
 # =========
 # Find zlib
 # =========
-if test "x$with_stream" != "xno"; then
+if test "x$with_stream" != "xno" -a "x$with_zip_stream" = "xyes"; then
 PKG_CHECK_MODULES([ZLIB],[zlib],[],[
     AC_CHECK_HEADER(zlib.h, [ZLIB_CFLAGS=],
         [AC_MSG_ERROR(zlib.h not found. install zlib)], [])
@@ -221,9 +234,9 @@ else
 ZLIB_CFLAGS=
 ZLIB_LIBS=
 fi
+
 AC_SUBST(ZLIB_CFLAGS)
 AC_SUBST(ZLIB_LIBS)
-
 
 # =====================
 # Prepare all .in files
@@ -264,6 +277,7 @@ Build configuration:
 	debug:           ${enable_debug}
 	docs:            ${build_docs}
 	stream:          ${with_stream}
+	zip-stream:      ${with_zip_stream}
 	static-tools:    ${enable_static_tools}
 	werror:          ${enable_werror}
 ==============================================================================
