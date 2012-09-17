@@ -93,6 +93,10 @@ SOURCE=..\..\src\lib\WPXOLEStream.cpp
 
 SOURCE=..\..\src\lib\WPXStreamImplementation.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WPXZipStream.cpp
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -108,6 +112,10 @@ SOURCE=..\..\src\lib\WPXStream.h
 # Begin Source File
 
 SOURCE=..\..\src\lib\WPXStreamImplementation.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lib\WPXZipStream.h
 # End Source File
 # End Group
 # End Target

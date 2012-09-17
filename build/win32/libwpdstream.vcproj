@@ -207,6 +207,10 @@
 					/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath="..\..\src\lib\WPXZipStream.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -222,6 +226,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\lib\WPXStreamImplementation.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\lib\WPXZipStream.h"
 				>
 			</File>
 		</Filter>
