@@ -223,6 +223,8 @@ int WPXFileStream::seek(long offset, WPX_SEEK_TYPE seekType)
 		return -1;
 	if (seekType == WPX_SEEK_CUR)
 		offset += tell();
+	if (seekType == WPX_SEEK_END)
+		offset += (long)d->streamSize;
 
 	if (offset < 0)
 		offset = 0;
@@ -378,6 +380,8 @@ int WPXStringStream::seek(long offset, WPX_SEEK_TYPE seekType)
 		d->offset += offset;
 	else if (seekType == WPX_SEEK_SET)
 		d->offset = offset;
+	else if (seekType == WPX_SEEK_END)
+		d->offset += d->buffer.size();
 
 	if (d->offset < 0)
 	{

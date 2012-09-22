@@ -29,7 +29,8 @@
 enum WPX_SEEK_TYPE
 {
 	WPX_SEEK_CUR,
-	WPX_SEEK_SET
+	WPX_SEEK_SET,
+	WPX_SEEK_END
 };
 
 class WPXInputStream
