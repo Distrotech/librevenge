@@ -43,7 +43,7 @@ public:
 private:
 	// disable copy construction and assignment
 	WPXMapImpl(const WPXMapImpl &other);
-	WPXMapImpl& operator=(const WPXMapImpl &other);
+	WPXMapImpl &operator=(const WPXMapImpl &other);
 
 private:
 	mutable std::map<std::string, WPXProperty *> m_map;
@@ -174,7 +174,7 @@ void WPXPropertyList::remove(const char *name)
 WPXPropertyList &WPXPropertyList::operator=(const WPXPropertyList &propList)
 {
 	WPXPropertyList tmp(propList);
-	swap(tmp);
+	std::swap(m_mapImpl, tmp.m_mapImpl);
 	return *this;
 }
 
@@ -188,11 +188,12 @@ void WPXPropertyList::clear()
 	m_mapImpl->clear();
 }
 
+#if 0
 void WPXPropertyList::swap(WPXPropertyList &other)
 {
-    using std::swap;
-    swap(m_mapImpl, other.m_mapImpl);
+	std::swap(m_mapImpl, other.m_mapImpl);
 }
+#endif
 
 class WPXMapIterImpl
 {
