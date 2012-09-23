@@ -41,12 +41,12 @@ AC_SUBST(WPD_MINOR_VERSION, [libwpd_version_minor])
 AC_SUBST(WPD_MICRO_VERSION, [libwpd_version_micro])
 AC_SUBST(WPD_VERSION, [libwpd_version])
 # AC_SUBST(LT_RELEASE, [libwpd_version_major.libwpd_version_minor])
-LT_CURRENT=`expr 100 '*' libwpd_version_major + libwpd_version_minor`
+LT_CURRENT=`expr 100 '*' libwpd_version_major + libwpd_version_minor + 1`
 # For 1.0.0 comment the first line and uncomment the second
-LT_AGE=0
+LT_AGE=1
 # LT_AGE=libwpd_version_minor
 AC_SUBST(LT_CURRENT)
-AC_SUBST(LT_REVISION, [libwpd_version_micro])
+AC_SUBST(LT_REVISION, [`expr libwpd_version_micro - 5`])
 AC_SUBST(LT_AGE)
 
 # ==========================
