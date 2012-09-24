@@ -116,12 +116,20 @@ static unsigned char getByte(WPXInputStream *input)
 
 static unsigned short getShort(WPXInputStream *input)
 {
-	return (unsigned short)getByte(input)+((unsigned short)getByte(input)<<8);
+	unsigned long numBytesRead = 0;
+	const unsigned char *ret = input->read(2, numBytesRead);
+	if (numBytesRead != 4)
+		throw StreamException();
+	return (unsigned short)ret[0]|((unsigned short)ret[1]<<8);
 }
 
 static unsigned getInt(WPXInputStream *input)
 {
-	return (unsigned)getByte(input)+((unsigned)getByte(input)<<8)+((unsigned)getByte(input)<<16)+((unsigned)getByte(input)<<24);
+	unsigned long numBytesRead = 0;
+	const unsigned char *ret = input->read(4, numBytesRead);
+	if (numBytesRead != 4)
+		throw StreamException();
+	return (unsigned)ret[0]|((unsigned)ret[1]<<8)|((unsigned)ret[2]<<16)|((unsigned)ret[3]<<24);
 }
 
 static bool readCentralDirectoryEnd(WPXInputStream *input, CentralDirectoryEnd &end)
@@ -247,7 +255,9 @@ static bool areHeadersConsistent(const LocalFileHeader &header, const CentralDir
 
 static bool findCentralDirectoryEnd(WPXInputStream *input)
 {
-	input->seek(0, WPX_SEEK_SET);
+	if (input->seek(-1024, WPX_SEEK_END))
+		input->seek(0, WPX_SEEK_SET);
+
 	try
 	{
 		while (!input->atEOS())
