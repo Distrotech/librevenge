@@ -118,7 +118,7 @@ static unsigned short getShort(WPXInputStream *input)
 {
 	unsigned long numBytesRead = 0;
 	const unsigned char *ret = input->read(2, numBytesRead);
-	if (numBytesRead != 4)
+	if (numBytesRead != 2)
 		throw StreamException();
 	return (unsigned short)ret[0]|((unsigned short)ret[1]<<8);
 }
