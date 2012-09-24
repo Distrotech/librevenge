@@ -212,9 +212,9 @@ AM_CONDITIONAL(WITH_LIBWPD_STREAM, [test "x$with_stream" != "xno"])
 # ==========
 if test "x$with_stream" != "xno"; then
 	AC_ARG_WITH([zip-stream],
-		[AS_HELP_STRING([--with-zip-stream], [Build the zip stream implementation])],
+		[AS_HELP_STRING([--without-zip-stream], [Do not build the zip stream implementation])],
 		[with_zip_stream="$withval"],
-		[with_zip_stream=no]
+		[with_zip_stream=yes]
 	)
 	AC_DEFINE([BUILD_ZIP_STREAM],[1],[Build the zip stream implementation])
 else
