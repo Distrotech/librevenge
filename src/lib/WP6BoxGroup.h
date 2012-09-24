@@ -28,7 +28,6 @@
 #define WP6BOXGROUP_H
 
 #include "WP6VariableLengthGroup.h"
-#include <vector>
 #include "libwpd_internal.h"
 
 class WPXInputStream;

@@ -304,8 +304,8 @@ void WP6BoxGroup::parse(WP6Listener *listener)
 	if (!m_nativeHeight && gbsPacket)
 		m_nativeHeight = gbsPacket->getNativeHeight();
 
-	std::vector<uint16_t> graphicsDataIds;
-	std::vector<uint16_t>::iterator gdiIter;
+	std::vector<unsigned> graphicsDataIds;
+	std::vector<unsigned>::iterator gdiIter;
 	WP6SubDocument *subDocument = 0;
 
 	// Get the box content
@@ -389,7 +389,7 @@ void WP6BoxGroup::parse(WP6Listener *listener)
 	if (tmpContentType == 0x03)
 	{
 		for (gdiIter = graphicsDataIds.begin(); gdiIter != graphicsDataIds.end(); gdiIter++)
-			listener->insertGraphicsData((*gdiIter));
+			listener->insertGraphicsData(((uint16_t)*gdiIter));
 	}
 	if ((tmpContentType == 0x01) && (subDocument))
 	{

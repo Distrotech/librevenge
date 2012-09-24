@@ -39,16 +39,12 @@ public:
 	~WP6GraphicsFilenamePacket();
 	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
 	void parse(WP6Listener * /*listener */) const {}
-	const std::vector<uint16_t> &getChildIds() const
-	{
-		return m_childIds;
-	}
-
+	const std::vector<unsigned> getChildIds() const;
 
 private:
 	WP6GraphicsFilenamePacket(const WP6GraphicsFilenamePacket &);
 	WP6GraphicsFilenamePacket &operator=(const WP6GraphicsFilenamePacket &);
-	std::vector<uint16_t> m_childIds;
+	std::vector<unsigned> m_childIds;
 	const uint8_t m_flags;
 
 };

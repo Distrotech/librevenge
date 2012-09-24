@@ -50,4 +50,9 @@ void WP6GraphicsFilenamePacket::_readContents(WPXInputStream *input, WPXEncrypti
 		m_childIds.push_back(readU16(input, encryption));
 }
 
+const std::vector<unsigned> WP6GraphicsFilenamePacket::getChildIds() const
+{
+	return m_childIds;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */
