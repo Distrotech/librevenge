@@ -50,7 +50,7 @@ public:
 
 	void remove(const char *name);
 	const WPXProperty *operator[](const char *name) const;
-	WPXPropertyList &operator=(const WPXPropertyList &propList);
+	const WPXPropertyList &operator=(const WPXPropertyList &propList);
 	void clear();
 
 	class Iter

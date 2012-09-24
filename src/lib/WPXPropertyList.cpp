@@ -171,7 +171,7 @@ void WPXPropertyList::remove(const char *name)
 	m_mapImpl->remove(name);
 }
 
-WPXPropertyList &WPXPropertyList::operator=(const WPXPropertyList &propList)
+const WPXPropertyList &WPXPropertyList::operator=(const WPXPropertyList &propList)
 {
 	WPXPropertyList tmp(propList);
 	std::swap(m_mapImpl, tmp.m_mapImpl);
