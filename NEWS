@@ -1,4 +1,18 @@
 CHANGES:
+0.9.5 - 0.9.6
+- Revert an accidental ABI change in WPXPropertyList
+- Fix Windows build inside LibreOffice
+- Link the Windows static libraries with DLL runtimes
+
+0.9.4 - 0.9.5
+- libwpd-stream: Add experimental support for ZIP storages
+- libwpd-stream: Add WPX_SEEK_END to the WPXSeekType enum
+  (Be sure that you are at offset 0 using it and check return value
+  in order to be compatible with lower versions of libwpd)
+- New Visual Studio 2008 and Visual Studio 2010 build files
+- Fix autogeneration with newer autotools
+- Removal of warnings, coverity and cppcheck errors and warnings
+
 0.9.3 - 0.9.4
 - Remove autopackage packaging that nobody uses (Fridrich)
 - Don't output points as integer. This solves some rounding issues along
