@@ -22,6 +22,10 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "WPXStreamImplementation.h"
 #include "WPXOLEStream.h"
 #ifdef BUILD_ZIP_STREAM

@@ -20,6 +20,10 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #ifdef BUILD_ZIP_STREAM
 
 #include <string>
