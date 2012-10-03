@@ -68,15 +68,11 @@ public:
 		if (!m_imaginaryFirst && m_iter != m_vector->end())
 			m_iter++;
 		m_imaginaryFirst = false;
-		if (m_iter != m_vector->end())
-			return true;
-		return false;
+		return (m_iter != m_vector->end());
 	}
 	bool last()
 	{
-		if (m_iter == m_vector->end())
-			return true;
-		return false;
+		return (m_iter == m_vector->end());
 	}
 	const WPXPropertyList &operator()() const
 	{
