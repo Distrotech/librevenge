@@ -68,7 +68,7 @@ WP6PrefixData::WP6PrefixData(WPXInputStream *input, WPXEncryption *encryption, c
 WP6PrefixData::~WP6PrefixData()
 {
 	DPH::iterator pos;
-	for (pos = m_prefixDataPacketHash.begin(); pos!=m_prefixDataPacketHash.end(); pos++)
+	for (pos = m_prefixDataPacketHash.begin(); pos!=m_prefixDataPacketHash.end(); ++pos)
 	{
 		delete(pos->second);
 	}

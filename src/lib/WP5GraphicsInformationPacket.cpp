@@ -39,13 +39,13 @@ WP5GraphicsInformationPacket::WP5GraphicsInformationPacket(WPXInputStream *input
 
 WP5GraphicsInformationPacket::~WP5GraphicsInformationPacket()
 {
-	for (std::vector<uint8_t *>::iterator iter1 = m_data.begin(); iter1 != m_data.end(); iter1++)
+	for (std::vector<uint8_t *>::iterator iter1 = m_data.begin(); iter1 != m_data.end(); ++iter1)
 	{
 		if ((*iter1))
 			delete [] (*iter1);
 		(*iter1) = 0;
 	}
-	for (std::vector<WPXBinaryData *>::iterator iter2 = m_images.begin(); iter2 != m_images.end(); iter2++)
+	for (std::vector<WPXBinaryData *>::iterator iter2 = m_images.begin(); iter2 != m_images.end(); ++iter2)
 	{
 		if ((*iter2))
 			delete (*iter2);

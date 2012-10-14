@@ -39,9 +39,9 @@ WPXTable::~WPXTable()
 {
 	typedef std::vector<WPXTableCell *>::iterator VTCIter;
 	typedef std::vector< std::vector<WPXTableCell *> >::iterator VVTCIter;
-	for (VVTCIter iter1 = m_tableRows.begin(); iter1 != m_tableRows.end(); iter1++)
+	for (VVTCIter iter1 = m_tableRows.begin(); iter1 != m_tableRows.end(); ++iter1)
 	{
-		for (VTCIter iter2 = (*iter1).begin(); iter2 != (*iter1).end(); iter2++)
+		for (VTCIter iter2 = (*iter1).begin(); iter2 != (*iter1).end(); ++iter2)
 		{
 			delete(*iter2);
 		}
@@ -98,7 +98,7 @@ void WPXTable::_makeCellBordersConsistent(WPXTableCell *cell, std::vector<WPXTab
 		// is not resolvable given how WP/OOo define table borders. see BUGS
 		if (cell->m_borderBits & adjacencyBitCell)
 		{
-			for (VTCIter iter = adjacentCells.begin(); iter != adjacentCells.end(); iter++)
+			for (VTCIter iter = adjacentCells.begin(); iter != adjacentCells.end(); ++iter)
 			{
 				(*iter)->m_borderBits |= (uint8_t)(adjacencyBitBoundCells & 0xff);
 			}
@@ -195,7 +195,7 @@ void WPXTableList::release()
 	{
 		if (--(*m_refCount) == 0)
 		{
-			for (std::vector<WPXTable *>::iterator iter = (*m_tableList).begin(); iter != (*m_tableList).end(); iter++)
+			for (std::vector<WPXTable *>::iterator iter = (*m_tableList).begin(); iter != (*m_tableList).end(); ++iter)
 				delete (*iter);
 			delete m_tableList;
 			delete m_refCount;

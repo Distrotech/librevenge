@@ -82,7 +82,7 @@ void WP6StylesListener::insertBreak(const uint8_t breakType)
 			{
 				m_pageList.push_back(m_currentPage);
 				if (m_pageListHardPageMark == m_pageList.end())
-					m_pageListHardPageMark--;
+					--m_pageListHardPageMark;
 			}
 			m_currentPage = WPXPageSpan(m_pageList.back(), 0.0, 0.0);
 			m_currentPage.setPageSpan(1);
@@ -165,7 +165,7 @@ void WP6StylesListener::marginChange(const uint8_t side, const uint16_t margin)
 			{
 				// Change the margin for the current page and for all pages in the list since the last Hard Break
 				m_currentPage.setMarginLeft(marginInch);
-				for (Iter = m_pageListHardPageMark; Iter != m_pageList.end(); Iter++)
+				for (Iter = m_pageListHardPageMark; Iter != m_pageList.end(); ++Iter)
 				{
 					(*Iter).setMarginLeft(marginInch);
 				}
@@ -179,7 +179,7 @@ void WP6StylesListener::marginChange(const uint8_t side, const uint16_t margin)
 			{
 				// Change the margin for the current page and for all pages in the list since the last Hard Break
 				m_currentPage.setMarginRight(marginInch);
-				for (Iter = m_pageListHardPageMark; Iter != m_pageList.end(); Iter++)
+				for (Iter = m_pageListHardPageMark; Iter != m_pageList.end(); ++Iter)
 				{
 					(*Iter).setMarginRight(marginInch);
 				}

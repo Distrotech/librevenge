@@ -66,7 +66,7 @@ public:
 	bool next()
 	{
 		if (!m_imaginaryFirst && m_iter != m_vector->end())
-			m_iter++;
+			++m_iter;
 		m_imaginaryFirst = false;
 		return (m_iter != m_vector->end());
 	}

@@ -158,7 +158,7 @@ void WP5PageFormatGroup::_readContents(WPXInputStream *input, WPXEncryption *enc
 				m_marginOffset = readU16(input, encryption);
 				if (0xFFFF != (m_marginOffset & 0xFFFF))
 				{
-					for (std::vector<WPXTabStop>::iterator iter = m_tabStops.begin(); iter != m_tabStops.end(); iter++)
+					for (std::vector<WPXTabStop>::iterator iter = m_tabStops.begin(); iter != m_tabStops.end(); ++iter)
 						iter->m_position -= (double)((double)m_marginOffset/(double)WPX_NUM_WPUS_PER_INCH);
 				}
 			}

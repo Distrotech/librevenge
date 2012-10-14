@@ -216,7 +216,7 @@ void WPXContentListener::_openSection()
 
 		WPXPropertyListVector columns;
 		typedef std::vector<WPXColumnDefinition>::const_iterator CDVIter;
-		for (CDVIter iter = m_ps->m_textColumns.begin(); iter != m_ps->m_textColumns.end(); iter++)
+		for (CDVIter iter = m_ps->m_textColumns.begin(); iter != m_ps->m_textColumns.end(); ++iter)
 		{
 			WPXPropertyList column;
 			// The "style:rel-width" is expressed in twips (1440 twips per inch) and includes the left and right Gutter
@@ -317,7 +317,7 @@ void WPXContentListener::_openPageSpan()
 
 	std::list<WPXPageSpan>::iterator currentPageSpanIter = m_pageList.begin();
 	for ( unsigned i = 0; i < m_ps->m_currentPage; i++ )
-		currentPageSpanIter++;
+		++currentPageSpanIter;
 
 	WPXPageSpan currentPage = (*currentPageSpanIter);
 
@@ -371,7 +371,7 @@ void WPXContentListener::_openPageSpan()
 	bool pageNumberInserted = false;
 
 	std::vector<WPXHeaderFooter> headerFooterList = currentPage.getHeaderFooterList();
-	for (std::vector<WPXHeaderFooter>::iterator iter = headerFooterList.begin(); iter != headerFooterList.end(); iter++)
+	for (std::vector<WPXHeaderFooter>::iterator iter = headerFooterList.begin(); iter != headerFooterList.end(); ++iter)
 	{
 		if (((*iter).getOccurence() != NEVER) && !currentPage.getHeaderFooterSuppression((*iter).getInternalType()))
 		{
@@ -604,7 +604,7 @@ void WPXContentListener::_appendParagraphProperties(WPXPropertyList &propList, c
 	{
 		std::list<WPXPageSpan>::iterator currentPageSpanIter = m_pageList.begin();
 		for ( unsigned i = 0; i < (m_ps->m_currentPage - 1); i+=(*currentPageSpanIter).getPageSpan())
-			currentPageSpanIter++;
+			++currentPageSpanIter;
 
 		WPXPageSpan currentPage = (*currentPageSpanIter);
 		if (currentPage.getPageNumberOverriden())
@@ -927,7 +927,7 @@ void WPXContentListener::_openTable()
 	double tableWidth = 0.0;
 	WPXPropertyListVector columns;
 	typedef std::vector<WPXColumnDefinition>::const_iterator CDVIter;
-	for (CDVIter iter = m_ps->m_tableDefinition.m_columns.begin(); iter != m_ps->m_tableDefinition.m_columns.end(); iter++)
+	for (CDVIter iter = m_ps->m_tableDefinition.m_columns.begin(); iter != m_ps->m_tableDefinition.m_columns.end(); ++iter)
 	{
 		WPXPropertyList column;
 		// The "style:rel-width" is expressed in twips (1440 twips per inch) and includes the left and right Gutter
@@ -1319,7 +1319,7 @@ void WPXContentListener::justificationChange(const uint8_t justification)
 
 double WPXContentListener::_getNextTabStop() const
 {
-	for (std::vector<WPXTabStop>::const_iterator iter = m_ps->m_tabStops.begin(); iter != (m_ps->m_tabStops.end() - 1); iter++)
+	for (std::vector<WPXTabStop>::const_iterator iter = m_ps->m_tabStops.begin(); iter != (m_ps->m_tabStops.end() - 1); ++iter)
 	{
 		if (iter->m_position
 		        - (m_ps->m_isTabPositionRelative ? 0.0 : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange))
@@ -1337,7 +1337,7 @@ double WPXContentListener::_getNextTabStop() const
 
 double WPXContentListener::_getPreviousTabStop() const
 {
-	for (std::vector<WPXTabStop>::reverse_iterator riter = m_ps->m_tabStops.rbegin(); riter != (m_ps->m_tabStops.rend() - 1); riter++)
+	for (std::vector<WPXTabStop>::reverse_iterator riter = m_ps->m_tabStops.rbegin(); riter != (m_ps->m_tabStops.rend() - 1); ++riter)
 	{
 		if (riter->m_position
 		        - (m_ps->m_isTabPositionRelative ? 0.0 : (m_ps->m_pageMarginLeft + m_ps->m_sectionMarginLeft + m_ps->m_leftMarginByParagraphMarginChange))

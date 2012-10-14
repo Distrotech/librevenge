@@ -106,7 +106,7 @@ void WP1SetTabsGroup::parse(WP1Listener *listener)
 {
 #ifdef DEBUG
 	WPD_DEBUG_MSG(("Parsing Set Tabs Group (positions: "));
-	for(std::vector<WPXTabStop>::const_iterator i = m_tabStops.begin(); i != m_tabStops.end(); i++)
+	for(std::vector<WPXTabStop>::const_iterator i = m_tabStops.begin(); i != m_tabStops.end(); ++i)
 	{
 		WPD_DEBUG_MSG((" %.4f", (*i).m_position));
 	}

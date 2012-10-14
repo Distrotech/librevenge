@@ -77,14 +77,14 @@ void WP42StylesListener::insertBreak(uint8_t breakType)
 				m_pageList.push_back(WPXPageSpan(m_currentPage));
 				if (m_pageListHardPageMark == m_pageList.end())
 				{
-					m_pageListHardPageMark--;
+					--m_pageListHardPageMark;
 				}
 			}
 			m_currentPage = WPXPageSpan(m_pageList.back(), 0.0, 0.0);
 			m_currentPage.setPageSpan(1);
 
 			for(std::vector<WPXHeaderFooter>::const_iterator HFiter = (m_nextPage.getHeaderFooterList()).begin();
-			        HFiter != (m_nextPage.getHeaderFooterList()).end(); HFiter++)
+			        HFiter != (m_nextPage.getHeaderFooterList()).end(); ++HFiter)
 			{
 				if ((*HFiter).getOccurence() != NEVER)
 				{

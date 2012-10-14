@@ -55,7 +55,7 @@ WPXMapImpl::~WPXMapImpl()
 {
 	for (std::map<std::string, WPXProperty *>::iterator iter = m_map.begin();
 	        iter != m_map.end();
-	        iter++)
+	        ++iter)
 	{
 		delete iter->second;
 	}
@@ -99,7 +99,7 @@ void WPXMapImpl::clear()
 {
 	for (std::map<std::string, WPXProperty *>::iterator iter = m_map.begin();
 	        iter != m_map.end();
-	        iter++)
+	        ++iter)
 	{
 		delete iter->second;
 	}
@@ -229,7 +229,7 @@ void WPXMapIterImpl::rewind()
 bool WPXMapIterImpl::next()
 {
 	if (!m_imaginaryFirst)
-		m_iter++;
+		++m_iter;
 	if (m_iter==m_map->end())
 		return false;
 	m_imaginaryFirst = false;

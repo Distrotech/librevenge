@@ -155,7 +155,7 @@ void WP5Parser::parse(WPXDocumentInterface *documentInterface)
 			else
 			{
 				previousPage = Iter;
-				Iter++;
+				++Iter;
 			}
 		}
 
@@ -198,7 +198,7 @@ void WP5Parser::parse(WPXDocumentInterface *documentInterface)
 
 		// cleanup section: free the used resources
 		delete prefixData;
-		for (std::vector<WP5SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); iterSubDoc++)
+		for (std::vector<WP5SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); ++iterSubDoc)
 		{
 			if (*iterSubDoc)
 				delete (*iterSubDoc);
@@ -209,7 +209,7 @@ void WP5Parser::parse(WPXDocumentInterface *documentInterface)
 		WPD_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
 
 		delete prefixData;
-		for (std::vector<WP5SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); iterSubDoc++)
+		for (std::vector<WP5SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); ++iterSubDoc)
 		{
 			if (*iterSubDoc)
 				delete (*iterSubDoc);
@@ -241,14 +241,14 @@ void WP5Parser::parseSubDocument(WPXDocumentInterface *documentInterface)
 		parseDocument(input, 0, &listener);
 		listener.endSubDocument();
 
-		for (std::vector<WP5SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); iterSubDoc++)
+		for (std::vector<WP5SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); ++iterSubDoc)
 			if (*iterSubDoc)
 				delete (*iterSubDoc);
 	}
 	catch(FileException)
 	{
 		WPD_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
-		for (std::vector<WP5SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); iterSubDoc++)
+		for (std::vector<WP5SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); ++iterSubDoc)
 			if (*iterSubDoc)
 				delete (*iterSubDoc);
 		throw FileException();

@@ -232,7 +232,7 @@ void WP3PageFormatGroup::parse(WP3Listener *listener)
 	case WP3_PAGE_FORMAT_GROUP_SET_TABS:
 #ifdef DEBUG
 		WPD_DEBUG_MSG(("Parsing Set Tabs Group (positions: "));
-		for(tabStopsIter = m_tabStops.begin(); tabStopsIter != m_tabStops.end(); tabStopsIter++)
+		for(tabStopsIter = m_tabStops.begin(); tabStopsIter != m_tabStops.end(); ++tabStopsIter)
 		{
 			WPD_DEBUG_MSG((" %.4f", (*tabStopsIter).m_position));
 		}

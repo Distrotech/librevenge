@@ -179,7 +179,7 @@ void WPXPageSpan::setHeaderFooter(const WPXHeaderFooterType type, const uint8_t 
 
 void WPXPageSpan::_removeHeaderFooter(WPXHeaderFooterType type, WPXHeaderFooterOccurence occurence)
 {
-	for (std::vector<WPXHeaderFooter>::iterator iter = m_headerFooterList.begin(); iter != m_headerFooterList.end(); iter++)
+	for (std::vector<WPXHeaderFooter>::iterator iter = m_headerFooterList.begin(); iter != m_headerFooterList.end(); ++iter)
 	{
 		if ((*iter).getType() == type && (*iter).getOccurence() == occurence)
 		{
@@ -192,7 +192,7 @@ void WPXPageSpan::_removeHeaderFooter(WPXHeaderFooterType type, WPXHeaderFooterO
 
 bool WPXPageSpan::_containsHeaderFooter(WPXHeaderFooterType type, WPXHeaderFooterOccurence occurence)
 {
-	for (std::vector<WPXHeaderFooter>::iterator iter = m_headerFooterList.begin(); iter != m_headerFooterList.end(); iter++)
+	for (std::vector<WPXHeaderFooter>::iterator iter = m_headerFooterList.begin(); iter != m_headerFooterList.end(); ++iter)
 	{
 		if ((*iter).getType()==type && (*iter).getOccurence()==occurence)
 			return true;
@@ -244,7 +244,7 @@ bool operator==(const WPXPageSpan &page1, const WPXPageSpan &page2)
 	std::vector<WPXHeaderFooter>::const_iterator iter1;
 	std::vector<WPXHeaderFooter>::const_iterator iter2;
 
-	for (iter1 = headerFooterList1.begin(); iter1 != headerFooterList1.end(); iter1++)
+	for (iter1 = headerFooterList1.begin(); iter1 != headerFooterList1.end(); ++iter1)
 	{
 		if (std::find(headerFooterList2.begin(), headerFooterList2.end(), (*iter1)) == headerFooterList2.end())
 			return false;
@@ -255,7 +255,7 @@ bool operator==(const WPXPageSpan &page1, const WPXPageSpan &page2)
 	// whether every header/footer that is in the second one is in the first too. If someone wants to optimize this,
 	// (s)he is most welcome :-)
 
-	for (iter2 = headerFooterList2.begin(); iter2 != headerFooterList2.end(); iter2++)
+	for (iter2 = headerFooterList2.begin(); iter2 != headerFooterList2.end(); ++iter2)
 	{
 		if (std::find(headerFooterList1.begin(), headerFooterList1.end(), (*iter2)) == headerFooterList1.end())
 			return false;

@@ -164,7 +164,7 @@ WP6ContentListener::WP6ContentListener(std::list<WPXPageSpan> &pageList, WPXTabl
 WP6ContentListener::~WP6ContentListener()
 {
 	typedef std::map<uint16_t, WP6OutlineDefinition *>::iterator Iter;
-	for (Iter outline = m_outlineDefineHash.begin(); outline != m_outlineDefineHash.end(); outline++)
+	for (Iter outline = m_outlineDefineHash.begin(); outline != m_outlineDefineHash.end(); ++outline)
 	{
 		delete(outline->second);
 	}

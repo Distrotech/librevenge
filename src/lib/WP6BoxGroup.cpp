@@ -388,7 +388,7 @@ void WP6BoxGroup::parse(WP6Listener *listener)
 	// Send the content according to its kind
 	if (tmpContentType == 0x03)
 	{
-		for (gdiIter = graphicsDataIds.begin(); gdiIter != graphicsDataIds.end(); gdiIter++)
+		for (gdiIter = graphicsDataIds.begin(); gdiIter != graphicsDataIds.end(); ++gdiIter)
 			listener->insertGraphicsData(((uint16_t)*gdiIter));
 	}
 	if ((tmpContentType == 0x01) && (subDocument))

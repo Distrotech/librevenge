@@ -174,7 +174,7 @@ void WP6Parser::parsePackets(WP6PrefixData *prefixData, int type, WP6Listener *l
 	std::pair< MPDP_CIter, MPDP_CIter > typeIterPair = prefixData->getPrefixDataPacketsOfType(type);
 	for (MPDP_CIter iter=typeIterPair.first;
 	        iter != typeIterPair.second;
-	        iter++)
+	        ++iter)
 	{
 		iter->second->parse(listener);
 	}
@@ -213,7 +213,7 @@ void WP6Parser::parse(WPXDocumentInterface *documentInterface)
 			else
 			{
 				previousPage = Iter;
-				Iter++;
+				++Iter;
 			}
 		}
 

@@ -147,7 +147,7 @@ WP3ResourceFork::WP3ResourceFork(WPXInputStream *input, WPXEncryption *encryptio
 WP3ResourceFork::~WP3ResourceFork()
 {
 	// delete the pointers from one of the multimaps.
-	for (std::multimap<uint32_t, WP3Resource *>::iterator iter = m_resourcesTypeMultimap.begin(); iter != m_resourcesTypeMultimap.end(); iter++)
+	for (std::multimap<uint32_t, WP3Resource *>::iterator iter = m_resourcesTypeMultimap.begin(); iter != m_resourcesTypeMultimap.end(); ++iter)
 		delete iter->second;
 }
 
@@ -159,7 +159,7 @@ const WP3Resource *WP3ResourceFork::getResource(uint32_t type, uint32_t ID) cons
 	if (tempPair.first == m_resourcesTypeMultimap.end())
 		return NULL;
 
-	for (std::multimap<uint32_t, WP3Resource *>::const_iterator iter = tempPair.first; iter != tempPair.second; iter++)
+	for (std::multimap<uint32_t, WP3Resource *>::const_iterator iter = tempPair.first; iter != tempPair.second; ++iter)
 		if (iter->second->getResourceReferenceID() == ID )
 			return iter->second;
 

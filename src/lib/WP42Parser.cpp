@@ -189,7 +189,7 @@ void WP42Parser::parse(WPXDocumentInterface *documentInterface)
 			else
 			{
 				previousPage = Iter;
-				Iter++;
+				++Iter;
 			}
 		}
 
@@ -199,7 +199,7 @@ void WP42Parser::parse(WPXDocumentInterface *documentInterface)
 		parse(input, encryption, &listener);
 
 		// cleanup section: free the used resources
-		for (std::vector<WP42SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); iterSubDoc++)
+		for (std::vector<WP42SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); ++iterSubDoc)
 		{
 			if (*iterSubDoc)
 				delete (*iterSubDoc);
@@ -209,7 +209,7 @@ void WP42Parser::parse(WPXDocumentInterface *documentInterface)
 	{
 		WPD_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
 
-		for (std::vector<WP42SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); iterSubDoc++)
+		for (std::vector<WP42SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); ++iterSubDoc)
 		{
 			if (*iterSubDoc)
 				delete (*iterSubDoc);
@@ -238,14 +238,14 @@ void WP42Parser::parseSubDocument(WPXDocumentInterface *documentInterface)
 		listener.startSubDocument();
 		parseDocument(input, 0, &listener);
 		listener.endSubDocument();
-		for (std::vector<WP42SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); iterSubDoc++)
+		for (std::vector<WP42SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); ++iterSubDoc)
 			if (*iterSubDoc)
 				delete (*iterSubDoc);
 	}
 	catch(FileException)
 	{
 		WPD_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
-		for (std::vector<WP42SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); iterSubDoc++)
+		for (std::vector<WP42SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); ++iterSubDoc)
 			if (*iterSubDoc)
 				delete (*iterSubDoc);
 		throw FileException();

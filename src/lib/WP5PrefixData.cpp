@@ -71,7 +71,7 @@ WP5PrefixData::WP5PrefixData(WPXInputStream *input, WPXEncryption *encryption) :
 	}
 
 	std::vector<WP5GeneralPacketIndex>::iterator gpiIter;
-	for (gpiIter = prefixIndexVector.begin(); gpiIter != prefixIndexVector.end(); gpiIter++)
+	for (gpiIter = prefixIndexVector.begin(); gpiIter != prefixIndexVector.end(); ++gpiIter)
 	{
 		WPD_DEBUG_MSG(("WordPerfect: constructing general packet data %i\n", (*gpiIter).getID()));
 		WP5GeneralPacketData *generalPacketData = WP5GeneralPacketData::constructGeneralPacketData(input, encryption, &(*gpiIter));
@@ -85,7 +85,7 @@ WP5PrefixData::WP5PrefixData(WPXInputStream *input, WPXEncryption *encryption) :
 WP5PrefixData::~WP5PrefixData()
 {
 	std::map<int, WP5GeneralPacketData *>::const_iterator Iter;
-	for (Iter = m_generalPacketData.begin(); Iter != m_generalPacketData.end(); Iter++)
+	for (Iter = m_generalPacketData.begin(); Iter != m_generalPacketData.end(); ++Iter)
 		delete (Iter->second);
 }
 
