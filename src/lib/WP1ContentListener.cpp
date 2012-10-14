@@ -204,6 +204,8 @@ void WP1ContentListener::attributeChange(bool isOn, uint8_t attribute)
 	case WP1_ATTRIBUTE_UNDERLINE:
 		textAttributeBit = WPX_UNDERLINE_BIT;
 		break;
+	default:
+		break;
 	}
 
 	if (isOn)
@@ -473,9 +475,6 @@ void WP1ContentListener::justificationChange(uint8_t justification)
 	{
 		switch (justification)
 		{
-		case 0x00:
-			m_ps->m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_LEFT;
-			break;
 		case 0x01:
 			m_ps->m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_CENTER;
 			break;
@@ -484,6 +483,9 @@ void WP1ContentListener::justificationChange(uint8_t justification)
 			break;
 		case 0x03:
 			m_ps->m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_FULL;
+			break;
+		default: // case 0x00 and all other invalid stuff
+			m_ps->m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_LEFT;
 			break;
 		}
 	}

@@ -100,6 +100,8 @@ void WP5StylesListener::insertBreak(uint8_t breakType)
 		m_nextPage = WPXPageSpan();
 		m_currentPageHasContent = false;
 		break;
+	default:
+		break;
 	}
 	if (breakType == WPX_PAGE_BREAK)
 	{
@@ -122,6 +124,8 @@ void WP5StylesListener::pageMarginChange(uint8_t side, uint16_t margin)
 		break;
 	case WPX_BOTTOM:
 		m_currentPage.setMarginBottom(marginInch);
+		break;
+	default:
 		break;
 	}
 	//}
@@ -181,6 +185,8 @@ void WP5StylesListener::marginChange(uint8_t side, uint16_t margin)
 				}
 			}
 			m_tempMarginRight = marginInch;
+			break;
+		default:
 			break;
 		}
 

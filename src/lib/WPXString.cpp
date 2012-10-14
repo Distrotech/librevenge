@@ -58,7 +58,7 @@ static const int8_t g_static_utf8_skip_data[256] =
     ((Char) < 0x10000 ? 3 :            \
      ((Char) < 0x200000 ? 4 :          \
       ((Char) < 0x4000000 ? 5 : 6)))))
-#define g_static_utf8_next_char(p) (char *)((p) + g_static_utf8_skip_data[*((uint8_t *)p)])
+#define g_static_utf8_next_char(p) (const char *)((p) + g_static_utf8_skip_data[(int)(*((const char *)p))])
 
 class WPXStringImpl
 {
@@ -83,7 +83,7 @@ WPXString::WPXString(const WPXString &stringBuf, bool escapeXML) :
 {
 	if (escapeXML)
 	{
-		int tmpLen = stringBuf.m_stringImpl->m_buf.length();
+		size_t tmpLen = stringBuf.m_stringImpl->m_buf.length();
 		m_stringImpl->m_buf.reserve(2*tmpLen);
 		const char *p = stringBuf.cstr();
 		const char *end = p + tmpLen;
@@ -242,17 +242,17 @@ void WPXString::Iter::rewind()
 
 bool WPXString::Iter::next()
 {
-	int len = m_stringImpl->m_buf.length();
+	size_t len = m_stringImpl->m_buf.length();
 
 	if (m_pos == (-1))
 		m_pos++;
-	else if (m_pos < len)
+	else if ((size_t)m_pos < len)
 	{
 		m_pos+=(int32_t) (g_static_utf8_next_char(&(m_stringImpl->m_buf.c_str()[m_pos])) -
 		                  &(m_stringImpl->m_buf.c_str()[m_pos]));
 	}
 
-	if (m_pos < len)
+	if ((size_t)m_pos < len)
 		return true;
 	return false;
 }
@@ -369,7 +369,7 @@ g_static_unichar_to_utf8 (uint32_t c,
 int
 g_static_utf8_strlen (const char *p)
 {
-	long len = 0;
+	int len = 0;
 	if (!p)
 		return 0;
 

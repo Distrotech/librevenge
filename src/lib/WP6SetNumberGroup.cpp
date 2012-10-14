@@ -55,6 +55,8 @@ void WP6SetNumberGroup::_readContents(WPXInputStream *input, WPXEncryption *encr
 		m_countNumbers = readU16(input, encryption);
 		WPD_DEBUG_MSG(("WordPerfect: Set number page number (%d, %d, %d)\n", m_countOfLevelNumbersSetting, m_startingLevelNumber, m_countNumbers));
 		break;
+	default:
+		break;
 	}
 }
 
@@ -66,6 +68,8 @@ void WP6SetNumberGroup::parse(WP6Listener *listener)
 	{
 	case WP6_SET_NUMBER_GROUP_SET_PAGE_NUMBER:
 		listener->setPageNumber(m_countNumbers);
+		break;
+	default:
 		break;
 	}
 }

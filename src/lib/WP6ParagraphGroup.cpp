@@ -72,6 +72,8 @@ void WP6ParagraphGroup::_readContents(WPXInputStream *input, WPXEncryption *encr
 	case WP6_PARAGRAPH_GROUP_OUTLINE_DEFINE:
 		m_subGroupData = new WP6ParagraphGroup_OutlineDefineSubGroup(input, encryption);
 		break;
+	default:
+		break;
 	}
 }
 
@@ -183,6 +185,8 @@ WP6ParagraphGroup_TabSetSubGroup::WP6ParagraphGroup_TabSetSubGroup(WPXInputStrea
 					tmp_tabStop.m_leaderCharacter = '_';
 					tmp_tabStop.m_leaderNumSpaces = 0;
 					tmp_usePreWP9LeaderMethod = false;
+					break;
+				default:
 					break;
 				}
 			}

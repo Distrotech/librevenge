@@ -26,6 +26,7 @@
 #ifndef WP3TABLESGROUP_H
 #define WP3TABLESGROUP_H
 
+#include <vector>
 #include "WP3VariableLengthGroup.h"
 #include "libwpd_internal.h"
 
@@ -46,10 +47,10 @@ private:
 	uint32_t m_bottomGutterSpacing;
 	uint32_t m_rightGutterSpacing;
 	uint8_t m_numColumns;
-	uint8_t m_columnMode[32];
-	uint8_t m_numberFormat[32];
-	uint32_t m_columnWidth[32];
-	uint32_t m_rightOffsetForDecimalAlign[32];
+	std::vector<uint8_t> m_columnMode;
+	std::vector<uint8_t> m_numberFormat;
+	std::vector<uint32_t> m_columnWidth;
+	std::vector<uint32_t> m_rightOffsetForDecimalAlign;
 
 	// variables needed for subgroup 2 (Set Table Cell Span)
 	uint16_t m_colSpan;

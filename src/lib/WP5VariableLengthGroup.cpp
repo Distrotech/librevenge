@@ -72,7 +72,7 @@ WP5VariableLengthGroup *WP5VariableLengthGroup::constructVariableLengthGroup(WPX
 
 bool WP5VariableLengthGroup::isGroupConsistent(WPXInputStream *input, WPXEncryption *encryption, const uint8_t group)
 {
-	uint32_t startPosition = input->tell();
+	long startPosition = input->tell();
 
 	try
 	{
@@ -112,10 +112,10 @@ bool WP5VariableLengthGroup::isGroupConsistent(WPXInputStream *input, WPXEncrypt
 
 void WP5VariableLengthGroup::_read(WPXInputStream *input, WPXEncryption *encryption)
 {
-	uint32_t startPosition = input->tell();
+	long startPosition = input->tell();
 
 	m_subGroup = readU8(input, encryption);
-	m_size = readU16(input, encryption) + 4; // the length is the number of data bytes minus 4 (ie. the function codes)
+	m_size = (uint16_t)(readU16(input, encryption) + 4); // the length is the number of data bytes minus 4 (ie. the function codes)
 
 	WPD_DEBUG_MSG(("WordPerfect: Read variable group header (start_position: %i, sub_group: 0x%2x, size: %i)\n", startPosition, m_subGroup, m_size));
 

@@ -48,14 +48,14 @@ WP3ResourceFork::WP3ResourceFork(WPXInputStream *input, WPXEncryption *encryptio
 	uint32_t nameListOffset = readU16(input, encryption, true);
 
 	input->seek(16+typeOffset+mapOffset, WPX_SEEK_SET);
-	uint16_t resourceTypesNumber = 1 + readU16(input, encryption, true);
+	uint16_t resourceTypesNumber = (uint16_t)(1 + readU16(input, encryption, true));
 
 	for (unsigned i=0; i < resourceTypesNumber; i++)
 	{
 		uint32_t resourceType = readU32(input,encryption, true);
 		uint32_t resourcesNumber = 1+readU16(input, encryption, true);
 		uint32_t referenceListOffset = 16+typeOffset+mapOffset+readU16(input, encryption, true);
-		unsigned position = input->tell();
+		long position = input->tell();
 		input->seek(referenceListOffset, WPX_SEEK_SET);
 		for (uint32_t j=0; j < resourcesNumber; j++)
 		{
@@ -64,7 +64,7 @@ WP3ResourceFork::WP3ResourceFork(WPXInputStream *input, WPXEncryption *encryptio
 			WPXString resourceName;
 			if (resourceNameOffset != 0xffff)
 			{
-				unsigned position2 = input->tell();
+				long position2 = input->tell();
 				input->seek(16+mapOffset+nameListOffset+resourceNameOffset, WPX_SEEK_SET);
 				resourceName = readPascalString(input, encryption);
 				input->seek(position2, WPX_SEEK_SET);
@@ -73,7 +73,7 @@ WP3ResourceFork::WP3ResourceFork(WPXInputStream *input, WPXEncryption *encryptio
 			uint32_t offsetToData = (readU8(input, encryption) << 16);
 			offsetToData |= readU16(input, encryption, true);
 			offsetToData += 16+dataOffset;
-			unsigned position3 = input->tell();
+			long position3 = input->tell();
 			input->seek(offsetToData, WPX_SEEK_SET);
 			uint32_t resourceDataSize = readU32(input, encryption, true);
 

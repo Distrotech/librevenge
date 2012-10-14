@@ -100,6 +100,8 @@ void WP1StylesListener::insertBreak(uint8_t breakType)
 			m_nextPage = WPXPageSpan();
 			m_currentPageHasContent = false;
 			break;
+		default:
+			break;
 		}
 		if (breakType == WPX_PAGE_BREAK)
 		{

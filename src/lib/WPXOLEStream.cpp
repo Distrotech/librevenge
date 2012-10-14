@@ -199,14 +199,14 @@ private:
 
 } // namespace libwpd
 
-static inline unsigned long readU16( const unsigned char *ptr )
+static inline unsigned short readU16( const unsigned char *ptr )
 {
-	return (unsigned long)(unsigned)(ptr[0]+(ptr[1]<<8));
+	return (unsigned short)(ptr[0]+(ptr[1]<<8));
 }
 
-static inline unsigned long readU32( const unsigned char *ptr )
+static inline unsigned readU32( const unsigned char *ptr )
 {
-	return (unsigned long)(unsigned)(ptr[0]+(ptr[1]<<8)+(ptr[2]<<16)+(ptr[3]<<24));
+	return (unsigned)(ptr[0]+(ptr[1]<<8)+(ptr[2]<<16)+(ptr[3]<<24));
 }
 
 static const unsigned char wpsole_magic[] =
@@ -289,10 +289,10 @@ unsigned long libwpd::AllocTable::count()
 
 void libwpd::AllocTable::resize( unsigned long newsize )
 {
-	unsigned oldsize = data.size();
+	size_t oldsize = data.size();
 	data.resize( newsize );
 	if( newsize > oldsize )
-		for( unsigned i = oldsize; i<newsize; i++ )
+		for( size_t i = oldsize; i<newsize; i++ )
 			data[i] = Avail;
 }
 
@@ -374,7 +374,7 @@ void libwpd::DirTree::clear()
 
 unsigned libwpd::DirTree::entryCount()
 {
-	return entries.size();
+	return (unsigned)entries.size();
 }
 
 libwpd::DirEntry *libwpd::DirTree::entry( unsigned index )
@@ -567,7 +567,7 @@ void libwpd::StorageIO::load()
 	{
 		std::vector<unsigned char> buffer2( bbat->blockSize );
 		unsigned k = 109;
-		unsigned sector;
+		unsigned long sector;
 		for( unsigned r = 0; r < header->num_mbat; r++ )
 		{
 			if(r == 0) // 1st meta bat location is in file header.
@@ -588,7 +588,7 @@ void libwpd::StorageIO::load()
 	{
 		std::vector<unsigned char> buffer( blocks.size()*bbat->blockSize );
 		loadBigBlocks( blocks, &buffer[0], buffer.size() );
-		bbat->load( &buffer[0], buffer.size() );
+		bbat->load( &buffer[0], (unsigned)buffer.size() );
 	}
 
 	// load small bat
@@ -598,7 +598,7 @@ void libwpd::StorageIO::load()
 	{
 		std::vector<unsigned char> buffer( blocks.size()*bbat->blockSize );
 		loadBigBlocks( blocks, &buffer[0], buffer.size() );
-		sbat->load( &buffer[0], buffer.size() );
+		sbat->load( &buffer[0], (unsigned)buffer.size() );
 	}
 
 	// load directory tree
@@ -606,7 +606,7 @@ void libwpd::StorageIO::load()
 	blocks = bbat->follow( header->dirent_start );
 	std::vector<unsigned char> buffer(blocks.size()*bbat->blockSize);
 	loadBigBlocks( blocks, &buffer[0], buffer.size() );
-	dirtree->load( &buffer[0], buffer.size() );
+	dirtree->load( &buffer[0], (unsigned)buffer.size() );
 	unsigned sb_start = readU32( &buffer[0x74] );
 
 	// fetch block chain as data for small-files
@@ -700,7 +700,7 @@ unsigned char *data, unsigned long maxlen )
 		loadBigBlock( sb_blocks[ bbindex ], &tmpBuf[0], bbat->blockSize );
 
 		// copy the data
-		unsigned offset = pos % bbat->blockSize;
+		unsigned long offset = pos % bbat->blockSize;
 		unsigned long p = (maxlen-bytes < bbat->blockSize-offset ) ? maxlen-bytes :  bbat->blockSize-offset;
 		p = (sbat->blockSize<p ) ? sbat->blockSize : p;
 		memcpy( data + bytes, &tmpBuf[offset], p );
@@ -834,7 +834,7 @@ void libwpd::StreamIO::updateCache()
 // =========== Storage ==========
 
 libwpd::Storage::Storage( WPXInputStream *is ) :
-	io(NULL)
+	io(0)
 {
 	io = new StorageIO( this, is );
 }

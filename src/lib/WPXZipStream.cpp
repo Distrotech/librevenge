@@ -124,7 +124,7 @@ static unsigned short getShort(WPXInputStream *input)
 	const unsigned char *ret = input->read(2, numBytesRead);
 	if (numBytesRead != 2)
 		throw StreamException();
-	return (unsigned short)ret[0]|((unsigned short)ret[1]<<8);
+	return (unsigned short)(ret[0]|((unsigned short)ret[1]<<8));
 }
 
 static unsigned getInt(WPXInputStream *input)
@@ -133,7 +133,7 @@ static unsigned getInt(WPXInputStream *input)
 	const unsigned char *ret = input->read(4, numBytesRead);
 	if (numBytesRead != 4)
 		throw StreamException();
-	return (unsigned)ret[0]|((unsigned)ret[1]<<8)|((unsigned)ret[2]<<16)|((unsigned)ret[3]<<24);
+	return (unsigned)(ret[0]|((unsigned)ret[1]<<8)|((unsigned)ret[2]<<16)|((unsigned)ret[3]<<24));
 }
 
 static bool readCentralDirectoryEnd(WPXInputStream *input, CentralDirectoryEnd &end)
@@ -285,7 +285,7 @@ static bool findCentralDirectoryEnd(WPXInputStream *input)
 
 static bool findDataStream(WPXInputStream *input, CentralDirectoryEntry &entry, const char *name)
 {
-	unsigned short name_size = strlen(name);
+	size_t name_size = strlen(name);
 	if (!findCentralDirectoryEnd(input))
 		return false;
 	CentralDirectoryEnd end;
@@ -345,11 +345,11 @@ WPXInputStream *WPXZipStream::getSubstream(WPXInputStream *input, const char *na
 	if (!entry.compressed_size)
 		return 0;
 	unsigned long numBytesRead = 0;
-	const unsigned char *compressedData = input->read(entry.compressed_size, numBytesRead);
+	unsigned char *compressedData = const_cast<unsigned char *>(input->read(entry.compressed_size, numBytesRead));
 	if (numBytesRead != entry.compressed_size)
 		return 0;
 	if (!entry.compression)
-		return new WPXStringStream(compressedData, numBytesRead);
+		return new WPXStringStream(compressedData, (unsigned)numBytesRead);
 	else
 	{
 		int ret;
@@ -365,7 +365,7 @@ WPXInputStream *WPXZipStream::getSubstream(WPXInputStream *input, const char *na
 		if (ret != Z_OK)
 			return 0;
 
-		strm.avail_in = numBytesRead;
+		strm.avail_in = (unsigned)numBytesRead;
 		strm.next_in = (Bytef *)compressedData;
 
 		std::vector<unsigned char>data(entry.uncompressed_size);
@@ -381,9 +381,11 @@ WPXInputStream *WPXZipStream::getSubstream(WPXInputStream *input, const char *na
 			(void)inflateEnd(&strm);
 			data.clear();
 			return 0;
+		default:
+			break;
 		}
 		(void)inflateEnd(&strm);
-		return new WPXStringStream(&data[0], data.size());
+		return new WPXStringStream(&data[0], (unsigned)data.size());
 	}
 }
 

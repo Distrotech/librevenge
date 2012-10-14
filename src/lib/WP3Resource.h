@@ -37,8 +37,8 @@ class WP3SubDocument;
 class WP3Resource
 {
 public:
-	WP3Resource(uint32_t resourceType, uint32_t resourceReferenceID, const WPXString resourceName,
-	            uint8_t resourceAttributes, const WPXBinaryData m_resource);
+	WP3Resource(uint32_t resourceType, uint32_t resourceReferenceID, const WPXString &resourceName,
+	            uint8_t resourceAttributes, const WPXBinaryData &resourceData);
 	virtual ~WP3Resource() {}
 
 	uint32_t getResourceType() const

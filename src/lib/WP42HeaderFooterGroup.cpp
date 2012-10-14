@@ -42,20 +42,20 @@ WP42HeaderFooterGroup::~WP42HeaderFooterGroup()
 void WP42HeaderFooterGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
 	input->seek(4, WPX_SEEK_CUR);
-	unsigned int tmpStartPosition = input->tell();
+	long tmpStartPosition = input->tell();
 	while (readU8(input, encryption) != 0xD1)
 	{
 	}
 	input->seek(-3, WPX_SEEK_CUR);
-	int tmpSubDocumentSize = 0;
+	long tmpSubDocumentSize = 0;
 	if (readU8(input, encryption) == 0xFF)
-		tmpSubDocumentSize=input->tell() - tmpStartPosition -1;
+		tmpSubDocumentSize = input->tell() - tmpStartPosition - 1;
 	WPD_DEBUG_MSG(("WP42SubDocument startPosition = %ui; SubDocumentSize = %i\n", tmpStartPosition, tmpSubDocumentSize));
 	input->seek(1, WPX_SEEK_CUR);
 	m_definition = readU8(input, encryption);
 	input->seek(tmpStartPosition, WPX_SEEK_SET);
 	if (tmpSubDocumentSize > 2)
-		m_subDocument = new WP42SubDocument(input, encryption, tmpSubDocumentSize);
+		m_subDocument = new WP42SubDocument(input, encryption, (unsigned)tmpSubDocumentSize);
 }
 
 void WP42HeaderFooterGroup::parse(WP42Listener *listener)

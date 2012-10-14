@@ -154,6 +154,8 @@ void WPXPageSpan::setHeaderFooter(const WPXHeaderFooterType type, const uint8_t 
 		_removeHeaderFooter(type, EVEN);
 		_removeHeaderFooter(type, ALL);
 		break;
+	default:
+		break;
 	}
 
 	if ((occurence != NEVER) && (subDocument))

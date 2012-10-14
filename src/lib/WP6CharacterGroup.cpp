@@ -104,7 +104,7 @@ WP6CharacterGroup_FontFaceChangeSubGroup::WP6CharacterGroup_FontFaceChangeSubGro
 
 	if (sizeDeletable > 24)
 	{
-		m_packet = new WP6FontDescriptorPacket(input, encryption, 0, input->tell(), sizeDeletable);
+		m_packet = new WP6FontDescriptorPacket(input, encryption, 0, (uint32_t)input->tell(), sizeDeletable);
 
 		WPD_DEBUG_MSG(("WordPerfect: Character Group Font Face Change subgroup info (font name: %s)\n", m_packet->getFontName().cstr()));
 	}

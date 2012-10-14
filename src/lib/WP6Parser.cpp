@@ -51,7 +51,7 @@ WP6PrefixData *WP6Parser::getPrefixData(WPXInputStream *input, WPXEncryption *en
 	WP6PrefixData *prefixData = 0;
 	try
 	{
-		prefixData = new WP6PrefixData(input, encryption, ((WP6Header *)getHeader())->getNumPrefixIndices());
+		prefixData = new WP6PrefixData(input, encryption, (static_cast<WP6Header *>(getHeader())->getNumPrefixIndices()));
 		return prefixData;
 	}
 	catch(FileException)

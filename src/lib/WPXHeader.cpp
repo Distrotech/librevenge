@@ -94,7 +94,7 @@ WPXHeader *WPXHeader::constructHeader(WPXInputStream *input, WPXEncryption *encr
 		switch (majorVersion)
 		{
 		case 0x00: // WP5
-			documentEncryption = (((documentEncryption & 0xff00) >> 8) | ((documentEncryption & 0x00ff) << 8));
+			documentEncryption = (uint16_t)(((documentEncryption & 0xff00) >> 8) | ((documentEncryption & 0x00ff) << 8));
 			return new WP5Header(input, encryption, documentOffset, productType, fileType,
 			                     majorVersion, minorVersion, documentEncryption);
 		case 0x02: // WP6

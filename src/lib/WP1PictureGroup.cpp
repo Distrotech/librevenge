@@ -63,8 +63,8 @@ void WP1PictureGroup::_readContents(WPXInputStream *input, WPXEncryption *encryp
 		return;
 	for (int i = 0; i < 512; i++)
 		m_binaryData.append((unsigned char)0);
-	m_binaryData.append(((dataSize + 512) & 0xFF00)>>8);
-	m_binaryData.append(((dataSize + 512) & 0x00FF));
+	m_binaryData.append((uint8_t)((dataSize + 512)>>8));
+	m_binaryData.append((uint8_t)(dataSize + 512));
 	for (unsigned long j = 2; j < dataSize && !input->atEOS(); j++ )
 		m_binaryData.append(readU8(input, encryption));
 #if DUMP_PICTURE

@@ -117,7 +117,7 @@ struct _WP6ContentParsingState
 
 	bool m_isFrameOpened;
 
-	uint16_t m_leaderCharacter;
+	uint32_t m_leaderCharacter;
 	uint8_t m_leaderNumSpaces;
 	std::vector<WPXTabStop> m_tempTabStops;
 	std::vector<bool> m_tempUsePreWP9LeaderMethod;
@@ -175,8 +175,8 @@ public:
 	             const uint8_t second, const uint8_t dayOfWeek,
 	             const uint8_t timeZone, const uint8_t unused);
 	void setExtendedInformation(const uint16_t type, const WPXString &data);
-	void setAlignmentCharacter(const uint16_t character);
-	void setLeaderCharacter(const uint16_t character, const uint8_t numSpaces);
+	void setAlignmentCharacter(const uint32_t character);
+	void setLeaderCharacter(const uint32_t character, const uint8_t numSpaces);
 	void defineTabStops(const bool isRelative, const std::vector<WPXTabStop> &tabStops,
 	                    const std::vector<bool> &usePreWP9LeaderMethods);
 	void insertCharacter(uint32_t character);

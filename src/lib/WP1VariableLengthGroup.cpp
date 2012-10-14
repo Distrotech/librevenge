@@ -61,7 +61,9 @@ WP1VariableLengthGroup *WP1VariableLengthGroup::constructVariableLengthGroup(WPX
 
 bool WP1VariableLengthGroup::isGroupConsistent(WPXInputStream *input, WPXEncryption *encryption, const uint8_t group)
 {
-	uint32_t startPosition = input->tell();
+	long startPosition = input->tell();
+	if (startPosition < 0)
+		throw FileException();
 
 	try
 	{
@@ -97,21 +99,23 @@ bool WP1VariableLengthGroup::isGroupConsistent(WPXInputStream *input, WPXEncrypt
 
 void WP1VariableLengthGroup::_read(WPXInputStream *input, WPXEncryption *encryption)
 {
-	uint32_t startPosition = input->tell();
+	long startPosition = input->tell();
+	if (startPosition < 0)
+		throw FileException();
 
 	WPD_DEBUG_MSG(("WordPerfect: handling a variable length group\n"));
 
 	m_size = readU32(input, encryption, true); // the length is the number of data bytes minus 4 (ie. the function codes)
 
-	if (m_size + startPosition < startPosition)
+	if ((long)(m_size + startPosition) < startPosition)
 		throw FileException();
 
 	WPD_DEBUG_MSG(("WordPerfect: Read variable group header (start_position: %i, size: %i)\n", startPosition, m_size));
 
 	_readContents(input, encryption);
 
-	if ((m_size + startPosition + 4 < m_size + startPosition) ||
-	        (m_size + startPosition + 4) > ((std::numeric_limits<uint32_t>::max)() / 2))
+	if ((m_size + (unsigned long)startPosition + 4 < m_size + (unsigned long)startPosition) ||
+	        (m_size + (unsigned long)startPosition + 4) > ((std::numeric_limits<uint32_t>::max)() / 2))
 		throw FileException();
 
 	input->seek(startPosition + m_size + 4, WPX_SEEK_SET);
@@ -127,8 +131,8 @@ void WP1VariableLengthGroup::_read(WPXInputStream *input, WPXEncryption *encrypt
 		throw FileException();
 	}
 
-	if ((m_size + startPosition + 9 < m_size + startPosition) ||
-	        (m_size + startPosition + 9) > ((std::numeric_limits<uint32_t>::max)() / 2))
+	if ((m_size + (unsigned long)startPosition + 9 < m_size + (unsigned long)startPosition) ||
+	        (m_size + (unsigned long)startPosition + 9) > ((std::numeric_limits<uint32_t>::max)() / 2))
 		throw FileException();
 	input->seek(startPosition + m_size + 9, WPX_SEEK_SET);
 

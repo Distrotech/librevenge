@@ -89,7 +89,7 @@ WP1FixedLengthGroup *WP1FixedLengthGroup::constructFixedLengthGroup(WPXInputStre
 
 void WP1FixedLengthGroup::_read(WPXInputStream *input, WPXEncryption *encryption)
 {
-	uint32_t startPosition = input->tell();
+	long startPosition = input->tell();
 
 	if (m_group >= 0xC0 && m_group <= 0xFE) // just an extra safety check
 	{

@@ -183,7 +183,7 @@ void WP6ContentListener::setDate(const uint16_t type, const uint16_t year,
 #define TMYEAROFFSET    1900    // tm_year is days since 1900
 #define DAYSINWEEK      7       // I hate magic numbers buried in code :-)
 	char    dateBuffer[DATEBUFLEN];    // points to buffer allocated for strftime()
-	int     retVal;         // return value from strftime()
+	size_t     retVal;         // return value from strftime()
 	struct  tm      m_tm;   // passed to strftime();
 	const char    *dateFormat = "%Y-%m-%dT%H:%M:%S";
 	// This date format is ALMOST the "Complete date plus hours, minutes and
@@ -234,6 +234,8 @@ void WP6ContentListener::setDate(const uint16_t type, const uint16_t year,
 		//	break;
 	case (WP6_INDEX_HEADER_EXTENDED_DOCUMENT_SUMMARY_VERSION_DATE):
 		m_metaData.insert("dcterms:issued", dateStr);
+		break;
+	default:
 		break;
 	}
 }
@@ -385,7 +387,7 @@ void WP6ContentListener::setExtendedInformation(const uint16_t type, const WPXSt
 	}
 }
 
-void WP6ContentListener::setAlignmentCharacter(const uint16_t character)
+void WP6ContentListener::setAlignmentCharacter(const uint32_t character)
 {
 	if (!isUndoOn())
 	{
@@ -393,7 +395,7 @@ void WP6ContentListener::setAlignmentCharacter(const uint16_t character)
 	}
 }
 
-void WP6ContentListener::setLeaderCharacter(const uint16_t character, const uint8_t numSpaces)
+void WP6ContentListener::setLeaderCharacter(const uint32_t character, const uint8_t numSpaces)
 {
 	assert(m_ps->m_tabStops.size() == m_parseState->m_tempUsePreWP9LeaderMethod.size());
 
@@ -788,6 +790,8 @@ void WP6ContentListener::attributeChange(const bool isOn, const uint8_t attribut
 		case WP6_ATTRIBUTE_BLINK:
 			textAttributeBit = WPX_BLINK_BIT;
 			break;
+		default:
+			break;
 		}
 
 		if (isOn)
@@ -850,6 +854,8 @@ void WP6ContentListener::marginChange(uint8_t side, uint16_t margin)
 			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
 			                               + m_ps->m_rightMarginByParagraphMarginChange
 			                               + m_ps->m_rightMarginByTabs;
+			break;
+		default:
 			break;
 		}
 
@@ -1017,7 +1023,7 @@ void WP6ContentListener::paragraphNumberOn(const uint16_t outlineHash, const uin
 {
 	if (!isUndoOn())
 	{
-		_paragraphNumberOn(outlineHash, (level + 1));
+		_paragraphNumberOn(outlineHash, (uint8_t)(level + 1));
 	}
 }
 
@@ -1069,6 +1075,8 @@ void WP6ContentListener::displayNumberReferenceGroupOn(const uint8_t subGroup, c
 		case WP6_DISPLAY_NUMBER_REFERENCE_GROUP_TOTAL_NUMBER_OF_PAGES_DISPLAY_ON:
 			m_parseState->m_styleStateSequence.setCurrentState(DISPLAY_REFERENCING);
 			break;
+		default:
+			break;
 		}
 	}
 }
@@ -1107,18 +1115,22 @@ void WP6ContentListener::displayNumberReferenceGroupOff(const uint8_t subGroup)
 			_openSpan();
 			// in theory the page numbering type should only apply to thepage number itself, however, I can't think of a case where you'd
 			// want the total num of pages to be in a different format plus I don't see a way of changing that. so...
-			WPXPropertyList propList;
-			propList.insert("style:num-format", _numberingTypeToString(m_parseState->m_currentPageNumberingType));
+			{
+				WPXPropertyList propList;
+				propList.insert("style:num-format", _numberingTypeToString(m_parseState->m_currentPageNumberingType));
 
-			if (subGroup == WP6_DISPLAY_NUMBER_REFERENCE_GROUP_PAGE_NUMBER_DISPLAY_OFF)
-			{
-				m_documentInterface->insertField(WPXString("text:page-number"), propList);
-			}
-			else // WP6_DISPLAY_NUMBER_REFERENCE_GROUP_TOTAL_NUMBER_OF_PAGES_DISPLAY_OFF
-			{
-				m_documentInterface->insertField(WPXString("text:page-count"), propList);
+				if (subGroup == WP6_DISPLAY_NUMBER_REFERENCE_GROUP_PAGE_NUMBER_DISPLAY_OFF)
+				{
+					m_documentInterface->insertField(WPXString("text:page-number"), propList);
+				}
+				else // WP6_DISPLAY_NUMBER_REFERENCE_GROUP_TOTAL_NUMBER_OF_PAGES_DISPLAY_OFF
+				{
+					m_documentInterface->insertField(WPXString("text:page-count"), propList);
+				}
 			}
 			m_parseState->m_styleStateSequence.setCurrentState(m_parseState->m_styleStateSequence.getPreviousState());
+			break;
+		default:
 			break;
 		}
 	}
@@ -1153,6 +1165,8 @@ void WP6ContentListener::styleGroupOn(const uint8_t subGroup)
 			WPD_DEBUG_MSG(("WordPerfect: Handling a para style end (ON)\n"));
 			m_parseState->m_styleStateSequence.setCurrentState(STYLE_END);
 			break;
+		default:
+			break;
 		}
 	}
 }
@@ -1174,6 +1188,8 @@ void WP6ContentListener::styleGroupOff(const uint8_t subGroup)
 		case WP6_STYLE_GROUP_PARASTYLE_END_OFF:
 			WPD_DEBUG_MSG(("WordPerfect: Handling a parastyle end (OFF)\n"));
 			m_parseState->m_styleStateSequence.setCurrentState(NORMAL);
+			break;
+		default:
 			break;
 		}
 	}

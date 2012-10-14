@@ -60,7 +60,7 @@ void WP5TableEOLGroup::_readContents(WPXInputStream *input, WPXEncryption *encry
 			m_useCellJustification = true;
 		if ((tmpFlags & 0x02) == 0x02)
 			m_useCellAttributes = true;
-		m_cellVerticalAlignment = ((tmpFlags & 0x0C) >> 2);
+		m_cellVerticalAlignment = (uint8_t)((tmpFlags & 0x0C) >> 2);
 		m_columnNumber = readU8(input, encryption);
 		tmpColumnSpanning = readU8(input, encryption);
 		m_colSpan = tmpColumnSpanning & 0x7F;

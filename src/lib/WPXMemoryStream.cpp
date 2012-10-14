@@ -47,7 +47,7 @@ const unsigned char *WPXMemoryInputStream::read(unsigned long numBytes, unsigned
 	if (numBytes == 0)
 		return 0;
 
-	int numBytesToRead;
+	long numBytesToRead;
 
 	if ((m_offset+numBytes) < m_size)
 		numBytesToRead = numBytes;

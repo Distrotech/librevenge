@@ -70,7 +70,7 @@ WP3FixedLengthGroup *WP3FixedLengthGroup::constructFixedLengthGroup(WPXInputStre
 
 bool WP3FixedLengthGroup::isGroupConsistent(WPXInputStream *input, WPXEncryption *encryption, const uint8_t groupID)
 {
-	uint32_t startPosition = input->tell();
+	long startPosition = input->tell();
 
 	try
 	{
@@ -98,7 +98,7 @@ bool WP3FixedLengthGroup::isGroupConsistent(WPXInputStream *input, WPXEncryption
 
 void WP3FixedLengthGroup::_read(WPXInputStream *input, WPXEncryption *encryption)
 {
-	uint32_t startPosition = input->tell();
+	long startPosition = input->tell();
 	_readContents(input, encryption);
 
 	if (m_group >= 0xC0 && m_group <= 0xCF) // just an extra safety check

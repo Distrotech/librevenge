@@ -327,7 +327,7 @@ WPXInputStream *WPXFileStream::getDocumentOLEStream(const char *name)
 			   resulting buffer */
 			return (WPXInputStream *)0;
 
-		return new WPXStringStream(&buf[0], tmpLength);
+		return new WPXStringStream(&buf[0], (unsigned)tmpLength);
 	}
 #ifdef BUILD_ZIP_STREAM
 	else if (d->streamType == ZIP)
@@ -354,7 +354,7 @@ const unsigned char *WPXStringStream::read(unsigned long numBytes, unsigned long
 	if (numBytes == 0)
 		return 0;
 
-	int numBytesToRead;
+	long numBytesToRead;
 
 	if ((d->offset+numBytes) < d->buffer.size())
 		numBytesToRead = numBytes;
@@ -467,7 +467,7 @@ WPXInputStream *WPXStringStream::getDocumentOLEStream(const char *name)
 			   resulting buffer */
 			return (WPXInputStream *)0;
 
-		return new WPXStringStream(&buf[0], tmpLength);
+		return new WPXStringStream(&buf[0], (unsigned)tmpLength);
 	}
 #ifdef BUILD_ZIP_STREAM
 	else if (d->streamType == ZIP)

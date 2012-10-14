@@ -39,6 +39,10 @@ WP3TablesGroup::WP3TablesGroup(WPXInputStream *input, WPXEncryption *encryption)
 	m_bottomGutterSpacing(0),
 	m_rightGutterSpacing(0),
 	m_numColumns(0),
+	m_columnMode(32),
+	m_numberFormat(32),
+	m_columnWidth(32),
+	m_rightOffsetForDecimalAlign(32),
 	m_colSpan(0),
 	m_rowSpan(0),
 	m_cellFillColor(RGBSColor(0xff, 0xff, 0xff))

@@ -53,8 +53,8 @@ public:
 	void setExtendedInformation(const uint16_t /* type */, const WPXString & /*data*/) {}
 	void startDocument() {}
 	void startSubDocument() {}
-	void setAlignmentCharacter(const uint16_t /* character */) {}
-	void setLeaderCharacter(const uint16_t /* character */, const uint8_t /* numberOfSpaces */) {}
+	void setAlignmentCharacter(const uint32_t /* character */) {}
+	void setLeaderCharacter(const uint32_t /* character */, const uint8_t /* numberOfSpaces */) {}
 	void defineTabStops(const bool /* isRelative */, const std::vector<WPXTabStop> & /* tabStops */,
 	                    const std::vector<bool> & /* usePreWP9LeaderMethods */) {}
 	void insertCharacter(uint32_t /* character */)

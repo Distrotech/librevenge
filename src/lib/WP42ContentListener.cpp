@@ -135,6 +135,8 @@ void WP42ContentListener::attributeChange(bool isOn, uint8_t attribute)
 	case WP42_ATTRIBUTE_UNDERLINE:
 		textAttributeBit = WPX_UNDERLINE_BIT;
 		break;
+	default:
+		break;
 	}
 
 	if (isOn)

@@ -52,6 +52,8 @@ void WP6NumberingMethodGroup::_readContents(WPXInputStream *input, WPXEncryption
 		m_levelNumber = readU8(input, encryption);;
 		m_numberingMethod = readU8(input, encryption);
 		break;
+	default:
+		break;
 	}
 }
 
@@ -79,6 +81,8 @@ void WP6NumberingMethodGroup::parse(WP6Listener *listener)
 			listener->setPageNumberingType(ARABIC);
 			break;
 		}
+		break;
+	default:
 		break;
 	}
 }

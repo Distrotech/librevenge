@@ -63,12 +63,12 @@ void WP6GraphicsBoxStylePacket::_readContents(WPXInputStream *input, WPXEncrypti
 	uint16_t tmpNumChildIDs = readU16(input, encryption);
 	input->seek(tmpNumChildIDs * 2, WPX_SEEK_CUR);
 	uint16_t tmpSizeOfBoxData = readU16(input, encryption);
-	unsigned tmpStartOfBoxData = input->tell();
+	long tmpStartOfBoxData = input->tell();
 
 	// Reading the box name/library data
 
 	uint16_t tmpSizeOfBoxNameLibraryData = readU16(input, encryption);
-	unsigned tmpBoxNameLibraryDataPosition = input->tell();
+	long tmpBoxNameLibraryDataPosition = input->tell();
 	input->seek(1, WPX_SEEK_CUR);
 	m_isLibraryStyle = ((readU8(input, encryption) & 0x01) != 0x00);
 	int16_t tmpBoxNameLength = (int16_t)readU16(input, encryption);
@@ -129,7 +129,7 @@ void WP6GraphicsBoxStylePacket::_readContents(WPXInputStream *input, WPXEncrypti
 	// Reading Box positioning data
 
 	uint16_t tmpSizeOfBoxPositioningData = readU16(input, encryption);
-	unsigned tmpBoxPositioningDataPosition = input->tell();
+	long tmpBoxPositioningDataPosition = input->tell();
 	input->seek(1, WPX_SEEK_CUR);
 
 	m_generalPositioningFlags = readU8(input, encryption);
@@ -173,13 +173,13 @@ void WP6GraphicsBoxStylePacket::_readContents(WPXInputStream *input, WPXEncrypti
 	// Reading box content data
 
 	uint16_t tmpSizeOfBoxContentData = readU16(input, encryption);
-	unsigned tmpBoxContentDataPosition = input->tell();
+	long tmpBoxContentDataPosition = input->tell();
 	input->seek(1, WPX_SEEK_CUR);
 
 	m_contentType = readU8(input, encryption);
 	uint8_t tmpContentAlignFlags = readU8(input, encryption);
 	m_contentHAlign = tmpContentAlignFlags & 0x03;
-	m_contentVAlign = (tmpContentAlignFlags & 0xC0) >> 2;
+	m_contentVAlign = (uint8_t)((tmpContentAlignFlags & 0xC0) >> 2);
 	m_contentPreserveAspectRatio = ((tmpContentAlignFlags & 0x10) == 0x00);
 
 	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Content Type (%i)\n", m_contentType));
@@ -191,7 +191,7 @@ void WP6GraphicsBoxStylePacket::_readContents(WPXInputStream *input, WPXEncrypti
 	case 0x03:
 	{
 		uint16_t tmpGraphicsRenderingInfoSize = readU16(input, encryption);
-		unsigned tmpGraphicsRenderingInfoBegin = input->tell();
+		long tmpGraphicsRenderingInfoBegin = input->tell();
 		if (0x01 == (readU8(input, encryption) & 0xFF))
 		{
 			m_nativeWidth = readU16(input, encryption);
@@ -212,35 +212,35 @@ void WP6GraphicsBoxStylePacket::_readContents(WPXInputStream *input, WPXEncrypti
 	// Reading box caption data
 
 	uint16_t tmpSizeOfBoxCaptionData = readU16(input, encryption);
-	unsigned tmpBoxCaptionDataPosition = input->tell();
+	long tmpBoxCaptionDataPosition = input->tell();
 
 	input->seek(tmpSizeOfBoxCaptionData + tmpBoxCaptionDataPosition, WPX_SEEK_SET);
 
 	// Reading box border data
 
 	uint16_t tmpSizeOfBoxBorderData = readU16(input, encryption);
-	unsigned tmpBoxBorderDataPosition = input->tell();
+	long tmpBoxBorderDataPosition = input->tell();
 
 	input->seek(tmpSizeOfBoxBorderData + tmpBoxBorderDataPosition, WPX_SEEK_SET);
 
 	// Reading box fill data
 
 	uint16_t tmpSizeOfBoxFillData = readU16(input, encryption);
-	unsigned tmpBoxFillDataPosition = input->tell();
+	long tmpBoxFillDataPosition = input->tell();
 
 	input->seek(tmpSizeOfBoxFillData + tmpBoxFillDataPosition, WPX_SEEK_SET);
 
 	// Reading box wrapping data
 
 	uint16_t tmpSizeOfBoxWrappingData = readU16(input, encryption);
-	unsigned tmpBoxWrappingDataPosition = input->tell();
+	long tmpBoxWrappingDataPosition = input->tell();
 
 	input->seek(tmpSizeOfBoxWrappingData + tmpBoxWrappingDataPosition, WPX_SEEK_SET);
 
 	// Reading box hypertext data
 
 	uint16_t tmpSizeOfBoxHypertextData = readU16(input, encryption);
-	unsigned tmpBoxHypertextDataPosition = input->tell();
+	long tmpBoxHypertextDataPosition = input->tell();
 
 	input->seek(tmpSizeOfBoxHypertextData + tmpBoxHypertextDataPosition, WPX_SEEK_SET);
 

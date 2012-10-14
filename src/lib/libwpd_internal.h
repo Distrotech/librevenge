@@ -218,7 +218,7 @@ struct _WPXTabStop
 	_WPXTabStop();
 	double m_position;
 	WPXTabAlignment m_alignment;
-	uint16_t m_leaderCharacter;
+	uint32_t m_leaderCharacter;
 	uint8_t m_leaderNumSpaces;
 };
 

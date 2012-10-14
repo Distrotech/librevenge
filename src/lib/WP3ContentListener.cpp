@@ -84,7 +84,7 @@ void WP3ContentListener::insertTab()
 		if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
 		{
 			if (m_ps->m_tabStops.empty() || (_getNextTabStop() == (std::numeric_limits<double>::max)()))
-				m_ps->m_textIndentByTabs += 0.5f;
+				m_ps->m_textIndentByTabs += 0.5;
 			else
 				m_ps->m_textIndentByTabs = _getNextTabStop() - (m_ps->m_leftMarginByTabs  + m_ps->m_textIndentByParagraphIndentChange);
 			m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange
@@ -375,6 +375,8 @@ void WP3ContentListener::attributeChange(const bool isOn, const uint8_t attribut
 		case WP3_ATTRIBUTE_SMALL_CAPS:
 			textAttributeBit = WPX_SMALL_CAPS_BIT;
 			break;
+		default:
+			break;
 		}
 
 		if (isOn)
@@ -431,6 +433,8 @@ void WP3ContentListener::marginChange(const uint8_t side, const uint16_t margin)
 			                               + m_ps->m_rightMarginByParagraphMarginChange
 			                               + m_ps->m_rightMarginByTabs;
 			break;
+		default:
+			break;
 		}
 		m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent;
 	}
@@ -444,9 +448,6 @@ void WP3ContentListener::justificationChange(const uint8_t justification)
 		// m_ps->m_paragraphJustification = justification;
 		switch (justification)
 		{
-		case 0x00:
-			m_ps->m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_LEFT;
-			break;
 		case 0x01:
 			m_ps->m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_CENTER;
 			break;
@@ -461,6 +462,9 @@ void WP3ContentListener::justificationChange(const uint8_t justification)
 			break;
 		case 0x05:
 			m_ps->m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_DECIMAL_ALIGNED;
+			break;
+		default:  // case 0x00 and all other invalid things
+			m_ps->m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_LEFT;
 			break;
 		}
 	}

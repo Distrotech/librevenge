@@ -41,10 +41,10 @@ WP5FontNameStringPoolPacket::~WP5FontNameStringPoolPacket()
 
 void WP5FontNameStringPoolPacket::_readContents(WPXInputStream *input, WPXEncryption *encryption, uint32_t dataSize)
 {
-	unsigned int tmpInitialOffset = input->tell();
-	while ((long)input->tell() < (long)(tmpInitialOffset + dataSize))
+	long tmpInitialOffset = input->tell();
+	while (input->tell() < (long)(tmpInitialOffset + dataSize))
 	{
-		unsigned int offset = input->tell() - tmpInitialOffset;
+		unsigned offset = (unsigned)(input->tell() - tmpInitialOffset);
 		WPXString fontName = readCString(input, encryption);
 		m_fontNameString[offset] = fontName;
 	}

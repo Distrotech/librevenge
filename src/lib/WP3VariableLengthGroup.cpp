@@ -78,8 +78,8 @@ WP3VariableLengthGroup *WP3VariableLengthGroup::constructVariableLengthGroup(WPX
 
 bool WP3VariableLengthGroup::isGroupConsistent(WPXInputStream *input, WPXEncryption *encryption, const uint8_t group)
 {
-	uint32_t startPosition = input->tell();
-	if (startPosition > ((std::numeric_limits<unsigned long>::max)() / 2))
+	long startPosition = input->tell();
+	if (0 > startPosition  || startPosition > ((std::numeric_limits<long>::max)()))
 		return false;
 
 	try
@@ -125,12 +125,12 @@ bool WP3VariableLengthGroup::isGroupConsistent(WPXInputStream *input, WPXEncrypt
 
 void WP3VariableLengthGroup::_read(WPXInputStream *input, WPXEncryption *encryption)
 {
-	uint32_t startPosition = input->tell();
+	long startPosition = input->tell();
 
 	WPD_DEBUG_MSG(("WordPerfect: handling a variable length group\n"));
 
 	m_subGroup = readU8(input, encryption);
-	m_size = readU16(input, encryption, true) + 4; // the length is the number of data bytes minus 4 (ie. the function codes)
+	m_size = (uint16_t)(readU16(input, encryption, true) + 4); // the length is the number of data bytes minus 4 (ie. the function codes)
 
 	WPD_DEBUG_MSG(("WordPerfect: Read variable group header (start_position: %i, sub_group: 0x%x, size: %i)\n", startPosition, m_subGroup, m_size));
 

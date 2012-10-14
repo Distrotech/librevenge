@@ -64,6 +64,8 @@ void WP6StyleGroup::_readContents(WPXInputStream *input, WPXEncryption *encrypti
 	case WP6_STYLE_GROUP_GLOBAL_ON:
 		m_subGroupData = new WP6StyleGroup_GlobalOnSubGroup(input, encryption);
 		break;
+	default:
+		break;
 	}
 }
 

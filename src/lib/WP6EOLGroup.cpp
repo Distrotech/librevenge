@@ -346,6 +346,9 @@ void WP6EOLGroup::parse(WP6Listener *listener)
 	case WP6_EOL_GROUP_TABLE_ROW_AT_HARD_EOP:
 	case WP6_EOL_GROUP_TABLE_OFF_AT_EOC_AT_EOP:
 		listener->insertBreak(WPX_SOFT_PAGE_BREAK);
+		break;
+	default:
+		break;
 	}
 }
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

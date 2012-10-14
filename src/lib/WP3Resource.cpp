@@ -29,8 +29,8 @@
 #include "WP3FileStructure.h"
 #include "libwpd_internal.h"
 
-WP3Resource::WP3Resource(uint32_t resourceType, uint32_t resourceReferenceID, const WPXString resourceName,
-                         uint8_t resourceAttributes, const WPXBinaryData resourceData) :
+WP3Resource::WP3Resource(uint32_t resourceType, uint32_t resourceReferenceID, const WPXString &resourceName,
+                         uint8_t resourceAttributes, const WPXBinaryData &resourceData) :
 	m_resourceType(resourceType),
 	m_resourceReferenceID(resourceReferenceID),
 	m_resourceName(resourceName),

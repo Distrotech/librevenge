@@ -99,7 +99,7 @@ WP6VariableLengthGroup *WP6VariableLengthGroup::constructVariableLengthGroup(WPX
 
 bool WP6VariableLengthGroup::isGroupConsistent(WPXInputStream *input, WPXEncryption *encryption, const uint8_t groupID)
 {
-	uint32_t startPosition = input->tell();
+	long startPosition = input->tell();
 
 	try
 	{
@@ -134,7 +134,7 @@ bool WP6VariableLengthGroup::isGroupConsistent(WPXInputStream *input, WPXEncrypt
 
 void WP6VariableLengthGroup::_read(WPXInputStream *input, WPXEncryption *encryption)
 {
-	uint32_t startPosition = input->tell();
+	long startPosition = input->tell();
 
 	m_subGroup = readU8(input, encryption);
 	if ((m_size = readU16(input, encryption)) == 0)
@@ -167,7 +167,7 @@ void WP6VariableLengthGroup::_read(WPXInputStream *input, WPXEncryption *encrypt
 		throw FileException();
 	}
 
-	uint32_t tmpPosition = input->tell();
+	long tmpPosition = input->tell();
 	input->seek(m_sizeNonDeletable, WPX_SEEK_CUR);
 	m_sizeDeletable = (uint16_t)(startPosition + m_size - 4 - input->tell());
 	input->seek(tmpPosition, WPX_SEEK_SET);

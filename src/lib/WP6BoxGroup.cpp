@@ -163,7 +163,7 @@ void WP6BoxGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption
 				if (m_hasBoxContentType && (m_boxContentType == 0x03)) // Image
 				{
 					uint16_t tmpImageContentOverrideSize = readU16(input, encryption);
-					unsigned tmpImageContentOverrideStart = input->tell();
+					long tmpImageContentOverrideStart = input->tell();
 					uint16_t tmpImageContentOverrideFlags = readU16(input, encryption);
 
 					if (tmpImageContentOverrideFlags & 0x8000)
@@ -346,8 +346,8 @@ void WP6BoxGroup::parse(WP6Listener *listener)
 	// Get the box general positioning
 	uint8_t tmpGeneralPositioningFlags = 0;
 	if (gbsPacket)
-		tmpGeneralPositioningFlags = (gbsPacket->getGeneralPositioningFlags() & (~ m_generalPositioningFlagsMask)) |
-		                             (m_generalPositioningFlagsData & m_generalPositioningFlagsMask);
+		tmpGeneralPositioningFlags = (uint8_t)((gbsPacket->getGeneralPositioningFlags() & (~ m_generalPositioningFlagsMask)) |
+		                                       (m_generalPositioningFlagsData & m_generalPositioningFlagsMask));
 	else  // here we did not manage to get the packet. Let's try to go with the override information
 		tmpGeneralPositioningFlags = (m_generalPositioningFlagsData & m_generalPositioningFlagsMask);
 

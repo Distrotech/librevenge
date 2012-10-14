@@ -53,8 +53,8 @@ public:
 	                     const uint8_t second, const uint8_t dayOfWeek,
 	                     const uint8_t timeZone, const uint8_t unused) = 0;
 	virtual void setExtendedInformation(const uint16_t type, const WPXString &data) = 0;
-	virtual void setAlignmentCharacter(const uint16_t character) = 0;
-	virtual void setLeaderCharacter(const uint16_t character, const uint8_t numSpaces) = 0;
+	virtual void setAlignmentCharacter(const uint32_t character) = 0;
+	virtual void setLeaderCharacter(const uint32_t character, const uint8_t numSpaces) = 0;
 	virtual void defineTabStops(const bool isRelative, const std::vector<WPXTabStop> &tabStops,
 	                            const std::vector<bool> &usePreWP9LeaderMethods) = 0;
 	virtual void insertCharacter(uint32_t character) = 0;

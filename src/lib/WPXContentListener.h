@@ -132,7 +132,7 @@ struct _WPXContentParsingState
 
 	uint8_t m_currentListLevel;
 
-	uint16_t m_alignmentCharacter;
+	uint32_t m_alignmentCharacter;
 	std::vector<WPXTabStop> m_tabStops;
 	bool m_isTabPositionRelative;
 

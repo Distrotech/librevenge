@@ -83,7 +83,7 @@ WPXString readPascalString(WPXInputStream *input, WPXEncryption *encryption)
 			tmpString.append((char)tmpChar);
 		else if (pascalStringLength > i++)
 		{
-			tmpChar = (tmpChar << 8) | readU8(input, encryption);
+			tmpChar = (uint16_t)((tmpChar << 8) | readU8(input, encryption));
 			const uint32_t *chars;
 			int len = appleWorldScriptToUCS4(tmpChar, &chars);
 			for (int j = 0; j < len; j++)
@@ -664,6 +664,8 @@ int extendedCharacterWP6ToUCS4(uint8_t character,
 			return i;
 		}
 		break;
+	default:
+		break;
 	}
 
 	// last resort: return whitespace
@@ -1013,6 +1015,8 @@ int extendedCharacterWP5ToUCS4(uint8_t character,
 		if ((retVal = findSimpleMap(character, chars, arabicScriptWP5, WPD_NUM_ELEMENTS(arabicScriptWP5))))
 			return retVal;
 		break;
+	default:
+		break;
 	}
 
 	// last resort: return whitespace
@@ -1247,6 +1251,8 @@ WPXString _numberingTypeToString(WPXNumberingType t)
 		break;
 	case UPPERCASE_ROMAN:
 		sListTypeSymbol = "I";
+		break;
+	default:
 		break;
 	}
 
@@ -6256,7 +6262,7 @@ int appleWorldScriptToUCS4(uint16_t character, const uint32_t **chars)
 	int retVal = 0;
 
 	// Find the entry corresponding to the WorldScript character
-	if ((retVal = findSimpleMap(character - 0x8140, chars, charSimpleMap, WPD_NUM_ELEMENTS(charSimpleMap))))
+	if ((retVal = findSimpleMap((uint16_t)(character - 0x8140), chars, charSimpleMap, WPD_NUM_ELEMENTS(charSimpleMap))))
 		return retVal;
 
 	if ((retVal = findComplexMap(character, chars, charComplexMap)))

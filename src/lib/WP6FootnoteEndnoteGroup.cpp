@@ -57,6 +57,8 @@ void WP6FootnoteEndnoteGroup::parse(WP6Listener *listener)
 	case WP6_FOOTNOTE_ENDNOTE_GROUP_ENDNOTE_OFF:
 		listener->noteOff(ENDNOTE);
 		break;
+	default:
+		break;
 	}
 }
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

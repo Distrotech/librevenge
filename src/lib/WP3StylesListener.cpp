@@ -87,6 +87,8 @@ void WP3StylesListener::insertBreak(const uint8_t breakType)
 			m_currentPage.setPageSpan(1);
 			m_currentPageHasContent = false;
 			break;
+		default:
+			break;
 		}
 		if (breakType == WPX_PAGE_BREAK)
 		{
@@ -120,6 +122,8 @@ void WP3StylesListener::pageMarginChange(const uint8_t side, const uint16_t marg
 			break;
 		case WPX_BOTTOM:
 			m_currentPage.setMarginBottom(marginInch);
+			break;
+		default:
 			break;
 		}
 	}
@@ -163,6 +167,8 @@ void WP3StylesListener::marginChange(const uint8_t side, const uint16_t margin)
 				}
 			}
 			m_tempMarginRight = marginInch;
+			break;
+		default:
 			break;
 		}
 

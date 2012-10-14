@@ -429,6 +429,8 @@ void WP5ContentListener::attributeChange(bool isOn, uint8_t attribute)
 		case WP5_ATTRIBUTE_SMALL_CAPS:
 			textAttributeBit = WPX_SMALL_CAPS_BIT;
 			break;
+		default:
+			break;
 		}
 
 		if (isOn)
@@ -475,6 +477,8 @@ void WP5ContentListener::marginChange(uint8_t side, uint16_t margin)
 			m_ps->m_paragraphMarginRight = m_ps->m_rightMarginByPageMarginChange
 			                               + m_ps->m_rightMarginByParagraphMarginChange
 			                               + m_ps->m_rightMarginByTabs;
+			break;
+		default:
 			break;
 		}
 		m_ps->m_listReferencePosition = m_ps->m_paragraphMarginLeft + m_ps->m_paragraphTextIndent;
