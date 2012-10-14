@@ -689,7 +689,7 @@ void WP6ContentListener::characterShadingChange(const uint8_t shading)
 	}
 }
 
-void WP6ContentListener::highlightChange(const bool isOn, const RGBSColor color)
+void WP6ContentListener::highlightChange(const bool isOn, const RGBSColor &color)
 {
 	if (!isUndoOn())
 	{

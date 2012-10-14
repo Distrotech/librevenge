@@ -197,7 +197,7 @@ public:
 	}
 	void characterColorChange(const uint8_t red, const uint8_t green, const uint8_t blue);
 	void characterShadingChange(const uint8_t shading);
-	void highlightChange(const bool isOn, const RGBSColor color);
+	void highlightChange(const bool isOn, const RGBSColor &color);
 	void fontChange(const uint16_t matchedFontPointSize, const uint16_t fontPID, const WPXString &fontName);
 	void attributeChange(const bool isOn, const uint8_t attribute);
 	void spacingAfterParagraphChange(const double spacingRelative, const double spacingAbsolute);
