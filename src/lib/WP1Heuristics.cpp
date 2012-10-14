@@ -152,11 +152,10 @@ WPDConfidence WP1Heuristics::isWP1FileFormat(WPXInputStream *input, const char *
 							delete encryption;
 						return WPD_CONFIDENCE_NONE;
 					}
-					unsigned long closingFunctionLength = 0;
 					WPD_DEBUG_MSG(("WP1Heuristics functionLength = 0x%.8x\n", (unsigned int)functionLength));
 
 					input->seek(functionLength, WPX_SEEK_CUR);
-					closingFunctionLength = readU32(input, encryption, true);
+					unsigned long closingFunctionLength = readU32(input, encryption, true);
 					WPD_DEBUG_MSG(("WP1Heuristics closingFunctionLength = 0x%.8x\n", (unsigned int)closingFunctionLength));
 					if (functionLength != closingFunctionLength)
 					{

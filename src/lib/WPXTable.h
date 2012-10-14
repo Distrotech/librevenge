@@ -71,7 +71,7 @@ public:
 	}
 	bool isEmpty() const
 	{
-		return m_tableRows.size() == 0;
+		return m_tableRows.empty();
 	}
 
 private:

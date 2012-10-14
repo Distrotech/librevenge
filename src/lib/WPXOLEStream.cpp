@@ -413,9 +413,8 @@ libwpd::DirEntry *libwpd::DirTree::entry( const std::string &name )
 
 	for( it = names.begin(); it != names.end(); ++it )
 	{
-		unsigned child = 0;
 		// dima: performace optimisation of the previous
-		child = find_child( index, *it );
+		unsigned child = find_child( index, *it );
 		// traverse to the child
 		if( child > 0 ) index = child;
 		else return (libwpd::DirEntry *)0;

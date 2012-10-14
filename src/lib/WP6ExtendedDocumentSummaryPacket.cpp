@@ -50,7 +50,7 @@ WP6ExtendedDocumentSummaryPacket::~WP6ExtendedDocumentSummaryPacket()
 
 void WP6ExtendedDocumentSummaryPacket::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
-	if (m_dataSize <= 0)
+	if (!m_dataSize)
 		return;
 	if (m_dataSize > ((std::numeric_limits<uint32_t>::max)() / 2))
 		m_dataSize = ((std::numeric_limits<uint32_t>::max)() / 2);

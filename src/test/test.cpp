@@ -67,14 +67,13 @@ void Test::tearDown(void)
 
 void Test::testStream(void)
 {
-	WPXInputStream *input = 0;
 	unsigned long numBytesRead;
 	unsigned long u32;
 
 	/**********************
 	 * Test WPXFileStream *
 	 **********************/
-	input = new WPXFileStream(TMP_FILENAME);
+	WPXInputStream *input = new WPXFileStream(TMP_FILENAME);
 
 	CPPUNIT_ASSERT_EQUAL ( false, input->isOLEStream() );
 	CPPUNIT_ASSERT_EQUAL ( (WPXInputStream *) NULL, input->getDocumentOLEStream("foo") );

@@ -90,7 +90,7 @@ void WPXTable::_makeCellBordersConsistent(WPXTableCell *cell, std::vector<WPXTab
         int adjacencyBitCell, int adjacencyBitBoundCells)
 {
 	typedef std::vector<WPXTableCell *>::iterator VTCIter;
-	if (adjacentCells.size() > 0)
+	if (!adjacentCells.empty())
 	{
 		// if this cell is adjacent to > 1 cell, and it has no border
 		// make the cells below have no border

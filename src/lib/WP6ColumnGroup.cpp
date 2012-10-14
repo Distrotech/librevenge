@@ -63,10 +63,10 @@ void WP6ColumnGroup::_readContents(WPXInputStream *input, WPXEncryption *encrypt
 		double tmpRowSpacingFractionalPart = (double)((double)(tmpRowSpacing & 0xffff)/(double)0x10000);
 		m_rowSpacing = (double)tmpRowSpacingIntegerPart + tmpRowSpacingFractionalPart;
 		m_numColumns = readU8(input, encryption);
-		uint8_t tmpDefinition;
-		uint16_t tmpWidth;
 		if (m_numColumns > 1)
 		{
+			uint16_t tmpWidth;
+			uint8_t tmpDefinition;
 			for (int i=0; i<((2*m_numColumns)-1); i++)
 			{
 				tmpDefinition = readU8(input, encryption);
