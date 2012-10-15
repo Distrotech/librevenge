@@ -44,11 +44,11 @@ WP5ListFontsUsedPacket::~WP5ListFontsUsedPacket()
 
 void WP5ListFontsUsedPacket::_readContents(WPXInputStream *input, WPXEncryption *encryption, uint32_t dataSize)
 {
-	int numFonts = (int)(dataSize / 86); // 86 == size of the structure describing the font
+	unsigned numFonts = dataSize / 86; // 86 == size of the structure describing the font
 	WPD_DEBUG_MSG(("WP5 List Fonts Used Packet, data size: %i, number fonts: %i\n", dataSize, numFonts));
 	unsigned tempFontNameOffset;
 	double tempFontSize;
-	for (int i=0; i<numFonts; i++)
+	for (unsigned i=0; i<numFonts; i++)
 	{
 		input->seek(18, WPX_SEEK_CUR);
 		tempFontNameOffset=readU16(input, encryption);
@@ -72,14 +72,14 @@ void WP5ListFontsUsedPacket::_readContents(WPXInputStream *input, WPXEncryption 
 
 unsigned WP5ListFontsUsedPacket::getFontNameOffset(unsigned fontNumber) const
 {
-	if (fontNumber && (fontNumber < m_fontNameOffset.size()))
+	if (fontNumber < m_fontNameOffset.size())
 		return m_fontNameOffset[fontNumber];
 	return 0;
 }
 
 double WP5ListFontsUsedPacket::getFontSize(unsigned fontNumber) const
 {
-	if (fontNumber && (fontNumber < m_fontSize.size()))
+	if (fontNumber < m_fontSize.size())
 		return m_fontSize[fontNumber];
 	return 0.0;
 }
