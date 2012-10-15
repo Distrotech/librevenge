@@ -39,37 +39,42 @@ uint8_t readU8(WPXInputStream *input, WPXEncryption *encryption)
 	if (!p || numBytesRead != sizeof(uint8_t))
 		throw FileException();
 
-	return WPD_LE_GET_GUINT8(p);
+	return p[0];
 }
 
 uint16_t readU16(WPXInputStream *input, WPXEncryption *encryption, bool bigendian)
 {
 	unsigned long numBytesRead;
-	uint16_t const *val = (uint16_t const *)(encryption ?
-	                      encryption->readAndDecrypt(input, sizeof(uint16_t), numBytesRead) :
-	                      input->read(sizeof(uint16_t), numBytesRead));
+	uint8_t const *p = (encryption ?
+	                    encryption->readAndDecrypt(input, sizeof(uint16_t), numBytesRead) :
+	                    input->read(sizeof(uint16_t), numBytesRead));
 
-	if (!val || numBytesRead != sizeof(uint16_t))
+	if (!p || numBytesRead != sizeof(uint16_t))
 		throw FileException();
 
 	if (bigendian)
-		return WPD_BE_GET_GUINT16(val);
-	return WPD_LE_GET_GUINT16(val);
+		return (uint16_t)(p[1]|((uint16_t)p[0]<<8));
+	return (uint16_t)(p[0]|((uint16_t)p[1]<<8));
+}
+
+int16_t readS16(WPXInputStream *input, WPXEncryption *encryption, bool bigendian)
+{
+	return (int16_t)readU16(input, encryption, bigendian);
 }
 
 uint32_t readU32(WPXInputStream *input, WPXEncryption *encryption, bool bigendian)
 {
 	unsigned long numBytesRead;
-	uint32_t const *val = (uint32_t const *)(encryption ?
-	                      encryption->readAndDecrypt(input, sizeof(uint32_t), numBytesRead) :
-	                      input->read(sizeof(uint32_t), numBytesRead));
+	uint8_t const *p = (encryption ?
+	                    encryption->readAndDecrypt(input, sizeof(uint32_t), numBytesRead) :
+	                    input->read(sizeof(uint32_t), numBytesRead));
 
-	if (!val || numBytesRead != sizeof(uint32_t))
+	if (!p || numBytesRead != sizeof(uint32_t))
 		throw FileException();
 
 	if (bigendian)
-		return WPD_BE_GET_GUINT32(val);
-	return WPD_LE_GET_GUINT32(val);
+		return (uint32_t)p[3]|((uint32_t)p[2]<<8)|((uint32_t)p[1]<<16)|((uint32_t)p[0]<<24);
+	return (uint32_t)p[0]|((uint32_t)p[1]<<8)|((uint32_t)p[2]<<16)|((uint32_t)p[3]<<24);
 }
 
 WPXString readPascalString(WPXInputStream *input, WPXEncryption *encryption)

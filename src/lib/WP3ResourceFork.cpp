@@ -70,7 +70,7 @@ WP3ResourceFork::WP3ResourceFork(WPXInputStream *input, WPXEncryption *encryptio
 				input->seek(position2, WPX_SEEK_SET);
 			}
 			uint8_t resourceAttributes = readU8(input, encryption);
-			uint32_t offsetToData = (readU8(input, encryption) << 16);
+			uint32_t offsetToData = (uint32_t)((uint32_t)readU8(input, encryption) << 16);
 			offsetToData |= readU16(input, encryption, true);
 			offsetToData += 16+dataOffset;
 			long position3 = input->tell();
@@ -86,7 +86,7 @@ WP3ResourceFork::WP3ResourceFork(WPXInputStream *input, WPXEncryption *encryptio
 				/* WBOX resource and PICT resource for the time being */
 				if (resourceType == 0x57424f58 /* WBOX */ || resourceType == 0x50494354 /* PICT */)
 				{
-					encryption->setEncryptionStartOffset(input->tell());
+					encryption->setEncryptionStartOffset((unsigned long)input->tell());
 					encryption->setEncryptionMaskBase(0);
 				}
 			}

@@ -36,6 +36,7 @@
 #ifndef _WPXTABLE_H
 #define _WPXTABLE_H
 #include <vector>
+#include <stdio.h>
 #include "libwpd_types.h"
 
 typedef struct _WPXTableCell WPXTableCell;
@@ -55,7 +56,7 @@ public:
 	~WPXTable();
 	void insertRow();
 	void insertCell(uint8_t colSpan, uint8_t rowSpan, uint8_t borderBits);
-	const WPXTableCell  *getCell(int i, int j)
+	const WPXTableCell  *getCell(size_t i, size_t j)
 	{
 		return (m_tableRows[i])[j];
 	}

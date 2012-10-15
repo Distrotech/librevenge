@@ -58,32 +58,13 @@
 #define WPD_DEBUG_MSG(M)
 #endif
 
-#define WPD_LE_GET_GUINT8(p) (*(uint8_t const *)(p))
-#define WPD_LE_GET_GUINT16(p)				  \
-        (uint16_t)((((uint8_t const *)(p))[0] << 0)  |    \
-                  (((uint8_t const *)(p))[1] << 8))
-#define WPD_LE_GET_GUINT32(p) \
-        (uint32_t)((((uint8_t const *)(p))[0] << 0)  |    \
-                  (((uint8_t const *)(p))[1] << 8)  |    \
-                  (((uint8_t const *)(p))[2] << 16) |    \
-                  (((uint8_t const *)(p))[3] << 24))
-
-#define WPD_BE_GET_GUINT8(p) (*(uint8_t const *)(p))
-#define WPD_BE_GET_GUINT16(p)                           \
-        (uint16_t)((((uint8_t const *)(p))[1] << 0)  |    \
-                  (((uint8_t const *)(p))[0] << 8))
-#define WPD_BE_GET_GUINT32(p)                           \
-        (uint32_t)((((uint8_t const *)(p))[3] << 0)  |    \
-                  (((uint8_t const *)(p))[2] << 8)  |    \
-                  (((uint8_t const *)(p))[1] << 16) |    \
-                  (((uint8_t const *)(p))[0] << 24))
-
 #define WPD_NUM_ELEMENTS(array) sizeof(array)/sizeof(array[0])
 
 // add more of these as needed for byteswapping
 // (the 8-bit functions are just there to make things consistent)
 uint8_t readU8(WPXInputStream *input, WPXEncryption *encryption);
 uint16_t readU16(WPXInputStream *input, WPXEncryption *encryption, bool bigendian=false);
+int16_t readS16(WPXInputStream *input, WPXEncryption *encryption, bool bigendian=false);
 uint32_t readU32(WPXInputStream *input, WPXEncryption *encryption, bool bigendian=false);
 
 WPXString readPascalString(WPXInputStream *input, WPXEncryption *encryption);

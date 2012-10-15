@@ -165,7 +165,7 @@ void WP42ContentListener::headerFooterGroup(uint8_t /* headerFooterDefinition */
 }
 
 void WP42ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType /* subDocumentType */,
-        WPXTableList /* tableList */, int /* nextTableIndice */)
+        WPXTableList /* tableList */, unsigned /* nextTableIndice */)
 {
 	// save our old parsing state on our "stack"
 	WP42ContentParsingState *oldParseState = m_parseState;

@@ -90,9 +90,9 @@ void WP5PageFormatGroup::_readContents(WPXInputStream *input, WPXEncryption *enc
 				m_tabStops[i].m_position = (double)((double)tmpTabPosition/(double)WPX_NUM_WPUS_PER_INCH);
 			}
 			if ((tmpTabPosition & 0xFFFF) == 0xFFFF)
-				input->seek((39 - m_tabStops.size()) * 2, WPX_SEEK_CUR);
+				input->seek((39 - (long)m_tabStops.size()) * 2, WPX_SEEK_CUR);
 			else
-				input->seek((40 - m_tabStops.size()) * 2, WPX_SEEK_CUR);
+				input->seek((40 - (long)m_tabStops.size()) * 2, WPX_SEEK_CUR);
 
 			for (unsigned j=0; (j < (m_tabStops.size() / 2) + (m_tabStops.size() % 2)) && (j < 20); j++)
 			{

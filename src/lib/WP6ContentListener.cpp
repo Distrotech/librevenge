@@ -103,7 +103,7 @@ void WP6OutlineDefinition::_updateNumberingMethods(const WP6OutlineLocation /* o
 
 }
 
-_WP6ContentParsingState::_WP6ContentParsingState(WPXTableList tableList, int nextTableIndice) :
+_WP6ContentParsingState::_WP6ContentParsingState(WPXTableList tableList, unsigned nextTableIndice) :
 	m_bodyText(),
 	m_textBeforeNumber(),
 	m_textBeforeDisplayReference(),
@@ -930,7 +930,7 @@ void WP6ContentListener::columnChange(const WPXTextColumnType /* columnType */, 
 	{
 		_openPageSpan(); // we need to have the right dimension, so open page span here if it is not already opened
 
-		int oldColumnNum = m_ps->m_numColumns;
+		unsigned oldColumnNum = m_ps->m_numColumns;
 
 		// In WP, the last column ends with a hard column break code.
 		// In this case, we do not really want to insert any column break
@@ -945,8 +945,8 @@ void WP6ContentListener::columnChange(const WPXTextColumnType /* columnType */, 
 		tmpColumnDefinition.clear();
 		if (numColumns > 1)
 		{
-			int i;
-			for (i=0; i<(int)columnWidth.size(); i++)
+			unsigned i;
+			for (i=0; i<columnWidth.size(); i++)
 			{
 				if (isFixedWidth[i])
 					remainingSpace -= columnWidth[i];
@@ -1420,7 +1420,7 @@ void WP6ContentListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan
 			throw ParseException(); // requesting a row larger than the number of rows the table holds
 		}
 
-		if ((int)m_parseState->m_currentTable->getRows()[m_ps->m_currentTableRow].size() <= (int)m_ps->m_currentTableCellNumberInRow)
+		if ((int)m_parseState->m_currentTable->getRows()[(unsigned)m_ps->m_currentTableRow].size() <= (int)m_ps->m_currentTableCellNumberInRow)
 		{
 			WPD_DEBUG_MSG(("Requesting a cell smaller than the number of cells in the row\n"));
 			throw ParseException(); // requesting a cell smaller than the number of cells in the row
@@ -1428,18 +1428,18 @@ void WP6ContentListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan
 
 		_flushText();
 
-		_openTableCell(colSpan, rowSpan, m_parseState->m_currentTable->getCell(m_ps->m_currentTableRow,
-		               m_ps->m_currentTableCellNumberInRow)->m_borderBits, cellFgColor, cellBgColor,
+		_openTableCell(colSpan, rowSpan, m_parseState->m_currentTable->getCell((unsigned)m_ps->m_currentTableRow,
+		               (unsigned)m_ps->m_currentTableCellNumberInRow)->m_borderBits, cellFgColor, cellBgColor,
 		               cellBorderColor, cellVerticalAlignment);
 
 		m_ps->m_cellAttributeBits = 0;
 		if (useCellAttributes)
 			m_ps->m_cellAttributeBits = cellAttributes;
 		else if (m_ps->m_currentTableCol > 0 && m_ps->m_tableDefinition.m_columnsProperties.size() >= (unsigned)m_ps->m_currentTableCol)
-			m_ps->m_cellAttributeBits = m_ps->m_tableDefinition.m_columnsProperties[m_ps->m_currentTableCol-1].m_attributes;
+			m_ps->m_cellAttributeBits = m_ps->m_tableDefinition.m_columnsProperties[(unsigned)(m_ps->m_currentTableCol-1)].m_attributes;
 
 		if (m_ps->m_currentTableCol > 0 && m_ps->m_tableDefinition.m_columnsProperties.size() >= (unsigned)m_ps->m_currentTableCol)
-			justificationChange(m_ps->m_tableDefinition.m_columnsProperties[m_ps->m_currentTableCol-1].m_alignment);
+			justificationChange(m_ps->m_tableDefinition.m_columnsProperties[(unsigned)(m_ps->m_currentTableCol-1)].m_alignment);
 	}
 }
 
@@ -1753,7 +1753,7 @@ void WP6ContentListener::commentAnnotation(const uint16_t textPID)
 }
 
 void WP6ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType,
-        WPXTableList tableList, int nextTableIndice)
+        WPXTableList tableList, unsigned nextTableIndice)
 {
 	// save our old parsing state on our "stack"
 	WP6ContentParsingState *oldParseState = m_parseState;
@@ -1889,7 +1889,7 @@ void WP6ContentListener::_handleListChange(const uint16_t outlineHash)
 	else
 		outlineDefinition = m_outlineDefineHash.find(outlineHash)->second;
 
-	int oldListLevel;
+	unsigned oldListLevel;
 	if (m_parseState->m_listLevelStack.empty())
 		oldListLevel = 0;
 	else
@@ -1924,7 +1924,7 @@ void WP6ContentListener::_handleListChange(const uint16_t outlineHash)
 
 			m_documentInterface->defineUnorderedListLevel(propList);
 		}
-		for (int i=(oldListLevel+1); i<=m_ps->m_currentListLevel; i++)
+		for (unsigned i=(oldListLevel+1); i<=m_ps->m_currentListLevel; i++)
 		{
 			m_parseState->m_listLevelStack.push(i);
 

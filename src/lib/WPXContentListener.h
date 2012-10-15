@@ -94,11 +94,11 @@ struct _WPXContentParsingState
 	uint8_t m_paragraphJustificationBeforeTable;
 
 	unsigned m_currentPage;
-	int m_numPagesRemainingInSpan;
-	int m_currentPageNumber;
+	unsigned m_numPagesRemainingInSpan;
+	unsigned m_currentPageNumber;
 
 	bool m_sectionAttributesChanged;
-	int m_numColumns;
+	unsigned m_numColumns;
 	std::vector < WPXColumnDefinition > m_textColumns;
 	bool m_isTextColumnWithoutParagraph;
 
@@ -157,7 +157,7 @@ protected:
 	void startSubDocument();
 	void endDocument();
 	void endSubDocument();
-	void handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList, int nextTableIndice);
+	void handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList, unsigned nextTableIndice);
 	void insertBreak(const uint8_t breakType);
 	void lineSpacingChange(const double lineSpacing);
 	void justificationChange(const uint8_t justification);
@@ -166,7 +166,7 @@ protected:
 	WPXDocumentInterface *m_documentInterface;
 	WPXPropertyList m_metaData;
 
-	virtual void _handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList, int nextTableIndice) = 0;
+	virtual void _handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList, unsigned nextTableIndice) = 0;
 	virtual void _flushText() = 0;
 	virtual void _changeList() = 0;
 

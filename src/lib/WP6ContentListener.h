@@ -59,7 +59,7 @@ public:
 	}
 	void setCurrentState(WP6StyleState state)
 	{
-		for (int i=(STATE_MEMORY-1); i>0; i--) m_stateSequence[i] = m_stateSequence[i-1];
+		for (unsigned i=(STATE_MEMORY-1); i>0; i--) m_stateSequence[i] = m_stateSequence[i-1];
 		m_stateSequence[0]=state;
 	}
 	WP6StyleState getCurrentState() const
@@ -83,7 +83,7 @@ private:
 typedef struct _WP6ContentParsingState WP6ContentParsingState;
 struct _WP6ContentParsingState
 {
-	_WP6ContentParsingState(WPXTableList tableList, int nextTableIndice = 0);
+	_WP6ContentParsingState(WPXTableList tableList, unsigned nextTableIndice = 0);
 	~_WP6ContentParsingState();
 	WPXString m_bodyText;
 	WPXString m_textBeforeNumber;
@@ -95,16 +95,16 @@ struct _WP6ContentParsingState
 	double m_paragraphMarginBottomRelative;
 	double m_paragraphMarginBottomAbsolute;
 
-	int m_numRemovedParagraphBreaks;
+	unsigned m_numRemovedParagraphBreaks;
 
-	int m_numListExtraTabs;
+	unsigned m_numListExtraTabs;
 	bool m_isListReference;
 
 	WPXTableList m_tableList;
 	WPXTable *m_currentTable;
-	int m_nextTableIndice;
+	unsigned m_nextTableIndice;
 
-	std::stack<int> m_listLevelStack;
+	std::stack<unsigned> m_listLevelStack;
 	std::stack<WP6ListType> m_listTypeStack;
 	uint16_t m_currentOutlineHash; // probably should replace Hash with Key in these sorts of cases
 	uint8_t m_oldListLevel;
@@ -112,8 +112,8 @@ struct _WP6ContentParsingState
 	bool m_putativeListElementHasParagraphNumber;
 	bool m_putativeListElementHasDisplayReferenceNumber;
 
-	int m_noteTextPID;
-	int m_numNestedNotes;
+	unsigned m_noteTextPID;
+	unsigned m_numNestedNotes;
 
 	bool m_isFrameOpened;
 
@@ -258,7 +258,7 @@ public:
 	void undoChange(const uint8_t undoType, const uint16_t undoLevel);
 
 protected:
-	void _handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList, int nextTableIndice = 0);
+	void _handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList, unsigned nextTableIndice = 0);
 
 	//void _handleLineBreakElementBegin();
 	void _paragraphNumberOn(const uint16_t outlineHash, const uint8_t level);

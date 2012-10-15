@@ -61,7 +61,7 @@ void WP5FootnoteEndnoteGroup::_readContents(WPXInputStream *input, WPXEncryption
 		tmpSizeOfNote -= 4;
 	}
 
-	m_subDocument = new WP5SubDocument(input, encryption, tmpSizeOfNote);
+	m_subDocument = new WP5SubDocument(input, encryption, (unsigned)tmpSizeOfNote);
 	if (tmpFlags & 0x80)
 		m_noteReference.sprintf("%c", tmpNumOfNote);
 	else

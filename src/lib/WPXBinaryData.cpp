@@ -120,13 +120,13 @@ const WPXString WPXBinaryData::getBase64Data() const
 {
 	static const char *base64Chars =
 	    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-	char tempCharsToEncode[3];
-	const long len = size();
-	long i = 0;
+	unsigned char tempCharsToEncode[3];
+	const unsigned long len = size();
+	unsigned long i = 0;
 	unsigned j = 0;
-	long modifiedLen;
+	unsigned long modifiedLen;
 	if (len % 3)
-		modifiedLen = 3 * ((long)(len / 3) + 1);
+		modifiedLen = 3 * ((len / 3) + 1);
 	else
 		modifiedLen = len;
 

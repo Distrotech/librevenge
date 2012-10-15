@@ -120,7 +120,7 @@ public:
 	virtual void insertGraphicsData(const WPXBinaryData *data);
 
 protected:
-	void _handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList, int nextTableIndice = 0);
+	void _handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList, unsigned nextTableIndice = 0);
 
 	void _flushText();
 	void _changeList() {}

@@ -347,8 +347,8 @@ void WP5ContentListener::insertCell(uint8_t colSpan, uint8_t rowSpan, uint8_t bo
 		if (useCellAttributes)
 			m_ps->m_cellAttributeBits = cellAttributes;
 		else
-			m_ps->m_cellAttributeBits = m_ps->m_tableDefinition.m_columnsProperties[m_ps->m_currentTableCol-1].m_attributes;
-		justificationChange(m_ps->m_tableDefinition.m_columnsProperties[m_ps->m_currentTableCol-1].m_alignment);
+			m_ps->m_cellAttributeBits = m_ps->m_tableDefinition.m_columnsProperties[(size_t)(m_ps->m_currentTableCol-1)].m_attributes;
+		justificationChange(m_ps->m_tableDefinition.m_columnsProperties[(size_t)(m_ps->m_currentTableCol-1)].m_alignment);
 	}
 }
 
@@ -559,7 +559,7 @@ void WP5ContentListener::insertNote(WPXNoteType noteType, const WP5SubDocument *
 }
 
 void WP5ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType,
-        WPXTableList /* tableList */, int /* nextTableIndice */)
+        WPXTableList /* tableList */, unsigned /* nextTableIndice */)
 {
 	// save our old parsing state on our "stack"
 	WP5ContentParsingState *oldParseState = m_parseState;

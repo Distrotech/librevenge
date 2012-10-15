@@ -44,7 +44,7 @@ WP1FootnoteEndnoteGroup::~WP1FootnoteEndnoteGroup()
 
 void WP1FootnoteEndnoteGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
 {
-	int tmpSubDocumentSize = getSize() - 29;
+	unsigned tmpSubDocumentSize = getSize() - 29;
 	uint8_t tmpNoteDefinition = readU8(input, encryption);
 	if (tmpNoteDefinition & 0x02)
 	{

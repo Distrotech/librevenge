@@ -47,8 +47,8 @@ void WP5HeaderFooterGroup::_readContents(WPXInputStream *input, WPXEncryption *e
 	if (m_occurenceBits)
 	{
 		input->seek(10, WPX_SEEK_CUR);
-		if (tmpSubDocumentLength)
-			m_subDocument = new WP5SubDocument(input, encryption, tmpSubDocumentLength);
+		if (tmpSubDocumentLength > 0)
+			m_subDocument = new WP5SubDocument(input, encryption, (unsigned)tmpSubDocumentLength);
 	}
 }
 

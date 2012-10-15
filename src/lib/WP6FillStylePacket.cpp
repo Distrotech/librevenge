@@ -52,9 +52,9 @@ void WP6FillStylePacket::_readContents(WPXInputStream *input, WPXEncryption *enc
 	uint16_t numChildPrefixIDs = readU16(input, encryption);
 	input->seek(sizeof(uint16_t)*numChildPrefixIDs, WPX_SEEK_CUR);
 	input->seek(WP6_FILL_STYLE_PACKET_SKIPABLE_DATA_AFTER_PREFIX_PACKETS, WPX_SEEK_CUR);
-	int16_t fillNameLength = readU16(input, encryption);
+	int16_t fillNameLength = readS16(input, encryption);
 	if (fillNameLength > 0)
-		input->seek(fillNameLength*sizeof(uint8_t), WPX_SEEK_CUR);
+		input->seek(fillNameLength, WPX_SEEK_CUR);
 	input->seek(WP6_FILL_STYLE_PACKET_SKIPABLE_DATA_AFTER_FILL_NAME, WPX_SEEK_CUR);
 
 	/* now we can finally grab the meat */

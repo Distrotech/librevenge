@@ -78,7 +78,7 @@ public:
 	void pageMarginChange(uint8_t /* side */, uint16_t /* margin */) {}
 	void pageFormChange(uint16_t /* length */, uint16_t /* width */, WPXFormOrientation /* orientation */) {}
 	void marginChange(uint8_t side, uint16_t margin);
-	void indentFirstLineChange(int16_t offset);
+	void indentFirstLineChange(double offset);
 	void setTabs(bool isRelative, const std::vector<WPXTabStop> tabStops);
 	void columnChange(WPXTextColumnType columnType, uint8_t numColumns, const std::vector<double> &columnWidth,
 	                  const std::vector<bool> &isFixedWidth);
@@ -125,7 +125,7 @@ public:
 	                     uint16_t figureFlags, const WP3SubDocument *subDocument, const WP3SubDocument *caption);
 
 protected:
-	void _handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList, int nextTableIndice = 0);
+	void _handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList, unsigned nextTableIndice = 0);
 	void _openParagraph();
 
 	void _flushText();

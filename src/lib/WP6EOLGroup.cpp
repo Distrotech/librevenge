@@ -159,7 +159,7 @@ void WP6EOLGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption
 			}
 			attributeWord1 = readU16(input, encryption);
 			attributeWord2 = readU16(input, encryption);
-			m_cellAttributes = ((attributeWord2 & 0x03) << 16) + attributeWord1;
+			m_cellAttributes = (uint32_t)(((attributeWord2 & 0x03) << 16) + attributeWord1);
 			break;
 		case WP6_EOL_GROUP_CELL_SPANNING_INFORMATION:
 			WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_SPANNING_INFORMATION\n"));

@@ -52,7 +52,7 @@ public:
 	virtual void pageMarginChange(uint8_t side, uint16_t margin) = 0;
 	virtual void pageFormChange(uint16_t length, uint16_t width, WPXFormOrientation orientation) = 0;
 	virtual void marginChange(uint8_t side, uint16_t margin) = 0;
-	virtual void indentFirstLineChange(int16_t offset) = 0;
+	virtual void indentFirstLineChange(double offset) = 0;
 	virtual void setTabs(bool isRelative, const std::vector<WPXTabStop> tabStops) = 0;
 	virtual void columnChange(WPXTextColumnType columnType, uint8_t numColumns, const std::vector<double> &columnWidth,
 	                          const std::vector<bool> &isFixedWidth) = 0;

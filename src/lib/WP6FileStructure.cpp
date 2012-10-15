@@ -27,7 +27,7 @@
 #include "WP6FileStructure.h"
 
 // size of the fixed length functiongroups 0xF0 to 0xFF
-int WP6_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16] =
+uint8_t WP6_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16] =
 {
 	4,	// 0xF0
 	5,	// 0xF1
@@ -44,6 +44,6 @@ int WP6_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16] =
 	6,	// 0xFC
 	8,	// 0xFD
 	8,	// 0xFE
-	-1	// 0xFF - Cannot be used. -1 is reserved so no size is assigned to this value.
+	(uint8_t)-1	// 0xFF - Cannot be used. -1 is reserved so no size is assigned to this value.
 };
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

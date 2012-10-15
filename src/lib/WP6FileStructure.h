@@ -27,8 +27,10 @@
 #ifndef WP6FILESTRUCTURE_H
 #define WP6FILESTRUCTURE_H
 
+#include "libwpd_internal.h"
+
 // size of the fixed length functiongroups 0xF0 to 0xFF
-extern int WP6_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16];
+extern uint8_t WP6_FIXED_LENGTH_FUNCTION_GROUP_SIZE[16];
 
 /* standard sizes */
 #define WP6_NUM_LIST_LEVELS 8

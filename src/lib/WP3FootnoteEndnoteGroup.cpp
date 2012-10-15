@@ -59,7 +59,7 @@ void WP3FootnoteEndnoteGroup::_readContents(WPXInputStream *input, WPXEncryption
 	// subdocument
 
 	if (tmpSizeOfNote > 0)
-		m_subDocument = new WP3SubDocument(input, encryption, tmpSizeOfNote);
+		m_subDocument = new WP3SubDocument(input, encryption, (unsigned)tmpSizeOfNote);
 }
 
 void WP3FootnoteEndnoteGroup::parse(WP3Listener *listener)

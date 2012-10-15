@@ -46,12 +46,12 @@ void WP5ListFontsUsedPacket::_readContents(WPXInputStream *input, WPXEncryption 
 {
 	int numFonts = (int)(dataSize / 86); // 86 == size of the structure describing the font
 	WPD_DEBUG_MSG(("WP5 List Fonts Used Packet, data size: %i, number fonts: %i\n", dataSize, numFonts));
-	int tempFontNameOffset;
+	unsigned tempFontNameOffset;
 	double tempFontSize;
 	for (int i=0; i<numFonts; i++)
 	{
 		input->seek(18, WPX_SEEK_CUR);
-		tempFontNameOffset=(int)readU16(input, encryption);
+		tempFontNameOffset=readU16(input, encryption);
 		if (m_packetType == WP50_LIST_FONTS_USED_PACKET)
 		{
 			input->seek(2, WPX_SEEK_CUR);
@@ -70,16 +70,16 @@ void WP5ListFontsUsedPacket::_readContents(WPXInputStream *input, WPXEncryption 
 	}
 }
 
-int WP5ListFontsUsedPacket::getFontNameOffset(const int fontNumber) const
+unsigned WP5ListFontsUsedPacket::getFontNameOffset(unsigned fontNumber) const
 {
-	if ((fontNumber >= 0) && ((long)fontNumber < (long)m_fontNameOffset.size()))
+	if (fontNumber && (fontNumber < m_fontNameOffset.size()))
 		return m_fontNameOffset[fontNumber];
 	return 0;
 }
 
-double WP5ListFontsUsedPacket::getFontSize(const int fontNumber) const
+double WP5ListFontsUsedPacket::getFontSize(unsigned fontNumber) const
 {
-	if ((fontNumber >= 0) && ((long)fontNumber < (long)m_fontSize.size()))
+	if (fontNumber && (fontNumber < m_fontSize.size()))
 		return m_fontSize[fontNumber];
 	return 0.0;
 }

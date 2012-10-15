@@ -477,7 +477,7 @@ void WPXContentListener::_openPageSpan()
 
 	m_ps->m_paragraphTextIndent = m_ps->m_textIndentByParagraphIndentChange + m_ps->m_textIndentByTabs;
 
-	m_ps->m_numPagesRemainingInSpan = (currentPage.getPageSpan() - 1);
+	m_ps->m_numPagesRemainingInSpan = (unsigned)(currentPage.getPageSpan() - 1);
 	m_ps->m_currentPage++;
 }
 
@@ -610,7 +610,7 @@ void WPXContentListener::_appendParagraphProperties(WPXPropertyList &propList, c
 	if (!m_ps->m_inSubDocument && m_ps->m_firstParagraphInPageSpan)
 	{
 		std::list<WPXPageSpan>::iterator currentPageSpanIter = m_pageList.begin();
-		for ( unsigned i = 0; i < (m_ps->m_currentPage - 1); i+=(*currentPageSpanIter).getPageSpan())
+		for ( unsigned i = 0; i < (unsigned)(m_ps->m_currentPage - 1); i+=(unsigned)(*currentPageSpanIter).getPageSpan())
 			++currentPageSpanIter;
 
 		WPXPageSpan currentPage = (*currentPageSpanIter);
@@ -672,7 +672,7 @@ void WPXContentListener::_insertBreakIfNecessary(WPXPropertyList &propList)
 
 void WPXContentListener::_getTabStops(WPXPropertyListVector &tabStops)
 {
-	for (int i=0; i<(int)m_ps->m_tabStops.size(); i++)
+	for (unsigned i=0; i<m_ps->m_tabStops.size(); i++)
 	{
 		WPXPropertyList tmpTabStop;
 
@@ -1027,7 +1027,7 @@ void WPXContentListener::_closeTableRow()
 			throw ParseException();
 		while ((unsigned long)m_ps->m_currentTableCol < (unsigned long)m_ps->m_numRowsToSkip.size())
 		{
-			if (!m_ps->m_numRowsToSkip[m_ps->m_currentTableCol]) // This case should not happen, but does :-(
+			if (!m_ps->m_numRowsToSkip[(size_t)(m_ps->m_currentTableCol)]) // This case should not happen, but does :-(
 			{
 				// m_ps->m_currentTableCol++;
 				// Fill the table row untill the end with empty cells
@@ -1036,7 +1036,7 @@ void WPXContentListener::_closeTableRow()
 				_closeTableCell();
 			}
 			else
-				m_ps->m_numRowsToSkip[m_ps->m_currentTableCol++]--;
+				m_ps->m_numRowsToSkip[(size_t)(m_ps->m_currentTableCol++)]--;
 		}
 
 		if (m_ps->m_isTableCellOpened)
@@ -1101,9 +1101,9 @@ void WPXContentListener::_openTableCell(const uint8_t colSpan, const uint8_t row
 		throw ParseException();
 
 	while ((unsigned long)m_ps->m_currentTableCol < (unsigned long)m_ps->m_numRowsToSkip.size() &&
-	        m_ps->m_numRowsToSkip[m_ps->m_currentTableCol])
+	        m_ps->m_numRowsToSkip[(size_t)(m_ps->m_currentTableCol)])
 	{
-		m_ps->m_numRowsToSkip[m_ps->m_currentTableCol]--;
+		m_ps->m_numRowsToSkip[(size_t)(m_ps->m_currentTableCol)]--;
 		m_ps->m_currentTableCol++;
 	}
 
@@ -1147,11 +1147,11 @@ void WPXContentListener::_openTableCell(const uint8_t colSpan, const uint8_t row
 
 	while ((unsigned long)m_ps->m_currentTableCol < (unsigned long)m_ps->m_numRowsToSkip.size() &&(tmpColSpan > 0))
 	{
-		if (m_ps->m_numRowsToSkip[m_ps->m_currentTableCol]) // This case should not happen, but it happens in real-life documents :-(
+		if (m_ps->m_numRowsToSkip[(size_t)(m_ps->m_currentTableCol)]) // This case should not happen, but it happens in real-life documents :-(
 		{
-			m_ps->m_numRowsToSkip[m_ps->m_currentTableCol]=0;
+			m_ps->m_numRowsToSkip[(size_t)(m_ps->m_currentTableCol)]=0;
 		}
-		m_ps->m_numRowsToSkip[m_ps->m_currentTableCol] += (rowSpan - 1);
+		m_ps->m_numRowsToSkip[(size_t)(m_ps->m_currentTableCol)] += (rowSpan - 1);
 		m_ps->m_currentTableCol++;
 		tmpColSpan--;
 	}
@@ -1181,7 +1181,7 @@ void WPXContentListener::_closeTableCell()
 Creates an new document state. Saves the old state on a "stack".
 */
 void WPXContentListener::handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType,
-        WPXTableList tableList, int nextTableIndice)
+        WPXTableList tableList, unsigned nextTableIndice)
 {
 	// save our old parsing state on our "stack"
 	WPXContentParsingState *oldPS = m_ps;
@@ -1422,7 +1422,7 @@ double WPXContentListener::_movePositionToFirstColumn(double position)
 		return position;
 	double tempSpaceRemaining = position - m_ps->m_pageMarginLeft - m_ps->m_sectionMarginLeft;
 	position -= m_ps->m_textColumns[0].m_leftGutter;
-	for (int i = 0; i < (int)(m_ps->m_textColumns.size() - 1); i++)
+	for (unsigned i = 0; i < (unsigned)(m_ps->m_textColumns.size() - 1); i++)
 	{
 		if ((tempSpaceRemaining -= m_ps->m_textColumns[i].m_width - m_ps->m_textColumns[i].m_rightGutter) > 0)
 		{

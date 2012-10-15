@@ -83,7 +83,7 @@ void WP3ContentListener::insertTab()
 	{
 		if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
 		{
-			if (m_ps->m_tabStops.empty() || (_getNextTabStop() == (std::numeric_limits<double>::max)()))
+			if (m_ps->m_tabStops.empty())
 				m_ps->m_textIndentByTabs += 0.5;
 			else
 				m_ps->m_textIndentByTabs = _getNextTabStop() - (m_ps->m_leftMarginByTabs  + m_ps->m_textIndentByParagraphIndentChange);
@@ -470,12 +470,11 @@ void WP3ContentListener::justificationChange(const uint8_t justification)
 	}
 }
 
-void WP3ContentListener::indentFirstLineChange(const int16_t offset)
+void WP3ContentListener::indentFirstLineChange(double offset)
 {
 	if (!isUndoOn())
 	{
-		double offsetInch = (double)((double)offset / (double)WPX_NUM_WPUS_PER_INCH);
-		m_ps->m_textIndentByParagraphIndentChange = offsetInch;
+		m_ps->m_textIndentByParagraphIndentChange = offset;
 		// This is necessary in case we have Indent First Line and Hard Back Tab
 		// in the same time. The Hard Back Tab applies to the current paragraph
 		// only. Indent First Line applies untill an new Indent First Line code.
@@ -501,7 +500,7 @@ void WP3ContentListener::columnChange(const WPXTextColumnType /* columnType */, 
 	{
 		_openPageSpan();
 
-		int oldColumnNum = m_ps->m_numColumns;
+		unsigned oldColumnNum = m_ps->m_numColumns;
 
 		// In WP, the last column ends with a hard column break code.
 		// In this case, we do not really want to insert any column break
@@ -516,8 +515,8 @@ void WP3ContentListener::columnChange(const WPXTextColumnType /* columnType */, 
 		tmpColumnDefinition.clear();
 		if (numColumns > 1)
 		{
-			int i;
-			for (i=0; i<(int)columnWidth.size(); i++)
+			unsigned i;
+			for (i=0; i<columnWidth.size(); i++)
 			{
 				if (isFixedWidth[i])
 					remainingSpace -= columnWidth[i];
@@ -658,7 +657,7 @@ void WP3ContentListener::backTab()
 {
 	if (!isUndoOn() && !m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
 	{
-		if (m_ps->m_tabStops.empty() || (_getPreviousTabStop() == (std::numeric_limits<double>::max)()))
+		if (m_ps->m_tabStops.empty())
 			m_ps->m_textIndentByTabs -= 0.5f;
 		else
 			m_ps->m_textIndentByTabs = _getPreviousTabStop() - (m_ps->m_leftMarginByTabs  + m_ps->m_textIndentByParagraphIndentChange);
@@ -680,7 +679,7 @@ void WP3ContentListener::leftIndent()
 	{
 		if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
 		{
-			if (m_ps->m_tabStops.empty() || (_getNextTabStop() == (std::numeric_limits<double>::min)()))
+			if (m_ps->m_tabStops.empty())
 				m_ps->m_leftMarginByTabs += 0.5f;
 			else
 				m_ps->m_leftMarginByTabs = _getNextTabStop() - (m_ps->m_textIndentByTabs + m_ps->m_textIndentByParagraphIndentChange);
@@ -736,7 +735,7 @@ void WP3ContentListener::leftRightIndent()
 	{
 		if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
 		{
-			if (m_ps->m_tabStops.empty() || (_getNextTabStop() == (std::numeric_limits<double>::min)()))
+			if (m_ps->m_tabStops.empty())
 				m_ps->m_leftMarginByTabs += 0.5f;
 			else
 				m_ps->m_leftMarginByTabs = _getNextTabStop() - (m_ps->m_textIndentByTabs + m_ps->m_textIndentByParagraphIndentChange);
@@ -1114,7 +1113,7 @@ void WP3ContentListener::_handleFrameParameters( WPXPropertyList &propList, doub
 }
 
 void WP3ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType,
-        WPXTableList /* tableList */, int /* nextTableIndice */)
+        WPXTableList /* tableList */, unsigned /* nextTableIndice */)
 {
 	// save our old parsing state on our "stack"
 	WP3ContentParsingState *oldParseState = m_parseState;

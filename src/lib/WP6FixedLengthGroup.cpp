@@ -76,7 +76,7 @@ bool WP6FixedLengthGroup::isGroupConsistent(WPXInputStream *input, WPXEncryption
 
 	try
 	{
-		uint32_t size = WP6_FIXED_LENGTH_FUNCTION_GROUP_SIZE[groupID-0xF0];
+		uint32_t size = WP6_FIXED_LENGTH_FUNCTION_GROUP_SIZE[(uint8_t)groupID-0xF0];
 		if (input->seek((startPosition + size - 2), WPX_SEEK_SET) || input->atEOS())
 		{
 			input->seek(startPosition, WPX_SEEK_SET);
