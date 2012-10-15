@@ -531,7 +531,7 @@ void WP3ContentListener::columnChange(const WPXTextColumnType /* columnType */, 
 				else
 					tmpColumn.m_leftGutter = 0.5f * remainingSpace * columnWidth[2*i-1];
 
-				if (i >= (numColumns - 1))
+				if (i >= (unsigned)(numColumns - 1))
 					tmpColumn.m_rightGutter = 0.0;
 				else if (isFixedWidth[2*i+1])
 					tmpColumn.m_rightGutter = 0.5f * columnWidth[2*i+1];
