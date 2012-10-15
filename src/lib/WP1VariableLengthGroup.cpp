@@ -110,7 +110,7 @@ void WP1VariableLengthGroup::_read(WPXInputStream *input, WPXEncryption *encrypt
 	if ((long)(m_size + startPosition) < startPosition)
 		throw FileException();
 
-	WPD_DEBUG_MSG(("WordPerfect: Read variable group header (start_position: %i, size: %i)\n", startPosition, m_size));
+	WPD_DEBUG_MSG(("WordPerfect: Read variable group header (start_position: %li, size: %u)\n", startPosition, m_size));
 
 	_readContents(input, encryption);
 

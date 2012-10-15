@@ -172,7 +172,7 @@ void WP6VariableLengthGroup::_read(WPXInputStream *input, WPXEncryption *encrypt
 	m_sizeDeletable = (uint16_t)(startPosition + m_size - 4 - input->tell());
 	input->seek(tmpPosition, WPX_SEEK_SET);
 
-	WPD_DEBUG_MSG(("WordPerfect: Read variable group header (start_position: %i, sub_group: %i, size: %i, flags: %i, num_prefix_ids: %i, size_non_deletable: %i, size_deletable: %i)\n", startPosition, m_subGroup, m_size, m_flags, m_numPrefixIDs, m_sizeNonDeletable, m_sizeDeletable));
+	WPD_DEBUG_MSG(("WordPerfect: Read variable group header (start_position: %li, sub_group: %i, size: %i, flags: %i, num_prefix_ids: %i, size_non_deletable: %i, size_deletable: %i)\n", startPosition, m_subGroup, m_size, m_flags, m_numPrefixIDs, m_sizeNonDeletable, m_sizeDeletable));
 
 	_readContents(input, encryption);
 

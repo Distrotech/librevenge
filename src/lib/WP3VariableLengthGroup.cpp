@@ -132,7 +132,7 @@ void WP3VariableLengthGroup::_read(WPXInputStream *input, WPXEncryption *encrypt
 	m_subGroup = readU8(input, encryption);
 	m_size = (uint16_t)(readU16(input, encryption, true) + 4); // the length is the number of data bytes minus 4 (ie. the function codes)
 
-	WPD_DEBUG_MSG(("WordPerfect: Read variable group header (start_position: %i, sub_group: 0x%x, size: %i)\n", startPosition, m_subGroup, m_size));
+	WPD_DEBUG_MSG(("WordPerfect: Read variable group header (start_position: %li, sub_group: 0x%x, size: %u)\n", startPosition, m_subGroup, m_size));
 
 	_readContents(input, encryption);
 
