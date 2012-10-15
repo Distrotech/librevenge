@@ -257,7 +257,7 @@ void WP3PageFormatGroup::parse(WP3Listener *listener)
 		break;
 
 	case WP3_PAGE_FORMAT_GROUP_INDENT_AT_BEGINNING_OF_PARAGRAPH:
-		listener->indentFirstLineChange(fixedPointToDouble(m_indent));
+		listener->indentFirstLineChange(fixedPointToDouble(m_indent) / 72.0);
 		break;
 
 
