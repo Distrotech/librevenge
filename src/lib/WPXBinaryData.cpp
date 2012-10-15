@@ -95,7 +95,7 @@ void WPXBinaryData::append(const unsigned char c)
 
 void WPXBinaryData::clear()
 {
-	m_binaryDataImpl->m_buf = std::vector<unsigned char>();
+	m_binaryDataImpl->m_buf.clear();
 }
 
 unsigned long WPXBinaryData::size() const
@@ -111,6 +111,8 @@ WPXBinaryData &WPXBinaryData::operator=(const WPXBinaryData &dataBuf)
 
 const unsigned char *WPXBinaryData::getDataBuffer() const
 {
+	if (m_binaryDataImpl->m_buf.empty())
+		return 0;
 	return &(m_binaryDataImpl->m_buf[0]);
 }
 
