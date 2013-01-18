@@ -55,7 +55,7 @@ void WP1FootnoteEndnoteGroup::_readContents(WPXInputStream *input, WPXEncryption
 	m_noteNumber = readU16(input, encryption, true);
 	input->seek(getSize() - tmpSubDocumentSize - 3, WPX_SEEK_CUR);
 
-	WPD_DEBUG_MSG(("WP1SubDocument subDocumentSize = %i\n", tmpSubDocumentSize));
+	WPD_DEBUG_MSG(("WP1SubDocument subDocumentSize = %u\n", tmpSubDocumentSize));
 	if (tmpSubDocumentSize)
 		m_subDocument = new WP1SubDocument(input, encryption, tmpSubDocumentSize);
 }

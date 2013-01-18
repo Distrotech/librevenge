@@ -1928,7 +1928,7 @@ void WP6ContentListener::_handleListChange(const uint16_t outlineHash)
 		{
 			m_parseState->m_listLevelStack.push(i);
 
-			WPD_DEBUG_MSG(("Pushed level %i onto the list level stack\n", i));
+			WPD_DEBUG_MSG(("Pushed level %u onto the list level stack\n", i));
 
 			WPXPropertyList propList2;
 			propList2.insert("libwpd:id", m_parseState->m_currentOutlineHash);

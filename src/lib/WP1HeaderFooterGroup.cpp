@@ -45,7 +45,7 @@ void WP1HeaderFooterGroup::_readContents(WPXInputStream *input, WPXEncryption *e
 
 	unsigned tmpSubDocumentSize = getSize() - 0x13;
 	input->seek(18, WPX_SEEK_CUR);
-	WPD_DEBUG_MSG(("WP1SubDocument subDocumentSize = %i\n", tmpSubDocumentSize));
+	WPD_DEBUG_MSG(("WP1SubDocument subDocumentSize = %u\n", tmpSubDocumentSize));
 	if (tmpSubDocumentSize)
 		m_subDocument = new WP1SubDocument(input, encryption, tmpSubDocumentSize);
 }
