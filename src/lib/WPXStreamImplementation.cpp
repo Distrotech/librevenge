@@ -444,7 +444,7 @@ bool WPXStringStream::isOLEStream()
 
 WPXInputStream *WPXStringStream::getDocumentOLEStream(const char *name)
 {
-	if (!d->buffer.empty())
+	if (d->buffer.empty())
 		return 0;
 	if (d->streamType == UNKNOWN && !isOLEStream())
 		return 0;
