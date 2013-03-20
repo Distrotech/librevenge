@@ -51,34 +51,51 @@
 
 namespace libwpd
 {
+enum { Avail = 0xffffffff, Eof = 0xfffffffe, Bat = 0xfffffffd, MetaBat = 0xfffffffc, NotFound=0xfffffff0 };
 
 class Header
 {
 public:
-	unsigned char id[8];       // signature, or magic identifier
-	unsigned b_shift;          // bbat->blockSize = 1 << b_shift
-	unsigned s_shift;          // sbat->blockSize = 1 << s_shift
-	unsigned num_bat;          // blocks allocated for big bat
-	unsigned dirent_start;     // starting block for directory info
-	unsigned threshold;        // switch from small to big file (usually 4K)
-	unsigned sbat_start;       // starting block index to store small bat
-	unsigned num_sbat;         // blocks allocated for small bat
-	unsigned mbat_start;       // starting block to store meta bat
-	unsigned num_mbat;         // blocks allocated for meta bat
-	unsigned long bb_blocks[109];
+	unsigned char m_magic[8];       // signature, or magic identifier
+	unsigned m_revision;         // the file revision
+	unsigned m_num_bat;          // blocks allocated for big bat
+	unsigned m_start_dirent;     // starting block for directory info
+	unsigned m_threshold;        // switch from small to big file (usually 4K)
+	unsigned m_start_sbat;       // starting block index to store small bat
+	unsigned m_num_sbat;         // blocks allocated for small bat
+	unsigned m_shift_sbat;          // sbat->blockSize = 1 << m_shift_sbat
+	unsigned m_size_sbat;		// the small block size, default 0x40
+	unsigned m_shift_bbat;          // bbat->blockSize = 1 << m_shift_bbat
+	unsigned m_size_bbat;		// the big block size, default 0x200
+	unsigned m_start_mbat;       // starting block to store meta bat
+	unsigned m_num_mbat;         // blocks allocated for meta bat
+	unsigned long m_blocks_bbat[109];
 
 	Header();
+	void compute_block_size()
+	{
+		m_size_bbat = 1 << m_shift_bbat;
+		m_size_sbat = 1 << m_shift_sbat;
+	}
+	bool valid_signature() const
+	{
+		for( unsigned i = 0; i < 8; i++ )
+			if (m_magic[i] != s_ole_magic[i]) return false;
+		return true;
+	}
 	bool valid();
 	void load( const unsigned char *buffer, unsigned long size );
+	void save( unsigned char *buffer );
+protected:
+	static const unsigned char s_ole_magic[];
 };
+
+const unsigned char Header::s_ole_magic[] =
+{ 0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1 };
 
 class AllocTable
 {
 public:
-	static const unsigned Eof;
-	static const unsigned Avail;
-	static const unsigned Bat;
-	static const unsigned MetaBat;
 	unsigned blockSize;
 	AllocTable();
 	void clear();
@@ -133,7 +150,7 @@ public:
 	WPXInputStream *input;
 	int result;               // result of operation
 
-	Header *header;           // storage header
+	Header m_header;           // storage header
 	DirTree *dirtree;         // directory tree
 	AllocTable *bbat;         // allocation table for big blocks
 	AllocTable *sbat;         // allocation table for small blocks
@@ -209,38 +226,44 @@ static inline unsigned readU32( const unsigned char *ptr )
 	return (unsigned)(ptr[0]+(ptr[1]<<8)+(ptr[2]<<16)+(ptr[3]<<24));
 }
 
-static const unsigned char wpsole_magic[] =
-{ 0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1 };
+static inline void writeU16( unsigned char *ptr, unsigned long data )
+{
+	ptr[0] = (unsigned char)(data & 0xff);
+	ptr[1] = (unsigned char)((data >> 8) & 0xff);
+}
 
+static inline void writeU32( unsigned char *ptr, unsigned long data )
+{
+	ptr[0] = (unsigned char)(data & 0xff);
+	ptr[1] = (unsigned char)((data >> 8) & 0xff);
+	ptr[2] = (unsigned char)((data >> 16) & 0xff);
+	ptr[3] = (unsigned char)((data >> 24) & 0xff);
+}
 
 // =========== Header ==========
 
 libwpd::Header::Header() :
-	b_shift(9),
-	s_shift(6),
-	num_bat(0),
-	dirent_start(0),
-	threshold(4096),
-	sbat_start(0),
-	num_sbat(0),
-	mbat_start(0),
-	num_mbat(0)
+	m_revision(0x3e), m_num_bat(0), m_start_dirent(0), m_threshold(4096),
+	m_start_sbat(Eof), m_num_sbat(0), m_shift_sbat(6), m_size_sbat(0),
+	m_shift_bbat(9), m_size_bbat(0),
+	m_start_mbat(Eof), m_num_mbat(0)
 {
 	for( unsigned i = 0; i < 8; i++ )
-		id[i] = wpsole_magic[i];
+		m_magic[i] = s_ole_magic[i];
 	for( unsigned j=0; j<109; j++ )
-		bb_blocks[j] = libwpd::AllocTable::Avail;
+		m_blocks_bbat[j] = Avail;
+	compute_block_size();
 }
 
 bool libwpd::Header::valid()
 {
-	if( threshold != 4096 ) return false;
-	if( num_bat == 0 ) return false;
-	if( (num_bat > 109) && (num_bat > (num_mbat * 127) + 109)) return false;
-	if( (num_bat < 109) && (num_mbat != 0) ) return false;
-	if( s_shift > b_shift ) return false;
-	if( b_shift <= 6 ) return false;
-	if( b_shift >=31 ) return false;
+	if( m_threshold != 4096 ) return false;
+	if( m_num_bat == 0 ) return false;
+	if( (m_num_bat > 109) && (m_num_bat > (m_num_mbat * (m_size_bbat/4-1)) + 109)) return false;
+	if( (m_num_bat < 109) && (m_num_mbat != 0) ) return false;
+	if( m_shift_sbat > m_shift_bbat ) return false;
+	if( m_shift_bbat <= 6 ) return false;
+	if( m_shift_bbat >=31 ) return false;
 
 	return true;
 }
@@ -249,30 +272,51 @@ void libwpd::Header::load( const unsigned char *buffer, unsigned long size )
 {
 	if (size < 512)
 		return;
-	b_shift      = readU16( buffer + 0x1e );
-	s_shift      = readU16( buffer + 0x20 );
-	num_bat      = readU32( buffer + 0x2c );
-	dirent_start = readU32( buffer + 0x30 );
-	threshold    = readU32( buffer + 0x38 );
-	sbat_start   = readU32( buffer + 0x3c );
-	num_sbat     = readU32( buffer + 0x40 );
-	mbat_start   = readU32( buffer + 0x44 );
-	num_mbat     = readU32( buffer + 0x48 );
+	m_revision = (unsigned) readU16(buffer+0x18);
+	m_shift_bbat      = (unsigned int) readU16( buffer + 0x1e );
+	m_shift_sbat      = (unsigned int) readU16( buffer + 0x20 );
+	m_num_bat      = (unsigned int) readU32( buffer + 0x2c );
+	m_start_dirent = (unsigned int) readU32( buffer + 0x30 );
+	m_threshold    = (unsigned int) readU32( buffer + 0x38 );
+	m_start_sbat   = (unsigned int) readU32( buffer + 0x3c );
+	m_num_sbat     = (unsigned int) readU32( buffer + 0x40 );
+	m_start_mbat   = (unsigned int) readU32( buffer + 0x44 );
+	m_num_mbat     = (unsigned int) readU32( buffer + 0x48 );
 
 	for( unsigned i = 0; i < 8; i++ )
-		id[i] = buffer[i];
+		m_magic[i] = buffer[i];
 	for( unsigned j=0; j<109; j++ )
-		bb_blocks[j] = readU32( buffer + 0x4C+j*4 );
+		m_blocks_bbat[j] = readU32( buffer + 0x4C+j*4 );
+	compute_block_size();
 }
 
+void libwpd::Header::save( unsigned char *buffer )
+{
+	memset( buffer, 0, 0x4c );
+	memcpy( buffer, s_ole_magic, 8 );        // ole signature
+	writeU32( buffer + 8, 0 );              // unknown
+	writeU32( buffer + 12, 0 );             // unknown
+	writeU32( buffer + 16, 0 );             // unknown
+	writeU16( buffer + 24, m_revision);
+	writeU16( buffer + 26, 3 );             // version ?
+	writeU16( buffer + 28, 0xfffe );        // unknown
+	writeU16( buffer + 0x1e, m_shift_bbat );
+	writeU16( buffer + 0x20, m_shift_sbat );
+	writeU32( buffer + 0x2c, m_num_bat );
+	writeU32( buffer + 0x30, m_start_dirent );
+	writeU32( buffer + 0x38, m_threshold );
+	writeU32( buffer + 0x3c, m_start_sbat );
+	writeU32( buffer + 0x40, m_num_sbat );
+	writeU32( buffer + 0x44, m_start_mbat );
+	writeU32( buffer + 0x48, m_num_mbat );
+
+	for( unsigned i=0; i<109; i++ )
+		writeU32( buffer + 0x4C+i*4, m_blocks_bbat[i] );
+}
 
 
 // =========== AllocTable ==========
 
-const unsigned libwpd::AllocTable::Avail = 0xffffffff;
-const unsigned libwpd::AllocTable::Eof = 0xfffffffe;
-const unsigned libwpd::AllocTable::Bat = 0xfffffffd;
-const unsigned libwpd::AllocTable::MetaBat = 0xfffffffc;
 
 libwpd::AllocTable::AllocTable() :
 	blockSize(4096),
@@ -504,14 +548,14 @@ libwpd::StorageIO::StorageIO( libwpd::Storage *st, WPXInputStream *is ) :
 	storage(st),
 	input( is ),
 	result(libwpd::Storage::Ok),
-	header(new libwpd::Header()),
+	m_header(),
 	dirtree(new libwpd::DirTree()),
 	bbat(new libwpd::AllocTable()),
 	sbat(new libwpd::AllocTable()),
 	sb_blocks()
 {
-	bbat->blockSize = 1 << header->b_shift;
-	sbat->blockSize = 1 << header->s_shift;
+	bbat->blockSize = 1 << m_header.m_shift_bbat;
+	sbat->blockSize = 1 << m_header.m_shift_sbat;
 }
 
 libwpd::StorageIO::~StorageIO()
@@ -519,7 +563,6 @@ libwpd::StorageIO::~StorageIO()
 	delete sbat;
 	delete bbat;
 	delete dirtree;
-	delete header;
 }
 
 bool libwpd::StorageIO::isOLEStream()
@@ -540,44 +583,43 @@ void libwpd::StorageIO::load()
 	if (numBytesRead < 512)
 		return;
 
-	header->load( buf, numBytesRead );
+	m_header.load( buf, numBytesRead );
 
 	// check OLE magic id
-	for( unsigned i=0; i<8; i++ )
-		if( header->id[i] != wpsole_magic[i] )
-			return;
+	if (!m_header.valid_signature())
+		return;
 
 	// sanity checks
 	result = libwpd::Storage::BadOLE;
-	if( !header->valid() ) return;
-	if( header->threshold != 4096 ) return;
+	if( !m_header.valid() ) return;
+	if( m_header.m_threshold != 4096 ) return;
 
 	// important block size
-	bbat->blockSize = 1 << header->b_shift;
-	sbat->blockSize = 1 << header->s_shift;
+	bbat->blockSize = m_header.m_size_bbat;
+	sbat->blockSize = m_header.m_size_sbat;
 
 	// find blocks allocated to store big bat
 	// the first 109 blocks are in header, the rest in meta bat
 	blocks.clear();
-	blocks.resize( header->num_bat );
+	blocks.resize( m_header.m_num_bat );
 	for( unsigned j = 0; j < 109; j++ )
-		if( j >= header->num_bat ) break;
-		else blocks[j] = header->bb_blocks[j];
-	if( (header->num_bat > 109) && (header->num_mbat > 0) )
+		if( j >= m_header.m_num_bat ) break;
+		else blocks[j] = m_header.m_blocks_bbat[j];
+	if( (m_header.m_num_bat > 109) && (m_header.m_num_mbat > 0) )
 	{
 		std::vector<unsigned char> buffer2( bbat->blockSize );
 		unsigned k = 109;
 		unsigned long sector;
-		for( unsigned r = 0; r < header->num_mbat; r++ )
+		for( unsigned r = 0; r < m_header.m_num_mbat; r++ )
 		{
 			if(r == 0) // 1st meta bat location is in file header.
-				sector = header->mbat_start;
+				sector = m_header.m_start_mbat;
 			else      // next meta bat location is the last current block value.
 				sector = blocks[--k];
 			loadBigBlock( sector, &buffer2[0], bbat->blockSize );
 			for( unsigned s=0; s < bbat->blockSize; s+=4 )
 			{
-				if( k >= header->num_bat ) break;
+				if( k >= m_header.m_num_bat ) break;
 				else  blocks[k++] = readU32( &buffer2[s] );
 			}
 		}
@@ -593,7 +635,7 @@ void libwpd::StorageIO::load()
 
 	// load small bat
 	blocks.clear();
-	blocks = bbat->follow( header->sbat_start );
+	blocks = bbat->follow( m_header.m_start_sbat );
 	if( blocks.size()*bbat->blockSize > 0 )
 	{
 		std::vector<unsigned char> buffer( blocks.size()*bbat->blockSize );
@@ -603,7 +645,7 @@ void libwpd::StorageIO::load()
 
 	// load directory tree
 	blocks.clear();
-	blocks = bbat->follow( header->dirent_start );
+	blocks = bbat->follow( m_header.m_start_dirent );
 	std::vector<unsigned char> buffer(blocks.size()*bbat->blockSize);
 	loadBigBlocks( blocks, &buffer[0], buffer.size() );
 	dirtree->load( &buffer[0], (unsigned)buffer.size() );
@@ -738,7 +780,7 @@ libwpd::StreamIO::StreamIO( libwpd::StorageIO *s, libwpd::DirEntry *e) :
 	cache_size(4096),
 	cache_pos(0)
 {
-	if( entry->size >= io->header->threshold )
+	if( entry->size >= io->m_header.m_threshold )
 		blocks = io->bbat->follow( entry->start );
 	else
 		blocks = io->sbat->follow( entry->start );
@@ -766,7 +808,7 @@ unsigned long libwpd::StreamIO::read( unsigned long pos, unsigned char *data, un
 
 	unsigned long totalbytes = 0;
 
-	if ( entry->size < io->header->threshold )
+	if ( entry->size < io->m_header.m_threshold )
 	{
 		// small file
 		unsigned long index = pos / io->sbat->blockSize;
