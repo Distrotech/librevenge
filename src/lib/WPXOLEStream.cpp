@@ -42,6 +42,7 @@
 #include <sstream>
 #include <iostream>
 #include <list>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -52,6 +53,30 @@
 namespace libwpd
 {
 enum { Avail = 0xffffffff, Eof = 0xfffffffe, Bat = 0xfffffffd, MetaBat = 0xfffffffc, NotFound=0xfffffff0 };
+
+static inline unsigned short readU16( const unsigned char *ptr )
+{
+	return (unsigned short)(ptr[0]+(ptr[1]<<8));
+}
+
+static inline unsigned readU32( const unsigned char *ptr )
+{
+	return (unsigned)(ptr[0]+(ptr[1]<<8)+(ptr[2]<<16)+(ptr[3]<<24));
+}
+
+static inline void writeU16( unsigned char *ptr, unsigned long data )
+{
+	ptr[0] = (unsigned char)(data & 0xff);
+	ptr[1] = (unsigned char)((data >> 8) & 0xff);
+}
+
+static inline void writeU32( unsigned char *ptr, unsigned long data )
+{
+	ptr[0] = (unsigned char)(data & 0xff);
+	ptr[1] = (unsigned char)((data >> 8) & 0xff);
+	ptr[2] = (unsigned char)((data >> 16) & 0xff);
+	ptr[3] = (unsigned char)((data >> 24) & 0xff);
+}
 
 class Header
 {
@@ -96,17 +121,58 @@ const unsigned char Header::s_ole_magic[] =
 class AllocTable
 {
 public:
-	unsigned blockSize;
-	AllocTable();
+	unsigned m_blockSize;
+	AllocTable() : m_blockSize(4096), m_data()
+	{
+		resize(128); // initial size
+	}
 	void clear();
-	unsigned long count();
-	void resize( unsigned long newsize );
-	void set( unsigned long index, unsigned long val );
-	std::vector<unsigned long> follow( unsigned long start );
-	unsigned long operator[](unsigned long index );
-	void load( const unsigned char *buffer, unsigned len );
+	unsigned long count() const
+	{
+		return (unsigned long) m_data.size();
+	}
+	void resize( unsigned long newsize )
+	{
+		m_data.resize(size_t(newsize), Avail);
+	}
+	void set( unsigned long index, unsigned long val )
+	{
+		if (index >= count())
+			resize(index+1);
+		m_data[size_t(index)] = val;
+	}
+	std::vector<unsigned long> follow( unsigned long start ) const;
+	unsigned long operator[](unsigned long index ) const
+	{
+		return m_data[size_t(index)];
+	}
+	void load( const unsigned char *buffer, unsigned len )
+	{
+		resize( len / 4 );
+		for( unsigned i = 0; i < count(); i++ )
+			set( i, readU32( buffer + i*4 ) );
+	}
+
+	// write part
+	void setChain( std::vector<unsigned long> chain, unsigned end);
+	void save( unsigned char *buffer ) const
+	{
+		unsigned cnt=(unsigned) count();
+		for( unsigned i = 0; i < cnt; i++ )
+			writeU32( buffer + i*4, m_data[i] );
+		unsigned lastFree = 128-(cnt%128);
+		if (lastFree==128) return;
+		for (unsigned i = 0; i < lastFree; i++)
+			writeU32( buffer + (cnt+i)*4, Avail);
+	}
+	// return space required to save the allocation table
+	unsigned saveSize() const
+	{
+		unsigned cnt=(unsigned) (((count()+127)/128)*128);
+		return cnt * 4;
+	}
 private:
-	std::vector<unsigned long> data;
+	std::vector<unsigned long> m_data;
 	AllocTable( const AllocTable & );
 	AllocTable &operator=( const AllocTable & );
 };
@@ -152,8 +218,8 @@ public:
 
 	Header m_header;           // storage header
 	DirTree *dirtree;         // directory tree
-	AllocTable *bbat;         // allocation table for big blocks
-	AllocTable *sbat;         // allocation table for small blocks
+	AllocTable m_bbat;         // allocation table for big blocks
+	AllocTable m_sbat;         // allocation table for small blocks
 
 	std::vector<unsigned long> sb_blocks; // blocks for "small" files
 
@@ -215,31 +281,6 @@ private:
 };
 
 } // namespace libwpd
-
-static inline unsigned short readU16( const unsigned char *ptr )
-{
-	return (unsigned short)(ptr[0]+(ptr[1]<<8));
-}
-
-static inline unsigned readU32( const unsigned char *ptr )
-{
-	return (unsigned)(ptr[0]+(ptr[1]<<8)+(ptr[2]<<16)+(ptr[3]<<24));
-}
-
-static inline void writeU16( unsigned char *ptr, unsigned long data )
-{
-	ptr[0] = (unsigned char)(data & 0xff);
-	ptr[1] = (unsigned char)((data >> 8) & 0xff);
-}
-
-static inline void writeU32( unsigned char *ptr, unsigned long data )
-{
-	ptr[0] = (unsigned char)(data & 0xff);
-	ptr[1] = (unsigned char)((data >> 8) & 0xff);
-	ptr[2] = (unsigned char)((data >> 16) & 0xff);
-	ptr[3] = (unsigned char)((data >> 24) & 0xff);
-}
-
 // =========== Header ==========
 
 libwpd::Header::Header() :
@@ -317,79 +358,32 @@ void libwpd::Header::save( unsigned char *buffer )
 
 // =========== AllocTable ==========
 
-
-libwpd::AllocTable::AllocTable() :
-	blockSize(4096),
-	data()
-{
-	// initial size
-	resize( 128 );
-}
-
-unsigned long libwpd::AllocTable::count()
-{
-	return data.size();
-}
-
-void libwpd::AllocTable::resize( unsigned long newsize )
-{
-	size_t oldsize = data.size();
-	data.resize( newsize );
-	if( newsize > oldsize )
-		for( size_t i = oldsize; i<newsize; i++ )
-			data[i] = Avail;
-}
-
-unsigned long libwpd::AllocTable::operator[]( unsigned long index )
-{
-	unsigned long result;
-	result = data[index];
-	return result;
-}
-
-void libwpd::AllocTable::set( unsigned long index, unsigned long value )
-{
-	if( index >= count() ) resize( index + 1);
-	data[ index ] = value;
-}
-
-// TODO: optimize this with better search
-static bool already_exist(const std::vector<unsigned long>& chain,
-unsigned long item)
-{
-	for(unsigned i = 0; i < chain.size(); i++)
-		if(chain[i] == item) return true;
-
-	return false;
-}
-
-// follow
-std::vector<unsigned long> libwpd::AllocTable::follow( unsigned long start )
+std::vector<unsigned long> libwpd::AllocTable::follow( unsigned long start ) const
 {
 	std::vector<unsigned long> chain;
-
 	if( start >= count() ) return chain;
 
+	std::set<unsigned long> seens;
 	unsigned long p = start;
 	while( p < count() )
 	{
-		if( p == (unsigned long)Eof ) break;
-		if( p == (unsigned long)Bat ) break;
-		if( p == (unsigned long)MetaBat ) break;
-		if( already_exist(chain, p) ) break;
+		if( p == Eof || p == Bat || p == MetaBat) break;
+		if (seens.find(p) != seens.end()) break;
+		seens.insert(p);
 		chain.push_back( p );
-		if( data[p] >= count() ) break;
-		p = data[ p ];
+		p = m_data[ p ];
 	}
 
 	return chain;
 }
 
-void libwpd::AllocTable::load( const unsigned char *buffer, unsigned len )
+void libwpd::AllocTable::setChain( std::vector<unsigned long> chain, unsigned end )
 {
-	resize( len / 4 );
-	for( unsigned i = 0; i < count(); i++ )
-		set( i, readU32( buffer + i*4 ) );
+	if(!chain.size() ) return;
+
+	for( unsigned i=0; i<chain.size()-1; i++ )
+		set( chain[i], chain[i+1] );
+	set( chain[ chain.size()-1 ], end );
 }
 
 // =========== DirTree ==========
@@ -550,18 +544,14 @@ libwpd::StorageIO::StorageIO( libwpd::Storage *st, WPXInputStream *is ) :
 	result(libwpd::Storage::Ok),
 	m_header(),
 	dirtree(new libwpd::DirTree()),
-	bbat(new libwpd::AllocTable()),
-	sbat(new libwpd::AllocTable()),
-	sb_blocks()
+	m_bbat(), m_sbat(), sb_blocks()
 {
-	bbat->blockSize = 1 << m_header.m_shift_bbat;
-	sbat->blockSize = 1 << m_header.m_shift_sbat;
+	m_bbat.m_blockSize = 1 << m_header.m_shift_bbat;
+	m_sbat.m_blockSize = 1 << m_header.m_shift_sbat;
 }
 
 libwpd::StorageIO::~StorageIO()
 {
-	delete sbat;
-	delete bbat;
 	delete dirtree;
 }
 
@@ -595,8 +585,8 @@ void libwpd::StorageIO::load()
 	if( m_header.m_threshold != 4096 ) return;
 
 	// important block size
-	bbat->blockSize = m_header.m_size_bbat;
-	sbat->blockSize = m_header.m_size_sbat;
+	m_bbat.m_blockSize = m_header.m_size_bbat;
+	m_sbat.m_blockSize = m_header.m_size_sbat;
 
 	// find blocks allocated to store big bat
 	// the first 109 blocks are in header, the rest in meta bat
@@ -607,7 +597,7 @@ void libwpd::StorageIO::load()
 		else blocks[j] = m_header.m_blocks_bbat[j];
 	if( (m_header.m_num_bat > 109) && (m_header.m_num_mbat > 0) )
 	{
-		std::vector<unsigned char> buffer2( bbat->blockSize );
+		std::vector<unsigned char> buffer2( m_bbat.m_blockSize );
 		unsigned k = 109;
 		unsigned long sector;
 		for( unsigned r = 0; r < m_header.m_num_mbat; r++ )
@@ -616,8 +606,8 @@ void libwpd::StorageIO::load()
 				sector = m_header.m_start_mbat;
 			else      // next meta bat location is the last current block value.
 				sector = blocks[--k];
-			loadBigBlock( sector, &buffer2[0], bbat->blockSize );
-			for( unsigned s=0; s < bbat->blockSize; s+=4 )
+			loadBigBlock( sector, &buffer2[0], m_bbat.m_blockSize );
+			for( unsigned s=0; s < m_bbat.m_blockSize; s+=4 )
 			{
 				if( k >= m_header.m_num_bat ) break;
 				else  blocks[k++] = readU32( &buffer2[s] );
@@ -626,33 +616,33 @@ void libwpd::StorageIO::load()
 	}
 
 	// load big bat
-	if( blocks.size()*bbat->blockSize > 0 )
+	if( blocks.size()*m_bbat.m_blockSize > 0 )
 	{
-		std::vector<unsigned char> buffer( blocks.size()*bbat->blockSize );
+		std::vector<unsigned char> buffer( blocks.size()*m_bbat.m_blockSize );
 		loadBigBlocks( blocks, &buffer[0], buffer.size() );
-		bbat->load( &buffer[0], (unsigned)buffer.size() );
+		m_bbat.load( &buffer[0], (unsigned)buffer.size() );
 	}
 
 	// load small bat
 	blocks.clear();
-	blocks = bbat->follow( m_header.m_start_sbat );
-	if( blocks.size()*bbat->blockSize > 0 )
+	blocks = m_bbat.follow( m_header.m_start_sbat );
+	if( blocks.size()*m_bbat.m_blockSize > 0 )
 	{
-		std::vector<unsigned char> buffer( blocks.size()*bbat->blockSize );
+		std::vector<unsigned char> buffer( blocks.size()*m_bbat.m_blockSize );
 		loadBigBlocks( blocks, &buffer[0], buffer.size() );
-		sbat->load( &buffer[0], (unsigned)buffer.size() );
+		m_sbat.load( &buffer[0], (unsigned)buffer.size() );
 	}
 
 	// load directory tree
 	blocks.clear();
-	blocks = bbat->follow( m_header.m_start_dirent );
-	std::vector<unsigned char> buffer(blocks.size()*bbat->blockSize);
+	blocks = m_bbat.follow( m_header.m_start_dirent );
+	std::vector<unsigned char> buffer(blocks.size()*m_bbat.m_blockSize);
 	loadBigBlocks( blocks, &buffer[0], buffer.size() );
 	dirtree->load( &buffer[0], (unsigned)buffer.size() );
 	unsigned sb_start = readU32( &buffer[0x74] );
 
 	// fetch block chain as data for small-files
-	sb_blocks = bbat->follow( sb_start ); // small files
+	sb_blocks = m_bbat.follow( sb_start ); // small files
 
 	// so far so good
 	result = libwpd::Storage::Ok;
@@ -689,8 +679,8 @@ unsigned char *data, unsigned long maxlen )
 	for( unsigned long i=0; (i < blocks.size() ) & ( bytes<maxlen ); i++ )
 	{
 		unsigned long block = blocks[i];
-		unsigned long pos =  bbat->blockSize * ( block+1 );
-		unsigned long p = (bbat->blockSize < maxlen-bytes) ? bbat->blockSize : maxlen-bytes;
+		unsigned long pos =  m_bbat.m_blockSize * ( block+1 );
+		unsigned long p = (m_bbat.m_blockSize < maxlen-bytes) ? m_bbat.m_blockSize : maxlen-bytes;
 
 		input->seek(pos, WPX_SEEK_SET);
 		unsigned long numBytesRead = 0;
@@ -726,7 +716,7 @@ unsigned char *data, unsigned long maxlen )
 	if( maxlen == 0 ) return 0;
 
 	// our own local buffer
-	std::vector<unsigned char> tmpBuf( bbat->blockSize );
+	std::vector<unsigned char> tmpBuf( m_bbat.m_blockSize );
 
 	// read small block one by one
 	unsigned long bytes = 0;
@@ -735,16 +725,16 @@ unsigned char *data, unsigned long maxlen )
 		unsigned long block = blocks[i];
 
 		// find where the small-block exactly is
-		unsigned long pos = block * sbat->blockSize;
-		unsigned long bbindex = pos / bbat->blockSize;
+		unsigned long pos = block * m_sbat.m_blockSize;
+		unsigned long bbindex = pos / m_bbat.m_blockSize;
 		if( bbindex >= sb_blocks.size() ) break;
 
-		loadBigBlock( sb_blocks[ bbindex ], &tmpBuf[0], bbat->blockSize );
+		loadBigBlock( sb_blocks[ bbindex ], &tmpBuf[0], m_bbat.m_blockSize );
 
 		// copy the data
-		unsigned long offset = pos % bbat->blockSize;
-		unsigned long p = (maxlen-bytes < bbat->blockSize-offset ) ? maxlen-bytes :  bbat->blockSize-offset;
-		p = (sbat->blockSize<p ) ? sbat->blockSize : p;
+		unsigned long offset = pos % m_bbat.m_blockSize;
+		unsigned long p = (maxlen-bytes < m_bbat.m_blockSize-offset ) ? maxlen-bytes :  m_bbat.m_blockSize-offset;
+		p = (m_sbat.m_blockSize<p ) ? m_sbat.m_blockSize : p;
 		memcpy( data + bytes, &tmpBuf[offset], p );
 		bytes += p;
 	}
@@ -781,9 +771,9 @@ libwpd::StreamIO::StreamIO( libwpd::StorageIO *s, libwpd::DirEntry *e) :
 	cache_pos(0)
 {
 	if( entry->size >= io->m_header.m_threshold )
-		blocks = io->bbat->follow( entry->start );
+		blocks = io->m_bbat.follow( entry->start );
 	else
-		blocks = io->sbat->follow( entry->start );
+		blocks = io->m_sbat.follow( entry->start );
 
 	// prepare cache
 	cache_data = std::vector<unsigned char>(cache_size);
@@ -811,17 +801,17 @@ unsigned long libwpd::StreamIO::read( unsigned long pos, unsigned char *data, un
 	if ( entry->size < io->m_header.m_threshold )
 	{
 		// small file
-		unsigned long index = pos / io->sbat->blockSize;
+		unsigned long index = pos / io->m_sbat.m_blockSize;
 
 		if( index >= blocks.size() ) return 0;
 
-		std::vector<unsigned char> buf( io->sbat->blockSize );
-		unsigned long offset = pos % io->sbat->blockSize;
+		std::vector<unsigned char> buf( io->m_sbat.m_blockSize );
+		unsigned long offset = pos % io->m_sbat.m_blockSize;
 		while( totalbytes < maxlen )
 		{
 			if( index >= blocks.size() ) break;
-			io->loadSmallBlock( blocks[index], &buf[0], io->bbat->blockSize );
-			unsigned long count = io->sbat->blockSize - offset;
+			io->loadSmallBlock( blocks[index], &buf[0], io->m_bbat.m_blockSize );
+			unsigned long count = io->m_sbat.m_blockSize - offset;
 			if( count > maxlen-totalbytes ) count = maxlen-totalbytes;
 			memcpy( data+totalbytes, &buf[offset], count );
 			totalbytes += count;
@@ -832,17 +822,17 @@ unsigned long libwpd::StreamIO::read( unsigned long pos, unsigned char *data, un
 	else
 	{
 		// big file
-		unsigned long index = pos / io->bbat->blockSize;
+		unsigned long index = pos / io->m_bbat.m_blockSize;
 
 		if( index >= blocks.size() ) return 0;
 
-		std::vector<unsigned char> buf( io->bbat->blockSize );
-		unsigned long offset = pos % io->bbat->blockSize;
+		std::vector<unsigned char> buf( io->m_bbat.m_blockSize );
+		unsigned long offset = pos % io->m_bbat.m_blockSize;
 		while( totalbytes < maxlen )
 		{
 			if( index >= blocks.size() ) break;
-			io->loadBigBlock( blocks[index], &buf[0], io->bbat->blockSize );
-			unsigned long count = io->bbat->blockSize - offset;
+			io->loadBigBlock( blocks[index], &buf[0], io->m_bbat.m_blockSize );
+			unsigned long count = io->m_bbat.m_blockSize - offset;
 			if( count > maxlen-totalbytes ) count = maxlen-totalbytes;
 			memcpy( data+totalbytes, &buf[offset], count );
 			totalbytes += count;
