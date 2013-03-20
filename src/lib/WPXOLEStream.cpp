@@ -39,6 +39,8 @@
  This file taken from libwpg WPGOLEStream.cpp 1.5 Thu Aug 17 21:21:30 2006
 */
 
+#include <string.h>
+
 #include <sstream>
 #include <iostream>
 #include <list>
@@ -46,9 +48,10 @@
 #include <string>
 #include <vector>
 
+#include "libwpd_internal.h"
+
 #include "WPXOLEStream.h"
 #include "WPXStream.h"
-#include <string.h>
 
 namespace libwpd
 {
@@ -177,25 +180,91 @@ private:
 	AllocTable &operator=( const AllocTable & );
 };
 
+class DirInfo
+{
+public:
+	//! constructor
+	DirInfo()
+	{
+		for (int i=0; i < 4; i++)
+			m_time[i]=0;
+		for (int i=0; i < 4; i++)
+			m_clsid[i]=0;
+	}
+	//! returns true if the clsid field is filed
+	bool hasCLSId() const
+	{
+		for (int i=0; i < 4; i++)
+			if (m_clsid[i]) return true;
+		return false;
+	}
+	/** four uint32_t : the first two used for creation, the last for modification time */
+	unsigned m_time[4];
+	/** four uint32_t: the clsid data */
+	unsigned m_clsid[4];
+};
+
 class DirEntry
 {
 public:
-	DirEntry() : valid(false), name(), dir(false), size(0), start(0),
-		prev(0), next(0), child(0) {}
-	bool valid;            // false if invalid (should be skipped)
-	std::string name;      // the name, not in unicode anymore
-	bool dir;              // true if directory
-	unsigned long size;    // size (not valid if directory)
-	unsigned long start;   // starting block
-	unsigned prev;         // previous sibling
-	unsigned next;         // next sibling
-	unsigned child;        // first child
+	enum { End= 0xffffffff };
+	//! constructor
+	DirEntry() : m_valid(false), m_macRootEntry(false), m_type(0), m_colour(0), m_size(0), m_start(0),
+		m_right(End), m_left(End), m_child(End), m_info(), m_name("")
+	{
+	}
+	//! returns true for a directory
+	bool is_dir() const
+	{
+		return m_type==1 || m_type==5;
+	}
+	//! returns the simplified file name
+	std::string name() const
+	{
+		if (m_name.length() && m_name[0]<32)
+			return m_name.substr(1);
+		return m_name;
+	}
+	/** returns the string which was store inside the file.
+
+	\note: either name() or a index (unknown) followed by name() */
+	std::string const &filename() const
+	{
+		return m_name;
+	}
+	/** sets the file name */
+	void setName(std::string const &nm)
+	{
+		m_name=nm;
+	}
+	/** reads a entry content in buffer */
+	void load( unsigned char *buffer, unsigned len );
+	//! saves a entry content in buffer */
+	void save( unsigned char *buffer ) const;
+	//! returns space required to save a dir entry
+	static unsigned saveSize()
+	{
+		return 128;
+	}
+
+	bool m_valid;            /** false if invalid (should be skipped) */
+	bool m_macRootEntry;      /** true if this is a classic mac directory entry */
+	unsigned m_type;         /** the type */
+	unsigned m_colour;       /** the red/black color: 0 means red */
+	unsigned long m_size;    /** size (not valid if directory) */
+	unsigned long m_start;   /** starting block */
+	unsigned m_right;        /** previous sibling */
+	unsigned m_left;         /** next sibling */
+	unsigned m_child;        /** first child */
+
+	DirInfo m_info; //! the file information
+protected:
+	std::string m_name;      /** the name, not in unicode anymore */
 };
 
 class DirTree
 {
 public:
-	static const unsigned End;
 	DirTree();
 	void clear();
 	unsigned entryCount();
@@ -386,9 +455,81 @@ void libwpd::AllocTable::setChain( std::vector<unsigned long> chain, unsigned en
 	set( chain[ chain.size()-1 ], end );
 }
 
-// =========== DirTree ==========
+// =========== DirEntry ==========
+void libwpd::DirEntry::load( unsigned char *buffer, unsigned len )
+{
+	if (len != 128)
+	{
+		WPD_DEBUG_MSG(("DirEntry::load: unexpected len for DirEntry::load\n"));
+		*this=DirEntry();
+		return;
+	}
+	// 2 = file (aka stream), 1 = directory (aka storage), 5 = root
+	m_type = buffer[ 0x42];
+	m_colour = buffer[0x43];
 
-const unsigned libwpd::DirTree::End = 0xffffffff;
+	// parse name of this entry, which stored as Unicode 16-bit
+	m_name=std::string("");
+	unsigned name_len = (unsigned) readU16( buffer + 0x40 );
+	if( name_len > 64 ) name_len = 64;
+	if (name_len==2 && m_type==5 && readU16(buffer)==0x5200)
+	{
+		// find in some mswork mac 4.0 file
+		m_name="R";
+		m_macRootEntry=true;
+	}
+	else
+	{
+		for( unsigned j=0; ( buffer[j]) && (j<name_len); j+= 2 )
+			m_name.append( 1, char(buffer[j]) );
+	}
+
+
+	for (int i = 0; i < 4; i++)
+		m_info.m_clsid[i]=(unsigned) readU32( buffer + 0x50 + 4*i);
+	for (int i = 0; i < 4; i++)
+		m_info.m_time[i]=(unsigned) readU32( buffer + 0x64 + 4*i);
+
+	m_valid = true;
+	m_start = (unsigned int) readU32( buffer + 0x74 );
+	m_size = (unsigned int) readU32( buffer + 0x78 );
+	m_left = (unsigned int) readU32( buffer + 0x44 );
+	m_right = (unsigned int) readU32( buffer + 0x48 );
+	m_child = (unsigned int) readU32( buffer + 0x4C );
+
+	// sanity checks
+	if( (m_type != 2) && (m_type != 1 ) && (m_type != 5 ) ) m_valid = false;
+	if( name_len < 1 ) m_valid = false;
+}
+
+void libwpd::DirEntry::save( unsigned char *buffer ) const
+{
+	for (int i = 0; i < 128; i++) buffer[i]=0;
+
+	unsigned name_len = (unsigned) m_name.length();
+	if (name_len>31) name_len = 31;
+	if (name_len==2 && m_macRootEntry && m_type==5)
+		buffer[1]='R';
+	else
+	{
+		for (size_t i = 0; i < name_len; i++)
+			writeU16(buffer+2*i, (unsigned) m_name[i]);
+	}
+	writeU16(buffer+0x40, 2*name_len+2);
+
+	buffer[0x42]=(unsigned char) m_type;
+	buffer[0x43]=(unsigned char) m_colour;
+	for (int i = 0; i < 4; i++)
+		writeU32(buffer + 0x50+4*i, m_info.m_clsid[i]);
+	for (int i = 0; i < 4; i++)
+		writeU32(buffer + 0x64+4*i, m_info.m_time[i]);
+	writeU32(buffer + 0x74, m_start);
+	writeU32(buffer + 0x78, m_size);
+	writeU32(buffer + 0x44, m_left);
+	writeU32(buffer + 0x48, m_right);
+	writeU32(buffer + 0x4C, m_child);
+}
+// =========== DirTree ==========
 
 libwpd::DirTree::DirTree() :
 	entries()
@@ -400,14 +541,10 @@ void libwpd::DirTree::clear()
 {
 	// leave only root entry
 	entries.resize( 1 );
-	entries[0].valid = true;
-	entries[0].name = "Root Entry";
-	entries[0].dir = true;
-	entries[0].size = 0;
-	entries[0].start = End;
-	entries[0].prev = End;
-	entries[0].next = End;
-	entries[0].child = End;
+	entries[0]=DirEntry();
+	entries[0].m_valid = true;
+	entries[0].setName("Root Entry");
+	entries[0].m_type = 5;
 }
 
 unsigned libwpd::DirTree::entryCount()
@@ -466,18 +603,18 @@ static unsigned dirtree_find_sibling( libwpd::DirTree *dirtree, unsigned index, 
 
 	unsigned count = dirtree->entryCount();
 	libwpd::DirEntry *e = dirtree->entry( index );
-	if (!e || !e->valid) return 0;
-	if (e->name == name) return index;
+	if (!e || !e->m_valid) return 0;
+	if (e->name() == name) return index;
 
-	if (e->next>0 && e->next<count)
+	if (e->m_right>0 && e->m_right<count)
 	{
-		unsigned r = dirtree_find_sibling( dirtree, e->next, name );
+		unsigned r = dirtree_find_sibling( dirtree, e->m_right, name );
 		if (r>0) return r;
 	}
 
-	if (e->prev>0 && e->prev<count)
+	if (e->m_left>0 && e->m_left<count)
 	{
-		unsigned r = dirtree_find_sibling( dirtree, e->prev, name );
+		unsigned r = dirtree_find_sibling( dirtree, e->m_left, name );
 		if (r>0) return r;
 	}
 
@@ -489,8 +626,8 @@ unsigned libwpd::DirTree::find_child( unsigned index, const std::string &name )
 
 	unsigned count = entryCount();
 	libwpd::DirEntry *p = entry( index );
-	if (p && p->valid && p->child < count )
-		return dirtree_find_sibling( this, p->child, name );
+	if (p && p->m_valid && p->m_child < count )
+		return dirtree_find_sibling( this, p->m_child, name );
 
 	return 0;
 }
@@ -501,37 +638,8 @@ void libwpd::DirTree::load( unsigned char *buffer, unsigned size )
 
 	for( unsigned i = 0; i < size/128; i++ )
 	{
-		unsigned p = i * 128;
-
-		// parse name of this entry, which stored as Unicode 16-bit
-		std::string name;
-		int name_len = readU16( buffer + 0x40+p );
-		if( name_len > 64 ) name_len = 64;
-		for( int j=0; ( buffer[j+p]) && (j<name_len); j+= 2 )
-			name.append( 1, buffer[j+p] );
-
-		// would be < 32 if first char in the name isn't printable
-		// first char isn't printable ? remove it...
-		if( buffer[p] < 32 )
-			name.erase( 0,1 );
-
-		// 2 = file (aka stream), 1 = directory (aka storage), 5 = root
-		unsigned type = buffer[ 0x42 + p];
-
-		libwpd::DirEntry e;
-		e.valid = true;
-		e.name = name;
-		e.start = readU32( buffer + 0x74+p );
-		e.size = readU32( buffer + 0x78+p );
-		e.prev = readU32( buffer + 0x44+p );
-		e.next = readU32( buffer + 0x48+p );
-		e.child = readU32( buffer + 0x4C+p );
-		e.dir = ( type!=2 );
-
-		// sanity checks
-		if( (type != 2) && (type != 1 ) && (type != 5 ) ) e.valid = false;
-		if( name_len < 1 ) e.valid = false;
-
+		DirEntry e;
+		e.load(buffer+i*128, 128);
 		entries.push_back( e );
 	}
 }
@@ -658,7 +766,7 @@ libwpd::StreamIO *libwpd::StorageIO::streamIO( const std::string &name )
 	// search in the entries
 	libwpd::DirEntry *entry = dirtree->entry( name );
 	if( !entry ) return (libwpd::StreamIO *)0;
-	if( entry->dir ) return (libwpd::StreamIO *)0;
+	if( entry->is_dir() ) return (libwpd::StreamIO *)0;
 
 	libwpd::StreamIO *res = new libwpd::StreamIO( this, entry );
 	res->fullName = name;
@@ -770,10 +878,10 @@ libwpd::StreamIO::StreamIO( libwpd::StorageIO *s, libwpd::DirEntry *e) :
 	cache_size(4096),
 	cache_pos(0)
 {
-	if( entry->size >= io->m_header.m_threshold )
-		blocks = io->m_bbat.follow( entry->start );
+	if( entry->m_size >= io->m_header.m_threshold )
+		blocks = io->m_bbat.follow( entry->m_start );
 	else
-		blocks = io->m_sbat.follow( entry->start );
+		blocks = io->m_sbat.follow( entry->m_start );
 
 	// prepare cache
 	cache_data = std::vector<unsigned char>(cache_size);
@@ -798,7 +906,7 @@ unsigned long libwpd::StreamIO::read( unsigned long pos, unsigned char *data, un
 
 	unsigned long totalbytes = 0;
 
-	if ( entry->size < io->m_header.m_threshold )
+	if ( entry->m_size < io->m_header.m_threshold )
 	{
 		// small file
 		unsigned long index = pos / io->m_sbat.m_blockSize;
@@ -858,7 +966,7 @@ void libwpd::StreamIO::updateCache()
 
 	cache_pos = m_pos - ( m_pos % cache_size );
 	unsigned long bytes = cache_size;
-	if( cache_pos + bytes > entry->size ) bytes = entry->size - cache_pos;
+	if( cache_pos + bytes > entry->m_size ) bytes = entry->m_size - cache_pos;
 	cache_size = read( cache_pos, &cache_data[0], bytes );
 }
 
@@ -901,7 +1009,7 @@ libwpd::Stream::~Stream()
 
 unsigned long libwpd::Stream::size()
 {
-	return io ? io->entry->size : 0;
+	return io ? io->entry->m_size : 0;
 }
 
 unsigned long libwpd::Stream::read( unsigned char *data, unsigned long maxlen )
