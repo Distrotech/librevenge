@@ -1254,47 +1254,47 @@ void libwpd::IStream::updateCache()
 // =========== Storage ==========
 
 libwpd::Storage::Storage( WPXInputStream *is ) :
-	io(0)
+	m_io(0)
 {
-	io = new IStorage( is );
+	m_io = new IStorage( is );
 }
 
 libwpd::Storage::~Storage()
 {
-	delete io;
+	delete m_io;
 }
 
 libwpd::Storage::Result libwpd::Storage::result()
 {
-	return io->m_result;
+	return m_io->m_result;
 }
 
 bool libwpd::Storage::isOLEStream()
 {
-	return io->isOLEStream();
+	return m_io->isOLEStream();
 }
 
 // =========== Stream ==========
 
 libwpd::Stream::Stream( libwpd::Storage *storage, const std::string &name ) :
-	io(0)
+	m_io(0)
 {
-	io = new libwpd::IStream(storage->io, name);
+	m_io = new libwpd::IStream(storage->m_io, name);
 }
 
 // FIXME tell parent we're gone
 libwpd::Stream::~Stream()
 {
-	if (io) delete io;
+	if (m_io) delete m_io;
 }
 
 unsigned long libwpd::Stream::size()
 {
-	return io ? io->size() : 0;
+	return m_io ? m_io->size() : 0;
 }
 
 unsigned long libwpd::Stream::read( unsigned char *data, unsigned long maxlen )
 {
-	return io ? io->read( data, maxlen ) : 0;
+	return m_io ? m_io->read( data, maxlen ) : 0;
 }
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

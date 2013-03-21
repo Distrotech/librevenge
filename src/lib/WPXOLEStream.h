@@ -74,7 +74,7 @@ public:
 	Result result();
 
 private:
-	IStorage *io;
+	IStorage *m_io;
 
 	// no copy or assign
 	Storage( const Storage & );
@@ -110,7 +110,7 @@ public:
 	unsigned long read( unsigned char *data, unsigned long maxlen );
 
 private:
-	IStream *io;
+	IStream *m_io;
 
 	// no copy or assign
 	Stream( const Stream & );
