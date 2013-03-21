@@ -431,53 +431,97 @@ private:
 	DirTree &operator=( const DirTree & );
 };
 
-class StorageIO
+class IStorage
 {
 public:
-	Storage *storage;         // owner
-	WPXInputStream *input;
-	int result;               // result of operation
+	WPXInputStream *m_input;
+	libwpd::Storage::Result m_result;               // result of operation
 
 	Header m_header;           // storage header
 	DirTree m_dirtree;         // directory tree
 	AllocTable m_bbat;         // allocation table for big blocks
 	AllocTable m_sbat;         // allocation table for small blocks
 
-	std::vector<unsigned long> sb_blocks; // blocks for "small" files
+	std::vector<unsigned long> m_sb_blocks; // blocks for "small" files
 
-	StorageIO( Storage *storage, WPXInputStream *is );
-	~StorageIO();
+	IStorage( WPXInputStream *is );
+	~IStorage() {}
+
+	//! returns a directory entry corresponding to a index
+	DirEntry *entry(unsigned ind)
+	{
+		load();
+		return m_dirtree.entry(ind);
+	}
+	//! returns a directory entry corresponding to a name
+	DirEntry *entry(const std::string &name)
+	{
+		if( !name.length() ) return 0;
+		load();
+		return m_dirtree.entry(name);
+	}
+	//! returns a directory entry corresponding to a index
+	unsigned index(const std::string &name)
+	{
+		if( !name.length() ) return NotFound;
+		load();
+		return m_dirtree.index( name );
+	}
+	/** returns the OLE revision */
+	unsigned revision() const
+	{
+		return m_header.m_revision;
+	}
+	/** returns true if it is a pc file */
+	bool hasRootTypePc() const
+	{
+		return m_dirtree.hasRootTypePc();
+	}
+	//! returns true if the entry exists in the OLE, if so fills isDir
+	bool isSubStream(const std::string &name, bool &isDir);
+	//! returns the list of subStream given a dirEntry index
+	std::vector<std::string> getSubStreamList(unsigned ind=0, bool retrieveAll=false)
+	{
+		load();
+		return m_dirtree.getSubStreamList(ind, retrieveAll);
+	}
 
 	bool isOLEStream();
 	void load();
 
-	unsigned long loadBigBlocks( std::vector<unsigned long> blocks, unsigned char *buffer, unsigned long maxlen );
+	bool use_big_block_for(unsigned long size) const
+	{
+		return size >= m_header.m_threshold;
+	}
+	unsigned long loadBigBlocks( std::vector<unsigned long> const &blocks, unsigned char *buffer, unsigned long maxlen );
 
 	unsigned long loadBigBlock( unsigned long block, unsigned char *buffer, unsigned long maxlen );
 
-	unsigned long loadSmallBlocks( std::vector<unsigned long> blocks, unsigned char *buffer, unsigned long maxlen );
+	unsigned long loadSmallBlocks( std::vector<unsigned long> const &blocks, unsigned char *buffer, unsigned long maxlen );
 
 	unsigned long loadSmallBlock( unsigned long block, unsigned char *buffer, unsigned long maxlen );
 
 	StreamIO *streamIO( const std::string &name );
 
+protected:
+	bool m_isLoad;
 private:
 	// no copy or assign
-	StorageIO( const StorageIO & );
-	StorageIO &operator=( const StorageIO & );
+	IStorage( const IStorage & );
+	IStorage &operator=( const IStorage & );
 
 };
 
 class StreamIO
 {
 public:
-	StorageIO *io;
+	IStorage *io;
 	DirEntry *entry;
 	std::string fullName;
 	bool eof;
 	bool fail;
 
-	StreamIO( StorageIO *io, DirEntry *entry );
+	StreamIO( IStorage *io, DirEntry *entry );
 	~StreamIO();
 	unsigned long size();
 	unsigned long tell();
@@ -889,39 +933,52 @@ unsigned libwpd::DirTree::setInRBTForm(std::vector<unsigned> const &childs,
 }
 
 
-// =========== StorageIO ==========
+// =========== IStorage ==========
 
-libwpd::StorageIO::StorageIO( libwpd::Storage *st, WPXInputStream *is ) :
-	storage(st),
-	input( is ),
-	result(libwpd::Storage::Ok),
+libwpd::IStorage::IStorage( WPXInputStream *is ) :
+	m_input( is ),
+	m_result(libwpd::Storage::Ok),
 	m_header(),
-	m_dirtree(),
-	m_bbat(), m_sbat(), sb_blocks()
+	m_bbat(), m_sbat(), m_sb_blocks(),
+	m_isLoad(false)
 {
-	m_bbat.m_blockSize = 1 << m_header.m_shift_bbat;
-	m_sbat.m_blockSize = 1 << m_header.m_shift_sbat;
+	m_bbat.m_blockSize = m_header.m_size_bbat;
+	m_sbat.m_blockSize = m_header.m_size_sbat;
 }
 
-libwpd::StorageIO::~StorageIO()
-{
-}
-
-bool libwpd::StorageIO::isOLEStream()
+bool libwpd::IStorage::isOLEStream()
 {
 	load();
-	return (result == libwpd::Storage::Ok);
+	return (m_result == libwpd::Storage::Ok);
 }
 
-void libwpd::StorageIO::load()
+bool libwpd::IStorage::isSubStream(const std::string &name, bool &isDir)
 {
+	if (!name.length()) return false;
+	load();
+	// search in the entries
+	DirEntry *e = m_dirtree.entry(name);
+	if( !e) return false;
+	isDir = e->is_dir();
+	return true;
+}
+
+void libwpd::IStorage::load()
+{
+	if (m_isLoad)
+		return;
+	m_isLoad = true;
+	m_result = libwpd::Storage::NotOLE;
+	if (!m_input)
+		return;
+
 	std::vector<unsigned long> blocks;
 
 	// load header
 	unsigned long numBytesRead = 0;
-	const unsigned char *buf = input->read(512, numBytesRead);
+	m_input->seek(0, WPX_SEEK_SET);
+	const unsigned char *buf = m_input->read(512, numBytesRead);
 
-	result = libwpd::Storage::NotOLE;
 	if (numBytesRead < 512)
 		return;
 
@@ -932,7 +989,7 @@ void libwpd::StorageIO::load()
 		return;
 
 	// sanity checks
-	result = libwpd::Storage::BadOLE;
+	m_result = libwpd::Storage::BadOLE;
 	if( !m_header.valid() ) return;
 	if( m_header.m_threshold != 4096 ) return;
 
@@ -994,13 +1051,13 @@ void libwpd::StorageIO::load()
 	unsigned sb_start = readU32( &buffer[0x74] );
 
 	// fetch block chain as data for small-files
-	sb_blocks = m_bbat.follow( sb_start ); // small files
+	m_sb_blocks = m_bbat.follow( sb_start ); // small files
 
 	// so far so good
-	result = libwpd::Storage::Ok;
+	m_result = libwpd::Storage::Ok;
 }
 
-libwpd::StreamIO *libwpd::StorageIO::streamIO( const std::string &name )
+libwpd::StreamIO *libwpd::IStorage::streamIO( const std::string &name )
 {
 	load();
 
@@ -1008,17 +1065,17 @@ libwpd::StreamIO *libwpd::StorageIO::streamIO( const std::string &name )
 	if( !name.length() ) return (libwpd::StreamIO *)0;
 
 	// search in the entries
-	libwpd::DirEntry *entry = m_dirtree.entry( name );
-	if( !entry ) return (libwpd::StreamIO *)0;
-	if( entry->is_dir() ) return (libwpd::StreamIO *)0;
+	libwpd::DirEntry *ent = m_dirtree.entry( name );
+	if( !ent ) return (libwpd::StreamIO *)0;
+	if( ent->is_dir() ) return (libwpd::StreamIO *)0;
 
-	libwpd::StreamIO *res = new libwpd::StreamIO( this, entry );
+	libwpd::StreamIO *res = new libwpd::StreamIO( this, ent );
 	res->fullName = name;
 
 	return res;
 }
 
-unsigned long libwpd::StorageIO::loadBigBlocks( std::vector<unsigned long> blocks,
+unsigned long libwpd::IStorage::loadBigBlocks( std::vector<unsigned long> const &blocks,
         unsigned char *data, unsigned long maxlen )
 {
 	// sentinel
@@ -1034,9 +1091,9 @@ unsigned long libwpd::StorageIO::loadBigBlocks( std::vector<unsigned long> block
 		unsigned long pos =  m_bbat.m_blockSize * ( block+1 );
 		unsigned long p = (m_bbat.m_blockSize < maxlen-bytes) ? m_bbat.m_blockSize : maxlen-bytes;
 
-		input->seek(pos, WPX_SEEK_SET);
+		m_input->seek(pos, WPX_SEEK_SET);
 		unsigned long numBytesRead = 0;
-		const unsigned char *buf = input->read(p, numBytesRead);
+		const unsigned char *buf = m_input->read(p, numBytesRead);
 		memcpy(data+bytes, buf, numBytesRead);
 		bytes += numBytesRead;
 	}
@@ -1044,7 +1101,7 @@ unsigned long libwpd::StorageIO::loadBigBlocks( std::vector<unsigned long> block
 	return bytes;
 }
 
-unsigned long libwpd::StorageIO::loadBigBlock( unsigned long block,
+unsigned long libwpd::IStorage::loadBigBlock( unsigned long block,
         unsigned char *data, unsigned long maxlen )
 {
 	// sentinel
@@ -1059,13 +1116,11 @@ unsigned long libwpd::StorageIO::loadBigBlock( unsigned long block,
 }
 
 // return number of bytes which has been read
-unsigned long libwpd::StorageIO::loadSmallBlocks( std::vector<unsigned long> blocks,
+unsigned long libwpd::IStorage::loadSmallBlocks( std::vector<unsigned long> const &blocks,
         unsigned char *data, unsigned long maxlen )
 {
 	// sentinel
-	if( !data ) return 0;
-	if( blocks.size() < 1 ) return 0;
-	if( maxlen == 0 ) return 0;
+	if( !data  || blocks.size() < 1 ||  maxlen == 0 ) return 0;
 
 	// our own local buffer
 	std::vector<unsigned char> tmpBuf( m_bbat.m_blockSize );
@@ -1079,9 +1134,9 @@ unsigned long libwpd::StorageIO::loadSmallBlocks( std::vector<unsigned long> blo
 		// find where the small-block exactly is
 		unsigned long pos = block * m_sbat.m_blockSize;
 		unsigned long bbindex = pos / m_bbat.m_blockSize;
-		if( bbindex >= sb_blocks.size() ) break;
+		if( bbindex >= m_sb_blocks.size() ) break;
 
-		loadBigBlock( sb_blocks[ bbindex ], &tmpBuf[0], m_bbat.m_blockSize );
+		loadBigBlock( m_sb_blocks[ bbindex ], &tmpBuf[0], m_bbat.m_blockSize );
 
 		// copy the data
 		unsigned long offset = pos % m_bbat.m_blockSize;
@@ -1094,7 +1149,7 @@ unsigned long libwpd::StorageIO::loadSmallBlocks( std::vector<unsigned long> blo
 	return bytes;
 }
 
-unsigned long libwpd::StorageIO::loadSmallBlock( unsigned long block,
+unsigned long libwpd::IStorage::loadSmallBlock( unsigned long block,
         unsigned char *data, unsigned long maxlen )
 {
 	// sentinel
@@ -1110,7 +1165,7 @@ unsigned long libwpd::StorageIO::loadSmallBlock( unsigned long block,
 
 // =========== StreamIO ==========
 
-libwpd::StreamIO::StreamIO( libwpd::StorageIO *s, libwpd::DirEntry *e) :
+libwpd::StreamIO::StreamIO( libwpd::IStorage *s, libwpd::DirEntry *e) :
 	io(s),
 	entry(e),
 	fullName(),
@@ -1122,7 +1177,7 @@ libwpd::StreamIO::StreamIO( libwpd::StorageIO *s, libwpd::DirEntry *e) :
 	cache_size(4096),
 	cache_pos(0)
 {
-	if( entry->m_size >= io->m_header.m_threshold )
+	if( io->use_big_block_for(entry->m_size) )
 		blocks = io->m_bbat.follow( entry->m_start );
 	else
 		blocks = io->m_sbat.follow( entry->m_start );
@@ -1150,7 +1205,7 @@ unsigned long libwpd::StreamIO::read( unsigned long pos, unsigned char *data, un
 
 	unsigned long totalbytes = 0;
 
-	if ( entry->m_size < io->m_header.m_threshold )
+	if ( !io->use_big_block_for(entry->m_size) )
 	{
 		// small file
 		unsigned long index = pos / io->m_sbat.m_blockSize;
@@ -1220,7 +1275,7 @@ void libwpd::StreamIO::updateCache()
 libwpd::Storage::Storage( WPXInputStream *is ) :
 	io(0)
 {
-	io = new StorageIO( this, is );
+	io = new IStorage( is );
 }
 
 libwpd::Storage::~Storage()
@@ -1228,9 +1283,9 @@ libwpd::Storage::~Storage()
 	delete io;
 }
 
-int libwpd::Storage::result()
+libwpd::Storage::Result libwpd::Storage::result()
 {
-	return io->result;
+	return io->m_result;
 }
 
 bool libwpd::Storage::isOLEStream()

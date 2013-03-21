@@ -40,7 +40,7 @@ class WPXInputStream;
 namespace libwpd
 {
 
-class StorageIO;
+class IStorage;
 class Stream;
 class StreamIO;
 
@@ -51,7 +51,7 @@ class Storage
 public:
 
 	// for Storage::result()
-	enum { Ok, OpenFailed, NotOLE, BadOLE, UnknownError };
+	enum Result { Ok, OpenFailed, NotOLE, BadOLE, UnknownError };
 
 	/**
 	 * Constructs a storage with data.
@@ -71,10 +71,10 @@ public:
 	/**
 	 * Returns the error code of last operation.
 	 **/
-	int result();
+	Result result();
 
 private:
-	StorageIO *io;
+	IStorage *io;
 
 	// no copy or assign
 	Storage( const Storage & );
@@ -85,7 +85,7 @@ private:
 class Stream
 {
 	friend class Storage;
-	friend class StorageIO;
+	friend class IStorage;
 
 public:
 
