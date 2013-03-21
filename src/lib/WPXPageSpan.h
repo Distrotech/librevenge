@@ -146,7 +146,7 @@ public:
 	{
 		return m_pageSpan;
 	}
-	const std::vector<WPXHeaderFooter> & getHeaderFooterList() const
+	const std::vector<WPXHeaderFooter> &getHeaderFooterList() const
 	{
 		return m_headerFooterList;
 	}

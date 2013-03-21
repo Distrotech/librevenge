@@ -35,7 +35,7 @@ public:
 	WP6TableStylePacket(WPXInputStream *input, WPXEncryption *encryption, int id, uint32_t dataOffset, uint32_t dataSize);
 	~WP6TableStylePacket();
 	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
-	void parse(WP6Listener* /*listener*/) const {}
+	void parse(WP6Listener * /*listener*/) const {}
 
 private:
 	WP6TableStylePacket(const WP6TableStylePacket &);

@@ -154,7 +154,7 @@ WP3ResourceFork::~WP3ResourceFork()
 const WP3Resource *WP3ResourceFork::getResource(uint32_t type, uint32_t ID) const
 {
 	std::pair< std::multimap<uint32_t, WP3Resource *>::const_iterator, std::multimap<uint32_t, WP3Resource *>::const_iterator > tempPair
-	= m_resourcesTypeMultimap.equal_range(type);
+	    = m_resourcesTypeMultimap.equal_range(type);
 
 	if (tempPair.first == m_resourcesTypeMultimap.end())
 		return NULL;

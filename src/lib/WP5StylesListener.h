@@ -44,8 +44,8 @@ public:
 
 	void startDocument() {}
 	void startSubDocument() {}
-	void setFont(const WPXString& /* fontName */, double /* fontSize */) {}
-	void setTabs(const std::vector<WPXTabStop>& /* tabStops */, uint16_t /* tabOffset */) {}
+	void setFont(const WPXString & /* fontName */, double /* fontSize */) {}
+	void setTabs(const std::vector<WPXTabStop> & /* tabStops */, uint16_t /* tabOffset */) {}
 	void insertCharacter(uint32_t /* character */)
 	{
 		/*if (!isUndoOn())*/ m_currentPageHasContent = true;
@@ -84,7 +84,7 @@ public:
 	                bool useCellAttributes, uint32_t cellAttributes);
 	void endTable() {}
 
-	void insertNoteReference(const WPXString& /* noteReference */) {}
+	void insertNoteReference(const WPXString & /* noteReference */) {}
 	void insertNote(WPXNoteType /* noteType */, const WP5SubDocument * /* subDocument */) {}
 	void headerFooterGroup(uint8_t headerFooterType, uint8_t occurenceBits, WP5SubDocument *subDocument);
 	void suppressPageCharacteristics(uint8_t suppressCode);

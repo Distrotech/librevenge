@@ -53,7 +53,7 @@ public:
 class WPXPropertyListVectorIterImpl
 {
 public:
-	WPXPropertyListVectorIterImpl(std::vector<WPXPropertyList> * vect) :
+	WPXPropertyListVectorIterImpl(std::vector<WPXPropertyList> *vect) :
 		m_vector(vect),
 		m_iter(m_vector->begin()),
 		m_imaginaryFirst(false) {}
@@ -82,7 +82,7 @@ public:
 private:
 	WPXPropertyListVectorIterImpl(const WPXPropertyListVectorIterImpl &);
 	WPXPropertyListVectorIterImpl &operator=(const WPXPropertyListVectorIterImpl &);
-	std::vector<WPXPropertyList> * m_vector;
+	std::vector<WPXPropertyList> *m_vector;
 	std::vector<WPXPropertyList>::iterator m_iter;
 	bool m_imaginaryFirst;
 };

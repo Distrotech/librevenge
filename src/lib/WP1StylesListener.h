@@ -76,7 +76,7 @@ public:
 		if (!isUndoOn()) m_currentPageHasContent = true;
 	}
 	void leftMarginRelease(uint16_t /* release */) {}
-	void setTabs(const std::vector<WPXTabStop>& /* tabStops */) {}
+	void setTabs(const std::vector<WPXTabStop> & /* tabStops */) {}
 	void headerFooterGroup(uint8_t headerFooterDefinition, WP1SubDocument *subDocument);
 	void suppressPageCharacteristics(uint8_t suppressCode);
 	void justificationChange(uint8_t /* justification */) {}

@@ -84,7 +84,7 @@ public:
 	void endTable() {}
 	void undoChange(uint8_t undoType, uint16_t undoLevel);
 	void setTextColor(const RGBSColor * /* fontColor */) {}
-	void setTextFont(const WPXString& /* fontName */) {}
+	void setTextFont(const WPXString & /* fontName */) {}
 	void setFontSize(uint16_t /* fontSize */) {}
 	void insertPageNumber(const WPXString & /* pageNumber */) {}
 	void insertNoteReference(const WPXString & /* noteReference */) {}

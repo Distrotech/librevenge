@@ -208,7 +208,7 @@ public:
 private:
 	bool m_imaginaryFirst;
 	std::map<std::string, WPXProperty *>::iterator m_iter;
-	std::map<std::string, WPXProperty *> * m_map;
+	std::map<std::string, WPXProperty *> *m_map;
 };
 
 
