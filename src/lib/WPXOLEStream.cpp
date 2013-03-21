@@ -44,6 +44,7 @@
 #include <sstream>
 #include <iostream>
 #include <list>
+#include <locale>
 #include <set>
 #include <string>
 #include <vector>
@@ -265,15 +266,167 @@ protected:
 class DirTree
 {
 public:
-	DirTree();
+	/** constructor */
+	DirTree() : m_entries()
+	{
+		clear();
+	}
+	/** clear all entries, leaving only a root entries */
 	void clear();
-	unsigned entryCount();
-	DirEntry *entry( unsigned index );
-	DirEntry *entry( const std::string &name );
-	unsigned find_child( unsigned index, const std::string &name );
+	/** set the root to a mac/pc root */
+	void setRootType(bool pc=true);
+	/** returns true if it is a pc file */
+	bool hasRootTypePc() const
+	{
+		return !m_entries.size() || !m_entries[0].m_macRootEntry;
+	}
+	/** returns the number of entries */
+	unsigned count() const
+	{
+		return unsigned(m_entries.size());
+	}
+	/** returns the entry with a given index */
+	DirEntry const *entry( unsigned ind ) const
+	{
+		if( ind >= count() ) return 0;
+		return &m_entries[ size_t(ind) ];
+	}
+	/** returns the entry with a given index */
+	DirEntry *entry( unsigned ind )
+	{
+		if( ind >= count() ) return  0;
+		return &m_entries[ size_t(ind) ];
+	}
+	/** returns the entry with a given name */
+	DirEntry *entry( const std::string &name )
+	{
+		return entry(index(name));
+	}
+	/** given a fullname (e.g "/ObjectPool/_1020961869"), find the entry */
+	unsigned index( const std::string &name, bool create=false );
+	/** tries to find a child of ind with a given name */
+	unsigned find_child( unsigned ind, const std::string &name ) const
+	{
+		DirEntry const *p = entry( ind );
+		if (!p || !p->m_valid) return 0;
+		std::vector<unsigned> siblingsList = get_siblings(p->m_child);
+		for (size_t s=0; s < siblingsList.size(); s++)
+		{
+			p  = entry( siblingsList[s] );
+			if (!p) continue;
+			if (p->name()==name)
+				return siblingsList[s];
+		}
+		return 0;
+	}
+	/** returns the list of ind substream */
+	std::vector<std::string> getSubStreamList(unsigned ind=0, bool retrieveAll=false)
+	{
+		std::vector<std::string> res;
+		std::set<unsigned> seens;
+		getSubStreamList(ind, retrieveAll, "", res, seens, true);
+		return res;
+	}
+	/** tries to read the different entries */
 	void load( unsigned char *buffer, unsigned len );
+
+	// write part:
+	//! check/update so that the sibling are store with a red black tree
+	void setInRedBlackTreeForm()
+	{
+		std::set<unsigned> seens;
+		setInRedBlackTreeForm(0, seens);
+	}
+	//! return space required to save a dir entry
+	unsigned saveSize() const
+	{
+		unsigned cnt = count();
+		cnt = 4*((cnt+3)/4);
+		return cnt*DirEntry::saveSize();
+	}
+	//! save the list of direntry in buffer
+	void save( unsigned char *buffer ) const
+	{
+		unsigned entrySize=DirEntry::saveSize();
+		size_t cnt = count();
+		for (size_t i = 0; i < cnt; i++)
+			m_entries[i].save(buffer+entrySize*i);
+		if ((cnt%4)==0) return;
+		DirEntry empty;
+		while (cnt%4)
+			empty.save(buffer+entrySize*cnt++);
+	}
+protected:
+	//! returns a list of siblings corresponding to a node
+	std::vector<unsigned> get_siblings(unsigned ind) const
+	{
+		std::set<unsigned> seens;
+		get_siblings(ind, seens);
+		return std::vector<unsigned>(seens.begin(), seens.end());
+	}
+	//! constructs the list of siblings ( by filling the seens set )
+	void get_siblings(unsigned ind, std::set<unsigned> &seens) const
+	{
+		if (seens.find(ind) != seens.end())
+			return;
+		seens.insert(ind);
+		DirEntry const *e = entry( ind );
+		if (!e) return;
+		unsigned cnt = count();
+		if (e->m_left>0&& e->m_left < cnt)
+			get_siblings(e->m_left, seens);
+		if (e->m_right>0 && e->m_right < cnt)
+			get_siblings(e->m_right, seens);
+	}
+	/** returns a substream list */
+	void getSubStreamList(unsigned ind, bool all, const std::string &prefix,
+	                      std::vector<std::string> &res, std::set<unsigned> &seen,
+	                      bool isRoot=false) const;
+
+	/** check that the subtrees of index is a red black tree, if not rebuild it */
+	void setInRedBlackTreeForm(unsigned id, std::set<unsigned> &seen);
+	/** rebuild all the childs m_left, m_right index as a red black
+		tree, returns the root index.
+
+		\note: this function supposes that the childs list is already sorted
+	*/
+	unsigned setInRBTForm(std::vector<unsigned> const &childList,
+	                      unsigned firstInd, unsigned lastInd,
+	                      unsigned height);
+
+	/** a comparaison funcion of DirTree used to sort the entry by name */
+	struct CompareEntryName
+	{
+		//! constructor
+		CompareEntryName(DirTree &tree) : m_tree(tree)
+		{
+		}
+		//! comparaison function
+		bool operator()(unsigned ind1, unsigned ind2) const
+		{
+			DirEntry const *e1=m_tree.entry(ind1);
+			DirEntry const *e2=m_tree.entry(ind2);
+			if (!e1 && !e2) return false;
+			if (!e1) return true;
+			if (!e2) return false;
+			std::string name1(e1->name()), name2(e2->name());
+			size_t len1=name1.length();
+			size_t len2=name2.length();
+			if (len1 != len2) return len1 < len2;
+			for (size_t c=0; c < len1; c++)
+			{
+				if (std::tolower(name1[c]) != std::tolower(name2[c]))
+					return std::tolower(name1[c]) < std::tolower(name2[c]);
+			}
+			return ind1 < ind2;
+		}
+
+		//! the main tree
+		DirTree &m_tree;
+	};
+
 private:
-	std::vector<DirEntry> entries;
+	std::vector<DirEntry> m_entries;
 	DirTree( const DirTree & );
 	DirTree &operator=( const DirTree & );
 };
@@ -286,7 +439,7 @@ public:
 	int result;               // result of operation
 
 	Header m_header;           // storage header
-	DirTree *dirtree;         // directory tree
+	DirTree m_dirtree;         // directory tree
 	AllocTable m_bbat;         // allocation table for big blocks
 	AllocTable m_sbat;         // allocation table for small blocks
 
@@ -531,41 +684,38 @@ void libwpd::DirEntry::save( unsigned char *buffer ) const
 }
 // =========== DirTree ==========
 
-libwpd::DirTree::DirTree() :
-	entries()
-{
-	clear();
-}
-
 void libwpd::DirTree::clear()
 {
-	// leave only root entry
-	entries.resize( 1 );
-	entries[0]=DirEntry();
-	entries[0].m_valid = true;
-	entries[0].setName("Root Entry");
-	entries[0].m_type = 5;
+	m_entries.resize( 0 );
+	setRootType(true);
 }
 
-unsigned libwpd::DirTree::entryCount()
+void libwpd::DirTree::setRootType(bool pc)
 {
-	return (unsigned)entries.size();
+	if (!m_entries.size())
+	{
+		m_entries.resize( 1 );
+		m_entries[0]=DirEntry();
+		m_entries[0].m_valid = true;
+		m_entries[0].setName("Root Entry");
+		m_entries[0].m_type = 5;
+	}
+	if (pc)
+		m_entries[0].setName("Root Entry");
+	else
+	{
+		m_entries[0].setName("R");
+		m_entries[0].m_macRootEntry = true;
+	}
 }
 
-libwpd::DirEntry *libwpd::DirTree::entry( unsigned index )
-{
-	if( index >= entryCount() ) return (libwpd::DirEntry *) 0;
-	return &entries[ index ];
-}
-
-// given a fullname (e.g "/ObjectPool/_1020961869"), find the entry
-libwpd::DirEntry *libwpd::DirTree::entry( const std::string &name )
+unsigned libwpd::DirTree::index( const std::string &name, bool create )
 {
 
-	if( !name.length() ) return (libwpd::DirEntry *)0;
+	if( name.length()==0 ) return NotFound;
 
 	// quick check for "/" (that's root)
-	if( name == "/" ) return entry( 0 );
+	if( name == "/" ) return 0;
 
 	// split the names, e.g  "/ObjectPool/_1020961869" will become:
 	// "ObjectPool" and "_1020961869"
@@ -581,68 +731,163 @@ libwpd::DirEntry *libwpd::DirTree::entry( const std::string &name )
 	}
 
 	// start from root
-	int index = 0 ;
+	unsigned ind = 0 ;
 
 	// trace one by one
-	std::list<std::string>::iterator it;
+	std::list<std::string>::const_iterator it;
+	size_t depth = 0;
 
-	for( it = names.begin(); it != names.end(); ++it )
+	for( it = names.begin(); it != names.end(); ++it, ++depth)
 	{
-		// dima: performace optimisation of the previous
-		unsigned child = find_child( index, *it );
+		std::string childName(*it);
+		if (childName.length() && childName[0]<32)
+			childName= it->substr(1);
+
+		unsigned child = find_child( ind, childName );
 		// traverse to the child
-		if( child > 0 ) index = child;
-		else return (libwpd::DirEntry *)0;
+		if( child > 0 )
+		{
+			ind = child;
+			continue;
+		}
+		else if( !create ) return NotFound;
+
+		// create a new entry
+		unsigned parent = ind;
+		m_entries.push_back( DirEntry() );
+		ind = count()-1;
+		DirEntry *e = entry( ind );
+		e->m_valid = true;
+		e->setName(*it);
+		e->m_type = depth+1==names.size() ? 2 : 1;
+		// e->m_start = Eof; CHECKME
+		e->m_left = entry(parent)->m_child;
+		entry(parent)->m_child = ind;
 	}
 
-	return entry( index );
-}
-
-static unsigned dirtree_find_sibling( libwpd::DirTree *dirtree, unsigned index, const std::string &name )
-{
-
-	unsigned count = dirtree->entryCount();
-	libwpd::DirEntry *e = dirtree->entry( index );
-	if (!e || !e->m_valid) return 0;
-	if (e->name() == name) return index;
-
-	if (e->m_right>0 && e->m_right<count)
-	{
-		unsigned r = dirtree_find_sibling( dirtree, e->m_right, name );
-		if (r>0) return r;
-	}
-
-	if (e->m_left>0 && e->m_left<count)
-	{
-		unsigned r = dirtree_find_sibling( dirtree, e->m_left, name );
-		if (r>0) return r;
-	}
-
-	return 0;
-}
-
-unsigned libwpd::DirTree::find_child( unsigned index, const std::string &name )
-{
-
-	unsigned count = entryCount();
-	libwpd::DirEntry *p = entry( index );
-	if (p && p->m_valid && p->m_child < count )
-		return dirtree_find_sibling( this, p->m_child, name );
-
-	return 0;
+	return ind;
 }
 
 void libwpd::DirTree::load( unsigned char *buffer, unsigned size )
 {
-	entries.clear();
+	m_entries.clear();
 
 	for( unsigned i = 0; i < size/128; i++ )
 	{
 		DirEntry e;
 		e.load(buffer+i*128, 128);
-		entries.push_back( e );
+		m_entries.push_back( e );
 	}
 }
+
+void libwpd::DirTree::getSubStreamList(unsigned ind, bool all, const std::string &prefix,
+                                       std::vector<std::string> &res,
+                                       std::set<unsigned> &seen,
+                                       bool isRoot) const
+{
+	if (seen.find(ind) != seen.end())
+		return;
+	seen.insert(ind);
+	unsigned cnt = count();
+	DirEntry const *p = entry( ind );
+	if (!p || !p->m_valid)
+		return;
+	std::string name(prefix);
+	if (ind && !isRoot)
+	{
+		if (p->filename().length())
+			name+= p->filename();
+		else
+			return;
+	}
+	if (!p->is_dir())
+	{
+		res.push_back(name);
+		return;
+	}
+	if (ind)
+		name += "/";
+	if (all)
+	{
+		if (ind)
+			res.push_back(name);
+		else
+			res.push_back("/");
+	}
+	if (p->m_child >= cnt)
+		return;
+	std::vector<unsigned> siblings=get_siblings(p->m_child);
+	for (size_t s=0; s < siblings.size(); s++)
+		getSubStreamList(siblings[s], all, name, res, seen);
+}
+
+void libwpd::DirTree::setInRedBlackTreeForm(unsigned ind, std::set<unsigned> &seen)
+{
+	if (seen.find(ind) != seen.end())
+		return;
+	seen.insert(ind);
+
+	DirEntry *p = entry( ind );
+	if (!p || !p->m_valid)
+		return;
+
+	p->m_colour=1; // set all nodes blacks
+	std::vector<unsigned> childs=get_siblings(p->m_child);
+	size_t numChild=childs.size();
+	for (size_t s=0; s < numChild; s++)
+		setInRedBlackTreeForm(childs[s], seen);
+	if (numChild <= 1)
+		return;
+	CompareEntryName compare(*this);
+	std::set<unsigned,CompareEntryName> set(childs.begin(),childs.end(),compare);
+	std::vector<unsigned> sortedChilds(set.begin(), set.end());
+	if (sortedChilds.size() != numChild)
+	{
+		WPD_DEBUG_MSG(("DirTree::setInRedBlackTreeForm: OOPS pb with numChild\n"));
+		return;
+	}
+	unsigned h=1;
+	unsigned hNumChild=1;
+	while (2*hNumChild+1<=numChild)
+	{
+		hNumChild=2*hNumChild+1;
+		h++;
+	}
+	p->m_child=setInRBTForm(sortedChilds, 0, unsigned(numChild-1), h);
+}
+
+unsigned libwpd::DirTree::setInRBTForm(std::vector<unsigned> const &childs,
+                                       unsigned firstInd, unsigned lastInd,
+                                       unsigned height)
+{
+	unsigned middle = (firstInd+lastInd)/2;
+	unsigned ind=childs[middle];
+	DirEntry *p = entry( ind );
+	if (!p)
+	{
+		WPD_DEBUG_MSG(("DirTree::setInRedBlackTreeForm: OOPS can not find tree to modified\n"));
+		GenericException();
+	}
+	unsigned newH = height==0 ? 0 : height-1;
+	if (height==0)
+	{
+		p->m_colour = 0;
+		if (firstInd!=middle || lastInd!=middle)
+		{
+			WPD_DEBUG_MSG(("DirTree::setInRedBlackTreeForm: OOPS problem setting RedBlack colour\n"));
+		}
+	}
+	if (firstInd!=middle)
+		p->m_left=setInRBTForm(childs, firstInd,unsigned(middle-1),newH);
+	else
+		p->m_left=DirEntry::End;
+	if (lastInd!=middle)
+		p->m_right=setInRBTForm(childs, unsigned(middle+1),lastInd,newH);
+	else
+		p->m_right=DirEntry::End;
+	return ind;
+}
+
 
 // =========== StorageIO ==========
 
@@ -651,7 +896,7 @@ libwpd::StorageIO::StorageIO( libwpd::Storage *st, WPXInputStream *is ) :
 	input( is ),
 	result(libwpd::Storage::Ok),
 	m_header(),
-	dirtree(new libwpd::DirTree()),
+	m_dirtree(),
 	m_bbat(), m_sbat(), sb_blocks()
 {
 	m_bbat.m_blockSize = 1 << m_header.m_shift_bbat;
@@ -660,7 +905,6 @@ libwpd::StorageIO::StorageIO( libwpd::Storage *st, WPXInputStream *is ) :
 
 libwpd::StorageIO::~StorageIO()
 {
-	delete dirtree;
 }
 
 bool libwpd::StorageIO::isOLEStream()
@@ -746,7 +990,7 @@ void libwpd::StorageIO::load()
 	blocks = m_bbat.follow( m_header.m_start_dirent );
 	std::vector<unsigned char> buffer(blocks.size()*m_bbat.m_blockSize);
 	loadBigBlocks( blocks, &buffer[0], buffer.size() );
-	dirtree->load( &buffer[0], (unsigned)buffer.size() );
+	m_dirtree.load( &buffer[0], (unsigned)buffer.size() );
 	unsigned sb_start = readU32( &buffer[0x74] );
 
 	// fetch block chain as data for small-files
@@ -764,7 +1008,7 @@ libwpd::StreamIO *libwpd::StorageIO::streamIO( const std::string &name )
 	if( !name.length() ) return (libwpd::StreamIO *)0;
 
 	// search in the entries
-	libwpd::DirEntry *entry = dirtree->entry( name );
+	libwpd::DirEntry *entry = m_dirtree.entry( name );
 	if( !entry ) return (libwpd::StreamIO *)0;
 	if( entry->is_dir() ) return (libwpd::StreamIO *)0;
 
@@ -775,7 +1019,7 @@ libwpd::StreamIO *libwpd::StorageIO::streamIO( const std::string &name )
 }
 
 unsigned long libwpd::StorageIO::loadBigBlocks( std::vector<unsigned long> blocks,
-unsigned char *data, unsigned long maxlen )
+        unsigned char *data, unsigned long maxlen )
 {
 	// sentinel
 	if( !data ) return 0;
@@ -801,7 +1045,7 @@ unsigned char *data, unsigned long maxlen )
 }
 
 unsigned long libwpd::StorageIO::loadBigBlock( unsigned long block,
-unsigned char *data, unsigned long maxlen )
+        unsigned char *data, unsigned long maxlen )
 {
 	// sentinel
 	if( !data ) return 0;
@@ -816,7 +1060,7 @@ unsigned char *data, unsigned long maxlen )
 
 // return number of bytes which has been read
 unsigned long libwpd::StorageIO::loadSmallBlocks( std::vector<unsigned long> blocks,
-unsigned char *data, unsigned long maxlen )
+        unsigned char *data, unsigned long maxlen )
 {
 	// sentinel
 	if( !data ) return 0;
@@ -851,7 +1095,7 @@ unsigned char *data, unsigned long maxlen )
 }
 
 unsigned long libwpd::StorageIO::loadSmallBlock( unsigned long block,
-unsigned char *data, unsigned long maxlen )
+        unsigned char *data, unsigned long maxlen )
 {
 	// sentinel
 	if( !data ) return 0;
