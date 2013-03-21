@@ -501,8 +501,6 @@ public:
 
 	unsigned long loadSmallBlock( unsigned long block, unsigned char *buffer, unsigned long maxlen );
 
-	StreamIO *streamIO( const std::string &name );
-
 protected:
 	bool m_isLoad;
 private:
@@ -512,37 +510,50 @@ private:
 
 };
 
-class StreamIO
+class IStream
 {
 public:
-	IStorage *io;
-	DirEntry *entry;
-	std::string fullName;
-	bool eof;
-	bool fail;
+	IStorage *m_io;
+	//! the stream size
+	unsigned long m_size;
+	std::string m_name;
 
-	StreamIO( IStorage *io, DirEntry *entry );
-	~StreamIO();
-	unsigned long size();
-	unsigned long tell();
-	unsigned long read( unsigned char *data, unsigned long maxlen );
+	IStream( IStorage *io, std::string const &name );
+	~IStream()
+	{
+	}
+	unsigned long size() const
+	{
+		return m_size;
+	}
+	unsigned long tell() const
+	{
+		return m_pos;
+	}
+	unsigned long read( unsigned char *data, unsigned long maxlen )
+	{
+		unsigned long bytes = read( tell(), data, maxlen );
+		m_pos += bytes;
+		return bytes;
+	}
+
 	unsigned long read( unsigned long pos, unsigned char *data, unsigned long maxlen );
 
 
 private:
-	std::vector<unsigned long> blocks;
+	std::vector<unsigned long> m_blocks;
 
 	// no copy or assign
-	StreamIO( const StreamIO & );
-	StreamIO &operator=( const StreamIO & );
+	IStream( const IStream & );
+	IStream &operator=( const IStream & );
 
 	// pointer for read
 	unsigned long m_pos;
 
 	// simple cache system to speed-up getch()
-	std::vector<unsigned char> cache_data;
-	unsigned long cache_size;
-	unsigned long cache_pos;
+	std::vector<unsigned char> m_cache_data;
+	unsigned long m_cache_size;
+	unsigned long m_cache_pos;
 	void updateCache();
 };
 
@@ -1057,24 +1068,6 @@ void libwpd::IStorage::load()
 	m_result = libwpd::Storage::Ok;
 }
 
-libwpd::StreamIO *libwpd::IStorage::streamIO( const std::string &name )
-{
-	load();
-
-	// sanity check
-	if( !name.length() ) return (libwpd::StreamIO *)0;
-
-	// search in the entries
-	libwpd::DirEntry *ent = m_dirtree.entry( name );
-	if( !ent ) return (libwpd::StreamIO *)0;
-	if( ent->is_dir() ) return (libwpd::StreamIO *)0;
-
-	libwpd::StreamIO *res = new libwpd::StreamIO( this, ent );
-	res->fullName = name;
-
-	return res;
-}
-
 unsigned long libwpd::IStorage::loadBigBlocks( std::vector<unsigned long> const &blocks,
         unsigned char *data, unsigned long maxlen )
 {
@@ -1163,62 +1156,56 @@ unsigned long libwpd::IStorage::loadSmallBlock( unsigned long block,
 	return loadSmallBlocks( blocks, data, maxlen );
 }
 
-// =========== StreamIO ==========
+// =========== IStream ==========
 
-libwpd::StreamIO::StreamIO( libwpd::IStorage *s, libwpd::DirEntry *e) :
-	io(s),
-	entry(e),
-	fullName(),
-	eof(false),
-	fail(false),
-	blocks(),
+libwpd::IStream::IStream( libwpd::IStorage *s, std::string const &name) :
+	m_io(s),
+	m_size(0),
+	m_name(name),
+	m_blocks(),
 	m_pos(0),
-	cache_data(),
-	cache_size(4096),
-	cache_pos(0)
+	m_cache_data(),
+	m_cache_size(4096),
+	m_cache_pos(0)
 {
-	if( io->use_big_block_for(entry->m_size) )
-		blocks = io->m_bbat.follow( entry->m_start );
+	if( !name.length() || !m_io) return;
+	m_io->load();
+	DirEntry *entry = m_io->entry( name );
+	if (!entry || entry->is_dir()) return;
+	m_size = entry->m_size;
+
+	if( m_io->use_big_block_for(entry->m_size) )
+		m_blocks = m_io->m_bbat.follow( entry->m_start );
 	else
-		blocks = io->m_sbat.follow( entry->m_start );
+		m_blocks = m_io->m_sbat.follow( entry->m_start );
 
 	// prepare cache
-	cache_data = std::vector<unsigned char>(cache_size);
+	m_cache_data = std::vector<unsigned char>(m_cache_size);
 	updateCache();
 }
 
-// FIXME tell parent we're gone
-libwpd::StreamIO::~StreamIO()
-{
-}
-
-unsigned long libwpd::StreamIO::tell()
-{
-	return m_pos;
-}
-
-unsigned long libwpd::StreamIO::read( unsigned long pos, unsigned char *data, unsigned long maxlen )
+unsigned long libwpd::IStream::read( unsigned long pos, unsigned char *data, unsigned long maxlen )
 {
 	// sanity checks
-	if( !data ) return 0;
-	if( maxlen == 0 ) return 0;
+	if( !data || maxlen == 0 || !m_io || !m_size) return 0;
 
 	unsigned long totalbytes = 0;
 
-	if ( !io->use_big_block_for(entry->m_size) )
+	if ( !m_io->use_big_block_for(size()) )
 	{
 		// small file
-		unsigned long index = pos / io->m_sbat.m_blockSize;
+		unsigned sBlockSize = m_io->m_sbat.m_blockSize;
+		unsigned long index = pos / sBlockSize;
 
-		if( index >= blocks.size() ) return 0;
+		if( index >= m_blocks.size() ) return 0;
 
-		std::vector<unsigned char> buf( io->m_sbat.m_blockSize );
-		unsigned long offset = pos % io->m_sbat.m_blockSize;
+		std::vector<unsigned char> buf( sBlockSize );
+		unsigned long offset = pos % sBlockSize;
 		while( totalbytes < maxlen )
 		{
-			if( index >= blocks.size() ) break;
-			io->loadSmallBlock( blocks[index], &buf[0], io->m_bbat.m_blockSize );
-			unsigned long count = io->m_sbat.m_blockSize - offset;
+			if( index >= m_blocks.size() ) break;
+			m_io->loadSmallBlock( m_blocks[index], &buf[0], m_io->m_bbat.m_blockSize );
+			unsigned long count = sBlockSize - offset;
 			if( count > maxlen-totalbytes ) count = maxlen-totalbytes;
 			memcpy( data+totalbytes, &buf[offset], count );
 			totalbytes += count;
@@ -1229,17 +1216,18 @@ unsigned long libwpd::StreamIO::read( unsigned long pos, unsigned char *data, un
 	else
 	{
 		// big file
-		unsigned long index = pos / io->m_bbat.m_blockSize;
+		unsigned bBlockSize = m_io->m_bbat.m_blockSize;
+		unsigned long index = pos / bBlockSize;
 
-		if( index >= blocks.size() ) return 0;
+		if( index >= m_blocks.size() ) return 0;
 
-		std::vector<unsigned char> buf( io->m_bbat.m_blockSize );
-		unsigned long offset = pos % io->m_bbat.m_blockSize;
+		std::vector<unsigned char> buf( bBlockSize );
+		unsigned long offset = pos % bBlockSize;
 		while( totalbytes < maxlen )
 		{
-			if( index >= blocks.size() ) break;
-			io->loadBigBlock( blocks[index], &buf[0], io->m_bbat.m_blockSize );
-			unsigned long count = io->m_bbat.m_blockSize - offset;
+			if( index >= m_blocks.size() ) break;
+			m_io->loadBigBlock( m_blocks[index], &buf[0], bBlockSize );
+			unsigned long count = bBlockSize - offset;
 			if( count > maxlen-totalbytes ) count = maxlen-totalbytes;
 			memcpy( data+totalbytes, &buf[offset], count );
 			totalbytes += count;
@@ -1251,22 +1239,15 @@ unsigned long libwpd::StreamIO::read( unsigned long pos, unsigned char *data, un
 	return totalbytes;
 }
 
-unsigned long libwpd::StreamIO::read( unsigned char *data, unsigned long maxlen )
-{
-	unsigned long bytes = read( tell(), data, maxlen );
-	m_pos += bytes;
-	return bytes;
-}
-
-void libwpd::StreamIO::updateCache()
+void libwpd::IStream::updateCache()
 {
 	// sanity check
-	if( cache_data.empty() ) return;
+	if( m_cache_data.empty() ) return;
 
-	cache_pos = m_pos - ( m_pos % cache_size );
-	unsigned long bytes = cache_size;
-	if( cache_pos + bytes > entry->m_size ) bytes = entry->m_size - cache_pos;
-	cache_size = read( cache_pos, &cache_data[0], bytes );
+	m_cache_pos = m_pos - ( m_pos % m_cache_size );
+	unsigned long bytes = m_cache_size;
+	if( m_cache_pos + bytes > size() ) bytes = size() - m_cache_pos;
+	m_cache_size = read( m_cache_pos, &m_cache_data[0], bytes );
 }
 
 
@@ -1296,19 +1277,20 @@ bool libwpd::Storage::isOLEStream()
 // =========== Stream ==========
 
 libwpd::Stream::Stream( libwpd::Storage *storage, const std::string &name ) :
-	io(storage->io->streamIO( name ))
+	io(0)
 {
+	io = new libwpd::IStream(storage->io, name);
 }
 
 // FIXME tell parent we're gone
 libwpd::Stream::~Stream()
 {
-	delete io;
+	if (io) delete io;
 }
 
 unsigned long libwpd::Stream::size()
 {
-	return io ? io->entry->m_size : 0;
+	return io ? io->size() : 0;
 }
 
 unsigned long libwpd::Stream::read( unsigned char *data, unsigned long maxlen )

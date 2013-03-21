@@ -42,7 +42,7 @@ namespace libwpd
 
 class IStorage;
 class Stream;
-class StreamIO;
+class IStream;
 
 class Storage
 {
@@ -110,7 +110,7 @@ public:
 	unsigned long read( unsigned char *data, unsigned long maxlen );
 
 private:
-	StreamIO *io;
+	IStream *io;
 
 	// no copy or assign
 	Stream( const Stream & );
