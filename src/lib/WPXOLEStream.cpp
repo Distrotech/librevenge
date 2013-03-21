@@ -938,7 +938,7 @@ unsigned libwpd::DirTree::setInRBTForm(std::vector<unsigned> const &childs,
 libwpd::IStorage::IStorage( WPXInputStream *is ) :
 	m_input( is ),
 	m_result(libwpd::Storage::Ok),
-	m_header(),
+	m_header(), m_dirtree(),
 	m_bbat(), m_sbat(), m_sb_blocks(),
 	m_isLoad(false)
 {
