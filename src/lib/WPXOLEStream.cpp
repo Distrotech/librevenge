@@ -510,10 +510,147 @@ private:
 
 };
 
+class OStorage
+{
+public:
+	//! constructor
+	OStorage(unsigned long minSize=0) : m_header(), m_dirtree(), m_bbat(), m_num_bbat(0), m_sbat(), m_num_sbat(0), m_sb_blocks(), m_data()
+	{
+		// update data to contain at least, header
+		m_data.resize(minSize>512 ? minSize : 512);
+	}
+	//! destructor
+	~OStorage() { }
+
+	//! function to retrieve the list of actual direntry
+	std::vector<std::string> getSubStreamList(unsigned ind=0, bool all=false)
+	{
+		return m_dirtree.getSubStreamList(ind, all);
+	}
+	/** set the OLE revision */
+	void setRevision(unsigned rev)
+	{
+		m_header.m_revision=rev;
+	}
+	//! set the root to a mac/pc root */
+	void setRootType(bool pc)
+	{
+		m_dirtree.setRootType(pc);
+	}
+	//! add a new stream knowing its data
+	bool addStream(std::string const &name, unsigned char const *buffer, unsigned long len);
+	//! add a new directory (usefull to create empty leaf dir )
+	bool addDirectory(std::string const &dir);
+	//! set a node information
+	void setInformation(std::string const &name, DirInfo const &info)
+	{
+		DirEntry *e = m_dirtree.entry(name);
+		if (!e)
+		{
+			WPD_DEBUG_MSG(("libwpdOLE::OStorage::setInformation: can not find entry %s!!!\n", name.c_str()));
+			return;
+		}
+		e->m_info = info;
+	}
+	//! try to return in data the contain of the file
+	bool getFileData(std::vector<unsigned char> &data)
+	{
+		try
+		{
+			if (!updateToSave())
+				return false;
+			data = m_data;
+		}
+		catch (...)
+		{
+			return false;
+		}
+		return true;
+	}
+
+protected:
+	//! add stream data in a file, returns the first index
+	unsigned insertData(unsigned char const *buffer, unsigned long len, bool useBigBlock, unsigned end=Eof);
+
+	//! return true if we need to use big block
+	bool useBigBlockFor(unsigned long size) const
+	{
+		return size >= m_header.m_threshold;
+	}
+	//! returns the maximum size of a big/small block
+	unsigned long getMaximumSize(bool isBig) const
+	{
+		return isBig ? 512 : 64;
+	}
+	//! returns the address of a big/small block
+	size_t getDataAddress(unsigned block, bool isBig) const
+	{
+		if (isBig) return size_t((block+1)*512);
+		size_t bId=size_t(block/8);
+		if (bId >= m_sb_blocks.size()) throw GenericException();
+		return size_t((m_sb_blocks[bId]+1)*512+64*(block%8));
+	}
+
+	//! create a new big block, resize m_data; ... and return is identifier
+	unsigned newBBlock()
+	{
+		unsigned res = m_num_bbat++;
+		if (m_data.size() < (res+2)*512) m_data.resize((res+2)*512, 0);
+		m_bbat.resize(res+1);
+		return res;
+	}
+	//! create a new small block, ... and returns is identifier
+	unsigned newSBlock()
+	{
+		unsigned res = m_num_sbat++;
+		if ((res%8)==0)
+			m_sb_blocks.push_back(newBBlock());
+		m_sbat.resize(res+1);
+		return res;
+	}
+
+	//! return a new dir entry, if it does not exists
+	DirEntry *createEntry(std::string const &name)
+	{
+		if (name.length()==0)
+		{
+			WPD_DEBUG_MSG(("libwpdOLE::OStorage::createEntry: called with no name\n"));
+			return 0;
+		}
+		if (m_dirtree.index(name)!=NotFound)
+		{
+			WPD_DEBUG_MSG(("libwpdOLE::OStorage::createEntry: entry %s already exists\n", name.c_str()));
+			return 0;
+		}
+		unsigned index = m_dirtree.index(name,true);
+		if (index == NotFound) return 0;
+
+		return m_dirtree.entry(index);
+	}
+
+	//! finish to update the file ( note: it is better to call this function only one time )
+	bool updateToSave();
+
+	Header m_header;           // storage header
+	DirTree m_dirtree;         // directory tree
+	AllocTable m_bbat;         // allocation table for big blocks
+	unsigned m_num_bbat;       // the number of bbat
+	AllocTable m_sbat;         // allocation table for small blocks
+	unsigned m_num_sbat;       // the number of sbat
+
+	std::vector<unsigned long> m_sb_blocks; // blocks for "small" files
+
+	std::vector<unsigned char> m_data;
+private:
+	// no copy or assign
+	OStorage( const OStorage & );
+	OStorage &operator=( const OStorage & );
+};
+
 class IStream
 {
 public:
-	IStorage *m_io;
+	IStorage *m_iStorage;
 	//! the stream size
 	unsigned long m_size;
 	std::string m_name;
@@ -532,13 +669,24 @@ public:
 	}
 	unsigned long read( unsigned char *data, unsigned long maxlen )
 	{
-		unsigned long bytes = read( tell(), data, maxlen );
+		if (!m_size)
+			return 0;
+		unsigned long bytes;
+		if (m_data.size())
+			bytes = readData( tell(), data, maxlen );
+		else
+			bytes = readUsingStorage( tell(), data, maxlen );
 		m_pos += bytes;
 		return bytes;
 	}
 
-	unsigned long read( unsigned long pos, unsigned char *data, unsigned long maxlen );
-
+protected:
+	//! create the data corresponding to a directory
+	bool createOleFromDirectory( IStorage *io, std::string const &name );
+	//! try to read maxlen data using m_iStorage
+	unsigned long readUsingStorage( unsigned long pos, unsigned char *data, unsigned long maxlen );
+	//! try to read maxlen data using m_data
+	unsigned long readData( unsigned long pos, unsigned char *data, unsigned long maxlen );
 
 private:
 	std::vector<unsigned long> m_blocks;
@@ -550,11 +698,8 @@ private:
 	// pointer for read
 	unsigned long m_pos;
 
-	// simple cache system to speed-up getch()
-	std::vector<unsigned char> m_cache_data;
-	unsigned long m_cache_size;
-	unsigned long m_cache_pos;
-	void updateCache();
+	// a copy of the data when the entry came for OStorage
+	std::vector<unsigned char> m_data;
 };
 
 } // namespace libwpd
@@ -1084,7 +1229,7 @@ unsigned long libwpd::IStorage::loadBigBlocks( std::vector<unsigned long> const 
 		unsigned long pos =  m_bbat.m_blockSize * ( block+1 );
 		unsigned long p = (m_bbat.m_blockSize < maxlen-bytes) ? m_bbat.m_blockSize : maxlen-bytes;
 
-		m_input->seek(pos, WPX_SEEK_SET);
+		m_input->seek(long(pos), WPX_SEEK_SET);
 		unsigned long numBytesRead = 0;
 		const unsigned char *buf = m_input->read(p, numBytesRead);
 		memcpy(data+bytes, buf, numBytesRead);
@@ -1156,45 +1301,221 @@ unsigned long libwpd::IStorage::loadSmallBlock( unsigned long block,
 	return loadSmallBlocks( blocks, data, maxlen );
 }
 
+// =========== OStorage ==========
+bool libwpd::OStorage::addDirectory(std::string const &dir)
+{
+	DirEntry *e=createEntry(dir);
+	if (!e) return false;
+
+	e->m_type=1;
+	return true;
+}
+
+bool libwpd::OStorage::addStream(std::string const &name, unsigned char const *buffer, unsigned long len)
+{
+	DirEntry *e=createEntry(name);
+	if (!e) return false;
+
+	if (!len)
+	{
+		WPD_DEBUG_MSG(("libwpdOLE::OStorage::addStream: call to create an empty file!!!\n"));
+		return true;
+	}
+	e->m_start = insertData(buffer, len, useBigBlockFor(len));
+	e->m_size = len;
+	return true;
+}
+
+bool libwpd::OStorage::updateToSave()
+{
+	unsigned long dirSize = m_dirtree.saveSize();
+	DirEntry *rEntry = m_dirtree.entry(0);
+	if (!dirSize || !rEntry)
+	{
+		WPD_DEBUG_MSG(("libwpdOLE::OStorage::updateToSave: can not find dir tree size!!!\n"));
+		return false;
+	}
+	m_dirtree.setInRedBlackTreeForm();
+
+	std::vector<unsigned char> buffer;
+	// first add the small block allocation table
+	unsigned long sbatSize = m_sbat.saveSize();
+	if (!sbatSize)
+		m_header.m_start_sbat = Bat;
+	else
+	{
+		// FIXME: set m_header.m_start_sbat
+		buffer.resize(sbatSize);
+		m_sbat.save(&buffer[0]);
+		m_header.m_num_sbat = (unsigned) (sbatSize+511)/512;
+		m_header.m_start_sbat = insertData(&buffer[0], sbatSize, true, unsigned(Eof));
+		if (m_sb_blocks.size())
+		{
+			rEntry->m_start =(unsigned) m_sb_blocks[0];
+			m_bbat.setChain(m_sb_blocks, unsigned(Eof));
+		}
+		rEntry->m_size = 64*m_num_sbat;
+	}
+	// then add dirtree
+	buffer.resize(dirSize);
+	m_dirtree.save(&buffer[0]);
+	m_header.m_start_dirent=insertData(&buffer[0], dirSize, true, unsigned(Eof));
+
+	// now update the big alloc table to add size for self and for the meta data
+	unsigned numBBlock = m_num_bbat;
+	if (numBBlock==0)
+	{
+		WPD_DEBUG_MSG(("libwpdOLE::OStorage::updateToSave: can not find any big block!!!\n"));
+		return false;
+	}
+	unsigned numBAlloc = (numBBlock+127)/128;
+	unsigned numMAlloc = (numBAlloc+17)/127; // ie. 109->0, 110->1, ...
+	while (numBBlock+numBAlloc+numMAlloc > numBAlloc*128)
+	{
+		numBAlloc++;
+		numMAlloc = (numBAlloc+17)/127;
+	}
+
+	std::vector<unsigned long> mainBlocks(numBAlloc);
+	for (unsigned b = 0; b < numBAlloc; b++)
+	{
+		mainBlocks[b]=numBBlock+b;
+		m_bbat.set(mainBlocks[b], unsigned(Bat));
+	}
+	if (numMAlloc)
+	{
+		for (unsigned b = 0; b < numMAlloc; b++)
+			m_bbat.set(numBBlock+numBAlloc+b, unsigned(MetaBat));
+	}
+
+	// now add the small block allocation table
+	unsigned long bbatSize = m_bbat.saveSize();
+	if (bbatSize)
+	{
+		buffer.resize(bbatSize);
+		m_bbat.save(&buffer[0]);
+		insertData(&buffer[0], bbatSize, true, unsigned(Bat));
+	}
+
+	for (unsigned b = 0; b < numBAlloc; b++)
+	{
+		if (b >= 109)
+			break;
+		m_header.m_blocks_bbat[b]=mainBlocks[b];
+	}
+	if (numMAlloc)
+	{
+		buffer.resize(numMAlloc*512,0);
+		size_t wPos=0;
+		for (unsigned b=109; b < numBAlloc; b++)
+		{
+			if ((wPos%512)==508)
+			{
+				writeU32(&buffer[wPos],numBBlock+numBAlloc+(wPos+4)/512);
+				wPos+=4;
+			}
+			writeU32(&buffer[wPos],mainBlocks[b]);
+			wPos+=4;
+		}
+		while (wPos%512)
+		{
+			writeU32(&buffer[wPos], Avail);
+			wPos+=4;
+		}
+		m_header.m_start_mbat = insertData((unsigned char const *)&buffer[0], 512*numMAlloc, true, unsigned(Eof));
+		m_header.m_start_mbat = numBBlock+numBAlloc;
+	}
+	m_header.m_num_bat = (m_num_bbat+127)/128;
+	m_header.m_num_mbat = numMAlloc;
+
+	m_data.resize((m_num_bbat+1)*512,0);
+	// save the header
+	m_header.save(&m_data[0]);
+	return true;
+}
+
+unsigned libwpd::OStorage::insertData(unsigned char const *buffer, unsigned long len, bool useBigBlock, unsigned end)
+{
+	if (buffer==0 || len == 0)
+	{
+		WPD_DEBUG_MSG(("libwpdOLE::OStorage::insertData: call with no data\n"));
+		return 0;
+	}
+
+	unsigned long bSize = getMaximumSize(useBigBlock);
+	size_t nBlock = ((len+bSize-1)/bSize);
+	std::vector<unsigned long> chain;
+	for (size_t b=0; b < nBlock; b++)
+	{
+		unsigned block=useBigBlock ? newBBlock() : newSBlock();
+		chain.push_back(block);
+		size_t wPos = getDataAddress(block, useBigBlock);
+		unsigned long wSize = len > bSize ? bSize : len;
+		memcpy(&m_data[wPos], &buffer[0], wSize);
+		buffer += bSize;
+		len -= wSize;
+	}
+	if (useBigBlock)
+		m_bbat.setChain(chain, end);
+	else
+		m_sbat.setChain(chain, end);
+	return (unsigned) chain[0];
+}
+
 // =========== IStream ==========
 
 libwpd::IStream::IStream( libwpd::IStorage *s, std::string const &name) :
-	m_io(s),
+	m_iStorage(s),
 	m_size(0),
 	m_name(name),
 	m_blocks(),
 	m_pos(0),
-	m_cache_data(),
-	m_cache_size(4096),
-	m_cache_pos(0)
+	m_data()
 {
-	if( !name.length() || !m_io) return;
-	m_io->load();
-	DirEntry *entry = m_io->entry( name );
-	if (!entry || entry->is_dir()) return;
+	if( !name.length() || !m_iStorage) return;
+	m_iStorage->load();
+	DirEntry *entry = m_iStorage->entry( name );
+	if (!entry)
+		return;
+	if (entry->is_dir())
+	{
+		createOleFromDirectory(s, name);
+		return;
+	}
+
 	m_size = entry->m_size;
 
-	if( m_io->use_big_block_for(entry->m_size) )
-		m_blocks = m_io->m_bbat.follow( entry->m_start );
+	if( m_iStorage->use_big_block_for(entry->m_size) )
+		m_blocks = m_iStorage->m_bbat.follow( entry->m_start );
 	else
-		m_blocks = m_io->m_sbat.follow( entry->m_start );
-
-	// prepare cache
-	m_cache_data = std::vector<unsigned char>(m_cache_size);
-	updateCache();
+		m_blocks = m_iStorage->m_sbat.follow( entry->m_start );
 }
 
-unsigned long libwpd::IStream::read( unsigned long pos, unsigned char *data, unsigned long maxlen )
+unsigned long libwpd::IStream::readData( unsigned long pos, unsigned char *data, unsigned long maxlen)
 {
 	// sanity checks
-	if( !data || maxlen == 0 || !m_io || !m_size) return 0;
+	if( !data || maxlen <= 0 || (unsigned long)m_data.size() != m_size || !m_size)
+		return 0;
+
+	if (pos >= m_size)
+		return 0;
+	unsigned long count = m_size - pos;
+	if( count > maxlen ) count = maxlen;
+	memcpy( data, &m_data[size_t(pos)], count );
+	return count;
+}
+
+unsigned long libwpd::IStream::readUsingStorage( unsigned long pos, unsigned char *data, unsigned long maxlen )
+{
+	// sanity checks
+	if( !data || maxlen <= 0 || !m_iStorage || !m_size) return 0;
 
 	unsigned long totalbytes = 0;
 
-	if ( !m_io->use_big_block_for(size()) )
+	if ( !m_iStorage->use_big_block_for(size()) )
 	{
 		// small file
-		unsigned sBlockSize = m_io->m_sbat.m_blockSize;
+		unsigned sBlockSize = m_iStorage->m_sbat.m_blockSize;
 		unsigned long index = pos / sBlockSize;
 
 		if( index >= m_blocks.size() ) return 0;
@@ -1204,7 +1525,7 @@ unsigned long libwpd::IStream::read( unsigned long pos, unsigned char *data, uns
 		while( totalbytes < maxlen )
 		{
 			if( index >= m_blocks.size() ) break;
-			m_io->loadSmallBlock( m_blocks[index], &buf[0], m_io->m_bbat.m_blockSize );
+			m_iStorage->loadSmallBlock( m_blocks[index], &buf[0], m_iStorage->m_bbat.m_blockSize );
 			unsigned long count = sBlockSize - offset;
 			if( count > maxlen-totalbytes ) count = maxlen-totalbytes;
 			memcpy( data+totalbytes, &buf[offset], count );
@@ -1216,7 +1537,7 @@ unsigned long libwpd::IStream::read( unsigned long pos, unsigned char *data, uns
 	else
 	{
 		// big file
-		unsigned bBlockSize = m_io->m_bbat.m_blockSize;
+		unsigned bBlockSize = m_iStorage->m_bbat.m_blockSize;
 		unsigned long index = pos / bBlockSize;
 
 		if( index >= m_blocks.size() ) return 0;
@@ -1226,7 +1547,7 @@ unsigned long libwpd::IStream::read( unsigned long pos, unsigned char *data, uns
 		while( totalbytes < maxlen )
 		{
 			if( index >= m_blocks.size() ) break;
-			m_io->loadBigBlock( m_blocks[index], &buf[0], bBlockSize );
+			m_iStorage->loadBigBlock( m_blocks[index], &buf[0], bBlockSize );
 			unsigned long count = bBlockSize - offset;
 			if( count > maxlen-totalbytes ) count = maxlen-totalbytes;
 			memcpy( data+totalbytes, &buf[offset], count );
@@ -1239,17 +1560,104 @@ unsigned long libwpd::IStream::read( unsigned long pos, unsigned char *data, uns
 	return totalbytes;
 }
 
-void libwpd::IStream::updateCache()
+bool libwpd::IStream::createOleFromDirectory( IStorage *io, std::string const &name )
 {
-	// sanity check
-	if( m_cache_data.empty() ) return;
+	// sanety check
+	if( !name.length() || !io) return false;
+	m_iStorage->load();
+	DirEntry *entry = io->entry( name );
+	if (!entry || !entry->is_dir()) return false;
 
-	m_cache_pos = m_pos - ( m_pos % m_cache_size );
-	unsigned long bytes = m_cache_size;
-	if( m_cache_pos + bytes > size() ) bytes = size() - m_cache_pos;
-	m_cache_size = read( m_cache_pos, &m_cache_data[0], bytes );
+	unsigned index = io->index(name);
+	if (index==libwpd::NotFound)  return false;
+	std::vector<std::string> nodes=io->getSubStreamList(index, true);
+	if (nodes.size() <= 1)
+	{
+		WPD_DEBUG_MSG(("libwpd::IStream::createOleFromDirectory: can not find any child for %s\n", name.c_str()));
+		return false;
+	}
+	try
+	{
+		std::string dir(name);
+		size_t len=dir.length();
+		if (len && dir[len-1]=='/') dir.resize(len-1);
+		std::vector<unsigned char> buffer;
+
+		// try to compute a minimum data size
+		unsigned long minimalSize = 0;
+		for (size_t l=0; l < nodes.size(); l++)
+		{
+			std::string fullName=dir+nodes[l];
+			entry=io->entry(fullName);
+			if (!entry || !entry->m_valid)
+				continue;
+			minimalSize += 128; // DirEntry
+			if (!entry->is_dir() && entry->m_size < 50000000)
+				minimalSize+=((entry->m_size+63)/64)*64;
+		}
+
+		libwpd::OStorage storage(minimalSize);
+		storage.setRevision(io->revision());
+		if (!io->hasRootTypePc())
+			storage.setRootType(false);
+		for (size_t l=0; l < nodes.size(); l++)
+		{
+			std::string fullName=dir+nodes[l];
+			entry=io->entry(fullName);
+			if (!entry)
+			{
+				WPD_DEBUG_MSG(("libwpd::IStream::createOleFromDirectory: can not find child for %s\n", fullName.c_str()));
+				continue;
+			}
+			if (entry->is_dir())
+			{
+				if (entry->m_child == libwpd::DirEntry::End)
+					storage.addDirectory(nodes[l]);
+				continue;
+			}
+			libwpd::IStream leafStream(io,fullName);
+			unsigned long sz=leafStream.size();
+			bool ok = true;
+			if (sz)
+			{
+				// a test because empty file are rare but seems to exists
+				buffer.resize(sz);
+				ok = leafStream.read(&buffer[0], sz) == sz;
+			}
+			if (ok)
+				ok=storage.addStream(nodes[l], &buffer[0], sz);
+			if (!ok)
+			{
+				WPD_DEBUG_MSG(("libwpd::IStream::createOleFromDirectory: can not read %s\n", fullName.c_str()));
+				return false;
+			}
+		}
+		// finally try to update the storage info
+		std::vector<std::string> resNodes=storage.getSubStreamList(0, true);
+		for (size_t l=0; l < resNodes.size(); l++)
+		{
+			std::string fullName=dir+resNodes[l];
+			entry=io->entry(fullName);
+			if (!entry) continue;
+			if (resNodes[l].length())
+				storage.setInformation(resNodes[l], entry->m_info);
+		}
+
+		// retrieve the data
+		if (!storage.getFileData(m_data))
+		{
+			m_data.resize(0);
+			return false;
+		}
+		// ok, we can update size
+		m_size = (unsigned long) m_data.size();
+		return true;
+	}
+	catch(...)
+	{
+	}
+	return false;
 }
-
 
 // =========== Storage ==========
 
