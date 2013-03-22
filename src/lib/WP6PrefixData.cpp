@@ -36,9 +36,13 @@ WP6PrefixData::WP6PrefixData(WPXInputStream *input, WPXEncryption *encryption, c
 	m_prefixDataPacketTypeHash(),
 	m_defaultInitialFontPID((-1))
 {
+	if (!numPrefixIndices)
+	{
+		WPD_DEBUG_MSG(("WordPerfect: constructing called without any prefix\n"));
+		return;
+	}
 	uint16_t i;
-
-	WP6PrefixIndice **prefixIndiceArray = new WP6PrefixIndice *[(numPrefixIndices-1)];
+	WP6PrefixIndice **prefixIndiceArray = new WP6PrefixIndice *[size_t(numPrefixIndices-1)];
 	for (i=1; i<numPrefixIndices; i++)
 	{
 		WPD_DEBUG_MSG(("WordPerfect: constructing prefix indice 0x%x\n", i));
