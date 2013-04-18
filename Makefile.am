@@ -17,7 +17,8 @@ EXTRA_DIST = \
 	libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.pc.in \
 	libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.pc.in \
 	libwpd-zip.in \
-	COPYING \
+	COPYING.LGPL \
+	COPYING.MPL \
 	CREDITS \
 	HACKING \
 	INSTALL \
