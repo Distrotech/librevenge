@@ -8,7 +8,6 @@
  *
  * Major Contributor(s):
  * Copyright (C) 2004 William Lachance (wrlach@gmail.com)
- * Copyright (C) 2005 Net Integration Technologies (http://www.net-itech.com)
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * For minor contributions see the git repository.
