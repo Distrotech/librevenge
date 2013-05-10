@@ -2,7 +2,7 @@ target_test = test
 
 check_PROGRAMS = $(target_test)
 
-AM_CXXFLAGS = -I$(top_srcdir)/src/lib/ $(LIBWPD_CXXFLAGS) $(DEBUG_CXXFLAGS)
+AM_CXXFLAGS = -I$(top_srcdir)/inc -I$(top_srcdir)/src/lib $(DEBUG_CXXFLAGS)
 
 test_LDFLAGS = -L../lib `cppunit-config --libs` 
 test_LDADD = \

@@ -29,7 +29,6 @@
 #include "libwpd_internal.h"
 #include "WP3Listener.h"
 #include "WP3ResourceFork.h"
-#include "WPXBinaryData.h"
 
 WP3WindowGroup::WP3WindowGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	WP3VariableLengthGroup(),

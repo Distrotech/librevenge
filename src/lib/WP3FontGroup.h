@@ -27,7 +27,6 @@
 #define WP3FONTGROUP_H
 
 #include "WP3VariableLengthGroup.h"
-#include "WPXString.h"
 #include "libwpd_internal.h"
 
 class WP3FontGroup : public WP3VariableLengthGroup

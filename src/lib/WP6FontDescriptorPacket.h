@@ -26,8 +26,9 @@
 
 #ifndef WP6FONTDESCRIPTORPACKET_H
 #define WP6FONTDESCRIPTORPACKET_H
+
+#include <libwpd/libwpd.h>
 #include "WP6PrefixDataPacket.h"
-#include "WPXString.h"
 
 class WP6FontDescriptorPacket : public WP6PrefixDataPacket
 {

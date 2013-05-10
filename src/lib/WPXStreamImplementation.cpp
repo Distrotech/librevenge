@@ -24,7 +24,7 @@
 #include "config.h"
 #endif
 
-#include "WPXStreamImplementation.h"
+#include <libwpd-stream/libwpd-stream.h>
 #include "WPXOLEStream.h"
 #ifdef BUILD_ZIP_STREAM
 #include "WPXZipStream.h"

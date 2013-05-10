@@ -28,8 +28,8 @@
 #ifndef WP1HEURISTICS_H
 #define WP1HEURISTICS_H
 
-#include "WPDocument.h"
-#include "WPXStream.h"
+#include <libwpd/libwpd.h>
+#include <libwpd-stream/libwpd-stream.h>
 
 class WP1Heuristics
 {

@@ -25,8 +25,9 @@
 
 #ifndef WP5SPECIALHEADERINDEX_H
 #define WP5SPECIALHEADERINDEX_H
+
+#include <libwpd-stream/libwpd-stream.h>
 #include "libwpd_types.h"
-#include "WPXStream.h"
 #include "WPXEncryption.h"
 
 class WP5SpecialHeaderIndex

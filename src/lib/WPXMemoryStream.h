@@ -25,7 +25,7 @@
 
 #ifndef MEMORYSTREAM_H
 #define MEMORYSTREAM_H
-#include "WPXStream.h"
+#include <libwpd-stream/libwpd-stream.h>
 
 class WPXMemoryInputStream : public WPXInputStream
 {

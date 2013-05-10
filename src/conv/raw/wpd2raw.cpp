@@ -25,8 +25,8 @@
  */
 
 #include <stdio.h>
-#include "libwpd.h"
-#include "libwpd-stream.h"
+#include <libwpd/libwpd.h>
+#include <libwpd-stream/libwpd-stream.h>
 #include "RawDocumentGenerator.h"
 #include <string.h>
 
@@ -41,14 +41,7 @@ int printUsage()
 	printf("--callgraph           Display the call graph nesting level\n");
 	printf("--help                Shows this help message\n");
 	printf("--password <password> Try to decrypt password protected document\n");
-	printf("--version             Output wpd2raw version \n");
 	return -1;
-}
-
-int printVersion()
-{
-	printf("wpd2raw %s\n", LIBWPD_VERSION_STRING);
-	return 0;
 }
 
 } // anonymous namespace
@@ -73,8 +66,6 @@ int main(int argc, char *argv[])
 			password = &argv[i][11];
 		else if (!strcmp(argv[i], "--callgraph"))
 			printIndentLevel = true;
-		else if (!strcmp(argv[i], "--version"))
-			return printVersion();
 		else if (!file && strncmp(argv[i], "--", 2))
 			file = argv[i];
 		else

@@ -27,8 +27,8 @@
 #ifndef WPXENCRYPTION_H
 #define WPXENCRYPTION_H
 
+#include <libwpd/libwpd.h>
 #include "libwpd_types.h"
-#include "WPXString.h"
 
 class WPXInputStream;
 

@@ -31,7 +31,7 @@
 #include "WP42Listener.h"
 #include "WP42SubDocument.h"
 #include "WPXContentListener.h"
-#include "WPXDocumentInterface.h"
+#include <libwpd/libwpd.h>
 
 typedef struct _WP42ContentParsingState WP42ContentParsingState;
 struct _WP42ContentParsingState

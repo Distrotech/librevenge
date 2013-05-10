@@ -24,7 +24,6 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WPXProperty.h"
 #include "libwpd_internal.h"
 
 class WPXStringProperty : public WPXProperty

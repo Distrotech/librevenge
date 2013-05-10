@@ -29,7 +29,8 @@
 
 #include <ostream>
 #include <sstream>
-#include "WPXDocumentInterface.h"
+#include <libwpd/libwpd.h>
+#include <libwpd-stream/libwpd-stream.h>
 
 class HtmlDocumentGenerator : public WPXDocumentInterface
 {

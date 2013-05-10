@@ -31,9 +31,7 @@
 #include "WP5Listener.h"
 #include "WPXContentListener.h"
 #include "WP5SubDocument.h"
-#include "WPXString.h"
 #include "libwpd_internal.h"
-#include "WPXDocumentInterface.h"
 #include <vector>
 
 typedef struct _WP5ContentParsingState WP5ContentParsingState;

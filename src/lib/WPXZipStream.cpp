@@ -30,7 +30,7 @@
 #include <stdio.h>
 #include <zlib.h>
 #include "WPXZipStream.h"
-#include "WPXStreamImplementation.h"
+#include <libwpd-stream/libwpd-stream.h>
 
 namespace
 {

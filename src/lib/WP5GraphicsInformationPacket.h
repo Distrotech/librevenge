@@ -26,8 +26,8 @@
 #ifndef WP5GRAPHICSINFORMATIONPACKET_H
 #define WP5GRAPHICSINFORMATIONPACKET_H
 #include "WP5GeneralPacketData.h"
-#include "WPXMemoryStream.h"
-#include "WPXBinaryData.h"
+#include <libwpd/libwpd.h>
+#include <libwpd-stream/libwpd-stream.h>
 #include <vector>
 
 class WP5GraphicsInformationPacket : public WP5GeneralPacketData

@@ -31,16 +31,16 @@ endif
 lib_LTLIBRARIES = libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.la $(target_libwpd_stream)
 libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_includedir = $(includedir)/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@/libwpd
 libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_include_HEADERS = \
-	libwpd.h \
-	WPDocument.h \
-	WPXBinaryData.h \
-	WPXDocumentInterface.h \
-	WPXProperty.h \
-	WPXPropertyList.h \
-	WPXPropertyListVector.h \
-	WPXString.h
+	$(top_srcdir)/inc/libwpd/libwpd.h \
+	$(top_srcdir)/inc/libwpd/WPDocument.h \
+	$(top_srcdir)/inc/libwpd/WPXBinaryData.h \
+	$(top_srcdir)/inc/libwpd/WPXDocumentInterface.h \
+	$(top_srcdir)/inc/libwpd/WPXProperty.h \
+	$(top_srcdir)/inc/libwpd/WPXPropertyList.h \
+	$(top_srcdir)/inc/libwpd/WPXPropertyListVector.h \
+	$(top_srcdir)/inc/libwpd/WPXString.h
 
-AM_CXXFLAGS = -I$(top_srcdir)/src/lib -I$(top_builddir)/src/lib $(DEBUG_CXXFLAGS)
+AM_CXXFLAGS = -I$(top_srcdir)/inc $(DEBUG_CXXFLAGS)
 
 libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_LIBADD  = @LIBWPD_WIN32_RESOURCE@
 libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_DEPENDENCIES = @LIBWPD_WIN32_RESOURCE@
@@ -218,7 +218,6 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WPXStylesListener.cpp \
 	WPXSubDocument.cpp \
 	WPXTable.cpp \
-	libwpd.h \
 	libwpd_internal.h \
 	libwpd_math.h \
 	libwpd_types.h \
@@ -377,34 +376,29 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP6UnsupportedFixedLengthGroup.h \
 	WP6UnsupportedVariableLengthGroup.h \
 	WP6VariableLengthGroup.h \
-	WPDocument.h \
 	WPXContentListener.h \
 	WPXEncryption.h \
 	WPXHeader.h \
 	WPXFileStructure.h \
-	WPXDocumentInterface.h \
 	WPXListener.h \
 	WPXMemoryStream.h \
 	WPXPageSpan.h \
 	WPXParser.h \
-	WPXProperty.h \
-	WPXPropertyList.h \
-	WPXPropertyListVector.h \
-	WPXString.h \
 	WPXStylesListener.h \
 	WPXSubDocument.h \
 	WPXTable.h
 
 libwpd_stream_headers = \
-			libwpd-stream.h \
-			WPXStream.h \
-			WPXStreamImplementation.h
+	$(top_srcdir)/inc/libwpd-stream/libwpd-stream.h \
+	$(top_srcdir)/inc/libwpd-stream/WPXStream.h \
+	$(top_srcdir)/inc/libwpd-stream/WPXStreamImplementation.h
+
 libwpd_stream_sources = \
-			WPXStreamImplementation.cpp \
-			WPXOLEStream.cpp \
-			WPXZipStream.cpp \
-			WPXOLEStream.h \
-			WPXZipStream.h
+	WPXStreamImplementation.cpp \
+	WPXOLEStream.cpp \
+	WPXZipStream.cpp \
+	WPXOLEStream.h \
+	WPXZipStream.h
 
 if WITH_LIBWPD_STREAM
 
@@ -436,15 +430,11 @@ EXTRA_DIST = \
 	$(libwpd_stream_headers) \
 	makefile.mk \
 	libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.def \
-	libwpd.h.in \
 	libwpd.rc.in \
 	libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.def \
-	libwpd-stream.h.in \
 	libwpd-stream.rc.in
 
 # These may be in the builddir too
 BUILD_EXTRA_DIST = \
-	libwpd.h \
 	libwpd.rc \
-	libwpd-stream.h \
 	libwpd-stream.rc

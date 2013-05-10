@@ -27,7 +27,8 @@
 #ifndef TEXTLISTENERIMPL_H
 #define TEXTLISTENERIMPL_H
 
-#include "WPXDocumentInterface.h"
+#include <libwpd/libwpd.h>
+#include <libwpd-stream/libwpd-stream.h>
 
 class TextDocumentGenerator : public WPXDocumentInterface
 {

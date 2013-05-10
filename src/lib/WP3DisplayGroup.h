@@ -27,7 +27,7 @@
 #define WP3DISPLAYGROUP_H
 
 #include "WP3VariableLengthGroup.h"
-#include "WPXString.h"
+#include <libwpd/libwpd.h>
 
 class WP3DisplayGroup : public WP3VariableLengthGroup
 {

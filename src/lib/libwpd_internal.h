@@ -26,11 +26,12 @@
 
 #ifndef LIBWPD_INTERNAL_H
 #define LIBWPD_INTERNAL_H
-#include "WPXStream.h"
+
 #include <stdio.h>
 #include <string>
 #include <algorithm>
-#include "WPXString.h"
+#include <libwpd/libwpd.h>
+#include <libwpd-stream/libwpd-stream.h>
 #include "WPXEncryption.h"
 #include "libwpd_types.h"
 

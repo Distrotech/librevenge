@@ -24,7 +24,7 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 #include "libwpd_internal.h"
-#include "WPXStream.h"
+#include <libwpd-stream/libwpd-stream.h>
 #include <ctype.h>
 #include <locale.h>
 #include <string>

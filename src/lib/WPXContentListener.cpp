@@ -26,7 +26,6 @@
 #include "WPXContentListener.h"
 #include "WPXPageSpan.h"
 #include "libwpd_internal.h"
-#include "WPXProperty.h"
 #include <limits>
 
 _WPXContentParsingState::_WPXContentParsingState() :

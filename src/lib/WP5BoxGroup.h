@@ -27,7 +27,7 @@
 #define WP5BOXGROUP_H
 
 #include "WP5VariableLengthGroup.h"
-#include "WPXBinaryData.h"
+#include <libwpd/libwpd.h>
 
 class WP5BoxGroup : public WP5VariableLengthGroup
 {

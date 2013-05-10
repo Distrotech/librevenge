@@ -25,7 +25,7 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WPXPropertyList.h"
+#include <libwpd/libwpd.h>
 #include <map>
 #include <string>
 #include <utility>

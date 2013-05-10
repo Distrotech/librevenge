@@ -30,7 +30,6 @@
 #include <cppunit/CompilerOutputter.h>
 
 #include "libwpd_internal.h"
-#include "WPXStreamImplementation.h"
 #include "WPXMemoryStream.h"
 
 

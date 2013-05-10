@@ -26,7 +26,8 @@
 
 #ifndef WP6PREFIXINDICE_H
 #define WP6PREFIXINDICE_H
-#include "WPXStream.h"
+
+#include <libwpd-stream/libwpd-stream.h>
 #include "libwpd_types.h"
 
 class WPXEncryption;

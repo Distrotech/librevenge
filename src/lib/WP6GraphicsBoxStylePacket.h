@@ -25,10 +25,11 @@
 
 #ifndef WP6GRAPHICSBOXSTYLEPACKET_H
 #define WP6GRAPHICSBOXSTYLEPACKET_H
+
+#include <libwpd/libwpd.h>
+#include <libwpd-stream/libwpd-stream.h>
 #include "WP6PrefixDataPacket.h"
 #include "WP6Listener.h"
-#include "WPXStream.h"
-#include "WPXString.h"
 
 class WP6GraphicsBoxStylePacket : public WP6PrefixDataPacket
 {

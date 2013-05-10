@@ -24,7 +24,6 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WPDocument.h"
 #include "WPXHeader.h"
 #include "WPXParser.h"
 #include "WP1Parser.h"
@@ -34,7 +33,6 @@
 #include "WP42Heuristics.h"
 #include "WP5Parser.h"
 #include "WP6Parser.h"
-#include "WPXStream.h"
 #include "WPXEncryption.h"
 #include "libwpd_internal.h"
 

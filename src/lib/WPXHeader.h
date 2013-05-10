@@ -27,7 +27,8 @@
 #ifndef WPXHEADER_H
 #define WPXHEADER_H
 
-#include "WPXStream.h"
+#include <libwpd/libwpd.h>
+#include <libwpd-stream/libwpd-stream.h>
 #include "libwpd_types.h"
 
 class WPXEncryption;

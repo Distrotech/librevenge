@@ -27,12 +27,9 @@
 #define WPXCONTENTLISTENER_H
 
 #include "WPXTable.h"
-#include "WPXPropertyListVector.h"
-#include "WPXPropertyList.h"
 #include "libwpd_internal.h"
 #include "WPXSubDocument.h"
 #include "WPXPageSpan.h"
-#include "WPXDocumentInterface.h"
 #include "WPXListener.h"
 #include <vector>
 #include <list>

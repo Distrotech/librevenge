@@ -25,9 +25,9 @@
 
 #ifndef WP6TABLESTYLEPACKET_H
 #define WP6TABLESTYLEPACKET_H
+
 #include "WP6PrefixDataPacket.h"
 #include "WP6Listener.h"
-#include "WPXStream.h"
 
 class WP6TableStylePacket : public WP6PrefixDataPacket
 {

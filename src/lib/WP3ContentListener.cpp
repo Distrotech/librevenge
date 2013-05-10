@@ -29,7 +29,6 @@
 #include "WPXFileStructure.h"
 #include "libwpd_internal.h"
 #include "WP3SubDocument.h"
-#include "WPDocument.h"
 #include <algorithm>
 #include <limits>
 

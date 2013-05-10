@@ -24,7 +24,6 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WPXString.h"
 #include "libwpd_internal.h"
 
 #include <string>

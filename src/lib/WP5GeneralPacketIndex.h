@@ -25,8 +25,9 @@
 
 #ifndef WP5GENERALPACKETINDEX_H
 #define WP5GENERALPACKETINDEX_H
+
+#include <libwpd-stream/libwpd-stream.h>
 #include "libwpd_types.h"
-#include "WPXStream.h"
 
 class WPXEncryption;
 

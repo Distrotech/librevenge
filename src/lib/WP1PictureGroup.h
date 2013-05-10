@@ -27,7 +27,6 @@
 #define WP1PICTUREGROUP_H
 
 #include "WP1VariableLengthGroup.h"
-#include "WPXBinaryData.h"
 #include "libwpd_internal.h"
 
 class WP1SubDocument;

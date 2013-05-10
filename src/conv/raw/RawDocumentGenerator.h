@@ -26,7 +26,8 @@
 
 #ifndef RAWLISTENERIMPL_H
 #define RAWLISTENERIMPL_H
-#include "WPXDocumentInterface.h"
+#include <libwpd/libwpd.h>
+#include <libwpd-stream/libwpd-stream.h>
 #include <stack>
 
 using namespace std;

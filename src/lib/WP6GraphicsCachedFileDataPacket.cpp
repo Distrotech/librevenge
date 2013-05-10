@@ -29,7 +29,6 @@
 #include "WP6Parser.h"
 #include "libwpd_internal.h"
 #include "WPXMemoryStream.h"
-#include "WPXString.h"
 
 WP6GraphicsCachedFileDataPacket::WP6GraphicsCachedFileDataPacket(WPXInputStream *input, WPXEncryption *encryption, int  id, uint32_t dataOffset, uint32_t dataSize):
 	WP6PrefixDataPacket(input, encryption),

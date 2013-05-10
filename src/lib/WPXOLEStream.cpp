@@ -52,7 +52,6 @@
 #include "libwpd_internal.h"
 
 #include "WPXOLEStream.h"
-#include "WPXStream.h"
 
 namespace libwpd
 {

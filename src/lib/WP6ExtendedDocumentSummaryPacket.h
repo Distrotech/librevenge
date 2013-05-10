@@ -29,7 +29,6 @@
 #include "WP6PrefixDataPacket.h"
 #include "WP6FileStructure.h"
 #include "WP6Listener.h"
-#include "WPXStream.h"
 #include "WPXMemoryStream.h"
 
 class WP6ExtendedDocumentSummaryPacket : public WP6PrefixDataPacket

@@ -25,9 +25,9 @@
 
 #ifndef WP6COMMENTANNOTATIONPACKET_H
 #define WP6COMMENTANNOTATIONPACKET_H
+
 #include "WP6PrefixDataPacket.h"
 #include "WP6Listener.h"
-#include "WPXStream.h"
 
 class WP6CommentAnnotationPacket : public WP6PrefixDataPacket
 {

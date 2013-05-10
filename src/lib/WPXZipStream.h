@@ -23,7 +23,7 @@
 #define __WPXZIPSTREAM_H__
 
 #include <vector>
-#include "WPXStream.h"
+#include <libwpd-stream/libwpd-stream.h>
 
 class WPXZipStream
 {

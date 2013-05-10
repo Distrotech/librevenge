@@ -25,7 +25,6 @@
 
 #include "WP3ResourceFork.h"
 #include "libwpd_internal.h"
-#include "WPXStream.h"
 #include "WPXEncryption.h"
 #include <vector>
 #include <sstream>

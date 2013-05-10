@@ -8,14 +8,14 @@ endif
 
 pkgconf_DATA = libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.pc $(LIBWPD_STREAM_PC)
 
-SUBDIRS = src build docs
+SUBDIRS = build inc src docs
 
 EXTRA_DIST = \
 	autogen.sh \
 	libwpd.spec \
 	libwpd.spec.in \
-	libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.pc.in \
-	libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.pc.in \
+	libwpd.pc.in \
+	libwpd-stream.pc.in \
 	libwpd-zip.in \
 	COPYING.LGPL \
 	COPYING.MPL \
@@ -26,7 +26,7 @@ EXTRA_DIST = \
 	README \
 	TODO
 distclean-local:
-	rm -rf *.cache *~
+	rm -rf *.cache *~ *.pc
 
 rpm: dist
 	rpmbuild -ta $(PACKAGE)-$(VERSION).tar.gz

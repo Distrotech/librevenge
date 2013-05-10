@@ -1,0 +1,1 @@
+SUBDIRS = libwpd libwpd-stream

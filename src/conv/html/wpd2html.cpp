@@ -22,8 +22,8 @@
 
 #include <stdio.h>
 #include "HtmlDocumentGenerator.h"
-#include "libwpd-stream.h"
-#include "libwpd.h"
+#include <libwpd/libwpd.h>
+#include <libwpd-stream/libwpd-stream.h>
 #include <string.h>
 
 namespace
@@ -36,14 +36,7 @@ int printUsage()
 	printf("Options:\n");
 	printf("--help                Shows this help message\n");
 	printf("--password <password> Try to decrypt password protected document\n");
-	printf("--version             Output wpd2html version \n");
 	return -1;
-}
-
-int printVersion()
-{
-	printf("wpd2html %s\n", LIBWPD_VERSION_STRING);
-	return 0;
 }
 
 } // anonymous namespace
@@ -65,8 +58,6 @@ int main(int argc, char *argv[])
 		}
 		else if (!strncmp(argv[i], "--password=", 11))
 			password = &argv[i][11];
-		else if (!strcmp(argv[i], "--version"))
-			return printVersion();
 		else if (!file && strncmp(argv[i], "--", 2))
 			file = argv[i];
 		else

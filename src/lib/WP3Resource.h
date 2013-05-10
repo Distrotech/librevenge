@@ -26,9 +26,9 @@
 
 #ifndef WP3RESOURCE_H
 #define WP3RESOURCE_H
+
+#include <libwpd/libwpd.h>
 #include "WPXParser.h"
-#include "WPXString.h"
-#include "WPXBinaryData.h"
 #include "libwpd_types.h"
 
 class WP3Listener;

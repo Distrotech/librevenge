@@ -28,7 +28,6 @@
 #include <ctype.h>
 #include "libwpd_math.h"
 #include "WP6ContentListener.h"
-#include "WPXDocumentInterface.h"
 #include "WP6FileStructure.h"
 #include "WPXFileStructure.h"
 #include "WP6FontDescriptorPacket.h"

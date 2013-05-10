@@ -24,7 +24,6 @@
  */
 
 #include "WPXEncryption.h"
-#include "WPXStream.h"
 #include "libwpd_internal.h"
 #include <string.h>
 

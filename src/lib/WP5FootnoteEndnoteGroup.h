@@ -26,10 +26,10 @@
 #ifndef WP5FOOTNOTEENDNOTEGROUP_H
 #define WP5FOOTNOTEENDNOTEGROUP_H
 
+#include <libwpd/libwpd.h>
+#include <libwpd-stream/libwpd-stream.h>
 #include "WP5VariableLengthGroup.h"
-#include "WPXMemoryStream.h"
 #include "WP5SubDocument.h"
-#include "WPXString.h"
 
 class WP5FootnoteEndnoteGroup : public WP5VariableLengthGroup
 {

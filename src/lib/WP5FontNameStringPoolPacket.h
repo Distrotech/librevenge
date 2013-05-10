@@ -25,10 +25,11 @@
 
 #ifndef WP5FONTNAMESTRINGPACKET_H
 #define WP5FONTNAMESTRINGPACKET_H
-#include "WP5GeneralPacketData.h"
-#include "WPXMemoryStream.h"
-#include "WPXString.h"
+
 #include <map>
+#include <libwpd/libwpd.h>
+#include <libwpd-stream/libwpd-stream.h>
+#include "WP5GeneralPacketData.h"
 
 class WP5FontNameStringPoolPacket : public WP5GeneralPacketData
 {
