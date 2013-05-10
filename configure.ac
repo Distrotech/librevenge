@@ -176,7 +176,6 @@ AS_IF([test "x$native_win32" = "xyes"], [
 		])
 	])
 ])
-AC_SUBST(DEBUG_CXXFLAGS)
 
 # ============
 # Debug switch
