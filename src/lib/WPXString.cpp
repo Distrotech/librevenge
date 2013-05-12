@@ -155,10 +155,8 @@ void WPXString::sprintf(const char *format, ...)
 			break;
 
 		if (buf != firstBuffer)
-		{
 			delete [] buf;
-			buf = new char[bufsize];
-		}
+		buf = new char[bufsize];
 	}
 
 	clear();
