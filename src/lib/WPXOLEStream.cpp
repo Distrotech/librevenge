@@ -1200,16 +1200,22 @@ void libwpd::IStorage::load()
 	// load directory tree
 	blocks.clear();
 	blocks = m_bbat.follow( m_header.m_start_dirent );
-	std::vector<unsigned char> buffer(blocks.size()*m_bbat.m_blockSize);
-	loadBigBlocks( blocks, &buffer[0], buffer.size() );
-	m_dirtree.load( &buffer[0], (unsigned)buffer.size() );
-	unsigned sb_start = readU32( &buffer[0x74] );
+	if( blocks.size()*m_bbat.m_blockSize > 0 )
+	{
+		std::vector<unsigned char> buffer(blocks.size()*m_bbat.m_blockSize);
+		loadBigBlocks( blocks, &buffer[0], buffer.size() );
+		m_dirtree.load( &buffer[0], (unsigned)buffer.size() );
+		if( buffer.size() >= 0x74 + 4 )
+		{
+			unsigned sb_start = readU32( &buffer[0x74] );
 
-	// fetch block chain as data for small-files
-	m_sb_blocks = m_bbat.follow( sb_start ); // small files
+			// fetch block chain as data for small-files
+			m_sb_blocks = m_bbat.follow( sb_start ); // small files
 
-	// so far so good
-	m_result = libwpd::Storage::Ok;
+			// so far so good
+			m_result = libwpd::Storage::Ok;
+		}
+	}
 }
 
 unsigned long libwpd::IStorage::loadBigBlocks( std::vector<unsigned long> const &blocks,
