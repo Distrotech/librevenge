@@ -70,6 +70,7 @@ void WP5StylesListener::insertBreak(uint8_t breakType)
 	{
 	case WPX_PAGE_BREAK:
 	case WPX_SOFT_PAGE_BREAK:
+	{
 		if ((m_pageList.size() > 0) && (m_currentPage==m_pageList.back())
 		        && (m_pageListHardPageMark != m_pageList.end()))
 		{
@@ -99,7 +100,8 @@ void WP5StylesListener::insertBreak(uint8_t breakType)
 		}
 		m_nextPage = WPXPageSpan();
 		m_currentPageHasContent = false;
-		break;
+	}
+	break;
 	default:
 		break;
 	}

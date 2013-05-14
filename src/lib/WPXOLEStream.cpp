@@ -40,6 +40,7 @@
 */
 
 #include <string.h>
+#include <ctype.h>
 
 #include <sstream>
 #include <iostream>
@@ -161,11 +162,12 @@ public:
 	void save( unsigned char *buffer ) const
 	{
 		unsigned cnt=(unsigned) count();
-		for( unsigned i = 0; i < cnt; i++ )
+		unsigned i = 0;
+		for(i = 0; i < cnt; i++ )
 			writeU32( buffer + i*4, m_data[i] );
 		unsigned lastFree = 128-(cnt%128);
 		if (lastFree==128) return;
-		for (unsigned i = 0; i < lastFree; i++)
+		for (i = 0; i < lastFree; i++)
 			writeU32( buffer + (cnt+i)*4, Avail);
 	}
 	// return space required to save the allocation table
@@ -186,9 +188,10 @@ public:
 	//! constructor
 	DirInfo()
 	{
-		for (int i=0; i < 4; i++)
+		int i = 0;
+		for (i=0; i < 4; i++)
 			m_time[i]=0;
-		for (int i=0; i < 4; i++)
+		for (i=0; i < 4; i++)
 			m_clsid[i]=0;
 	}
 	//! returns true if the clsid field is filed
@@ -361,7 +364,11 @@ protected:
 	{
 		std::set<unsigned> seens;
 		get_siblings(ind, seens);
-		return std::vector<unsigned>(seens.begin(), seens.end());
+		std::vector<unsigned> retVal;
+		for (std::set<unsigned>::const_iterator iter = seens.begin();
+		        iter != seens.end(); ++iter)
+			retVal.push_back(*iter);
+		return retVal;
 	}
 	//! constructs the list of siblings ( by filling the seens set )
 	void get_siblings(unsigned ind, std::set<unsigned> &seens) const
@@ -414,8 +421,8 @@ protected:
 			if (len1 != len2) return len1 < len2;
 			for (size_t c=0; c < len1; c++)
 			{
-				if (std::tolower(name1[c]) != std::tolower(name2[c]))
-					return std::tolower(name1[c]) < std::tolower(name2[c]);
+				if (tolower(name1[c]) != tolower(name2[c]))
+					return tolower(name1[c]) < tolower(name2[c]);
 			}
 			return ind1 < ind2;
 		}
@@ -836,10 +843,10 @@ void libwpd::DirEntry::load( unsigned char *buffer, unsigned len )
 			m_name.append( 1, char(buffer[j]) );
 	}
 
-
-	for (int i = 0; i < 4; i++)
+	int i = 0;
+	for (i = 0; i < 4; i++)
 		m_info.m_clsid[i]=(unsigned) readU32( buffer + 0x50 + 4*i);
-	for (int i = 0; i < 4; i++)
+	for (i = 0; i < 4; i++)
 		m_info.m_time[i]=(unsigned) readU32( buffer + 0x64 + 4*i);
 
 	m_valid = true;
@@ -856,7 +863,8 @@ void libwpd::DirEntry::load( unsigned char *buffer, unsigned len )
 
 void libwpd::DirEntry::save( unsigned char *buffer ) const
 {
-	for (int i = 0; i < 128; i++) buffer[i]=0;
+	int i = 0;
+	for (i = 0; i < 128; i++) buffer[i]=0;
 
 	unsigned name_len = (unsigned) m_name.length();
 	if (name_len>31) name_len = 31;
@@ -864,16 +872,16 @@ void libwpd::DirEntry::save( unsigned char *buffer ) const
 		buffer[1]='R';
 	else
 	{
-		for (size_t i = 0; i < name_len; i++)
-			writeU16(buffer+2*i, (unsigned) m_name[i]);
+		for (size_t j = 0; j < name_len; j++)
+			writeU16(buffer+2*j, (unsigned) m_name[j]);
 	}
 	writeU16(buffer+0x40, 2*name_len+2);
 
 	buffer[0x42]=(unsigned char) m_type;
 	buffer[0x43]=(unsigned char) m_colour;
-	for (int i = 0; i < 4; i++)
+	for (i = 0; i < 4; i++)
 		writeU32(buffer + 0x50+4*i, m_info.m_clsid[i]);
-	for (int i = 0; i < 4; i++)
+	for (i = 0; i < 4; i++)
 		writeU32(buffer + 0x64+4*i, m_info.m_time[i]);
 	writeU32(buffer + 0x74, m_start);
 	writeU32(buffer + 0x78, m_size);
@@ -1039,8 +1047,11 @@ void libwpd::DirTree::setInRedBlackTreeForm(unsigned ind, std::set<unsigned> &se
 		return;
 	CompareEntryName compare(*this);
 	std::set<unsigned,CompareEntryName> set(childs.begin(),childs.end(),compare);
-	std::vector<unsigned> sortedChilds(set.begin(), set.end());
-	if (sortedChilds.size() != numChild)
+	std::vector<unsigned> sortedChildren;
+	for (std::set<unsigned,CompareEntryName>::const_iterator iter = set.begin();
+	        iter != set.end(); ++iter)
+		sortedChildren.push_back(*iter);
+	if (sortedChildren.size() != numChild)
 	{
 		WPD_DEBUG_MSG(("DirTree::setInRedBlackTreeForm: OOPS pb with numChild\n"));
 		return;
@@ -1052,7 +1063,7 @@ void libwpd::DirTree::setInRedBlackTreeForm(unsigned ind, std::set<unsigned> &se
 		hNumChild=2*hNumChild+1;
 		h++;
 	}
-	p->m_child=setInRBTForm(sortedChilds, 0, unsigned(numChild-1), h);
+	p->m_child=setInRBTForm(sortedChildren, 0, unsigned(numChild-1), h);
 }
 
 unsigned libwpd::DirTree::setInRBTForm(std::vector<unsigned> const &childs,
@@ -1382,14 +1393,15 @@ bool libwpd::OStorage::updateToSave()
 	}
 
 	std::vector<unsigned long> mainBlocks(numBAlloc);
-	for (unsigned b = 0; b < numBAlloc; b++)
+	unsigned b = 0;
+	for (b = 0; b < numBAlloc; b++)
 	{
 		mainBlocks[b]=numBBlock+b;
 		m_bbat.set(mainBlocks[b], unsigned(Bat));
 	}
 	if (numMAlloc)
 	{
-		for (unsigned b = 0; b < numMAlloc; b++)
+		for (b = 0; b < numMAlloc; b++)
 			m_bbat.set(numBBlock+numBAlloc+b, unsigned(MetaBat));
 	}
 
@@ -1402,7 +1414,7 @@ bool libwpd::OStorage::updateToSave()
 		insertData(&buffer[0], bbatSize, true, unsigned(Bat));
 	}
 
-	for (unsigned b = 0; b < numBAlloc; b++)
+	for (b = 0; b < numBAlloc; b++)
 	{
 		if (b >= 109)
 			break;
@@ -1412,7 +1424,7 @@ bool libwpd::OStorage::updateToSave()
 	{
 		buffer.resize(numMAlloc*512,0);
 		size_t wPos=0;
-		for (unsigned b=109; b < numBAlloc; b++)
+		for (b=109; b < numBAlloc; b++)
 		{
 			if ((wPos%512)==508)
 			{
@@ -1590,7 +1602,8 @@ bool libwpd::IStream::createOleFromDirectory( IStorage *io, std::string const &n
 
 		// try to compute a minimum data size
 		unsigned long minimalSize = 0;
-		for (size_t l=0; l < nodes.size(); l++)
+		size_t l=0;
+		for (l=0; l < nodes.size(); l++)
 		{
 			std::string fullName=dir+nodes[l];
 			entry=io->entry(fullName);
@@ -1605,7 +1618,7 @@ bool libwpd::IStream::createOleFromDirectory( IStorage *io, std::string const &n
 		storage.setRevision(io->revision());
 		if (!io->hasRootTypePc())
 			storage.setRootType(false);
-		for (size_t l=0; l < nodes.size(); l++)
+		for (l=0; l < nodes.size(); l++)
 		{
 			std::string fullName=dir+nodes[l];
 			entry=io->entry(fullName);
@@ -1639,7 +1652,7 @@ bool libwpd::IStream::createOleFromDirectory( IStorage *io, std::string const &n
 		}
 		// finally try to update the storage info
 		std::vector<std::string> resNodes=storage.getSubStreamList(0, true);
-		for (size_t l=0; l < resNodes.size(); l++)
+		for (l=0; l < resNodes.size(); l++)
 		{
 			std::string fullName=dir+resNodes[l];
 			entry=io->entry(fullName);
