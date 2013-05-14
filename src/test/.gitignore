@@ -4,5 +4,7 @@ test
 .libs
 .deps
 *.lo
+*.log
 *.o
+*.trs
 *~
