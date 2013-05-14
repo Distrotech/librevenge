@@ -40,6 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="..\..\inc"
 				PreprocessorDefinitions="_DEBUG;DEBUG;WIN32;_LIB;_CRT_SECURE_NO_WARNINGS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -114,6 +115,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
+				AdditionalIncludeDirectories="..\..\inc"
 				PreprocessorDefinitions="NDEBUG;WIN32;_LIB;_CRT_SECURE_NO_WARNINGS"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -3615,7 +3617,7 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
-				RelativePath="..\..\src\lib\libwpd.h"
+				RelativePath="..\..\inc\libwpd\libwpd.h"
 				>
 			</File>
 			<File
@@ -4251,11 +4253,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPDocument.h"
+				RelativePath="..\..\inc\libwpd\WPDocument.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXBinaryData.h"
+				RelativePath="..\..\inc\libwpd\WPXBinaryData.h"
 				>
 			</File>
 			<File
@@ -4263,7 +4265,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXDocumentInterface.h"
+				RelativePath="..\..\inc\libwpd\WPXDocumentInterface.h"
 				>
 			</File>
 			<File
@@ -4295,19 +4297,19 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXProperty.h"
+				RelativePath="..\..\inc\libwpd\WPXProperty.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXPropertyList.h"
+				RelativePath="..\..\inc\libwpd\WPXPropertyList.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXPropertyListVector.h"
+				RelativePath="..\..\inc\libwpd\WPXPropertyListVector.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXString.h"
+				RelativePath="..\..\inc\libwpd\WPXString.h"
 				>
 			</File>
 			<File

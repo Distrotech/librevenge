@@ -4,6 +4,7 @@
 	Version="9.00"
 	Name="libwpdstream"
 	ProjectGUID="{CB848337-B6C8-4942-961B-5A9FBBF37B46}"
+	RootNamespace="libwpdstream"
 	TargetFrameworkVersion="0"
 	>
 	<Platforms>
@@ -41,6 +42,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
+				AdditionalIncludeDirectories="..\..\inc"
 				PreprocessorDefinitions="NDEBUG;WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -113,6 +115,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="..\..\inc"
 				PreprocessorDefinitions="_DEBUG;DEBUG;WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -217,15 +220,19 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
+				RelativePath="..\..\inc\libwpd-stream\libwpd-stream.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\lib\WPXOLEStream.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXStream.h"
+				RelativePath="..\..\inc\libwpd-stream\WPXStream.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXStreamImplementation.h"
+				RelativePath="..\..\inc\libwpd-stream\WPXStreamImplementation.h"
 				>
 			</File>
 			<File
