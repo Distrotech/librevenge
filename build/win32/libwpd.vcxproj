@@ -42,6 +42,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;DEBUG;WIN32;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -72,6 +73,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <AdditionalIncludeDirectories>..\..\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;WIN32;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -789,7 +791,14 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\lib\libwpd.h" />
+    <ClInclude Include="..\..\inc\libwpd\libwpd.h" />
+    <ClInclude Include="..\..\inc\libwpd\WPDocument.h" />
+    <ClInclude Include="..\..\inc\libwpd\WPXBinaryData.h" />
+    <ClInclude Include="..\..\inc\libwpd\WPXDocumentInterface.h" />
+    <ClInclude Include="..\..\inc\libwpd\WPXProperty.h" />
+    <ClInclude Include="..\..\inc\libwpd\WPXPropertyList.h" />
+    <ClInclude Include="..\..\inc\libwpd\WPXPropertyListVector.h" />
+    <ClInclude Include="..\..\inc\libwpd\WPXString.h" />
     <ClInclude Include="..\..\src\lib\libwpd_internal.h" />
     <ClInclude Include="..\..\src\lib\libwpd_math.h" />
     <ClInclude Include="..\..\src\lib\libwpd_types.h" />
@@ -948,10 +957,7 @@
     <ClInclude Include="..\..\src\lib\WP6UnsupportedFixedLengthGroup.h" />
     <ClInclude Include="..\..\src\lib\WP6UnsupportedVariableLengthGroup.h" />
     <ClInclude Include="..\..\src\lib\WP6VariableLengthGroup.h" />
-    <ClInclude Include="..\..\src\lib\WPDocument.h" />
-    <ClInclude Include="..\..\src\lib\WPXBinaryData.h" />
     <ClInclude Include="..\..\src\lib\WPXContentListener.h" />
-    <ClInclude Include="..\..\src\lib\WPXDocumentInterface.h" />
     <ClInclude Include="..\..\src\lib\WPXEncryption.h" />
     <ClInclude Include="..\..\src\lib\WPXFileStructure.h" />
     <ClInclude Include="..\..\src\lib\WPXHeader.h" />
@@ -959,10 +965,6 @@
     <ClInclude Include="..\..\src\lib\WPXMemoryStream.h" />
     <ClInclude Include="..\..\src\lib\WPXPageSpan.h" />
     <ClInclude Include="..\..\src\lib\WPXParser.h" />
-    <ClInclude Include="..\..\src\lib\WPXProperty.h" />
-    <ClInclude Include="..\..\src\lib\WPXPropertyList.h" />
-    <ClInclude Include="..\..\src\lib\WPXPropertyListVector.h" />
-    <ClInclude Include="..\..\src\lib\WPXString.h" />
     <ClInclude Include="..\..\src\lib\WPXStylesListener.h" />
     <ClInclude Include="..\..\src\lib\WPXSubDocument.h" />
     <ClInclude Include="..\..\src\lib\WPXTable.h" />
