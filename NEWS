@@ -1,4 +1,18 @@
 CHANGES:
+0.9.7 - 0.9.8
+- Fix buffer allocation in WPXString::sprintf that can lead to crash
+- Fix crash reading invalid OLE stream
+- Change source code layout so that public headers be in inc/ and its
+  subdirectories
+- libwpd.h and libwpd-stream.h are not generated headers anymore
+- 
+
+0.9.6 - 0.9.7
+- Improvements to WPXOLEStream class
+- Added MPL2+ to the licenses libwpd is released under
+- Fix build of ZIP based stream reader
+- Miscellaneous fixes
+
 0.9.5 - 0.9.6
 - Revert an accidental ABI change in WPXPropertyList
 - Fix Windows build inside LibreOffice
