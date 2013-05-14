@@ -5,7 +5,7 @@ CHANGES:
 - Change source code layout so that public headers be in inc/ and its
   subdirectories
 - libwpd.h and libwpd-stream.h are not generated headers anymore
-- 
+- Change the way we get version from libwpd build
 
 0.9.6 - 0.9.7
 - Improvements to WPXOLEStream class
