@@ -35,7 +35,7 @@
 #endif
 
 #ifndef VERSION
-#define VERSION "unknown"
+#define VERSION "UNKNOWN VERSION"
 #endif
 
 namespace
