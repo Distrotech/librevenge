@@ -56,22 +56,26 @@ HtmlDocumentGenerator::~HtmlDocumentGenerator()
 
 void HtmlDocumentGenerator::setDocumentMetaData(const WPXPropertyList &propList)
 {
-	if (propList["author"])
-		*m_pOutputStream << "<meta name=\"author\" content=\"" << propList["author"]->getStr().cstr() << "\">" << std::endl;
-	if (propList["subject"])
-		*m_pOutputStream << "<meta name=\"subject\" content=\"" << propList["subject"]->getStr().cstr() << "\">" << std::endl;
-	if (propList["publisher"])
-		*m_pOutputStream << "<meta name=\"publisher\" content=\"" << propList["publisher"]->getStr().cstr() << "\">" << std::endl;
-	if (propList["keywords"])
-		*m_pOutputStream << "<meta name=\"keywords\" content=\"" << propList["keywords"]->getStr().cstr() << "\">" << std::endl;
-	if (propList["language"])
-		*m_pOutputStream << "<meta name=\"language\" content=\"" << propList["language"]->getStr().cstr() << "\">" << std::endl;
-	if (propList["abstract"])
-		*m_pOutputStream << "<meta name=\"abstract\" content=\"" << propList["abstract"]->getStr().cstr() << "\">" << std::endl;
-	if (propList["descriptive-name"])
-		*m_pOutputStream << "<meta name=\"descriptive-name\" content=\"" << propList["descriptive-name"]->getStr().cstr() << "\">" << std::endl;
-	if (propList["descriptive-type"])
-		*m_pOutputStream << "<meta name=\"descriptive-type\" content=\"" << propList["descriptive-type"]->getStr().cstr() << "\">" << std::endl;
+	if (propList["meta:initial-creator"])
+		*m_pOutputStream << "<meta name=\"author\" content=\"" << propList["meta:initial-creator"]->getStr().cstr() << "\">" << std::endl;
+	if (propList["dc:creator"])
+		*m_pOutputStream << "<meta name=\"typist\" content=\"" << propList["dc:creator"]->getStr().cstr() << "\">" << std::endl;
+	if (propList["dc:subject"])
+		*m_pOutputStream << "<meta name=\"subject\" content=\"" << propList["dc:subject"]->getStr().cstr() << "\">" << std::endl;
+	if (propList["dc:publisher"])
+		*m_pOutputStream << "<meta name=\"publisher\" content=\"" << propList["dc:publisher"]->getStr().cstr() << "\">" << std::endl;
+	if (propList["meta:keyword"])
+		*m_pOutputStream << "<meta name=\"keywords\" content=\"" << propList["meta:keyword"]->getStr().cstr() << "\">" << std::endl;
+	if (propList["dc:language"])
+		*m_pOutputStream << "<meta name=\"language\" content=\"" << propList["dc:language"]->getStr().cstr() << "\">" << std::endl;
+	if (propList["dc:description"])
+		*m_pOutputStream << "<meta name=\"abstract\" content=\"" << propList["dc:description"]->getStr().cstr() << "\">" << std::endl;
+	if (propList["libwpd:descriptive-name"]) {
+		*m_pOutputStream << "<meta name=\"descriptive-name\" content=\"" << propList["libwpd:descriptive-name"]->getStr().cstr() << "\">" << std::endl;
+		*m_pOutputStream << "<title>" << propList["libwpd:descriptive-name"]->getStr().cstr() << "</title>" << std::endl;
+	}
+	if (propList["libwpd:descriptive-type"])
+		*m_pOutputStream << "<meta name=\"descriptive-type\" content=\"" << propList["libwpd:descriptive-type"]->getStr().cstr() << "\">" << std::endl;
 }
 
 void HtmlDocumentGenerator::startDocument()
