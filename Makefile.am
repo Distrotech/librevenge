@@ -25,6 +25,7 @@ EXTRA_DIST = \
 	NEWS \
 	README \
 	TODO
+
 distclean-local:
 	rm -rf *.cache *~ *.pc
 
