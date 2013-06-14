@@ -71,6 +71,8 @@ int WPXMemoryInputStream::seek(long offset, WPX_SEEK_TYPE seekType)
 		m_offset += offset;
 	else if (seekType == WPX_SEEK_SET)
 		m_offset = offset;
+	else if (seekType == WPX_SEEK_END)
+		m_offset = m_size+offset;
 
 	if (m_offset < 0)
 	{

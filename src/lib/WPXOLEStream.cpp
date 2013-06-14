@@ -584,7 +584,7 @@ protected:
 		return size >= m_header.m_threshold;
 	}
 	//! returns the maximum size of a big/small block
-	unsigned long getMaximumSize(bool isBig) const
+	static unsigned long getMaximumSize(bool isBig)
 	{
 		return isBig ? 512 : 64;
 	}
@@ -1076,7 +1076,7 @@ unsigned libwpd::DirTree::setInRBTForm(std::vector<unsigned> const &childs,
 	if (!p)
 	{
 		WPD_DEBUG_MSG(("DirTree::setInRedBlackTreeForm: OOPS can not find tree to modified\n"));
-		GenericException();
+		throw GenericException();
 	}
 	unsigned newH = height==0 ? 0 : height-1;
 	if (height==0)
