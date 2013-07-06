@@ -70,7 +70,8 @@ void HtmlDocumentGenerator::setDocumentMetaData(const WPXPropertyList &propList)
 		*m_pOutputStream << "<meta name=\"language\" content=\"" << propList["dc:language"]->getStr().cstr() << "\">" << std::endl;
 	if (propList["dc:description"])
 		*m_pOutputStream << "<meta name=\"abstract\" content=\"" << propList["dc:description"]->getStr().cstr() << "\">" << std::endl;
-	if (propList["libwpd:descriptive-name"]) {
+	if (propList["libwpd:descriptive-name"])
+	{
 		*m_pOutputStream << "<meta name=\"descriptive-name\" content=\"" << propList["libwpd:descriptive-name"]->getStr().cstr() << "\">" << std::endl;
 		*m_pOutputStream << "<title>" << propList["libwpd:descriptive-name"]->getStr().cstr() << "</title>" << std::endl;
 	}
