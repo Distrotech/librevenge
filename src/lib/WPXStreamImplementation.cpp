@@ -116,8 +116,8 @@ WPXFileStream::WPXFileStream(const char *filename) :
 	}
 
 	struct stat status;
-	stat( filename, &status );
-	if ( !S_ISREG(status.st_mode) )
+	const int retval = stat( filename, &status );
+	if ( (0 != retval) || !S_ISREG(status.st_mode) )
 	{
 		delete d;
 		d = 0;
