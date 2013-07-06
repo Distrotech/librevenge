@@ -31,7 +31,7 @@
 
 uint8_t readU8(WPXInputStream *input, WPXEncryption *encryption)
 {
-	unsigned long numBytesRead;
+	unsigned long numBytesRead = 0;
 	uint8_t const *p = (encryption ?
 	                    encryption->readAndDecrypt(input, sizeof(uint8_t), numBytesRead) :
 	                    input->read(sizeof(uint8_t), numBytesRead));
@@ -44,7 +44,7 @@ uint8_t readU8(WPXInputStream *input, WPXEncryption *encryption)
 
 uint16_t readU16(WPXInputStream *input, WPXEncryption *encryption, bool bigendian)
 {
-	unsigned long numBytesRead;
+	unsigned long numBytesRead = 0;
 	uint8_t const *p = (encryption ?
 	                    encryption->readAndDecrypt(input, sizeof(uint16_t), numBytesRead) :
 	                    input->read(sizeof(uint16_t), numBytesRead));
@@ -64,7 +64,7 @@ int16_t readS16(WPXInputStream *input, WPXEncryption *encryption, bool bigendian
 
 uint32_t readU32(WPXInputStream *input, WPXEncryption *encryption, bool bigendian)
 {
-	unsigned long numBytesRead;
+	unsigned long numBytesRead = 0;
 	uint8_t const *p = (encryption ?
 	                    encryption->readAndDecrypt(input, sizeof(uint32_t), numBytesRead) :
 	                    input->read(sizeof(uint32_t), numBytesRead));
