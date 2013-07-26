@@ -100,7 +100,6 @@ public:
 	virtual void insertEquation(const WPXPropertyList & /* propList */, const WPXString & /* data */) {}
 
 private:
-	unsigned int m_currentListLevel;
 	bool m_isInfo;
 };
 
