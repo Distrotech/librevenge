@@ -1,4 +1,10 @@
 CHANGES:
+0.9.8 - 0.9.9
+- Miscellaneous coverity fixes (David Tardon)
+- WPX_SEEK_END for WPXMemoryInputStream (Laurent Alonso)
+- Metadata for wpd2html (David Hislop)
+- Cleanup and build fixes (Fridrich Strba)
+
 0.9.7 - 0.9.8
 - Fix buffer allocation in WPXString::sprintf that can lead to crash
 - Fix crash reading invalid OLE stream
