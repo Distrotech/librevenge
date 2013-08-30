@@ -35,7 +35,7 @@
 #define vsnprintf _vsnprintf
 #endif
 
-static int g_static_utf8_strlen (const char *p);
+static int g_static_utf8_strlen (const char *p, const char *end);
 static int g_static_unichar_to_utf8 (uint32_t c,  char *outbuf);
 
 static const int8_t g_static_utf8_skip_data[256] =
@@ -62,6 +62,11 @@ class WPXStringImpl
 {
 public:
 	WPXStringImpl() : m_buf() {}
+	int len() const
+	{
+		if (m_buf.empty()) return 0;
+		return g_static_utf8_strlen(m_buf.c_str(), m_buf.c_str()+m_buf.length());
+	}
 	std::string m_buf;
 };
 
@@ -88,7 +93,11 @@ WPXString::WPXString(const WPXString &stringBuf, bool escapeXML) :
 		while (p != end)
 		{
 			const char *next = g_static_utf8_next_char(p);
-
+			if (next > end)
+			{
+				WPD_DEBUG_MSG(("WPXString::WPXString: oops, we have a problem\n"));
+				break;
+			}
 			switch (*p)
 			{
 			case '&':
@@ -187,7 +196,7 @@ void WPXString::clear()
 
 int WPXString::len() const
 {
-	return g_static_utf8_strlen(cstr());
+	return m_stringImpl->len();
 }
 
 WPXString &WPXString::operator=(const WPXString &stringBuf)
@@ -255,7 +264,7 @@ bool WPXString::Iter::next()
 
 bool WPXString::Iter::last()
 {
-	if (m_pos >= g_static_utf8_strlen(m_stringImpl->m_buf.c_str()))
+	if (m_pos >= m_stringImpl->len())
 		return true;
 	return false;
 }
@@ -363,13 +372,13 @@ g_static_unichar_to_utf8 (uint32_t c,
  * Return value: the length of the string in characters
  */
 int
-g_static_utf8_strlen (const char *p)
+g_static_utf8_strlen (const char *p, const char *end)
 {
-	long len = 0;
 	if (!p)
 		return 0;
 
-	while (*p)
+	long len = 0;
+	while (p < end && *p)
 	{
 		p = g_static_utf8_next_char (p);
 		++len;
