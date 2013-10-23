@@ -24,6 +24,7 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 #include <string.h>
+#include <vector>
 
 #include "WP6GeneralTextPacket.h"
 #include "WP6Parser.h"
@@ -57,7 +58,7 @@ void WP6GeneralTextPacket::_readContents(WPXInputStream *input, WPXEncryption *e
 		return; // m_subDocument will be 0
 	}
 
-	uint32_t *blockSizes = new uint32_t[numTextBlocks];
+	std::vector<uint32_t> blockSizes(numTextBlocks);
 	unsigned totalSize = 0;
 	unsigned i;
 
@@ -77,8 +78,6 @@ void WP6GeneralTextPacket::_readContents(WPXInputStream *input, WPXEncryption *e
 	if (!totalSize)
 	{
 		WPD_DEBUG_MSG(("WordPerfect: The total size of the text is %ui\n", totalSize));
-		if (blockSizes)
-			delete [] blockSizes;
 		return; // m_subDocument will be 0
 	}
 	m_streamData = new uint8_t[totalSize];
@@ -93,8 +92,6 @@ void WP6GeneralTextPacket::_readContents(WPXInputStream *input, WPXEncryption *e
 			streamPos++;
 		}
 	}
-	if (blockSizes)
-		delete [] blockSizes;
 
 	if (totalSize)
 		m_subDocument = new WP6SubDocument(m_streamData, totalSize);
