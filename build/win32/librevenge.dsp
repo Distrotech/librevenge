@@ -1427,7 +1427,7 @@ SOURCE=..\..\src\lib\RVNGContentListener.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\inc\librevenge\RVNGDocumentInterface.h
+SOURCE=..\..\inc\librevenge\RVNGTextInterface.h
 # End Source File
 # Begin Source File
 

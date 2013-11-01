@@ -1,1 +1,0 @@
-SUBDIRS = raw html text

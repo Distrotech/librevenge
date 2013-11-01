@@ -274,13 +274,6 @@ AC_SUBST(ZLIB_LIBS)
 AC_CONFIG_FILES([
 Makefile
 src/Makefile
-src/conv/Makefile
-src/conv/html/Makefile
-src/conv/html/rvng2html.rc
-src/conv/raw/Makefile
-src/conv/raw/rvng2raw.rc
-src/conv/text/Makefile
-src/conv/text/rvng2text.rc
 src/lib/Makefile
 src/lib/librevenge.rc
 src/lib/librevenge-stream.rc

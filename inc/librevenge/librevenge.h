@@ -27,8 +27,7 @@
 #ifndef LIBREVENGE_H
 #define LIBREVENGE_H
 
-#include "RVNGDocumentInterface.h"
-#include "RVNGocument.h"
+#include "RVNGTextInterface.h"
 
 #endif /* LIBREVENGE_H */
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

@@ -106,7 +106,7 @@ DEP_CPP_RVNG2T=\
 	"..\..\src\lib\librevenge_types.h"\
 	"..\..\src\lib\RVNGocument.h"\
 	"..\..\src\lib\RVNGBinaryData.h"\
-	"..\..\src\lib\RVNGDocumentInterface.h"\
+	"..\..\src\lib\RVNGTextInterface.h"\
 	"..\..\src\lib\RVNGProperty.h"\
 	"..\..\src\lib\RVNGPropertyList.h"\
 	"..\..\src\lib\RVNGPropertyListVector.h"\

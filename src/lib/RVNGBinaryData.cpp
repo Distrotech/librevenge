@@ -23,8 +23,8 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
+#include <librevenge/librevenge.h>
 #include "RVNGMemoryStream.h"
-#include "librevenge_internal.h"
 
 #include <vector>
 #include <stdarg.h>

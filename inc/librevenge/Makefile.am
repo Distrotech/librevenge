@@ -2,7 +2,7 @@ EXTRA_DIST = \
 	librevenge.h \
 	RVNGocument.h \
 	RVNGBinaryData.h \
-	RVNGDocumentInterface.h \
+	RVNGTextInterface.h \
 	RVNGProperty.h \
 	RVNGPropertyList.h \
 	RVNGPropertyListVector.h \

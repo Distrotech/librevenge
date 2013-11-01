@@ -1,1 +1,1 @@
-SUBDIRS = lib conv test
+SUBDIRS = lib test

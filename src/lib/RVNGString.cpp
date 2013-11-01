@@ -36,9 +36,9 @@
 #endif
 
 static int g_static_utf8_strlen (const char *p, const char *end);
-static int g_static_unichar_to_utf8 (uint32_t c,  char *outbuf);
+static int g_static_unichar_to_utf8 (unsigned c,  char *outbuf);
 
-static const int8_t g_static_utf8_skip_data[256] =
+static const signed char g_static_utf8_skip_data[256] =
 {
 	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
@@ -56,7 +56,7 @@ static const int8_t g_static_utf8_skip_data[256] =
     ((Char) < 0x10000 ? 3 :            \
      ((Char) < 0x200000 ? 4 :          \
       ((Char) < 0x4000000 ? 5 : 6)))))
-#define g_static_utf8_next_char(p) (char *)((p) + g_static_utf8_skip_data[*((uint8_t *)p)])
+#define g_static_utf8_next_char(p) (char *)((p) + g_static_utf8_skip_data[*((unsigned char *)p)])
 
 class RVNGStringImpl
 {
@@ -253,7 +253,7 @@ bool RVNGString::Iter::next()
 		m_pos++;
 	else if (m_pos < len)
 	{
-		m_pos+=(int32_t) (g_static_utf8_next_char(&(m_stringImpl->m_buf.c_str()[m_pos])) -
+		m_pos+=(int) (g_static_utf8_next_char(&(m_stringImpl->m_buf.c_str()[m_pos])) -
 		                  &(m_stringImpl->m_buf.c_str()[m_pos]));
 	}
 
@@ -275,7 +275,7 @@ const char *RVNGString::Iter::operator()() const
 
 	if (m_curChar) delete [] m_curChar;
 	m_curChar = 0;
-	int32_t charLength =(int32_t) (g_static_utf8_next_char(&(m_stringImpl->m_buf.c_str()[m_pos])) -
+	int charLength =(int) (g_static_utf8_next_char(&(m_stringImpl->m_buf.c_str()[m_pos])) -
 	                               &(m_stringImpl->m_buf.c_str()[m_pos]));
 	m_curChar = new char[charLength+1];
 	for (int i=0; i<charLength; i++)
@@ -287,7 +287,7 @@ const char *RVNGString::Iter::operator()() const
 
 /* Various utf8/ucs4 routines, some stolen from glib */
 
-void appendUCS4(RVNGString &str, uint32_t ucs4)
+void appendUCS4(RVNGString &str, unsigned ucs4)
 {
 	int charLength = g_static_unichar_to_utf8(ucs4, 0);
 	char *utf8 = new char[charLength+1];
@@ -313,11 +313,11 @@ void appendUCS4(RVNGString &str, uint32_t ucs4)
  * Return value: number of bytes written
  */
 int
-g_static_unichar_to_utf8 (uint32_t c,
+g_static_unichar_to_utf8 (unsigned c,
                           char   *outbuf)
 {
-	uint8_t len = 1;
-	uint8_t first = 0;
+	unsigned char len = 1;
+	unsigned char first = 0;
 
 	if (c < 0x80)
 	{
@@ -352,7 +352,7 @@ g_static_unichar_to_utf8 (uint32_t c,
 
 	if (outbuf)
 	{
-		for (uint8_t i = (uint8_t)(len - 1); i > 0; --i)
+		for (unsigned char i = (unsigned char)(len - 1); i > 0; --i)
 		{
 			outbuf[i] = (char)((c & 0x3f) | 0x80);
 			c >>= 6;

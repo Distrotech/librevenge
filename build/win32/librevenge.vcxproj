@@ -794,7 +794,7 @@
     <ClInclude Include="..\..\inc\librevenge\librevenge.h" />
     <ClInclude Include="..\..\inc\librevenge\RVNGocument.h" />
     <ClInclude Include="..\..\inc\librevenge\RVNGBinaryData.h" />
-    <ClInclude Include="..\..\inc\librevenge\RVNGDocumentInterface.h" />
+    <ClInclude Include="..\..\inc\librevenge\RVNGTextInterface.h" />
     <ClInclude Include="..\..\inc\librevenge\RVNGProperty.h" />
     <ClInclude Include="..\..\inc\librevenge\RVNGPropertyList.h" />
     <ClInclude Include="..\..\inc\librevenge\RVNGPropertyListVector.h" />

@@ -4265,7 +4265,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\inc\librevenge\RVNGDocumentInterface.h"
+				RelativePath="..\..\inc\librevenge\RVNGTextInterface.h"
 				>
 			</File>
 			<File

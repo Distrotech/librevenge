@@ -25,7 +25,6 @@
  */
 
 #include "RVNGMemoryStream.h"
-#include "librevenge_internal.h"
 
 
 RVNGMemoryInputStream::RVNGMemoryInputStream(unsigned char *data, unsigned long size) :

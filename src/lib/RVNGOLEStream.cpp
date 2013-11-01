@@ -50,9 +50,10 @@
 #include <string>
 #include <vector>
 
-#include "librevenge_internal.h"
+#include <librevenge-stream/librevenge-stream.h>
 
 #include "RVNGOLEStream.h"
+#include "librevenge_internal.h"
 
 namespace librevenge
 {

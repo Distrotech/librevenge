@@ -39,10 +39,10 @@ definitions listed here.
 
 class RVNGInputStream;
 
-class RVNGDocumentInterface
+class RVNGTextInterface
 {
 public:
-	virtual ~RVNGDocumentInterface() {}
+	virtual ~RVNGTextInterface() {}
 
 	/**
 	Called when all document metadata should be set. This is always the first callback made.
