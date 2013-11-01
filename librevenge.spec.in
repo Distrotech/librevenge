@@ -79,7 +79,7 @@ umask 022
 %if %{!?_without_stream:1}%{?_without_stream:0}
 %files tools
 %defattr(755,root,root,755)
-%{_bindir}/wpd2*
+%{_bindir}/rvng2*
 %endif
 
 %files devel

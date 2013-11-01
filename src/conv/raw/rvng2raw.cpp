@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * Major Contributor(s):
- * Copyright (C) 2002-2003 William Lachance (wrlach@gmail.com)
- * Copyright (C) 2002-2004 Marc Maurer (uwog@uwog.net)
+ * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
+ * Copyright (C) 2002,2004 Marc Maurer (uwog@uwog.net)
  *
  * For minor contributions see the git repository.
  *
@@ -20,10 +20,14 @@
  * For further information visit http://librevenge.sourceforge.net
  */
 
+/* "This product is not manufactured, approved, or supported by
+ * Corel Corporation or Corel Corporation Limited."
+ */
+
 #include <stdio.h>
-#include "HtmlDocumentGenerator.h"
 #include <librevenge/librevenge.h>
 #include <librevenge-stream/librevenge-stream.h>
+#include "RawDocumentGenerator.h"
 #include <string.h>
 
 #ifdef HAVE_CONFIG_H
@@ -39,18 +43,19 @@ namespace
 
 int printUsage()
 {
-	printf("Usage: wpd2html [OPTION] <WordPerfect Document>\n");
+	printf("Usage: rvng2raw [OPTION] <WordPerfect Document>\n");
 	printf("\n");
 	printf("Options:\n");
+	printf("--callgraph           Display the call graph nesting level\n");
 	printf("--help                Shows this help message\n");
 	printf("--password <password> Try to decrypt password protected document\n");
-	printf("--version             Output wpd2html version \n");
+	printf("--version             Output rvng2raw version \n");
 	return -1;
 }
 
 int printVersion()
 {
-	printf("wpd2html %s\n", VERSION);
+	printf("rvng2raw %s\n", VERSION);
 	return 0;
 }
 
@@ -58,11 +63,12 @@ int printVersion()
 
 int main(int argc, char *argv[])
 {
-	if (argc < 2)
-		return printUsage();
-
+	bool printIndentLevel = false;
 	char *file = 0;
 	char *password = 0;
+
+	if (argc < 2)
+		return printUsage();
 
 	for (int i = 1; i < argc; i++)
 	{
@@ -73,6 +79,8 @@ int main(int argc, char *argv[])
 		}
 		else if (!strncmp(argv[i], "--password=", 11))
 			password = &argv[i][11];
+		else if (!strcmp(argv[i], "--callgraph"))
+			printIndentLevel = true;
 		else if (!strcmp(argv[i], "--version"))
 			return printVersion();
 		else if (!file && strncmp(argv[i], "--", 2))
@@ -105,7 +113,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	HtmlDocumentGenerator documentGenerator;
+	RawDocumentGenerator documentGenerator(printIndentLevel);
 	RVNGResult error = RVNGocument::parse(&input, &documentGenerator, password);
 
 	if (error == RVNG_FILE_ACCESS_ERROR)

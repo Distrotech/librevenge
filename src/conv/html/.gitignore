@@ -4,5 +4,5 @@
 *.la
 Makefile
 Makefile.in
-wpd2html
+rvng2html
 *.rc

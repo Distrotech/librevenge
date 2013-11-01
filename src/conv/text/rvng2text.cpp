@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * Major Contributor(s):
- * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
- * Copyright (C) 2002,2004 Marc Maurer (uwog@uwog.net)
+ * Copyright (C) 2002-2003 William Lachance (wrlach@gmail.com)
+ * Copyright (C) 2002-2004 Marc Maurer (uwog@uwog.net)
  *
  * For minor contributions see the git repository.
  *
@@ -25,10 +25,10 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 #include <librevenge/librevenge.h>
 #include <librevenge-stream/librevenge-stream.h>
-#include "RawDocumentGenerator.h"
-#include <string.h>
+#include "TextDocumentGenerator.h"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,19 +43,19 @@ namespace
 
 int printUsage()
 {
-	printf("Usage: wpd2raw [OPTION] <WordPerfect Document>\n");
+	printf("Usage: rvng2text [OPTION] <WordPerfect Document>\n");
 	printf("\n");
 	printf("Options:\n");
-	printf("--callgraph           Display the call graph nesting level\n");
+	printf("--info                Display document metadata instead of the text\n");
 	printf("--help                Shows this help message\n");
 	printf("--password <password> Try to decrypt password protected document\n");
-	printf("--version             Output wpd2raw version \n");
+	printf("--version             Output rvng2text version\n");
 	return -1;
 }
 
 int printVersion()
 {
-	printf("wpd2raw %s\n", VERSION);
+	printf("rvng2text %s\n", VERSION);
 	return 0;
 }
 
@@ -63,12 +63,12 @@ int printVersion()
 
 int main(int argc, char *argv[])
 {
-	bool printIndentLevel = false;
-	char *file = 0;
-	char *password = 0;
-
 	if (argc < 2)
 		return printUsage();
+
+	char *szInputFile = 0;
+	bool isInfo = false;
+	char *password = 0;
 
 	for (int i = 1; i < argc; i++)
 	{
@@ -79,20 +79,20 @@ int main(int argc, char *argv[])
 		}
 		else if (!strncmp(argv[i], "--password=", 11))
 			password = &argv[i][11];
-		else if (!strcmp(argv[i], "--callgraph"))
-			printIndentLevel = true;
+		else if (!strcmp(argv[i], "--info"))
+			isInfo = true;
 		else if (!strcmp(argv[i], "--version"))
 			return printVersion();
-		else if (!file && strncmp(argv[i], "--", 2))
-			file = argv[i];
+		else if (!szInputFile && strncmp(argv[i], "--", 2))
+			szInputFile = argv[i];
 		else
 			return printUsage();
 	}
 
-	if (!file)
+	if (!szInputFile)
 		return printUsage();
 
-	RVNGFileStream input(file);
+	RVNGFileStream input(szInputFile);
 
 	RVNGConfidence confidence = RVNGocument::isFileFormatSupported(&input);
 	if (confidence != RVNG_CONFIDENCE_EXCELLENT && confidence != RVNG_CONFIDENCE_SUPPORTED_ENCRYPTION)
@@ -113,7 +113,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	RawDocumentGenerator documentGenerator(printIndentLevel);
+	TextDocumentGenerator documentGenerator(isInfo);
 	RVNGResult error = RVNGocument::parse(&input, &documentGenerator, password);
 
 	if (error == RVNG_FILE_ACCESS_ERROR)

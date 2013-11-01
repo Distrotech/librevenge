@@ -27,7 +27,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "wpd2html"=".\wpd2html.dsp" - Package Owner=<4>
+Project: "rvng2html"=".\rvng2html.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -45,7 +45,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "wpd2raw"=".\wpd2raw.dsp" - Package Owner=<4>
+Project: "rvng2raw"=".\rvng2raw.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -63,7 +63,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "wpd2text"=".\wpd2text.dsp" - Package Owner=<4>
+Project: "rvng2text"=".\rvng2text.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{

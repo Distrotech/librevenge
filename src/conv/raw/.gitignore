@@ -4,5 +4,5 @@
 *.la
 Makefile
 Makefile.in
-wpd2raw
+rvng2raw
 *.rc

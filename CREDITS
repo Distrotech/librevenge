@@ -32,7 +32,7 @@ Kamran Khan <sum1_abi@yahoo.com>			Audit librevenge with more than 46k
 Andrew Ziem <ahziem1@mailbolt.com>			Fix memory leak in standalone
 							WordPerfect converters.
 David Hislop <david.hislop.1@gmail.com>			Build fixed on MSVC++ and project
-							files to build wpd2foo converters
+							files to build rvng2foo converters
 							with MSVC++ compilers.
 Edward Mendelson <em36@columbia.edu>		Miscellaneous character conversion fixes.
 Tomas 'scarabeus' Chvatal <tomas.chvatal@gmail.com>		Build system rewrite

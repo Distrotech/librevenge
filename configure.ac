@@ -58,9 +58,9 @@ AS_CASE([$host],
 		native_win32=yes
 		LIBREVENGE_WIN32_RESOURCE=librevenge-win32res.lo
 		LIBREVENGE_STREAM_WIN32_RESOURCE=librevenge-stream-win32res.lo
-		RVNG2HTML_WIN32_RESOURCE=wpd2html-win32res.lo
-		RVNG2TEXT_WIN32_RESOURCE=wpd2text-win32res.lo
-		RVNG2RAW_WIN32_RESOURCE=wpd2raw-win32res.lo
+		RVNG2HTML_WIN32_RESOURCE=rvng2html-win32res.lo
+		RVNG2TEXT_WIN32_RESOURCE=rvng2text-win32res.lo
+		RVNG2RAW_WIN32_RESOURCE=rvng2raw-win32res.lo
 	], [
 		native_win32=no
 		LIBREVENGE_WIN32_RESOURCE=
@@ -276,11 +276,11 @@ Makefile
 src/Makefile
 src/conv/Makefile
 src/conv/html/Makefile
-src/conv/html/wpd2html.rc
+src/conv/html/rvng2html.rc
 src/conv/raw/Makefile
-src/conv/raw/wpd2raw.rc
+src/conv/raw/rvng2raw.rc
 src/conv/text/Makefile
-src/conv/text/wpd2text.rc
+src/conv/text/rvng2text.rc
 src/lib/Makefile
 src/lib/librevenge.rc
 src/lib/librevenge-stream.rc

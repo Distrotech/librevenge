@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="wpd2html"
-	ProjectGUID="{CE8B94C0-593D-442E-ACDD-CA3830A00FF6}"
+	Name="rvng2raw"
+	ProjectGUID="{A11C84E5-19D8-44EF-BD26-50A487CEB4B2}"
 	TargetFrameworkVersion="0"
 	>
 	<Platforms>
@@ -19,6 +19,7 @@
 			OutputDirectory=".\Release"
 			IntermediateDirectory=".\Release"
 			ConfigurationType="1"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			>
@@ -38,7 +39,7 @@
 				Name="VCMIDLTool"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName=".\Release/wpd2html.tlb"
+				TypeLibraryName=".\Release/rvng2raw.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
@@ -48,7 +49,7 @@
 				PreprocessorDefinitions="NDEBUG;WIN32;_CONSOLE"
 				RuntimeLibrary="2"
 				TreatWChar_tAsBuiltInType="false"
-				PrecompiledHeaderFile=".\Release/wpd2html.pch"
+				PrecompiledHeaderFile=".\Release/rvng2raw.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
@@ -69,11 +70,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="librevenge-stream-0.9.lib librevenge-0.9.lib"
-				OutputFile="Release\bin\wpd2html.exe"
+				OutputFile="Release\bin\rvng2raw.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="Release\lib"
-				ProgramDatabaseFile=".\Release/wpd2html.pdb"
+				ProgramDatabaseFile=".\Release/rvng2raw.pdb"
 				SubSystem="1"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -90,7 +91,7 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile=".\Release/wpd2html.bsc"
+				OutputFile=".\Release/rvng2raw.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -107,6 +108,7 @@
 			OutputDirectory=".\Debug"
 			IntermediateDirectory=".\Debug"
 			ConfigurationType="1"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			>
@@ -126,7 +128,7 @@
 				Name="VCMIDLTool"
 				SuppressStartupBanner="true"
 				TargetEnvironment="1"
-				TypeLibraryName=".\Debug/wpd2html.tlb"
+				TypeLibraryName=".\Debug/rvng2raw.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
@@ -137,7 +139,7 @@
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				TreatWChar_tAsBuiltInType="false"
-				PrecompiledHeaderFile=".\Debug/wpd2html.pch"
+				PrecompiledHeaderFile=".\Debug/rvng2raw.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
@@ -159,12 +161,12 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="librevenge-0.9.lib librevenge-stream-0.9.lib"
-				OutputFile="Debug\bin\wpd2html.exe"
+				OutputFile="Debug\bin\rvng2raw.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="Debug\lib"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\Debug/wpd2html.pdb"
+				ProgramDatabaseFile=".\Debug/rvng2raw.pdb"
 				SubSystem="1"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -181,7 +183,7 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile=".\Debug/wpd2html.bsc"
+				OutputFile=".\Debug/rvng2raw.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -202,7 +204,7 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			>
 			<File
-				RelativePath="..\..\src\conv\html\HtmlDocumentGenerator.cpp"
+				RelativePath="..\..\src\conv\raw\RawDocumentGenerator.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -224,7 +226,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\src\conv\html\wpd2html.cpp"
+				RelativePath="..\..\src\conv\raw\rvng2raw.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -251,7 +253,7 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			>
 			<File
-				RelativePath="..\..\src\conv\html\HtmlDocumentGenerator.h"
+				RelativePath="..\..\src\conv\raw\RawDocumentGenerator.h"
 				>
 			</File>
 		</Filter>

@@ -2,7 +2,7 @@ CHANGES:
 0.9.8 - 0.9.9
 - Miscellaneous coverity fixes (David Tardon)
 - RVNG_SEEK_END for RVNGMemoryInputStream (Laurent Alonso)
-- Metadata for wpd2html (David Hislop)
+- Metadata for rvng2html (David Hislop)
 - Cleanup and build fixes (Fridrich Strba)
 
 0.9.7 - 0.9.8
@@ -78,7 +78,7 @@ CHANGES:
 - Fix unicode mappings of some older Symbol and Dingbats fonts (Fridrich)
 - Drop the libgsf dependency in favour of pure C++ implementation of the RVNGInputStream
   interface (Fridrich, Ariya)
-- Fix the footnote/endnote/comment/annotation/textbox writing in wpd2html converter
+- Fix the footnote/endnote/comment/annotation/textbox writing in rvng2html converter
 - Improve metadata parsing (David Hislop)
 
 0.8.13 - 0.8.14
@@ -119,7 +119,7 @@ CHANGES:
 - Prevent the heuristic typedetection from throwing (Fridrich)
 - Add a new stream implementation based on C++ streams, rendering libgsf dependency
   very optional; deprecate GSFInputStream (Fridrich)
-- Allow building of wpd2foo tools by Micro$oft Visual studio (David Hislop, Fridrich)
+- Allow building of rvng2foo tools by Micro$oft Visual studio (David Hislop, Fridrich)
 
 0.8.8 - 0.8.9
 - Fix http://qa.openoffice.org/issues/show_bug.cgi?id=74134, a bug in WP1 document
@@ -159,7 +159,7 @@ CHANGES:
 - Initial conversion of headers/footers in WP42 parser (Fridrich)
 - Fix some parser errors in WP42 parser; now we seek to the right place
   and parse correctly all functions (Fridrich)
-- Fixed crash in wpd2foo if invoked with non-existing filename (Jody Goldberg)
+- Fixed crash in rvng2foo if invoked with non-existing filename (Jody Goldberg)
 - Assure that the table we send to the listener implementation is a valid
   table independent of how messy the table is in the WP document (Fridrich)
 - Fix situations where there is no tab position information in WPUs inside
@@ -206,7 +206,7 @@ CHANGES:
   the same independent on the order of the operands (Fridrich)
 - Fix http://bugzilla.abisource.com/show_bug.cgi?id=10279, a crash if a table
   from the middle of the tableList is in footnote and/or endnote (Marc, Fridrich)
-- Add an option "--info" to wpd2text; called with this option, wpd2text dumps the
+- Add an option "--info" to rvng2text; called with this option, rvng2text dumps the
   information of the document instead of converting it. This could be useful for 
   beagle (Fridrich)
 - Refactoring of the listener structure and split of RVNGListener into RVNGContentListener
@@ -296,11 +296,11 @@ CHANGES:
   paragraph group
 - Conversion of Hard-Line-Breaks (Fridrich Strba)
 - Fixed bug in WP6FixedLengthGroup handling (Fridrich Strba)
-- Added --callgraph to wpd2raw, and added all parameters to the 
+- Added --callgraph to rvng2raw, and added all parameters to the 
   output (Marc Maurer)
 - Fixed a bug that prevented the conversion of full justification
   (Fridrich Strba)
-- wpd2foo tools properly detect if a file format is suported
+- rvng2foo tools properly detect if a file format is suported
   or not (Marc Maurer)
 - Handle unsupported file types other than WordPerfect documents
   (like Macintosh WP2.0 documents) more gracefully (Marc Maurer)
@@ -335,9 +335,9 @@ to bold a word (Fridrich Strba)
 - Cleanup file header handling mess (Marc Maurer)
 - Removal of stale files (Marc Maurer)
 - Several fixes to make librevenge compile on Win32/MSVC (Marc Maurer)
-- Make the wpd2text converter use the high level parsing framework
+- Make the rvng2text converter use the high level parsing framework
   to support WP4 and WP5 documents as well (Marc Maurer)
-- Rework the wpd2raw tool to use the high level parsing framework
+- Rework the rvng2raw tool to use the high level parsing framework
   to support WP4 and WP5 documents as well (Marc Maurer)
 - Restructure the class hierarchy to allow for code sharing
   between the different high level listeners (Marc Maurer)
@@ -402,7 +402,7 @@ list elements (William Lachance)
 - many bugfixes (William, Marc)
 
 0.3.1 -> 0.3.2
-- small typo fix to wpd2html (Marc Maurer)
+- small typo fix to rvng2html (Marc Maurer)
 - huge bug in the build system: we require libgsf-1 (Marc)
 
 0.3.0 -> 0.3.1

@@ -14,11 +14,11 @@ VS_VERSION_INFO VERSIONINFO
       BLOCK "040904B0"
       BEGIN
 	VALUE "CompanyName", "The librevenge developer community"
-	VALUE "FileDescription", "wpd2html"
+	VALUE "FileDescription", "rvng2text"
 	VALUE "FileVersion", "@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.@RVNG_MICRO_VERSION@.BUILDNUMBER"
-	VALUE "InternalName", "wpd2html"
+	VALUE "InternalName", "rvng2text"
 	VALUE "LegalCopyright", "Copyright (C) 2002-2006 William Lachance, Marc Maurer, Fridrich Strba, other contributers"
-	VALUE "OriginalFilename", "wpd2html.exe"
+	VALUE "OriginalFilename", "rvng2text.exe"
 	VALUE "ProductName", "librevenge"
 	VALUE "ProductVersion", "@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.@RVNG_MICRO_VERSION@"
       END

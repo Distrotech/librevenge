@@ -16,16 +16,16 @@ DLLDIR=bin
 @STRIP@ --strip-all \
 $DLLDIR/librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.dll \
 $DLLDIR/librevenge-stream-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.dll \
-bin/wpd2html.exe \
-bin/wpd2raw.exe \
-bin/wpd2text.exe
+bin/rvng2html.exe \
+bin/rvng2raw.exe \
+bin/rvng2text.exe
 
 upx -qqq --best \
 $DLLDIR/librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.dll \
 $DLLDIR/librevenge-stream-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.dll \
-bin/wpd2html.exe \
-bin/wpd2raw.exe \
-bin/wpd2text.exe
+bin/rvng2html.exe \
+bin/rvng2raw.exe \
+bin/rvng2text.exe
 
 rm -f $ZIP
 zip -q -r $ZIP -@ <<EOF
@@ -46,7 +46,7 @@ EOF
 
 rm -f $TOOLSZIP
 zip -q -r -j $TOOLSZIP -@ <<EOF
-bin/wpd2html.exe
-bin/wpd2raw.exe
-bin/wpd2text.exe
+bin/rvng2html.exe
+bin/rvng2raw.exe
+bin/rvng2text.exe
 EOF

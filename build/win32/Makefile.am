@@ -5,20 +5,20 @@ EXTRA_DIST = \
 	librevengestream.dsp \
 	librevenge.dsp \
 	librevenge.dsw \
-	wpd2html.dsp \
-	wpd2raw.dsp \
-	wpd2text.dsp \
+	rvng2html.dsp \
+	rvng2raw.dsp \
+	rvng2text.dsp \
 	\
 	librevenge.vcxproj.sln \
 	librevengestream.vcxproj \
 	librevenge.vcxproj \
-	wpd2html.vcxproj \
-	wpd2raw.vcxproj \
-	wpd2text.vcxproj \
+	rvng2html.vcxproj \
+	rvng2raw.vcxproj \
+	rvng2text.vcxproj \
 	\
 	librevenge.vcproj.sln \
 	librevengestream.vcproj \
 	librevenge.vcproj \
-	wpd2html.vcproj \
-	wpd2raw.vcproj \
-	wpd2text.vcproj
+	rvng2html.vcproj \
+	rvng2raw.vcproj \
+	rvng2text.vcproj

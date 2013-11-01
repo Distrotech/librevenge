@@ -6,9 +6,9 @@
 { perl ./createBuildNumber.pl \
 	src/lib/librevenge-build.stamp \
 	src/lib/librevenge-stream-build.stamp \
-	src/conv/html/wpd2html-build.stamp \
-	src/conv/raw/wpd2raw-build.stamp \
-	src/conv/text/wpd2text-build.stamp
+	src/conv/html/rvng2html-build.stamp \
+	src/conv/raw/rvng2raw-build.stamp \
+	src/conv/text/rvng2text-build.stamp
 #Success
 exit 0
 }
