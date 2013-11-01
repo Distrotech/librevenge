@@ -4,8 +4,8 @@ libdir=@libdir@
 includedir=@includedir@
 
 Name: librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@
-Description: A library for reading and writing Corel WordPerfect(tm) documents
+Description: API library for generic document converters
 Version: @VERSION@
 Requires: librevenge-stream-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@
-Libs: -L${libdir} -lwpd-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@
+Libs: -L${libdir} -lrevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@
 Cflags: -I${includedir}/librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@

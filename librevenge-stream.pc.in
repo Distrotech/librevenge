@@ -4,7 +4,7 @@ libdir=@libdir@
 includedir=@includedir@
                                                                        
 Name: librevenge-stream-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@
-Description: Sample Input stream implementation for librevenge, a library for reading and writing Corel WordPerfect(tm) documents
+Description: Sample Input stream implementation for librevenge
 Version: @VERSION@
-Libs: -L${libdir} -lwpd-stream-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@
+Libs: -L${libdir} -lrevenge-stream-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@
 Cflags: -I${includedir}/librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@
