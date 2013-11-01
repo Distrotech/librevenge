@@ -77,13 +77,6 @@ AS_CASE([$host],
 AC_MSG_RESULT([$platform_win32])
 AM_CONDITIONAL([PLATFORM_WIN32], [test "x$platform_win32" = "xyes"])
 
-AC_ARG_ENABLE([def-files],
-	[AS_HELP_STRING([--enable-def-files], [Enable use of def files to define exported symbols on win32])],
-	[enable_def_files="$enableval"],
-	[enable_def_files=no]
-)
-AM_CONDITIONAL(DEF_FILES, [test "x$enable_def_files" = "xyes" -a "x$native_win32" = "xyes"])
-
 # =========================
 # Platform check for darwin
 # =========================
