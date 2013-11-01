@@ -254,7 +254,7 @@ bool RVNGString::Iter::next()
 	else if (m_pos < len)
 	{
 		m_pos+=(int) (g_static_utf8_next_char(&(m_stringImpl->m_buf.c_str()[m_pos])) -
-		                  &(m_stringImpl->m_buf.c_str()[m_pos]));
+		              &(m_stringImpl->m_buf.c_str()[m_pos]));
 	}
 
 	if (m_pos < len)
@@ -276,7 +276,7 @@ const char *RVNGString::Iter::operator()() const
 	if (m_curChar) delete [] m_curChar;
 	m_curChar = 0;
 	int charLength =(int) (g_static_utf8_next_char(&(m_stringImpl->m_buf.c_str()[m_pos])) -
-	                               &(m_stringImpl->m_buf.c_str()[m_pos]));
+	                       &(m_stringImpl->m_buf.c_str()[m_pos]));
 	m_curChar = new char[charLength+1];
 	for (int i=0; i<charLength; i++)
 		m_curChar[i] = m_stringImpl->m_buf[m_pos+i];

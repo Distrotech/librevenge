@@ -6,8 +6,8 @@ AC_PREREQ([2.65])
 # Version informations
 # ====================
 m4_define([librevenge_version_major],[0])
-m4_define([librevenge_version_minor],[9])
-m4_define([librevenge_version_micro],[9])
+m4_define([librevenge_version_minor],[0])
+m4_define([librevenge_version_micro],[0])
 m4_define([librevenge_version],[librevenge_version_major.librevenge_version_minor.librevenge_version_micro])
 
 # =============
@@ -58,25 +58,16 @@ AS_CASE([$host],
 		native_win32=yes
 		LIBREVENGE_WIN32_RESOURCE=librevenge-win32res.lo
 		LIBREVENGE_STREAM_WIN32_RESOURCE=librevenge-stream-win32res.lo
-		RVNG2HTML_WIN32_RESOURCE=rvng2html-win32res.lo
-		RVNG2TEXT_WIN32_RESOURCE=rvng2text-win32res.lo
-		RVNG2RAW_WIN32_RESOURCE=rvng2raw-win32res.lo
 	], [
 		native_win32=no
 		LIBREVENGE_WIN32_RESOURCE=
 		LIBREVENGE_STREAM_WIN32_RESOURCE=
-		RVNG2HTML_WIN32_RESOURCE=
-		RVNG2TEXT_WIN32_RESOURCE=
-		RVNG2RAW_WIN32_RESOURCE=
 	]
 )
 AC_MSG_RESULT([$native_win32])
 AM_CONDITIONAL(OS_WIN32, [test "x$native_win32" = "xyes"])
 AC_SUBST(LIBREVENGE_WIN32_RESOURCE)
 AC_SUBST(LIBREVENGE_STREAM_WIN32_RESOURCE)
-AC_SUBST(RVNG2HTML_WIN32_RESOURCE)
-AC_SUBST(RVNG2TEXT_WIN32_RESOURCE)
-AC_SUBST(RVNG2RAW_WIN32_RESOURCE)
 
 AC_MSG_CHECKING([for Win32 platform in general])
 AS_CASE([$host],
@@ -192,21 +183,6 @@ AS_IF([test "x$enable_debug" = "xyes"], [
 ])
 AC_SUBST(DEBUG_CXXFLAGS)
 
-# ============
-# Static tools
-# ============
-AC_ARG_ENABLE([static-tools],
-	[AS_HELP_STRING([--enable-static-tools], [Link tools (binaries) statically])],
-	[enable_static_tools="$enableval"],
-	[enable_static_tools=no]
-)
-AS_IF([test "x$enable_static_tools" = "xyes"], [
-	enable_static="yes"
-], [
-	AC_DISABLE_STATIC
-])
-AM_CONDITIONAL(STATIC_TOOLS, [test "x$enable_static_tools" = "xyes"])
-
 # =============
 # Documentation
 # =============
@@ -227,43 +203,14 @@ AM_CONDITIONAL([WITH_LIBREVENGE_DOCS], [test "x$build_docs" != "xno"])
 
 
 # =========
-# Streaming
-# =========
-AC_ARG_WITH([stream],
-	[AS_HELP_STRING([--without-stream], [Do not build the input stream implementation])],
-	[with_stream="$withval"],
-	[with_stream=yes]
-)
-AM_CONDITIONAL(WITH_LIBREVENGE_STREAM, [test "x$with_stream" != "xno"])
-
-# ==========
-# Zip stream
-# ==========
-if test "x$with_stream" != "xno"; then
-	AC_ARG_WITH([zip-stream],
-		[AS_HELP_STRING([--without-zip-stream], [Do not build the zip stream implementation])],
-		[with_zip_stream="$withval"],
-		[with_zip_stream=yes]
-	)
-	AC_DEFINE([BUILD_ZIP_STREAM],[1],[Build the zip stream implementation])
-else
-	with_zip_stream="$with_stream"
-fi
-
-# =========
 # Find zlib
 # =========
-if test "x$with_stream" != "xno" -a "x$with_zip_stream" = "xyes"; then
 PKG_CHECK_MODULES([ZLIB],[zlib],[],[
     AC_CHECK_HEADER(zlib.h, [ZLIB_CFLAGS=],
         [AC_MSG_ERROR(zlib.h not found. install zlib)], [])
     AC_CHECK_LIB(z, inflate, [ ZLIB_LIBS=-lz ],
         [AC_MSG_ERROR(zlib not found or functional)], [])
 ])
-else
-ZLIB_CFLAGS=
-ZLIB_LIBS=
-fi
 
 AC_SUBST(ZLIB_CFLAGS)
 AC_SUBST(ZLIB_LIBS)
@@ -302,7 +249,6 @@ Build configuration:
 	docs:            ${build_docs}
 	stream:          ${with_stream}
 	zip-stream:      ${with_zip_stream}
-	static-tools:    ${enable_static_tools}
 	werror:          ${enable_werror}
 ==============================================================================
 ])

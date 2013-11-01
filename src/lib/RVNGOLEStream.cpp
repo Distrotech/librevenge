@@ -989,9 +989,9 @@ void librevenge::DirTree::load( unsigned char *buffer, unsigned size )
 }
 
 void librevenge::DirTree::getSubStreamList(unsigned ind, bool all, const std::string &prefix,
-                                       std::vector<std::string> &res,
-                                       std::set<unsigned> &seen,
-                                       bool isRoot) const
+        std::vector<std::string> &res,
+        std::set<unsigned> &seen,
+        bool isRoot) const
 {
 	if (seen.find(ind) != seen.end())
 		return;
@@ -1068,8 +1068,8 @@ void librevenge::DirTree::setInRedBlackTreeForm(unsigned ind, std::set<unsigned>
 }
 
 unsigned librevenge::DirTree::setInRBTForm(std::vector<unsigned> const &childs,
-                                       unsigned firstInd, unsigned lastInd,
-                                       unsigned height)
+        unsigned firstInd, unsigned lastInd,
+        unsigned height)
 {
 	unsigned middle = (firstInd+lastInd)/2;
 	unsigned ind=childs[middle];

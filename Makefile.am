@@ -2,11 +2,9 @@ ACLOCAL_AMFLAGS = -I m4
 
 pkgconfdir = $(libdir)/pkgconfig
 
-if WITH_LIBREVENGE_STREAM
-LIBREVENGE_STREAM_PC = librevenge-stream-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.pc
-endif
-
-pkgconf_DATA = librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.pc $(LIBREVENGE_STREAM_PC)
+pkgconf_DATA = \
+	librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.pc \
+	librevenge-stream-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.pc
 
 SUBDIRS = build inc src docs
 

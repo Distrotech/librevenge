@@ -66,7 +66,6 @@ void Test::tearDown(void)
 void Test::testStream(void)
 {
 	unsigned long numBytesRead;
-	unsigned long u32;
 
 	/**********************
 	 * Test RVNGFileStream *
@@ -88,23 +87,6 @@ void Test::testStream(void)
 	CPPUNIT_ASSERT ( NULL != input->read(50, numBytesRead)  );
 	CPPUNIT_ASSERT_EQUAL ( (long) 8 , input->tell() );
 
-	// test readU*()
-	input->seek(0, RVNG_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL( (uint8_t) 1 , readU8(input, 0) );
-	CPPUNIT_ASSERT_EQUAL( (uint8_t) 2 , readU8(input, 0) );
-	CPPUNIT_ASSERT_EQUAL( (uint8_t) 3 , readU8(input, 0) );
-	CPPUNIT_ASSERT_EQUAL( (uint8_t) 4 , readU8(input, 0) );
-
-	input->seek(0, RVNG_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL( (uint16_t) 0x0201 , readU16(input, 0) );
-	CPPUNIT_ASSERT_EQUAL( (uint16_t) 0x0403 , readU16(input, 0) );
-
-	input->seek(0, RVNG_SEEK_SET);
-	u32 = readU32(input, 0);
-	CPPUNIT_ASSERT_EQUAL( (unsigned long) 0x04030201 , u32 );
-	u32 = readU32(input, 0);
-	CPPUNIT_ASSERT_EQUAL( (unsigned long) 0x07060500 , u32 );
-
 	// test seek(), tell(), atEOS()
 	input->seek(1, RVNG_SEEK_SET);
 	CPPUNIT_ASSERT_EQUAL ( (long) 1 , input->tell() );
@@ -114,13 +96,6 @@ void Test::testStream(void)
 
 	input->seek(8, RVNG_SEEK_SET);
 	CPPUNIT_ASSERT_EQUAL ( (long) 8 , input->tell() );
-
-	input->seek(0, RVNG_SEEK_SET);
-	for (int i = 0; i < 8; i++)
-		readU8(input, 0);
-	CPPUNIT_ASSERT_EQUAL ( true, input->atEOS() );
-
-	CPPUNIT_ASSERT_THROW ( readU8(input, 0), FileException );
 
 	input->seek(-1, RVNG_SEEK_SET);
 	CPPUNIT_ASSERT_EQUAL ( (long) 0, input->tell() );
@@ -154,23 +129,6 @@ void Test::testStream(void)
 	CPPUNIT_ASSERT ( NULL != input->read(50, numBytesRead)  );
 	CPPUNIT_ASSERT_EQUAL ( (long) 8 , input->tell() );
 
-	// test readU*()
-	input->seek(0, RVNG_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL( (uint8_t) 1 , readU8(input, 0) );
-	CPPUNIT_ASSERT_EQUAL( (uint8_t) 2 , readU8(input, 0) );
-	CPPUNIT_ASSERT_EQUAL( (uint8_t) 3 , readU8(input, 0) );
-	CPPUNIT_ASSERT_EQUAL( (uint8_t) 4 , readU8(input, 0) );
-
-	input->seek(0, RVNG_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL( (uint16_t) 0x0201 , readU16(input, 0) );
-	CPPUNIT_ASSERT_EQUAL( (uint16_t) 0x0403 , readU16(input, 0) );
-
-	input->seek(0, RVNG_SEEK_SET);
-	u32 = readU32(input, 0);
-	CPPUNIT_ASSERT_EQUAL( (unsigned long) 0x04030201 , u32 );
-	u32 = readU32(input, 0);
-	CPPUNIT_ASSERT_EQUAL( (unsigned long) 0x07060500 , u32 );
-
 	// test seek(), tell(), atEOS()
 	input->seek(1, RVNG_SEEK_SET);
 	CPPUNIT_ASSERT_EQUAL ( (long) 1 , input->tell() );
@@ -180,13 +138,6 @@ void Test::testStream(void)
 
 	input->seek(8, RVNG_SEEK_SET);
 	CPPUNIT_ASSERT_EQUAL ( (long) 8 , input->tell() );
-
-	input->seek(0, RVNG_SEEK_SET);
-	for (int i = 0; i < 8; i++)
-		readU8(input, 0);
-	CPPUNIT_ASSERT_EQUAL ( true, input->atEOS() );
-
-	CPPUNIT_ASSERT_THROW ( readU8(input, 0), FileException );
 
 	input->seek(-1, RVNG_SEEK_SET);
 	CPPUNIT_ASSERT_EQUAL ( (long) 0, input->tell() );
@@ -204,7 +155,7 @@ void Test::testStream(void)
 	/************************
 	 * Test RVNGMemoryInputStream *
 	 ************************/
-	input = new RVNGMemoryInputStream((uint8_t *)("\1\2\3\4\0\5\6\7"), 8);
+	input = new RVNGMemoryInputStream((unsigned char *)("\1\2\3\4\0\5\6\7"), 8);
 
 	CPPUNIT_ASSERT_EQUAL ( false, input->isOLEStream() );
 	CPPUNIT_ASSERT_EQUAL ( (RVNGInputStream *) NULL, input->getDocumentOLEStream("foo") );
@@ -221,23 +172,6 @@ void Test::testStream(void)
 	CPPUNIT_ASSERT ( NULL != input->read(50, numBytesRead)  );
 	CPPUNIT_ASSERT_EQUAL ( (long) 8 , input->tell() );
 
-	// test readU*()
-	input->seek(0, RVNG_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL( (uint8_t) 1 , readU8(input, 0) );
-	CPPUNIT_ASSERT_EQUAL( (uint8_t) 2 , readU8(input, 0) );
-	CPPUNIT_ASSERT_EQUAL( (uint8_t) 3 , readU8(input, 0) );
-	CPPUNIT_ASSERT_EQUAL( (uint8_t) 4 , readU8(input, 0) );
-
-	input->seek(0, RVNG_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL( (uint16_t) 0x0201 , readU16(input, 0) );
-	CPPUNIT_ASSERT_EQUAL( (uint16_t) 0x0403 , readU16(input, 0) );
-
-	input->seek(0, RVNG_SEEK_SET);
-	u32 = readU32(input, 0);
-	CPPUNIT_ASSERT_EQUAL( (unsigned long) 0x04030201 , u32 );
-	u32 = readU32(input, 0);
-	CPPUNIT_ASSERT_EQUAL( (unsigned long) 0x07060500 , u32 );
-
 	// test seek(), tell(), atEOS()
 	input->seek(1, RVNG_SEEK_SET);
 	CPPUNIT_ASSERT_EQUAL ( (long) 1 , input->tell() );
@@ -247,13 +181,6 @@ void Test::testStream(void)
 
 	input->seek(8, RVNG_SEEK_SET);
 	CPPUNIT_ASSERT_EQUAL ( (long) 8 , input->tell() );
-
-	input->seek(0, RVNG_SEEK_SET);
-	for (int i = 0; i < 8; i++)
-		readU8(input, 0);
-	CPPUNIT_ASSERT_EQUAL ( true, input->atEOS() );
-
-	CPPUNIT_ASSERT_THROW ( readU8(input, 0), FileException );
 
 	input->seek(-1, RVNG_SEEK_SET);
 	CPPUNIT_ASSERT_EQUAL ( (long) 0, input->tell() );
