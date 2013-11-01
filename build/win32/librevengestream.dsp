@@ -50,7 +50,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"Release\lib\librevenge-stream-0.9.lib"
+# ADD LIB32 /nologo /out:"Release\lib\librevenge-stream-0.0.lib"
 
 !ELSEIF  "$(CFG)" == "librevengestream - Win32 Debug"
 
@@ -74,7 +74,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"Debug\lib\librevenge-stream-0.9.lib"
+# ADD LIB32 /nologo /out:"Debug\lib\librevenge-stream-0.0.lib"
 
 !ENDIF 
 

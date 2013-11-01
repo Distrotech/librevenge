@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="librevengestream"
-	ProjectGUID="{CB848337-B6C8-4942-961B-5A9FBBF37B46}"
+	ProjectGUID="{9BD03F44-431F-11E3-B8FC-D067E5EAB6E3}"
 	RootNamespace="librevengestream"
 	TargetFrameworkVersion="0"
 	>
@@ -68,7 +68,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="Release\lib\librevenge-stream-0.9.lib"
+				OutputFile="Release\lib\librevenge-stream-0.0.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -141,7 +141,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="Debug\lib\librevenge-stream-0.9.lib"
+				OutputFile="Debug\lib\librevenge-stream-0.0.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool

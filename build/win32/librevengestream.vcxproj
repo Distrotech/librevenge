@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{CB848337-B6C8-4942-961B-5A9FBBF37B46}</ProjectGuid>
+    <ProjectGuid>{9BD03F44-431F-11E3-B8FC-D067E5EAB6E3}</ProjectGuid>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -61,7 +61,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Lib>
-      <OutputFile>Release\lib\librevenge-stream-0.9.lib</OutputFile>
+      <OutputFile>Release\lib\librevenge-stream-0.0.lib</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Bscmake>
@@ -90,7 +90,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Lib>
-      <OutputFile>Debug\lib\librevenge-stream-0.9.lib</OutputFile>
+      <OutputFile>Debug\lib\librevenge-stream-0.0.lib</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Bscmake>

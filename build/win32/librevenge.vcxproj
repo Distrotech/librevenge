@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{330E414A-9C06-4A4B-9814-0C665F5DCA52}</ProjectGuid>
+    <ProjectGuid>{740F0D46-431F-11E3-B75A-D067E5EAB6E3}</ProjectGuid>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -61,7 +61,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Lib>
-      <OutputFile>Debug\lib\librevenge-0.9.lib</OutputFile>
+      <OutputFile>Debug\lib\librevenge-0.0.lib</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Bscmake>
@@ -92,7 +92,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Lib>
-      <OutputFile>Release\lib\librevenge-0.9.lib</OutputFile>
+      <OutputFile>Release\lib\librevenge-0.0.lib</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Bscmake>

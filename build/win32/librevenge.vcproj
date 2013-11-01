@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="librevenge"
-	ProjectGUID="{330E414A-9C06-4A4B-9814-0C665F5DCA52}"
+	ProjectGUID="{740F0D46-431F-11E3-B75A-D067E5EAB6E3}"
 	TargetFrameworkVersion="0"
 	>
 	<Platforms>
@@ -67,7 +67,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="Debug\lib\librevenge-0.9.lib"
+				OutputFile="Debug\lib\librevenge-0.0.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -142,7 +142,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="Release\lib\librevenge-0.9.lib"
+				OutputFile="Release\lib\librevenge-0.0.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
