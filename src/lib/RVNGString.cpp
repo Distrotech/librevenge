@@ -36,7 +36,6 @@
 #endif
 
 static int g_static_utf8_strlen (const char *p, const char *end);
-static int g_static_unichar_to_utf8 (unsigned c,  char *outbuf);
 
 static const signed char g_static_utf8_skip_data[256] =
 {
@@ -286,82 +285,6 @@ const char *RVNGString::Iter::operator()() const
 }
 
 /* Various utf8/ucs4 routines, some stolen from glib */
-
-void appendUCS4(RVNGString &str, unsigned ucs4)
-{
-	int charLength = g_static_unichar_to_utf8(ucs4, 0);
-	char *utf8 = new char[charLength+1];
-	utf8[charLength] = '\0';
-	g_static_unichar_to_utf8(ucs4, utf8);
-	str.append(utf8);
-
-	delete[] utf8;
-}
-
-/*
- * g_static_unichar_to_utf8:
- *
- * stolen from glib 2.4.1
- *
- * @c: a ISO10646 character code
- * @outbuf: output buffer, must have at least 6 bytes of space.
- *       If %0, the length will be computed and returned
- *       and nothing will be written to @outbuf.
- *
- * Converts a single character to UTF-8.
- *
- * Return value: number of bytes written
- */
-int
-g_static_unichar_to_utf8 (unsigned c,
-                          char   *outbuf)
-{
-	unsigned char len = 1;
-	unsigned char first = 0;
-
-	if (c < 0x80)
-	{
-		first = 0;
-		len = 1;
-	}
-	else if (c < 0x800)
-	{
-		first = 0xc0;
-		len = 2;
-	}
-	else if (c < 0x10000)
-	{
-		first = 0xe0;
-		len = 3;
-	}
-	else if (c < 0x200000)
-	{
-		first = 0xf0;
-		len = 4;
-	}
-	else if (c < 0x4000000)
-	{
-		first = 0xf8;
-		len = 5;
-	}
-	else
-	{
-		first = 0xfc;
-		len = 6;
-	}
-
-	if (outbuf)
-	{
-		for (unsigned char i = (unsigned char)(len - 1); i > 0; --i)
-		{
-			outbuf[i] = (char)((c & 0x3f) | 0x80);
-			c >>= 6;
-		}
-		outbuf[0] = (char)(c | first);
-	}
-
-	return len;
-}
 
 /*
  * g_static_utf8_strlen:
