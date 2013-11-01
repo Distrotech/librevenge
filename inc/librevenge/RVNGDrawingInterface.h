@@ -26,6 +26,7 @@
 
 #ifndef __RVNGPAINTINTERFACE_H__
 #define __RVNGPAINTINTERFACE_H__
+
 #include "RVNGPropertyList.h"
 #include "RVNGPropertyListVector.h"
 #include "RVNGBinaryData.h"

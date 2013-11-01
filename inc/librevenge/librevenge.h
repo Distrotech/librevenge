@@ -24,6 +24,7 @@
 #define LIBREVENGE_H
 
 #include "RVNGDrawingInterface.h"
+#include "RVNGPresentationInterface.h"
 #include "RVNGTextInterface.h"
 #include "RVNGStringVector.h"
 

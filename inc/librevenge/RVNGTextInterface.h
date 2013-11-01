@@ -23,6 +23,7 @@
 
 #ifndef RVNGDOCUMENTINTERFACEIMPL_H
 #define RVNGDOCUMENTINTERFACEIMPL_H
+
 #include "RVNGPropertyList.h"
 #include "RVNGPropertyListVector.h"
 #include "RVNGBinaryData.h"

@@ -22,6 +22,7 @@
 #ifndef RVNGBINARYDATA_H
 #define RVNGBINARYDATA_H
 
+#include <librevenge-stream/librevenge-stream.h>
 #include "RVNGString.h"
 
 class RVNGInputStream;

@@ -23,12 +23,13 @@ librevenge_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_include_HEADERS = \
 	$(top_srcdir)/inc/librevenge/librevenge.h \
 	$(top_srcdir)/inc/librevenge/RVNGBinaryData.h \
 	$(top_srcdir)/inc/librevenge/RVNGDrawingInterface.h \
-	$(top_srcdir)/inc/librevenge/RVNGTextInterface.h \
+	$(top_srcdir)/inc/librevenge/RVNGPresentationInterface.h \
 	$(top_srcdir)/inc/librevenge/RVNGProperty.h \
 	$(top_srcdir)/inc/librevenge/RVNGPropertyList.h \
 	$(top_srcdir)/inc/librevenge/RVNGPropertyListVector.h \
 	$(top_srcdir)/inc/librevenge/RVNGString.h \
-	$(top_srcdir)/inc/librevenge/RVNGStringVector.h
+	$(top_srcdir)/inc/librevenge/RVNGStringVector.h \
+	$(top_srcdir)/inc/librevenge/RVNGTextInterface.h
 
 AM_CXXFLAGS = -I$(top_srcdir)/inc $(DEBUG_CXXFLAGS)
 
