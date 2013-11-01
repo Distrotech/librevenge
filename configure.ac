@@ -234,8 +234,6 @@ build/Makefile
 build/win32/Makefile
 librevenge-$RVNG_MAJOR_VERSION.$RVNG_MINOR_VERSION.pc:librevenge.pc.in
 librevenge-stream-$RVNG_MAJOR_VERSION.$RVNG_MINOR_VERSION.pc:librevenge-stream.pc.in
-librevenge.spec
-librevenge-zip
 ])
 AC_OUTPUT
 
