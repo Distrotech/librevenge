@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -27,8 +27,8 @@
 
 #include "WP5ContentListener.h"
 #include "WP5FileStructure.h"
-#include "WPXFileStructure.h"
-#include "libwpd_internal.h"
+#include "RVNGFileStructure.h"
+#include "librevenge_internal.h"
 #include "WP5SubDocument.h"
 
 _WP5ContentParsingState::_WP5ContentParsingState() :
@@ -43,9 +43,9 @@ _WP5ContentParsingState::~_WP5ContentParsingState()
 {
 }
 
-WP5ContentListener::WP5ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP5SubDocument *> &subDocuments, WPXDocumentInterface *documentInterface) :
+WP5ContentListener::WP5ContentListener(std::list<RVNGPageSpan> &pageList, std::vector<WP5SubDocument *> &subDocuments, RVNGDocumentInterface *documentInterface) :
 	WP5Listener(),
-	WPXContentListener(pageList, documentInterface),
+	RVNGContentListener(pageList, documentInterface),
 	m_parseState(new WP5ContentParsingState),
 	m_subDocuments(subDocuments),
 	m_defaultFontSize(12.0),
@@ -74,7 +74,7 @@ void WP5ContentListener::insertCharacter(uint32_t character)
 void WP5ContentListener::insertTab(uint8_t tabType, double tabPosition)
 {
 	bool tmpHasTabPositionInformation = true;
-	if (tabPosition >= (double)((double)0xFFFE/(double)WPX_NUM_WPUS_PER_INCH) || tabPosition == 0.0)
+	if (tabPosition >= (double)((double)0xFFFE/(double)RVNG_NUM_WPUS_PER_INCH) || tabPosition == 0.0)
 		tmpHasTabPositionInformation = false;
 
 	if (!isUndoOn())
@@ -104,11 +104,11 @@ void WP5ContentListener::insertTab(uint8_t tabType, double tabPosition)
 			{
 			case WP5_TAB_GROUP_CENTER_ON_MARGINS:
 			case WP5_TAB_GROUP_CENTER_ON_CURRENT_POSITION:
-				m_ps->m_tempParagraphJustification = WPX_PARAGRAPH_JUSTIFICATION_CENTER;
+				m_ps->m_tempParagraphJustification = RVNG_PARAGRAPH_JUSTIFICATION_CENTER;
 				break;
 
 			case WP5_TAB_GROUP_FLUSH_RIGHT:
-				m_ps->m_tempParagraphJustification = WPX_PARAGRAPH_JUSTIFICATION_RIGHT;
+				m_ps->m_tempParagraphJustification = RVNG_PARAGRAPH_JUSTIFICATION_RIGHT;
 				break;
 
 			case WP5_TAB_GROUP_LEFT_TAB: // converted as first line indent
@@ -169,7 +169,7 @@ void WP5ContentListener::insertTab(uint8_t tabType, double tabPosition)
 void WP5ContentListener::insertIndent(uint8_t indentType, double indentPosition)
 {
 	bool tmpHasIndentPositionInformation = true;
-	if (indentPosition >= (double)((double)0xFFFE/(double)WPX_NUM_WPUS_PER_INCH) || indentPosition == 0.0)
+	if (indentPosition >= (double)((double)0xFFFE/(double)RVNG_NUM_WPUS_PER_INCH) || indentPosition == 0.0)
 		tmpHasIndentPositionInformation = false;
 
 	if (!isUndoOn())
@@ -244,26 +244,26 @@ void WP5ContentListener::defineTable(uint8_t position, uint16_t leftOffset)
 		switch (position & 0x07)
 		{
 		case 0:
-			m_ps->m_tableDefinition.m_positionBits = WPX_TABLE_POSITION_ALIGN_WITH_LEFT_MARGIN;
+			m_ps->m_tableDefinition.m_positionBits = RVNG_TABLE_POSITION_ALIGN_WITH_LEFT_MARGIN;
 			break;
 		case 1:
-			m_ps->m_tableDefinition.m_positionBits = WPX_TABLE_POSITION_ALIGN_WITH_RIGHT_MARGIN;
+			m_ps->m_tableDefinition.m_positionBits = RVNG_TABLE_POSITION_ALIGN_WITH_RIGHT_MARGIN;
 			break;
 		case 2:
-			m_ps->m_tableDefinition.m_positionBits = WPX_TABLE_POSITION_CENTER_BETWEEN_MARGINS;
+			m_ps->m_tableDefinition.m_positionBits = RVNG_TABLE_POSITION_CENTER_BETWEEN_MARGINS;
 			break;
 		case 3:
-			m_ps->m_tableDefinition.m_positionBits = WPX_TABLE_POSITION_FULL;
+			m_ps->m_tableDefinition.m_positionBits = RVNG_TABLE_POSITION_FULL;
 			break;
 		case 4:
-			m_ps->m_tableDefinition.m_positionBits = WPX_TABLE_POSITION_ABSOLUTE_FROM_LEFT_MARGIN;
+			m_ps->m_tableDefinition.m_positionBits = RVNG_TABLE_POSITION_ABSOLUTE_FROM_LEFT_MARGIN;
 			break;
 		default:
 			// should not happen
 			break;
 		}
 		// Note: WordPerfect has an offset from the left edge of the page. We translate it to the offset from the left margin
-		m_ps->m_tableDefinition.m_leftOffset = (double)((double)leftOffset / (double)WPX_NUM_WPUS_PER_INCH) - m_ps->m_paragraphMarginLeft;
+		m_ps->m_tableDefinition.m_leftOffset = (double)((double)leftOffset / (double)RVNG_NUM_WPUS_PER_INCH) - m_ps->m_paragraphMarginLeft;
 
 		// remove all the old column information
 		m_ps->m_tableDefinition.m_columns.clear();
@@ -278,15 +278,15 @@ void WP5ContentListener::addTableColumnDefinition(uint32_t width, uint32_t /* le
 	if (!isUndoOn())
 	{
 		// define the new column
-		WPXColumnDefinition colDef;
-		colDef.m_width = (double)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
-		colDef.m_leftGutter = (double)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
-		colDef.m_rightGutter = (double)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
+		RVNGColumnDefinition colDef;
+		colDef.m_width = (double)((double)width / (double)RVNG_NUM_WPUS_PER_INCH);
+		colDef.m_leftGutter = (double)((double)width / (double)RVNG_NUM_WPUS_PER_INCH);
+		colDef.m_rightGutter = (double)((double)width / (double)RVNG_NUM_WPUS_PER_INCH);
 
 		// add the new column definition to our table definition
 		m_ps->m_tableDefinition.m_columns.push_back(colDef);
 
-		WPXColumnProperties colProp;
+		RVNGColumnProperties colProp;
 		colProp.m_attributes = attributes;
 		colProp.m_alignment = alignment;
 
@@ -323,14 +323,14 @@ void WP5ContentListener::insertRow(uint16_t rowHeight, bool isMinimumHeight, boo
 	if (!isUndoOn())
 	{
 		_flushText();
-		double rowHeightInch = (double)((double) rowHeight / (double)WPX_NUM_WPUS_PER_INCH);
+		double rowHeightInch = (double)((double) rowHeight / (double)RVNG_NUM_WPUS_PER_INCH);
 		_openTableRow(rowHeightInch, isMinimumHeight, isHeaderRow);
 	}
 }
 
 void WP5ContentListener::insertCell(uint8_t colSpan, uint8_t rowSpan, uint8_t borderBits,
                                     const RGBSColor *cellFgColor, const RGBSColor *cellBgColor,
-                                    const RGBSColor *cellBorderColor, WPXVerticalAlignment cellVerticalAlignment,
+                                    const RGBSColor *cellBorderColor, RVNGVerticalAlignment cellVerticalAlignment,
                                     bool useCellAttributes, uint32_t cellAttributes)
 {
 	if (!isUndoOn())
@@ -381,52 +381,52 @@ void WP5ContentListener::attributeChange(bool isOn, uint8_t attribute)
 		switch (attribute)
 		{
 		case WP5_ATTRIBUTE_EXTRA_LARGE:
-			textAttributeBit = WPX_EXTRA_LARGE_BIT;
+			textAttributeBit = RVNG_EXTRA_LARGE_BIT;
 			break;
 		case WP5_ATTRIBUTE_VERY_LARGE:
-			textAttributeBit = WPX_VERY_LARGE_BIT;
+			textAttributeBit = RVNG_VERY_LARGE_BIT;
 			break;
 		case WP5_ATTRIBUTE_LARGE:
-			textAttributeBit = WPX_LARGE_BIT;
+			textAttributeBit = RVNG_LARGE_BIT;
 			break;
 		case WP5_ATTRIBUTE_SMALL_PRINT:
-			textAttributeBit = WPX_SMALL_PRINT_BIT;
+			textAttributeBit = RVNG_SMALL_PRINT_BIT;
 			break;
 		case WP5_ATTRIBUTE_FINE_PRINT:
-			textAttributeBit = WPX_FINE_PRINT_BIT;
+			textAttributeBit = RVNG_FINE_PRINT_BIT;
 			break;
 		case WP5_ATTRIBUTE_SUPERSCRIPT:
-			textAttributeBit = WPX_SUPERSCRIPT_BIT;
+			textAttributeBit = RVNG_SUPERSCRIPT_BIT;
 			break;
 		case WP5_ATTRIBUTE_SUBSCRIPT:
-			textAttributeBit = WPX_SUBSCRIPT_BIT;
+			textAttributeBit = RVNG_SUBSCRIPT_BIT;
 			break;
 		case WP5_ATTRIBUTE_OUTLINE:
-			textAttributeBit = WPX_OUTLINE_BIT;
+			textAttributeBit = RVNG_OUTLINE_BIT;
 			break;
 		case WP5_ATTRIBUTE_ITALICS:
-			textAttributeBit = WPX_ITALICS_BIT;
+			textAttributeBit = RVNG_ITALICS_BIT;
 			break;
 		case WP5_ATTRIBUTE_SHADOW:
-			textAttributeBit = WPX_SHADOW_BIT;
+			textAttributeBit = RVNG_SHADOW_BIT;
 			break;
 		case WP5_ATTRIBUTE_REDLINE:
-			textAttributeBit = WPX_REDLINE_BIT;
+			textAttributeBit = RVNG_REDLINE_BIT;
 			break;
 		case WP5_ATTRIBUTE_DOUBLE_UNDERLINE:
-			textAttributeBit = WPX_DOUBLE_UNDERLINE_BIT;
+			textAttributeBit = RVNG_DOUBLE_UNDERLINE_BIT;
 			break;
 		case WP5_ATTRIBUTE_BOLD:
-			textAttributeBit = WPX_BOLD_BIT;
+			textAttributeBit = RVNG_BOLD_BIT;
 			break;
 		case WP5_ATTRIBUTE_STRIKE_OUT:
-			textAttributeBit = WPX_STRIKEOUT_BIT;
+			textAttributeBit = RVNG_STRIKEOUT_BIT;
 			break;
 		case WP5_ATTRIBUTE_UNDERLINE:
-			textAttributeBit = WPX_UNDERLINE_BIT;
+			textAttributeBit = RVNG_UNDERLINE_BIT;
 			break;
 		case WP5_ATTRIBUTE_SMALL_CAPS:
-			textAttributeBit = WPX_SMALL_CAPS_BIT;
+			textAttributeBit = RVNG_SMALL_CAPS_BIT;
 			break;
 		default:
 			break;
@@ -443,11 +443,11 @@ void WP5ContentListener::marginChange(uint8_t side, uint16_t margin)
 {
 	if (!isUndoOn())
 	{
-		double marginInch = (double)((double)margin/ (double)WPX_NUM_WPUS_PER_INCH);
+		double marginInch = (double)((double)margin/ (double)RVNG_NUM_WPUS_PER_INCH);
 
 		switch(side)
 		{
-		case WPX_LEFT:
+		case RVNG_LEFT:
 			if (m_ps->m_numColumns > 1)
 			{
 				m_ps->m_leftMarginByPageMarginChange = 0.0;
@@ -462,7 +462,7 @@ void WP5ContentListener::marginChange(uint8_t side, uint16_t margin)
 			                              + m_ps->m_leftMarginByParagraphMarginChange
 			                              + m_ps->m_leftMarginByTabs;
 			break;
-		case WPX_RIGHT:
+		case RVNG_RIGHT:
 			if (m_ps->m_numColumns > 1)
 			{
 				m_ps->m_rightMarginByPageMarginChange = 0.0;
@@ -495,7 +495,7 @@ void WP5ContentListener::characterColorChange(uint8_t red, uint8_t green, uint8_
 	}
 }
 
-void WP5ContentListener::setFont(const WPXString &fontName, double fontSize)
+void WP5ContentListener::setFont(const RVNGString &fontName, double fontSize)
 {
 	if (!isUndoOn())
 	{
@@ -505,7 +505,7 @@ void WP5ContentListener::setFont(const WPXString &fontName, double fontSize)
 	}
 }
 
-void WP5ContentListener::setTabs(const std::vector<WPXTabStop> &tabStops, uint16_t tabOffset)
+void WP5ContentListener::setTabs(const std::vector<RVNGTabStop> &tabStops, uint16_t tabOffset)
 {
 	if (!isUndoOn())
 	{
@@ -515,7 +515,7 @@ void WP5ContentListener::setTabs(const std::vector<WPXTabStop> &tabStops, uint16
 }
 
 
-void WP5ContentListener::insertNoteReference(const WPXString &noteReference)
+void WP5ContentListener::insertNoteReference(const RVNGString &noteReference)
 {
 	if (!isUndoOn() && !m_ps->m_isNote)
 	{
@@ -523,7 +523,7 @@ void WP5ContentListener::insertNoteReference(const WPXString &noteReference)
 	}
 }
 
-void WP5ContentListener::insertNote(WPXNoteType noteType, const WP5SubDocument *subDocument)
+void WP5ContentListener::insertNote(RVNGNoteType noteType, const WP5SubDocument *subDocument)
 {
 	if (!isUndoOn())
 	{
@@ -535,19 +535,19 @@ void WP5ContentListener::insertNote(WPXNoteType noteType, const WP5SubDocument *
 			_closeSpan();
 		}
 		m_ps->m_isNote = true;
-		WPXNumberingType numberingType = _extractWPXNumberingTypeFromBuf(m_parseState->m_noteReference, ARABIC);
+		RVNGNumberingType numberingType = _extractRVNGNumberingTypeFromBuf(m_parseState->m_noteReference, ARABIC);
 		int number = _extractDisplayReferenceNumberFromBuf(m_parseState->m_noteReference, numberingType);
 		m_parseState->m_noteReference.clear();
 
-		WPXPropertyList propList;
-		propList.insert("libwpd:number", number);
+		RVNGPropertyList propList;
+		propList.insert("librevenge:number", number);
 
 		if (noteType == FOOTNOTE)
 			m_documentInterface->openFootnote(propList);
 		else
 			m_documentInterface->openEndnote(propList);
 
-		handleSubDocument(subDocument, WPX_SUBDOCUMENT_NOTE, m_parseState->m_tableList, 0);
+		handleSubDocument(subDocument, RVNG_SUBDOCUMENT_NOTE, m_parseState->m_tableList, 0);
 
 		if (noteType == FOOTNOTE)
 			m_documentInterface->closeFootnote();
@@ -557,8 +557,8 @@ void WP5ContentListener::insertNote(WPXNoteType noteType, const WP5SubDocument *
 	}
 }
 
-void WP5ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType,
-        WPXTableList /* tableList */, unsigned /* nextTableIndice */)
+void WP5ContentListener::_handleSubDocument(const RVNGSubDocument *subDocument, RVNGSubDocumentType subDocumentType,
+        RVNGTableList /* tableList */, unsigned /* nextTableIndice */)
 {
 	// save our old parsing state on our "stack"
 	WP5ContentParsingState *oldParseState = m_parseState;
@@ -566,10 +566,10 @@ void WP5ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, W
 	m_parseState = new WP5ContentParsingState();
 	setFont(m_defaultFontName, m_defaultFontSize);
 
-	if (subDocumentType == WPX_SUBDOCUMENT_HEADER_FOOTER)
+	if (subDocumentType == RVNG_SUBDOCUMENT_HEADER_FOOTER)
 	{
-		marginChange(WPX_LEFT, WPX_NUM_WPUS_PER_INCH);
-		marginChange(WPX_RIGHT, WPX_NUM_WPUS_PER_INCH);
+		marginChange(RVNG_LEFT, RVNG_NUM_WPUS_PER_INCH);
+		marginChange(RVNG_RIGHT, RVNG_NUM_WPUS_PER_INCH);
 	}
 
 	if (subDocument)
@@ -601,7 +601,7 @@ void WP5ContentListener::headerFooterGroup(uint8_t /* headerFooterType */, uint8
 		m_subDocuments.push_back(subDocument);
 }
 
-void WP5ContentListener::setDefaultFont(const WPXString &fontName, double fontSize)
+void WP5ContentListener::setDefaultFont(const RVNGString &fontName, double fontSize)
 {
 	m_defaultFontName = fontName;
 	m_defaultFontSize = fontSize;
@@ -659,10 +659,10 @@ void WP5ContentListener::boxOn(uint8_t positionAndType, uint8_t alignment, uint1
 	else
 		_flushText();
 
-	WPXPropertyList propList;
+	RVNGPropertyList propList;
 
-	propList.insert("svg:height", (double)((double)height/(double)WPX_NUM_WPUS_PER_INCH));
-	propList.insert("svg:width", (double)((double)width/(double)WPX_NUM_WPUS_PER_INCH));
+	propList.insert("svg:height", (double)((double)height/(double)RVNG_NUM_WPUS_PER_INCH));
+	propList.insert("svg:width", (double)((double)width/(double)RVNG_NUM_WPUS_PER_INCH));
 
 	if ( alignment & 0x80 )
 		propList.insert( "style:wrap", "dynamic" );
@@ -699,12 +699,12 @@ void WP5ContentListener::boxOn(uint8_t positionAndType, uint8_t alignment, uint1
 		else
 		{
 			propList.insert("style:vertical-pos", "from-top" );
-			double newPosition = (double)((double)y/(double)WPX_NUM_WPUS_PER_INCH);
+			double newPosition = (double)((double)y/(double)RVNG_NUM_WPUS_PER_INCH);
 			if (newPosition > (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
-			                           - (double)height/(double)WPX_NUM_WPUS_PER_INCH) )
+			                           - (double)height/(double)RVNG_NUM_WPUS_PER_INCH) )
 			{
 				newPosition = (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
-				                       - (double)height/(double)WPX_NUM_WPUS_PER_INCH);
+				                       - (double)height/(double)RVNG_NUM_WPUS_PER_INCH);
 			}
 			propList.insert("svg:y", newPosition);
 		}
@@ -716,12 +716,12 @@ void WP5ContentListener::boxOn(uint8_t positionAndType, uint8_t alignment, uint1
 		{
 			propList.insert("style:vertical-pos", "from-top" );
 			double newPosition = (double)((m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
-			                               - (double)height/(double)WPX_NUM_WPUS_PER_INCH)/2.0);
+			                               - (double)height/(double)RVNG_NUM_WPUS_PER_INCH)/2.0);
 			if (newPosition > (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
-			                           - (double)height/(double)WPX_NUM_WPUS_PER_INCH) )
+			                           - (double)height/(double)RVNG_NUM_WPUS_PER_INCH) )
 			{
 				newPosition = (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
-				                       - (double)height/(double)WPX_NUM_WPUS_PER_INCH);
+				                       - (double)height/(double)RVNG_NUM_WPUS_PER_INCH);
 			}
 			propList.insert("svg:y", newPosition);
 		}
@@ -733,12 +733,12 @@ void WP5ContentListener::boxOn(uint8_t positionAndType, uint8_t alignment, uint1
 		{
 			propList.insert("style:vertical-pos", "from-top" );
 			double newPosition = (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
-			                              - (double)height/(double)WPX_NUM_WPUS_PER_INCH + (double)y/(double)WPX_NUM_WPUS_PER_INCH);
+			                              - (double)height/(double)RVNG_NUM_WPUS_PER_INCH + (double)y/(double)RVNG_NUM_WPUS_PER_INCH);
 			if (newPosition > (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
-			                           - (double)height/(double)WPX_NUM_WPUS_PER_INCH) )
+			                           - (double)height/(double)RVNG_NUM_WPUS_PER_INCH) )
 			{
 				newPosition = (double)(m_ps->m_pageFormLength - m_ps->m_pageMarginTop - m_ps->m_pageMarginBottom
-				                       - (double)height/(double)WPX_NUM_WPUS_PER_INCH);
+				                       - (double)height/(double)RVNG_NUM_WPUS_PER_INCH);
 			}
 			propList.insert("svg:y", newPosition);
 		}
@@ -746,7 +746,7 @@ void WP5ContentListener::boxOn(uint8_t positionAndType, uint8_t alignment, uint1
 	case 0x04:
 		propList.insert("style:vertical-rel", "page" );
 		propList.insert("style:vertical-pos", "from-top" );
-		propList.insert("svg:y", (double)((double)y/(double)WPX_NUM_WPUS_PER_INCH));
+		propList.insert("svg:y", (double)((double)y/(double)RVNG_NUM_WPUS_PER_INCH));
 		break;
 	default:
 		break;
@@ -761,7 +761,7 @@ void WP5ContentListener::boxOn(uint8_t positionAndType, uint8_t alignment, uint1
 		else
 		{
 			propList.insert( "style:horizontal-pos", "from-left");
-			propList.insert( "svg:x", (double)((double)x/(double)WPX_NUM_WPUS_PER_INCH));
+			propList.insert( "svg:x", (double)((double)x/(double)RVNG_NUM_WPUS_PER_INCH));
 		}
 		break;
 	case 0x01:
@@ -771,7 +771,7 @@ void WP5ContentListener::boxOn(uint8_t positionAndType, uint8_t alignment, uint1
 		{
 			propList.insert( "style:horizontal-pos", "from-left");
 			propList.insert( "svg:x", (double)(m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight
-			                                   - (double)width/(double)WPX_NUM_WPUS_PER_INCH + (double)x/(double)WPX_NUM_WPUS_PER_INCH));
+			                                   - (double)width/(double)RVNG_NUM_WPUS_PER_INCH + (double)x/(double)RVNG_NUM_WPUS_PER_INCH));
 		}
 		break;
 	case 0x02:
@@ -781,7 +781,7 @@ void WP5ContentListener::boxOn(uint8_t positionAndType, uint8_t alignment, uint1
 		{
 			propList.insert( "style:horizontal-pos", "from-left");
 			propList.insert( "svg:x", (double)((m_ps->m_pageFormWidth - m_ps->m_pageMarginLeft - m_ps->m_pageMarginRight
-			                                    - (double)width/(double)WPX_NUM_WPUS_PER_INCH)/2.0 + (double)x/(double)WPX_NUM_WPUS_PER_INCH));
+			                                    - (double)width/(double)RVNG_NUM_WPUS_PER_INCH)/2.0 + (double)x/(double)RVNG_NUM_WPUS_PER_INCH));
 		}
 		break;
 	case 0x03:
@@ -806,15 +806,15 @@ void WP5ContentListener::boxOff()
 	}
 }
 
-void WP5ContentListener::insertGraphicsData(const WPXBinaryData *data)
+void WP5ContentListener::insertGraphicsData(const RVNGBinaryData *data)
 {
 	if (isUndoOn() || !m_parseState->m_isFrameOpened)
 		return;
 
 	if (data)
 	{
-		WPXPropertyList propList;
-		propList.insert("libwpd:mimetype", "image/x-wpg");
+		RVNGPropertyList propList;
+		propList.insert("librevenge:mimetype", "image/x-wpg");
 		m_documentInterface->insertBinaryObject(propList, *data);
 	}
 }

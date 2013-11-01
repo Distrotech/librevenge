@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -25,12 +25,12 @@
 
 #include "WP3WindowGroup.h"
 #include "WP3FileStructure.h"
-#include "WPXFileStructure.h"
-#include "libwpd_internal.h"
+#include "RVNGFileStructure.h"
+#include "librevenge_internal.h"
 #include "WP3Listener.h"
 #include "WP3ResourceFork.h"
 
-WP3WindowGroup::WP3WindowGroup(WPXInputStream *input, WPXEncryption *encryption) :
+WP3WindowGroup::WP3WindowGroup(RVNGInputStream *input, RVNGEncryption *encryption) :
 	WP3VariableLengthGroup(),
 	m_figureFlags(0),
 	m_leftColumn(0),
@@ -55,7 +55,7 @@ WP3WindowGroup::~WP3WindowGroup()
 		delete m_caption;
 }
 
-void WP3WindowGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP3WindowGroup::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	switch (getSubGroup())
 	{
@@ -66,22 +66,22 @@ void WP3WindowGroup::_readContents(WPXInputStream *input, WPXEncryption *encrypt
 	case WP3_WINDOW_GROUP_EQUATION_BOX_FUNCTION:
 	case WP3_WINDOW_GROUP_HTML_IMAGE_BOX_FUNCTION:
 	{
-		input->seek(14, WPX_SEEK_CUR);
+		input->seek(14, RVNG_SEEK_CUR);
 		m_figureFlags = readU16(input, encryption, true); // picture flags
-		input->seek(2, WPX_SEEK_CUR);
+		input->seek(2, RVNG_SEEK_CUR);
 		m_leftColumn = readU8(input, encryption); // left align column
 		m_rightColumn = readU8(input, encryption); // right align column
-		input->seek(28, WPX_SEEK_CUR);
+		input->seek(28, RVNG_SEEK_CUR);
 		m_boxType = readU8(input, encryption);
-		input->seek(1, WPX_SEEK_CUR);
+		input->seek(1, RVNG_SEEK_CUR);
 		m_resourceID = readU16(input, encryption, true);
 		m_verticalOffset = fixedPointToDouble(readU32(input, encryption, true));
 		m_horizontalOffset = fixedPointToDouble(readU32(input, encryption, true));
 		m_width = fixedPointToDouble(readU32(input, encryption, true));
 		m_height = fixedPointToDouble(readU32(input, encryption, true));
-		input->seek(9, WPX_SEEK_CUR);
+		input->seek(9, RVNG_SEEK_CUR);
 		uint8_t tmpNumSubRect = readU8(input, encryption);
-		input->seek(tmpNumSubRect * 8, WPX_SEEK_CUR);
+		input->seek(tmpNumSubRect * 8, RVNG_SEEK_CUR);
 		uint16_t tmpBoxCaptionSize = readU16(input, encryption, true);
 		if (tmpBoxCaptionSize)
 			m_caption = new WP3SubDocument(input, encryption, tmpBoxCaptionSize);
@@ -101,7 +101,7 @@ void WP3WindowGroup::_readContents(WPXInputStream *input, WPXEncryption *encrypt
 
 void WP3WindowGroup::parse(WP3Listener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling a Window group\n"));
+	RVNG_DEBUG_MSG(("WordPerfect: handling a Window group\n"));
 
 	switch (getSubGroup())
 	{
@@ -113,7 +113,7 @@ void WP3WindowGroup::parse(WP3Listener *listener)
 	case WP3_WINDOW_GROUP_HTML_IMAGE_BOX_FUNCTION:
 		if (m_boxType == 0x02)
 		{
-			WPXBinaryData tmpWBOXData;
+			RVNGBinaryData tmpWBOXData;
 			for (int i=0; i < 512; i++)
 				tmpWBOXData.append((unsigned char)0);
 			if (listener->getResourceFork() && listener->getResourceFork()->getResource(0x57424f58, m_resourceID)) // WBOX resource
@@ -124,7 +124,7 @@ void WP3WindowGroup::parse(WP3Listener *listener)
 		}
 		else if (m_boxType == 0x01 || m_boxType == 0x03)
 		{
-			WPXBinaryData tmpPICTData;
+			RVNGBinaryData tmpPICTData;
 			for (int i=0; i < 512; i++)
 				tmpPICTData.append((unsigned char)0);
 			if (listener->getResourceFork() && listener->getResourceFork()->getResource(0x50494354, m_resourceID)) // replacement picture in PICT format

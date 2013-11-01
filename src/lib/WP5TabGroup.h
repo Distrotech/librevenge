@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -32,11 +32,11 @@
 class WP5TabGroup : public WP5FixedLengthGroup
 {
 public:
-	WP5TabGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);
+	WP5TabGroup(RVNGInputStream *input, RVNGEncryption *encryption, uint8_t groupID);
 	void parse(WP5Listener *listener);
 
 protected:
-	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
+	void _readContents(RVNGInputStream *input, RVNGEncryption *encryption);
 
 private:
 	uint8_t m_tabType;

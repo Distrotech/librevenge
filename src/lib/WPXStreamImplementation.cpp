@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,17 +17,17 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include <libwpd-stream/libwpd-stream.h>
-#include "WPXOLEStream.h"
+#include <librevenge-stream/librevenge-stream.h>
+#include "RVNGOLEStream.h"
 #ifdef BUILD_ZIP_STREAM
-#include "WPXZipStream.h"
+#include "RVNGZipStream.h"
 #endif
 
 #include <limits>
@@ -39,40 +39,40 @@
 #define S_ISREG(x) (((x) & S_IFMT) == S_IFREG)
 #endif
 
-using namespace libwpd;
+using namespace librevenge;
 
-enum WPXStreamType { UNKNOWN, FLAT, OLE2, ZIP };
+enum RVNGStreamType { UNKNOWN, FLAT, OLE2, ZIP };
 
-class WPXFileStreamPrivate
+class RVNGFileStreamPrivate
 {
 public:
-	WPXFileStreamPrivate();
-	~WPXFileStreamPrivate();
+	RVNGFileStreamPrivate();
+	~RVNGFileStreamPrivate();
 	FILE *file;
 	unsigned long streamSize;
 	unsigned char *readBuffer;
 	unsigned long readBufferLength;
 	unsigned long readBufferPos;
-	WPXStreamType streamType;
+	RVNGStreamType streamType;
 private:
-	WPXFileStreamPrivate(const WPXFileStreamPrivate &);
-	WPXFileStreamPrivate &operator=(const WPXFileStreamPrivate &);
+	RVNGFileStreamPrivate(const RVNGFileStreamPrivate &);
+	RVNGFileStreamPrivate &operator=(const RVNGFileStreamPrivate &);
 };
 
-class WPXStringStreamPrivate
+class RVNGStringStreamPrivate
 {
 public:
-	WPXStringStreamPrivate(const unsigned char *data, unsigned dataSize);
-	~WPXStringStreamPrivate();
+	RVNGStringStreamPrivate(const unsigned char *data, unsigned dataSize);
+	~RVNGStringStreamPrivate();
 	std::vector<unsigned char> buffer;
 	volatile long offset;
-	WPXStreamType streamType;
+	RVNGStreamType streamType;
 private:
-	WPXStringStreamPrivate(const WPXStringStreamPrivate &);
-	WPXStringStreamPrivate &operator=(const WPXStringStreamPrivate &);
+	RVNGStringStreamPrivate(const RVNGStringStreamPrivate &);
+	RVNGStringStreamPrivate &operator=(const RVNGStringStreamPrivate &);
 };
 
-WPXFileStreamPrivate::WPXFileStreamPrivate() :
+RVNGFileStreamPrivate::RVNGFileStreamPrivate() :
 	file(0),
 	streamSize(0),
 	readBuffer(0),
@@ -82,7 +82,7 @@ WPXFileStreamPrivate::WPXFileStreamPrivate() :
 {
 }
 
-WPXFileStreamPrivate::~WPXFileStreamPrivate()
+RVNGFileStreamPrivate::~RVNGFileStreamPrivate()
 {
 	if (file)
 		fclose(file);
@@ -90,7 +90,7 @@ WPXFileStreamPrivate::~WPXFileStreamPrivate()
 		delete [] readBuffer;
 }
 
-WPXStringStreamPrivate::WPXStringStreamPrivate(const unsigned char *data, unsigned dataSize) :
+RVNGStringStreamPrivate::RVNGStringStreamPrivate(const unsigned char *data, unsigned dataSize) :
 	buffer(dataSize),
 	offset(0),
 	streamType(UNKNOWN)
@@ -99,13 +99,13 @@ WPXStringStreamPrivate::WPXStringStreamPrivate(const unsigned char *data, unsign
 	memcpy(&buffer[0], data, dataSize);
 }
 
-WPXStringStreamPrivate::~WPXStringStreamPrivate()
+RVNGStringStreamPrivate::~RVNGStringStreamPrivate()
 {
 }
 
-WPXFileStream::WPXFileStream(const char *filename) :
-	WPXInputStream(),
-	d(new WPXFileStreamPrivate())
+RVNGFileStream::RVNGFileStream(const char *filename) :
+	RVNGInputStream(),
+	d(new RVNGFileStreamPrivate())
 {
 	d->file = fopen( filename, "rb" );
 	if (!d->file || ferror(d->file))
@@ -135,7 +135,7 @@ WPXFileStream::WPXFileStream(const char *filename) :
 	fseek(d->file, 0, SEEK_SET );
 }
 
-WPXFileStream::~WPXFileStream()
+RVNGFileStream::~RVNGFileStream()
 {
 	if (d)
 		delete d;
@@ -143,7 +143,7 @@ WPXFileStream::~WPXFileStream()
 
 #define BUFFER_MAX 65536
 
-const unsigned char *WPXFileStream::read(unsigned long numBytes, unsigned long &numBytesRead)
+const unsigned char *RVNGFileStream::read(unsigned long numBytes, unsigned long &numBytesRead)
 {
 	if (!d)
 		return 0;
@@ -212,20 +212,20 @@ const unsigned char *WPXFileStream::read(unsigned long numBytes, unsigned long &
 	return const_cast<const unsigned char *>( d->readBuffer );
 }
 
-long WPXFileStream::tell()
+long RVNGFileStream::tell()
 {
 	if (!d)
 		return -1L;
 	return ferror(d->file) ? -1L : (long)((long)ftell(d->file) - d->readBufferLength + d->readBufferPos);
 }
 
-int WPXFileStream::seek(long offset, WPX_SEEK_TYPE seekType)
+int RVNGFileStream::seek(long offset, RVNG_SEEK_TYPE seekType)
 {
 	if (!d)
 		return -1;
-	if (seekType == WPX_SEEK_CUR)
+	if (seekType == RVNG_SEEK_CUR)
 		offset += tell();
-	if (seekType == WPX_SEEK_END)
+	if (seekType == RVNG_SEEK_END)
 		offset += (long)d->streamSize;
 
 	if (offset < 0)
@@ -258,14 +258,14 @@ int WPXFileStream::seek(long offset, WPX_SEEK_TYPE seekType)
 		return -1;
 }
 
-bool WPXFileStream::atEOS()
+bool RVNGFileStream::atEOS()
 {
 	if (!d)
 		return true;
 	return (tell() >= (long)d->streamSize);
 }
 
-bool WPXFileStream::isOLEStream()
+bool RVNGFileStream::isOLEStream()
 {
 	if (!d)
 		return false;
@@ -273,7 +273,7 @@ bool WPXFileStream::isOLEStream()
 		return false;
 	if (d->streamType == UNKNOWN)
 	{
-		seek(0, WPX_SEEK_SET);
+		seek(0, RVNG_SEEK_SET);
 
 		// Check whether it is OLE2 storage
 		Storage tmpStorage( this );
@@ -283,8 +283,8 @@ bool WPXFileStream::isOLEStream()
 			return true;
 		}
 #ifdef BUILD_ZIP_STREAM
-		seek(0, WPX_SEEK_SET);
-		if (WPXZipStream::isZipFile(this))
+		seek(0, RVNG_SEEK_SET);
+		if (RVNGZipStream::isZipFile(this))
 		{
 			d->streamType = ZIP;
 			return true;
@@ -299,7 +299,7 @@ bool WPXFileStream::isOLEStream()
 		return true;
 }
 
-WPXInputStream *WPXFileStream::getDocumentOLEStream(const char *name)
+RVNGInputStream *RVNGFileStream::getDocumentOLEStream(const char *name)
 {
 	if (!d)
 		return 0;
@@ -309,11 +309,11 @@ WPXInputStream *WPXFileStream::getDocumentOLEStream(const char *name)
 		return 0;
 	if (d->streamType == OLE2)
 	{
-		seek(0, WPX_SEEK_SET);
+		seek(0, RVNG_SEEK_SET);
 		Storage tmpStorage( this );
 		Stream tmpStream( &tmpStorage, name );
 		if (tmpStorage.result() != Storage::Ok  || !tmpStream.size())
-			return (WPXInputStream *)0;
+			return (RVNGInputStream *)0;
 
 		std::vector<unsigned char> buf(tmpStream.size());
 		unsigned long tmpLength;
@@ -323,29 +323,29 @@ WPXInputStream *WPXFileStream::getDocumentOLEStream(const char *name)
 		if (tmpLength != tmpStream.size())
 			/* something went wrong here and we do not trust the
 			   resulting buffer */
-			return (WPXInputStream *)0;
+			return (RVNGInputStream *)0;
 
-		return new WPXStringStream(&buf[0], (unsigned)tmpLength);
+		return new RVNGStringStream(&buf[0], (unsigned)tmpLength);
 	}
 #ifdef BUILD_ZIP_STREAM
 	else if (d->streamType == ZIP)
-		return WPXZipStream::getSubstream(this, name);
+		return RVNGZipStream::getSubstream(this, name);
 #endif
 	return 0;
 }
 
-WPXStringStream::WPXStringStream(const unsigned char *data, const unsigned int dataSize) :
-	WPXInputStream(),
-	d(new WPXStringStreamPrivate(data, dataSize))
+RVNGStringStream::RVNGStringStream(const unsigned char *data, const unsigned int dataSize) :
+	RVNGInputStream(),
+	d(new RVNGStringStreamPrivate(data, dataSize))
 {
 }
 
-WPXStringStream::~WPXStringStream()
+RVNGStringStream::~RVNGStringStream()
 {
 	delete d;
 }
 
-const unsigned char *WPXStringStream::read(unsigned long numBytes, unsigned long &numBytesRead)
+const unsigned char *RVNGStringStream::read(unsigned long numBytes, unsigned long &numBytesRead)
 {
 	numBytesRead = 0;
 
@@ -371,18 +371,18 @@ const unsigned char *WPXStringStream::read(unsigned long numBytes, unsigned long
 
 }
 
-long WPXStringStream::tell()
+long RVNGStringStream::tell()
 {
 	return d->offset;
 }
 
-int WPXStringStream::seek(long offset, WPX_SEEK_TYPE seekType)
+int RVNGStringStream::seek(long offset, RVNG_SEEK_TYPE seekType)
 {
-	if (seekType == WPX_SEEK_CUR)
+	if (seekType == RVNG_SEEK_CUR)
 		d->offset += offset;
-	else if (seekType == WPX_SEEK_SET)
+	else if (seekType == RVNG_SEEK_SET)
 		d->offset = offset;
-	else if (seekType == WPX_SEEK_END)
+	else if (seekType == RVNG_SEEK_END)
 		d->offset += d->buffer.size();
 
 	if (d->offset < 0)
@@ -399,7 +399,7 @@ int WPXStringStream::seek(long offset, WPX_SEEK_TYPE seekType)
 	return 0;
 }
 
-bool WPXStringStream::atEOS()
+bool RVNGStringStream::atEOS()
 {
 	if ((long)d->offset >= (long)d->buffer.size())
 		return true;
@@ -407,14 +407,14 @@ bool WPXStringStream::atEOS()
 	return false;
 }
 
-bool WPXStringStream::isOLEStream()
+bool RVNGStringStream::isOLEStream()
 {
 	if (d->buffer.empty())
 		return false;
 
 	if (d->streamType == UNKNOWN)
 	{
-		seek(0, WPX_SEEK_SET);
+		seek(0, RVNG_SEEK_SET);
 
 		// Check whether it is OLE2 storage
 		Storage tmpStorage( this );
@@ -424,8 +424,8 @@ bool WPXStringStream::isOLEStream()
 			return true;
 		}
 #ifdef BUILD_ZIP_STREAM
-		seek(0, WPX_SEEK_SET);
-		if (WPXZipStream::isZipFile(this))
+		seek(0, RVNG_SEEK_SET);
+		if (RVNGZipStream::isZipFile(this))
 		{
 			d->streamType = ZIP;
 			return true;
@@ -440,7 +440,7 @@ bool WPXStringStream::isOLEStream()
 		return true;
 }
 
-WPXInputStream *WPXStringStream::getDocumentOLEStream(const char *name)
+RVNGInputStream *RVNGStringStream::getDocumentOLEStream(const char *name)
 {
 	if (d->buffer.empty())
 		return 0;
@@ -449,11 +449,11 @@ WPXInputStream *WPXStringStream::getDocumentOLEStream(const char *name)
 
 	if (d->streamType == OLE2)
 	{
-		seek(0, WPX_SEEK_SET);
+		seek(0, RVNG_SEEK_SET);
 		Storage tmpStorage( this );
 		Stream tmpStream( &tmpStorage, name );
 		if (tmpStorage.result() != Storage::Ok  || !tmpStream.size())
-			return (WPXInputStream *)0;
+			return (RVNGInputStream *)0;
 
 		std::vector<unsigned char> buf(tmpStream.size());
 		unsigned long tmpLength;
@@ -463,13 +463,13 @@ WPXInputStream *WPXStringStream::getDocumentOLEStream(const char *name)
 		if (tmpLength != tmpStream.size())
 			/* something went wrong here and we do not trust the
 			   resulting buffer */
-			return (WPXInputStream *)0;
+			return (RVNGInputStream *)0;
 
-		return new WPXStringStream(&buf[0], (unsigned)tmpLength);
+		return new RVNGStringStream(&buf[0], (unsigned)tmpLength);
 	}
 #ifdef BUILD_ZIP_STREAM
 	else if (d->streamType == ZIP)
-		return WPXZipStream::getSubstream(this, name);
+		return RVNGZipStream::getSubstream(this, name);
 #endif
 	return 0;
 }

@@ -1,4 +1,4 @@
-%define name libwpd
+%define name librevenge
 %define version @VERSION@
 %define  RELEASE 1
 %define  release     %{?CUSTOM_RELEASE} %{!?CUSTOM_RELEASE:%RELEASE}
@@ -9,19 +9,19 @@ Version: %{version}
 Release: %{release}
 Source: %{name}-%{version}.tar.gz
 Group: System Environment/Libraries
-URL: http://libwpd.sf.net/
+URL: http://librevenge.sf.net/
 BuildRoot: %{_tmppath}/%{name}-%{version}-buildroot
 License: LGPL
 BuildRequires: gcc-c++, libstdc++-devel
-Provides: %{name}-@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@-@WPD_MINOR_VERSION@
-Obsoletes: %{name}-@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@-@WPD_MINOR_VERSION@ < %{version}-%{release}
+Provides: %{name}-@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@-@RVNG_MINOR_VERSION@
+Obsoletes: %{name}-@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@-@RVNG_MINOR_VERSION@ < %{version}-%{release}
 
 %description
 Library that handles Word Perfect documents.
 
 %if %{!?_without_stream:1}%{?_without_stream:0}
 %package tools
-Requires: libwpd
+Requires: librevenge
 Summary: Tools to transform WordPerfect Documents into other formats
 Group: Applications/Publishing
 
@@ -31,23 +31,23 @@ Currently supported: html, raw, text
 %endif
 
 %package devel
-Requires: libwpd = %{version}-%{release}
-Summary: Files for developing with libwpd.
+Requires: librevenge = %{version}-%{release}
+Summary: Files for developing with librevenge.
 Group: Development/Libraries
 
 %description devel
-Includes and definitions for developing with libwpd.
+Includes and definitions for developing with librevenge.
 
 %if %{!?_without_docs:1}%{?_without_docs:0}
 %package docs
 BuildRequires: doxygen
 Provides: %{name}-devel-doc
 Obsoletes: %{name}-devel-doc < %{version}-%{release}
-Summary: Documentation of libwpd API
+Summary: Documentation of librevenge API
 Group: Development/Documentation
 
 %description docs
-Documentation of libwpd API for developing with libwpd
+Documentation of librevenge API for developing with librevenge
 %endif
 
 %prep
@@ -74,7 +74,7 @@ umask 022
 
 %files
 %defattr(644,root,root,755)
-%{_libdir}/libwpd*-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.so.*
+%{_libdir}/librevenge*-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.so.*
 
 %if %{!?_without_stream:1}%{?_without_stream:0}
 %files tools
@@ -84,10 +84,10 @@ umask 022
 
 %files devel
 %defattr(644,root,root,755)
-%{_libdir}/libwpd*-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.so
-#%{_libdir}/libwpd*-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.*a
-%{_libdir}/pkgconfig/libwpd*-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.pc
-%{_includedir}/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@/libwpd*
+%{_libdir}/librevenge*-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.so
+#%{_libdir}/librevenge*-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.*a
+%{_libdir}/pkgconfig/librevenge*-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.pc
+%{_includedir}/librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@/librevenge*
 
 %if %{!?_without_docs:1}%{?_without_docs:0}
 %files docs
@@ -96,11 +96,11 @@ umask 022
 
 %changelog
 * Fri Jan 28 2005 Fridrich Strba <fridrich.strba@bluewin.ch>
-- Adapt to the new libwpd-X.Y and libwpd-stream-X.Y modules
+- Adapt to the new librevenge-X.Y and librevenge-stream-X.Y modules
 
 * Wed Sep 29 2004 Fridrich Strba <fridrich.strba@bluewin.ch>
-- Move files between libwpd and libwpd-devel packages
-- Reflect the separation of libwpd-1 and libwpd-stream-1
+- Move files between librevenge and librevenge-devel packages
+- Reflect the separation of librevenge-1 and librevenge-stream-1
 
 * Sat May 22 2003 Rui M. Seabra <rms@1407.org>
 - Reflect current state of build

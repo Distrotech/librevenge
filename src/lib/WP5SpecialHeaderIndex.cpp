@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -24,9 +24,9 @@
  */
 
 #include "WP5SpecialHeaderIndex.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
-WP5SpecialHeaderIndex::WP5SpecialHeaderIndex(WPXInputStream *input, WPXEncryption *encryption) :
+WP5SpecialHeaderIndex::WP5SpecialHeaderIndex(RVNGInputStream *input, RVNGEncryption *encryption) :
 	m_type(0),
 	m_numOfIndexes(0),
 	m_indexBlockSize(0),
@@ -35,7 +35,7 @@ WP5SpecialHeaderIndex::WP5SpecialHeaderIndex(WPXInputStream *input, WPXEncryptio
 	_read(input, encryption);
 }
 
-void WP5SpecialHeaderIndex::_read(WPXInputStream *input, WPXEncryption *encryption)
+void WP5SpecialHeaderIndex::_read(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	m_type = readU16(input, encryption);
 
@@ -44,7 +44,7 @@ void WP5SpecialHeaderIndex::_read(WPXInputStream *input, WPXEncryption *encrypti
 	m_indexBlockSize = readU16(input, encryption);
 	m_nextBlockOffset = readU32(input, encryption);
 
-	WPD_DEBUG_MSG(("Special Header Index (type: %i, number of indexes: %i, index block size: %i, next block offset: %i)\n",
+	RVNG_DEBUG_MSG(("Special Header Index (type: %i, number of indexes: %i, index block size: %i, next block offset: %i)\n",
 	               m_type, m_numOfIndexes, m_indexBlockSize, m_nextBlockOffset));
 }
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

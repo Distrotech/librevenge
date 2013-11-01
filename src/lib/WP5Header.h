@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -27,12 +27,12 @@
 #ifndef _WP5HEADER_H
 #define _WP5HEADER_H
 
-#include "WPXHeader.h"
+#include "RVNGHeader.h"
 
-class WP5Header : public WPXHeader
+class WP5Header : public RVNGHeader
 {
 public:
-	WP5Header(WPXInputStream *input, WPXEncryption *encryption, uint32_t documentOffset, uint8_t productType,
+	WP5Header(RVNGInputStream *input, RVNGEncryption *encryption, uint32_t documentOffset, uint8_t productType,
 	          uint8_t fileType, uint8_t majorVersion, uint8_t minorVersion, uint16_t documentEncryption);
 	~WP5Header() {}
 };

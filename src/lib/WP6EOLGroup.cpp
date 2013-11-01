@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -27,11 +27,11 @@
 
 #include "WP6EOLGroup.h"
 #include "WP6Listener.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
 #include "WP6FillStylePacket.h" // for the fill packet
 
-WP6EOLGroup::WP6EOLGroup(WPXInputStream *input, WPXEncryption *encryption) :
+WP6EOLGroup::WP6EOLGroup(RVNGInputStream *input, RVNGEncryption *encryption) :
 	WP6VariableLengthGroup(),
 	m_colSpan(1),
 	m_rowSpan(1),
@@ -66,19 +66,19 @@ WP6EOLGroup::~WP6EOLGroup()
 	DELETEP(m_cellBorderColor);
 }
 
-void WP6EOLGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP6EOLGroup::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
-	WPD_DEBUG_MSG(("WordPerfect: EOL Group: Reading Embedded Sub-Function Data\n"));
+	RVNG_DEBUG_MSG(("WordPerfect: EOL Group: Reading Embedded Sub-Function Data\n"));
 	long startPosition = input->tell();
 	uint16_t sizeDeletableSubFunctionData = readU16(input, encryption);
-	WPD_DEBUG_MSG(("WordPerfect: EOL Group: Size of Deletable Sub-Function Data: %ld,  Size of Deletable and Non-deletable sub-function data: %ld\n", (long) sizeDeletableSubFunctionData, (long) getSizeNonDeletable()));
+	RVNG_DEBUG_MSG(("WordPerfect: EOL Group: Size of Deletable Sub-Function Data: %ld,  Size of Deletable and Non-deletable sub-function data: %ld\n", (long) sizeDeletableSubFunctionData, (long) getSizeNonDeletable()));
 	if ((long)sizeDeletableSubFunctionData > (long)getSizeNonDeletable())
 	{
-		WPD_DEBUG_MSG(("WordPerfect: EOL Group: Possible corruption detected, bailing out\n"));
+		RVNG_DEBUG_MSG(("WordPerfect: EOL Group: Possible corruption detected, bailing out\n"));
 		throw FileException();
 	}
 
-	input->seek(sizeDeletableSubFunctionData, WPX_SEEK_CUR);
+	input->seek(sizeDeletableSubFunctionData, RVNG_SEEK_CUR);
 	while ((long)input->tell() < (long)(startPosition + getSizeNonDeletable()))
 	{
 		uint8_t byte;
@@ -88,7 +88,7 @@ void WP6EOLGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption
 		switch (byte)
 		{
 		case WP6_EOL_GROUP_ROW_INFORMATION:
-			WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: ROW_INFORMATION\n"));
+			RVNG_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: ROW_INFORMATION\n"));
 			numBytesToSkip = WP6_EOL_GROUP_ROW_INFORMATION_SIZE;
 			uint8_t rowFlags;
 			rowFlags = readU8(input, encryption);
@@ -111,20 +111,20 @@ void WP6EOLGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption
 		case WP6_EOL_GROUP_CELL_FORMULA:
 			uint16_t embeddedSubGroupSize;
 			embeddedSubGroupSize = readU16(input, encryption);
-			WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_FORMULA (length: %ld)\n",
+			RVNG_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_FORMULA (length: %ld)\n",
 			               (long) embeddedSubGroupSize));
 			numBytesToSkip = embeddedSubGroupSize;
 			break;
 		case WP6_EOL_GROUP_TOP_GUTTER_SPACING:
-			WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: TOP_GUTTER_SPACING\n"));
+			RVNG_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: TOP_GUTTER_SPACING\n"));
 			numBytesToSkip = WP6_EOL_GROUP_TOP_GUTTER_SPACING_SIZE;
 			break;
 		case WP6_EOL_GROUP_BOTTOM_GUTTER_SPACING:
-			WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: BOTTOM_GUTTER_SPACING\n"));
+			RVNG_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: BOTTOM_GUTTER_SPACING\n"));
 			numBytesToSkip = WP6_EOL_GROUP_BOTTOM_GUTTER_SPACING_SIZE;
 			break;
 		case WP6_EOL_GROUP_CELL_INFORMATION:
-			WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_INFORMATION\n"));
+			RVNG_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_INFORMATION\n"));
 			numBytesToSkip = WP6_EOL_GROUP_CELL_INFORMATION_SIZE;
 			uint8_t cellFlag, tmpCellVerticalAlign;
 			uint16_t attributeWord1, attributeWord2;
@@ -161,17 +161,17 @@ void WP6EOLGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption
 			m_cellAttributes = (uint32_t)(((attributeWord2 & 0x03) << 16) + attributeWord1);
 			break;
 		case WP6_EOL_GROUP_CELL_SPANNING_INFORMATION:
-			WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_SPANNING_INFORMATION\n"));
+			RVNG_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_SPANNING_INFORMATION\n"));
 			numBytesToSkip = WP6_EOL_GROUP_CELL_SPANNING_INFORMATION_SIZE;
 			m_colSpan = readU8(input, encryption);
 			m_rowSpan = readU8(input, encryption);
-			WPD_DEBUG_MSG(("WordPerfect: num cells spanned (h:%ld, v:%ld)\n",
+			RVNG_DEBUG_MSG(("WordPerfect: num cells spanned (h:%ld, v:%ld)\n",
 			               (long) m_colSpan, (long) m_rowSpan));
 			if (m_colSpan >= 128)
 				m_boundFromAbove = true;
 			break;
 		case WP6_EOL_GROUP_CELL_FILL_COLORS:
-			WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_FILL_COLORS\n"));
+			RVNG_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_FILL_COLORS\n"));
 			numBytesToSkip = WP6_EOL_GROUP_CELL_FILL_COLORS_SIZE;
 			uint8_t fR, fG, fB, fS;
 			uint8_t bR, bG, bB, bS;
@@ -187,12 +187,12 @@ void WP6EOLGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption
 
 			m_cellFgColor = new RGBSColor(fR,fG,fB,fS);
 			m_cellBgColor = new RGBSColor(bR,bG,bB,bS);
-			WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded FG Color (%i, %i, %i, %i) BG Color (%i, %i, %i, %i)\n",
+			RVNG_DEBUG_MSG(("WordPerfect: EOL Group Embedded FG Color (%i, %i, %i, %i) BG Color (%i, %i, %i, %i)\n",
 			               m_cellFgColor->m_r, m_cellFgColor->m_g, m_cellFgColor->m_b, m_cellFgColor->m_s,
 			               m_cellBgColor->m_r, m_cellBgColor->m_g, m_cellBgColor->m_b, m_cellBgColor->m_s));
 			break;
 		case WP6_EOL_GROUP_CELL_LINE_COLOR:
-			WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_LINE_COLOR\n"));
+			RVNG_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_LINE_COLOR\n"));
 			numBytesToSkip = WP6_EOL_GROUP_CELL_LINE_COLOR_SIZE;
 
 			m_cellBorderColor->m_r = readU8(input, encryption);
@@ -200,52 +200,52 @@ void WP6EOLGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption
 			m_cellBorderColor->m_b = readU8(input, encryption);
 			m_cellBorderColor->m_s = readU8(input, encryption);
 
-			WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Border Color (%i, %i, %i, %i)\n",
+			RVNG_DEBUG_MSG(("WordPerfect: EOL Group Embedded Border Color (%i, %i, %i, %i)\n",
 			               m_cellBorderColor->m_r, m_cellBorderColor->m_g, m_cellBorderColor->m_b, m_cellBorderColor->m_s));
 			break;
 		case WP6_EOL_GROUP_CELL_NUMBER_TYPE:
-			WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_NUMBER_TYPE\n"));
+			RVNG_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_NUMBER_TYPE\n"));
 			numBytesToSkip = WP6_EOL_GROUP_CELL_NUMBER_TYPE_SIZE;
 			break;
 		case WP6_EOL_GROUP_CELL_FLOATING_POINT_NUMBER:
-			WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_FLOATING_POINT_NUMBER\n"));
+			RVNG_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_FLOATING_POINT_NUMBER\n"));
 			numBytesToSkip = WP6_EOL_GROUP_CELL_FLOATING_POINT_NUMBER_SIZE;
 			break;
 		case WP6_EOL_GROUP_CELL_PREFIX_FLAG:
-			WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_PREFIX_FLAG\n"));
+			RVNG_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_PREFIX_FLAG\n"));
 			numBytesToSkip = WP6_EOL_GROUP_CELL_PREFIX_FLAG_SIZE;
 			m_cellBorders = readU8(input, encryption);
 			break;
 		case WP6_EOL_GROUP_CELL_RECALCULATION_ERROR_NUMBER:
-			WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_RECALCULATION_ERROR_NUMBER\n"));
+			RVNG_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: CELL_RECALCULATION_ERROR_NUMBER\n"));
 			numBytesToSkip = WP6_EOL_GROUP_CELL_RECALCULATION_ERROR_NUMBER_SIZE;
 			break;
 		case WP6_EOL_GROUP_DONT_END_A_PARAGRAPH_STYLE_FOR_THIS_HARD_RETURN:
-			WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: DONT_END_A_PARAGRAPH_STYLE_FOR_THIS_HARD_RETURN\n"));
+			RVNG_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: DONT_END_A_PARAGRAPH_STYLE_FOR_THIS_HARD_RETURN\n"));
 			numBytesToSkip = WP6_EOL_GROUP_DONT_END_A_PARAGRAPH_STYLE_FOR_THIS_HARD_RETURN_SIZE;
 			m_isDontEndAParagraphStyleForThisHardReturn = true;
 			break;
 		case 0x8e:
 		case 0x8f:
-			WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: UNKNOWN SUBFUNCTION (%x) (BAD BAD BAD)\n", byte));
+			RVNG_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: UNKNOWN SUBFUNCTION (%x) (BAD BAD BAD)\n", byte));
 			numBytesToSkip = readU16(input, encryption); // It seems that these two unknow sub-functions have their
 			// length information embedded: <subfunction>[length]...[length]<subfunction>
 			break;
 		default:
-			WPD_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: UNKNOWN SUBFUNCTION (%x) (BAD BAD BAD)\n", byte));
-			WPD_DEBUG_MSG(("WordPerfect: Possible corruption detected, bailing out\n"));
+			RVNG_DEBUG_MSG(("WordPerfect: EOL Group Embedded Sub-Function: UNKNOWN SUBFUNCTION (%x) (BAD BAD BAD)\n", byte));
+			RVNG_DEBUG_MSG(("WordPerfect: Possible corruption detected, bailing out\n"));
 			throw FileException();
 		}
 
 		if (startPosition2 + numBytesToSkip - 1 - input->tell() < 0)
 			throw FileException();
-		input->seek((startPosition2 + numBytesToSkip - 1), WPX_SEEK_SET);
+		input->seek((startPosition2 + numBytesToSkip - 1), RVNG_SEEK_SET);
 	}
 }
 
 void WP6EOLGroup::parse(WP6Listener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling an EOL group\n"));
+	RVNG_DEBUG_MSG(("WordPerfect: handling an EOL group\n"));
 
 	// first off, grab any prefix information which may be useful
 	const RGBSColor *cellFgColor = m_cellFgColor;
@@ -292,13 +292,13 @@ void WP6EOLGroup::parse(WP6Listener *listener)
 	case WP6_EOL_GROUP_HARD_EOC_AT_EOP:
 	case WP6_EOL_GROUP_DELETABLE_HARD_EOC:
 	case WP6_EOL_GROUP_DELETABLE_HARD_EOC_AT_EOP:
-		listener->insertBreak(WPX_COLUMN_BREAK);
+		listener->insertBreak(RVNG_COLUMN_BREAK);
 		break;
 	case WP6_EOL_GROUP_HARD_EOP: // hard EOP
-		listener->insertBreak(WPX_PAGE_BREAK);
+		listener->insertBreak(RVNG_PAGE_BREAK);
 		break;
 	case WP6_EOL_GROUP_TABLE_CELL: // Table Cell
-		WPD_DEBUG_MSG(("WordPerfect: EOL group: table cell\n"));
+		RVNG_DEBUG_MSG(("WordPerfect: EOL group: table cell\n"));
 		if (!m_boundFromAbove)
 		{
 			listener->insertCell(m_colSpan, m_rowSpan, m_cellBorders, cellFgColor, cellBgColor,
@@ -313,7 +313,7 @@ void WP6EOLGroup::parse(WP6Listener *listener)
 	case WP6_EOL_GROUP_TABLE_ROW_AT_HARD_EOC:
 	case WP6_EOL_GROUP_TABLE_ROW_AT_HARD_EOC_AT_HARD_EOP:
 	case WP6_EOL_GROUP_TABLE_ROW_AT_HARD_EOP:
-		WPD_DEBUG_MSG(("WordPerfect: EOL group: table row and cell\n"));
+		RVNG_DEBUG_MSG(("WordPerfect: EOL group: table row and cell\n"));
 
 		listener->insertRow(m_rowHeight, m_isMinimumHeight, m_isHeaderRow);
 		// the cellBorders variable already represent the cell border bits as well
@@ -344,7 +344,7 @@ void WP6EOLGroup::parse(WP6Listener *listener)
 	case WP6_EOL_GROUP_TABLE_ROW_AT_HARD_EOC_AT_HARD_EOP:
 	case WP6_EOL_GROUP_TABLE_ROW_AT_HARD_EOP:
 	case WP6_EOL_GROUP_TABLE_OFF_AT_EOC_AT_EOP:
-		listener->insertBreak(WPX_SOFT_PAGE_BREAK);
+		listener->insertBreak(RVNG_SOFT_PAGE_BREAK);
 		break;
 	default:
 		break;

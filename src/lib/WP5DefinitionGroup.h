@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -32,7 +32,7 @@
 class WP5DefinitionGroup_DefineTablesSubGroup : public WP5VariableLengthGroup_SubGroup
 {
 public:
-	WP5DefinitionGroup_DefineTablesSubGroup(WPXInputStream *input, WPXEncryption *encryption, uint16_t subGroupSize);
+	WP5DefinitionGroup_DefineTablesSubGroup(RVNGInputStream *input, RVNGEncryption *encryption, uint16_t subGroupSize);
 	void parse(WP5Listener *listener);
 
 private:
@@ -50,12 +50,12 @@ private:
 class WP5DefinitionGroup : public WP5VariableLengthGroup
 {
 public:
-	WP5DefinitionGroup(WPXInputStream *input, WPXEncryption *encryption);
+	WP5DefinitionGroup(RVNGInputStream *input, RVNGEncryption *encryption);
 	~WP5DefinitionGroup();
 	void parse(WP5Listener *listener);
 
 protected:
-	virtual void _readContents(WPXInputStream *input, WPXEncryption *encryption);
+	virtual void _readContents(RVNGInputStream *input, RVNGEncryption *encryption);
 
 private:
 	WP5DefinitionGroup(const WP5DefinitionGroup &);

@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,51 +17,51 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WPXPARSER_H
-#define WPXPARSER_H
+#ifndef RVNGPARSER_H
+#define RVNGPARSER_H
 
-class WPXDocumentInterface;
-class WPXHeader;
-class WPXInputStream;
-class WPXEncryption;
+class RVNGDocumentInterface;
+class RVNGHeader;
+class RVNGInputStream;
+class RVNGEncryption;
 
-class WPXParser
+class RVNGParser
 {
 public:
-	WPXParser(WPXInputStream *input, WPXHeader *header, WPXEncryption *encryption);
-	virtual ~WPXParser() {}
+	RVNGParser(RVNGInputStream *input, RVNGHeader *header, RVNGEncryption *encryption);
+	virtual ~RVNGParser() {}
 
-	virtual void parse(WPXDocumentInterface *documentInterface) = 0;
-	virtual void parseSubDocument(WPXDocumentInterface *documentInterface) = 0;
+	virtual void parse(RVNGDocumentInterface *documentInterface) = 0;
+	virtual void parseSubDocument(RVNGDocumentInterface *documentInterface) = 0;
 
 protected:
-	WPXHeader *getHeader()
+	RVNGHeader *getHeader()
 	{
 		return m_header;
 	}
-	WPXInputStream *getInput()
+	RVNGInputStream *getInput()
 	{
 		return m_input;
 	}
-	WPXEncryption *getEncryption()
+	RVNGEncryption *getEncryption()
 	{
 		return m_encryption;
 	}
 
 private:
-	WPXParser(const WPXParser &);
-	WPXParser &operator=(const WPXParser &);
-	WPXInputStream *m_input;
-	WPXHeader *m_header;
-	WPXEncryption *m_encryption;
+	RVNGParser(const RVNGParser &);
+	RVNGParser &operator=(const RVNGParser &);
+	RVNGInputStream *m_input;
+	RVNGHeader *m_header;
+	RVNGEncryption *m_encryption;
 };
 
-#endif /* WPXPARSER_H */
+#endif /* RVNGPARSER_H */
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

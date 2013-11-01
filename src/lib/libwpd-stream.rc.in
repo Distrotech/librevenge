@@ -1,8 +1,8 @@
 #include <winver.h>
 
 VS_VERSION_INFO VERSIONINFO
-  FILEVERSION @WPD_MAJOR_VERSION@,@WPD_MINOR_VERSION@,@WPD_MICRO_VERSION@,BUILDNUMBER
-  PRODUCTVERSION @WPD_MAJOR_VERSION@,@WPD_MINOR_VERSION@,@WPD_MICRO_VERSION@,0
+  FILEVERSION @RVNG_MAJOR_VERSION@,@RVNG_MINOR_VERSION@,@RVNG_MICRO_VERSION@,BUILDNUMBER
+  PRODUCTVERSION @RVNG_MAJOR_VERSION@,@RVNG_MINOR_VERSION@,@RVNG_MICRO_VERSION@,0
   FILEFLAGSMASK 0
   FILEFLAGS 0
   FILEOS VOS__WINDOWS32
@@ -13,14 +13,14 @@ VS_VERSION_INFO VERSIONINFO
     BEGIN
       BLOCK "040904B0"
       BEGIN
-	VALUE "CompanyName", "The libwpd developer community"
-	VALUE "FileDescription", "libwpd-stream"
-	VALUE "FileVersion", "@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.@WPD_MICRO_VERSION@.BUILDNUMBER"
-	VALUE "InternalName", "libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@"
+	VALUE "CompanyName", "The librevenge developer community"
+	VALUE "FileDescription", "librevenge-stream"
+	VALUE "FileVersion", "@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.@RVNG_MICRO_VERSION@.BUILDNUMBER"
+	VALUE "InternalName", "librevenge-stream-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@"
 	VALUE "LegalCopyright", "Copyright (C) 2002-2006 William Lachance, Marc Maurer, Fridrich Strba, other contributers"
-	VALUE "OriginalFilename", "libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll"
-	VALUE "ProductName", "libwpd"
-	VALUE "ProductVersion", "@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.@WPD_MICRO_VERSION@"
+	VALUE "OriginalFilename", "librevenge-stream-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.dll"
+	VALUE "ProductName", "librevenge"
+	VALUE "ProductVersion", "@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.@RVNG_MICRO_VERSION@"
       END
     END
     BLOCK "VarFileInfo"

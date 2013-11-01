@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,41 +16,41 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WPXPROPERTY_H
-#define WPXPROPERTY_H
-#include "WPXString.h"
+#ifndef RVNGPROPERTY_H
+#define RVNGPROPERTY_H
+#include "RVNGString.h"
 
-enum WPXUnit { WPX_INCH, WPX_PERCENT, WPX_POINT, WPX_TWIP, WPX_GENERIC };
+enum RVNGUnit { RVNG_INCH, RVNG_PERCENT, RVNG_POINT, RVNG_TWIP, RVNG_GENERIC };
 
-class WPXProperty
+class RVNGProperty
 {
 public:
-	virtual ~WPXProperty();
+	virtual ~RVNGProperty();
 	virtual int getInt() const = 0;
 	virtual double getDouble() const = 0;
-	virtual WPXString getStr() const = 0;
-	virtual WPXProperty *clone() const = 0;
+	virtual RVNGString getStr() const = 0;
+	virtual RVNGProperty *clone() const = 0;
 };
 
-class WPXPropertyFactory
+class RVNGPropertyFactory
 {
 public:
-	static WPXProperty *newStringProp(const WPXString &str);
-	static WPXProperty *newStringProp(const char *str);
-	static WPXProperty *newIntProp(const int val);
-	static WPXProperty *newBoolProp(const bool val);
-	static WPXProperty *newDoubleProp(const double val);
-	static WPXProperty *newInchProp(const double val);
-	static WPXProperty *newPercentProp(const double val);
-	static WPXProperty *newPointProp(const double val);
-	static WPXProperty *newTwipProp(const double val);
+	static RVNGProperty *newStringProp(const RVNGString &str);
+	static RVNGProperty *newStringProp(const char *str);
+	static RVNGProperty *newIntProp(const int val);
+	static RVNGProperty *newBoolProp(const bool val);
+	static RVNGProperty *newDoubleProp(const double val);
+	static RVNGProperty *newInchProp(const double val);
+	static RVNGProperty *newPercentProp(const double val);
+	static RVNGProperty *newPointProp(const double val);
+	static RVNGProperty *newTwipProp(const double val);
 };
-#endif /* WPXPROPERTY_H */
+#endif /* RVNGPROPERTY_H */
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

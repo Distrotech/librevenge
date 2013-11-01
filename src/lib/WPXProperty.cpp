@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,177 +17,177 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
-class WPXStringProperty : public WPXProperty
+class RVNGStringProperty : public RVNGProperty
 {
 public:
-	WPXStringProperty(const WPXString &str);
-	WPXStringProperty(const char *str);
-	~WPXStringProperty() {}
+	RVNGStringProperty(const RVNGString &str);
+	RVNGStringProperty(const char *str);
+	~RVNGStringProperty() {}
 	virtual int getInt() const;
 	virtual double getDouble() const;
-	virtual WPXString getStr() const;
-	virtual WPXProperty *clone() const;
+	virtual RVNGString getStr() const;
+	virtual RVNGProperty *clone() const;
 
 private:
-	WPXString m_str;
+	RVNGString m_str;
 };
 
-class WPXIntProperty : public WPXProperty
+class RVNGIntProperty : public RVNGProperty
 {
 public:
-	WPXIntProperty(const int val);
-	~WPXIntProperty() {}
+	RVNGIntProperty(const int val);
+	~RVNGIntProperty() {}
 	virtual int getInt() const;
 	virtual double getDouble() const;
-	virtual WPXString getStr() const;
-	virtual WPXProperty *clone() const;
+	virtual RVNGString getStr() const;
+	virtual RVNGProperty *clone() const;
 
 private:
 	int m_val;
 };
 
-class WPXBoolProperty : public WPXIntProperty
+class RVNGBoolProperty : public RVNGIntProperty
 {
 public:
-	WPXBoolProperty(const bool val);
-	~WPXBoolProperty() {}
-	virtual WPXString getStr() const;
-	virtual WPXProperty *clone() const;
+	RVNGBoolProperty(const bool val);
+	~RVNGBoolProperty() {}
+	virtual RVNGString getStr() const;
+	virtual RVNGProperty *clone() const;
 };
 
-class WPXDoubleProperty : public WPXProperty
+class RVNGDoubleProperty : public RVNGProperty
 {
 public:
-	WPXDoubleProperty(const double val);
-	~WPXDoubleProperty() {}
+	RVNGDoubleProperty(const double val);
+	~RVNGDoubleProperty() {}
 	virtual int getInt() const;
 	virtual double getDouble() const;
-	virtual WPXString getStr() const;
-	virtual WPXProperty *clone() const;
+	virtual RVNGString getStr() const;
+	virtual RVNGProperty *clone() const;
 
 private:
 	double m_val;
 };
 
-class WPXInchProperty : public WPXDoubleProperty
+class RVNGInchProperty : public RVNGDoubleProperty
 {
 public:
-	WPXInchProperty(const double val);
-	~WPXInchProperty() {}
-	virtual WPXString getStr() const;
-	virtual WPXProperty *clone() const;
+	RVNGInchProperty(const double val);
+	~RVNGInchProperty() {}
+	virtual RVNGString getStr() const;
+	virtual RVNGProperty *clone() const;
 };
 
-class WPXPercentProperty : public WPXDoubleProperty
+class RVNGPercentProperty : public RVNGDoubleProperty
 {
 public:
-	WPXPercentProperty(const double val);
-	~WPXPercentProperty() {}
-	virtual WPXString getStr() const;
-	virtual WPXProperty *clone() const;
+	RVNGPercentProperty(const double val);
+	~RVNGPercentProperty() {}
+	virtual RVNGString getStr() const;
+	virtual RVNGProperty *clone() const;
 };
 
-class WPXPointProperty : public WPXDoubleProperty
+class RVNGPointProperty : public RVNGDoubleProperty
 {
 public:
-	WPXPointProperty(const double val);
-	~WPXPointProperty() {}
-	virtual WPXString getStr() const;
-	virtual WPXProperty *clone() const;
+	RVNGPointProperty(const double val);
+	~RVNGPointProperty() {}
+	virtual RVNGString getStr() const;
+	virtual RVNGProperty *clone() const;
 };
 
-class WPXTwipProperty : public WPXDoubleProperty
+class RVNGTwipProperty : public RVNGDoubleProperty
 {
 public:
-	WPXTwipProperty(const double val);
-	~WPXTwipProperty() {}
-	virtual WPXString getStr() const;
-	virtual WPXProperty *clone() const;
+	RVNGTwipProperty(const double val);
+	~RVNGTwipProperty() {}
+	virtual RVNGString getStr() const;
+	virtual RVNGProperty *clone() const;
 };
 
-class WPXGenericProperty : public WPXDoubleProperty
+class RVNGGenericProperty : public RVNGDoubleProperty
 {
 public:
-	WPXGenericProperty(const double val);
-	~WPXGenericProperty() {}
-	virtual WPXString getStr() const;
-	virtual WPXProperty *clone() const;
+	RVNGGenericProperty(const double val);
+	~RVNGGenericProperty() {}
+	virtual RVNGString getStr() const;
+	virtual RVNGProperty *clone() const;
 };
 
-WPXProperty::~WPXProperty()
+RVNGProperty::~RVNGProperty()
 {
 }
 
-WPXStringProperty::WPXStringProperty(const WPXString &str) :
+RVNGStringProperty::RVNGStringProperty(const RVNGString &str) :
 	m_str(str)
 {
 }
-WPXStringProperty::WPXStringProperty(const char *str) :
+RVNGStringProperty::RVNGStringProperty(const char *str) :
 	m_str(str)
 {
 }
-int WPXStringProperty::getInt() const
+int RVNGStringProperty::getInt() const
 {
 	return 0;
 }
 
-double WPXStringProperty::getDouble() const
+double RVNGStringProperty::getDouble() const
 {
 	return 0.0;
 }
 
-WPXString WPXStringProperty::getStr() const
+RVNGString RVNGStringProperty::getStr() const
 {
 	return m_str;
 }
 
-WPXProperty *WPXStringProperty::clone() const
+RVNGProperty *RVNGStringProperty::clone() const
 {
-	return new WPXStringProperty(m_str);
+	return new RVNGStringProperty(m_str);
 }
 
-WPXIntProperty::WPXIntProperty(const int val)  :
+RVNGIntProperty::RVNGIntProperty(const int val)  :
 	m_val(val)
 {
 }
 
-int WPXIntProperty::getInt() const
+int RVNGIntProperty::getInt() const
 {
 	return m_val;
 }
 
-double WPXIntProperty::getDouble() const
+double RVNGIntProperty::getDouble() const
 {
 	return (double)m_val;
 }
 
-WPXString WPXIntProperty::getStr() const
+RVNGString RVNGIntProperty::getStr() const
 {
-	WPXString str;
+	RVNGString str;
 	str.sprintf("%d", m_val);
 	return str;
 }
 
-WPXProperty *WPXIntProperty::clone() const
+RVNGProperty *RVNGIntProperty::clone() const
 {
-	return new WPXIntProperty(m_val);
+	return new RVNGIntProperty(m_val);
 }
 
-WPXBoolProperty::WPXBoolProperty(const bool val)  :
-	WPXIntProperty(val)
+RVNGBoolProperty::RVNGBoolProperty(const bool val)  :
+	RVNGIntProperty(val)
 {
 }
 
-WPXString WPXBoolProperty::getStr() const
+RVNGString RVNGBoolProperty::getStr() const
 {
 	if (getInt())
 		return "true";
@@ -195,148 +195,148 @@ WPXString WPXBoolProperty::getStr() const
 		return "false";
 }
 
-WPXProperty *WPXBoolProperty::clone() const
+RVNGProperty *RVNGBoolProperty::clone() const
 {
-	return new WPXBoolProperty(getInt() != 0);
+	return new RVNGBoolProperty(getInt() != 0);
 }
 
-WPXDoubleProperty::WPXDoubleProperty(const double val) :
+RVNGDoubleProperty::RVNGDoubleProperty(const double val) :
 	m_val(val)
 {
 }
 
-int WPXDoubleProperty::getInt() const
+int RVNGDoubleProperty::getInt() const
 {
 	return (int)m_val;
 }
 
-double WPXDoubleProperty::getDouble() const
+double RVNGDoubleProperty::getDouble() const
 {
 	return m_val;
 }
 
-WPXString WPXDoubleProperty::getStr() const
+RVNGString RVNGDoubleProperty::getStr() const
 {
-	WPXString str = doubleToString(getDouble());
+	RVNGString str = doubleToString(getDouble());
 	return str;
 }
 
-WPXProperty *WPXDoubleProperty::clone() const
+RVNGProperty *RVNGDoubleProperty::clone() const
 {
-	return new WPXDoubleProperty(getDouble());
+	return new RVNGDoubleProperty(getDouble());
 }
 
-WPXInchProperty::WPXInchProperty(const double val) :
-	WPXDoubleProperty(val)
+RVNGInchProperty::RVNGInchProperty(const double val) :
+	RVNGDoubleProperty(val)
 {
 }
 
-WPXString WPXInchProperty::getStr() const
+RVNGString RVNGInchProperty::getStr() const
 {
-	WPXString str = doubleToString(getDouble());
+	RVNGString str = doubleToString(getDouble());
 	str.append("in");
 	return str;
 }
 
-WPXProperty *WPXInchProperty::clone() const
+RVNGProperty *RVNGInchProperty::clone() const
 {
-	return new WPXInchProperty(getDouble());
+	return new RVNGInchProperty(getDouble());
 }
 
-WPXPercentProperty::WPXPercentProperty(const double val) :
-	WPXDoubleProperty(val)
+RVNGPercentProperty::RVNGPercentProperty(const double val) :
+	RVNGDoubleProperty(val)
 {
 }
 
-WPXString WPXPercentProperty::getStr() const
+RVNGString RVNGPercentProperty::getStr() const
 {
-	WPXString str = doubleToString(getDouble()*100.0);
+	RVNGString str = doubleToString(getDouble()*100.0);
 	str.append("%");
 	return str;
 }
 
-WPXProperty *WPXPercentProperty::clone() const
+RVNGProperty *RVNGPercentProperty::clone() const
 {
-	return new WPXPercentProperty(getDouble());
+	return new RVNGPercentProperty(getDouble());
 }
 
-WPXPointProperty::WPXPointProperty(const double val) :
-	WPXDoubleProperty(val)
+RVNGPointProperty::RVNGPointProperty(const double val) :
+	RVNGDoubleProperty(val)
 {
 }
 
-WPXString WPXPointProperty::getStr() const
+RVNGString RVNGPointProperty::getStr() const
 {
-	WPXString str = doubleToString(getDouble());
+	RVNGString str = doubleToString(getDouble());
 	str.append("pt");
 	return str;
 }
 
-WPXProperty *WPXPointProperty::clone() const
+RVNGProperty *RVNGPointProperty::clone() const
 {
-	return new WPXPointProperty(getDouble());
+	return new RVNGPointProperty(getDouble());
 }
 
-WPXTwipProperty::WPXTwipProperty(const double val) :
-	WPXDoubleProperty(val)
+RVNGTwipProperty::RVNGTwipProperty(const double val) :
+	RVNGDoubleProperty(val)
 {
 }
 
-WPXString WPXTwipProperty::getStr() const
+RVNGString RVNGTwipProperty::getStr() const
 {
-	WPXString str;
+	RVNGString str;
 	str.sprintf("%i*", getInt());
 	return str;
 }
 
-WPXProperty *WPXTwipProperty::clone() const
+RVNGProperty *RVNGTwipProperty::clone() const
 {
-	return new WPXTwipProperty(getDouble());
+	return new RVNGTwipProperty(getDouble());
 }
 
-WPXProperty *WPXPropertyFactory::newStringProp(const WPXString &str)
+RVNGProperty *RVNGPropertyFactory::newStringProp(const RVNGString &str)
 {
-	return static_cast<WPXProperty *>(new WPXStringProperty(str));
+	return static_cast<RVNGProperty *>(new RVNGStringProperty(str));
 }
 
-WPXProperty *WPXPropertyFactory::newStringProp(const char *str)
+RVNGProperty *RVNGPropertyFactory::newStringProp(const char *str)
 {
-	return static_cast<WPXProperty *>(new WPXStringProperty(str));
+	return static_cast<RVNGProperty *>(new RVNGStringProperty(str));
 }
 
-WPXProperty *WPXPropertyFactory::newIntProp(const int val)
+RVNGProperty *RVNGPropertyFactory::newIntProp(const int val)
 {
-	return static_cast<WPXProperty *>(new WPXIntProperty(val));
+	return static_cast<RVNGProperty *>(new RVNGIntProperty(val));
 }
 
-WPXProperty *WPXPropertyFactory::newBoolProp(const bool val)
+RVNGProperty *RVNGPropertyFactory::newBoolProp(const bool val)
 {
-	return static_cast<WPXProperty *>(new WPXBoolProperty(val));
+	return static_cast<RVNGProperty *>(new RVNGBoolProperty(val));
 }
 
-WPXProperty *WPXPropertyFactory::newDoubleProp(const double val)
+RVNGProperty *RVNGPropertyFactory::newDoubleProp(const double val)
 {
-	return static_cast<WPXProperty *>(new WPXDoubleProperty(val));
+	return static_cast<RVNGProperty *>(new RVNGDoubleProperty(val));
 }
 
-WPXProperty *WPXPropertyFactory::newInchProp(const double val)
+RVNGProperty *RVNGPropertyFactory::newInchProp(const double val)
 {
-	return static_cast<WPXProperty *>(new WPXInchProperty(val));
+	return static_cast<RVNGProperty *>(new RVNGInchProperty(val));
 }
 
-WPXProperty *WPXPropertyFactory::newPercentProp(const double val)
+RVNGProperty *RVNGPropertyFactory::newPercentProp(const double val)
 {
-	return static_cast<WPXProperty *>(new WPXPercentProperty(val));
+	return static_cast<RVNGProperty *>(new RVNGPercentProperty(val));
 }
 
-WPXProperty *WPXPropertyFactory::newPointProp(const double val)
+RVNGProperty *RVNGPropertyFactory::newPointProp(const double val)
 {
-	return static_cast<WPXProperty *>(new WPXPointProperty(val));
+	return static_cast<RVNGProperty *>(new RVNGPointProperty(val));
 }
 
-WPXProperty *WPXPropertyFactory::newTwipProp(const double val)
+RVNGProperty *RVNGPropertyFactory::newTwipProp(const double val)
 {
-	return static_cast<WPXProperty *>(new WPXTwipProperty(val));
+	return static_cast<RVNGProperty *>(new RVNGTwipProperty(val));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

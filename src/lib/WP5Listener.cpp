@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* This product is not manufactured, approved, or supported by
@@ -27,8 +27,8 @@
 
 #include "WP5Listener.h"
 #include "WP5FileStructure.h"
-#include "WPXFileStructure.h"
-#include "libwpd_internal.h"
+#include "RVNGFileStructure.h"
+#include "librevenge_internal.h"
 #include "WP5PrefixData.h"
 
 WP5Listener::WP5Listener() :

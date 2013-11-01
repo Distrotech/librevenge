@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -27,12 +27,12 @@
 #ifndef WP3LISTENER_H
 #define WP3LISTENER_H
 
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 #include <vector>
 
 class WP3SubDocument;
 class WP3ResourceFork;
-class WPXBinaryData;
+class RVNGBinaryData;
 
 class WP3Listener
 {
@@ -50,11 +50,11 @@ public:
 	virtual void lineSpacingChange(double lineSpacing) = 0;
 	virtual void attributeChange(bool isOn, uint8_t attribute) = 0;
 	virtual void pageMarginChange(uint8_t side, uint16_t margin) = 0;
-	virtual void pageFormChange(uint16_t length, uint16_t width, WPXFormOrientation orientation) = 0;
+	virtual void pageFormChange(uint16_t length, uint16_t width, RVNGFormOrientation orientation) = 0;
 	virtual void marginChange(uint8_t side, uint16_t margin) = 0;
 	virtual void indentFirstLineChange(double offset) = 0;
-	virtual void setTabs(bool isRelative, const std::vector<WPXTabStop> tabStops) = 0;
-	virtual void columnChange(WPXTextColumnType columnType, uint8_t numColumns, const std::vector<double> &columnWidth,
+	virtual void setTabs(bool isRelative, const std::vector<RVNGTabStop> tabStops) = 0;
+	virtual void columnChange(RVNGTextColumnType columnType, uint8_t numColumns, const std::vector<double> &columnWidth,
 	                          const std::vector<bool> &isFixedWidth) = 0;
 	virtual void endDocument() = 0;
 	virtual void endSubDocument() = 0;
@@ -71,11 +71,11 @@ public:
 	virtual void undoChange(uint8_t undoType, uint16_t undoLevel) = 0;
 	virtual void justificationChange(uint8_t justification) = 0;
 	virtual void setTextColor(const RGBSColor *fontColor) = 0;
-	virtual void setTextFont(const WPXString &fontName) = 0;
+	virtual void setTextFont(const RVNGString &fontName) = 0;
 	virtual void setFontSize(uint16_t fontSize) = 0;
-	virtual void insertPageNumber(const WPXString &pageNumber) = 0;
-	virtual void insertNoteReference(const WPXString &noteReference) = 0;
-	virtual void insertNote(WPXNoteType noteType, const WP3SubDocument *subDocument) = 0;
+	virtual void insertPageNumber(const RVNGString &pageNumber) = 0;
+	virtual void insertNoteReference(const RVNGString &noteReference) = 0;
+	virtual void insertNote(RVNGNoteType noteType, const WP3SubDocument *subDocument) = 0;
 	virtual void headerFooterGroup(uint8_t headerFooterType, uint8_t occurenceBits, WP3SubDocument *subDocument) = 0;
 	virtual void suppressPage(uint16_t suppressCode) = 0;
 	virtual void backTab() = 0;
@@ -84,7 +84,7 @@ public:
 	virtual void leftRightIndent() = 0;
 	virtual void leftRightIndent(double offset) = 0;
 	virtual void insertPicture(double height, double width, double verticalOffset, double horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
-	                           uint16_t figureFlags, const WPXBinaryData &binaryData) = 0;
+	                           uint16_t figureFlags, const RVNGBinaryData &binaryData) = 0;
 	virtual void insertTextBox(double height, double width, double verticalOffset, double horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,
 	                           uint16_t figureFlags, const WP3SubDocument *subDocument, const WP3SubDocument *caption) = 0;
 	virtual void insertWP51Table(double height, double width, double verticalOffset, double horizontalOffset, uint8_t leftColumn, uint8_t rightColumn,

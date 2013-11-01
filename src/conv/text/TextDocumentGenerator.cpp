@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -39,11 +39,11 @@ TextDocumentGenerator::~TextDocumentGenerator()
 {
 }
 
-void TextDocumentGenerator::setDocumentMetaData(const WPXPropertyList &propList)
+void TextDocumentGenerator::setDocumentMetaData(const RVNGPropertyList &propList)
 {
 	if (!m_isInfo)
 		return;
-	WPXPropertyList::Iter propIter(propList);
+	RVNGPropertyList::Iter propIter(propList);
 	for (propIter.rewind(); propIter.next(); )
 	{
 		printf("%s %s\n", propIter.key(), propIter()->getStr().cstr());
@@ -64,7 +64,7 @@ void TextDocumentGenerator::insertTab()
 	printf("%c", UCS_TAB);
 }
 
-void TextDocumentGenerator::insertText(const WPXString &text)
+void TextDocumentGenerator::insertText(const RVNGString &text)
 {
 	if (m_isInfo)
 		return;

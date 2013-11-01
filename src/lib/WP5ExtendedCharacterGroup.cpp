@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -19,7 +19,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -28,10 +28,10 @@
 
 #include "WP5ExtendedCharacterGroup.h"
 #include "WP5FileStructure.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 #include "WP5Listener.h"
 
-WP5ExtendedCharacterGroup::WP5ExtendedCharacterGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID) :
+WP5ExtendedCharacterGroup::WP5ExtendedCharacterGroup(RVNGInputStream *input, RVNGEncryption *encryption, uint8_t groupID) :
 	WP5FixedLengthGroup(groupID),
 	m_character(0),
 	m_characterSet(0)
@@ -39,7 +39,7 @@ WP5ExtendedCharacterGroup::WP5ExtendedCharacterGroup(WPXInputStream *input, WPXE
 	_read(input, encryption);
 }
 
-void WP5ExtendedCharacterGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP5ExtendedCharacterGroup::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	m_character = readU8(input, encryption);
 	m_characterSet = readU8(input, encryption);

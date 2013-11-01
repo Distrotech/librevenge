@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -24,15 +24,15 @@
  */
 
 #include "WP3ResourceFork.h"
-#include "libwpd_internal.h"
-#include "WPXEncryption.h"
+#include "librevenge_internal.h"
+#include "RVNGEncryption.h"
 #include <vector>
 #include <sstream>
 
-WP3ResourceFork::WP3ResourceFork(WPXInputStream *input, WPXEncryption *encryption) :
+WP3ResourceFork::WP3ResourceFork(RVNGInputStream *input, RVNGEncryption *encryption) :
 	m_resourcesTypeMultimap(), m_resourcesIDMultimap()
 {
-	input->seek(16, WPX_SEEK_SET);
+	input->seek(16, RVNG_SEEK_SET);
 	uint32_t dataOffset = readU32(input, encryption, true);
 	uint32_t mapOffset = readU32(input, encryption, true);
 	/* uint32_t dataLength = */
@@ -40,12 +40,12 @@ WP3ResourceFork::WP3ResourceFork(WPXInputStream *input, WPXEncryption *encryptio
 	/* uint32_t mapLength = */
 	readU32(input, encryption, true);
 
-	input->seek(40+mapOffset, WPX_SEEK_SET);
+	input->seek(40+mapOffset, RVNG_SEEK_SET);
 
 	uint32_t typeOffset = readU16(input, encryption, true);
 	uint32_t nameListOffset = readU16(input, encryption, true);
 
-	input->seek(16+typeOffset+mapOffset, WPX_SEEK_SET);
+	input->seek(16+typeOffset+mapOffset, RVNG_SEEK_SET);
 	uint16_t resourceTypesNumber = (uint16_t)(1 + readU16(input, encryption, true));
 
 	for (unsigned i=0; i < resourceTypesNumber; i++)
@@ -54,25 +54,25 @@ WP3ResourceFork::WP3ResourceFork(WPXInputStream *input, WPXEncryption *encryptio
 		uint32_t resourcesNumber = 1+readU16(input, encryption, true);
 		uint32_t referenceListOffset = 16+typeOffset+mapOffset+readU16(input, encryption, true);
 		long position = input->tell();
-		input->seek(referenceListOffset, WPX_SEEK_SET);
+		input->seek(referenceListOffset, RVNG_SEEK_SET);
 		for (uint32_t j=0; j < resourcesNumber; j++)
 		{
 			uint32_t resourceReferenceID = readU16(input, encryption, true);
 			uint16_t resourceNameOffset = readU16(input, encryption, true);
-			WPXString resourceName;
+			RVNGString resourceName;
 			if (resourceNameOffset != 0xffff)
 			{
 				long position2 = input->tell();
-				input->seek(16+mapOffset+nameListOffset+resourceNameOffset, WPX_SEEK_SET);
+				input->seek(16+mapOffset+nameListOffset+resourceNameOffset, RVNG_SEEK_SET);
 				resourceName = readPascalString(input, encryption);
-				input->seek(position2, WPX_SEEK_SET);
+				input->seek(position2, RVNG_SEEK_SET);
 			}
 			uint8_t resourceAttributes = readU8(input, encryption);
 			uint32_t offsetToData = (uint32_t)((uint32_t)readU8(input, encryption) << 16);
 			offsetToData |= readU16(input, encryption, true);
 			offsetToData += 16+dataOffset;
 			long position3 = input->tell();
-			input->seek(offsetToData, WPX_SEEK_SET);
+			input->seek(offsetToData, RVNG_SEEK_SET);
 			uint32_t resourceDataSize = readU32(input, encryption, true);
 
 			unsigned long oldEncryptionOffset = 0;
@@ -89,7 +89,7 @@ WP3ResourceFork::WP3ResourceFork(WPXInputStream *input, WPXEncryption *encryptio
 				}
 			}
 
-			WPXBinaryData resourceData;
+			RVNGBinaryData resourceData;
 			for (unsigned long k = 0; k < (unsigned long)resourceDataSize && !input->atEOS(); k++)
 				resourceData.append((unsigned char)readU8(input, encryption));
 
@@ -99,14 +99,14 @@ WP3ResourceFork::WP3ResourceFork(WPXInputStream *input, WPXEncryption *encryptio
 				encryption->setEncryptionMaskBase(oldEncryptionMaskBase);
 			}
 
-			input->seek(position3, WPX_SEEK_SET);
+			input->seek(position3, RVNG_SEEK_SET);
 			WP3Resource *resource = new WP3Resource(resourceType, resourceReferenceID, resourceName, resourceAttributes, resourceData);
 			m_resourcesTypeMultimap.insert(std::multimap<uint32_t, WP3Resource *>::value_type( resourceType, resource ) );
 			m_resourcesIDMultimap.insert(std::multimap<uint32_t, WP3Resource *>::value_type( resourceReferenceID, resource ) );
-			WPD_DEBUG_MSG(("WP3Resource: Type 0x%.8x, ID %i, name %s, attributes 0x%.2x\n", resourceType, resourceReferenceID, resourceName.cstr(), resourceAttributes));
-			input->seek(4, WPX_SEEK_CUR);
+			RVNG_DEBUG_MSG(("WP3Resource: Type 0x%.8x, ID %i, name %s, attributes 0x%.2x\n", resourceType, resourceReferenceID, resourceName.cstr(), resourceAttributes));
+			input->seek(4, RVNG_SEEK_CUR);
 #if 0
-			WPXInputStream *tmpBinaryStream = const_cast<WPXInputStream *>(resourceData.getDataStream());
+			RVNGInputStream *tmpBinaryStream = const_cast<RVNGInputStream *>(resourceData.getDataStream());
 			int indexNumber = 0;
 			while (!tmpBinaryStream->atEOS())
 			{
@@ -125,20 +125,20 @@ WP3ResourceFork::WP3ResourceFork(WPXInputStream *input, WPXEncryption *encryptio
 			std::ostringstream filename;
 			filename << "binarydump" << m_resourcesTypeMultimap.size() << ".bin";
 			FILE *f = fopen(filename.str().c_str(), "wb");
-			WPXBinaryData tmpResData;
+			RVNGBinaryData tmpResData;
 			for (int tmpIndex = 0; tmpIndex < 512; tmpIndex++)
 				tmpResData.append((const unsigned char)0);
 			tmpResData.append(resourceData);
 			if (f)
 			{
-				WPXInputStream *tmpStream = const_cast<WPXInputStream *>(tmpResData.getDataStream());
+				RVNGInputStream *tmpStream = const_cast<RVNGInputStream *>(tmpResData.getDataStream());
 				while (!tmpStream->atEOS())
 					fprintf(f, "%c", readU8(tmpStream, 0));
 				fclose(f);
 			}
 #endif
 		}
-		input->seek(position, WPX_SEEK_SET);
+		input->seek(position, RVNG_SEEK_SET);
 	}
 }
 

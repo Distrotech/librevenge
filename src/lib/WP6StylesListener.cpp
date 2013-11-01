@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -26,19 +26,19 @@
  */
 
 #include "WP6StylesListener.h"
-#include "WPXTable.h"
+#include "RVNGTable.h"
 #include "WP6FileStructure.h"
-#include "WPXFileStructure.h"
-#include "libwpd_internal.h"
+#include "RVNGFileStructure.h"
+#include "librevenge_internal.h"
 #include "WP6SubDocument.h"
 #include "WP6PrefixDataPacket.h"
 
 // WP6StylesListener: creates intermediate table and page span representations, given a
 // sequence of messages passed to it by the parser.
 
-WP6StylesListener::WP6StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList) :
+WP6StylesListener::WP6StylesListener(std::list<RVNGPageSpan> &pageList, RVNGTableList tableList) :
 	WP6Listener(),
-	WPXStylesListener(pageList),
+	RVNGStylesListener(pageList),
 	m_currentPage(),
 	m_tableList(tableList),
 	m_currentTable(0),
@@ -54,12 +54,12 @@ WP6StylesListener::WP6StylesListener(std::list<WPXPageSpan> &pageList, WPXTableL
 
 void WP6StylesListener::endDocument()
 {
-	insertBreak(WPX_SOFT_PAGE_BREAK); // pretend we just had a soft page break (for the last page)
+	insertBreak(RVNG_SOFT_PAGE_BREAK); // pretend we just had a soft page break (for the last page)
 }
 
 void WP6StylesListener::endSubDocument()
 {
-	insertBreak(WPX_SOFT_PAGE_BREAK); // pretend we just had a soft page break (for the last page)
+	insertBreak(RVNG_SOFT_PAGE_BREAK); // pretend we just had a soft page break (for the last page)
 }
 
 void WP6StylesListener::insertBreak(const uint8_t breakType)
@@ -71,8 +71,8 @@ void WP6StylesListener::insertBreak(const uint8_t breakType)
 	{
 		switch (breakType)
 		{
-		case WPX_PAGE_BREAK:
-		case WPX_SOFT_PAGE_BREAK:
+		case RVNG_PAGE_BREAK:
+		case RVNG_SOFT_PAGE_BREAK:
 			if ((m_pageList.size() > 0) && (m_currentPage==m_pageList.back())
 			        && (m_pageListHardPageMark != m_pageList.end()))
 			{
@@ -84,14 +84,14 @@ void WP6StylesListener::insertBreak(const uint8_t breakType)
 				if (m_pageListHardPageMark == m_pageList.end())
 					--m_pageListHardPageMark;
 			}
-			m_currentPage = WPXPageSpan(m_pageList.back(), 0.0, 0.0);
+			m_currentPage = RVNGPageSpan(m_pageList.back(), 0.0, 0.0);
 			m_currentPage.setPageSpan(1);
 			m_currentPageHasContent = false;
 			break;
 		default:
 			break;
 		}
-		if (breakType == WPX_PAGE_BREAK)
+		if (breakType == RVNG_PAGE_BREAK)
 		{
 			m_pageListHardPageMark = m_pageList.end();
 			m_currentPage.setMarginLeft(m_tempMarginLeft);
@@ -100,7 +100,7 @@ void WP6StylesListener::insertBreak(const uint8_t breakType)
 	}
 }
 
-void WP6StylesListener::pageNumberingChange(const WPXPageNumberPosition pageNumberingPosition, const uint16_t pageNumberFontPointSize, const uint16_t pageNumberFontPID)
+void WP6StylesListener::pageNumberingChange(const RVNGPageNumberPosition pageNumberingPosition, const uint16_t pageNumberFontPointSize, const uint16_t pageNumberFontPID)
 {
 	if (!isUndoOn())
 	{
@@ -108,7 +108,7 @@ void WP6StylesListener::pageNumberingChange(const WPXPageNumberPosition pageNumb
 
 		if (pageNumberFontPID)
 		{
-			WPXString pidFontName = WP6Listener::getFontNameForPID(pageNumberFontPID);
+			RVNGString pidFontName = WP6Listener::getFontNameForPID(pageNumberFontPID);
 			if (!!pidFontName)
 				m_currentPage.setPageNumberingFontName(pidFontName);
 		}
@@ -121,13 +121,13 @@ void WP6StylesListener::pageMarginChange(const uint8_t side, const uint16_t marg
 {
 	if (!isUndoOn())
 	{
-		double marginInch = (double)((double)margin / (double)WPX_NUM_WPUS_PER_INCH);
+		double marginInch = (double)((double)margin / (double)RVNG_NUM_WPUS_PER_INCH);
 		switch(side)
 		{
-		case WPX_TOP:
+		case RVNG_TOP:
 			m_currentPage.setMarginTop(marginInch);
 			break;
-		case WPX_BOTTOM:
+		case RVNG_BOTTOM:
 			m_currentPage.setMarginBottom(marginInch);
 			break;
 		default:
@@ -136,12 +136,12 @@ void WP6StylesListener::pageMarginChange(const uint8_t side, const uint16_t marg
 	}
 }
 
-void WP6StylesListener::pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation)
+void WP6StylesListener::pageFormChange(const uint16_t length, const uint16_t width, const RVNGFormOrientation orientation)
 {
 	if (!isUndoOn())
 	{
-		double lengthInch = (double)((double)length / (double)WPX_NUM_WPUS_PER_INCH);
-		double widthInch = (double)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
+		double lengthInch = (double)((double)length / (double)RVNG_NUM_WPUS_PER_INCH);
+		double widthInch = (double)((double)width / (double)RVNG_NUM_WPUS_PER_INCH);
 		if (!m_currentPageHasContent)
 		{
 			m_currentPage.setFormLength(lengthInch);
@@ -158,11 +158,11 @@ void WP6StylesListener::marginChange(const uint8_t side, const uint16_t margin)
 		if (m_isSubDocument)
 			return; // do not deal with L/R margins in headers, footer and notes
 
-		std::list<WPXPageSpan>::iterator Iter;
-		double marginInch = (double)((double)margin / (double)WPX_NUM_WPUS_PER_INCH);
+		std::list<RVNGPageSpan>::iterator Iter;
+		double marginInch = (double)((double)margin / (double)RVNG_NUM_WPUS_PER_INCH);
 		switch(side)
 		{
-		case WPX_LEFT:
+		case RVNG_LEFT:
 			if (!m_currentPageHasContent && (m_pageListHardPageMark == m_pageList.end()))
 				m_currentPage.setMarginLeft(marginInch);
 			else if (m_currentPage.getMarginLeft() > marginInch)
@@ -176,7 +176,7 @@ void WP6StylesListener::marginChange(const uint8_t side, const uint16_t margin)
 			}
 			m_tempMarginLeft = marginInch;
 			break;
-		case WPX_RIGHT:
+		case RVNG_RIGHT:
 			if (!m_currentPageHasContent && (m_pageListHardPageMark == m_pageList.end()))
 				m_currentPage.setMarginRight(marginInch);
 			else if (m_currentPage.getMarginRight() > marginInch)
@@ -202,25 +202,25 @@ void WP6StylesListener::headerFooterGroup(const uint8_t headerFooterType, const 
 {
 	if (!isUndoOn())
 	{
-		WPD_DEBUG_MSG(("WordPerfect: headerFooterGroup (headerFooterType: %i, occurenceBits: %i, textPID: %i)\n",
+		RVNG_DEBUG_MSG(("WordPerfect: headerFooterGroup (headerFooterType: %i, occurenceBits: %i, textPID: %i)\n",
 		               headerFooterType, occurenceBits, textPID));
 		bool tempCurrentPageHasContent = m_currentPageHasContent;
 		if (headerFooterType <= WP6_HEADER_FOOTER_GROUP_FOOTER_B) // ignore watermarks for now
 		{
-			WPXHeaderFooterType wpxType = ((headerFooterType <= WP6_HEADER_FOOTER_GROUP_HEADER_B) ? HEADER : FOOTER);
+			RVNGHeaderFooterType rvngType = ((headerFooterType <= WP6_HEADER_FOOTER_GROUP_HEADER_B) ? HEADER : FOOTER);
 
-			WPXHeaderFooterOccurence wpxOccurence;
+			RVNGHeaderFooterOccurence rvngOccurence;
 			if (occurenceBits & WP6_HEADER_FOOTER_GROUP_EVEN_BIT && occurenceBits & WP6_HEADER_FOOTER_GROUP_ODD_BIT)
-				wpxOccurence = ALL;
+				rvngOccurence = ALL;
 			else if (occurenceBits & WP6_HEADER_FOOTER_GROUP_EVEN_BIT)
-				wpxOccurence = EVEN;
+				rvngOccurence = EVEN;
 			else
-				wpxOccurence = ODD;
+				rvngOccurence = ODD;
 
-			WPXTableList tableList;
-			m_currentPage.setHeaderFooter(wpxType, headerFooterType, wpxOccurence,
+			RVNGTableList tableList;
+			m_currentPage.setHeaderFooter(rvngType, headerFooterType, rvngOccurence,
 			                              ((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : 0), tableList);
-			_handleSubDocument(((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : 0), WPX_SUBDOCUMENT_HEADER_FOOTER, tableList);
+			_handleSubDocument(((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : 0), RVNG_SUBDOCUMENT_HEADER_FOOTER, tableList);
 		}
 		m_currentPageHasContent = tempCurrentPageHasContent;
 	}
@@ -230,19 +230,19 @@ void WP6StylesListener::suppressPageCharacteristics(const uint8_t suppressCode)
 {
 	if (!isUndoOn())
 	{
-		WPD_DEBUG_MSG(("WordPerfect: suppressPageCharacteristics (suppressCode: %u)\n", suppressCode));
+		RVNG_DEBUG_MSG(("WordPerfect: suppressPageCharacteristics (suppressCode: %u)\n", suppressCode));
 
 		if (suppressCode & WP6_PAGE_GROUP_SUPPRESS_PAGE_NUMBER)
 			m_currentPage.setPageNumberSuppression(true);
 
 		if (suppressCode & WP6_PAGE_GROUP_SUPPRESS_HEADER_A)
-			m_currentPage.setHeadFooterSuppression(WPX_HEADER_A, true);
+			m_currentPage.setHeadFooterSuppression(RVNG_HEADER_A, true);
 		if (suppressCode & WP6_PAGE_GROUP_SUPPRESS_HEADER_B)
-			m_currentPage.setHeadFooterSuppression(WPX_HEADER_B, true);
+			m_currentPage.setHeadFooterSuppression(RVNG_HEADER_B, true);
 		if (suppressCode & WP6_PAGE_GROUP_SUPPRESS_FOOTER_A)
-			m_currentPage.setHeadFooterSuppression(WPX_FOOTER_A, true);
+			m_currentPage.setHeadFooterSuppression(RVNG_FOOTER_A, true);
 		if (suppressCode & WP6_PAGE_GROUP_SUPPRESS_FOOTER_B)
-			m_currentPage.setHeadFooterSuppression(WPX_FOOTER_B, true);
+			m_currentPage.setHeadFooterSuppression(RVNG_FOOTER_B, true);
 	}
 }
 
@@ -254,7 +254,7 @@ void WP6StylesListener::setPageNumber(const uint16_t pageNumber)
 	}
 }
 
-void WP6StylesListener::setPageNumberingType(const WPXNumberingType pageNumberingType)
+void WP6StylesListener::setPageNumberingType(const RVNGNumberingType pageNumberingType)
 {
 	if (!isUndoOn())
 	{
@@ -267,7 +267,7 @@ void WP6StylesListener::defineTable(const uint8_t /* position */, const uint16_t
 	if (!isUndoOn())
 	{
 		m_currentPageHasContent = true;
-		m_currentTable = new WPXTable();
+		m_currentTable = new RVNGTable();
 		m_tableList.add(m_currentTable);
 		m_isTableDefined = true;
 	}
@@ -278,7 +278,7 @@ void WP6StylesListener::startTable()
 	if (!isUndoOn() && !m_isTableDefined)
 	{
 		m_currentPageHasContent = true;
-		m_currentTable = new WPXTable();
+		m_currentTable = new RVNGTable();
 		m_tableList.add(m_currentTable);
 		m_isTableDefined = false;
 	}
@@ -305,7 +305,7 @@ void WP6StylesListener::insertRow(const uint16_t /* rowHeight */, const bool /* 
 
 void WP6StylesListener::insertCell(const uint8_t colSpan, const uint8_t rowSpan, const uint8_t borderBits,
                                    const RGBSColor * /* cellFgColor */, const RGBSColor * /* cellBgColor */,
-                                   const RGBSColor * /* cellBorderColor */, const WPXVerticalAlignment /* cellVerticalAlignment */,
+                                   const RGBSColor * /* cellBorderColor */, const RVNGVerticalAlignment /* cellVerticalAlignment */,
                                    const bool /* useCellAttributes */, const uint32_t /* cellAttributes */)
 {
 	if (!isUndoOn() && m_currentTable)
@@ -320,7 +320,7 @@ void WP6StylesListener::noteOn(const uint16_t textPID)
 	if (!isUndoOn())
 	{
 		m_currentPageHasContent = true;
-		_handleSubDocument(((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : 0), WPX_SUBDOCUMENT_NOTE, m_tableList);
+		_handleSubDocument(((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : 0), RVNG_SUBDOCUMENT_NOTE, m_tableList);
 	}
 }
 
@@ -329,7 +329,7 @@ void WP6StylesListener::insertTextBox(const WP6SubDocument *subDocument)
 	if (!isUndoOn() && subDocument)
 	{
 		m_currentPageHasContent = true;
-		_handleSubDocument(subDocument, WPX_SUBDOCUMENT_TEXT_BOX, m_tableList);
+		_handleSubDocument(subDocument, RVNG_SUBDOCUMENT_TEXT_BOX, m_tableList);
 	}
 }
 
@@ -338,16 +338,16 @@ void WP6StylesListener::commentAnnotation(const uint16_t textPID)
 	if (!isUndoOn())
 	{
 		m_currentPageHasContent = true;
-		_handleSubDocument(((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : 0), WPX_SUBDOCUMENT_COMMENT_ANNOTATION, m_tableList);
+		_handleSubDocument(((textPID && WP6Listener::getPrefixDataPacket(textPID)) ? WP6Listener::getPrefixDataPacket(textPID)->getSubDocument() : 0), RVNG_SUBDOCUMENT_COMMENT_ANNOTATION, m_tableList);
 	}
 }
 
-void WP6StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList,
+void WP6StylesListener::_handleSubDocument(const RVNGSubDocument *subDocument, RVNGSubDocumentType subDocumentType, RVNGTableList tableList,
         int /* nextTableIndice */)
 {
 	// We don't want to actual insert anything in the case of a sub-document, but we
 	// do want to capture whatever table-related information is within it..
-	std::set <const WPXSubDocument *> oldSubDocuments;
+	std::set <const RVNGSubDocument *> oldSubDocuments;
 	oldSubDocuments = m_subDocuments;
 	// prevent entering in an endless loop
 	if ((subDocument) && (oldSubDocuments.find(subDocument) == oldSubDocuments.end()))
@@ -355,11 +355,11 @@ void WP6StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, WP
 		m_subDocuments.insert(subDocument);
 		bool oldIsSubDocument = m_isSubDocument;
 		m_isSubDocument = true;
-		WPXTable *oldCurrentTable = m_currentTable;
-		if (subDocumentType == WPX_SUBDOCUMENT_HEADER_FOOTER)
+		RVNGTable *oldCurrentTable = m_currentTable;
+		if (subDocumentType == RVNG_SUBDOCUMENT_HEADER_FOOTER)
 		{
 			bool oldCurrentPageHasContent = m_currentPageHasContent;
-			WPXTableList oldTableList = m_tableList;
+			RVNGTableList oldTableList = m_tableList;
 			m_tableList = tableList;
 
 			if (subDocument)

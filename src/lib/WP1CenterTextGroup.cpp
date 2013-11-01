@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,17 +16,17 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 #include "WP1CenterTextGroup.h"
 
-WP1CenterTextGroup::WP1CenterTextGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group) :
+WP1CenterTextGroup::WP1CenterTextGroup(RVNGInputStream *input, RVNGEncryption *encryption, uint8_t group) :
 	WP1FixedLengthGroup(group)
 {
 	_read(input, encryption);
@@ -38,7 +38,7 @@ WP1CenterTextGroup::~WP1CenterTextGroup()
 
 void WP1CenterTextGroup::parse(WP1Listener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling the Center Text group\n"));
+	RVNG_DEBUG_MSG(("WordPerfect: handling the Center Text group\n"));
 	listener->centerOn();
 }
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

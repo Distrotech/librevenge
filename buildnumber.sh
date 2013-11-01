@@ -4,8 +4,8 @@
 # needs the script createBuildNumber.pl to be in the same directory.
 
 { perl ./createBuildNumber.pl \
-	src/lib/libwpd-build.stamp \
-	src/lib/libwpd-stream-build.stamp \
+	src/lib/librevenge-build.stamp \
+	src/lib/librevenge-stream-build.stamp \
 	src/conv/html/wpd2html-build.stamp \
 	src/conv/raw/wpd2raw-build.stamp \
 	src/conv/text/wpd2text-build.stamp

@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,61 +16,61 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WPXMemoryStream.h"
-#include "libwpd_internal.h"
+#include "RVNGMemoryStream.h"
+#include "librevenge_internal.h"
 
 #include <vector>
 #include <stdarg.h>
 #include <stdio.h>
 
-class WPXBinaryDataImpl
+class RVNGBinaryDataImpl
 {
 public:
-	WPXBinaryDataImpl() : m_buf(), m_stream(NULL) {}
-	~WPXBinaryDataImpl()
+	RVNGBinaryDataImpl() : m_buf(), m_stream(NULL) {}
+	~RVNGBinaryDataImpl()
 	{
 		if (m_stream) delete m_stream;
 	}
 	std::vector<unsigned char> m_buf;
-	WPXMemoryInputStream *m_stream;
+	RVNGMemoryInputStream *m_stream;
 private:
 	// Unimplemented to prevent compiler from creating crasher ones
-	WPXBinaryDataImpl(const WPXBinaryDataImpl &);
-	WPXBinaryDataImpl &operator=(const WPXBinaryDataImpl &);
+	RVNGBinaryDataImpl(const RVNGBinaryDataImpl &);
+	RVNGBinaryDataImpl &operator=(const RVNGBinaryDataImpl &);
 };
 
-WPXBinaryData::~WPXBinaryData()
+RVNGBinaryData::~RVNGBinaryData()
 {
 	delete m_binaryDataImpl;
 }
 
-WPXBinaryData::WPXBinaryData() :
-	m_binaryDataImpl(new WPXBinaryDataImpl)
+RVNGBinaryData::RVNGBinaryData() :
+	m_binaryDataImpl(new RVNGBinaryDataImpl)
 {
 }
 
-WPXBinaryData::WPXBinaryData(const WPXBinaryData &data) :
-	m_binaryDataImpl(new WPXBinaryDataImpl)
+RVNGBinaryData::RVNGBinaryData(const RVNGBinaryData &data) :
+	m_binaryDataImpl(new RVNGBinaryDataImpl)
 {
 	m_binaryDataImpl->m_buf = data.m_binaryDataImpl->m_buf;
 }
 
-WPXBinaryData::WPXBinaryData(const unsigned char *buffer, const unsigned long bufferSize) :
-	m_binaryDataImpl(new WPXBinaryDataImpl)
+RVNGBinaryData::RVNGBinaryData(const unsigned char *buffer, const unsigned long bufferSize) :
+	m_binaryDataImpl(new RVNGBinaryDataImpl)
 {
 	m_binaryDataImpl->m_buf = std::vector<unsigned char> (bufferSize);
 	for (unsigned long i = 0; i < bufferSize; i++)
 		m_binaryDataImpl->m_buf[i] = buffer[i];
 }
 
-void WPXBinaryData::append(const WPXBinaryData &data)
+void RVNGBinaryData::append(const RVNGBinaryData &data)
 {
 	unsigned long previousSize = m_binaryDataImpl->m_buf.size();
 	m_binaryDataImpl->m_buf.reserve(previousSize + data.m_binaryDataImpl->m_buf.size());
@@ -78,7 +78,7 @@ void WPXBinaryData::append(const WPXBinaryData &data)
 		m_binaryDataImpl->m_buf.push_back(data.m_binaryDataImpl->m_buf[i]);
 }
 
-void WPXBinaryData::append(const unsigned char *buffer, const unsigned long bufferSize )
+void RVNGBinaryData::append(const unsigned char *buffer, const unsigned long bufferSize )
 {
 	unsigned long previousSize = m_binaryDataImpl->m_buf.size();
 	m_binaryDataImpl->m_buf.reserve(previousSize + bufferSize);
@@ -86,35 +86,35 @@ void WPXBinaryData::append(const unsigned char *buffer, const unsigned long buff
 		m_binaryDataImpl->m_buf.push_back(buffer[i]);
 }
 
-void WPXBinaryData::append(const unsigned char c)
+void RVNGBinaryData::append(const unsigned char c)
 {
 	m_binaryDataImpl->m_buf.push_back(c);
 }
 
-void WPXBinaryData::clear()
+void RVNGBinaryData::clear()
 {
 	m_binaryDataImpl->m_buf.clear();
 }
 
-unsigned long WPXBinaryData::size() const
+unsigned long RVNGBinaryData::size() const
 {
 	return (unsigned long)m_binaryDataImpl->m_buf.size();
 }
 
-WPXBinaryData &WPXBinaryData::operator=(const WPXBinaryData &dataBuf)
+RVNGBinaryData &RVNGBinaryData::operator=(const RVNGBinaryData &dataBuf)
 {
 	m_binaryDataImpl->m_buf = dataBuf.m_binaryDataImpl->m_buf;
 	return *this;
 }
 
-const unsigned char *WPXBinaryData::getDataBuffer() const
+const unsigned char *RVNGBinaryData::getDataBuffer() const
 {
 	if (m_binaryDataImpl->m_buf.empty())
 		return 0;
 	return &(m_binaryDataImpl->m_buf[0]);
 }
 
-const WPXString WPXBinaryData::getBase64Data() const
+const RVNGString RVNGBinaryData::getBase64Data() const
 {
 	static const char *base64Chars =
 	    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
@@ -129,7 +129,7 @@ const WPXString WPXBinaryData::getBase64Data() const
 		modifiedLen = len;
 
 	bool shouldIexit = false;
-	WPXString base64;
+	RVNGString base64;
 	for (; i < modifiedLen; i++)
 	{
 		if (i < len)
@@ -171,7 +171,7 @@ const WPXString WPXBinaryData::getBase64Data() const
 	return base64;
 }
 
-const WPXInputStream *WPXBinaryData::getDataStream() const
+const RVNGInputStream *RVNGBinaryData::getDataStream() const
 {
 	if (m_binaryDataImpl->m_stream)
 	{
@@ -180,7 +180,7 @@ const WPXInputStream *WPXBinaryData::getDataStream() const
 	}
 	if (m_binaryDataImpl->m_buf.empty())
 		return 0;
-	m_binaryDataImpl->m_stream = new WPXMemoryInputStream(&(m_binaryDataImpl->m_buf[0]), m_binaryDataImpl->m_buf.size());
+	m_binaryDataImpl->m_stream = new RVNGMemoryInputStream(&(m_binaryDataImpl->m_buf[0]), m_binaryDataImpl->m_buf.size());
 	return m_binaryDataImpl->m_stream;
 }
 

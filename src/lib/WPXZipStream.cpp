@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 #ifdef HAVE_CONFIG_H
@@ -29,8 +29,8 @@
 #include <string.h>
 #include <stdio.h>
 #include <zlib.h>
-#include "WPXZipStream.h"
-#include <libwpd-stream/libwpd-stream.h>
+#include "RVNGZipStream.h"
+#include <librevenge-stream/librevenge-stream.h>
 
 namespace
 {
@@ -108,7 +108,7 @@ struct CentralDirectoryEnd
 #define LOC_FILE_HEADER_SIG 0x04034b50
 #define CDIR_END_SIG 0x06054b50
 
-static unsigned char getByte(WPXInputStream *input)
+static unsigned char getByte(RVNGInputStream *input)
 {
 	unsigned long numBytesRead = 0;
 	const unsigned char *ret = input->read(1, numBytesRead);
@@ -117,7 +117,7 @@ static unsigned char getByte(WPXInputStream *input)
 	return ret[0];
 }
 
-static unsigned short getShort(WPXInputStream *input)
+static unsigned short getShort(RVNGInputStream *input)
 {
 	unsigned long numBytesRead = 0;
 	const unsigned char *ret = input->read(2, numBytesRead);
@@ -126,7 +126,7 @@ static unsigned short getShort(WPXInputStream *input)
 	return (unsigned short)(ret[0]|((unsigned short)ret[1]<<8));
 }
 
-static unsigned getInt(WPXInputStream *input)
+static unsigned getInt(RVNGInputStream *input)
 {
 	unsigned long numBytesRead = 0;
 	const unsigned char *ret = input->read(4, numBytesRead);
@@ -135,7 +135,7 @@ static unsigned getInt(WPXInputStream *input)
 	return (unsigned)(ret[0]|((unsigned)ret[1]<<8)|((unsigned)ret[2]<<16)|((unsigned)ret[3]<<24));
 }
 
-static bool readCentralDirectoryEnd(WPXInputStream *input, CentralDirectoryEnd &end)
+static bool readCentralDirectoryEnd(RVNGInputStream *input, CentralDirectoryEnd &end)
 {
 	try
 	{
@@ -161,7 +161,7 @@ static bool readCentralDirectoryEnd(WPXInputStream *input, CentralDirectoryEnd &
 	return true;
 }
 
-static bool readCentralDirectoryEntry(WPXInputStream *input, CentralDirectoryEntry &entry)
+static bool readCentralDirectoryEntry(RVNGInputStream *input, CentralDirectoryEntry &entry)
 {
 	try
 	{
@@ -203,7 +203,7 @@ static bool readCentralDirectoryEntry(WPXInputStream *input, CentralDirectoryEnt
 	return true;
 }
 
-static bool readLocalFileHeader(WPXInputStream *input, LocalFileHeader &header)
+static bool readLocalFileHeader(RVNGInputStream *input, LocalFileHeader &header)
 {
 	try
 	{
@@ -256,10 +256,10 @@ static bool areHeadersConsistent(const LocalFileHeader &header, const CentralDir
 	return true;
 }
 
-static bool findCentralDirectoryEnd(WPXInputStream *input)
+static bool findCentralDirectoryEnd(RVNGInputStream *input)
 {
-	if (input->seek(-1024, WPX_SEEK_END))
-		input->seek(0, WPX_SEEK_SET);
+	if (input->seek(-1024, RVNG_SEEK_END))
+		input->seek(0, RVNG_SEEK_SET);
 
 	try
 	{
@@ -268,11 +268,11 @@ static bool findCentralDirectoryEnd(WPXInputStream *input)
 			unsigned signature = getInt(input);
 			if (signature == CDIR_END_SIG)
 			{
-				input->seek(-4, WPX_SEEK_CUR);
+				input->seek(-4, RVNG_SEEK_CUR);
 				return true;
 			}
 			else
-				input->seek(-3, WPX_SEEK_CUR);
+				input->seek(-3, RVNG_SEEK_CUR);
 		}
 	}
 	catch (...)
@@ -282,7 +282,7 @@ static bool findCentralDirectoryEnd(WPXInputStream *input)
 	return false;
 }
 
-static bool findDataStream(WPXInputStream *input, CentralDirectoryEntry &entry, const char *name)
+static bool findDataStream(RVNGInputStream *input, CentralDirectoryEntry &entry, const char *name)
 {
 	size_t name_size = strlen(name);
 	if (!findCentralDirectoryEnd(input))
@@ -290,7 +290,7 @@ static bool findDataStream(WPXInputStream *input, CentralDirectoryEntry &entry, 
 	CentralDirectoryEnd end;
 	if (!readCentralDirectoryEnd(input, end))
 		return false;
-	input->seek(end.cdir_offset, WPX_SEEK_SET);
+	input->seek(end.cdir_offset, RVNG_SEEK_SET);
 	while (!input->atEOS() && (unsigned)input->tell() < end.cdir_offset + end.cdir_size)
 	{
 		if (!readCentralDirectoryEntry(input, entry))
@@ -302,7 +302,7 @@ static bool findDataStream(WPXInputStream *input, CentralDirectoryEntry &entry, 
 		return false;
 	if (entry.filename != name)
 		return false;
-	input->seek(entry.offset, WPX_SEEK_SET);
+	input->seek(entry.offset, RVNG_SEEK_SET);
 	LocalFileHeader header;
 	if (!readLocalFileHeader(input, header))
 		return false;
@@ -313,7 +313,7 @@ static bool findDataStream(WPXInputStream *input, CentralDirectoryEntry &entry, 
 
 } // anonymous namespace
 
-bool WPXZipStream::isZipFile(WPXInputStream *input)
+bool RVNGZipStream::isZipFile(RVNGInputStream *input)
 {
 	// look for central directory end
 	if (!findCentralDirectoryEnd(input))
@@ -321,12 +321,12 @@ bool WPXZipStream::isZipFile(WPXInputStream *input)
 	CentralDirectoryEnd end;
 	if (!readCentralDirectoryEnd(input, end))
 		return false;
-	input->seek(end.cdir_offset, WPX_SEEK_SET);
+	input->seek(end.cdir_offset, RVNG_SEEK_SET);
 	// read first entry in the central directory
 	CentralDirectoryEntry entry;
 	if (!readCentralDirectoryEntry(input, entry))
 		return false;
-	input->seek(entry.offset, WPX_SEEK_SET);
+	input->seek(entry.offset, RVNG_SEEK_SET);
 	// read the local file header and compare with the central directory information
 	LocalFileHeader header;
 	if (!readLocalFileHeader(input, header))
@@ -336,7 +336,7 @@ bool WPXZipStream::isZipFile(WPXInputStream *input)
 	return true;
 }
 
-WPXInputStream *WPXZipStream::getSubstream(WPXInputStream *input, const char *name)
+RVNGInputStream *RVNGZipStream::getSubstream(RVNGInputStream *input, const char *name)
 {
 	CentralDirectoryEntry entry;
 	if (!findDataStream(input, entry, name))
@@ -348,7 +348,7 @@ WPXInputStream *WPXZipStream::getSubstream(WPXInputStream *input, const char *na
 	if (numBytesRead != entry.compressed_size)
 		return 0;
 	if (!entry.compression)
-		return new WPXStringStream(compressedData, (unsigned)numBytesRead);
+		return new RVNGStringStream(compressedData, (unsigned)numBytesRead);
 	else
 	{
 		int ret;
@@ -384,7 +384,7 @@ WPXInputStream *WPXZipStream::getSubstream(WPXInputStream *input, const char *na
 			break;
 		}
 		(void)inflateEnd(&strm);
-		return new WPXStringStream(&data[0], (unsigned)data.size());
+		return new RVNGStringStream(&data[0], (unsigned)data.size());
 	}
 }
 

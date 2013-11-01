@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,54 +17,54 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WPXPROPERTYLISTVECTOR_H
-#define WPXPROPERTYLISTVECTOR_H
+#ifndef RVNGPROPERTYLISTVECTOR_H
+#define RVNGPROPERTYLISTVECTOR_H
 
-#include "WPXPropertyList.h"
+#include "RVNGPropertyList.h"
 
-class WPXPropertyListVectorImpl;
-class WPXPropertyListVectorIterImpl;
+class RVNGPropertyListVectorImpl;
+class RVNGPropertyListVectorIterImpl;
 
-class WPXPropertyListVector
+class RVNGPropertyListVector
 {
 public:
-	WPXPropertyListVector(const WPXPropertyListVector &);
-	WPXPropertyListVector();
-	virtual ~WPXPropertyListVector();
-	void append(const WPXPropertyList &elem);
-	void append(const WPXPropertyListVector &vec);
+	RVNGPropertyListVector(const RVNGPropertyListVector &);
+	RVNGPropertyListVector();
+	virtual ~RVNGPropertyListVector();
+	void append(const RVNGPropertyList &elem);
+	void append(const RVNGPropertyListVector &vec);
 	unsigned long count() const;
-	const WPXPropertyList &operator[](unsigned long index) const;
-	WPXPropertyListVector &operator=(const WPXPropertyListVector &vect);
+	const RVNGPropertyList &operator[](unsigned long index) const;
+	RVNGPropertyListVector &operator=(const RVNGPropertyListVector &vect);
 
 	class Iter
 	{
 	public:
-		Iter(const WPXPropertyListVector &vect);
+		Iter(const RVNGPropertyListVector &vect);
 		virtual ~Iter();
 		void rewind();
 		bool next();
 		bool last();
-		const WPXPropertyList &operator()() const;
+		const RVNGPropertyList &operator()() const;
 
 	private:
-		WPXPropertyListVectorIterImpl *m_iterImpl;
+		RVNGPropertyListVectorIterImpl *m_iterImpl;
 		Iter(const Iter &);
 		Iter &operator=(const Iter &);
 	};
 
-	friend class WPXPropertyListVector::Iter;
+	friend class RVNGPropertyListVector::Iter;
 
 private:
-	WPXPropertyListVectorImpl *m_impl;
+	RVNGPropertyListVectorImpl *m_impl;
 };
 
-#endif /* WPXPROPERTYLISTVECTOR_H */
+#endif /* RVNGPROPERTYLISTVECTOR_H */
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

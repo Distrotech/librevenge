@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -27,15 +27,15 @@
 
 #include "WP42Parser.h"
 #include "WP42Part.h"
-#include "WPXHeader.h"
-#include "libwpd_internal.h"
-#include "WPXTable.h"
+#include "RVNGHeader.h"
+#include "librevenge_internal.h"
+#include "RVNGTable.h"
 #include "WP42FileStructure.h"
 #include "WP42StylesListener.h"
 #include "WP42ContentListener.h"
 
-WP42Parser::WP42Parser(WPXInputStream *input, WPXEncryption *encryption) :
-	WPXParser(input, 0, encryption)
+WP42Parser::WP42Parser(RVNGInputStream *input, RVNGEncryption *encryption) :
+	RVNGParser(input, 0, encryption)
 {
 }
 
@@ -43,13 +43,13 @@ WP42Parser::~WP42Parser()
 {
 }
 
-void WP42Parser::parse(WPXInputStream *input, WPXEncryption *encryption, WP42Listener *listener)
+void WP42Parser::parse(RVNGInputStream *input, RVNGEncryption *encryption, WP42Listener *listener)
 {
 	listener->startDocument();
 
-	input->seek(0, WPX_SEEK_SET);
+	input->seek(0, RVNG_SEEK_SET);
 
-	WPD_DEBUG_MSG(("WordPerfect: Starting document body parse (position = %ld)\n",(long)input->tell()));
+	RVNG_DEBUG_MSG(("WordPerfect: Starting document body parse (position = %ld)\n",(long)input->tell()));
 
 	parseDocument(input, encryption, listener);
 
@@ -57,7 +57,7 @@ void WP42Parser::parse(WPXInputStream *input, WPXEncryption *encryption, WP42Lis
 }
 
 // parseDocument: parses a document body (may call itself recursively, on other streams, or itself)
-void WP42Parser::parseDocument(WPXInputStream *input, WPXEncryption *encryption, WP42Listener *listener)
+void WP42Parser::parseDocument(RVNGInputStream *input, RVNGEncryption *encryption, WP42Listener *listener)
 {
 	while (!input->atEOS())
 	{
@@ -66,7 +66,7 @@ void WP42Parser::parseDocument(WPXInputStream *input, WPXEncryption *encryption,
 
 		if (readVal < (uint8_t)0x20)
 		{
-			WPD_DEBUG_MSG(("Offset: %i, Handling Control Character 0x%2x\n", (unsigned int)input->tell(), readVal));
+			RVNG_DEBUG_MSG(("Offset: %i, Handling Control Character 0x%2x\n", (unsigned int)input->tell(), readVal));
 
 			switch (readVal)
 			{
@@ -77,10 +77,10 @@ void WP42Parser::parseDocument(WPXInputStream *input, WPXEncryption *encryption,
 				listener->insertEOL();
 				break;
 			case 0x0B: // soft new page
-				listener->insertBreak(WPX_SOFT_PAGE_BREAK);
+				listener->insertBreak(RVNG_SOFT_PAGE_BREAK);
 				break;
 			case 0x0C: // hard new page
-				listener->insertBreak(WPX_PAGE_BREAK);
+				listener->insertBreak(RVNG_PAGE_BREAK);
 				break;
 			case 0x0D: // soft new line
 				listener->insertCharacter(' ');
@@ -92,14 +92,14 @@ void WP42Parser::parseDocument(WPXInputStream *input, WPXEncryption *encryption,
 		}
 		else if (readVal >= (uint8_t)0x20 && readVal <= (uint8_t)0x7F)
 		{
-			WPD_DEBUG_MSG(("Offset: %i, Handling Ascii Character 0x%2x\n", (unsigned int)input->tell(), readVal));
+			RVNG_DEBUG_MSG(("Offset: %i, Handling Ascii Character 0x%2x\n", (unsigned int)input->tell(), readVal));
 
 			// normal ASCII characters
 			listener->insertCharacter( readVal );
 		}
 		else if (readVal >= (uint8_t)0x80 && readVal <= (uint8_t)0xBF)
 		{
-			WPD_DEBUG_MSG(("Offset: %i, Handling Single Character Function 0x%2x\n", (unsigned int)input->tell(), readVal));
+			RVNG_DEBUG_MSG(("Offset: %i, Handling Single Character Function 0x%2x\n", (unsigned int)input->tell(), readVal));
 
 			// single character function codes
 			switch (readVal)
@@ -163,11 +163,11 @@ void WP42Parser::parseDocument(WPXInputStream *input, WPXEncryption *encryption,
 	}
 }
 
-void WP42Parser::parse(WPXDocumentInterface *documentInterface)
+void WP42Parser::parse(RVNGDocumentInterface *documentInterface)
 {
-	WPXInputStream *input = getInput();
-	WPXEncryption *encryption = getEncryption();
-	std::list<WPXPageSpan> pageList;
+	RVNGInputStream *input = getInput();
+	RVNGEncryption *encryption = getEncryption();
+	std::list<RVNGPageSpan> pageList;
 	std::vector<WP42SubDocument *> subDocuments;
 
 	try
@@ -178,8 +178,8 @@ void WP42Parser::parse(WPXDocumentInterface *documentInterface)
 		parse(input, encryption, &stylesListener);
 
 		// postprocess the pageList == remove duplicate page spans due to the page breaks
-		std::list<WPXPageSpan>::iterator previousPage = pageList.begin();
-		for (std::list<WPXPageSpan>::iterator Iter=pageList.begin(); Iter != pageList.end();)
+		std::list<RVNGPageSpan>::iterator previousPage = pageList.begin();
+		for (std::list<RVNGPageSpan>::iterator Iter=pageList.begin(); Iter != pageList.end();)
 		{
 			if ((Iter != previousPage) && ((*previousPage)==(*Iter)))
 			{
@@ -207,7 +207,7 @@ void WP42Parser::parse(WPXDocumentInterface *documentInterface)
 	}
 	catch(FileException)
 	{
-		WPD_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
+		RVNG_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
 
 		for (std::vector<WP42SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); ++iterSubDoc)
 		{
@@ -220,12 +220,12 @@ void WP42Parser::parse(WPXDocumentInterface *documentInterface)
 
 }
 
-void WP42Parser::parseSubDocument(WPXDocumentInterface *documentInterface)
+void WP42Parser::parseSubDocument(RVNGDocumentInterface *documentInterface)
 {
-	std::list<WPXPageSpan> pageList;
+	std::list<RVNGPageSpan> pageList;
 	std::vector<WP42SubDocument *> subDocuments;
 
-	WPXInputStream *input = getInput();
+	RVNGInputStream *input = getInput();
 
 	try
 	{
@@ -244,7 +244,7 @@ void WP42Parser::parseSubDocument(WPXDocumentInterface *documentInterface)
 	}
 	catch(FileException)
 	{
-		WPD_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
+		RVNG_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
 		for (std::vector<WP42SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); ++iterSubDoc)
 			if (*iterSubDoc)
 				delete (*iterSubDoc);

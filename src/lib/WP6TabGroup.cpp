@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -26,11 +26,11 @@
  */
 
 #include "WP6TabGroup.h"
-#include "libwpd_internal.h"
-#include "WPXFileStructure.h"
+#include "librevenge_internal.h"
+#include "RVNGFileStructure.h"
 #include "WP6Listener.h"
 
-WP6TabGroup::WP6TabGroup(WPXInputStream *input, WPXEncryption *encryption) :
+WP6TabGroup::WP6TabGroup(RVNGInputStream *input, RVNGEncryption *encryption) :
 	WP6VariableLengthGroup(),
 	m_position(0.0),
 	m_ignoreFunction(false)
@@ -38,7 +38,7 @@ WP6TabGroup::WP6TabGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	_read(input, encryption);
 }
 
-void WP6TabGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP6TabGroup::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	uint16_t tempPosition = 0xFFFF;
 	if ((getFlags() & 0x40) == 0x40) // 0x40 is "ignore function" flag
@@ -59,28 +59,28 @@ void WP6TabGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption
 		/* This case might be fully included in the previous condition, but I am not sure;
 		 * so leaving it in for the while */
 	{
-		input->seek((getSize() - 12), WPX_SEEK_CUR);
+		input->seek((getSize() - 12), RVNG_SEEK_CUR);
 		tempPosition = readU16(input, encryption);
 	}
 	else if (getSize() > 18)
 	{
-		input->seek(6, WPX_SEEK_CUR);
+		input->seek(6, RVNG_SEEK_CUR);
 		tempPosition = readU16(input, encryption);
 	}
 	// If we got a tempPosition of 0, it means, the information in WPUs is not there (WP6 for DOS??).
 	// We will have to dig a bit more to see whether we can get the information from the screen units ???
 	if (!tempPosition)
 		tempPosition = 0xFFFF;
-	m_position = (double)((double)tempPosition/(double)WPX_NUM_WPUS_PER_INCH);
+	m_position = (double)((double)tempPosition/(double)RVNG_NUM_WPUS_PER_INCH);
 }
 
 void WP6TabGroup::parse(WP6Listener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling a Tab group (Tab type: %i, Tab position: %.4finch, Ignore function: %s)\n",
+	RVNG_DEBUG_MSG(("WordPerfect: handling a Tab group (Tab type: %i, Tab position: %.4finch, Ignore function: %s)\n",
 	               getSubGroup(), m_position, (m_ignoreFunction?"true":"false")));
 	if (!m_ignoreFunction)
 	{
-		WPD_DEBUG_MSG(("WordPerfect: Parsing a Tab group\n"));
+		RVNG_DEBUG_MSG(("WordPerfect: Parsing a Tab group\n"));
 		listener->insertTab(getSubGroup(), m_position);
 	}
 }

@@ -67,7 +67,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>libwpd-stream-0.9.lib;libwpd-0.9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>librevenge-stream-0.9.lib;librevenge-0.9.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>Release\bin\wpd2raw.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>Release\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -110,7 +110,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>libwpd-0.9.lib;libwpd-stream-0.9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>librevenge-0.9.lib;librevenge-stream-0.9.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>Debug\bin\wpd2raw.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>Debug\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -144,11 +144,11 @@
     <ClInclude Include="..\..\src\conv\raw\RawDocumentGenerator.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="libwpd.vcxproj">
+    <ProjectReference Include="librevenge.vcxproj">
       <Project>{330e414a-9c06-4a4b-9814-0c665f5dca52}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="libwpdstream.vcxproj">
+    <ProjectReference Include="librevengestream.vcxproj">
       <Project>{cb848337-b6c8-4942-961b-5a9fbbf37b46}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>

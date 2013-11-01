@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,14 +17,14 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
-// WPXTable: an intermediate representation of a table, designed to be created
+// RVNGTable: an intermediate representation of a table, designed to be created
 // "ahead of time". unlike wordperfect's table definition messages, this representation
 // is _consistent_: we can always count on the messages being sent using this representation
 // (once it is created and finalized) to be reliable (assuming no bugs in this code!) :-)
@@ -33,40 +33,40 @@
 // side by side, one with border, one without-- creating a false ambiguity (none
 // actually exists: if one cell does not have a border, the other doesn't either)
 
-#ifndef _WPXTABLE_H
-#define _WPXTABLE_H
+#ifndef _RVNGTABLE_H
+#define _RVNGTABLE_H
 #include <vector>
 #include <stdio.h>
-#include "libwpd_types.h"
+#include "librevenge_types.h"
 
-typedef struct _WPXTableCell WPXTableCell;
+typedef struct _RVNGTableCell RVNGTableCell;
 
-struct _WPXTableCell
+struct _RVNGTableCell
 {
-	_WPXTableCell(uint8_t colSpan, uint8_t rowSpan, uint8_t borderBits);
+	_RVNGTableCell(uint8_t colSpan, uint8_t rowSpan, uint8_t borderBits);
 	uint8_t m_colSpan;
 	uint8_t m_rowSpan;
 	uint8_t m_borderBits;
 };
 
-class WPXTable
+class RVNGTable
 {
 public:
-	WPXTable() : m_tableRows() {}
-	~WPXTable();
+	RVNGTable() : m_tableRows() {}
+	~RVNGTable();
 	void insertRow();
 	void insertCell(uint8_t colSpan, uint8_t rowSpan, uint8_t borderBits);
-	const WPXTableCell  *getCell(size_t i, size_t j)
+	const RVNGTableCell  *getCell(size_t i, size_t j)
 	{
 		return (m_tableRows[i])[j];
 	}
 	void makeBordersConsistent();
-	void _makeCellBordersConsistent(WPXTableCell *cell, std::vector<WPXTableCell *> &adjacentCells,
+	void _makeCellBordersConsistent(RVNGTableCell *cell, std::vector<RVNGTableCell *> &adjacentCells,
 	                                int adjacencyBitCell, int adjacencyBitBoundCells);
-	std::vector<WPXTableCell *>  _getCellsBottomAdjacent(int i, int j);
-	std::vector<WPXTableCell *>  _getCellsRightAdjacent(int i, int j);
+	std::vector<RVNGTableCell *>  _getCellsBottomAdjacent(int i, int j);
+	std::vector<RVNGTableCell *>  _getCellsRightAdjacent(int i, int j);
 
-	const std::vector< std::vector<WPXTableCell *> > &getRows() const
+	const std::vector< std::vector<RVNGTableCell *> > &getRows() const
 	{
 		return m_tableRows;
 	}
@@ -76,40 +76,40 @@ public:
 	}
 
 private:
-	std::vector< std::vector<WPXTableCell *> > m_tableRows;
+	std::vector< std::vector<RVNGTableCell *> > m_tableRows;
 };
 
-class WPXTableList
+class RVNGTableList
 {
 public:
-	WPXTableList();
-	WPXTableList(const WPXTableList &);
-	WPXTableList &operator=(const WPXTableList &tableList);
-	virtual ~WPXTableList();
+	RVNGTableList();
+	RVNGTableList(const RVNGTableList &);
+	RVNGTableList &operator=(const RVNGTableList &tableList);
+	virtual ~RVNGTableList();
 
-	WPXTable *operator[](unsigned long i)
+	RVNGTable *operator[](unsigned long i)
 	{
 		return (*m_tableList)[i];
 	}
-	void add(WPXTable *table)
+	void add(RVNGTable *table)
 	{
 		m_tableList->push_back(table);
 	}
 
 private:
 	void release();
-	void acquire(int *refCount, std::vector<WPXTable *> *tableList);
+	void acquire(int *refCount, std::vector<RVNGTable *> *tableList);
 	int *getRef() const
 	{
 		return m_refCount;
 	}
-	std::vector<WPXTable *> *get() const
+	std::vector<RVNGTable *> *get() const
 	{
 		return m_tableList;
 	}
 
-	std::vector<WPXTable *> *m_tableList;
+	std::vector<RVNGTable *> *m_tableList;
 	int *m_refCount;
 };
-#endif /* _WPXTABLE_H */
+#endif /* _RVNGTABLE_H */
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

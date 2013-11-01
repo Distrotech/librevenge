@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -27,14 +27,14 @@
 #ifndef WP42HEURISTICS_H
 #define WP42HEURISTICS_H
 
-#include <libwpd/libwpd.h>
-#include <libwpd-stream/libwpd-stream.h>
+#include <librevenge/librevenge.h>
+#include <librevenge-stream/librevenge-stream.h>
 
 class WP42Heuristics
 {
 public:
-	static WPDConfidence isWP42FileFormat(WPXInputStream *input, const char *password = 0);
-	static WPDPasswordMatch verifyPassword(WPXInputStream *input, const char *password);
+	static RVNGConfidence isWP42FileFormat(RVNGInputStream *input, const char *password = 0);
+	static RVNGPasswordMatch verifyPassword(RVNGInputStream *input, const char *password);
 };
 
 #endif /* WP42HEURISTICS_H */

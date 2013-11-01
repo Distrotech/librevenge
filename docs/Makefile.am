@@ -1,9 +1,9 @@
 SUBDIRS = doxygen
 
-EXTRA_DIST = libwpd.dia libwpd.png
+EXTRA_DIST = librevenge.dia librevenge.png
 
-if WITH_LIBWPD_DOCS
+if WITH_LIBREVENGE_DOCS
 
-doc_DATA = libwpd.dia libwpd.png
+doc_DATA = librevenge.dia librevenge.png
 
 endif

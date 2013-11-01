@@ -22,7 +22,7 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #
-# For further information visit http://libwpd.sourceforge.net
+# For further information visit http://librevenge.sourceforge.net
 #
 #
 # "This product is not manufactured, approved, or supported by 

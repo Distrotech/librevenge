@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -24,9 +24,9 @@
  */
 
 #include "WP1ExtendedCharacterGroup.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
-WP1ExtendedCharacterGroup::WP1ExtendedCharacterGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group) :
+WP1ExtendedCharacterGroup::WP1ExtendedCharacterGroup(RVNGInputStream *input, RVNGEncryption *encryption, uint8_t group) :
 	WP1FixedLengthGroup(group),
 	m_extendedCharacter(0)
 {
@@ -37,14 +37,14 @@ WP1ExtendedCharacterGroup::~WP1ExtendedCharacterGroup()
 {
 }
 
-void WP1ExtendedCharacterGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP1ExtendedCharacterGroup::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	m_extendedCharacter = readU8(input, encryption);
 }
 
 void WP1ExtendedCharacterGroup::parse(WP1Listener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling the Extended Character group\n"));
+	RVNG_DEBUG_MSG(("WordPerfect: handling the Extended Character group\n"));
 	listener->insertExtendedCharacter(m_extendedCharacter);
 }
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

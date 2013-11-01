@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,42 +18,42 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include <libwpd/libwpd.h>
+#include <librevenge/librevenge.h>
 #include <map>
 #include <string>
 #include <utility>
 
-class WPXMapImpl
+class RVNGMapImpl
 {
 public:
-	WPXMapImpl() : m_map() {}
-	~WPXMapImpl();
-	void insert(const char *name, WPXProperty *property);
-	const WPXProperty *operator[](const char *name) const;
+	RVNGMapImpl() : m_map() {}
+	~RVNGMapImpl();
+	void insert(const char *name, RVNGProperty *property);
+	const RVNGProperty *operator[](const char *name) const;
 	void remove(const char *name);
 	void clear();
 
 private:
 	// disable copy construction and assignment
-	WPXMapImpl(const WPXMapImpl &other);
-	WPXMapImpl &operator=(const WPXMapImpl &other);
+	RVNGMapImpl(const RVNGMapImpl &other);
+	RVNGMapImpl &operator=(const RVNGMapImpl &other);
 
 private:
-	mutable std::map<std::string, WPXProperty *> m_map;
+	mutable std::map<std::string, RVNGProperty *> m_map;
 
-	friend class WPXMapIterImpl;
+	friend class RVNGMapIterImpl;
 };
 
-WPXMapImpl::~WPXMapImpl()
+RVNGMapImpl::~RVNGMapImpl()
 {
-	for (std::map<std::string, WPXProperty *>::iterator iter = m_map.begin();
+	for (std::map<std::string, RVNGProperty *>::iterator iter = m_map.begin();
 	        iter != m_map.end();
 	        ++iter)
 	{
@@ -61,9 +61,9 @@ WPXMapImpl::~WPXMapImpl()
 	}
 }
 
-const WPXProperty *WPXMapImpl::operator[](const char *name) const
+const RVNGProperty *RVNGMapImpl::operator[](const char *name) const
 {
-	std::map<std::string, WPXProperty *>::iterator i = m_map.find(name);
+	std::map<std::string, RVNGProperty *>::iterator i = m_map.find(name);
 	if (i != m_map.end())
 	{
 		return i->second;
@@ -72,22 +72,22 @@ const WPXProperty *WPXMapImpl::operator[](const char *name) const
 	return 0;
 }
 
-void WPXMapImpl::insert(const char *name, WPXProperty *prop)
+void RVNGMapImpl::insert(const char *name, RVNGProperty *prop)
 {
-	std::map<std::string, WPXProperty *>::iterator i = m_map.lower_bound(name);
+	std::map<std::string, RVNGProperty *>::iterator i = m_map.lower_bound(name);
 	if (i != m_map.end() && !(m_map.key_comp()(name, i->first)))
 	{
-		WPXProperty *tmpProp = i->second;
+		RVNGProperty *tmpProp = i->second;
 		i->second = prop;
 		delete tmpProp;
 		return;
 	}
-	m_map.insert(i, std::map<std::string, WPXProperty *>::value_type(name, prop));
+	m_map.insert(i, std::map<std::string, RVNGProperty *>::value_type(name, prop));
 }
 
-void WPXMapImpl::remove(const char *name)
+void RVNGMapImpl::remove(const char *name)
 {
-	std::map<std::string, WPXProperty *>::iterator i = m_map.find(name);
+	std::map<std::string, RVNGProperty *>::iterator i = m_map.find(name);
 	if (i != m_map.end())
 	{
 		if (i->second) delete (i->second);
@@ -95,9 +95,9 @@ void WPXMapImpl::remove(const char *name)
 	}
 }
 
-void WPXMapImpl::clear()
+void RVNGMapImpl::clear()
 {
-	for (std::map<std::string, WPXProperty *>::iterator iter = m_map.begin();
+	for (std::map<std::string, RVNGProperty *>::iterator iter = m_map.begin();
 	        iter != m_map.end();
 	        ++iter)
 	{
@@ -107,131 +107,131 @@ void WPXMapImpl::clear()
 	m_map.clear();
 }
 
-WPXPropertyList::WPXPropertyList() :
-	m_mapImpl(new WPXMapImpl())
+RVNGPropertyList::RVNGPropertyList() :
+	m_mapImpl(new RVNGMapImpl())
 {
 }
 
-WPXPropertyList::WPXPropertyList(const WPXPropertyList &propList) :
-	m_mapImpl(new WPXMapImpl())
+RVNGPropertyList::RVNGPropertyList(const RVNGPropertyList &propList) :
+	m_mapImpl(new RVNGMapImpl())
 {
-	WPXPropertyList::Iter i(propList);
+	RVNGPropertyList::Iter i(propList);
 	for (i.rewind(); i.next(); )
 	{
 		insert(i.key(), i()->clone());
 	}
 }
 
-WPXPropertyList::~WPXPropertyList()
+RVNGPropertyList::~RVNGPropertyList()
 {
 	delete m_mapImpl;
 }
 
-void WPXPropertyList::insert(const char *name, WPXProperty *prop)
+void RVNGPropertyList::insert(const char *name, RVNGProperty *prop)
 {
 	m_mapImpl->insert(name, prop);
 }
 
-void WPXPropertyList::insert(const char *name, const int val)
+void RVNGPropertyList::insert(const char *name, const int val)
 {
-	m_mapImpl->insert(name, WPXPropertyFactory::newIntProp(val));
+	m_mapImpl->insert(name, RVNGPropertyFactory::newIntProp(val));
 }
 
-void WPXPropertyList::insert(const char *name, const bool val)
+void RVNGPropertyList::insert(const char *name, const bool val)
 {
-	m_mapImpl->insert(name, WPXPropertyFactory::newBoolProp(val));
+	m_mapImpl->insert(name, RVNGPropertyFactory::newBoolProp(val));
 }
 
-void WPXPropertyList::insert(const char *name, const char *val)
+void RVNGPropertyList::insert(const char *name, const char *val)
 {
-	m_mapImpl->insert(name, WPXPropertyFactory::newStringProp(val));
+	m_mapImpl->insert(name, RVNGPropertyFactory::newStringProp(val));
 }
 
-void WPXPropertyList::insert(const char *name, const WPXString &val)
+void RVNGPropertyList::insert(const char *name, const RVNGString &val)
 {
-	m_mapImpl->insert(name, WPXPropertyFactory::newStringProp(val));
+	m_mapImpl->insert(name, RVNGPropertyFactory::newStringProp(val));
 }
 
-void WPXPropertyList::insert(const char *name, const double val, const WPXUnit units)
+void RVNGPropertyList::insert(const char *name, const double val, const RVNGUnit units)
 {
-	if (units == WPX_INCH)
-		m_mapImpl->insert(name, WPXPropertyFactory::newInchProp(val));
-	else if (units == WPX_PERCENT)
-		m_mapImpl->insert(name, WPXPropertyFactory::newPercentProp(val));
-	else if (units == WPX_POINT)
-		m_mapImpl->insert(name, WPXPropertyFactory::newPointProp(val));
-	else if (units == WPX_TWIP)
-		m_mapImpl->insert(name, WPXPropertyFactory::newTwipProp(val));
-	else if (units == WPX_GENERIC)
-		m_mapImpl->insert(name, WPXPropertyFactory::newDoubleProp(val));
+	if (units == RVNG_INCH)
+		m_mapImpl->insert(name, RVNGPropertyFactory::newInchProp(val));
+	else if (units == RVNG_PERCENT)
+		m_mapImpl->insert(name, RVNGPropertyFactory::newPercentProp(val));
+	else if (units == RVNG_POINT)
+		m_mapImpl->insert(name, RVNGPropertyFactory::newPointProp(val));
+	else if (units == RVNG_TWIP)
+		m_mapImpl->insert(name, RVNGPropertyFactory::newTwipProp(val));
+	else if (units == RVNG_GENERIC)
+		m_mapImpl->insert(name, RVNGPropertyFactory::newDoubleProp(val));
 }
 
-void WPXPropertyList::remove(const char *name)
+void RVNGPropertyList::remove(const char *name)
 {
 	m_mapImpl->remove(name);
 }
 
-const WPXPropertyList &WPXPropertyList::operator=(const WPXPropertyList &propList)
+const RVNGPropertyList &RVNGPropertyList::operator=(const RVNGPropertyList &propList)
 {
-	WPXPropertyList tmp(propList);
+	RVNGPropertyList tmp(propList);
 	std::swap(m_mapImpl, tmp.m_mapImpl);
 	return *this;
 }
 
-const WPXProperty *WPXPropertyList::operator[](const char *name) const
+const RVNGProperty *RVNGPropertyList::operator[](const char *name) const
 {
 	return (*m_mapImpl)[name];
 }
 
-void WPXPropertyList::clear()
+void RVNGPropertyList::clear()
 {
 	m_mapImpl->clear();
 }
 
 #if 0
-void WPXPropertyList::swap(WPXPropertyList &other)
+void RVNGPropertyList::swap(RVNGPropertyList &other)
 {
 	std::swap(m_mapImpl, other.m_mapImpl);
 }
 #endif
 
-class WPXMapIterImpl
+class RVNGMapIterImpl
 {
 public:
-	WPXMapIterImpl(const WPXMapImpl *impl);
+	RVNGMapIterImpl(const RVNGMapImpl *impl);
 	void rewind();
 	bool next();
 	bool last();
-	const WPXProperty *operator()() const;
+	const RVNGProperty *operator()() const;
 	const char *key();
 
 private:
 	// not implemented
-	WPXMapIterImpl(const WPXMapIterImpl &other);
-	WPXMapIterImpl &operator=(const WPXMapIterImpl &other);
+	RVNGMapIterImpl(const RVNGMapIterImpl &other);
+	RVNGMapIterImpl &operator=(const RVNGMapIterImpl &other);
 
 private:
 	bool m_imaginaryFirst;
-	std::map<std::string, WPXProperty *>::iterator m_iter;
-	std::map<std::string, WPXProperty *> *m_map;
+	std::map<std::string, RVNGProperty *>::iterator m_iter;
+	std::map<std::string, RVNGProperty *> *m_map;
 };
 
 
-WPXMapIterImpl::WPXMapIterImpl(const WPXMapImpl *impl) :
+RVNGMapIterImpl::RVNGMapIterImpl(const RVNGMapImpl *impl) :
 	m_imaginaryFirst(false),
 	m_iter(impl->m_map.begin()),
 	m_map(&impl->m_map)
 {
 }
 
-void WPXMapIterImpl::rewind()
+void RVNGMapIterImpl::rewind()
 {
 	// rewind to an imaginary element that preceeds the first one
 	m_imaginaryFirst = true;
 	m_iter = m_map->begin();
 }
 
-bool WPXMapIterImpl::next()
+bool RVNGMapIterImpl::next()
 {
 	if (!m_imaginaryFirst)
 		++m_iter;
@@ -242,7 +242,7 @@ bool WPXMapIterImpl::next()
 	return true;
 }
 
-bool WPXMapIterImpl::last()
+bool RVNGMapIterImpl::last()
 {
 	if (m_iter == m_map->end())
 		return true;
@@ -250,48 +250,48 @@ bool WPXMapIterImpl::last()
 	return false;
 }
 
-const WPXProperty *WPXMapIterImpl::operator()() const
+const RVNGProperty *RVNGMapIterImpl::operator()() const
 {
 	return m_iter->second;
 }
 
-const char *WPXMapIterImpl::key()
+const char *RVNGMapIterImpl::key()
 {
 	return m_iter->first.c_str();
 }
 
-WPXPropertyList::Iter::Iter(const WPXPropertyList &propList) :
-	m_iterImpl(new WPXMapIterImpl(static_cast<WPXMapImpl *>(propList.m_mapImpl)))
+RVNGPropertyList::Iter::Iter(const RVNGPropertyList &propList) :
+	m_iterImpl(new RVNGMapIterImpl(static_cast<RVNGMapImpl *>(propList.m_mapImpl)))
 {
 }
 
-WPXPropertyList::Iter::~Iter()
+RVNGPropertyList::Iter::~Iter()
 {
 	delete m_iterImpl;
 }
 
-void WPXPropertyList::Iter::rewind()
+void RVNGPropertyList::Iter::rewind()
 {
 	// rewind to an imaginary element that preceeds the first one
 	m_iterImpl->rewind();
 }
 
-bool WPXPropertyList::Iter::next()
+bool RVNGPropertyList::Iter::next()
 {
 	return m_iterImpl->next();
 }
 
-bool WPXPropertyList::Iter::last()
+bool RVNGPropertyList::Iter::last()
 {
 	return m_iterImpl->last();
 }
 
-const WPXProperty *WPXPropertyList::Iter::operator()() const
+const RVNGProperty *RVNGPropertyList::Iter::operator()() const
 {
 	return (*m_iterImpl)();
 }
 
-const char *WPXPropertyList::Iter::key()
+const char *RVNGPropertyList::Iter::key()
 {
 	return m_iterImpl->key();
 }

@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -27,47 +27,47 @@
 
 #include "WP42Heuristics.h"
 #include "WP42FileStructure.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
-WPDPasswordMatch WP42Heuristics::verifyPassword(WPXInputStream *input, const char *password)
+RVNGPasswordMatch WP42Heuristics::verifyPassword(RVNGInputStream *input, const char *password)
 {
 	if (!password)
-		return WPD_PASSWORD_MATCH_DONTKNOW;
+		return RVNG_PASSWORD_MATCH_DONTKNOW;
 
-	input->seek(0, WPX_SEEK_SET);
-	WPXEncryption *encryption = 0;
+	input->seek(0, RVNG_SEEK_SET);
+	RVNGEncryption *encryption = 0;
 	try
 	{
 		if (readU8(input, 0) == 0xFE && readU8(input, 0) == 0xFF &&
 		        readU8(input, 0) == 0x61 && readU8(input, 0) == 0x61)
 		{
-			encryption = new WPXEncryption(password, 6);
+			encryption = new RVNGEncryption(password, 6);
 			if (readU16(input, 0) == encryption->getCheckSum())
 			{
 				delete encryption;
-				return WPD_PASSWORD_MATCH_OK;
+				return RVNG_PASSWORD_MATCH_OK;
 			}
 			else
 			{
 				delete encryption;
-				return WPD_PASSWORD_MATCH_NONE;
+				return RVNG_PASSWORD_MATCH_NONE;
 			}
 		}
 		else
-			return WPD_PASSWORD_MATCH_DONTKNOW;
+			return RVNG_PASSWORD_MATCH_DONTKNOW;
 	}
 	catch (...)
 	{
 		if (encryption)
 			delete encryption;
-		return WPD_PASSWORD_MATCH_DONTKNOW;
+		return RVNG_PASSWORD_MATCH_DONTKNOW;
 	}
 }
 
-WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input, const char *password)
+RVNGConfidence WP42Heuristics::isWP42FileFormat(RVNGInputStream *input, const char *password)
 {
-	input->seek(0, WPX_SEEK_SET);
-	WPXEncryption *encryption = 0;
+	input->seek(0, RVNG_SEEK_SET);
+	RVNGEncryption *encryption = 0;
 	try
 	{
 		if (readU8(input, 0) == 0xFE && readU8(input, 0) == 0xFF &&
@@ -75,33 +75,33 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input, const char
 		{
 			if (password)
 			{
-				encryption = new WPXEncryption(password, 6);
+				encryption = new RVNGEncryption(password, 6);
 				if (readU16(input, 0) != encryption->getCheckSum())
 				{
 					delete encryption;
-					return WPD_CONFIDENCE_SUPPORTED_ENCRYPTION;
+					return RVNG_CONFIDENCE_SUPPORTED_ENCRYPTION;
 				}
 			}
 			else
 			{
 				if (readU16(input,0) != 0x0000)
-					return WPD_CONFIDENCE_SUPPORTED_ENCRYPTION;
+					return RVNG_CONFIDENCE_SUPPORTED_ENCRYPTION;
 			}
 		}
 
-		input->seek(0, WPX_SEEK_SET);
+		input->seek(0, RVNG_SEEK_SET);
 		if (password && encryption)
-			input->seek(6, WPX_SEEK_SET);
+			input->seek(6, RVNG_SEEK_SET);
 
 		int functionGroupCount = 0;
 
-		WPD_DEBUG_MSG(("WP42Heuristics::isWP42FileFormat()\n"));
+		RVNG_DEBUG_MSG(("WP42Heuristics::isWP42FileFormat()\n"));
 
 		while (!input->atEOS())
 		{
 			uint8_t readVal = readU8(input, encryption);
 
-			WPD_DEBUG_MSG(("WP42Heuristics, Offset 0x%.8x, value 0x%.2x\n", (unsigned int)(input->tell() - 1), readVal));
+			RVNG_DEBUG_MSG(("WP42Heuristics, Offset 0x%.8x, value 0x%.2x\n", (unsigned int)(input->tell() - 1), readVal));
 
 			if (readVal < (uint8_t)0x20)
 			{
@@ -121,7 +121,7 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input, const char
 				// special codes that should not be found as separate functions
 				if (encryption)
 					delete encryption;
-				return WPD_CONFIDENCE_NONE;
+				return RVNG_CONFIDENCE_NONE;
 			}
 			else
 			{
@@ -147,7 +147,7 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input, const char
 					{
 						if (encryption)
 							delete encryption;
-						return WPD_CONFIDENCE_NONE;
+						return RVNG_CONFIDENCE_NONE;
 					}
 
 					functionGroupCount++;
@@ -157,13 +157,13 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input, const char
 					// fixed length function group
 
 					// seek to the position where the closing gate should be
-					int res = input->seek(WP42_FUNCTION_GROUP_SIZE[readVal-0xC0]-2, WPX_SEEK_CUR);
+					int res = input->seek(WP42_FUNCTION_GROUP_SIZE[readVal-0xC0]-2, RVNG_SEEK_CUR);
 					// when passed the complete file, we should be able to do that
 					if (res)
 					{
 						if (encryption)
 							delete encryption;
-						return WPD_CONFIDENCE_NONE;
+						return RVNG_CONFIDENCE_NONE;
 					}
 
 					// read the closing gate
@@ -172,7 +172,7 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input, const char
 					{
 						if (encryption)
 							delete encryption;
-						return WPD_CONFIDENCE_NONE;
+						return RVNG_CONFIDENCE_NONE;
 					}
 
 					functionGroupCount++;
@@ -182,26 +182,26 @@ WPDConfidence WP42Heuristics::isWP42FileFormat(WPXInputStream *input, const char
 
 		/* When we get here, the document is in a format that we *could* import properly.
 		However, if we didn't entcounter a single WP4.2 function group) we need to be more carefull:
-		this would be the case when passed a plaintext file for example, which libwpd is not
+		this would be the case when passed a plaintext file for example, which librevenge is not
 		supposed to handle. */
 		if (!functionGroupCount)
 		{
 			if (encryption)
 			{
 				delete encryption;
-				return WPD_CONFIDENCE_EXCELLENT;
+				return RVNG_CONFIDENCE_EXCELLENT;
 			}
-			return WPD_CONFIDENCE_NONE;
+			return RVNG_CONFIDENCE_NONE;
 		}
 		if (encryption)
 			delete encryption;
-		return WPD_CONFIDENCE_EXCELLENT;
+		return RVNG_CONFIDENCE_EXCELLENT;
 	}
 	catch (...)
 	{
 		if (encryption)
 			delete encryption;
-		return WPD_CONFIDENCE_NONE;
+		return RVNG_CONFIDENCE_NONE;
 	}
 }
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

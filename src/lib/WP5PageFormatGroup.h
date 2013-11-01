@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -34,9 +34,9 @@
 class WP5PageFormatGroup : public WP5VariableLengthGroup
 {
 public:
-	WP5PageFormatGroup(WPXInputStream *input, WPXEncryption *encryption);
+	WP5PageFormatGroup(RVNGInputStream *input, RVNGEncryption *encryption);
 	~WP5PageFormatGroup();
-	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
+	void _readContents(RVNGInputStream *input, RVNGEncryption *encryption);
 	void parse(WP5Listener *listener);
 
 private:
@@ -46,7 +46,7 @@ private:
 	// variable needed for subgroup 2 (Spacing Set)
 	double m_lineSpacing;
 	// variables needed for subbroup 4 (Tab Set)
-	std::vector<WPXTabStop> m_tabStops;
+	std::vector<RVNGTabStop> m_tabStops;
 	uint16_t m_marginOffset;
 	// variables needed for subgroup 5 (Top/Bottom Margin Set)
 	uint16_t m_topMargin;
@@ -58,7 +58,7 @@ private:
 	// variables needed for subgroup 11 (Form)
 	uint16_t m_formLength;
 	uint16_t m_formWidth;
-	WPXFormOrientation m_formOrientation;
+	RVNGFormOrientation m_formOrientation;
 
 };
 

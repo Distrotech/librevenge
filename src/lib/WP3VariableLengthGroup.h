@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -29,7 +29,7 @@
 
 #include "WP3Part.h"
 
-class WPXEncryption;
+class RVNGEncryption;
 
 class WP3VariableLengthGroup : public WP3Part
 {
@@ -37,13 +37,13 @@ public:
 	WP3VariableLengthGroup(); // WP3VariableLengthGroup should _never_ be constructed, only its inherited classes
 	virtual ~WP3VariableLengthGroup() {}
 
-	static WP3VariableLengthGroup *constructVariableLengthGroup(WPXInputStream *input, WPXEncryption *encryption, const uint8_t group);
+	static WP3VariableLengthGroup *constructVariableLengthGroup(RVNGInputStream *input, RVNGEncryption *encryption, const uint8_t group);
 
-	static bool isGroupConsistent(WPXInputStream *input, WPXEncryption *encryption, const uint8_t group);
+	static bool isGroupConsistent(RVNGInputStream *input, RVNGEncryption *encryption, const uint8_t group);
 
 protected:
-	void _read(WPXInputStream *input, WPXEncryption *encryption);
-	virtual void _readContents(WPXInputStream * /* input */, WPXEncryption * /* encryption */) {} // we don't always need more information than that provided generically
+	void _read(RVNGInputStream *input, RVNGEncryption *encryption);
+	virtual void _readContents(RVNGInputStream * /* input */, RVNGEncryption * /* encryption */) {} // we don't always need more information than that provided generically
 
 	uint8_t getSubGroup() const
 	{

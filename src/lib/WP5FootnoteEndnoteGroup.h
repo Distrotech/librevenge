@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -26,24 +26,24 @@
 #ifndef WP5FOOTNOTEENDNOTEGROUP_H
 #define WP5FOOTNOTEENDNOTEGROUP_H
 
-#include <libwpd/libwpd.h>
-#include <libwpd-stream/libwpd-stream.h>
+#include <librevenge/librevenge.h>
+#include <librevenge-stream/librevenge-stream.h>
 #include "WP5VariableLengthGroup.h"
 #include "WP5SubDocument.h"
 
 class WP5FootnoteEndnoteGroup : public WP5VariableLengthGroup
 {
 public:
-	WP5FootnoteEndnoteGroup(WPXInputStream *input, WPXEncryption *encryption);
+	WP5FootnoteEndnoteGroup(RVNGInputStream *input, RVNGEncryption *encryption);
 	~WP5FootnoteEndnoteGroup();
-	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
+	void _readContents(RVNGInputStream *input, RVNGEncryption *encryption);
 	void parse(WP5Listener *listener);
 
 private:
 	WP5FootnoteEndnoteGroup(const WP5FootnoteEndnoteGroup &);
 	WP5FootnoteEndnoteGroup &operator=(const WP5FootnoteEndnoteGroup &);
 	WP5SubDocument *m_subDocument;
-	WPXString m_noteReference;
+	RVNGString m_noteReference;
 
 };
 

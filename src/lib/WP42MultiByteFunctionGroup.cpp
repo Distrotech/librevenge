@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -33,14 +33,14 @@
 #include "WP42ExtendedCharacterGroup.h"
 #include "WP42DefineColumnsGroup.h"
 #include "WP42FileStructure.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
 WP42MultiByteFunctionGroup::WP42MultiByteFunctionGroup(uint8_t group)
 	: m_group(group)
 {
 }
 
-WP42MultiByteFunctionGroup *WP42MultiByteFunctionGroup::constructMultiByteFunctionGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group)
+WP42MultiByteFunctionGroup *WP42MultiByteFunctionGroup::constructMultiByteFunctionGroup(RVNGInputStream *input, RVNGEncryption *encryption, uint8_t group)
 {
 	switch (group)
 	{
@@ -61,7 +61,7 @@ WP42MultiByteFunctionGroup *WP42MultiByteFunctionGroup::constructMultiByteFuncti
 	}
 }
 
-void WP42MultiByteFunctionGroup::_read(WPXInputStream *input, WPXEncryption *encryption)
+void WP42MultiByteFunctionGroup::_read(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	_readContents(input, encryption);
 
@@ -70,6 +70,6 @@ void WP42MultiByteFunctionGroup::_read(WPXInputStream *input, WPXEncryption *enc
 	{
 	}
 	// IMPORTANT: if the class that implements _readContent(input, encryption) already reads the closing gate,
-	// IMPORTANT: it is necessary to make an input->seek(-1, WPX_SEEK_CUR) for this function to work well.
+	// IMPORTANT: it is necessary to make an input->seek(-1, RVNG_SEEK_CUR) for this function to work well.
 }
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

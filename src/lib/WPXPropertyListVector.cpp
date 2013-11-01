@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,23 +18,23 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include <libwpd/libwpd.h>
+#include <librevenge/librevenge.h>
 #include <vector>
 
-class WPXPropertyListVectorImpl
+class RVNGPropertyListVectorImpl
 {
-	friend class WPXPropertyListVector;
+	friend class RVNGPropertyListVector;
 public:
-	WPXPropertyListVectorImpl(const std::vector<WPXPropertyList> &_vector) : m_vector(_vector) {}
-	WPXPropertyListVectorImpl() : m_vector() {}
-	void append(const WPXPropertyList &elem)
+	RVNGPropertyListVectorImpl(const std::vector<RVNGPropertyList> &_vector) : m_vector(_vector) {}
+	RVNGPropertyListVectorImpl() : m_vector() {}
+	void append(const RVNGPropertyList &elem)
 	{
 		m_vector.push_back(elem);
 	}
@@ -42,21 +42,21 @@ public:
 	{
 		return m_vector.size();
 	}
-	std::vector<WPXPropertyList> m_vector;
-	const WPXPropertyList &operator[](unsigned long index) const
+	std::vector<RVNGPropertyList> m_vector;
+	const RVNGPropertyList &operator[](unsigned long index) const
 	{
 		return m_vector[index];
 	}
 };
 
-class WPXPropertyListVectorIterImpl
+class RVNGPropertyListVectorIterImpl
 {
 public:
-	WPXPropertyListVectorIterImpl(std::vector<WPXPropertyList> *vect) :
+	RVNGPropertyListVectorIterImpl(std::vector<RVNGPropertyList> *vect) :
 		m_vector(vect),
 		m_iter(m_vector->begin()),
 		m_imaginaryFirst(false) {}
-	~WPXPropertyListVectorIterImpl() {}
+	~RVNGPropertyListVectorIterImpl() {}
 	void rewind()
 	{
 		m_iter = m_vector->begin();
@@ -73,89 +73,89 @@ public:
 	{
 		return (m_iter == m_vector->end());
 	}
-	const WPXPropertyList &operator()() const
+	const RVNGPropertyList &operator()() const
 	{
 		return (*m_iter);
 	}
 
 private:
-	WPXPropertyListVectorIterImpl(const WPXPropertyListVectorIterImpl &);
-	WPXPropertyListVectorIterImpl &operator=(const WPXPropertyListVectorIterImpl &);
-	std::vector<WPXPropertyList> *m_vector;
-	std::vector<WPXPropertyList>::iterator m_iter;
+	RVNGPropertyListVectorIterImpl(const RVNGPropertyListVectorIterImpl &);
+	RVNGPropertyListVectorIterImpl &operator=(const RVNGPropertyListVectorIterImpl &);
+	std::vector<RVNGPropertyList> *m_vector;
+	std::vector<RVNGPropertyList>::iterator m_iter;
 	bool m_imaginaryFirst;
 };
 
-WPXPropertyListVector::WPXPropertyListVector(const WPXPropertyListVector &vect) :
-	m_impl(new WPXPropertyListVectorImpl(static_cast<WPXPropertyListVectorImpl *>(vect.m_impl)->m_vector))
+RVNGPropertyListVector::RVNGPropertyListVector(const RVNGPropertyListVector &vect) :
+	m_impl(new RVNGPropertyListVectorImpl(static_cast<RVNGPropertyListVectorImpl *>(vect.m_impl)->m_vector))
 {
 }
 
-WPXPropertyListVector::WPXPropertyListVector() :
-	m_impl(new WPXPropertyListVectorImpl)
+RVNGPropertyListVector::RVNGPropertyListVector() :
+	m_impl(new RVNGPropertyListVectorImpl)
 {
 }
 
-WPXPropertyListVector::~WPXPropertyListVector()
+RVNGPropertyListVector::~RVNGPropertyListVector()
 {
 	if (m_impl)
 		delete m_impl;
 }
 
-void WPXPropertyListVector::append(const WPXPropertyList &elem)
+void RVNGPropertyListVector::append(const RVNGPropertyList &elem)
 {
 	m_impl->append(elem);
 }
 
-void WPXPropertyListVector::append(const WPXPropertyListVector &vec)
+void RVNGPropertyListVector::append(const RVNGPropertyListVector &vec)
 {
-	WPXPropertyListVector::Iter i(vec);
+	RVNGPropertyListVector::Iter i(vec);
 	for (i.rewind(); i.next(); )
 		m_impl->append(i());
 }
 
-unsigned long WPXPropertyListVector::count() const
+unsigned long RVNGPropertyListVector::count() const
 {
 	return m_impl->count();
 }
 
-const WPXPropertyList &WPXPropertyListVector::operator[](unsigned long index) const
+const RVNGPropertyList &RVNGPropertyListVector::operator[](unsigned long index) const
 {
 	return m_impl->operator[](index);
 }
 
-WPXPropertyListVector &WPXPropertyListVector::operator=(const WPXPropertyListVector &vect)
+RVNGPropertyListVector &RVNGPropertyListVector::operator=(const RVNGPropertyListVector &vect)
 {
 	m_impl->m_vector = vect.m_impl->m_vector;
 	return *this;
 }
 
-WPXPropertyListVector::Iter::Iter(const WPXPropertyListVector &vect) :
-	m_iterImpl(new WPXPropertyListVectorIterImpl(&(static_cast<WPXPropertyListVectorImpl * >(vect.m_impl)->m_vector)))
+RVNGPropertyListVector::Iter::Iter(const RVNGPropertyListVector &vect) :
+	m_iterImpl(new RVNGPropertyListVectorIterImpl(&(static_cast<RVNGPropertyListVectorImpl * >(vect.m_impl)->m_vector)))
 {
 }
 
-WPXPropertyListVector::Iter::~Iter()
+RVNGPropertyListVector::Iter::~Iter()
 {
 	delete m_iterImpl;
 }
 
-void WPXPropertyListVector::Iter::rewind()
+void RVNGPropertyListVector::Iter::rewind()
 {
 	m_iterImpl->rewind();
 }
 
-bool WPXPropertyListVector::Iter::next()
+bool RVNGPropertyListVector::Iter::next()
 {
 	return m_iterImpl->next();
 }
 
-bool WPXPropertyListVector::Iter::last()
+bool RVNGPropertyListVector::Iter::last()
 {
 	return m_iterImpl->last();
 }
 
-const WPXPropertyList &WPXPropertyListVector::Iter::operator()() const
+const RVNGPropertyList &RVNGPropertyListVector::Iter::operator()() const
 {
 	return (*m_iterImpl)();
 }

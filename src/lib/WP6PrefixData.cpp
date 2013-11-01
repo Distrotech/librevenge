@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -29,29 +29,29 @@
 #include "WP6PrefixDataPacket.h"
 #include "WP6FontDescriptorPacket.h"
 #include "WP6DefaultInitialFontPacket.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
-WP6PrefixData::WP6PrefixData(WPXInputStream *input, WPXEncryption *encryption, const int numPrefixIndices) :
+WP6PrefixData::WP6PrefixData(RVNGInputStream *input, RVNGEncryption *encryption, const int numPrefixIndices) :
 	m_prefixDataPacketHash(),
 	m_prefixDataPacketTypeHash(),
 	m_defaultInitialFontPID((-1))
 {
 	if (!numPrefixIndices)
 	{
-		WPD_DEBUG_MSG(("WordPerfect: constructing called without any prefix\n"));
+		RVNG_DEBUG_MSG(("WordPerfect: constructing called without any prefix\n"));
 		return;
 	}
 	uint16_t i;
 	WP6PrefixIndice **prefixIndiceArray = new WP6PrefixIndice *[size_t(numPrefixIndices-1)];
 	for (i=1; i<numPrefixIndices; i++)
 	{
-		WPD_DEBUG_MSG(("WordPerfect: constructing prefix indice 0x%x\n", i));
+		RVNG_DEBUG_MSG(("WordPerfect: constructing prefix indice 0x%x\n", i));
 		prefixIndiceArray[(i-1)] = new WP6PrefixIndice(input, encryption, i);
 	}
 
 	for (i=1; i<numPrefixIndices; i++)
 	{
-		WPD_DEBUG_MSG(("WordPerfect: constructing prefix packet 0x%x\n", i));
+		RVNG_DEBUG_MSG(("WordPerfect: constructing prefix packet 0x%x\n", i));
 		WP6PrefixDataPacket *prefixDataPacket = WP6PrefixDataPacket::constructPrefixDataPacket(input, encryption, prefixIndiceArray[(i-1)]);
 		if (prefixDataPacket)
 		{

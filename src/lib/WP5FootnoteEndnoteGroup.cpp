@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -28,7 +28,7 @@
 #include "WP5FileStructure.h"
 #include "WP5Parser.h"
 
-WP5FootnoteEndnoteGroup::WP5FootnoteEndnoteGroup(WPXInputStream *input, WPXEncryption *encryption) :
+WP5FootnoteEndnoteGroup::WP5FootnoteEndnoteGroup(RVNGInputStream *input, RVNGEncryption *encryption) :
 	WP5VariableLengthGroup(),
 	m_subDocument(0),
 	m_noteReference()
@@ -41,7 +41,7 @@ WP5FootnoteEndnoteGroup::~WP5FootnoteEndnoteGroup()
 	delete m_subDocument;
 }
 
-void WP5FootnoteEndnoteGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP5FootnoteEndnoteGroup::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	int tmpSizeOfNote = getSize() - 8;
 	uint8_t tmpFlags = readU8(input, encryption);
@@ -52,12 +52,12 @@ void WP5FootnoteEndnoteGroup::_readContents(WPXInputStream *input, WPXEncryption
 	{
 		int tmpNumOfAdditionalPages = readU8(input, encryption);
 		tmpSizeOfNote -= 1;
-		input->seek(2*(tmpNumOfAdditionalPages+1) + 9, WPX_SEEK_CUR);
+		input->seek(2*(tmpNumOfAdditionalPages+1) + 9, RVNG_SEEK_CUR);
 		tmpSizeOfNote -= 2*(tmpNumOfAdditionalPages+1) + 9;
 	}
 	else /* WP5_FOOTNOTE_ENDNOTE_GROUP_ENDNOTE */
 	{
-		input->seek(4, WPX_SEEK_CUR);
+		input->seek(4, RVNG_SEEK_CUR);
 		tmpSizeOfNote -= 4;
 	}
 
@@ -70,7 +70,7 @@ void WP5FootnoteEndnoteGroup::_readContents(WPXInputStream *input, WPXEncryption
 
 void WP5FootnoteEndnoteGroup::parse(WP5Listener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling a Footnote/Endnote group\n"));
+	RVNG_DEBUG_MSG(("WordPerfect: handling a Footnote/Endnote group\n"));
 	listener->insertNoteReference(m_noteReference);
 	switch (getSubGroup())
 	{

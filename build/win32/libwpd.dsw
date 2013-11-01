@@ -3,7 +3,7 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
-Project: "libwpd"=".\libwpd.dsp" - Package Owner=<4>
+Project: "librevenge"=".\librevenge.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -15,7 +15,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "libwpdstream"=".\libwpdstream.dsp" - Package Owner=<4>
+Project: "librevengestream"=".\librevengestream.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -36,10 +36,10 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name libwpd
+    Project_Dep_Name librevenge
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name libwpdstream
+    Project_Dep_Name librevengestream
     End Project Dependency
 }}}
 
@@ -54,10 +54,10 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name libwpd
+    Project_Dep_Name librevenge
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name libwpdstream
+    Project_Dep_Name librevengestream
     End Project Dependency
 }}}
 
@@ -72,10 +72,10 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name libwpd
+    Project_Dep_Name librevenge
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name libwpdstream
+    Project_Dep_Name librevengestream
     End Project Dependency
 }}}
 

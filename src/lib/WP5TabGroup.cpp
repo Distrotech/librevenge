@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -25,11 +25,11 @@
 
 #include "WP5TabGroup.h"
 #include "WP5FileStructure.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 #include "WP5Listener.h"
-#include "WPXFileStructure.h"
+#include "RVNGFileStructure.h"
 
-WP5TabGroup::WP5TabGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID) :
+WP5TabGroup::WP5TabGroup(RVNGInputStream *input, RVNGEncryption *encryption, uint8_t groupID) :
 	WP5FixedLengthGroup(groupID),
 	m_tabType(0),
 	m_tabPosition(0.0)
@@ -37,12 +37,12 @@ WP5TabGroup::WP5TabGroup(WPXInputStream *input, WPXEncryption *encryption, uint8
 	_read(input, encryption);
 }
 
-void WP5TabGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP5TabGroup::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	m_tabType = readU8(input, encryption);
-	input->seek(2, WPX_SEEK_CUR);
+	input->seek(2, RVNG_SEEK_CUR);
 	uint16_t tmpTabPosition = readU16(input, encryption);
-	m_tabPosition = (double)((double)tmpTabPosition/(double)WPX_NUM_WPUS_PER_INCH);
+	m_tabPosition = (double)((double)tmpTabPosition/(double)RVNG_NUM_WPUS_PER_INCH);
 }
 
 void WP5TabGroup::parse(WP5Listener *listener)

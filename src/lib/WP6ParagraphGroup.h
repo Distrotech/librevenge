@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -34,7 +34,7 @@
 class WP6ParagraphGroup_LineSpacingSubGroup : public WP6VariableLengthGroup_SubGroup
 {
 public:
-	WP6ParagraphGroup_LineSpacingSubGroup(WPXInputStream *input, WPXEncryption *encryption);
+	WP6ParagraphGroup_LineSpacingSubGroup(RVNGInputStream *input, RVNGEncryption *encryption);
 	void parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
 
 private:
@@ -44,7 +44,7 @@ private:
 class WP6ParagraphGroup_JustificationModeSubGroup : public WP6VariableLengthGroup_SubGroup
 {
 public:
-	WP6ParagraphGroup_JustificationModeSubGroup(WPXInputStream *input, WPXEncryption *encryption);
+	WP6ParagraphGroup_JustificationModeSubGroup(RVNGInputStream *input, RVNGEncryption *encryption);
 	void parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
 
 private:
@@ -54,7 +54,7 @@ private:
 class WP6ParagraphGroup_SpacingAfterParagraphSubGroup : public WP6VariableLengthGroup_SubGroup
 {
 public:
-	WP6ParagraphGroup_SpacingAfterParagraphSubGroup(WPXInputStream *input, WPXEncryption *encryption, const uint16_t sizeNonDeletable);
+	WP6ParagraphGroup_SpacingAfterParagraphSubGroup(RVNGInputStream *input, RVNGEncryption *encryption, const uint16_t sizeNonDeletable);
 	void parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
 
 private:
@@ -66,7 +66,7 @@ private:
 class WP6ParagraphGroup_TabSetSubGroup : public WP6VariableLengthGroup_SubGroup
 {
 public:
-	WP6ParagraphGroup_TabSetSubGroup(WPXInputStream *input, WPXEncryption *encryption);
+	WP6ParagraphGroup_TabSetSubGroup(RVNGInputStream *input, RVNGEncryption *encryption);
 	~WP6ParagraphGroup_TabSetSubGroup();
 	void parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
 
@@ -74,13 +74,13 @@ private:
 	bool m_isRelative;
 	double m_tabAdjustValue;
 	std::vector<bool> m_usePreWP9LeaderMethods;
-	std::vector<WPXTabStop> m_tabStops;
+	std::vector<RVNGTabStop> m_tabStops;
 };
 
 class WP6ParagraphGroup_IndentFirstLineSubGroup : public WP6VariableLengthGroup_SubGroup
 {
 public:
-	WP6ParagraphGroup_IndentFirstLineSubGroup(WPXInputStream *input, WPXEncryption *encryption);
+	WP6ParagraphGroup_IndentFirstLineSubGroup(RVNGInputStream *input, RVNGEncryption *encryption);
 	void parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
 
 private:
@@ -90,7 +90,7 @@ private:
 class WP6ParagraphGroup_LeftMarginAdjustmentSubGroup : public WP6VariableLengthGroup_SubGroup
 {
 public:
-	WP6ParagraphGroup_LeftMarginAdjustmentSubGroup(WPXInputStream *input, WPXEncryption *encryption);
+	WP6ParagraphGroup_LeftMarginAdjustmentSubGroup(RVNGInputStream *input, RVNGEncryption *encryption);
 	void parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
 
 private:
@@ -100,7 +100,7 @@ private:
 class WP6ParagraphGroup_RightMarginAdjustmentSubGroup : public WP6VariableLengthGroup_SubGroup
 {
 public:
-	WP6ParagraphGroup_RightMarginAdjustmentSubGroup(WPXInputStream *input, WPXEncryption *encryption);
+	WP6ParagraphGroup_RightMarginAdjustmentSubGroup(RVNGInputStream *input, RVNGEncryption *encryption);
 	void parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
 
 private:
@@ -110,7 +110,7 @@ private:
 class WP6ParagraphGroup_OutlineDefineSubGroup : public WP6VariableLengthGroup_SubGroup
 {
 public:
-	WP6ParagraphGroup_OutlineDefineSubGroup(WPXInputStream *input, WPXEncryption *encryption);
+	WP6ParagraphGroup_OutlineDefineSubGroup(RVNGInputStream *input, RVNGEncryption *encryption);
 	void parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
 
 private:
@@ -122,9 +122,9 @@ private:
 class WP6ParagraphGroup : public WP6VariableLengthGroup
 {
 public:
-	WP6ParagraphGroup(WPXInputStream *input, WPXEncryption *encryption);
+	WP6ParagraphGroup(RVNGInputStream *input, RVNGEncryption *encryption);
 	~WP6ParagraphGroup();
-	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
+	void _readContents(RVNGInputStream *input, RVNGEncryption *encryption);
 	void parse(WP6Listener *listener);
 private:
 	WP6ParagraphGroup(const WP6ParagraphGroup &);

@@ -15,39 +15,39 @@ version_info = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
 endif
 
 if DEF_FILES
-export_symbols_libwpd = -export-symbols libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.def
-export_symbols_libwpd_stream = -export-symbols libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.def
+export_symbols_librevenge = -export-symbols librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.def
+export_symbols_librevenge_stream = -export-symbols librevenge-stream-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.def
 else
-export_symbols_libwpd =
-export_symbols_libwpd_stream =
+export_symbols_librevenge =
+export_symbols_librevenge_stream =
 endif
 
-if WITH_LIBWPD_STREAM
-target_libwpd_stream = libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.la
+if WITH_LIBREVENGE_STREAM
+target_librevenge_stream = librevenge-stream-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.la
 else
-target_libwpd_stream =
+target_librevenge_stream =
 endif
 
-lib_LTLIBRARIES = libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.la $(target_libwpd_stream)
-libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_includedir = $(includedir)/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@/libwpd
-libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_include_HEADERS = \
-	$(top_srcdir)/inc/libwpd/libwpd.h \
-	$(top_srcdir)/inc/libwpd/WPDocument.h \
-	$(top_srcdir)/inc/libwpd/WPXBinaryData.h \
-	$(top_srcdir)/inc/libwpd/WPXDocumentInterface.h \
-	$(top_srcdir)/inc/libwpd/WPXProperty.h \
-	$(top_srcdir)/inc/libwpd/WPXPropertyList.h \
-	$(top_srcdir)/inc/libwpd/WPXPropertyListVector.h \
-	$(top_srcdir)/inc/libwpd/WPXString.h
+lib_LTLIBRARIES = librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.la $(target_librevenge_stream)
+librevenge_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_includedir = $(includedir)/librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@/librevenge
+librevenge_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_include_HEADERS = \
+	$(top_srcdir)/inc/librevenge/librevenge.h \
+	$(top_srcdir)/inc/librevenge/RVNGocument.h \
+	$(top_srcdir)/inc/librevenge/RVNGBinaryData.h \
+	$(top_srcdir)/inc/librevenge/RVNGDocumentInterface.h \
+	$(top_srcdir)/inc/librevenge/RVNGProperty.h \
+	$(top_srcdir)/inc/librevenge/RVNGPropertyList.h \
+	$(top_srcdir)/inc/librevenge/RVNGPropertyListVector.h \
+	$(top_srcdir)/inc/librevenge/RVNGString.h
 
 AM_CXXFLAGS = -I$(top_srcdir)/inc $(DEBUG_CXXFLAGS)
 
-libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_LIBADD  = @LIBWPD_WIN32_RESOURCE@
-libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_DEPENDENCIES = @LIBWPD_WIN32_RESOURCE@
-libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic $(no_undefined) $(export_symbols_libwpd)
-libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
-	libwpd_internal.cpp \
-	libwpd_math.cpp \
+librevenge_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_LIBADD  = @LIBREVENGE_WIN32_RESOURCE@
+librevenge_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_DEPENDENCIES = @LIBREVENGE_WIN32_RESOURCE@
+librevenge_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic $(no_undefined) $(export_symbols_librevenge)
+librevenge_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_SOURCES = \
+	librevenge_internal.cpp \
+	librevenge_math.cpp \
 	WP1BottomMarginGroup.cpp \
 	WP1CenterTextGroup.cpp \
 	WP1ContentListener.cpp \
@@ -202,25 +202,25 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP6UnsupportedFixedLengthGroup.cpp \
 	WP6UnsupportedVariableLengthGroup.cpp \
 	WP6VariableLengthGroup.cpp \
-	WPDocument.cpp \
-	WPXBinaryData.cpp \
-	WPXContentListener.cpp \
-	WPXEncryption.cpp \
-	WPXHeader.cpp \
-	WPXListener.cpp \
-	WPXMemoryStream.cpp \
-	WPXPageSpan.cpp \
-	WPXParser.cpp \
-	WPXProperty.cpp \
-	WPXPropertyList.cpp \
-	WPXPropertyListVector.cpp \
-	WPXString.cpp \
-	WPXStylesListener.cpp \
-	WPXSubDocument.cpp \
-	WPXTable.cpp \
-	libwpd_internal.h \
-	libwpd_math.h \
-	libwpd_types.h \
+	RVNGocument.cpp \
+	RVNGBinaryData.cpp \
+	RVNGContentListener.cpp \
+	RVNGEncryption.cpp \
+	RVNGHeader.cpp \
+	RVNGListener.cpp \
+	RVNGMemoryStream.cpp \
+	RVNGPageSpan.cpp \
+	RVNGParser.cpp \
+	RVNGProperty.cpp \
+	RVNGPropertyList.cpp \
+	RVNGPropertyListVector.cpp \
+	RVNGString.cpp \
+	RVNGStylesListener.cpp \
+	RVNGSubDocument.cpp \
+	RVNGTable.cpp \
+	librevenge_internal.h \
+	librevenge_math.h \
+	librevenge_types.h \
 	WP1BottomMarginGroup.h \
 	WP1CenterTextGroup.h \
 	WP1ContentListener.h \
@@ -376,65 +376,65 @@ libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = \
 	WP6UnsupportedFixedLengthGroup.h \
 	WP6UnsupportedVariableLengthGroup.h \
 	WP6VariableLengthGroup.h \
-	WPXContentListener.h \
-	WPXEncryption.h \
-	WPXHeader.h \
-	WPXFileStructure.h \
-	WPXListener.h \
-	WPXMemoryStream.h \
-	WPXPageSpan.h \
-	WPXParser.h \
-	WPXStylesListener.h \
-	WPXSubDocument.h \
-	WPXTable.h
+	RVNGContentListener.h \
+	RVNGEncryption.h \
+	RVNGHeader.h \
+	RVNGFileStructure.h \
+	RVNGListener.h \
+	RVNGMemoryStream.h \
+	RVNGPageSpan.h \
+	RVNGParser.h \
+	RVNGStylesListener.h \
+	RVNGSubDocument.h \
+	RVNGTable.h
 
-libwpd_stream_headers = \
-	$(top_srcdir)/inc/libwpd-stream/libwpd-stream.h \
-	$(top_srcdir)/inc/libwpd-stream/WPXStream.h \
-	$(top_srcdir)/inc/libwpd-stream/WPXStreamImplementation.h
+librevenge_stream_headers = \
+	$(top_srcdir)/inc/librevenge-stream/librevenge-stream.h \
+	$(top_srcdir)/inc/librevenge-stream/RVNGStream.h \
+	$(top_srcdir)/inc/librevenge-stream/RVNGStreamImplementation.h
 
-libwpd_stream_sources = \
-	WPXStreamImplementation.cpp \
-	WPXOLEStream.cpp \
-	WPXZipStream.cpp \
-	WPXOLEStream.h \
-	WPXZipStream.h
+librevenge_stream_sources = \
+	RVNGStreamImplementation.cpp \
+	RVNGOLEStream.cpp \
+	RVNGZipStream.cpp \
+	RVNGOLEStream.h \
+	RVNGZipStream.h
 
-if WITH_LIBWPD_STREAM
+if WITH_LIBREVENGE_STREAM
 
-libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_includedir = $(includedir)/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@/libwpd-stream
-libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_include_HEADERS = $(libwpd_stream_headers)
+librevenge_stream_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_includedir = $(includedir)/librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@/librevenge-stream
+librevenge_stream_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_include_HEADERS = $(librevenge_stream_headers)
 
-libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_LIBADD  = $(ZLIB_LIBS) @LIBWPD_STREAM_WIN32_RESOURCE@
-libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_DEPENDENCIES = @LIBWPD_STREAM_WIN32_RESOURCE@
-libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic $(no_undefined) $(export_symbols_libwpd_stream)
-libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_SOURCES = $(libwpd_stream_sources)
+librevenge_stream_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_LIBADD  = $(ZLIB_LIBS) @LIBREVENGE_STREAM_WIN32_RESOURCE@
+librevenge_stream_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_DEPENDENCIES = @LIBREVENGE_STREAM_WIN32_RESOURCE@
+librevenge_stream_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic $(no_undefined) $(export_symbols_librevenge_stream)
+librevenge_stream_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_SOURCES = $(librevenge_stream_sources)
 
 endif
 
 if OS_WIN32
 
-@LIBWPD_WIN32_RESOURCE@ : libwpd.rc $(libwpd_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_OBJECTS)
+@LIBREVENGE_WIN32_RESOURCE@ : librevenge.rc $(librevenge_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_OBJECTS)
 	chmod +x $(top_srcdir)/build/win32/*compile-resource
-	WINDRES=@WINDRES@ $(top_srcdir)/build/win32/lt-compile-resource libwpd.rc @LIBWPD_WIN32_RESOURCE@
+	WINDRES=@WINDRES@ $(top_srcdir)/build/win32/lt-compile-resource librevenge.rc @LIBREVENGE_WIN32_RESOURCE@
 
-@LIBWPD_STREAM_WIN32_RESOURCE@ : libwpd-stream.rc $(libwpd_stream_@WPD_MAJOR_VERSION@_@WPD_MINOR_VERSION@_la_OBJECTS)
+@LIBREVENGE_STREAM_WIN32_RESOURCE@ : librevenge-stream.rc $(librevenge_stream_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_OBJECTS)
 	chmod +x $(top_srcdir)/build/win32/*compile-resource && \
-	WINDRES=@WINDRES@ $(top_srcdir)/build/win32/lt-compile-resource libwpd-stream.rc @LIBWPD_STREAM_WIN32_RESOURCE@
+	WINDRES=@WINDRES@ $(top_srcdir)/build/win32/lt-compile-resource librevenge-stream.rc @LIBREVENGE_STREAM_WIN32_RESOURCE@
 endif
 
 
 # Include the GSFStream.* in case we build a tarball without stream
 EXTRA_DIST = \
-	$(libwpd_stream_sources) \
-	$(libwpd_stream_headers) \
+	$(librevenge_stream_sources) \
+	$(librevenge_stream_headers) \
 	makefile.mk \
-	libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.def \
-	libwpd.rc.in \
-	libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.def \
-	libwpd-stream.rc.in
+	librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.def \
+	librevenge.rc.in \
+	librevenge-stream-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.def \
+	librevenge-stream.rc.in
 
 # These may be in the builddir too
 BUILD_EXTRA_DIST = \
-	libwpd.rc \
-	libwpd-stream.rc
+	librevenge.rc \
+	librevenge-stream.rc

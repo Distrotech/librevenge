@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -27,9 +27,9 @@
 #ifndef WP3RESOURCE_H
 #define WP3RESOURCE_H
 
-#include <libwpd/libwpd.h>
-#include "WPXParser.h"
-#include "libwpd_types.h"
+#include <librevenge/librevenge.h>
+#include "RVNGParser.h"
+#include "librevenge_types.h"
 
 class WP3Listener;
 class WP3SubDocument;
@@ -37,8 +37,8 @@ class WP3SubDocument;
 class WP3Resource
 {
 public:
-	WP3Resource(uint32_t resourceType, uint32_t resourceReferenceID, const WPXString &resourceName,
-	            uint8_t resourceAttributes, const WPXBinaryData &resourceData);
+	WP3Resource(uint32_t resourceType, uint32_t resourceReferenceID, const RVNGString &resourceName,
+	            uint8_t resourceAttributes, const RVNGBinaryData &resourceData);
 	virtual ~WP3Resource() {}
 
 	uint32_t getResourceType() const
@@ -49,7 +49,7 @@ public:
 	{
 		return m_resourceReferenceID;
 	}
-	const WPXString &getResourceName() const
+	const RVNGString &getResourceName() const
 	{
 		return m_resourceName;
 	}
@@ -57,7 +57,7 @@ public:
 	{
 		return m_resourceAttributes;
 	}
-	const WPXBinaryData &getResourceData() const
+	const RVNGBinaryData &getResourceData() const
 	{
 		return m_resourceData;
 	}
@@ -65,9 +65,9 @@ public:
 private:
 	uint32_t m_resourceType;
 	uint32_t m_resourceReferenceID;
-	const WPXString m_resourceName;
+	const RVNGString m_resourceName;
 	uint8_t m_resourceAttributes;
-	WPXBinaryData m_resourceData;
+	RVNGBinaryData m_resourceData;
 };
 
 #endif /* WP3RESOURCE_H */

@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -27,9 +27,9 @@
 #include "WP6StyleGroup.h"
 #include "WP6Listener.h"
 #include "WP6FileStructure.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
-WP6StyleGroup_GlobalOnSubGroup::WP6StyleGroup_GlobalOnSubGroup(WPXInputStream *input, WPXEncryption *encryption) :
+WP6StyleGroup_GlobalOnSubGroup::WP6StyleGroup_GlobalOnSubGroup(RVNGInputStream *input, RVNGEncryption *encryption) :
 	m_hash(0), m_systemStyleNumber(0)
 {
 	m_hash = readU16(input, encryption);
@@ -41,7 +41,7 @@ void WP6StyleGroup_GlobalOnSubGroup::parse(WP6Listener *listener, const uint8_t 
 	listener->globalOn(m_systemStyleNumber);
 }
 
-WP6StyleGroup::WP6StyleGroup(WPXInputStream *input, WPXEncryption *encryption) :
+WP6StyleGroup::WP6StyleGroup(RVNGInputStream *input, RVNGEncryption *encryption) :
 	WP6VariableLengthGroup(),
 	m_subGroupData(0)
 {
@@ -55,7 +55,7 @@ WP6StyleGroup::~WP6StyleGroup()
 
 }
 
-void WP6StyleGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP6StyleGroup::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	// this group can contain different kinds of data, thus we need to read
 	// the contents accordingly
@@ -71,7 +71,7 @@ void WP6StyleGroup::_readContents(WPXInputStream *input, WPXEncryption *encrypti
 
 void WP6StyleGroup::parse(WP6Listener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling a style group\n"));
+	RVNG_DEBUG_MSG(("WordPerfect: handling a style group\n"));
 
 	if (getSubGroup() == WP6_STYLE_GROUP_GLOBAL_ON)
 	{

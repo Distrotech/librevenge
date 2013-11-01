@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -25,25 +25,25 @@
 
 #ifndef MEMORYSTREAM_H
 #define MEMORYSTREAM_H
-#include <libwpd-stream/libwpd-stream.h>
+#include <librevenge-stream/librevenge-stream.h>
 
-class WPXMemoryInputStream : public WPXInputStream
+class RVNGMemoryInputStream : public RVNGInputStream
 {
 public:
-	WPXMemoryInputStream(unsigned char *data, unsigned long size);
-	virtual ~WPXMemoryInputStream();
+	RVNGMemoryInputStream(unsigned char *data, unsigned long size);
+	virtual ~RVNGMemoryInputStream();
 
 	virtual bool isOLEStream()
 	{
 		return false;
 	}
-	virtual WPXInputStream *getDocumentOLEStream(const char *)
+	virtual RVNGInputStream *getDocumentOLEStream(const char *)
 	{
 		return 0;
 	}
 
 	virtual const unsigned char *read(unsigned long numBytes, unsigned long &numBytesRead);
-	virtual int seek(long offset, WPX_SEEK_TYPE seekType);
+	virtual int seek(long offset, RVNG_SEEK_TYPE seekType);
 	virtual long tell();
 	virtual bool atEOS();
 	virtual unsigned long getSize() const
@@ -55,8 +55,8 @@ private:
 	long m_offset;
 	unsigned long m_size;
 	unsigned char *m_data;
-	WPXMemoryInputStream(const WPXMemoryInputStream &);
-	WPXMemoryInputStream &operator=(const WPXMemoryInputStream &);
+	RVNGMemoryInputStream(const RVNGMemoryInputStream &);
+	RVNGMemoryInputStream &operator=(const RVNGMemoryInputStream &);
 };
 
 #endif

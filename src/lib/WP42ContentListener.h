@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -30,36 +30,36 @@
 
 #include "WP42Listener.h"
 #include "WP42SubDocument.h"
-#include "WPXContentListener.h"
-#include <libwpd/libwpd.h>
+#include "RVNGContentListener.h"
+#include <librevenge/librevenge.h>
 
 typedef struct _WP42ContentParsingState WP42ContentParsingState;
 struct _WP42ContentParsingState
 {
 	_WP42ContentParsingState();
 	~_WP42ContentParsingState();
-	WPXString m_textBuffer;
+	RVNGString m_textBuffer;
 };
 
-class WP42ContentListener : public WP42Listener, protected WPXContentListener
+class WP42ContentListener : public WP42Listener, protected RVNGContentListener
 {
 public:
-	WP42ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP42SubDocument *> &subDocuments, WPXDocumentInterface *documentInterface);
+	WP42ContentListener(std::list<RVNGPageSpan> &pageList, std::vector<WP42SubDocument *> &subDocuments, RVNGDocumentInterface *documentInterface);
 	~WP42ContentListener();
 
 	void startDocument()
 	{
-		WPXContentListener::startDocument();
+		RVNGContentListener::startDocument();
 	}
 	void startSubDocument()
 	{
-		WPXContentListener::startSubDocument();
+		RVNGContentListener::startSubDocument();
 	}
 	void insertCharacter(uint32_t character);
 	void insertTab(uint8_t tabType, double tabPosition);
 	void insertBreak(uint8_t breakType)
 	{
-		WPXContentListener::insertBreak(breakType);
+		RVNGContentListener::insertBreak(breakType);
 	}
 	void insertEOL();
 	void attributeChange(bool isOn, uint8_t attribute);
@@ -68,15 +68,15 @@ public:
 	void suppressPageCharacteristics(uint8_t /* suppressCode */) {}
 	void endDocument()
 	{
-		WPXContentListener::endDocument();
+		RVNGContentListener::endDocument();
 	}
 	void endSubDocument()
 	{
-		WPXContentListener::endSubDocument();
+		RVNGContentListener::endSubDocument();
 	}
 
 protected:
-	void _handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList, unsigned nextTableIndice = 0);
+	void _handleSubDocument(const RVNGSubDocument *subDocument, RVNGSubDocumentType subDocumentType, RVNGTableList tableList, unsigned nextTableIndice = 0);
 
 	void _flushText();
 	void _changeList() {}

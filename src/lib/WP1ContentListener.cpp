@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -27,7 +27,7 @@
 
 #include "WP1ContentListener.h"
 #include "WP1FileStructure.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 #include "WP1SubDocument.h"
 
 // #define WP1_NUM_TEXT_COLUMS_PER_INCH 12
@@ -45,9 +45,9 @@ _WP1ContentParsingState::~_WP1ContentParsingState()
 }
 
 
-WP1ContentListener::WP1ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP1SubDocument *> &subDocuments, WPXDocumentInterface *documentInterface) :
+WP1ContentListener::WP1ContentListener(std::list<RVNGPageSpan> &pageList, std::vector<WP1SubDocument *> &subDocuments, RVNGDocumentInterface *documentInterface) :
 	WP1Listener(),
-	WPXContentListener(pageList, documentInterface),
+	RVNGContentListener(pageList, documentInterface),
 	m_parseState(new WP1ContentParsingState),
 	m_subDocuments(subDocuments)
 {
@@ -130,7 +130,7 @@ void WP1ContentListener::insertEOL()
 	}
 }
 
-void WP1ContentListener::insertNote(const WPXNoteType noteType, WP1SubDocument *subDocument)
+void WP1ContentListener::insertNote(const RVNGNoteType noteType, WP1SubDocument *subDocument)
 {
 	if (!isUndoOn() && !m_ps->m_isNote)
 	{
@@ -144,21 +144,21 @@ void WP1ContentListener::insertNote(const WPXNoteType noteType, WP1SubDocument *
 
 		m_ps->m_isNote = true;
 
-		WPXPropertyList propList;
+		RVNGPropertyList propList;
 
 		if (noteType == FOOTNOTE)
 		{
-			propList.insert("libwpd:number", ++(m_parseState->m_footNoteNumber));
+			propList.insert("librevenge:number", ++(m_parseState->m_footNoteNumber));
 			m_documentInterface->openFootnote(propList);
 		}
 		else
 		{
-			propList.insert("libwpd:number", ++(m_parseState->m_endNoteNumber));
+			propList.insert("librevenge:number", ++(m_parseState->m_endNoteNumber));
 			m_documentInterface->openEndnote(propList);
 		}
 
-		WPXTableList tableList;
-		handleSubDocument(subDocument, WPX_SUBDOCUMENT_NOTE, tableList, 0);
+		RVNGTableList tableList;
+		handleSubDocument(subDocument, RVNG_SUBDOCUMENT_NOTE, tableList, 0);
 
 		if (noteType == FOOTNOTE)
 			m_documentInterface->closeFootnote();
@@ -178,31 +178,31 @@ void WP1ContentListener::attributeChange(bool isOn, uint8_t attribute)
 	switch (attribute)
 	{
 	case WP1_ATTRIBUTE_SUBSCRIPT:
-		textAttributeBit = WPX_SUBSCRIPT_BIT;
+		textAttributeBit = RVNG_SUBSCRIPT_BIT;
 		break;
 	case WP1_ATTRIBUTE_SUPERSCRIPT:
-		textAttributeBit = WPX_SUPERSCRIPT_BIT;
+		textAttributeBit = RVNG_SUPERSCRIPT_BIT;
 		break;
 	case WP1_ATTRIBUTE_OUTLINE:
-		textAttributeBit = WPX_OUTLINE_BIT;
+		textAttributeBit = RVNG_OUTLINE_BIT;
 		break;
 	case WP1_ATTRIBUTE_ITALICS:
-		textAttributeBit = WPX_ITALICS_BIT;
+		textAttributeBit = RVNG_ITALICS_BIT;
 		break;
 	case WP1_ATTRIBUTE_SHADOW:
-		textAttributeBit = WPX_SHADOW_BIT;
+		textAttributeBit = RVNG_SHADOW_BIT;
 		break;
 	case WP1_ATTRIBUTE_REDLINE:
-		textAttributeBit = WPX_REDLINE_BIT;
+		textAttributeBit = RVNG_REDLINE_BIT;
 		break;
 	case WP1_ATTRIBUTE_BOLD:
-		textAttributeBit = WPX_BOLD_BIT;
+		textAttributeBit = RVNG_BOLD_BIT;
 		break;
 	case WP1_ATTRIBUTE_STRIKE_OUT:
-		textAttributeBit = WPX_STRIKEOUT_BIT;
+		textAttributeBit = RVNG_STRIKEOUT_BIT;
 		break;
 	case WP1_ATTRIBUTE_UNDERLINE:
-		textAttributeBit = WPX_UNDERLINE_BIT;
+		textAttributeBit = RVNG_UNDERLINE_BIT;
 		break;
 	default:
 		break;
@@ -476,16 +476,16 @@ void WP1ContentListener::justificationChange(uint8_t justification)
 		switch (justification)
 		{
 		case 0x01:
-			m_ps->m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_CENTER;
+			m_ps->m_paragraphJustification = RVNG_PARAGRAPH_JUSTIFICATION_CENTER;
 			break;
 		case 0x02:
-			m_ps->m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_RIGHT;
+			m_ps->m_paragraphJustification = RVNG_PARAGRAPH_JUSTIFICATION_RIGHT;
 			break;
 		case 0x03:
-			m_ps->m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_FULL;
+			m_ps->m_paragraphJustification = RVNG_PARAGRAPH_JUSTIFICATION_FULL;
 			break;
 		default: // case 0x00 and all other invalid stuff
-			m_ps->m_paragraphJustification = WPX_PARAGRAPH_JUSTIFICATION_LEFT;
+			m_ps->m_paragraphJustification = RVNG_PARAGRAPH_JUSTIFICATION_LEFT;
 			break;
 		}
 	}
@@ -497,7 +497,7 @@ void WP1ContentListener::headerFooterGroup(uint8_t /* headerFooterDefinition */,
 		m_subDocuments.push_back(subDocument);
 }
 
-void WP1ContentListener::setTabs(const std::vector<WPXTabStop> &tabStops)
+void WP1ContentListener::setTabs(const std::vector<RVNGTabStop> &tabStops)
 {
 	if (!isUndoOn())
 	{
@@ -513,7 +513,7 @@ void WP1ContentListener::flushRightOn()
 		if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
 		{
 			m_parseState->m_numDeferredTabs = 0;
-			m_ps->m_tempParagraphJustification = WPX_PARAGRAPH_JUSTIFICATION_RIGHT;
+			m_ps->m_tempParagraphJustification = RVNG_PARAGRAPH_JUSTIFICATION_RIGHT;
 		}
 		else
 			insertTab();
@@ -527,36 +527,36 @@ void WP1ContentListener::centerOn()
 		if (!m_ps->m_isParagraphOpened && !m_ps->m_isListElementOpened)
 		{
 			m_parseState->m_numDeferredTabs = 0;
-			m_ps->m_tempParagraphJustification = WPX_PARAGRAPH_JUSTIFICATION_CENTER;
+			m_ps->m_tempParagraphJustification = RVNG_PARAGRAPH_JUSTIFICATION_CENTER;
 		}
 		else
 			insertTab();
 	}
 }
 
-void WP1ContentListener::insertPicture(uint16_t width, uint16_t height, const WPXBinaryData &binaryData)
+void WP1ContentListener::insertPicture(uint16_t width, uint16_t height, const RVNGBinaryData &binaryData)
 {
 	if (!isUndoOn())
 	{
 		if (!m_ps->m_isSpanOpened)
 			_openSpan();
 
-		WPXPropertyList propList;
+		RVNGPropertyList propList;
 		propList.insert("svg:width", (double)((double)width/72.0));
 		propList.insert("svg:height", (double)((double)height/72.0));
 		propList.insert("text:anchor-type", "as-char");
 		m_documentInterface->openFrame(propList);
 
 		propList.clear();
-		propList.insert("libwpd:mimetype", "image/pict");
+		propList.insert("librevenge:mimetype", "image/pict");
 		m_documentInterface->insertBinaryObject(propList, binaryData);
 
 		m_documentInterface->closeFrame();
 	}
 }
 
-void WP1ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType /* subDocumentType */,
-        WPXTableList /* tableList */, unsigned /* nextTableIndice */)
+void WP1ContentListener::_handleSubDocument(const RVNGSubDocument *subDocument, RVNGSubDocumentType /* subDocumentType */,
+        RVNGTableList /* tableList */, unsigned /* nextTableIndice */)
 {
 	// save our old parsing state on our "stack"
 	WP1ContentParsingState *oldParseState = m_parseState;

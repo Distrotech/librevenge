@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,38 +18,38 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WPXPAGE_H
-#define WPXPAGE_H
-#include "WPXFileStructure.h"
+#ifndef RVNGPAGE_H
+#define RVNGPAGE_H
+#include "RVNGFileStructure.h"
 #include <vector>
-#include "WPXTable.h"
-#include "libwpd_internal.h"
-#include "WPXSubDocument.h"
+#include "RVNGTable.h"
+#include "librevenge_internal.h"
+#include "RVNGSubDocument.h"
 
 // intermediate page representation class: for internal use only (by the high-level content/styles listeners). should not be exported.
 
-class WPXHeaderFooter
+class RVNGHeaderFooter
 {
 public:
-	WPXHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence occurence,
-	                const uint8_t internalType, const WPXSubDocument *subDocument, WPXTableList tableList);
-	WPXHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence occurence,
-	                const uint8_t internalType, const WPXSubDocument *subDocument);
-	WPXHeaderFooter(const WPXHeaderFooter &headerFooter);
-	~WPXHeaderFooter();
-	WPXHeaderFooter &operator=(const WPXHeaderFooter &headerFooter);
-	WPXHeaderFooterType getType() const
+	RVNGHeaderFooter(const RVNGHeaderFooterType headerFooterType, const RVNGHeaderFooterOccurence occurence,
+	                const uint8_t internalType, const RVNGSubDocument *subDocument, RVNGTableList tableList);
+	RVNGHeaderFooter(const RVNGHeaderFooterType headerFooterType, const RVNGHeaderFooterOccurence occurence,
+	                const uint8_t internalType, const RVNGSubDocument *subDocument);
+	RVNGHeaderFooter(const RVNGHeaderFooter &headerFooter);
+	~RVNGHeaderFooter();
+	RVNGHeaderFooter &operator=(const RVNGHeaderFooter &headerFooter);
+	RVNGHeaderFooterType getType() const
 	{
 		return m_type;
 	}
-	WPXHeaderFooterOccurence getOccurence() const
+	RVNGHeaderFooterOccurence getOccurence() const
 	{
 		return m_occurence;
 	}
@@ -57,29 +57,29 @@ public:
 	{
 		return m_internalType;
 	}
-	const WPXSubDocument *getSubDocument() const
+	const RVNGSubDocument *getSubDocument() const
 	{
 		return m_subDocument;
 	}
-	WPXTableList getTableList() const
+	RVNGTableList getTableList() const
 	{
 		return m_tableList;
 	}
 
 private:
-	WPXHeaderFooterType m_type;
-	WPXHeaderFooterOccurence m_occurence;
+	RVNGHeaderFooterType m_type;
+	RVNGHeaderFooterOccurence m_occurence;
 	uint8_t m_internalType; // for suppression
-	const WPXSubDocument *m_subDocument;  // for the actual text
-	WPXTableList m_tableList;
+	const RVNGSubDocument *m_subDocument;  // for the actual text
+	RVNGTableList m_tableList;
 };
 
-class WPXPageSpan
+class RVNGPageSpan
 {
 public:
-	WPXPageSpan();
-	WPXPageSpan(const WPXPageSpan &page, double paragraphMarginLeft, double paragraphMarginRight);
-	virtual ~WPXPageSpan();
+	RVNGPageSpan();
+	RVNGPageSpan(const RVNGPageSpan &page, double paragraphMarginLeft, double paragraphMarginRight);
+	virtual ~RVNGPageSpan();
 
 	bool getPageNumberSuppression() const
 	{
@@ -87,7 +87,7 @@ public:
 	}
 	bool getHeaderFooterSuppression(const uint8_t headerFooterType) const
 	{
-		if (headerFooterType <= WPX_FOOTER_B) return m_isHeaderFooterSuppressed[headerFooterType];
+		if (headerFooterType <= RVNG_FOOTER_B) return m_isHeaderFooterSuppressed[headerFooterType];
 		return false;
 	}
 	double getFormLength() const
@@ -98,7 +98,7 @@ public:
 	{
 		return m_formWidth;
 	}
-	WPXFormOrientation getFormOrientation() const
+	RVNGFormOrientation getFormOrientation() const
 	{
 		return m_formOrientation;
 	}
@@ -118,7 +118,7 @@ public:
 	{
 		return m_marginBottom;
 	}
-	WPXPageNumberPosition getPageNumberPosition() const
+	RVNGPageNumberPosition getPageNumberPosition() const
 	{
 		return m_pageNumberPosition;
 	}
@@ -130,7 +130,7 @@ public:
 	{
 		return m_pageNumberOverride;
 	}
-	WPXNumberingType getPageNumberingType() const
+	RVNGNumberingType getPageNumberingType() const
 	{
 		return m_pageNumberingType;
 	}
@@ -138,7 +138,7 @@ public:
 	{
 		return m_pageNumberingFontSize;
 	}
-	WPXString getPageNumberingFontName() const
+	RVNGString getPageNumberingFontName() const
 	{
 		return m_pageNumberingFontName;
 	}
@@ -146,13 +146,13 @@ public:
 	{
 		return m_pageSpan;
 	}
-	const std::vector<WPXHeaderFooter> &getHeaderFooterList() const
+	const std::vector<RVNGHeaderFooter> &getHeaderFooterList() const
 	{
 		return m_headerFooterList;
 	}
 
-	void setHeaderFooter(const WPXHeaderFooterType type, const uint8_t headerFooterType, const WPXHeaderFooterOccurence occurence,
-	                     const WPXSubDocument *subDocument, WPXTableList tableList);
+	void setHeaderFooter(const RVNGHeaderFooterType type, const uint8_t headerFooterType, const RVNGHeaderFooterOccurence occurence,
+	                     const RVNGSubDocument *subDocument, RVNGTableList tableList);
 	void setPageNumberSuppression(const bool suppress)
 	{
 		m_isPageNumberSuppressed = suppress;
@@ -169,7 +169,7 @@ public:
 	{
 		m_formWidth = formWidth;
 	}
-	void setFormOrientation(const WPXFormOrientation formOrientation)
+	void setFormOrientation(const RVNGFormOrientation formOrientation)
 	{
 		m_formOrientation = formOrientation;
 	}
@@ -189,7 +189,7 @@ public:
 	{
 		m_marginBottom = marginBottom;
 	}
-	void setPageNumberPosition(const WPXPageNumberPosition pageNumberPosition)
+	void setPageNumberPosition(const RVNGPageNumberPosition pageNumberPosition)
 	{
 		m_pageNumberPosition = pageNumberPosition;
 	}
@@ -198,7 +198,7 @@ public:
 		m_pageNumberOverride = pageNumberOverride;
 		m_isPageNumberOverridden = true;
 	}
-	void setPageNumberingType(const WPXNumberingType pageNumberingType)
+	void setPageNumberingType(const RVNGNumberingType pageNumberingType)
 	{
 		m_pageNumberingType = pageNumberingType;
 	}
@@ -206,7 +206,7 @@ public:
 	{
 		m_pageNumberingFontSize = pageNumberingFontSize;
 	}
-	void setPageNumberingFontName(const WPXString &pageNumberingFontName)
+	void setPageNumberingFontName(const RVNGString &pageNumberingFontName)
 	{
 		m_pageNumberingFontName = pageNumberingFontName;
 	}
@@ -216,27 +216,27 @@ public:
 	}
 
 protected:
-	void _removeHeaderFooter(WPXHeaderFooterType type, WPXHeaderFooterOccurence occurence);
-	bool _containsHeaderFooter(WPXHeaderFooterType type, WPXHeaderFooterOccurence occurence);
+	void _removeHeaderFooter(RVNGHeaderFooterType type, RVNGHeaderFooterOccurence occurence);
+	bool _containsHeaderFooter(RVNGHeaderFooterType type, RVNGHeaderFooterOccurence occurence);
 
 private:
-	bool m_isHeaderFooterSuppressed[WPX_NUM_HEADER_FOOTER_TYPES];
+	bool m_isHeaderFooterSuppressed[RVNG_NUM_HEADER_FOOTER_TYPES];
 	bool m_isPageNumberSuppressed;
 	double m_formLength, m_formWidth;
-	WPXFormOrientation m_formOrientation;
+	RVNGFormOrientation m_formOrientation;
 	double m_marginLeft, m_marginRight;
 	double m_marginTop, m_marginBottom;
-	WPXPageNumberPosition m_pageNumberPosition;
+	RVNGPageNumberPosition m_pageNumberPosition;
 	bool m_isPageNumberOverridden;
 	int m_pageNumberOverride;
-	WPXNumberingType m_pageNumberingType;
-	WPXString m_pageNumberingFontName;
+	RVNGNumberingType m_pageNumberingType;
+	RVNGString m_pageNumberingFontName;
 	double m_pageNumberingFontSize;
-	std::vector<WPXHeaderFooter> m_headerFooterList;
+	std::vector<RVNGHeaderFooter> m_headerFooterList;
 
 	int m_pageSpan;
 };
 
-bool operator==(const WPXPageSpan &, const WPXPageSpan &);
-#endif /* WPXPAGE_H */
+bool operator==(const RVNGPageSpan &, const RVNGPageSpan &);
+#endif /* RVNGPAGE_H */
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -28,11 +28,11 @@
 #ifndef WP1LISTENER_H
 #define WP1LISTENER_H
 
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 #include <vector>
 
 class WP1SubDocument;
-class WPXBinaryData;
+class RVNGBinaryData;
 
 class WP1Listener
 {
@@ -47,7 +47,7 @@ public:
 	virtual void insertTab() = 0;
 	virtual void insertBreak(uint8_t breakType) = 0;
 	virtual void insertEOL() = 0;
-	virtual void insertNote(WPXNoteType noteType, WP1SubDocument *subDocument) = 0;
+	virtual void insertNote(RVNGNoteType noteType, WP1SubDocument *subDocument) = 0;
 	virtual void attributeChange(bool isOn, uint8_t attribute) = 0;
 	virtual void fontPointSize(uint8_t pointSize) = 0;
 	virtual void fontId(uint16_t id) = 0;
@@ -57,7 +57,7 @@ public:
 	virtual void leftIndent(uint16_t leftMarginOffset) = 0;
 	virtual void leftRightIndent(uint16_t leftRightMarginOffset) = 0;
 	virtual void leftMarginRelease(uint16_t release) = 0;
-	virtual void setTabs(const std::vector<WPXTabStop> &tabStops) = 0;
+	virtual void setTabs(const std::vector<RVNGTabStop> &tabStops) = 0;
 	virtual void headerFooterGroup(uint8_t headerFooterDefinition, WP1SubDocument *subDocument) = 0;
 	virtual void suppressPageCharacteristics(uint8_t suppressCode) = 0;
 	virtual void justificationChange(uint8_t justification) = 0;
@@ -68,7 +68,7 @@ public:
 	virtual void centerOff() = 0;
 	virtual void endDocument() = 0;
 	virtual void endSubDocument() = 0;
-	virtual void insertPicture(uint16_t width, uint16_t height, const WPXBinaryData &binaryData) = 0;
+	virtual void insertPicture(uint16_t width, uint16_t height, const RVNGBinaryData &binaryData) = 0;
 
 };
 

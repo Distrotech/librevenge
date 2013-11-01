@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -39,14 +39,14 @@
 #include "WP6TableStylePacket.h"
 #include "WP6GraphicsFilenamePacket.h"
 #include "WP6GraphicsCachedFileDataPacket.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
-WP6PrefixDataPacket::WP6PrefixDataPacket(WPXInputStream * /* input */, WPXEncryption * /* encryption */) :
+WP6PrefixDataPacket::WP6PrefixDataPacket(RVNGInputStream * /* input */, RVNGEncryption * /* encryption */) :
 	m_dataSize(0)
 {
 }
 
-WP6PrefixDataPacket *WP6PrefixDataPacket::constructPrefixDataPacket(WPXInputStream *input, WPXEncryption *encryption, WP6PrefixIndice *prefixIndice)
+WP6PrefixDataPacket *WP6PrefixDataPacket::constructPrefixDataPacket(RVNGInputStream *input, RVNGEncryption *encryption, WP6PrefixIndice *prefixIndice)
 {
 	WP6PrefixDataPacket *tmpPacket = 0;
 	try
@@ -110,14 +110,14 @@ WP6PrefixDataPacket *WP6PrefixDataPacket::constructPrefixDataPacket(WPXInputStre
 	return tmpPacket;
 }
 
-void WP6PrefixDataPacket::_read(WPXInputStream *input, WPXEncryption *encryption, uint32_t dataOffset, uint32_t dataSize)
+void WP6PrefixDataPacket::_read(RVNGInputStream *input, RVNGEncryption *encryption, uint32_t dataOffset, uint32_t dataSize)
 {
 	m_dataSize = dataSize;
 
 	if (!m_dataSize)
 		return;
 
-	input->seek(dataOffset, WPX_SEEK_SET);
+	input->seek(dataOffset, RVNG_SEEK_SET);
 
 	_readContents(input, encryption);
 

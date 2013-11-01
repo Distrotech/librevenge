@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -26,10 +26,10 @@
  */
 
 #include "WP3SingleByteFunction.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 #include "WP3Listener.h"
 
-WP3SingleByteFunction *WP3SingleByteFunction::constructSingleByteFunction(WPXInputStream * /* input */, WPXEncryption * /* encryption */, uint8_t groupID)
+WP3SingleByteFunction *WP3SingleByteFunction::constructSingleByteFunction(RVNGInputStream * /* input */, RVNGEncryption * /* encryption */, uint8_t groupID)
 {
 
 	switch (groupID)
@@ -89,7 +89,7 @@ void WP3EOLFunction::parse(WP3Listener *listener)
 
 void WP3EOPFunction::parse(WP3Listener *listener)
 {
-	listener->insertBreak(WPX_PAGE_BREAK);
+	listener->insertBreak(RVNG_PAGE_BREAK);
 }
 
 void WP3CondensedTabFunction::parse(WP3Listener *listener)

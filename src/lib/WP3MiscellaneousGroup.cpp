@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -28,10 +28,10 @@
 #include <math.h>
 #include "WP3MiscellaneousGroup.h"
 #include "WP3FileStructure.h"
-#include "WPXFileStructure.h"
+#include "RVNGFileStructure.h"
 #include "WP3Listener.h"
 
-WP3MiscellaneousGroup::WP3MiscellaneousGroup(WPXInputStream *input, WPXEncryption *encryption) :
+WP3MiscellaneousGroup::WP3MiscellaneousGroup(RVNGInputStream *input, RVNGEncryption *encryption) :
 	WP3VariableLengthGroup(),
 	m_pageWidth(0),
 	m_pageHeight(0),
@@ -44,7 +44,7 @@ WP3MiscellaneousGroup::~WP3MiscellaneousGroup()
 {
 }
 
-void WP3MiscellaneousGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP3MiscellaneousGroup::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	// this group can contain different kinds of data, thus we need to read
 	// the contents accordingly
@@ -54,7 +54,7 @@ void WP3MiscellaneousGroup::_readContents(WPXInputStream *input, WPXEncryption *
 		uint16_t tmpPageOrientation;
 
 		// skip 20 bytes of old values
-		input->seek(20, WPX_SEEK_CUR);
+		input->seek(20, RVNG_SEEK_CUR);
 
 		// read the new values
 		tmpPageOrientation = readU16(input, encryption, true);
@@ -76,7 +76,7 @@ void WP3MiscellaneousGroup::_readContents(WPXInputStream *input, WPXEncryption *
 
 void WP3MiscellaneousGroup::parse(WP3Listener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling a Miscellaneous group\n"));
+	RVNG_DEBUG_MSG(("WordPerfect: handling a Miscellaneous group\n"));
 
 	switch (getSubGroup())
 	{

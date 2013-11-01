@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="libwpdstream"
+	Name="librevengestream"
 	ProjectGUID="{CB848337-B6C8-4942-961B-5A9FBBF37B46}"
-	RootNamespace="libwpdstream"
+	RootNamespace="librevengestream"
 	TargetFrameworkVersion="0"
 	>
 	<Platforms>
@@ -48,7 +48,7 @@
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				TreatWChar_tAsBuiltInType="false"
-				PrecompiledHeaderFile=".\Release/libwpdstream.pch"
+				PrecompiledHeaderFile=".\Release/librevengestream.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
@@ -68,7 +68,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="Release\lib\libwpd-stream-0.9.lib"
+				OutputFile="Release\lib\librevenge-stream-0.9.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -80,7 +80,7 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile=".\Release/libwpdstream.bsc"
+				OutputFile=".\Release/librevengestream.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -120,7 +120,7 @@
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				TreatWChar_tAsBuiltInType="false"
-				PrecompiledHeaderFile=".\Debug/libwpdstream.pch"
+				PrecompiledHeaderFile=".\Debug/librevengestream.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
@@ -141,7 +141,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="Debug\lib\libwpd-stream-0.9.lib"
+				OutputFile="Debug\lib\librevenge-stream-0.9.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -153,7 +153,7 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile=".\Debug/libwpdstream.bsc"
+				OutputFile=".\Debug/librevengestream.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -171,7 +171,7 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath="..\..\src\lib\WPXOLEStream.cpp"
+				RelativePath="..\..\src\lib\RVNGOLEStream.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -191,7 +191,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXStreamImplementation.cpp"
+				RelativePath="..\..\src\lib\RVNGStreamImplementation.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -211,7 +211,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXZipStream.cpp"
+				RelativePath="..\..\src\lib\RVNGZipStream.cpp"
 				>
 			</File>
 		</Filter>
@@ -220,23 +220,23 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
-				RelativePath="..\..\inc\libwpd-stream\libwpd-stream.h"
+				RelativePath="..\..\inc\librevenge-stream\librevenge-stream.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXOLEStream.h"
+				RelativePath="..\..\src\lib\RVNGOLEStream.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\inc\libwpd-stream\WPXStream.h"
+				RelativePath="..\..\inc\librevenge-stream\RVNGStream.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\inc\libwpd-stream\WPXStreamImplementation.h"
+				RelativePath="..\..\inc\librevenge-stream\RVNGStreamImplementation.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXZipStream.h"
+				RelativePath="..\..\src\lib\RVNGZipStream.h"
 				>
 			</File>
 		</Filter>

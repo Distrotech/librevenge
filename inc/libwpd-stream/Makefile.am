@@ -1,4 +1,4 @@
 EXTRA_DIST = \
-	libwpd-stream.h \
-	WPXStream.h \
-	WPXStreamImplementation.h
+	librevenge-stream.h \
+	RVNGStream.h \
+	RVNGStreamImplementation.h

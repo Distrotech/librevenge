@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,14 +17,14 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
 #include <string>
 #include <stdarg.h>
@@ -58,10 +58,10 @@ static const int8_t g_static_utf8_skip_data[256] =
       ((Char) < 0x4000000 ? 5 : 6)))))
 #define g_static_utf8_next_char(p) (char *)((p) + g_static_utf8_skip_data[*((uint8_t *)p)])
 
-class WPXStringImpl
+class RVNGStringImpl
 {
 public:
-	WPXStringImpl() : m_buf() {}
+	RVNGStringImpl() : m_buf() {}
 	int len() const
 	{
 		if (m_buf.empty()) return 0;
@@ -70,19 +70,19 @@ public:
 	std::string m_buf;
 };
 
-WPXString::~WPXString()
+RVNGString::~RVNGString()
 {
 	delete m_stringImpl;
 }
 
-WPXString::WPXString() :
-	m_stringImpl(new WPXStringImpl)
+RVNGString::RVNGString() :
+	m_stringImpl(new RVNGStringImpl)
 {
 	m_stringImpl->m_buf.reserve(FIRST_BUF_SIZE);
 }
 
-WPXString::WPXString(const WPXString &stringBuf, bool escapeXML) :
-	m_stringImpl(new WPXStringImpl)
+RVNGString::RVNGString(const RVNGString &stringBuf, bool escapeXML) :
+	m_stringImpl(new RVNGStringImpl)
 {
 	if (escapeXML)
 	{
@@ -95,7 +95,7 @@ WPXString::WPXString(const WPXString &stringBuf, bool escapeXML) :
 			const char *next = g_static_utf8_next_char(p);
 			if (next > end)
 			{
-				WPD_DEBUG_MSG(("WPXString::WPXString: oops, we have a problem\n"));
+				RVNG_DEBUG_MSG(("RVNGString::RVNGString: oops, we have a problem\n"));
 				break;
 			}
 			switch (*p)
@@ -131,18 +131,18 @@ WPXString::WPXString(const WPXString &stringBuf, bool escapeXML) :
 		m_stringImpl->m_buf = stringBuf.m_stringImpl->m_buf;
 }
 
-WPXString::WPXString(const char *str) :
-	m_stringImpl(new WPXStringImpl)
+RVNGString::RVNGString(const char *str) :
+	m_stringImpl(new RVNGStringImpl)
 {
 	m_stringImpl->m_buf = std::string(str);
 }
 
-const char *WPXString::cstr() const
+const char *RVNGString::cstr() const
 {
 	return m_stringImpl->m_buf.c_str();
 }
 
-void WPXString::sprintf(const char *format, ...)
+void RVNGString::sprintf(const char *format, ...)
 {
 	va_list args;
 
@@ -174,78 +174,78 @@ void WPXString::sprintf(const char *format, ...)
 		delete [] buf;
 }
 
-void WPXString::append(const WPXString &s)
+void RVNGString::append(const RVNGString &s)
 {
 	m_stringImpl->m_buf.append(s.m_stringImpl->m_buf);
 }
 
-void WPXString::append(const char *s)
+void RVNGString::append(const char *s)
 {
 	m_stringImpl->m_buf.append(s);
 }
 
-void WPXString::append(const char c)
+void RVNGString::append(const char c)
 {
 	m_stringImpl->m_buf.append(1, c);
 }
 
-void WPXString::clear()
+void RVNGString::clear()
 {
 	m_stringImpl->m_buf.erase(m_stringImpl->m_buf.begin(), m_stringImpl->m_buf.end());
 }
 
-int WPXString::len() const
+int RVNGString::len() const
 {
 	return m_stringImpl->len();
 }
 
-WPXString &WPXString::operator=(const WPXString &stringBuf)
+RVNGString &RVNGString::operator=(const RVNGString &stringBuf)
 {
 	m_stringImpl->m_buf = stringBuf.m_stringImpl->m_buf;
 	return *this;
 }
 
-WPXString &WPXString::operator=(const char *s)
+RVNGString &RVNGString::operator=(const char *s)
 {
 	m_stringImpl->m_buf = std::string(s);
 	return *this;
 }
 
-bool WPXString::operator==(const char *str) const
+bool RVNGString::operator==(const char *str) const
 {
 	return (m_stringImpl->m_buf == str);
 }
 
-bool WPXString::operator==(const WPXString &str) const
+bool RVNGString::operator==(const RVNGString &str) const
 {
 	return (m_stringImpl->m_buf == str.m_stringImpl->m_buf);
 }
 
-bool WPXString::operator!() const
+bool RVNGString::operator!() const
 {
 	return (m_stringImpl->m_buf.length() == 0);
 }
 
-WPXString::Iter::Iter(const WPXString &str) :
-	m_stringImpl(new WPXStringImpl),
+RVNGString::Iter::Iter(const RVNGString &str) :
+	m_stringImpl(new RVNGStringImpl),
 	m_pos(0),
 	m_curChar(0)
 {
 	m_stringImpl->m_buf = str.cstr();
 }
 
-WPXString::Iter::~Iter()
+RVNGString::Iter::~Iter()
 {
 	delete [] m_curChar;
 	delete m_stringImpl;
 }
 
-void WPXString::Iter::rewind()
+void RVNGString::Iter::rewind()
 {
 	m_pos = (-1);
 }
 
-bool WPXString::Iter::next()
+bool RVNGString::Iter::next()
 {
 	int len = m_stringImpl->m_buf.length();
 
@@ -262,14 +262,14 @@ bool WPXString::Iter::next()
 	return false;
 }
 
-bool WPXString::Iter::last()
+bool RVNGString::Iter::last()
 {
 	if (m_pos >= m_stringImpl->len())
 		return true;
 	return false;
 }
 
-const char *WPXString::Iter::operator()() const
+const char *RVNGString::Iter::operator()() const
 {
 	if (m_pos == (-1)) return 0;
 
@@ -287,7 +287,7 @@ const char *WPXString::Iter::operator()() const
 
 /* Various utf8/ucs4 routines, some stolen from glib */
 
-void appendUCS4(WPXString &str, uint32_t ucs4)
+void appendUCS4(RVNGString &str, uint32_t ucs4)
 {
 	int charLength = g_static_unichar_to_utf8(ucs4, 0);
 	char *utf8 = new char[charLength+1];

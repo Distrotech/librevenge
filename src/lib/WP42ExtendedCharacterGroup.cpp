@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -24,9 +24,9 @@
  */
 
 #include "WP42ExtendedCharacterGroup.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
-WP42ExtendedCharacterGroup::WP42ExtendedCharacterGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group) :
+WP42ExtendedCharacterGroup::WP42ExtendedCharacterGroup(RVNGInputStream *input, RVNGEncryption *encryption, uint8_t group) :
 	WP42MultiByteFunctionGroup(group),
 	m_extendedCharacter(0)
 {
@@ -37,14 +37,14 @@ WP42ExtendedCharacterGroup::~WP42ExtendedCharacterGroup()
 {
 }
 
-void WP42ExtendedCharacterGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP42ExtendedCharacterGroup::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	m_extendedCharacter = readU8(input, encryption);
 }
 
 void WP42ExtendedCharacterGroup::parse(WP42Listener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling an ExtendedCharacter group\n"));
+	RVNG_DEBUG_MSG(("WordPerfect: handling an ExtendedCharacter group\n"));
 	const uint32_t *chars;
 	int len = extendedCharacterWP42ToUCS4(m_extendedCharacter, &chars);
 

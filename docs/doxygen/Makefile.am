@@ -2,7 +2,7 @@ EXTRA_DIST =	doxygen.cfg \
 		footer.html.in \
 		header.html.in
 
-if WITH_LIBWPD_DOCS
+if WITH_LIBREVENGE_DOCS
 
 install-data-am:
 	mkdir -p $(DESTDIR)$(docdir)/html

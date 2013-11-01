@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -28,10 +28,10 @@
 #ifndef WP6LISTENER_H
 #define WP6LISTENER_H
 
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 #include <vector>
 
-class WPXString;
+class RVNGString;
 class WP6DefaultInitialFontPacket;
 class WP6PrefixData;
 class WP6PrefixDataPacket;
@@ -52,10 +52,10 @@ public:
 	                     const uint8_t hour, const uint8_t minute,
 	                     const uint8_t second, const uint8_t dayOfWeek,
 	                     const uint8_t timeZone, const uint8_t unused) = 0;
-	virtual void setExtendedInformation(const uint16_t type, const WPXString &data) = 0;
+	virtual void setExtendedInformation(const uint16_t type, const RVNGString &data) = 0;
 	virtual void setAlignmentCharacter(const uint32_t character) = 0;
 	virtual void setLeaderCharacter(const uint32_t character, const uint8_t numSpaces) = 0;
-	virtual void defineTabStops(const bool isRelative, const std::vector<WPXTabStop> &tabStops,
+	virtual void defineTabStops(const bool isRelative, const std::vector<RVNGTabStop> &tabStops,
 	                            const std::vector<bool> &usePreWP9LeaderMethods) = 0;
 	virtual void insertCharacter(uint32_t character) = 0;
 	virtual void insertTab(const uint8_t tabType, double tabPosition) = 0;
@@ -67,16 +67,16 @@ public:
 	virtual void characterColorChange(const uint8_t red, const uint8_t green, const uint8_t blue) = 0;
 	virtual void characterShadingChange(const uint8_t shading) = 0;
 	virtual void highlightChange(const bool isOn, const RGBSColor &color) = 0;
-	virtual void fontChange(const uint16_t matchedFontPointSize, const uint16_t fontPID, const WPXString &fontName) = 0;
+	virtual void fontChange(const uint16_t matchedFontPointSize, const uint16_t fontPID, const RVNGString &fontName) = 0;
 	virtual void attributeChange(const bool isOn, const uint8_t attribute) = 0;
 	virtual void spacingAfterParagraphChange(const double spacingRelative, const double spacingAbsolute) = 0;
 	virtual void pageMarginChange(const uint8_t side, const uint16_t margin) = 0;
-	virtual void pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation) = 0;
-	virtual void pageNumberingChange(const WPXPageNumberPosition pageNumberPosition, const uint16_t pageNumberFontPointSize, const uint16_t pageNumberFontPID) = 0;
+	virtual void pageFormChange(const uint16_t length, const uint16_t width, const RVNGFormOrientation orientation) = 0;
+	virtual void pageNumberingChange(const RVNGPageNumberPosition pageNumberPosition, const uint16_t pageNumberFontPointSize, const uint16_t pageNumberFontPID) = 0;
 	virtual void marginChange(const uint8_t side, const uint16_t margin) = 0;
 	virtual void paragraphMarginChange(const uint8_t side, const int16_t margin) = 0;
 	virtual void indentFirstLineChange(const int16_t offset) = 0;
-	virtual void columnChange(const WPXTextColumnType columnType, const uint8_t numColumns,
+	virtual void columnChange(const RVNGTextColumnType columnType, const uint8_t numColumns,
 	                          const std::vector<double> &columnWidth, const std::vector<bool> &isFixedWidth) = 0;
 	virtual void updateOutlineDefinition(const WP6OutlineLocation outlineLocation, const uint16_t outlineHash,
 	                                     const uint8_t *numberingMethods, const uint8_t tabBehaviourFlag) = 0;
@@ -89,11 +89,11 @@ public:
 	virtual void globalOn(const uint8_t systemStyle) = 0;
 	virtual void globalOff() = 0;
 	virtual void noteOn(const uint16_t textPID) = 0;
-	virtual void noteOff(const WPXNoteType noteType) = 0;
+	virtual void noteOff(const RVNGNoteType noteType) = 0;
 	virtual void headerFooterGroup(const uint8_t headerFooterType, const uint8_t occurenceBits, const uint16_t textPID) = 0;
 	virtual void suppressPageCharacteristics(const uint8_t suppressCode) = 0;
 	virtual void setPageNumber(const uint16_t pageNumber) = 0;
-	virtual void setPageNumberingType(const WPXNumberingType pageNumberingType) = 0;
+	virtual void setPageNumberingType(const RVNGNumberingType pageNumberingType) = 0;
 	virtual void endDocument() = 0;
 	virtual void endSubDocument() = 0;
 	virtual void defineTable(const uint8_t position, const uint16_t leftOffset) = 0;
@@ -103,7 +103,7 @@ public:
 	virtual void insertRow(const uint16_t rowHeight, const bool isMinimumHeight, const bool isHeaderRow) = 0;
 	virtual void insertCell(const uint8_t colSpan, const uint8_t rowSpan, const uint8_t borderBits,
 	                        const RGBSColor *cellFgColor, const RGBSColor *cellBgColor,
-	                        const RGBSColor *cellBorderColor, const WPXVerticalAlignment cellVerticalAlignment,
+	                        const RGBSColor *cellBorderColor, const RVNGVerticalAlignment cellVerticalAlignment,
 	                        const bool useCellAttributes, const uint32_t cellAttributes) = 0;
 	virtual void endTable() = 0;
 
@@ -123,7 +123,7 @@ public:
 		m_prefixData = prefixData;
 	}
 	const WP6PrefixDataPacket *getPrefixDataPacket(const int prefixID) const;
-	WPXString getFontNameForPID(const int prefixID) const;
+	RVNGString getFontNameForPID(const int prefixID) const;
 
 private:
 	WP6Listener(const WP6Listener &);

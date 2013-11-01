@@ -24,7 +24,7 @@ Windows - Microsoft(tm) Visual Studio/C++
 
 A workspace for MSVC6 can be found in the ./build/win32/ directory.
 This workspace contains a projects file to compile a release version or 
-a debug version of libwpd. 
+a debug version of librevenge. 
 
 NOTE: Using the MSVC build system will result in a static library only. 
 No dll can be created yet using this build system. If you want to create 
@@ -34,16 +34,16 @@ a dll, please use the MingW build system (see below for details).
 Windows - MinGW
 ===============
 
-First of all, in order to use libwpd in your application, you do not need
+First of all, in order to use librevenge in your application, you do not need
 to build it yourself. If you have access to a binary distribution, you
 are encouraged to use it. If for whatever reason you still want to build
-libwpd using MinGW, read following instructions.
+librevenge using MinGW, read following instructions.
 
 
 * Build environment and dependencies
 
-In order to build libwpd, you have to have installed MinGW distribution from
-http://www.mingw.org. Because the build system of libwpd uses autotools, you
+In order to build librevenge, you have to have installed MinGW distribution from
+http://www.mingw.org. Because the build system of librevenge uses autotools, you
 must install also the MSys packages. It is advisable to install all recent
 packages into a path that does not contain spaces. Besides the MinGW
 distribution, you have to install the _runtime_ and _development_ packages of 
@@ -68,7 +68,7 @@ BUT: libxml2.dll -> libxml2.dll.a
 
 1. Unpack the source code by running:
 
-  gunzip -dc libwpd-{version}.tar.gz | tar xpf
+  gunzip -dc librevenge-{version}.tar.gz | tar xpf
 
 You can also use WinZip or any other GUI compression tool.
 
@@ -85,7 +85,7 @@ The ACLOCAL_FLAGS variable is there in order to allow the auto* scripts to find
 the pkg.m4 macro that is part of the pkg-config distribution. If this macro is
 not found, the generated configure script will be ending with an error.
 
-3. Time to configure libwpd; run:
+3. Time to configure librevenge; run:
 
   ./configure [--prefix=<target>] [--enable-static] [--disable-shared]
 
@@ -109,7 +109,7 @@ link with the first libXXX.dll.a that it meets.
  
   make clean all
 
-6. And last but not least, compile and install libwpd by running:
+6. And last but not least, compile and install librevenge by running:
 
   make install [-i]
 
@@ -119,8 +119,8 @@ them and will stop with error. The "-i" option makes it to report the error, but
 not to stop. Like that the installation will succeed.
 
 That's all folks! For more information, ask questions at the mailing list
-libwpd-devel@list.sourceforge.net. Remember that Uncle Google can also be of big
-help especially when the problem is not with libwpd, but with one of its 
+librevenge-devel@list.sourceforge.net. Remember that Uncle Google can also be of big
+help especially when the problem is not with librevenge, but with one of its 
 dependencies.
 
 Mac OSX
@@ -141,5 +141,5 @@ unresolved symbols at runtime
 
      make ; sudo make install
      
-The above-mentioned fix is from the libwpd-1.info file of Justin F. Hallet who
-maintains the libwpd-1* packages for Fink project (http://fink.sourceforge.net).
+The above-mentioned fix is from the librevenge-1.info file of Justin F. Hallet who
+maintains the librevenge-1* packages for Fink project (http://fink.sourceforge.net).

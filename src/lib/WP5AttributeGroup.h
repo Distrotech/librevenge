@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -33,7 +33,7 @@
 class WP5AttributeGroup : public WP5FixedLengthGroup
 {
 public:
-	WP5AttributeGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);
+	WP5AttributeGroup(RVNGInputStream *input, RVNGEncryption *encryption, uint8_t groupID);
 	virtual void parse(WP5Listener *listener) = 0;
 	uint8_t getAttribute() const
 	{
@@ -41,7 +41,7 @@ public:
 	}
 
 protected:
-	virtual void _readContents(WPXInputStream *input, WPXEncryption *encryption);
+	virtual void _readContents(RVNGInputStream *input, RVNGEncryption *encryption);
 
 private:
 	uint8_t m_attribute;
@@ -50,14 +50,14 @@ private:
 class WP5AttributeOnGroup : public WP5AttributeGroup
 {
 public:
-	WP5AttributeOnGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);
+	WP5AttributeOnGroup(RVNGInputStream *input, RVNGEncryption *encryption, uint8_t groupID);
 	void parse(WP5Listener *listener);
 };
 
 class WP5AttributeOffGroup : public WP5AttributeGroup
 {
 public:
-	WP5AttributeOffGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);
+	WP5AttributeOffGroup(RVNGInputStream *input, RVNGEncryption *encryption, uint8_t groupID);
 	void parse(WP5Listener *listener);
 };
 

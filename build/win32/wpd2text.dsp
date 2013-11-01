@@ -52,8 +52,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 libwpd-stream-0.9.lib libwpd-0.9.lib/nologo /subsystem:console /machine:IX86 /out:"Release\bin\wpd2text.exe" /libpath:"Release\lib"
-# ADD LINK32 libwpd-stream-0.9.lib libwpd-0.9.lib /nologo /subsystem:console /machine:IX86 /out:"Release\bin\wpd2text.exe" /libpath:"Release\lib"
+# ADD BASE LINK32 librevenge-stream-0.9.lib librevenge-0.9.lib/nologo /subsystem:console /machine:IX86 /out:"Release\bin\wpd2text.exe" /libpath:"Release\lib"
+# ADD LINK32 librevenge-stream-0.9.lib librevenge-0.9.lib /nologo /subsystem:console /machine:IX86 /out:"Release\bin\wpd2text.exe" /libpath:"Release\lib"
 # SUBTRACT LINK32 /nodefaultlib
 
 !ELSEIF  "$(CFG)" == "wpd2text - Win32 Debug"
@@ -80,8 +80,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 libwpd-0.9.lib libwpd-stream-0.9.lib /nologo /subsystem:console /debug /machine:IX86 /out:"Debug\bin\wpd2text.exe" /libpath:"Debug\lib"
-# ADD LINK32 libwpd-0.9.lib libwpd-stream-0.9.lib /nologo /subsystem:console /debug /machine:IX86 /out:"Debug\bin\wpd2text.exe" /libpath:"Debug\lib"
+# ADD BASE LINK32 librevenge-0.9.lib librevenge-stream-0.9.lib /nologo /subsystem:console /debug /machine:IX86 /out:"Debug\bin\wpd2text.exe" /libpath:"Debug\lib"
+# ADD LINK32 librevenge-0.9.lib librevenge-stream-0.9.lib /nologo /subsystem:console /debug /machine:IX86 /out:"Debug\bin\wpd2text.exe" /libpath:"Debug\lib"
 # SUBTRACT LINK32 /nodefaultlib
 
 !ENDIF 
@@ -100,19 +100,19 @@ SOURCE=..\..\src\conv\text\TextDocumentGenerator.cpp
 # Begin Source File
 
 SOURCE=..\..\src\conv\text\wpd2text.cpp
-DEP_CPP_WPD2T=\
+DEP_CPP_RVNG2T=\
 	"..\..\src\conv\text\TextDocumentGenerator.h"\
-	"..\..\src\lib\libwpd.h"\
-	"..\..\src\lib\libwpd_types.h"\
-	"..\..\src\lib\WPDocument.h"\
-	"..\..\src\lib\WPXBinaryData.h"\
-	"..\..\src\lib\WPXDocumentInterface.h"\
-	"..\..\src\lib\WPXProperty.h"\
-	"..\..\src\lib\WPXPropertyList.h"\
-	"..\..\src\lib\WPXPropertyListVector.h"\
-	"..\..\src\lib\WPXStream.h"\
-	"..\..\src\lib\WPXStreamImplementation.h"\
-	"..\..\src\lib\WPXString.h"\
+	"..\..\src\lib\librevenge.h"\
+	"..\..\src\lib\librevenge_types.h"\
+	"..\..\src\lib\RVNGocument.h"\
+	"..\..\src\lib\RVNGBinaryData.h"\
+	"..\..\src\lib\RVNGDocumentInterface.h"\
+	"..\..\src\lib\RVNGProperty.h"\
+	"..\..\src\lib\RVNGPropertyList.h"\
+	"..\..\src\lib\RVNGPropertyListVector.h"\
+	"..\..\src\lib\RVNGStream.h"\
+	"..\..\src\lib\RVNGStreamImplementation.h"\
+	"..\..\src\lib\RVNGString.h"\
 	
 # End Source File
 # End Group

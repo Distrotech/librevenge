@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -26,23 +26,23 @@
 
 #include "WP6HeaderFooterGroup.h"
 #include "WP6Listener.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
-WP6HeaderFooterGroup::WP6HeaderFooterGroup(WPXInputStream *input, WPXEncryption *encryption) :
+WP6HeaderFooterGroup::WP6HeaderFooterGroup(RVNGInputStream *input, RVNGEncryption *encryption) :
 	WP6VariableLengthGroup(),
 	m_occurenceBits(0)
 {
 	_read(input, encryption);
 }
 
-void WP6HeaderFooterGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP6HeaderFooterGroup::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	m_occurenceBits = readU8(input, encryption);
 }
 
 void WP6HeaderFooterGroup::parse(WP6Listener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling a HeaderFooter group\n"));
+	RVNG_DEBUG_MSG(("WordPerfect: handling a HeaderFooter group\n"));
 
 	if (getNumPrefixIDs() > 0) // FIXME: perhaps we should throw an exception if this isn't true..
 	{

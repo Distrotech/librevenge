@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -26,18 +26,18 @@
  */
 
 #include "WP5Parser.h"
-#include "WPXHeader.h"
+#include "RVNGHeader.h"
 #include "WP5Part.h"
 #include "WP5ContentListener.h"
 #include "WP5StylesListener.h"
-#include "libwpd_internal.h"
-#include "WPXTable.h"
+#include "librevenge_internal.h"
+#include "RVNGTable.h"
 #include "WP5PrefixData.h"
 #include "WP5ListFontsUsedPacket.h"
 #include "WP5FontNameStringPoolPacket.h"
 
-WP5Parser::WP5Parser(WPXInputStream *input, WPXHeader *header, WPXEncryption *encryption) :
-	WPXParser(input, header, encryption)
+WP5Parser::WP5Parser(RVNGInputStream *input, RVNGHeader *header, RVNGEncryption *encryption) :
+	RVNGParser(input, header, encryption)
 {
 }
 
@@ -45,7 +45,7 @@ WP5Parser::~WP5Parser()
 {
 }
 
-WP5PrefixData *WP5Parser::getPrefixData(WPXInputStream *input, WPXEncryption *encryption)
+WP5PrefixData *WP5Parser::getPrefixData(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	WP5PrefixData *prefixData = 0;
 	try
@@ -60,13 +60,13 @@ WP5PrefixData *WP5Parser::getPrefixData(WPXInputStream *input, WPXEncryption *en
 	}
 }
 
-void WP5Parser::parse(WPXInputStream *input, WPXEncryption *encryption, WP5Listener *listener)
+void WP5Parser::parse(RVNGInputStream *input, RVNGEncryption *encryption, WP5Listener *listener)
 {
 	listener->startDocument();
 
-	input->seek(getHeader()->getDocumentOffset(), WPX_SEEK_SET);
+	input->seek(getHeader()->getDocumentOffset(), RVNG_SEEK_SET);
 
-	WPD_DEBUG_MSG(("WordPerfect: Starting document body parse (position = %ld)\n", (long)input->tell()));
+	RVNG_DEBUG_MSG(("WordPerfect: Starting document body parse (position = %ld)\n", (long)input->tell()));
 
 	parseDocument(input, encryption, listener);
 
@@ -74,7 +74,7 @@ void WP5Parser::parse(WPXInputStream *input, WPXEncryption *encryption, WP5Liste
 }
 
 // parseDocument: parses a document body (may call itself recursively, on other streams, or itself)
-void WP5Parser::parseDocument(WPXInputStream *input, WPXEncryption *encryption, WP5Listener *listener)
+void WP5Parser::parseDocument(RVNGInputStream *input, RVNGEncryption *encryption, WP5Listener *listener)
 {
 	while (!input->atEOS())
 	{
@@ -96,10 +96,10 @@ void WP5Parser::parseDocument(WPXInputStream *input, WPXEncryption *encryption, 
 				break;
 			case 0x0B: // soft new page (convert like space)
 				listener->insertCharacter((uint32_t) ' ');
-				listener->insertBreak(WPX_SOFT_PAGE_BREAK);
+				listener->insertBreak(RVNG_SOFT_PAGE_BREAK);
 				break;
 			case 0x0C: // hard new page
-				listener->insertBreak(WPX_PAGE_BREAK);
+				listener->insertBreak(RVNG_PAGE_BREAK);
 				break;
 			case 0x0D: // soft new line (convert like space)
 				listener->insertCharacter((uint32_t) ' ');
@@ -125,12 +125,12 @@ void WP5Parser::parseDocument(WPXInputStream *input, WPXEncryption *encryption, 
 	}
 }
 
-void WP5Parser::parse(WPXDocumentInterface *documentInterface)
+void WP5Parser::parse(RVNGDocumentInterface *documentInterface)
 {
-	WPXInputStream *input = getInput();
-	WPXEncryption *encryption = getEncryption();
-	std::list<WPXPageSpan> pageList;
-	WPXTableList tableList;
+	RVNGInputStream *input = getInput();
+	RVNGEncryption *encryption = getEncryption();
+	std::list<RVNGPageSpan> pageList;
+	RVNGTableList tableList;
 	WP5PrefixData *prefixData = 0;
 	std::vector<WP5SubDocument *> subDocuments;
 
@@ -144,8 +144,8 @@ void WP5Parser::parse(WPXDocumentInterface *documentInterface)
 		parse(input, encryption, &stylesListener);
 
 		// postprocess the pageList == remove duplicate page spans due to the page breaks
-		std::list<WPXPageSpan>::iterator previousPage = pageList.begin();
-		for (std::list<WPXPageSpan>::iterator Iter=pageList.begin(); Iter != pageList.end();)
+		std::list<RVNGPageSpan>::iterator previousPage = pageList.begin();
+		for (std::list<RVNGPageSpan>::iterator Iter=pageList.begin(); Iter != pageList.end();)
 		{
 			if ((Iter != previousPage) && ((*previousPage)==(*Iter)))
 			{
@@ -170,7 +170,7 @@ void WP5Parser::parse(WPXDocumentInterface *documentInterface)
 		// FIXME: UGLY, UGLY, UGLY!!! FIND A BETTER WAY TO ACHIEVE THE SAME
 		unsigned tmpFontNameOffset = 0; // The default font in WP5 is at the position 0
 		double tmpFontSize = 12.0;
-		WPXString tmpFontName("Times New Roman");
+		RVNGString tmpFontName("Times New Roman");
 		bool tmpHasFontsUsedPacket = true;
 
 		if (listener.getGeneralPacketData(15))
@@ -206,7 +206,7 @@ void WP5Parser::parse(WPXDocumentInterface *documentInterface)
 	}
 	catch(FileException)
 	{
-		WPD_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
+		RVNG_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
 
 		delete prefixData;
 		for (std::vector<WP5SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); ++iterSubDoc)
@@ -219,13 +219,13 @@ void WP5Parser::parse(WPXDocumentInterface *documentInterface)
 	}
 }
 
-void WP5Parser::parseSubDocument(WPXDocumentInterface *documentInterface)
+void WP5Parser::parseSubDocument(RVNGDocumentInterface *documentInterface)
 {
-	std::list<WPXPageSpan> pageList;
-	WPXTableList tableList;
+	std::list<RVNGPageSpan> pageList;
+	RVNGTableList tableList;
 	std::vector<WP5SubDocument *> subDocuments;
 
-	WPXInputStream *input = getInput();
+	RVNGInputStream *input = getInput();
 
 	try
 	{
@@ -234,7 +234,7 @@ void WP5Parser::parseSubDocument(WPXDocumentInterface *documentInterface)
 		parseDocument(input, 0, &stylesListener);
 		stylesListener.endSubDocument();
 
-		input->seek(0, WPX_SEEK_SET);
+		input->seek(0, RVNG_SEEK_SET);
 
 		WP5ContentListener listener(pageList, subDocuments, documentInterface);
 		listener.startSubDocument();
@@ -247,7 +247,7 @@ void WP5Parser::parseSubDocument(WPXDocumentInterface *documentInterface)
 	}
 	catch(FileException)
 	{
-		WPD_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
+		RVNG_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
 		for (std::vector<WP5SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); ++iterSubDoc)
 			if (*iterSubDoc)
 				delete (*iterSubDoc);

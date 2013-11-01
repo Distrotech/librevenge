@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -27,10 +27,10 @@
 
 #include "WP6GraphicsCachedFileDataPacket.h"
 #include "WP6Parser.h"
-#include "libwpd_internal.h"
-#include "WPXMemoryStream.h"
+#include "librevenge_internal.h"
+#include "RVNGMemoryStream.h"
 
-WP6GraphicsCachedFileDataPacket::WP6GraphicsCachedFileDataPacket(WPXInputStream *input, WPXEncryption *encryption, int  id, uint32_t dataOffset, uint32_t dataSize):
+WP6GraphicsCachedFileDataPacket::WP6GraphicsCachedFileDataPacket(RVNGInputStream *input, RVNGEncryption *encryption, int  id, uint32_t dataOffset, uint32_t dataSize):
 	WP6PrefixDataPacket(input, encryption),
 	m_id(id),
 	m_object(0),
@@ -49,14 +49,14 @@ WP6GraphicsCachedFileDataPacket::~WP6GraphicsCachedFileDataPacket()
 	m_object = 0;
 }
 
-void WP6GraphicsCachedFileDataPacket::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP6GraphicsCachedFileDataPacket::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	uint32_t tmpDataSize = getDataSize();
 	m_data = new uint8_t[tmpDataSize];
 	for (uint32_t i = 0; i < tmpDataSize; i++)
 		m_data[i] = readU8(input, encryption);
 #if 0
-	WPXString filename;
+	RVNGString filename;
 	filename.sprintf("binarydump%.4x.wpg", m_id);
 	FILE *f = fopen(filename.cstr(), "wb");
 	if (f) // don't crash when current directory is on read-only file-system
@@ -66,6 +66,6 @@ void WP6GraphicsCachedFileDataPacket::_readContents(WPXInputStream *input, WPXEn
 		fclose(f);
 	}
 #endif
-	m_object = new WPXBinaryData(m_data, tmpDataSize);
+	m_object = new RVNGBinaryData(m_data, tmpDataSize);
 }
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

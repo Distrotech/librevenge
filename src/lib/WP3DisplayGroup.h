@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -27,19 +27,19 @@
 #define WP3DISPLAYGROUP_H
 
 #include "WP3VariableLengthGroup.h"
-#include <libwpd/libwpd.h>
+#include <librevenge/librevenge.h>
 
 class WP3DisplayGroup : public WP3VariableLengthGroup
 {
 public:
-	WP3DisplayGroup(WPXInputStream *input, WPXEncryption *encryption);
+	WP3DisplayGroup(RVNGInputStream *input, RVNGEncryption *encryption);
 	~WP3DisplayGroup();
-	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
+	void _readContents(RVNGInputStream *input, RVNGEncryption *encryption);
 	void parse(WP3Listener *listener);
 
 private:
-	WPXString m_noteReference;
-	WPXString m_pageNumber;
+	RVNGString m_noteReference;
+	RVNGString m_pageNumber;
 };
 
 #endif /* WP3DISPLAYGROUP_H */

@@ -1,4 +1,4 @@
-TODO list for libwpd:
+TODO list for librevenge:
 
 Near Future:
 - Handle {right, center} tabs using tab stops instead of just inserting 

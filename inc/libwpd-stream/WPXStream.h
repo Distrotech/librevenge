@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,28 +16,28 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WPXSTREAM_H
-#define WPXSTREAM_H
+#ifndef RVNGSTREAM_H
+#define RVNGSTREAM_H
 
-enum WPX_SEEK_TYPE
+enum RVNG_SEEK_TYPE
 {
-    WPX_SEEK_CUR,
-    WPX_SEEK_SET,
-    WPX_SEEK_END
+    RVNG_SEEK_CUR,
+    RVNG_SEEK_SET,
+    RVNG_SEEK_END
 };
 
-class WPXInputStream
+class RVNGInputStream
 {
 public:
-	WPXInputStream() {}
-	virtual ~WPXInputStream() {}
+	RVNGInputStream() {}
+	virtual ~RVNGInputStream() {}
 
 	/**
 	Analyses the content of the input stream to see whether it is an OLE2 storage.
@@ -47,11 +47,11 @@ public:
 	virtual bool isOLEStream() = 0;
 	/**
 	Extracts a \c PerfectOffice_MAIN stream from an OLE2 storage.
-	\return Should be a pointer to WPXInputStream constructed from the \c PerfectOffice_MAIN stream if it exists.
+	\return Should be a pointer to RVNGInputStream constructed from the \c PerfectOffice_MAIN stream if it exists.
 	\return Should be 0, if the \c PerfectOffice_MAIN stream does not exist inside the OLE2 storage
 	or if the input stream is not an OLE2 storage.
 	*/
-	virtual WPXInputStream *getDocumentOLEStream(const char *name) = 0;
+	virtual RVNGInputStream *getDocumentOLEStream(const char *name) = 0;
 
 	/**
 	Tries to read a given number of bytes starting from the current position inside the input stream.
@@ -67,11 +67,11 @@ public:
 	It is relative either to the current position or to the beginning of the input stream
 	depending on the value of the \c seekType parameter.
 	\param seekType Determines whether the \c offset is relative to the
-	beginning of the input stream (\c WPX_SEEK_SET) or to the current position (\c WPX_SEEK_CUR).
+	beginning of the input stream (\c RVNG_SEEK_SET) or to the current position (\c RVNG_SEEK_CUR).
 	\return An integer value that should be 0 (zero) if the seek was successful and any other value
 	if it failed (i.e. the requested \c offset is beyond the end of the input stream or before its beginning).
 	*/
-	virtual int seek(long offset, WPX_SEEK_TYPE seekType) = 0;
+	virtual int seek(long offset, RVNG_SEEK_TYPE seekType) = 0;
 	/**
 	Returns the actual position inside the input stream.
 	\return A long integer value that should correspond to the position of the next location to be read in the input stream.

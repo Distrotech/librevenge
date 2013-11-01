@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -27,11 +27,11 @@
 
 #include <math.h>
 #include <ctype.h>
-#include "WPXListener.h"
+#include "RVNGListener.h"
 #include "WP6Listener.h"
 #include "WP6FileStructure.h"
-#include "WPXFileStructure.h"
-#include "libwpd_internal.h"
+#include "RVNGFileStructure.h"
+#include "librevenge_internal.h"
 #include "WP6PrefixData.h"
 #include "WP6FontDescriptorPacket.h"
 #include "WP6DefaultInitialFontPacket.h"
@@ -49,13 +49,13 @@ const WP6PrefixDataPacket *WP6Listener::getPrefixDataPacket(const int prefixID) 
 		return 0;
 }
 
-WPXString WP6Listener::getFontNameForPID(const int prefixID) const
+RVNGString WP6Listener::getFontNameForPID(const int prefixID) const
 {
 
 	const WP6FontDescriptorPacket *fontDescriptorPacket =
 	    dynamic_cast<const WP6FontDescriptorPacket *>(getPrefixDataPacket(prefixID));
 	if (fontDescriptorPacket)
 		return fontDescriptorPacket->getFontName();
-	return WPXString();
+	return RVNGString();
 }
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

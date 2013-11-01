@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -29,15 +29,15 @@
 #define WP3PAGEFORMATGROUP_H
 
 #include "WP3VariableLengthGroup.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 #include <vector>
 
 class WP3PageFormatGroup : public WP3VariableLengthGroup
 {
 public:
-	WP3PageFormatGroup(WPXInputStream *input, WPXEncryption *encryption);
+	WP3PageFormatGroup(RVNGInputStream *input, RVNGEncryption *encryption);
 	~WP3PageFormatGroup();
-	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
+	void _readContents(RVNGInputStream *input, RVNGEncryption *encryption);
 	void parse(WP3Listener *listener);
 
 private:
@@ -48,7 +48,7 @@ private:
 	double m_lineSpacing;
 	// variables needed for subgroup 0x04 (Set Tabs)
 	bool m_isRelative;
-	std::vector<WPXTabStop> m_tabStops;
+	std::vector<RVNGTabStop> m_tabStops;
 	// variables needed for subgroup 0x05 (Vertical Margins)
 	uint32_t m_topMargin;
 	uint32_t m_bottomMargin;

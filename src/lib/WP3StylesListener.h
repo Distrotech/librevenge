@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -28,16 +28,16 @@
 #define WP3STYLESLISTENER_H
 
 #include "WP3Listener.h"
-#include "WPXStylesListener.h"
+#include "RVNGStylesListener.h"
 #include <vector>
 #include <set>
-#include "WPXPageSpan.h"
-#include "WPXTable.h"
+#include "RVNGPageSpan.h"
+#include "RVNGTable.h"
 
-class WP3StylesListener : public WP3Listener, protected WPXStylesListener
+class WP3StylesListener : public WP3Listener, protected RVNGStylesListener
 {
 public:
-	WP3StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, std::vector<WP3SubDocument *> &subDocuments);
+	WP3StylesListener(std::list<RVNGPageSpan> &pageList, RVNGTableList tableList, std::vector<WP3SubDocument *> &subDocuments);
 
 	void startDocument() {}
 	void startSubDocument() {}
@@ -62,11 +62,11 @@ public:
 	void lineSpacingChange(double /* lineSpacing */) {}
 	void justificationChange(uint8_t /* justification */) {}
 	void pageMarginChange(uint8_t side, uint16_t margin);
-	void pageFormChange(uint16_t length, uint16_t width, WPXFormOrientation orientation);
+	void pageFormChange(uint16_t length, uint16_t width, RVNGFormOrientation orientation);
 	void marginChange(uint8_t side, uint16_t margin);
 	void indentFirstLineChange(double /* offset */) {}
-	void setTabs(bool /* isRelative */, const std::vector<WPXTabStop> /* tabStops */) {}
-	void columnChange(WPXTextColumnType /* columnType */, uint8_t /* numColumns */,
+	void setTabs(bool /* isRelative */, const std::vector<RVNGTabStop> /* tabStops */) {}
+	void columnChange(RVNGTextColumnType /* columnType */, uint8_t /* numColumns */,
 	                  const std::vector<double> & /* columnWidth */, const std::vector<bool> & /* isFixedWidth */) {}
 	void endDocument();
 	void endSubDocument();
@@ -84,11 +84,11 @@ public:
 	void endTable() {}
 	void undoChange(uint8_t undoType, uint16_t undoLevel);
 	void setTextColor(const RGBSColor * /* fontColor */) {}
-	void setTextFont(const WPXString & /* fontName */) {}
+	void setTextFont(const RVNGString & /* fontName */) {}
 	void setFontSize(uint16_t /* fontSize */) {}
-	void insertPageNumber(const WPXString & /* pageNumber */) {}
-	void insertNoteReference(const WPXString & /* noteReference */) {}
-	void insertNote(WPXNoteType /* noteType */, const WP3SubDocument * /* subDocument */)
+	void insertPageNumber(const RVNGString & /* pageNumber */) {}
+	void insertNoteReference(const RVNGString & /* noteReference */) {}
+	void insertNote(RVNGNoteType /* noteType */, const WP3SubDocument * /* subDocument */)
 	{
 		if (!isUndoOn()) m_currentPageHasContent = true;
 	}
@@ -103,27 +103,27 @@ public:
 	void leftRightIndent() {}
 	void leftRightIndent(double /* offset */) {}
 	void insertPicture(double /* height */, double /* width */, double /* verticalOffset */, double /* horizontalOffset */, uint8_t /* leftColumn */, uint8_t /* rightColumn */,
-	                   uint16_t /* figureFlags */, const WPXBinaryData & /* binaryData */) {}
+	                   uint16_t /* figureFlags */, const RVNGBinaryData & /* binaryData */) {}
 	void insertTextBox(double /* height */, double /* width */, double /* verticalOffset */, double /* horizontalOffset */, uint8_t /* leftColumn */, uint8_t /* rightColumn */,
 	                   uint16_t /* figureFlags */, const WP3SubDocument * /* subDocument */, const WP3SubDocument * /* caption */) {}
 	void insertWP51Table(double /* height */, double /* width */, double /* verticalOffset */, double /* horizontalOffset */, uint8_t /* leftColumn */, uint8_t /* rightColumn */,
 	                     uint16_t /* figureFlags */, const WP3SubDocument * /* subDocument */, const WP3SubDocument * /* caption */) {}
 
 protected:
-	void _handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList, int nextTableIndice = 0);
+	void _handleSubDocument(const RVNGSubDocument *subDocument, RVNGSubDocumentType subDocumentType, RVNGTableList tableList, int nextTableIndice = 0);
 
 private:
 	WP3StylesListener(const WP3StylesListener &);
 	WP3StylesListener &operator=(const WP3StylesListener &);
-	WPXPageSpan m_currentPage;
+	RVNGPageSpan m_currentPage;
 
-	WPXTableList m_tableList;
-	WPXTable *m_currentTable;
+	RVNGTableList m_tableList;
+	RVNGTable *m_currentTable;
 	double m_tempMarginLeft, m_tempMarginRight;
 	bool m_currentPageHasContent;
 	bool m_isSubDocument;
 	std::vector<WP3SubDocument *> &m_subDocuments;
-	std::list<WPXPageSpan>::iterator m_pageListHardPageMark;
+	std::list<RVNGPageSpan>::iterator m_pageListHardPageMark;
 };
 
 #endif /* WP3STYLESLISTENER_H */

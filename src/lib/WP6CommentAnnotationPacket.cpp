@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -28,7 +28,7 @@
 #include "WP6CommentAnnotationPacket.h"
 #include "WP6Parser.h"
 
-WP6CommentAnnotationPacket::WP6CommentAnnotationPacket(WPXInputStream *input, WPXEncryption *encryption, int  /* id */, uint32_t dataOffset, uint32_t dataSize):
+WP6CommentAnnotationPacket::WP6CommentAnnotationPacket(RVNGInputStream *input, RVNGEncryption *encryption, int  /* id */, uint32_t dataOffset, uint32_t dataSize):
 	WP6PrefixDataPacket(input, encryption),
 	m_textPID(0),
 	m_flags(0)
@@ -40,7 +40,7 @@ WP6CommentAnnotationPacket::~WP6CommentAnnotationPacket()
 {
 }
 
-void WP6CommentAnnotationPacket::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP6CommentAnnotationPacket::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	uint16_t tmpNumPrefixIDs = readU16(input, encryption);
 	if (tmpNumPrefixIDs != 0x0001)

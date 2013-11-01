@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -27,20 +27,20 @@
 #define WP5FONTNAMESTRINGPACKET_H
 
 #include <map>
-#include <libwpd/libwpd.h>
-#include <libwpd-stream/libwpd-stream.h>
+#include <librevenge/librevenge.h>
+#include <librevenge-stream/librevenge-stream.h>
 #include "WP5GeneralPacketData.h"
 
 class WP5FontNameStringPoolPacket : public WP5GeneralPacketData
 {
 public:
-	WP5FontNameStringPoolPacket(WPXInputStream *input, WPXEncryption *encryption, int id, uint32_t dataOffset, uint32_t dataSize);
+	WP5FontNameStringPoolPacket(RVNGInputStream *input, RVNGEncryption *encryption, int id, uint32_t dataOffset, uint32_t dataSize);
 	~WP5FontNameStringPoolPacket();
-	void _readContents(WPXInputStream *input, WPXEncryption *encryption, uint32_t dataSize);
-	WPXString getFontName(const unsigned int offset) const;
+	void _readContents(RVNGInputStream *input, RVNGEncryption *encryption, uint32_t dataSize);
+	RVNGString getFontName(const unsigned int offset) const;
 
 private:
-	std::map<unsigned int, WPXString> m_fontNameString;
+	std::map<unsigned int, RVNGString> m_fontNameString;
 };
 #endif /* WP5FONTNAMESTRINGPACKET_H */
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

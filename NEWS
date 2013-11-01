@@ -1,34 +1,34 @@
 CHANGES:
 0.9.8 - 0.9.9
 - Miscellaneous coverity fixes (David Tardon)
-- WPX_SEEK_END for WPXMemoryInputStream (Laurent Alonso)
+- RVNG_SEEK_END for RVNGMemoryInputStream (Laurent Alonso)
 - Metadata for wpd2html (David Hislop)
 - Cleanup and build fixes (Fridrich Strba)
 
 0.9.7 - 0.9.8
-- Fix buffer allocation in WPXString::sprintf that can lead to crash
+- Fix buffer allocation in RVNGString::sprintf that can lead to crash
 - Fix crash reading invalid OLE stream
 - Change source code layout so that public headers be in inc/ and its
   subdirectories
-- libwpd.h and libwpd-stream.h are not generated headers anymore
-- Change the way we get version from libwpd build
+- librevenge.h and librevenge-stream.h are not generated headers anymore
+- Change the way we get version from librevenge build
 
 0.9.6 - 0.9.7
-- Improvements to WPXOLEStream class
-- Added MPL2+ to the licenses libwpd is released under
+- Improvements to RVNGOLEStream class
+- Added MPL2+ to the licenses librevenge is released under
 - Fix build of ZIP based stream reader
 - Miscellaneous fixes
 
 0.9.5 - 0.9.6
-- Revert an accidental ABI change in WPXPropertyList
+- Revert an accidental ABI change in RVNGPropertyList
 - Fix Windows build inside LibreOffice
 - Link the Windows static libraries with DLL runtimes
 
 0.9.4 - 0.9.5
-- libwpd-stream: Add experimental support for ZIP storages
-- libwpd-stream: Add WPX_SEEK_END to the WPXSeekType enum
+- librevenge-stream: Add experimental support for ZIP storages
+- librevenge-stream: Add RVNG_SEEK_END to the RVNGSeekType enum
   (Be sure that you are at offset 0 using it and check return value
-  in order to be compatible with lower versions of libwpd)
+  in order to be compatible with lower versions of librevenge)
 - New Visual Studio 2008 and Visual Studio 2010 build files
 - Fix autogeneration with newer autotools
 - Removal of warnings, coverity and cppcheck errors and warnings
@@ -46,8 +46,8 @@ CHANGES:
 - Build system rewrite and improvement (Tomas Chvatal)
 - Cleanup of return values (Thomas Klausner)
 - Fix crashes with WP 2.1 for Mac documents (Fridrich)
-- Fix bug in WPXPropertyList::operator= (Fridrich)
-- Fix memory issues in some WPXProperty's derived classes (Fridrich)
+- Fix bug in RVNGPropertyList::operator= (Fridrich)
+- Fix memory issues in some RVNGProperty's derived classes (Fridrich)
 - Conversion of extended characters in WP 42 parser (Fridrich)
 - Various fixes for building inside LibreOffice (Tor Lillqvist, Jan Holesovky)
 
@@ -76,7 +76,7 @@ CHANGES:
 - Fix some greek characters so that Text written in WP5.1 with Printer Polyglott
   convert correct.
 - Fix unicode mappings of some older Symbol and Dingbats fonts (Fridrich)
-- Drop the libgsf dependency in favour of pure C++ implementation of the WPXInputStream
+- Drop the libgsf dependency in favour of pure C++ implementation of the RVNGInputStream
   interface (Fridrich, Ariya)
 - Fix the footnote/endnote/comment/annotation/textbox writing in wpd2html converter
 - Improve metadata parsing (David Hislop)
@@ -87,7 +87,7 @@ CHANGES:
 - Fix two loops with corrupted documents (Thank you, sum1!)
 
 0.8.12 - 0.8.13
-- Implement readahead in the WPXStreamImplementation class (Jan Holesovsky, Fridrich)
+- Implement readahead in the RVNGStreamImplementation class (Jan Holesovsky, Fridrich)
 
 0.8.11 - 0.8.12
 - Enable building of statically linked tools even when a shared library is built,
@@ -107,7 +107,7 @@ CHANGES:
   incorrect information in the file-format (Fridrich)
 - Fix incorrect reading of font name information in prefix packets (Fridrich)
 - Fixing http://bugzilla.abisource.com bug #10957: Bad -L flags in Makefile.am break
-  compiling if different libwpd version is already installed (Daniel Mack)
+  compiling if different librevenge version is already installed (Daniel Mack)
 - Fixing http://bugzilla.abisource.com bug #10958: Risky -I ordering (Daniel Mack)
 - Making a proper release win32 (MinGW) binaries crosscompilation on Linux possible and
   smooth (Fridrich)
@@ -128,7 +128,7 @@ CHANGES:
   WP1 and WP3 file-format (Fridrich)
 - Fixed several overflow bugs reported by iDefense. An attacker could create a
   carefully crafted Word Perfect file that could cause an application linked with
-  libwpd, such as OpenOffice, to crash or possibly execute arbitrary code if the
+  librevenge, such as OpenOffice, to crash or possibly execute arbitrary code if the
   file was opened by a victim. (CVE-2007-0002) (iDefense's Sean Larsson, Fridrich)
 
 0.8.7 - 0.8.8
@@ -138,12 +138,12 @@ CHANGES:
 - Handle graciously unsupported password-protected documents; (Fridrich)
   fixes http://www.openoffice.org/issues/show_bug.cgi?id=72307
 - Remove warnings on main OpenOffice.org platforms (Fridrich)
-- Remove some potential memory leaks in the WPXPropertyList class and optimize
-  the WPXPropertyList subscription operator (Fridrich)
-- When possible, pass WPXStrings by reference instead of passing them by copy
+- Remove some potential memory leaks in the RVNGPropertyList class and optimize
+  the RVNGPropertyList subscription operator (Fridrich)
+- When possible, pass RVNGStrings by reference instead of passing them by copy
   (Fridrich)
-- Refactor WPXString to not cast from and to void*; refactor WPXPropertyList and
-  WPXPropertyListVector classes as to save a bunch of virtual calls (Fridrich)
+- Refactor RVNGString to not cast from and to void*; refactor RVNGPropertyList and
+  RVNGPropertyListVector classes as to save a bunch of virtual calls (Fridrich)
 
 0.8.6 - 0.8.7
 - Revert the alignment fix, in order to mimick the way WP for Mac renders
@@ -168,7 +168,7 @@ CHANGES:
 - Try not to crash under any circumstance by sanitizing the code and throwing
   exception in illogical, but in WP documents very real, situations (sum1,
   Fridrich)
-- Make every implementation of WPXInputStream that we use return !0 if a seek
+- Make every implementation of RVNGInputStream that we use return !0 if a seek
   fails; be more paranoiac with the result of read functions (sum1, Fridrich)
 - Ignore corrupted prefix packets in WP5 documents (Fridrich)
 - Try to convert as much information as possible even in corrupted WP3, WP5 and
@@ -180,7 +180,7 @@ CHANGES:
   absent (Fridrich)
 - Fix hangs while parsing a corrupted WP6ExtendedDocumentSummaryPacket (sum1,
   Fridrich)
-- General improvement of libwpd's conversion-success-rate and extensive QA with
+- General improvement of librevenge's conversion-success-rate and extensive QA with
   more than 46'000 real life documents (Mr. SUM1)
 
 0.8.4 -> 0.8.5
@@ -202,15 +202,15 @@ CHANGES:
 - Fix http://bugzilla.abisource.com/show_bug.cgi?id=10105, an incorrect
   conversion of table alignment in WP3.x file format (Fridrich)
 - Fix small issue with incorrect number of pages in page-spans (Fridrich)
-- Fix an issue with "==" operator for WPXPageSpan classes. The result is now
+- Fix an issue with "==" operator for RVNGPageSpan classes. The result is now
   the same independent on the order of the operands (Fridrich)
 - Fix http://bugzilla.abisource.com/show_bug.cgi?id=10279, a crash if a table
   from the middle of the tableList is in footnote and/or endnote (Marc, Fridrich)
 - Add an option "--info" to wpd2text; called with this option, wpd2text dumps the
   information of the document instead of converting it. This could be useful for 
   beagle (Fridrich)
-- Refactoring of the listener structure and split of WPXListener into WPXContentListener
-  and WPXStylesListener (Fridrich, Marc and Cyrille Moureaux as a guest star)
+- Refactoring of the listener structure and split of RVNGListener into RVNGContentListener
+  and RVNGStylesListener (Fridrich, Marc and Cyrille Moureaux as a guest star)
 
 0.8.3 -> 0.8.4
 - Fix compilation with gcc >=  4.1.0 (Stephan Kulow)
@@ -222,7 +222,7 @@ CHANGES:
   colour (Fridrich Strba)
 - Conversion of sections with multiple columns in WP3.x format (Fridrich)
 - Conversion of foot/endnotes in WP3.x format (Fridrich)
-- Adding an assignment operator to WPXString class as well as trying
+- Adding an assignment operator to RVNGString class as well as trying
   to make it much more a std::string wrapper (Fridrich)
 
 0.8.2 -> 0.8.3
@@ -256,7 +256,7 @@ CHANGES:
 - Fix incorrect conversion of text attributes in spans with tabs and
   incorrect conversion of page characteristics in documents with
   headers/footers (Fridrich Strba)
-- Build a libwpd-docs rpm package (All)
+- Build a librevenge-docs rpm package (All)
 
 0.7.x -> 0.8.0
 - Initial WordPerfect 3.0-3.5(e) for Mac support (Marc Maurer, Fridrich Strba)
@@ -288,7 +288,7 @@ CHANGES:
   (William Lachance, Michael Meeks)
 - Internal changes to reduce API/ABI breakage between versions (William Lachance)
 - Fix many memory leaks (William Lachance)
-- Can now build libwpd dynamically against OOo (William Lachance,
+- Can now build librevenge dynamically against OOo (William Lachance,
   Fridrich Strba, Caolan McNamara)
 
 0.7.1 -> 0.7.2
@@ -334,7 +334,7 @@ to bold a word (Fridrich Strba)
 - Fix errors in the international character mappings (Fridrich Strba)
 - Cleanup file header handling mess (Marc Maurer)
 - Removal of stale files (Marc Maurer)
-- Several fixes to make libwpd compile on Win32/MSVC (Marc Maurer)
+- Several fixes to make librevenge compile on Win32/MSVC (Marc Maurer)
 - Make the wpd2text converter use the high level parsing framework
   to support WP4 and WP5 documents as well (Marc Maurer)
 - Rework the wpd2raw tool to use the high level parsing framework
@@ -352,7 +352,7 @@ to bold a word (Fridrich Strba)
   for more verbose error detection (Marc Maurer)
 
 0.6.4 -> 0.6.5
-- Fix parsing error that caused libwpd to hang on various documents (Marc Maurer)
+- Fix parsing error that caused librevenge to hang on various documents (Marc Maurer)
 
 0.6.3 -> 0.6.4
 - Fix illegal memory access (Marc Maurer)
@@ -388,7 +388,7 @@ list elements (William Lachance)
 - better font handling (William)
 - footnotes/endnotes (William)
 - improved table handling - column sizing, offset, and alignment (Marc Maurer)
-- build libwpd as a shared library (Francis J Franklin)
+- build librevenge as a shared library (Francis J Franklin)
 - add support for tab-based justification (William)
 - byteswap on file reads to support big-endian architectures (William)
 - many, many bugfixes (William, Marc)
@@ -397,7 +397,7 @@ list elements (William Lachance)
 - support for WordPerfect 6.0 files (Marc Maurer, William Lachance)
 - lists/outlines (William)
 - hyphens (a bit of a hack; but it'll do for now) (William)
-- make libwpd use the STL (William)
+- make librevenge use the STL (William)
 - add an internal Unicode string class (William)
 - many bugfixes (William, Marc)
 

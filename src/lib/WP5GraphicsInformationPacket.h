@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -26,28 +26,28 @@
 #ifndef WP5GRAPHICSINFORMATIONPACKET_H
 #define WP5GRAPHICSINFORMATIONPACKET_H
 #include "WP5GeneralPacketData.h"
-#include <libwpd/libwpd.h>
-#include <libwpd-stream/libwpd-stream.h>
+#include <librevenge/librevenge.h>
+#include <librevenge-stream/librevenge-stream.h>
 #include <vector>
 
 class WP5GraphicsInformationPacket : public WP5GeneralPacketData
 {
 public:
-	WP5GraphicsInformationPacket(WPXInputStream *input, WPXEncryption *encryption, int id, uint32_t dataOffset, uint32_t dataSize);
+	WP5GraphicsInformationPacket(RVNGInputStream *input, RVNGEncryption *encryption, int id, uint32_t dataOffset, uint32_t dataSize);
 	~WP5GraphicsInformationPacket();
-	void _readContents(WPXInputStream *input, WPXEncryption *encryption, uint32_t dataSize);
-	const std::vector<WPXBinaryData *> &getImages() const
+	void _readContents(RVNGInputStream *input, RVNGEncryption *encryption, uint32_t dataSize);
+	const std::vector<RVNGBinaryData *> &getImages() const
 	{
 		return m_images;
 	}
-	const WPXBinaryData *getImage( unsigned long imageIndex ) const
+	const RVNGBinaryData *getImage( unsigned long imageIndex ) const
 	{
 		if (imageIndex < m_images.size()) return m_images[imageIndex];
 		return 0;
 	}
 
 private:
-	std::vector<WPXBinaryData *> m_images;
+	std::vector<RVNGBinaryData *> m_images;
 	std::vector<uint8_t *> m_data;
 };
 #endif /* WP5GRAPHICSINFORMATIONPACKET_H */

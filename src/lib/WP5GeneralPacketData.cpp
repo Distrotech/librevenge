@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -30,13 +30,13 @@
 #include "WP5ListFontsUsedPacket.h"
 #include "WP5FontNameStringPoolPacket.h"
 #include "WP5GraphicsInformationPacket.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
 WP5GeneralPacketData::WP5GeneralPacketData()
 {
 }
 
-WP5GeneralPacketData *WP5GeneralPacketData::constructGeneralPacketData(WPXInputStream *input, WPXEncryption *encryption, WP5GeneralPacketIndex *packetIndex)
+WP5GeneralPacketData *WP5GeneralPacketData::constructGeneralPacketData(RVNGInputStream *input, RVNGEncryption *encryption, WP5GeneralPacketIndex *packetIndex)
 {
 	switch (packetIndex->getType())
 	{
@@ -55,9 +55,9 @@ WP5GeneralPacketData *WP5GeneralPacketData::constructGeneralPacketData(WPXInputS
 	}
 }
 
-void WP5GeneralPacketData::_read(WPXInputStream *input, WPXEncryption *encryption, uint32_t dataOffset, uint32_t dataSize)
+void WP5GeneralPacketData::_read(RVNGInputStream *input, RVNGEncryption *encryption, uint32_t dataOffset, uint32_t dataSize)
 {
-	input->seek(dataOffset, WPX_SEEK_SET);
+	input->seek(dataOffset, RVNG_SEEK_SET);
 
 	_readContents(input, encryption, dataSize);
 

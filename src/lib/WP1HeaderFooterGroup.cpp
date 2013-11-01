@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -24,10 +24,10 @@
  */
 
 #include "WP1HeaderFooterGroup.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 #include "WP1SubDocument.h"
 
-WP1HeaderFooterGroup::WP1HeaderFooterGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group) :
+WP1HeaderFooterGroup::WP1HeaderFooterGroup(RVNGInputStream *input, RVNGEncryption *encryption, uint8_t group) :
 	WP1VariableLengthGroup(group),
 	m_definition(0),
 	m_subDocument(0)
@@ -39,20 +39,20 @@ WP1HeaderFooterGroup::~WP1HeaderFooterGroup()
 {
 }
 
-void WP1HeaderFooterGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP1HeaderFooterGroup::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	m_definition = readU8(input, encryption);
 
 	unsigned tmpSubDocumentSize = getSize() - 0x13;
-	input->seek(18, WPX_SEEK_CUR);
-	WPD_DEBUG_MSG(("WP1SubDocument subDocumentSize = %u\n", tmpSubDocumentSize));
+	input->seek(18, RVNG_SEEK_CUR);
+	RVNG_DEBUG_MSG(("WP1SubDocument subDocumentSize = %u\n", tmpSubDocumentSize));
 	if (tmpSubDocumentSize)
 		m_subDocument = new WP1SubDocument(input, encryption, tmpSubDocumentSize);
 }
 
 void WP1HeaderFooterGroup::parse(WP1Listener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling a HeaderFooter group\n"));
+	RVNG_DEBUG_MSG(("WordPerfect: handling a HeaderFooter group\n"));
 	listener->headerFooterGroup(m_definition, m_subDocument);
 }
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

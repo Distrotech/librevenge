@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -27,22 +27,22 @@
 #ifndef WP6FONTDESCRIPTORPACKET_H
 #define WP6FONTDESCRIPTORPACKET_H
 
-#include <libwpd/libwpd.h>
+#include <librevenge/librevenge.h>
 #include "WP6PrefixDataPacket.h"
 
 class WP6FontDescriptorPacket : public WP6PrefixDataPacket
 {
 public:
-	WP6FontDescriptorPacket(WPXInputStream *input, WPXEncryption *encryption, int id, uint32_t dataOffset, uint32_t dataSize);
+	WP6FontDescriptorPacket(RVNGInputStream *input, RVNGEncryption *encryption, int id, uint32_t dataOffset, uint32_t dataSize);
 	~WP6FontDescriptorPacket();
-	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
-	const WPXString &getFontName() const
+	void _readContents(RVNGInputStream *input, RVNGEncryption *encryption);
+	const RVNGString &getFontName() const
 	{
 		return m_fontName;
 	}
 
 private:
-	void _readFontName(WPXInputStream *input, WPXEncryption *encryption);
+	void _readFontName(RVNGInputStream *input, RVNGEncryption *encryption);
 
 	WP6FontDescriptorPacket(const WP6FontDescriptorPacket &);
 	WP6FontDescriptorPacket &operator=(const WP6FontDescriptorPacket &);
@@ -67,7 +67,7 @@ private:
 
 	uint16_t m_fontNameLength;
 
-	WPXString m_fontName;
+	RVNGString m_fontName;
 };
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

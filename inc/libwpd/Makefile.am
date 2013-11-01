@@ -1,9 +1,9 @@
 EXTRA_DIST = \
-	libwpd.h \
-	WPDocument.h \
-	WPXBinaryData.h \
-	WPXDocumentInterface.h \
-	WPXProperty.h \
-	WPXPropertyList.h \
-	WPXPropertyListVector.h \
-	WPXString.h
+	librevenge.h \
+	RVNGocument.h \
+	RVNGBinaryData.h \
+	RVNGDocumentInterface.h \
+	RVNGProperty.h \
+	RVNGPropertyList.h \
+	RVNGPropertyListVector.h \
+	RVNGString.h

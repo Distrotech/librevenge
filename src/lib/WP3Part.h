@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -27,18 +27,18 @@
 #ifndef WP3PART_H
 #define WP3PART_H
 
-#include "libwpd_types.h"
+#include "librevenge_types.h"
 
-class WPXInputStream;
+class RVNGInputStream;
 class WP3Listener;
-class WPXEncryption;
+class RVNGEncryption;
 
 class WP3Part
 {
 public:
 	virtual ~WP3Part() {}
 
-	static WP3Part *constructPart(WPXInputStream *input, WPXEncryption *encryption, const uint8_t readVal);
+	static WP3Part *constructPart(RVNGInputStream *input, RVNGEncryption *encryption, const uint8_t readVal);
 	virtual void parse(WP3Listener *listener) = 0;
 };
 

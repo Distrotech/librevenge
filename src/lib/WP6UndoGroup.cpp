@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -26,9 +26,9 @@
 
 #include "WP6UndoGroup.h"
 #include "WP6Listener.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
-WP6UndoGroup::WP6UndoGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID) :
+WP6UndoGroup::WP6UndoGroup(RVNGInputStream *input, RVNGEncryption *encryption, uint8_t groupID) :
 	WP6FixedLengthGroup(groupID),
 	m_undoType(0),
 	m_undoLevel(0)
@@ -36,7 +36,7 @@ WP6UndoGroup::WP6UndoGroup(WPXInputStream *input, WPXEncryption *encryption, uin
 	_read(input, encryption);
 }
 
-void WP6UndoGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP6UndoGroup::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	m_undoType = readU8(input, encryption);
 	m_undoLevel = readU16(input, encryption);

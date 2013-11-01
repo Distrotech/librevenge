@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -26,11 +26,11 @@
 #include <math.h>
 #include "WP3DisplayGroup.h"
 #include "WP3FileStructure.h"
-#include "libwpd_internal.h"
-#include "libwpd_math.h"
+#include "librevenge_internal.h"
+#include "librevenge_math.h"
 #include "WP3Listener.h"
 
-WP3DisplayGroup::WP3DisplayGroup(WPXInputStream *input, WPXEncryption *encryption) :
+WP3DisplayGroup::WP3DisplayGroup(RVNGInputStream *input, RVNGEncryption *encryption) :
 	WP3VariableLengthGroup(),
 	m_noteReference(),
 	m_pageNumber()
@@ -42,17 +42,17 @@ WP3DisplayGroup::~WP3DisplayGroup()
 {
 }
 
-void WP3DisplayGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP3DisplayGroup::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	switch (getSubGroup())
 	{
 	case WP3_DISPLAY_GROUP_INSERT_PAGE_NUMBER:
-		input->seek(4, WPX_SEEK_CUR);
+		input->seek(4, RVNG_SEEK_CUR);
 		m_pageNumber = readPascalString(input, encryption);
 		break;
 	case WP3_DISPLAY_GROUP_INSERT_FOOTNOTE_NUMBER:
 	case WP3_DISPLAY_GROUP_INSERT_ENDNOTE_NUMBER:
-		input->seek(4, WPX_SEEK_CUR);
+		input->seek(4, RVNG_SEEK_CUR);
 		m_noteReference = readPascalString(input, encryption);
 		break;
 	default:
@@ -62,7 +62,7 @@ void WP3DisplayGroup::_readContents(WPXInputStream *input, WPXEncryption *encryp
 
 void WP3DisplayGroup::parse(WP3Listener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling a Display group\n"));
+	RVNG_DEBUG_MSG(("WordPerfect: handling a Display group\n"));
 
 	switch (getSubGroup())
 	{

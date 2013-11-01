@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -28,9 +28,9 @@
 #include "WP6SingleByteFunction.h"
 #include "WP6FileStructure.h"
 #include "WP6Listener.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
-WP6SingleByteFunction *WP6SingleByteFunction::constructSingleByteFunction(WPXInputStream * /* input */, WPXEncryption * /* encryption */, uint8_t groupID)
+WP6SingleByteFunction *WP6SingleByteFunction::constructSingleByteFunction(RVNGInputStream * /* input */, RVNGEncryption * /* encryption */, uint8_t groupID)
 {
 
 	switch (groupID)
@@ -123,17 +123,17 @@ void WP6EOLFunction::parse(WP6Listener *listener)
 
 void WP6EOCFunction::parse(WP6Listener *listener)
 {
-	listener->insertBreak(WPX_COLUMN_BREAK);
+	listener->insertBreak(RVNG_COLUMN_BREAK);
 }
 
 void WP6EOPFunction::parse(WP6Listener *listener)
 {
-	listener->insertBreak(WPX_PAGE_BREAK);
+	listener->insertBreak(RVNG_PAGE_BREAK);
 }
 
 void WP6SoftEOPFunction::parse(WP6Listener *listener)
 {
-	listener->insertBreak(WPX_SOFT_PAGE_BREAK);
+	listener->insertBreak(RVNG_SOFT_PAGE_BREAK);
 }
 
 void WP6HyphenFunction::parse(WP6Listener *listener)
@@ -165,7 +165,7 @@ void WP6TableOffFunction::parse(WP6Listener *listener)
 void WP6TableOffAtSoftEOPFunction::parse(WP6Listener *listener)
 {
 	listener->endTable();
-	listener->insertBreak(WPX_SOFT_PAGE_BREAK);
+	listener->insertBreak(RVNG_SOFT_PAGE_BREAK);
 }
 
 void WP6TableRowAtSoftEOPFunction::parse(WP6Listener *listener)
@@ -175,7 +175,7 @@ void WP6TableRowAtSoftEOPFunction::parse(WP6Listener *listener)
 	listener->insertRow(0x0000, true, false);
 	RGBSColor tmpCellBorderColor(0x00, 0x00, 0x00, 0x64);
 	listener->insertCell(1, 1, 0x00, 0, 0, &tmpCellBorderColor, TOP, false, 0x00000000);
-	listener->insertBreak(WPX_SOFT_PAGE_BREAK);
+	listener->insertBreak(RVNG_SOFT_PAGE_BREAK);
 }
 
 void WP6TableRowAtEOPFunction::parse(WP6Listener *listener)
@@ -185,7 +185,7 @@ void WP6TableRowAtEOPFunction::parse(WP6Listener *listener)
 	listener->insertRow(0x0000, true, false);
 	RGBSColor tmpCellBorderColor(0x00, 0x00, 0x00, 0x64);
 	listener->insertCell(1, 1, 0x00, 0, 0, &tmpCellBorderColor, TOP, false, 0x00000000);
-	listener->insertBreak(WPX_PAGE_BREAK);
+	listener->insertBreak(RVNG_PAGE_BREAK);
 }
 
 void WP6TableRowAtEOCFunction::parse(WP6Listener *listener)
@@ -195,7 +195,7 @@ void WP6TableRowAtEOCFunction::parse(WP6Listener *listener)
 	listener->insertRow(0x0000, true, false);
 	RGBSColor tmpCellBorderColor(0x00, 0x00, 0x00, 0x64);
 	listener->insertCell(1, 1, 0x00, 0, 0, &tmpCellBorderColor, TOP, false, 0x00000000);
-	listener->insertBreak(WPX_COLUMN_BREAK);
+	listener->insertBreak(RVNG_COLUMN_BREAK);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

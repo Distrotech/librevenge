@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -26,11 +26,11 @@
 #include <math.h>
 #include "WP3FontGroup.h"
 #include "WP3FileStructure.h"
-#include "libwpd_internal.h"
-#include "libwpd_math.h"
+#include "librevenge_internal.h"
+#include "librevenge_math.h"
 #include "WP3Listener.h"
 
-WP3FontGroup::WP3FontGroup(WPXInputStream *input, WPXEncryption *encryption) :
+WP3FontGroup::WP3FontGroup(RVNGInputStream *input, RVNGEncryption *encryption) :
 	WP3VariableLengthGroup(),
 	m_fontColor(),
 	m_fontName(),
@@ -43,14 +43,14 @@ WP3FontGroup::~WP3FontGroup()
 {
 }
 
-void WP3FontGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP3FontGroup::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	// this group can contain different kinds of data, thus we need to read
 	// the contents accordingly
 	switch (getSubGroup())
 	{
 	case WP3_FONT_GROUP_SET_TEXT_COLOR:
-		input->seek(6, WPX_SEEK_CUR);
+		input->seek(6, RVNG_SEEK_CUR);
 		{
 			uint16_t tmpRed = readU16(input, encryption, true);
 			uint16_t tmpGreen = readU16(input, encryption, true);
@@ -59,11 +59,11 @@ void WP3FontGroup::_readContents(WPXInputStream *input, WPXEncryption *encryptio
 		}
 		break;
 	case WP3_FONT_GROUP_SET_TEXT_FONT:
-		input->seek(12, WPX_SEEK_CUR);
+		input->seek(12, RVNG_SEEK_CUR);
 		m_fontName = readPascalString(input, encryption);
 		break;
 	case WP3_FONT_GROUP_SET_FONT_SIZE:
-		input->seek(2, WPX_SEEK_CUR);
+		input->seek(2, RVNG_SEEK_CUR);
 		m_fontSize = readU16(input, encryption, true);
 		break;
 	default: /* something else we don't support, since it isn't in the docs */
@@ -73,7 +73,7 @@ void WP3FontGroup::_readContents(WPXInputStream *input, WPXEncryption *encryptio
 
 void WP3FontGroup::parse(WP3Listener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling a Font group\n"));
+	RVNG_DEBUG_MSG(("WordPerfect: handling a Font group\n"));
 
 	switch (getSubGroup())
 	{

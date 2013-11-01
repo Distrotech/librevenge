@@ -1,24 +1,24 @@
-# Microsoft Developer Studio Project File - Name="libwpd" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="librevenge" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=libwpd - Win32 Release
+CFG=librevenge - Win32 Release
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "libwpd.mak".
+!MESSAGE NMAKE /f "librevenge.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "libwpd.mak" CFG="libwpd - Win32 Release"
+!MESSAGE NMAKE /f "librevenge.mak" CFG="librevenge - Win32 Release"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "libwpd - Win32 Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "libwpd - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "librevenge - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "librevenge - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -28,7 +28,7 @@ CFG=libwpd - Win32 Release
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "libwpd - Win32 Release"
+!IF  "$(CFG)" == "librevenge - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -50,9 +50,9 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"Release\lib\libwpd-0.9.lib"
+# ADD LIB32 /nologo /out:"Release\lib\librevenge-0.9.lib"
 
-!ELSEIF  "$(CFG)" == "libwpd - Win32 Debug"
+!ELSEIF  "$(CFG)" == "librevenge - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -74,24 +74,24 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"Debug\lib\libwpd-0.9.lib"
+# ADD LIB32 /nologo /out:"Debug\lib\librevenge-0.9.lib"
 
 !ENDIF 
 
 # Begin Target
 
-# Name "libwpd - Win32 Release"
-# Name "libwpd - Win32 Debug"
+# Name "librevenge - Win32 Release"
+# Name "librevenge - Win32 Debug"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=..\..\src\lib\libwpd_internal.cpp
+SOURCE=..\..\src\lib\librevenge_internal.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\libwpd_math.cpp
+SOURCE=..\..\src\lib\librevenge_math.cpp
 # End Source File
 # Begin Source File
 
@@ -711,67 +711,67 @@ SOURCE=..\..\src\lib\WP6VariableLengthGroup.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPDocument.cpp
+SOURCE=..\..\src\lib\RVNGocument.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXBinaryData.cpp
+SOURCE=..\..\src\lib\RVNGBinaryData.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXContentListener.cpp
+SOURCE=..\..\src\lib\RVNGContentListener.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXEncryption.cpp
+SOURCE=..\..\src\lib\RVNGEncryption.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXHeader.cpp
+SOURCE=..\..\src\lib\RVNGHeader.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXListener.cpp
+SOURCE=..\..\src\lib\RVNGListener.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXMemoryStream.cpp
+SOURCE=..\..\src\lib\RVNGMemoryStream.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXPageSpan.cpp
+SOURCE=..\..\src\lib\RVNGPageSpan.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXParser.cpp
+SOURCE=..\..\src\lib\RVNGParser.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXProperty.cpp
+SOURCE=..\..\src\lib\RVNGProperty.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXPropertyList.cpp
+SOURCE=..\..\src\lib\RVNGPropertyList.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXPropertyListVector.cpp
+SOURCE=..\..\src\lib\RVNGPropertyListVector.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXString.cpp
+SOURCE=..\..\src\lib\RVNGString.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXStylesListener.cpp
+SOURCE=..\..\src\lib\RVNGStylesListener.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXSubDocument.cpp
+SOURCE=..\..\src\lib\RVNGSubDocument.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXTable.cpp
+SOURCE=..\..\src\lib\RVNGTable.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -779,19 +779,19 @@ SOURCE=..\..\src\lib\WPXTable.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\..\inc\libwpd\libwpd.h
+SOURCE=..\..\inc\librevenge\librevenge.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\libwpd_internal.h
+SOURCE=..\..\src\lib\librevenge_internal.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\libwpd_math.h
+SOURCE=..\..\src\lib\librevenge_math.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\libwpd_types.h
+SOURCE=..\..\src\lib\librevenge_types.h
 # End Source File
 # Begin Source File
 
@@ -1415,75 +1415,75 @@ SOURCE=..\..\src\lib\WP6VariableLengthGroup.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\inc\libwpd\WPDocument.h
+SOURCE=..\..\inc\librevenge\RVNGocument.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\inc\libwpd\WPXBinaryData.h
+SOURCE=..\..\inc\librevenge\RVNGBinaryData.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXContentListener.h
+SOURCE=..\..\src\lib\RVNGContentListener.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\inc\libwpd\WPXDocumentInterface.h
+SOURCE=..\..\inc\librevenge\RVNGDocumentInterface.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXEncryption.h
+SOURCE=..\..\src\lib\RVNGEncryption.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXFileStructure.h
+SOURCE=..\..\src\lib\RVNGFileStructure.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXHeader.h
+SOURCE=..\..\src\lib\RVNGHeader.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXListener.h
+SOURCE=..\..\src\lib\RVNGListener.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXMemoryStream.h
+SOURCE=..\..\src\lib\RVNGMemoryStream.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXPageSpan.h
+SOURCE=..\..\src\lib\RVNGPageSpan.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXParser.h
+SOURCE=..\..\src\lib\RVNGParser.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\inc\libwpd\WPXProperty.h
+SOURCE=..\..\inc\librevenge\RVNGProperty.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\inc\libwpd\WPXPropertyList.h
+SOURCE=..\..\inc\librevenge\RVNGPropertyList.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\inc\libwpd\WPXPropertyListVector.h
+SOURCE=..\..\inc\librevenge\RVNGPropertyListVector.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\inc\libwpd\WPXString.h
+SOURCE=..\..\inc\librevenge\RVNGString.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXStylesListener.h
+SOURCE=..\..\src\lib\RVNGStylesListener.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXSubDocument.h
+SOURCE=..\..\src\lib\RVNGSubDocument.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\lib\WPXTable.h
+SOURCE=..\..\src\lib\RVNGTable.h
 # End Source File
 # End Group
 # End Target

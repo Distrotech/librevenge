@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -24,7 +24,7 @@
  */
 
 #include "WP1PictureGroup.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
 #ifndef DUMP_PICTURE
 #define DUMP_PICTURE 0
@@ -35,7 +35,7 @@ static unsigned pictureId = 0;
 #include <sstream>
 #endif
 
-WP1PictureGroup::WP1PictureGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group) :
+WP1PictureGroup::WP1PictureGroup(RVNGInputStream *input, RVNGEncryption *encryption, uint8_t group) :
 	WP1VariableLengthGroup(group),
 	m_binaryData(),
 	m_width(0),
@@ -48,17 +48,17 @@ WP1PictureGroup::~WP1PictureGroup()
 {
 }
 
-void WP1PictureGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP1PictureGroup::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	m_binaryData.clear();
 	uint8_t tmpWhatNot = readU8(input, encryption);
 	if (tmpWhatNot)
-		input->seek(1, WPX_SEEK_CUR);
+		input->seek(1, RVNG_SEEK_CUR);
 	m_width = readU16(input, encryption, true);
 	m_height = readU16(input, encryption, true);
-	input->seek(6, WPX_SEEK_CUR);
+	input->seek(6, RVNG_SEEK_CUR);
 	uint32_t dataSize = readU16(input, encryption, true);
-	WPD_DEBUG_MSG(("WP1PictureGroup: Offset = 0x%.4x, Width = %i, Height = %i, Data Size = 0x%.4x\n", (unsigned)input->tell(), m_width, m_height, dataSize));
+	RVNG_DEBUG_MSG(("WP1PictureGroup: Offset = 0x%.4x, Width = %i, Height = %i, Data Size = 0x%.4x\n", (unsigned)input->tell(), m_width, m_height, dataSize));
 	if (dataSize + 13 > getSize())
 		return;
 	for (int i = 0; i < 512; i++)
@@ -73,7 +73,7 @@ void WP1PictureGroup::_readContents(WPXInputStream *input, WPXEncryption *encryp
 	FILE *f = fopen(filename.str().c_str(), "wb");
 	if (f)
 	{
-		WPXInputStream *tmpStream = const_cast<WPXInputStream *>(m_binaryData.getDataStream());
+		RVNGInputStream *tmpStream = const_cast<RVNGInputStream *>(m_binaryData.getDataStream());
 		while (!tmpStream->atEOS())
 			fprintf(f, "%c", readU8(tmpStream, 0));
 		fclose(f);
@@ -83,7 +83,7 @@ void WP1PictureGroup::_readContents(WPXInputStream *input, WPXEncryption *encryp
 
 void WP1PictureGroup::parse(WP1Listener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling a Picture group\n"));
+	RVNG_DEBUG_MSG(("WordPerfect: handling a Picture group\n"));
 	listener->insertPicture(m_width, m_height, m_binaryData);
 }
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

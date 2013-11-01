@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="libwpd"
+	Name="librevenge"
 	ProjectGUID="{330E414A-9C06-4A4B-9814-0C665F5DCA52}"
 	TargetFrameworkVersion="0"
 	>
@@ -46,7 +46,7 @@
 				RuntimeLibrary="3"
 				TreatWChar_tAsBuiltInType="false"
 				RuntimeTypeInfo="true"
-				PrecompiledHeaderFile=".\Debug/libwpd.pch"
+				PrecompiledHeaderFile=".\Debug/librevenge.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
@@ -67,7 +67,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="Debug\lib\libwpd-0.9.lib"
+				OutputFile="Debug\lib\librevenge-0.9.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -79,7 +79,7 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile=".\Debug/libwpd.bsc"
+				OutputFile=".\Debug/librevenge.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -122,7 +122,7 @@
 				EnableFunctionLevelLinking="true"
 				TreatWChar_tAsBuiltInType="false"
 				RuntimeTypeInfo="true"
-				PrecompiledHeaderFile=".\Release/libwpd.pch"
+				PrecompiledHeaderFile=".\Release/librevenge.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
@@ -142,7 +142,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="Release\lib\libwpd-0.9.lib"
+				OutputFile="Release\lib\librevenge-0.9.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -154,7 +154,7 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile=".\Release/libwpd.bsc"
+				OutputFile=".\Release/librevenge.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -172,7 +172,7 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath="..\..\src\lib\libwpd_internal.cpp"
+				RelativePath="..\..\src\lib\librevenge_internal.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -192,7 +192,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\libwpd_math.cpp"
+				RelativePath="..\..\src\lib\librevenge_math.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -3292,7 +3292,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPDocument.cpp"
+				RelativePath="..\..\src\lib\RVNGocument.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -3312,7 +3312,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXBinaryData.cpp"
+				RelativePath="..\..\src\lib\RVNGBinaryData.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -3332,7 +3332,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXContentListener.cpp"
+				RelativePath="..\..\src\lib\RVNGContentListener.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -3352,7 +3352,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXEncryption.cpp"
+				RelativePath="..\..\src\lib\RVNGEncryption.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -3372,7 +3372,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXHeader.cpp"
+				RelativePath="..\..\src\lib\RVNGHeader.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -3392,7 +3392,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXListener.cpp"
+				RelativePath="..\..\src\lib\RVNGListener.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -3412,7 +3412,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXMemoryStream.cpp"
+				RelativePath="..\..\src\lib\RVNGMemoryStream.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -3432,7 +3432,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXPageSpan.cpp"
+				RelativePath="..\..\src\lib\RVNGPageSpan.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -3452,7 +3452,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXParser.cpp"
+				RelativePath="..\..\src\lib\RVNGParser.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -3472,7 +3472,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXProperty.cpp"
+				RelativePath="..\..\src\lib\RVNGProperty.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -3492,7 +3492,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXPropertyList.cpp"
+				RelativePath="..\..\src\lib\RVNGPropertyList.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -3512,7 +3512,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXPropertyListVector.cpp"
+				RelativePath="..\..\src\lib\RVNGPropertyListVector.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -3532,7 +3532,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXString.cpp"
+				RelativePath="..\..\src\lib\RVNGString.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -3552,7 +3552,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXStylesListener.cpp"
+				RelativePath="..\..\src\lib\RVNGStylesListener.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -3572,7 +3572,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXSubDocument.cpp"
+				RelativePath="..\..\src\lib\RVNGSubDocument.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -3592,7 +3592,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXTable.cpp"
+				RelativePath="..\..\src\lib\RVNGTable.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -3617,19 +3617,19 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
-				RelativePath="..\..\inc\libwpd\libwpd.h"
+				RelativePath="..\..\inc\librevenge\librevenge.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\libwpd_internal.h"
+				RelativePath="..\..\src\lib\librevenge_internal.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\libwpd_math.h"
+				RelativePath="..\..\src\lib\librevenge_math.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\libwpd_types.h"
+				RelativePath="..\..\src\lib\librevenge_types.h"
 				>
 			</File>
 			<File
@@ -4253,75 +4253,75 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\inc\libwpd\WPDocument.h"
+				RelativePath="..\..\inc\librevenge\RVNGocument.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\inc\libwpd\WPXBinaryData.h"
+				RelativePath="..\..\inc\librevenge\RVNGBinaryData.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXContentListener.h"
+				RelativePath="..\..\src\lib\RVNGContentListener.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\inc\libwpd\WPXDocumentInterface.h"
+				RelativePath="..\..\inc\librevenge\RVNGDocumentInterface.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXEncryption.h"
+				RelativePath="..\..\src\lib\RVNGEncryption.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXFileStructure.h"
+				RelativePath="..\..\src\lib\RVNGFileStructure.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXHeader.h"
+				RelativePath="..\..\src\lib\RVNGHeader.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXListener.h"
+				RelativePath="..\..\src\lib\RVNGListener.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXMemoryStream.h"
+				RelativePath="..\..\src\lib\RVNGMemoryStream.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXPageSpan.h"
+				RelativePath="..\..\src\lib\RVNGPageSpan.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXParser.h"
+				RelativePath="..\..\src\lib\RVNGParser.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\inc\libwpd\WPXProperty.h"
+				RelativePath="..\..\inc\librevenge\RVNGProperty.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\inc\libwpd\WPXPropertyList.h"
+				RelativePath="..\..\inc\librevenge\RVNGPropertyList.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\inc\libwpd\WPXPropertyListVector.h"
+				RelativePath="..\..\inc\librevenge\RVNGPropertyListVector.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\inc\libwpd\WPXString.h"
+				RelativePath="..\..\inc\librevenge\RVNGString.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXStylesListener.h"
+				RelativePath="..\..\src\lib\RVNGStylesListener.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXSubDocument.h"
+				RelativePath="..\..\src\lib\RVNGSubDocument.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\lib\WPXTable.h"
+				RelativePath="..\..\src\lib\RVNGTable.h"
 				>
 			</File>
 		</Filter>

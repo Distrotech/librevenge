@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -34,23 +34,23 @@
 // returns the part if it successfully creates the part, returns 0 if it can't
 // throws an exception if there is an error
 // precondition: readVal us between 0x80 and 0xFF
-WP6Part *WP6Part::constructPart(WPXInputStream *input, WPXEncryption *encryption, const uint8_t readVal)
+WP6Part *WP6Part::constructPart(RVNGInputStream *input, RVNGEncryption *encryption, const uint8_t readVal)
 {
-	WPD_DEBUG_MSG(("WordPerfect: ConstructPart\n"));
+	RVNG_DEBUG_MSG(("WordPerfect: ConstructPart\n"));
 
 	if (readVal >= (uint8_t)0x80 && readVal <= (uint8_t)0xCF)
 	{
-		WPD_DEBUG_MSG(("WordPerfect: constructSingleByteFunction(input, val=0x%.2x)\n", readVal));
+		RVNG_DEBUG_MSG(("WordPerfect: constructSingleByteFunction(input, val=0x%.2x)\n", readVal));
 		return WP6SingleByteFunction::constructSingleByteFunction(input, encryption, readVal);
 	}
 	else if (readVal >= (uint8_t)0xD0 && readVal <= (uint8_t)0xEF)
 	{
 		if (!WP6VariableLengthGroup::isGroupConsistent(input, encryption, readVal))
 		{
-			WPD_DEBUG_MSG(("WordPerfect: Consistency Check (variable length) failed; ignoring this byte\n"));
+			RVNG_DEBUG_MSG(("WordPerfect: Consistency Check (variable length) failed; ignoring this byte\n"));
 			return 0;
 		}
-		WPD_DEBUG_MSG(("WordPerfect: constructVariableLengthGroup(input, val=0x%.2x)\n", readVal));
+		RVNG_DEBUG_MSG(("WordPerfect: constructVariableLengthGroup(input, val=0x%.2x)\n", readVal));
 		return WP6VariableLengthGroup::constructVariableLengthGroup(input, encryption, readVal);
 	}
 
@@ -58,18 +58,18 @@ WP6Part *WP6Part::constructPart(WPXInputStream *input, WPXEncryption *encryption
 	{
 		if (!WP6FixedLengthGroup::isGroupConsistent(input, encryption, readVal))
 		{
-			WPD_DEBUG_MSG(("WordPerfect: Consistency Check (fixed length) failed; ignoring this byte\n"));
+			RVNG_DEBUG_MSG(("WordPerfect: Consistency Check (fixed length) failed; ignoring this byte\n"));
 			return 0;
 		}
-		WPD_DEBUG_MSG(("WordPerfect: constructFixedLengthGroup(input, val=0x%.2x)\n", readVal));
+		RVNG_DEBUG_MSG(("WordPerfect: constructFixedLengthGroup(input, val=0x%.2x)\n", readVal));
 		return WP6FixedLengthGroup::constructFixedLengthGroup(input, encryption, readVal);
 	}
 #ifdef DEBUG
 	else
-		WPD_DEBUG_MSG(("WordPerfect: invalid group (val=0x%2x)\n", readVal));
+		RVNG_DEBUG_MSG(("WordPerfect: invalid group (val=0x%2x)\n", readVal));
 #endif
 
-	WPD_DEBUG_MSG(("WordPerfect: Returning 0 from constructPart\n"));
+	RVNG_DEBUG_MSG(("WordPerfect: Returning 0 from constructPart\n"));
 	return 0;
 }
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

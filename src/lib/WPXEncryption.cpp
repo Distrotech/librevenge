@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,18 +16,18 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WPXEncryption.h"
-#include "libwpd_internal.h"
+#include "RVNGEncryption.h"
+#include "librevenge_internal.h"
 #include <string.h>
 
-WPXEncryption::WPXEncryption(const char *password, const unsigned long encryptionStartOffset) :
+RVNGEncryption::RVNGEncryption(const char *password, const unsigned long encryptionStartOffset) :
 	m_buffer(NULL),
 	m_password(),
 	m_encryptionStartOffset(encryptionStartOffset),
@@ -44,26 +44,26 @@ WPXEncryption::WPXEncryption(const char *password, const unsigned long encryptio
 	}
 }
 
-WPXEncryption::~WPXEncryption()
+RVNGEncryption::~RVNGEncryption()
 {
 	if (m_buffer)
 		delete [] m_buffer;
 }
 
 
-uint16_t WPXEncryption::getCheckSum() const
+uint16_t RVNGEncryption::getCheckSum() const
 {
 	if (m_password.len() <= 0)
 		return 0;
-	WPXString::Iter i(m_password);
+	RVNGString::Iter i(m_password);
 	uint16_t checkSum = 0;
 	for (i.rewind(); i.next();)
 		checkSum = (uint16_t)(((checkSum >> 1) | (checkSum << 15)) ^ (((uint16_t)*(i())) << 8 ));
-	WPD_DEBUG_MSG(("CheckSum: 0x%.4x\n", checkSum));
+	RVNG_DEBUG_MSG(("CheckSum: 0x%.4x\n", checkSum));
 	return checkSum;
 }
 
-const unsigned char *WPXEncryption::readAndDecrypt(WPXInputStream *input, unsigned long numBytes, unsigned long &numBytesRead)
+const unsigned char *RVNGEncryption::readAndDecrypt(RVNGInputStream *input, unsigned long numBytes, unsigned long &numBytesRead)
 {
 	if ((m_password.len() <= 0) || (m_encryptionStartOffset > input->tell() + numBytes))
 		return input->read(numBytes, numBytesRead);

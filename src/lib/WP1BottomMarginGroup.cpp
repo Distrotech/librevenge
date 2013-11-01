@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -24,9 +24,9 @@
  */
 
 #include "WP1BottomMarginGroup.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
-WP1BottomMarginGroup::WP1BottomMarginGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group) :
+WP1BottomMarginGroup::WP1BottomMarginGroup(RVNGInputStream *input, RVNGEncryption *encryption, uint8_t group) :
 	WP1FixedLengthGroup(group),
 	m_bottomMargin(0)
 {
@@ -37,15 +37,15 @@ WP1BottomMarginGroup::~WP1BottomMarginGroup()
 {
 }
 
-void WP1BottomMarginGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP1BottomMarginGroup::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
-	input->seek(2, WPX_SEEK_CUR);
+	input->seek(2, RVNG_SEEK_CUR);
 	m_bottomMargin = readU16(input, encryption, true);
 }
 
 void WP1BottomMarginGroup::parse(WP1Listener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling the Bottom Margin group\n"));
+	RVNG_DEBUG_MSG(("WordPerfect: handling the Bottom Margin group\n"));
 	listener->bottomMarginSet(m_bottomMargin);
 }
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

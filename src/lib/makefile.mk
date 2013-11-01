@@ -2,7 +2,7 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 
 PRJ=..$/..$/..$/..$/..$/..
 
-PRJNAME=libwpd
+PRJNAME=librevenge
 TARGET=wpdlib
 ENABLE_EXCEPTIONS=TRUE
 LIBTARGET=NO
@@ -17,8 +17,8 @@ CFLAGSCXX+=-frtti
 .ENDIF
 
 SLOFILES= \
-	$(SLO)$/libwpd_internal.obj \
-	$(SLO)$/libwpd_math.obj \
+	$(SLO)$/librevenge_internal.obj \
+	$(SLO)$/librevenge_math.obj \
 	$(SLO)$/WP1BottomMarginGroup.obj \
 	$(SLO)$/WP1CenterTextGroup.obj \
 	$(SLO)$/WP1ContentListener.obj \
@@ -173,24 +173,24 @@ SLOFILES= \
 	$(SLO)$/WP6UnsupportedFixedLengthGroup.obj \
 	$(SLO)$/WP6UnsupportedVariableLengthGroup.obj \
 	$(SLO)$/WP6VariableLengthGroup.obj \
-	$(SLO)$/WPDocument.obj \
-	$(SLO)$/WPXBinaryData.obj \
-	$(SLO)$/WPXContentListener.obj \
-	$(SLO)$/WPXEncryption.obj \
-	$(SLO)$/WPXHeader.obj \
-	$(SLO)$/WPXListener.obj \
-	$(SLO)$/WPXMemoryStream.obj \
-	$(SLO)$/WPXPageSpan.obj \
-	$(SLO)$/WPXParser.obj \
-	$(SLO)$/WPXProperty.obj \
-	$(SLO)$/WPXPropertyList.obj \
-	$(SLO)$/WPXPropertyListVector.obj \
-	$(SLO)$/WPXString.obj \
-	$(SLO)$/WPXStylesListener.obj \
-	$(SLO)$/WPXSubDocument.obj \
-	$(SLO)$/WPXTable.obj
+	$(SLO)$/RVNGocument.obj \
+	$(SLO)$/RVNGBinaryData.obj \
+	$(SLO)$/RVNGContentListener.obj \
+	$(SLO)$/RVNGEncryption.obj \
+	$(SLO)$/RVNGHeader.obj \
+	$(SLO)$/RVNGListener.obj \
+	$(SLO)$/RVNGMemoryStream.obj \
+	$(SLO)$/RVNGPageSpan.obj \
+	$(SLO)$/RVNGParser.obj \
+	$(SLO)$/RVNGProperty.obj \
+	$(SLO)$/RVNGPropertyList.obj \
+	$(SLO)$/RVNGPropertyListVector.obj \
+	$(SLO)$/RVNGString.obj \
+	$(SLO)$/RVNGStylesListener.obj \
+	$(SLO)$/RVNGSubDocument.obj \
+	$(SLO)$/RVNGTable.obj
 
-LIB1ARCHIV=$(LB)$/libwpdlib.a
+LIB1ARCHIV=$(LB)$/librevengelib.a
 LIB1TARGET=$(SLB)$/$(TARGET).lib
 LIB1OBJFILES= $(SLOFILES)
 

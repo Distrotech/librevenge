@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -28,9 +28,9 @@
 #include <limits>
 
 #include "WP6ExtendedDocumentSummaryPacket.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
-WP6ExtendedDocumentSummaryPacket::WP6ExtendedDocumentSummaryPacket(WPXInputStream *input, WPXEncryption *encryption, int /* id */, uint32_t dataOffset, uint32_t dataSize) :
+WP6ExtendedDocumentSummaryPacket::WP6ExtendedDocumentSummaryPacket(RVNGInputStream *input, RVNGEncryption *encryption, int /* id */, uint32_t dataOffset, uint32_t dataSize) :
 	WP6PrefixDataPacket(input, encryption),
 	m_dataSize(dataSize),
 	m_streamData(0),
@@ -48,7 +48,7 @@ WP6ExtendedDocumentSummaryPacket::~WP6ExtendedDocumentSummaryPacket()
 		delete [] m_streamData;
 }
 
-void WP6ExtendedDocumentSummaryPacket::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP6ExtendedDocumentSummaryPacket::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	if (!m_dataSize)
 		return;
@@ -58,7 +58,7 @@ void WP6ExtendedDocumentSummaryPacket::_readContents(WPXInputStream *input, WPXE
 	for(unsigned i=0; i<(unsigned)m_dataSize; i++)
 		m_streamData[i] = readU8(input, encryption);
 
-	m_stream = new WPXMemoryInputStream(m_streamData, (unsigned long)m_dataSize);
+	m_stream = new RVNGMemoryInputStream(m_streamData, (unsigned long)m_dataSize);
 }
 
 void WP6ExtendedDocumentSummaryPacket::parse(WP6Listener *listener) const
@@ -82,10 +82,10 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6Listener *listener) const
 		uint16_t tagID = readU16(m_stream, 0);
 		if (m_stream->atEOS())
 			return;
-		if (m_stream->seek(2, WPX_SEEK_CUR))
+		if (m_stream->seek(2, RVNG_SEEK_CUR))
 			return;
 
-		WPXString name;
+		RVNGString name;
 		uint16_t wpChar = 0;
 		if (!m_stream->atEOS())
 			wpChar = readU16(m_stream, 0);
@@ -127,7 +127,7 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6Listener *listener) const
 		}
 		else
 		{
-			WPXString data;
+			RVNGString data;
 			if (!m_stream->atEOS())
 				wpChar = readU16(m_stream, 0);
 			for (; wpChar != 0 && !m_stream->atEOS(); wpChar = readU16(m_stream, 0))
@@ -143,7 +143,7 @@ void WP6ExtendedDocumentSummaryPacket::parse(WP6Listener *listener) const
 			if (data.len())
 				listener->setExtendedInformation(tagID, data);
 		}
-		m_stream->seek((i+groupLength), WPX_SEEK_SET);
+		m_stream->seek((i+groupLength), RVNG_SEEK_SET);
 	}
 }
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

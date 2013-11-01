@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -26,7 +26,7 @@
 #include <string.h>
 #include <limits>
 #include "WP6FontDescriptorPacket.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 #include <string>
 
 const char *FONT_WEIGHT_STRINGS [] = {	"Bold", "bold", "Demi", "demi", "Extended", "extended",
@@ -37,7 +37,7 @@ const char *FONT_WEIGHT_STRINGS [] = {	"Bold", "bold", "Demi", "demi", "Extended
 const char *USELESS_WP_POSTFIX = "-WP";
 #define countElements(a) ((sizeof(a) / sizeof(a[0])))
 
-WP6FontDescriptorPacket::WP6FontDescriptorPacket(WPXInputStream *input, WPXEncryption *encryption, int /* id */, uint32_t dataOffset, uint32_t dataSize) :
+WP6FontDescriptorPacket::WP6FontDescriptorPacket(RVNGInputStream *input, RVNGEncryption *encryption, int /* id */, uint32_t dataOffset, uint32_t dataSize) :
 	WP6PrefixDataPacket(input, encryption),
 	m_characterWidth(0),
 	m_ascenderHeight(0),
@@ -66,7 +66,7 @@ WP6FontDescriptorPacket::~WP6FontDescriptorPacket()
 {
 }
 
-void WP6FontDescriptorPacket::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP6FontDescriptorPacket::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	// short sized characteristics
 	m_characterWidth = readU16(input, encryption);
@@ -93,7 +93,7 @@ void WP6FontDescriptorPacket::_readContents(WPXInputStream *input, WPXEncryption
 	_readFontName(input, encryption);
 }
 
-void WP6FontDescriptorPacket::_readFontName(WPXInputStream *input, WPXEncryption *encryption)
+void WP6FontDescriptorPacket::_readFontName(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	if (m_fontNameLength > ((std::numeric_limits<uint16_t>::max)() / 2))
 		m_fontNameLength = ((std::numeric_limits<uint16_t>::max)() / 2);
@@ -115,7 +115,7 @@ void WP6FontDescriptorPacket::_readFontName(WPXInputStream *input, WPXEncryption
 				appendUCS4(m_fontName, chars[j]);
 		}
 
-		WPD_DEBUG_MSG(("WordPerfect: stripping font name (original: %s)\n", m_fontName.cstr()));
+		RVNG_DEBUG_MSG(("WordPerfect: stripping font name (original: %s)\n", m_fontName.cstr()));
 		std::string stringValue(m_fontName.cstr());
 		std::string::size_type pos;
 		for (unsigned k = 0; k < countElements(FONT_WEIGHT_STRINGS); k++)
@@ -140,8 +140,8 @@ void WP6FontDescriptorPacket::_readFontName(WPXInputStream *input, WPXEncryption
 			while ((pos = stringValue.find("-", stringValue.size() - 1)) != std::string::npos)
 				stringValue.replace(pos, strlen("-"), "");
 
-		m_fontName = WPXString(stringValue.c_str());
-		WPD_DEBUG_MSG(("WordPerfect: stripping font name (final: %s)\n", m_fontName.cstr()));
+		m_fontName = RVNGString(stringValue.c_str());
+		RVNG_DEBUG_MSG(("WordPerfect: stripping font name (final: %s)\n", m_fontName.cstr()));
 	}
 }
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

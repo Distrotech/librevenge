@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -26,8 +26,8 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <libwpd/libwpd.h>
-#include <libwpd-stream/libwpd-stream.h>
+#include <librevenge/librevenge.h>
+#include <librevenge-stream/librevenge-stream.h>
 #include "TextDocumentGenerator.h"
 
 #ifdef HAVE_CONFIG_H
@@ -92,42 +92,42 @@ int main(int argc, char *argv[])
 	if (!szInputFile)
 		return printUsage();
 
-	WPXFileStream input(szInputFile);
+	RVNGFileStream input(szInputFile);
 
-	WPDConfidence confidence = WPDocument::isFileFormatSupported(&input);
-	if (confidence != WPD_CONFIDENCE_EXCELLENT && confidence != WPD_CONFIDENCE_SUPPORTED_ENCRYPTION)
+	RVNGConfidence confidence = RVNGocument::isFileFormatSupported(&input);
+	if (confidence != RVNG_CONFIDENCE_EXCELLENT && confidence != RVNG_CONFIDENCE_SUPPORTED_ENCRYPTION)
 	{
 		fprintf(stderr, "ERROR: Unsupported file format!\n");
 		return 1;
 	}
 
-	if (confidence == WPD_CONFIDENCE_SUPPORTED_ENCRYPTION && !password)
+	if (confidence == RVNG_CONFIDENCE_SUPPORTED_ENCRYPTION && !password)
 	{
 		fprintf(stderr, "ERROR: File is password protected! Use \"--password\" option!\n");
 		return 1;
 	}
 
-	if (confidence == WPD_CONFIDENCE_SUPPORTED_ENCRYPTION && password && (WPD_PASSWORD_MATCH_OK != WPDocument::verifyPassword(&input, password)))
+	if (confidence == RVNG_CONFIDENCE_SUPPORTED_ENCRYPTION && password && (RVNG_PASSWORD_MATCH_OK != RVNGocument::verifyPassword(&input, password)))
 	{
 		fprintf(stderr, "ERROR: The password does not match, or document is not encrypted!\n");
 		return 1;
 	}
 
 	TextDocumentGenerator documentGenerator(isInfo);
-	WPDResult error = WPDocument::parse(&input, &documentGenerator, password);
+	RVNGResult error = RVNGocument::parse(&input, &documentGenerator, password);
 
-	if (error == WPD_FILE_ACCESS_ERROR)
+	if (error == RVNG_FILE_ACCESS_ERROR)
 		fprintf(stderr, "ERROR: File Exception!\n");
-	else if (error == WPD_PARSE_ERROR)
+	else if (error == RVNG_PARSE_ERROR)
 		fprintf(stderr, "ERROR: Parse Exception!\n");
-	else if (error == WPD_UNSUPPORTED_ENCRYPTION_ERROR)
+	else if (error == RVNG_UNSUPPORTED_ENCRYPTION_ERROR)
 		fprintf(stderr, "ERROR: File is password protected! (Unsupported encryption)\n");
-	else if (error == WPD_OLE_ERROR)
+	else if (error == RVNG_OLE_ERROR)
 		fprintf(stderr, "ERROR: File is an OLE document, but does not contain a WordPerfect stream!\n");
-	else if (error != WPD_OK)
+	else if (error != RVNG_OK)
 		fprintf(stderr, "ERROR: Unknown Error!\n");
 
-	if (error != WPD_OK)
+	if (error != RVNG_OK)
 		return 1;
 
 	return 0;

@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -26,16 +26,16 @@
 
 #include "WP6DisplayNumberReferenceGroup.h"
 #include "WP6Listener.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
-WP6DisplayNumberReferenceGroup::WP6DisplayNumberReferenceGroup(WPXInputStream *input, WPXEncryption *encryption) :
+WP6DisplayNumberReferenceGroup::WP6DisplayNumberReferenceGroup(RVNGInputStream *input, RVNGEncryption *encryption) :
 	WP6VariableLengthGroup(),
 	m_levelNumberToDisplay(0)
 {
 	_read(input, encryption);
 }
 
-void WP6DisplayNumberReferenceGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP6DisplayNumberReferenceGroup::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	if (!(getSubGroup() % 2) || getSubGroup() == 0)
 		m_levelNumberToDisplay = readU8(input, encryption);
@@ -43,7 +43,7 @@ void WP6DisplayNumberReferenceGroup::_readContents(WPXInputStream *input, WPXEnc
 
 void WP6DisplayNumberReferenceGroup::parse(WP6Listener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling a DisplayNumberReference group\n"));
+	RVNG_DEBUG_MSG(("WordPerfect: handling a DisplayNumberReference group\n"));
 
 	if (!(getSubGroup() % 2) || getSubGroup() == 0)
 		listener->displayNumberReferenceGroupOn(getSubGroup(), m_levelNumberToDisplay);

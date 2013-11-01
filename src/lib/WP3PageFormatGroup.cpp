@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -28,11 +28,11 @@
 #include <math.h>
 #include "WP3PageFormatGroup.h"
 #include "WP3FileStructure.h"
-#include "libwpd_internal.h"
-#include "libwpd_math.h"
+#include "librevenge_internal.h"
+#include "librevenge_math.h"
 #include "WP3Listener.h"
 
-WP3PageFormatGroup::WP3PageFormatGroup(WPXInputStream *input, WPXEncryption *encryption) :
+WP3PageFormatGroup::WP3PageFormatGroup(RVNGInputStream *input, RVNGEncryption *encryption) :
 	WP3VariableLengthGroup(),
 	m_leftMargin(0),
 	m_rightMargin(0),
@@ -52,33 +52,33 @@ WP3PageFormatGroup::~WP3PageFormatGroup()
 {
 }
 
-void WP3PageFormatGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP3PageFormatGroup::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	// this group can contain different kinds of data, thus we need to read
 	// the contents accordingly
 	uint8_t tmpTmp = 0xff;
 	int8_t tmpTabType = 0;
 	double tmpTabPosition = 0.0;
-	WPXTabStop tmpTabStop = WPXTabStop();
+	RVNGTabStop tmpTabStop = RVNGTabStop();
 
 	switch (getSubGroup())
 	{
 	case WP3_PAGE_FORMAT_GROUP_HORIZONTAL_MARGINS:
 		// skip 8 bytes (old values of no interest for us)
-		input->seek(8, WPX_SEEK_CUR);
+		input->seek(8, RVNG_SEEK_CUR);
 		m_leftMargin = readU32(input, encryption, true);
 		m_rightMargin = readU32(input, encryption, true);
-		WPD_DEBUG_MSG(("WordPerfect: Page format group horizontal margins\n"));
+		RVNG_DEBUG_MSG(("WordPerfect: Page format group horizontal margins\n"));
 		break;
 
 	case WP3_PAGE_FORMAT_GROUP_LINE_SPACING:
 		// skip 4 bytes (old spacing of no interest for us)
-		input->seek(4, WPX_SEEK_CUR);
+		input->seek(4, RVNG_SEEK_CUR);
 		{
 			uint32_t lineSpacing = readU32(input, encryption, true);
 			int16_t lineSpacingIntegerPart = (int16_t)((lineSpacing & 0xFFFF0000) >> 16);
 			double lineSpacingFractionalPart = (double)((double)(lineSpacing & 0xFFFF)/(double)0xFFFF);
-			WPD_DEBUG_MSG(("WordPerfect: Page format group line spacing - integer part: %i fractional part: %f (original value: %i)\n",
+			RVNG_DEBUG_MSG(("WordPerfect: Page format group line spacing - integer part: %i fractional part: %f (original value: %i)\n",
 			               lineSpacingIntegerPart, lineSpacingFractionalPart, lineSpacing));
 			m_lineSpacing = lineSpacingIntegerPart + lineSpacingFractionalPart;
 		}
@@ -89,7 +89,7 @@ void WP3PageFormatGroup::_readContents(WPXInputStream *input, WPXEncryption *enc
 		if (0xFF != readU8(input, encryption))
 		{
 			while (readU8(input, encryption) != 0xFF)
-				input->seek(4, WPX_SEEK_CUR);
+				input->seek(4, RVNG_SEEK_CUR);
 		}
 
 		m_isRelative = (readU8(input, encryption) & 0x01);
@@ -170,27 +170,27 @@ void WP3PageFormatGroup::_readContents(WPXInputStream *input, WPXEncryption *enc
 
 	case WP3_PAGE_FORMAT_GROUP_VERTICAL_MARGINS:
 		// skip 8 bytes (old values of no interest for us)
-		input->seek(8, WPX_SEEK_CUR);
+		input->seek(8, RVNG_SEEK_CUR);
 		m_topMargin = readU32(input, encryption, true);
 		m_bottomMargin = readU32(input, encryption, true);
-		WPD_DEBUG_MSG(("WordPerfect: Page format group vertical margins\n"));
+		RVNG_DEBUG_MSG(("WordPerfect: Page format group vertical margins\n"));
 		break;
 
 	case WP3_PAGE_FORMAT_GROUP_JUSTIFICATION_MODE:
 		// skip 1 byte (old justifcation value of no interest for us)
-		input->seek(1, WPX_SEEK_CUR);
+		input->seek(1, RVNG_SEEK_CUR);
 		m_justification = readU8(input, encryption);
 		break;
 
 	case WP3_PAGE_FORMAT_GROUP_SUPPRESS_PAGE:
 		// skip 2 bytes (old suppress code)
-		input->seek(2, WPX_SEEK_CUR);
+		input->seek(2, RVNG_SEEK_CUR);
 		m_suppressCode = readU16(input, encryption, true);
 		break;
 
 	case WP3_PAGE_FORMAT_GROUP_INDENT_AT_BEGINNING_OF_PARAGRAPH:
 		// skip 4 bytes (old indent indent value of no interest for us)
-		input->seek(4, WPX_SEEK_CUR);
+		input->seek(4, RVNG_SEEK_CUR);
 		m_indent = readU32(input, encryption, true);
 		break;
 
@@ -201,10 +201,10 @@ void WP3PageFormatGroup::_readContents(WPXInputStream *input, WPXEncryption *enc
 
 void WP3PageFormatGroup::parse(WP3Listener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling a Page Format group\n"));
+	RVNG_DEBUG_MSG(("WordPerfect: handling a Page Format group\n"));
 
 #ifdef DEBUG
-	std::vector<WPXTabStop>::const_iterator tabStopsIter;
+	std::vector<RVNGTabStop>::const_iterator tabStopsIter;
 #endif
 
 	switch (getSubGroup())
@@ -212,40 +212,40 @@ void WP3PageFormatGroup::parse(WP3Listener *listener)
 	case WP3_PAGE_FORMAT_GROUP_HORIZONTAL_MARGINS:
 		if (m_leftMargin != 0x80000000)
 		{
-			listener->marginChange(WPX_LEFT, fixedPointToWPUs(m_leftMargin));
-			WPD_DEBUG_MSG(("WordPerfect: Page format group left margin - WPUs: %i (original value: %i)\n",
+			listener->marginChange(RVNG_LEFT, fixedPointToWPUs(m_leftMargin));
+			RVNG_DEBUG_MSG(("WordPerfect: Page format group left margin - WPUs: %i (original value: %i)\n",
 			               fixedPointToWPUs(m_leftMargin), m_leftMargin));
 		}
 		if (m_rightMargin != 0x8000000)
 		{
-			listener->marginChange(WPX_RIGHT, fixedPointToWPUs(m_rightMargin));
-			WPD_DEBUG_MSG(("WordPerfect: Page format group right margin - integer part: WPUs: %i (original value: %i)\n",
+			listener->marginChange(RVNG_RIGHT, fixedPointToWPUs(m_rightMargin));
+			RVNG_DEBUG_MSG(("WordPerfect: Page format group right margin - integer part: WPUs: %i (original value: %i)\n",
 			               fixedPointToWPUs(m_rightMargin), m_rightMargin));
 		}
 		break;
 
 	case WP3_PAGE_FORMAT_GROUP_LINE_SPACING:
-		WPD_DEBUG_MSG(("WordPerfect: parsing a line spacing change of: %f\n", m_lineSpacing));
+		RVNG_DEBUG_MSG(("WordPerfect: parsing a line spacing change of: %f\n", m_lineSpacing));
 		listener->lineSpacingChange(m_lineSpacing);
 		break;
 
 	case WP3_PAGE_FORMAT_GROUP_SET_TABS:
 #ifdef DEBUG
-		WPD_DEBUG_MSG(("Parsing Set Tabs Group (positions: "));
+		RVNG_DEBUG_MSG(("Parsing Set Tabs Group (positions: "));
 		for(tabStopsIter = m_tabStops.begin(); tabStopsIter != m_tabStops.end(); ++tabStopsIter)
 		{
-			WPD_DEBUG_MSG((" %.4f", (*tabStopsIter).m_position));
+			RVNG_DEBUG_MSG((" %.4f", (*tabStopsIter).m_position));
 		}
-		WPD_DEBUG_MSG((")\n"));
+		RVNG_DEBUG_MSG((")\n"));
 #endif
 		listener->setTabs(m_isRelative, m_tabStops);
 		break;
 
 	case WP3_PAGE_FORMAT_GROUP_VERTICAL_MARGINS:
 		if (m_topMargin != 0x80000000)
-			listener->pageMarginChange(WPX_TOP, fixedPointToWPUs(m_topMargin));
+			listener->pageMarginChange(RVNG_TOP, fixedPointToWPUs(m_topMargin));
 		if (m_bottomMargin != 0x80000000)
-			listener->pageMarginChange(WPX_BOTTOM, fixedPointToWPUs(m_bottomMargin));
+			listener->pageMarginChange(RVNG_BOTTOM, fixedPointToWPUs(m_bottomMargin));
 		break;
 
 	case WP3_PAGE_FORMAT_GROUP_JUSTIFICATION_MODE:

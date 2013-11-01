@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -28,9 +28,9 @@
 #include "WP6PageGroup.h"
 #include "WP6FileStructure.h"
 #include "WP6Listener.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
-WP6PageGroup::WP6PageGroup(WPXInputStream *input, WPXEncryption *encryption) :
+WP6PageGroup::WP6PageGroup(RVNGInputStream *input, RVNGEncryption *encryption) :
 	WP6VariableLengthGroup(),
 	m_margin(0),
 	m_suppressedCode(0),
@@ -58,7 +58,7 @@ WP6PageGroup::~WP6PageGroup()
 {
 }
 
-void WP6PageGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP6PageGroup::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	// this group can contain different kinds of data, thus we need to read
 	// the contents accordingly
@@ -67,11 +67,11 @@ void WP6PageGroup::_readContents(WPXInputStream *input, WPXEncryption *encryptio
 	case WP6_PAGE_GROUP_TOP_MARGIN_SET:
 	case WP6_PAGE_GROUP_BOTTOM_MARGIN_SET:
 		m_margin = readU16(input, encryption);
-		WPD_DEBUG_MSG(("WordPerfect: Read page group margin size (margin: %i)\n", m_margin));
+		RVNG_DEBUG_MSG(("WordPerfect: Read page group margin size (margin: %i)\n", m_margin));
 		break;
 	case WP6_PAGE_GROUP_SUPPRESS_PAGE_CHARACTERISTICS:
 		m_suppressedCode = readU8(input, encryption);
-		WPD_DEBUG_MSG(("WordPerfect: Read suppressed code (%i)\n", m_suppressedCode));
+		RVNG_DEBUG_MSG(("WordPerfect: Read suppressed code (%i)\n", m_suppressedCode));
 		break;
 	case WP6_PAGE_GROUP_PAGE_NUMBER_POSITION:
 		m_pageNumberTypefaceDesc = readU16(input, encryption);
@@ -93,7 +93,7 @@ void WP6PageGroup::_readContents(WPXInputStream *input, WPXEncryption *encryptio
 	case WP6_PAGE_GROUP_FORM:
 		uint8_t tmpOrientation;
 		// skip Hash values that we do not use (2+1 bytes)
-		input->seek(3, WPX_SEEK_CUR);
+		input->seek(3, RVNG_SEEK_CUR);
 		m_formLength = readU16(input, encryption);
 		m_formWidth = readU16(input, encryption);
 		m_formType = readU8(input, encryption);
@@ -110,7 +110,7 @@ void WP6PageGroup::_readContents(WPXInputStream *input, WPXEncryption *encryptio
 			m_formOrientation = PORTRAIT;
 			break;
 		}
-		WPD_DEBUG_MSG(("WordPerfect: Read form information (length: %i), (width: %i), (form orientation: %s),\n",
+		RVNG_DEBUG_MSG(("WordPerfect: Read form information (length: %i), (width: %i), (form orientation: %s),\n",
 		               m_formLength, m_formWidth, ((m_formOrientation==PORTRAIT)?"portrait":"landscape")));
 		break;
 	default: /* something else we don't support, since it isn't in the docs */
@@ -120,21 +120,21 @@ void WP6PageGroup::_readContents(WPXInputStream *input, WPXEncryption *encryptio
 
 void WP6PageGroup::parse(WP6Listener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling a Page group\n"));
+	RVNG_DEBUG_MSG(("WordPerfect: handling a Page group\n"));
 
 	switch (getSubGroup())
 	{
 	case WP6_PAGE_GROUP_PAGE_NUMBER_POSITION:
 		if (m_pageNumberUseFlag == 0 || !getNumPrefixIDs())
-			listener->pageNumberingChange((WPXPageNumberPosition)m_pageNumberPosition, 0, 0);
+			listener->pageNumberingChange((RVNGPageNumberPosition)m_pageNumberPosition, 0, 0);
 		else
-			listener->pageNumberingChange((WPXPageNumberPosition)m_pageNumberPosition, m_pageNumberMatchedFontPointSize, getPrefixIDs()[0]);
+			listener->pageNumberingChange((RVNGPageNumberPosition)m_pageNumberPosition, m_pageNumberMatchedFontPointSize, getPrefixIDs()[0]);
 		break;
 	case WP6_PAGE_GROUP_TOP_MARGIN_SET:
-		listener->pageMarginChange(WPX_TOP, m_margin);
+		listener->pageMarginChange(RVNG_TOP, m_margin);
 		break;
 	case WP6_PAGE_GROUP_BOTTOM_MARGIN_SET:
-		listener->pageMarginChange(WPX_BOTTOM, m_margin);
+		listener->pageMarginChange(RVNG_BOTTOM, m_margin);
 		break;
 	case WP6_PAGE_GROUP_SUPPRESS_PAGE_CHARACTERISTICS:
 		listener->suppressPageCharacteristics(m_suppressedCode);

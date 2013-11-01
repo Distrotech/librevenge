@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -19,7 +19,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -54,7 +54,7 @@ HtmlDocumentGenerator::~HtmlDocumentGenerator()
 {
 }
 
-void HtmlDocumentGenerator::setDocumentMetaData(const WPXPropertyList &propList)
+void HtmlDocumentGenerator::setDocumentMetaData(const RVNGPropertyList &propList)
 {
 	if (propList["meta:initial-creator"])
 		*m_pOutputStream << "<meta name=\"author\" content=\"" << propList["meta:initial-creator"]->getStr().cstr() << "\">" << std::endl;
@@ -70,13 +70,13 @@ void HtmlDocumentGenerator::setDocumentMetaData(const WPXPropertyList &propList)
 		*m_pOutputStream << "<meta name=\"language\" content=\"" << propList["dc:language"]->getStr().cstr() << "\">" << std::endl;
 	if (propList["dc:description"])
 		*m_pOutputStream << "<meta name=\"abstract\" content=\"" << propList["dc:description"]->getStr().cstr() << "\">" << std::endl;
-	if (propList["libwpd:descriptive-name"])
+	if (propList["librevenge:descriptive-name"])
 	{
-		*m_pOutputStream << "<meta name=\"descriptive-name\" content=\"" << propList["libwpd:descriptive-name"]->getStr().cstr() << "\">" << std::endl;
-		*m_pOutputStream << "<title>" << propList["libwpd:descriptive-name"]->getStr().cstr() << "</title>" << std::endl;
+		*m_pOutputStream << "<meta name=\"descriptive-name\" content=\"" << propList["librevenge:descriptive-name"]->getStr().cstr() << "\">" << std::endl;
+		*m_pOutputStream << "<title>" << propList["librevenge:descriptive-name"]->getStr().cstr() << "</title>" << std::endl;
 	}
-	if (propList["libwpd:descriptive-type"])
-		*m_pOutputStream << "<meta name=\"descriptive-type\" content=\"" << propList["libwpd:descriptive-type"]->getStr().cstr() << "\">" << std::endl;
+	if (propList["librevenge:descriptive-type"])
+		*m_pOutputStream << "<meta name=\"descriptive-type\" content=\"" << propList["librevenge:descriptive-type"]->getStr().cstr() << "\">" << std::endl;
 }
 
 void HtmlDocumentGenerator::startDocument()
@@ -115,7 +115,7 @@ void HtmlDocumentGenerator::endDocument()
 	*m_pOutputStream << "</html>" << std::endl;
 }
 
-void HtmlDocumentGenerator::openHeader(const WPXPropertyList & /* propList */)
+void HtmlDocumentGenerator::openHeader(const RVNGPropertyList & /* propList */)
 {
 	m_ignore = true;
 }
@@ -126,7 +126,7 @@ void HtmlDocumentGenerator::closeHeader()
 }
 
 
-void HtmlDocumentGenerator::openFooter(const WPXPropertyList & /* propList */)
+void HtmlDocumentGenerator::openFooter(const RVNGPropertyList & /* propList */)
 {
 	m_ignore = true;
 }
@@ -136,7 +136,7 @@ void HtmlDocumentGenerator::closeFooter()
 	m_ignore = false;
 }
 
-void HtmlDocumentGenerator::openParagraph(const WPXPropertyList &propList, const WPXPropertyListVector & /* tabStops */)
+void HtmlDocumentGenerator::openParagraph(const RVNGPropertyList &propList, const RVNGPropertyListVector & /* tabStops */)
 {
 	if (!m_ignore)
 	{
@@ -145,7 +145,7 @@ void HtmlDocumentGenerator::openParagraph(const WPXPropertyList &propList, const
 		if (propList["fo:text-align"])
 		{
 
-			if (propList["fo:text-align"]->getStr() == WPXString("end")) // stupid OOo convention..
+			if (propList["fo:text-align"]->getStr() == RVNGString("end")) // stupid OOo convention..
 				*m_pOutputStream << "text-align:right;";
 			else
 				*m_pOutputStream << "text-align:" << propList["fo:text-align"]->getStr().cstr() << ";";
@@ -167,7 +167,7 @@ void HtmlDocumentGenerator::closeParagraph()
 	}
 }
 
-void HtmlDocumentGenerator::openSpan(const WPXPropertyList &propList)
+void HtmlDocumentGenerator::openSpan(const RVNGPropertyList &propList)
 {
 	if (!m_ignore)
 	{
@@ -181,7 +181,7 @@ void HtmlDocumentGenerator::openSpan(const WPXPropertyList &propList)
 			*m_pOutputStream << "font-weight: " << propList["fo:font-weight"]->getStr().cstr() << ";";
 		if (propList["fo:font-style"])
 			*m_pOutputStream << "font-style: " << propList["fo:font-style"]->getStr().cstr() << ";";
-		if (propList["style:text-crossing-out"] && propList["style:text-crossing-out"]->getStr() == WPXString("single-line"))
+		if (propList["style:text-crossing-out"] && propList["style:text-crossing-out"]->getStr() == RVNGString("single-line"))
 			*m_pOutputStream << "text-decoration:line-through;";
 		if (propList["style:text-underline"]) // don't know if double underline is possible
 			*m_pOutputStream << "text-decoration:underline;";
@@ -222,12 +222,12 @@ void HtmlDocumentGenerator::insertLineBreak()
 	}
 }
 
-void HtmlDocumentGenerator::insertText(const WPXString &text)
+void HtmlDocumentGenerator::insertText(const RVNGString &text)
 {
 	if (!m_ignore)
 	{
 
-		WPXString tempUTF8(text, true);
+		RVNGString tempUTF8(text, true);
 		*m_pOutputStream << tempUTF8.cstr();
 	}
 }
@@ -240,7 +240,7 @@ void HtmlDocumentGenerator::insertSpace()
 	}
 }
 
-void HtmlDocumentGenerator::openOrderedListLevel(const WPXPropertyList & /* propList */)
+void HtmlDocumentGenerator::openOrderedListLevel(const RVNGPropertyList & /* propList */)
 {
 	if (!m_ignore)
 	{
@@ -256,7 +256,7 @@ void HtmlDocumentGenerator::closeOrderedListLevel()
 	}
 }
 
-void HtmlDocumentGenerator::openUnorderedListLevel(const WPXPropertyList & /* propList */)
+void HtmlDocumentGenerator::openUnorderedListLevel(const RVNGPropertyList & /* propList */)
 {
 	if (!m_ignore)
 	{
@@ -273,7 +273,7 @@ void HtmlDocumentGenerator::closeUnorderedListLevel()
 }
 
 
-void HtmlDocumentGenerator::openListElement(const WPXPropertyList & /* propList */, const WPXPropertyListVector &/* tabStops */)
+void HtmlDocumentGenerator::openListElement(const RVNGPropertyList & /* propList */, const RVNGPropertyListVector &/* tabStops */)
 {
 	if (!m_ignore)
 	{
@@ -289,18 +289,18 @@ void HtmlDocumentGenerator::closeListElement()
 	}
 }
 
-void HtmlDocumentGenerator::openFootnote(const WPXPropertyList &propList)
+void HtmlDocumentGenerator::openFootnote(const RVNGPropertyList &propList)
 {
 	if (!m_ignore)
 	{
 		if (!m_footNotesCount++)
 		{
-			if (propList["libwpd:number"])
-				*m_pOutputStream << "<sup>(footnote: " << propList["libwpd:number"]->getStr().cstr() << ")</sup>";
+			if (propList["librevenge:number"])
+				*m_pOutputStream << "<sup>(footnote: " << propList["librevenge:number"]->getStr().cstr() << ")</sup>";
 			m_pOutputStream = &m_footNotesStream;
 			// Cheesey hack..
-			if (propList["libwpd:number"])
-				*m_pOutputStream << "<p>" << propList["libwpd:number"]->getStr().cstr() << ":</p>";
+			if (propList["librevenge:number"])
+				*m_pOutputStream << "<p>" << propList["librevenge:number"]->getStr().cstr() << ":</p>";
 			else
 				*m_pOutputStream << "<p/>";
 		}
@@ -321,18 +321,18 @@ void HtmlDocumentGenerator::closeFootnote()
 	}
 }
 
-void HtmlDocumentGenerator::openEndnote(const WPXPropertyList &propList)
+void HtmlDocumentGenerator::openEndnote(const RVNGPropertyList &propList)
 {
 	if (!m_ignore)
 	{
 		if (!m_endNotesCount++)
 		{
-			if (propList["libwpd:number"])
-				*m_pOutputStream << "<sup>(endnote: " << propList["libwpd:number"]->getStr().cstr() << ")</sup>";
+			if (propList["librevenge:number"])
+				*m_pOutputStream << "<sup>(endnote: " << propList["librevenge:number"]->getStr().cstr() << ")</sup>";
 			m_pOutputStream = &m_footNotesStream;
 			// Cheesey hack..
-			if (propList["libwpd:number"])
-				*m_pOutputStream << "<p>" << propList["libwpd:number"]->getStr().cstr() << ":</p>";
+			if (propList["librevenge:number"])
+				*m_pOutputStream << "<p>" << propList["librevenge:number"]->getStr().cstr() << ":</p>";
 			else
 				*m_pOutputStream << "<p/>";
 		}
@@ -353,7 +353,7 @@ void HtmlDocumentGenerator::closeEndnote()
 	}
 }
 
-void HtmlDocumentGenerator::openComment(const WPXPropertyList & /*propList*/)
+void HtmlDocumentGenerator::openComment(const RVNGPropertyList & /*propList*/)
 {
 	if (!m_ignore)
 	{
@@ -381,7 +381,7 @@ void HtmlDocumentGenerator::closeComment()
 	}
 }
 
-void HtmlDocumentGenerator::openTextBox(const WPXPropertyList & /*propList*/)
+void HtmlDocumentGenerator::openTextBox(const RVNGPropertyList & /*propList*/)
 {
 	if (!m_ignore)
 	{
@@ -410,7 +410,7 @@ void HtmlDocumentGenerator::closeTextBox()
 	}
 }
 
-void HtmlDocumentGenerator::openTable(const WPXPropertyList & /* propList */, const WPXPropertyListVector & /* columns */)
+void HtmlDocumentGenerator::openTable(const RVNGPropertyList & /* propList */, const RVNGPropertyListVector & /* columns */)
 {
 	if (!m_ignore)
 	{
@@ -419,7 +419,7 @@ void HtmlDocumentGenerator::openTable(const WPXPropertyList & /* propList */, co
 	}
 }
 
-void HtmlDocumentGenerator::openTableRow(const WPXPropertyList & /* propList */)
+void HtmlDocumentGenerator::openTableRow(const RVNGPropertyList & /* propList */)
 {
 	if (!m_ignore)
 	{
@@ -435,7 +435,7 @@ void HtmlDocumentGenerator::closeTableRow()
 	}
 }
 
-void HtmlDocumentGenerator::openTableCell(const WPXPropertyList &propList)
+void HtmlDocumentGenerator::openTableCell(const RVNGPropertyList &propList)
 {
 	if (!m_ignore)
 	{

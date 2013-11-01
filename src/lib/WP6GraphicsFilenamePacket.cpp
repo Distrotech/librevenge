@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -27,9 +27,9 @@
 
 #include "WP6GraphicsFilenamePacket.h"
 #include "WP6Parser.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
-WP6GraphicsFilenamePacket::WP6GraphicsFilenamePacket(WPXInputStream *input, WPXEncryption *encryption, int /* id */, const uint8_t flags, uint32_t dataOffset, uint32_t dataSize):
+WP6GraphicsFilenamePacket::WP6GraphicsFilenamePacket(RVNGInputStream *input, RVNGEncryption *encryption, int /* id */, const uint8_t flags, uint32_t dataOffset, uint32_t dataSize):
 	WP6PrefixDataPacket(input, encryption),
 	m_childIds(),
 	m_flags(flags)
@@ -41,7 +41,7 @@ WP6GraphicsFilenamePacket::~WP6GraphicsFilenamePacket()
 {
 }
 
-void WP6GraphicsFilenamePacket::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP6GraphicsFilenamePacket::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	if ((m_flags & 0x01) == 0x00)
 		return;

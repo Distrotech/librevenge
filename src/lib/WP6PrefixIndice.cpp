@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -26,9 +26,9 @@
 
 #include "WP6PrefixIndice.h"
 #include "WP6FileStructure.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
-WP6PrefixIndice::WP6PrefixIndice(WPXInputStream *input, WPXEncryption *encryption, int id)
+WP6PrefixIndice::WP6PrefixIndice(RVNGInputStream *input, RVNGEncryption *encryption, int id)
 	: m_id(id),
 	  m_type(0),
 	  m_flags(0),
@@ -41,7 +41,7 @@ WP6PrefixIndice::WP6PrefixIndice(WPXInputStream *input, WPXEncryption *encryptio
 	_read(input, encryption);
 }
 
-void WP6PrefixIndice::_read(WPXInputStream *input, WPXEncryption *encryption)
+void WP6PrefixIndice::_read(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	m_flags = readU8(input, encryption);
 	m_type = readU8(input, encryption);
@@ -51,7 +51,7 @@ void WP6PrefixIndice::_read(WPXInputStream *input, WPXEncryption *encryption)
 	m_dataSize = readU32(input, encryption);
 	m_dataOffset = readU32(input, encryption);
 
-	WPD_DEBUG_MSG(("Prefix Packet (type: %i, data size: %i, data offset: %i)\n", m_type, m_dataSize, m_dataOffset));
+	RVNG_DEBUG_MSG(("Prefix Packet (type: %i, data size: %i, data offset: %i)\n", m_type, m_dataSize, m_dataOffset));
 
 	if (m_flags & WP6_INDEX_HEADER_ELEMENT_CHILD_PACKET_BIT)
 		m_hasChildren = true;

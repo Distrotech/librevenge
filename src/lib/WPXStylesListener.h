@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,26 +16,26 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WPXSTYLESLISTENER_H
-#define WPXSTYLESLISTENER_H
+#ifndef RVNGSTYLESLISTENER_H
+#define RVNGSTYLESLISTENER_H
 
-#include "WPXPageSpan.h"
-#include "WPXListener.h"
+#include "RVNGPageSpan.h"
+#include "RVNGListener.h"
 #include <list>
 
-class WPXStylesListener : protected WPXListener
+class RVNGStylesListener : protected RVNGListener
 {
 protected:
-	WPXStylesListener(std::list<WPXPageSpan> &pageList);
-	virtual ~WPXStylesListener();
+	RVNGStylesListener(std::list<RVNGPageSpan> &pageList);
+	virtual ~RVNGStylesListener();
 };
 
-#endif /* WPXSTYLESLISTENER_H */
+#endif /* RVNGSTYLESLISTENER_H */
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

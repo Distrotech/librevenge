@@ -13,8 +13,8 @@ configure
 depcomp
 install-sh
 libtool
-libwpd.spec
-libwpd-zip
+librevenge.spec
+librevenge-zip
 ltmain.sh
 m4
 missing

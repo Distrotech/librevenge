@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,43 +16,43 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WPXBINARYDATA_H
-#define WPXBINARYDATA_H
+#ifndef RVNGBINARYDATA_H
+#define RVNGBINARYDATA_H
 
-#include "WPXString.h"
+#include "RVNGString.h"
 
-class WPXInputStream;
-class WPXBinaryDataImpl;
+class RVNGInputStream;
+class RVNGBinaryDataImpl;
 
-class WPXBinaryData
+class RVNGBinaryData
 {
 public:
-	WPXBinaryData();
-	WPXBinaryData(const WPXBinaryData &);
-	WPXBinaryData(const unsigned char *buffer, const unsigned long bufferSize);
-	~WPXBinaryData();
+	RVNGBinaryData();
+	RVNGBinaryData(const RVNGBinaryData &);
+	RVNGBinaryData(const unsigned char *buffer, const unsigned long bufferSize);
+	~RVNGBinaryData();
 
-	void append(const WPXBinaryData &data);
+	void append(const RVNGBinaryData &data);
 	void append(const unsigned char *buffer, const unsigned long bufferSize);
 	void append(const unsigned char c);
 	void clear();
 
 	unsigned long size() const;
 	const unsigned char *getDataBuffer() const;
-	const WPXString getBase64Data() const;
-	const WPXInputStream *getDataStream() const;
+	const RVNGString getBase64Data() const;
+	const RVNGInputStream *getDataStream() const;
 
-	WPXBinaryData &operator=(const WPXBinaryData &);
+	RVNGBinaryData &operator=(const RVNGBinaryData &);
 
 private:
-	WPXBinaryDataImpl *m_binaryDataImpl;
+	RVNGBinaryDataImpl *m_binaryDataImpl;
 };
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

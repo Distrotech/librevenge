@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,30 +17,30 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WPXMemoryStream.h"
-#include "libwpd_internal.h"
+#include "RVNGMemoryStream.h"
+#include "librevenge_internal.h"
 
 
-WPXMemoryInputStream::WPXMemoryInputStream(unsigned char *data, unsigned long size) :
-	WPXInputStream(),
+RVNGMemoryInputStream::RVNGMemoryInputStream(unsigned char *data, unsigned long size) :
+	RVNGInputStream(),
 	m_offset(0),
 	m_size(size),
 	m_data(data)
 {
 }
 
-WPXMemoryInputStream::~WPXMemoryInputStream()
+RVNGMemoryInputStream::~RVNGMemoryInputStream()
 {
 }
 
-const unsigned char *WPXMemoryInputStream::read(unsigned long numBytes, unsigned long &numBytesRead)
+const unsigned char *RVNGMemoryInputStream::read(unsigned long numBytes, unsigned long &numBytesRead)
 {
 	numBytesRead = 0;
 
@@ -65,13 +65,13 @@ const unsigned char *WPXMemoryInputStream::read(unsigned long numBytes, unsigned
 	return &m_data[oldOffset];
 }
 
-int WPXMemoryInputStream::seek(long offset, WPX_SEEK_TYPE seekType)
+int RVNGMemoryInputStream::seek(long offset, RVNG_SEEK_TYPE seekType)
 {
-	if (seekType == WPX_SEEK_CUR)
+	if (seekType == RVNG_SEEK_CUR)
 		m_offset += offset;
-	else if (seekType == WPX_SEEK_SET)
+	else if (seekType == RVNG_SEEK_SET)
 		m_offset = offset;
-	else if (seekType == WPX_SEEK_END)
+	else if (seekType == RVNG_SEEK_END)
 		m_offset = m_size+offset;
 
 	if (m_offset < 0)
@@ -88,12 +88,12 @@ int WPXMemoryInputStream::seek(long offset, WPX_SEEK_TYPE seekType)
 	return 0;
 }
 
-long WPXMemoryInputStream::tell()
+long RVNGMemoryInputStream::tell()
 {
 	return m_offset;
 }
 
-bool WPXMemoryInputStream::atEOS()
+bool RVNGMemoryInputStream::atEOS()
 {
 	if ((long)m_offset == (long)m_size)
 		return true;

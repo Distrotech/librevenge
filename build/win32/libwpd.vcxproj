@@ -47,7 +47,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <PrecompiledHeaderOutputFile>.\Debug/libwpd.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeaderOutputFile>.\Debug/librevenge.pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
       <ObjectFileName>.\Debug/</ObjectFileName>
       <ProgramDataBaseFileName>.\Debug/</ProgramDataBaseFileName>
@@ -61,12 +61,12 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Lib>
-      <OutputFile>Debug\lib\libwpd-0.9.lib</OutputFile>
+      <OutputFile>Debug\lib\librevenge-0.9.lib</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\Debug/libwpd.bsc</OutputFile>
+      <OutputFile>.\Debug/librevenge.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -79,7 +79,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <PrecompiledHeaderOutputFile>.\Release/libwpd.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeaderOutputFile>.\Release/librevenge.pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>.\Release/</AssemblerListingLocation>
       <ObjectFileName>.\Release/</ObjectFileName>
       <ProgramDataBaseFileName>.\Release/</ProgramDataBaseFileName>
@@ -92,20 +92,20 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Lib>
-      <OutputFile>Release\lib\libwpd-0.9.lib</OutputFile>
+      <OutputFile>Release\lib\librevenge-0.9.lib</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\Release/libwpd.bsc</OutputFile>
+      <OutputFile>.\Release/librevenge.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\lib\libwpd_internal.cpp">
+    <ClCompile Include="..\..\src\lib\librevenge_internal.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="..\..\src\lib\libwpd_math.cpp">
+    <ClCompile Include="..\..\src\lib\librevenge_math.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -725,83 +725,83 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="..\..\src\lib\WPDocument.cpp">
+    <ClCompile Include="..\..\src\lib\RVNGocument.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="..\..\src\lib\WPXBinaryData.cpp">
+    <ClCompile Include="..\..\src\lib\RVNGBinaryData.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="..\..\src\lib\WPXContentListener.cpp">
+    <ClCompile Include="..\..\src\lib\RVNGContentListener.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="..\..\src\lib\WPXEncryption.cpp">
+    <ClCompile Include="..\..\src\lib\RVNGEncryption.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="..\..\src\lib\WPXHeader.cpp">
+    <ClCompile Include="..\..\src\lib\RVNGHeader.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="..\..\src\lib\WPXListener.cpp">
+    <ClCompile Include="..\..\src\lib\RVNGListener.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="..\..\src\lib\WPXMemoryStream.cpp">
+    <ClCompile Include="..\..\src\lib\RVNGMemoryStream.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="..\..\src\lib\WPXPageSpan.cpp">
+    <ClCompile Include="..\..\src\lib\RVNGPageSpan.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="..\..\src\lib\WPXParser.cpp">
+    <ClCompile Include="..\..\src\lib\RVNGParser.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="..\..\src\lib\WPXProperty.cpp">
+    <ClCompile Include="..\..\src\lib\RVNGProperty.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="..\..\src\lib\WPXPropertyList.cpp">
+    <ClCompile Include="..\..\src\lib\RVNGPropertyList.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="..\..\src\lib\WPXPropertyListVector.cpp">
+    <ClCompile Include="..\..\src\lib\RVNGPropertyListVector.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="..\..\src\lib\WPXString.cpp">
+    <ClCompile Include="..\..\src\lib\RVNGString.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="..\..\src\lib\WPXStylesListener.cpp">
+    <ClCompile Include="..\..\src\lib\RVNGStylesListener.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="..\..\src\lib\WPXSubDocument.cpp">
+    <ClCompile Include="..\..\src\lib\RVNGSubDocument.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="..\..\src\lib\WPXTable.cpp">
+    <ClCompile Include="..\..\src\lib\RVNGTable.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\inc\libwpd\libwpd.h" />
-    <ClInclude Include="..\..\inc\libwpd\WPDocument.h" />
-    <ClInclude Include="..\..\inc\libwpd\WPXBinaryData.h" />
-    <ClInclude Include="..\..\inc\libwpd\WPXDocumentInterface.h" />
-    <ClInclude Include="..\..\inc\libwpd\WPXProperty.h" />
-    <ClInclude Include="..\..\inc\libwpd\WPXPropertyList.h" />
-    <ClInclude Include="..\..\inc\libwpd\WPXPropertyListVector.h" />
-    <ClInclude Include="..\..\inc\libwpd\WPXString.h" />
-    <ClInclude Include="..\..\src\lib\libwpd_internal.h" />
-    <ClInclude Include="..\..\src\lib\libwpd_math.h" />
-    <ClInclude Include="..\..\src\lib\libwpd_types.h" />
+    <ClInclude Include="..\..\inc\librevenge\librevenge.h" />
+    <ClInclude Include="..\..\inc\librevenge\RVNGocument.h" />
+    <ClInclude Include="..\..\inc\librevenge\RVNGBinaryData.h" />
+    <ClInclude Include="..\..\inc\librevenge\RVNGDocumentInterface.h" />
+    <ClInclude Include="..\..\inc\librevenge\RVNGProperty.h" />
+    <ClInclude Include="..\..\inc\librevenge\RVNGPropertyList.h" />
+    <ClInclude Include="..\..\inc\librevenge\RVNGPropertyListVector.h" />
+    <ClInclude Include="..\..\inc\librevenge\RVNGString.h" />
+    <ClInclude Include="..\..\src\lib\librevenge_internal.h" />
+    <ClInclude Include="..\..\src\lib\librevenge_math.h" />
+    <ClInclude Include="..\..\src\lib\librevenge_types.h" />
     <ClInclude Include="..\..\src\lib\WP1BottomMarginGroup.h" />
     <ClInclude Include="..\..\src\lib\WP1CenterTextGroup.h" />
     <ClInclude Include="..\..\src\lib\WP1ContentListener.h" />
@@ -957,17 +957,17 @@
     <ClInclude Include="..\..\src\lib\WP6UnsupportedFixedLengthGroup.h" />
     <ClInclude Include="..\..\src\lib\WP6UnsupportedVariableLengthGroup.h" />
     <ClInclude Include="..\..\src\lib\WP6VariableLengthGroup.h" />
-    <ClInclude Include="..\..\src\lib\WPXContentListener.h" />
-    <ClInclude Include="..\..\src\lib\WPXEncryption.h" />
-    <ClInclude Include="..\..\src\lib\WPXFileStructure.h" />
-    <ClInclude Include="..\..\src\lib\WPXHeader.h" />
-    <ClInclude Include="..\..\src\lib\WPXListener.h" />
-    <ClInclude Include="..\..\src\lib\WPXMemoryStream.h" />
-    <ClInclude Include="..\..\src\lib\WPXPageSpan.h" />
-    <ClInclude Include="..\..\src\lib\WPXParser.h" />
-    <ClInclude Include="..\..\src\lib\WPXStylesListener.h" />
-    <ClInclude Include="..\..\src\lib\WPXSubDocument.h" />
-    <ClInclude Include="..\..\src\lib\WPXTable.h" />
+    <ClInclude Include="..\..\src\lib\RVNGContentListener.h" />
+    <ClInclude Include="..\..\src\lib\RVNGEncryption.h" />
+    <ClInclude Include="..\..\src\lib\RVNGFileStructure.h" />
+    <ClInclude Include="..\..\src\lib\RVNGHeader.h" />
+    <ClInclude Include="..\..\src\lib\RVNGListener.h" />
+    <ClInclude Include="..\..\src\lib\RVNGMemoryStream.h" />
+    <ClInclude Include="..\..\src\lib\RVNGPageSpan.h" />
+    <ClInclude Include="..\..\src\lib\RVNGParser.h" />
+    <ClInclude Include="..\..\src\lib\RVNGStylesListener.h" />
+    <ClInclude Include="..\..\src\lib\RVNGSubDocument.h" />
+    <ClInclude Include="..\..\src\lib\RVNGTable.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

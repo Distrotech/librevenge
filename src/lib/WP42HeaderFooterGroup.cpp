@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -24,10 +24,10 @@
  */
 
 #include "WP42HeaderFooterGroup.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 #include <vector>
 
-WP42HeaderFooterGroup::WP42HeaderFooterGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group) :
+WP42HeaderFooterGroup::WP42HeaderFooterGroup(RVNGInputStream *input, RVNGEncryption *encryption, uint8_t group) :
 	WP42MultiByteFunctionGroup(group),
 	m_definition(0),
 	m_subDocument(0)
@@ -39,28 +39,28 @@ WP42HeaderFooterGroup::~WP42HeaderFooterGroup()
 {
 }
 
-void WP42HeaderFooterGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP42HeaderFooterGroup::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
-	input->seek(4, WPX_SEEK_CUR);
+	input->seek(4, RVNG_SEEK_CUR);
 	long tmpStartPosition = input->tell();
 	while (readU8(input, encryption) != 0xD1)
 	{
 	}
-	input->seek(-3, WPX_SEEK_CUR);
+	input->seek(-3, RVNG_SEEK_CUR);
 	long tmpSubDocumentSize = 0;
 	if (readU8(input, encryption) == 0xFF)
 		tmpSubDocumentSize = input->tell() - tmpStartPosition - 1;
-	WPD_DEBUG_MSG(("WP42SubDocument startPosition = %li; SubDocumentSize = %li\n", tmpStartPosition, tmpSubDocumentSize));
-	input->seek(1, WPX_SEEK_CUR);
+	RVNG_DEBUG_MSG(("WP42SubDocument startPosition = %li; SubDocumentSize = %li\n", tmpStartPosition, tmpSubDocumentSize));
+	input->seek(1, RVNG_SEEK_CUR);
 	m_definition = readU8(input, encryption);
-	input->seek(tmpStartPosition, WPX_SEEK_SET);
+	input->seek(tmpStartPosition, RVNG_SEEK_SET);
 	if (tmpSubDocumentSize > 2)
 		m_subDocument = new WP42SubDocument(input, encryption, (unsigned)tmpSubDocumentSize);
 }
 
 void WP42HeaderFooterGroup::parse(WP42Listener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling a HeaderFooter group\n"));
+	RVNG_DEBUG_MSG(("WordPerfect: handling a HeaderFooter group\n"));
 	listener->headerFooterGroup(m_definition, m_subDocument);
 }
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

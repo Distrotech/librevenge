@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -29,7 +29,7 @@
 #define WP1CONTENTLISTENER_H
 
 #include "WP1Listener.h"
-#include "WPXContentListener.h"
+#include "RVNGContentListener.h"
 
 class WP1SubDocument;
 
@@ -38,7 +38,7 @@ struct _WP1ContentParsingState
 {
 	_WP1ContentParsingState();
 	~_WP1ContentParsingState();
-	WPXString m_textBuffer;
+	RVNGString m_textBuffer;
 	int m_numDeferredTabs;
 	int m_footNoteNumber, m_endNoteNumber;
 private:
@@ -46,29 +46,29 @@ private:
 	_WP1ContentParsingState &operator=(const _WP1ContentParsingState &);
 };
 
-class WP1ContentListener : public WP1Listener, protected WPXContentListener
+class WP1ContentListener : public WP1Listener, protected RVNGContentListener
 {
 public:
-	WP1ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP1SubDocument *> &subDocuments, WPXDocumentInterface *documentInterface);
+	WP1ContentListener(std::list<RVNGPageSpan> &pageList, std::vector<WP1SubDocument *> &subDocuments, RVNGDocumentInterface *documentInterface);
 	~WP1ContentListener();
 
 	void startDocument()
 	{
-		WPXContentListener::startDocument();
+		RVNGContentListener::startDocument();
 	}
 	void startSubDocument()
 	{
-		WPXContentListener::startSubDocument();
+		RVNGContentListener::startSubDocument();
 	}
 	void insertCharacter(uint32_t character);
 	void insertExtendedCharacter(uint8_t extendedCharacter);
 	void insertTab();
 	void insertBreak(uint8_t breakType)
 	{
-		WPXContentListener::insertBreak(breakType);
+		RVNGContentListener::insertBreak(breakType);
 	}
 	void insertEOL();
-	void insertNote(WPXNoteType noteType, WP1SubDocument *subDocument);
+	void insertNote(RVNGNoteType noteType, WP1SubDocument *subDocument);
 	void attributeChange(bool isOn, uint8_t attribute);
 	void fontPointSize(uint8_t pointSize);
 	void fontId(uint16_t id);
@@ -78,13 +78,13 @@ public:
 	void leftIndent(uint16_t leftMarginOffset);
 	void leftRightIndent(uint16_t leftRightMarginOffset);
 	void leftMarginRelease(uint16_t release);
-	void setTabs(const std::vector<WPXTabStop> &tabStops);
+	void setTabs(const std::vector<RVNGTabStop> &tabStops);
 	void headerFooterGroup(uint8_t headerFooterDefinition, WP1SubDocument *subDocument);
 	void suppressPageCharacteristics(uint8_t /* suppressCode */) {}
 	void justificationChange(uint8_t justification);
 	void lineSpacingChange(uint8_t spacing)
 	{
-		WPXContentListener::lineSpacingChange((double)((double)spacing/2.0));
+		RVNGContentListener::lineSpacingChange((double)((double)spacing/2.0));
 	}
 	void flushRightOn();
 	void flushRightOff() {}
@@ -92,17 +92,17 @@ public:
 	void centerOff() {}
 	void endDocument()
 	{
-		WPXContentListener::endDocument();
+		RVNGContentListener::endDocument();
 	}
 	void endSubDocument()
 	{
-		WPXContentListener::endSubDocument();
+		RVNGContentListener::endSubDocument();
 	}
-	void insertPicture(uint16_t width, uint16_t height, const WPXBinaryData &binaryData);
+	void insertPicture(uint16_t width, uint16_t height, const RVNGBinaryData &binaryData);
 
 protected:
-	using WPXContentListener::lineSpacingChange;
-	void _handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList, unsigned nextTableIndice = 0);
+	using RVNGContentListener::lineSpacingChange;
+	void _handleSubDocument(const RVNGSubDocument *subDocument, RVNGSubDocumentType subDocumentType, RVNGTableList tableList, unsigned nextTableIndice = 0);
 
 	void _flushText();
 	void _changeList() {}

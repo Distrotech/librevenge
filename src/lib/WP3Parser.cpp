@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -25,16 +25,16 @@
  */
 
 #include "WP3Parser.h"
-#include "WPXHeader.h"
+#include "RVNGHeader.h"
 #include "WP3Part.h"
 #include "WP3ContentListener.h"
 #include "WP3StylesListener.h"
 #include "WP3ResourceFork.h"
-#include "libwpd_internal.h"
-#include "WPXTable.h"
+#include "librevenge_internal.h"
+#include "RVNGTable.h"
 
-WP3Parser::WP3Parser(WPXInputStream *input, WPXHeader *header, WPXEncryption *encryption) :
-	WPXParser(input, header, encryption)
+WP3Parser::WP3Parser(RVNGInputStream *input, RVNGHeader *header, RVNGEncryption *encryption) :
+	RVNGParser(input, header, encryption)
 {
 }
 
@@ -42,14 +42,14 @@ WP3Parser::~WP3Parser()
 {
 }
 
-WP3ResourceFork *WP3Parser::getResourceFork(WPXInputStream *input, WPXEncryption *encryption)
+WP3ResourceFork *WP3Parser::getResourceFork(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	WP3ResourceFork *resourceFork = 0;
 
 	// Certain WP2 documents actually don't contain resource fork, so check for its existence
 	if (!getHeader() || getHeader()->getDocumentOffset() <= 0x10)
 	{
-		WPD_DEBUG_MSG(("WP3Parser: Document does not contain resource fork\n"));
+		RVNG_DEBUG_MSG(("WP3Parser: Document does not contain resource fork\n"));
 		return 0;
 	}
 
@@ -65,13 +65,13 @@ WP3ResourceFork *WP3Parser::getResourceFork(WPXInputStream *input, WPXEncryption
 	}
 }
 
-void WP3Parser::parse(WPXInputStream *input, WPXEncryption *encryption, WP3Listener *listener)
+void WP3Parser::parse(RVNGInputStream *input, RVNGEncryption *encryption, WP3Listener *listener)
 {
 	listener->startDocument();
 
-	input->seek(getHeader()->getDocumentOffset(), WPX_SEEK_SET);
+	input->seek(getHeader()->getDocumentOffset(), RVNG_SEEK_SET);
 
-	WPD_DEBUG_MSG(("WordPerfect: Starting document body parse (position = %ld)\n",(long)input->tell()));
+	RVNG_DEBUG_MSG(("WordPerfect: Starting document body parse (position = %ld)\n",(long)input->tell()));
 
 	parseDocument(input, encryption, listener);
 
@@ -79,7 +79,7 @@ void WP3Parser::parse(WPXInputStream *input, WPXEncryption *encryption, WP3Liste
 }
 
 // parseDocument: parses a document body (may call itself recursively, on other streams, or itself)
-void WP3Parser::parseDocument(WPXInputStream *input, WPXEncryption *encryption, WP3Listener *listener)
+void WP3Parser::parseDocument(RVNGInputStream *input, RVNGEncryption *encryption, WP3Listener *listener)
 {
 	while (!input->atEOS())
 	{
@@ -111,12 +111,12 @@ void WP3Parser::parseDocument(WPXInputStream *input, WPXEncryption *encryption, 
 	}
 }
 
-void WP3Parser::parse(WPXDocumentInterface *documentInterface)
+void WP3Parser::parse(RVNGDocumentInterface *documentInterface)
 {
-	WPXInputStream *input = getInput();
-	WPXEncryption *encryption = getEncryption();
-	std::list<WPXPageSpan> pageList;
-	WPXTableList tableList;
+	RVNGInputStream *input = getInput();
+	RVNGEncryption *encryption = getEncryption();
+	std::list<RVNGPageSpan> pageList;
+	RVNGTableList tableList;
 	WP3ResourceFork *resourceFork = 0;
 	std::vector<WP3SubDocument *> subDocuments;
 
@@ -131,8 +131,8 @@ void WP3Parser::parse(WPXDocumentInterface *documentInterface)
 		parse(input, encryption, &stylesListener);
 
 		// postprocess the pageList == remove duplicate page spans due to the page breaks
-		std::list<WPXPageSpan>::iterator previousPage = pageList.begin();
-		for (std::list<WPXPageSpan>::iterator Iter=pageList.begin(); Iter != pageList.end(); /* Iter++ */)
+		std::list<RVNGPageSpan>::iterator previousPage = pageList.begin();
+		for (std::list<RVNGPageSpan>::iterator Iter=pageList.begin(); Iter != pageList.end(); /* Iter++ */)
 		{
 			if ((Iter != previousPage) && (*previousPage==*Iter))
 			{
@@ -163,7 +163,7 @@ void WP3Parser::parse(WPXDocumentInterface *documentInterface)
 	}
 	catch(FileException)
 	{
-		WPD_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
+		RVNG_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
 
 		for (std::vector<WP3SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); ++iterSubDoc)
 		{
@@ -177,13 +177,13 @@ void WP3Parser::parse(WPXDocumentInterface *documentInterface)
 	}
 }
 
-void WP3Parser::parseSubDocument(WPXDocumentInterface *documentInterface)
+void WP3Parser::parseSubDocument(RVNGDocumentInterface *documentInterface)
 {
-	std::list<WPXPageSpan> pageList;
-	WPXTableList tableList;
+	std::list<RVNGPageSpan> pageList;
+	RVNGTableList tableList;
 	std::vector<WP3SubDocument *> subDocuments;
 
-	WPXInputStream *input = getInput();
+	RVNGInputStream *input = getInput();
 
 	try
 	{
@@ -192,7 +192,7 @@ void WP3Parser::parseSubDocument(WPXDocumentInterface *documentInterface)
 		parseDocument(input, 0, &stylesListener);
 		stylesListener.endSubDocument();
 
-		input->seek(0, WPX_SEEK_SET);
+		input->seek(0, RVNG_SEEK_SET);
 
 		WP3ContentListener listener(pageList, subDocuments, documentInterface);
 		listener.startSubDocument();
@@ -205,7 +205,7 @@ void WP3Parser::parseSubDocument(WPXDocumentInterface *documentInterface)
 	}
 	catch(FileException)
 	{
-		WPD_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
+		RVNG_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
 		for (std::vector<WP3SubDocument *>::iterator iterSubDoc = subDocuments.begin(); iterSubDoc != subDocuments.end(); ++iterSubDoc)
 			if (*iterSubDoc)
 				delete *iterSubDoc;

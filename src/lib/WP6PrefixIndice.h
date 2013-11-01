@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -27,15 +27,15 @@
 #ifndef WP6PREFIXINDICE_H
 #define WP6PREFIXINDICE_H
 
-#include <libwpd-stream/libwpd-stream.h>
-#include "libwpd_types.h"
+#include <librevenge-stream/librevenge-stream.h>
+#include "librevenge_types.h"
 
-class WPXEncryption;
+class RVNGEncryption;
 
 class WP6PrefixIndice
 {
 public:
-	WP6PrefixIndice(WPXInputStream *input, WPXEncryption *encryption, int id);
+	WP6PrefixIndice(RVNGInputStream *input, RVNGEncryption *encryption, int id);
 	int getID() const
 	{
 		return m_id;
@@ -58,7 +58,7 @@ public:
 	}
 
 protected:
-	void _read(WPXInputStream *input, WPXEncryption *encryption);
+	void _read(RVNGInputStream *input, RVNGEncryption *encryption);
 
 private:
 	int m_id;

@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -24,9 +24,9 @@
  */
 
 #include "WP5GeneralPacketIndex.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
-WP5GeneralPacketIndex::WP5GeneralPacketIndex(WPXInputStream *input, WPXEncryption *encryption, int id)
+WP5GeneralPacketIndex::WP5GeneralPacketIndex(RVNGInputStream *input, RVNGEncryption *encryption, int id)
 	: m_id(id),
 	  m_type(0),
 	  m_dataSize(0),
@@ -35,13 +35,13 @@ WP5GeneralPacketIndex::WP5GeneralPacketIndex(WPXInputStream *input, WPXEncryptio
 	_read(input, encryption);
 }
 
-void WP5GeneralPacketIndex::_read(WPXInputStream *input, WPXEncryption *encryption)
+void WP5GeneralPacketIndex::_read(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	m_type = readU16(input, encryption);
 
 	m_dataSize = readU32(input, encryption);
 	m_dataOffset = readU32(input, encryption);
 
-	WPD_DEBUG_MSG(("General Packet Index (id: %i, type: %i, data size: %u, data offset: %u)\n", m_id, m_type, m_dataSize, m_dataOffset));
+	RVNG_DEBUG_MSG(("General Packet Index (id: %i, type: %i, data size: %u, data offset: %u)\n", m_id, m_type, m_dataSize, m_dataOffset));
 }
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

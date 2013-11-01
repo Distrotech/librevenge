@@ -27,17 +27,17 @@
    THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef WPXOLESTREAM_H
-#define WPXOLESTREAM_H
+#ifndef RVNGOLESTREAM_H
+#define RVNGOLESTREAM_H
 
 #include <string>
 #include <fstream>
 #include <vector>
 #include <list>
 
-class WPXInputStream;
+class RVNGInputStream;
 
-namespace libwpd
+namespace librevenge
 {
 
 class IStorage;
@@ -56,7 +56,7 @@ public:
 	/**
 	 * Constructs a storage with data.
 	 **/
-	Storage( WPXInputStream *is );
+	Storage( RVNGInputStream *is );
 
 	/**
 	 * Destroys the storage.
@@ -117,7 +117,7 @@ private:
 	Stream &operator=( const Stream & );
 };
 
-}  // namespace libwpd
+}  // namespace librevenge
 
-#endif // WPXOLESTREAM_H
+#endif // RVNGOLESTREAM_H
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

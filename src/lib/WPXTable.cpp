@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,27 +18,27 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WPXTable.h"
-#include "libwpd_internal.h"
+#include "RVNGTable.h"
+#include "librevenge_internal.h"
 
-_WPXTableCell::_WPXTableCell(uint8_t colSpan, uint8_t rowSpan, uint8_t borderBits) :
+_RVNGTableCell::_RVNGTableCell(uint8_t colSpan, uint8_t rowSpan, uint8_t borderBits) :
 	m_colSpan(colSpan),
 	m_rowSpan(rowSpan),
 	m_borderBits(borderBits)
 {
 }
 
-WPXTable::~WPXTable()
+RVNGTable::~RVNGTable()
 {
-	typedef std::vector<WPXTableCell *>::iterator VTCIter;
-	typedef std::vector< std::vector<WPXTableCell *> >::iterator VVTCIter;
+	typedef std::vector<RVNGTableCell *>::iterator VTCIter;
+	typedef std::vector< std::vector<RVNGTableCell *> >::iterator VVTCIter;
 	for (VVTCIter iter1 = m_tableRows.begin(); iter1 != m_tableRows.end(); ++iter1)
 	{
 		for (VTCIter iter2 = (*iter1).begin(); iter2 != (*iter1).end(); ++iter2)
@@ -48,22 +48,22 @@ WPXTable::~WPXTable()
 	}
 }
 
-void WPXTable::insertRow()
+void RVNGTable::insertRow()
 {
-	m_tableRows.push_back(std::vector<WPXTableCell *>());
+	m_tableRows.push_back(std::vector<RVNGTableCell *>());
 }
 
-void WPXTable::insertCell(uint8_t colSpan, uint8_t rowSpan, uint8_t borderBits)
+void RVNGTable::insertCell(uint8_t colSpan, uint8_t rowSpan, uint8_t borderBits)
 {
 	if (m_tableRows.size() < 1)
 		throw ParseException();
-	m_tableRows[(m_tableRows.size()-1)].push_back(new WPXTableCell(colSpan, rowSpan, borderBits));
+	m_tableRows[(m_tableRows.size()-1)].push_back(new RVNGTableCell(colSpan, rowSpan, borderBits));
 }
 
 // makeConsistent: make the table border specification (defined per-cell) consistent, with no
 // duplicated borders
 // pre-condition: the table must be completely built/read before this function is called
-void WPXTable::makeBordersConsistent()
+void RVNGTable::makeBordersConsistent()
 {
 	// make the top/bottom table borders consistent
 	for(unsigned i=0; i<m_tableRows.size(); i++)
@@ -72,24 +72,24 @@ void WPXTable::makeBordersConsistent()
 		{
 			if (i < (m_tableRows.size()-1))
 			{
-				std::vector<WPXTableCell *> cellsBottomAdjacent = _getCellsBottomAdjacent(i, j);
+				std::vector<RVNGTableCell *> cellsBottomAdjacent = _getCellsBottomAdjacent(i, j);
 				_makeCellBordersConsistent((m_tableRows[i])[j], cellsBottomAdjacent,
-				                           WPX_TABLE_CELL_BOTTOM_BORDER_OFF, WPX_TABLE_CELL_TOP_BORDER_OFF);
+				                           RVNG_TABLE_CELL_BOTTOM_BORDER_OFF, RVNG_TABLE_CELL_TOP_BORDER_OFF);
 			}
 			if (j < (m_tableRows[i].size()-1))
 			{
-				std::vector<WPXTableCell *> cellsRightAdjacent = _getCellsRightAdjacent(i, j);
+				std::vector<RVNGTableCell *> cellsRightAdjacent = _getCellsRightAdjacent(i, j);
 				_makeCellBordersConsistent((m_tableRows[i])[j], cellsRightAdjacent,
-				                           WPX_TABLE_CELL_RIGHT_BORDER_OFF, WPX_TABLE_CELL_LEFT_BORDER_OFF);
+				                           RVNG_TABLE_CELL_RIGHT_BORDER_OFF, RVNG_TABLE_CELL_LEFT_BORDER_OFF);
 			}
 		}
 	}
 }
 
-void WPXTable::_makeCellBordersConsistent(WPXTableCell *cell, std::vector<WPXTableCell *> &adjacentCells,
+void RVNGTable::_makeCellBordersConsistent(RVNGTableCell *cell, std::vector<RVNGTableCell *> &adjacentCells,
         int adjacencyBitCell, int adjacencyBitBoundCells)
 {
-	typedef std::vector<WPXTableCell *>::iterator VTCIter;
+	typedef std::vector<RVNGTableCell *>::iterator VTCIter;
 	if (!adjacentCells.empty())
 	{
 		// if this cell is adjacent to > 1 cell, and it has no border
@@ -111,10 +111,10 @@ void WPXTable::_makeCellBordersConsistent(WPXTableCell *cell, std::vector<WPXTab
 	}
 }
 
-std::vector<WPXTableCell *> WPXTable::_getCellsBottomAdjacent(int i, int j)
+std::vector<RVNGTableCell *> RVNGTable::_getCellsBottomAdjacent(int i, int j)
 {
 	int bottomAdjacentRow = i + (m_tableRows[i])[j]->m_rowSpan;
-	std::vector<WPXTableCell *>  cellsBottomAdjacent = std::vector<WPXTableCell *>();
+	std::vector<RVNGTableCell *>  cellsBottomAdjacent = std::vector<RVNGTableCell *>();
 
 	if ((long)bottomAdjacentRow >= (long)m_tableRows.size())
 		return cellsBottomAdjacent;
@@ -131,10 +131,10 @@ std::vector<WPXTableCell *> WPXTable::_getCellsBottomAdjacent(int i, int j)
 	return cellsBottomAdjacent;
 }
 
-std::vector<WPXTableCell *> WPXTable::_getCellsRightAdjacent(int i, int j)
+std::vector<RVNGTableCell *> RVNGTable::_getCellsRightAdjacent(int i, int j)
 {
 	int rightAdjacentCol = j + 1;
-	std::vector<WPXTableCell *> cellsRightAdjacent = std::vector<WPXTableCell *>();
+	std::vector<RVNGTableCell *> cellsRightAdjacent = std::vector<RVNGTableCell *>();
 
 	if ((long)rightAdjacentCol >= (long)m_tableRows[i].size()) // num cols is uniform across table: this comparison is valid
 		return cellsRightAdjacent;
@@ -155,14 +155,14 @@ std::vector<WPXTableCell *> WPXTable::_getCellsRightAdjacent(int i, int j)
 	return cellsRightAdjacent;
 }
 
-WPXTableList::WPXTableList() :
-	m_tableList(new std::vector<WPXTable *>),
+RVNGTableList::RVNGTableList() :
+	m_tableList(new std::vector<RVNGTable *>),
 	m_refCount(new int)
 {
 	(*m_refCount) = 1;
 }
 
-WPXTableList::WPXTableList(const WPXTableList &tableList) :
+RVNGTableList::RVNGTableList(const RVNGTableList &tableList) :
 	m_tableList(tableList.get()),
 	m_refCount(tableList.getRef())
 {
@@ -170,7 +170,7 @@ WPXTableList::WPXTableList(const WPXTableList &tableList) :
 		(*m_refCount)++;
 }
 
-WPXTableList &WPXTableList::operator=(const WPXTableList &tableList)
+RVNGTableList &RVNGTableList::operator=(const RVNGTableList &tableList)
 {
 	if (this != &tableList)
 	{
@@ -181,7 +181,7 @@ WPXTableList &WPXTableList::operator=(const WPXTableList &tableList)
 	return (*this);
 }
 
-void WPXTableList::acquire(int *refCount, std::vector<WPXTable *> *tableList)
+void RVNGTableList::acquire(int *refCount, std::vector<RVNGTable *> *tableList)
 {
 	m_refCount = refCount;
 	m_tableList = tableList;
@@ -189,13 +189,13 @@ void WPXTableList::acquire(int *refCount, std::vector<WPXTable *> *tableList)
 		(*m_refCount)++;
 }
 
-void WPXTableList::release()
+void RVNGTableList::release()
 {
 	if (m_refCount)
 	{
 		if (--(*m_refCount) == 0)
 		{
-			for (std::vector<WPXTable *>::iterator iter = (*m_tableList).begin(); iter != (*m_tableList).end(); ++iter)
+			for (std::vector<RVNGTable *>::iterator iter = (*m_tableList).begin(); iter != (*m_tableList).end(); ++iter)
 				delete (*iter);
 			delete m_tableList;
 			delete m_refCount;
@@ -205,7 +205,7 @@ void WPXTableList::release()
 	}
 }
 
-WPXTableList::~WPXTableList()
+RVNGTableList::~RVNGTableList()
 {
 	release();
 }

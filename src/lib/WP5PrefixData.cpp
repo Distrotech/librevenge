@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -26,9 +26,9 @@
 #include "WP5PrefixData.h"
 #include "WP5GeneralPacketIndex.h"
 #include "WP5SpecialHeaderIndex.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
-WP5PrefixData::WP5PrefixData(WPXInputStream *input, WPXEncryption *encryption) :
+WP5PrefixData::WP5PrefixData(RVNGInputStream *input, RVNGEncryption *encryption) :
 	m_generalPacketData()
 {
 	std::vector<WP5GeneralPacketIndex> prefixIndexVector;
@@ -39,7 +39,7 @@ WP5PrefixData::WP5PrefixData(WPXInputStream *input, WPXEncryption *encryption) :
 
 		if ((shi.getType() != 0xfffb) || (shi.getNumOfIndexes() != 5) || (shi.getIndexBlockSize() != 50))
 		{
-			WPD_DEBUG_MSG(("WordPerfect: detected possible prefix data corruption, ignoring this and all following packets.\n"));
+			RVNG_DEBUG_MSG(("WordPerfect: detected possible prefix data corruption, ignoring this and all following packets.\n"));
 			break;
 		}
 
@@ -49,14 +49,14 @@ WP5PrefixData::WP5PrefixData(WPXInputStream *input, WPXEncryption *encryption) :
 			WP5GeneralPacketIndex gpi = WP5GeneralPacketIndex(input, encryption, id);
 			if ((gpi.getType() > 0x02ff) && (gpi.getType() < 0xfffb))
 			{
-				WPD_DEBUG_MSG(("WordPerfect: detected possible prefix data corruption, ignoring this and all following packets.\n"));
+				RVNG_DEBUG_MSG(("WordPerfect: detected possible prefix data corruption, ignoring this and all following packets.\n"));
 				tmpFoundPossibleCorruption = true;
 				break;
 			}
 
 			if ((gpi.getType() != 0) && (gpi.getType() != 0xffff))
 			{
-				WPD_DEBUG_MSG(("WordPerfect: constructing general packet index 0x%x\n", id));
+				RVNG_DEBUG_MSG(("WordPerfect: constructing general packet index 0x%x\n", id));
 				prefixIndexVector.push_back(gpi);
 				id++;
 			}
@@ -65,7 +65,7 @@ WP5PrefixData::WP5PrefixData(WPXInputStream *input, WPXEncryption *encryption) :
 			break;
 
 		if (shi.getNextBlockOffset() != 0)
-			input->seek(shi.getNextBlockOffset(), WPX_SEEK_SET);
+			input->seek(shi.getNextBlockOffset(), RVNG_SEEK_SET);
 		else
 			break;
 	}
@@ -73,7 +73,7 @@ WP5PrefixData::WP5PrefixData(WPXInputStream *input, WPXEncryption *encryption) :
 	std::vector<WP5GeneralPacketIndex>::iterator gpiIter;
 	for (gpiIter = prefixIndexVector.begin(); gpiIter != prefixIndexVector.end(); ++gpiIter)
 	{
-		WPD_DEBUG_MSG(("WordPerfect: constructing general packet data %i\n", (*gpiIter).getID()));
+		RVNG_DEBUG_MSG(("WordPerfect: constructing general packet data %i\n", (*gpiIter).getID()));
 		WP5GeneralPacketData *generalPacketData = WP5GeneralPacketData::constructGeneralPacketData(input, encryption, &(*gpiIter));
 		if (generalPacketData)
 		{

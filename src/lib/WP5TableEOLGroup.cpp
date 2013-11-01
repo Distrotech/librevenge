@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -28,9 +28,9 @@
 #include "WP5TableEOLGroup.h"
 #include "WP5FileStructure.h"
 #include "WP5Listener.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
-WP5TableEOLGroup::WP5TableEOLGroup(WPXInputStream *input, WPXEncryption *encryption) :
+WP5TableEOLGroup::WP5TableEOLGroup(RVNGInputStream *input, RVNGEncryption *encryption) :
 	WP5VariableLengthGroup(),
 	m_cellVerticalAlignment(0),
 	m_useCellAttributes(false),
@@ -49,7 +49,7 @@ WP5TableEOLGroup::~WP5TableEOLGroup()
 {
 }
 
-void WP5TableEOLGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP5TableEOLGroup::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	uint8_t tmpFlags, tmpColumnSpanning;
 	switch (getSubGroup())
@@ -67,7 +67,7 @@ void WP5TableEOLGroup::_readContents(WPXInputStream *input, WPXEncryption *encry
 		if ((tmpColumnSpanning & 0x80) == 0x80)
 			m_spannedFromAbove = true;
 		m_rowSpan = readU8(input, encryption);
-		input->seek(4, WPX_SEEK_CUR);
+		input->seek(4, RVNG_SEEK_CUR);
 		m_cellAttributes = readU16(input, encryption);
 		m_cellJustification = readU8(input, encryption);
 		break;
@@ -82,7 +82,7 @@ void WP5TableEOLGroup::_readContents(WPXInputStream *input, WPXEncryption *encry
 
 void WP5TableEOLGroup::parse(WP5Listener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling a Table EOL group\n"));
+	RVNG_DEBUG_MSG(("WordPerfect: handling a Table EOL group\n"));
 
 	switch (getSubGroup())
 	{

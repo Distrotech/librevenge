@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -25,9 +25,9 @@
 
 #include "WP42DefineColumnsGroup.h"
 #include "WP42FileStructure.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
-WP42DefineColumnsGroup::WP42DefineColumnsGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group) :
+WP42DefineColumnsGroup::WP42DefineColumnsGroup(RVNGInputStream *input, RVNGEncryption *encryption, uint8_t group) :
 	WP42MultiByteFunctionGroup(group),
 	m_groupId(group),
 	m_numColumns(0),
@@ -41,17 +41,17 @@ WP42DefineColumnsGroup::~WP42DefineColumnsGroup()
 {
 }
 
-void WP42DefineColumnsGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP42DefineColumnsGroup::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	uint8_t maxNumColumns = 0;
 	switch (m_groupId)
 	{
 	case WP42_DEFINE_COLUMNS_OLD_GROUP:
-		input->seek(11, WPX_SEEK_CUR);
+		input->seek(11, RVNG_SEEK_CUR);
 		maxNumColumns = 5;
 		break;
 	case WP42_DEFINE_COLUMNS_NEW_GROUP:
-		input->seek(49, WPX_SEEK_CUR);
+		input->seek(49, RVNG_SEEK_CUR);
 		maxNumColumns = 24;
 		break;
 	default:
@@ -68,6 +68,6 @@ void WP42DefineColumnsGroup::_readContents(WPXInputStream *input, WPXEncryption 
 
 void WP42DefineColumnsGroup::parse(WP42Listener * /* listener */)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling an DefineColumns group\n"));
+	RVNG_DEBUG_MSG(("WordPerfect: handling an DefineColumns group\n"));
 }
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

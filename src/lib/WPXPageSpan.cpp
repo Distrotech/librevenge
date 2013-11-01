@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -27,17 +27,17 @@
 
 #include <math.h>
 #include <algorithm>
-#include "WPXPageSpan.h"
-#include "libwpd_internal.h"
+#include "RVNGPageSpan.h"
+#include "librevenge_internal.h"
 
-const double WPX_DEFAULT_PAGE_MARGIN_TOP = 1.0;
-const double WPX_DEFAULT_PAGE_MARGIN_BOTTOM = 1.0;
+const double RVNG_DEFAULT_PAGE_MARGIN_TOP = 1.0;
+const double RVNG_DEFAULT_PAGE_MARGIN_BOTTOM = 1.0;
 
 const uint8_t DUMMY_INTERNAL_HEADER_FOOTER = 16;
 
 // precondition: 0 <= headerFooterType <= 3 (i.e.: we don't handle watermarks here)
-WPXHeaderFooter::WPXHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence occurence,
-                                 const uint8_t internalType, const WPXSubDocument *subDocument, WPXTableList tableList) :
+RVNGHeaderFooter::RVNGHeaderFooter(const RVNGHeaderFooterType headerFooterType, const RVNGHeaderFooterOccurence occurence,
+                                 const uint8_t internalType, const RVNGSubDocument *subDocument, RVNGTableList tableList) :
 	m_type(headerFooterType),
 	m_occurence(occurence),
 	m_internalType(internalType),
@@ -46,8 +46,8 @@ WPXHeaderFooter::WPXHeaderFooter(const WPXHeaderFooterType headerFooterType, con
 {
 }
 
-WPXHeaderFooter::WPXHeaderFooter(const WPXHeaderFooterType headerFooterType, const WPXHeaderFooterOccurence occurence,
-                                 const uint8_t internalType, const WPXSubDocument *subDocument) :
+RVNGHeaderFooter::RVNGHeaderFooter(const RVNGHeaderFooterType headerFooterType, const RVNGHeaderFooterOccurence occurence,
+                                 const uint8_t internalType, const RVNGSubDocument *subDocument) :
 	m_type(headerFooterType),
 	m_occurence(occurence),
 	m_internalType(internalType),
@@ -56,7 +56,7 @@ WPXHeaderFooter::WPXHeaderFooter(const WPXHeaderFooterType headerFooterType, con
 {
 }
 
-WPXHeaderFooter::WPXHeaderFooter(const WPXHeaderFooter &headerFooter) :
+RVNGHeaderFooter::RVNGHeaderFooter(const RVNGHeaderFooter &headerFooter) :
 	m_type(headerFooter.getType()),
 	m_occurence(headerFooter.getOccurence()),
 	m_internalType(headerFooter.getInternalType()),
@@ -65,7 +65,7 @@ WPXHeaderFooter::WPXHeaderFooter(const WPXHeaderFooter &headerFooter) :
 {
 }
 
-WPXHeaderFooter &WPXHeaderFooter::operator=(const WPXHeaderFooter &headerFooter)
+RVNGHeaderFooter &RVNGHeaderFooter::operator=(const RVNGHeaderFooter &headerFooter)
 {
 	if (this != &headerFooter)
 	{
@@ -78,20 +78,20 @@ WPXHeaderFooter &WPXHeaderFooter::operator=(const WPXHeaderFooter &headerFooter)
 	return *this;
 }
 
-WPXHeaderFooter::~WPXHeaderFooter()
+RVNGHeaderFooter::~RVNGHeaderFooter()
 {
 //	delete m_subDocument;
 }
 
-WPXPageSpan::WPXPageSpan() :
+RVNGPageSpan::RVNGPageSpan() :
 	m_isPageNumberSuppressed(false),
 	m_formLength(11.0),
 	m_formWidth(8.5f),
 	m_formOrientation(PORTRAIT),
 	m_marginLeft(1.0),
 	m_marginRight(1.0),
-	m_marginTop(WPX_DEFAULT_PAGE_MARGIN_TOP),
-	m_marginBottom(WPX_DEFAULT_PAGE_MARGIN_BOTTOM),
+	m_marginTop(RVNG_DEFAULT_PAGE_MARGIN_TOP),
+	m_marginBottom(RVNG_DEFAULT_PAGE_MARGIN_BOTTOM),
 	m_pageNumberPosition(PAGENUMBER_POSITION_NONE),
 	m_isPageNumberOverridden(false),
 	m_pageNumberOverride(0),
@@ -101,13 +101,13 @@ WPXPageSpan::WPXPageSpan() :
 	m_headerFooterList(),
 	m_pageSpan(1)
 {
-	for (int i=0; i<WPX_NUM_HEADER_FOOTER_TYPES; i++)
+	for (int i=0; i<RVNG_NUM_HEADER_FOOTER_TYPES; i++)
 		m_isHeaderFooterSuppressed[i]=false;
 }
 
 // NB: this is not a literal "clone" function: it is contingent on the side margins that are passed,
 // and suppression and override variables are not copied
-WPXPageSpan::WPXPageSpan(const WPXPageSpan &page, double paragraphMarginLeft, double paragraphMarginRight) :
+RVNGPageSpan::RVNGPageSpan(const RVNGPageSpan &page, double paragraphMarginLeft, double paragraphMarginRight) :
 	m_isPageNumberSuppressed(false),
 	m_formLength(page.getFormLength()),
 	m_formWidth(page.getFormWidth()),
@@ -125,19 +125,19 @@ WPXPageSpan::WPXPageSpan(const WPXPageSpan &page, double paragraphMarginLeft, do
 	m_headerFooterList(page.getHeaderFooterList()),
 	m_pageSpan(page.getPageSpan())
 {
-	for (int i=0; i<WPX_NUM_HEADER_FOOTER_TYPES; i++)
+	for (int i=0; i<RVNG_NUM_HEADER_FOOTER_TYPES; i++)
 		m_isHeaderFooterSuppressed[i] = false;
 }
 
-WPXPageSpan::~WPXPageSpan()
+RVNGPageSpan::~RVNGPageSpan()
 {
 }
 
 
-void WPXPageSpan::setHeaderFooter(const WPXHeaderFooterType type, const uint8_t headerFooterType, const WPXHeaderFooterOccurence occurence,
-                                  const  WPXSubDocument *subDocument, WPXTableList tableList)
+void RVNGPageSpan::setHeaderFooter(const RVNGHeaderFooterType type, const uint8_t headerFooterType, const RVNGHeaderFooterOccurence occurence,
+                                  const  RVNGSubDocument *subDocument, RVNGTableList tableList)
 {
-	WPXHeaderFooter headerFooter(type, occurence, headerFooterType, subDocument, tableList);
+	RVNGHeaderFooter headerFooter(type, occurence, headerFooterType, subDocument, tableList);
 	switch (occurence)
 	{
 	case ALL:
@@ -164,37 +164,37 @@ void WPXPageSpan::setHeaderFooter(const WPXHeaderFooterType type, const uint8_t 
 	bool containsHFLeft = _containsHeaderFooter(type, ODD);
 	bool containsHFRight = _containsHeaderFooter(type, EVEN);
 
-	WPD_DEBUG_MSG(("Contains HFL: %i HFR: %i\n", containsHFLeft, containsHFRight));
+	RVNG_DEBUG_MSG(("Contains HFL: %i HFR: %i\n", containsHFLeft, containsHFRight));
 	if (containsHFLeft && !containsHFRight)
 	{
-		WPD_DEBUG_MSG(("Inserting dummy header right\n"));
-		WPXHeaderFooter dummyHeader(type, EVEN, DUMMY_INTERNAL_HEADER_FOOTER, 0);
+		RVNG_DEBUG_MSG(("Inserting dummy header right\n"));
+		RVNGHeaderFooter dummyHeader(type, EVEN, DUMMY_INTERNAL_HEADER_FOOTER, 0);
 		m_headerFooterList.push_back(dummyHeader);
 	}
 	else if (!containsHFLeft && containsHFRight)
 	{
-		WPD_DEBUG_MSG(("Inserting dummy header left\n"));
-		WPXHeaderFooter dummyHeader(type, ODD, DUMMY_INTERNAL_HEADER_FOOTER, 0);
+		RVNG_DEBUG_MSG(("Inserting dummy header left\n"));
+		RVNGHeaderFooter dummyHeader(type, ODD, DUMMY_INTERNAL_HEADER_FOOTER, 0);
 		m_headerFooterList.push_back(dummyHeader);
 	}
 }
 
-void WPXPageSpan::_removeHeaderFooter(WPXHeaderFooterType type, WPXHeaderFooterOccurence occurence)
+void RVNGPageSpan::_removeHeaderFooter(RVNGHeaderFooterType type, RVNGHeaderFooterOccurence occurence)
 {
-	for (std::vector<WPXHeaderFooter>::iterator iter = m_headerFooterList.begin(); iter != m_headerFooterList.end(); ++iter)
+	for (std::vector<RVNGHeaderFooter>::iterator iter = m_headerFooterList.begin(); iter != m_headerFooterList.end(); ++iter)
 	{
 		if ((*iter).getType() == type && (*iter).getOccurence() == occurence)
 		{
-			WPD_DEBUG_MSG(("WordPerfect: Removing header/footer element of type: %i since it is identical to %i\n",(*iter).getType(), type));
+			RVNG_DEBUG_MSG(("WordPerfect: Removing header/footer element of type: %i since it is identical to %i\n",(*iter).getType(), type));
 			m_headerFooterList.erase(iter);
 			return;
 		}
 	}
 }
 
-bool WPXPageSpan::_containsHeaderFooter(WPXHeaderFooterType type, WPXHeaderFooterOccurence occurence)
+bool RVNGPageSpan::_containsHeaderFooter(RVNGHeaderFooterType type, RVNGHeaderFooterOccurence occurence)
 {
-	for (std::vector<WPXHeaderFooter>::iterator iter = m_headerFooterList.begin(); iter != m_headerFooterList.end(); ++iter)
+	for (std::vector<RVNGHeaderFooter>::iterator iter = m_headerFooterList.begin(); iter != m_headerFooterList.end(); ++iter)
 	{
 		if ((*iter).getType()==type && (*iter).getOccurence()==occurence)
 			return true;
@@ -203,7 +203,7 @@ bool WPXPageSpan::_containsHeaderFooter(WPXHeaderFooterType type, WPXHeaderFoote
 	return false;
 }
 
-inline bool operator==(const WPXHeaderFooter &headerFooter1, const WPXHeaderFooter &headerFooter2)
+inline bool operator==(const RVNGHeaderFooter &headerFooter1, const RVNGHeaderFooter &headerFooter2)
 {
 	return ((headerFooter1.getType() == headerFooter2.getType()) &&
 	        (headerFooter1.getSubDocument() == headerFooter2.getSubDocument()) &&
@@ -211,7 +211,7 @@ inline bool operator==(const WPXHeaderFooter &headerFooter1, const WPXHeaderFoot
 	        (headerFooter1.getInternalType() == headerFooter2.getInternalType()) );
 }
 
-bool operator==(const WPXPageSpan &page1, const WPXPageSpan &page2)
+bool operator==(const RVNGPageSpan &page1, const RVNGPageSpan &page2)
 {
 	if ((page1.getMarginLeft() != page2.getMarginLeft()) || (page1.getMarginRight() != page2.getMarginRight()) ||
 	        (page1.getMarginTop() != page2.getMarginTop())|| (page1.getMarginBottom() != page2.getMarginBottom()))
@@ -234,17 +234,17 @@ bool operator==(const WPXPageSpan &page1, const WPXPageSpan &page2)
 	        page1.getPageNumberingFontSize() != page2.getPageNumberingFontSize())
 		return false;
 
-	for (uint8_t i=0; i<WPX_NUM_HEADER_FOOTER_TYPES; i++)
+	for (uint8_t i=0; i<RVNG_NUM_HEADER_FOOTER_TYPES; i++)
 	{
 		if (page1.getHeaderFooterSuppression(i) != page2.getHeaderFooterSuppression(i))
 			return false;
 	}
 
 	// NOTE: yes this is O(n^2): so what? n=4 at most
-	const std::vector<WPXHeaderFooter> headerFooterList1 = page1.getHeaderFooterList();
-	const std::vector<WPXHeaderFooter> headerFooterList2 = page2.getHeaderFooterList();
-	std::vector<WPXHeaderFooter>::const_iterator iter1;
-	std::vector<WPXHeaderFooter>::const_iterator iter2;
+	const std::vector<RVNGHeaderFooter> headerFooterList1 = page1.getHeaderFooterList();
+	const std::vector<RVNGHeaderFooter> headerFooterList2 = page2.getHeaderFooterList();
+	std::vector<RVNGHeaderFooter>::const_iterator iter1;
+	std::vector<RVNGHeaderFooter>::const_iterator iter2;
 
 	for (iter1 = headerFooterList1.begin(); iter1 != headerFooterList1.end(); ++iter1)
 	{
@@ -264,7 +264,7 @@ bool operator==(const WPXPageSpan &page1, const WPXPageSpan &page2)
 	}
 
 
-	WPD_DEBUG_MSG(("WordPerfect: WPXPageSpan == comparison finished, found no differences\n"));
+	RVNG_DEBUG_MSG(("WordPerfect: RVNGPageSpan == comparison finished, found no differences\n"));
 
 	return true;
 }

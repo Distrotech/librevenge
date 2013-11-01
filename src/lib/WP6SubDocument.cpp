@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -25,19 +25,19 @@
 
 #include "WP6SubDocument.h"
 #include "WP6Parser.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
 WP6SubDocument::WP6SubDocument(uint8_t *streamData, const unsigned dataSize) :
-	WPXSubDocument(streamData, dataSize)
+	RVNGSubDocument(streamData, dataSize)
 {
 }
 
 void WP6SubDocument::parse(WP6Listener *listener) const
 {
-	WPXMemoryInputStream *tmpStream = getStream();
+	RVNGMemoryInputStream *tmpStream = getStream();
 	if (!tmpStream)
 		return;
-	tmpStream->seek(0, WPX_SEEK_SET);
+	tmpStream->seek(0, RVNG_SEEK_SET);
 	WP6Parser::parseDocument(tmpStream, 0, listener);
 }
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -27,7 +27,7 @@
 
 #include "WP42ContentListener.h"
 #include "WP42FileStructure.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
 #define WP42_NUM_TEXT_COLUMS_PER_INCH 12
 
@@ -41,9 +41,9 @@ _WP42ContentParsingState::~_WP42ContentParsingState()
 }
 
 
-WP42ContentListener::WP42ContentListener(std::list<WPXPageSpan> &pageList, std::vector<WP42SubDocument *> &subDocuments, WPXDocumentInterface *documentInterface) :
+WP42ContentListener::WP42ContentListener(std::list<RVNGPageSpan> &pageList, std::vector<WP42SubDocument *> &subDocuments, RVNGDocumentInterface *documentInterface) :
 	WP42Listener(),
-	WPXContentListener(pageList, documentInterface),
+	RVNGContentListener(pageList, documentInterface),
 	m_parseState(new WP42ContentParsingState),
 	m_subDocuments(subDocuments)
 {
@@ -106,34 +106,34 @@ void WP42ContentListener::attributeChange(bool isOn, uint8_t attribute)
 	switch (attribute)
 	{
 		/*case WP42_ATTRIBUTE_SUBSCRIPT:
-			textAttributeBit = WPX_SUBSCRIPT_BIT;
+			textAttributeBit = RVNG_SUBSCRIPT_BIT;
 			break;
 		case WP42_ATTRIBUTE_SUPERSCRIPT:
-			textAttributeBit = WPX_SUPERSCRIPT_BIT;
+			textAttributeBit = RVNG_SUPERSCRIPT_BIT;
 			break;
 		case WP42_ATTRIBUTE_OUTLINE:
-			textAttributeBit = WPX_OUTLINE_BIT;
+			textAttributeBit = RVNG_OUTLINE_BIT;
 			break;*/
 	case WP42_ATTRIBUTE_ITALICS:
-		textAttributeBit = WPX_ITALICS_BIT;
+		textAttributeBit = RVNG_ITALICS_BIT;
 		break;
 	case WP42_ATTRIBUTE_SHADOW:
-		textAttributeBit = WPX_SHADOW_BIT;
+		textAttributeBit = RVNG_SHADOW_BIT;
 		break;
 	case WP42_ATTRIBUTE_REDLINE:
-		textAttributeBit = WPX_REDLINE_BIT;
+		textAttributeBit = RVNG_REDLINE_BIT;
 		break;
 		/*case WP42_ATTRIBUTE_DOUBLE_UNDERLINE:
-			textAttributeBit = WPX_DOUBLE_UNDERLINE_BIT;
+			textAttributeBit = RVNG_DOUBLE_UNDERLINE_BIT;
 			break;			*/
 	case WP42_ATTRIBUTE_BOLD:
-		textAttributeBit = WPX_BOLD_BIT;
+		textAttributeBit = RVNG_BOLD_BIT;
 		break;
 	case WP42_ATTRIBUTE_STRIKE_OUT:
-		textAttributeBit = WPX_STRIKEOUT_BIT;
+		textAttributeBit = RVNG_STRIKEOUT_BIT;
 		break;
 	case WP42_ATTRIBUTE_UNDERLINE:
-		textAttributeBit = WPX_UNDERLINE_BIT;
+		textAttributeBit = RVNG_UNDERLINE_BIT;
 		break;
 	default:
 		break;
@@ -164,8 +164,8 @@ void WP42ContentListener::headerFooterGroup(uint8_t /* headerFooterDefinition */
 		m_subDocuments.push_back(subDocument);
 }
 
-void WP42ContentListener::_handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType /* subDocumentType */,
-        WPXTableList /* tableList */, unsigned /* nextTableIndice */)
+void WP42ContentListener::_handleSubDocument(const RVNGSubDocument *subDocument, RVNGSubDocumentType /* subDocumentType */,
+        RVNGTableList /* tableList */, unsigned /* nextTableIndice */)
 {
 	// save our old parsing state on our "stack"
 	WP42ContentParsingState *oldParseState = m_parseState;

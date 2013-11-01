@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -37,7 +37,7 @@
 #include "WP3FootnoteEndnoteGroup.h"
 #include "WP3TablesGroup.h"
 #include "WP3WindowGroup.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 #include <limits>
 
 WP3VariableLengthGroup::WP3VariableLengthGroup() :
@@ -46,7 +46,7 @@ WP3VariableLengthGroup::WP3VariableLengthGroup() :
 {
 }
 
-WP3VariableLengthGroup *WP3VariableLengthGroup::constructVariableLengthGroup(WPXInputStream *input, WPXEncryption *encryption, const uint8_t group)
+WP3VariableLengthGroup *WP3VariableLengthGroup::constructVariableLengthGroup(RVNGInputStream *input, RVNGEncryption *encryption, const uint8_t group)
 {
 	switch (group)
 	{
@@ -76,7 +76,7 @@ WP3VariableLengthGroup *WP3VariableLengthGroup::constructVariableLengthGroup(WPX
 	}
 }
 
-bool WP3VariableLengthGroup::isGroupConsistent(WPXInputStream *input, WPXEncryption *encryption, const uint8_t group)
+bool WP3VariableLengthGroup::isGroupConsistent(RVNGInputStream *input, RVNGEncryption *encryption, const uint8_t group)
 {
 	long startPosition = input->tell();
 	if (0 > startPosition  || startPosition > ((std::numeric_limits<long>::max)()))
@@ -88,68 +88,68 @@ bool WP3VariableLengthGroup::isGroupConsistent(WPXInputStream *input, WPXEncrypt
 		uint16_t size = readU16(input, encryption, true);
 		if (startPosition + size < startPosition)
 		{
-			input->seek(startPosition, WPX_SEEK_SET);
+			input->seek(startPosition, RVNG_SEEK_SET);
 			return false;
 		}
 
-		if (input->seek((startPosition + size - 1), WPX_SEEK_SET) || input->atEOS())
+		if (input->seek((startPosition + size - 1), RVNG_SEEK_SET) || input->atEOS())
 		{
-			input->seek(startPosition, WPX_SEEK_SET);
+			input->seek(startPosition, RVNG_SEEK_SET);
 			return false;
 		}
 		if (size != readU16(input, encryption, true))
 		{
-			input->seek(startPosition, WPX_SEEK_SET);
+			input->seek(startPosition, RVNG_SEEK_SET);
 			return false;
 		}
 		if (subGroup != readU8(input, encryption))
 		{
-			input->seek(startPosition, WPX_SEEK_SET);
+			input->seek(startPosition, RVNG_SEEK_SET);
 			return false;
 		}
 		if (group != readU8(input, encryption))
 		{
-			input->seek(startPosition, WPX_SEEK_SET);
+			input->seek(startPosition, RVNG_SEEK_SET);
 			return false;
 		}
 
-		input->seek(startPosition, WPX_SEEK_SET);
+		input->seek(startPosition, RVNG_SEEK_SET);
 		return true;
 	}
 	catch(...)
 	{
-		input->seek(startPosition, WPX_SEEK_SET);
+		input->seek(startPosition, RVNG_SEEK_SET);
 		return false;
 	}
 }
 
-void WP3VariableLengthGroup::_read(WPXInputStream *input, WPXEncryption *encryption)
+void WP3VariableLengthGroup::_read(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	long startPosition = input->tell();
 
-	WPD_DEBUG_MSG(("WordPerfect: handling a variable length group\n"));
+	RVNG_DEBUG_MSG(("WordPerfect: handling a variable length group\n"));
 
 	m_subGroup = readU8(input, encryption);
 	m_size = (uint16_t)(readU16(input, encryption, true) + 4); // the length is the number of data bytes minus 4 (ie. the function codes)
 
-	WPD_DEBUG_MSG(("WordPerfect: Read variable group header (start_position: %li, sub_group: 0x%x, size: %u)\n", startPosition, m_subGroup, m_size));
+	RVNG_DEBUG_MSG(("WordPerfect: Read variable group header (start_position: %li, sub_group: 0x%x, size: %u)\n", startPosition, m_subGroup, m_size));
 
 	_readContents(input, encryption);
 
-	input->seek((startPosition + m_size - 5), WPX_SEEK_SET);
+	input->seek((startPosition + m_size - 5), RVNG_SEEK_SET);
 
 	if (m_size != (readU16(input, encryption, true) + 4))
 	{
-		WPD_DEBUG_MSG(("WordPerfect: Possible corruption detected. Bailing out!\n"));
+		RVNG_DEBUG_MSG(("WordPerfect: Possible corruption detected. Bailing out!\n"));
 		throw FileException();
 	}
 	if (m_subGroup != readU8(input, encryption))
 	{
-		WPD_DEBUG_MSG(("WordPerfect: Possible corruption detected. Bailing out!\n"));
+		RVNG_DEBUG_MSG(("WordPerfect: Possible corruption detected. Bailing out!\n"));
 		throw FileException();
 	}
 
-	input->seek((startPosition + m_size - 1), WPX_SEEK_SET);
+	input->seek((startPosition + m_size - 1), RVNG_SEEK_SET);
 
 }
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

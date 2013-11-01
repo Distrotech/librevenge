@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -24,12 +24,12 @@
  */
 
 #include "WP1SetTabsGroup.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 #include <vector>
 
-WP1SetTabsGroup::WP1SetTabsGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group) :
+WP1SetTabsGroup::WP1SetTabsGroup(RVNGInputStream *input, RVNGEncryption *encryption, uint8_t group) :
 	WP1VariableLengthGroup(group),
-	m_tabStops(std::vector<WPXTabStop>())
+	m_tabStops(std::vector<RVNGTabStop>())
 {
 	_read(input, encryption);
 }
@@ -38,16 +38,16 @@ WP1SetTabsGroup::~WP1SetTabsGroup()
 {
 }
 
-void WP1SetTabsGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP1SetTabsGroup::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	// Skip first the old condensed tab table
 	while (readU8(input, encryption) != 0xff && !input->atEOS())
-		input->seek(2, WPX_SEEK_CUR);
+		input->seek(2, RVNG_SEEK_CUR);
 
 	// Now read the new condensed tab table
 	int8_t tmpTabType = 0;
 	double tmpTabPosition = 0.0;
-	WPXTabStop tmpTabStop = WPXTabStop();
+	RVNGTabStop tmpTabStop = RVNGTabStop();
 
 	while (((tmpTabType = (int8_t)readU8(input, encryption)) & 0xff) != 0xff)
 	{
@@ -105,12 +105,12 @@ void WP1SetTabsGroup::_readContents(WPXInputStream *input, WPXEncryption *encryp
 void WP1SetTabsGroup::parse(WP1Listener *listener)
 {
 #ifdef DEBUG
-	WPD_DEBUG_MSG(("Parsing Set Tabs Group (positions: "));
-	for(std::vector<WPXTabStop>::const_iterator i = m_tabStops.begin(); i != m_tabStops.end(); ++i)
+	RVNG_DEBUG_MSG(("Parsing Set Tabs Group (positions: "));
+	for(std::vector<RVNGTabStop>::const_iterator i = m_tabStops.begin(); i != m_tabStops.end(); ++i)
 	{
-		WPD_DEBUG_MSG((" %.4f", (*i).m_position));
+		RVNG_DEBUG_MSG((" %.4f", (*i).m_position));
 	}
-	WPD_DEBUG_MSG((")\n"));
+	RVNG_DEBUG_MSG((")\n"));
 #endif
 	listener->setTabs(m_tabStops);
 }

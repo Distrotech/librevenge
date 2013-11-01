@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,40 +16,40 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WPXSUBDOCUMENT_H
-#define WPXSUBDOCUMENT_H
+#ifndef RVNGSUBDOCUMENT_H
+#define RVNGSUBDOCUMENT_H
 
-#include "WPXMemoryStream.h"
-#include "libwpd_types.h"
+#include "RVNGMemoryStream.h"
+#include "librevenge_types.h"
 
-class WPXListener;
-class WPXEncryption;
+class RVNGListener;
+class RVNGEncryption;
 
-class WPXSubDocument
+class RVNGSubDocument
 {
 public:
-	WPXSubDocument(WPXInputStream *input, WPXEncryption *encryption, const unsigned dataSize);
-	WPXSubDocument(uint8_t *streamData, const unsigned dataSize);
-	virtual ~WPXSubDocument();
-	WPXMemoryInputStream *getStream() const
+	RVNGSubDocument(RVNGInputStream *input, RVNGEncryption *encryption, const unsigned dataSize);
+	RVNGSubDocument(uint8_t *streamData, const unsigned dataSize);
+	virtual ~RVNGSubDocument();
+	RVNGMemoryInputStream *getStream() const
 	{
 		return m_stream;
 	}
 
 private:
-	WPXMemoryInputStream *m_stream;
+	RVNGMemoryInputStream *m_stream;
 	uint8_t *m_streamData;
-	WPXSubDocument();
-	WPXSubDocument(const WPXSubDocument &);
-	WPXSubDocument &operator=(const WPXSubDocument &);
+	RVNGSubDocument();
+	RVNGSubDocument(const RVNGSubDocument &);
+	RVNGSubDocument &operator=(const RVNGSubDocument &);
 
 };
-#endif /* WPXSUBDOCUMENT_H */
+#endif /* RVNGSUBDOCUMENT_H */
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

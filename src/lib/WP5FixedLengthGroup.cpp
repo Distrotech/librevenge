@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -32,14 +32,14 @@
 #include "WP5TabGroup.h"
 #include "WP5IndentGroup.h"
 #include "WP5UnsupportedFixedLengthGroup.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
 WP5FixedLengthGroup::WP5FixedLengthGroup(const uint8_t groupID):
 	m_group(groupID)
 {
 }
 
-WP5FixedLengthGroup *WP5FixedLengthGroup::constructFixedLengthGroup(WPXInputStream *input, WPXEncryption *encryption, const uint8_t groupID)
+WP5FixedLengthGroup *WP5FixedLengthGroup::constructFixedLengthGroup(RVNGInputStream *input, RVNGEncryption *encryption, const uint8_t groupID)
 {
 	switch (groupID)
 	{
@@ -64,35 +64,35 @@ WP5FixedLengthGroup *WP5FixedLengthGroup::constructFixedLengthGroup(WPXInputStre
 	}
 }
 
-bool WP5FixedLengthGroup::isGroupConsistent(WPXInputStream *input, WPXEncryption *encryption, const uint8_t groupID)
+bool WP5FixedLengthGroup::isGroupConsistent(RVNGInputStream *input, RVNGEncryption *encryption, const uint8_t groupID)
 {
 	long startPosition = input->tell();
 
 	try
 	{
 		int size = WP5_FIXED_LENGTH_FUNCTION_GROUP_SIZE[groupID-0xC0];
-		if (input->seek((startPosition + size - 2), WPX_SEEK_SET) || input->atEOS())
+		if (input->seek((startPosition + size - 2), RVNG_SEEK_SET) || input->atEOS())
 		{
-			input->seek(startPosition, WPX_SEEK_SET);
+			input->seek(startPosition, RVNG_SEEK_SET);
 			return false;
 		}
 		if (groupID != readU8(input, encryption))
 		{
-			input->seek(startPosition, WPX_SEEK_SET);
+			input->seek(startPosition, RVNG_SEEK_SET);
 			return false;
 		}
 
-		input->seek(startPosition, WPX_SEEK_SET);
+		input->seek(startPosition, RVNG_SEEK_SET);
 		return true;
 	}
 	catch(...)
 	{
-		input->seek(startPosition, WPX_SEEK_SET);
+		input->seek(startPosition, RVNG_SEEK_SET);
 		return false;
 	}
 }
 
-void WP5FixedLengthGroup::_read(WPXInputStream *input, WPXEncryption *encryption)
+void WP5FixedLengthGroup::_read(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	long startPosition = input->tell();
 	_readContents(input, encryption);
@@ -100,10 +100,10 @@ void WP5FixedLengthGroup::_read(WPXInputStream *input, WPXEncryption *encryption
 	if (m_group >= 0xC0 && m_group <= 0xCF) // just an extra safety check
 	{
 		int size = WP5_FIXED_LENGTH_FUNCTION_GROUP_SIZE[m_group-0xC0];
-		input->seek((startPosition + size - 2), WPX_SEEK_SET);
+		input->seek((startPosition + size - 2), RVNG_SEEK_SET);
 		if (m_group != readU8(input, encryption))
 		{
-			WPD_DEBUG_MSG(("WordPerfect: Possible corruption detected. Bailing out!\n"));
+			RVNG_DEBUG_MSG(("WordPerfect: Possible corruption detected. Bailing out!\n"));
 			throw FileException();
 		}
 	}

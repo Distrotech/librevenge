@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -29,14 +29,14 @@
 #include "WP6PrefixDataPacket.h"
 #include "WP6FileStructure.h"
 #include "WP6Listener.h"
-#include "WPXMemoryStream.h"
+#include "RVNGMemoryStream.h"
 
 class WP6ExtendedDocumentSummaryPacket : public WP6PrefixDataPacket
 {
 public:
-	WP6ExtendedDocumentSummaryPacket(WPXInputStream *input, WPXEncryption *encryption, int id, uint32_t dataOffset, uint32_t dataSize);
+	WP6ExtendedDocumentSummaryPacket(RVNGInputStream *input, RVNGEncryption *encryption, int id, uint32_t dataOffset, uint32_t dataSize);
 	~WP6ExtendedDocumentSummaryPacket();
-	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
+	void _readContents(RVNGInputStream *input, RVNGEncryption *encryption);
 	void parse(WP6Listener *listener) const;
 
 private:
@@ -44,7 +44,7 @@ private:
 	WP6ExtendedDocumentSummaryPacket &operator=(const WP6ExtendedDocumentSummaryPacket &);
 	uint32_t m_dataSize;
 	uint8_t *m_streamData;
-	mutable WPXMemoryInputStream *m_stream;
+	mutable RVNGMemoryInputStream *m_stream;
 
 };
 #endif /* WP6EXTENDEDDOCUMENTSUMMARYPACKET_H */

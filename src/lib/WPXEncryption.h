@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,28 +17,28 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WPXENCRYPTION_H
-#define WPXENCRYPTION_H
+#ifndef RVNGENCRYPTION_H
+#define RVNGENCRYPTION_H
 
-#include <libwpd/libwpd.h>
-#include "libwpd_types.h"
+#include <librevenge/librevenge.h>
+#include "librevenge_types.h"
 
-class WPXInputStream;
+class RVNGInputStream;
 
-class WPXEncryption
+class RVNGEncryption
 {
 public:
-	WPXEncryption(const char *password, const unsigned long encryptionStartOffset = 0);
-	~WPXEncryption();
+	RVNGEncryption(const char *password, const unsigned long encryptionStartOffset = 0);
+	~RVNGEncryption();
 
-	const unsigned char *readAndDecrypt(WPXInputStream *input, unsigned long numBytes, unsigned long &numBytesRead);
+	const unsigned char *readAndDecrypt(RVNGInputStream *input, unsigned long numBytes, unsigned long &numBytesRead);
 	uint16_t getCheckSum() const;
 
 	void setEncryptionStartOffset(unsigned long encryptionStartOffset)
@@ -59,20 +59,20 @@ public:
 		return m_encryptionMaskBase;
 	}
 
-	const WPXString &getEncryptionPassword() const
+	const RVNGString &getEncryptionPassword() const
 	{
 		return m_password;
 	}
 
 private:
 	unsigned char *m_buffer;
-	WPXString m_password;
+	RVNGString m_password;
 	unsigned long m_encryptionStartOffset;
 	unsigned char m_encryptionMaskBase;
 	// Unimplemented to prevent compiler from creating crasher ones
-	WPXEncryption(const WPXEncryption &);
-	WPXEncryption &operator=(const WPXEncryption &);
+	RVNGEncryption(const RVNGEncryption &);
+	RVNGEncryption &operator=(const RVNGEncryption &);
 };
 
-#endif /* WPXENCRYPTION_H */
+#endif /* RVNGENCRYPTION_H */
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

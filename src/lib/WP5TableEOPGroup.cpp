@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -28,9 +28,9 @@
 #include "WP5TableEOPGroup.h"
 #include "WP5FileStructure.h"
 #include "WP5Listener.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
-WP5TableEOPGroup::WP5TableEOPGroup(WPXInputStream *input, WPXEncryption *encryption) :
+WP5TableEOPGroup::WP5TableEOPGroup(RVNGInputStream *input, RVNGEncryption *encryption) :
 	WP5VariableLengthGroup()
 {
 	_read(input, encryption);
@@ -40,7 +40,7 @@ WP5TableEOPGroup::~WP5TableEOPGroup()
 {
 }
 
-void WP5TableEOPGroup::_readContents(WPXInputStream * /* input */, WPXEncryption * /* encryption */)
+void WP5TableEOPGroup::_readContents(RVNGInputStream * /* input */, RVNGEncryption * /* encryption */)
 {
 	switch (getSubGroup())
 	{
@@ -57,7 +57,7 @@ void WP5TableEOPGroup::_readContents(WPXInputStream * /* input */, WPXEncryption
 
 void WP5TableEOPGroup::parse(WP5Listener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling a Table EOP group\n"));
+	RVNG_DEBUG_MSG(("WordPerfect: handling a Table EOP group\n"));
 
 	switch (getSubGroup())
 	{

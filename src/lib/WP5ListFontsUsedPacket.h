@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -26,15 +26,15 @@
 #ifndef WP5LISTFONTSUSEDPACKET_H
 #define WP5LISTFONTSUSEDPACKET_H
 #include "WP5GeneralPacketData.h"
-#include "WPXMemoryStream.h"
+#include "RVNGMemoryStream.h"
 #include <vector>
 
 class WP5ListFontsUsedPacket : public WP5GeneralPacketData
 {
 public:
-	WP5ListFontsUsedPacket(WPXInputStream *input, WPXEncryption *encryption, int id, uint32_t dataOffset, uint32_t dataSize, uint16_t packetType);
+	WP5ListFontsUsedPacket(RVNGInputStream *input, RVNGEncryption *encryption, int id, uint32_t dataOffset, uint32_t dataSize, uint16_t packetType);
 	~WP5ListFontsUsedPacket();
-	void _readContents(WPXInputStream *input, WPXEncryption *encryption, uint32_t dataSize);
+	void _readContents(RVNGInputStream *input, RVNGEncryption *encryption, uint32_t dataSize);
 	unsigned getFontNameOffset(unsigned fontNumber) const;
 	double getFontSize(unsigned fontNumber) const;
 

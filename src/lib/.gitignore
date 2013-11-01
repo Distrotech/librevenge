@@ -6,5 +6,5 @@
 *.rc
 Makefile
 Makefile.in
-libwpd.h
-libwpd-stream.h
+librevenge.h
+librevenge-stream.h

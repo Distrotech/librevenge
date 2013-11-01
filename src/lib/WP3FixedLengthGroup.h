@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -29,15 +29,15 @@
 
 #include "WP3Part.h"
 
-class WPXEncryption;
+class RVNGEncryption;
 
 class WP3FixedLengthGroup : public WP3Part
 {
 public:
 	WP3FixedLengthGroup(const uint8_t groupID);
-	static WP3FixedLengthGroup *constructFixedLengthGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t const groupID);
+	static WP3FixedLengthGroup *constructFixedLengthGroup(RVNGInputStream *input, RVNGEncryption *encryption, uint8_t const groupID);
 
-	static bool isGroupConsistent(WPXInputStream *input, WPXEncryption *encryption, const uint8_t groupID);
+	static bool isGroupConsistent(RVNGInputStream *input, RVNGEncryption *encryption, const uint8_t groupID);
 
 	uint8_t getGroup() const
 	{
@@ -45,8 +45,8 @@ public:
 	}
 
 protected:
-	void _read(WPXInputStream *input, WPXEncryption *encryption);
-	virtual void _readContents(WPXInputStream *input, WPXEncryption *encryption) = 0; // we always read the contents in the case of a fixed length group
+	void _read(RVNGInputStream *input, RVNGEncryption *encryption);
+	virtual void _readContents(RVNGInputStream *input, RVNGEncryption *encryption) = 0; // we always read the contents in the case of a fixed length group
 private:
 	uint8_t m_group;
 };

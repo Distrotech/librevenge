@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -26,11 +26,11 @@
 
 #include "WP6ColumnGroup.h"
 #include "WP6Listener.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 #include "WP6FileStructure.h"
-#include "WPXFileStructure.h"
+#include "RVNGFileStructure.h"
 
-WP6ColumnGroup::WP6ColumnGroup(WPXInputStream *input, WPXEncryption *encryption) :
+WP6ColumnGroup::WP6ColumnGroup(RVNGInputStream *input, RVNGEncryption *encryption) :
 	WP6VariableLengthGroup(),
 	m_margin(0),
 	m_colType(0),
@@ -42,7 +42,7 @@ WP6ColumnGroup::WP6ColumnGroup(WPXInputStream *input, WPXEncryption *encryption)
 	_read(input, encryption);
 }
 
-void WP6ColumnGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP6ColumnGroup::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	// this group can contain different kinds of data, thus we need to read
 	// the contents accordingly
@@ -52,7 +52,7 @@ void WP6ColumnGroup::_readContents(WPXInputStream *input, WPXEncryption *encrypt
 	case 1: // Right Margin Set
 	{
 		m_margin = readU16(input, encryption);
-		WPD_DEBUG_MSG(("WordPerfect: Read column group margin size (margin: %i)\n", m_margin));
+		RVNG_DEBUG_MSG(("WordPerfect: Read column group margin size (margin: %i)\n", m_margin));
 	}
 	break;
 	case 2:
@@ -74,7 +74,7 @@ void WP6ColumnGroup::_readContents(WPXInputStream *input, WPXEncryption *encrypt
 				if ((tmpDefinition & 0x01) == 0x01)
 				{
 					m_isFixedWidth.push_back(true);
-					m_columnWidth.push_back((double)((double)tmpWidth/(double)WPX_NUM_WPUS_PER_INCH));
+					m_columnWidth.push_back((double)((double)tmpWidth/(double)RVNG_NUM_WPUS_PER_INCH));
 				}
 				else
 				{
@@ -84,8 +84,8 @@ void WP6ColumnGroup::_readContents(WPXInputStream *input, WPXEncryption *encrypt
 
 			}
 		}
-		WPD_DEBUG_MSG(("WordPerfect: Column type: %d\n", m_colType & 0x03));
-		WPD_DEBUG_MSG(("WordPerfect: Numer of columns: %d\n", m_numColumns));
+		RVNG_DEBUG_MSG(("WordPerfect: Column type: %d\n", m_colType & 0x03));
+		RVNG_DEBUG_MSG(("WordPerfect: Numer of columns: %d\n", m_numColumns));
 	}
 	break;
 	case 3: /* TODO: Column Border */
@@ -99,7 +99,7 @@ void WP6ColumnGroup::_readContents(WPXInputStream *input, WPXEncryption *encrypt
 
 void WP6ColumnGroup::parse(WP6Listener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling a Column group\n"));
+	RVNG_DEBUG_MSG(("WordPerfect: handling a Column group\n"));
 
 	if (getFlags() & 0x40)  // Ignore function flag
 		return;
@@ -108,12 +108,12 @@ void WP6ColumnGroup::parse(WP6Listener *listener)
 	{
 	case 0: // Left Margin Set
 	{
-		listener->marginChange(WPX_LEFT, m_margin);
+		listener->marginChange(RVNG_LEFT, m_margin);
 	}
 	break;
 	case 1: // Right Margin Set
 	{
-		listener->marginChange(WPX_RIGHT, m_margin);
+		listener->marginChange(RVNG_RIGHT, m_margin);
 	}
 	break;
 	case 2: // Define Text Columns

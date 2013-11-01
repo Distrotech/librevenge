@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -30,15 +30,15 @@
 
 #include "WP1Listener.h"
 #include "WP1SubDocument.h"
-#include "WPXStylesListener.h"
+#include "RVNGStylesListener.h"
 #include <vector>
-#include "WPXPageSpan.h"
-#include "WPXTable.h"
+#include "RVNGPageSpan.h"
+#include "RVNGTable.h"
 
-class WP1StylesListener : public WP1Listener, protected WPXStylesListener
+class WP1StylesListener : public WP1Listener, protected RVNGStylesListener
 {
 public:
-	WP1StylesListener(std::list<WPXPageSpan> &pageList, std::vector<WP1SubDocument *> &subDocuments);
+	WP1StylesListener(std::list<RVNGPageSpan> &pageList, std::vector<WP1SubDocument *> &subDocuments);
 	~WP1StylesListener() {}
 
 	void startDocument() {}
@@ -60,7 +60,7 @@ public:
 		if (!isUndoOn()) m_currentPageHasContent = true;
 	}
 	void insertBreak(uint8_t breakType);
-	void insertNote(WPXNoteType /* noteType */, WP1SubDocument * /* subDocument */) {}
+	void insertNote(RVNGNoteType /* noteType */, WP1SubDocument * /* subDocument */) {}
 	void attributeChange(bool /* isOn */, uint8_t /* attribute */) {}
 	void fontPointSize(uint8_t /* pointSize */) {}
 	void fontId(uint16_t /* id */) {}
@@ -76,7 +76,7 @@ public:
 		if (!isUndoOn()) m_currentPageHasContent = true;
 	}
 	void leftMarginRelease(uint16_t /* release */) {}
-	void setTabs(const std::vector<WPXTabStop> & /* tabStops */) {}
+	void setTabs(const std::vector<RVNGTabStop> & /* tabStops */) {}
 	void headerFooterGroup(uint8_t headerFooterDefinition, WP1SubDocument *subDocument);
 	void suppressPageCharacteristics(uint8_t suppressCode);
 	void justificationChange(uint8_t /* justification */) {}
@@ -87,18 +87,18 @@ public:
 	void centerOff() {}
 	void endDocument();
 	void endSubDocument();
-	void insertPicture(uint16_t /* width */, uint16_t /* height */, const WPXBinaryData & /* binaryData */) {}
+	void insertPicture(uint16_t /* width */, uint16_t /* height */, const RVNGBinaryData & /* binaryData */) {}
 
 protected:
-	void _handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList, int nextTableIndice = 0);
+	void _handleSubDocument(const RVNGSubDocument *subDocument, RVNGSubDocumentType subDocumentType, RVNGTableList tableList, int nextTableIndice = 0);
 
 private:
-	WPXPageSpan m_currentPage, m_nextPage;
+	RVNGPageSpan m_currentPage, m_nextPage;
 	std::vector<WP1SubDocument *> &m_subDocuments;
 	double m_tempMarginLeft, m_tempMarginRight;
 	bool m_currentPageHasContent;
 	bool m_isSubDocument;
-	std::list<WPXPageSpan>::iterator m_pageListHardPageMark;
+	std::list<RVNGPageSpan>::iterator m_pageListHardPageMark;
 };
 
 #endif /* WP1STYLESLISTENER_H */

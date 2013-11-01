@@ -50,11 +50,11 @@
 #include <string>
 #include <vector>
 
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
-#include "WPXOLEStream.h"
+#include "RVNGOLEStream.h"
 
-namespace libwpd
+namespace librevenge
 {
 enum { Avail = 0xffffffff, Eof = 0xfffffffe, Bat = 0xfffffffd, MetaBat = 0xfffffffc, NotFound=0xfffffff0 };
 
@@ -440,8 +440,8 @@ private:
 class IStorage
 {
 public:
-	WPXInputStream *m_input;
-	libwpd::Storage::Result m_result;               // result of operation
+	RVNGInputStream *m_input;
+	librevenge::Storage::Result m_result;               // result of operation
 
 	Header m_header;           // storage header
 	DirTree m_dirtree;         // directory tree
@@ -450,7 +450,7 @@ public:
 
 	std::vector<unsigned long> m_sb_blocks; // blocks for "small" files
 
-	IStorage( WPXInputStream *is );
+	IStorage( RVNGInputStream *is );
 	~IStorage() {}
 
 	//! returns a directory entry corresponding to a index
@@ -553,7 +553,7 @@ public:
 		DirEntry *e = m_dirtree.entry(name);
 		if (!e)
 		{
-			WPD_DEBUG_MSG(("libwpdOLE::OStorage::setInformation: can not find entry %s!!!\n", name.c_str()));
+			RVNG_DEBUG_MSG(("librevengeOLE::OStorage::setInformation: can not find entry %s!!!\n", name.c_str()));
 			return;
 		}
 		e->m_info = info;
@@ -620,12 +620,12 @@ protected:
 	{
 		if (name.length()==0)
 		{
-			WPD_DEBUG_MSG(("libwpdOLE::OStorage::createEntry: called with no name\n"));
+			RVNG_DEBUG_MSG(("librevengeOLE::OStorage::createEntry: called with no name\n"));
 			return 0;
 		}
 		if (m_dirtree.index(name)!=NotFound)
 		{
-			WPD_DEBUG_MSG(("libwpdOLE::OStorage::createEntry: entry %s already exists\n", name.c_str()));
+			RVNG_DEBUG_MSG(("librevengeOLE::OStorage::createEntry: entry %s already exists\n", name.c_str()));
 			return 0;
 		}
 		unsigned index = m_dirtree.index(name,true);
@@ -708,10 +708,10 @@ private:
 	std::vector<unsigned char> m_data;
 };
 
-} // namespace libwpd
+} // namespace librevenge
 // =========== Header ==========
 
-libwpd::Header::Header() :
+librevenge::Header::Header() :
 	m_revision(0x3e), m_num_bat(0), m_start_dirent(0), m_threshold(4096),
 	m_start_sbat(Eof), m_num_sbat(0), m_shift_sbat(6), m_size_sbat(0),
 	m_shift_bbat(9), m_size_bbat(0),
@@ -724,7 +724,7 @@ libwpd::Header::Header() :
 	compute_block_size();
 }
 
-bool libwpd::Header::valid()
+bool librevenge::Header::valid()
 {
 	if( m_threshold != 4096 ) return false;
 	if( m_num_bat == 0 ) return false;
@@ -737,7 +737,7 @@ bool libwpd::Header::valid()
 	return true;
 }
 
-void libwpd::Header::load( const unsigned char *buffer, unsigned long size )
+void librevenge::Header::load( const unsigned char *buffer, unsigned long size )
 {
 	if (size < 512)
 		return;
@@ -759,7 +759,7 @@ void libwpd::Header::load( const unsigned char *buffer, unsigned long size )
 	compute_block_size();
 }
 
-void libwpd::Header::save( unsigned char *buffer )
+void librevenge::Header::save( unsigned char *buffer )
 {
 	memset( buffer, 0, 0x4c );
 	memcpy( buffer, s_ole_magic, 8 );        // ole signature
@@ -786,7 +786,7 @@ void libwpd::Header::save( unsigned char *buffer )
 
 // =========== AllocTable ==========
 
-std::vector<unsigned long> libwpd::AllocTable::follow( unsigned long start ) const
+std::vector<unsigned long> librevenge::AllocTable::follow( unsigned long start ) const
 {
 	std::vector<unsigned long> chain;
 	if( start >= count() ) return chain;
@@ -805,7 +805,7 @@ std::vector<unsigned long> libwpd::AllocTable::follow( unsigned long start ) con
 	return chain;
 }
 
-void libwpd::AllocTable::setChain( std::vector<unsigned long> chain, unsigned end )
+void librevenge::AllocTable::setChain( std::vector<unsigned long> chain, unsigned end )
 {
 	if(!chain.size() ) return;
 
@@ -815,11 +815,11 @@ void libwpd::AllocTable::setChain( std::vector<unsigned long> chain, unsigned en
 }
 
 // =========== DirEntry ==========
-void libwpd::DirEntry::load( unsigned char *buffer, unsigned len )
+void librevenge::DirEntry::load( unsigned char *buffer, unsigned len )
 {
 	if (len != 128)
 	{
-		WPD_DEBUG_MSG(("DirEntry::load: unexpected len for DirEntry::load\n"));
+		RVNG_DEBUG_MSG(("DirEntry::load: unexpected len for DirEntry::load\n"));
 		*this=DirEntry();
 		return;
 	}
@@ -861,7 +861,7 @@ void libwpd::DirEntry::load( unsigned char *buffer, unsigned len )
 	if( name_len < 1 ) m_valid = false;
 }
 
-void libwpd::DirEntry::save( unsigned char *buffer ) const
+void librevenge::DirEntry::save( unsigned char *buffer ) const
 {
 	int i = 0;
 	for (i = 0; i < 128; i++) buffer[i]=0;
@@ -891,13 +891,13 @@ void libwpd::DirEntry::save( unsigned char *buffer ) const
 }
 // =========== DirTree ==========
 
-void libwpd::DirTree::clear()
+void librevenge::DirTree::clear()
 {
 	m_entries.resize( 0 );
 	setRootType(true);
 }
 
-void libwpd::DirTree::setRootType(bool pc)
+void librevenge::DirTree::setRootType(bool pc)
 {
 	if (!m_entries.size())
 	{
@@ -916,7 +916,7 @@ void libwpd::DirTree::setRootType(bool pc)
 	}
 }
 
-unsigned libwpd::DirTree::index( const std::string &name, bool create )
+unsigned librevenge::DirTree::index( const std::string &name, bool create )
 {
 
 	if( name.length()==0 ) return NotFound;
@@ -975,7 +975,7 @@ unsigned libwpd::DirTree::index( const std::string &name, bool create )
 	return ind;
 }
 
-void libwpd::DirTree::load( unsigned char *buffer, unsigned size )
+void librevenge::DirTree::load( unsigned char *buffer, unsigned size )
 {
 	m_entries.clear();
 
@@ -987,7 +987,7 @@ void libwpd::DirTree::load( unsigned char *buffer, unsigned size )
 	}
 }
 
-void libwpd::DirTree::getSubStreamList(unsigned ind, bool all, const std::string &prefix,
+void librevenge::DirTree::getSubStreamList(unsigned ind, bool all, const std::string &prefix,
                                        std::vector<std::string> &res,
                                        std::set<unsigned> &seen,
                                        bool isRoot) const
@@ -1028,7 +1028,7 @@ void libwpd::DirTree::getSubStreamList(unsigned ind, bool all, const std::string
 		getSubStreamList(siblings[s], all, name, res, seen);
 }
 
-void libwpd::DirTree::setInRedBlackTreeForm(unsigned ind, std::set<unsigned> &seen)
+void librevenge::DirTree::setInRedBlackTreeForm(unsigned ind, std::set<unsigned> &seen)
 {
 	if (seen.find(ind) != seen.end())
 		return;
@@ -1053,7 +1053,7 @@ void libwpd::DirTree::setInRedBlackTreeForm(unsigned ind, std::set<unsigned> &se
 		sortedChildren.push_back(*iter);
 	if (sortedChildren.size() != numChild)
 	{
-		WPD_DEBUG_MSG(("DirTree::setInRedBlackTreeForm: OOPS pb with numChild\n"));
+		RVNG_DEBUG_MSG(("DirTree::setInRedBlackTreeForm: OOPS pb with numChild\n"));
 		return;
 	}
 	unsigned h=1;
@@ -1066,7 +1066,7 @@ void libwpd::DirTree::setInRedBlackTreeForm(unsigned ind, std::set<unsigned> &se
 	p->m_child=setInRBTForm(sortedChildren, 0, unsigned(numChild-1), h);
 }
 
-unsigned libwpd::DirTree::setInRBTForm(std::vector<unsigned> const &childs,
+unsigned librevenge::DirTree::setInRBTForm(std::vector<unsigned> const &childs,
                                        unsigned firstInd, unsigned lastInd,
                                        unsigned height)
 {
@@ -1075,7 +1075,7 @@ unsigned libwpd::DirTree::setInRBTForm(std::vector<unsigned> const &childs,
 	DirEntry *p = entry( ind );
 	if (!p)
 	{
-		WPD_DEBUG_MSG(("DirTree::setInRedBlackTreeForm: OOPS can not find tree to modified\n"));
+		RVNG_DEBUG_MSG(("DirTree::setInRedBlackTreeForm: OOPS can not find tree to modified\n"));
 		throw GenericException();
 	}
 	unsigned newH = height==0 ? 0 : height-1;
@@ -1084,7 +1084,7 @@ unsigned libwpd::DirTree::setInRBTForm(std::vector<unsigned> const &childs,
 		p->m_colour = 0;
 		if (firstInd!=middle || lastInd!=middle)
 		{
-			WPD_DEBUG_MSG(("DirTree::setInRedBlackTreeForm: OOPS problem setting RedBlack colour\n"));
+			RVNG_DEBUG_MSG(("DirTree::setInRedBlackTreeForm: OOPS problem setting RedBlack colour\n"));
 		}
 	}
 	if (firstInd!=middle)
@@ -1101,9 +1101,9 @@ unsigned libwpd::DirTree::setInRBTForm(std::vector<unsigned> const &childs,
 
 // =========== IStorage ==========
 
-libwpd::IStorage::IStorage( WPXInputStream *is ) :
+librevenge::IStorage::IStorage( RVNGInputStream *is ) :
 	m_input( is ),
-	m_result(libwpd::Storage::Ok),
+	m_result(librevenge::Storage::Ok),
 	m_header(), m_dirtree(),
 	m_bbat(), m_sbat(), m_sb_blocks(),
 	m_isLoad(false)
@@ -1112,13 +1112,13 @@ libwpd::IStorage::IStorage( WPXInputStream *is ) :
 	m_sbat.m_blockSize = m_header.m_size_sbat;
 }
 
-bool libwpd::IStorage::isOLEStream()
+bool librevenge::IStorage::isOLEStream()
 {
 	load();
-	return (m_result == libwpd::Storage::Ok);
+	return (m_result == librevenge::Storage::Ok);
 }
 
-bool libwpd::IStorage::isSubStream(const std::string &name, bool &isDir)
+bool librevenge::IStorage::isSubStream(const std::string &name, bool &isDir)
 {
 	if (!name.length()) return false;
 	load();
@@ -1129,12 +1129,12 @@ bool libwpd::IStorage::isSubStream(const std::string &name, bool &isDir)
 	return true;
 }
 
-void libwpd::IStorage::load()
+void librevenge::IStorage::load()
 {
 	if (m_isLoad)
 		return;
 	m_isLoad = true;
-	m_result = libwpd::Storage::NotOLE;
+	m_result = librevenge::Storage::NotOLE;
 	if (!m_input)
 		return;
 
@@ -1142,7 +1142,7 @@ void libwpd::IStorage::load()
 
 	// load header
 	unsigned long numBytesRead = 0;
-	m_input->seek(0, WPX_SEEK_SET);
+	m_input->seek(0, RVNG_SEEK_SET);
 	const unsigned char *buf = m_input->read(512, numBytesRead);
 
 	if (numBytesRead < 512)
@@ -1155,7 +1155,7 @@ void libwpd::IStorage::load()
 		return;
 
 	// sanity checks
-	m_result = libwpd::Storage::BadOLE;
+	m_result = librevenge::Storage::BadOLE;
 	if( !m_header.valid() ) return;
 	if( m_header.m_threshold != 4096 ) return;
 
@@ -1224,12 +1224,12 @@ void libwpd::IStorage::load()
 			m_sb_blocks = m_bbat.follow( sb_start ); // small files
 
 			// so far so good
-			m_result = libwpd::Storage::Ok;
+			m_result = librevenge::Storage::Ok;
 		}
 	}
 }
 
-unsigned long libwpd::IStorage::loadBigBlocks( std::vector<unsigned long> const &blocks,
+unsigned long librevenge::IStorage::loadBigBlocks( std::vector<unsigned long> const &blocks,
         unsigned char *data, unsigned long maxlen )
 {
 	// sentinel
@@ -1245,7 +1245,7 @@ unsigned long libwpd::IStorage::loadBigBlocks( std::vector<unsigned long> const 
 		unsigned long pos =  m_bbat.m_blockSize * ( block+1 );
 		unsigned long p = (m_bbat.m_blockSize < maxlen-bytes) ? m_bbat.m_blockSize : maxlen-bytes;
 
-		m_input->seek(long(pos), WPX_SEEK_SET);
+		m_input->seek(long(pos), RVNG_SEEK_SET);
 		unsigned long numBytesRead = 0;
 		const unsigned char *buf = m_input->read(p, numBytesRead);
 		memcpy(data+bytes, buf, numBytesRead);
@@ -1255,7 +1255,7 @@ unsigned long libwpd::IStorage::loadBigBlocks( std::vector<unsigned long> const 
 	return bytes;
 }
 
-unsigned long libwpd::IStorage::loadBigBlock( unsigned long block,
+unsigned long librevenge::IStorage::loadBigBlock( unsigned long block,
         unsigned char *data, unsigned long maxlen )
 {
 	// sentinel
@@ -1270,7 +1270,7 @@ unsigned long libwpd::IStorage::loadBigBlock( unsigned long block,
 }
 
 // return number of bytes which has been read
-unsigned long libwpd::IStorage::loadSmallBlocks( std::vector<unsigned long> const &blocks,
+unsigned long librevenge::IStorage::loadSmallBlocks( std::vector<unsigned long> const &blocks,
         unsigned char *data, unsigned long maxlen )
 {
 	// sentinel
@@ -1303,7 +1303,7 @@ unsigned long libwpd::IStorage::loadSmallBlocks( std::vector<unsigned long> cons
 	return bytes;
 }
 
-unsigned long libwpd::IStorage::loadSmallBlock( unsigned long block,
+unsigned long librevenge::IStorage::loadSmallBlock( unsigned long block,
         unsigned char *data, unsigned long maxlen )
 {
 	// sentinel
@@ -1318,7 +1318,7 @@ unsigned long libwpd::IStorage::loadSmallBlock( unsigned long block,
 }
 
 // =========== OStorage ==========
-bool libwpd::OStorage::addDirectory(std::string const &dir)
+bool librevenge::OStorage::addDirectory(std::string const &dir)
 {
 	DirEntry *e=createEntry(dir);
 	if (!e) return false;
@@ -1327,14 +1327,14 @@ bool libwpd::OStorage::addDirectory(std::string const &dir)
 	return true;
 }
 
-bool libwpd::OStorage::addStream(std::string const &name, unsigned char const *buffer, unsigned long len)
+bool librevenge::OStorage::addStream(std::string const &name, unsigned char const *buffer, unsigned long len)
 {
 	DirEntry *e=createEntry(name);
 	if (!e) return false;
 
 	if (!len)
 	{
-		WPD_DEBUG_MSG(("libwpdOLE::OStorage::addStream: call to create an empty file!!!\n"));
+		RVNG_DEBUG_MSG(("librevengeOLE::OStorage::addStream: call to create an empty file!!!\n"));
 		return true;
 	}
 	e->m_start = insertData(buffer, len, useBigBlockFor(len));
@@ -1342,13 +1342,13 @@ bool libwpd::OStorage::addStream(std::string const &name, unsigned char const *b
 	return true;
 }
 
-bool libwpd::OStorage::updateToSave()
+bool librevenge::OStorage::updateToSave()
 {
 	unsigned long dirSize = m_dirtree.saveSize();
 	DirEntry *rEntry = m_dirtree.entry(0);
 	if (!dirSize || !rEntry)
 	{
-		WPD_DEBUG_MSG(("libwpdOLE::OStorage::updateToSave: can not find dir tree size!!!\n"));
+		RVNG_DEBUG_MSG(("librevengeOLE::OStorage::updateToSave: can not find dir tree size!!!\n"));
 		return false;
 	}
 	m_dirtree.setInRedBlackTreeForm();
@@ -1381,7 +1381,7 @@ bool libwpd::OStorage::updateToSave()
 	unsigned numBBlock = m_num_bbat;
 	if (numBBlock==0)
 	{
-		WPD_DEBUG_MSG(("libwpdOLE::OStorage::updateToSave: can not find any big block!!!\n"));
+		RVNG_DEBUG_MSG(("librevengeOLE::OStorage::updateToSave: can not find any big block!!!\n"));
 		return false;
 	}
 	unsigned numBAlloc = (numBBlock+127)/128;
@@ -1451,11 +1451,11 @@ bool libwpd::OStorage::updateToSave()
 	return true;
 }
 
-unsigned libwpd::OStorage::insertData(unsigned char const *buffer, unsigned long len, bool useBigBlock, unsigned end)
+unsigned librevenge::OStorage::insertData(unsigned char const *buffer, unsigned long len, bool useBigBlock, unsigned end)
 {
 	if (buffer==0 || len == 0)
 	{
-		WPD_DEBUG_MSG(("libwpdOLE::OStorage::insertData: call with no data\n"));
+		RVNG_DEBUG_MSG(("librevengeOLE::OStorage::insertData: call with no data\n"));
 		return 0;
 	}
 
@@ -1481,7 +1481,7 @@ unsigned libwpd::OStorage::insertData(unsigned char const *buffer, unsigned long
 
 // =========== IStream ==========
 
-libwpd::IStream::IStream( libwpd::IStorage *s, std::string const &name) :
+librevenge::IStream::IStream( librevenge::IStorage *s, std::string const &name) :
 	m_iStorage(s),
 	m_size(0),
 	m_name(name),
@@ -1508,7 +1508,7 @@ libwpd::IStream::IStream( libwpd::IStorage *s, std::string const &name) :
 		m_blocks = m_iStorage->m_sbat.follow( entry->m_start );
 }
 
-unsigned long libwpd::IStream::readData( unsigned long pos, unsigned char *data, unsigned long maxlen)
+unsigned long librevenge::IStream::readData( unsigned long pos, unsigned char *data, unsigned long maxlen)
 {
 	// sanity checks
 	if( !data || maxlen <= 0 || (unsigned long)m_data.size() != m_size || !m_size)
@@ -1522,7 +1522,7 @@ unsigned long libwpd::IStream::readData( unsigned long pos, unsigned char *data,
 	return count;
 }
 
-unsigned long libwpd::IStream::readUsingStorage( unsigned long pos, unsigned char *data, unsigned long maxlen )
+unsigned long librevenge::IStream::readUsingStorage( unsigned long pos, unsigned char *data, unsigned long maxlen )
 {
 	// sanity checks
 	if( !data || maxlen <= 0 || !m_iStorage || !m_size) return 0;
@@ -1577,7 +1577,7 @@ unsigned long libwpd::IStream::readUsingStorage( unsigned long pos, unsigned cha
 	return totalbytes;
 }
 
-bool libwpd::IStream::createOleFromDirectory( IStorage *io, std::string const &name )
+bool librevenge::IStream::createOleFromDirectory( IStorage *io, std::string const &name )
 {
 	// sanety check
 	if( !name.length() || !io) return false;
@@ -1586,11 +1586,11 @@ bool libwpd::IStream::createOleFromDirectory( IStorage *io, std::string const &n
 	if (!entry || !entry->is_dir()) return false;
 
 	unsigned index = io->index(name);
-	if (index==libwpd::NotFound)  return false;
+	if (index==librevenge::NotFound)  return false;
 	std::vector<std::string> nodes=io->getSubStreamList(index, true);
 	if (nodes.size() <= 1)
 	{
-		WPD_DEBUG_MSG(("libwpd::IStream::createOleFromDirectory: can not find any child for %s\n", name.c_str()));
+		RVNG_DEBUG_MSG(("librevenge::IStream::createOleFromDirectory: can not find any child for %s\n", name.c_str()));
 		return false;
 	}
 	try
@@ -1614,7 +1614,7 @@ bool libwpd::IStream::createOleFromDirectory( IStorage *io, std::string const &n
 				minimalSize+=((entry->m_size+63)/64)*64;
 		}
 
-		libwpd::OStorage storage(minimalSize);
+		librevenge::OStorage storage(minimalSize);
 		storage.setRevision(io->revision());
 		if (!io->hasRootTypePc())
 			storage.setRootType(false);
@@ -1624,16 +1624,16 @@ bool libwpd::IStream::createOleFromDirectory( IStorage *io, std::string const &n
 			entry=io->entry(fullName);
 			if (!entry)
 			{
-				WPD_DEBUG_MSG(("libwpd::IStream::createOleFromDirectory: can not find child for %s\n", fullName.c_str()));
+				RVNG_DEBUG_MSG(("librevenge::IStream::createOleFromDirectory: can not find child for %s\n", fullName.c_str()));
 				continue;
 			}
 			if (entry->is_dir())
 			{
-				if (entry->m_child == libwpd::DirEntry::End)
+				if (entry->m_child == librevenge::DirEntry::End)
 					storage.addDirectory(nodes[l]);
 				continue;
 			}
-			libwpd::IStream leafStream(io,fullName);
+			librevenge::IStream leafStream(io,fullName);
 			unsigned long sz=leafStream.size();
 			bool ok = true;
 			if (sz)
@@ -1646,7 +1646,7 @@ bool libwpd::IStream::createOleFromDirectory( IStorage *io, std::string const &n
 				ok=storage.addStream(nodes[l], &buffer[0], sz);
 			if (!ok)
 			{
-				WPD_DEBUG_MSG(("libwpd::IStream::createOleFromDirectory: can not read %s\n", fullName.c_str()));
+				RVNG_DEBUG_MSG(("librevenge::IStream::createOleFromDirectory: can not read %s\n", fullName.c_str()));
 				return false;
 			}
 		}
@@ -1679,47 +1679,47 @@ bool libwpd::IStream::createOleFromDirectory( IStorage *io, std::string const &n
 
 // =========== Storage ==========
 
-libwpd::Storage::Storage( WPXInputStream *is ) :
+librevenge::Storage::Storage( RVNGInputStream *is ) :
 	m_io(0)
 {
 	m_io = new IStorage( is );
 }
 
-libwpd::Storage::~Storage()
+librevenge::Storage::~Storage()
 {
 	delete m_io;
 }
 
-libwpd::Storage::Result libwpd::Storage::result()
+librevenge::Storage::Result librevenge::Storage::result()
 {
 	return m_io->m_result;
 }
 
-bool libwpd::Storage::isOLEStream()
+bool librevenge::Storage::isOLEStream()
 {
 	return m_io->isOLEStream();
 }
 
 // =========== Stream ==========
 
-libwpd::Stream::Stream( libwpd::Storage *storage, const std::string &name ) :
+librevenge::Stream::Stream( librevenge::Storage *storage, const std::string &name ) :
 	m_io(0)
 {
-	m_io = new libwpd::IStream(storage->m_io, name);
+	m_io = new librevenge::IStream(storage->m_io, name);
 }
 
 // FIXME tell parent we're gone
-libwpd::Stream::~Stream()
+librevenge::Stream::~Stream()
 {
 	if (m_io) delete m_io;
 }
 
-unsigned long libwpd::Stream::size()
+unsigned long librevenge::Stream::size()
 {
 	return m_io ? m_io->size() : 0;
 }
 
-unsigned long libwpd::Stream::read( unsigned char *data, unsigned long maxlen )
+unsigned long librevenge::Stream::read( unsigned char *data, unsigned long maxlen )
 {
 	return m_io ? m_io->read( data, maxlen ) : 0;
 }

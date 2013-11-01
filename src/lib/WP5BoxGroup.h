@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -27,16 +27,16 @@
 #define WP5BOXGROUP_H
 
 #include "WP5VariableLengthGroup.h"
-#include <libwpd/libwpd.h>
+#include <librevenge/librevenge.h>
 
 class WP5BoxGroup : public WP5VariableLengthGroup
 {
 public:
-	WP5BoxGroup(WPXInputStream *input, WPXEncryption *encryption);
+	WP5BoxGroup(RVNGInputStream *input, RVNGEncryption *encryption);
 	void parse(WP5Listener *listener);
 
 protected:
-	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
+	void _readContents(RVNGInputStream *input, RVNGEncryption *encryption);
 
 private:
 	uint16_t m_boxNumber;
@@ -44,7 +44,7 @@ private:
 	uint16_t m_width, m_height, m_x, m_y;
 	uint8_t m_boxType;
 	uint16_t m_graphicsOffset;
-	const WPXBinaryData *m_data;
+	const RVNGBinaryData *m_data;
 	// Unimplemented to prevent compiler from creating crasher ones
 	WP5BoxGroup(const WP5BoxGroup &);
 	WP5BoxGroup &operator=(const WP5BoxGroup &);

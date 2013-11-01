@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,22 +16,22 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
-#ifndef __WPXZIPSTREAM_H__
-#define __WPXZIPSTREAM_H__
+#ifndef __RVNGZIPSTREAM_H__
+#define __RVNGZIPSTREAM_H__
 
 #include <vector>
-#include <libwpd-stream/libwpd-stream.h>
+#include <librevenge-stream/librevenge-stream.h>
 
-class WPXZipStream
+class RVNGZipStream
 {
 public:
-	static bool isZipFile(WPXInputStream *input);
+	static bool isZipFile(RVNGInputStream *input);
 
-	static WPXInputStream *getSubstream(WPXInputStream *input, const char *name);
+	static RVNGInputStream *getSubstream(RVNGInputStream *input, const char *name);
 };
 
-#endif // __WPXZIPSTREAM_H__
+#endif // __RVNGZIPSTREAM_H__
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

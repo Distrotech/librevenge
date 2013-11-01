@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -27,18 +27,18 @@
 #include "WP6StylesListener.h"
 #include "WP6ContentListener.h"
 #include "WP6Parser.h"
-#include "WPXHeader.h"
+#include "RVNGHeader.h"
 #include "WP6Header.h"
 #include "WP60Header.h"
 #include "WP61Header.h"
 #include "WP6PrefixData.h"
 #include "WP6Part.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 #include "WP6DefaultInitialFontPacket.h"
-#include "WPXTable.h"
+#include "RVNGTable.h"
 
-WP6Parser::WP6Parser(WPXInputStream *input, WPXHeader *header, WPXEncryption *encryption) :
-	WPXParser(input, header, encryption)
+WP6Parser::WP6Parser(RVNGInputStream *input, RVNGHeader *header, RVNGEncryption *encryption) :
+	RVNGParser(input, header, encryption)
 {
 }
 
@@ -46,7 +46,7 @@ WP6Parser::~WP6Parser()
 {
 }
 
-WP6PrefixData *WP6Parser::getPrefixData(WPXInputStream *input, WPXEncryption *encryption)
+WP6PrefixData *WP6Parser::getPrefixData(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	WP6PrefixData *prefixData = 0;
 	try
@@ -56,7 +56,7 @@ WP6PrefixData *WP6Parser::getPrefixData(WPXInputStream *input, WPXEncryption *en
 	}
 	catch(FileException)
 	{
-		WPD_DEBUG_MSG(("WordPerfect: Prefix Data most likely corrupted.\n"));
+		RVNG_DEBUG_MSG(("WordPerfect: Prefix Data most likely corrupted.\n"));
 		// TODO: Try to check packet after packet so that we try to recover at least the begining if the corruption is not at
 		//       the begining.
 		DELETEP(prefixData);
@@ -64,7 +64,7 @@ WP6PrefixData *WP6Parser::getPrefixData(WPXInputStream *input, WPXEncryption *en
 	}
 	catch(...)
 	{
-		WPD_DEBUG_MSG(("WordPerfect: Prefix Data most likely corrupted. Trying to ignore.\n"));
+		RVNG_DEBUG_MSG(("WordPerfect: Prefix Data most likely corrupted. Trying to ignore.\n"));
 		// TODO: Try to check packet after packet so that we try to recover at least the begining if the corruption is not at
 		//       the begining.
 		DELETEP(prefixData);
@@ -72,13 +72,13 @@ WP6PrefixData *WP6Parser::getPrefixData(WPXInputStream *input, WPXEncryption *en
 	}
 }
 
-void WP6Parser::parse(WPXInputStream *input, WPXEncryption *encryption, WP6Listener *listener)
+void WP6Parser::parse(RVNGInputStream *input, RVNGEncryption *encryption, WP6Listener *listener)
 {
 	listener->startDocument();
 
-	input->seek(getHeader()->getDocumentOffset(), WPX_SEEK_SET);
+	input->seek(getHeader()->getDocumentOffset(), RVNG_SEEK_SET);
 
-	WPD_DEBUG_MSG(("WordPerfect: Starting document body parse (position = %ld)\n",(long)input->tell()));
+	RVNG_DEBUG_MSG(("WordPerfect: Starting document body parse (position = %ld)\n",(long)input->tell()));
 
 	parseDocument(input, encryption, listener);
 
@@ -122,7 +122,7 @@ static const uint16_t extendedInternationalCharacterMap[] =
 };
 
 // parseDocument: parses a document body (may call itself recursively, on other streams, or itself)
-void WP6Parser::parseDocument(WPXInputStream *input, WPXEncryption *encryption, WP6Listener *listener)
+void WP6Parser::parseDocument(RVNGInputStream *input, RVNGEncryption *encryption, WP6Listener *listener)
 {
 	while (!input->atEOS())
 	{
@@ -182,14 +182,14 @@ void WP6Parser::parsePackets(WP6PrefixData *prefixData, int type, WP6Listener *l
 
 // WP6Parser::parse() reads AND parses a wordperfect document, passing any retrieved low-level
 // information to a low-level listener
-void WP6Parser::parse(WPXDocumentInterface *documentInterface)
+void WP6Parser::parse(RVNGDocumentInterface *documentInterface)
 {
 	WP6PrefixData *prefixData = 0;
-	std::list<WPXPageSpan> pageList;
-	WPXTableList tableList;
+	std::list<RVNGPageSpan> pageList;
+	RVNGTableList tableList;
 
-	WPXInputStream *input = getInput();
-	WPXEncryption *encryption = getEncryption();
+	RVNGInputStream *input = getInput();
+	RVNGEncryption *encryption = getEncryption();
 
 	try
 	{
@@ -202,8 +202,8 @@ void WP6Parser::parse(WPXDocumentInterface *documentInterface)
 		parse(input, encryption, &stylesListener);
 
 		// postprocess the pageList == remove duplicate page spans due to the page breaks
-		std::list<WPXPageSpan>::iterator previousPage = pageList.begin();
-		for (std::list<WPXPageSpan>::iterator Iter=pageList.begin(); Iter != pageList.end(); /* Iter++ */)
+		std::list<RVNGPageSpan>::iterator previousPage = pageList.begin();
+		for (std::list<RVNGPageSpan>::iterator Iter=pageList.begin(); Iter != pageList.end(); /* Iter++ */)
 		{
 			if ((Iter != previousPage) && ((*previousPage)==(*Iter)))
 			{
@@ -235,7 +235,7 @@ void WP6Parser::parse(WPXDocumentInterface *documentInterface)
 	}
 	catch(FileException)
 	{
-		WPD_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
+		RVNG_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
 
 		delete prefixData;
 
@@ -243,12 +243,12 @@ void WP6Parser::parse(WPXDocumentInterface *documentInterface)
 	}
 }
 
-void WP6Parser::parseSubDocument(WPXDocumentInterface *documentInterface)
+void WP6Parser::parseSubDocument(RVNGDocumentInterface *documentInterface)
 {
-	std::list<WPXPageSpan> pageList;
-	WPXTableList tableList;
+	std::list<RVNGPageSpan> pageList;
+	RVNGTableList tableList;
 
-	WPXInputStream *input = getInput();
+	RVNGInputStream *input = getInput();
 
 	try
 	{
@@ -257,7 +257,7 @@ void WP6Parser::parseSubDocument(WPXDocumentInterface *documentInterface)
 		parseDocument(input, 0, &stylesListener);
 		stylesListener.endSubDocument();
 
-		input->seek(0, WPX_SEEK_SET);
+		input->seek(0, RVNG_SEEK_SET);
 
 		WP6ContentListener listener(pageList, tableList, documentInterface);
 		listener.startSubDocument();
@@ -266,7 +266,7 @@ void WP6Parser::parseSubDocument(WPXDocumentInterface *documentInterface)
 	}
 	catch(FileException)
 	{
-		WPD_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
+		RVNG_DEBUG_MSG(("WordPerfect: File Exception. Parse terminated prematurely."));
 		throw FileException();
 	}
 }

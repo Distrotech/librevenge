@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -32,7 +32,7 @@
 class WP6StyleGroup_GlobalOnSubGroup : public WP6VariableLengthGroup_SubGroup
 {
 public:
-	WP6StyleGroup_GlobalOnSubGroup(WPXInputStream *input, WPXEncryption *encryption);
+	WP6StyleGroup_GlobalOnSubGroup(RVNGInputStream *input, RVNGEncryption *encryption);
 	void parse(WP6Listener *listener, const uint8_t numPrefixIDs, uint16_t const *prefixIDs) const;
 
 private:
@@ -43,9 +43,9 @@ private:
 class WP6StyleGroup : public WP6VariableLengthGroup
 {
 public:
-	WP6StyleGroup(WPXInputStream *input, WPXEncryption *encryption);
+	WP6StyleGroup(RVNGInputStream *input, RVNGEncryption *encryption);
 	~WP6StyleGroup();
-	void _readContents(WPXInputStream *input, WPXEncryption *encryption);
+	void _readContents(RVNGInputStream *input, RVNGEncryption *encryption);
 	void parse(WP6Listener *listener);
 
 private:

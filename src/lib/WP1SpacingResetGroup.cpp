@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -24,9 +24,9 @@
  */
 
 #include "WP1SpacingResetGroup.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
-WP1SpacingResetGroup::WP1SpacingResetGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group) :
+WP1SpacingResetGroup::WP1SpacingResetGroup(RVNGInputStream *input, RVNGEncryption *encryption, uint8_t group) :
 	WP1FixedLengthGroup(group),
 	m_spacing(2)
 {
@@ -37,15 +37,15 @@ WP1SpacingResetGroup::~WP1SpacingResetGroup()
 {
 }
 
-void WP1SpacingResetGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP1SpacingResetGroup::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
-	input->seek(1, WPX_SEEK_CUR);
+	input->seek(1, RVNG_SEEK_CUR);
 	m_spacing = readU8(input, encryption);
 }
 
 void WP1SpacingResetGroup::parse(WP1Listener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling the Spacing Reset group\n"));
+	RVNG_DEBUG_MSG(("WordPerfect: handling the Spacing Reset group\n"));
 	listener->lineSpacingChange(m_spacing);
 }
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

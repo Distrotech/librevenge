@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -25,16 +25,16 @@
  */
 
 #include "WP3StylesListener.h"
-#include "WPXTable.h"
+#include "RVNGTable.h"
 #include "WP3FileStructure.h"
-#include "WPXFileStructure.h"
-#include "libwpd_internal.h"
+#include "RVNGFileStructure.h"
+#include "librevenge_internal.h"
 #include "WP3SubDocument.h"
 
-WP3StylesListener::WP3StylesListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, std::vector<WP3SubDocument *> &subDocuments) :
+WP3StylesListener::WP3StylesListener(std::list<RVNGPageSpan> &pageList, RVNGTableList tableList, std::vector<WP3SubDocument *> &subDocuments) :
 	WP3Listener(),
-	WPXStylesListener(pageList),
-	m_currentPage(WPXPageSpan()),
+	RVNGStylesListener(pageList),
+	m_currentPage(RVNGPageSpan()),
 	m_tableList(tableList),
 	m_currentTable(0),
 	m_tempMarginLeft(1.0),
@@ -49,13 +49,13 @@ WP3StylesListener::WP3StylesListener(std::list<WPXPageSpan> &pageList, WPXTableL
 
 void WP3StylesListener::endDocument()
 {
-	insertBreak(WPX_SOFT_PAGE_BREAK); // pretend we just had a soft page break (for the last page)
+	insertBreak(RVNG_SOFT_PAGE_BREAK); // pretend we just had a soft page break (for the last page)
 	setUndoOn(false);
 }
 
 void WP3StylesListener::endSubDocument()
 {
-	insertBreak(WPX_SOFT_PAGE_BREAK); // pretend we just had a soft page break (for the last page)
+	insertBreak(RVNG_SOFT_PAGE_BREAK); // pretend we just had a soft page break (for the last page)
 	setUndoOn(false);
 }
 
@@ -67,11 +67,11 @@ void WP3StylesListener::insertBreak(const uint8_t breakType)
 	if (!isUndoOn())
 	{
 		m_currentPageHasContent = true;
-		WPXTableList tableList;
+		RVNGTableList tableList;
 		switch (breakType)
 		{
-		case WPX_PAGE_BREAK:
-		case WPX_SOFT_PAGE_BREAK:
+		case RVNG_PAGE_BREAK:
+		case RVNG_SOFT_PAGE_BREAK:
 			if ((m_pageList.size() > 0) && (m_currentPage==m_pageList.back())
 			        && (m_pageListHardPageMark != m_pageList.end()))
 			{
@@ -79,18 +79,18 @@ void WP3StylesListener::insertBreak(const uint8_t breakType)
 			}
 			else
 			{
-				m_pageList.push_back(WPXPageSpan(m_currentPage));
+				m_pageList.push_back(RVNGPageSpan(m_currentPage));
 				if (m_pageListHardPageMark == m_pageList.end())
 					--m_pageListHardPageMark;
 			}
-			m_currentPage = WPXPageSpan(m_pageList.back(), 0.0, 0.0);
+			m_currentPage = RVNGPageSpan(m_pageList.back(), 0.0, 0.0);
 			m_currentPage.setPageSpan(1);
 			m_currentPageHasContent = false;
 			break;
 		default:
 			break;
 		}
-		if (breakType == WPX_PAGE_BREAK)
+		if (breakType == RVNG_PAGE_BREAK)
 		{
 			m_pageListHardPageMark = m_pageList.end();
 			m_currentPage.setMarginLeft(m_tempMarginLeft);
@@ -114,13 +114,13 @@ void WP3StylesListener::pageMarginChange(const uint8_t side, const uint16_t marg
 {
 	if (!isUndoOn())
 	{
-		double marginInch = (double)((double)margin / (double)WPX_NUM_WPUS_PER_INCH);
+		double marginInch = (double)((double)margin / (double)RVNG_NUM_WPUS_PER_INCH);
 		switch(side)
 		{
-		case WPX_TOP:
+		case RVNG_TOP:
 			m_currentPage.setMarginTop(marginInch);
 			break;
-		case WPX_BOTTOM:
+		case RVNG_BOTTOM:
 			m_currentPage.setMarginBottom(marginInch);
 			break;
 		default:
@@ -136,11 +136,11 @@ void WP3StylesListener::marginChange(const uint8_t side, const uint16_t margin)
 		if (m_isSubDocument)
 			return; // do not collect L/R margin information in sub documents
 
-		std::list<WPXPageSpan>::iterator Iter;
-		double marginInch = (double)((double)margin / (double)WPX_NUM_WPUS_PER_INCH);
+		std::list<RVNGPageSpan>::iterator Iter;
+		double marginInch = (double)((double)margin / (double)RVNG_NUM_WPUS_PER_INCH);
 		switch(side)
 		{
-		case WPX_LEFT:
+		case RVNG_LEFT:
 			if (!m_currentPageHasContent && (m_pageListHardPageMark == m_pageList.end()))
 				m_currentPage.setMarginLeft(marginInch);
 			else if (m_currentPage.getMarginLeft() > marginInch)
@@ -154,7 +154,7 @@ void WP3StylesListener::marginChange(const uint8_t side, const uint16_t margin)
 			}
 			m_tempMarginLeft = marginInch;
 			break;
-		case WPX_RIGHT:
+		case RVNG_RIGHT:
 			if (!m_currentPageHasContent && (m_pageListHardPageMark == m_pageList.end()))
 				m_currentPage.setMarginRight(marginInch);
 			else if (m_currentPage.getMarginRight() > marginInch)
@@ -175,12 +175,12 @@ void WP3StylesListener::marginChange(const uint8_t side, const uint16_t margin)
 	}
 }
 
-void WP3StylesListener::pageFormChange(const uint16_t length, const uint16_t width, const WPXFormOrientation orientation)
+void WP3StylesListener::pageFormChange(const uint16_t length, const uint16_t width, const RVNGFormOrientation orientation)
 {
 	if (!isUndoOn())
 	{
-		double lengthInch = (double)((double)length / (double)WPX_NUM_WPUS_PER_INCH);
-		double widthInch = (double)((double)width / (double)WPX_NUM_WPUS_PER_INCH);
+		double lengthInch = (double)((double)length / (double)RVNG_NUM_WPUS_PER_INCH);
+		double widthInch = (double)((double)width / (double)RVNG_NUM_WPUS_PER_INCH);
 		if (!m_currentPageHasContent)
 		{
 			m_currentPage.setFormLength(lengthInch);
@@ -197,32 +197,32 @@ void WP3StylesListener::headerFooterGroup(const uint8_t headerFooterType, const 
 		if (subDocument)
 			m_subDocuments.push_back(subDocument);
 
-		WPD_DEBUG_MSG(("WordPerfect: headerFooterGroup (headerFooterType: %i, occurenceBits: %i)\n",
+		RVNG_DEBUG_MSG(("WordPerfect: headerFooterGroup (headerFooterType: %i, occurenceBits: %i)\n",
 		               headerFooterType, occurenceBits));
 		bool tempCurrentPageHasContent = m_currentPageHasContent;
 		if (headerFooterType <= WP3_HEADER_FOOTER_GROUP_FOOTER_B) // ignore watermarks for now
 		{
-			WPXHeaderFooterType wpxType = ((headerFooterType <= WP3_HEADER_FOOTER_GROUP_HEADER_B) ? HEADER : FOOTER);
+			RVNGHeaderFooterType rvngType = ((headerFooterType <= WP3_HEADER_FOOTER_GROUP_HEADER_B) ? HEADER : FOOTER);
 
-			WPXHeaderFooterOccurence wpxOccurence;
+			RVNGHeaderFooterOccurence rvngOccurence;
 			if ((occurenceBits & WP3_HEADER_FOOTER_GROUP_EVEN_BIT) && (occurenceBits & WP3_HEADER_FOOTER_GROUP_ODD_BIT))
-				wpxOccurence = ALL;
+				rvngOccurence = ALL;
 			else if (occurenceBits & WP3_HEADER_FOOTER_GROUP_EVEN_BIT)
-				wpxOccurence = EVEN;
+				rvngOccurence = EVEN;
 			else if (occurenceBits & WP3_HEADER_FOOTER_GROUP_ODD_BIT)
-				wpxOccurence = ODD;
+				rvngOccurence = ODD;
 			else
-				wpxOccurence = NEVER;
+				rvngOccurence = NEVER;
 
-			WPXTableList tableList;
+			RVNGTableList tableList;
 
-			if (wpxOccurence != NEVER)
+			if (rvngOccurence != NEVER)
 			{
-				m_currentPage.setHeaderFooter(wpxType, headerFooterType, wpxOccurence, subDocument, tableList);
-				_handleSubDocument(subDocument, WPX_SUBDOCUMENT_HEADER_FOOTER, tableList);
+				m_currentPage.setHeaderFooter(rvngType, headerFooterType, rvngOccurence, subDocument, tableList);
+				_handleSubDocument(subDocument, RVNG_SUBDOCUMENT_HEADER_FOOTER, tableList);
 			}
 			else
-				m_currentPage.setHeaderFooter(wpxType, headerFooterType, wpxOccurence, 0, tableList);
+				m_currentPage.setHeaderFooter(rvngType, headerFooterType, rvngOccurence, 0, tableList);
 		}
 		m_currentPageHasContent = tempCurrentPageHasContent;
 	}
@@ -233,15 +233,15 @@ void WP3StylesListener::suppressPage(const uint16_t suppressCode)
 {
 	if (!isUndoOn())
 	{
-		WPD_DEBUG_MSG(("WordPerfect: suppressPageCharacteristics (suppressCode: %u)\n", suppressCode));
+		RVNG_DEBUG_MSG(("WordPerfect: suppressPageCharacteristics (suppressCode: %u)\n", suppressCode));
 		if (suppressCode & WP3_PAGE_GROUP_SUPPRESS_HEADER_A)
-			m_currentPage.setHeadFooterSuppression(WPX_HEADER_A, true);
+			m_currentPage.setHeadFooterSuppression(RVNG_HEADER_A, true);
 		if (suppressCode & WP3_PAGE_GROUP_SUPPRESS_HEADER_B)
-			m_currentPage.setHeadFooterSuppression(WPX_HEADER_B, true);
+			m_currentPage.setHeadFooterSuppression(RVNG_HEADER_B, true);
 		if (suppressCode & WP3_PAGE_GROUP_SUPPRESS_FOOTER_A)
-			m_currentPage.setHeadFooterSuppression(WPX_FOOTER_A, true);
+			m_currentPage.setHeadFooterSuppression(RVNG_FOOTER_A, true);
 		if (suppressCode & WP3_PAGE_GROUP_SUPPRESS_FOOTER_B)
-			m_currentPage.setHeadFooterSuppression(WPX_FOOTER_B, true);
+			m_currentPage.setHeadFooterSuppression(RVNG_FOOTER_B, true);
 	}
 }
 
@@ -250,7 +250,7 @@ void WP3StylesListener::startTable()
 	if (!isUndoOn())
 	{
 		m_currentPageHasContent = true;
-		m_currentTable = new WPXTable();
+		m_currentTable = new RVNGTable();
 		m_tableList.add(m_currentTable);
 	}
 }
@@ -275,17 +275,17 @@ void WP3StylesListener::insertCell()
 	}
 }
 
-void WP3StylesListener::_handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType,
-        WPXTableList tableList, int /* nextTableIndice */)
+void WP3StylesListener::_handleSubDocument(const RVNGSubDocument *subDocument, RVNGSubDocumentType subDocumentType,
+        RVNGTableList tableList, int /* nextTableIndice */)
 {
 	bool oldIsSubDocument = m_isSubDocument;
 	m_isSubDocument = true;
 	bool oldIsUndoOn = isUndoOn();
-	if (subDocumentType == WPX_SUBDOCUMENT_HEADER_FOOTER)
+	if (subDocumentType == RVNG_SUBDOCUMENT_HEADER_FOOTER)
 	{
 		bool oldCurrentPageHasContent = m_currentPageHasContent;
-		WPXTable *oldCurrentTable = m_currentTable;
-		WPXTableList oldTableList = m_tableList;
+		RVNGTable *oldCurrentTable = m_currentTable;
+		RVNGTableList oldTableList = m_tableList;
 		m_tableList = tableList;
 
 		if (subDocument)

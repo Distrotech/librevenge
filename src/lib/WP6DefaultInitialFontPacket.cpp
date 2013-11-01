@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -26,9 +26,9 @@
 
 #include "WP6Listener.h"
 #include "WP6DefaultInitialFontPacket.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
-WP6DefaultInitialFontPacket::WP6DefaultInitialFontPacket(WPXInputStream *input, WPXEncryption *encryption, int /* id */, uint32_t dataOffset, uint32_t dataSize) :
+WP6DefaultInitialFontPacket::WP6DefaultInitialFontPacket(RVNGInputStream *input, RVNGEncryption *encryption, int /* id */, uint32_t dataOffset, uint32_t dataSize) :
 	WP6PrefixDataPacket(input, encryption),
 	m_numPrefixIDs(0),
 	m_initialFontDescriptorPID(0),
@@ -39,15 +39,15 @@ WP6DefaultInitialFontPacket::WP6DefaultInitialFontPacket(WPXInputStream *input, 
 
 void WP6DefaultInitialFontPacket::parse(WP6Listener *listener) const
 {
-	listener->fontChange(getPointSize(), getInitialFontDescriptorPID(), WPXString());
+	listener->fontChange(getPointSize(), getInitialFontDescriptorPID(), RVNGString());
 }
 
-void WP6DefaultInitialFontPacket::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP6DefaultInitialFontPacket::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	m_numPrefixIDs = readU16(input, encryption);
 	m_initialFontDescriptorPID = readU16(input, encryption);
 	m_pointSize = readU16(input, encryption);
-	WPD_DEBUG_MSG(("WordPerfect: Read default initial font packet (initial font descriptor pid: %i, point size: %i)\n",
+	RVNG_DEBUG_MSG(("WordPerfect: Read default initial font packet (initial font descriptor pid: %i, point size: %i)\n",
 	               (int) m_initialFontDescriptorPID, (int) m_pointSize));
 }
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

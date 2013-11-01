@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -33,7 +33,7 @@
 class WP6HighlightGroup : public WP6FixedLengthGroup
 {
 public:
-	WP6HighlightGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);
+	WP6HighlightGroup(RVNGInputStream *input, RVNGEncryption *encryption, uint8_t groupID);
 	virtual void parse(WP6Listener *listener) = 0;
 	const RGBSColor getColor() const
 	{
@@ -41,7 +41,7 @@ public:
 	}
 
 protected:
-	virtual void _readContents(WPXInputStream *input, WPXEncryption *encryption);
+	virtual void _readContents(RVNGInputStream *input, RVNGEncryption *encryption);
 
 private:
 	RGBSColor m_color;
@@ -50,14 +50,14 @@ private:
 class WP6HighlightOnGroup : public WP6HighlightGroup
 {
 public:
-	WP6HighlightOnGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);
+	WP6HighlightOnGroup(RVNGInputStream *input, RVNGEncryption *encryption, uint8_t groupID);
 	void parse(WP6Listener *listener);
 };
 
 class WP6HighlightOffGroup : public WP6HighlightGroup
 {
 public:
-	WP6HighlightOffGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID);
+	WP6HighlightOffGroup(RVNGInputStream *input, RVNGEncryption *encryption, uint8_t groupID);
 	void parse(WP6Listener *listener);
 };
 

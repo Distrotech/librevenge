@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -26,21 +26,21 @@
 
 #include "WP6AttributeGroup.h"
 #include "WP6Listener.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
-WP6AttributeGroup::WP6AttributeGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID) :
+WP6AttributeGroup::WP6AttributeGroup(RVNGInputStream *input, RVNGEncryption *encryption, uint8_t groupID) :
 	WP6FixedLengthGroup(groupID),
 	m_attribute(0)
 {
 	_read(input, encryption);
 }
 
-void WP6AttributeGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP6AttributeGroup::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	m_attribute = readU8(input, encryption);
 }
 
-WP6AttributeOnGroup::WP6AttributeOnGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID)
+WP6AttributeOnGroup::WP6AttributeOnGroup(RVNGInputStream *input, RVNGEncryption *encryption, uint8_t groupID)
 	: WP6AttributeGroup(input, encryption, groupID)
 {
 }
@@ -51,7 +51,7 @@ void WP6AttributeOnGroup::parse(WP6Listener *listener)
 	listener->attributeChange(true, getAttribute());
 }
 
-WP6AttributeOffGroup::WP6AttributeOffGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t groupID)
+WP6AttributeOffGroup::WP6AttributeOffGroup(RVNGInputStream *input, RVNGEncryption *encryption, uint8_t groupID)
 	: WP6AttributeGroup(input, encryption, groupID)
 {
 }

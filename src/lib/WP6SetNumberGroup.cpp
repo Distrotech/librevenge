@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -28,11 +28,11 @@
 #include "WP6SetNumberGroup.h"
 #include "WP6FileStructure.h"
 #include "WP6Listener.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
 
-WP6SetNumberGroup::WP6SetNumberGroup(WPXInputStream *input,
-                                     WPXEncryption *encryption) :
+WP6SetNumberGroup::WP6SetNumberGroup(RVNGInputStream *input,
+                                     RVNGEncryption *encryption) :
 	WP6VariableLengthGroup(),
 	m_countOfLevelNumbersSetting(0x00),
 	m_startingLevelNumber(0x00),
@@ -45,7 +45,7 @@ WP6SetNumberGroup::~WP6SetNumberGroup()
 {
 }
 
-void WP6SetNumberGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP6SetNumberGroup::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	switch (getSubGroup())
 	{
@@ -53,7 +53,7 @@ void WP6SetNumberGroup::_readContents(WPXInputStream *input, WPXEncryption *encr
 		m_countOfLevelNumbersSetting = readU8(input, encryption);
 		m_startingLevelNumber = readU8(input, encryption);
 		m_countNumbers = readU16(input, encryption);
-		WPD_DEBUG_MSG(("WordPerfect: Set number page number (%d, %d, %d)\n", m_countOfLevelNumbersSetting, m_startingLevelNumber, m_countNumbers));
+		RVNG_DEBUG_MSG(("WordPerfect: Set number page number (%d, %d, %d)\n", m_countOfLevelNumbersSetting, m_startingLevelNumber, m_countNumbers));
 		break;
 	default:
 		break;
@@ -62,7 +62,7 @@ void WP6SetNumberGroup::_readContents(WPXInputStream *input, WPXEncryption *encr
 
 void WP6SetNumberGroup::parse(WP6Listener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling a set number group\n"));
+	RVNG_DEBUG_MSG(("WordPerfect: handling a set number group\n"));
 
 	switch (getSubGroup())
 	{

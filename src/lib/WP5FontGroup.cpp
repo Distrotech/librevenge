@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -24,15 +24,15 @@
  */
 
 #include "WP5FontGroup.h"
-#include "WPXListener.h"
-#include "libwpd_internal.h"
+#include "RVNGListener.h"
+#include "librevenge_internal.h"
 #include "WP5FileStructure.h"
 #include "WP5PrefixData.h"
 #include "WP5ListFontsUsedPacket.h"
 #include "WP5FontNameStringPoolPacket.h"
 #include "WP5Listener.h"
 
-WP5FontGroup::WP5FontGroup(WPXInputStream *input, WPXEncryption *encryption) :
+WP5FontGroup::WP5FontGroup(RVNGInputStream *input, RVNGEncryption *encryption) :
 	WP5VariableLengthGroup(),
 	m_red(0),
 	m_green(0),
@@ -43,22 +43,22 @@ WP5FontGroup::WP5FontGroup(WPXInputStream *input, WPXEncryption *encryption) :
 	_read(input, encryption);
 }
 
-void WP5FontGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP5FontGroup::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	switch(getSubGroup())
 	{
 	case WP5_TOP_FONT_GROUP_COLOR:
-		input->seek(3, WPX_SEEK_CUR);
+		input->seek(3, RVNG_SEEK_CUR);
 		m_red = readU8(input, encryption);
 		m_green = readU8(input, encryption);
 		m_blue = readU8(input, encryption);
 		break;
 	case WP5_TOP_FONT_GROUP_FONT_CHANGE:
-		input->seek(25, WPX_SEEK_CUR);
+		input->seek(25, RVNG_SEEK_CUR);
 		m_fontNumber = readU8(input, encryption);
 		if (getSize() >= 36)
 		{
-			input->seek(2, WPX_SEEK_CUR);
+			input->seek(2, RVNG_SEEK_CUR);
 			m_fontSize = (double)(readU16(input, encryption) / 50);
 		}
 		break;
@@ -69,11 +69,11 @@ void WP5FontGroup::_readContents(WPXInputStream *input, WPXEncryption *encryptio
 
 void WP5FontGroup::parse(WP5Listener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling a Font group\n"));
+	RVNG_DEBUG_MSG(("WordPerfect: handling a Font group\n"));
 
 	unsigned tmpFontNameOffset = 0;
 	double tmpFontSize = 12.0;
-	WPXString tmpFontName("Times New Roman");
+	RVNGString tmpFontName("Times New Roman");
 
 	switch(getSubGroup())
 	{
@@ -103,7 +103,7 @@ void WP5FontGroup::parse(WP5Listener *listener)
 		if (m_fontSize >= 0)
 			tmpFontSize = m_fontSize;
 
-		WPD_DEBUG_MSG(("WP5 Parsing Font Change, fontNumber %i, fontName: %s, fontSize: %.4f\n", m_fontNumber, tmpFontName.cstr(), tmpFontSize));
+		RVNG_DEBUG_MSG(("WP5 Parsing Font Change, fontNumber %i, fontName: %s, fontSize: %.4f\n", m_fontNumber, tmpFontName.cstr(), tmpFontSize));
 		listener->setFont(tmpFontName, tmpFontSize);
 		break;
 	default:

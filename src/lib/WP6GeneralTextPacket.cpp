@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -28,9 +28,9 @@
 
 #include "WP6GeneralTextPacket.h"
 #include "WP6Parser.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
-WP6GeneralTextPacket::WP6GeneralTextPacket(WPXInputStream *input, WPXEncryption *encryption, int /* id */, uint32_t dataOffset, uint32_t dataSize):
+WP6GeneralTextPacket::WP6GeneralTextPacket(RVNGInputStream *input, RVNGEncryption *encryption, int /* id */, uint32_t dataOffset, uint32_t dataSize):
 	WP6PrefixDataPacket(input, encryption),
 	m_subDocument(0),
 	m_streamData(0)
@@ -46,15 +46,15 @@ WP6GeneralTextPacket::~WP6GeneralTextPacket()
 		delete [] m_streamData;
 }
 
-void WP6GeneralTextPacket::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP6GeneralTextPacket::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	long startPosition = input->tell();
 	uint16_t numTextBlocks = readU16(input, encryption);
-	input->seek(4, WPX_SEEK_CUR);
+	input->seek(4, RVNG_SEEK_CUR);
 
 	if (numTextBlocks < 1)
 	{
-		WPD_DEBUG_MSG(("WordPerfect: Number of text blocks is %i\n", numTextBlocks));
+		RVNG_DEBUG_MSG(("WordPerfect: Number of text blocks is %i\n", numTextBlocks));
 		return; // m_subDocument will be 0
 	}
 
@@ -77,7 +77,7 @@ void WP6GeneralTextPacket::_readContents(WPXInputStream *input, WPXEncryption *e
 
 	if (!totalSize)
 	{
-		WPD_DEBUG_MSG(("WordPerfect: The total size of the text is %ui\n", totalSize));
+		RVNG_DEBUG_MSG(("WordPerfect: The total size of the text is %ui\n", totalSize));
 		return; // m_subDocument will be 0
 	}
 	m_streamData = new uint8_t[totalSize];

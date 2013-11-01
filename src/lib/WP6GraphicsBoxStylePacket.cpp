@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -28,7 +28,7 @@
 #include "WP6GraphicsBoxStylePacket.h"
 #include "WP6Parser.h"
 
-WP6GraphicsBoxStylePacket::WP6GraphicsBoxStylePacket(WPXInputStream *input, WPXEncryption *encryption, int  /* id */, uint32_t dataOffset, uint32_t dataSize):
+WP6GraphicsBoxStylePacket::WP6GraphicsBoxStylePacket(RVNGInputStream *input, RVNGEncryption *encryption, int  /* id */, uint32_t dataOffset, uint32_t dataSize):
 	WP6PrefixDataPacket(input, encryption),
 	m_isLibraryStyle(false),
 	m_boxStyleName(),
@@ -57,11 +57,11 @@ WP6GraphicsBoxStylePacket::~WP6GraphicsBoxStylePacket()
 {
 }
 
-void WP6GraphicsBoxStylePacket::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP6GraphicsBoxStylePacket::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
-	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket position: 0x%.8x\n", (unsigned)input->tell()));
+	RVNG_DEBUG_MSG(("WP6GraphicsBoxStylePacket position: 0x%.8x\n", (unsigned)input->tell()));
 	uint16_t tmpNumChildIDs = readU16(input, encryption);
-	input->seek(tmpNumChildIDs * 2, WPX_SEEK_CUR);
+	input->seek(tmpNumChildIDs * 2, RVNG_SEEK_CUR);
 	uint16_t tmpSizeOfBoxData = readU16(input, encryption);
 	long tmpStartOfBoxData = input->tell();
 
@@ -69,7 +69,7 @@ void WP6GraphicsBoxStylePacket::_readContents(WPXInputStream *input, WPXEncrypti
 
 	uint16_t tmpSizeOfBoxNameLibraryData = readU16(input, encryption);
 	long tmpBoxNameLibraryDataPosition = input->tell();
-	input->seek(1, WPX_SEEK_CUR);
+	input->seek(1, RVNG_SEEK_CUR);
 	m_isLibraryStyle = ((readU8(input, encryption) & 0x01) != 0x00);
 	int16_t tmpBoxNameLength = (int16_t)readU16(input, encryption);
 
@@ -117,64 +117,64 @@ void WP6GraphicsBoxStylePacket::_readContents(WPXInputStream *input, WPXEncrypti
 			break;
 		}
 	}
-	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Style name: %s\n", m_boxStyleName.cstr()));
-	input->seek(tmpSizeOfBoxNameLibraryData + tmpBoxNameLibraryDataPosition, WPX_SEEK_SET);
+	RVNG_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Style name: %s\n", m_boxStyleName.cstr()));
+	input->seek(tmpSizeOfBoxNameLibraryData + tmpBoxNameLibraryDataPosition, RVNG_SEEK_SET);
 
 	// Skipping box counter data
 
 	uint16_t tmpSizeOfBoxCounterData = readU16(input, encryption);
-	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box counter data\n"));
-	input->seek(tmpSizeOfBoxCounterData, WPX_SEEK_CUR);
+	RVNG_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box counter data\n"));
+	input->seek(tmpSizeOfBoxCounterData, RVNG_SEEK_CUR);
 
 	// Reading Box positioning data
 
 	uint16_t tmpSizeOfBoxPositioningData = readU16(input, encryption);
 	long tmpBoxPositioningDataPosition = input->tell();
-	input->seek(1, WPX_SEEK_CUR);
+	input->seek(1, RVNG_SEEK_CUR);
 
 	m_generalPositioningFlags = readU8(input, encryption);
-	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Positioning data (general positioning flags: 0x%.2x)\n", m_generalPositioningFlags));
-	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Positioning data (anchor value: %i) (page offset bit: %i) (overlap flag: %i) (auto flag: %i)\n",
+	RVNG_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Positioning data (general positioning flags: 0x%.2x)\n", m_generalPositioningFlags));
+	RVNG_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Positioning data (anchor value: %i) (page offset bit: %i) (overlap flag: %i) (auto flag: %i)\n",
 	               m_generalPositioningFlags & 0x07, (m_generalPositioningFlags & 0x08) >> 3, (m_generalPositioningFlags & 0x10) >> 4, (m_generalPositioningFlags & 0x20) >> 5));
 
 	m_horizontalPositioningFlags = readU8(input, encryption);
-	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Horizontal position (horizontal alignment type: %i) (horizontal alignment: %i)\n",
+	RVNG_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Horizontal position (horizontal alignment type: %i) (horizontal alignment: %i)\n",
 	               m_horizontalPositioningFlags & 0x03, (m_horizontalPositioningFlags & 0x1C) >> 2));
 
 	m_horizontalOffset = (int16_t)readU16(input, encryption);
-	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Horizontal Offset (%i)\n", m_horizontalOffset));
+	RVNG_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Horizontal Offset (%i)\n", m_horizontalOffset));
 
 	m_leftColumn = readU8(input, encryption);
 	m_rightColumn = readU8(input, encryption);
 
-	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Horizontal position (between columns %i and %i)\n", m_leftColumn, m_rightColumn));
+	RVNG_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Horizontal position (between columns %i and %i)\n", m_leftColumn, m_rightColumn));
 
 	m_verticalPositioningFlags = readU8(input, encryption);
-	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Vertical position (vertical alignment type: %i) (vertical alignment: %i) (vertical effect: %i)\n",
+	RVNG_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Vertical position (vertical alignment type: %i) (vertical alignment: %i) (vertical effect: %i)\n",
 	               m_verticalPositioningFlags & 0x03, (m_verticalPositioningFlags & 0x1C) >> 2, (m_verticalPositioningFlags & 0x20) >> 5));
 
 	m_verticalOffset = (int16_t)readU16(input, encryption);
-	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Vertical Offset (%i)\n", m_verticalOffset));
+	RVNG_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Vertical Offset (%i)\n", m_verticalOffset));
 
 	m_widthFlags = readU8(input, encryption) & 0x01;
-	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Width Flags: 0x%.2x\n", m_widthFlags));
+	RVNG_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Width Flags: 0x%.2x\n", m_widthFlags));
 
 	m_width = readU16(input, encryption);
-	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Width: %i\n", m_width));
+	RVNG_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Width: %i\n", m_width));
 
 	m_heightFlags = readU8(input, encryption) & 0x01;
-	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Height Flags: 0x%.2x\n", m_heightFlags));
+	RVNG_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Height Flags: 0x%.2x\n", m_heightFlags));
 
 	m_height = readU16(input, encryption);
-	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Height: %i\n", m_height));
+	RVNG_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Height: %i\n", m_height));
 
-	input->seek(tmpSizeOfBoxPositioningData + tmpBoxPositioningDataPosition, WPX_SEEK_SET);
+	input->seek(tmpSizeOfBoxPositioningData + tmpBoxPositioningDataPosition, RVNG_SEEK_SET);
 
 	// Reading box content data
 
 	uint16_t tmpSizeOfBoxContentData = readU16(input, encryption);
 	long tmpBoxContentDataPosition = input->tell();
-	input->seek(1, WPX_SEEK_CUR);
+	input->seek(1, RVNG_SEEK_CUR);
 
 	m_contentType = readU8(input, encryption);
 	uint8_t tmpContentAlignFlags = readU8(input, encryption);
@@ -182,8 +182,8 @@ void WP6GraphicsBoxStylePacket::_readContents(WPXInputStream *input, WPXEncrypti
 	m_contentVAlign = (uint8_t)((tmpContentAlignFlags & 0xC0) >> 2);
 	m_contentPreserveAspectRatio = ((tmpContentAlignFlags & 0x10) == 0x00);
 
-	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Content Type (%i)\n", m_contentType));
-	WPD_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Content Alignment (horizontal: 0x%.2x) (vertical: 0x%.2x) (preserve aspect ratio: %s)\n",
+	RVNG_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Content Type (%i)\n", m_contentType));
+	RVNG_DEBUG_MSG(("WP6GraphicsBoxStylePacket -- Box Content Alignment (horizontal: 0x%.2x) (vertical: 0x%.2x) (preserve aspect ratio: %s)\n",
 	               m_contentHAlign, m_contentVAlign, m_contentPreserveAspectRatio ? "true" : "false"));
 
 	switch (m_contentType)
@@ -198,51 +198,51 @@ void WP6GraphicsBoxStylePacket::_readContents(WPXInputStream *input, WPXEncrypti
 			m_nativeHeight = readU16(input, encryption);
 		}
 		else
-			input->seek(4, WPX_SEEK_CUR);
+			input->seek(4, RVNG_SEEK_CUR);
 
-		input->seek(tmpGraphicsRenderingInfoSize + tmpGraphicsRenderingInfoBegin, WPX_SEEK_CUR);
+		input->seek(tmpGraphicsRenderingInfoSize + tmpGraphicsRenderingInfoBegin, RVNG_SEEK_CUR);
 	}
 	break;
 	default:
 		break;
 	}
 
-	input->seek(tmpSizeOfBoxContentData + tmpBoxContentDataPosition, WPX_SEEK_SET);
+	input->seek(tmpSizeOfBoxContentData + tmpBoxContentDataPosition, RVNG_SEEK_SET);
 
 	// Reading box caption data
 
 	uint16_t tmpSizeOfBoxCaptionData = readU16(input, encryption);
 	long tmpBoxCaptionDataPosition = input->tell();
 
-	input->seek(tmpSizeOfBoxCaptionData + tmpBoxCaptionDataPosition, WPX_SEEK_SET);
+	input->seek(tmpSizeOfBoxCaptionData + tmpBoxCaptionDataPosition, RVNG_SEEK_SET);
 
 	// Reading box border data
 
 	uint16_t tmpSizeOfBoxBorderData = readU16(input, encryption);
 	long tmpBoxBorderDataPosition = input->tell();
 
-	input->seek(tmpSizeOfBoxBorderData + tmpBoxBorderDataPosition, WPX_SEEK_SET);
+	input->seek(tmpSizeOfBoxBorderData + tmpBoxBorderDataPosition, RVNG_SEEK_SET);
 
 	// Reading box fill data
 
 	uint16_t tmpSizeOfBoxFillData = readU16(input, encryption);
 	long tmpBoxFillDataPosition = input->tell();
 
-	input->seek(tmpSizeOfBoxFillData + tmpBoxFillDataPosition, WPX_SEEK_SET);
+	input->seek(tmpSizeOfBoxFillData + tmpBoxFillDataPosition, RVNG_SEEK_SET);
 
 	// Reading box wrapping data
 
 	uint16_t tmpSizeOfBoxWrappingData = readU16(input, encryption);
 	long tmpBoxWrappingDataPosition = input->tell();
 
-	input->seek(tmpSizeOfBoxWrappingData + tmpBoxWrappingDataPosition, WPX_SEEK_SET);
+	input->seek(tmpSizeOfBoxWrappingData + tmpBoxWrappingDataPosition, RVNG_SEEK_SET);
 
 	// Reading box hypertext data
 
 	uint16_t tmpSizeOfBoxHypertextData = readU16(input, encryption);
 	long tmpBoxHypertextDataPosition = input->tell();
 
-	input->seek(tmpSizeOfBoxHypertextData + tmpBoxHypertextDataPosition, WPX_SEEK_SET);
+	input->seek(tmpSizeOfBoxHypertextData + tmpBoxHypertextDataPosition, RVNG_SEEK_SET);
 
 	// Dumping hexadecimally the rest of the packet
 
@@ -254,11 +254,11 @@ void WP6GraphicsBoxStylePacket::_readContents(WPXInputStream *input, WPXEncrypti
 	for (unsigned i = 0; i < tmpStartOfBoxData + tmpSizeOfBoxData - tmpCurrentPosition; i++)
 	{
 		if (i % 8 == 0)
-			WPD_DEBUG_MSG(("\n        "));
-		WPD_DEBUG_MSG(("%.2x ", readU8(input, encryption)));
+			RVNG_DEBUG_MSG(("\n        "));
+		RVNG_DEBUG_MSG(("%.2x ", readU8(input, encryption)));
 	}
 #else
-	if (input->seek(tmpStartOfBoxData + tmpSizeOfBoxData, WPX_SEEK_SET))
+	if (input->seek(tmpStartOfBoxData + tmpSizeOfBoxData, RVNG_SEEK_SET))
 		throw FileException();
 #endif
 

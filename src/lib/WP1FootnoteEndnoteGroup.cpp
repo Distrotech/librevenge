@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -24,10 +24,10 @@
  */
 
 #include "WP1FootnoteEndnoteGroup.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 #include "WP1SubDocument.h"
 
-WP1FootnoteEndnoteGroup::WP1FootnoteEndnoteGroup(WPXInputStream *input, WPXEncryption *encryption, uint8_t group) :
+WP1FootnoteEndnoteGroup::WP1FootnoteEndnoteGroup(RVNGInputStream *input, RVNGEncryption *encryption, uint8_t group) :
 	WP1VariableLengthGroup(group),
 	m_noteType(FOOTNOTE),
 	m_noteNumber(0),
@@ -42,7 +42,7 @@ WP1FootnoteEndnoteGroup::~WP1FootnoteEndnoteGroup()
 		delete m_subDocument;
 }
 
-void WP1FootnoteEndnoteGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP1FootnoteEndnoteGroup::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	unsigned tmpSubDocumentSize = getSize() - 29;
 	uint8_t tmpNoteDefinition = readU8(input, encryption);
@@ -53,16 +53,16 @@ void WP1FootnoteEndnoteGroup::_readContents(WPXInputStream *input, WPXEncryption
 	}
 
 	m_noteNumber = readU16(input, encryption, true);
-	input->seek(getSize() - tmpSubDocumentSize - 3, WPX_SEEK_CUR);
+	input->seek(getSize() - tmpSubDocumentSize - 3, RVNG_SEEK_CUR);
 
-	WPD_DEBUG_MSG(("WP1SubDocument subDocumentSize = %u\n", tmpSubDocumentSize));
+	RVNG_DEBUG_MSG(("WP1SubDocument subDocumentSize = %u\n", tmpSubDocumentSize));
 	if (tmpSubDocumentSize)
 		m_subDocument = new WP1SubDocument(input, encryption, tmpSubDocumentSize);
 }
 
 void WP1FootnoteEndnoteGroup::parse(WP1Listener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling a Footnote Endnote group\n"));
+	RVNG_DEBUG_MSG(("WordPerfect: handling a Footnote Endnote group\n"));
 	listener->insertNote(m_noteType, m_subDocument);
 }
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,19 +17,19 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
-#include "libwpd_internal.h"
-#include <libwpd-stream/libwpd-stream.h>
+#include "librevenge_internal.h"
+#include <librevenge-stream/librevenge-stream.h>
 #include <ctype.h>
 #include <locale.h>
 #include <string>
 
-uint8_t readU8(WPXInputStream *input, WPXEncryption *encryption)
+uint8_t readU8(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	unsigned long numBytesRead = 0;
 	uint8_t const *p = (encryption ?
@@ -42,7 +42,7 @@ uint8_t readU8(WPXInputStream *input, WPXEncryption *encryption)
 	return p[0];
 }
 
-uint16_t readU16(WPXInputStream *input, WPXEncryption *encryption, bool bigendian)
+uint16_t readU16(RVNGInputStream *input, RVNGEncryption *encryption, bool bigendian)
 {
 	unsigned long numBytesRead = 0;
 	uint8_t const *p = (encryption ?
@@ -57,12 +57,12 @@ uint16_t readU16(WPXInputStream *input, WPXEncryption *encryption, bool bigendia
 	return (uint16_t)(p[0]|((uint16_t)p[1]<<8));
 }
 
-int16_t readS16(WPXInputStream *input, WPXEncryption *encryption, bool bigendian)
+int16_t readS16(RVNGInputStream *input, RVNGEncryption *encryption, bool bigendian)
 {
 	return (int16_t)readU16(input, encryption, bigendian);
 }
 
-uint32_t readU32(WPXInputStream *input, WPXEncryption *encryption, bool bigendian)
+uint32_t readU32(RVNGInputStream *input, RVNGEncryption *encryption, bool bigendian)
 {
 	unsigned long numBytesRead = 0;
 	uint8_t const *p = (encryption ?
@@ -77,10 +77,10 @@ uint32_t readU32(WPXInputStream *input, WPXEncryption *encryption, bool bigendia
 	return (uint32_t)p[0]|((uint32_t)p[1]<<8)|((uint32_t)p[2]<<16)|((uint32_t)p[3]<<24);
 }
 
-WPXString readPascalString(WPXInputStream *input, WPXEncryption *encryption)
+RVNGString readPascalString(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	int pascalStringLength = readU8(input, encryption);
-	WPXString tmpString;
+	RVNGString tmpString;
 	for (int i=0; i<pascalStringLength; i++)
 	{
 		uint16_t tmpChar = readU8(input, encryption);
@@ -98,20 +98,20 @@ WPXString readPascalString(WPXInputStream *input, WPXEncryption *encryption)
 	return tmpString;
 }
 
-WPXString readCString(WPXInputStream *input, WPXEncryption *encryption)
+RVNGString readCString(RVNGInputStream *input, RVNGEncryption *encryption)
 {
-	WPXString tmpString;
+	RVNGString tmpString;
 	char character;
 	while ((character = (char)readU8(input, encryption)) != '\0')
 		tmpString.append(character);
 	return tmpString;
 }
 
-typedef struct _WPXComplexMap
+typedef struct _RVNGComplexMap
 {
 	uint16_t charToMap;
 	uint32_t unicodeChars[6];
-} WPXComplexMap;
+} RVNGComplexMap;
 
 
 // the ascii map appears stupid, but we need the const 32-bit data for now
@@ -143,7 +143,7 @@ static int findSimpleMap(uint16_t character, const uint32_t **chars, const uint3
 	return 0;
 }
 
-static int findComplexMap(uint16_t character, const uint32_t **chars, const WPXComplexMap *complexMap)
+static int findComplexMap(uint16_t character, const uint32_t **chars, const RVNGComplexMap *complexMap)
 {
 	if (!complexMap)
 		return 0;
@@ -160,7 +160,7 @@ static int findComplexMap(uint16_t character, const uint32_t **chars, const WPXC
 
 	*chars = complexMap[i].unicodeChars;
 
-	for (unsigned j = 0; j<WPD_NUM_ELEMENTS(complexMap[i].unicodeChars); j++)
+	for (unsigned j = 0; j<RVNG_NUM_ELEMENTS(complexMap[i].unicodeChars); j++)
 	{
 		if (!(complexMap[i].unicodeChars[j]))
 			return (int)j;
@@ -209,7 +209,7 @@ static const uint32_t multinationalWP6[] =
 };
 
 /* WP6 multinational characters (charset 1) - multicharacter mapping */
-static const WPXComplexMap multinationalWP6Complex[] =
+static const RVNGComplexMap multinationalWP6Complex[] =
 {
 	{ 156, { 0x02bc, 0x004e, 0x0000 } },
 
@@ -594,69 +594,69 @@ int extendedCharacterWP6ToUCS4(uint8_t character,
 	switch (characterSet)
 	{
 	case WP6_MULTINATIONAL_CHARACTER_SET:
-		if ((retVal = findSimpleMap(character, chars, multinationalWP6, WPD_NUM_ELEMENTS(multinationalWP6))))
+		if ((retVal = findSimpleMap(character, chars, multinationalWP6, RVNG_NUM_ELEMENTS(multinationalWP6))))
 			return retVal;
 		if ((retVal = findComplexMap(character, chars, multinationalWP6Complex)))
 			return retVal;
 		break;
 
 	case WP6_PHONETIC_SYMBOL_CHARACTER_SET:
-		if ((retVal = findSimpleMap(character, chars, phoneticWP6, WPD_NUM_ELEMENTS(phoneticWP6))))
+		if ((retVal = findSimpleMap(character, chars, phoneticWP6, RVNG_NUM_ELEMENTS(phoneticWP6))))
 			return retVal;
 		break;
 
 	case WP6_BOX_DRAWING_CHARACTER_SET:
-		if ((retVal = findSimpleMap(character, chars, boxdrawingWP6, WPD_NUM_ELEMENTS(boxdrawingWP6))))
+		if ((retVal = findSimpleMap(character, chars, boxdrawingWP6, RVNG_NUM_ELEMENTS(boxdrawingWP6))))
 			return retVal;
 		break;
 
 	case WP6_TYPOGRAPHIC_SYMBOL_CHARACTER_SET:
-		if ((retVal = findSimpleMap(character, chars, typographicWP6, WPD_NUM_ELEMENTS(typographicWP6))))
+		if ((retVal = findSimpleMap(character, chars, typographicWP6, RVNG_NUM_ELEMENTS(typographicWP6))))
 			return retVal;
 		break;
 
 	case WP6_ICONIC_SYMBOL_CHARACTER_SET:
-		if ((retVal = findSimpleMap(character, chars, iconicWP6, WPD_NUM_ELEMENTS(iconicWP6))))
+		if ((retVal = findSimpleMap(character, chars, iconicWP6, RVNG_NUM_ELEMENTS(iconicWP6))))
 			return retVal;
 		break;
 
 	case WP6_MATH_SCIENTIFIC_CHARACTER_SET:
-		if ((retVal = findSimpleMap(character, chars, mathWP6, WPD_NUM_ELEMENTS(mathWP6))))
+		if ((retVal = findSimpleMap(character, chars, mathWP6, RVNG_NUM_ELEMENTS(mathWP6))))
 			return retVal;
 		break;
 
 	case WP6_MATH_SCIENTIFIC_EXTENDED_CHARACTER_SET:
-		if ((retVal = findSimpleMap(character, chars, mathextWP6, WPD_NUM_ELEMENTS(mathextWP6))))
+		if ((retVal = findSimpleMap(character, chars, mathextWP6, RVNG_NUM_ELEMENTS(mathextWP6))))
 			return retVal;
 		break;
 
 	case WP6_GREEK_CHARACTER_SET:
-		if ((retVal = findSimpleMap(character, chars, greekWP6, WPD_NUM_ELEMENTS(greekWP6))))
+		if ((retVal = findSimpleMap(character, chars, greekWP6, RVNG_NUM_ELEMENTS(greekWP6))))
 			return retVal;
 		break;
 
 	case WP6_HEBREW_CHARACTER_SET:
-		if ((retVal = findSimpleMap(character, chars, hebrewWP6, WPD_NUM_ELEMENTS(hebrewWP6))))
+		if ((retVal = findSimpleMap(character, chars, hebrewWP6, RVNG_NUM_ELEMENTS(hebrewWP6))))
 			return retVal;
 		break;
 
 	case WP6_CYRILLIC_CHARACTER_SET:
-		if ((retVal = findSimpleMap(character, chars, cyrillicWP6, WPD_NUM_ELEMENTS(cyrillicWP6))))
+		if ((retVal = findSimpleMap(character, chars, cyrillicWP6, RVNG_NUM_ELEMENTS(cyrillicWP6))))
 			return retVal;
 		break;
 
 	case WP6_JAPANESE_CHARACTER_SET:
-		if ((retVal = findSimpleMap(character, chars, japaneseWP6, WPD_NUM_ELEMENTS(japaneseWP6))))
+		if ((retVal = findSimpleMap(character, chars, japaneseWP6, RVNG_NUM_ELEMENTS(japaneseWP6))))
 			return retVal;
 		break;
 
 	case WP6_ARABIC_CHARACTER_SET:
-		if ((retVal = findSimpleMap(character, chars, arabicWP6, WPD_NUM_ELEMENTS(arabicWP6))))
+		if ((retVal = findSimpleMap(character, chars, arabicWP6, RVNG_NUM_ELEMENTS(arabicWP6))))
 			return retVal;
 		break;
 
 	case WP6_ARABIC_SCRIPT_CHARACTER_SET:
-		if ((retVal = findSimpleMap(character, chars, arabicScriptWP6, WPD_NUM_ELEMENTS(arabicScriptWP6))))
+		if ((retVal = findSimpleMap(character, chars, arabicScriptWP6, RVNG_NUM_ELEMENTS(arabicScriptWP6))))
 			return retVal;
 		break;
 
@@ -790,7 +790,7 @@ static const uint32_t cyrillicWP5[] =
 };
 
 /* WP5 cyrillic (charset 10) - multicharacter mapping */
-static const WPXComplexMap cyrillicWP5Complex[] =
+static const RVNGComplexMap cyrillicWP5Complex[] =
 {
 	{ 110, { 0x0410, 0x0301, 0x0000 } }, { 111, { 0x0430, 0x0301, 0x0000 } },
 	{ 112, { 0x0415, 0x0301, 0x0000 } }, { 113, { 0x0435, 0x0301, 0x0000 } },
@@ -876,7 +876,7 @@ static const uint32_t arabicWP5[] =
 };
 
 /* WP5 arabic (charset 13) - multicharacter mapping */
-static const WPXComplexMap arabicWP5Complex[] =
+static const RVNGComplexMap arabicWP5Complex[] =
 {
 	{ 25, { 0x0640, 0xfc60, 0x0000 } },
 
@@ -951,73 +951,73 @@ int extendedCharacterWP5ToUCS4(uint8_t character,
 	switch (characterSet)
 	{
 	case WP5_INTERNATIONAL_1_CHARACTER_SET:
-		if ((retVal = findSimpleMap(character, chars, multinationalWP6, WPD_NUM_ELEMENTS(multinationalWP6))))
+		if ((retVal = findSimpleMap(character, chars, multinationalWP6, RVNG_NUM_ELEMENTS(multinationalWP6))))
 			return retVal;
 		if ((retVal = findComplexMap(character, chars, multinationalWP6Complex)))
 			return retVal;
 		break;
 
 	case WP5_INTERNATIONAL_2_CHARACTER_SET:
-		if ((retVal = findSimpleMap(character, chars, international2WP5, WPD_NUM_ELEMENTS(international2WP5))))
+		if ((retVal = findSimpleMap(character, chars, international2WP5, RVNG_NUM_ELEMENTS(international2WP5))))
 			return retVal;
 		break;
 
 	case WP5_BOX_DRAWING_CHARACTER_SET:
-		if ((retVal = findSimpleMap(character, chars, boxdrawingWP6, WPD_NUM_ELEMENTS(boxdrawingWP6))))
+		if ((retVal = findSimpleMap(character, chars, boxdrawingWP6, RVNG_NUM_ELEMENTS(boxdrawingWP6))))
 			return retVal;
 		break;
 
 	case WP5_TYPOGRAPHIC_SYMBOL_CHARACTER_SET:
-		if ((retVal = findSimpleMap(character, chars, typographicWP6, WPD_NUM_ELEMENTS(typographicWP6))))
+		if ((retVal = findSimpleMap(character, chars, typographicWP6, RVNG_NUM_ELEMENTS(typographicWP6))))
 			return retVal;
 		break;
 
 	case WP5_ICONIC_SYMBOL_CHARACTER_SET:
-		if ((retVal = findSimpleMap(character, chars, iconicWP5, WPD_NUM_ELEMENTS(iconicWP5))))
+		if ((retVal = findSimpleMap(character, chars, iconicWP5, RVNG_NUM_ELEMENTS(iconicWP5))))
 			return retVal;
 		break;
 
 	case WP5_MATH_SCIENTIFIC_CHARACTER_SET:
-		if ((retVal = findSimpleMap(character, chars, mathWP6, WPD_NUM_ELEMENTS(mathWP6))))
+		if ((retVal = findSimpleMap(character, chars, mathWP6, RVNG_NUM_ELEMENTS(mathWP6))))
 			return retVal;
 		break;
 
 	case WP5_MATH_SCIENTIFIC_EXTENDED_CHARACTER_SET:
-		if ((retVal = findSimpleMap(character, chars, mathextWP6, WPD_NUM_ELEMENTS(mathextWP6))))
+		if ((retVal = findSimpleMap(character, chars, mathextWP6, RVNG_NUM_ELEMENTS(mathextWP6))))
 			return retVal;
 		break;
 
 	case WP5_GREEK_CHARACTER_SET:
-		if ((retVal = findSimpleMap(character, chars, greekWP5, WPD_NUM_ELEMENTS(greekWP5))))
+		if ((retVal = findSimpleMap(character, chars, greekWP5, RVNG_NUM_ELEMENTS(greekWP5))))
 			return retVal;
 		break;
 
 	case WP5_HEBREW_CHARACTER_SET:
-		if ((retVal = findSimpleMap(character, chars, hebrewWP5, WPD_NUM_ELEMENTS(hebrewWP5))))
+		if ((retVal = findSimpleMap(character, chars, hebrewWP5, RVNG_NUM_ELEMENTS(hebrewWP5))))
 			return retVal;
 		break;
 
 	case WP5_CYRILLIC_CHARACTER_SET:
-		if ((retVal = findSimpleMap(character, chars, cyrillicWP5, WPD_NUM_ELEMENTS(cyrillicWP5))))
+		if ((retVal = findSimpleMap(character, chars, cyrillicWP5, RVNG_NUM_ELEMENTS(cyrillicWP5))))
 			return retVal;
 		if ((retVal = findComplexMap(character, chars, cyrillicWP5Complex)))
 			return retVal;
 		break;
 
 	case WP5_JAPANESE_CHARACTER_SET:
-		if ((retVal = findSimpleMap(character, chars, japaneseWP5, WPD_NUM_ELEMENTS(japaneseWP5))))
+		if ((retVal = findSimpleMap(character, chars, japaneseWP5, RVNG_NUM_ELEMENTS(japaneseWP5))))
 			return retVal;
 		break;
 
 	case WP5_ARABIC_CHARACTER_SET:
-		if ((retVal = findSimpleMap(character, chars, arabicWP5, WPD_NUM_ELEMENTS(arabicWP5))))
+		if ((retVal = findSimpleMap(character, chars, arabicWP5, RVNG_NUM_ELEMENTS(arabicWP5))))
 			return retVal;
 		if ((retVal = findComplexMap(character, chars, arabicWP5Complex)))
 			return retVal;
 		break;
 
 	case WP5_ARABIC_SCRIPT_CHARACTER_SET:
-		if ((retVal = findSimpleMap(character, chars, arabicScriptWP5, WPD_NUM_ELEMENTS(arabicScriptWP5))))
+		if ((retVal = findSimpleMap(character, chars, arabicScriptWP5, RVNG_NUM_ELEMENTS(arabicScriptWP5))))
 			return retVal;
 		break;
 	default:
@@ -1069,14 +1069,14 @@ int extendedCharacterWP42ToUCS4(uint8_t character, const uint32_t **chars)
 {
 	int retVal = 0;
 
-	if ((retVal = findSimpleMap(character, chars, extendedCharactersWP42, WPD_NUM_ELEMENTS(extendedCharactersWP42))))
+	if ((retVal = findSimpleMap(character, chars, extendedCharactersWP42, RVNG_NUM_ELEMENTS(extendedCharactersWP42))))
 		return retVal;
 	*chars = &asciiMap[0x00];
 	return 1;
 }
 
-#include "WPXFileStructure.h"
-#include "libwpd_math.h"
+#include "RVNGFileStructure.h"
+#include "librevenge_math.h"
 
 uint16_t fixedPointToWPUs(const uint32_t fixedPointNumber)
 {
@@ -1122,7 +1122,7 @@ _RGBSColor::_RGBSColor(uint16_t red, uint16_t green, uint16_t blue)
 {
 }
 
-_WPXTabStop::_WPXTabStop()
+_RVNGTabStop::_RVNGTabStop()
 	:	m_position(0.0),
 	    m_alignment(LEFT),
 	    m_leaderCharacter('\0'),
@@ -1130,14 +1130,14 @@ _WPXTabStop::_WPXTabStop()
 {
 }
 
-_WPXColumnDefinition::_WPXColumnDefinition()
+_RVNGColumnDefinition::_RVNGColumnDefinition()
 	:	m_width(0.0),
 	    m_leftGutter(0.0),
 	    m_rightGutter(0.0)
 {
 }
 
-_WPXColumnProperties::_WPXColumnProperties()
+_RVNGColumnProperties::_RVNGColumnProperties()
 	:	m_attributes(0x00000000),
 	    m_alignment(0x00)
 {
@@ -1171,13 +1171,13 @@ int _extractNumericValueFromRoman(const char romanChar)
 // as letters, numbers, or roman numerals.. return an integer value representing its number
 // HACK: this function is really cheesey
 // NOTE: if the input is not valid, the output is unspecified
-int _extractDisplayReferenceNumberFromBuf(const WPXString &buf, const WPXNumberingType listType)
+int _extractDisplayReferenceNumberFromBuf(const RVNGString &buf, const RVNGNumberingType listType)
 {
 	if (listType == LOWERCASE_ROMAN || listType == UPPERCASE_ROMAN)
 	{
 		int currentSum = 0;
 		int lastMark = 0;
-		WPXString::Iter i(buf);
+		RVNGString::Iter i(buf);
 		for (i.rewind(); i.next();)
 		{
 			int currentMark = _extractNumericValueFromRoman(*(i()));
@@ -1205,7 +1205,7 @@ int _extractDisplayReferenceNumberFromBuf(const WPXString &buf, const WPXNumberi
 	else if (listType == ARABIC)
 	{
 		int currentSum = 0;
-		WPXString::Iter i(buf);
+		RVNGString::Iter i(buf);
 		for (i.rewind(); i.next();)
 		{
 			currentSum *= 10;
@@ -1217,16 +1217,16 @@ int _extractDisplayReferenceNumberFromBuf(const WPXString &buf, const WPXNumberi
 	return 1;
 }
 
-WPXNumberingType _extractWPXNumberingTypeFromBuf(const WPXString &buf, const WPXNumberingType putativeWPXNumberingType)
+RVNGNumberingType _extractRVNGNumberingTypeFromBuf(const RVNGString &buf, const RVNGNumberingType putativeRVNGNumberingType)
 {
-	WPXString::Iter i(buf);
+	RVNGString::Iter i(buf);
 	for (i.rewind(); i.next();)
 	{
 		if ((*(i()) == 'I' || *(i()) == 'V' || *(i()) == 'X') &&
-		        (putativeWPXNumberingType == LOWERCASE_ROMAN || putativeWPXNumberingType == UPPERCASE_ROMAN))
+		        (putativeRVNGNumberingType == LOWERCASE_ROMAN || putativeRVNGNumberingType == UPPERCASE_ROMAN))
 			return UPPERCASE_ROMAN;
 		else if ((*(i()) == 'i' || *(i()) == 'v' || *(i()) == 'x') &&
-		         (putativeWPXNumberingType == LOWERCASE_ROMAN || putativeWPXNumberingType == UPPERCASE_ROMAN))
+		         (putativeRVNGNumberingType == LOWERCASE_ROMAN || putativeRVNGNumberingType == UPPERCASE_ROMAN))
 			return LOWERCASE_ROMAN;
 		else if (*(i()) >= 'A' && *(i()) <= 'Z')
 			return UPPERCASE;
@@ -1237,9 +1237,9 @@ WPXNumberingType _extractWPXNumberingTypeFromBuf(const WPXString &buf, const WPX
 	return ARABIC;
 }
 
-WPXString _numberingTypeToString(WPXNumberingType t)
+RVNGString _numberingTypeToString(RVNGNumberingType t)
 {
-	WPXString sListTypeSymbol("1");
+	RVNGString sListTypeSymbol("1");
 	switch (t)
 	{
 	case ARABIC:
@@ -1299,9 +1299,9 @@ const uint32_t macRomanCharacterMap[] =
 	0x00af, 0x02d8, 0x02d9, 0x02da, 0x00b8, 0x02dd, 0x02db, 0x02c7
 };
 
-WPXString doubleToString(const double value)
+RVNGString doubleToString(const double value)
 {
-	WPXString tempString;
+	RVNGString tempString;
 	if (value < 0.0001 && value > -0.0001)
 		tempString.sprintf("0.0000");
 	else
@@ -1320,7 +1320,7 @@ WPXString doubleToString(const double value)
 		while ((pos = stringValue.find(decimalPoint)) != std::string::npos)
 			stringValue.replace(pos,decimalPoint.size(),".");
 	}
-	return WPXString(stringValue.c_str());
+	return RVNGString(stringValue.c_str());
 }
 
 int appleWorldScriptToUCS4(uint16_t character, const uint32_t **chars)
@@ -5321,7 +5321,7 @@ int appleWorldScriptToUCS4(uint16_t character, const uint32_t **chars)
 		0x71b9, 0x71ba, 0x72a7, 0x79a7, 0x7a00, 0x7fb2, 0x8a70, 0x0000  // 0xfdf8 - 0xfdff
 	};
 
-	static const WPXComplexMap charComplexMap[] =
+	static const RVNGComplexMap charComplexMap[] =
 	{
 		{ 0x8591, { 0xF860, 0x0030, 0x002E, 0x0000 } },
 		{ 0x85AB, { 0xF862, 0x0058, 0x0049, 0x0049, 0x0049, 0x0000 } },
@@ -6267,7 +6267,7 @@ int appleWorldScriptToUCS4(uint16_t character, const uint32_t **chars)
 	int retVal = 0;
 
 	// Find the entry corresponding to the WorldScript character
-	if ((retVal = findSimpleMap((uint16_t)(character - 0x8140), chars, charSimpleMap, WPD_NUM_ELEMENTS(charSimpleMap))))
+	if ((retVal = findSimpleMap((uint16_t)(character - 0x8140), chars, charSimpleMap, RVNG_NUM_ELEMENTS(charSimpleMap))))
 		return retVal;
 
 	if ((retVal = findComplexMap(character, chars, charComplexMap)))

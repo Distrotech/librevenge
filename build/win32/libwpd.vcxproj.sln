@@ -1,8 +1,8 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libwpd", "libwpd.vcxproj", "{330E414A-9C06-4A4B-9814-0C665F5DCA52}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "librevenge", "librevenge.vcxproj", "{330E414A-9C06-4A4B-9814-0C665F5DCA52}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libwpdstream", "libwpdstream.vcxproj", "{CB848337-B6C8-4942-961B-5A9FBBF37B46}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "librevengestream", "librevengestream.vcxproj", "{CB848337-B6C8-4942-961B-5A9FBBF37B46}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wpd2html", "wpd2html.vcxproj", "{CE8B94C0-593D-442E-ACDD-CA3830A00FF6}"
 EndProject

@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,60 +17,60 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WPXPROPERTYLIST_H
-#define WPXPROPERTYLIST_H
-#include "WPXProperty.h"
+#ifndef RVNGPROPERTYLIST_H
+#define RVNGPROPERTYLIST_H
+#include "RVNGProperty.h"
 
 // we use the pimpl pattern so we don't expose any STL symbols to the rest of
 // the world.. yes, this is quite annoying.
 
-class WPXMapImpl;
-class WPXMapIterImpl;
+class RVNGMapImpl;
+class RVNGMapIterImpl;
 
-class WPXPropertyList
+class RVNGPropertyList
 {
 public:
-	WPXPropertyList();
-	WPXPropertyList(const WPXPropertyList &);
-	virtual ~WPXPropertyList();
-	void insert(const char *name, WPXProperty *prop);
+	RVNGPropertyList();
+	RVNGPropertyList(const RVNGPropertyList &);
+	virtual ~RVNGPropertyList();
+	void insert(const char *name, RVNGProperty *prop);
 	void insert(const char *name, const char *val);
 	void insert(const char *name, const int val);
 	void insert(const char *name, const bool val);
-	void insert(const char *name, const WPXString &val);
-	void insert(const char *name, const double val, const WPXUnit units = WPX_INCH);
+	void insert(const char *name, const RVNGString &val);
+	void insert(const char *name, const double val, const RVNGUnit units = RVNG_INCH);
 
 	void remove(const char *name);
-	const WPXProperty *operator[](const char *name) const;
-	const WPXPropertyList &operator=(const WPXPropertyList &propList);
+	const RVNGProperty *operator[](const char *name) const;
+	const RVNGPropertyList &operator=(const RVNGPropertyList &propList);
 	void clear();
 
 	class Iter
 	{
 	public:
-		Iter(const WPXPropertyList &propList);
+		Iter(const RVNGPropertyList &propList);
 		virtual ~Iter();
 		void rewind();
 		bool next();
 		bool last();
-		const WPXProperty *operator()() const;
+		const RVNGProperty *operator()() const;
 		const char *key();
 	private:
-		WPXMapIterImpl *m_iterImpl;
+		RVNGMapIterImpl *m_iterImpl;
 		Iter(const Iter &);
 		Iter &operator=(const Iter &);
 	};
-	friend class WPXPropertyList::Iter;
+	friend class RVNGPropertyList::Iter;
 
 private:
-	mutable WPXMapImpl *m_mapImpl;
+	mutable RVNGMapImpl *m_mapImpl;
 };
-#endif /* WPXPROPERTYLIST_H */
+#endif /* RVNGPROPERTYLIST_H */
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

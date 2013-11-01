@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,15 +17,15 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WPXHeader.h"
-#include "WPXParser.h"
+#include "RVNGHeader.h"
+#include "RVNGParser.h"
 #include "WP1Parser.h"
 #include "WP3Parser.h"
 #include "WP42Parser.h"
@@ -33,21 +33,21 @@
 #include "WP42Heuristics.h"
 #include "WP5Parser.h"
 #include "WP6Parser.h"
-#include "WPXEncryption.h"
-#include "libwpd_internal.h"
+#include "RVNGEncryption.h"
+#include "librevenge_internal.h"
 
 /**
-\mainpage libwpd documentation
-This document contains both the libwpd API specification and the normal libwpd
+\mainpage librevenge documentation
+This document contains both the librevenge API specification and the normal librevenge
 documentation.
-\section api_docs libwpd API documentation
-The external libwpd API is provided by the WPDocument class. This class, combined
-with the WPXDocumentInterface class, are the only two classes that will be of interest
-for the application programmer using libwpd.
-\section lib_docs libwpd documentation
-If you are interrested in the structure of libwpd itself, this whole document
-would be a good starting point for exploring the interals of libwpd. Mind that
-this document is a work-in-progress, and will most likely not cover libwpd for
+\section api_docs librevenge API documentation
+The external librevenge API is provided by the RVNGocument class. This class, combined
+with the RVNGDocumentInterface class, are the only two classes that will be of interest
+for the application programmer using librevenge.
+\section lib_docs librevenge documentation
+If you are interrested in the structure of librevenge itself, this whole document
+would be a good starting point for exploring the interals of librevenge. Mind that
+this document is a work-in-progress, and will most likely not cover librevenge for
 the full 100%.
 */
 
@@ -57,13 +57,13 @@ Analyzes the content of an input stream to see if it can be parsed
 \return A confidence value which represents the likelyhood that the content from
 the input stream can be parsed
 */
-WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input)
+RVNGConfidence RVNGocument::isFileFormatSupported(RVNGInputStream *input)
 {
-	WPD_DEBUG_MSG(("WPDocument::isFileFormatSupported()\n"));
+	RVNG_DEBUG_MSG(("RVNGocument::isFileFormatSupported()\n"));
 
 	// by-pass the OLE stream (if it exists) and returns the (sub) stream with the
 	// WordPerfect document.
-	WPXInputStream *document = 0;
+	RVNGInputStream *document = 0;
 	bool isDocumentOLE = false;
 
 	if (input->isOLEStream())
@@ -72,15 +72,15 @@ WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input)
 		if (document)
 			isDocumentOLE = true;
 		else
-			return WPD_CONFIDENCE_NONE;
+			return RVNG_CONFIDENCE_NONE;
 	}
 	else
 		document = input;
 
 	try
 	{
-		WPDConfidence confidence = WPD_CONFIDENCE_NONE;
-		WPXHeader *header = WPXHeader::constructHeader(document, 0);
+		RVNGConfidence confidence = RVNG_CONFIDENCE_NONE;
+		RVNGHeader *header = RVNGHeader::constructHeader(document, 0);
 		if (header)
 		{
 			switch (header->getFileType())
@@ -90,11 +90,11 @@ WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input)
 				{
 				case 0x00: // WP5
 				case 0x02: // WP6+
-					confidence = WPD_CONFIDENCE_EXCELLENT;
+					confidence = RVNG_CONFIDENCE_EXCELLENT;
 					break;
 				default:
 					// unhandled file format
-					confidence = WPD_CONFIDENCE_NONE;
+					confidence = RVNG_CONFIDENCE_NONE;
 					break;
 				}
 				break;
@@ -104,32 +104,32 @@ WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input)
 				case 0x02: // WP Mac 2.x
 				case 0x03: // WP Mac 3.0-3.5
 				case 0x04: // WP Mac 3.5e
-					confidence = WPD_CONFIDENCE_EXCELLENT;
+					confidence = RVNG_CONFIDENCE_EXCELLENT;
 					break;
 				default:
 					// unhandled file format
-					confidence = WPD_CONFIDENCE_NONE;
+					confidence = RVNG_CONFIDENCE_NONE;
 					break;
 				}
 				break;
 			default:
 				// unhandled file type
-				confidence = WPD_CONFIDENCE_NONE;
+				confidence = RVNG_CONFIDENCE_NONE;
 				break;
 			}
 			if (header->getDocumentEncryption())
 			{
 				if (header->getMajorVersion() == 0x02)
-					confidence = WPD_CONFIDENCE_UNSUPPORTED_ENCRYPTION;
+					confidence = RVNG_CONFIDENCE_UNSUPPORTED_ENCRYPTION;
 				else
-					confidence = WPD_CONFIDENCE_SUPPORTED_ENCRYPTION;
+					confidence = RVNG_CONFIDENCE_SUPPORTED_ENCRYPTION;
 			}
 			DELETEP(header);
 		}
 		else
 			confidence = WP1Heuristics::isWP1FileFormat(input, 0);
-		if (confidence != WPD_CONFIDENCE_EXCELLENT && confidence != WPD_CONFIDENCE_SUPPORTED_ENCRYPTION)
-			confidence = LIBWPD_MAX(confidence, WP42Heuristics::isWP42FileFormat(input, 0));
+		if (confidence != RVNG_CONFIDENCE_EXCELLENT && confidence != RVNG_CONFIDENCE_SUPPORTED_ENCRYPTION)
+			confidence = LIBREVENGE_MAX(confidence, WP42Heuristics::isWP42FileFormat(input, 0));
 
 
 		// dispose of the reference to the ole input stream, if we allocated one
@@ -140,23 +140,23 @@ WPDConfidence WPDocument::isFileFormatSupported(WPXInputStream *input)
 	}
 	catch (FileException)
 	{
-		WPD_DEBUG_MSG(("File Exception trapped\n"));
+		RVNG_DEBUG_MSG(("File Exception trapped\n"));
 
 		// dispose of the reference to the ole input stream, if we allocated one
 		if (document && isDocumentOLE)
 			DELETEP(document);
 
-		return WPD_CONFIDENCE_NONE;
+		return RVNG_CONFIDENCE_NONE;
 	}
 	catch (...)
 	{
-		WPD_DEBUG_MSG(("Unknown Exception trapped\n"));
+		RVNG_DEBUG_MSG(("Unknown Exception trapped\n"));
 
 		// dispose of the reference to the ole input stream, if we allocated one
 		if (document && isDocumentOLE)
 			DELETEP(document);
 
-		return WPD_CONFIDENCE_NONE;
+		return RVNG_CONFIDENCE_NONE;
 	}
 }
 
@@ -166,25 +166,25 @@ Checks whether the given password was used to encrypt the document
 \param password The password used to protect the document or NULL if the document is not protected
 \return A value which indicates between the given password and the password that was used to protect the document
 */
-WPDPasswordMatch WPDocument::verifyPassword(WPXInputStream *input, const char *password)
+RVNGPasswordMatch RVNGocument::verifyPassword(RVNGInputStream *input, const char *password)
 {
 	if (!password)
-		return WPD_PASSWORD_MATCH_DONTKNOW;
+		return RVNG_PASSWORD_MATCH_DONTKNOW;
 	if (!input)
-		return WPD_PASSWORD_MATCH_DONTKNOW;
+		return RVNG_PASSWORD_MATCH_DONTKNOW;
 
-	input->seek(0, WPX_SEEK_SET);
+	input->seek(0, RVNG_SEEK_SET);
 
-	WPDPasswordMatch passwordMatch = WPD_PASSWORD_MATCH_NONE;
-	WPXEncryption encryption(password);
+	RVNGPasswordMatch passwordMatch = RVNG_PASSWORD_MATCH_NONE;
+	RVNGEncryption encryption(password);
 
-	WPXHeader *header = 0;
+	RVNGHeader *header = 0;
 
-	WPD_DEBUG_MSG(("WPDocument::verifyPassword()\n"));
+	RVNG_DEBUG_MSG(("RVNGocument::verifyPassword()\n"));
 
 	// by-pass the OLE stream (if it exists) and returns the (sub) stream with the
 	// WordPerfect document.
-	WPXInputStream *document = 0;
+	RVNGInputStream *document = 0;
 	bool isDocumentOLE = false;
 
 	if (input->isOLEStream())
@@ -193,29 +193,29 @@ WPDPasswordMatch WPDocument::verifyPassword(WPXInputStream *input, const char *p
 		if (document)
 			isDocumentOLE = true;
 		else
-			return WPD_PASSWORD_MATCH_NONE;
+			return RVNG_PASSWORD_MATCH_NONE;
 	}
 	else
 		document = input;
 
 	try
 	{
-		header = WPXHeader::constructHeader(document, 0);
+		header = RVNGHeader::constructHeader(document, 0);
 		if (header)
 		{
 			if (header->getDocumentEncryption())
 			{
 				if (header->getMajorVersion() == 0x02)
-					passwordMatch = WPD_PASSWORD_MATCH_DONTKNOW;
+					passwordMatch = RVNG_PASSWORD_MATCH_DONTKNOW;
 				else if (header->getDocumentEncryption() == encryption.getCheckSum())
-					passwordMatch = WPD_PASSWORD_MATCH_OK;
+					passwordMatch = RVNG_PASSWORD_MATCH_OK;
 			}
 			DELETEP(header);
 		}
 		else
 			passwordMatch = WP1Heuristics::verifyPassword(input, password);
-		if (passwordMatch == WPD_PASSWORD_MATCH_NONE)
-			passwordMatch = LIBWPD_MAX(passwordMatch, WP42Heuristics::verifyPassword(input, password));
+		if (passwordMatch == RVNG_PASSWORD_MATCH_NONE)
+			passwordMatch = LIBREVENGE_MAX(passwordMatch, WP42Heuristics::verifyPassword(input, password));
 
 
 		// dispose of the reference to the ole input stream, if we allocated one
@@ -226,73 +226,73 @@ WPDPasswordMatch WPDocument::verifyPassword(WPXInputStream *input, const char *p
 	}
 	catch (FileException)
 	{
-		WPD_DEBUG_MSG(("File Exception trapped\n"));
+		RVNG_DEBUG_MSG(("File Exception trapped\n"));
 
 		// dispose of the reference to the ole input stream, if we allocated one
 		if (document && isDocumentOLE)
 			DELETEP(document);
 
-		return WPD_PASSWORD_MATCH_NONE;
+		return RVNG_PASSWORD_MATCH_NONE;
 	}
 	catch (...)
 	{
-		WPD_DEBUG_MSG(("Unknown Exception trapped\n"));
+		RVNG_DEBUG_MSG(("Unknown Exception trapped\n"));
 
 		// dispose of the reference to the ole input stream, if we allocated one
 		if (document && isDocumentOLE)
 			DELETEP(document);
 
-		return WPD_PASSWORD_MATCH_NONE;
+		return RVNG_PASSWORD_MATCH_NONE;
 	}
 }
 
 /**
 Parses the input stream content. It will make callbacks to the functions provided by a
-WPXDocumentInterface class implementation when needed. This is often commonly called the
+RVNGDocumentInterface class implementation when needed. This is often commonly called the
 'main parsing routine'.
 \param input The input stream
-\param documentInterface A WPXDocumentInterface implementation
+\param documentInterface A RVNGDocumentInterface implementation
 \param password The password used to protect the document or NULL if the document
 is not protected
 \return A value that indicates whether the conversion was successful and in case it
 was not, it indicates the reason of the error
 */
-WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *documentInterface, const char *password)
+RVNGResult RVNGocument::parse(RVNGInputStream *input, RVNGDocumentInterface *documentInterface, const char *password)
 {
 	if (!input)
-		return WPD_FILE_ACCESS_ERROR;
+		return RVNG_FILE_ACCESS_ERROR;
 
-	if (password && verifyPassword(input, password) != WPD_PASSWORD_MATCH_OK)
-		return WPD_PASSWORD_MISSMATCH_ERROR;
+	if (password && verifyPassword(input, password) != RVNG_PASSWORD_MATCH_OK)
+		return RVNG_PASSWORD_MISSMATCH_ERROR;
 
-	input->seek(0, WPX_SEEK_SET);
+	input->seek(0, RVNG_SEEK_SET);
 
-	WPXParser *parser = 0;
+	RVNGParser *parser = 0;
 
 	// by-pass the OLE stream (if it exists) and returns the (sub) stream with the
 	// WordPerfect document.
 
-	WPXInputStream *document = 0;
+	RVNGInputStream *document = 0;
 	bool isDocumentOLE = false;
 
-	WPD_DEBUG_MSG(("WPDocument::parse()\n"));
+	RVNG_DEBUG_MSG(("RVNGocument::parse()\n"));
 	if (input->isOLEStream())
 	{
 		document = input->getDocumentOLEStream("PerfectOffice_MAIN");
 		if (document)
 			isDocumentOLE = true;
 		else
-			return WPD_OLE_ERROR;
+			return RVNG_OLE_ERROR;
 	}
 	else
 		document = input;
 
-	WPDResult error = WPD_OK;
+	RVNGResult error = RVNG_OK;
 
 	try
 	{
-		WPXEncryption *encryption = 0;
-		WPXHeader *header = WPXHeader::constructHeader(document, 0);
+		RVNGEncryption *encryption = 0;
+		RVNGHeader *header = RVNGHeader::constructHeader(document, 0);
 
 		if (header)
 		{
@@ -302,14 +302,14 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *documen
 				switch (header->getMajorVersion())
 				{
 				case 0x00: // WP5
-					WPD_DEBUG_MSG(("WordPerfect: Using the WP5 parser.\n"));
+					RVNG_DEBUG_MSG(("WordPerfect: Using the WP5 parser.\n"));
 					if (password)
-						encryption = new WPXEncryption(password, 16);
+						encryption = new RVNGEncryption(password, 16);
 					parser = new WP5Parser(document, header, encryption);
 					parser->parse(documentInterface);
 					break;
 				case 0x02: // WP6
-					WPD_DEBUG_MSG(("WordPerfect: Using the WP6 parser.\n"));
+					RVNG_DEBUG_MSG(("WordPerfect: Using the WP6 parser.\n"));
 					if (password)
 					{
 						delete header;
@@ -320,7 +320,7 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *documen
 					break;
 				default:
 					// unhandled file format
-					WPD_DEBUG_MSG(("WordPerfect: Unsupported file format.\n"));
+					RVNG_DEBUG_MSG(("WordPerfect: Unsupported file format.\n"));
 					break;
 				}
 				break;
@@ -330,21 +330,21 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *documen
 				case 0x02: // WP Mac 2.x
 				case 0x03: // WP Mac 3.0-3.5
 				case 0x04: // WP Mac 3.5e
-					WPD_DEBUG_MSG(("WordPerfect: Using the WP3 parser.\n"));
+					RVNG_DEBUG_MSG(("WordPerfect: Using the WP3 parser.\n"));
 					if (password)
-						encryption = new WPXEncryption(password, header->getDocumentOffset());
+						encryption = new RVNGEncryption(password, header->getDocumentOffset());
 					parser = new WP3Parser(document, header, encryption);
 					parser->parse(documentInterface);
 					break;
 				default:
 					// unhandled file format
-					WPD_DEBUG_MSG(("WordPerfect: Unsupported file format.\n"));
+					RVNG_DEBUG_MSG(("WordPerfect: Unsupported file format.\n"));
 					break;
 				}
 				break;
 			default:
 				// unhandled file format
-				WPD_DEBUG_MSG(("WordPerfect: Unsupported file type.\n"));
+				RVNG_DEBUG_MSG(("WordPerfect: Unsupported file type.\n"));
 				break;
 			}
 			DELETEP(parser);
@@ -356,24 +356,24 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *documen
 			// header which can be used to determine which parser to instanciate.
 			// Use heuristics to determine with some certainty if we are dealing with
 			// a file in the WP4.2 format or WP Mac 1.x format.
-			if (WP1Heuristics::isWP1FileFormat(document, password) == WPD_CONFIDENCE_EXCELLENT)
+			if (WP1Heuristics::isWP1FileFormat(document, password) == RVNG_CONFIDENCE_EXCELLENT)
 			{
-				WPD_DEBUG_MSG(("WordPerfect: Mostly likely the file format is WP Mac 1.x.\n\n"));
-				WPD_DEBUG_MSG(("WordPerfect: Using the WP Mac 1.x parser.\n\n"));
+				RVNG_DEBUG_MSG(("WordPerfect: Mostly likely the file format is WP Mac 1.x.\n\n"));
+				RVNG_DEBUG_MSG(("WordPerfect: Using the WP Mac 1.x parser.\n\n"));
 				if (password)
-					encryption = new WPXEncryption(password, 6);
+					encryption = new RVNGEncryption(password, 6);
 				parser = new WP1Parser(document, encryption);
 				parser->parse(documentInterface);
 				DELETEP(parser);
 			}
-			else if (WP42Heuristics::isWP42FileFormat(document, password) == WPD_CONFIDENCE_EXCELLENT)
+			else if (WP42Heuristics::isWP42FileFormat(document, password) == RVNG_CONFIDENCE_EXCELLENT)
 			{
-				WPD_DEBUG_MSG(("WordPerfect: Mostly likely the file format is WP4.2.\n\n"));
-				WPD_DEBUG_MSG(("WordPerfect: Using the WP4.2 parser.\n\n"));
+				RVNG_DEBUG_MSG(("WordPerfect: Mostly likely the file format is WP4.2.\n\n"));
+				RVNG_DEBUG_MSG(("WordPerfect: Using the WP4.2 parser.\n\n"));
 				if (password)
 				{
-					encryption = new WPXEncryption(password, 6);
-					input->seek(6, WPX_SEEK_SET);
+					encryption = new RVNGEncryption(password, 6);
+					input->seek(6, RVNG_SEEK_SET);
 				}
 				parser = new WP42Parser(document, encryption);
 				parser->parse(documentInterface);
@@ -381,29 +381,29 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *documen
 			}
 			else
 
-				error = WPD_FILE_ACCESS_ERROR;
+				error = RVNG_FILE_ACCESS_ERROR;
 		}
 	}
 
 	catch (FileException)
 	{
-		WPD_DEBUG_MSG(("File Exception trapped\n"));
-		error = WPD_FILE_ACCESS_ERROR;
+		RVNG_DEBUG_MSG(("File Exception trapped\n"));
+		error = RVNG_FILE_ACCESS_ERROR;
 	}
 	catch (ParseException)
 	{
-		WPD_DEBUG_MSG(("Parse Exception trapped\n"));
-		error = WPD_PARSE_ERROR;
+		RVNG_DEBUG_MSG(("Parse Exception trapped\n"));
+		error = RVNG_PARSE_ERROR;
 	}
 	catch (UnsupportedEncryptionException)
 	{
-		WPD_DEBUG_MSG(("Encrypted document exception trapped\n"));
-		error = WPD_UNSUPPORTED_ENCRYPTION_ERROR;
+		RVNG_DEBUG_MSG(("Encrypted document exception trapped\n"));
+		error = RVNG_UNSUPPORTED_ENCRYPTION_ERROR;
 	}
 	catch (...)
 	{
-		WPD_DEBUG_MSG(("Unknown Exception trapped\n"));
-		error = WPD_UNKNOWN_ERROR;
+		RVNG_DEBUG_MSG(("Unknown Exception trapped\n"));
+		error = RVNG_UNKNOWN_ERROR;
 	}
 
 	DELETEP(parser);
@@ -413,36 +413,36 @@ WPDResult WPDocument::parse(WPXInputStream *input, WPXDocumentInterface *documen
 	return error;
 }
 
-WPDResult WPDocument::parseSubDocument(WPXInputStream *input, WPXDocumentInterface *documentInterface, WPDFileFormat fileFormat)
+RVNGResult RVNGocument::parseSubDocument(RVNGInputStream *input, RVNGDocumentInterface *documentInterface, RVNGFileFormat fileFormat)
 {
-	WPXParser *parser = 0;
+	RVNGParser *parser = 0;
 
-	WPDResult error = WPD_OK;
+	RVNGResult error = RVNG_OK;
 
 	try
 	{
 
 		switch (fileFormat)
 		{
-		case WPD_FILE_FORMAT_WP6:
+		case RVNG_FILE_FORMAT_WP6:
 			parser = new WP6Parser(input, 0, 0);
 			break;
-		case WPD_FILE_FORMAT_WP5:
+		case RVNG_FILE_FORMAT_WP5:
 			parser = new WP5Parser(input, 0, 0);
 			break;
-		case WPD_FILE_FORMAT_WP42:
+		case RVNG_FILE_FORMAT_WP42:
 			parser = new WP42Parser(input, 0);
 			break;
-		case WPD_FILE_FORMAT_WP3:
+		case RVNG_FILE_FORMAT_WP3:
 			parser = new WP3Parser(input, 0, 0);
 			break;
-		case WPD_FILE_FORMAT_WP1:
+		case RVNG_FILE_FORMAT_WP1:
 			parser = new WP1Parser(input, 0);
 			break;
-		case WPD_FILE_FORMAT_UNKNOWN:
+		case RVNG_FILE_FORMAT_UNKNOWN:
 		default:
 			DELETEP(parser);
-			return WPD_UNKNOWN_ERROR;
+			return RVNG_UNKNOWN_ERROR;
 		}
 
 		if (parser)
@@ -450,23 +450,23 @@ WPDResult WPDocument::parseSubDocument(WPXInputStream *input, WPXDocumentInterfa
 	}
 	catch (FileException)
 	{
-		WPD_DEBUG_MSG(("File Exception trapped\n"));
-		error = WPD_FILE_ACCESS_ERROR;
+		RVNG_DEBUG_MSG(("File Exception trapped\n"));
+		error = RVNG_FILE_ACCESS_ERROR;
 	}
 	catch (ParseException)
 	{
-		WPD_DEBUG_MSG(("Parse Exception trapped\n"));
-		error = WPD_PARSE_ERROR;
+		RVNG_DEBUG_MSG(("Parse Exception trapped\n"));
+		error = RVNG_PARSE_ERROR;
 	}
 	catch (UnsupportedEncryptionException)
 	{
-		WPD_DEBUG_MSG(("Encrypted document exception trapped\n"));
-		error = WPD_UNSUPPORTED_ENCRYPTION_ERROR;
+		RVNG_DEBUG_MSG(("Encrypted document exception trapped\n"));
+		error = RVNG_UNSUPPORTED_ENCRYPTION_ERROR;
 	}
 	catch (...)
 	{
-		WPD_DEBUG_MSG(("Unknown Exception trapped\n"));
-		error = WPD_UNKNOWN_ERROR;
+		RVNG_DEBUG_MSG(("Unknown Exception trapped\n"));
+		error = RVNG_UNKNOWN_ERROR;
 	}
 	DELETEP(parser);
 	return error;

@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -28,7 +28,7 @@
 #include "WP3FileStructure.h"
 #include "WP3Parser.h"
 
-WP3FootnoteEndnoteGroup::WP3FootnoteEndnoteGroup(WPXInputStream *input, WPXEncryption *encryption) :
+WP3FootnoteEndnoteGroup::WP3FootnoteEndnoteGroup(RVNGInputStream *input, RVNGEncryption *encryption) :
 	WP3VariableLengthGroup(),
 	m_subDocument(0)
 {
@@ -40,18 +40,18 @@ WP3FootnoteEndnoteGroup::~WP3FootnoteEndnoteGroup()
 	delete m_subDocument;
 }
 
-void WP3FootnoteEndnoteGroup::_readContents(WPXInputStream *input, WPXEncryption *encryption)
+void WP3FootnoteEndnoteGroup::_readContents(RVNGInputStream *input, RVNGEncryption *encryption)
 {
 	int tmpSizeOfNote = getSize() - 8;
-	input->seek(25, WPX_SEEK_CUR);
+	input->seek(25, RVNG_SEEK_CUR);
 	tmpSizeOfNote -= 25;
 	unsigned tmpNumOfPages = readU16(input, encryption, true);
 	tmpSizeOfNote -= 2;
-	input->seek(4*tmpNumOfPages, WPX_SEEK_CUR);
+	input->seek(4*tmpNumOfPages, RVNG_SEEK_CUR);
 	tmpSizeOfNote -= 4*tmpNumOfPages;
 	unsigned tmpNumBreakTableEntries = readU16(input, encryption, true);
 	tmpSizeOfNote -= 2;
-	input->seek(6*tmpNumBreakTableEntries, WPX_SEEK_CUR);
+	input->seek(6*tmpNumBreakTableEntries, RVNG_SEEK_CUR);
 	tmpSizeOfNote -= 6*tmpNumBreakTableEntries;
 
 	// here we skipped all the useless junk and we are at the beginning of the
@@ -64,7 +64,7 @@ void WP3FootnoteEndnoteGroup::_readContents(WPXInputStream *input, WPXEncryption
 
 void WP3FootnoteEndnoteGroup::parse(WP3Listener *listener)
 {
-	WPD_DEBUG_MSG(("WordPerfect: handling a Footnote/Endnote group\n"));
+	RVNG_DEBUG_MSG(("WordPerfect: handling a Footnote/Endnote group\n"));
 	switch (getSubGroup())
 	{
 	case WP3_FOOTNOTE_ENDNOTE_GROUP_FOOTNOTE_FUNCTION:

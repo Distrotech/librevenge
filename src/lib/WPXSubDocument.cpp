@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,20 +16,20 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include "WPXSubDocument.h"
+#include "RVNGSubDocument.h"
 #include "WP3Parser.h"
-#include "libwpd_internal.h"
-#include "WPXListener.h"
+#include "librevenge_internal.h"
+#include "RVNGListener.h"
 #include <string.h>
 
-WPXSubDocument::WPXSubDocument(WPXInputStream *input, WPXEncryption *encryption, const unsigned dataSize) :
+RVNGSubDocument::RVNGSubDocument(RVNGInputStream *input, RVNGEncryption *encryption, const unsigned dataSize) :
 	m_stream(0),
 	m_streamData(new uint8_t[dataSize])
 {
@@ -40,18 +40,18 @@ WPXSubDocument::WPXSubDocument(WPXInputStream *input, WPXEncryption *encryption,
 			break;
 		m_streamData[i] = readU8(input, encryption);
 	}
-	m_stream = new WPXMemoryInputStream(m_streamData, i);
+	m_stream = new RVNGMemoryInputStream(m_streamData, i);
 }
 
-WPXSubDocument::WPXSubDocument(uint8_t *streamData, const unsigned dataSize) :
+RVNGSubDocument::RVNGSubDocument(uint8_t *streamData, const unsigned dataSize) :
 	m_stream(0),
 	m_streamData(0)
 {
 	if (streamData)
-		m_stream = new WPXMemoryInputStream(streamData, dataSize);
+		m_stream = new RVNGMemoryInputStream(streamData, dataSize);
 }
 
-WPXSubDocument::~WPXSubDocument()
+RVNGSubDocument::~RVNGSubDocument()
 {
 	if (m_stream)
 		delete m_stream;

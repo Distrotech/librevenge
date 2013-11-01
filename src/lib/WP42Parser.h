@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,7 +17,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -27,24 +27,24 @@
 #ifndef WP42PARSER_H
 #define WP42PARSER_H
 
-#include "WPXParser.h"
+#include "RVNGParser.h"
 #include "WP42Listener.h"
 
-class WPXDocumentInterface;
+class RVNGDocumentInterface;
 
-class WP42Parser : public WPXParser
+class WP42Parser : public RVNGParser
 {
 public:
-	WP42Parser(WPXInputStream *input, WPXEncryption *encryption);
+	WP42Parser(RVNGInputStream *input, RVNGEncryption *encryption);
 	~WP42Parser();
 
-	void parse(WPXDocumentInterface *documentInterface);
-	void parseSubDocument(WPXDocumentInterface *documentInterface);
+	void parse(RVNGDocumentInterface *documentInterface);
+	void parseSubDocument(RVNGDocumentInterface *documentInterface);
 
-	static void parseDocument(WPXInputStream *input, WPXEncryption *encryption, WP42Listener *listener);
+	static void parseDocument(RVNGInputStream *input, RVNGEncryption *encryption, WP42Listener *listener);
 
 private:
-	void parse(WPXInputStream *input, WPXEncryption *encryption, WP42Listener *listener);
+	void parse(RVNGInputStream *input, RVNGEncryption *encryption, WP42Listener *listener);
 };
 
 #endif /* WP42PARSER_H */

@@ -1,47 +1,47 @@
 #!/bin/sh
 
-# Build runtime and developer zipfiles for libwpd on Win32.
+# Build runtime and developer zipfiles for librevenge on Win32.
 
-ZIP=libwpd-@WPD_VERSION@-MinGW.zip
-DEVZIP=libwpd-devel-@WPD_VERSION@-MinGW.zip
-TOOLSZIP=libwpd-tools-@WPD_VERSION@-MinGW.zip
+ZIP=librevenge-@RVNG_VERSION@-MinGW.zip
+DEVZIP=librevenge-devel-@RVNG_VERSION@-MinGW.zip
+TOOLSZIP=librevenge-tools-@RVNG_VERSION@-MinGW.zip
 
 cd $DESTDIR@prefix@
 
 DLLDIR=lib
-[ -f bin/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll ] && \
-[ -f bin/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll ] && \
+[ -f bin/librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.dll ] && \
+[ -f bin/librevenge-stream-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.dll ] && \
 DLLDIR=bin
 
 @STRIP@ --strip-all \
-$DLLDIR/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll \
-$DLLDIR/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll \
+$DLLDIR/librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.dll \
+$DLLDIR/librevenge-stream-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.dll \
 bin/wpd2html.exe \
 bin/wpd2raw.exe \
 bin/wpd2text.exe
 
 upx -qqq --best \
-$DLLDIR/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll \
-$DLLDIR/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll \
+$DLLDIR/librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.dll \
+$DLLDIR/librevenge-stream-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.dll \
 bin/wpd2html.exe \
 bin/wpd2raw.exe \
 bin/wpd2text.exe
 
 rm -f $ZIP
 zip -q -r $ZIP -@ <<EOF
-$DLLDIR/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll
-$DLLDIR/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll
+$DLLDIR/librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.dll
+$DLLDIR/librevenge-stream-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.dll
 EOF
 
 rm -f $DEVZIP
 zip -q -r $DEVZIP -@ <<EOF
-include/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@
-lib/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll.a
-lib/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.a
-lib/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.dll.a
-lib/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.a
-lib/pkgconfig/libwpd-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.pc
-lib/pkgconfig/libwpd-stream-@WPD_MAJOR_VERSION@.@WPD_MINOR_VERSION@.pc
+include/librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@
+lib/librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.dll.a
+lib/librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.a
+lib/librevenge-stream-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.dll.a
+lib/librevenge-stream-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.a
+lib/pkgconfig/librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.pc
+lib/pkgconfig/librevenge-stream-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.pc
 EOF
 
 rm -f $TOOLSZIP

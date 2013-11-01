@@ -5,15 +5,15 @@ AC_PREREQ([2.65])
 # ====================
 # Version informations
 # ====================
-m4_define([libwpd_version_major],[0])
-m4_define([libwpd_version_minor],[9])
-m4_define([libwpd_version_micro],[9])
-m4_define([libwpd_version],[libwpd_version_major.libwpd_version_minor.libwpd_version_micro])
+m4_define([librevenge_version_major],[0])
+m4_define([librevenge_version_minor],[9])
+m4_define([librevenge_version_micro],[9])
+m4_define([librevenge_version],[librevenge_version_major.librevenge_version_minor.librevenge_version_micro])
 
 # =============
 # Automake init
 # =============
-AC_INIT([libwpd],[libwpd_version])
+AC_INIT([librevenge],[librevenge_version])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADER([config.h])
 AM_INIT_AUTOMAKE([1.11 foreign dist-xz dist-bzip2])
@@ -36,17 +36,17 @@ AC_CANONICAL_HOST
 # =================================
 # Libtool/Version Makefile settings
 # =================================
-AC_SUBST(WPD_MAJOR_VERSION, [libwpd_version_major])
-AC_SUBST(WPD_MINOR_VERSION, [libwpd_version_minor])
-AC_SUBST(WPD_MICRO_VERSION, [libwpd_version_micro])
-AC_SUBST(WPD_VERSION, [libwpd_version])
-# AC_SUBST(LT_RELEASE, [libwpd_version_major.libwpd_version_minor])
-LT_CURRENT=`expr 100 '*' libwpd_version_major + libwpd_version_minor`
+AC_SUBST(RVNG_MAJOR_VERSION, [librevenge_version_major])
+AC_SUBST(RVNG_MINOR_VERSION, [librevenge_version_minor])
+AC_SUBST(RVNG_MICRO_VERSION, [librevenge_version_micro])
+AC_SUBST(RVNG_VERSION, [librevenge_version])
+# AC_SUBST(LT_RELEASE, [librevenge_version_major.librevenge_version_minor])
+LT_CURRENT=`expr 100 '*' librevenge_version_major + librevenge_version_minor`
 # For 1.0.0 comment the first line and uncomment the second
 LT_AGE=0
-# LT_AGE=libwpd_version_minor
+# LT_AGE=librevenge_version_minor
 AC_SUBST(LT_CURRENT)
-AC_SUBST(LT_REVISION, [libwpd_version_micro])
+AC_SUBST(LT_REVISION, [librevenge_version_micro])
 AC_SUBST(LT_AGE)
 
 # ==========================
@@ -56,27 +56,27 @@ AC_MSG_CHECKING([for native Win32])
 AS_CASE([$host],
 	[*-*-mingw*], [
 		native_win32=yes
-		LIBWPD_WIN32_RESOURCE=libwpd-win32res.lo
-		LIBWPD_STREAM_WIN32_RESOURCE=libwpd-stream-win32res.lo
-		WPD2HTML_WIN32_RESOURCE=wpd2html-win32res.lo
-		WPD2TEXT_WIN32_RESOURCE=wpd2text-win32res.lo
-		WPD2RAW_WIN32_RESOURCE=wpd2raw-win32res.lo
+		LIBREVENGE_WIN32_RESOURCE=librevenge-win32res.lo
+		LIBREVENGE_STREAM_WIN32_RESOURCE=librevenge-stream-win32res.lo
+		RVNG2HTML_WIN32_RESOURCE=wpd2html-win32res.lo
+		RVNG2TEXT_WIN32_RESOURCE=wpd2text-win32res.lo
+		RVNG2RAW_WIN32_RESOURCE=wpd2raw-win32res.lo
 	], [
 		native_win32=no
-		LIBWPD_WIN32_RESOURCE=
-		LIBWPD_STREAM_WIN32_RESOURCE=
-		WPD2HTML_WIN32_RESOURCE=
-		WPD2TEXT_WIN32_RESOURCE=
-		WPD2RAW_WIN32_RESOURCE=
+		LIBREVENGE_WIN32_RESOURCE=
+		LIBREVENGE_STREAM_WIN32_RESOURCE=
+		RVNG2HTML_WIN32_RESOURCE=
+		RVNG2TEXT_WIN32_RESOURCE=
+		RVNG2RAW_WIN32_RESOURCE=
 	]
 )
 AC_MSG_RESULT([$native_win32])
 AM_CONDITIONAL(OS_WIN32, [test "x$native_win32" = "xyes"])
-AC_SUBST(LIBWPD_WIN32_RESOURCE)
-AC_SUBST(LIBWPD_STREAM_WIN32_RESOURCE)
-AC_SUBST(WPD2HTML_WIN32_RESOURCE)
-AC_SUBST(WPD2TEXT_WIN32_RESOURCE)
-AC_SUBST(WPD2RAW_WIN32_RESOURCE)
+AC_SUBST(LIBREVENGE_WIN32_RESOURCE)
+AC_SUBST(LIBREVENGE_STREAM_WIN32_RESOURCE)
+AC_SUBST(RVNG2HTML_WIN32_RESOURCE)
+AC_SUBST(RVNG2TEXT_WIN32_RESOURCE)
+AC_SUBST(RVNG2RAW_WIN32_RESOURCE)
 
 AC_MSG_CHECKING([for Win32 platform in general])
 AS_CASE([$host],
@@ -223,7 +223,7 @@ AS_IF([test "x$with_docs" != "xno"], [
 		build_docs=no
 	], [build_docs=yes])
 ], [build_docs=no])
-AM_CONDITIONAL([WITH_LIBWPD_DOCS], [test "x$build_docs" != "xno"])
+AM_CONDITIONAL([WITH_LIBREVENGE_DOCS], [test "x$build_docs" != "xno"])
 
 
 # =========
@@ -234,7 +234,7 @@ AC_ARG_WITH([stream],
 	[with_stream="$withval"],
 	[with_stream=yes]
 )
-AM_CONDITIONAL(WITH_LIBWPD_STREAM, [test "x$with_stream" != "xno"])
+AM_CONDITIONAL(WITH_LIBREVENGE_STREAM, [test "x$with_stream" != "xno"])
 
 # ==========
 # Zip stream
@@ -282,20 +282,20 @@ src/conv/raw/wpd2raw.rc
 src/conv/text/Makefile
 src/conv/text/wpd2text.rc
 src/lib/Makefile
-src/lib/libwpd.rc
-src/lib/libwpd-stream.rc
+src/lib/librevenge.rc
+src/lib/librevenge-stream.rc
 src/test/Makefile
 inc/Makefile
-inc/libwpd/Makefile
-inc/libwpd-stream/Makefile
+inc/librevenge/Makefile
+inc/librevenge-stream/Makefile
 docs/Makefile
 docs/doxygen/Makefile
 build/Makefile
 build/win32/Makefile
-libwpd-$WPD_MAJOR_VERSION.$WPD_MINOR_VERSION.pc:libwpd.pc.in
-libwpd-stream-$WPD_MAJOR_VERSION.$WPD_MINOR_VERSION.pc:libwpd-stream.pc.in
-libwpd.spec
-libwpd-zip
+librevenge-$RVNG_MAJOR_VERSION.$RVNG_MINOR_VERSION.pc:librevenge.pc.in
+librevenge-stream-$RVNG_MAJOR_VERSION.$RVNG_MINOR_VERSION.pc:librevenge-stream.pc.in
+librevenge.spec
+librevenge-zip
 ])
 AC_OUTPUT
 

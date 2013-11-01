@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -18,7 +18,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -29,15 +29,15 @@
 #define WP6CONTENTLISTENER_H
 
 #include "WP6Listener.h"
-#include "WPXContentListener.h"
+#include "RVNGContentListener.h"
 #include "WP6FileStructure.h"
 
 #include <stack>
 #include <map>
 #include <vector>
 
-class WPXDocumentInterface;
-class WPXTable;
+class RVNGDocumentInterface;
+class RVNGTable;
 
 enum WP6StyleState { NORMAL, DOCUMENT_NOTE, DOCUMENT_NOTE_GLOBAL,
                      BEGIN_BEFORE_NUMBERING,
@@ -83,14 +83,14 @@ private:
 typedef struct _WP6ContentParsingState WP6ContentParsingState;
 struct _WP6ContentParsingState
 {
-	_WP6ContentParsingState(WPXTableList tableList, unsigned nextTableIndice = 0);
+	_WP6ContentParsingState(RVNGTableList tableList, unsigned nextTableIndice = 0);
 	~_WP6ContentParsingState();
-	WPXString m_bodyText;
-	WPXString m_textBeforeNumber;
-	WPXString m_textBeforeDisplayReference;
-	WPXString m_numberText;
-	WPXString m_textAfterDisplayReference;
-	WPXString m_textAfterNumber;
+	RVNGString m_bodyText;
+	RVNGString m_textBeforeNumber;
+	RVNGString m_textBeforeDisplayReference;
+	RVNGString m_numberText;
+	RVNGString m_textAfterDisplayReference;
+	RVNGString m_textAfterNumber;
 
 	double m_paragraphMarginBottomRelative;
 	double m_paragraphMarginBottomAbsolute;
@@ -100,8 +100,8 @@ struct _WP6ContentParsingState
 	unsigned m_numListExtraTabs;
 	bool m_isListReference;
 
-	WPXTableList m_tableList;
-	WPXTable *m_currentTable;
+	RVNGTableList m_tableList;
+	RVNGTable *m_currentTable;
 	unsigned m_nextTableIndice;
 
 	std::stack<unsigned> m_listLevelStack;
@@ -119,10 +119,10 @@ struct _WP6ContentParsingState
 
 	uint32_t m_leaderCharacter;
 	uint8_t m_leaderNumSpaces;
-	std::vector<WPXTabStop> m_tempTabStops;
+	std::vector<RVNGTabStop> m_tempTabStops;
 	std::vector<bool> m_tempUsePreWP9LeaderMethod;
 
-	WPXNumberingType m_currentPageNumberingType;
+	RVNGNumberingType m_currentPageNumberingType;
 
 private:
 	_WP6ContentParsingState(const _WP6ContentParsingState &);
@@ -143,7 +143,7 @@ public:
 	                     const uint8_t tabBehaviourFlag);
 	void update(const uint8_t *numberingMethods, const uint8_t tabBehaviourFlag);
 
-	WPXNumberingType getListType(int level)
+	RVNGNumberingType getListType(int level)
 	{
 		return m_listTypes[level];
 	}
@@ -152,32 +152,32 @@ protected:
 	void _updateNumberingMethods(const WP6OutlineLocation outlineLocation, const uint8_t *numberingMethods);
 
 private:
-	WPXNumberingType m_listTypes[WP6_NUM_LIST_LEVELS];
+	RVNGNumberingType m_listTypes[WP6_NUM_LIST_LEVELS];
 };
 
-class WP6ContentListener : public WP6Listener, protected WPXContentListener
+class WP6ContentListener : public WP6Listener, protected RVNGContentListener
 {
 public:
-	WP6ContentListener(std::list<WPXPageSpan> &pageList, WPXTableList tableList, WPXDocumentInterface *documentInterface);
+	WP6ContentListener(std::list<RVNGPageSpan> &pageList, RVNGTableList tableList, RVNGDocumentInterface *documentInterface);
 	~WP6ContentListener();
 
 	void startDocument()
 	{
-		WPXContentListener::startDocument();
+		RVNGContentListener::startDocument();
 	}
 	void startSubDocument()
 	{
-		WPXContentListener::startSubDocument();
+		RVNGContentListener::startSubDocument();
 	}
 	void setDate(const uint16_t type, const uint16_t year,
 	             const uint8_t month, const uint8_t day,
 	             const uint8_t hour, const uint8_t minute,
 	             const uint8_t second, const uint8_t dayOfWeek,
 	             const uint8_t timeZone, const uint8_t unused);
-	void setExtendedInformation(const uint16_t type, const WPXString &data);
+	void setExtendedInformation(const uint16_t type, const RVNGString &data);
 	void setAlignmentCharacter(const uint32_t character);
 	void setLeaderCharacter(const uint32_t character, const uint8_t numSpaces);
-	void defineTabStops(const bool isRelative, const std::vector<WPXTabStop> &tabStops,
+	void defineTabStops(const bool isRelative, const std::vector<RVNGTabStop> &tabStops,
 	                    const std::vector<bool> &usePreWP9LeaderMethods);
 	void insertCharacter(uint32_t character);
 	void insertTab(const uint8_t tabType, double tabPosition);
@@ -185,29 +185,29 @@ public:
 	void insertEOL();
 	void insertBreak(const uint8_t breakType)
 	{
-		WPXContentListener::insertBreak(breakType);
+		RVNGContentListener::insertBreak(breakType);
 	}
 	void lineSpacingChange(const double lineSpacing)
 	{
-		WPXContentListener::lineSpacingChange(lineSpacing);
+		RVNGContentListener::lineSpacingChange(lineSpacing);
 	}
 	void justificationChange(const uint8_t justification)
 	{
-		WPXContentListener::justificationChange(justification);
+		RVNGContentListener::justificationChange(justification);
 	}
 	void characterColorChange(const uint8_t red, const uint8_t green, const uint8_t blue);
 	void characterShadingChange(const uint8_t shading);
 	void highlightChange(const bool isOn, const RGBSColor &color);
-	void fontChange(const uint16_t matchedFontPointSize, const uint16_t fontPID, const WPXString &fontName);
+	void fontChange(const uint16_t matchedFontPointSize, const uint16_t fontPID, const RVNGString &fontName);
 	void attributeChange(const bool isOn, const uint8_t attribute);
 	void spacingAfterParagraphChange(const double spacingRelative, const double spacingAbsolute);
-	void pageNumberingChange(const WPXPageNumberPosition /* page numbering position */, const uint16_t /* matchedFontPointSize */, const uint16_t /* fontPID */) {}
+	void pageNumberingChange(const RVNGPageNumberPosition /* page numbering position */, const uint16_t /* matchedFontPointSize */, const uint16_t /* fontPID */) {}
 	void pageMarginChange(const uint8_t /* side */, const uint16_t /* margin */) {}
-	void pageFormChange(const uint16_t /* length */, const uint16_t /* width */, const WPXFormOrientation /* orientation */) {}
+	void pageFormChange(const uint16_t /* length */, const uint16_t /* width */, const RVNGFormOrientation /* orientation */) {}
 	void marginChange(const uint8_t side, const uint16_t margin);
 	void paragraphMarginChange(const uint8_t side, const int16_t margin);
 	void indentFirstLineChange(const int16_t offset);
-	void columnChange(const WPXTextColumnType columnType, const uint8_t numColumns, const std::vector<double> &columnWidth,
+	void columnChange(const RVNGTextColumnType columnType, const uint8_t numColumns, const std::vector<double> &columnWidth,
 	                  const std::vector<bool> &isFixedWidth);
 	void updateOutlineDefinition(const WP6OutlineLocation outlineLocation, const uint16_t outlineHash,
 	                             const uint8_t *numberingMethods, const uint8_t tabBehaviourFlag);
@@ -221,18 +221,18 @@ public:
 	void globalOn(const uint8_t systemStyle);
 	void globalOff();
 	void noteOn(const uint16_t textPID);
-	void noteOff(const WPXNoteType noteType);
+	void noteOff(const RVNGNoteType noteType);
 	void headerFooterGroup(const uint8_t /* headerFooterType */, const uint8_t /* occurenceBits */, const uint16_t /* textPID */) {}
 	void suppressPageCharacteristics(const uint8_t /* suppressCode */) {}
 	void setPageNumber(const uint16_t /* pageNumber */) {}
-	void setPageNumberingType(const WPXNumberingType pageNumberingType);
+	void setPageNumberingType(const RVNGNumberingType pageNumberingType);
 	void endDocument()
 	{
-		WPXContentListener::endDocument();
+		RVNGContentListener::endDocument();
 	}
 	void endSubDocument()
 	{
-		WPXContentListener::endSubDocument();
+		RVNGContentListener::endSubDocument();
 	}
 
 	void defineTable(const uint8_t position, const uint16_t leftOffset);
@@ -242,7 +242,7 @@ public:
 	void insertRow(const uint16_t rowHeight, const bool isMinimumHeight, const bool isHeaderRow);
 	void insertCell(const uint8_t colSpan, const uint8_t rowSpan, const uint8_t borderBits,
 	                const RGBSColor *cellFgColor, const RGBSColor *cellBgColor,
-	                const RGBSColor *cellBorderColor, const WPXVerticalAlignment cellVerticalAlignment,
+	                const RGBSColor *cellBorderColor, const RVNGVerticalAlignment cellVerticalAlignment,
 	                const bool useCellAttributes, const uint32_t cellAttributes);
 	void endTable();
 	void boxOn(const uint8_t anchoringType, const uint8_t generalPositioningFlags, const uint8_t horizontalPositioningFlags,
@@ -258,7 +258,7 @@ public:
 	void undoChange(const uint8_t undoType, const uint16_t undoLevel);
 
 protected:
-	void _handleSubDocument(const WPXSubDocument *subDocument, WPXSubDocumentType subDocumentType, WPXTableList tableList, unsigned nextTableIndice = 0);
+	void _handleSubDocument(const RVNGSubDocument *subDocument, RVNGSubDocumentType subDocumentType, RVNGTableList tableList, unsigned nextTableIndice = 0);
 
 	//void _handleLineBreakElementBegin();
 	void _paragraphNumberOn(const uint16_t outlineHash, const uint8_t level);

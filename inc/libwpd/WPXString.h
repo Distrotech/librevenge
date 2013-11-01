@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,44 +17,44 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef WPXSTRING_H
-#define WPXSTRING_H
+#ifndef RVNGSTRING_H
+#define RVNGSTRING_H
 
-class WPXStringImpl;
+class RVNGStringImpl;
 
-class WPXString
+class RVNGString
 {
 public:
-	WPXString();
-	WPXString(const WPXString &, bool escapeXML = false);
-	WPXString(const char *str);
-	~WPXString();
+	RVNGString();
+	RVNGString(const RVNGString &, bool escapeXML = false);
+	RVNGString(const char *str);
+	~RVNGString();
 
 	const char *cstr() const;
 	int len() const;
 
 	void sprintf(const char *format, ...);
-	void append(const WPXString &s);
+	void append(const RVNGString &s);
 	void append(const char *s);
 	void append(const char c);
 	void clear();
-	WPXString &operator=(const WPXString &str);
-	WPXString &operator=(const char *s);
+	RVNGString &operator=(const RVNGString &str);
+	RVNGString &operator=(const char *s);
 	bool operator==(const char *s) const;
-	bool operator==(const WPXString &str) const;
+	bool operator==(const RVNGString &str) const;
 	bool operator!() const;
 	inline bool operator!=(const char *s) const
 	{
 		return !operator==(s);
 	}
-	inline bool operator!=(const WPXString &str) const
+	inline bool operator!=(const RVNGString &str) const
 	{
 		return !operator==(str);
 	}
@@ -62,7 +62,7 @@ public:
 	class Iter
 	{
 	public:
-		Iter(const WPXString &str);
+		Iter(const RVNGString &str);
 		virtual ~Iter();
 		void rewind();
 		bool next();
@@ -71,13 +71,13 @@ public:
 	private:
 		Iter(const Iter &);
 		Iter &operator=(const Iter &);
-		WPXStringImpl *m_stringImpl;
+		RVNGStringImpl *m_stringImpl;
 		int m_pos;
 		mutable char *m_curChar;
 	};
 
 private:
-	WPXStringImpl *m_stringImpl;
+	RVNGStringImpl *m_stringImpl;
 };
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

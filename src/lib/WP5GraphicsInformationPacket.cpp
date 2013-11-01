@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpd
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http://librevenge.sourceforge.net
  */
 
 /* "This product is not manufactured, approved, or supported by
@@ -26,9 +26,9 @@
 
 #include "WP5GraphicsInformationPacket.h"
 #include "WP5Parser.h"
-#include "libwpd_internal.h"
+#include "librevenge_internal.h"
 
-WP5GraphicsInformationPacket::WP5GraphicsInformationPacket(WPXInputStream *input, WPXEncryption *encryption, int /* id */, uint32_t dataOffset, uint32_t dataSize) :
+WP5GraphicsInformationPacket::WP5GraphicsInformationPacket(RVNGInputStream *input, RVNGEncryption *encryption, int /* id */, uint32_t dataOffset, uint32_t dataSize) :
 	WP5GeneralPacketData(),
 	m_images(),
 	m_data()
@@ -44,7 +44,7 @@ WP5GraphicsInformationPacket::~WP5GraphicsInformationPacket()
 			delete [] (*iter1);
 		(*iter1) = 0;
 	}
-	for (std::vector<WPXBinaryData *>::iterator iter2 = m_images.begin(); iter2 != m_images.end(); ++iter2)
+	for (std::vector<RVNGBinaryData *>::iterator iter2 = m_images.begin(); iter2 != m_images.end(); ++iter2)
 	{
 		if ((*iter2))
 			delete (*iter2);
@@ -52,7 +52,7 @@ WP5GraphicsInformationPacket::~WP5GraphicsInformationPacket()
 	}
 }
 
-void WP5GraphicsInformationPacket::_readContents(WPXInputStream *input, WPXEncryption *encryption, uint32_t /* dataSize */)
+void WP5GraphicsInformationPacket::_readContents(RVNGInputStream *input, RVNGEncryption *encryption, uint32_t /* dataSize */)
 {
 	uint16_t tmpImagesCount = readU16(input, encryption);
 	std::vector<uint32_t> tmpImagesSizes;
@@ -66,7 +66,7 @@ void WP5GraphicsInformationPacket::_readContents(WPXInputStream *input, WPXEncry
 		for (uint32_t k = 0; k < tmpImagesSizes[j]; k++)
 			tmpData[k] = readU8(input, encryption);
 #if 0
-		WPXString filename;
+		RVNGString filename;
 		filename.sprintf("binarydump%.4x.wpg", j);
 		FILE *f = fopen(filename.cstr(), "wb");
 		if (f)
@@ -85,7 +85,7 @@ void WP5GraphicsInformationPacket::_readContents(WPXInputStream *input, WPXEncry
 			fclose(f);
 		}
 #endif
-		m_images.push_back( new WPXBinaryData(tmpData, tmpImagesSizes[j]) );
+		m_images.push_back( new RVNGBinaryData(tmpData, tmpImagesSizes[j]) );
 		m_data.push_back(tmpData);
 	}
 }
