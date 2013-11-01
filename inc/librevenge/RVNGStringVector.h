@@ -38,7 +38,7 @@ public:
 	unsigned size() const;
 	bool empty() const;
 	const RVNGString &operator[](unsigned idx) const;
-	void append(const WPXString &str);
+	void append(const RVNGString &str);
 	void clear();
 
 private:

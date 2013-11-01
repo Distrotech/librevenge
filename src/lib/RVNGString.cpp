@@ -20,10 +20,6 @@
  * For further information visit http://librevenge.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by
- * Corel Corporation or Corel Corporation Limited."
- */
-
 #include "librevenge_internal.h"
 
 #include <string>
@@ -35,9 +31,10 @@
 #define vsnprintf _vsnprintf
 #endif
 
-static int g_static_utf8_strlen (const char *p, const char *end);
+namespace
+{
 
-static const signed char g_static_utf8_skip_data[256] =
+static const unsigned char librvng_utf8_skip_data[256] =
 {
 	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
@@ -49,13 +46,24 @@ static const signed char g_static_utf8_skip_data[256] =
 	3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,5,5,6,6,1,1
 };
 
-#define UTF8_LENGTH(Char)              \
-  ((Char) < 0x80 ? 1 :                 \
-   ((Char) < 0x800 ? 2 :               \
-    ((Char) < 0x10000 ? 3 :            \
-     ((Char) < 0x200000 ? 4 :          \
-      ((Char) < 0x4000000 ? 5 : 6)))))
-#define g_static_utf8_next_char(p) (char *)((p) + g_static_utf8_skip_data[*((unsigned char *)p)])
+#define librvng_utf8_next_char(p) (char *)((p) + librvng_utf8_skip_data[*((unsigned char *)p)])
+
+static int librvng_utf8_strlen (const char *p, const char *end)
+{
+	if (!p)
+		return 0;
+
+	long len = 0;
+	while (p < end && *p)
+	{
+		p = librvng_utf8_next_char (p);
+		++len;
+	}
+
+	return len;
+}
+
+} // anonymous namespace
 
 class RVNGStringImpl
 {
@@ -64,7 +72,7 @@ public:
 	int len() const
 	{
 		if (m_buf.empty()) return 0;
-		return g_static_utf8_strlen(m_buf.c_str(), m_buf.c_str()+m_buf.length());
+		return librvng_utf8_strlen(m_buf.c_str(), m_buf.c_str()+m_buf.length());
 	}
 	std::string m_buf;
 };
@@ -91,7 +99,7 @@ RVNGString::RVNGString(const RVNGString &stringBuf, bool escapeXML) :
 		const char *end = p + tmpLen;
 		while (p != end)
 		{
-			const char *next = g_static_utf8_next_char(p);
+			const char *next = librvng_utf8_next_char(p);
 			if (next > end)
 			{
 				RVNG_DEBUG_MSG(("RVNGString::RVNGString: oops, we have a problem\n"));
@@ -252,7 +260,7 @@ bool RVNGString::Iter::next()
 		m_pos++;
 	else if (m_pos < len)
 	{
-		m_pos+=(int) (g_static_utf8_next_char(&(m_stringImpl->m_buf.c_str()[m_pos])) -
+		m_pos+=(int) (librvng_utf8_next_char(&(m_stringImpl->m_buf.c_str()[m_pos])) -
 		              &(m_stringImpl->m_buf.c_str()[m_pos]));
 	}
 
@@ -274,7 +282,7 @@ const char *RVNGString::Iter::operator()() const
 
 	if (m_curChar) delete [] m_curChar;
 	m_curChar = 0;
-	int charLength =(int) (g_static_utf8_next_char(&(m_stringImpl->m_buf.c_str()[m_pos])) -
+	int charLength =(int) (librvng_utf8_next_char(&(m_stringImpl->m_buf.c_str()[m_pos])) -
 	                       &(m_stringImpl->m_buf.c_str()[m_pos]));
 	m_curChar = new char[charLength+1];
 	for (int i=0; i<charLength; i++)
@@ -282,32 +290,6 @@ const char *RVNGString::Iter::operator()() const
 	m_curChar[charLength]='\0';
 
 	return m_curChar;
-}
-
-/* Various utf8/ucs4 routines, some stolen from glib */
-
-/*
- * g_static_utf8_strlen:
- * @p: pointer to the start of a UTF-8 encoded string.
- *
- * Returns the length of the string in characters.
- *
- * Return value: the length of the string in characters
- */
-int
-g_static_utf8_strlen (const char *p, const char *end)
-{
-	if (!p)
-		return 0;
-
-	long len = 0;
-	while (p < end && *p)
-	{
-		p = g_static_utf8_next_char (p);
-		++len;
-	}
-
-	return len;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

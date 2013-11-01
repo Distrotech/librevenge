@@ -22,11 +22,13 @@ librevenge_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_includedir = $(includedir)/
 librevenge_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_include_HEADERS = \
 	$(top_srcdir)/inc/librevenge/librevenge.h \
 	$(top_srcdir)/inc/librevenge/RVNGBinaryData.h \
+	$(top_srcdir)/inc/librevenge/RVNGDrawingInterface.h \
 	$(top_srcdir)/inc/librevenge/RVNGTextInterface.h \
 	$(top_srcdir)/inc/librevenge/RVNGProperty.h \
 	$(top_srcdir)/inc/librevenge/RVNGPropertyList.h \
 	$(top_srcdir)/inc/librevenge/RVNGPropertyListVector.h \
-	$(top_srcdir)/inc/librevenge/RVNGString.h
+	$(top_srcdir)/inc/librevenge/RVNGString.h \
+	$(top_srcdir)/inc/librevenge/RVNGStringVector.h
 
 AM_CXXFLAGS = -I$(top_srcdir)/inc $(DEBUG_CXXFLAGS)
 
@@ -34,13 +36,13 @@ librevenge_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_LIBADD  = @LIBREVENGE_WI
 librevenge_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_DEPENDENCIES = @LIBREVENGE_WIN32_RESOURCE@
 librevenge_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic $(no_undefined)
 librevenge_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_SOURCES = \
-	librevenge_internal.cpp \
 	RVNGBinaryData.cpp \
 	RVNGMemoryStream.cpp \
 	RVNGProperty.cpp \
 	RVNGPropertyList.cpp \
 	RVNGPropertyListVector.cpp \
 	RVNGString.cpp \
+	RVNGStringVector.cpp \
 	librevenge_internal.h \
 	RVNGMemoryStream.h
 

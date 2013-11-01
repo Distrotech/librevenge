@@ -19,10 +19,6 @@
  * For further information visit http://librevenge.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by
- * Corel Corporation or Corel Corporation Limited."
- */
-
 #ifndef RVNGPROPERTY_H
 #define RVNGPROPERTY_H
 #include "RVNGString.h"

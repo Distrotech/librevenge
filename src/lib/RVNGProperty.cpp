@@ -20,11 +20,39 @@
  * For further information visit http://librevenge.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by
- * Corel Corporation or Corel Corporation Limited."
- */
+#include <ctype.h>
+#include <locale.h>
+#include <string>
+#include <librevenge/librevenge.h>
 
-#include "librevenge_internal.h"
+namespace
+{
+
+static RVNGString doubleToString(const double value)
+{
+	RVNGString tempString;
+	if (value < 0.0001 && value > -0.0001)
+		tempString.sprintf("0.0000");
+	else
+		tempString.sprintf("%.4f", value);
+#ifndef __ANDROID__
+	std::string decimalPoint(localeconv()->decimal_point);
+#else
+	std::string decimalPoint(".");
+#endif
+	if ((decimalPoint.size() == 0) || (decimalPoint == "."))
+		return tempString;
+	std::string stringValue(tempString.cstr());
+	if (!stringValue.empty())
+	{
+		std::string::size_type pos;
+		while ((pos = stringValue.find(decimalPoint)) != std::string::npos)
+			stringValue.replace(pos,decimalPoint.size(),".");
+	}
+	return RVNGString(stringValue.c_str());
+}
+
+} // anonymous namespace
 
 class RVNGStringProperty : public RVNGProperty
 {

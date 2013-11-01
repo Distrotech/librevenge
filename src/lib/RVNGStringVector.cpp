@@ -27,25 +27,25 @@ class RVNGStringVectorImpl
 public:
 	RVNGStringVectorImpl() : m_strings() {}
 	~RVNGStringVectorImpl() {}
-	std::vector<WPXString> m_strings;
+	std::vector<RVNGString> m_strings;
 };
 
-libwpg::RVNGStringVector::RVNGStringVector()
+RVNGStringVector::RVNGStringVector()
 	: m_pImpl(new RVNGStringVectorImpl())
 {
 }
 
-libwpg::RVNGStringVector::RVNGStringVector(const RVNGStringVector &vec)
+RVNGStringVector::RVNGStringVector(const RVNGStringVector &vec)
 	: m_pImpl(new RVNGStringVectorImpl(*(vec.m_pImpl)))
 {
 }
 
-libwpg::RVNGStringVector::~RVNGStringVector()
+RVNGStringVector::~RVNGStringVector()
 {
 	delete m_pImpl;
 }
 
-libwpg::RVNGStringVector &libwpg::RVNGStringVector::operator=(const RVNGStringVector &vec)
+RVNGStringVector &RVNGStringVector::operator=(const RVNGStringVector &vec)
 {
 	// Check for self-assignment
 	if (this == &vec)
@@ -56,27 +56,27 @@ libwpg::RVNGStringVector &libwpg::RVNGStringVector::operator=(const RVNGStringVe
 	return *this;
 }
 
-unsigned libwpg::RVNGStringVector::size() const
+unsigned RVNGStringVector::size() const
 {
 	return (unsigned)(m_pImpl->m_strings.size());
 }
 
-bool libwpg::RVNGStringVector::empty() const
+bool RVNGStringVector::empty() const
 {
 	return m_pImpl->m_strings.empty();
 }
 
-const WPXString &libwpg::RVNGStringVector::operator[](unsigned idx) const
+const RVNGString &RVNGStringVector::operator[](unsigned idx) const
 {
 	return m_pImpl->m_strings[idx];
 }
 
-void libwpg::RVNGStringVector::append(const WPXString &str)
+void RVNGStringVector::append(const RVNGString &str)
 {
 	m_pImpl->m_strings.push_back(str);
 }
 
-void libwpg::RVNGStringVector::clear()
+void RVNGStringVector::clear()
 {
 	m_pImpl->m_strings.clear();
 }

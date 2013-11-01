@@ -20,10 +20,6 @@
  * For further information visit http://librevenge.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by
- * Corel Corporation or Corel Corporation Limited."
- */
-
 #ifndef LIBREVENGE_INTERNAL_H
 #define LIBREVENGE_INTERNAL_H
 
@@ -34,8 +30,6 @@
 #else
 #define RVNG_DEBUG_MSG(M)
 #endif
-
-RVNGString doubleToString(const double value);
 
 class GenericException
 {

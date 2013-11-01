@@ -245,8 +245,6 @@ AC_MSG_NOTICE([
 Build configuration:
 	debug:           ${enable_debug}
 	docs:            ${build_docs}
-	stream:          ${with_stream}
-	zip-stream:      ${with_zip_stream}
 	werror:          ${enable_werror}
 ==============================================================================
 ])

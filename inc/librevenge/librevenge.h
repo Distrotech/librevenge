@@ -20,14 +20,12 @@
  * For further information visit http://librevenge.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by
- * Corel Corporation or Corel Corporation Limited."
- */
-
 #ifndef LIBREVENGE_H
 #define LIBREVENGE_H
 
+#include "RVNGDrawingInterface.h"
 #include "RVNGTextInterface.h"
+#include "RVNGStringVector.h"
 
 #endif /* LIBREVENGE_H */
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

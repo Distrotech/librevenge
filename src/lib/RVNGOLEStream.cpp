@@ -36,7 +36,7 @@
 */
 
 /*
- This file taken from libwpg WPGOLEStream.cpp 1.5 Thu Aug 17 21:21:30 2006
+ This file taken from libwpg RVNGOLEStream.cpp 1.5 Thu Aug 17 21:21:30 2006
 */
 
 #include <string.h>
