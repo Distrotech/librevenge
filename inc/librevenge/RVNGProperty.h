@@ -23,7 +23,7 @@
 #define RVNGPROPERTY_H
 #include "RVNGString.h"
 
-enum RVNGUnit { RVNG_INCH, RVNG_PERCENT, RVNG_POINT, RVNG_TWIP, RVNG_GENERIC };
+enum RVNGUnit { RVNG_INCH, RVNG_PERCENT, RVNG_POINT, RVNG_TWIP, RVNG_GENERIC, RVNG_UNDEF, RVNG_UNIT_ERROR };
 
 class RVNGProperty
 {
@@ -31,7 +31,7 @@ public:
 	virtual ~RVNGProperty();
 	virtual int getInt() const = 0;
 	virtual double getDouble() const = 0;
-	/** returns the property unit when possible. If not, returns RVNG_GENERIC */
+	/** returns the property unit when possible. If not, returns RVNG_UNIT_ERROR */
 	virtual RVNGUnit getUnit() const = 0;
 	virtual RVNGString getStr() const = 0;
 	virtual RVNGProperty *clone() const = 0;

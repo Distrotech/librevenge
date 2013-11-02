@@ -80,7 +80,7 @@ public:
 	virtual RVNGUnit getUnit() const
 	{
 		double val;
-		RVNGUnit unit=RVNG_GENERIC;
+		RVNGUnit unit=RVNG_UNIT_ERROR;
 		findDouble(val, unit);
 		return unit;
 	}
@@ -115,6 +115,10 @@ class RVNGBoolProperty : public RVNGIntProperty
 public:
 	RVNGBoolProperty(const bool val);
 	~RVNGBoolProperty() {}
+	virtual RVNGUnit getUnit() const
+	{
+		return RVNG_UNIT_ERROR;
+	}
 	virtual RVNGString getStr() const;
 	virtual RVNGProperty *clone() const;
 };
@@ -142,6 +146,10 @@ class RVNGInchProperty : public RVNGDoubleProperty
 public:
 	RVNGInchProperty(const double val);
 	~RVNGInchProperty() {}
+	virtual RVNGUnit getUnit() const
+	{
+		return RVNG_INCH;
+	}
 	virtual RVNGString getStr() const;
 	virtual RVNGProperty *clone() const;
 };
