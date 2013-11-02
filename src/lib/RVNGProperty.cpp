@@ -22,7 +22,10 @@
 
 #include <ctype.h>
 #include <locale.h>
+
+#include <sstream>
 #include <string>
+
 #include <librevenge/librevenge.h>
 
 namespace
@@ -60,12 +63,32 @@ public:
 	RVNGStringProperty(const RVNGString &str);
 	RVNGStringProperty(const char *str);
 	~RVNGStringProperty() {}
-	virtual int getInt() const;
-	virtual double getDouble() const;
+	virtual int getInt() const
+	{
+		double val;
+		RVNGUnit unit;
+		if (!findDouble(val, unit)) return 0;
+		return int(val);
+	}
+	virtual double getDouble() const
+	{
+		double val;
+		RVNGUnit unit;
+		if (!findDouble(val, unit)) return 0;
+		return val;
+	}
+	virtual RVNGUnit getUnit() const
+	{
+		double val;
+		RVNGUnit unit=RVNG_GENERIC;
+		findDouble(val, unit);
+		return unit;
+	}
 	virtual RVNGString getStr() const;
 	virtual RVNGProperty *clone() const;
 
 private:
+	bool findDouble(double &res, RVNGUnit &unit) const;
 	RVNGString m_str;
 };
 
@@ -76,6 +99,10 @@ public:
 	~RVNGIntProperty() {}
 	virtual int getInt() const;
 	virtual double getDouble() const;
+	virtual RVNGUnit getUnit() const
+	{
+		return RVNG_GENERIC;
+	}
 	virtual RVNGString getStr() const;
 	virtual RVNGProperty *clone() const;
 
@@ -99,6 +126,10 @@ public:
 	~RVNGDoubleProperty() {}
 	virtual int getInt() const;
 	virtual double getDouble() const;
+	virtual RVNGUnit getUnit() const
+	{
+		return RVNG_GENERIC;
+	}
 	virtual RVNGString getStr() const;
 	virtual RVNGProperty *clone() const;
 
@@ -120,6 +151,10 @@ class RVNGPercentProperty : public RVNGDoubleProperty
 public:
 	RVNGPercentProperty(const double val);
 	~RVNGPercentProperty() {}
+	virtual RVNGUnit getUnit() const
+	{
+		return RVNG_PERCENT;
+	}
 	virtual RVNGString getStr() const;
 	virtual RVNGProperty *clone() const;
 };
@@ -129,6 +164,10 @@ class RVNGPointProperty : public RVNGDoubleProperty
 public:
 	RVNGPointProperty(const double val);
 	~RVNGPointProperty() {}
+	virtual RVNGUnit getUnit() const
+	{
+		return RVNG_POINT;
+	}
 	virtual RVNGString getStr() const;
 	virtual RVNGProperty *clone() const;
 };
@@ -138,6 +177,10 @@ class RVNGTwipProperty : public RVNGDoubleProperty
 public:
 	RVNGTwipProperty(const double val);
 	~RVNGTwipProperty() {}
+	virtual RVNGUnit getUnit() const
+	{
+		return RVNG_TWIP;
+	}
 	virtual RVNGString getStr() const;
 	virtual RVNGProperty *clone() const;
 };
@@ -163,14 +206,42 @@ RVNGStringProperty::RVNGStringProperty(const char *str) :
 	m_str(str)
 {
 }
-int RVNGStringProperty::getInt() const
-{
-	return 0;
-}
 
-double RVNGStringProperty::getDouble() const
+bool RVNGStringProperty::findDouble(double &res, RVNGUnit &unit) const
 {
-	return 0.0;
+	if (m_str.len()==0) return false;
+	char firstC=m_str.cstr()[0];
+	if (firstC!='-' && firstC!='.' && (firstC<'0' || firstC>'9'))
+		return false;
+
+	std::istringstream iss(m_str.cstr());
+	res = 0.0;
+	iss >> res;
+	if (iss.fail())
+		return false;
+	if (iss.eof() || iss.peek() == std::char_traits<char>::eof())
+	{
+		unit=RVNG_GENERIC;
+		return true;
+	}
+	std::string remain;
+	iss >> remain;
+	if (iss.peek() != std::char_traits<char>::eof())
+		return false;
+	if (remain=="pt")
+		unit=RVNG_PERCENT;
+	else if (remain=="in")
+		unit=RVNG_INCH;
+	else if (remain=="%")
+	{
+		res *= 100.;
+		unit=RVNG_PERCENT;
+	}
+	else if (remain=="*")
+		unit=RVNG_TWIP;
+	else
+		return false;
+	return true;
 }
 
 RVNGString RVNGStringProperty::getStr() const
