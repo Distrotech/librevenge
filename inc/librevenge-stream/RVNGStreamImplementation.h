@@ -35,10 +35,22 @@ public:
 	const unsigned char *read(unsigned long numBytes, unsigned long &numBytesRead);
 	long tell();
 	int seek(long offset, RVNG_SEEK_TYPE seekType);
-	bool atEOS();
+	bool isEnd();
 
-	bool isOLEStream();
-	RVNGInputStream *getDocumentOLEStream(const char *name);
+	bool isStructured();
+	unsigned subStreamCount()
+	{
+		return 0;
+	}
+	const char *subStreamName(unsigned)
+	{
+		return 0;
+	}
+	RVNGInputStream *getSubStreamByName(const char *name);
+	RVNGInputStream *getSubStreamById(unsigned)
+	{
+		return 0;
+	}
 
 private:
 	RVNGFileStreamPrivate *d;
@@ -57,10 +69,22 @@ public:
 	const unsigned char *read(unsigned long numBytes, unsigned long &numBytesRead);
 	long tell();
 	int seek(long offset, RVNG_SEEK_TYPE seekType);
-	bool atEOS();
+	bool isEnd();
 
-	bool isOLEStream();
-	RVNGInputStream *getDocumentOLEStream(const char *name);
+	bool isStructured();
+	unsigned subStreamCount()
+	{
+		return 0;
+	}
+	const char *subStreamName(unsigned)
+	{
+		return 0;
+	}
+	RVNGInputStream *getSubStreamByName(const char *name);
+	RVNGInputStream *getSubStreamById(unsigned)
+	{
+		return 0;
+	}
 
 private:
 	RVNGStringStreamPrivate *d;

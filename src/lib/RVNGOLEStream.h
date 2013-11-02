@@ -66,7 +66,7 @@ public:
 	/**
 	 * Checks whether the storage is OLE2 storage.
 	 **/
-	bool isOLEStream();
+	bool isStructured();
 
 	/**
 	 * Returns the error code of last operation.

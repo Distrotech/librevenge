@@ -72,8 +72,8 @@ void Test::testStream(void)
 	 **********************/
 	RVNGInputStream *input = new RVNGFileStream(TMP_FILENAME);
 
-	CPPUNIT_ASSERT_EQUAL ( false, input->isOLEStream() );
-	CPPUNIT_ASSERT_EQUAL ( (RVNGInputStream *) NULL, input->getDocumentOLEStream("foo") );
+	CPPUNIT_ASSERT_EQUAL ( false, input->isStructured() );
+	CPPUNIT_ASSERT_EQUAL ( (RVNGInputStream *) NULL, input->getSubStreamByName("foo") );
 
 	// test read()
 	input->seek(0, RVNG_SEEK_SET);
@@ -87,7 +87,7 @@ void Test::testStream(void)
 	CPPUNIT_ASSERT ( NULL != input->read(50, numBytesRead)  );
 	CPPUNIT_ASSERT_EQUAL ( (long) 8 , input->tell() );
 
-	// test seek(), tell(), atEOS()
+	// test seek(), tell(), isEnd()
 	input->seek(1, RVNG_SEEK_SET);
 	CPPUNIT_ASSERT_EQUAL ( (long) 1 , input->tell() );
 
@@ -101,11 +101,11 @@ void Test::testStream(void)
 	CPPUNIT_ASSERT_EQUAL ( (long) 0, input->tell() );
 
 	input->seek(8, RVNG_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL ( true, input->atEOS() );
+	CPPUNIT_ASSERT_EQUAL ( true, input->isEnd() );
 
 	input->seek(10000, RVNG_SEEK_SET);
 	CPPUNIT_ASSERT( 10000 != input->tell() );
-	CPPUNIT_ASSERT( input->atEOS() );
+	CPPUNIT_ASSERT( input->isEnd() );
 
 	delete input;
 
@@ -114,8 +114,8 @@ void Test::testStream(void)
 	 ************************/
 	input = new RVNGStringStream((const unsigned char *)"\1\2\3\4\0\5\6\7", 8);
 
-	CPPUNIT_ASSERT_EQUAL ( false, input->isOLEStream() );
-	CPPUNIT_ASSERT_EQUAL ( (RVNGInputStream *) NULL, input->getDocumentOLEStream("foo") );
+	CPPUNIT_ASSERT_EQUAL ( false, input->isStructured() );
+	CPPUNIT_ASSERT_EQUAL ( (RVNGInputStream *) NULL, input->getSubStreamByName("foo") );
 
 	// test read()
 	input->seek(0, RVNG_SEEK_SET);
@@ -129,7 +129,7 @@ void Test::testStream(void)
 	CPPUNIT_ASSERT ( NULL != input->read(50, numBytesRead)  );
 	CPPUNIT_ASSERT_EQUAL ( (long) 8 , input->tell() );
 
-	// test seek(), tell(), atEOS()
+	// test seek(), tell(), isEnd()
 	input->seek(1, RVNG_SEEK_SET);
 	CPPUNIT_ASSERT_EQUAL ( (long) 1 , input->tell() );
 
@@ -143,11 +143,11 @@ void Test::testStream(void)
 	CPPUNIT_ASSERT_EQUAL ( (long) 0, input->tell() );
 
 	input->seek(8, RVNG_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL ( true, input->atEOS() );
+	CPPUNIT_ASSERT_EQUAL ( true, input->isEnd() );
 
 	input->seek(10000, RVNG_SEEK_SET);
 	CPPUNIT_ASSERT( 10000 != input->tell() );
-	CPPUNIT_ASSERT( input->atEOS() );
+	CPPUNIT_ASSERT( input->isEnd() );
 
 	delete input;
 
@@ -157,8 +157,8 @@ void Test::testStream(void)
 	 ************************/
 	input = new RVNGMemoryInputStream((unsigned char *)("\1\2\3\4\0\5\6\7"), 8);
 
-	CPPUNIT_ASSERT_EQUAL ( false, input->isOLEStream() );
-	CPPUNIT_ASSERT_EQUAL ( (RVNGInputStream *) NULL, input->getDocumentOLEStream("foo") );
+	CPPUNIT_ASSERT_EQUAL ( false, input->isStructured() );
+	CPPUNIT_ASSERT_EQUAL ( (RVNGInputStream *) NULL, input->getSubStreamByName("foo") );
 
 	// test read()
 	input->seek(0, RVNG_SEEK_SET);
@@ -172,7 +172,7 @@ void Test::testStream(void)
 	CPPUNIT_ASSERT ( NULL != input->read(50, numBytesRead)  );
 	CPPUNIT_ASSERT_EQUAL ( (long) 8 , input->tell() );
 
-	// test seek(), tell(), atEOS()
+	// test seek(), tell(), isEnd()
 	input->seek(1, RVNG_SEEK_SET);
 	CPPUNIT_ASSERT_EQUAL ( (long) 1 , input->tell() );
 
@@ -186,11 +186,11 @@ void Test::testStream(void)
 	CPPUNIT_ASSERT_EQUAL ( (long) 0, input->tell() );
 
 	input->seek(8, RVNG_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL ( true, input->atEOS() );
+	CPPUNIT_ASSERT_EQUAL ( true, input->isEnd() );
 
 	input->seek(10000, RVNG_SEEK_SET);
 	CPPUNIT_ASSERT( 10000 != input->tell() );
-	CPPUNIT_ASSERT( input->atEOS() );
+	CPPUNIT_ASSERT( input->isEnd() );
 
 	delete input;
 

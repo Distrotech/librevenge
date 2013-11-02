@@ -28,20 +28,30 @@ class RVNGMemoryInputStream : public RVNGInputStream
 public:
 	RVNGMemoryInputStream(unsigned char *data, unsigned long size);
 	virtual ~RVNGMemoryInputStream();
-
-	virtual bool isOLEStream()
+	virtual bool isStructured()
 	{
 		return false;
 	}
-	virtual RVNGInputStream *getDocumentOLEStream(const char *)
+	virtual unsigned subStreamCount()
 	{
 		return 0;
 	}
-
+	virtual const char *subStreamName(unsigned)
+	{
+		return 0;
+	}
+	virtual RVNGInputStream *getSubStreamByName(const char *)
+	{
+		return 0;
+	}
+	virtual RVNGInputStream *getSubStreamById(unsigned)
+	{
+		return 0;
+	}
 	virtual const unsigned char *read(unsigned long numBytes, unsigned long &numBytesRead);
 	virtual int seek(long offset, RVNG_SEEK_TYPE seekType);
 	virtual long tell();
-	virtual bool atEOS();
+	virtual bool isEnd();
 	virtual unsigned long getSize() const
 	{
 		return m_size;

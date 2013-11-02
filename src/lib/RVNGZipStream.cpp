@@ -263,7 +263,7 @@ static bool findCentralDirectoryEnd(RVNGInputStream *input)
 
 	try
 	{
-		while (!input->atEOS())
+		while (!input->isEnd())
 		{
 			unsigned signature = getInt(input);
 			if (signature == CDIR_END_SIG)
@@ -291,7 +291,7 @@ static bool findDataStream(RVNGInputStream *input, CentralDirectoryEntry &entry,
 	if (!readCentralDirectoryEnd(input, end))
 		return false;
 	input->seek(end.cdir_offset, RVNG_SEEK_SET);
-	while (!input->atEOS() && (unsigned)input->tell() < end.cdir_offset + end.cdir_size)
+	while (!input->isEnd() && (unsigned)input->tell() < end.cdir_offset + end.cdir_size)
 	{
 		if (!readCentralDirectoryEntry(input, entry))
 			return false;

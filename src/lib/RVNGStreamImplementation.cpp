@@ -149,7 +149,7 @@ const unsigned char *RVNGFileStream::read(unsigned long numBytes, unsigned long 
 		return 0;
 	numBytesRead = 0;
 
-	if (numBytes == 0 || /* atEOS() || */ numBytes > (std::numeric_limits<unsigned long>::max)()/2
+	if (numBytes == 0 || /* isEnd() || */ numBytes > (std::numeric_limits<unsigned long>::max)()/2
 	        || ferror(d->file))
 		return 0;
 
@@ -258,14 +258,14 @@ int RVNGFileStream::seek(long offset, RVNG_SEEK_TYPE seekType)
 		return -1;
 }
 
-bool RVNGFileStream::atEOS()
+bool RVNGFileStream::isEnd()
 {
 	if (!d)
 		return true;
 	return (tell() >= (long)d->streamSize);
 }
 
-bool RVNGFileStream::isOLEStream()
+bool RVNGFileStream::isStructured()
 {
 	if (!d)
 		return false;
@@ -277,7 +277,7 @@ bool RVNGFileStream::isOLEStream()
 
 		// Check whether it is OLE2 storage
 		Storage tmpStorage( this );
-		if (tmpStorage.isOLEStream())
+		if (tmpStorage.isStructured())
 		{
 			d->streamType = OLE2;
 			return true;
@@ -299,13 +299,13 @@ bool RVNGFileStream::isOLEStream()
 		return true;
 }
 
-RVNGInputStream *RVNGFileStream::getDocumentOLEStream(const char *name)
+RVNGInputStream *RVNGFileStream::getSubStreamByName(const char *name)
 {
 	if (!d)
 		return 0;
 	if (ferror(d->file))
 		return 0;
-	if (d->streamType == UNKNOWN && !isOLEStream())
+	if (d->streamType == UNKNOWN && !isStructured())
 		return 0;
 	if (d->streamType == OLE2)
 	{
@@ -399,7 +399,7 @@ int RVNGStringStream::seek(long offset, RVNG_SEEK_TYPE seekType)
 	return 0;
 }
 
-bool RVNGStringStream::atEOS()
+bool RVNGStringStream::isEnd()
 {
 	if ((long)d->offset >= (long)d->buffer.size())
 		return true;
@@ -407,7 +407,7 @@ bool RVNGStringStream::atEOS()
 	return false;
 }
 
-bool RVNGStringStream::isOLEStream()
+bool RVNGStringStream::isStructured()
 {
 	if (d->buffer.empty())
 		return false;
@@ -418,7 +418,7 @@ bool RVNGStringStream::isOLEStream()
 
 		// Check whether it is OLE2 storage
 		Storage tmpStorage( this );
-		if (tmpStorage.isOLEStream())
+		if (tmpStorage.isStructured())
 		{
 			d->streamType = OLE2;
 			return true;
@@ -440,11 +440,11 @@ bool RVNGStringStream::isOLEStream()
 		return true;
 }
 
-RVNGInputStream *RVNGStringStream::getDocumentOLEStream(const char *name)
+RVNGInputStream *RVNGStringStream::getSubStreamByName(const char *name)
 {
 	if (d->buffer.empty())
 		return 0;
-	if (d->streamType == UNKNOWN && !isOLEStream())
+	if (d->streamType == UNKNOWN && !isStructured())
 		return 0;
 
 	if (d->streamType == OLE2)

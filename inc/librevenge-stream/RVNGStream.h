@@ -40,14 +40,21 @@ public:
 	\return A boolean value that should be true if the input stream is an OLE2 storage
 	and false if it is not the case
 	*/
-	virtual bool isOLEStream() = 0;
+	virtual bool isStructured() = 0;
+
+	virtual unsigned subStreamCount() = 0;
+
+	virtual const char *subStreamName(unsigned id) = 0;
+
 	/**
 	Extracts a \c PerfectOffice_MAIN stream from an OLE2 storage.
 	\return Should be a pointer to RVNGInputStream constructed from the \c PerfectOffice_MAIN stream if it exists.
 	\return Should be 0, if the \c PerfectOffice_MAIN stream does not exist inside the OLE2 storage
 	or if the input stream is not an OLE2 storage.
 	*/
-	virtual RVNGInputStream *getDocumentOLEStream(const char *name) = 0;
+	virtual RVNGInputStream *getSubStreamByName(const char *name) = 0;
+
+	virtual RVNGInputStream *getSubStreamById(unsigned id) = 0;
 
 	/**
 	Tries to read a given number of bytes starting from the current position inside the input stream.
@@ -57,6 +64,7 @@ public:
 	\return Optionally it could be 0 if the desired number of bytes could not be read.
 	*/
 	virtual const unsigned char *read(unsigned long numBytes, unsigned long &numBytesRead) = 0;
+
 	/**
 	Moves to the next location inside the input stream.
 	\param offset The offset of the location inside the input stream to move to.
@@ -68,17 +76,19 @@ public:
 	if it failed (i.e. the requested \c offset is beyond the end of the input stream or before its beginning).
 	*/
 	virtual int seek(long offset, RVNG_SEEK_TYPE seekType) = 0;
+
 	/**
 	Returns the actual position inside the input stream.
 	\return A long integer value that should correspond to the position of the next location to be read in the input stream.
 	*/
 	virtual long tell() = 0;
+
 	/**
 	Determines whether the current position is at the end of the stream.
 	\return A boolean value that should be true if the next location to be read in the input stream
 	is beyond its end. In all other cases, it should be false.
 	*/
-	virtual bool atEOS() = 0;
+	virtual bool isEnd() = 0;
 };
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

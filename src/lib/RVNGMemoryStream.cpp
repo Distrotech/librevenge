@@ -88,7 +88,7 @@ long RVNGMemoryInputStream::tell()
 	return m_offset;
 }
 
-bool RVNGMemoryInputStream::atEOS()
+bool RVNGMemoryInputStream::isEnd()
 {
 	if ((long)m_offset == (long)m_size)
 		return true;

@@ -493,7 +493,7 @@ public:
 		return m_dirtree.getSubStreamList(ind, retrieveAll);
 	}
 
-	bool isOLEStream();
+	bool isStructured();
 	void load();
 
 	bool use_big_block_for(unsigned long size) const
@@ -1113,7 +1113,7 @@ librevenge::IStorage::IStorage( RVNGInputStream *is ) :
 	m_sbat.m_blockSize = m_header.m_size_sbat;
 }
 
-bool librevenge::IStorage::isOLEStream()
+bool librevenge::IStorage::isStructured()
 {
 	load();
 	return (m_result == librevenge::Storage::Ok);
@@ -1696,9 +1696,9 @@ librevenge::Storage::Result librevenge::Storage::result()
 	return m_io->m_result;
 }
 
-bool librevenge::Storage::isOLEStream()
+bool librevenge::Storage::isStructured()
 {
-	return m_io->isOLEStream();
+	return m_io->isStructured();
 }
 
 // =========== Stream ==========
