@@ -126,7 +126,7 @@ RVNGFileStream::RVNGFileStream(const char *filename) :
 
 	fseek(d->file, 0, SEEK_END);
 
-	d->streamSize = ftell(d->file);
+	d->streamSize = (unsigned long) ftell(d->file);
 	if (d->streamSize == (unsigned long)-1)
 		d->streamSize = 0;
 	// preventing possible unsigned/signed issues later by truncating the file
@@ -166,15 +166,15 @@ const unsigned char *RVNGFileStream::read(unsigned long numBytes, unsigned long 
 	// hmm, we cannot: go back by the bytes we read ahead && invalidate the buffer
 	if (d->readBuffer)
 	{
-		fseek(d->file, (unsigned long)ftell(d->file) - d->readBufferLength, SEEK_SET);
-		fseek(d->file, d->readBufferPos, SEEK_CUR);
+		fseek(d->file, (long)ftell(d->file) - (long)d->readBufferLength, SEEK_SET);
+		fseek(d->file, (long)d->readBufferPos, SEEK_CUR);
 		delete [] d->readBuffer;
 		d->readBuffer = 0;
 		d->readBufferPos = 0;
 		d->readBufferLength = 0;
 	}
 
-	unsigned long curpos = tell();
+	unsigned long curpos = (unsigned long) tell();
 	if (curpos == (unsigned long)-1)  // tellg() returned ERROR
 		return 0;
 
@@ -194,8 +194,8 @@ const unsigned char *RVNGFileStream::read(unsigned long numBytes, unsigned long 
 	else
 		d->readBufferLength = numBytes;
 
-	fseek(d->file, d->readBufferLength, SEEK_CUR);
-	fseek(d->file, curpos, SEEK_SET);
+	fseek(d->file, (long) d->readBufferLength, SEEK_CUR);
+	fseek(d->file, (long) curpos, SEEK_SET);
 
 	d->readBuffer = new unsigned char[d->readBufferLength];
 	unsigned long tmpNumBytes;
@@ -216,7 +216,7 @@ long RVNGFileStream::tell()
 {
 	if (!d)
 		return -1L;
-	return ferror(d->file) ? -1L : (long)((long)ftell(d->file) - d->readBufferLength + d->readBufferPos);
+	return ferror(d->file) ? -1L : (long)ftell(d->file) - (long)d->readBufferLength + (long) d->readBufferPos;
 }
 
 int RVNGFileStream::seek(long offset, RVNG_SEEK_TYPE seekType)
@@ -235,14 +235,14 @@ int RVNGFileStream::seek(long offset, RVNG_SEEK_TYPE seekType)
 
 	if (!ferror(d->file) && offset < ftell(d->file) && (unsigned long)offset >= (unsigned long)ftell(d->file) - d->readBufferLength)
 	{
-		d->readBufferPos = offset + d->readBufferLength - ftell(d->file);
+		d->readBufferPos = (unsigned long) (offset + (long) d->readBufferLength - (long) ftell(d->file));
 		return 0;
 	}
 
 	if (d->readBuffer) // seeking outside of the buffer, so invalidate the buffer
 	{
-		fseek(d->file, (unsigned long)ftell(d->file) - d->readBufferLength, SEEK_SET);
-		fseek(d->file, d->readBufferPos, SEEK_CUR);
+		fseek(d->file, (long)ftell(d->file) - (long)d->readBufferLength, SEEK_SET);
+		fseek(d->file, (long) d->readBufferPos, SEEK_CUR);
 		delete [] d->readBuffer;
 		d->readBuffer = 0;
 		d->readBufferPos = 0;
@@ -354,12 +354,12 @@ const unsigned char *RVNGStringStream::read(unsigned long numBytes, unsigned lon
 
 	long numBytesToRead;
 
-	if ((d->offset+numBytes) < d->buffer.size())
-		numBytesToRead = numBytes;
+	if ((unsigned long)d->offset+numBytes < d->buffer.size())
+		numBytesToRead = (long) numBytes;
 	else
-		numBytesToRead = d->buffer.size() - d->offset;
+		numBytesToRead = (long) d->buffer.size() - d->offset;
 
-	numBytesRead = numBytesToRead; // about as paranoid as we can be..
+	numBytesRead = (unsigned long) numBytesToRead; // about as paranoid as we can be..
 
 	if (numBytesToRead == 0)
 		return 0;
@@ -367,7 +367,7 @@ const unsigned char *RVNGStringStream::read(unsigned long numBytes, unsigned lon
 	long oldOffset = d->offset;
 	d->offset += numBytesToRead;
 
-	return &d->buffer[oldOffset];
+	return &d->buffer[size_t(oldOffset)];
 
 }
 
@@ -392,7 +392,7 @@ int RVNGStringStream::seek(long offset, RVNG_SEEK_TYPE seekType)
 	}
 	if ((long)d->offset > (long)d->buffer.size())
 	{
-		d->offset = d->buffer.size();
+		d->offset = (long) d->buffer.size();
 		return 1;
 	}
 

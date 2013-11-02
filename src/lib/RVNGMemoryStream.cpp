@@ -44,12 +44,12 @@ const unsigned char *RVNGMemoryInputStream::read(unsigned long numBytes, unsigne
 
 	long numBytesToRead;
 
-	if ((m_offset+numBytes) < m_size)
-		numBytesToRead = numBytes;
+	if (m_offset+long(numBytes) < long(m_size))
+		numBytesToRead = long(numBytes);
 	else
-		numBytesToRead = m_size - m_offset;
+		numBytesToRead = long(m_size) - long(m_offset);
 
-	numBytesRead = numBytesToRead; // about as paranoid as we can be..
+	numBytesRead = (unsigned long) numBytesToRead; // about as paranoid as we can be..
 
 	if (numBytesToRead == 0)
 		return 0;
@@ -67,7 +67,7 @@ int RVNGMemoryInputStream::seek(long offset, RVNG_SEEK_TYPE seekType)
 	else if (seekType == RVNG_SEEK_SET)
 		m_offset = offset;
 	else if (seekType == RVNG_SEEK_END)
-		m_offset = m_size+offset;
+		m_offset = (long)m_size+offset;
 
 	if (m_offset < 0)
 	{
@@ -76,7 +76,7 @@ int RVNGMemoryInputStream::seek(long offset, RVNG_SEEK_TYPE seekType)
 	}
 	if ((long)m_offset > (long)m_size)
 	{
-		m_offset = m_size;
+		m_offset = (long) m_size;
 		return 1;
 	}
 

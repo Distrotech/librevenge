@@ -53,7 +53,7 @@ static int librvng_utf8_strlen (const char *p, const char *end)
 	if (!p)
 		return 0;
 
-	long len = 0;
+	int len = 0;
 	while (p < end && *p)
 	{
 		p = librvng_utf8_next_char (p);
@@ -93,7 +93,7 @@ RVNGString::RVNGString(const RVNGString &stringBuf, bool escapeXML) :
 {
 	if (escapeXML)
 	{
-		int tmpLen = stringBuf.m_stringImpl->m_buf.length();
+		size_t tmpLen = stringBuf.m_stringImpl->m_buf.length();
 		m_stringImpl->m_buf.reserve(2*tmpLen);
 		const char *p = stringBuf.cstr();
 		const char *end = p + tmpLen;
@@ -160,7 +160,7 @@ void RVNGString::sprintf(const char *format, ...)
 	while(true)
 	{
 		va_start(args, format);
-		int outsize = vsnprintf(buf, bufsize, format, args);
+		int outsize = vsnprintf(buf, size_t(bufsize), format, args);
 		va_end(args);
 
 		if ((outsize == -1) || (outsize == bufsize) || (outsize == bufsize - 1))
@@ -254,7 +254,7 @@ void RVNGString::Iter::rewind()
 
 bool RVNGString::Iter::next()
 {
-	int len = m_stringImpl->m_buf.length();
+	int len = (int) m_stringImpl->m_buf.length();
 
 	if (m_pos == (-1))
 		m_pos++;
@@ -286,7 +286,7 @@ const char *RVNGString::Iter::operator()() const
 	                       &(m_stringImpl->m_buf.c_str()[m_pos]));
 	m_curChar = new char[charLength+1];
 	for (int i=0; i<charLength; i++)
-		m_curChar[i] = m_stringImpl->m_buf[m_pos+i];
+		m_curChar[i] = m_stringImpl->m_buf[size_t(m_pos+i)];
 	m_curChar[charLength]='\0';
 
 	return m_curChar;
