@@ -25,7 +25,6 @@
 #include <librevenge-stream/librevenge-stream.h>
 #include "RVNGString.h"
 
-class RVNGInputStream;
 class RVNGBinaryDataImpl;
 
 class RVNGBinaryData
