@@ -19,8 +19,9 @@
  * For further information visit http://librevenge.sourceforge.net
  */
 
-#ifndef MEMORYSTREAM_H
-#define MEMORYSTREAM_H
+#ifndef RVNGMEMORYSTREAM_H
+#define RVNGMEMORYSTREAM_H
+
 #include <librevenge-stream/librevenge-stream.h>
 
 class RVNGMemoryInputStream : public RVNGInputStream
