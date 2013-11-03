@@ -23,10 +23,10 @@
 
 /** Interface for import of presentations.
   */
-class KEYPresentationInterface
+class RVNGPresentationInterface
 {
 public:
-	virtual ~KEYPresentationInterface() {}
+	virtual ~RVNGPresentationInterface() {}
 
 	// none of the other callback functions will be called before this function is called
 	virtual void startDocument(const RVNGPropertyList &propList) = 0;
