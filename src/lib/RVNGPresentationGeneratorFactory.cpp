@@ -14,22 +14,26 @@
 
 #include <librevenge-generators/RVNGPresentationGeneratorFactory.h>
 
+#include "RVNGRawPresentationGenerator.h"
+#include "RVNGSVGPresentationGenerator.h"
+#include "RVNGTextPresentationGenerator.h"
+
 namespace librevenge
 {
 
 RVNGPresentationInterface *RVNGPresentationGeneratorFactory::makeRaw(RVNGStringVector &/*output*/)
 {
-	return 0;
+	return new RVNGRawPresentationGenerator();
 }
 
-RVNGPresentationInterface *RVNGPresentationGeneratorFactory::makeSVG(RVNGStringVector &/*output*/)
+RVNGPresentationInterface *RVNGPresentationGeneratorFactory::makeSVG(RVNGStringVector &output)
 {
-	return 0;
+	return new RVNGSVGPresentationGenerator(output);
 }
 
 RVNGPresentationInterface *RVNGPresentationGeneratorFactory::makeText(RVNGStringVector &/*output*/)
 {
-	return 0;
+	return new RVNGTextPresentationGenerator();
 }
 
 }
