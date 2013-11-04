@@ -15,6 +15,8 @@
 #ifndef RVNGSPREADSHEETGENERATORFACTORY_H
 #define RVNGSPREADSHEETGENERATORFACTORY_H
 
+#include <librevenge/RVNGStringVector.h>
+
 namespace librevenge
 {
 
@@ -29,9 +31,9 @@ class RVNGSpreadsheetInterface;
 class RVNGSpreadsheetGeneratorFactory
 {
 public:
-	static RVNGSpreadsheetInterface *makeCSV();
-	static RVNGSpreadsheetInterface *makeHTML();
-	static RVNGSpreadsheetInterface *makeRaw();
+	static RVNGSpreadsheetInterface *makeCSV(RVNGStringVector &output);
+	static RVNGSpreadsheetInterface *makeHTML(RVNGStringVector &output);
+	static RVNGSpreadsheetInterface *makeRaw(RVNGStringVector &output);
 };
 
 }

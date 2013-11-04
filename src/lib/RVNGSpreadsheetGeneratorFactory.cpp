@@ -17,17 +17,17 @@
 namespace librevenge
 {
 
-RVNGSpreadsheetInterface *RVNGSpreadsheetGeneratorFactory::makeCSV()
+RVNGSpreadsheetInterface *RVNGSpreadsheetGeneratorFactory::makeCSV(RVNGStringVector &/*output*/)
 {
 	return 0;
 }
 
-RVNGSpreadsheetInterface *RVNGSpreadsheetGeneratorFactory::makeHTML()
+RVNGSpreadsheetInterface *RVNGSpreadsheetGeneratorFactory::makeHTML(RVNGStringVector &/*output*/)
 {
 	return 0;
 }
 
-RVNGSpreadsheetInterface *RVNGSpreadsheetGeneratorFactory::makeRaw()
+RVNGSpreadsheetInterface *RVNGSpreadsheetGeneratorFactory::makeRaw(RVNGStringVector &/*output*/)
 {
 	return 0;
 }

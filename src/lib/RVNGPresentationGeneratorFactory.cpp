@@ -17,17 +17,17 @@
 namespace librevenge
 {
 
-RVNGPresentationInterface *RVNGPresentationGeneratorFactory::makeRaw()
+RVNGPresentationInterface *RVNGPresentationGeneratorFactory::makeRaw(RVNGStringVector &/*output*/)
 {
 	return 0;
 }
 
-RVNGPresentationInterface *RVNGPresentationGeneratorFactory::makeSVG()
+RVNGPresentationInterface *RVNGPresentationGeneratorFactory::makeSVG(RVNGStringVector &/*output*/)
 {
 	return 0;
 }
 
-RVNGPresentationInterface *RVNGPresentationGeneratorFactory::makeText()
+RVNGPresentationInterface *RVNGPresentationGeneratorFactory::makeText(RVNGStringVector &/*output*/)
 {
 	return 0;
 }

@@ -15,6 +15,7 @@
 #ifndef RVNGTEXTGENERATORFACTORY_H
 #define RVNGTEXTGENERATORFACTORY_H
 
+#include <librevenge/RVNGStringVector.h>
 #include <librevenge/RVNGTextInterface.h>
 
 namespace librevenge
@@ -32,9 +33,9 @@ public:
 	// That means passing a RVNGStringVector argument to every one of them.
 	// Adapt.
 
-	static RVNGTextInterface *makeHTML();
-	static RVNGTextInterface *makeRaw();
-	static RVNGTextInterface *makeText();
+	static RVNGTextInterface *makeHTML(RVNGStringVector &output);
+	static RVNGTextInterface *makeRaw(RVNGStringVector &output);
+	static RVNGTextInterface *makeText(RVNGStringVector &output);
 };
 
 }

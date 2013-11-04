@@ -16,6 +16,7 @@
 #define RVNGPRESENTATIONGENERATORFACTORY_H
 
 #include <librevenge/RVNGPresentationInterface.h>
+#include <librevenge/RVNGStringVector.h>
 
 namespace librevenge
 {
@@ -28,9 +29,9 @@ namespace librevenge
 class RVNGPresentationGeneratorFactory
 {
 public:
-	static RVNGPresentationInterface *makeRaw();
-	static RVNGPresentationInterface *makeSVG();
-	static RVNGPresentationInterface *makeText();
+	static RVNGPresentationInterface *makeRaw(RVNGStringVector &output);
+	static RVNGPresentationInterface *makeSVG(RVNGStringVector &output);
+	static RVNGPresentationInterface *makeText(RVNGStringVector &output);
 };
 
 }

@@ -21,18 +21,18 @@
 namespace librevenge
 {
 
-RVNGTextInterface *RVNGTextGeneratorFactory::makeHTML()
+RVNGTextInterface *RVNGTextGeneratorFactory::makeHTML(RVNGStringVector &/*output*/)
 {
 	return new RVNGHTMLTextGenerator();
 }
 
-RVNGTextInterface *RVNGTextGeneratorFactory::makeRaw()
+RVNGTextInterface *RVNGTextGeneratorFactory::makeRaw(RVNGStringVector &/*output*/)
 {
 	// TODO: expose isInfo in API or drop it?
 	return new RVNGRawTextGenerator(false);
 }
 
-RVNGTextInterface *RVNGTextGeneratorFactory::makeText()
+RVNGTextInterface *RVNGTextGeneratorFactory::makeText(RVNGStringVector &/*output*/)
 {
 	// TODO: expose printCallgraphScore in API or drop it?
 	return new RVNGTextTextGenerator(false);
