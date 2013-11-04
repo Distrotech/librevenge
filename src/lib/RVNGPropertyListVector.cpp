@@ -22,6 +22,9 @@
 #include <librevenge/librevenge.h>
 #include <vector>
 
+namespace librevenge
+{
+
 class RVNGPropertyListVectorImpl
 {
 	friend class RVNGPropertyListVector;
@@ -153,4 +156,7 @@ const RVNGPropertyList &RVNGPropertyListVector::Iter::operator()() const
 {
 	return (*m_iterImpl)();
 }
+
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

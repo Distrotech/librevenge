@@ -22,6 +22,9 @@
 
 #include "RVNGStream.h"
 
+namespace librevenge
+{
+
 class RVNGFileStreamPrivate;
 
 class RVNGFileStream: public RVNGInputStream
@@ -71,6 +74,8 @@ private:
 	RVNGStringStream(const RVNGStringStream &); // copy is not allowed
 	RVNGStringStream &operator=(const RVNGStringStream &); // assignment is not allowed
 };
+
+}
 
 #endif // RVNGSTREAMIMPLEMENTATION_H
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

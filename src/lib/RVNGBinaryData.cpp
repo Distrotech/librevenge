@@ -24,6 +24,9 @@
 #include <stdarg.h>
 #include <stdio.h>
 
+namespace librevenge
+{
+
 class RVNGBinaryDataImpl
 {
 public:
@@ -176,6 +179,8 @@ const RVNGInputStream *RVNGBinaryData::getDataStream() const
 		return 0;
 	m_binaryDataImpl->m_stream = new RVNGMemoryInputStream(&(m_binaryDataImpl->m_buf[0]), m_binaryDataImpl->m_buf.size());
 	return m_binaryDataImpl->m_stream;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

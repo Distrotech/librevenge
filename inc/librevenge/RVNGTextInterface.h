@@ -26,6 +26,9 @@
 #include "RVNGPropertyListVector.h"
 #include "RVNGBinaryData.h"
 
+namespace librevenge
+{
+
 /**
 Pure virtual class containing all the callback functions that can be made by
 the parser. An application using this library should implement all the function
@@ -442,6 +445,8 @@ public:
 	*/
 	virtual void insertEquation(const RVNGPropertyList &propList, const RVNGString &data) = 0;
 };
+
+}
 
 #endif /* RVNGTEXTINTERFACE_H */
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

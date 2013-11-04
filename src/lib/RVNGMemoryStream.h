@@ -22,6 +22,9 @@
 
 #include <librevenge-stream/librevenge-stream.h>
 
+namespace librevenge
+{
+
 class RVNGMemoryInputStream : public RVNGInputStream
 {
 public:
@@ -63,6 +66,8 @@ private:
 	RVNGMemoryInputStream(const RVNGMemoryInputStream &);
 	RVNGMemoryInputStream &operator=(const RVNGMemoryInputStream &);
 };
+
+}
 
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

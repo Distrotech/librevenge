@@ -29,6 +29,9 @@
 #define vsnprintf _vsnprintf
 #endif
 
+namespace librevenge
+{
+
 namespace
 {
 
@@ -288,6 +291,8 @@ const char *RVNGString::Iter::operator()() const
 	m_curChar[charLength]='\0';
 
 	return m_curChar;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

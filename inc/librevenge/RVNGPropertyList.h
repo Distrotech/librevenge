@@ -22,6 +22,9 @@
 #define RVNGPROPERTYLIST_H
 #include "RVNGProperty.h"
 
+namespace librevenge
+{
+
 // we use the pimpl pattern so we don't expose any STL symbols to the rest of
 // the world.. yes, this is quite annoying.
 
@@ -66,5 +69,8 @@ public:
 private:
 	mutable RVNGMapImpl *m_mapImpl;
 };
+
+}
+
 #endif /* RVNGPROPERTYLIST_H */
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

@@ -20,6 +20,9 @@
 #ifndef RVNGSTREAM_H
 #define RVNGSTREAM_H
 
+namespace librevenge
+{
+
 enum RVNG_SEEK_TYPE
 {
     RVNG_SEEK_CUR,
@@ -88,5 +91,8 @@ public:
 	*/
 	virtual bool isEnd() = 0;
 };
+
+}
+
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

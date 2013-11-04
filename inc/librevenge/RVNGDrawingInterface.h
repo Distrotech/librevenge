@@ -25,6 +25,9 @@
 #include "RVNGPropertyListVector.h"
 #include "RVNGBinaryData.h"
 
+namespace librevenge
+{
+
 class RVNGDrawingInterface
 {
 public:
@@ -259,6 +262,8 @@ public:
 	*/
 	virtual void closeSpan() = 0;
 };
+
+}
 
 #endif // __RVNGPAINTINTERFACE_H__
 

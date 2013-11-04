@@ -20,6 +20,9 @@
 #include <vector>
 #include <librevenge/librevenge.h>
 
+namespace librevenge
+{
+
 class RVNGStringVectorImpl
 {
 public:
@@ -77,6 +80,8 @@ void RVNGStringVector::append(const RVNGString &str)
 void RVNGStringVector::clear()
 {
 	m_pImpl->m_strings.clear();
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

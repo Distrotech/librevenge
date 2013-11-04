@@ -23,6 +23,9 @@
 
 #include "RVNGPropertyList.h"
 
+namespace librevenge
+{
+
 class RVNGPropertyListVectorImpl;
 class RVNGPropertyListVectorIterImpl;
 
@@ -59,6 +62,8 @@ public:
 private:
 	RVNGPropertyListVectorImpl *m_impl;
 };
+
+}
 
 #endif /* RVNGPROPERTYLISTVECTOR_H */
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

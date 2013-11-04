@@ -22,6 +22,9 @@
 
 #include "RVNGString.h"
 
+namespace librevenge
+{
+
 class RVNGStringVectorImpl;
 
 class RVNGStringVector
@@ -42,6 +45,8 @@ public:
 private:
 	RVNGStringVectorImpl *m_pImpl;
 };
+
+}
 
 #endif /* RVNGSTRINGVECTOR_H */
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

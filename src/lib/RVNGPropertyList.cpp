@@ -24,6 +24,9 @@
 #include <string>
 #include <utility>
 
+namespace librevenge
+{
+
 class RVNGMapImpl
 {
 public:
@@ -289,4 +292,7 @@ const char *RVNGPropertyList::Iter::key()
 {
 	return m_iterImpl->key();
 }
+
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

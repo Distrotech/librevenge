@@ -65,6 +65,8 @@ void Test::tearDown(void)
 
 void Test::testStream(void)
 {
+	using namespace librevenge;
+
 	unsigned long numBytesRead;
 
 	/**********************

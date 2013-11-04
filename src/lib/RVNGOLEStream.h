@@ -35,10 +35,10 @@
 #include <string>
 #include <vector>
 
-class RVNGInputStream;
-
 namespace librevenge
 {
+
+class RVNGInputStream;
 
 class IStorage;
 class Stream;

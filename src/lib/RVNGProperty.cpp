@@ -26,6 +26,9 @@
 
 #include <librevenge/librevenge.h>
 
+namespace librevenge
+{
+
 namespace
 {
 
@@ -442,6 +445,8 @@ RVNGProperty *RVNGPropertyFactory::newPointProp(const double val)
 RVNGProperty *RVNGPropertyFactory::newTwipProp(const double val)
 {
 	return static_cast<RVNGProperty *>(new RVNGTwipProperty(val));
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

@@ -23,6 +23,9 @@
 #include <string>
 #include <vector>
 
+namespace librevenge
+{
+
 class RVNGInputStream;
 
 class RVNGZipStream
@@ -33,6 +36,8 @@ public:
 	static std::vector<std::string> getSubStreamNamesList(RVNGInputStream *input);
 	static RVNGInputStream *getSubstream(RVNGInputStream *input, const char *name);
 };
+
+}
 
 #endif // RVNGZIPSTREAM_H
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

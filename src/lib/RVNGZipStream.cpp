@@ -24,6 +24,9 @@
 #include "RVNGZipStream.h"
 #include <librevenge-stream/librevenge-stream.h>
 
+namespace librevenge
+{
+
 namespace
 {
 class StreamException
@@ -402,6 +405,8 @@ RVNGInputStream *RVNGZipStream::getSubstream(RVNGInputStream *input, const char 
 		(void)inflateEnd(&strm);
 		return new RVNGStringStream(&data[0], (unsigned)data.size());
 	}
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

@@ -35,7 +35,8 @@
 #define S_ISREG(x) (((x) & S_IFMT) == S_IFREG)
 #endif
 
-using namespace librevenge;
+namespace librevenge
+{
 
 enum RVNGStreamType { UNKNOWN, FLAT, OLE2, ZIP };
 
@@ -474,8 +475,6 @@ RVNGInputStream *RVNGStringStream::getSubStreamById(unsigned id)
 	return getSubStreamByName(subStreamName(id));
 }
 
-
-
 RVNGInputStream *RVNGStringStream::getSubStreamByName(const char *name)
 {
 	if (!name || d->buffer.empty())
@@ -507,4 +506,7 @@ RVNGInputStream *RVNGStringStream::getSubStreamByName(const char *name)
 		return RVNGZipStream::getSubstream(this, name);
 	return 0;
 }
+
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

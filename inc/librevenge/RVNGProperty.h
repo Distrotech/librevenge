@@ -21,6 +21,9 @@
 #define RVNGPROPERTY_H
 #include "RVNGString.h"
 
+namespace librevenge
+{
+
 enum RVNGUnit { RVNG_INCH, RVNG_PERCENT, RVNG_POINT, RVNG_TWIP, RVNG_GENERIC, RVNG_UNIT_ERROR };
 
 class RVNGProperty
@@ -48,5 +51,8 @@ public:
 	static RVNGProperty *newPointProp(const double val);
 	static RVNGProperty *newTwipProp(const double val);
 };
+
+}
+
 #endif /* RVNGPROPERTY_H */
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

@@ -23,6 +23,9 @@
 #include <librevenge-stream/librevenge-stream.h>
 #include "RVNGString.h"
 
+namespace librevenge
+{
+
 class RVNGBinaryDataImpl;
 
 class RVNGBinaryData
@@ -48,5 +51,8 @@ public:
 private:
 	RVNGBinaryDataImpl *m_binaryDataImpl;
 };
+
+}
+
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

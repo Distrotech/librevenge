@@ -19,6 +19,9 @@
 #include "RVNGPropertyListVector.h"
 #include "RVNGBinaryData.h"
 
+namespace librevenge
+{
+
 /** Interface for import of presentations.
   */
 class RVNGPresentationInterface
@@ -338,6 +341,8 @@ public:
 	  */
 	virtual void endNotes() = 0;
 };
+
+}
 
 #endif // RVNGPRESENTATIONINTERFACE_H
 

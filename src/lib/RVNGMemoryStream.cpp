@@ -20,6 +20,8 @@
 
 #include "RVNGMemoryStream.h"
 
+namespace librevenge
+{
 
 RVNGMemoryInputStream::RVNGMemoryInputStream(unsigned char *data, unsigned long size) :
 	RVNGInputStream(),
@@ -93,4 +95,7 @@ bool RVNGMemoryInputStream::isEnd()
 
 	return false;
 }
+
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

@@ -21,6 +21,9 @@
 #ifndef RVNGSTRING_H
 #define RVNGSTRING_H
 
+namespace librevenge
+{
+
 class RVNGStringImpl;
 
 class RVNGString
@@ -73,5 +76,8 @@ public:
 private:
 	RVNGStringImpl *m_stringImpl;
 };
+
+}
+
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */
