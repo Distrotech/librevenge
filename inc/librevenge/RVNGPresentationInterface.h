@@ -45,45 +45,45 @@ public:
 	\li \c dc:type The document's type
 	\li \c dcterms:available Date when the document was completed
 	\li \c dcterms:issued: Date of the version of the document
-	\li \c libwpd:abstract Abstract of the document's contents
-	\li \c libwpd:account Account
-	\li \c libwpd:address Address
-	\li \c libwpd:attachments
-	\li \c libwpd:authorization
-	\li \c libwpd:bill-to
-	\li \c libwpd:blind-copy
-	\li \c libwpd:carbon-copy
-	\li \c libwpd:checked-by
-	\li \c libwpd:client
-	\li \c libwpd:comments
-	\li \c libwpd:department
-	\li \c libwpd:descriptive-name The descriptive name for the document
-	\li \c libwpd:descriptive-type The descriptive type for the document
-	\li \c libwpd:destination
-	\li \c libwpd:disposition
-	\li \c libwpd:division
-	\li \c libwpd:document-number
-	\li \c libwpd:editor
-	\li \c libwpd:forward-to
-	\li \c libwpd:group
-	\li \c libwpd:mail-stop
-	\li \c libwpd:matter
-	\li \c libwpd:office
-	\li \c libwpd:owner
-	\li \c libwpd:project
-	\li \c libwpd:purpose
-	\li \c libwpd:received-from
-	\li \c libwpd:recorded-by
-	\li \c libwpd:recorded-date Date when the document was recorded
-	\li \c libwpd:reference
-	\li \c libwpd:revision-notes
-	\li \c libwpd:revision-number
-	\li \c libwpd:section
-	\li \c libwpd:security
-	\li \c libwpd:status
-	\li \c libwpd:telephone-number
-	\li \c libwpd:version-notes
-	\li \c libwpd:version-number
+	\li \c librevenge:abstract Abstract of the document's contents
+	\li \c librevenge:account Account
+	\li \c librevenge:address Address
+	\li \c librevenge:attachments
+	\li \c librevenge:authorization
+	\li \c librevenge:bill-to
+	\li \c librevenge:blind-copy
+	\li \c librevenge:carbon-copy
+	\li \c librevenge:checked-by
+	\li \c librevenge:client
+	\li \c librevenge:comments
+	\li \c librevenge:department
+	\li \c librevenge:descriptive-name The descriptive name for the document
+	\li \c librevenge:descriptive-type The descriptive type for the document
+	\li \c librevenge:destination
+	\li \c librevenge:disposition
+	\li \c librevenge:division
+	\li \c librevenge:document-number
+	\li \c librevenge:editor
+	\li \c librevenge:forward-to
+	\li \c librevenge:group
+	\li \c librevenge:mail-stop
+	\li \c librevenge:matter
+	\li \c librevenge:office
+	\li \c librevenge:owner
+	\li \c librevenge:project
+	\li \c librevenge:purpose
+	\li \c librevenge:received-from
+	\li \c librevenge:recorded-by
+	\li \c librevenge:recorded-date Date when the document was recorded
+	\li \c librevenge:reference
+	\li \c librevenge:revision-notes
+	\li \c librevenge:revision-number
+	\li \c librevenge:section
+	\li \c librevenge:security
+	\li \c librevenge:status
+	\li \c librevenge:telephone-number
+	\li \c librevenge:version-notes
+	\li \c librevenge:version-number
 	\li \c meta:creation-date Document creation date
 	\li \c meta:initial-creator The document's author
 	\li \c meta:keyword The document's keywords
@@ -168,7 +168,7 @@ public:
 	/**
 	Called when a new ordered list level should be opened
 	\param propList Defines a set of properties for the list. May contain:
-	\li \c libwpd:level The level of the list in the hierarchy
+	\li \c librevenge:level The level of the list in the hierarchy
 	\li \c style:num-format Type of list
 	\li \c style:num-prefix Text that comes before the number in the list
 	\li \c style:num-suffix Text that comes after the number in the list
@@ -181,7 +181,7 @@ public:
 	/**
 	Called when a new unordered list level should be opened
 	\param propList Defines a set of properties for the list level. May contain:
-	\li \c libwpd:level The level of the list in the hierarchy
+	\li \c librevenge:level The level of the list in the hierarchy
 	\li \c text:bullet-char The string that should be used as a bullet
 	\li \c text:min-label-width The distance between the bullet and the actual text, stored in inches
 	\li \c text:space-before The indentation level of the lists, stored in inches
@@ -286,7 +286,7 @@ public:
 	\param propList Defines a set of properties for the table row. May contain:
 	\li \c style:row-height The row's height, in inches
 	\li \c style:min-row-height The row's minimum height, in inches
-	\li \c libwpd:is-header-row This row contains headings of columns and should repeat at every page (for tables that span several pages)
+	\li \c librevenge:is-header-row This row contains headings of columns and should repeat at every page (for tables that span several pages)
 	*/
 	virtual void openTableRow(const RVNGPropertyList &propList) = 0;
 	/**
@@ -296,8 +296,8 @@ public:
 	/**
 	Called when a new table cell is opened
 	\param propList Property list for the table cell. May contain:
-	\li \c libwpd:column Number of the column in which the cell is positioned
-	\li \c libwpd:row Number of the row in which the cell is positioned
+	\li \c librevenge:column Number of the column in which the cell is positioned
+	\li \c librevenge:row Number of the row in which the cell is positioned
 	\li \c table:number-columns-spanned Number of columns that the cell spans
 	\li \c table:number-rows-spanned Number of rows that the cell spans
 	\li \c fo:border-left Properties of the left border of the cell
@@ -315,8 +315,8 @@ public:
 	/**
 	Called when a covered (spanned by another cell in the table) table cell is opened
 	\param propList Property list for the table cell. May contain:
-	\li \c libwpd:column Number of the column in which the cell is positioned
-	\li \c libwpd:row Number of the row in which the cell is positioned
+	\li \c librevenge:column Number of the column in which the cell is positioned
+	\li \c librevenge:row Number of the row in which the cell is positioned
 	*/
 	virtual void insertCoveredTableCell(const RVNGPropertyList &propList) = 0;
 	/**

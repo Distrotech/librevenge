@@ -432,14 +432,14 @@ public:
 	/**
 	Called when a binary object should be inserted
 	\param propList Defines a set of properties for the object. May contain:
-	\li \c librevenge:mimetype The mimetype of the object
+	\li \c librevenge:mime-type The mimetype of the object
 	\param data Reference to the binary object
 	*/
 	virtual void insertBinaryObject(const RVNGPropertyList &propList, const RVNGBinaryData &data) = 0;
 	/**
 	Called when a mathml object should be inserted
 	\param propList Defines a set of properties for the object.
-	\li \c librevenge:mimetype The mimetype of the object
+	\li \c librevenge:mime-type The mimetype of the object
 	\param data Reference to the string containing the equation representation
 	*/
 	virtual void insertEquation(const RVNGPropertyList &propList, const RVNGString &data) = 0;
