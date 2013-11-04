@@ -14,17 +14,21 @@
 
 #include <librevenge-generators/RVNGDrawingGeneratorFactory.h>
 
+#include "RVNGRawDrawingGenerator.h"
+#include "RVNGSVGDrawingGenerator.h"
+
 namespace librevenge
 {
 
-RVNGDrawingInterface *RVNGDrawingGeneratorFactory::makeRaw()
+RVNGDrawingInterface *RVNGDrawingGeneratorFactory::makeRaw(RVNGStringVector &/*output*/)
 {
-	return 0;
+	return new RVNGRawDrawingGenerator();
 }
 
-RVNGDrawingInterface *RVNGDrawingGeneratorFactory::makeSVG()
+RVNGDrawingInterface *RVNGDrawingGeneratorFactory::makeSVG(RVNGStringVector &output)
 {
-	return 0;
+	// TODO: what about nmspace arg?
+	return new RVNGSVGDrawingGenerator(output, "");
 }
 
 }

@@ -16,6 +16,7 @@
 #define RVNGDRAWINGGENERATORFACTORY_H
 
 #include <librevenge/RVNGDrawingInterface.h>
+#include <librevenge/RVNGStringVector.h>
 
 namespace librevenge
 {
@@ -28,8 +29,8 @@ namespace librevenge
 class RVNGDrawingGeneratorFactory
 {
 public:
-	static RVNGDrawingInterface *makeRaw();
-	static RVNGDrawingInterface *makeSVG();
+	static RVNGDrawingInterface *makeRaw(RVNGStringVector &output);
+	static RVNGDrawingInterface *makeSVG(RVNGStringVector &output);
 };
 
 }

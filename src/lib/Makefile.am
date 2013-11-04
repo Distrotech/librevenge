@@ -66,8 +66,12 @@ librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_SOURCES = \
 	RVNGTextGeneratorFactory.cpp \
 	RVNGHTMLTextGenerator.cpp \
 	RVNGHTMLTextGenerator.h \
+	RVNGRawDrawingGenerator.cpp \
+	RVNGRawDrawingGenerator.h \
 	RVNGRawTextGenerator.cpp \
 	RVNGRawTextGenerator.h \
+	RVNGSVGDrawingGenerator.cpp \
+	RVNGSVGDrawingGenerator.h \
 	RVNGTextTextGenerator.cpp \
 	RVNGTextTextGenerator.h
 
