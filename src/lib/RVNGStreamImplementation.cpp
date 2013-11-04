@@ -31,6 +31,9 @@
 #endif
 
 #include <limits>
+#include <string>
+#include <vector>
+
 #include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -54,6 +57,7 @@ public:
 	unsigned long readBufferLength;
 	unsigned long readBufferPos;
 	RVNGStreamType streamType;
+	std::vector<std::string> streamNameList;
 private:
 	RVNGFileStreamPrivate(const RVNGFileStreamPrivate &);
 	RVNGFileStreamPrivate &operator=(const RVNGFileStreamPrivate &);
@@ -67,6 +71,7 @@ public:
 	std::vector<unsigned char> buffer;
 	volatile long offset;
 	RVNGStreamType streamType;
+	std::vector<std::string> streamNameList;
 private:
 	RVNGStringStreamPrivate(const RVNGStringStreamPrivate &);
 	RVNGStringStreamPrivate &operator=(const RVNGStringStreamPrivate &);
@@ -280,6 +285,7 @@ bool RVNGFileStream::isStructured()
 		if (tmpStorage.isStructured())
 		{
 			d->streamType = OLE2;
+			d->streamNameList = tmpStorage.getSubStreamNamesList();
 			return true;
 		}
 #ifdef BUILD_ZIP_STREAM
@@ -287,6 +293,7 @@ bool RVNGFileStream::isStructured()
 		if (RVNGZipStream::isZipFile(this))
 		{
 			d->streamType = ZIP;
+			d->streamNameList = RVNGZipStream::getSubStreamNamesList(this);
 			return true;
 		}
 #endif
@@ -299,9 +306,27 @@ bool RVNGFileStream::isStructured()
 		return true;
 }
 
+unsigned RVNGFileStream::subStreamCount()
+{
+	if (!isStructured()||!d) return 0;
+	return (unsigned) d->streamNameList.size();
+}
+
+const char *RVNGFileStream::subStreamName(unsigned id)
+{
+	if (!isStructured() ||!d || id>=(unsigned) d->streamNameList.size())
+		return 0;
+	return d->streamNameList[size_t(id)].c_str();
+}
+
+RVNGInputStream *RVNGFileStream::getSubStreamById(unsigned id)
+{
+	return getSubStreamByName(subStreamName(id));
+}
+
 RVNGInputStream *RVNGFileStream::getSubStreamByName(const char *name)
 {
-	if (!d)
+	if (!name || !d)
 		return 0;
 	if (ferror(d->file))
 		return 0;
@@ -421,6 +446,7 @@ bool RVNGStringStream::isStructured()
 		if (tmpStorage.isStructured())
 		{
 			d->streamType = OLE2;
+			d->streamNameList = tmpStorage.getSubStreamNamesList();
 			return true;
 		}
 #ifdef BUILD_ZIP_STREAM
@@ -428,6 +454,7 @@ bool RVNGStringStream::isStructured()
 		if (RVNGZipStream::isZipFile(this))
 		{
 			d->streamType = ZIP;
+			d->streamNameList = RVNGZipStream::getSubStreamNamesList(this);
 			return true;
 		}
 #endif
@@ -440,9 +467,29 @@ bool RVNGStringStream::isStructured()
 		return true;
 }
 
+unsigned RVNGStringStream::subStreamCount()
+{
+	if (!isStructured()||!d) return 0;
+	return (unsigned) d->streamNameList.size();
+}
+
+const char *RVNGStringStream::subStreamName(unsigned id)
+{
+	if (!isStructured() ||!d || id>=(unsigned) d->streamNameList.size())
+		return 0;
+	return d->streamNameList[size_t(id)].c_str();
+}
+
+RVNGInputStream *RVNGStringStream::getSubStreamById(unsigned id)
+{
+	return getSubStreamByName(subStreamName(id));
+}
+
+
+
 RVNGInputStream *RVNGStringStream::getSubStreamByName(const char *name)
 {
-	if (d->buffer.empty())
+	if (!name || d->buffer.empty())
 		return 0;
 	if (d->streamType == UNKNOWN && !isStructured())
 		return 0;

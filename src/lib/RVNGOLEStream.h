@@ -31,9 +31,7 @@
 #define RVNGOLESTREAM_H
 
 #include <string>
-#include <fstream>
 #include <vector>
-#include <list>
 
 class RVNGInputStream;
 
@@ -67,6 +65,11 @@ public:
 	 * Checks whether the storage is OLE2 storage.
 	 **/
 	bool isStructured();
+	
+	/**
+	 * Returns the list of substream name
+	 **/
+	std::vector<std::string> getSubStreamNamesList();
 
 	/**
 	 * Returns the error code of last operation.

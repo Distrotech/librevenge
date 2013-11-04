@@ -47,9 +47,9 @@ public:
 	virtual const char *subStreamName(unsigned id) = 0;
 
 	/**
-	Extracts a \c PerfectOffice_MAIN stream from an OLE2 storage.
-	\return Should be a pointer to RVNGInputStream constructed from the \c PerfectOffice_MAIN stream if it exists.
-	\return Should be 0, if the \c PerfectOffice_MAIN stream does not exist inside the OLE2 storage
+	Extracts a \c named stream from an OLE2 storage.
+	\return Should be a pointer to RVNGInputStream constructed from the \c named stream if it exists.
+	\return Should be 0, if the \c named stream does not exist inside the OLE2 storage
 	or if the input stream is not an OLE2 storage.
 	*/
 	virtual RVNGInputStream *getSubStreamByName(const char *name) = 0;

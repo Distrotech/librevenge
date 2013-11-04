@@ -38,19 +38,10 @@ public:
 	bool isEnd();
 
 	bool isStructured();
-	unsigned subStreamCount()
-	{
-		return 0;
-	}
-	const char *subStreamName(unsigned)
-	{
-		return 0;
-	}
+	unsigned subStreamCount();
+	const char *subStreamName(unsigned id);
+	RVNGInputStream *getSubStreamById(unsigned id);
 	RVNGInputStream *getSubStreamByName(const char *name);
-	RVNGInputStream *getSubStreamById(unsigned)
-	{
-		return 0;
-	}
 
 private:
 	RVNGFileStreamPrivate *d;
@@ -72,19 +63,10 @@ public:
 	bool isEnd();
 
 	bool isStructured();
-	unsigned subStreamCount()
-	{
-		return 0;
-	}
-	const char *subStreamName(unsigned)
-	{
-		return 0;
-	}
+	unsigned subStreamCount();
+	const char *subStreamName(unsigned);
 	RVNGInputStream *getSubStreamByName(const char *name);
-	RVNGInputStream *getSubStreamById(unsigned)
-	{
-		return 0;
-	}
+	RVNGInputStream *getSubStreamById(unsigned);
 
 private:
 	RVNGStringStreamPrivate *d;

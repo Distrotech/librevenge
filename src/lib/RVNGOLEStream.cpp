@@ -52,8 +52,9 @@
 
 #include <librevenge-stream/librevenge-stream.h>
 
-#include "RVNGOLEStream.h"
 #include "librevenge_internal.h"
+
+#include "RVNGOLEStream.h"
 
 namespace librevenge
 {
@@ -494,6 +495,7 @@ public:
 	}
 
 	bool isStructured();
+	std::vector<std::string> getSubStreamNamesList();
 	void load();
 
 	bool use_big_block_for(unsigned long size) const
@@ -1119,6 +1121,14 @@ bool librevenge::IStorage::isStructured()
 	return (m_result == librevenge::Storage::Ok);
 }
 
+std::vector<std::string> librevenge::IStorage::getSubStreamNamesList()
+{
+	load();
+	if (m_result != librevenge::Storage::Ok)
+		return std::vector<std::string>();
+	return m_dirtree.getSubStreamList(0, true);
+}
+
 bool librevenge::IStorage::isSubStream(const std::string &name, bool &isDir)
 {
 	if (!name.length()) return false;
@@ -1699,6 +1709,11 @@ librevenge::Storage::Result librevenge::Storage::result()
 bool librevenge::Storage::isStructured()
 {
 	return m_io->isStructured();
+}
+
+std::vector<std::string> librevenge::Storage::getSubStreamNamesList()
+{
+	return m_io->getSubStreamNamesList();
 }
 
 // =========== Stream ==========

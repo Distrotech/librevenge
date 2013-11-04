@@ -311,6 +311,25 @@ static bool findDataStream(RVNGInputStream *input, CentralDirectoryEntry &entry,
 	return true;
 }
 
+static std::vector<std::string> getSubStreamNamesInZip(RVNGInputStream *input, bool all=false)
+{
+	std::vector<std::string> res;
+	if (!input || !findCentralDirectoryEnd(input))
+		return res;
+	CentralDirectoryEnd end;
+	if (!readCentralDirectoryEnd(input, end))
+		return res;
+	input->seek(long(end.cdir_offset), RVNG_SEEK_SET);
+	while (!input->isEnd() && (unsigned)input->tell() < end.cdir_offset + end.cdir_size)
+	{
+		CentralDirectoryEntry entry;
+		if (!readCentralDirectoryEntry(input, entry))
+			break;
+		if (!entry.filename_size || (!all && entry.filename[entry.filename.size()-1]=='/')) continue;
+		res.push_back(entry.filename);
+	}
+	return res;
+}
 } // anonymous namespace
 
 bool RVNGZipStream::isZipFile(RVNGInputStream *input)
@@ -334,6 +353,11 @@ bool RVNGZipStream::isZipFile(RVNGInputStream *input)
 	if (!areHeadersConsistent(header, entry))
 		return false;
 	return true;
+}
+
+std::vector<std::string> RVNGZipStream::getSubStreamNamesList(RVNGInputStream *input)
+{
+	return getSubStreamNamesInZip(input,false);
 }
 
 RVNGInputStream *RVNGZipStream::getSubstream(RVNGInputStream *input, const char *name)

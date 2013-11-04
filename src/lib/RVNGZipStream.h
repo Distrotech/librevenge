@@ -22,14 +22,17 @@
 #ifndef __RVNGZIPSTREAM_H__
 #define __RVNGZIPSTREAM_H__
 
+#include <string>
 #include <vector>
-#include <librevenge-stream/librevenge-stream.h>
+
+class RVNGInputStream;
 
 class RVNGZipStream
 {
 public:
 	static bool isZipFile(RVNGInputStream *input);
 
+	static std::vector<std::string> getSubStreamNamesList(RVNGInputStream *input);
 	static RVNGInputStream *getSubstream(RVNGInputStream *input, const char *name);
 };
 
