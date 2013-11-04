@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpg
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -10,12 +10,10 @@
  * of the GNU Lesser General Public License Version 2.1 or later
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
- *
- * For further information visit http://libwpg.sourceforge.net
  */
 
-#ifndef __RVNGPRESENTATIONINTERFACE_H__
-#define __RVNGPRESENTATIONINTERFACE_H__
+#ifndef RVNGPRESENTATIONINTERFACE_H
+#define RVNGPRESENTATIONINTERFACE_H
 
 #include "RVNGPropertyList.h"
 #include "RVNGPropertyListVector.h"
@@ -341,6 +339,6 @@ public:
 	virtual void endNotes() = 0;
 };
 
-#endif // __RVNGPRESENTATIONINTERFACE_H__
+#endif // RVNGPRESENTATIONINTERFACE_H
 
-/* vim:set shiftwidth=2 softtabstop=2 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

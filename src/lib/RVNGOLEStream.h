@@ -1,5 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* POLE - Portable C++ library to access OLE Storage
+/* librevenge
+
+   Original source: POLE - Portable C++ library to access OLE Storage
    Copyright (C) 2002-2005 Ariya Hidayat <ariya@kde.org>
 
    Redistribution and use in source and binary forms, with or without

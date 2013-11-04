@@ -15,12 +15,10 @@
  * of the GNU Lesser General Public License Version 2.1 or later
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
- *
- * For further information visit http://librevenge.sourceforge.net
  */
 
-#ifndef __RVNGSTREAMIMPLEMENTATION_H__
-#define __RVNGSTREAMIMPLEMENTATION_H__
+#ifndef RVNGSTREAMIMPLEMENTATION_H
+#define RVNGSTREAMIMPLEMENTATION_H
 
 #include "RVNGStream.h"
 
@@ -74,5 +72,5 @@ private:
 	RVNGStringStream &operator=(const RVNGStringStream &); // assignment is not allowed
 };
 
-#endif // __RVNGSTREAMIMPLEMENTATION_H__
+#endif // RVNGSTREAMIMPLEMENTATION_H
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

@@ -15,12 +15,10 @@
  * of the GNU Lesser General Public License Version 2.1 or later
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
- *
- * For further information visit http://librevenge.sourceforge.net
  */
 
-#ifndef __RVNGZIPSTREAM_H__
-#define __RVNGZIPSTREAM_H__
+#ifndef RVNGZIPSTREAM_H
+#define RVNGZIPSTREAM_H
 
 #include <string>
 #include <vector>
@@ -36,5 +34,5 @@ public:
 	static RVNGInputStream *getSubstream(RVNGInputStream *input, const char *name);
 };
 
-#endif // __RVNGZIPSTREAM_H__
+#endif // RVNGZIPSTREAM_H
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

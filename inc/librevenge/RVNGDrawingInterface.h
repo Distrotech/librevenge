@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* libwpg
+/* librevenge
  * Version: MPL 2.0 / LGPLv2.1+
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,16 +16,10 @@
  * of the GNU Lesser General Public License Version 2.1 or later
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
- *
- * For further information visit http://libwpg.sourceforge.net
  */
 
-/* "This product is not manufactured, approved, or supported by
- * Corel Corporation or Corel Corporation Limited."
- */
-
-#ifndef __RVNGPAINTINTERFACE_H__
-#define __RVNGPAINTINTERFACE_H__
+#ifndef RVNGDRAWINGINTERFACE_H
+#define RVNGDRAWINGINTERFACE_H
 
 #include "RVNGPropertyList.h"
 #include "RVNGPropertyListVector.h"

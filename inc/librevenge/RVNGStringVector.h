@@ -15,12 +15,10 @@
  * of the GNU Lesser General Public License Version 2.1 or later
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
- *
- * For further information visit http://librevenge.sourceforge.net
  */
 
-#ifndef __RVNGSTRINGVECTOR_H__
-#define __RVNGSTRINGVECTOR_H__
+#ifndef RVNGSTRINGVECTOR_H
+#define RVNGSTRINGVECTOR_H
 
 #include "RVNGString.h"
 
@@ -45,5 +43,5 @@ private:
 	RVNGStringVectorImpl *m_pImpl;
 };
 
-#endif /* __RVNGSTRINGVECTOR_H__ */
+#endif /* RVNGSTRINGVECTOR_H */
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

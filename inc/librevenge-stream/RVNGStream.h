@@ -15,8 +15,6 @@
  * of the GNU Lesser General Public License Version 2.1 or later
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
- *
- * For further information visit http://librevenge.sourceforge.net
  */
 
 #ifndef RVNGSTREAM_H
