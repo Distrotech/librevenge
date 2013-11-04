@@ -57,16 +57,19 @@ AS_CASE([$host],
 	[*-*-mingw*], [
 		native_win32=yes
 		LIBREVENGE_WIN32_RESOURCE=librevenge-win32res.lo
+		LIBREVENGE_GENERATORS_WIN32_RESOURCE=librevenge-generators-win32res.lo
 		LIBREVENGE_STREAM_WIN32_RESOURCE=librevenge-stream-win32res.lo
 	], [
 		native_win32=no
 		LIBREVENGE_WIN32_RESOURCE=
+		LIBREVENGE_GENERATORS_WIN32_RESOURCE=
 		LIBREVENGE_STREAM_WIN32_RESOURCE=
 	]
 )
 AC_MSG_RESULT([$native_win32])
 AM_CONDITIONAL(OS_WIN32, [test "x$native_win32" = "xyes"])
 AC_SUBST(LIBREVENGE_WIN32_RESOURCE)
+AC_SUBST(LIBREVENGE_GENERATORS_WIN32_RESOURCE)
 AC_SUBST(LIBREVENGE_STREAM_WIN32_RESOURCE)
 
 AC_MSG_CHECKING([for Win32 platform in general])
@@ -216,16 +219,19 @@ Makefile
 src/Makefile
 src/lib/Makefile
 src/lib/librevenge.rc
+src/lib/librevenge-generators.rc
 src/lib/librevenge-stream.rc
 src/test/Makefile
 inc/Makefile
 inc/librevenge/Makefile
+inc/librevenge-generators/Makefile
 inc/librevenge-stream/Makefile
 docs/Makefile
 docs/doxygen/Makefile
 build/Makefile
 build/win32/Makefile
 librevenge-$RVNG_MAJOR_VERSION.$RVNG_MINOR_VERSION.pc:librevenge.pc.in
+librevenge-generators-$RVNG_MAJOR_VERSION.$RVNG_MINOR_VERSION.pc:librevenge-generators.pc.in
 librevenge-stream-$RVNG_MAJOR_VERSION.$RVNG_MINOR_VERSION.pc:librevenge-stream.pc.in
 ])
 AC_OUTPUT

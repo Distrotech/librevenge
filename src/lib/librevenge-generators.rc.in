@@ -1,0 +1,31 @@
+#include <winver.h>
+
+VS_VERSION_INFO VERSIONINFO
+  FILEVERSION @RVNG_MAJOR_VERSION@,@RVNG_MINOR_VERSION@,@RVNG_MICRO_VERSION@,BUILDNUMBER
+  PRODUCTVERSION @RVNG_MAJOR_VERSION@,@RVNG_MINOR_VERSION@,@RVNG_MICRO_VERSION@,0
+  FILEFLAGSMASK 0
+  FILEFLAGS 0
+  FILEOS VOS__WINDOWS32
+  FILETYPE VFT_DLL
+  FILESUBTYPE VFT2_UNKNOWN
+  BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+      BLOCK "040904B0"
+      BEGIN
+	VALUE "CompanyName", "The librevenge developer community"
+	VALUE "FileDescription", "librevenge-generators"
+	VALUE "FileVersion", "@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.@RVNG_MICRO_VERSION@.BUILDNUMBER"
+	VALUE "InternalName", "librevenge-generators-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@"
+	VALUE "LegalCopyright", "Copyright (C) 2002-2006 William Lachance, Marc Maurer, Fridrich Strba, other contributers"
+	VALUE "OriginalFilename", "librevenge-generators-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.dll"
+	VALUE "ProductName", "librevenge"
+	VALUE "ProductVersion", "@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.@RVNG_MICRO_VERSION@"
+      END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+      VALUE "Translation", 0x409, 1200
+    END
+  END
+

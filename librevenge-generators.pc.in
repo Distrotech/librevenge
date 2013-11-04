@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: librevenge-generators-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@
+Description: Input generators implementation for librevenge
+Version: @VERSION@
+Libs: -L${libdir} -lrevenge-generators-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@
+Cflags: -I${includedir}/librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@

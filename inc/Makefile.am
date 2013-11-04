@@ -1,1 +1,1 @@
-SUBDIRS = librevenge librevenge-stream
+SUBDIRS = librevenge librevenge-generators librevenge-stream

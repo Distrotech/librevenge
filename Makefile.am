@@ -4,6 +4,7 @@ pkgconfdir = $(libdir)/pkgconfig
 
 pkgconf_DATA = \
 	librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.pc \
+	librevenge-generators-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.pc \
 	librevenge-stream-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.pc
 
 SUBDIRS = build inc src docs
@@ -11,6 +12,7 @@ SUBDIRS = build inc src docs
 EXTRA_DIST = \
 	autogen.sh \
 	librevenge.pc.in \
+	librevenge-generators.pc.in \
 	librevenge-stream.pc.in \
 	COPYING.LGPL \
 	COPYING.MPL \
