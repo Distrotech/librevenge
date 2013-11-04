@@ -65,7 +65,7 @@ public:
 	 * Checks whether the storage is OLE2 storage.
 	 **/
 	bool isStructured();
-	
+
 	/**
 	 * Returns the list of substream name
 	 **/

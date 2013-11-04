@@ -20,23 +20,18 @@
  * For further information visit http://librevenge.sourceforge.net
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#include <librevenge-stream/librevenge-stream.h>
-#include "RVNGOLEStream.h"
-#ifdef BUILD_ZIP_STREAM
-#include "RVNGZipStream.h"
-#endif
-
 #include <limits>
 #include <string>
 #include <vector>
 
+#include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+
+#include <librevenge-stream/librevenge-stream.h>
+#include "RVNGOLEStream.h"
+#include "RVNGZipStream.h"
 
 #ifndef S_ISREG
 #define S_ISREG(x) (((x) & S_IFMT) == S_IFREG)
@@ -83,7 +78,8 @@ RVNGFileStreamPrivate::RVNGFileStreamPrivate() :
 	readBuffer(0),
 	readBufferLength(0),
 	readBufferPos(0),
-	streamType(UNKNOWN)
+	streamType(UNKNOWN),
+	streamNameList()
 {
 }
 
@@ -98,7 +94,8 @@ RVNGFileStreamPrivate::~RVNGFileStreamPrivate()
 RVNGStringStreamPrivate::RVNGStringStreamPrivate(const unsigned char *data, unsigned dataSize) :
 	buffer(dataSize),
 	offset(0),
-	streamType(UNKNOWN)
+	streamType(UNKNOWN),
+	streamNameList()
 
 {
 	memcpy(&buffer[0], data, dataSize);
@@ -288,7 +285,6 @@ bool RVNGFileStream::isStructured()
 			d->streamNameList = tmpStorage.getSubStreamNamesList();
 			return true;
 		}
-#ifdef BUILD_ZIP_STREAM
 		seek(0, RVNG_SEEK_SET);
 		if (RVNGZipStream::isZipFile(this))
 		{
@@ -296,7 +292,6 @@ bool RVNGFileStream::isStructured()
 			d->streamNameList = RVNGZipStream::getSubStreamNamesList(this);
 			return true;
 		}
-#endif
 		d->streamType = FLAT;
 		return false;
 	}
@@ -352,10 +347,8 @@ RVNGInputStream *RVNGFileStream::getSubStreamByName(const char *name)
 
 		return new RVNGStringStream(&buf[0], (unsigned)tmpLength);
 	}
-#ifdef BUILD_ZIP_STREAM
 	else if (d->streamType == ZIP)
 		return RVNGZipStream::getSubstream(this, name);
-#endif
 	return 0;
 }
 
@@ -449,7 +442,6 @@ bool RVNGStringStream::isStructured()
 			d->streamNameList = tmpStorage.getSubStreamNamesList();
 			return true;
 		}
-#ifdef BUILD_ZIP_STREAM
 		seek(0, RVNG_SEEK_SET);
 		if (RVNGZipStream::isZipFile(this))
 		{
@@ -457,7 +449,6 @@ bool RVNGStringStream::isStructured()
 			d->streamNameList = RVNGZipStream::getSubStreamNamesList(this);
 			return true;
 		}
-#endif
 		d->streamType = FLAT;
 		return false;
 	}
@@ -514,10 +505,8 @@ RVNGInputStream *RVNGStringStream::getSubStreamByName(const char *name)
 
 		return new RVNGStringStream(&buf[0], (unsigned)tmpLength);
 	}
-#ifdef BUILD_ZIP_STREAM
 	else if (d->streamType == ZIP)
 		return RVNGZipStream::getSubstream(this, name);
-#endif
 	return 0;
 }
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

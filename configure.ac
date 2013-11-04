@@ -179,29 +179,15 @@ AC_SUBST(DEBUG_CXXFLAGS)
 # =========
 # Find zlib
 # =========
-AC_ARG_ENABLE([zip],
-	[AS_HELP_STRING([--disable-zip], [Do not use the zip library and so do not accept a zipped document as input.])],
-	[with_zip="$enableval"],
-	[with_zip=yes]
-)
-
-AS_IF([test "x$with_zip" != "xno"], [
-  PKG_CHECK_MODULES([ZLIB], [zlib], [have_zip=yes],
-   [
-	have_zip=yes;
-       	AC_CHECK_HEADER(zlib.h, [], [have_zip=no], [])
-    	AC_CHECK_LIB(z, inflate, [ ZLIB_LIBS=-lz ], [have_zip=no], [])
-   ])
-   	], [have_zip=no])
-
-if test "x$have_zip" != "xno"; then
-	AC_DEFINE([BUILD_ZIP_STREAM],[1],[Use the zip library to read a zipped document.])
-else
-	ZLIB_CFLAGS=
-	ZLIB_LIBS=
-fi
+PKG_CHECK_MODULES([ZLIB],[zlib],[],[
+    AC_CHECK_HEADER(zlib.h, [ZLIB_CFLAGS=],
+        [AC_MSG_ERROR(zlib.h not found. install zlib)], [])
+    AC_CHECK_LIB(z, inflate, [ ZLIB_LIBS=-lz ],
+        [AC_MSG_ERROR(zlib not found or functional)], [])
+])
 AC_SUBST(ZLIB_CFLAGS)
 AC_SUBST(ZLIB_LIBS)
+
 
 # =============
 # Documentation

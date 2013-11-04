@@ -19,12 +19,6 @@
  * For further information visit http://librevenge.sourceforge.net
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#ifdef BUILD_ZIP_STREAM
-
 #include <string>
 #include <string.h>
 #include <stdio.h>
@@ -411,7 +405,5 @@ RVNGInputStream *RVNGZipStream::getSubstream(RVNGInputStream *input, const char 
 		return new RVNGStringStream(&data[0], (unsigned)data.size());
 	}
 }
-
-#endif /* BUILD_ZIP_STREAM */
 
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */
