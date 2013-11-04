@@ -63,7 +63,13 @@ librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_SOURCES = \
 	RVNGDrawingGeneratorFactory.cpp \
 	RVNGPresentationGeneratorFactory.cpp \
 	RVNGSpreadsheetGeneratorFactory.cpp \
-	RVNGTextGeneratorFactory.cpp
+	RVNGTextGeneratorFactory.cpp \
+	RVNGHTMLTextGenerator.cpp \
+	RVNGHTMLTextGenerator.h \
+	RVNGRawTextGenerator.cpp \
+	RVNGRawTextGenerator.h \
+	RVNGTextTextGenerator.cpp \
+	RVNGTextTextGenerator.h
 
 librevenge_stream_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_includedir = $(includedir)/librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@/librevenge-stream
 librevenge_stream_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_include_HEADERS = \

@@ -14,22 +14,28 @@
 
 #include <librevenge-generators/RVNGTextGeneratorFactory.h>
 
+#include "RVNGHTMLTextGenerator.h"
+#include "RVNGRawTextGenerator.h"
+#include "RVNGTextTextGenerator.h"
+
 namespace librevenge
 {
 
 RVNGTextInterface *RVNGTextGeneratorFactory::makeHTML()
 {
-	return 0;
+	return new RVNGHTMLTextGenerator();
 }
 
 RVNGTextInterface *RVNGTextGeneratorFactory::makeRaw()
 {
-	return 0;
+	// TODO: expose isInfo in API or drop it?
+	return new RVNGRawTextGenerator(false);
 }
 
 RVNGTextInterface *RVNGTextGeneratorFactory::makeText()
 {
-	return 0;
+	// TODO: expose printCallgraphScore in API or drop it?
+	return new RVNGTextTextGenerator(false);
 }
 
 }
