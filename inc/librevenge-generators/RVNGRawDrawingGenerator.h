@@ -51,9 +51,9 @@ public:
 
 	~RVNGRawDrawingGenerator();
 
-	void startDocument(const librevenge::RVNGPropertyList & /*propList*/) {}
-	void endDocument() {}
-	void setDocumentMetaData(const librevenge::RVNGPropertyList & /*propList*/) {}
+	void startDocument(const librevenge::RVNGPropertyList &propList);
+	void endDocument();
+	void setDocumentMetaData(const librevenge::RVNGPropertyList &propList);
 	void startPage(const librevenge::RVNGPropertyList &propList);
 	void endPage();
 	void startLayer(const librevenge::RVNGPropertyList &propList);
@@ -73,14 +73,14 @@ public:
 	void endTextObject();
 
 
-	void openOrderedListLevel(const librevenge::RVNGPropertyList & /*propList*/) {}
-	void closeOrderedListLevel() {}
+	void openOrderedListLevel(const librevenge::RVNGPropertyList &propList);
+	void closeOrderedListLevel();
 
-	void openUnorderedListLevel(const librevenge::RVNGPropertyList & /*propList*/) {}
-	void closeUnorderedListLevel() {}
+	void openUnorderedListLevel(const librevenge::RVNGPropertyList &propList);
+	void closeUnorderedListLevel();
 
-	void openListElement(const librevenge::RVNGPropertyList & /*propList*/, const librevenge::RVNGPropertyListVector & /* tabStops */) {}
-	void closeListElement() {}
+	void openListElement(const librevenge::RVNGPropertyList &propList, const librevenge::RVNGPropertyListVector &tabStops);
+	void closeListElement();
 
 	void openParagraph(const librevenge::RVNGPropertyList &propList, const librevenge::RVNGPropertyListVector &tabStops);
 	void closeParagraph();
@@ -88,11 +88,11 @@ public:
 	void openSpan(const librevenge::RVNGPropertyList &propList);
 	void closeSpan();
 
-	void insertTab() {}
-	void insertSpace() {}
+	void insertTab();
+	void insertSpace();
 	void insertText(const librevenge::RVNGString &text);
-	void insertLineBreak() {}
-	void insertField(const librevenge::RVNGString & /* type */, const librevenge::RVNGPropertyList & /*propList*/) {}
+	void insertLineBreak();
+	void insertField(const librevenge::RVNGString &type, const librevenge::RVNGPropertyList &propList);
 
 private:
 	RVNGRawDrawingGeneratorImpl *m_impl;

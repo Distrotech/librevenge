@@ -185,6 +185,10 @@ void RVNGRawDrawingGeneratorImpl::idprintf(const char *format, ...)
 	va_end(args);
 }
 
+void RVNGRawDrawingGenerator::startDocument(const librevenge::RVNGPropertyList & /*propList*/) {}
+void RVNGRawDrawingGenerator::endDocument() {}
+void RVNGRawDrawingGenerator::setDocumentMetaData(const librevenge::RVNGPropertyList & /*propList*/) {}
+
 void RVNGRawDrawingGenerator::startPage(const RVNGPropertyList &propList)
 {
 	_U(("startPage(%s)\n", getPropString(propList).cstr()), PC_START_GRAPHICS);
@@ -281,6 +285,15 @@ void RVNGRawDrawingGenerator::endTextObject()
 	_D(("endTextObject\n"), PC_START_TEXT_OBJECT);
 }
 
+void RVNGRawDrawingGenerator::openOrderedListLevel(const librevenge::RVNGPropertyList & /*propList*/) {}
+void RVNGRawDrawingGenerator::closeOrderedListLevel() {}
+
+void RVNGRawDrawingGenerator::openUnorderedListLevel(const librevenge::RVNGPropertyList & /*propList*/) {}
+void RVNGRawDrawingGenerator::closeUnorderedListLevel() {}
+
+void RVNGRawDrawingGenerator::openListElement(const librevenge::RVNGPropertyList & /*propList*/, const librevenge::RVNGPropertyListVector & /* tabStops */) {}
+void RVNGRawDrawingGenerator::closeListElement() {}
+
 void RVNGRawDrawingGenerator::openParagraph(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops)
 {
 	_U(("openParagraph (%s, tabStops: (%s))\n", getPropString(propList).cstr(), getPropString(tabStops).cstr()), PC_START_TEXT_LINE);
@@ -301,6 +314,9 @@ void RVNGRawDrawingGenerator::closeSpan()
 	_D(("closeSpan\n"), PC_START_TEXT_SPAN);
 }
 
+void RVNGRawDrawingGenerator::insertTab() {}
+void RVNGRawDrawingGenerator::insertSpace() {}
+
 void RVNGRawDrawingGenerator::insertText(const RVNGString &str)
 {
 	if (m_impl->m_printCallgraphScore)
@@ -308,6 +324,9 @@ void RVNGRawDrawingGenerator::insertText(const RVNGString &str)
 
 	m_impl->iprintf("insertText (%s)\n", str.cstr());
 }
+
+void RVNGRawDrawingGenerator::insertLineBreak() {}
+void RVNGRawDrawingGenerator::insertField(const librevenge::RVNGString & /* type */, const librevenge::RVNGPropertyList & /*propList*/) {}
 
 }
 
