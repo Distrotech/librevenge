@@ -60,7 +60,7 @@ librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_include_HEADERS 
 	$(top_srcdir)/inc/librevenge-generators/RVNGTextPresentationGenerator.h \
 	$(top_srcdir)/inc/librevenge-generators/RVNGTextTextGenerator.h
 
-librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_LIBADD  = @LIBREVENGE_GENERATORS_WIN32_RESOURCE@
+librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_LIBADD  = ./librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.la @LIBREVENGE_GENERATORS_WIN32_RESOURCE@
 librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_DEPENDENCIES = @LIBREVENGE_GENERATORS_WIN32_RESOURCE@
 librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic $(no_undefined)
 librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_SOURCES = \
