@@ -27,18 +27,31 @@
 namespace librevenge
 {
 
-RVNGTextTextGenerator::RVNGTextTextGenerator(const bool isInfo) :
+struct RVNGTextTextGeneratorImpl
+{
+	explicit RVNGTextTextGeneratorImpl(bool isInfo);
+
+	bool m_isInfo;
+};
+
+RVNGTextTextGeneratorImpl::RVNGTextTextGeneratorImpl(const bool isInfo) :
 	m_isInfo(isInfo)
+{
+}
+
+RVNGTextTextGenerator::RVNGTextTextGenerator(const bool isInfo) :
+	m_impl(new RVNGTextTextGeneratorImpl(isInfo))
 {
 }
 
 RVNGTextTextGenerator::~RVNGTextTextGenerator()
 {
+	delete m_impl;
 }
 
 void RVNGTextTextGenerator::setDocumentMetaData(const RVNGPropertyList &propList)
 {
-	if (!m_isInfo)
+	if (!m_impl->m_isInfo)
 		return;
 	RVNGPropertyList::Iter propIter(propList);
 	for (propIter.rewind(); propIter.next(); )
@@ -49,35 +62,35 @@ void RVNGTextTextGenerator::setDocumentMetaData(const RVNGPropertyList &propList
 
 void RVNGTextTextGenerator::closeParagraph()
 {
-	if (m_isInfo)
+	if (m_impl->m_isInfo)
 		return;
 	printf("\n");
 }
 
 void RVNGTextTextGenerator::insertTab()
 {
-	if (m_isInfo)
+	if (m_impl->m_isInfo)
 		return;
 	printf("%c", UCS_TAB);
 }
 
 void RVNGTextTextGenerator::insertText(const RVNGString &text)
 {
-	if (m_isInfo)
+	if (m_impl->m_isInfo)
 		return;
 	printf("%s", text.cstr());
 }
 
 void RVNGTextTextGenerator::insertSpace()
 {
-	if (m_isInfo)
+	if (m_impl->m_isInfo)
 		return;
 	printf(" ");
 }
 
 void RVNGTextTextGenerator::insertLineBreak()
 {
-	if (m_isInfo)
+	if (m_impl->m_isInfo)
 		return;
 	printf("\n");
 }

@@ -27,8 +27,14 @@
 namespace librevenge
 {
 
+struct RVNGTextTextGeneratorImpl;
+
 class RVNGTextTextGenerator : public RVNGTextInterface
 {
+	// disable copying
+	RVNGTextTextGenerator(const RVNGTextTextGenerator &other);
+	RVNGTextTextGenerator &operator=(const RVNGTextTextGenerator &other);
+
 public:
 	RVNGTextTextGenerator(const bool isInfo=false);
 	virtual ~RVNGTextTextGenerator();
@@ -97,7 +103,7 @@ public:
 	virtual void insertEquation(const RVNGPropertyList & /* propList */, const RVNGString & /* data */) {}
 
 private:
-	bool m_isInfo;
+	RVNGTextTextGeneratorImpl *m_impl;
 };
 
 }
