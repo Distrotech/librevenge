@@ -15,19 +15,20 @@
 #ifndef RVNGSVGPRESENTATIONGENERATOR_H
 #define RVNGSVGPRESENTATIONGENERATOR_H
 
-#include <sstream>
-
-#include <librevenge/RVNGBinaryData.h>
-#include <librevenge/RVNGPresentationInterface.h>
-#include <librevenge/RVNGPropertyList.h>
-#include <librevenge/RVNGPropertyListVector.h>
-#include <librevenge/RVNGStringVector.h>
+#include <librevenge/librevenge.h>
+#include <librevenge-stream/librevenge-stream.h>
 
 namespace librevenge
 {
 
+struct RVNGSVGPresentationGeneratorImpl;
+
 class RVNGSVGPresentationGenerator : public RVNGPresentationInterface
 {
+	// disable copying
+	RVNGSVGPresentationGenerator(const RVNGSVGPresentationGenerator &other);
+	RVNGSVGPresentationGenerator &operator=(const RVNGSVGPresentationGenerator &other);
+
 public:
 	explicit RVNGSVGPresentationGenerator(RVNGStringVector &vec);
 	virtual ~RVNGSVGPresentationGenerator();
@@ -96,16 +97,7 @@ public:
 	virtual void endNotes();
 
 private:
-	RVNGPropertyListVector m_gradient;
-	RVNGPropertyList m_style;
-	int m_gradientIndex;
-	int m_patternIndex;
-	int m_shadowIndex;
-	void writeStyle(bool isClosed=true);
-	void drawPolySomething(const RVNGPropertyListVector &vertices, bool isClosed);
-
-	std::ostringstream m_outputSink;
-	RVNGStringVector &m_vec;
+	RVNGSVGPresentationGeneratorImpl *m_impl;
 };
 
 } // namespace libetonyek

@@ -23,12 +23,12 @@ RVNGTextDrawingGenerator::RVNGTextDrawingGenerator(): RVNGDrawingInterface()
 
 void RVNGTextDrawingGenerator::insertText(const RVNGString &str)
 {
-  printf("%s", str.cstr());
+	printf("%s", str.cstr());
 }
 
 void RVNGTextDrawingGenerator::closeParagraph()
 {
-  printf("\n");
+	printf("\n");
 }
 
 

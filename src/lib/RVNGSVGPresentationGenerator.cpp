@@ -53,12 +53,42 @@ static unsigned stringToColour(const RVNGString &s)
 
 }
 
-RVNGSVGPresentationGenerator::RVNGSVGPresentationGenerator(RVNGStringVector &vec): m_gradient(), m_style(), m_gradientIndex(1), m_patternIndex(1), m_shadowIndex(1), m_outputSink(), m_vec(vec)
+struct RVNGSVGPresentationGeneratorImpl
+{
+	RVNGSVGPresentationGeneratorImpl(RVNGStringVector &m_vec);
+
+	RVNGPropertyListVector m_gradient;
+	RVNGPropertyList m_style;
+	int m_gradientIndex;
+	int m_patternIndex;
+	int m_shadowIndex;
+
+	void writeStyle(bool isClosed=true);
+	void drawPolySomething(const RVNGPropertyListVector &vertices, bool isClosed);
+
+	std::ostringstream m_outputSink;
+	RVNGStringVector &m_vec;
+};
+
+RVNGSVGPresentationGeneratorImpl::RVNGSVGPresentationGeneratorImpl(RVNGStringVector &vec)
+	: m_gradient()
+	, m_style()
+	, m_gradientIndex(1)
+	, m_patternIndex(1)
+	, m_shadowIndex(1)
+	, m_outputSink()
+	, m_vec(vec)
+{
+}
+
+RVNGSVGPresentationGenerator::RVNGSVGPresentationGenerator(RVNGStringVector &vec)
+	: m_impl(new RVNGSVGPresentationGeneratorImpl(vec))
 {
 }
 
 RVNGSVGPresentationGenerator::~RVNGSVGPresentationGenerator()
 {
+	delete m_impl;
 }
 
 void RVNGSVGPresentationGenerator::startDocument(const RVNGPropertyList &)
@@ -75,319 +105,319 @@ void RVNGSVGPresentationGenerator::setDocumentMetaData(const RVNGPropertyList &)
 
 void RVNGSVGPresentationGenerator::startSlide(const RVNGPropertyList &propList)
 {
-	m_outputSink << "<svg:svg version=\"1.1\" xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" ";
+	m_impl->m_outputSink << "<svg:svg version=\"1.1\" xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" ";
 	if (propList["svg:width"])
-		m_outputSink << "width=\"" << doubleToString(72*(propList["svg:width"]->getDouble())) << "\" ";
+		m_impl->m_outputSink << "width=\"" << doubleToString(72*(propList["svg:width"]->getDouble())) << "\" ";
 	if (propList["svg:height"])
-		m_outputSink << "height=\"" << doubleToString(72*(propList["svg:height"]->getDouble())) << "\"";
-	m_outputSink << " >\n";
+		m_impl->m_outputSink << "height=\"" << doubleToString(72*(propList["svg:height"]->getDouble())) << "\"";
+	m_impl->m_outputSink << " >\n";
 }
 
 void RVNGSVGPresentationGenerator::endSlide()
 {
-	m_outputSink << "</svg:svg>\n";
-	m_vec.append(m_outputSink.str().c_str());
-	m_outputSink.str("");
+	m_impl->m_outputSink << "</svg:svg>\n";
+	m_impl->m_vec.append(m_impl->m_outputSink.str().c_str());
+	m_impl->m_outputSink.str("");
 }
 
 void RVNGSVGPresentationGenerator::setStyle(const RVNGPropertyList &propList, const RVNGPropertyListVector &gradient)
 {
-	m_style.clear();
-	m_style = propList;
+	m_impl->m_style.clear();
+	m_impl->m_style = propList;
 
-	m_gradient = gradient;
-	if(m_style["draw:shadow"] && m_style["draw:shadow"]->getStr() == "visible")
+	m_impl->m_gradient = gradient;
+	if(m_impl->m_style["draw:shadow"] && m_impl->m_style["draw:shadow"]->getStr() == "visible")
 	{
 		unsigned shadowColour = 0;
 		double shadowRed = 0.0;
 		double shadowGreen = 0.0;
 		double shadowBlue = 0.0;
-		if (m_style["draw:shadow-color"])
+		if (m_impl->m_style["draw:shadow-color"])
 		{
-			shadowColour = stringToColour(m_style["draw:shadow-color"]->getStr());
+			shadowColour = stringToColour(m_impl->m_style["draw:shadow-color"]->getStr());
 			shadowRed = (double)((shadowColour & 0x00ff0000) >> 16)/255.0;
 			shadowGreen = (double)((shadowColour & 0x0000ff00) >> 8)/255.0;
 			shadowBlue = (double)(shadowColour & 0x000000ff)/255.0;
 		}
-		m_outputSink << "<svg:defs>\n";
-		m_outputSink << "<svg:filter filterUnits=\"userSpaceOnUse\" id=\"shadow" << m_shadowIndex++ << "\">";
-		m_outputSink << "<svg:feOffset in=\"SourceGraphic\" result=\"offset\" ";
-		m_outputSink << "dx=\"" << doubleToString(72*m_style["draw:shadow-offset-x"]->getDouble()) << "\" ";
-		m_outputSink << "dy=\"" << doubleToString(72*m_style["draw:shadow-offset-y"]->getDouble()) << "\"/>";
-		m_outputSink << "<svg:feColorMatrix in=\"offset\" result=\"offset-color\" type=\"matrix\" values=\"";
-		m_outputSink << "0 0 0 0 " << doubleToString(shadowRed) ;
-		m_outputSink << " 0 0 0 0 " << doubleToString(shadowGreen);
-		m_outputSink << " 0 0 0 0 " << doubleToString(shadowBlue);
-		if(m_style["draw:opacity"] && m_style["draw:opacity"]->getDouble() < 1)
-			m_outputSink << " 0 0 0 "   << doubleToString(m_style["draw:shadow-opacity"]->getDouble()/m_style["draw:opacity"]->getDouble()) << " 0\"/>";
+		m_impl->m_outputSink << "<svg:defs>\n";
+		m_impl->m_outputSink << "<svg:filter filterUnits=\"userSpaceOnUse\" id=\"shadow" << m_impl->m_shadowIndex++ << "\">";
+		m_impl->m_outputSink << "<svg:feOffset in=\"SourceGraphic\" result=\"offset\" ";
+		m_impl->m_outputSink << "dx=\"" << doubleToString(72*m_impl->m_style["draw:shadow-offset-x"]->getDouble()) << "\" ";
+		m_impl->m_outputSink << "dy=\"" << doubleToString(72*m_impl->m_style["draw:shadow-offset-y"]->getDouble()) << "\"/>";
+		m_impl->m_outputSink << "<svg:feColorMatrix in=\"offset\" result=\"offset-color\" type=\"matrix\" values=\"";
+		m_impl->m_outputSink << "0 0 0 0 " << doubleToString(shadowRed) ;
+		m_impl->m_outputSink << " 0 0 0 0 " << doubleToString(shadowGreen);
+		m_impl->m_outputSink << " 0 0 0 0 " << doubleToString(shadowBlue);
+		if(m_impl->m_style["draw:opacity"] && m_impl->m_style["draw:opacity"]->getDouble() < 1)
+			m_impl->m_outputSink << " 0 0 0 "   << doubleToString(m_impl->m_style["draw:shadow-opacity"]->getDouble()/m_impl->m_style["draw:opacity"]->getDouble()) << " 0\"/>";
 		else
-			m_outputSink << " 0 0 0 "   << doubleToString(m_style["draw:shadow-opacity"]->getDouble()) << " 0\"/>";
-		m_outputSink << "<svg:feMerge><svg:feMergeNode in=\"offset-color\" /><svg:feMergeNode in=\"SourceGraphic\" /></svg:feMerge></svg:filter></svg:defs>";
+			m_impl->m_outputSink << " 0 0 0 "   << doubleToString(m_impl->m_style["draw:shadow-opacity"]->getDouble()) << " 0\"/>";
+		m_impl->m_outputSink << "<svg:feMerge><svg:feMergeNode in=\"offset-color\" /><svg:feMergeNode in=\"SourceGraphic\" /></svg:feMerge></svg:filter></svg:defs>";
 	}
 
-	if(m_style["draw:fill"] && m_style["draw:fill"]->getStr() == "gradient")
+	if(m_impl->m_style["draw:fill"] && m_impl->m_style["draw:fill"]->getStr() == "gradient")
 	{
-		double angle = (m_style["draw:angle"] ? m_style["draw:angle"]->getDouble() : 0.0);
+		double angle = (m_impl->m_style["draw:angle"] ? m_impl->m_style["draw:angle"]->getDouble() : 0.0);
 		angle *= -1.0;
 		while(angle < 0)
 			angle += 360;
 		while(angle > 360)
 			angle -= 360;
 
-		if (!m_gradient.count())
+		if (!m_impl->m_gradient.count())
 		{
-			if (m_style["draw:style"] &&
-			        (m_style["draw:style"]->getStr() == "radial" ||
-			         m_style["draw:style"]->getStr() == "rectangular" ||
-			         m_style["draw:style"]->getStr() == "square" ||
-			         m_style["draw:style"]->getStr() == "ellipsoid"))
+			if (m_impl->m_style["draw:style"] &&
+			        (m_impl->m_style["draw:style"]->getStr() == "radial" ||
+			         m_impl->m_style["draw:style"]->getStr() == "rectangular" ||
+			         m_impl->m_style["draw:style"]->getStr() == "square" ||
+			         m_impl->m_style["draw:style"]->getStr() == "ellipsoid"))
 			{
-				m_outputSink << "<svg:defs>\n";
-				m_outputSink << "  <svg:radialGradient id=\"grad" << m_gradientIndex++ << "\"";
+				m_impl->m_outputSink << "<svg:defs>\n";
+				m_impl->m_outputSink << "  <svg:radialGradient id=\"grad" << m_impl->m_gradientIndex++ << "\"";
 
-				if (m_style["svg:cx"])
-					m_outputSink << " cx=\"" << m_style["svg:cx"]->getStr().cstr() << "\"";
-				else if (m_style["draw:cx"])
-					m_outputSink << " cx=\"" << m_style["draw:cx"]->getStr().cstr() << "\"";
+				if (m_impl->m_style["svg:cx"])
+					m_impl->m_outputSink << " cx=\"" << m_impl->m_style["svg:cx"]->getStr().cstr() << "\"";
+				else if (m_impl->m_style["draw:cx"])
+					m_impl->m_outputSink << " cx=\"" << m_impl->m_style["draw:cx"]->getStr().cstr() << "\"";
 
-				if (m_style["svg:cy"])
-					m_outputSink << " cy=\"" << m_style["svg:cy"]->getStr().cstr() << "\"";
-				else if (m_style["draw:cy"])
-					m_outputSink << " cy=\"" << m_style["draw:cy"]->getStr().cstr() << "\"";
-				m_outputSink << " r=\"" << (1 - (m_style["draw:border"] ? m_style["draw:border"]->getDouble() : 0))*100.0 << "%\" >\n";
-				m_outputSink << " >\n";
+				if (m_impl->m_style["svg:cy"])
+					m_impl->m_outputSink << " cy=\"" << m_impl->m_style["svg:cy"]->getStr().cstr() << "\"";
+				else if (m_impl->m_style["draw:cy"])
+					m_impl->m_outputSink << " cy=\"" << m_impl->m_style["draw:cy"]->getStr().cstr() << "\"";
+				m_impl->m_outputSink << " r=\"" << (1 - (m_impl->m_style["draw:border"] ? m_impl->m_style["draw:border"]->getDouble() : 0))*100.0 << "%\" >\n";
+				m_impl->m_outputSink << " >\n";
 
-				if (m_style["draw:start-color"] && m_style["draw:end-color"])
+				if (m_impl->m_style["draw:start-color"] && m_impl->m_style["draw:end-color"])
 				{
-					m_outputSink << "    <svg:stop offset=\"0%\"";
-					m_outputSink << " stop-color=\"" << m_style["draw:end-color"]->getStr().cstr() << "\"";
-					m_outputSink << " stop-opacity=\"" << (m_style["libwpg:end-opacity"] ? m_style["libwpg:end-opacity"]->getDouble() : 1) << "\" />" << std::endl;
+					m_impl->m_outputSink << "    <svg:stop offset=\"0%\"";
+					m_impl->m_outputSink << " stop-color=\"" << m_impl->m_style["draw:end-color"]->getStr().cstr() << "\"";
+					m_impl->m_outputSink << " stop-opacity=\"" << (m_impl->m_style["libwpg:end-opacity"] ? m_impl->m_style["libwpg:end-opacity"]->getDouble() : 1) << "\" />" << std::endl;
 
-					m_outputSink << "    <svg:stop offset=\"100%\"";
-					m_outputSink << " stop-color=\"" << m_style["draw:start-color"]->getStr().cstr() << "\"";
-					m_outputSink << " stop-opacity=\"" << (m_style["libwpg:start-opacity"] ? m_style["libwpg:start-opacity"]->getDouble() : 1) << "\" />" << std::endl;
+					m_impl->m_outputSink << "    <svg:stop offset=\"100%\"";
+					m_impl->m_outputSink << " stop-color=\"" << m_impl->m_style["draw:start-color"]->getStr().cstr() << "\"";
+					m_impl->m_outputSink << " stop-opacity=\"" << (m_impl->m_style["libwpg:start-opacity"] ? m_impl->m_style["libwpg:start-opacity"]->getDouble() : 1) << "\" />" << std::endl;
 				}
-				m_outputSink << "  </svg:radialGradient>\n";
-				m_outputSink << "</svg:defs>\n";
+				m_impl->m_outputSink << "  </svg:radialGradient>\n";
+				m_impl->m_outputSink << "</svg:defs>\n";
 			}
-			else if (m_style["draw:style"] && m_style["draw:style"]->getStr() == "linear")
+			else if (m_impl->m_style["draw:style"] && m_impl->m_style["draw:style"]->getStr() == "linear")
 			{
-				m_outputSink << "<svg:defs>\n";
-				m_outputSink << "  <svg:linearGradient id=\"grad" << m_gradientIndex++ << "\" >\n";
+				m_impl->m_outputSink << "<svg:defs>\n";
+				m_impl->m_outputSink << "  <svg:linearGradient id=\"grad" << m_impl->m_gradientIndex++ << "\" >\n";
 
-				if (m_style["draw:start-color"] && m_style["draw:end-color"])
+				if (m_impl->m_style["draw:start-color"] && m_impl->m_style["draw:end-color"])
 				{
-					m_outputSink << "    <svg:stop offset=\"0%\"";
-					m_outputSink << " stop-color=\"" << m_style["draw:start-color"]->getStr().cstr() << "\"";
-					m_outputSink << " stop-opacity=\"" << (m_style["libwpg:start-opacity"] ? m_style["libwpg:start-opacity"]->getDouble() : 1) << "\" />" << std::endl;
+					m_impl->m_outputSink << "    <svg:stop offset=\"0%\"";
+					m_impl->m_outputSink << " stop-color=\"" << m_impl->m_style["draw:start-color"]->getStr().cstr() << "\"";
+					m_impl->m_outputSink << " stop-opacity=\"" << (m_impl->m_style["libwpg:start-opacity"] ? m_impl->m_style["libwpg:start-opacity"]->getDouble() : 1) << "\" />" << std::endl;
 
-					m_outputSink << "    <svg:stop offset=\"100%\"";
-					m_outputSink << " stop-color=\"" << m_style["draw:end-color"]->getStr().cstr() << "\"";
-					m_outputSink << " stop-opacity=\"" << (m_style["libwpg:end-opacity"] ? m_style["libwpg:end-opacity"]->getDouble() : 1) << "\" />" << std::endl;
+					m_impl->m_outputSink << "    <svg:stop offset=\"100%\"";
+					m_impl->m_outputSink << " stop-color=\"" << m_impl->m_style["draw:end-color"]->getStr().cstr() << "\"";
+					m_impl->m_outputSink << " stop-opacity=\"" << (m_impl->m_style["libwpg:end-opacity"] ? m_impl->m_style["libwpg:end-opacity"]->getDouble() : 1) << "\" />" << std::endl;
 				}
-				m_outputSink << "  </svg:linearGradient>\n";
+				m_impl->m_outputSink << "  </svg:linearGradient>\n";
 
 				// not a simple horizontal gradient
 				if(angle != 270)
 				{
-					m_outputSink << "  <svg:linearGradient xlink:href=\"#grad" << m_gradientIndex-1 << "\"";
-					m_outputSink << " id=\"grad" << m_gradientIndex++ << "\" ";
-					m_outputSink << "x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\" ";
-					m_outputSink << "gradientTransform=\"rotate(" << angle << " .5 .5)\" ";
-					m_outputSink << "gradientUnits=\"objectBoundingBox\" >\n";
-					m_outputSink << "  </svg:linearGradient>\n";
+					m_impl->m_outputSink << "  <svg:linearGradient xlink:href=\"#grad" << m_impl->m_gradientIndex-1 << "\"";
+					m_impl->m_outputSink << " id=\"grad" << m_impl->m_gradientIndex++ << "\" ";
+					m_impl->m_outputSink << "x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\" ";
+					m_impl->m_outputSink << "gradientTransform=\"rotate(" << angle << " .5 .5)\" ";
+					m_impl->m_outputSink << "gradientUnits=\"objectBoundingBox\" >\n";
+					m_impl->m_outputSink << "  </svg:linearGradient>\n";
 				}
 
-				m_outputSink << "</svg:defs>\n";
+				m_impl->m_outputSink << "</svg:defs>\n";
 			}
-			else if (m_style["draw:style"] && m_style["draw:style"]->getStr() == "axial")
+			else if (m_impl->m_style["draw:style"] && m_impl->m_style["draw:style"]->getStr() == "axial")
 			{
-				m_outputSink << "<svg:defs>\n";
-				m_outputSink << "  <svg:linearGradient id=\"grad" << m_gradientIndex++ << "\" >\n";
+				m_impl->m_outputSink << "<svg:defs>\n";
+				m_impl->m_outputSink << "  <svg:linearGradient id=\"grad" << m_impl->m_gradientIndex++ << "\" >\n";
 
-				if (m_style["draw:start-color"] && m_style["draw:end-color"])
+				if (m_impl->m_style["draw:start-color"] && m_impl->m_style["draw:end-color"])
 				{
-					m_outputSink << "    <svg:stop offset=\"0%\"";
-					m_outputSink << " stop-color=\"" << m_style["draw:end-color"]->getStr().cstr() << "\"";
-					m_outputSink << " stop-opacity=\"" << (m_style["libwpg:end-opacity"] ? m_style["libwpg:end-opacity"]->getDouble() : 1) << "\" />" << std::endl;
+					m_impl->m_outputSink << "    <svg:stop offset=\"0%\"";
+					m_impl->m_outputSink << " stop-color=\"" << m_impl->m_style["draw:end-color"]->getStr().cstr() << "\"";
+					m_impl->m_outputSink << " stop-opacity=\"" << (m_impl->m_style["libwpg:end-opacity"] ? m_impl->m_style["libwpg:end-opacity"]->getDouble() : 1) << "\" />" << std::endl;
 
-					m_outputSink << "    <svg:stop offset=\"50%\"";
-					m_outputSink << " stop-color=\"" << m_style["draw:start-color"]->getStr().cstr() << "\"";
-					m_outputSink << " stop-opacity=\"" << (m_style["libwpg:start-opacity"] ? m_style["libwpg:start-opacity"]->getDouble() : 1) << "\" />" << std::endl;
+					m_impl->m_outputSink << "    <svg:stop offset=\"50%\"";
+					m_impl->m_outputSink << " stop-color=\"" << m_impl->m_style["draw:start-color"]->getStr().cstr() << "\"";
+					m_impl->m_outputSink << " stop-opacity=\"" << (m_impl->m_style["libwpg:start-opacity"] ? m_impl->m_style["libwpg:start-opacity"]->getDouble() : 1) << "\" />" << std::endl;
 
-					m_outputSink << "    <svg:stop offset=\"100%\"";
-					m_outputSink << " stop-color=\"" << m_style["draw:end-color"]->getStr().cstr() << "\"";
-					m_outputSink << " stop-opacity=\"" << (m_style["libwpg:end-opacity"] ? m_style["libwpg:end-opacity"]->getDouble() : 1) << "\" />" << std::endl;
+					m_impl->m_outputSink << "    <svg:stop offset=\"100%\"";
+					m_impl->m_outputSink << " stop-color=\"" << m_impl->m_style["draw:end-color"]->getStr().cstr() << "\"";
+					m_impl->m_outputSink << " stop-opacity=\"" << (m_impl->m_style["libwpg:end-opacity"] ? m_impl->m_style["libwpg:end-opacity"]->getDouble() : 1) << "\" />" << std::endl;
 				}
-				m_outputSink << "  </svg:linearGradient>\n";
+				m_impl->m_outputSink << "  </svg:linearGradient>\n";
 
 				// not a simple horizontal gradient
 				if(angle != 270)
 				{
-					m_outputSink << "  <svg:linearGradient xlink:href=\"#grad" << m_gradientIndex-1 << "\"";
-					m_outputSink << " id=\"grad" << m_gradientIndex++ << "\" ";
-					m_outputSink << "x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\" ";
-					m_outputSink << "gradientTransform=\"rotate(" << angle << " .5 .5)\" ";
-					m_outputSink << "gradientUnits=\"objectBoundingBox\" >\n";
-					m_outputSink << "  </svg:linearGradient>\n";
+					m_impl->m_outputSink << "  <svg:linearGradient xlink:href=\"#grad" << m_impl->m_gradientIndex-1 << "\"";
+					m_impl->m_outputSink << " id=\"grad" << m_impl->m_gradientIndex++ << "\" ";
+					m_impl->m_outputSink << "x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\" ";
+					m_impl->m_outputSink << "gradientTransform=\"rotate(" << angle << " .5 .5)\" ";
+					m_impl->m_outputSink << "gradientUnits=\"objectBoundingBox\" >\n";
+					m_impl->m_outputSink << "  </svg:linearGradient>\n";
 				}
 
-				m_outputSink << "</svg:defs>\n";
+				m_impl->m_outputSink << "</svg:defs>\n";
 			}
 		}
 		else
 		{
-			if (m_style["draw:style"] && m_style["draw:style"]->getStr() == "radial")
+			if (m_impl->m_style["draw:style"] && m_impl->m_style["draw:style"]->getStr() == "radial")
 			{
-				m_outputSink << "<svg:defs>\n";
-				m_outputSink << "  <svg:radialGradient id=\"grad" << m_gradientIndex++ << "\" cx=\"" << m_style["svg:cx"]->getStr().cstr() << "\" cy=\"" << m_style["svg:cy"]->getStr().cstr() << "\" r=\"" << m_style["svg:r"]->getStr().cstr() << "\" >\n";
-				for(unsigned c = 0; c < m_gradient.count(); c++)
+				m_impl->m_outputSink << "<svg:defs>\n";
+				m_impl->m_outputSink << "  <svg:radialGradient id=\"grad" << m_impl->m_gradientIndex++ << "\" cx=\"" << m_impl->m_style["svg:cx"]->getStr().cstr() << "\" cy=\"" << m_impl->m_style["svg:cy"]->getStr().cstr() << "\" r=\"" << m_impl->m_style["svg:r"]->getStr().cstr() << "\" >\n";
+				for(unsigned c = 0; c < m_impl->m_gradient.count(); c++)
 				{
-					m_outputSink << "    <svg:stop offset=\"" << m_gradient[c]["svg:offset"]->getStr().cstr() << "\"";
+					m_impl->m_outputSink << "    <svg:stop offset=\"" << m_impl->m_gradient[c]["svg:offset"]->getStr().cstr() << "\"";
 
-					m_outputSink << " stop-color=\"" << m_gradient[c]["svg:stop-color"]->getStr().cstr() << "\"";
-					m_outputSink << " stop-opacity=\"" << m_gradient[c]["svg:stop-opacity"]->getDouble() << "\" />" << std::endl;
+					m_impl->m_outputSink << " stop-color=\"" << m_impl->m_gradient[c]["svg:stop-color"]->getStr().cstr() << "\"";
+					m_impl->m_outputSink << " stop-opacity=\"" << m_impl->m_gradient[c]["svg:stop-opacity"]->getDouble() << "\" />" << std::endl;
 
 				}
-				m_outputSink << "  </svg:radialGradient>\n";
-				m_outputSink << "</svg:defs>\n";
+				m_impl->m_outputSink << "  </svg:radialGradient>\n";
+				m_impl->m_outputSink << "</svg:defs>\n";
 			}
 			else
 			{
-				m_outputSink << "<svg:defs>\n";
-				m_outputSink << "  <svg:linearGradient id=\"grad" << m_gradientIndex++ << "\" >\n";
-				for(unsigned c = 0; c < m_gradient.count(); c++)
+				m_impl->m_outputSink << "<svg:defs>\n";
+				m_impl->m_outputSink << "  <svg:linearGradient id=\"grad" << m_impl->m_gradientIndex++ << "\" >\n";
+				for(unsigned c = 0; c < m_impl->m_gradient.count(); c++)
 				{
-					m_outputSink << "    <svg:stop offset=\"" << m_gradient[c]["svg:offset"]->getStr().cstr() << "\"";
+					m_impl->m_outputSink << "    <svg:stop offset=\"" << m_impl->m_gradient[c]["svg:offset"]->getStr().cstr() << "\"";
 
-					m_outputSink << " stop-color=\"" << m_gradient[c]["svg:stop-color"]->getStr().cstr() << "\"";
-					m_outputSink << " stop-opacity=\"" << m_gradient[c]["svg:stop-opacity"]->getDouble() << "\" />" << std::endl;
+					m_impl->m_outputSink << " stop-color=\"" << m_impl->m_gradient[c]["svg:stop-color"]->getStr().cstr() << "\"";
+					m_impl->m_outputSink << " stop-opacity=\"" << m_impl->m_gradient[c]["svg:stop-opacity"]->getDouble() << "\" />" << std::endl;
 
 				}
-				m_outputSink << "  </svg:linearGradient>\n";
+				m_impl->m_outputSink << "  </svg:linearGradient>\n";
 
 				// not a simple horizontal gradient
 				if(angle != 270)
 				{
-					m_outputSink << "  <svg:linearGradient xlink:href=\"#grad" << m_gradientIndex-1 << "\"";
-					m_outputSink << " id=\"grad" << m_gradientIndex++ << "\" ";
-					m_outputSink << "x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\" ";
-					m_outputSink << "gradientTransform=\"rotate(" << angle << " .5 .5)\" ";
-					m_outputSink << "gradientUnits=\"objectBoundingBox\" >\n";
-					m_outputSink << "  </svg:linearGradient>\n";
+					m_impl->m_outputSink << "  <svg:linearGradient xlink:href=\"#grad" << m_impl->m_gradientIndex-1 << "\"";
+					m_impl->m_outputSink << " id=\"grad" << m_impl->m_gradientIndex++ << "\" ";
+					m_impl->m_outputSink << "x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\" ";
+					m_impl->m_outputSink << "gradientTransform=\"rotate(" << angle << " .5 .5)\" ";
+					m_impl->m_outputSink << "gradientUnits=\"objectBoundingBox\" >\n";
+					m_impl->m_outputSink << "  </svg:linearGradient>\n";
 				}
 
-				m_outputSink << "</svg:defs>\n";
+				m_impl->m_outputSink << "</svg:defs>\n";
 			}
 		}
 	}
-	else if(m_style["draw:fill"] && m_style["draw:fill"]->getStr() == "bitmap")
+	else if(m_impl->m_style["draw:fill"] && m_impl->m_style["draw:fill"]->getStr() == "bitmap")
 	{
-		if (m_style["draw:fill-image"] && m_style["libwpg:mime-type"])
+		if (m_impl->m_style["draw:fill-image"] && m_impl->m_style["libwpg:mime-type"])
 		{
-			m_outputSink << "<svg:defs>\n";
-			m_outputSink << "  <svg:pattern id=\"img" << m_patternIndex++ << "\" patternUnits=\"userSpaceOnUse\" ";
-			if (m_style["svg:width"])
-				m_outputSink << "width=\"" << doubleToString(72*(m_style["svg:width"]->getDouble())) << "\" ";
+			m_impl->m_outputSink << "<svg:defs>\n";
+			m_impl->m_outputSink << "  <svg:pattern id=\"img" << m_impl->m_patternIndex++ << "\" patternUnits=\"userSpaceOnUse\" ";
+			if (m_impl->m_style["svg:width"])
+				m_impl->m_outputSink << "width=\"" << doubleToString(72*(m_impl->m_style["svg:width"]->getDouble())) << "\" ";
 			else
-				m_outputSink << "width=\"100\" ";
+				m_impl->m_outputSink << "width=\"100\" ";
 
-			if (m_style["svg:height"])
-				m_outputSink << "height=\"" << doubleToString(72*(m_style["svg:height"]->getDouble())) << "\">" << std::endl;
+			if (m_impl->m_style["svg:height"])
+				m_impl->m_outputSink << "height=\"" << doubleToString(72*(m_impl->m_style["svg:height"]->getDouble())) << "\">" << std::endl;
 			else
-				m_outputSink << "height=\"100\">" << std::endl;
-			m_outputSink << "<svg:image ";
+				m_impl->m_outputSink << "height=\"100\">" << std::endl;
+			m_impl->m_outputSink << "<svg:image ";
 
-			if (m_style["svg:x"])
-				m_outputSink << "x=\"" << doubleToString(72*(m_style["svg:x"]->getDouble())) << "\" ";
+			if (m_impl->m_style["svg:x"])
+				m_impl->m_outputSink << "x=\"" << doubleToString(72*(m_impl->m_style["svg:x"]->getDouble())) << "\" ";
 			else
-				m_outputSink << "x=\"0\" ";
+				m_impl->m_outputSink << "x=\"0\" ";
 
-			if (m_style["svg:y"])
-				m_outputSink << "y=\"" << doubleToString(72*(m_style["svg:y"]->getDouble())) << "\" ";
+			if (m_impl->m_style["svg:y"])
+				m_impl->m_outputSink << "y=\"" << doubleToString(72*(m_impl->m_style["svg:y"]->getDouble())) << "\" ";
 			else
-				m_outputSink << "y=\"0\" ";
+				m_impl->m_outputSink << "y=\"0\" ";
 
-			if (m_style["svg:width"])
-				m_outputSink << "width=\"" << doubleToString(72*(m_style["svg:width"]->getDouble())) << "\" ";
+			if (m_impl->m_style["svg:width"])
+				m_impl->m_outputSink << "width=\"" << doubleToString(72*(m_impl->m_style["svg:width"]->getDouble())) << "\" ";
 			else
-				m_outputSink << "width=\"100\" ";
+				m_impl->m_outputSink << "width=\"100\" ";
 
-			if (m_style["svg:height"])
-				m_outputSink << "height=\"" << doubleToString(72*(m_style["svg:height"]->getDouble())) << "\" ";
+			if (m_impl->m_style["svg:height"])
+				m_impl->m_outputSink << "height=\"" << doubleToString(72*(m_impl->m_style["svg:height"]->getDouble())) << "\" ";
 			else
-				m_outputSink << "height=\"100\" ";
+				m_impl->m_outputSink << "height=\"100\" ";
 
-			m_outputSink << "xlink:href=\"data:" << m_style["libwpg:mime-type"]->getStr().cstr() << ";base64,";
-			m_outputSink << m_style["draw:fill-image"]->getStr().cstr();
-			m_outputSink << "\" />\n";
-			m_outputSink << "  </svg:pattern>\n";
-			m_outputSink << "</svg:defs>\n";
+			m_impl->m_outputSink << "xlink:href=\"data:" << m_impl->m_style["libwpg:mime-type"]->getStr().cstr() << ";base64,";
+			m_impl->m_outputSink << m_impl->m_style["draw:fill-image"]->getStr().cstr();
+			m_impl->m_outputSink << "\" />\n";
+			m_impl->m_outputSink << "  </svg:pattern>\n";
+			m_impl->m_outputSink << "</svg:defs>\n";
 		}
 	}
 }
 
 void RVNGSVGPresentationGenerator::startLayer(const RVNGPropertyList &propList)
 {
-	m_outputSink << "<svg:g id=\"Layer" << propList["svg:id"]->getInt() << "\"";
+	m_impl->m_outputSink << "<svg:g id=\"Layer" << propList["svg:id"]->getInt() << "\"";
 	if (propList["svg:fill-rule"])
-		m_outputSink << " fill-rule=\"" << propList["svg:fill-rule"]->getStr().cstr() << "\"";
-	m_outputSink << " >\n";
+		m_impl->m_outputSink << " fill-rule=\"" << propList["svg:fill-rule"]->getStr().cstr() << "\"";
+	m_impl->m_outputSink << " >\n";
 }
 
 void RVNGSVGPresentationGenerator::endLayer()
 {
-	m_outputSink << "</svg:g>\n";
+	m_impl->m_outputSink << "</svg:g>\n";
 }
 
 void RVNGSVGPresentationGenerator::startGroup(const RVNGPropertyList &/*propList*/)
 {
 	// TODO: handle svg:id
-	m_outputSink << "<svg:g>\n";
+	m_impl->m_outputSink << "<svg:g>\n";
 }
 
 void RVNGSVGPresentationGenerator::endGroup()
 {
-	m_outputSink << "</svg:g>\n";
+	m_impl->m_outputSink << "</svg:g>\n";
 }
 
 void RVNGSVGPresentationGenerator::drawRectangle(const RVNGPropertyList &propList)
 {
-	m_outputSink << "<svg:rect ";
-	m_outputSink << "x=\"" << doubleToString(72*propList["svg:x"]->getDouble()) << "\" y=\"" << doubleToString(72*propList["svg:y"]->getDouble()) << "\" ";
-	m_outputSink << "width=\"" << doubleToString(72*propList["svg:width"]->getDouble()) << "\" height=\"" << doubleToString(72*propList["svg:height"]->getDouble()) << "\" ";
+	m_impl->m_outputSink << "<svg:rect ";
+	m_impl->m_outputSink << "x=\"" << doubleToString(72*propList["svg:x"]->getDouble()) << "\" y=\"" << doubleToString(72*propList["svg:y"]->getDouble()) << "\" ";
+	m_impl->m_outputSink << "width=\"" << doubleToString(72*propList["svg:width"]->getDouble()) << "\" height=\"" << doubleToString(72*propList["svg:height"]->getDouble()) << "\" ";
 	if((propList["svg:rx"] && propList["svg:rx"]->getInt() !=0) || (propList["svg:ry"] && propList["svg:ry"]->getInt() !=0))
-		m_outputSink << "rx=\"" << doubleToString(72*propList["svg:rx"]->getDouble()) << "\" ry=\"" << doubleToString(72*propList["svg:ry"]->getDouble()) << "\" ";
-	writeStyle();
-	m_outputSink << "/>\n";
+		m_impl->m_outputSink << "rx=\"" << doubleToString(72*propList["svg:rx"]->getDouble()) << "\" ry=\"" << doubleToString(72*propList["svg:ry"]->getDouble()) << "\" ";
+	m_impl->writeStyle();
+	m_impl->m_outputSink << "/>\n";
 }
 
 void RVNGSVGPresentationGenerator::drawEllipse(const RVNGPropertyList &propList)
 {
-	m_outputSink << "<svg:ellipse ";
-	m_outputSink << "cx=\"" << doubleToString(72*propList["svg:cx"]->getDouble()) << "\" cy=\"" << doubleToString(72*propList["svg:cy"]->getDouble()) << "\" ";
-	m_outputSink << "rx=\"" << doubleToString(72*propList["svg:rx"]->getDouble()) << "\" ry=\"" << doubleToString(72*propList["svg:ry"]->getDouble()) << "\" ";
-	writeStyle();
+	m_impl->m_outputSink << "<svg:ellipse ";
+	m_impl->m_outputSink << "cx=\"" << doubleToString(72*propList["svg:cx"]->getDouble()) << "\" cy=\"" << doubleToString(72*propList["svg:cy"]->getDouble()) << "\" ";
+	m_impl->m_outputSink << "rx=\"" << doubleToString(72*propList["svg:rx"]->getDouble()) << "\" ry=\"" << doubleToString(72*propList["svg:ry"]->getDouble()) << "\" ";
+	m_impl->writeStyle();
 	if (propList["libwpg:rotate"] && propList["libwpg:rotate"]->getDouble() != 0.0)
-		m_outputSink << " transform=\" translate(" << doubleToString(72*propList["svg:cx"]->getDouble()) << ", " << doubleToString(72*propList["svg:cy"]->getDouble())
-		             << ") rotate(" << doubleToString(-propList["libwpg:rotate"]->getDouble())
-		             << ") translate(" << doubleToString(-72*propList["svg:cx"]->getDouble())
-		             << ", " << doubleToString(-72*propList["svg:cy"]->getDouble())
-		             << ")\" ";
-	m_outputSink << "/>\n";
+		m_impl->m_outputSink << " transform=\" translate(" << doubleToString(72*propList["svg:cx"]->getDouble()) << ", " << doubleToString(72*propList["svg:cy"]->getDouble())
+		                     << ") rotate(" << doubleToString(-propList["libwpg:rotate"]->getDouble())
+		                     << ") translate(" << doubleToString(-72*propList["svg:cx"]->getDouble())
+		                     << ", " << doubleToString(-72*propList["svg:cy"]->getDouble())
+		                     << ")\" ";
+	m_impl->m_outputSink << "/>\n";
 }
 
 void RVNGSVGPresentationGenerator::drawPolyline(const RVNGPropertyListVector &vertices)
 {
-	drawPolySomething(vertices, false);
+	m_impl->drawPolySomething(vertices, false);
 }
 
 void RVNGSVGPresentationGenerator::drawPolygon(const RVNGPropertyListVector &vertices)
 {
-	drawPolySomething(vertices, true);
+	m_impl->drawPolySomething(vertices, true);
 }
 
-void RVNGSVGPresentationGenerator::drawPolySomething(const RVNGPropertyListVector &vertices, bool isClosed)
+void RVNGSVGPresentationGeneratorImpl::drawPolySomething(const RVNGPropertyListVector &vertices, bool isClosed)
 {
 	if(vertices.count() < 2)
 		return;
@@ -422,7 +452,7 @@ void RVNGSVGPresentationGenerator::drawPolySomething(const RVNGPropertyListVecto
 
 void RVNGSVGPresentationGenerator::drawPath(const RVNGPropertyListVector &path)
 {
-	m_outputSink << "<svg:path d=\" ";
+	m_impl->m_outputSink << "<svg:path d=\" ";
 	bool isClosed = false;
 	unsigned i=0;
 	for(i=0; i < path.count(); i++)
@@ -430,46 +460,46 @@ void RVNGSVGPresentationGenerator::drawPath(const RVNGPropertyListVector &path)
 		RVNGPropertyList propList = path[i];
 		if (propList["libwpg:path-action"] && propList["libwpg:path-action"]->getStr() == "M")
 		{
-			m_outputSink << "\nM";
-			m_outputSink << doubleToString(72*(propList["svg:x"]->getDouble())) << "," << doubleToString(72*(propList["svg:y"]->getDouble()));
+			m_impl->m_outputSink << "\nM";
+			m_impl->m_outputSink << doubleToString(72*(propList["svg:x"]->getDouble())) << "," << doubleToString(72*(propList["svg:y"]->getDouble()));
 		}
 		else if (propList["libwpg:path-action"] && propList["libwpg:path-action"]->getStr() == "L")
 		{
-			m_outputSink << "\nL";
-			m_outputSink << doubleToString(72*(propList["svg:x"]->getDouble())) << "," << doubleToString(72*(propList["svg:y"]->getDouble()));
+			m_impl->m_outputSink << "\nL";
+			m_impl->m_outputSink << doubleToString(72*(propList["svg:x"]->getDouble())) << "," << doubleToString(72*(propList["svg:y"]->getDouble()));
 		}
 		else if (propList["libwpg:path-action"] && propList["libwpg:path-action"]->getStr() == "C")
 		{
-			m_outputSink << "\nC";
-			m_outputSink << doubleToString(72*(propList["svg:x1"]->getDouble())) << "," << doubleToString(72*(propList["svg:y1"]->getDouble())) << " ";
-			m_outputSink << doubleToString(72*(propList["svg:x2"]->getDouble())) << "," << doubleToString(72*(propList["svg:y2"]->getDouble())) << " ";
-			m_outputSink << doubleToString(72*(propList["svg:x"]->getDouble())) << "," << doubleToString(72*(propList["svg:y"]->getDouble()));
+			m_impl->m_outputSink << "\nC";
+			m_impl->m_outputSink << doubleToString(72*(propList["svg:x1"]->getDouble())) << "," << doubleToString(72*(propList["svg:y1"]->getDouble())) << " ";
+			m_impl->m_outputSink << doubleToString(72*(propList["svg:x2"]->getDouble())) << "," << doubleToString(72*(propList["svg:y2"]->getDouble())) << " ";
+			m_impl->m_outputSink << doubleToString(72*(propList["svg:x"]->getDouble())) << "," << doubleToString(72*(propList["svg:y"]->getDouble()));
 		}
 		else if (propList["libwpg:path-action"] && propList["libwpg:path-action"]->getStr() == "Q")
 		{
-			m_outputSink << "\nQ";
-			m_outputSink << doubleToString(72*(propList["svg:x1"]->getDouble())) << "," << doubleToString(72*(propList["svg:y1"]->getDouble())) << " ";
-			m_outputSink << doubleToString(72*(propList["svg:x"]->getDouble())) << "," << doubleToString(72*(propList["svg:y"]->getDouble()));
+			m_impl->m_outputSink << "\nQ";
+			m_impl->m_outputSink << doubleToString(72*(propList["svg:x1"]->getDouble())) << "," << doubleToString(72*(propList["svg:y1"]->getDouble())) << " ";
+			m_impl->m_outputSink << doubleToString(72*(propList["svg:x"]->getDouble())) << "," << doubleToString(72*(propList["svg:y"]->getDouble()));
 		}
 		else if (propList["libwpg:path-action"] && propList["libwpg:path-action"]->getStr() == "A")
 		{
-			m_outputSink << "\nA";
-			m_outputSink << doubleToString(72*(propList["svg:rx"]->getDouble())) << "," << doubleToString(72*(propList["svg:ry"]->getDouble())) << " ";
-			m_outputSink << doubleToString(propList["libwpg:rotate"] ? propList["libwpg:rotate"]->getDouble() : 0) << " ";
-			m_outputSink << (propList["libwpg:large-arc"] ? propList["libwpg:large-arc"]->getInt() : 1) << ",";
-			m_outputSink << (propList["libwpg:sweep"] ? propList["libwpg:sweep"]->getInt() : 1) << " ";
-			m_outputSink << doubleToString(72*(propList["svg:x"]->getDouble())) << "," << doubleToString(72*(propList["svg:y"]->getDouble()));
+			m_impl->m_outputSink << "\nA";
+			m_impl->m_outputSink << doubleToString(72*(propList["svg:rx"]->getDouble())) << "," << doubleToString(72*(propList["svg:ry"]->getDouble())) << " ";
+			m_impl->m_outputSink << doubleToString(propList["libwpg:rotate"] ? propList["libwpg:rotate"]->getDouble() : 0) << " ";
+			m_impl->m_outputSink << (propList["libwpg:large-arc"] ? propList["libwpg:large-arc"]->getInt() : 1) << ",";
+			m_impl->m_outputSink << (propList["libwpg:sweep"] ? propList["libwpg:sweep"]->getInt() : 1) << " ";
+			m_impl->m_outputSink << doubleToString(72*(propList["svg:x"]->getDouble())) << "," << doubleToString(72*(propList["svg:y"]->getDouble()));
 		}
 		else if ((i >= path.count()-1 && i > 2) && propList["libwpg:path-action"] && propList["libwpg:path-action"]->getStr() == "Z" )
 		{
 			isClosed = true;
-			m_outputSink << "\nZ";
+			m_impl->m_outputSink << "\nZ";
 		}
 	}
 
-	m_outputSink << "\" \n";
-	writeStyle(isClosed);
-	m_outputSink << "/>\n";
+	m_impl->m_outputSink << "\" \n";
+	m_impl->writeStyle(isClosed);
+	m_impl->m_outputSink << "/>\n";
 }
 
 void RVNGSVGPresentationGenerator::drawGraphicObject(const RVNGPropertyList &propList, const RVNGBinaryData &binaryData)
@@ -477,13 +507,13 @@ void RVNGSVGPresentationGenerator::drawGraphicObject(const RVNGPropertyList &pro
 	if (!propList["libwpg:mime-type"] || propList["libwpg:mime-type"]->getStr().len() <= 0)
 		return;
 	RVNGString base64 = binaryData.getBase64Data();
-	m_outputSink << "<svg:image ";
+	m_impl->m_outputSink << "<svg:image ";
 	if (propList["svg:x"] && propList["svg:y"] && propList["svg:width"] && propList["svg:height"])
-		m_outputSink << "x=\"" << doubleToString(72*(propList["svg:x"]->getDouble())) << "\" y=\"" << doubleToString(72*(propList["svg:y"]->getDouble())) << "\" ";
-	m_outputSink << "width=\"" << doubleToString(72*(propList["svg:width"]->getDouble())) << "\" height=\"" << doubleToString(72*(propList["svg:height"]->getDouble())) << "\" ";
-	m_outputSink << "xlink:href=\"data:" << propList["libwpg:mime-type"]->getStr().cstr() << ";base64,";
-	m_outputSink << base64.cstr();
-	m_outputSink << "\" />\n";
+		m_impl->m_outputSink << "x=\"" << doubleToString(72*(propList["svg:x"]->getDouble())) << "\" y=\"" << doubleToString(72*(propList["svg:y"]->getDouble())) << "\" ";
+	m_impl->m_outputSink << "width=\"" << doubleToString(72*(propList["svg:width"]->getDouble())) << "\" height=\"" << doubleToString(72*(propList["svg:height"]->getDouble())) << "\" ";
+	m_impl->m_outputSink << "xlink:href=\"data:" << propList["libwpg:mime-type"]->getStr().cstr() << ";base64,";
+	m_impl->m_outputSink << base64.cstr();
+	m_impl->m_outputSink << "\" />\n";
 }
 
 void RVNGSVGPresentationGenerator::drawConnector(const RVNGPropertyList &/*propList*/, const RVNGPropertyListVector &/*path*/)
@@ -493,72 +523,72 @@ void RVNGSVGPresentationGenerator::drawConnector(const RVNGPropertyList &/*propL
 
 void RVNGSVGPresentationGenerator::startTextObject(const RVNGPropertyList &propList, const RVNGPropertyListVector & /* path */)
 {
-	m_outputSink << "<svg:text ";
+	m_impl->m_outputSink << "<svg:text ";
 	if (propList["svg:x"] && propList["svg:y"])
-		m_outputSink << "x=\"" << doubleToString(72*(propList["svg:x"]->getDouble())) << "\" y=\"" << doubleToString(72*(propList["svg:y"]->getDouble())) << "\"";
+		m_impl->m_outputSink << "x=\"" << doubleToString(72*(propList["svg:x"]->getDouble())) << "\" y=\"" << doubleToString(72*(propList["svg:y"]->getDouble())) << "\"";
 	if (propList["libwpg:rotate"] && propList["libwpg:rotate"]->getDouble() != 0.0)
-		m_outputSink << " transform=\"translate(" << doubleToString(72*propList["svg:x"]->getDouble()) << ", " << doubleToString(72*propList["svg:y"]->getDouble())
-		             << ") rotate(" << doubleToString(-propList["libwpg:rotate"]->getDouble())
-		             << ") translate(" << doubleToString(-72*propList["svg:x"]->getDouble())
-		             << ", " << doubleToString(-72*propList["svg:y"]->getDouble())
-		             << ")\"";
-	m_outputSink << ">\n";
+		m_impl->m_outputSink << " transform=\"translate(" << doubleToString(72*propList["svg:x"]->getDouble()) << ", " << doubleToString(72*propList["svg:y"]->getDouble())
+		                     << ") rotate(" << doubleToString(-propList["libwpg:rotate"]->getDouble())
+		                     << ") translate(" << doubleToString(-72*propList["svg:x"]->getDouble())
+		                     << ", " << doubleToString(-72*propList["svg:y"]->getDouble())
+		                     << ")\"";
+	m_impl->m_outputSink << ">\n";
 
 }
 
 void RVNGSVGPresentationGenerator::endTextObject()
 {
-	m_outputSink << "</svg:text>\n";
+	m_impl->m_outputSink << "</svg:text>\n";
 }
 
 void RVNGSVGPresentationGenerator::openSpan(const RVNGPropertyList &propList)
 {
-	m_outputSink << "<svg:tspan ";
+	m_impl->m_outputSink << "<svg:tspan ";
 	if (propList["style:font-name"])
-		m_outputSink << "font-family=\"" << propList["style:font-name"]->getStr().cstr() << "\" ";
+		m_impl->m_outputSink << "font-family=\"" << propList["style:font-name"]->getStr().cstr() << "\" ";
 	if (propList["fo:font-style"])
-		m_outputSink << "font-style=\"" << propList["fo:font-style"]->getStr().cstr() << "\" ";
+		m_impl->m_outputSink << "font-style=\"" << propList["fo:font-style"]->getStr().cstr() << "\" ";
 	if (propList["fo:font-weight"])
-		m_outputSink << "font-weight=\"" << propList["fo:font-weight"]->getStr().cstr() << "\" ";
+		m_impl->m_outputSink << "font-weight=\"" << propList["fo:font-weight"]->getStr().cstr() << "\" ";
 	if (propList["fo:font-variant"])
-		m_outputSink << "font-variant=\"" << propList["fo:font-variant"]->getStr().cstr() << "\" ";
+		m_impl->m_outputSink << "font-variant=\"" << propList["fo:font-variant"]->getStr().cstr() << "\" ";
 	if (propList["fo:font-size"])
-		m_outputSink << "font-size=\"" << doubleToString(propList["fo:font-size"]->getDouble()) << "\" ";
+		m_impl->m_outputSink << "font-size=\"" << doubleToString(propList["fo:font-size"]->getDouble()) << "\" ";
 	if (propList["fo:color"])
-		m_outputSink << "fill=\"" << propList["fo:color"]->getStr().cstr() << "\" ";
+		m_impl->m_outputSink << "fill=\"" << propList["fo:color"]->getStr().cstr() << "\" ";
 	if (propList["fo:text-transform"])
-		m_outputSink << "text-transform=\"" << propList["fo:text-transform"]->getStr().cstr() << "\" ";
+		m_impl->m_outputSink << "text-transform=\"" << propList["fo:text-transform"]->getStr().cstr() << "\" ";
 	if (propList["svg:fill-opacity"])
-		m_outputSink << "fill-opacity=\"" << doubleToString(propList["svg:fill-opacity"]->getDouble()) << "\" ";
+		m_impl->m_outputSink << "fill-opacity=\"" << doubleToString(propList["svg:fill-opacity"]->getDouble()) << "\" ";
 	if (propList["svg:stroke-opacity"])
-		m_outputSink << "stroke-opacity=\"" << doubleToString(propList["svg:stroke-opacity"]->getDouble()) << "\" ";
-	m_outputSink << ">\n";
+		m_impl->m_outputSink << "stroke-opacity=\"" << doubleToString(propList["svg:stroke-opacity"]->getDouble()) << "\" ";
+	m_impl->m_outputSink << ">\n";
 }
 
 void RVNGSVGPresentationGenerator::closeSpan()
 {
-	m_outputSink << "</svg:tspan>\n";
+	m_impl->m_outputSink << "</svg:tspan>\n";
 }
 
 void RVNGSVGPresentationGenerator::insertTab()
 {
-	m_outputSink << '\t';
+	m_impl->m_outputSink << '\t';
 }
 
 void RVNGSVGPresentationGenerator::insertSpace()
 {
-	m_outputSink << ' ';
+	m_impl->m_outputSink << ' ';
 }
 
 void RVNGSVGPresentationGenerator::insertText(const RVNGString &str)
 {
 	RVNGString tempUTF8(str, true);
-	m_outputSink << tempUTF8.cstr() << "\n";
+	m_impl->m_outputSink << tempUTF8.cstr() << "\n";
 }
 
 void RVNGSVGPresentationGenerator::insertLineBreak()
 {
-	m_outputSink << '\n';
+	m_impl->m_outputSink << '\n';
 }
 
 void RVNGSVGPresentationGenerator::insertField(const RVNGString &/*type*/, const RVNGPropertyList &/*propList*/)
@@ -598,7 +628,7 @@ void RVNGSVGPresentationGenerator::openParagraph(const RVNGPropertyList &, const
 
 void RVNGSVGPresentationGenerator::closeParagraph()
 {
-	m_outputSink << '\n';
+	m_impl->m_outputSink << '\n';
 }
 
 void RVNGSVGPresentationGenerator::openTable(const RVNGPropertyList &/*propList*/, const RVNGPropertyListVector &/*columns*/)
@@ -659,7 +689,7 @@ void RVNGSVGPresentationGenerator::endNotes()
 }
 
 // create "style" attribute based on current pen and brush
-void RVNGSVGPresentationGenerator::writeStyle(bool /* isClosed */)
+void RVNGSVGPresentationGeneratorImpl::writeStyle(bool /* isClosed */)
 {
 	m_outputSink << "style=\"";
 
