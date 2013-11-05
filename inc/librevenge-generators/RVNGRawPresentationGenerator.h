@@ -15,19 +15,23 @@
 #ifndef RVNGRAWPRESENTATIONGENERATOR_H
 #define RVNGRAWPRESENTATIONGENERATOR_H
 
-#include <librevenge/RVNGBinaryData.h>
-#include <librevenge/RVNGPresentationInterface.h>
-#include <librevenge/RVNGPropertyList.h>
-#include <librevenge/RVNGPropertyListVector.h>
-#include <librevenge/RVNGString.h>
+#include <librevenge/librevenge.h>
+#include <librevenge-stream/librevenge-stream.h>
 
 namespace librevenge
 {
 
+struct RVNGRawPresentationGeneratorImpl;
+
 class RVNGRawPresentationGenerator : public RVNGPresentationInterface
 {
+	// disable copying
+	RVNGRawPresentationGenerator(const RVNGRawPresentationGenerator &other);
+	RVNGRawPresentationGenerator &operator=(const RVNGRawPresentationGenerator &other);
+
 public:
 	RVNGRawPresentationGenerator();
+	~RVNGRawPresentationGenerator();
 
 	virtual void startDocument(const RVNGPropertyList &propList);
 	virtual void endDocument();
@@ -84,6 +88,9 @@ public:
 
 	virtual void startNotes(const RVNGPropertyList &propList);
 	virtual void endNotes();
+
+private:
+	RVNGRawPresentationGeneratorImpl *m_impl;
 };
 
 }

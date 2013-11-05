@@ -71,7 +71,16 @@ RVNGString getPropString(const RVNGPropertyListVector &itemList)
 
 }
 
+struct RVNGRawPresentationGeneratorImpl
+{
+};
+
 RVNGRawPresentationGenerator::RVNGRawPresentationGenerator()
+	: m_impl(0)
+{
+}
+
+RVNGRawPresentationGenerator::~RVNGRawPresentationGenerator()
 {
 }
 
