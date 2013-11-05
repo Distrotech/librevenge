@@ -81,6 +81,8 @@ librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_DEPENDENCIES 
 librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic $(no_undefined)
 librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_SOURCES = \
 	RVNGHTMLTextGenerator.cpp \
+	RVNGRawGeneratorBase.cpp \
+	RVNGRawGeneratorBase.h \
 	RVNGRawDrawingGenerator.cpp \
 	RVNGRawPresentationGenerator.cpp \
 	RVNGRawTextGenerator.cpp \

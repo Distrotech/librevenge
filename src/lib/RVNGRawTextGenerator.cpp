@@ -18,38 +18,11 @@
  * applicable instead of those above.
  */
 
-#include <stack>
 #include <stdio.h>
-#include <stdarg.h>
 
 #include <librevenge-generators/librevenge-generators.h>
 
-#ifdef _U
-#undef _U
-#endif
-
-#define _U(M, L) \
-	m_impl->m_atLeastOneCallback = true; \
-	if (!m_impl->m_printCallgraphScore) \
-			m_impl->iuprintf M; \
-	else \
-		m_impl->m_callStack.push(L);
-
-#ifdef _D
-#undef _D
-#endif
-
-#define _D(M, L) \
-	m_impl->m_atLeastOneCallback = true; \
-	if (!m_impl->m_printCallgraphScore) \
-			m_impl->idprintf M; \
-	else \
-	{ \
-		RVNGRawTextGeneratorCallback lc = m_impl->m_callStack.top(); \
-		if (lc != L) \
-			m_impl->m_callbackMisses++; \
-		m_impl->m_callStack.pop(); \
-	}
+#include "RVNGRawGeneratorBase.h"
 
 namespace librevenge
 {
@@ -80,36 +53,13 @@ enum RVNGRawTextGeneratorCallback
 
 }
 
-struct RVNGRawTextGeneratorImpl
+struct RVNGRawTextGeneratorImpl : RVNGRawGeneratorBase
 {
 	explicit RVNGRawTextGeneratorImpl(bool printCallgraphScore);
-
-	int m_indent;
-	int m_callbackMisses;
-	bool m_atLeastOneCallback;
-	bool m_printCallgraphScore;
-	std::stack<RVNGRawTextGeneratorCallback> m_callStack;
-
-	void indentUp()
-	{
-		m_indent++;
-	}
-	void indentDown()
-	{
-		if (m_indent > 0) m_indent--;
-	}
-
-	void iprintf(const char *format, ...);
-	void iuprintf(const char *format, ...);
-	void idprintf(const char *format, ...);
 };
 
-RVNGRawTextGeneratorImpl::RVNGRawTextGeneratorImpl(const bool printCallgraphScore) :
-	m_indent(0),
-	m_callbackMisses(0),
-	m_atLeastOneCallback(false),
-	m_printCallgraphScore(printCallgraphScore),
-	m_callStack()
+RVNGRawTextGeneratorImpl::RVNGRawTextGeneratorImpl(const bool printCallgraphScore)
+	: RVNGRawGeneratorBase(printCallgraphScore)
 {
 }
 
@@ -124,43 +74,6 @@ RVNGRawTextGenerator::~RVNGRawTextGenerator()
 		printf("%d\n", m_impl->m_atLeastOneCallback ? (int)(m_impl->m_callStack.size() + m_impl->m_callbackMisses) : -1);
 
 	delete m_impl;
-}
-
-void RVNGRawTextGeneratorImpl::iprintf(const char *format, ...)
-{
-	m_atLeastOneCallback = true;
-	if (m_printCallgraphScore) return;
-
-	va_list args;
-	va_start(args, format);
-	for (int i=0; i<m_indent; i++)
-		printf("  ");
-	vprintf(format, args);
-	va_end(args);
-}
-
-void RVNGRawTextGeneratorImpl::iuprintf(const char *format, ...)
-{
-	m_atLeastOneCallback = true;
-	va_list args;
-	va_start(args, format);
-	for (int i=0; i<m_indent; i++)
-		printf("  ");
-	vprintf(format, args);
-	indentUp();
-	va_end(args);
-}
-
-void RVNGRawTextGeneratorImpl::idprintf(const char *format, ...)
-{
-	m_atLeastOneCallback = true;
-	va_list args;
-	va_start(args, format);
-	indentDown();
-	for (int i=0; i<m_indent; i++)
-		printf("  ");
-	vprintf(format, args);
-	va_end(args);
 }
 
 RVNGString getPropString(const RVNGPropertyList &propList)

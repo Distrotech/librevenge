@@ -20,36 +20,10 @@
  */
 
 #include <stdio.h>
-#include <stdarg.h>
-#include <string.h>
-#include <stack>
 
 #include <librevenge-generators/librevenge-generators.h>
 
-#ifdef _U
-#undef _U
-#endif
-
-#define _U(M, L) \
-	if (!m_impl->m_printCallgraphScore) \
-			m_impl->iuprintf M; \
-	else \
-		m_impl->m_callStack.push(L);
-
-#ifdef _D
-#undef _D
-#endif
-
-#define _D(M, L) \
-	if (!m_impl->m_printCallgraphScore) \
-			m_impl->idprintf M; \
-	else \
-	{ \
-		RVNGRawDrawingGeneratorCallback lc = m_impl->m_callStack.top(); \
-		if (lc != L) \
-			m_impl->m_callbackMisses++; \
-		m_impl->m_callStack.pop(); \
-	}
+#include "RVNGRawGeneratorBase.h"
 
 namespace librevenge
 {
@@ -121,34 +95,13 @@ RVNGString getPropString(const RVNGPropertyListVector &itemList)
 
 } // anonymous namespace
 
-struct RVNGRawDrawingGeneratorImpl
+struct RVNGRawDrawingGeneratorImpl : RVNGRawGeneratorBase
 {
-	RVNGRawDrawingGeneratorImpl(bool printCallgraphScore);
-
-	int m_indent;
-	int m_callbackMisses;
-	bool m_printCallgraphScore;
-	std::stack<RVNGRawDrawingGeneratorCallback> m_callStack;
-
-	void indentUp()
-	{
-		m_indent++;
-	}
-	void indentDown()
-	{
-		if (m_indent > 0) m_indent--;
-	}
-
-	void iprintf(const char *format, ...);
-	void iuprintf(const char *format, ...);
-	void idprintf(const char *format, ...);
+	explicit RVNGRawDrawingGeneratorImpl(bool printCallgraphScore);
 };
 
 RVNGRawDrawingGeneratorImpl::RVNGRawDrawingGeneratorImpl(const bool printCallgraphScore)
-	: m_indent(0)
-	, m_callbackMisses(0)
-	, m_printCallgraphScore(printCallgraphScore)
-	, m_callStack()
+	: RVNGRawGeneratorBase(printCallgraphScore)
 {
 }
 
@@ -164,40 +117,6 @@ RVNGRawDrawingGenerator::~RVNGRawDrawingGenerator()
 		printf("%d\n", (int)(m_impl->m_callStack.size() + m_impl->m_callbackMisses));
 
 	delete m_impl;
-}
-
-void RVNGRawDrawingGeneratorImpl::iprintf(const char *format, ...)
-{
-	if (m_printCallgraphScore) return;
-
-	va_list args;
-	va_start(args, format);
-	for (int i=0; i<m_indent; i++)
-		printf("  ");
-	vprintf(format, args);
-	va_end(args);
-}
-
-void RVNGRawDrawingGeneratorImpl::iuprintf(const char *format, ...)
-{
-	va_list args;
-	va_start(args, format);
-	for (int i=0; i<m_indent; i++)
-		printf("  ");
-	vprintf(format, args);
-	indentUp();
-	va_end(args);
-}
-
-void RVNGRawDrawingGeneratorImpl::idprintf(const char *format, ...)
-{
-	va_list args;
-	va_start(args, format);
-	indentDown();
-	for (int i=0; i<m_indent; i++)
-		printf("  ");
-	vprintf(format, args);
-	va_end(args);
 }
 
 void RVNGRawDrawingGenerator::startDocument(const librevenge::RVNGPropertyList & /*propList*/) {}
