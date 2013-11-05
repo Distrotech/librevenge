@@ -32,16 +32,57 @@ RVNGTextDrawingGenerator::~RVNGTextDrawingGenerator()
 {
 }
 
-void RVNGTextDrawingGenerator::insertText(const RVNGString &str)
-{
-	printf("%s", str.cstr());
-}
+void RVNGTextDrawingGenerator::startDocument(const RVNGPropertyList & /*propList*/) {}
+void RVNGTextDrawingGenerator::endDocument() {}
+void RVNGTextDrawingGenerator::setDocumentMetaData(const RVNGPropertyList & /*propList*/) {}
+void RVNGTextDrawingGenerator::startPage(const RVNGPropertyList &) {}
+void RVNGTextDrawingGenerator::endPage() {}
+void RVNGTextDrawingGenerator::startLayer(const RVNGPropertyList &) {}
+void RVNGTextDrawingGenerator::endLayer() {}
+void RVNGTextDrawingGenerator::startEmbeddedGraphics(const RVNGPropertyList &) {}
+void RVNGTextDrawingGenerator::endEmbeddedGraphics() {}
+
+void RVNGTextDrawingGenerator::setStyle(const RVNGPropertyList &, const RVNGPropertyListVector &) {}
+
+void RVNGTextDrawingGenerator::drawRectangle(const RVNGPropertyList &) {}
+void RVNGTextDrawingGenerator::drawEllipse(const RVNGPropertyList &) {}
+void RVNGTextDrawingGenerator::drawPolyline(const RVNGPropertyListVector &) {}
+void RVNGTextDrawingGenerator::drawPolygon(const RVNGPropertyListVector &) {}
+void RVNGTextDrawingGenerator::drawPath(const RVNGPropertyListVector &) {}
+void RVNGTextDrawingGenerator::drawGraphicObject(const RVNGPropertyList &, const RVNGBinaryData &) {}
+void RVNGTextDrawingGenerator::startTextObject(const RVNGPropertyList &, const RVNGPropertyListVector &) {}
+void RVNGTextDrawingGenerator::endTextObject() {}
+
+
+void RVNGTextDrawingGenerator::openOrderedListLevel(const RVNGPropertyList & /*propList*/) {}
+void RVNGTextDrawingGenerator::closeOrderedListLevel() {}
+
+void RVNGTextDrawingGenerator::openUnorderedListLevel(const RVNGPropertyList & /*propList*/) {}
+void RVNGTextDrawingGenerator::closeUnorderedListLevel() {}
+
+void RVNGTextDrawingGenerator::openListElement(const RVNGPropertyList & /*propList*/, const RVNGPropertyListVector & /* tabStops */) {}
+void RVNGTextDrawingGenerator::closeListElement() {}
+
+void RVNGTextDrawingGenerator::openParagraph(const RVNGPropertyList & /*propList*/, const RVNGPropertyListVector & /* tabStops */) {}
 
 void RVNGTextDrawingGenerator::closeParagraph()
 {
 	printf("\n");
 }
 
+void RVNGTextDrawingGenerator::openSpan(const RVNGPropertyList & /* propList */) {}
+void RVNGTextDrawingGenerator::closeSpan() {}
+
+void RVNGTextDrawingGenerator::insertTab() {}
+void RVNGTextDrawingGenerator::insertSpace() {}
+
+void RVNGTextDrawingGenerator::insertText(const RVNGString &str)
+{
+	printf("%s", str.cstr());
+}
+
+void RVNGTextDrawingGenerator::insertLineBreak() {}
+void RVNGTextDrawingGenerator::insertField(const RVNGString & /* type */, const RVNGPropertyList & /*propList*/) {}
 
 }
 

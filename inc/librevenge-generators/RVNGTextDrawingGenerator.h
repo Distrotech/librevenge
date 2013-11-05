@@ -33,48 +33,48 @@ public:
 	RVNGTextDrawingGenerator();
 	~RVNGTextDrawingGenerator();
 
-	void startDocument(const RVNGPropertyList & /*propList*/) {}
-	void endDocument() {}
-	void setDocumentMetaData(const RVNGPropertyList & /*propList*/) {}
-	void startPage(const RVNGPropertyList &) {}
-	void endPage() {}
-	void startLayer(const RVNGPropertyList &) {}
-	void endLayer() {}
-	void startEmbeddedGraphics(const RVNGPropertyList &) {}
-	void endEmbeddedGraphics() {}
+	void startDocument(const RVNGPropertyList &propList);
+	void endDocument();
+	void setDocumentMetaData(const RVNGPropertyList &propList);
+	void startPage(const RVNGPropertyList &);
+	void endPage();
+	void startLayer(const RVNGPropertyList &);
+	void endLayer();
+	void startEmbeddedGraphics(const RVNGPropertyList &);
+	void endEmbeddedGraphics();
 
-	void setStyle(const RVNGPropertyList &, const RVNGPropertyListVector &) {}
+	void setStyle(const RVNGPropertyList &, const RVNGPropertyListVector &);
 
-	void drawRectangle(const RVNGPropertyList &) {}
-	void drawEllipse(const RVNGPropertyList &) {}
-	void drawPolyline(const RVNGPropertyListVector &) {}
-	void drawPolygon(const RVNGPropertyListVector &) {}
-	void drawPath(const RVNGPropertyListVector &) {}
-	void drawGraphicObject(const RVNGPropertyList &, const RVNGBinaryData &) {}
-	void startTextObject(const RVNGPropertyList &, const RVNGPropertyListVector &) {}
-	void endTextObject() {}
+	void drawRectangle(const RVNGPropertyList &);
+	void drawEllipse(const RVNGPropertyList &);
+	void drawPolyline(const RVNGPropertyListVector &);
+	void drawPolygon(const RVNGPropertyListVector &);
+	void drawPath(const RVNGPropertyListVector &);
+	void drawGraphicObject(const RVNGPropertyList &, const RVNGBinaryData &);
+	void startTextObject(const RVNGPropertyList &, const RVNGPropertyListVector &);
+	void endTextObject();
 
 
-	void openOrderedListLevel(const RVNGPropertyList & /*propList*/) {}
-	void closeOrderedListLevel() {}
+	void openOrderedListLevel(const RVNGPropertyList &propList);
+	void closeOrderedListLevel();
 
-	void openUnorderedListLevel(const RVNGPropertyList & /*propList*/) {}
-	void closeUnorderedListLevel() {}
+	void openUnorderedListLevel(const RVNGPropertyList &propList);
+	void closeUnorderedListLevel();
 
-	void openListElement(const RVNGPropertyList & /*propList*/, const RVNGPropertyListVector & /* tabStops */) {}
-	void closeListElement() {}
+	void openListElement(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops);
+	void closeListElement();
 
-	void openParagraph(const RVNGPropertyList & /*propList*/, const RVNGPropertyListVector & /* tabStops */) {}
+	void openParagraph(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops);
 	void closeParagraph();
 
-	void openSpan(const RVNGPropertyList & /* propList */) {}
-	void closeSpan() {}
+	void openSpan(const RVNGPropertyList &propList);
+	void closeSpan();
 
-	void insertTab() {}
-	void insertSpace() {}
+	void insertTab();
+	void insertSpace();
 	void insertText(const RVNGString &text);
-	void insertLineBreak() {}
-	void insertField(const RVNGString & /* type */, const RVNGPropertyList & /*propList*/) {}
+	void insertLineBreak();
+	void insertField(const RVNGString &type, const RVNGPropertyList &propList);
 
 private:
 	RVNGTextDrawingGeneratorImpl *m_impl;
