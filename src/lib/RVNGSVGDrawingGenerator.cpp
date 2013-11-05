@@ -20,6 +20,8 @@
 
 #include <sstream>
 #include <string>
+#include <stdio.h>
+#include <iostream>
 
 #include <librevenge-generators/librevenge-generators.h>
 

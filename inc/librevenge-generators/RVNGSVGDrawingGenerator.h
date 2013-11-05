@@ -21,8 +21,6 @@
 #ifndef RVNGSVGDRAWINGGENERATOR_H
 #define RVNGSVGDRAWINGGENERATOR_H
 
-#include <stdio.h>
-#include <iostream>
 #include <librevenge/librevenge.h>
 
 namespace librevenge
