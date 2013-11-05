@@ -70,9 +70,13 @@ class RVNGStringImpl
 {
 public:
 	RVNGStringImpl() : m_buf() {}
+	bool empty() const
+	{
+		return m_buf.empty();
+	}
 	int len() const
 	{
-		if (m_buf.empty()) return 0;
+		if (empty()) return 0;
 		return librvng_utf8_strlen(m_buf.c_str(), m_buf.c_str()+m_buf.length());
 	}
 	std::string m_buf;
@@ -205,6 +209,11 @@ void RVNGString::clear()
 int RVNGString::len() const
 {
 	return m_stringImpl->len();
+}
+
+bool RVNGString::empty() const
+{
+	return m_stringImpl->empty();
 }
 
 RVNGString &RVNGString::operator=(const RVNGString &stringBuf)

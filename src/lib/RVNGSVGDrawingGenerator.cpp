@@ -544,7 +544,7 @@ RVNGSVGDrawingGenerator::~RVNGSVGDrawingGenerator()
 
 void RVNGSVGDrawingGenerator::startPage(const RVNGPropertyList &propList)
 {
-#if 1
+#if 0
 	m_pImpl->m_outputSink << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n";
 	m_pImpl->m_outputSink << "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\"";
 	m_pImpl->m_outputSink << " \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n";

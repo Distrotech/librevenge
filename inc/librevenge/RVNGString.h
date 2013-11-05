@@ -36,6 +36,7 @@ public:
 
 	const char *cstr() const;
 	int len() const;
+	bool empty() const;
 
 	void sprintf(const char *format, ...);
 	void append(const RVNGString &s);
