@@ -15,10 +15,14 @@
 #ifndef LIBREVENGE_GENERATORS_H
 #define LIBREVENGE_GENERATORS_H
 
-#include "RVNGDrawingGeneratorFactory.h"
-#include "RVNGPresentationGeneratorFactory.h"
-#include "RVNGSpreadsheetGeneratorFactory.h"
-#include "RVNGTextGeneratorFactory.h"
+#include "RVNGHTMLTextGenerator.h"
+#include "RVNGRawDrawingGenerator.h"
+#include "RVNGRawPresentationGenerator.h"
+#include "RVNGRawTextGenerator.h"
+#include "RVNGSVGDrawingGenerator.h"
+#include "RVNGSVGPresentationGenerator.h"
+#include "RVNGTextPresentationGenerator.h"
+#include "RVNGTextTextGenerator.h"
 
 #endif // LIBREVENGE_GENERATORS_H
 

@@ -20,7 +20,7 @@
 
 #include <stdio.h>
 #include <stdarg.h>
-#include "RVNGRawTextGenerator.h"
+#include <librevenge-generators/librevenge-generators.h>
 
 #ifdef _U
 #undef _U

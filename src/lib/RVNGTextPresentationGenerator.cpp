@@ -14,7 +14,7 @@
 
 #include <stdio.h>
 
-#include "RVNGTextPresentationGenerator.h"
+#include <librevenge-generators/librevenge-generators.h>
 
 namespace librevenge
 {

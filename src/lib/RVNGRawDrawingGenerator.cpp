@@ -22,7 +22,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "RVNGRawDrawingGenerator.h"
+#include <librevenge-generators/librevenge-generators.h>
 
 namespace librevenge
 {

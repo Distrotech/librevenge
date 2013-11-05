@@ -51,35 +51,27 @@ librevenge_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_SOURCES = \
 librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_includedir = $(includedir)/librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@/librevenge-generators
 librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_include_HEADERS = \
 	$(top_srcdir)/inc/librevenge-generators/librevenge-generators.h \
-	$(top_srcdir)/inc/librevenge-generators/RVNGDrawingGeneratorFactory.h \
-	$(top_srcdir)/inc/librevenge-generators/RVNGPresentationGeneratorFactory.h \
-	$(top_srcdir)/inc/librevenge-generators/RVNGSpreadsheetGeneratorFactory.h \
-	$(top_srcdir)/inc/librevenge-generators/RVNGTextGeneratorFactory.h
+	$(top_srcdir)/inc/librevenge-generators/RVNGHTMLTextGenerator.h \
+	$(top_srcdir)/inc/librevenge-generators/RVNGRawDrawingGenerator.h \
+	$(top_srcdir)/inc/librevenge-generators/RVNGRawPresentationGenerator.h \
+	$(top_srcdir)/inc/librevenge-generators/RVNGRawTextGenerator.h \
+	$(top_srcdir)/inc/librevenge-generators/RVNGSVGDrawingGenerator.h \
+	$(top_srcdir)/inc/librevenge-generators/RVNGSVGPresentationGenerator.h \
+	$(top_srcdir)/inc/librevenge-generators/RVNGTextPresentationGenerator.h \
+	$(top_srcdir)/inc/librevenge-generators/RVNGTextTextGenerator.h
 
 librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_LIBADD  = @LIBREVENGE_GENERATORS_WIN32_RESOURCE@
 librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_DEPENDENCIES = @LIBREVENGE_GENERATORS_WIN32_RESOURCE@
 librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic $(no_undefined)
 librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_SOURCES = \
-	RVNGDrawingGeneratorFactory.cpp \
-	RVNGPresentationGeneratorFactory.cpp \
-	RVNGSpreadsheetGeneratorFactory.cpp \
-	RVNGTextGeneratorFactory.cpp \
 	RVNGHTMLTextGenerator.cpp \
-	RVNGHTMLTextGenerator.h \
 	RVNGRawDrawingGenerator.cpp \
-	RVNGRawDrawingGenerator.h \
 	RVNGRawPresentationGenerator.cpp \
-	RVNGRawPresentationGenerator.h \
 	RVNGRawTextGenerator.cpp \
-	RVNGRawTextGenerator.h \
 	RVNGSVGDrawingGenerator.cpp \
-	RVNGSVGDrawingGenerator.h \
 	RVNGSVGPresentationGenerator.cpp \
-	RVNGSVGPresentationGenerator.h \
 	RVNGTextPresentationGenerator.cpp \
-	RVNGTextPresentationGenerator.h \
-	RVNGTextTextGenerator.cpp \
-	RVNGTextTextGenerator.h
+	RVNGTextTextGenerator.cpp
 
 librevenge_stream_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_includedir = $(includedir)/librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@/librevenge-stream
 librevenge_stream_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_include_HEADERS = \

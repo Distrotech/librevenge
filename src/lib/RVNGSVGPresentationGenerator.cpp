@@ -16,7 +16,7 @@
 #include <sstream>
 #include <string>
 
-#include "RVNGSVGPresentationGenerator.h"
+#include <librevenge-generators/librevenge-generators.h>
 
 namespace librevenge
 {

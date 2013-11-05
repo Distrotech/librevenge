@@ -22,7 +22,7 @@
 
 #include <stdio.h>
 #include <iostream>
-#include "RVNGHTMLTextGenerator.h"
+#include <librevenge-generators/librevenge-generators.h>
 
 // use the BELL code to represent a TAB for now
 #define UCS_TAB 0x0009

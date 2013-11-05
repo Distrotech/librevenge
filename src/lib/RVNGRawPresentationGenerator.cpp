@@ -14,7 +14,7 @@
 
 #include <stdio.h>
 
-#include "RVNGRawPresentationGenerator.h"
+#include <librevenge-generators/librevenge-generators.h>
 
 namespace librevenge
 {

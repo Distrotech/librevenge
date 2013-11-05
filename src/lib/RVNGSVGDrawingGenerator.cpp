@@ -21,7 +21,7 @@
 #include <sstream>
 #include <string>
 
-#include "RVNGSVGDrawingGenerator.h"
+#include <librevenge-generators/librevenge-generators.h>
 
 namespace librevenge
 {

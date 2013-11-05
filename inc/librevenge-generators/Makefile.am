@@ -1,6 +1,10 @@
 EXTRA_DIST = \
 	librevenge-generators.h \
-	RVNGDrawingGeneratorFactory.h \
-	RVNGPresentationGeneratorFactory.h \
-	RVNGSpreadsheetGeneratorFactory.h \
-	RVNGTextGeneratorFactory.h
+	RVNGHTMLTextGenerator.h \
+	RVNGRawDrawingGenerator.h \
+	RVNGRawPresentationGenerator.h \
+	RVNGRawTextGenerator.h \
+	RVNGSVGDrawingGenerator.h \
+	RVNGSVGPresentationGenerator.h \
+	RVNGTextPresentationGenerator.h \
+	RVNGTextTextGenerator.h
