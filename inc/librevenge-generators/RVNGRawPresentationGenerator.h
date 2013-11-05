@@ -30,7 +30,7 @@ class RVNGRawPresentationGenerator : public RVNGPresentationInterface
 	RVNGRawPresentationGenerator &operator=(const RVNGRawPresentationGenerator &other);
 
 public:
-	RVNGRawPresentationGenerator();
+	explicit RVNGRawPresentationGenerator(bool printCallgraphScore = false);
 	~RVNGRawPresentationGenerator();
 
 	virtual void startDocument(const RVNGPropertyList &propList);
