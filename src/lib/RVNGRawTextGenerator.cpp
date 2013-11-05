@@ -51,8 +51,6 @@
 		m_impl->m_callStack.pop(); \
 	}
 
-using namespace std;
-
 namespace librevenge
 {
 
@@ -64,7 +62,7 @@ struct RVNGRawTextGeneratorImpl
 	int m_callbackMisses;
 	bool m_atLeastOneCallback;
 	bool m_printCallgraphScore;
-	stack<RVNGRawTextGeneratorCallback> m_callStack;
+	std::stack<RVNGRawTextGeneratorCallback> m_callStack;
 
 	void indentUp()
 	{
