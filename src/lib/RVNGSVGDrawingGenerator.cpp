@@ -544,6 +544,10 @@ RVNGSVGDrawingGenerator::~RVNGSVGDrawingGenerator()
 	delete m_pImpl;
 }
 
+void RVNGSVGDrawingGenerator::startDocument(const RVNGPropertyList & /*propList*/) {}
+void RVNGSVGDrawingGenerator::endDocument() {}
+void RVNGSVGDrawingGenerator::setDocumentMetaData(const RVNGPropertyList & /*propList*/) {}
+
 void RVNGSVGDrawingGenerator::startPage(const RVNGPropertyList &propList)
 {
 #if 0
@@ -585,6 +589,9 @@ void RVNGSVGDrawingGenerator::endLayer()
 {
 	m_pImpl->m_outputSink << "</" << m_pImpl->getNamespaceAndDelim() << "g>\n";
 }
+
+void RVNGSVGDrawingGenerator::startEmbeddedGraphics(const RVNGPropertyList & /*propList*/) {}
+void RVNGSVGDrawingGenerator::endEmbeddedGraphics() {}
 
 void RVNGSVGDrawingGenerator::setStyle(const RVNGPropertyList &propList, const RVNGPropertyListVector &gradient)
 {
@@ -795,6 +802,18 @@ void RVNGSVGDrawingGenerator::endTextObject()
 	m_pImpl->m_outputSink << "</" << m_pImpl->getNamespaceAndDelim() << "text>\n";
 }
 
+void RVNGSVGDrawingGenerator::openOrderedListLevel(const RVNGPropertyList & /*propList*/) {}
+void RVNGSVGDrawingGenerator::closeOrderedListLevel() {}
+
+void RVNGSVGDrawingGenerator::openUnorderedListLevel(const RVNGPropertyList & /*propList*/) {}
+void RVNGSVGDrawingGenerator::closeUnorderedListLevel() {}
+
+void RVNGSVGDrawingGenerator::openListElement(const RVNGPropertyList & /*propList*/, const RVNGPropertyListVector & /* tabStops */) {}
+void RVNGSVGDrawingGenerator::closeListElement() {}
+
+void RVNGSVGDrawingGenerator::openParagraph(const RVNGPropertyList & /*propList*/, const RVNGPropertyListVector & /* tabStops */) {}
+void RVNGSVGDrawingGenerator::closeParagraph() {}
+
 void RVNGSVGDrawingGenerator::openSpan(const RVNGPropertyList &propList)
 {
 	m_pImpl->m_outputSink << "<" << m_pImpl->getNamespaceAndDelim() << "tspan ";
@@ -844,6 +863,8 @@ void RVNGSVGDrawingGenerator::insertLineBreak()
 {
 	m_pImpl->m_outputSink << "<tbreak/>";
 }
+
+void RVNGSVGDrawingGenerator::insertField(const RVNGString & /* type */, const RVNGPropertyList & /*propList*/) {}
 
 }
 

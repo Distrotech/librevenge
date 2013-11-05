@@ -34,15 +34,15 @@ public:
 	RVNGSVGDrawingGenerator(RVNGStringVector &vec, const RVNGString &nmspace);
 	~RVNGSVGDrawingGenerator();
 
-	void startDocument(const RVNGPropertyList & /*propList*/) {}
-	void endDocument() {}
-	void setDocumentMetaData(const RVNGPropertyList & /*propList*/) {}
+	void startDocument(const RVNGPropertyList &propList);
+	void endDocument();
+	void setDocumentMetaData(const RVNGPropertyList &propList);
 	void startPage(const RVNGPropertyList &propList);
 	void endPage();
-	void startLayer(const RVNGPropertyList & /*propList*/);
+	void startLayer(const RVNGPropertyList &propList);
 	void endLayer();
-	void startEmbeddedGraphics(const RVNGPropertyList & /*propList*/) {}
-	void endEmbeddedGraphics() {}
+	void startEmbeddedGraphics(const RVNGPropertyList &propList);
+	void endEmbeddedGraphics();
 
 	void setStyle(const RVNGPropertyList &propList, const RVNGPropertyListVector &gradient);
 
@@ -55,17 +55,17 @@ public:
 	void startTextObject(const RVNGPropertyList &propList, const RVNGPropertyListVector &path);
 	void endTextObject();
 
-	void openOrderedListLevel(const RVNGPropertyList & /*propList*/) {}
-	void closeOrderedListLevel() {}
+	void openOrderedListLevel(const RVNGPropertyList &propList);
+	void closeOrderedListLevel();
 
-	void openUnorderedListLevel(const RVNGPropertyList & /*propList*/) {}
-	void closeUnorderedListLevel() {}
+	void openUnorderedListLevel(const RVNGPropertyList &propList);
+	void closeUnorderedListLevel();
 
-	void openListElement(const RVNGPropertyList & /*propList*/, const RVNGPropertyListVector & /* tabStops */) {}
-	void closeListElement() {}
+	void openListElement(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops);
+	void closeListElement();
 
-	void openParagraph(const RVNGPropertyList & /*propList*/, const RVNGPropertyListVector & /* tabStops */) {}
-	void closeParagraph() {}
+	void openParagraph(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops);
+	void closeParagraph();
 
 	void openSpan(const RVNGPropertyList &propList);
 	void closeSpan();
@@ -74,7 +74,7 @@ public:
 	void insertSpace();
 	void insertText(const RVNGString &text);
 	void insertLineBreak();
-	void insertField(const RVNGString & /* type */, const RVNGPropertyList & /*propList*/) {}
+	void insertField(const RVNGString &type, const RVNGPropertyList &propList);
 
 private:
 	RVNGSVGDrawingGenerator(const RVNGSVGDrawingGenerator &);
