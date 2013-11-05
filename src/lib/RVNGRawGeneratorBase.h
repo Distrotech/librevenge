@@ -23,22 +23,24 @@
 
 #include <stack>
 
-#ifdef _U
-#undef _U
+#ifdef RVNG_CALLGRAPH_ENTER
+#warning who defined RVNG_CALLGRAPH_ENTER?
+#undef RVNG_CALLGRAPH_ENTER
 #endif
 
-#define _U(M, L) \
+#define RVNG_CALLGRAPH_ENTER(M, L) \
 	m_impl->m_atLeastOneCallback = true; \
 	if (!m_impl->m_printCallgraphScore) \
 			m_impl->iuprintf M; \
 	else \
 		m_impl->m_callStack.push(L);
 
-#ifdef _D
-#undef _D
+#ifdef RVNG_CALLGRAPH_LEAVE
+#warning who defined RVNG_CALLGRAPH_LEAVE?
+#undef RVNG_CALLGRAPH_LEAVE
 #endif
 
-#define _D(M, L) \
+#define RVNG_CALLGRAPH_LEAVE(M, L) \
 	m_impl->m_atLeastOneCallback = true; \
 	if (!m_impl->m_printCallgraphScore) \
 			m_impl->idprintf M; \

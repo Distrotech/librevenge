@@ -133,12 +133,12 @@ void RVNGRawTextGenerator::setDocumentMetaData(const RVNGPropertyList &propList)
 
 void RVNGRawTextGenerator::startDocument()
 {
-	_U(("startDocument()\n"), LC_START_DOCUMENT);
+	RVNG_CALLGRAPH_ENTER(("startDocument()\n"), LC_START_DOCUMENT);
 }
 
 void RVNGRawTextGenerator::endDocument()
 {
-	_D(("endDocument()\n"), LC_START_DOCUMENT);
+	RVNG_CALLGRAPH_LEAVE(("endDocument()\n"), LC_START_DOCUMENT);
 }
 
 void RVNGRawTextGenerator::definePageStyle(const RVNGPropertyList &propList)
@@ -148,40 +148,40 @@ void RVNGRawTextGenerator::definePageStyle(const RVNGPropertyList &propList)
 
 void RVNGRawTextGenerator::openPageSpan(const RVNGPropertyList &propList)
 {
-	_U(("openPageSpan(%s)\n", getPropString(propList).cstr()),
-	   LC_OPEN_PAGE_SPAN);
+	RVNG_CALLGRAPH_ENTER(("openPageSpan(%s)\n", getPropString(propList).cstr()),
+	                     LC_OPEN_PAGE_SPAN);
 }
 
 void RVNGRawTextGenerator::closePageSpan()
 {
-	_D(("closePageSpan()\n"),
-	   LC_OPEN_PAGE_SPAN);
+	RVNG_CALLGRAPH_LEAVE(("closePageSpan()\n"),
+	                     LC_OPEN_PAGE_SPAN);
 }
 
 void RVNGRawTextGenerator::openHeader(const RVNGPropertyList &propList)
 {
-	_U(("openHeader(%s)\n",
-	    getPropString(propList).cstr()),
-	   LC_OPEN_HEADER_FOOTER);
+	RVNG_CALLGRAPH_ENTER(("openHeader(%s)\n",
+	                      getPropString(propList).cstr()),
+	                     LC_OPEN_HEADER_FOOTER);
 }
 
 void RVNGRawTextGenerator::closeHeader()
 {
-	_D(("closeHeader()\n"),
-	   LC_OPEN_HEADER_FOOTER);
+	RVNG_CALLGRAPH_LEAVE(("closeHeader()\n"),
+	                     LC_OPEN_HEADER_FOOTER);
 }
 
 void RVNGRawTextGenerator::openFooter(const RVNGPropertyList &propList)
 {
-	_U(("openFooter(%s)\n",
-	    getPropString(propList).cstr()),
-	   LC_OPEN_HEADER_FOOTER);
+	RVNG_CALLGRAPH_ENTER(("openFooter(%s)\n",
+	                      getPropString(propList).cstr()),
+	                     LC_OPEN_HEADER_FOOTER);
 }
 
 void RVNGRawTextGenerator::closeFooter()
 {
-	_D(("closeFooter()\n"),
-	   LC_OPEN_HEADER_FOOTER);
+	RVNG_CALLGRAPH_LEAVE(("closeFooter()\n"),
+	                     LC_OPEN_HEADER_FOOTER);
 }
 
 void RVNGRawTextGenerator::defineParagraphStyle(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops)
@@ -191,13 +191,13 @@ void RVNGRawTextGenerator::defineParagraphStyle(const RVNGPropertyList &propList
 
 void RVNGRawTextGenerator::openParagraph(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops)
 {
-	_U(("openParagraph(%s, tab-stops: %s)\n", getPropString(propList).cstr(), getPropString(tabStops).cstr()),
-	   LC_OPEN_PARAGRAPH);
+	RVNG_CALLGRAPH_ENTER(("openParagraph(%s, tab-stops: %s)\n", getPropString(propList).cstr(), getPropString(tabStops).cstr()),
+	                     LC_OPEN_PARAGRAPH);
 }
 
 void RVNGRawTextGenerator::closeParagraph()
 {
-	_D(("closeParagraph()\n"), LC_OPEN_PARAGRAPH);
+	RVNG_CALLGRAPH_LEAVE(("closeParagraph()\n"), LC_OPEN_PARAGRAPH);
 }
 
 void RVNGRawTextGenerator::defineCharacterStyle(const RVNGPropertyList &propList)
@@ -207,12 +207,12 @@ void RVNGRawTextGenerator::defineCharacterStyle(const RVNGPropertyList &propList
 
 void RVNGRawTextGenerator::openSpan(const RVNGPropertyList &propList)
 {
-	_U(("openSpan(%s)\n", getPropString(propList).cstr()), LC_OPEN_SPAN);
+	RVNG_CALLGRAPH_ENTER(("openSpan(%s)\n", getPropString(propList).cstr()), LC_OPEN_SPAN);
 }
 
 void RVNGRawTextGenerator::closeSpan()
 {
-	_D(("closeSpan()\n"), LC_OPEN_SPAN);
+	RVNG_CALLGRAPH_LEAVE(("closeSpan()\n"), LC_OPEN_SPAN);
 }
 
 void RVNGRawTextGenerator::defineSectionStyle(const RVNGPropertyList &propList, const RVNGPropertyListVector &columns)
@@ -222,12 +222,12 @@ void RVNGRawTextGenerator::defineSectionStyle(const RVNGPropertyList &propList, 
 
 void RVNGRawTextGenerator::openSection(const RVNGPropertyList &propList, const RVNGPropertyListVector &columns)
 {
-	_U(("openSection(%s, columns: %s)\n", getPropString(propList).cstr(), getPropString(columns).cstr()), LC_OPEN_SECTION);
+	RVNG_CALLGRAPH_ENTER(("openSection(%s, columns: %s)\n", getPropString(propList).cstr(), getPropString(columns).cstr()), LC_OPEN_SECTION);
 }
 
 void RVNGRawTextGenerator::closeSection()
 {
-	_D(("closeSection()\n"), LC_OPEN_SECTION);
+	RVNG_CALLGRAPH_LEAVE(("closeSection()\n"), LC_OPEN_SECTION);
 }
 
 void RVNGRawTextGenerator::insertTab()
@@ -267,107 +267,107 @@ void RVNGRawTextGenerator::defineUnorderedListLevel(const RVNGPropertyList &prop
 
 void RVNGRawTextGenerator::openOrderedListLevel(const RVNGPropertyList &propList)
 {
-	_U(("openOrderedListLevel(%s)\n", getPropString(propList).cstr()),
-	   LC_OPEN_ORDERED_LIST_LEVEL);
+	RVNG_CALLGRAPH_ENTER(("openOrderedListLevel(%s)\n", getPropString(propList).cstr()),
+	                     LC_OPEN_ORDERED_LIST_LEVEL);
 }
 
 void RVNGRawTextGenerator::openUnorderedListLevel(const RVNGPropertyList &propList)
 {
-	_U(("openUnorderedListLevel(%s)\n", getPropString(propList).cstr()),
-	   LC_OPEN_UNORDERED_LIST_LEVEL);
+	RVNG_CALLGRAPH_ENTER(("openUnorderedListLevel(%s)\n", getPropString(propList).cstr()),
+	                     LC_OPEN_UNORDERED_LIST_LEVEL);
 }
 
 void RVNGRawTextGenerator::closeOrderedListLevel()
 {
-	_D(("closeOrderedListLevel()\n"),
-	   LC_OPEN_ORDERED_LIST_LEVEL);
+	RVNG_CALLGRAPH_LEAVE(("closeOrderedListLevel()\n"),
+	                     LC_OPEN_ORDERED_LIST_LEVEL);
 }
 
 void RVNGRawTextGenerator::closeUnorderedListLevel()
 {
-	_D(("closeUnorderedListLevel()\n"), LC_OPEN_UNORDERED_LIST_LEVEL);
+	RVNG_CALLGRAPH_LEAVE(("closeUnorderedListLevel()\n"), LC_OPEN_UNORDERED_LIST_LEVEL);
 }
 
 void RVNGRawTextGenerator::openListElement(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops)
 {
-	_U(("openListElement(%s, tab-stops: %s)\n", getPropString(propList).cstr(), getPropString(tabStops).cstr()),
-	   LC_OPEN_LIST_ELEMENT);
+	RVNG_CALLGRAPH_ENTER(("openListElement(%s, tab-stops: %s)\n", getPropString(propList).cstr(), getPropString(tabStops).cstr()),
+	                     LC_OPEN_LIST_ELEMENT);
 }
 
 void RVNGRawTextGenerator::closeListElement()
 {
-	_D(("closeListElement()\n"), LC_OPEN_LIST_ELEMENT);
+	RVNG_CALLGRAPH_LEAVE(("closeListElement()\n"), LC_OPEN_LIST_ELEMENT);
 }
 
 void RVNGRawTextGenerator::openFootnote(const RVNGPropertyList &propList)
 {
-	_U(("openFootnote(%s)\n", getPropString(propList).cstr()),
-	   LC_OPEN_FOOTNOTE);
+	RVNG_CALLGRAPH_ENTER(("openFootnote(%s)\n", getPropString(propList).cstr()),
+	                     LC_OPEN_FOOTNOTE);
 }
 
 void RVNGRawTextGenerator::closeFootnote()
 {
-	_D(("closeFootnote()\n"), LC_OPEN_FOOTNOTE);
+	RVNG_CALLGRAPH_LEAVE(("closeFootnote()\n"), LC_OPEN_FOOTNOTE);
 }
 
 void RVNGRawTextGenerator::openEndnote(const RVNGPropertyList &propList)
 {
-	_U(("openEndnote(number: %s)\n", getPropString(propList).cstr()),
-	   LC_OPEN_ENDNOTE);
+	RVNG_CALLGRAPH_ENTER(("openEndnote(number: %s)\n", getPropString(propList).cstr()),
+	                     LC_OPEN_ENDNOTE);
 }
 
 void RVNGRawTextGenerator::closeEndnote()
 {
-	_D(("closeEndnote()\n"), LC_OPEN_ENDNOTE);
+	RVNG_CALLGRAPH_LEAVE(("closeEndnote()\n"), LC_OPEN_ENDNOTE);
 }
 
 void RVNGRawTextGenerator::openComment(const RVNGPropertyList &propList)
 {
-	_U(("openComment(%s)\n", getPropString(propList).cstr()),
-	   LC_OPEN_COMMENT);
+	RVNG_CALLGRAPH_ENTER(("openComment(%s)\n", getPropString(propList).cstr()),
+	                     LC_OPEN_COMMENT);
 }
 
 void RVNGRawTextGenerator::closeComment()
 {
-	_D(("closeComment()\n"), LC_OPEN_COMMENT);
+	RVNG_CALLGRAPH_LEAVE(("closeComment()\n"), LC_OPEN_COMMENT);
 }
 
 void RVNGRawTextGenerator::openTextBox(const RVNGPropertyList &propList)
 {
-	_U(("openTextBox(%s)\n", getPropString(propList).cstr()),
-	   LC_OPEN_TEXT_BOX);
+	RVNG_CALLGRAPH_ENTER(("openTextBox(%s)\n", getPropString(propList).cstr()),
+	                     LC_OPEN_TEXT_BOX);
 }
 
 void RVNGRawTextGenerator::closeTextBox()
 {
-	_D(("closeTextBox()\n"), LC_OPEN_TEXT_BOX);
+	RVNG_CALLGRAPH_LEAVE(("closeTextBox()\n"), LC_OPEN_TEXT_BOX);
 }
 
 void RVNGRawTextGenerator::openTable(const RVNGPropertyList &propList, const RVNGPropertyListVector &columns)
 {
-	_U(("openTable(%s, columns: %s)\n", getPropString(propList).cstr(), getPropString(columns).cstr()), LC_OPEN_TABLE);
+	RVNG_CALLGRAPH_ENTER(("openTable(%s, columns: %s)\n", getPropString(propList).cstr(), getPropString(columns).cstr()), LC_OPEN_TABLE);
 }
 
 void RVNGRawTextGenerator::openTableRow(const RVNGPropertyList &propList)
 {
-	_U(("openTableRow(%s)\n", getPropString(propList).cstr()),
-	   LC_OPEN_TABLE_ROW);
+	RVNG_CALLGRAPH_ENTER(("openTableRow(%s)\n", getPropString(propList).cstr()),
+	                     LC_OPEN_TABLE_ROW);
 }
 
 void RVNGRawTextGenerator::closeTableRow()
 {
-	_D(("closeTableRow()\n"), LC_OPEN_TABLE_ROW);
+	RVNG_CALLGRAPH_LEAVE(("closeTableRow()\n"), LC_OPEN_TABLE_ROW);
 }
 
 void RVNGRawTextGenerator::openTableCell(const RVNGPropertyList &propList)
 {
-	_U(("openTableCell(%s)\n", getPropString(propList).cstr()),
-	   LC_OPEN_TABLE_CELL);
+	RVNG_CALLGRAPH_ENTER(("openTableCell(%s)\n", getPropString(propList).cstr()),
+	                     LC_OPEN_TABLE_CELL);
 }
 
 void RVNGRawTextGenerator::closeTableCell()
 {
-	_D(("closeTableCell()\n"), LC_OPEN_TABLE_CELL);
+	RVNG_CALLGRAPH_LEAVE(("closeTableCell()\n"), LC_OPEN_TABLE_CELL);
 }
 
 void RVNGRawTextGenerator::insertCoveredTableCell(const RVNGPropertyList &propList)
@@ -377,18 +377,18 @@ void RVNGRawTextGenerator::insertCoveredTableCell(const RVNGPropertyList &propLi
 
 void RVNGRawTextGenerator::closeTable()
 {
-	_D(("closeTable()\n"), LC_OPEN_TABLE);
+	RVNG_CALLGRAPH_LEAVE(("closeTable()\n"), LC_OPEN_TABLE);
 }
 
 void RVNGRawTextGenerator::openFrame(const RVNGPropertyList &propList)
 {
-	_U(("openFrame(%s)\n", getPropString(propList).cstr()),
-	   LC_OPEN_FRAME);
+	RVNG_CALLGRAPH_ENTER(("openFrame(%s)\n", getPropString(propList).cstr()),
+	                     LC_OPEN_FRAME);
 }
 
 void RVNGRawTextGenerator::closeFrame()
 {
-	_D(("closeFrame()\n"), LC_OPEN_FRAME);
+	RVNG_CALLGRAPH_LEAVE(("closeFrame()\n"), LC_OPEN_FRAME);
 }
 
 void RVNGRawTextGenerator::insertBinaryObject(const RVNGPropertyList &propList, const RVNGBinaryData & /* data */)
