@@ -21,11 +21,8 @@
 #ifndef RVNGRAWTEXTGENERATOR_H
 #define RVNGRAWTEXTGENERATOR_H
 
-#include <stack>
 #include <librevenge/librevenge.h>
 #include <librevenge-stream/librevenge-stream.h>
-
-using namespace std;
 
 namespace librevenge
 {
@@ -51,8 +48,14 @@ enum RVNGRawTextGeneratorCallback
     LC_OPEN_FRAME
 };
 
+struct RVNGRawTextGeneratorImpl;
+
 class RVNGRawTextGenerator : public RVNGTextInterface
 {
+	// disable copying
+	RVNGRawTextGenerator(const RVNGRawTextGenerator &other);
+	RVNGRawTextGenerator &operator=(const RVNGRawTextGenerator &other);
+
 public:
 	explicit RVNGRawTextGenerator(bool printCallgraphScore);
 	virtual ~RVNGRawTextGenerator();
@@ -121,25 +124,7 @@ public:
 	virtual void insertEquation(const RVNGPropertyList &propList, const RVNGString &data);
 
 private:
-	int m_indent;
-	int m_callbackMisses;
-	bool m_atLeastOneCallback;
-	bool m_printCallgraphScore;
-	stack<RVNGRawTextGeneratorCallback> m_callStack;
-
-	void __indentUp()
-	{
-		m_indent++;
-	}
-	void __indentDown()
-	{
-		if (m_indent > 0) m_indent--;
-	}
-
-	void __iprintf(const char *format, ...);
-	void __iuprintf(const char *format, ...);
-	void __idprintf(const char *format, ...);
-
+	RVNGRawTextGeneratorImpl *m_impl;
 };
 
 }
