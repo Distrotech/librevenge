@@ -12,12 +12,23 @@
  * applicable instead of those above.
  */
 
+#include <stdio.h>
+
 #include <librevenge-generators/librevenge-generators.h>
 
 namespace librevenge
 {
 
-RVNGTextDrawingGenerator::RVNGTextDrawingGenerator(): RVNGDrawingInterface()
+struct RVNGTextDrawingGeneratorImpl
+{
+};
+
+RVNGTextDrawingGenerator::RVNGTextDrawingGenerator()
+	: m_impl(0)
+{
+}
+
+RVNGTextDrawingGenerator::~RVNGTextDrawingGenerator()
 {
 }
 

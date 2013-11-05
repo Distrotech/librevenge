@@ -15,17 +15,23 @@
 #ifndef RVNGTEXTDRAWINGGENERATOR_H
 #define RVNGTEXTDRAWINGGENERATOR_H
 
-#include <stdio.h>
 #include <librevenge-stream/librevenge-stream.h>
 #include <librevenge/librevenge.h>
 
 namespace librevenge
 {
 
+struct RVNGTextDrawingGeneratorImpl;
+
 class RVNGTextDrawingGenerator : public RVNGDrawingInterface
 {
+	// disable copying
+	RVNGTextDrawingGenerator(const RVNGTextDrawingGenerator &other);
+	RVNGTextDrawingGenerator &operator=(const RVNGTextDrawingGenerator &other);
+
 public:
 	RVNGTextDrawingGenerator();
+	~RVNGTextDrawingGenerator();
 
 	void startDocument(const RVNGPropertyList & /*propList*/) {}
 	void endDocument() {}
@@ -70,6 +76,8 @@ public:
 	void insertLineBreak() {}
 	void insertField(const RVNGString & /* type */, const RVNGPropertyList & /*propList*/) {}
 
+private:
+	RVNGTextDrawingGeneratorImpl *m_impl;
 };
 
 }
