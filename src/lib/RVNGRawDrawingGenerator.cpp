@@ -57,6 +57,21 @@ namespace librevenge
 namespace
 {
 
+enum RVNGRawDrawingGeneratorCallback
+{
+    PC_START_GRAPHICS = 0,
+    PC_START_LAYER,
+    PC_START_EMBEDDED_GRAPHICS,
+    PC_START_TEXT_OBJECT,
+    PC_START_TEXT_LINE,
+    PC_START_TEXT_SPAN
+};
+
+}
+
+namespace
+{
+
 RVNGString getPropString(const RVNGPropertyList &propList)
 {
 	RVNGString propString;
