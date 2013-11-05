@@ -223,22 +223,28 @@ bool RVNGStringProperty::findDouble(double &res, RVNGUnit &unit) const
 	if (firstC!='-' && firstC!='.' && (firstC<'0' || firstC>'9'))
 		return false;
 
-	std::istringstream iss(m_str.cstr());
-	res = 0.0;
-	iss >> res;
-	if (iss.fail())
-		return false;
-	if (iss.eof() || iss.peek() == std::char_traits<char>::eof())
+	std::string content(m_str.cstr()), number(""), remain("");
+	// check if the val can be a double, first isolate the potential numbering part ...
+	for (size_t s=0; s<content.size(); ++s)
 	{
-		unit=RVNG_GENERIC;
-		return true;
+		char c=(char) content[s];
+		if (c=='-' || c=='.' || c=='e' || c=='E' || (c>='0' && c<='9'))
+		{
+			number+=c;
+			continue;
+		}
+		remain=content.substr(s);
+		break;
 	}
-	std::string remain;
-	iss >> remain;
-	if (iss.peek() != std::char_traits<char>::eof())
+	if (number.empty() || remain.size() > 2) return false;
+	std::istringstream iss(number);
+	iss >> res;
+	if (iss.fail() || iss.peek()!=std::char_traits<char>::eof())
 		return false;
-	if (remain=="pt")
-		unit=RVNG_PERCENT;
+	if (remain.empty())
+		unit=RVNG_GENERIC;
+	else if (remain=="pt")
+		unit=RVNG_POINT;
 	else if (remain=="in")
 		unit=RVNG_INCH;
 	else if (remain=="%")

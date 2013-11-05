@@ -1715,7 +1715,18 @@ bool librevenge::Storage::isStructured()
 
 std::vector<std::string> librevenge::Storage::getSubStreamNamesList()
 {
-	return m_io->getSubStreamNamesList();
+	std::vector<std::string> res=m_io->getSubStreamNamesList();
+
+	// time to do some cleaning ( remove ^A, ^B, ... )
+	for (size_t i = 0; i < res.size(); ++i)
+	{
+		std::string str=res[i], finalStr("");
+		for (size_t s=0; s<str.length(); ++s)
+			if (str[s]>=32)
+				finalStr+=str[s];
+		res[i]=finalStr;
+	}
+	return res;
 }
 
 // =========== Stream ==========
