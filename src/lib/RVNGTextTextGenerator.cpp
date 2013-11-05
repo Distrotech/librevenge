@@ -60,12 +60,34 @@ void RVNGTextTextGenerator::setDocumentMetaData(const RVNGPropertyList &propList
 	}
 }
 
+void RVNGTextTextGenerator::startDocument() {}
+void RVNGTextTextGenerator::endDocument() {}
+
+void RVNGTextTextGenerator::definePageStyle(const RVNGPropertyList &) {}
+void RVNGTextTextGenerator::openPageSpan(const RVNGPropertyList & /* propList */) {}
+void RVNGTextTextGenerator::closePageSpan() {}
+void RVNGTextTextGenerator::openHeader(const RVNGPropertyList & /* propList */) {}
+void RVNGTextTextGenerator::closeHeader() {}
+void RVNGTextTextGenerator::openFooter(const RVNGPropertyList & /* propList */) {}
+void RVNGTextTextGenerator::closeFooter() {}
+
+void RVNGTextTextGenerator::defineSectionStyle(const RVNGPropertyList &, const RVNGPropertyListVector &) {}
+void RVNGTextTextGenerator::openSection(const RVNGPropertyList & /* propList */, const RVNGPropertyListVector & /* columns */) {}
+void RVNGTextTextGenerator::closeSection() {}
+
+void RVNGTextTextGenerator::defineParagraphStyle(const RVNGPropertyList &, const RVNGPropertyListVector &) {}
+void RVNGTextTextGenerator::openParagraph(const RVNGPropertyList & /* propList */, const RVNGPropertyListVector & /* tabStops */) {}
+
 void RVNGTextTextGenerator::closeParagraph()
 {
 	if (m_impl->m_isInfo)
 		return;
 	printf("\n");
 }
+
+void RVNGTextTextGenerator::defineCharacterStyle(const RVNGPropertyList &) {}
+void RVNGTextTextGenerator::openSpan(const RVNGPropertyList & /* propList */) {}
+void RVNGTextTextGenerator::closeSpan() {}
 
 void RVNGTextTextGenerator::insertTab()
 {
@@ -94,6 +116,40 @@ void RVNGTextTextGenerator::insertLineBreak()
 		return;
 	printf("\n");
 }
+
+void RVNGTextTextGenerator::insertField(const RVNGString & /* type */, const RVNGPropertyList & /* propList */) {}
+
+void RVNGTextTextGenerator::defineOrderedListLevel(const RVNGPropertyList & /* propList */) {}
+void RVNGTextTextGenerator::defineUnorderedListLevel(const RVNGPropertyList & /* propList */) {}
+void RVNGTextTextGenerator::openOrderedListLevel(const RVNGPropertyList & /* propList */) {}
+void RVNGTextTextGenerator::openUnorderedListLevel(const RVNGPropertyList & /* propList */) {}
+void RVNGTextTextGenerator::closeOrderedListLevel() {}
+void RVNGTextTextGenerator::closeUnorderedListLevel() {}
+void RVNGTextTextGenerator::openListElement(const RVNGPropertyList & /* propList */, const RVNGPropertyListVector & /* tabStops */) {}
+void RVNGTextTextGenerator::closeListElement() {}
+
+void RVNGTextTextGenerator::openFootnote(const RVNGPropertyList & /* propList */) {}
+void RVNGTextTextGenerator::closeFootnote() {}
+void RVNGTextTextGenerator::openEndnote(const RVNGPropertyList & /* propList */) {}
+void RVNGTextTextGenerator::closeEndnote() {}
+void RVNGTextTextGenerator::openComment(const RVNGPropertyList & /* propList */) {}
+void RVNGTextTextGenerator::closeComment() {}
+void RVNGTextTextGenerator::openTextBox(const RVNGPropertyList & /* propList */) {}
+void RVNGTextTextGenerator::closeTextBox() {}
+
+void RVNGTextTextGenerator::openTable(const RVNGPropertyList & /* propList */, const RVNGPropertyListVector & /* columns */) {}
+void RVNGTextTextGenerator::openTableRow(const RVNGPropertyList & /* propList */) {}
+void RVNGTextTextGenerator::closeTableRow() {}
+void RVNGTextTextGenerator::openTableCell(const RVNGPropertyList & /* propList */) {}
+void RVNGTextTextGenerator::closeTableCell() {}
+void RVNGTextTextGenerator::insertCoveredTableCell(const RVNGPropertyList & /* propList */) {}
+void RVNGTextTextGenerator::closeTable() {}
+
+void RVNGTextTextGenerator::openFrame(const RVNGPropertyList & /* propList */) {}
+void RVNGTextTextGenerator::closeFrame() {}
+
+void RVNGTextTextGenerator::insertBinaryObject(const RVNGPropertyList & /* propList */, const RVNGBinaryData & /* object */) {}
+void RVNGTextTextGenerator::insertEquation(const RVNGPropertyList & /* propList */, const RVNGString & /* data */) {}
 
 }
 
