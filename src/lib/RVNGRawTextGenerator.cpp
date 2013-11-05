@@ -31,7 +31,7 @@
 #define _U(M, L) \
 	m_impl->m_atLeastOneCallback = true; \
 	if (!m_impl->m_printCallgraphScore) \
-			m_impl->__iuprintf M; \
+			m_impl->iuprintf M; \
 	else \
 		m_impl->m_callStack.push(L);
 
@@ -42,7 +42,7 @@
 #define _D(M, L) \
 	m_impl->m_atLeastOneCallback = true; \
 	if (!m_impl->m_printCallgraphScore) \
-			m_impl->__idprintf M; \
+			m_impl->idprintf M; \
 	else \
 	{ \
 		RVNGRawTextGeneratorCallback lc = m_impl->m_callStack.top(); \
@@ -66,18 +66,18 @@ struct RVNGRawTextGeneratorImpl
 	bool m_printCallgraphScore;
 	stack<RVNGRawTextGeneratorCallback> m_callStack;
 
-	void __indentUp()
+	void indentUp()
 	{
 		m_indent++;
 	}
-	void __indentDown()
+	void indentDown()
 	{
 		if (m_indent > 0) m_indent--;
 	}
 
-	void __iprintf(const char *format, ...);
-	void __iuprintf(const char *format, ...);
-	void __idprintf(const char *format, ...);
+	void iprintf(const char *format, ...);
+	void iuprintf(const char *format, ...);
+	void idprintf(const char *format, ...);
 };
 
 RVNGRawTextGeneratorImpl::RVNGRawTextGeneratorImpl(const bool printCallgraphScore) :
@@ -102,7 +102,7 @@ RVNGRawTextGenerator::~RVNGRawTextGenerator()
 	delete m_impl;
 }
 
-void RVNGRawTextGeneratorImpl::__iprintf(const char *format, ...)
+void RVNGRawTextGeneratorImpl::iprintf(const char *format, ...)
 {
 	m_atLeastOneCallback = true;
 	if (m_printCallgraphScore) return;
@@ -115,7 +115,7 @@ void RVNGRawTextGeneratorImpl::__iprintf(const char *format, ...)
 	va_end(args);
 }
 
-void RVNGRawTextGeneratorImpl::__iuprintf(const char *format, ...)
+void RVNGRawTextGeneratorImpl::iuprintf(const char *format, ...)
 {
 	m_atLeastOneCallback = true;
 	va_list args;
@@ -123,16 +123,16 @@ void RVNGRawTextGeneratorImpl::__iuprintf(const char *format, ...)
 	for (int i=0; i<m_indent; i++)
 		printf("  ");
 	vprintf(format, args);
-	__indentUp();
+	indentUp();
 	va_end(args);
 }
 
-void RVNGRawTextGeneratorImpl::__idprintf(const char *format, ...)
+void RVNGRawTextGeneratorImpl::idprintf(const char *format, ...)
 {
 	m_atLeastOneCallback = true;
 	va_list args;
 	va_start(args, format);
-	__indentDown();
+	indentDown();
 	for (int i=0; i<m_indent; i++)
 		printf("  ");
 	vprintf(format, args);
@@ -191,7 +191,7 @@ void RVNGRawTextGenerator::setDocumentMetaData(const RVNGPropertyList &propList)
 	if (m_impl->m_printCallgraphScore)
 		return;
 
-	m_impl->__iprintf("setDocumentMetaData(%s)\n", getPropString(propList).cstr());
+	m_impl->iprintf("setDocumentMetaData(%s)\n", getPropString(propList).cstr());
 }
 
 void RVNGRawTextGenerator::startDocument()
@@ -206,7 +206,7 @@ void RVNGRawTextGenerator::endDocument()
 
 void RVNGRawTextGenerator::definePageStyle(const RVNGPropertyList &propList)
 {
-	m_impl->__iprintf("definePageStyle(%s)\n", getPropString(propList).cstr());
+	m_impl->iprintf("definePageStyle(%s)\n", getPropString(propList).cstr());
 }
 
 void RVNGRawTextGenerator::openPageSpan(const RVNGPropertyList &propList)
@@ -249,7 +249,7 @@ void RVNGRawTextGenerator::closeFooter()
 
 void RVNGRawTextGenerator::defineParagraphStyle(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops)
 {
-	m_impl->__iprintf("defineParagraphStyle(%s, tab-stops: %s)\n", getPropString(propList).cstr(), getPropString(tabStops).cstr());
+	m_impl->iprintf("defineParagraphStyle(%s, tab-stops: %s)\n", getPropString(propList).cstr(), getPropString(tabStops).cstr());
 }
 
 void RVNGRawTextGenerator::openParagraph(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops)
@@ -265,7 +265,7 @@ void RVNGRawTextGenerator::closeParagraph()
 
 void RVNGRawTextGenerator::defineCharacterStyle(const RVNGPropertyList &propList)
 {
-	m_impl->__iprintf("defineCharacterStyle(%s)\n", getPropString(propList).cstr());
+	m_impl->iprintf("defineCharacterStyle(%s)\n", getPropString(propList).cstr());
 }
 
 void RVNGRawTextGenerator::openSpan(const RVNGPropertyList &propList)
@@ -280,7 +280,7 @@ void RVNGRawTextGenerator::closeSpan()
 
 void RVNGRawTextGenerator::defineSectionStyle(const RVNGPropertyList &propList, const RVNGPropertyListVector &columns)
 {
-	m_impl->__iprintf("defineSectionStyle(%s, columns: %s)\n", getPropString(propList).cstr(), getPropString(columns).cstr());
+	m_impl->iprintf("defineSectionStyle(%s, columns: %s)\n", getPropString(propList).cstr(), getPropString(columns).cstr());
 }
 
 void RVNGRawTextGenerator::openSection(const RVNGPropertyList &propList, const RVNGPropertyListVector &columns)
@@ -295,37 +295,37 @@ void RVNGRawTextGenerator::closeSection()
 
 void RVNGRawTextGenerator::insertTab()
 {
-	m_impl->__iprintf("insertTab()\n");
+	m_impl->iprintf("insertTab()\n");
 }
 
 void RVNGRawTextGenerator::insertSpace()
 {
-	m_impl->__iprintf("insertSpace()\n");
+	m_impl->iprintf("insertSpace()\n");
 }
 
 void RVNGRawTextGenerator::insertText(const RVNGString &text)
 {
-	m_impl->__iprintf("insertText(text: %s)\n", text.cstr());
+	m_impl->iprintf("insertText(text: %s)\n", text.cstr());
 }
 
 void RVNGRawTextGenerator::insertLineBreak()
 {
-	m_impl->__iprintf("insertLineBreak()\n");
+	m_impl->iprintf("insertLineBreak()\n");
 }
 
 void RVNGRawTextGenerator::insertField(const RVNGString &type, const RVNGPropertyList &propList)
 {
-	m_impl->__iprintf("insertField(type: %s, %s)\n", type.cstr(), getPropString(propList).cstr());
+	m_impl->iprintf("insertField(type: %s, %s)\n", type.cstr(), getPropString(propList).cstr());
 }
 
 void RVNGRawTextGenerator::defineOrderedListLevel(const RVNGPropertyList &propList)
 {
-	m_impl->__iprintf("defineOrderedListLevel(%s)\n", getPropString(propList).cstr());
+	m_impl->iprintf("defineOrderedListLevel(%s)\n", getPropString(propList).cstr());
 }
 
 void RVNGRawTextGenerator::defineUnorderedListLevel(const RVNGPropertyList &propList)
 {
-	m_impl->__iprintf("defineUnorderedListLevel(%s)\n", getPropString(propList).cstr());
+	m_impl->iprintf("defineUnorderedListLevel(%s)\n", getPropString(propList).cstr());
 }
 
 void RVNGRawTextGenerator::openOrderedListLevel(const RVNGPropertyList &propList)
@@ -435,7 +435,7 @@ void RVNGRawTextGenerator::closeTableCell()
 
 void RVNGRawTextGenerator::insertCoveredTableCell(const RVNGPropertyList &propList)
 {
-	m_impl->__iprintf("insertCoveredTableCell(%s)\n", getPropString(propList).cstr());
+	m_impl->iprintf("insertCoveredTableCell(%s)\n", getPropString(propList).cstr());
 }
 
 void RVNGRawTextGenerator::closeTable()
@@ -456,12 +456,12 @@ void RVNGRawTextGenerator::closeFrame()
 
 void RVNGRawTextGenerator::insertBinaryObject(const RVNGPropertyList &propList, const RVNGBinaryData & /* data */)
 {
-	m_impl->__iprintf("insertBinaryObject(%s)\n", getPropString(propList).cstr());
+	m_impl->iprintf("insertBinaryObject(%s)\n", getPropString(propList).cstr());
 }
 
 void RVNGRawTextGenerator::insertEquation(const RVNGPropertyList &propList, const RVNGString &data)
 {
-	m_impl->__iprintf("insertEquation(%s, text: %s)\n", getPropString(propList).cstr(), data.cstr());
+	m_impl->iprintf("insertEquation(%s, text: %s)\n", getPropString(propList).cstr(), data.cstr());
 }
 
 }
