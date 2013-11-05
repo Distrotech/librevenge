@@ -46,8 +46,8 @@ public:
 	virtual void startLayer(const RVNGPropertyList &propList);
 	virtual void endLayer();
 
-	virtual void startEmbeddedGraphics(const RVNGPropertyList & /*propList*/) {}
-	virtual void endEmbeddedGraphics() {}
+	virtual void startEmbeddedGraphics(const RVNGPropertyList &propList);
+	virtual void endEmbeddedGraphics();
 
 	virtual void startGroup(const RVNGPropertyList &propList);
 	virtual void endGroup();

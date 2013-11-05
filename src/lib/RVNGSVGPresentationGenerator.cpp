@@ -370,6 +370,14 @@ void RVNGSVGPresentationGenerator::endLayer()
 	m_impl->m_outputSink << "</svg:g>\n";
 }
 
+void RVNGSVGPresentationGenerator::startEmbeddedGraphics(const RVNGPropertyList & /*propList*/)
+{
+}
+
+void RVNGSVGPresentationGenerator::endEmbeddedGraphics()
+{
+}
+
 void RVNGSVGPresentationGenerator::startGroup(const RVNGPropertyList &/*propList*/)
 {
 	// TODO: handle svg:id
