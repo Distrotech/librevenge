@@ -32,7 +32,7 @@
 
 #define _U(M, L) \
 	if (!m_impl->m_printCallgraphScore) \
-			m_impl->__iuprintf M; \
+			m_impl->iuprintf M; \
 	else \
 		m_impl->m_callStack.push(L);
 
@@ -42,7 +42,7 @@
 
 #define _D(M, L) \
 	if (!m_impl->m_printCallgraphScore) \
-			m_impl->__idprintf M; \
+			m_impl->idprintf M; \
 	else \
 	{ \
 		RVNGRawDrawingGeneratorCallback lc = m_impl->m_callStack.top(); \
@@ -115,18 +115,18 @@ struct RVNGRawDrawingGeneratorImpl
 	bool m_printCallgraphScore;
 	std::stack<RVNGRawDrawingGeneratorCallback> m_callStack;
 
-	void __indentUp()
+	void indentUp()
 	{
 		m_indent++;
 	}
-	void __indentDown()
+	void indentDown()
 	{
 		if (m_indent > 0) m_indent--;
 	}
 
-	void __iprintf(const char *format, ...);
-	void __iuprintf(const char *format, ...);
-	void __idprintf(const char *format, ...);
+	void iprintf(const char *format, ...);
+	void iuprintf(const char *format, ...);
+	void idprintf(const char *format, ...);
 };
 
 RVNGRawDrawingGeneratorImpl::RVNGRawDrawingGeneratorImpl(const bool printCallgraphScore)
@@ -151,7 +151,7 @@ RVNGRawDrawingGenerator::~RVNGRawDrawingGenerator()
 	delete m_impl;
 }
 
-void RVNGRawDrawingGeneratorImpl::__iprintf(const char *format, ...)
+void RVNGRawDrawingGeneratorImpl::iprintf(const char *format, ...)
 {
 	if (m_printCallgraphScore) return;
 
@@ -163,22 +163,22 @@ void RVNGRawDrawingGeneratorImpl::__iprintf(const char *format, ...)
 	va_end(args);
 }
 
-void RVNGRawDrawingGeneratorImpl::__iuprintf(const char *format, ...)
+void RVNGRawDrawingGeneratorImpl::iuprintf(const char *format, ...)
 {
 	va_list args;
 	va_start(args, format);
 	for (int i=0; i<m_indent; i++)
 		printf("  ");
 	vprintf(format, args);
-	__indentUp();
+	indentUp();
 	va_end(args);
 }
 
-void RVNGRawDrawingGeneratorImpl::__idprintf(const char *format, ...)
+void RVNGRawDrawingGeneratorImpl::idprintf(const char *format, ...)
 {
 	va_list args;
 	va_start(args, format);
-	__indentDown();
+	indentDown();
 	for (int i=0; i<m_indent; i++)
 		printf("  ");
 	vprintf(format, args);
@@ -220,7 +220,7 @@ void RVNGRawDrawingGenerator::setStyle(const RVNGPropertyList &propList, const R
 	if (m_impl->m_printCallgraphScore)
 		return;
 
-	m_impl->__iprintf("setStyle(%s, gradient: (%s))\n", getPropString(propList).cstr(), getPropString(gradient).cstr());
+	m_impl->iprintf("setStyle(%s, gradient: (%s))\n", getPropString(propList).cstr(), getPropString(gradient).cstr());
 }
 
 void RVNGRawDrawingGenerator::drawRectangle(const RVNGPropertyList &propList)
@@ -228,7 +228,7 @@ void RVNGRawDrawingGenerator::drawRectangle(const RVNGPropertyList &propList)
 	if (m_impl->m_printCallgraphScore)
 		return;
 
-	m_impl->__iprintf("drawRectangle (%s)\n", getPropString(propList).cstr());
+	m_impl->iprintf("drawRectangle (%s)\n", getPropString(propList).cstr());
 }
 
 void RVNGRawDrawingGenerator::drawEllipse(const RVNGPropertyList &propList)
@@ -236,7 +236,7 @@ void RVNGRawDrawingGenerator::drawEllipse(const RVNGPropertyList &propList)
 	if (m_impl->m_printCallgraphScore)
 		return;
 
-	m_impl->__iprintf("drawEllipse (%s)\n", getPropString(propList).cstr());
+	m_impl->iprintf("drawEllipse (%s)\n", getPropString(propList).cstr());
 }
 
 void RVNGRawDrawingGenerator::drawPolyline(const RVNGPropertyListVector &vertices)
@@ -244,7 +244,7 @@ void RVNGRawDrawingGenerator::drawPolyline(const RVNGPropertyListVector &vertice
 	if (m_impl->m_printCallgraphScore)
 		return;
 
-	m_impl->__iprintf("drawPolyline (%s)\n", getPropString(vertices).cstr());
+	m_impl->iprintf("drawPolyline (%s)\n", getPropString(vertices).cstr());
 }
 
 void RVNGRawDrawingGenerator::drawPolygon(const RVNGPropertyListVector &vertices)
@@ -252,7 +252,7 @@ void RVNGRawDrawingGenerator::drawPolygon(const RVNGPropertyListVector &vertices
 	if (m_impl->m_printCallgraphScore)
 		return;
 
-	m_impl->__iprintf("drawPolygon (%s)\n", getPropString(vertices).cstr());
+	m_impl->iprintf("drawPolygon (%s)\n", getPropString(vertices).cstr());
 }
 
 void RVNGRawDrawingGenerator::drawPath(const RVNGPropertyListVector &path)
@@ -260,7 +260,7 @@ void RVNGRawDrawingGenerator::drawPath(const RVNGPropertyListVector &path)
 	if (m_impl->m_printCallgraphScore)
 		return;
 
-	m_impl->__iprintf("drawPath (%s)\n", getPropString(path).cstr());
+	m_impl->iprintf("drawPath (%s)\n", getPropString(path).cstr());
 }
 
 void RVNGRawDrawingGenerator::drawGraphicObject(const RVNGPropertyList &propList, const RVNGBinaryData & /*binaryData*/)
@@ -268,7 +268,7 @@ void RVNGRawDrawingGenerator::drawGraphicObject(const RVNGPropertyList &propList
 	if (m_impl->m_printCallgraphScore)
 		return;
 
-	m_impl->__iprintf("drawGraphicObject (%s)\n", getPropString(propList).cstr());
+	m_impl->iprintf("drawGraphicObject (%s)\n", getPropString(propList).cstr());
 }
 
 void RVNGRawDrawingGenerator::startTextObject(const RVNGPropertyList &propList, const RVNGPropertyListVector &path)
@@ -306,7 +306,7 @@ void RVNGRawDrawingGenerator::insertText(const RVNGString &str)
 	if (m_impl->m_printCallgraphScore)
 		return;
 
-	m_impl->__iprintf("insertText (%s)\n", str.cstr());
+	m_impl->iprintf("insertText (%s)\n", str.cstr());
 }
 
 }
