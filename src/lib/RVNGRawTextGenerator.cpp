@@ -43,7 +43,7 @@
 			__idprintf M; \
 	else \
 	{ \
-		ListenerCallback lc = m_callStack.top(); \
+		RVNGRawTextGeneratorCallback lc = m_callStack.top(); \
 		if (lc != L) \
 			m_callbackMisses++; \
 		m_callStack.pop(); \

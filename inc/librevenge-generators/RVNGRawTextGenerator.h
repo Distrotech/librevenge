@@ -30,7 +30,7 @@ using namespace std;
 namespace librevenge
 {
 
-enum ListenerCallback
+enum RVNGRawTextGeneratorCallback
 {
     LC_START_DOCUMENT = 0,
     LC_OPEN_PAGE_SPAN,
@@ -125,7 +125,7 @@ private:
 	int m_callbackMisses;
 	bool m_atLeastOneCallback;
 	bool m_printCallgraphScore;
-	stack<ListenerCallback> m_callStack;
+	stack<RVNGRawTextGeneratorCallback> m_callStack;
 
 	void __indentUp()
 	{

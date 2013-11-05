@@ -19,9 +19,6 @@
  * applicable instead of those above.
  */
 
-#include <stdio.h>
-#include <string.h>
-
 #include <librevenge-generators/librevenge-generators.h>
 
 namespace librevenge
@@ -77,175 +74,179 @@ RVNGString getPropString(const RVNGPropertyListVector &itemList)
 	return propString;
 }
 
-}
+} // anonymous namespace
 
-RVNGRawDrawingGenerator::RVNGRawDrawingGenerator(): RVNGDrawingInterface()
+RVNGRawDrawingGenerator::RVNGRawDrawingGenerator(bool printCallgraphScore):
+	RVNGDrawingInterface(),
+	m_indent(0),
+	m_callbackMisses(0),
+	m_printCallgraphScore(printCallgraphScore),
+	m_callStack()
 {
 }
 
-void RVNGRawDrawingGenerator::startDocument(const RVNGPropertyList &propList)
+RVNGRawDrawingGenerator::~RVNGRawDrawingGenerator()
 {
-	printf("RVNGRawDrawingGenerator::startDocument(%s)\n", getPropString(propList).cstr());
+	if (m_printCallgraphScore)
+		printf("%d\n", (int)(m_callStack.size() + m_callbackMisses));
 }
 
-void RVNGRawDrawingGenerator::endDocument()
+void RVNGRawDrawingGenerator::__iprintf(const char *format, ...)
 {
-	printf("RVNGRawDrawingGenerator::endDocument\n");
+	if (m_printCallgraphScore) return;
+
+	va_list args;
+	va_start(args, format);
+	for (int i=0; i<m_indent; i++)
+		printf("  ");
+	vprintf(format, args);
+	va_end(args);
 }
 
-void RVNGRawDrawingGenerator::setDocumentMetaData(const RVNGPropertyList &propList)
+void RVNGRawDrawingGenerator::__iuprintf(const char *format, ...)
 {
-	printf("RVNGRawDrawingGenerator::setDocumentMetaData((%s)\n", getPropString(propList).cstr());
+	va_list args;
+	va_start(args, format);
+	for (int i=0; i<m_indent; i++)
+		printf("  ");
+	vprintf(format, args);
+	__indentUp();
+	va_end(args);
+}
+
+void RVNGRawDrawingGenerator::__idprintf(const char *format, ...)
+{
+	va_list args;
+	va_start(args, format);
+	__indentDown();
+	for (int i=0; i<m_indent; i++)
+		printf("  ");
+	vprintf(format, args);
+	va_end(args);
 }
 
 void RVNGRawDrawingGenerator::startPage(const RVNGPropertyList &propList)
 {
-	printf("RVNGRawDrawingGenerator::startPage(%s)\n", getPropString(propList).cstr());
+	_U(("startPage(%s)\n", getPropString(propList).cstr()), PC_START_GRAPHICS);
 }
 
 void RVNGRawDrawingGenerator::endPage()
 {
-	printf("RVNGRawDrawingGenerator::endPage\n");
+	_D(("endPage\n"), PC_START_GRAPHICS);
 }
 
 void RVNGRawDrawingGenerator::startLayer(const RVNGPropertyList &propList)
 {
-	printf("RVNGRawDrawingGenerator::startLayer (%s)\n", getPropString(propList).cstr());
+	_U(("startLayer (%s)\n", getPropString(propList).cstr()), PC_START_LAYER);
 }
 
 void RVNGRawDrawingGenerator::endLayer()
 {
-	printf("RVNGRawDrawingGenerator::endLayer\n");
+	_D(("endLayer\n"), PC_START_LAYER);
 }
 
 void RVNGRawDrawingGenerator::startEmbeddedGraphics(const RVNGPropertyList &propList)
 {
-	printf("RVNGRawDrawingGenerator::startEmbeddedGraphics (%s)\n", getPropString(propList).cstr());
+	_U(("startEmbeddedGraphics (%s)\n", getPropString(propList).cstr()), PC_START_EMBEDDED_GRAPHICS);
 }
 
 void RVNGRawDrawingGenerator::endEmbeddedGraphics()
 {
-	printf("RVNGRawDrawingGenerator::endEmbeddedGraphics \n");
+	_D(("endEmbeddedGraphics \n"), PC_START_EMBEDDED_GRAPHICS);
 }
 
 void RVNGRawDrawingGenerator::setStyle(const RVNGPropertyList &propList, const RVNGPropertyListVector &gradient)
 {
-	printf("RVNGRawDrawingGenerator::setStyle(%s, gradient: (%s))\n", getPropString(propList).cstr(), getPropString(gradient).cstr());
+	if (m_printCallgraphScore)
+		return;
+
+	__iprintf("setStyle(%s, gradient: (%s))\n", getPropString(propList).cstr(), getPropString(gradient).cstr());
 }
 
 void RVNGRawDrawingGenerator::drawRectangle(const RVNGPropertyList &propList)
 {
-	printf("RVNGRawDrawingGenerator::drawRectangle (%s)\n", getPropString(propList).cstr());
+	if (m_printCallgraphScore)
+		return;
+
+	__iprintf("drawRectangle (%s)\n", getPropString(propList).cstr());
 }
 
 void RVNGRawDrawingGenerator::drawEllipse(const RVNGPropertyList &propList)
 {
-	printf("RVNGRawDrawingGenerator::drawEllipse (%s)\n", getPropString(propList).cstr());
+	if (m_printCallgraphScore)
+		return;
+
+	__iprintf("drawEllipse (%s)\n", getPropString(propList).cstr());
 }
 
 void RVNGRawDrawingGenerator::drawPolyline(const RVNGPropertyListVector &vertices)
 {
-	printf("RVNGRawDrawingGenerator::drawPolyline (%s)\n", getPropString(vertices).cstr());
+	if (m_printCallgraphScore)
+		return;
+
+	__iprintf("drawPolyline (%s)\n", getPropString(vertices).cstr());
 }
 
 void RVNGRawDrawingGenerator::drawPolygon(const RVNGPropertyListVector &vertices)
 {
-	printf("RVNGRawDrawingGenerator::drawPolygon (%s)\n", getPropString(vertices).cstr());
+	if (m_printCallgraphScore)
+		return;
+
+	__iprintf("drawPolygon (%s)\n", getPropString(vertices).cstr());
 }
 
 void RVNGRawDrawingGenerator::drawPath(const RVNGPropertyListVector &path)
 {
-	printf("RVNGRawDrawingGenerator::drawPath (%s)\n", getPropString(path).cstr());
+	if (m_printCallgraphScore)
+		return;
+
+	__iprintf("drawPath (%s)\n", getPropString(path).cstr());
 }
 
 void RVNGRawDrawingGenerator::drawGraphicObject(const RVNGPropertyList &propList, const RVNGBinaryData & /*binaryData*/)
 {
-	printf("RVNGRawDrawingGenerator::drawGraphicObject (%s)\n", getPropString(propList).cstr());
+	if (m_printCallgraphScore)
+		return;
+
+	__iprintf("drawGraphicObject (%s)\n", getPropString(propList).cstr());
 }
 
 void RVNGRawDrawingGenerator::startTextObject(const RVNGPropertyList &propList, const RVNGPropertyListVector &path)
 {
-	printf("RVNGRawDrawingGenerator::startTextObject (%s, path: (%s))\n", getPropString(propList).cstr(), getPropString(path).cstr());
+	_U(("startTextObject (%s, path: (%s))\n", getPropString(propList).cstr(), getPropString(path).cstr()), PC_START_TEXT_OBJECT);
 }
 
 void RVNGRawDrawingGenerator::endTextObject()
 {
-	printf("RVNGRawDrawingGenerator::endTextObject\n");
+	_D(("endTextObject\n"), PC_START_TEXT_OBJECT);
 }
 
 void RVNGRawDrawingGenerator::openParagraph(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops)
 {
-	printf("RVNGRawDrawingGenerator::openParagraph (%s, tabs (%s))\n", getPropString(propList).cstr(), getPropString(tabStops).cstr());
+	_U(("openParagraph (%s, tabStops: (%s))\n", getPropString(propList).cstr(), getPropString(tabStops).cstr()), PC_START_TEXT_LINE);
 }
 
 void RVNGRawDrawingGenerator::closeParagraph()
 {
-	printf("RVNGRawDrawingGenerator::closeParagraph\n");
-}
-
-void RVNGRawDrawingGenerator::openListElement(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops)
-{
-	printf("RVNGRawDrawingGenerator::openListElement (%s, tabs (%s))\n", getPropString(propList).cstr(), getPropString(tabStops).cstr());
-}
-
-void RVNGRawDrawingGenerator::closeListElement()
-{
-	printf("RVNGRawDrawingGenerator::closeListElement\n");
+	_D(("closeParagraph\n"), PC_START_TEXT_LINE);
 }
 
 void RVNGRawDrawingGenerator::openSpan(const RVNGPropertyList &propList)
 {
-	printf("RVNGRawDrawingGenerator::openSpan (%s)\n", getPropString(propList).cstr());
+	_U(("openSpan (%s)\n", getPropString(propList).cstr()), PC_START_TEXT_SPAN);
 }
 
 void RVNGRawDrawingGenerator::closeSpan()
 {
-	printf("RVNGRawDrawingGenerator::closeSpan\n");
-}
-
-void RVNGRawDrawingGenerator::insertTab()
-{
-	printf("RVNGRawDrawingGenerator::insertTab\n");
-}
-
-void RVNGRawDrawingGenerator::insertSpace()
-{
-	printf("RVNGRawDrawingGenerator::insertSpace\n");
-}
-
-void RVNGRawDrawingGenerator::insertLineBreak()
-{
-	printf("RVNGRawDrawingGenerator::insertLineBreak\n");
+	_D(("closeSpan\n"), PC_START_TEXT_SPAN);
 }
 
 void RVNGRawDrawingGenerator::insertText(const RVNGString &str)
 {
-	printf("RVNGRawDrawingGenerator::insertText (%s)\n", str.cstr());
-}
+	if (m_printCallgraphScore)
+		return;
 
-void RVNGRawDrawingGenerator::insertField(const RVNGString &type, const RVNGPropertyList &propList)
-{
-	printf("RVNGRawDrawingGenerator::insertField(%s, type %s)\n", getPropString(propList).cstr(), type.cstr());
-}
-
-void RVNGRawDrawingGenerator::openOrderedListLevel(const RVNGPropertyList &propList)
-{
-	printf("RVNGRawDrawingGenerator::openOrderedListLevel(%s)\n", getPropString(propList).cstr());
-}
-
-void RVNGRawDrawingGenerator::closeOrderedListLevel()
-{
-	printf("RVNGRawDrawingGenerator::closeOrderedListLevel\n");
-}
-
-void RVNGRawDrawingGenerator::openUnorderedListLevel(const RVNGPropertyList &propList)
-{
-	printf("RVNGRawDrawingGenerator::openUnorderedListLevel(%s)\n", getPropString(propList).cstr());
-}
-
-void RVNGRawDrawingGenerator::closeUnorderedListLevel()
-{
-	printf("RVNGRawDrawingGenerator::closeUnorderedListLevel\n");
+	__iprintf("insertText (%s)\n", str.cstr());
 }
 
 }

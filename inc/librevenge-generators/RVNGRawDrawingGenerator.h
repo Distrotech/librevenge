@@ -22,60 +22,122 @@
 #ifndef RVNGRAWDRAWINGGENERATOR_H
 #define RVNGRAWDRAWINGGENERATOR_H
 
+#include <stdio.h>
+#include <stdarg.h>
+#include <string.h>
+#include <stack>
 #include <librevenge-stream/librevenge-stream.h>
 #include <librevenge/librevenge.h>
 
 namespace librevenge
 {
 
+enum RVNGRawDrawingGeneratorCallback
+{
+    PC_START_GRAPHICS = 0,
+    PC_START_LAYER,
+    PC_START_EMBEDDED_GRAPHICS,
+    PC_START_TEXT_OBJECT,
+    PC_START_TEXT_LINE,
+    PC_START_TEXT_SPAN
+};
+
+#ifdef _U
+#undef _U
+#endif
+
+#define _U(M, L) \
+	if (!m_printCallgraphScore) \
+			__iuprintf M; \
+	else \
+		m_callStack.push(L);
+
+#ifdef _D
+#undef _D
+#endif
+
+#define _D(M, L) \
+	if (!m_printCallgraphScore) \
+			__idprintf M; \
+	else \
+	{ \
+		RVNGRawDrawingGeneratorCallback lc = m_callStack.top(); \
+		if (lc != L) \
+			m_callbackMisses++; \
+		m_callStack.pop(); \
+	}
+
 class RVNGRawDrawingGenerator : public RVNGDrawingInterface
 {
 public:
-	RVNGRawDrawingGenerator();
+	RVNGRawDrawingGenerator(bool printCallgraphScore = false);
 
-	void startDocument(const RVNGPropertyList &propList);
-	void endDocument();
-	void setDocumentMetaData(const RVNGPropertyList &propList);
-	void startPage(const RVNGPropertyList &propList);
+	~RVNGRawDrawingGenerator();
+
+	void startDocument(const librevenge::RVNGPropertyList & /*propList*/) {}
+	void endDocument() {}
+	void setDocumentMetaData(const librevenge::RVNGPropertyList & /*propList*/) {}
+	void startPage(const librevenge::RVNGPropertyList &propList);
 	void endPage();
-	void startLayer(const RVNGPropertyList &propList);
+	void startLayer(const librevenge::RVNGPropertyList &propList);
 	void endLayer();
-	void startEmbeddedGraphics(const RVNGPropertyList &propList);
+	void startEmbeddedGraphics(const librevenge::RVNGPropertyList &propList);
 	void endEmbeddedGraphics();
 
-	void setStyle(const RVNGPropertyList &propList, const RVNGPropertyListVector &gradient);
+	void setStyle(const librevenge::RVNGPropertyList &propList, const librevenge::RVNGPropertyListVector &gradient);
 
-	void drawRectangle(const RVNGPropertyList &propList);
-	void drawEllipse(const RVNGPropertyList &propList);
-	void drawPolyline(const RVNGPropertyListVector &vertices);
-	void drawPolygon(const RVNGPropertyListVector &vertices);
-	void drawPath(const RVNGPropertyListVector &path);
-	void drawGraphicObject(const RVNGPropertyList &propList, const RVNGBinaryData &binaryData);
-	void startTextObject(const RVNGPropertyList &propList, const RVNGPropertyListVector &path);
+	void drawRectangle(const librevenge::RVNGPropertyList &propList);
+	void drawEllipse(const librevenge::RVNGPropertyList &propList);
+	void drawPolyline(const librevenge::RVNGPropertyListVector &vertices);
+	void drawPolygon(const librevenge::RVNGPropertyListVector &vertices);
+	void drawPath(const librevenge::RVNGPropertyListVector &path);
+	void drawGraphicObject(const librevenge::RVNGPropertyList &propList, const librevenge::RVNGBinaryData &binaryData);
+	void startTextObject(const librevenge::RVNGPropertyList &propList, const librevenge::RVNGPropertyListVector &path);
 	void endTextObject();
 
-	void openOrderedListLevel(const RVNGPropertyList &propList);
-	void closeOrderedListLevel();
 
-	void openUnorderedListLevel(const RVNGPropertyList &propList);
-	void closeUnorderedListLevel();
+	void openOrderedListLevel(const librevenge::RVNGPropertyList & /*propList*/) {}
+	void closeOrderedListLevel() {}
 
-	void openListElement(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops);
-	void closeListElement();
+	void openUnorderedListLevel(const librevenge::RVNGPropertyList & /*propList*/) {}
+	void closeUnorderedListLevel() {}
 
-	void openParagraph(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops);
+	void openListElement(const librevenge::RVNGPropertyList & /*propList*/, const librevenge::RVNGPropertyListVector & /* tabStops */) {}
+	void closeListElement() {}
+
+	void openParagraph(const librevenge::RVNGPropertyList &propList, const librevenge::RVNGPropertyListVector &tabStops);
 	void closeParagraph();
 
-	void openSpan(const RVNGPropertyList &propList);
+	void openSpan(const librevenge::RVNGPropertyList &propList);
 	void closeSpan();
 
-	void insertTab();
-	void insertSpace();
-	void insertText(const RVNGString &text);
-	void insertLineBreak();
-	void insertField(const RVNGString &type, const RVNGPropertyList &propList);
+	void insertTab() {}
+	void insertSpace() {}
+	void insertText(const librevenge::RVNGString &text);
+	void insertLineBreak() {}
+	void insertField(const librevenge::RVNGString & /* type */, const librevenge::RVNGPropertyList & /*propList*/) {}
 
+
+private:
+	int m_indent;
+	int m_callbackMisses;
+	bool m_printCallgraphScore;
+	std::stack<RVNGRawDrawingGeneratorCallback> m_callStack;
+
+	void __indentUp()
+	{
+		m_indent++;
+	}
+	void __indentDown()
+	{
+		if (m_indent > 0) m_indent--;
+	}
+
+	void __iprintf(const char *format, ...);
+	void __iuprintf(const char *format, ...);
+	void __idprintf(const char *format, ...);
 };
+
 
 }
 
