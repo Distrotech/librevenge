@@ -22,10 +22,6 @@
 #ifndef RVNGRAWDRAWINGGENERATOR_H
 #define RVNGRAWDRAWINGGENERATOR_H
 
-#include <stdio.h>
-#include <stdarg.h>
-#include <string.h>
-#include <stack>
 #include <librevenge-stream/librevenge-stream.h>
 #include <librevenge/librevenge.h>
 
@@ -42,33 +38,14 @@ enum RVNGRawDrawingGeneratorCallback
     PC_START_TEXT_SPAN
 };
 
-#ifdef _U
-#undef _U
-#endif
-
-#define _U(M, L) \
-	if (!m_printCallgraphScore) \
-			__iuprintf M; \
-	else \
-		m_callStack.push(L);
-
-#ifdef _D
-#undef _D
-#endif
-
-#define _D(M, L) \
-	if (!m_printCallgraphScore) \
-			__idprintf M; \
-	else \
-	{ \
-		RVNGRawDrawingGeneratorCallback lc = m_callStack.top(); \
-		if (lc != L) \
-			m_callbackMisses++; \
-		m_callStack.pop(); \
-	}
+struct RVNGRawDrawingGeneratorImpl;
 
 class RVNGRawDrawingGenerator : public RVNGDrawingInterface
 {
+	// disable copying
+	RVNGRawDrawingGenerator(const RVNGRawDrawingGenerator &other);
+	RVNGRawDrawingGenerator &operator=(const RVNGRawDrawingGenerator &other);
+
 public:
 	RVNGRawDrawingGenerator(bool printCallgraphScore = false);
 
@@ -117,25 +94,8 @@ public:
 	void insertLineBreak() {}
 	void insertField(const librevenge::RVNGString & /* type */, const librevenge::RVNGPropertyList & /*propList*/) {}
 
-
 private:
-	int m_indent;
-	int m_callbackMisses;
-	bool m_printCallgraphScore;
-	std::stack<RVNGRawDrawingGeneratorCallback> m_callStack;
-
-	void __indentUp()
-	{
-		m_indent++;
-	}
-	void __indentDown()
-	{
-		if (m_indent > 0) m_indent--;
-	}
-
-	void __iprintf(const char *format, ...);
-	void __iuprintf(const char *format, ...);
-	void __idprintf(const char *format, ...);
+	RVNGRawDrawingGeneratorImpl *m_impl;
 };
 
 
