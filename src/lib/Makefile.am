@@ -57,6 +57,7 @@ librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_include_HEADERS 
 	$(top_srcdir)/inc/librevenge-generators/RVNGRawTextGenerator.h \
 	$(top_srcdir)/inc/librevenge-generators/RVNGSVGDrawingGenerator.h \
 	$(top_srcdir)/inc/librevenge-generators/RVNGSVGPresentationGenerator.h \
+	$(top_srcdir)/inc/librevenge-generators/RVNGTextDrawingGenerator.h \
 	$(top_srcdir)/inc/librevenge-generators/RVNGTextPresentationGenerator.h \
 	$(top_srcdir)/inc/librevenge-generators/RVNGTextTextGenerator.h
 
@@ -70,6 +71,7 @@ librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_SOURCES = \
 	RVNGRawTextGenerator.cpp \
 	RVNGSVGDrawingGenerator.cpp \
 	RVNGSVGPresentationGenerator.cpp \
+	RVNGTextDrawingGenerator.cpp \
 	RVNGTextPresentationGenerator.cpp \
 	RVNGTextTextGenerator.cpp
 

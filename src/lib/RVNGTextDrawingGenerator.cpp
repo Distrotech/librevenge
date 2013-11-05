@@ -12,19 +12,26 @@
  * applicable instead of those above.
  */
 
-#ifndef LIBREVENGE_GENERATORS_H
-#define LIBREVENGE_GENERATORS_H
+#include <librevenge-generators/librevenge-generators.h>
 
-#include "RVNGHTMLTextGenerator.h"
-#include "RVNGRawDrawingGenerator.h"
-#include "RVNGRawPresentationGenerator.h"
-#include "RVNGRawTextGenerator.h"
-#include "RVNGSVGDrawingGenerator.h"
-#include "RVNGSVGPresentationGenerator.h"
-#include "RVNGTextDrawingGenerator.h"
-#include "RVNGTextPresentationGenerator.h"
-#include "RVNGTextTextGenerator.h"
+namespace librevenge
+{
 
-#endif // LIBREVENGE_GENERATORS_H
+RVNGTextDrawingGenerator::RVNGTextDrawingGenerator(): RVNGDrawingInterface()
+{
+}
+
+void RVNGTextDrawingGenerator::insertText(const RVNGString &str)
+{
+  printf("%s", str.cstr());
+}
+
+void RVNGTextDrawingGenerator::closeParagraph()
+{
+  printf("\n");
+}
+
+
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */
