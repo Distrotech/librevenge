@@ -19,7 +19,16 @@
 namespace librevenge
 {
 
+struct RVNGTextPresentationGeneratorImpl
+{
+};
+
 RVNGTextPresentationGenerator::RVNGTextPresentationGenerator()
+	: m_impl(0)
+{
+}
+
+RVNGTextPresentationGenerator::~RVNGTextPresentationGenerator()
 {
 }
 

@@ -12,19 +12,23 @@
  * applicable instead of those above.
  */
 
-#include <librevenge/RVNGBinaryData.h>
-#include <librevenge/RVNGPresentationInterface.h>
-#include <librevenge/RVNGPropertyList.h>
-#include <librevenge/RVNGPropertyListVector.h>
-#include <librevenge/RVNGString.h>
+#include <librevenge/librevenge.h>
+#include <librevenge-stream/librevenge-stream.h>
 
 namespace librevenge
 {
 
+struct RVNGTextPresentationGeneratorImpl;
+
 class RVNGTextPresentationGenerator : public RVNGPresentationInterface
 {
+	// disable copying
+	RVNGTextPresentationGenerator(const RVNGTextPresentationGenerator &other);
+	RVNGTextPresentationGenerator &operator=(const RVNGTextPresentationGenerator &other);
+
 public:
 	RVNGTextPresentationGenerator();
+	virtual ~RVNGTextPresentationGenerator();
 
 	virtual void startDocument(const RVNGPropertyList &propList);
 	virtual void endDocument();
@@ -81,6 +85,9 @@ public:
 
 	virtual void startNotes(const RVNGPropertyList &propList);
 	virtual void endNotes();
+
+private:
+	RVNGTextPresentationGeneratorImpl *m_impl;
 };
 
 }
