@@ -21,13 +21,13 @@
 #ifndef RVNGHTMLTEXTGENERATOR_H
 #define RVNGHTMLTEXTGENERATOR_H
 
-#include <ostream>
-#include <sstream>
 #include <librevenge/librevenge.h>
 #include <librevenge-stream/librevenge-stream.h>
 
 namespace librevenge
 {
+
+struct RVNGHTMLTextGeneratorImpl;
 
 class RVNGHTMLTextGenerator : public RVNGTextInterface
 {
@@ -99,11 +99,8 @@ public:
 	virtual void insertEquation(const RVNGPropertyList & /* propList */, const RVNGString & /* data */) {}
 
 private:
-	bool m_ignore;
-	std::ostream *m_pOutputStream;
-	std::ostringstream m_footNotesStream, m_endNotesStream, m_commentsStream, m_textBoxesStream, m_dummyStream;
-	unsigned m_footNotesCount, m_endNotesCount, m_commentsCount, m_textBoxesCount;
-	unsigned m_commentNumber, m_textBoxNumber;
+	RVNGHTMLTextGeneratorImpl *m_impl;
+
 	// Unimplemented to prevent compiler from creating crasher ones
 	RVNGHTMLTextGenerator(const RVNGHTMLTextGenerator &);
 	RVNGHTMLTextGenerator &operator=(const RVNGHTMLTextGenerator &);
