@@ -136,6 +136,10 @@ void RVNGHTMLTextGenerator::endDocument()
 	*m_impl->m_pOutputStream << "</html>" << std::endl;
 }
 
+void RVNGHTMLTextGenerator::definePageStyle(const RVNGPropertyList &) {}
+void RVNGHTMLTextGenerator::openPageSpan(const RVNGPropertyList & /* propList */) {}
+void RVNGHTMLTextGenerator::closePageSpan() {}
+
 void RVNGHTMLTextGenerator::openHeader(const RVNGPropertyList & /* propList */)
 {
 	m_impl->m_ignore = true;
@@ -156,6 +160,12 @@ void RVNGHTMLTextGenerator::closeFooter()
 {
 	m_impl->m_ignore = false;
 }
+
+void RVNGHTMLTextGenerator::defineSectionStyle(const RVNGPropertyList &, const RVNGPropertyListVector &) {}
+void RVNGHTMLTextGenerator::openSection(const RVNGPropertyList & /* propList */, const RVNGPropertyListVector & /* columns */) {}
+void RVNGHTMLTextGenerator::closeSection() {}
+
+void RVNGHTMLTextGenerator::defineParagraphStyle(const RVNGPropertyList &, const RVNGPropertyListVector &) {}
 
 void RVNGHTMLTextGenerator::openParagraph(const RVNGPropertyList &propList, const RVNGPropertyListVector & /* tabStops */)
 {
@@ -187,6 +197,8 @@ void RVNGHTMLTextGenerator::closeParagraph()
 		*m_impl->m_pOutputStream << "</p>" << std::endl;
 	}
 }
+
+void RVNGHTMLTextGenerator::defineCharacterStyle(const RVNGPropertyList &) {}
 
 void RVNGHTMLTextGenerator::openSpan(const RVNGPropertyList &propList)
 {
@@ -242,6 +254,11 @@ void RVNGHTMLTextGenerator::insertLineBreak()
 		*m_impl->m_pOutputStream << "<br>" << std::endl;
 	}
 }
+
+void RVNGHTMLTextGenerator::insertField(const RVNGString & /* type */, const RVNGPropertyList & /* propList */) {}
+
+void RVNGHTMLTextGenerator::defineOrderedListLevel(const RVNGPropertyList & /* propList */) {}
+void RVNGHTMLTextGenerator::defineUnorderedListLevel(const RVNGPropertyList & /* propList */) {}
 
 void RVNGHTMLTextGenerator::insertText(const RVNGString &text)
 {
@@ -483,6 +500,8 @@ void RVNGHTMLTextGenerator::closeTableCell()
 	}
 }
 
+void RVNGHTMLTextGenerator::insertCoveredTableCell(const RVNGPropertyList & /* propList */) {}
+
 void RVNGHTMLTextGenerator::closeTable()
 {
 	if (!m_impl->m_ignore)
@@ -491,6 +510,9 @@ void RVNGHTMLTextGenerator::closeTable()
 		*m_impl->m_pOutputStream << "</table>" << std::endl;
 	}
 }
+
+void RVNGHTMLTextGenerator::insertBinaryObject(const RVNGPropertyList & /* propList */, const RVNGBinaryData & /* data */) {}
+void RVNGHTMLTextGenerator::insertEquation(const RVNGPropertyList & /* propList */, const RVNGString & /* data */) {}
 
 }
 

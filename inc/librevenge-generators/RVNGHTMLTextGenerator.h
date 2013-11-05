@@ -40,23 +40,23 @@ public:
 	virtual void startDocument();
 	virtual void endDocument();
 
-	virtual void definePageStyle(const RVNGPropertyList &) {}
-	virtual void openPageSpan(const RVNGPropertyList & /* propList */) {}
-	virtual void closePageSpan() {}
+	virtual void definePageStyle(const RVNGPropertyList &);
+	virtual void openPageSpan(const RVNGPropertyList &propList);
+	virtual void closePageSpan();
 	virtual void openHeader(const RVNGPropertyList &propList);
 	virtual void closeHeader();
 	virtual void openFooter(const RVNGPropertyList &propList);
 	virtual void closeFooter();
 
-	virtual void defineSectionStyle(const RVNGPropertyList &, const RVNGPropertyListVector &) {}
-	virtual void openSection(const RVNGPropertyList & /* propList */, const RVNGPropertyListVector & /* columns */) {}
-	virtual void closeSection() {}
+	virtual void defineSectionStyle(const RVNGPropertyList &, const RVNGPropertyListVector &);
+	virtual void openSection(const RVNGPropertyList &propList, const RVNGPropertyListVector &columns);
+	virtual void closeSection();
 
-	virtual void defineParagraphStyle(const RVNGPropertyList &, const RVNGPropertyListVector &) {}
+	virtual void defineParagraphStyle(const RVNGPropertyList &, const RVNGPropertyListVector &);
 	virtual void openParagraph(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops);
 	virtual void closeParagraph();
 
-	virtual void defineCharacterStyle(const RVNGPropertyList &) {}
+	virtual void defineCharacterStyle(const RVNGPropertyList &);
 	virtual void openSpan(const RVNGPropertyList &propList);
 	virtual void closeSpan();
 
@@ -64,10 +64,10 @@ public:
 	virtual void insertText(const RVNGString &text);
 	virtual void insertSpace();
 	virtual void insertLineBreak();
-	virtual void insertField(const RVNGString & /* type */, const RVNGPropertyList & /* propList */) {}
+	virtual void insertField(const RVNGString &type, const RVNGPropertyList &propList);
 
-	virtual void defineOrderedListLevel(const RVNGPropertyList & /* propList */) {}
-	virtual void defineUnorderedListLevel(const RVNGPropertyList & /* propList */) {}
+	virtual void defineOrderedListLevel(const RVNGPropertyList &propList);
+	virtual void defineUnorderedListLevel(const RVNGPropertyList &propList);
 	virtual void openOrderedListLevel(const RVNGPropertyList &propList);
 	virtual void openUnorderedListLevel(const RVNGPropertyList &propList);
 	virtual void closeOrderedListLevel();
@@ -89,14 +89,14 @@ public:
 	virtual void closeTableRow();
 	virtual void openTableCell(const RVNGPropertyList &propList);
 	virtual void closeTableCell();
-	virtual void insertCoveredTableCell(const RVNGPropertyList & /* propList */) {}
+	virtual void insertCoveredTableCell(const RVNGPropertyList &propList);
 	virtual void closeTable();
 
-	virtual void openFrame(const RVNGPropertyList & /* propList */) {}
-	virtual void closeFrame() {}
+	virtual void openFrame(const RVNGPropertyList &propList);
+	virtual void closeFrame();
 
-	virtual void insertBinaryObject(const RVNGPropertyList & /* propList */, const RVNGBinaryData & /* data */) {}
-	virtual void insertEquation(const RVNGPropertyList & /* propList */, const RVNGString & /* data */) {}
+	virtual void insertBinaryObject(const RVNGPropertyList &propList, const RVNGBinaryData &data);
+	virtual void insertEquation(const RVNGPropertyList &propList, const RVNGString &data);
 
 private:
 	RVNGHTMLTextGeneratorImpl *m_impl;
