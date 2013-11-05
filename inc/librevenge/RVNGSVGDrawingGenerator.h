@@ -21,7 +21,8 @@
 #ifndef RVNGSVGDRAWINGGENERATOR_H
 #define RVNGSVGDRAWINGGENERATOR_H
 
-#include <librevenge/librevenge.h>
+#include "RVNGDrawingInterface.h"
+#include "RVNGStringVector.h"
 
 namespace librevenge
 {

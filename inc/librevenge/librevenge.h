@@ -24,7 +24,7 @@
 #include "RVNGDrawingInterface.h"
 #include "RVNGPresentationInterface.h"
 #include "RVNGTextInterface.h"
-#include "RVNGStringVector.h"
+#include "RVNGSVGDrawingGenerator.h"
 
 #endif /* LIBREVENGE_H */
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

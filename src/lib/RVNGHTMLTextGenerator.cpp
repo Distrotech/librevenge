@@ -511,6 +511,8 @@ void RVNGHTMLTextGenerator::closeTable()
 	}
 }
 
+void RVNGHTMLTextGenerator::openFrame(const RVNGPropertyList & /* propList */) {}
+void RVNGHTMLTextGenerator::closeFrame() {}
 void RVNGHTMLTextGenerator::insertBinaryObject(const RVNGPropertyList & /* propList */, const RVNGBinaryData & /* data */) {}
 void RVNGHTMLTextGenerator::insertEquation(const RVNGPropertyList & /* propList */, const RVNGString & /* data */) {}
 

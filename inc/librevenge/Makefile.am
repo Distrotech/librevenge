@@ -8,4 +8,5 @@ EXTRA_DIST = \
 	RVNGPresentationInterface.h \
 	RVNGString.h \
 	RVNGStringVector.h \
+	RVNGSVGDrawingGenerator.h \
 	RVNGTextInterface.h
