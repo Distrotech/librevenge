@@ -14,10 +14,7 @@ else
 version_info = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
 endif
 
-lib_LTLIBRARIES = \
-	librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.la \
-	librevenge-generators-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.la \
-	librevenge-stream-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.la
+lib_LTLIBRARIES = librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.la
 
 librevenge_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_includedir = $(includedir)/librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@/librevenge
 librevenge_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_include_HEADERS = \
@@ -48,6 +45,23 @@ librevenge_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_SOURCES = \
 	librevenge_internal.h \
 	RVNGMemoryStream.h
 
+if OS_WIN32
+
+@LIBREVENGE_WIN32_RESOURCE@ : librevenge.rc $(librevenge_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_OBJECTS)
+	chmod +x $(top_srcdir)/build/win32/*compile-resource
+	WINDRES=@WINDRES@ $(top_srcdir)/build/win32/lt-compile-resource librevenge.rc @LIBREVENGE_WIN32_RESOURCE@
+
+endif
+
+EXTRA_DIST = librevenge.rc.in
+
+# These may be in the builddir too
+BUILD_EXTRA_DIST = librevenge.rc
+
+if BUILD_GENERATORS
+
+lib_LTLIBRARIES += librevenge-generators-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.la
+
 librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_includedir = $(includedir)/librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@/librevenge-generators
 librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_include_HEADERS = \
 	$(top_srcdir)/inc/librevenge-generators/librevenge-generators.h \
@@ -75,6 +89,24 @@ librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_SOURCES = \
 	RVNGTextPresentationGenerator.cpp \
 	RVNGTextTextGenerator.cpp
 
+if OS_WIN32
+
+@LIBREVENGE_GENERATORS_WIN32_RESOURCE@ : librevenge-generators.rc $(librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_OBJECTS)
+	chmod +x $(top_srcdir)/build/win32/*compile-resource && \
+	WINDRES=@WINDRES@ $(top_srcdir)/build/win32/lt-compile-resource librevenge-generators.rc @LIBREVENGE_GENERATORS_WIN32_RESOURCE@
+
+endif
+
+EXTRA_DIST += librevenge-generators.rc.in
+
+BUILD_EXTRA_DIST += librevenge-generators.rc
+
+endif
+
+if BUILD_STREAMS
+
+lib_LTLIBRARIES += librevenge-stream-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.la
+
 librevenge_stream_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_includedir = $(includedir)/librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@/librevenge-stream
 librevenge_stream_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_include_HEADERS = \
 	$(top_srcdir)/inc/librevenge-stream/librevenge-stream.h \
@@ -93,27 +125,13 @@ librevenge_stream_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_SOURCES = \
 
 if OS_WIN32
 
-@LIBREVENGE_WIN32_RESOURCE@ : librevenge.rc $(librevenge_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_OBJECTS)
-	chmod +x $(top_srcdir)/build/win32/*compile-resource
-	WINDRES=@WINDRES@ $(top_srcdir)/build/win32/lt-compile-resource librevenge.rc @LIBREVENGE_WIN32_RESOURCE@
-
-@LIBREVENGE_GENERATORS_WIN32_RESOURCE@ : librevenge-generators.rc $(librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_OBJECTS)
-	chmod +x $(top_srcdir)/build/win32/*compile-resource && \
-	WINDRES=@WINDRES@ $(top_srcdir)/build/win32/lt-compile-resource librevenge-generators.rc @LIBREVENGE_GENERATORS_WIN32_RESOURCE@
-
 @LIBREVENGE_STREAM_WIN32_RESOURCE@ : librevenge-stream.rc $(librevenge_stream_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_OBJECTS)
 	chmod +x $(top_srcdir)/build/win32/*compile-resource && \
 	WINDRES=@WINDRES@ $(top_srcdir)/build/win32/lt-compile-resource librevenge-stream.rc @LIBREVENGE_STREAM_WIN32_RESOURCE@
 endif
 
+EXTRA_DIST += librevenge-stream.rc.in
 
-EXTRA_DIST = \
-	librevenge.rc.in \
-	librevenge-generators.rc.in \
-	librevenge-stream.rc.in
+BUILD_EXTRA_DIST += librevenge-stream.rc
 
-# These may be in the builddir too
-BUILD_EXTRA_DIST = \
-	librevenge.rc \
-	librevenge-generators.rc \
-	librevenge-stream.rc
+endif

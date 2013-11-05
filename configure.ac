@@ -210,6 +210,25 @@ AS_IF([test "x$with_docs" != "xno"], [
 ], [build_docs=no])
 AM_CONDITIONAL([WITH_LIBREVENGE_DOCS], [test "x$build_docs" != "xno"])
 
+# =======
+# Streams
+# =======
+AC_ARG_ENABLE(streams,
+	[AS_HELP_STRING([--disable-streams], [Do not build librevenge-stream library])],
+	[enable_streams="$withval"],
+	[enable_streams=yes]
+)
+AM_CONDITIONAL([BUILD_STREAMS], [test "x$enable_streams" != "xno"])
+
+# ==========
+# Generators
+# ==========
+AC_ARG_ENABLE(generators,
+	[AS_HELP_STRING([--disable-generators], [Do not build librevenge-generators library])],
+	[enable_generators="$withval"],
+	[enable_generators=yes]
+)
+AM_CONDITIONAL([BUILD_GENERATORS], [test "x$enable_generators" != "xno"])
 
 # =====================
 # Prepare all .in files
@@ -244,6 +263,8 @@ AC_MSG_NOTICE([
 Build configuration:
 	debug:           ${enable_debug}
 	docs:            ${build_docs}
+	generators:      ${enable_generators}
+	streams:         ${enable_streams}
 	werror:          ${enable_werror}
 ==============================================================================
 ])

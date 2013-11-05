@@ -2,10 +2,15 @@ ACLOCAL_AMFLAGS = -I m4
 
 pkgconfdir = $(libdir)/pkgconfig
 
-pkgconf_DATA = \
-	librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.pc \
-	librevenge-generators-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.pc \
-	librevenge-stream-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.pc
+pkgconf_DATA = librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.pc
+
+if BUILD_GENERATORS
+pkgconf_DATA += librevenge-generators-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.pc
+endif
+
+if BUILD_STREAMS
+pkgconf_DATA += librevenge-stream-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.pc
+endif
 
 SUBDIRS = build inc src docs
 

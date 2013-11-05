@@ -1,1 +1,5 @@
-SUBDIRS = librevenge librevenge-generators librevenge-stream
+SUBDIRS = librevenge librevenge-stream
+
+if BUILD_GENERATORS
+SUBDIRS += librevenge-generators
+endif
