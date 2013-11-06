@@ -258,17 +258,36 @@ static bool findCentralDirectoryEnd(RVNGInputStream *input)
 
 	try
 	{
-		while (!input->isEnd())
+		input->seek(0, RVNG_SEEK_END);
+		long size = input->tell();
+
+		// CentralDirectoryEnd is CDIR_END_SIG:4+at least 18 other bytes
+		if (size < 22) return false;
+		if (input->seek(size>1024 ? size-1024 : 0, RVNG_SEEK_SET))
+			return false;
+		long pos=input->tell();
+		long toCheck=(size-18)-pos;
+		unsigned long numBytesRead = 0;
+		unsigned char const *ret =
+		    input->read((unsigned long) toCheck, numBytesRead);
+		if (!ret || long(numBytesRead)!=toCheck)
+			return false;
+		unsigned const sigRev=
+		    ((CDIR_END_SIG&0xFF)<<24)|
+		    ((CDIR_END_SIG&0xFF00)<<8)|
+		    ((CDIR_END_SIG&0xFF0000)>>8)|
+		    ((CDIR_END_SIG&0xFF000000)>>24);
+		unsigned signature=0;
+		for (long p=0; p < toCheck; p++)
 		{
-			unsigned signature = getInt(input);
-			if (signature == CDIR_END_SIG)
+			signature=((signature&0xFFFFFF)<<8)|*(ret++);
+			if (signature == sigRev)
 			{
-				input->seek(-4, RVNG_SEEK_CUR);
+				input->seek(pos+p-3, RVNG_SEEK_SET);
 				return true;
 			}
-			else
-				input->seek(-3, RVNG_SEEK_CUR);
 		}
+
 	}
 	catch (...)
 	{
