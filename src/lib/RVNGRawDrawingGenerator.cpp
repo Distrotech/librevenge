@@ -114,7 +114,7 @@ RVNGRawDrawingGenerator::RVNGRawDrawingGenerator(bool printCallgraphScore):
 RVNGRawDrawingGenerator::~RVNGRawDrawingGenerator()
 {
 	if (m_impl->m_printCallgraphScore)
-		printf("%d\n", (int)(m_impl->m_callStack.size() + m_impl->m_callbackMisses));
+		printf("%d\n", (int)m_impl->m_callStack.size() + m_impl->m_callbackMisses);
 
 	delete m_impl;
 }

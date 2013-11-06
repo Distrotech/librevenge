@@ -218,7 +218,7 @@ void RVNGSVGPresentationGenerator::setStyle(const RVNGPropertyList &propList, co
 				m_impl->m_outputSink << "  </svg:linearGradient>\n";
 
 				// not a simple horizontal gradient
-				if(angle != 270)
+				if(angle < 270 || angle > 270)
 				{
 					m_impl->m_outputSink << "  <svg:linearGradient xlink:href=\"#grad" << m_impl->m_gradientIndex-1 << "\"";
 					m_impl->m_outputSink << " id=\"grad" << m_impl->m_gradientIndex++ << "\" ";
@@ -252,7 +252,7 @@ void RVNGSVGPresentationGenerator::setStyle(const RVNGPropertyList &propList, co
 				m_impl->m_outputSink << "  </svg:linearGradient>\n";
 
 				// not a simple horizontal gradient
-				if(angle != 270)
+				if(angle < 270 || angle > 270)
 				{
 					m_impl->m_outputSink << "  <svg:linearGradient xlink:href=\"#grad" << m_impl->m_gradientIndex-1 << "\"";
 					m_impl->m_outputSink << " id=\"grad" << m_impl->m_gradientIndex++ << "\" ";
@@ -297,7 +297,7 @@ void RVNGSVGPresentationGenerator::setStyle(const RVNGPropertyList &propList, co
 				m_impl->m_outputSink << "  </svg:linearGradient>\n";
 
 				// not a simple horizontal gradient
-				if(angle != 270)
+				if(angle < 270 || angle > 270)
 				{
 					m_impl->m_outputSink << "  <svg:linearGradient xlink:href=\"#grad" << m_impl->m_gradientIndex-1 << "\"";
 					m_impl->m_outputSink << " id=\"grad" << m_impl->m_gradientIndex++ << "\" ";
