@@ -11,6 +11,8 @@ test_LDADD = \
 	$(LIBREVENGE_LIBS) 
 
 test_SOURCES = \
+	RVNGBinaryDataTest.cpp \
+	RVNGBinaryDataTest.h \
 	test.cpp
 
 TESTS = $(target_test)
