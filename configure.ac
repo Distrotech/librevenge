@@ -191,6 +191,16 @@ PKG_CHECK_MODULES([ZLIB],[zlib],[],[
 AC_SUBST(ZLIB_CFLAGS)
 AC_SUBST(ZLIB_LIBS)
 
+# ==================
+# Find boost headers
+# ==================
+AC_CHECK_HEADERS(
+        boost/scoped_ptr.hpp \
+        boost/shared_ptr.hpp,
+    [],
+    [AC_MSG_ERROR([Required boost headers not found.])],
+    []
+)
 
 # =============
 # Documentation
