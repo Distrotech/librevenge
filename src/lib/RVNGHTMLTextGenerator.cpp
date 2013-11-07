@@ -21,124 +21,397 @@
  */
 
 #include <stdio.h>
+#include <cstring>
+#include <fstream>
 #include <iostream>
-#include <ostream>
 #include <sstream>
+#include <vector>
+
+#include "RVNGHTMLTextTableStyle.h"
+#include "RVNGHTMLTextTextStyle.h"
 
 #include <librevenge-generators/librevenge-generators.h>
 
-// use the BELL code to represent a TAB for now
-#define UCS_TAB 0x0009
+#include "librevenge_internal.h"
 
 namespace librevenge
 {
 
-struct RVNGHTMLTextGeneratorImpl
+struct RVNGHTMLTextStream;
+
+//! a zone to regroup footnote/endnote,... data
+struct RVNGHTMLTextZone
 {
-	RVNGHTMLTextGeneratorImpl();
+	friend struct RVNGHTMLTextStream;
 
-	// disable copying
-	RVNGHTMLTextGeneratorImpl(const RVNGHTMLTextGeneratorImpl &other);
-	RVNGHTMLTextGeneratorImpl &operator=(const RVNGHTMLTextGeneratorImpl &other);
+	//! the different zone
+	enum Type { Z_Comment=0, Z_EndNote, Z_FootNote, Z_Main, Z_MetaData, Z_TextBox, Z_Unknown, Z_NumZones= Z_Unknown+1};
+	//! constructor for basic stream
+	RVNGHTMLTextZone(Type tp=Z_Unknown) : m_type(tp), m_actualId(0), m_stringList()
+	{
+	}
+	//! the type
+	Type type() const
+	{
+		return m_type;
+	}
+	//! the type
+	void setType(Type tp)
+	{
+		m_type=tp;
+	}
+	//! returns a new stream corresponding to this zone
+	RVNGHTMLTextStream *getNewStream();
+	//! delete a stream corresponding to this zone
+	void deleteStream(RVNGHTMLTextStream *stream);
+	//! returns true if there is no data
+	bool isEmpty() const
+	{
+		for (size_t i = 0; i < m_stringList.size(); i++)
+			if(m_stringList[i].size())
+				return false;
+		return true;
+	}
+	//! send the zone data
+	void send(std::ostream &out) const
+	{
+		if (isEmpty() || m_type==Z_Unknown || m_type==Z_Main)
+			return;
+		if (m_type!=Z_MetaData)
+			out << "<hr>\n";
+		if (m_type==Z_MetaData)
+		{
+			for (size_t i = 0; i < m_stringList.size(); i++)
+				out << m_stringList[i];
+			return;
+		}
+		if (m_type==Z_TextBox)
+		{
+			out << "<p><b>TEXT BOXES</b></p><hr>\n";
+			for (size_t i = 0; i < m_stringList.size(); i++)
+				out << m_stringList[i] << "<hr>\n";
+			return;
+		}
+		for (size_t i = 0; i < m_stringList.size(); i++)
+		{
+			std::string const &str=m_stringList[i];
+			out << str << "\n";
+			// check if we need to add a return line
+			size_t lastComPos=str.rfind('<');
+			if (lastComPos!=std::string::npos)
+			{
+				if (str.compare(lastComPos,4,"</p>")==0 ||
+				        str.compare(lastComPos,5,"</ul>")==0 ||
+				        str.compare(lastComPos,5,"</ol>")==0 ||
+				        str.compare(lastComPos,4,"<br>")==0)
+					continue;
+			}
+			out << "<br>\n";
+		}
+	}
 
-	bool m_ignore;
-	std::ostream *m_pOutputStream;
-	std::ostringstream m_footNotesStream, m_endNotesStream, m_commentsStream, m_textBoxesStream, m_dummyStream;
-	unsigned m_footNotesCount, m_endNotesCount, m_commentsCount, m_textBoxesCount;
-	unsigned m_commentNumber, m_textBoxNumber;
+protected:
+	//! return a label corresponding to the zone
+	std::string label(int id) const;
+	//! the zone type
+	Type m_type;
+	//! the actual id
+	mutable int m_actualId;
+	//! the list of data string
+	std::vector<std::string> m_stringList;
+private:
+	RVNGHTMLTextZone(RVNGHTMLTextZone const &orig);
+	RVNGHTMLTextZone operator=(RVNGHTMLTextZone const &orig);
 };
 
-RVNGHTMLTextGeneratorImpl::RVNGHTMLTextGeneratorImpl() :
-	m_ignore(false),
-	m_pOutputStream(&std::cout),
-	m_footNotesStream(),
-	m_endNotesStream(),
-	m_commentsStream(),
-	m_textBoxesStream(),
-	m_dummyStream(),
-	m_footNotesCount(0),
-	m_endNotesCount(0),
-	m_commentsCount(0),
-	m_textBoxesCount(0),
-	m_commentNumber(1),
-	m_textBoxNumber(1)
+struct RVNGHTMLTextStream
 {
+	//! constructor
+	RVNGHTMLTextStream(RVNGHTMLTextZone *zone): m_zone(zone), m_zoneId(0), m_stream(), m_delayedLabel("")
+	{
+		if (m_zone)
+			m_zoneId=m_zone->m_actualId++;
+	}
+	//! destructor
+	~RVNGHTMLTextStream() { }
+	//! add a label called on main and a label in this ( delayed to allow openParagraph to be called )
+	void addLabel(std::ostream &output)
+	{
+		std::string lbl=label();
+		if (!lbl.length())
+			return;
+		output << "<sup id=\"called" << lbl << "\"><a href=\"#data" << lbl << "\">" << lbl << "</a></sup>";
+		flush();
+		std::stringstream ss;
+		ss << "<sup id=\"data" << lbl << "\"><a href=\"#called" << lbl << "\">" << lbl << "</a></sup>";
+		m_delayedLabel=ss.str();
+	}
+	//! flush delayed label, ...
+	void flush()
+	{
+		if (m_delayedLabel.length())
+		{
+			m_stream << m_delayedLabel;
+			m_delayedLabel="";
+		}
+	}
+	//! return the stream
+	std::ostream &stream()
+	{
+		return m_stream;
+	}
+	//! send the data to the zone
+	void send()
+	{
+		if (!m_zone || m_zone->m_type==RVNGHTMLTextZone::Z_Main)
+		{
+			RVNG_DEBUG_MSG(("RVNGHTMLTextStream::send: must not be called\n"));
+			return;
+		}
+		flush();
+		if (m_zone->m_stringList.size() <= size_t(m_zoneId))
+			m_zone->m_stringList.resize(size_t(m_zoneId)+1);
+		m_zone->m_stringList[size_t(m_zoneId)]=m_stream.str();
+	}
+	//! send the data to the zone
+	void sendMain(std::ostream &output)
+	{
+		flush();
+		output << m_stream.str() << "\n";
+	}
+protected:
+	//! return the stream label
+	std::string label() const
+	{
+		if (!m_zone || m_zone->m_type==RVNGHTMLTextZone::Z_Main)
+		{
+			RVNG_DEBUG_MSG(("RVNGHTMLTextStream::label: must not be called\n"));
+			return "";
+		}
+		return m_zone->label(m_zoneId);
+	}
+	//! a zone
+	RVNGHTMLTextZone *m_zone;
+	//! the zone id
+	int m_zoneId;
+	//! the stream
+	std::ostringstream m_stream;
+	//! the label
+	std::string m_delayedLabel;
+private:
+	RVNGHTMLTextStream(RVNGHTMLTextStream const &orig);
+	RVNGHTMLTextStream operator=(RVNGHTMLTextStream const &orig);
+};
+
+RVNGHTMLTextStream *RVNGHTMLTextZone::getNewStream()
+{
+	return new RVNGHTMLTextStream(this);
 }
 
-RVNGHTMLTextGenerator::RVNGHTMLTextGenerator() :
-	m_impl(new RVNGHTMLTextGeneratorImpl())
+void RVNGHTMLTextZone::deleteStream(RVNGHTMLTextStream *stream)
+{
+	if (stream) delete stream;
+}
+
+std::string RVNGHTMLTextZone::label(int id) const
+{
+	char c=0;
+	switch(m_type)
+	{
+	case Z_Comment:
+		c='C';
+		break;
+	case Z_EndNote:
+		c='E';
+		break;
+	case Z_FootNote:
+		c='F';
+		break;
+	case Z_TextBox:
+		c='T';
+		break;
+	case Z_Main:
+	case Z_MetaData:
+	case Z_Unknown:
+	case Z_NumZones:
+	default:
+		break;
+	}
+	if (c==0)
+		return "";
+	std::stringstream s;
+	s << c << id+1;
+	return s.str();
+}
+
+//! the internal state of a html document generator
+struct RVNGHTMLTextGeneratorImpl
+{
+	//! constructor
+	RVNGHTMLTextGeneratorImpl() : m_actualPage(0), m_ignore(false), m_listManager(), m_paragraphManager(), m_spanManager(), m_tableManager(), m_actualStream(), m_streamStack()
+	{
+		for (int i = 0; i < RVNGHTMLTextZone::Z_NumZones; ++i)
+			m_zones[i].setType(RVNGHTMLTextZone::Type(i));
+		m_actualStream=m_zones[RVNGHTMLTextZone::Z_Main].getNewStream();
+	}
+	//! destructor
+	~RVNGHTMLTextGeneratorImpl()
+	{
+		for (size_t i=0; i<m_streamStack.size(); ++i)
+		{
+			if (m_streamStack[i]) delete m_streamStack[i];
+		}
+		if (m_actualStream) delete m_actualStream;
+	}
+
+	//! returns the actual output ( sending delayed data if needed)
+	std::ostream &output(bool sendDelayed=true)
+	{
+		if (sendDelayed)
+			m_actualStream->flush();
+		return m_actualStream->stream();
+	}
+	//! returns the actual stream
+	RVNGHTMLTextStream &stream()
+	{
+		return *m_actualStream;
+	}
+	void push(RVNGHTMLTextZone::Type type)
+	{
+		m_streamStack.push_back(m_actualStream);
+		if (type==RVNGHTMLTextZone::Z_Main || type==RVNGHTMLTextZone::Z_NumZones)
+		{
+			RVNG_DEBUG_MSG(("RVNGHTMLTextGeneratorImpl::push: can not push the main zone\n"));
+			type=RVNGHTMLTextZone::Z_Unknown;
+		}
+		m_actualStream=m_zones[type].getNewStream();
+	}
+	void pop()
+	{
+		if (m_streamStack.size() <= 0)
+		{
+			RVNG_DEBUG_MSG(("RVNGHTMLTextGenerator::pop: can not pop stream\n"));
+			return;
+		}
+		if (m_actualStream)
+		{
+			m_actualStream->send();
+			delete m_actualStream;
+		}
+		m_actualStream = m_streamStack.back();
+		m_streamStack.pop_back();
+	}
+	void sendMetaData(std::ostream &out)
+	{
+		m_zones[RVNGHTMLTextZone::Z_MetaData].send(out);
+	}
+	void flushUnsent(std::ostream &out)
+	{
+		if (m_streamStack.size())
+		{
+			RVNG_DEBUG_MSG(("RVNGHTMLTextGenerator::flushUnsent: the stream stack is not empty\n"));
+			while (m_streamStack.size())
+				pop();
+		}
+		// first send the main data
+		if (!m_actualStream)
+		{
+			RVNG_DEBUG_MSG(("RVNGHTMLTextGenerator::flushUnsent: can not find the main block\n"));
+		}
+		else
+			m_actualStream->sendMain(out);
+		m_zones[RVNGHTMLTextZone::Z_Comment].send(out);
+		m_zones[RVNGHTMLTextZone::Z_FootNote].send(out);
+		m_zones[RVNGHTMLTextZone::Z_EndNote].send(out);
+		m_zones[RVNGHTMLTextZone::Z_TextBox].send(out);
+	}
+	int m_actualPage;
+	bool m_ignore;
+
+	RVNGHTMLTextListStyleManager m_listManager;
+	RVNGHTMLTextParagraphStyleManager m_paragraphManager;
+	RVNGHTMLTextSpanStyleManager m_spanManager;
+	RVNGHTMLTextTableStyleManager m_tableManager;
+protected:
+	RVNGHTMLTextStream *m_actualStream;
+	std::vector<RVNGHTMLTextStream *> m_streamStack;
+
+	RVNGHTMLTextZone m_zones[RVNGHTMLTextZone::Z_NumZones];
+private:
+	RVNGHTMLTextGeneratorImpl(RVNGHTMLTextGeneratorImpl const &orig);
+	RVNGHTMLTextGeneratorImpl operator=(RVNGHTMLTextGeneratorImpl const &orig);
+};
+
+RVNGHTMLTextGenerator::RVNGHTMLTextGenerator() : m_impl(new RVNGHTMLTextGeneratorImpl())
 {
 }
 
 RVNGHTMLTextGenerator::~RVNGHTMLTextGenerator()
 {
-	delete m_impl;
+	if (m_impl) delete m_impl;
 }
 
 void RVNGHTMLTextGenerator::setDocumentMetaData(const RVNGPropertyList &propList)
 {
-	if (propList["meta:initial-creator"])
-		*m_impl->m_pOutputStream << "<meta name=\"author\" content=\"" << propList["meta:initial-creator"]->getStr().cstr() << "\">" << std::endl;
-	if (propList["dc:creator"])
-		*m_impl->m_pOutputStream << "<meta name=\"typist\" content=\"" << propList["dc:creator"]->getStr().cstr() << "\">" << std::endl;
-	if (propList["dc:subject"])
-		*m_impl->m_pOutputStream << "<meta name=\"subject\" content=\"" << propList["dc:subject"]->getStr().cstr() << "\">" << std::endl;
-	if (propList["dc:publisher"])
-		*m_impl->m_pOutputStream << "<meta name=\"publisher\" content=\"" << propList["dc:publisher"]->getStr().cstr() << "\">" << std::endl;
-	if (propList["meta:keyword"])
-		*m_impl->m_pOutputStream << "<meta name=\"keywords\" content=\"" << propList["meta:keyword"]->getStr().cstr() << "\">" << std::endl;
-	if (propList["dc:language"])
-		*m_impl->m_pOutputStream << "<meta name=\"language\" content=\"" << propList["dc:language"]->getStr().cstr() << "\">" << std::endl;
-	if (propList["dc:description"])
-		*m_impl->m_pOutputStream << "<meta name=\"abstract\" content=\"" << propList["dc:description"]->getStr().cstr() << "\">" << std::endl;
-	if (propList["librevenge:descriptive-name"])
+	m_impl->push(RVNGHTMLTextZone::Z_MetaData);
+	std::ostream &meta=m_impl->output();
+	static char const *wpdMetaFields[9]=
 	{
-		*m_impl->m_pOutputStream << "<meta name=\"descriptive-name\" content=\"" << propList["librevenge:descriptive-name"]->getStr().cstr() << "\">" << std::endl;
-		*m_impl->m_pOutputStream << "<title>" << propList["librevenge:descriptive-name"]->getStr().cstr() << "</title>" << std::endl;
+		"meta:initial-creator", "dc:creator", "dc:subject", "dc:publisher", "meta:keywords",
+		"dc:language", "dc:description", "librevenge:descriptive-name", "librevenge:descriptive-type"
+	};
+	static char const *metaFields[9]=
+	{
+		"author", "typist", "subject", "publisher", "keywords",
+		"language", "abstract", "descriptive-name", "descriptive-type"
+	};
+	for (int i = 0; i < 9; i++)
+	{
+		if (!propList[wpdMetaFields[i]])
+			continue;
+		meta << "<meta name=\"" << metaFields[i] << "\" content=\"" << propList[wpdMetaFields[i]]->getStr().cstr() << "\">" << std::endl;
 	}
-	if (propList["librevenge:descriptive-type"])
-		*m_impl->m_pOutputStream << "<meta name=\"descriptive-type\" content=\"" << propList["librevenge:descriptive-type"]->getStr().cstr() << "\">" << std::endl;
+	if (propList["librevenge:descriptive-name"])
+		meta << "<title>" << propList["librevenge:descriptive-name"]->getStr().cstr() << "</title>" << std::endl;
+	else
+		meta << "<title></title>" << std::endl;
+	m_impl->pop();
 }
 
 void RVNGHTMLTextGenerator::startDocument()
 {
-	*m_impl->m_pOutputStream << "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\" \"http://www.w3.org/TR/REC-html40/loose.dtd\">" << std::endl;
-	*m_impl->m_pOutputStream << "<html>" << std::endl;
-	*m_impl->m_pOutputStream << "<head>" << std::endl;
-	*m_impl->m_pOutputStream << "<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" >" << std::endl;
-	*m_impl->m_pOutputStream << "</head>" << std::endl;
-	*m_impl->m_pOutputStream << "<body>" << std::endl;
 }
 
 void RVNGHTMLTextGenerator::endDocument()
 {
-	if (m_impl->m_footNotesStream.str().length())
-	{
-		*m_impl->m_pOutputStream << "<p><b>FOOTNOTES</b></p>" << std::endl;
-		*m_impl->m_pOutputStream << m_impl->m_footNotesStream.str() << std::endl;
-	}
-	if (m_impl->m_endNotesStream.str().length())
-	{
-		*m_impl->m_pOutputStream << "<p><b>ENDNOTES</b></p>" << std::endl;
-		*m_impl->m_pOutputStream << m_impl->m_endNotesStream.str() << std::endl;
-	}
-	if (m_impl->m_commentsStream.str().length())
-	{
-		*m_impl->m_pOutputStream << "<p><b>COMMENTS AND ANNOTATIONS</b></p>" << std::endl;
-		*m_impl->m_pOutputStream << m_impl->m_commentsStream.str() << std::endl;
-	}
-	if (m_impl->m_textBoxesStream.str().length())
-	{
-		*m_impl->m_pOutputStream << "<p><b>TEXT BOXES</b></p>" << std::endl;
-		*m_impl->m_pOutputStream << m_impl->m_textBoxesStream.str() << std::endl;
-	}
-	*m_impl->m_pOutputStream << "</body>" << std::endl;
-	*m_impl->m_pOutputStream << "</html>" << std::endl;
+	std::cout << "<!DOCTYPE HTML>" << std::endl;
+	std::cout << "<html>" << std::endl;
+	std::cout << "<head>" << std::endl;
+	std::cout << "<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" >" << std::endl;
+	m_impl->sendMetaData(std::cout);
+	std::cout << "<style>" << std::endl;
+	m_impl->m_listManager.send(std::cout);
+	m_impl->m_paragraphManager.send(std::cout);
+	m_impl->m_spanManager.send(std::cout);
+	m_impl->m_tableManager.send(std::cout);
+	std::cout << "</style>" << std::endl;
+	std::cout << "</head>" << std::endl;
+	std::cout << "<body>" << std::endl;
+	m_impl->flushUnsent(std::cout);
+	std::cout << "</body>" << std::endl;
+	std::cout << "</html>" << std::endl;
+}
+
+void RVNGHTMLTextGenerator::openPageSpan(const RVNGPropertyList & /* propList */)
+{
+	m_impl->m_actualPage++;
+}
+
+void RVNGHTMLTextGenerator::closePageSpan()
+{
 }
 
 void RVNGHTMLTextGenerator::definePageStyle(const RVNGPropertyList &) {}
-void RVNGHTMLTextGenerator::openPageSpan(const RVNGPropertyList & /* propList */) {}
-void RVNGHTMLTextGenerator::closePageSpan() {}
 
 void RVNGHTMLTextGenerator::openHeader(const RVNGPropertyList & /* propList */)
 {
@@ -167,348 +440,250 @@ void RVNGHTMLTextGenerator::closeSection() {}
 
 void RVNGHTMLTextGenerator::defineParagraphStyle(const RVNGPropertyList &, const RVNGPropertyListVector &) {}
 
-void RVNGHTMLTextGenerator::openParagraph(const RVNGPropertyList &propList, const RVNGPropertyListVector & /* tabStops */)
+void RVNGHTMLTextGenerator::openParagraph(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops)
 {
-	if (!m_impl->m_ignore)
-	{
-		*m_impl->m_pOutputStream << "<p style=\"";
+	if (m_impl->m_ignore)
+		return;
 
-		if (propList["fo:text-align"])
-		{
-
-			if (propList["fo:text-align"]->getStr() == RVNGString("end")) // stupid OOo convention..
-				*m_impl->m_pOutputStream << "text-align:right;";
-			else
-				*m_impl->m_pOutputStream << "text-align:" << propList["fo:text-align"]->getStr().cstr() << ";";
-		}
-		if (propList["fo:text-indent"])
-			*m_impl->m_pOutputStream << "text-indent:" << propList["fo:text-indent"]->getStr().cstr() << ";";
-
-		if (propList["fo:line-height"] && propList["fo:line-height"]->getDouble() != 1.0)
-			*m_impl->m_pOutputStream << "line-height:" << propList["fo:line-height"]->getDouble() << ";";
-		*m_impl->m_pOutputStream << "\">";
-	}
+	m_impl->output(false) << "<p class=\"" << m_impl->m_paragraphManager.getClass(propList, tabStops) << "\">";
 }
 
 void RVNGHTMLTextGenerator::closeParagraph()
 {
-	if (!m_impl->m_ignore)
-	{
-		*m_impl->m_pOutputStream << "</p>" << std::endl;
-	}
+	if (m_impl->m_ignore)
+		return;
+
+	m_impl->output() << "</p>" << std::endl;
 }
 
 void RVNGHTMLTextGenerator::defineCharacterStyle(const RVNGPropertyList &) {}
 
 void RVNGHTMLTextGenerator::openSpan(const RVNGPropertyList &propList)
 {
-	if (!m_impl->m_ignore)
-	{
+	if (m_impl->m_ignore)
+		return;
 
-		*m_impl->m_pOutputStream << "<span style=\"";
-		if (propList["style:font-name"])
-			*m_impl->m_pOutputStream << "font-family: \'" << propList["style:font-name"]->getStr().cstr() << "\';";
-		if (propList["fo:font-size"])
-			*m_impl->m_pOutputStream << "font-size: " << propList["fo:font-size"]->getStr().cstr() << ";";
-		if (propList["fo:font-weight"])
-			*m_impl->m_pOutputStream << "font-weight: " << propList["fo:font-weight"]->getStr().cstr() << ";";
-		if (propList["fo:font-style"])
-			*m_impl->m_pOutputStream << "font-style: " << propList["fo:font-style"]->getStr().cstr() << ";";
-		if (propList["style:text-crossing-out"] && propList["style:text-crossing-out"]->getStr() == RVNGString("single-line"))
-			*m_impl->m_pOutputStream << "text-decoration:line-through;";
-		if (propList["style:text-underline"]) // don't know if double underline is possible
-			*m_impl->m_pOutputStream << "text-decoration:underline;";
-		if (propList["style:text-blinking"])
-			*m_impl->m_pOutputStream << "text-decoration:blink;";
-		if (propList["fo:color"])
-			*m_impl->m_pOutputStream << "color:" << propList["fo:color"]->getStr().cstr() << ";";
-		if (propList["style:text-background-color"])
-			*m_impl->m_pOutputStream << "background-color:" << propList["style:text-background-color"]->getStr().cstr() << ";";
-
-		*m_impl->m_pOutputStream << "\">";
-	}
+	m_impl->output() << "<span class=\"" << m_impl->m_spanManager.getClass(propList) << "\">";
 }
 
 void RVNGHTMLTextGenerator::closeSpan()
 {
-	if (!m_impl->m_ignore)
-	{
-		*m_impl->m_pOutputStream << "</span>" << std::endl;
-	}
+	if (m_impl->m_ignore)
+		return;
+	m_impl->output() << "</span>" << std::endl;
 }
 
 void RVNGHTMLTextGenerator::insertTab()
 {
-	if (!m_impl->m_ignore)
-	{
-		// Does not have a lot of effect since tabs in html are ignorable white-space
-		*m_impl->m_pOutputStream << "\t";
-	}
+	if (m_impl->m_ignore)
+		return;
+
+	// Does not have a lot of effect since tabs in html are ignorable white-space
+	m_impl->output() << "\t";
 }
 
 void RVNGHTMLTextGenerator::insertLineBreak()
 {
-	if (!m_impl->m_ignore)
-	{
-
-		*m_impl->m_pOutputStream << "<br>" << std::endl;
-	}
+	if (m_impl->m_ignore)
+		return;
+	m_impl->output() << "<br>" << std::endl;
 }
 
 void RVNGHTMLTextGenerator::insertField(const RVNGString & /* type */, const RVNGPropertyList & /* propList */) {}
 
-void RVNGHTMLTextGenerator::defineOrderedListLevel(const RVNGPropertyList & /* propList */) {}
-void RVNGHTMLTextGenerator::defineUnorderedListLevel(const RVNGPropertyList & /* propList */) {}
-
 void RVNGHTMLTextGenerator::insertText(const RVNGString &text)
 {
-	if (!m_impl->m_ignore)
-	{
-
-		RVNGString tempUTF8(text, true);
-		*m_impl->m_pOutputStream << tempUTF8.cstr();
-	}
+	if (m_impl->m_ignore)
+		return;
+	RVNGString tempUTF8(text, true);
+	m_impl->output() << tempUTF8.cstr();
 }
 
 void RVNGHTMLTextGenerator::insertSpace()
 {
-	if (!m_impl->m_ignore)
-	{
-		*m_impl->m_pOutputStream << "&nbsp;";
-	}
+	if (m_impl->m_ignore)
+		return;
+	m_impl->output() << "&nbsp;";
 }
 
-void RVNGHTMLTextGenerator::openOrderedListLevel(const RVNGPropertyList & /* propList */)
+void RVNGHTMLTextGenerator::defineOrderedListLevel(const RVNGPropertyList &propList)
 {
-	if (!m_impl->m_ignore)
-	{
-		*m_impl->m_pOutputStream << "<ol>" << std::endl;
-	}
+	if (m_impl->m_ignore)
+		return;
+	m_impl->m_listManager.defineLevel(propList, true);
+}
+
+void RVNGHTMLTextGenerator::defineUnorderedListLevel(const RVNGPropertyList &propList)
+{
+	if (m_impl->m_ignore)
+		return;
+	m_impl->m_listManager.defineLevel(propList, false);
+}
+
+void RVNGHTMLTextGenerator::openOrderedListLevel(const RVNGPropertyList &propList)
+{
+	if (m_impl->m_ignore)
+		return;
+	// fixme: if level is > 1, we must first insert a div here
+	m_impl->output(false) << "<ol class=\"" << m_impl->m_listManager.openLevel(propList, true) << "\">\n";
 }
 
 void RVNGHTMLTextGenerator::closeOrderedListLevel()
 {
-	if (!m_impl->m_ignore)
-	{
-		*m_impl->m_pOutputStream << "</ol>" << std::endl;
-	}
+	if (m_impl->m_ignore)
+		return;
+	m_impl->m_listManager.closeLevel();
+	m_impl->output() << "</ol>" << std::endl;
 }
 
-void RVNGHTMLTextGenerator::openUnorderedListLevel(const RVNGPropertyList & /* propList */)
+void RVNGHTMLTextGenerator::openUnorderedListLevel(const RVNGPropertyList &propList)
 {
-	if (!m_impl->m_ignore)
-	{
-		*m_impl->m_pOutputStream << "<ul>" << std::endl;
-	}
+	if (m_impl->m_ignore)
+		return;
+	// fixme: if level is > 1, we must first insert a div here
+	m_impl->output(false) << "<ul class=\"" << m_impl->m_listManager.openLevel(propList, false) << "\">\n";
 }
 
 void RVNGHTMLTextGenerator::closeUnorderedListLevel()
 {
-	if (!m_impl->m_ignore)
-	{
-		*m_impl->m_pOutputStream << "</ul>" << std::endl;
-	}
+	if (m_impl->m_ignore)
+		return;
+	m_impl->m_listManager.closeLevel();
+	m_impl->output() << "</ul>" << std::endl;
 }
 
 
-void RVNGHTMLTextGenerator::openListElement(const RVNGPropertyList & /* propList */, const RVNGPropertyListVector &/* tabStops */)
+void RVNGHTMLTextGenerator::openListElement(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops)
 {
-	if (!m_impl->m_ignore)
-	{
-		*m_impl->m_pOutputStream << "<li>";
-	}
+	if (m_impl->m_ignore)
+		return;
+	m_impl->output(false) << "<li class=\"" << m_impl->m_listManager.getClass(propList, tabStops) << "\">";
 }
 
 void RVNGHTMLTextGenerator::closeListElement()
 {
-	if (!m_impl->m_ignore)
-	{
-		*m_impl->m_pOutputStream << "</li>" << std::endl;
-	}
+	if (m_impl->m_ignore)
+		return;
+	m_impl->output() << "</li>" << std::endl;
 }
 
-void RVNGHTMLTextGenerator::openFootnote(const RVNGPropertyList &propList)
+void RVNGHTMLTextGenerator::openFootnote(const RVNGPropertyList &)
 {
-	if (!m_impl->m_ignore)
-	{
-		if (!m_impl->m_footNotesCount++)
-		{
-			if (propList["librevenge:number"])
-				*m_impl->m_pOutputStream << "<sup>(footnote: " << propList["librevenge:number"]->getStr().cstr() << ")</sup>";
-			m_impl->m_pOutputStream = &m_impl->m_footNotesStream;
-			// Cheesey hack..
-			if (propList["librevenge:number"])
-				*m_impl->m_pOutputStream << "<p>" << propList["librevenge:number"]->getStr().cstr() << ":</p>";
-			else
-				*m_impl->m_pOutputStream << "<p/>";
-		}
-		else
-			m_impl->m_pOutputStream = &m_impl->m_dummyStream;
-	}
+	if (m_impl->m_ignore)
+		return;
+	std::ostream &out=m_impl->output();
+	m_impl->push(RVNGHTMLTextZone::Z_FootNote);
+	m_impl->stream().addLabel(out);
 }
 
 void RVNGHTMLTextGenerator::closeFootnote()
 {
-	if (!m_impl->m_ignore)
-	{
-		if (!(--m_impl->m_footNotesCount))
-		{
-			*m_impl->m_pOutputStream << "<p/>" << std::endl;
-			m_impl->m_pOutputStream = &std::cout;
-		}
-	}
+	if (m_impl->m_ignore)
+		return;
+	m_impl->pop();
 }
 
-void RVNGHTMLTextGenerator::openEndnote(const RVNGPropertyList &propList)
+void RVNGHTMLTextGenerator::openEndnote(const RVNGPropertyList &)
 {
-	if (!m_impl->m_ignore)
-	{
-		if (!m_impl->m_endNotesCount++)
-		{
-			if (propList["librevenge:number"])
-				*m_impl->m_pOutputStream << "<sup>(endnote: " << propList["librevenge:number"]->getStr().cstr() << ")</sup>";
-			m_impl->m_pOutputStream = &m_impl->m_footNotesStream;
-			// Cheesey hack..
-			if (propList["librevenge:number"])
-				*m_impl->m_pOutputStream << "<p>" << propList["librevenge:number"]->getStr().cstr() << ":</p>";
-			else
-				*m_impl->m_pOutputStream << "<p/>";
-		}
-		else
-			m_impl->m_pOutputStream = &m_impl->m_dummyStream;
-	}
+	if (m_impl->m_ignore)
+		return;
+	std::ostream &out=m_impl->output();
+	m_impl->push(RVNGHTMLTextZone::Z_EndNote);
+	m_impl->stream().addLabel(out);
 }
 
 void RVNGHTMLTextGenerator::closeEndnote()
 {
-	if (!m_impl->m_ignore)
-	{
-		if (!(--m_impl->m_endNotesCount))
-		{
-			*m_impl->m_pOutputStream << "<p/>" << std::endl;
-			m_impl->m_pOutputStream = &std::cout;
-		}
-	}
+	if (m_impl->m_ignore)
+		return;
+	m_impl->pop();
 }
 
 void RVNGHTMLTextGenerator::openComment(const RVNGPropertyList & /*propList*/)
 {
-	if (!m_impl->m_ignore)
-	{
-		if (!m_impl->m_commentsCount++)
-		{
-			*m_impl->m_pOutputStream << "<sup>(comment: " << m_impl->m_commentNumber << ")</sup>";
-			m_impl->m_pOutputStream = &m_impl->m_commentsStream;
-			*m_impl->m_pOutputStream << "<p>Comment " << m_impl->m_commentNumber++ << ":</p>" << std::endl;
-			*m_impl->m_pOutputStream << "<p/>";
-		}
-		else
-			m_impl->m_pOutputStream = &m_impl->m_dummyStream;
-	}
+	if (m_impl->m_ignore)
+		return;
+	std::ostream &out=m_impl->output();
+	m_impl->push(RVNGHTMLTextZone::Z_Comment);
+	m_impl->stream().addLabel(out);
 }
 
 void RVNGHTMLTextGenerator::closeComment()
 {
-	if (!m_impl->m_ignore)
-	{
-		if (!(--m_impl->m_commentsCount))
-		{
-			*m_impl->m_pOutputStream << "<p/>" << std::endl;
-			m_impl->m_pOutputStream = &std::cout;
-		}
-	}
+	if (m_impl->m_ignore)
+		return;
+	m_impl->pop();
 }
 
 void RVNGHTMLTextGenerator::openTextBox(const RVNGPropertyList & /*propList*/)
 {
-	if (!m_impl->m_ignore)
-	{
-		if (!m_impl->m_textBoxesCount++)
-		{
-			*m_impl->m_pOutputStream << "<sup>(text box: " << m_impl->m_textBoxNumber << ")</sup>";
-			m_impl->m_pOutputStream = &m_impl->m_commentsStream;
-			*m_impl->m_pOutputStream << "<p>Text Box " << m_impl->m_textBoxNumber++ << ":</p>" << std::endl;
-			m_impl->m_pOutputStream = &m_impl->m_textBoxesStream;
-			*m_impl->m_pOutputStream << "<p/>";
-		}
-		else
-			m_impl->m_pOutputStream = &m_impl->m_dummyStream;
-	}
+	if (m_impl->m_ignore)
+		return;
+	std::ostream &out=m_impl->output();
+	m_impl->push(RVNGHTMLTextZone::Z_TextBox);
+	m_impl->stream().addLabel(out);
 }
 
 void RVNGHTMLTextGenerator::closeTextBox()
 {
-	if (!m_impl->m_ignore)
-	{
-		if (!(--m_impl->m_textBoxesCount))
-		{
-			*m_impl->m_pOutputStream << "<p/>" << std::endl;
-			m_impl->m_pOutputStream = &std::cout;
-		}
-	}
+	if (m_impl->m_ignore)
+		return;
+	m_impl->pop();
 }
 
-void RVNGHTMLTextGenerator::openTable(const RVNGPropertyList & /* propList */, const RVNGPropertyListVector & /* columns */)
+void RVNGHTMLTextGenerator::openTable(const RVNGPropertyList & /* propList */, const RVNGPropertyListVector &columns)
 {
-	if (!m_impl->m_ignore)
-	{
-		*m_impl->m_pOutputStream << "<table border=\"1\">" << std::endl;
-		*m_impl->m_pOutputStream << "<tbody>" << std::endl;
-	}
+	if (m_impl->m_ignore)
+		return;
+	m_impl->m_tableManager.openTable(columns);
+	m_impl->output() << "<table>" << std::endl;
+	m_impl->output() << "<tbody>" << std::endl;
 }
 
-void RVNGHTMLTextGenerator::openTableRow(const RVNGPropertyList & /* propList */)
+void RVNGHTMLTextGenerator::openTableRow(const RVNGPropertyList &propList)
 {
-	if (!m_impl->m_ignore)
-	{
-		*m_impl->m_pOutputStream << "<tr>" << std::endl;
-	}
+	if (m_impl->m_ignore)
+		return;
+	m_impl->output() << "<tr class=\"" << m_impl->m_tableManager.getRowClass(propList) << "\">\n";
 }
 
 void RVNGHTMLTextGenerator::closeTableRow()
 {
-	if (!m_impl->m_ignore)
-	{
-		*m_impl->m_pOutputStream << "</tr>" << std::endl;
-	}
+	if (m_impl->m_ignore)
+		return;
+	m_impl->output() << "</tr>" << std::endl;
 }
 
 void RVNGHTMLTextGenerator::openTableCell(const RVNGPropertyList &propList)
 {
-	if (!m_impl->m_ignore)
-	{
-		*m_impl->m_pOutputStream << "<td style=\"";
-		if (propList["fo:background-color"])
-			*m_impl->m_pOutputStream << "background-color:" << propList["fo:background-color"]->getStr().cstr() << ";";
+	if (m_impl->m_ignore)
+		return;
+	std::ostream &out=m_impl->output();
+	out << "<td class=\"" << m_impl->m_tableManager.getCellClass(propList) << "\"";
+	if (propList["table:number-columns-spanned"])
+		out << " colspan=\"" << propList["table:number-columns-spanned"]->getInt() << "\"";
+	if (propList["table:number-rows-spanned"])
+		out << " rowspan=\"" << propList["table:number-rows-spanned"]->getInt() << "\"";
+	out << ">" << std::endl;
 
-		*m_impl->m_pOutputStream << "\" ";
-
-		if (propList["table:number-columns-spanned"])
-			*m_impl->m_pOutputStream << "colspan=\"" << propList["table:number-columns-spanned"]->getInt() << "\" ";
-		if (propList["table:number-rows-spanned"])
-			*m_impl->m_pOutputStream << "rowspan=\"" << propList["table:number-rows-spanned"]->getInt() << "\" ";
-
-		*m_impl->m_pOutputStream << ">" << std::endl;
-	}
 }
 
 void RVNGHTMLTextGenerator::closeTableCell()
 {
-	if (!m_impl->m_ignore)
-	{
-		*m_impl->m_pOutputStream << "</td>" << std::endl;
-	}
+	if (m_impl->m_ignore)
+		return;
+	m_impl->output() << "</td>" << std::endl;
 }
 
 void RVNGHTMLTextGenerator::insertCoveredTableCell(const RVNGPropertyList & /* propList */) {}
 
 void RVNGHTMLTextGenerator::closeTable()
 {
-	if (!m_impl->m_ignore)
-	{
-		*m_impl->m_pOutputStream << "</tbody>" << std::endl;
-		*m_impl->m_pOutputStream << "</table>" << std::endl;
-	}
+	if (m_impl->m_ignore)
+		return;
+	m_impl->output() << "</tbody>" << std::endl;
+	m_impl->output() << "</table>" << std::endl;
+	m_impl->m_tableManager.closeTable();
 }
 
 void RVNGHTMLTextGenerator::openFrame(const RVNGPropertyList & /* propList */) {}
@@ -517,5 +692,4 @@ void RVNGHTMLTextGenerator::insertBinaryObject(const RVNGPropertyList & /* propL
 void RVNGHTMLTextGenerator::insertEquation(const RVNGPropertyList & /* propList */, const RVNGString & /* data */) {}
 
 }
-
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

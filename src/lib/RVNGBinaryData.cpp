@@ -203,7 +203,7 @@ const RVNGInputStream *RVNGBinaryData::getDataStream() const
 		m_binaryDataImpl->m_data->m_stream.reset();
 	else
 		m_binaryDataImpl->m_data->m_stream.reset(
-				new RVNGMemoryInputStream(&(m_binaryDataImpl->m_data->m_buf[0]), m_binaryDataImpl->m_data->m_buf.size()));
+		    new RVNGMemoryInputStream(&(m_binaryDataImpl->m_data->m_buf[0]), m_binaryDataImpl->m_data->m_buf.size()));
 
 	return m_binaryDataImpl->m_data->m_stream.get();
 }
