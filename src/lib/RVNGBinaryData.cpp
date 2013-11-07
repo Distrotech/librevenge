@@ -17,6 +17,9 @@
  * applicable instead of those above.
  */
 
+#include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
+
 #include <librevenge/librevenge.h>
 #include "RVNGMemoryStream.h"
 
@@ -27,21 +30,43 @@
 namespace librevenge
 {
 
-class RVNGBinaryDataImpl
+namespace
+
 {
-public:
-	RVNGBinaryDataImpl() : m_buf(), m_stream(NULL) {}
-	~RVNGBinaryDataImpl()
-	{
-		if (m_stream) delete m_stream;
-	}
+
+struct DataImpl
+{
+	DataImpl() : m_buf(), m_stream() {}
+
 	std::vector<unsigned char> m_buf;
-	RVNGMemoryInputStream *m_stream;
-private:
-	// Unimplemented to prevent compiler from creating crasher ones
-	RVNGBinaryDataImpl(const RVNGBinaryDataImpl &);
-	RVNGBinaryDataImpl &operator=(const RVNGBinaryDataImpl &);
+	boost::scoped_ptr<RVNGMemoryInputStream> m_stream;
 };
+
+}
+
+struct RVNGBinaryDataImpl
+{
+	RVNGBinaryDataImpl();
+
+	void makeUnique();
+
+	boost::shared_ptr<DataImpl> m_ptr;
+};
+
+RVNGBinaryDataImpl::RVNGBinaryDataImpl()
+	: m_ptr(new DataImpl())
+{
+}
+
+void RVNGBinaryDataImpl::makeUnique()
+{
+	if (!m_ptr.unique())
+	{
+		boost::shared_ptr<DataImpl> ptr(new DataImpl());
+		ptr->m_buf = m_ptr->m_buf;
+		m_ptr = ptr;
+	}
+}
 
 RVNGBinaryData::~RVNGBinaryData()
 {
@@ -56,59 +81,67 @@ RVNGBinaryData::RVNGBinaryData() :
 RVNGBinaryData::RVNGBinaryData(const RVNGBinaryData &data) :
 	m_binaryDataImpl(new RVNGBinaryDataImpl)
 {
-	m_binaryDataImpl->m_buf = data.m_binaryDataImpl->m_buf;
+	m_binaryDataImpl->m_ptr = data.m_binaryDataImpl->m_ptr;
 }
 
 RVNGBinaryData::RVNGBinaryData(const unsigned char *buffer, const unsigned long bufferSize) :
 	m_binaryDataImpl(new RVNGBinaryDataImpl)
 {
-	m_binaryDataImpl->m_buf = std::vector<unsigned char> (bufferSize);
+	m_binaryDataImpl->m_ptr->m_buf = std::vector<unsigned char> (bufferSize);
 	for (unsigned long i = 0; i < bufferSize; i++)
-		m_binaryDataImpl->m_buf[i] = buffer[i];
+		m_binaryDataImpl->m_ptr->m_buf[i] = buffer[i];
 }
 
 void RVNGBinaryData::append(const RVNGBinaryData &data)
 {
-	unsigned long previousSize = m_binaryDataImpl->m_buf.size();
-	m_binaryDataImpl->m_buf.reserve(previousSize + data.m_binaryDataImpl->m_buf.size());
-	for (unsigned long i = 0; i < data.m_binaryDataImpl->m_buf.size(); i++)
-		m_binaryDataImpl->m_buf.push_back(data.m_binaryDataImpl->m_buf[i]);
+	m_binaryDataImpl->makeUnique();
+
+	unsigned long previousSize = m_binaryDataImpl->m_ptr->m_buf.size();
+	m_binaryDataImpl->m_ptr->m_buf.reserve(previousSize + data.m_binaryDataImpl->m_ptr->m_buf.size());
+	for (unsigned long i = 0; i < data.m_binaryDataImpl->m_ptr->m_buf.size(); i++)
+		m_binaryDataImpl->m_ptr->m_buf.push_back(data.m_binaryDataImpl->m_ptr->m_buf[i]);
 }
 
 void RVNGBinaryData::append(const unsigned char *buffer, const unsigned long bufferSize )
 {
-	unsigned long previousSize = m_binaryDataImpl->m_buf.size();
-	m_binaryDataImpl->m_buf.reserve(previousSize + bufferSize);
+	m_binaryDataImpl->makeUnique();
+
+	unsigned long previousSize = m_binaryDataImpl->m_ptr->m_buf.size();
+	m_binaryDataImpl->m_ptr->m_buf.reserve(previousSize + bufferSize);
 	for (unsigned long i = 0; i < bufferSize; i++)
-		m_binaryDataImpl->m_buf.push_back(buffer[i]);
+		m_binaryDataImpl->m_ptr->m_buf.push_back(buffer[i]);
 }
 
 void RVNGBinaryData::append(const unsigned char c)
 {
-	m_binaryDataImpl->m_buf.push_back(c);
+	m_binaryDataImpl->makeUnique();
+
+	m_binaryDataImpl->m_ptr->m_buf.push_back(c);
 }
 
 void RVNGBinaryData::clear()
 {
-	m_binaryDataImpl->m_buf.clear();
+	m_binaryDataImpl->makeUnique();
+
+	m_binaryDataImpl->m_ptr->m_buf.clear();
 }
 
 unsigned long RVNGBinaryData::size() const
 {
-	return (unsigned long)m_binaryDataImpl->m_buf.size();
+	return (unsigned long)m_binaryDataImpl->m_ptr->m_buf.size();
 }
 
 RVNGBinaryData &RVNGBinaryData::operator=(const RVNGBinaryData &dataBuf)
 {
-	m_binaryDataImpl->m_buf = dataBuf.m_binaryDataImpl->m_buf;
+	m_binaryDataImpl->m_ptr = dataBuf.m_binaryDataImpl->m_ptr;
 	return *this;
 }
 
 const unsigned char *RVNGBinaryData::getDataBuffer() const
 {
-	if (m_binaryDataImpl->m_buf.empty())
+	if (m_binaryDataImpl->m_ptr->m_buf.empty())
 		return 0;
-	return &(m_binaryDataImpl->m_buf[0]);
+	return &(m_binaryDataImpl->m_ptr->m_buf[0]);
 }
 
 const RVNGString RVNGBinaryData::getBase64Data() const
@@ -130,7 +163,7 @@ const RVNGString RVNGBinaryData::getBase64Data() const
 	for (; i < modifiedLen; i++)
 	{
 		if (i < len)
-			tempCharsToEncode[j++] = m_binaryDataImpl->m_buf[i];
+			tempCharsToEncode[j++] = m_binaryDataImpl->m_ptr->m_buf[i];
 		else
 		{
 			tempCharsToEncode[j++] = '\0';
@@ -170,15 +203,14 @@ const RVNGString RVNGBinaryData::getBase64Data() const
 
 const RVNGInputStream *RVNGBinaryData::getDataStream() const
 {
-	if (m_binaryDataImpl->m_stream)
+	if (m_binaryDataImpl->m_ptr->m_stream)
 	{
-		delete (m_binaryDataImpl->m_stream);
-		m_binaryDataImpl->m_stream = 0;
+		m_binaryDataImpl->m_ptr->m_stream.reset();
 	}
-	if (m_binaryDataImpl->m_buf.empty())
+	if (m_binaryDataImpl->m_ptr->m_buf.empty())
 		return 0;
-	m_binaryDataImpl->m_stream = new RVNGMemoryInputStream(&(m_binaryDataImpl->m_buf[0]), m_binaryDataImpl->m_buf.size());
-	return m_binaryDataImpl->m_stream;
+	m_binaryDataImpl->m_ptr->m_stream.reset(new RVNGMemoryInputStream(&(m_binaryDataImpl->m_ptr->m_buf[0]), m_binaryDataImpl->m_ptr->m_buf.size()));
+	return m_binaryDataImpl->m_ptr->m_stream.get();
 }
 
 }

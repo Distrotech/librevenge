@@ -26,7 +26,7 @@
 namespace librevenge
 {
 
-class RVNGBinaryDataImpl;
+struct RVNGBinaryDataImpl;
 
 class RVNGBinaryData
 {
