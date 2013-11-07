@@ -199,14 +199,14 @@ private:
 
 private:
 	bool m_imaginaryFirst;
-	RVNGPtree::const_assoc_iterator m_iter;
+	RVNGPtree::const_iterator m_iter;
 	RVNGPtree *m_ptree;
 };
 
 
 RVNGPropertyListIterImpl::RVNGPropertyListIterImpl(const RVNGPropertyListImpl *impl) :
 	m_imaginaryFirst(false),
-	m_iter(impl->m_ptree.ordered_begin()),
+	m_iter(impl->m_ptree.begin()),
 	m_ptree(&impl->m_ptree)
 {
 }
@@ -215,14 +215,14 @@ void RVNGPropertyListIterImpl::rewind()
 {
 	// rewind to an imaginary element that preceeds the first one
 	m_imaginaryFirst = true;
-	m_iter = m_ptree->ordered_begin();
+	m_iter = m_ptree->begin();
 }
 
 bool RVNGPropertyListIterImpl::next()
 {
 	if (!m_imaginaryFirst)
 		++m_iter;
-	if (m_iter==m_ptree->not_found())
+	if (m_iter==m_ptree->end())
 		return false;
 	m_imaginaryFirst = false;
 
@@ -231,7 +231,7 @@ bool RVNGPropertyListIterImpl::next()
 
 bool RVNGPropertyListIterImpl::last()
 {
-	if (m_iter == m_ptree->not_found())
+	if (m_iter == m_ptree->end())
 		return true;
 
 	return false;

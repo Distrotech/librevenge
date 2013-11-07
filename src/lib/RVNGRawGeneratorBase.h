@@ -22,6 +22,7 @@
 #define RVNGRAWGENERATORBASE_H
 
 #include <stack>
+#include <librevenge/librevenge.h>
 
 #ifdef RVNG_CALLGRAPH_ENTER
 #warning who defined RVNG_CALLGRAPH_ENTER?
@@ -52,6 +53,9 @@
 		m_impl->m_callStack.pop(); \
 	}
 
+namespace librevenge
+{
+
 struct RVNGRawGeneratorBase
 {
 	explicit RVNGRawGeneratorBase(bool printCallgraphScore);
@@ -76,6 +80,12 @@ struct RVNGRawGeneratorBase
 	void iuprintf(const char *format, ...);
 	void idprintf(const char *format, ...);
 };
+
+RVNGString getPropString(const RVNGPropertyList &propList);
+
+RVNGString getPropString(const RVNGPropertyListVector &itemList);
+
+} // namespace librevenge
 
 #endif // RVNGRAWGENERATORBASE_H
 

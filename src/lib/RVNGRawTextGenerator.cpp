@@ -76,53 +76,6 @@ RVNGRawTextGenerator::~RVNGRawTextGenerator()
 	delete m_impl;
 }
 
-RVNGString getPropString(const RVNGPropertyList &propList)
-{
-	RVNGString propString;
-	RVNGPropertyList::Iter i(propList);
-	if (!i.last())
-	{
-		propString.append(i.key());
-		propString.append(": ");
-		propString.append(i()->getStr().cstr());
-		for (; i.next(); )
-		{
-			propString.append(", ");
-			propString.append(i.key());
-			propString.append(": ");
-			propString.append(i()->getStr().cstr());
-		}
-	}
-
-	return propString;
-}
-
-RVNGString getPropString(const RVNGPropertyListVector &itemList)
-{
-	RVNGString propString;
-
-	propString.append("(");
-	RVNGPropertyListVector::Iter i(itemList);
-
-	if (!i.last())
-	{
-		propString.append("(");
-		propString.append(getPropString(i()));
-		propString.append(")");
-
-		for (; i.next();)
-		{
-			propString.append(", (");
-			propString.append(getPropString(i()));
-			propString.append(")");
-		}
-
-	}
-	propString.append(")");
-
-	return propString;
-}
-
 void RVNGRawTextGenerator::setDocumentMetaData(const RVNGPropertyList &propList)
 {
 	if (m_impl->m_printCallgraphScore)

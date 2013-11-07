@@ -20,8 +20,13 @@
 
 #include <stdarg.h>
 #include <stdio.h>
+#include <map>
+#include <string>
 
 #include "RVNGRawGeneratorBase.h"
+
+namespace librevenge
+{
 
 RVNGRawGeneratorBase::RVNGRawGeneratorBase(bool printCallgraphScore)
 	: m_indent(0)
@@ -72,5 +77,54 @@ void RVNGRawGeneratorBase::idprintf(const char *format, ...)
 	vprintf(format, args);
 	va_end(args);
 }
+
+RVNGString getPropString(const RVNGPropertyList &propList)
+{
+	std::map<std::string, std::string> tmpMap;
+	RVNGPropertyList::Iter i(propList);
+	for (i.rewind(); i.next(); )
+		tmpMap[i.key()] = i()->getStr().cstr();
+
+	RVNGString propString;
+	for (std::map<std::string, std::string>::const_iterator iter = tmpMap.begin();
+	        iter != tmpMap.end(); ++iter)
+	{
+		if (iter != tmpMap.begin())
+			propString.append(", ");
+		propString.append(iter->first.c_str());
+		propString.append(": ");
+		propString.append(iter->second.c_str());
+	}
+
+	return propString;
+}
+
+RVNGString getPropString(const RVNGPropertyListVector &itemList)
+{
+	RVNGString propString;
+
+	propString.append("(");
+	RVNGPropertyListVector::Iter i(itemList);
+
+	if (!i.last())
+	{
+		propString.append("(");
+		propString.append(getPropString(i()));
+		propString.append(")");
+
+		for (; i.next();)
+		{
+			propString.append(", (");
+			propString.append(getPropString(i()));
+			propString.append(")");
+		}
+
+	}
+	propString.append(")");
+
+	return propString;
+}
+
+} // namespace librevenge
 
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */
