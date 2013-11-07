@@ -23,11 +23,25 @@ namespace test
 
 class RVNGBinaryDataTest : public CPPUNIT_NS::TestFixture
 {
+public:
 	virtual void setUp();
 	virtual void tearDown();
 
+private:
 	CPPUNIT_TEST_SUITE(RVNGBinaryDataTest);
+	CPPUNIT_TEST(testConstruction);
+	CPPUNIT_TEST(testAppend);
+	CPPUNIT_TEST(testClear);
+	CPPUNIT_TEST(testBase64);
+	CPPUNIT_TEST(testStream);
 	CPPUNIT_TEST_SUITE_END();
+
+private:
+	void testConstruction();
+	void testAppend();
+	void testClear();
+	void testBase64();
+	void testStream();
 };
 
 }
