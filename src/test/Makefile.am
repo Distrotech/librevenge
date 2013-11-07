@@ -13,6 +13,8 @@ test_LDADD = \
 test_SOURCES = \
 	RVNGBinaryDataTest.cpp \
 	RVNGBinaryDataTest.h \
+	RVNGStreamTest.cpp \
+	RVNGStreamTest.h \
 	test.cpp
 
 TESTS = $(target_test)
