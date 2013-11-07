@@ -28,8 +28,8 @@ namespace librevenge
 // we use the pimpl pattern so we don't expose any STL symbols to the rest of
 // the world.. yes, this is quite annoying.
 
-class RVNGMapImpl;
-class RVNGMapIterImpl;
+class RVNGPropertyListImpl;
+class RVNGPropertyListIterImpl;
 
 class RVNGPropertyList
 {
@@ -60,14 +60,14 @@ public:
 		const RVNGProperty *operator()() const;
 		const char *key();
 	private:
-		RVNGMapIterImpl *m_iterImpl;
+		RVNGPropertyListIterImpl *m_iterImpl;
 		Iter(const Iter &);
 		Iter &operator=(const Iter &);
 	};
 	friend class RVNGPropertyList::Iter;
 
 private:
-	mutable RVNGMapImpl *m_mapImpl;
+	mutable RVNGPropertyListImpl *m_impl;
 };
 
 }

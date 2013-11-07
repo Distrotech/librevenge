@@ -24,6 +24,7 @@
 #include <librevenge/librevenge.h>
 
 #ifdef DEBUG
+#include <stdio.h>
 #define RVNG_DEBUG_MSG(M) printf M
 #else
 #define RVNG_DEBUG_MSG(M)

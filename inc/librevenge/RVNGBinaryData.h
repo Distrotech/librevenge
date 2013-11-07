@@ -26,53 +26,15 @@
 namespace librevenge
 {
 
-struct RVNGBinaryDataImpl;
+class RVNGBinaryDataImpl;
 
-/** A representation of arbitrary binary data.
-
-This class is optimized for copying, which means the copies of an
-instance share the data (@seealso copy).
-
-The typical usage pattern of this class is:
-1. construction
-2. (optional) modification, using @c append and @c clear
-3. usage (treating it as immutable)
-*/
 class RVNGBinaryData
 {
 public:
 	RVNGBinaryData();
-
-	/** Creates a new (shallow) copy of @c other.
-
-	  The copy is shallow, which means that the actual content is shared
-	  with original. If you need a separately changeable copy, use @c
-	  copy.
-
-	  @seealso copy
-	  */
-	RVNGBinaryData(const RVNGBinaryData &other);
+	RVNGBinaryData(const RVNGBinaryData &);
 	RVNGBinaryData(const unsigned char *buffer, const unsigned long bufferSize);
 	~RVNGBinaryData();
-
-	/** Assigns a (shallow) copy of @c other to @c this.
-
-	  The copy is shallow, which means that the actual content is shared
-	  with original. If you need a separately changeable copy, use @c
-	  copy.
-
-	  @seealso copy
-	  */
-	RVNGBinaryData &operator=(const RVNGBinaryData &other);
-
-	/** Creates a (deep) copy of @c this.
-
-	  A copy created by this function does not share data with the
-	  original and can thus be changed separately.
-
-	  @seealso RVNGBinaryData(const RVNGBinaryData &)
-	  */
-	RVNGBinaryData copy() const;
 
 	void append(const RVNGBinaryData &data);
 	void append(const unsigned char *buffer, const unsigned long bufferSize);
@@ -83,6 +45,8 @@ public:
 	const unsigned char *getDataBuffer() const;
 	const RVNGString getBase64Data() const;
 	const RVNGInputStream *getDataStream() const;
+
+	RVNGBinaryData &operator=(const RVNGBinaryData &);
 
 private:
 	RVNGBinaryDataImpl *m_binaryDataImpl;
