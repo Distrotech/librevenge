@@ -20,10 +20,8 @@
  * applicable instead of those above.
  */
 
-#include <stdio.h>
 #include <cstring>
 #include <fstream>
-#include <iostream>
 #include <sstream>
 #include <vector>
 
@@ -248,7 +246,7 @@ std::string RVNGHTMLTextZone::label(int id) const
 struct RVNGHTMLTextGeneratorImpl
 {
 	//! constructor
-	RVNGHTMLTextGeneratorImpl() : m_actualPage(0), m_ignore(false), m_listManager(), m_paragraphManager(), m_spanManager(), m_tableManager(), m_actualStream(), m_streamStack()
+	RVNGHTMLTextGeneratorImpl(RVNGString &document) : m_document(document), m_actualPage(0), m_ignore(false), m_listManager(), m_paragraphManager(), m_spanManager(), m_tableManager(), m_actualStream(), m_streamStack()
 	{
 		for (int i = 0; i < RVNGHTMLTextZone::Z_NumZones; ++i)
 			m_zones[i].setType(RVNGHTMLTextZone::Type(i));
@@ -325,6 +323,9 @@ struct RVNGHTMLTextGeneratorImpl
 		m_zones[RVNGHTMLTextZone::Z_EndNote].send(out);
 		m_zones[RVNGHTMLTextZone::Z_TextBox].send(out);
 	}
+
+	RVNGString &m_document;
+
 	int m_actualPage;
 	bool m_ignore;
 
@@ -342,7 +343,7 @@ private:
 	RVNGHTMLTextGeneratorImpl operator=(RVNGHTMLTextGeneratorImpl const &orig);
 };
 
-RVNGHTMLTextGenerator::RVNGHTMLTextGenerator() : m_impl(new RVNGHTMLTextGeneratorImpl())
+RVNGHTMLTextGenerator::RVNGHTMLTextGenerator(RVNGString &document) : m_impl(new RVNGHTMLTextGeneratorImpl(document))
 {
 }
 
@@ -384,22 +385,25 @@ void RVNGHTMLTextGenerator::startDocument()
 
 void RVNGHTMLTextGenerator::endDocument()
 {
-	std::cout << "<!DOCTYPE HTML>" << std::endl;
-	std::cout << "<html>" << std::endl;
-	std::cout << "<head>" << std::endl;
-	std::cout << "<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" >" << std::endl;
-	m_impl->sendMetaData(std::cout);
-	std::cout << "<style>" << std::endl;
-	m_impl->m_listManager.send(std::cout);
-	m_impl->m_paragraphManager.send(std::cout);
-	m_impl->m_spanManager.send(std::cout);
-	m_impl->m_tableManager.send(std::cout);
-	std::cout << "</style>" << std::endl;
-	std::cout << "</head>" << std::endl;
-	std::cout << "<body>" << std::endl;
-	m_impl->flushUnsent(std::cout);
-	std::cout << "</body>" << std::endl;
-	std::cout << "</html>" << std::endl;
+	std::ostringstream out;
+	out << "<!DOCTYPE HTML>" << std::endl;
+	out << "<html>" << std::endl;
+	out << "<head>" << std::endl;
+	out << "<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" >" << std::endl;
+	m_impl->sendMetaData(out);
+	out << "<style>" << std::endl;
+	m_impl->m_listManager.send(out);
+	m_impl->m_paragraphManager.send(out);
+	m_impl->m_spanManager.send(out);
+	m_impl->m_tableManager.send(out);
+	out << "</style>" << std::endl;
+	out << "</head>" << std::endl;
+	out << "<body>" << std::endl;
+	m_impl->flushUnsent(out);
+	out << "</body>" << std::endl;
+	out << "</html>" << std::endl;
+
+	m_impl->m_document.append(out.str().c_str());
 }
 
 void RVNGHTMLTextGenerator::openPageSpan(const RVNGPropertyList & /* propList */)

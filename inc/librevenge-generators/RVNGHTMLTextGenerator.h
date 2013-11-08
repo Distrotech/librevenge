@@ -32,7 +32,7 @@ struct RVNGHTMLTextGeneratorImpl;
 class RVNGHTMLTextGenerator : public RVNGTextInterface
 {
 public:
-	RVNGHTMLTextGenerator();
+	explicit RVNGHTMLTextGenerator(RVNGString &document);
 	virtual ~RVNGHTMLTextGenerator();
 
 	virtual void setDocumentMetaData(const RVNGPropertyList &propList);
