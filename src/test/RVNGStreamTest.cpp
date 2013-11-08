@@ -54,7 +54,7 @@ void RVNGStreamTest::tearDown()
 void RVNGStreamTest::testFileStream()
 {
 	scoped_ptr<RVNGInputStream> input(new RVNGFileStream(TMP_FILENAME));
-    unsigned long numBytesRead = 0;
+	unsigned long numBytesRead = 0;
 
 	CPPUNIT_ASSERT_EQUAL ( false, input->isStructured() );
 	CPPUNIT_ASSERT_EQUAL ( (RVNGInputStream *) NULL, input->getSubStreamByName("foo") );
@@ -95,7 +95,7 @@ void RVNGStreamTest::testFileStream()
 void RVNGStreamTest::testMemoryInputStream()
 {
 	scoped_ptr<RVNGInputStream> input(new RVNGMemoryInputStream((unsigned char *)("\1\2\3\4\0\5\6\7"), 8));
-    unsigned long numBytesRead = 0;
+	unsigned long numBytesRead = 0;
 
 	CPPUNIT_ASSERT_EQUAL ( false, input->isStructured() );
 	CPPUNIT_ASSERT_EQUAL ( (RVNGInputStream *) NULL, input->getSubStreamByName("foo") );
@@ -136,7 +136,7 @@ void RVNGStreamTest::testMemoryInputStream()
 void RVNGStreamTest::testStringStream()
 {
 	scoped_ptr<RVNGInputStream> input(new RVNGStringStream((const unsigned char *)"\1\2\3\4\0\5\6\7", 8));
-    unsigned long numBytesRead = 0;
+	unsigned long numBytesRead = 0;
 
 	CPPUNIT_ASSERT_EQUAL ( false, input->isStructured() );
 	CPPUNIT_ASSERT_EQUAL ( (RVNGInputStream *) NULL, input->getSubStreamByName("foo") );
