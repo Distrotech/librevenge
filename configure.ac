@@ -183,10 +183,10 @@ AC_SUBST(DEBUG_CXXFLAGS)
 # Find zlib
 # =========
 PKG_CHECK_MODULES([ZLIB],[zlib],[],[
-    AC_CHECK_HEADER(zlib.h, [ZLIB_CFLAGS=],
-        [AC_MSG_ERROR(zlib.h not found. install zlib)], [])
-    AC_CHECK_LIB(z, inflate, [ ZLIB_LIBS=-lz ],
-        [AC_MSG_ERROR(zlib not found or functional)], [])
+	AC_CHECK_HEADER(zlib.h, [ZLIB_CFLAGS=],
+		[AC_MSG_ERROR(zlib.h not found. install zlib)], [])
+	AC_CHECK_LIB(z, inflate, [ ZLIB_LIBS=-lz ],
+		[AC_MSG_ERROR(zlib not found or functional)], [])
 ])
 AC_SUBST(ZLIB_CFLAGS)
 AC_SUBST(ZLIB_LIBS)
@@ -195,13 +195,14 @@ AC_SUBST(ZLIB_LIBS)
 # Find boost headers
 # ==================
 AC_CHECK_HEADERS(
-        boost/foreach.hpp \
-        boost/property_tree/ptree.hpp \
-        boost/scoped_ptr.hpp \
-        boost/shared_ptr.hpp,
-    [],
-    [AC_MSG_ERROR([Required boost headers not found.])],
-    []
+		boost/foreach.hpp \
+		boost/property_tree/ptree.hpp \
+		boost/scoped_ptr.hpp \
+		boost/shared_ptr.hpp \
+		boost/spirit/include/classic.hpp,
+	[],
+	[AC_MSG_ERROR([Required boost headers not found.])],
+	[]
 )
 
 # =============

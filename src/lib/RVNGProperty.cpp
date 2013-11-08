@@ -23,6 +23,7 @@
 
 #include <sstream>
 #include <string>
+#include <boost/spirit/include/classic.hpp>
 
 #include <librevenge/librevenge.h>
 
@@ -56,6 +57,38 @@ static RVNGString doubleToString(const double value)
 	return RVNGString(stringValue.c_str());
 }
 
+bool findDouble(const RVNGString &str, double &res, RVNGUnit &unit)
+{
+	using namespace ::boost::spirit::classic;
+
+	if (str.empty())
+		return false;
+
+	unit = RVNG_GENERIC;
+
+	bool bRes = parse(str.cstr(),
+	                  //  Begin grammar
+	                  (
+	                      real_p[assign_a(res)] >>
+	                      (
+	                          str_p("pt")[assign_a(unit,RVNG_POINT)]
+	                          |
+	                          str_p("in")[assign_a(unit,RVNG_INCH)]
+	                          |
+	                          str_p("%")[assign_a(unit,RVNG_PERCENT)]
+	                          |
+	                          str_p("*")[assign_a(unit,RVNG_TWIP)]
+	                      )
+	                  ) >> ')' >> end_p,
+	                  //  End grammar
+	                  space_p).full;
+
+	if (unit == RVNG_PERCENT)
+		res *= 100.0;
+
+	return bRes;
+}
+
 } // anonymous namespace
 
 class RVNGStringProperty : public RVNGProperty
@@ -68,28 +101,27 @@ public:
 	{
 		double val;
 		RVNGUnit unit;
-		if (!findDouble(val, unit)) return 0;
+		if (!findDouble(m_str, val, unit)) return 0;
 		return int(val);
 	}
 	virtual double getDouble() const
 	{
 		double val;
 		RVNGUnit unit;
-		if (!findDouble(val, unit)) return 0;
+		if (!findDouble(m_str, val, unit)) return 0;
 		return val;
 	}
 	virtual RVNGUnit getUnit() const
 	{
 		double val;
 		RVNGUnit unit=RVNG_UNIT_ERROR;
-		findDouble(val, unit);
+		findDouble(m_str, val, unit);
 		return unit;
 	}
 	virtual RVNGString getStr() const;
 	virtual RVNGProperty *clone() const;
 
 private:
-	bool findDouble(double &res, RVNGUnit &unit) const;
 	RVNGString m_str;
 };
 
@@ -214,49 +246,6 @@ RVNGStringProperty::RVNGStringProperty(const RVNGString &str) :
 RVNGStringProperty::RVNGStringProperty(const char *str) :
 	m_str(str)
 {
-}
-
-bool RVNGStringProperty::findDouble(double &res, RVNGUnit &unit) const
-{
-	if (m_str.len()==0) return false;
-	char firstC=m_str.cstr()[0];
-	if (firstC!='-' && firstC!='.' && (firstC<'0' || firstC>'9'))
-		return false;
-
-	std::string content(m_str.cstr()), number(""), remain("");
-	// check if the val can be a double, first isolate the potential numbering part ...
-	for (size_t s=0; s<content.size(); ++s)
-	{
-		char c=(char) content[s];
-		if (c=='-' || c=='.' || c=='e' || c=='E' || (c>='0' && c<='9'))
-		{
-			number+=c;
-			continue;
-		}
-		remain=content.substr(s);
-		break;
-	}
-	if (number.empty() || remain.size() > 2) return false;
-	std::istringstream iss(number);
-	iss >> res;
-	if (iss.fail() || iss.peek()!=std::char_traits<char>::eof())
-		return false;
-	if (remain.empty())
-		unit=RVNG_GENERIC;
-	else if (remain=="pt")
-		unit=RVNG_POINT;
-	else if (remain=="in")
-		unit=RVNG_INCH;
-	else if (remain=="%")
-	{
-		res *= 100.;
-		unit=RVNG_PERCENT;
-	}
-	else if (remain=="*")
-		unit=RVNG_TWIP;
-	else
-		return false;
-	return true;
 }
 
 RVNGString RVNGStringProperty::getStr() const
