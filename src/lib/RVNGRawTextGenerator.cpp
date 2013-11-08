@@ -71,7 +71,7 @@ RVNGRawTextGenerator::RVNGRawTextGenerator(bool printCallgraphScore) :
 RVNGRawTextGenerator::~RVNGRawTextGenerator()
 {
 	if (m_impl->m_printCallgraphScore)
-		printf("%d\n", m_impl->m_atLeastOneCallback ? (int)(m_impl->m_callStack.size() + m_impl->m_callbackMisses) : -1);
+		printf("%d\n", m_impl->m_atLeastOneCallback ? (int)m_impl->m_callStack.size() + m_impl->m_callbackMisses : -1);
 
 	delete m_impl;
 }
