@@ -12,7 +12,7 @@
  * applicable instead of those above.
  */
 
-#include <stdio.h>
+#include <sstream>
 
 #include <librevenge-generators/librevenge-generators.h>
 
@@ -21,15 +21,26 @@ namespace librevenge
 
 struct RVNGTextPresentationGeneratorImpl
 {
+	explicit RVNGTextPresentationGeneratorImpl(RVNGStringVector &pages);
+
+	RVNGStringVector &m_pages;
+	std::ostringstream m_stream;
 };
 
-RVNGTextPresentationGenerator::RVNGTextPresentationGenerator()
-	: m_impl(0)
+RVNGTextPresentationGeneratorImpl::RVNGTextPresentationGeneratorImpl(RVNGStringVector &pages)
+	: m_pages(pages)
+	, m_stream()
+{
+}
+
+RVNGTextPresentationGenerator::RVNGTextPresentationGenerator(RVNGStringVector &pages)
+	: m_impl(new RVNGTextPresentationGeneratorImpl(pages))
 {
 }
 
 RVNGTextPresentationGenerator::~RVNGTextPresentationGenerator()
 {
+	delete m_impl;
 }
 
 void RVNGTextPresentationGenerator::startDocument(const RVNGPropertyList &)
@@ -50,7 +61,8 @@ void RVNGTextPresentationGenerator::startSlide(const RVNGPropertyList &)
 
 void RVNGTextPresentationGenerator::endSlide()
 {
-	printf("\n");
+	m_impl->m_pages.append(m_impl->m_stream.str().c_str());
+	m_impl->m_stream.str("");
 }
 
 void RVNGTextPresentationGenerator::startLayer(const RVNGPropertyList &)
@@ -115,7 +127,7 @@ void RVNGTextPresentationGenerator::startTextObject(const RVNGPropertyList &, co
 
 void RVNGTextPresentationGenerator::endTextObject()
 {
-	printf("\n");
+	m_impl->m_stream << '\n';
 }
 
 void RVNGTextPresentationGenerator::openParagraph(const RVNGPropertyList &, const RVNGPropertyListVector &)
@@ -124,7 +136,7 @@ void RVNGTextPresentationGenerator::openParagraph(const RVNGPropertyList &, cons
 
 void RVNGTextPresentationGenerator::closeParagraph()
 {
-	printf("\n");
+	m_impl->m_stream << '\n';
 }
 
 void RVNGTextPresentationGenerator::openSpan(const RVNGPropertyList &)
@@ -137,22 +149,22 @@ void RVNGTextPresentationGenerator::closeSpan()
 
 void RVNGTextPresentationGenerator::insertText(const RVNGString &str)
 {
-	printf("%s", str.cstr());
+	m_impl->m_stream << str.cstr();
 }
 
 void RVNGTextPresentationGenerator::insertTab()
 {
-	printf("\t");
+	m_impl->m_stream << '\t';
 }
 
 void RVNGTextPresentationGenerator::insertSpace()
 {
-	printf(" ");
+	m_impl->m_stream << ' ';
 }
 
 void RVNGTextPresentationGenerator::insertLineBreak()
 {
-	printf("\n");
+	m_impl->m_stream << '\n';
 }
 
 void RVNGTextPresentationGenerator::insertField(const RVNGString &, const RVNGPropertyList &)

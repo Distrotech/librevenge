@@ -12,8 +12,9 @@
  * applicable instead of those above.
  */
 
-#include <stdio.h>
+#include <sstream>
 
+#include <librevenge/librevenge.h>
 #include <librevenge-generators/librevenge-generators.h>
 
 namespace librevenge
@@ -21,22 +22,39 @@ namespace librevenge
 
 struct RVNGTextDrawingGeneratorImpl
 {
+	RVNGTextDrawingGeneratorImpl(RVNGStringVector &pages);
+
+	RVNGStringVector &m_pages;
+	std::ostringstream m_stream;
 };
 
-RVNGTextDrawingGenerator::RVNGTextDrawingGenerator()
-	: m_impl(0)
+RVNGTextDrawingGeneratorImpl::RVNGTextDrawingGeneratorImpl(RVNGStringVector &pages)
+	: m_pages(pages)
+	, m_stream()
+{
+}
+
+RVNGTextDrawingGenerator::RVNGTextDrawingGenerator(RVNGStringVector &pages)
+	: m_impl(new RVNGTextDrawingGeneratorImpl(pages))
 {
 }
 
 RVNGTextDrawingGenerator::~RVNGTextDrawingGenerator()
 {
+	delete m_impl;
 }
 
 void RVNGTextDrawingGenerator::startDocument(const RVNGPropertyList & /*propList*/) {}
 void RVNGTextDrawingGenerator::endDocument() {}
 void RVNGTextDrawingGenerator::setDocumentMetaData(const RVNGPropertyList & /*propList*/) {}
 void RVNGTextDrawingGenerator::startPage(const RVNGPropertyList &) {}
-void RVNGTextDrawingGenerator::endPage() {}
+
+void RVNGTextDrawingGenerator::endPage()
+{
+	m_impl->m_pages.append(m_impl->m_stream.str().c_str());
+	m_impl->m_stream.str("");
+}
+
 void RVNGTextDrawingGenerator::startLayer(const RVNGPropertyList &) {}
 void RVNGTextDrawingGenerator::endLayer() {}
 void RVNGTextDrawingGenerator::startEmbeddedGraphics(const RVNGPropertyList &) {}
@@ -67,7 +85,7 @@ void RVNGTextDrawingGenerator::openParagraph(const RVNGPropertyList & /*propList
 
 void RVNGTextDrawingGenerator::closeParagraph()
 {
-	printf("\n");
+	m_impl->m_stream << "\n";
 }
 
 void RVNGTextDrawingGenerator::openSpan(const RVNGPropertyList & /* propList */) {}
@@ -78,7 +96,7 @@ void RVNGTextDrawingGenerator::insertSpace() {}
 
 void RVNGTextDrawingGenerator::insertText(const RVNGString &str)
 {
-	printf("%s", str.cstr());
+	m_impl->m_stream << str.cstr();
 }
 
 void RVNGTextDrawingGenerator::insertLineBreak() {}

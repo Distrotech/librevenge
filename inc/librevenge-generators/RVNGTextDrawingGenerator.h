@@ -30,7 +30,7 @@ class RVNGTextDrawingGenerator : public RVNGDrawingInterface
 	RVNGTextDrawingGenerator &operator=(const RVNGTextDrawingGenerator &other);
 
 public:
-	RVNGTextDrawingGenerator();
+	explicit RVNGTextDrawingGenerator(RVNGStringVector &pages);
 	~RVNGTextDrawingGenerator();
 
 	void startDocument(const RVNGPropertyList &propList);

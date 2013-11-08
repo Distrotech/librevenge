@@ -36,7 +36,7 @@ class RVNGTextTextGenerator : public RVNGTextInterface
 	RVNGTextTextGenerator &operator=(const RVNGTextTextGenerator &other);
 
 public:
-	explicit RVNGTextTextGenerator(const bool isInfo=false);
+	explicit RVNGTextTextGenerator(RVNGString &document, const bool isInfo=false);
 	virtual ~RVNGTextTextGenerator();
 
 	virtual void setDocumentMetaData(const RVNGPropertyList &propList);

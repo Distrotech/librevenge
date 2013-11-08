@@ -18,7 +18,8 @@
  * applicable instead of those above.
  */
 
-#include <stdio.h>
+#include <sstream>
+
 #include <librevenge-generators/librevenge-generators.h>
 
 // use the BELL code to represent a TAB for now
@@ -29,18 +30,22 @@ namespace librevenge
 
 struct RVNGTextTextGeneratorImpl
 {
-	explicit RVNGTextTextGeneratorImpl(bool isInfo);
+	explicit RVNGTextTextGeneratorImpl(RVNGString &document, bool isInfo);
 
+	RVNGString &m_document;
+	std::ostringstream m_stream;
 	bool m_isInfo;
 };
 
-RVNGTextTextGeneratorImpl::RVNGTextTextGeneratorImpl(const bool isInfo) :
-	m_isInfo(isInfo)
+RVNGTextTextGeneratorImpl::RVNGTextTextGeneratorImpl(RVNGString &document, const bool isInfo)
+	: m_document(document)
+	, m_stream()
+	, m_isInfo(isInfo)
 {
 }
 
-RVNGTextTextGenerator::RVNGTextTextGenerator(const bool isInfo) :
-	m_impl(new RVNGTextTextGeneratorImpl(isInfo))
+RVNGTextTextGenerator::RVNGTextTextGenerator(RVNGString &document, const bool isInfo) :
+	m_impl(new RVNGTextTextGeneratorImpl(document, isInfo))
 {
 }
 
@@ -56,7 +61,7 @@ void RVNGTextTextGenerator::setDocumentMetaData(const RVNGPropertyList &propList
 	RVNGPropertyList::Iter propIter(propList);
 	for (propIter.rewind(); propIter.next(); )
 	{
-		printf("%s %s\n", propIter.key(), propIter()->getStr().cstr());
+		m_impl->m_stream << propIter.key() << ' ' << propIter()->getStr().cstr() << '\n';
 	}
 }
 
@@ -82,7 +87,7 @@ void RVNGTextTextGenerator::closeParagraph()
 {
 	if (m_impl->m_isInfo)
 		return;
-	printf("\n");
+	m_impl->m_stream << '\n';
 }
 
 void RVNGTextTextGenerator::defineCharacterStyle(const RVNGPropertyList &) {}
@@ -93,28 +98,28 @@ void RVNGTextTextGenerator::insertTab()
 {
 	if (m_impl->m_isInfo)
 		return;
-	printf("%c", UCS_TAB);
+	m_impl->m_stream << static_cast<char>(UCS_TAB);
 }
 
 void RVNGTextTextGenerator::insertText(const RVNGString &text)
 {
 	if (m_impl->m_isInfo)
 		return;
-	printf("%s", text.cstr());
+	m_impl->m_stream << text.cstr();
 }
 
 void RVNGTextTextGenerator::insertSpace()
 {
 	if (m_impl->m_isInfo)
 		return;
-	printf(" ");
+	m_impl->m_stream << ' ';
 }
 
 void RVNGTextTextGenerator::insertLineBreak()
 {
 	if (m_impl->m_isInfo)
 		return;
-	printf("\n");
+	m_impl->m_stream << '\n';
 }
 
 void RVNGTextTextGenerator::insertField(const RVNGString & /* type */, const RVNGPropertyList & /* propList */) {}

@@ -27,7 +27,7 @@ class RVNGTextPresentationGenerator : public RVNGPresentationInterface
 	RVNGTextPresentationGenerator &operator=(const RVNGTextPresentationGenerator &other);
 
 public:
-	RVNGTextPresentationGenerator();
+	explicit RVNGTextPresentationGenerator(RVNGStringVector &pages);
 	virtual ~RVNGTextPresentationGenerator();
 
 	virtual void startDocument(const RVNGPropertyList &propList);
