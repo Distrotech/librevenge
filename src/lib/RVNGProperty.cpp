@@ -79,7 +79,7 @@ bool findDouble(const RVNGString &str, double &res, RVNGUnit &unit)
 	                          |
 	                          str_p("*")[assign_a(unit,RVNG_TWIP)]
 	                      )
-	                  ) >> ')' >> end_p,
+	                  ) >> end_p,
 	                  //  End grammar
 	                  space_p).full;
 
