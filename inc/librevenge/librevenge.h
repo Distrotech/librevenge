@@ -21,10 +21,16 @@
 #ifndef LIBREVENGE_H
 #define LIBREVENGE_H
 
+#include "RVNGBinaryData.h"
 #include "RVNGDrawingInterface.h"
 #include "RVNGPresentationInterface.h"
-#include "RVNGTextInterface.h"
+#include "RVNGProperty.h"
+#include "RVNGPropertyList.h"
+#include "RVNGPropertyListVector.h"
 #include "RVNGSVGDrawingGenerator.h"
+#include "RVNGString.h"
+#include "RVNGStringVector.h"
+#include "RVNGTextInterface.h"
 
 #endif /* LIBREVENGE_H */
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */
