@@ -68,13 +68,13 @@ RVNGRawPresentationGenerator::~RVNGRawPresentationGenerator()
 
 void RVNGRawPresentationGenerator::startDocument(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("RVNGRawPresentationGenerator::startDocument(%s)\n", getPropString(propList).cstr()),
+	RVNG_CALLGRAPH_ENTER(("startDocument(%s)\n", getPropString(propList).cstr()),
 	                     CALLBACK_START_DOCUMENT);
 }
 
 void RVNGRawPresentationGenerator::endDocument()
 {
-	RVNG_CALLGRAPH_LEAVE(("RVNGRawPresentationGenerator::endDocument\n"), CALLBACK_START_DOCUMENT);
+	RVNG_CALLGRAPH_LEAVE(("endDocument\n"), CALLBACK_START_DOCUMENT);
 }
 
 void RVNGRawPresentationGenerator::setDocumentMetaData(const RVNGPropertyList &propList)
@@ -84,46 +84,46 @@ void RVNGRawPresentationGenerator::setDocumentMetaData(const RVNGPropertyList &p
 
 void RVNGRawPresentationGenerator::startSlide(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("RVNGRawPresentationGenerator::startSlide(%s)\n", getPropString(propList).cstr()),
+	RVNG_CALLGRAPH_ENTER(("startSlide(%s)\n", getPropString(propList).cstr()),
 	                     CALLBACK_START_SLIDE);
 }
 
 void RVNGRawPresentationGenerator::endSlide()
 {
-	RVNG_CALLGRAPH_LEAVE(("RVNGRawPresentationGenerator::endSlide\n"), CALLBACK_START_SLIDE);
+	RVNG_CALLGRAPH_LEAVE(("endSlide\n"), CALLBACK_START_SLIDE);
 }
 
 void RVNGRawPresentationGenerator::startLayer(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("RVNGRawPresentationGenerator::startLayer (%s)\n", getPropString(propList).cstr()),
+	RVNG_CALLGRAPH_ENTER(("startLayer (%s)\n", getPropString(propList).cstr()),
 	                     CALLBACK_START_LAYER);
 }
 
 void RVNGRawPresentationGenerator::endLayer()
 {
-	RVNG_CALLGRAPH_LEAVE(("RVNGRawPresentationGenerator::endLayer\n"), CALLBACK_START_LAYER);
+	RVNG_CALLGRAPH_LEAVE(("endLayer\n"), CALLBACK_START_LAYER);
 }
 
 void RVNGRawPresentationGenerator::startEmbeddedGraphics(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("RVNGRawPresentationGenerator::startEmbeddedGraphics (%s)\n", getPropString(propList).cstr()),
+	RVNG_CALLGRAPH_ENTER(("startEmbeddedGraphics (%s)\n", getPropString(propList).cstr()),
 	                     CALLBACK_START_EMBEDDED_GRAPHICS);
 }
 
 void RVNGRawPresentationGenerator::endEmbeddedGraphics()
 {
-	RVNG_CALLGRAPH_LEAVE(("RVNGRawPresentationGenerator::endEmbeddedGraphics \n"), CALLBACK_START_EMBEDDED_GRAPHICS);
+	RVNG_CALLGRAPH_LEAVE(("endEmbeddedGraphics \n"), CALLBACK_START_EMBEDDED_GRAPHICS);
 }
 
 void RVNGRawPresentationGenerator::startGroup(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("RVNGRawPresentationGenerator::startGroup(%s)\n", getPropString(propList).cstr()),
+	RVNG_CALLGRAPH_ENTER(("startGroup(%s)\n", getPropString(propList).cstr()),
 	                     CALLBACK_START_GROUP);
 }
 
 void RVNGRawPresentationGenerator::endGroup()
 {
-	RVNG_CALLGRAPH_LEAVE(("RVNGRawPresentationGenerator::endGroup\n"), CALLBACK_START_GROUP);
+	RVNG_CALLGRAPH_LEAVE(("endGroup\n"), CALLBACK_START_GROUP);
 }
 
 void RVNGRawPresentationGenerator::setStyle(const RVNGPropertyList &propList, const RVNGPropertyListVector &gradient)
@@ -168,37 +168,37 @@ void RVNGRawPresentationGenerator::drawConnector(const RVNGPropertyList &propLis
 
 void RVNGRawPresentationGenerator::startTextObject(const RVNGPropertyList &propList, const RVNGPropertyListVector &path)
 {
-	RVNG_CALLGRAPH_ENTER(("RVNGRawPresentationGenerator::startTextObject (%s, path: (%s))\n",
+	RVNG_CALLGRAPH_ENTER(("startTextObject (%s, path: (%s))\n",
 	                      getPropString(propList).cstr(), getPropString(path).cstr()),
 	                     CALLBACK_START_TEXT_OBJECT);
 }
 
 void RVNGRawPresentationGenerator::endTextObject()
 {
-	RVNG_CALLGRAPH_LEAVE(("RVNGRawPresentationGenerator::endTextObject\n"), CALLBACK_START_TEXT_OBJECT);
+	RVNG_CALLGRAPH_LEAVE(("endTextObject\n"), CALLBACK_START_TEXT_OBJECT);
 }
 
 void RVNGRawPresentationGenerator::openParagraph(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops)
 {
-	RVNG_CALLGRAPH_ENTER(("RVNGRawPresentationGenerator::openParagraph (%s, tabStops: (%s))\n",
+	RVNG_CALLGRAPH_ENTER(("openParagraph (%s, tabStops: (%s))\n",
 	                      getPropString(propList).cstr(), getPropString(tabStops).cstr()),
 	                     CALLBACK_OPEN_PARAGRAPH);
 }
 
 void RVNGRawPresentationGenerator::closeParagraph()
 {
-	RVNG_CALLGRAPH_LEAVE(("RVNGRawPresentationGenerator::closeParagraph\n"), CALLBACK_OPEN_PARAGRAPH);
+	RVNG_CALLGRAPH_LEAVE(("closeParagraph\n"), CALLBACK_OPEN_PARAGRAPH);
 }
 
 void RVNGRawPresentationGenerator::openSpan(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("RVNGRawPresentationGenerator::openSpan (%s)\n", getPropString(propList).cstr()),
+	RVNG_CALLGRAPH_ENTER(("openSpan (%s)\n", getPropString(propList).cstr()),
 	                     CALLBACK_OPEN_SPAN);
 }
 
 void RVNGRawPresentationGenerator::closeSpan()
 {
-	RVNG_CALLGRAPH_LEAVE(("RVNGRawPresentationGenerator::closeSpan\n"), CALLBACK_OPEN_SPAN);
+	RVNG_CALLGRAPH_LEAVE(("closeSpan\n"), CALLBACK_OPEN_SPAN);
 }
 
 void RVNGRawPresentationGenerator::insertText(const RVNGString &str)
@@ -228,67 +228,67 @@ void RVNGRawPresentationGenerator::insertField(const RVNGString &type, const RVN
 
 void RVNGRawPresentationGenerator::openOrderedListLevel(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("RVNGRawPresentationGenerator::openOrderedListLevel(%s)\n", getPropString(propList).cstr()),
+	RVNG_CALLGRAPH_ENTER(("openOrderedListLevel(%s)\n", getPropString(propList).cstr()),
 	                     CALLBACK_OPEN_ORDERED_LIST_LEVEL);
 }
 
 void RVNGRawPresentationGenerator::openUnorderedListLevel(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("RVNGRawPresentationGenerator::openUnorderedListLevel(%s)\n", getPropString(propList).cstr()),
+	RVNG_CALLGRAPH_ENTER(("openUnorderedListLevel(%s)\n", getPropString(propList).cstr()),
 	                     CALLBACK_OPEN_UNORDERED_LIST_LEVEL);
 }
 
 void RVNGRawPresentationGenerator::closeOrderedListLevel()
 {
-	RVNG_CALLGRAPH_LEAVE(("RVNGRawPresentationGenerator::closeOrderedListLevel\n"),
+	RVNG_CALLGRAPH_LEAVE(("closeOrderedListLevel\n"),
 	                     CALLBACK_OPEN_ORDERED_LIST_LEVEL);
 }
 
 void RVNGRawPresentationGenerator::closeUnorderedListLevel()
 {
-	RVNG_CALLGRAPH_LEAVE(("RVNGRawPresentationGenerator::closeUnorderedListLevel\n"),
+	RVNG_CALLGRAPH_LEAVE(("closeUnorderedListLevel\n"),
 	                     CALLBACK_OPEN_UNORDERED_LIST_LEVEL);
 }
 
 void RVNGRawPresentationGenerator::openListElement(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops)
 {
-	RVNG_CALLGRAPH_ENTER(("RVNGRawPresentationGenerator::openListElement(%s, tabStops: (%s))\n",
+	RVNG_CALLGRAPH_ENTER(("openListElement(%s, tabStops: (%s))\n",
 	                      getPropString(propList).cstr(), getPropString(tabStops).cstr()),
 	                     CALLBACK_OPEN_LIST_ELEMENT);
 }
 
 void RVNGRawPresentationGenerator::closeListElement()
 {
-	RVNG_CALLGRAPH_LEAVE(("RVNGRawPresentationGenerator::closeListElement\n"), CALLBACK_OPEN_LIST_ELEMENT);
+	RVNG_CALLGRAPH_LEAVE(("closeListElement\n"), CALLBACK_OPEN_LIST_ELEMENT);
 }
 
 void RVNGRawPresentationGenerator::openTable(const RVNGPropertyList &propList, const RVNGPropertyListVector &columns)
 {
-	RVNG_CALLGRAPH_ENTER(("RVNGRawPresentationGenerator::openTable(%s, columns: (%s))\n",
+	RVNG_CALLGRAPH_ENTER(("openTable(%s, columns: (%s))\n",
 	                      getPropString(propList).cstr(), getPropString(columns).cstr()),
 	                     CALLBACK_OPEN_TABLE);
 }
 
 void RVNGRawPresentationGenerator::openTableRow(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("RVNGRawPresentationGenerator::openTableRow(%s)\n", getPropString(propList).cstr()),
+	RVNG_CALLGRAPH_ENTER(("openTableRow(%s)\n", getPropString(propList).cstr()),
 	                     CALLBACK_OPEN_TABLE_ROW);
 }
 
 void RVNGRawPresentationGenerator::closeTableRow()
 {
-	RVNG_CALLGRAPH_LEAVE(("RVNGRawPresentationGenerator::closeTableRow\n"), CALLBACK_OPEN_TABLE_ROW);
+	RVNG_CALLGRAPH_LEAVE(("closeTableRow\n"), CALLBACK_OPEN_TABLE_ROW);
 }
 
 void RVNGRawPresentationGenerator::openTableCell(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("RVNGRawPresentationGenerator::openTableCell(%s)\n", getPropString(propList).cstr()),
+	RVNG_CALLGRAPH_ENTER(("openTableCell(%s)\n", getPropString(propList).cstr()),
 	                     CALLBACK_OPEN_TABLE_CELL);
 }
 
 void RVNGRawPresentationGenerator::closeTableCell()
 {
-	RVNG_CALLGRAPH_LEAVE(("RVNGRawPresentationGenerator::closeTableCell\n"), CALLBACK_OPEN_TABLE_CELL);
+	RVNG_CALLGRAPH_LEAVE(("closeTableCell\n"), CALLBACK_OPEN_TABLE_CELL);
 }
 
 void RVNGRawPresentationGenerator::insertCoveredTableCell(const RVNGPropertyList &propList)
@@ -298,29 +298,29 @@ void RVNGRawPresentationGenerator::insertCoveredTableCell(const RVNGPropertyList
 
 void RVNGRawPresentationGenerator::closeTable()
 {
-	RVNG_CALLGRAPH_LEAVE(("RVNGRawPresentationGenerator::closeTable\n"), CALLBACK_OPEN_TABLE);
+	RVNG_CALLGRAPH_LEAVE(("closeTable\n"), CALLBACK_OPEN_TABLE);
 }
 
 void RVNGRawPresentationGenerator::startComment(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("RVNGRawPresentationGenerator::startComment(%s)\n", getPropString(propList).cstr()),
+	RVNG_CALLGRAPH_ENTER(("startComment(%s)\n", getPropString(propList).cstr()),
 	                     CALLBACK_START_COMMENT);
 }
 
 void RVNGRawPresentationGenerator::endComment()
 {
-	RVNG_CALLGRAPH_LEAVE(("RVNGRawPresentationGenerator::endComment\n"), CALLBACK_START_COMMENT);
+	RVNG_CALLGRAPH_LEAVE(("endComment\n"), CALLBACK_START_COMMENT);
 }
 
 void RVNGRawPresentationGenerator::startNotes(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("RVNGRawPresentationGenerator::startNotes(%s)\n", getPropString(propList).cstr()),
+	RVNG_CALLGRAPH_ENTER(("startNotes(%s)\n", getPropString(propList).cstr()),
 	                     CALLBACK_START_NOTES);
 }
 
 void RVNGRawPresentationGenerator::endNotes()
 {
-	RVNG_CALLGRAPH_LEAVE(("RVNGRawPresentationGenerator::endNotes\n"), CALLBACK_START_NOTES);
+	RVNG_CALLGRAPH_LEAVE(("endNotes\n"), CALLBACK_START_NOTES);
 }
 
 }
