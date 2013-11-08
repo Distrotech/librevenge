@@ -21,6 +21,7 @@
 
 #include <librevenge/librevenge.h>
 #include <boost/property_tree/ptree.hpp>
+#include <boost/foreach.hpp>
 #include <string>
 #include <utility>
 
@@ -52,12 +53,10 @@ private:
 
 RVNGPropertyListImpl::~RVNGPropertyListImpl()
 {
-	for (RVNGPtree::iterator iter = m_ptree.begin();
-	        iter != m_ptree.end();
-	        ++iter)
+	BOOST_FOREACH(RVNGPtree::value_type &prop, m_ptree)
 	{
-		if (iter->second.data())
-			delete iter->second.data();
+		if (prop.second.data())
+			delete prop.second.data();
 	}
 }
 
@@ -84,12 +83,10 @@ void RVNGPropertyListImpl::remove(const char *name)
 
 void RVNGPropertyListImpl::clear()
 {
-	for (RVNGPtree::iterator iter = m_ptree.begin();
-	        iter != m_ptree.end();
-	        ++iter)
+	BOOST_FOREACH(RVNGPtree::value_type &prop, m_ptree)
 	{
-		if (iter->second.data())
-			delete iter->second.data();
+		if (prop.second.data())
+			delete prop.second.data();
 	}
 	m_ptree.clear();
 }
@@ -174,13 +171,6 @@ void RVNGPropertyList::clear()
 {
 	m_impl->clear();
 }
-
-#if 0
-void RVNGPropertyList::swap(RVNGPropertyList &other)
-{
-	std::swap(m_impl, other.m_impl);
-}
-#endif
 
 class RVNGPropertyListIterImpl
 {

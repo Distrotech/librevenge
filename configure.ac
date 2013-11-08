@@ -195,9 +195,10 @@ AC_SUBST(ZLIB_LIBS)
 # Find boost headers
 # ==================
 AC_CHECK_HEADERS(
+        boost/foreach.hpp \
+        boost/property_tree/ptree.hpp \
         boost/scoped_ptr.hpp \
-        boost/shared_ptr.hpp \
-        boost/property_tree/ptree.hpp,
+        boost/shared_ptr.hpp,
     [],
     [AC_MSG_ERROR([Required boost headers not found.])],
     []
