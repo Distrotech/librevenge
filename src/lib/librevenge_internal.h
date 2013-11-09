@@ -26,7 +26,6 @@
 #define RVNG_NUM_ELEMENTS(array) (sizeof(array) / sizeof((array)[0]))
 
 #ifdef DEBUG
-#include <stdio.h>
 #define RVNG_DEBUG_MSG(M) printf M
 #else
 #define RVNG_DEBUG_MSG(M)

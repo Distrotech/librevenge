@@ -195,7 +195,6 @@ AC_SUBST(ZLIB_LIBS)
 # Find boost headers
 # ==================
 AC_CHECK_HEADERS(
-		boost/property_tree/ptree.hpp \
 		boost/scoped_ptr.hpp \
 		boost/shared_ptr.hpp \
 		boost/spirit/include/classic.hpp,

@@ -20,19 +20,17 @@
  */
 
 #include <librevenge/librevenge.h>
-#include <boost/property_tree/ptree.hpp>
+#include <map>
 #include <string>
 #include <utility>
 
 namespace librevenge
 {
 
-typedef boost::property_tree::basic_ptree<std::string, RVNGProperty *> RVNGPtree;
-
 class RVNGPropertyListImpl
 {
 public:
-	RVNGPropertyListImpl() : m_ptree() {}
+	RVNGPropertyListImpl() : m_map() {}
 	~RVNGPropertyListImpl();
 	void insert(const char *name, RVNGProperty *property);
 	const RVNGProperty *operator[](const char *name) const;
@@ -45,53 +43,65 @@ private:
 	RVNGPropertyListImpl &operator=(const RVNGPropertyListImpl &other);
 
 private:
-	mutable RVNGPtree m_ptree;
+	mutable std::map<std::string, RVNGProperty *> m_map;
 
 	friend class RVNGPropertyListIterImpl;
 };
 
 RVNGPropertyListImpl::~RVNGPropertyListImpl()
 {
-	for (RVNGPtree::iterator iter = m_ptree.begin();
-	        iter != m_ptree.end();
+	for (std::map<std::string, RVNGProperty *>::iterator iter = m_map.begin();
+	        iter != m_map.end();
 	        ++iter)
 	{
-		if (iter->second.data())
-			delete iter->second.data();
+		delete iter->second;
 	}
 }
 
 const RVNGProperty *RVNGPropertyListImpl::operator[](const char *name) const
 {
-	return m_ptree.get<RVNGProperty *>(name, 0);
+	std::map<std::string, RVNGProperty *>::iterator i = m_map.find(name);
+	if (i != m_map.end())
+	{
+		return i->second;
+	}
+
+	return 0;
 }
 
 void RVNGPropertyListImpl::insert(const char *name, RVNGProperty *prop)
 {
-	RVNGProperty *i = m_ptree.get<RVNGProperty *>(name, 0);
-	m_ptree.put(name, prop);
-	if (i)
-		delete i;
+	std::map<std::string, RVNGProperty *>::iterator i = m_map.lower_bound(name);
+	if (i != m_map.end() && !(m_map.key_comp()(name, i->first)))
+	{
+		RVNGProperty *tmpProp = i->second;
+		i->second = prop;
+		delete tmpProp;
+		return;
+	}
+	m_map.insert(i, std::map<std::string, RVNGProperty *>::value_type(name, prop));
 }
 
 void RVNGPropertyListImpl::remove(const char *name)
 {
-	RVNGProperty *i = m_ptree.get<RVNGProperty *>(name, 0);
-	if (i)
-		delete i;
-	m_ptree.erase(name);
+	std::map<std::string, RVNGProperty *>::iterator i = m_map.find(name);
+	if (i != m_map.end())
+	{
+		if (i->second) delete (i->second);
+		m_map.erase(i);
+	}
 }
 
 void RVNGPropertyListImpl::clear()
 {
-	for (RVNGPtree::iterator iter = m_ptree.begin();
-	        iter != m_ptree.end();
+	for (std::map<std::string, RVNGProperty *>::iterator iter = m_map.begin();
+	        iter != m_map.end();
 	        ++iter)
 	{
-		if (iter->second.data())
-			delete iter->second.data();
+		delete iter->second;
 	}
-	m_ptree.clear();
+
+	m_map.clear();
 }
 
 RVNGPropertyList::RVNGPropertyList() :
@@ -199,15 +209,15 @@ private:
 
 private:
 	bool m_imaginaryFirst;
-	RVNGPtree::const_iterator m_iter;
-	RVNGPtree *m_ptree;
+	std::map<std::string, RVNGProperty *>::iterator m_iter;
+	std::map<std::string, RVNGProperty *> *m_map;
 };
 
 
 RVNGPropertyListIterImpl::RVNGPropertyListIterImpl(const RVNGPropertyListImpl *impl) :
 	m_imaginaryFirst(false),
-	m_iter(impl->m_ptree.begin()),
-	m_ptree(&impl->m_ptree)
+	m_iter(impl->m_map.begin()),
+	m_map(&impl->m_map)
 {
 }
 
@@ -215,14 +225,14 @@ void RVNGPropertyListIterImpl::rewind()
 {
 	// rewind to an imaginary element that preceeds the first one
 	m_imaginaryFirst = true;
-	m_iter = m_ptree->begin();
+	m_iter = m_map->begin();
 }
 
 bool RVNGPropertyListIterImpl::next()
 {
 	if (!m_imaginaryFirst)
 		++m_iter;
-	if (m_iter==m_ptree->end())
+	if (m_iter==m_map->end())
 		return false;
 	m_imaginaryFirst = false;
 
@@ -231,7 +241,7 @@ bool RVNGPropertyListIterImpl::next()
 
 bool RVNGPropertyListIterImpl::last()
 {
-	if (m_iter == m_ptree->end())
+	if (m_iter == m_map->end())
 		return true;
 
 	return false;
@@ -239,7 +249,7 @@ bool RVNGPropertyListIterImpl::last()
 
 const RVNGProperty *RVNGPropertyListIterImpl::operator()() const
 {
-	return m_iter->second.data();
+	return m_iter->second;
 }
 
 const char *RVNGPropertyListIterImpl::key()
