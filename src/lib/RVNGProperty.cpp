@@ -442,6 +442,16 @@ RVNGProperty *RVNGPropertyFactory::newTwipProp(const double val)
 	return static_cast<RVNGProperty *>(new RVNGTwipProperty(val));
 }
 
+RVNGProperty *RVNGPropertyFactory::newBinaryDataProp(const RVNGBinaryData & /* data */)
+{
+	return 0;
+}
+
+RVNGProperty *RVNGPropertyFactory::newPropListProp(const RVNGPropertyList & /* propList */)
+{
+	return 0;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

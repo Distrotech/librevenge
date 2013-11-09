@@ -20,9 +20,12 @@
 #ifndef RVNGPROPERTY_H
 #define RVNGPROPERTY_H
 #include "RVNGString.h"
+#include "RVNGBinaryData.h"
 
 namespace librevenge
 {
+
+class RVNGPropertyList;
 
 enum RVNGUnit { RVNG_INCH, RVNG_PERCENT, RVNG_POINT, RVNG_TWIP, RVNG_GENERIC, RVNG_UNIT_ERROR };
 
@@ -50,6 +53,8 @@ public:
 	static RVNGProperty *newPercentProp(const double val);
 	static RVNGProperty *newPointProp(const double val);
 	static RVNGProperty *newTwipProp(const double val);
+	static RVNGProperty *newBinaryDataProp(const RVNGBinaryData &data);
+	static RVNGProperty *newPropListProp(const RVNGPropertyList &propList);
 };
 
 }
