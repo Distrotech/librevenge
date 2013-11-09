@@ -49,6 +49,8 @@ bool findDouble(const librevenge::RVNGString &str, double &res, librevenge::RVNG
 	                   str_p("%")[assign_a(unit,librevenge::RVNG_PERCENT)]
 	                   |
 	                   str_p("*")[assign_a(unit,librevenge::RVNG_TWIP)]
+	                   |
+	                   eps_p
 	               )
 	           ) >> end_p,
 	           //  End grammar
@@ -58,7 +60,7 @@ bool findDouble(const librevenge::RVNGString &str, double &res, librevenge::RVNG
 	}
 
 	if (unit == librevenge::RVNG_PERCENT)
-		res *= 100.0;
+		res /= 100.0;
 
 	return true;
 }
