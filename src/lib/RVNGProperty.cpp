@@ -23,7 +23,6 @@
 
 #include <sstream>
 #include <string>
-#include <boost/spirit/include/classic.hpp>
 
 #include <librevenge/librevenge.h>
 
