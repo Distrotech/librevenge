@@ -26,6 +26,7 @@ namespace librevenge
 {
 
 class RVNGPropertyList;
+class RVNGPropertyListVector;
 
 enum RVNGUnit { RVNG_INCH, RVNG_PERCENT, RVNG_POINT, RVNG_TWIP, RVNG_GENERIC, RVNG_UNIT_ERROR };
 
@@ -55,6 +56,7 @@ public:
 	static RVNGProperty *newTwipProp(const double val);
 	static RVNGProperty *newBinaryDataProp(const RVNGBinaryData &data);
 	static RVNGProperty *newPropListProp(const RVNGPropertyList &propList);
+	static RVNGProperty *newPropListVecProp(const RVNGPropertyListVector &vec);
 };
 
 }

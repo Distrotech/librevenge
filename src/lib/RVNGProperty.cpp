@@ -452,6 +452,11 @@ RVNGProperty *RVNGPropertyFactory::newPropListProp(const RVNGPropertyList & /* p
 	return 0;
 }
 
+RVNGProperty *RVNGPropertyFactory::newPropListVecProp(const RVNGPropertyListVector & /* vec */)
+{
+	return 0;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */
