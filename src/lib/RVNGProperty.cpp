@@ -57,38 +57,6 @@ static RVNGString doubleToString(const double value)
 	return RVNGString(stringValue.c_str());
 }
 
-bool findDouble(const RVNGString &str, double &res, RVNGUnit &unit)
-{
-	using namespace ::boost::spirit::classic;
-
-	if (str.empty())
-		return false;
-
-	unit = RVNG_GENERIC;
-
-	bool bRes = parse(str.cstr(),
-	                  //  Begin grammar
-	                  (
-	                      real_p[assign_a(res)] >>
-	                      (
-	                          str_p("pt")[assign_a(unit,RVNG_POINT)]
-	                          |
-	                          str_p("in")[assign_a(unit,RVNG_INCH)]
-	                          |
-	                          str_p("%")[assign_a(unit,RVNG_PERCENT)]
-	                          |
-	                          str_p("*")[assign_a(unit,RVNG_TWIP)]
-	                      )
-	                  ) >> end_p,
-	                  //  End grammar
-	                  space_p).full;
-
-	if (unit == RVNG_PERCENT)
-		res *= 100.0;
-
-	return bRes;
-}
-
 } // anonymous namespace
 
 class RVNGStringProperty : public RVNGProperty
@@ -99,24 +67,15 @@ public:
 	~RVNGStringProperty() {}
 	virtual int getInt() const
 	{
-		double val;
-		RVNGUnit unit;
-		if (!findDouble(m_str, val, unit)) return 0;
-		return int(val);
+		return 0;
 	}
 	virtual double getDouble() const
 	{
-		double val;
-		RVNGUnit unit;
-		if (!findDouble(m_str, val, unit)) return 0;
-		return val;
+		return 0;
 	}
 	virtual RVNGUnit getUnit() const
 	{
-		double val;
-		RVNGUnit unit=RVNG_UNIT_ERROR;
-		findDouble(m_str, val, unit);
-		return unit;
+		return RVNG_UNIT_ERROR;
 	}
 	virtual RVNGString getStr() const;
 	virtual RVNGProperty *clone() const;

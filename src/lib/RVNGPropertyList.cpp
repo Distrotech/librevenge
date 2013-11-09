@@ -19,10 +19,89 @@
  * applicable instead of those above.
  */
 
-#include <librevenge/librevenge.h>
 #include <map>
 #include <string>
 #include <utility>
+#include <boost/spirit/include/classic.hpp>
+#include <librevenge/librevenge.h>
+
+namespace
+{
+
+bool findDouble(const librevenge::RVNGString &str, double &res, librevenge::RVNGUnit &unit)
+{
+	using namespace ::boost::spirit::classic;
+
+	if (str.empty())
+		return false;
+
+	unit = librevenge::RVNG_GENERIC;
+
+	if (!parse(str.cstr(),
+	           //  Begin grammar
+	           (
+	               real_p[assign_a(res)] >>
+	               (
+	                   str_p("pt")[assign_a(unit,librevenge::RVNG_POINT)]
+	                   |
+	                   str_p("in")[assign_a(unit,librevenge::RVNG_INCH)]
+	                   |
+	                   str_p("%")[assign_a(unit,librevenge::RVNG_PERCENT)]
+	                   |
+	                   str_p("*")[assign_a(unit,librevenge::RVNG_TWIP)]
+	               )
+	           ) >> end_p,
+	           //  End grammar
+	           space_p).full)
+	{
+		return false;
+	}
+
+	if (unit == librevenge::RVNG_PERCENT)
+		res *= 100.0;
+
+	return true;
+}
+
+bool findInt(const librevenge::RVNGString &str, int &res)
+{
+	using namespace ::boost::spirit::classic;
+
+	if (str.empty())
+		return false;
+
+	return parse(str.cstr(),
+	             //  Begin grammar
+	             (
+	                 int_p[assign_a(res)]
+	             ) >> end_p,
+	             //  End grammar
+	             space_p).full;
+}
+
+bool findBool(const librevenge::RVNGString &str, bool &res)
+{
+	using namespace ::boost::spirit::classic;
+
+	if (str.empty())
+		return false;
+
+	return parse(str.cstr(),
+	             //  Begin grammar
+	             (
+	                 str_p("true")[assign_a(res,true)]
+	                 |
+	                 str_p("false")[assign_a(res,false)]
+	                 |
+	                 str_p("TRUE")[assign_a(res,true)]
+	                 |
+	                 str_p("FALSE")[assign_a(res,false)]
+	             ) >> end_p,
+	             //  End grammar
+	             space_p).full;
+}
+
+} // anonymous namespace
 
 namespace librevenge
 {
@@ -141,11 +220,30 @@ void RVNGPropertyList::insert(const char *name, const bool val)
 
 void RVNGPropertyList::insert(const char *name, const char *val)
 {
-	m_impl->insert(name, RVNGPropertyFactory::newStringProp(val));
+	insert(name, RVNGString(val));
 }
 
 void RVNGPropertyList::insert(const char *name, const RVNGString &val)
 {
+	int valInt;
+	if (findInt(val, valInt))
+	{
+		insert(name, valInt);
+		return;
+	}
+	double valDouble;
+	RVNGUnit valUnit;
+	if (findDouble(val, valDouble, valUnit))
+	{
+		insert(name, valDouble, valUnit);
+		return;
+	}
+	bool valBool;
+	if (findBool(val, valBool))
+	{
+		insert(name, valBool);
+		return;
+	}
 	m_impl->insert(name, RVNGPropertyFactory::newStringProp(val));
 }
 
