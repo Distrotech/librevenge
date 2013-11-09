@@ -80,20 +80,20 @@ void RVNGRawGeneratorBase::idprintf(const char *format, ...)
 
 RVNGString getPropString(const RVNGPropertyList &propList)
 {
-	std::map<std::string, std::string> tmpMap;
-	RVNGPropertyList::Iter i(propList);
-	for (i.rewind(); i.next(); )
-		tmpMap[i.key()] = i()->getStr().cstr();
-
 	RVNGString propString;
-	for (std::map<std::string, std::string>::const_iterator iter = tmpMap.begin();
-	        iter != tmpMap.end(); ++iter)
+	RVNGPropertyList::Iter i(propList);
+	if (!i.last())
 	{
-		if (iter != tmpMap.begin())
-			propString.append(", ");
-		propString.append(iter->first.c_str());
+		propString.append(i.key());
 		propString.append(": ");
-		propString.append(iter->second.c_str());
+		propString.append(i()->getStr().cstr());
+		for (; i.next(); )
+		{
+			propString.append(", ");
+			propString.append(i.key());
+			propString.append(": ");
+			propString.append(i()->getStr().cstr());
+		}
 	}
 
 	return propString;
