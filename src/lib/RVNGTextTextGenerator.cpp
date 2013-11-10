@@ -66,7 +66,10 @@ void RVNGTextTextGenerator::setDocumentMetaData(const RVNGPropertyList &propList
 }
 
 void RVNGTextTextGenerator::startDocument() {}
-void RVNGTextTextGenerator::endDocument() {}
+void RVNGTextTextGenerator::endDocument()
+{
+	m_impl->m_document=m_impl->m_stream.str().c_str();
+}
 
 void RVNGTextTextGenerator::definePageStyle(const RVNGPropertyList &) {}
 void RVNGTextTextGenerator::openPageSpan(const RVNGPropertyList & /* propList */) {}
