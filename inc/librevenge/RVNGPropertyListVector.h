@@ -40,6 +40,7 @@ public:
 	unsigned long count() const;
 	const RVNGPropertyList &operator[](unsigned long index) const;
 	RVNGPropertyListVector &operator=(const RVNGPropertyListVector &vect);
+	const RVNGProperty *operator()() const;
 
 	class Iter
 	{
