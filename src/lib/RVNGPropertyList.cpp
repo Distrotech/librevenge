@@ -112,8 +112,27 @@ class RVNGPropertyListElement
 {
 public:
 	RVNGPropertyListElement() : m_prop(0), m_vec(0) {}
+	RVNGPropertyListElement(const RVNGPropertyListElement &elem)
+		: m_prop(elem.m_prop ? elem.m_prop->clone() : 0),
+		  m_vec(elem.m_vec ? elem.m_vec->clone() : 0) {}
+	/*
+	 * Caution, following constructor does not allocate memory but takes as
+	 * arguments pre-allocated memory that this class takes ownership of.
+	 * Deallocating this memory outside this class can result in double free.
+	 */
 	RVNGPropertyListElement(RVNGProperty *prop, RVNGPropertyListVector *vec)
 		: m_prop(prop), m_vec(vec) {}
+	~RVNGPropertyListElement()
+	{
+		delete m_prop;
+		delete m_vec;
+	}
+	RVNGPropertyListElement &operator=(const RVNGPropertyListElement &elem)
+	{
+		m_prop = elem.m_prop ? elem.m_prop->clone() : 0;
+		m_vec = elem.m_vec ? elem.m_vec->clone() : 0;
+		return *this;
+	}
 	RVNGProperty *m_prop;
 	RVNGPropertyListVector *m_vec;
 };
@@ -122,7 +141,9 @@ class RVNGPropertyListImpl
 {
 public:
 	RVNGPropertyListImpl() : m_map() {}
-	~RVNGPropertyListImpl();
+	RVNGPropertyListImpl(const RVNGPropertyListImpl &plist) : m_map(plist.m_map) {}
+	~RVNGPropertyListImpl() {}
+	RVNGPropertyListImpl &operator=(const RVNGPropertyListImpl &plist);
 	void insert(const char *name, RVNGProperty *prop);
 	void insert(const char *name, RVNGPropertyListVector *vec);
 	const RVNGProperty *operator[](const char *name) const;
@@ -131,32 +152,19 @@ public:
 	void clear();
 
 	mutable std::map<std::string, RVNGPropertyListElement> m_map;
-
-private:
-	// disable copy construction and assignment
-	RVNGPropertyListImpl(const RVNGPropertyListImpl &);
-	RVNGPropertyListImpl &operator=(const RVNGPropertyListImpl &);
 };
 
-RVNGPropertyListImpl::~RVNGPropertyListImpl()
+RVNGPropertyListImpl &RVNGPropertyListImpl::operator=(const RVNGPropertyListImpl &plist)
 {
-	for (std::map<std::string, RVNGPropertyListElement>::iterator iter = m_map.begin();
-	        iter != m_map.end();
-	        ++iter)
-	{
-		delete iter->second.m_prop;
-		delete iter->second.m_vec;
-	}
+	m_map = plist.m_map;
+	return *this;
 }
 
 const RVNGProperty *RVNGPropertyListImpl::operator[](const char *name) const
 {
 	std::map<std::string, RVNGPropertyListElement>::iterator i = m_map.find(name);
 	if (i != m_map.end())
-	{
 		return i->second.m_prop;
-	}
-
 	return 0;
 }
 
@@ -206,22 +214,12 @@ void RVNGPropertyListImpl::remove(const char *name)
 	std::map<std::string, RVNGPropertyListElement>::iterator i = m_map.find(name);
 	if (i != m_map.end())
 	{
-		delete i->second.m_prop;
-		delete i->second.m_vec;
 		m_map.erase(i);
 	}
 }
 
 void RVNGPropertyListImpl::clear()
 {
-	for (std::map<std::string, RVNGPropertyListElement>::iterator iter = m_map.begin();
-	        iter != m_map.end();
-	        ++iter)
-	{
-		delete iter->second.m_prop;
-		delete iter->second.m_vec;
-	}
-
 	m_map.clear();
 }
 
@@ -231,13 +229,8 @@ RVNGPropertyList::RVNGPropertyList() :
 }
 
 RVNGPropertyList::RVNGPropertyList(const RVNGPropertyList &propList) :
-	m_impl(new RVNGPropertyListImpl())
+	m_impl(new RVNGPropertyListImpl(*(propList.m_impl)))
 {
-	RVNGPropertyList::Iter i(propList);
-	for (i.rewind(); i.next(); )
-	{
-		insert(i.key(), i()->clone());
-	}
 }
 
 RVNGPropertyList::~RVNGPropertyList()
