@@ -176,6 +176,8 @@ void RVNGPropertyListImpl::insert(const char *name, RVNGProperty *prop)
 	std::map<std::string, RVNGPropertyListElement>::iterator i = m_map.lower_bound(name);
 	if (i != m_map.end() && !(m_map.key_comp()(name, i->first)))
 	{
+		delete i->second.m_vec;
+		i->second.m_vec = 0;
 		RVNGProperty *tmpProp = i->second.m_prop;
 		i->second.m_prop = prop;
 		delete tmpProp;
@@ -189,6 +191,8 @@ void RVNGPropertyListImpl::insert(const char *name, RVNGPropertyListVector *vec)
 	std::map<std::string, RVNGPropertyListElement>::iterator i = m_map.lower_bound(name);
 	if (i != m_map.end() && !(m_map.key_comp()(name, i->first)))
 	{
+		delete i->second.m_prop;
+		i->second.m_prop = 0;
 		RVNGPropertyListVector *tmpProp = i->second.m_vec;
 		i->second.m_vec = vec;
 		delete tmpProp;
