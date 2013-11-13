@@ -120,10 +120,9 @@ public:
 
 private:
 	// disable copy construction and assignment
-	RVNGPropertyListImpl(const RVNGPropertyListImpl &other);
-	RVNGPropertyListImpl &operator=(const RVNGPropertyListImpl &other);
+	RVNGPropertyListImpl(const RVNGPropertyListImpl &);
+	RVNGPropertyListImpl &operator=(const RVNGPropertyListImpl &);
 
-private:
 	mutable std::map<std::string, RVNGProperty *> m_map;
 
 	friend class RVNGPropertyListIterImpl;
