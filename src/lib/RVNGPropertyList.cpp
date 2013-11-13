@@ -401,7 +401,7 @@ const char *RVNGPropertyListIterImpl::key()
 }
 
 RVNGPropertyList::Iter::Iter(const RVNGPropertyList &propList) :
-	m_iterImpl(new RVNGPropertyListIterImpl(static_cast<RVNGPropertyListImpl *>(propList.m_impl)))
+	m_iterImpl(new RVNGPropertyListIterImpl(propList.m_impl))
 {
 }
 

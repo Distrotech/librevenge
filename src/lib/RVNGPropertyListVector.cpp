@@ -83,7 +83,7 @@ private:
 };
 
 RVNGPropertyListVector::RVNGPropertyListVector(const RVNGPropertyListVector &vect) :
-	m_impl(new RVNGPropertyListVectorImpl(static_cast<RVNGPropertyListVectorImpl *>(vect.m_impl)->m_vector))
+	m_impl(new RVNGPropertyListVectorImpl(vect.m_impl->m_vector))
 {
 }
 
@@ -132,7 +132,7 @@ RVNGPropertyListVector &RVNGPropertyListVector::operator=(const RVNGPropertyList
 }
 
 RVNGPropertyListVector::Iter::Iter(const RVNGPropertyListVector &vect) :
-	m_iterImpl(new RVNGPropertyListVectorIterImpl(&(static_cast<RVNGPropertyListVectorImpl * >(vect.m_impl)->m_vector)))
+	m_iterImpl(new RVNGPropertyListVectorIterImpl(&(vect.m_impl->m_vector)))
 {
 }
 

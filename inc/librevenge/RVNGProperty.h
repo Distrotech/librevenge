@@ -43,6 +43,9 @@ class RVNGPropertyFactory
 public:
 	static RVNGProperty *newStringProp(const RVNGString &str);
 	static RVNGProperty *newStringProp(const char *str);
+	static RVNGProperty *newBinaryDataProp(const RVNGBinaryData &data);
+	static RVNGProperty *newBinaryDataProp(const unsigned char *buffer,
+	                                       const unsigned long bufferSize);
 	static RVNGProperty *newIntProp(const int val);
 	static RVNGProperty *newBoolProp(const bool val);
 	static RVNGProperty *newDoubleProp(const double val);

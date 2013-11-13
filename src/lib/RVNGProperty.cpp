@@ -83,6 +83,31 @@ private:
 	RVNGString m_str;
 };
 
+class RVNGBinaryDataProperty : public RVNGProperty
+{
+public:
+	RVNGBinaryDataProperty(const RVNGBinaryData &data);
+	RVNGBinaryDataProperty(const unsigned char *buffer, const unsigned long bufferSize);
+	~RVNGBinaryDataProperty() {}
+	virtual int getInt() const
+	{
+		return 0;
+	}
+	virtual double getDouble() const
+	{
+		return 0;
+	}
+	virtual RVNGUnit getUnit() const
+	{
+		return RVNG_UNIT_ERROR;
+	}
+	virtual RVNGString getStr() const;
+	virtual RVNGProperty *clone() const;
+
+private:
+	RVNGBinaryData m_data;
+};
+
 class RVNGIntProperty : public RVNGProperty
 {
 public:
@@ -214,6 +239,25 @@ RVNGString RVNGStringProperty::getStr() const
 RVNGProperty *RVNGStringProperty::clone() const
 {
 	return new RVNGStringProperty(m_str);
+}
+
+RVNGBinaryDataProperty::RVNGBinaryDataProperty(const RVNGBinaryData &data) :
+	m_data(data)
+{
+}
+RVNGBinaryDataProperty::RVNGBinaryDataProperty(const unsigned char *buffer, const unsigned long bufferSize) :
+	m_data(buffer, bufferSize)
+{
+}
+
+RVNGString RVNGBinaryDataProperty::getStr() const
+{
+	return m_data.getBase64Data();
+}
+
+RVNGProperty *RVNGBinaryDataProperty::clone() const
+{
+	return new RVNGBinaryDataProperty(m_data);
 }
 
 RVNGIntProperty::RVNGIntProperty(const int val)  :
@@ -357,47 +401,57 @@ RVNGProperty *RVNGTwipProperty::clone() const
 
 RVNGProperty *RVNGPropertyFactory::newStringProp(const RVNGString &str)
 {
-	return static_cast<RVNGProperty *>(new RVNGStringProperty(str));
+	return new RVNGStringProperty(str);
 }
 
 RVNGProperty *RVNGPropertyFactory::newStringProp(const char *str)
 {
-	return static_cast<RVNGProperty *>(new RVNGStringProperty(str));
+	return new RVNGStringProperty(str);
+}
+
+RVNGProperty *RVNGPropertyFactory::newBinaryDataProp(const RVNGBinaryData &data)
+{
+	return new RVNGBinaryDataProperty(data);
+}
+
+RVNGProperty *RVNGPropertyFactory::newBinaryDataProp(const unsigned char *buffer, const unsigned long bufferSize)
+{
+	return new RVNGBinaryDataProperty(buffer, bufferSize);
 }
 
 RVNGProperty *RVNGPropertyFactory::newIntProp(const int val)
 {
-	return static_cast<RVNGProperty *>(new RVNGIntProperty(val));
+	return new RVNGIntProperty(val);
 }
 
 RVNGProperty *RVNGPropertyFactory::newBoolProp(const bool val)
 {
-	return static_cast<RVNGProperty *>(new RVNGBoolProperty(val));
+	return new RVNGBoolProperty(val);
 }
 
 RVNGProperty *RVNGPropertyFactory::newDoubleProp(const double val)
 {
-	return static_cast<RVNGProperty *>(new RVNGDoubleProperty(val));
+	return new RVNGDoubleProperty(val);
 }
 
 RVNGProperty *RVNGPropertyFactory::newInchProp(const double val)
 {
-	return static_cast<RVNGProperty *>(new RVNGInchProperty(val));
+	return new RVNGInchProperty(val);
 }
 
 RVNGProperty *RVNGPropertyFactory::newPercentProp(const double val)
 {
-	return static_cast<RVNGProperty *>(new RVNGPercentProperty(val));
+	return new RVNGPercentProperty(val);
 }
 
 RVNGProperty *RVNGPropertyFactory::newPointProp(const double val)
 {
-	return static_cast<RVNGProperty *>(new RVNGPointProperty(val));
+	return new RVNGPointProperty(val);
 }
 
 RVNGProperty *RVNGPropertyFactory::newTwipProp(const double val)
 {
-	return static_cast<RVNGProperty *>(new RVNGTwipProperty(val));
+	return new RVNGTwipProperty(val);
 }
 
 }
