@@ -27,7 +27,6 @@ namespace librevenge
 
 class RVNGPropertyListVectorImpl
 {
-	friend class RVNGPropertyListVector;
 public:
 	RVNGPropertyListVectorImpl(const std::vector<RVNGPropertyList> &_vector) : m_vector(_vector) {}
 	RVNGPropertyListVectorImpl() : m_vector() {}
@@ -39,11 +38,11 @@ public:
 	{
 		return m_vector.size();
 	}
-	std::vector<RVNGPropertyList> m_vector;
 	const RVNGPropertyList &operator[](unsigned long index) const
 	{
 		return m_vector[index];
 	}
+	std::vector<RVNGPropertyList> m_vector;
 };
 
 class RVNGPropertyListVectorIterImpl

@@ -130,14 +130,12 @@ public:
 	void remove(const char *name);
 	void clear();
 
+	mutable std::map<std::string, RVNGPropertyListElement> m_map;
+
 private:
 	// disable copy construction and assignment
 	RVNGPropertyListImpl(const RVNGPropertyListImpl &);
 	RVNGPropertyListImpl &operator=(const RVNGPropertyListImpl &);
-
-	mutable std::map<std::string, RVNGPropertyListElement> m_map;
-
-	friend class RVNGPropertyListIterImpl;
 };
 
 RVNGPropertyListImpl::~RVNGPropertyListImpl()
