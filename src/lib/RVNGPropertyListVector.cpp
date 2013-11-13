@@ -27,10 +27,10 @@ namespace librevenge
 
 class RVNGPropertyListVectorImpl
 {
+	friend class RVNGPropertyListVector;
 public:
-	RVNGPropertyListVectorImpl(const std::vector<RVNGPropertyList> &vec) : m_prop(0), m_vector(vec) {}
-	RVNGPropertyListVectorImpl(const RVNGProperty *prop) : m_prop(prop), m_vector() {}
-	RVNGPropertyListVectorImpl() : m_prop(0), m_vector() {}
+	RVNGPropertyListVectorImpl(const std::vector<RVNGPropertyList> &_vector) : m_vector(_vector) {}
+	RVNGPropertyListVectorImpl() : m_vector() {}
 	void append(const RVNGPropertyList &elem)
 	{
 		m_vector.push_back(elem);
@@ -39,23 +39,11 @@ public:
 	{
 		return m_vector.size();
 	}
+	std::vector<RVNGPropertyList> m_vector;
 	const RVNGPropertyList &operator[](unsigned long index) const
 	{
 		return m_vector[index];
 	}
-	const RVNGProperty *operator()() const
-	{
-		return m_prop;
-	}
-private:
-	// disable copy construction and assignment
-	RVNGPropertyListVectorImpl(const RVNGPropertyListVectorImpl &);
-	RVNGPropertyListVectorImpl &operator=(const RVNGPropertyListVectorImpl &);
-
-	const RVNGProperty *m_prop;
-	std::vector<RVNGPropertyList> m_vector;
-
-	friend class RVNGPropertyListVector;
 };
 
 class RVNGPropertyListVectorIterImpl
@@ -128,6 +116,11 @@ unsigned long RVNGPropertyListVector::count() const
 	return m_impl->count();
 }
 
+RVNGPropertyListVector *RVNGPropertyListVector::clone() const
+{
+	return new RVNGPropertyListVector(*this);
+}
+
 const RVNGPropertyList &RVNGPropertyListVector::operator[](unsigned long index) const
 {
 	return m_impl->operator[](index);
@@ -136,15 +129,8 @@ const RVNGPropertyList &RVNGPropertyListVector::operator[](unsigned long index) 
 RVNGPropertyListVector &RVNGPropertyListVector::operator=(const RVNGPropertyListVector &vect)
 {
 	m_impl->m_vector = vect.m_impl->m_vector;
-	m_impl->m_prop = vect.m_impl->m_prop->clone();
 	return *this;
 }
-
-const RVNGProperty *RVNGPropertyListVector::operator()() const
-{
-	return m_impl->m_prop;
-}
-
 
 RVNGPropertyListVector::Iter::Iter(const RVNGPropertyListVector &vect) :
 	m_iterImpl(new RVNGPropertyListVectorIterImpl(&(static_cast<RVNGPropertyListVectorImpl * >(vect.m_impl)->m_vector)))

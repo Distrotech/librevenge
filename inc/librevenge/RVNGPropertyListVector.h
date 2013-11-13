@@ -38,9 +38,9 @@ public:
 	void append(const RVNGPropertyList &elem);
 	void append(const RVNGPropertyListVector &vec);
 	unsigned long count() const;
+	RVNGPropertyListVector *clone() const;
 	const RVNGPropertyList &operator[](unsigned long index) const;
 	RVNGPropertyListVector &operator=(const RVNGPropertyListVector &vect);
-	const RVNGProperty *operator()() const;
 
 	class Iter
 	{

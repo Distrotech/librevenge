@@ -30,6 +30,7 @@ namespace librevenge
 
 class RVNGPropertyListImpl;
 class RVNGPropertyListIterImpl;
+class RVNGPropertyListVector;
 
 class RVNGPropertyList
 {
@@ -44,8 +45,11 @@ public:
 	void insert(const char *name, const RVNGString &val);
 	void insert(const char *name, const double val, const RVNGUnit units = RVNG_INCH);
 
+	void insert(const char *name, const RVNGPropertyListVector &vec);
+
 	void remove(const char *name);
 	const RVNGProperty *operator[](const char *name) const;
+	const RVNGPropertyListVector *get(const char *name) const;
 	const RVNGPropertyList &operator=(const RVNGPropertyList &propList);
 	void clear();
 
