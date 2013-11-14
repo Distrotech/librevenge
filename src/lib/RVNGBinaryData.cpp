@@ -48,6 +48,21 @@ struct DataImpl
 	boost::scoped_ptr<RVNGMemoryInputStream> m_stream;
 };
 
+void convertFromBase64(std::vector<unsigned char> &result, std::string &source)
+{
+	unsigned numPadding = std::count(source.begin(), source.end(), '=');
+	std::replace(source.begin(),source.end(),'=','A'); // replace '=' by base64 encoding of '\0'
+	typedef boost::archive::iterators::transform_width<
+	boost::archive::iterators::binary_from_base64<
+	boost::archive::iterators::remove_whitespace< std::string::const_iterator > >, 8, 6 > base64_decoder;
+
+	std::copy(base64_decoder(source.begin()), base64_decoder(source.end()), std::back_inserter(result));
+	if (!result.empty())
+	{
+		result.erase(result.end()-numPadding,result.end());  // erase padding '\0' characters
+	}
+}
+
 }
 
 struct RVNGBinaryDataImpl
@@ -98,23 +113,18 @@ RVNGBinaryData::RVNGBinaryData(const unsigned char *buffer, const unsigned long 
 		m_binaryDataImpl->m_ptr->m_buf[i] = buffer[i];
 }
 
-RVNGBinaryData::RVNGBinaryData(const RVNGString &base64Data) :
+RVNGBinaryData::RVNGBinaryData(const RVNGString &base64) :
 	m_binaryDataImpl(new RVNGBinaryDataImpl)
 {
+	std::string base64String(base64.cstr(), base64.size());
+	convertFromBase64(m_binaryDataImpl->m_ptr->m_buf, base64String);
+}
 
-	std::string base64String(base64Data.cstr(), base64Data.size());
-	unsigned numPadding = std::count(base64String.begin(), base64String.end(), '=');
-	std::replace(base64String.begin(),base64String.end(),'=','A'); // replace '=' by base64 encoding of '\0'
-	typedef boost::archive::iterators::transform_width<
-	boost::archive::iterators::binary_from_base64<
-	boost::archive::iterators::remove_whitespace< std::string::const_iterator > >, 8, 6 > base64_decoder;
-
-	std::vector<unsigned char> buffer;
-	std::copy(base64_decoder(base64String.begin()), base64_decoder(base64String.end()), std::back_inserter(m_binaryDataImpl->m_ptr->m_buf));
-	if (!m_binaryDataImpl->m_ptr->m_buf.empty())
-	{
-		m_binaryDataImpl->m_ptr->m_buf.erase(m_binaryDataImpl->m_ptr->m_buf.end()-numPadding,m_binaryDataImpl->m_ptr->m_buf.end());  // erase padding '\0' characters
-	}
+RVNGBinaryData::RVNGBinaryData(const char *base64) :
+	m_binaryDataImpl(new RVNGBinaryDataImpl)
+{
+	std::string base64String(base64);
+	convertFromBase64(m_binaryDataImpl->m_ptr->m_buf, base64String);
 }
 
 void RVNGBinaryData::append(const RVNGBinaryData &data)
@@ -127,9 +137,22 @@ void RVNGBinaryData::append(const RVNGBinaryData &data)
 		m_binaryDataImpl->m_ptr->m_buf.push_back(data.m_binaryDataImpl->m_ptr->m_buf[i]);
 }
 
-void RVNGBinaryData::append(const RVNGString &base64Data)
+void RVNGBinaryData::append(const RVNGString &base64)
 {
-	append(RVNGBinaryData(base64Data));
+	std::string base64String(base64.cstr(), base64.size());
+	std::vector<unsigned char> buffer;
+	convertFromBase64(buffer, base64String);
+	if (!buffer.empty())
+		append(&buffer[0], buffer.size());
+}
+
+void RVNGBinaryData::append(const char *base64)
+{
+	std::string base64String(base64);
+	std::vector<unsigned char> buffer;
+	convertFromBase64(buffer, base64String);
+	if (!buffer.empty())
+		append(&buffer[0], buffer.size());
 }
 
 void RVNGBinaryData::append(const unsigned char *buffer, const unsigned long bufferSize )
