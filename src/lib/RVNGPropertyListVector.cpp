@@ -38,6 +38,10 @@ public:
 	{
 		return m_vector.size();
 	}
+	void clear()
+	{
+		m_vector.clear();
+	}
 	const RVNGPropertyList &operator[](unsigned long index) const
 	{
 		return m_vector[index];
@@ -122,9 +126,7 @@ RVNGPropertyListVector *RVNGPropertyListVector::clone() const
 
 void RVNGPropertyListVector::clear()
 {
-	if (m_impl)
-		delete m_impl;
-	m_impl = new RVNGPropertyListVectorImpl;
+	m_impl->clear();
 }
 
 const RVNGPropertyList &RVNGPropertyListVector::operator[](unsigned long index) const
