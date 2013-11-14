@@ -137,7 +137,7 @@ void RVNGBinaryData::append(const RVNGBinaryData &data)
 		m_binaryDataImpl->m_ptr->m_buf.push_back(data.m_binaryDataImpl->m_ptr->m_buf[i]);
 }
 
-void RVNGBinaryData::append(const RVNGString &base64)
+void RVNGBinaryData::appendBase64Data(const RVNGString &base64)
 {
 	std::string base64String(base64.cstr(), base64.size());
 	std::vector<unsigned char> buffer;
@@ -146,7 +146,7 @@ void RVNGBinaryData::append(const RVNGString &base64)
 		append(&buffer[0], buffer.size());
 }
 
-void RVNGBinaryData::append(const char *base64)
+void RVNGBinaryData::appendBase64Data(const char *base64)
 {
 	std::string base64String(base64);
 	std::vector<unsigned char> buffer;
