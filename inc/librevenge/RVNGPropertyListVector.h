@@ -39,6 +39,7 @@ public:
 	void append(const RVNGPropertyListVector &vec);
 	unsigned long count() const;
 	RVNGPropertyListVector *clone() const;
+	void clear();
 	const RVNGPropertyList &operator[](unsigned long index) const;
 	RVNGPropertyListVector &operator=(const RVNGPropertyListVector &vect);
 

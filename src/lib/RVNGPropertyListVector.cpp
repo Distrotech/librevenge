@@ -120,6 +120,13 @@ RVNGPropertyListVector *RVNGPropertyListVector::clone() const
 	return new RVNGPropertyListVector(*this);
 }
 
+void RVNGPropertyListVector::clear()
+{
+	if (m_impl)
+		delete m_impl;
+	m_impl = new RVNGPropertyListVectorImpl;
+}
+
 const RVNGPropertyList &RVNGPropertyListVector::operator[](unsigned long index) const
 {
 	return m_impl->operator[](index);
