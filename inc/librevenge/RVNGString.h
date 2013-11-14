@@ -36,6 +36,7 @@ public:
 
 	const char *cstr() const;
 	int len() const;
+	unsigned long size() const;
 	bool empty() const;
 
 	void sprintf(const char *format, ...);

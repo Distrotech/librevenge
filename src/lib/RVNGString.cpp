@@ -79,6 +79,10 @@ public:
 		if (empty()) return 0;
 		return librvng_utf8_strlen(m_buf.c_str(), m_buf.c_str()+m_buf.length());
 	}
+	unsigned long size() const
+	{
+		return (unsigned long)m_buf.size();
+	}
 	std::string m_buf;
 };
 
@@ -209,6 +213,11 @@ void RVNGString::clear()
 int RVNGString::len() const
 {
 	return m_stringImpl->len();
+}
+
+unsigned long RVNGString::size() const
+{
+	return m_stringImpl->size();
 }
 
 bool RVNGString::empty() const
