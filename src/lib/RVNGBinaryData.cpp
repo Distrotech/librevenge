@@ -17,15 +17,21 @@
  * applicable instead of those above.
  */
 
+#include <boost/archive/iterators/binary_from_base64.hpp>
+#include <boost/archive/iterators/remove_whitespace.hpp>
+#include <boost/archive/iterators/transform_width.hpp>
+#include <boost/range/iterator_range.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
+
+#include <vector>
+#include <string>
+#include <stdarg.h>
+#include <stdio.h>
 
 #include <librevenge/librevenge.h>
 #include "RVNGMemoryStream.h"
 
-#include <vector>
-#include <stdarg.h>
-#include <stdio.h>
 
 namespace librevenge
 {
@@ -92,6 +98,25 @@ RVNGBinaryData::RVNGBinaryData(const unsigned char *buffer, const unsigned long 
 		m_binaryDataImpl->m_ptr->m_buf[i] = buffer[i];
 }
 
+RVNGBinaryData::RVNGBinaryData(const RVNGString &base64Data) :
+	m_binaryDataImpl(new RVNGBinaryDataImpl)
+{
+
+	std::string base64String(base64Data.cstr(), base64Data.size());
+	unsigned numPadding = std::count(base64String.begin(), base64String.end(), '=');
+	std::replace(base64String.begin(),base64String.end(),'=','A'); // replace '=' by base64 encoding of '\0'
+	typedef boost::archive::iterators::transform_width<
+	boost::archive::iterators::binary_from_base64<
+	boost::archive::iterators::remove_whitespace< std::string::const_iterator > >, 8, 6 > base64_decoder;
+
+	std::vector<unsigned char> buffer;
+	std::copy(base64_decoder(base64String.begin()), base64_decoder(base64String.end()), std::back_inserter(m_binaryDataImpl->m_ptr->m_buf));
+	if (!m_binaryDataImpl->m_ptr->m_buf.empty())
+	{
+		m_binaryDataImpl->m_ptr->m_buf.erase(m_binaryDataImpl->m_ptr->m_buf.end()-numPadding,m_binaryDataImpl->m_ptr->m_buf.end());  // erase padding '\0' characters
+	}
+}
+
 void RVNGBinaryData::append(const RVNGBinaryData &data)
 {
 	m_binaryDataImpl->makeUnique();
@@ -100,6 +125,11 @@ void RVNGBinaryData::append(const RVNGBinaryData &data)
 	m_binaryDataImpl->m_ptr->m_buf.reserve(previousSize + data.m_binaryDataImpl->m_ptr->m_buf.size());
 	for (unsigned long i = 0; i < data.m_binaryDataImpl->m_ptr->m_buf.size(); i++)
 		m_binaryDataImpl->m_ptr->m_buf.push_back(data.m_binaryDataImpl->m_ptr->m_buf[i]);
+}
+
+void RVNGBinaryData::append(const RVNGString &base64Data)
+{
+	append(RVNGBinaryData(base64Data));
 }
 
 void RVNGBinaryData::append(const unsigned char *buffer, const unsigned long bufferSize )

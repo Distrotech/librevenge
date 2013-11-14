@@ -34,11 +34,13 @@ public:
 	RVNGBinaryData();
 	RVNGBinaryData(const RVNGBinaryData &);
 	RVNGBinaryData(const unsigned char *buffer, const unsigned long bufferSize);
+	RVNGBinaryData(const RVNGString &base64Data);
 	~RVNGBinaryData();
 
 	void append(const RVNGBinaryData &data);
 	void append(const unsigned char *buffer, const unsigned long bufferSize);
 	void append(const unsigned char c);
+	void append(const RVNGString &base64Data);
 	void clear();
 
 	unsigned long size() const;
