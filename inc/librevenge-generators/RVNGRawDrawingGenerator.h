@@ -58,7 +58,7 @@ public:
 	void drawPolyline(const librevenge::RVNGPropertyListVector &vertices);
 	void drawPolygon(const librevenge::RVNGPropertyListVector &vertices);
 	void drawPath(const librevenge::RVNGPropertyListVector &path);
-	void drawGraphicObject(const librevenge::RVNGPropertyList &propList, const librevenge::RVNGBinaryData &binaryData);
+	void drawGraphicObject(const librevenge::RVNGPropertyList &propList);
 	void startTextObject(const librevenge::RVNGPropertyList &propList, const librevenge::RVNGPropertyListVector &path);
 	void endTextObject();
 

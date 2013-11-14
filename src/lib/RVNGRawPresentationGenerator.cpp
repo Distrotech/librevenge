@@ -156,7 +156,7 @@ void RVNGRawPresentationGenerator::drawPath(const RVNGPropertyListVector &path)
 	printf("RVNGRawPresentationGenerator::drawPath (%s)\n", getPropString(path).cstr());
 }
 
-void RVNGRawPresentationGenerator::drawGraphicObject(const RVNGPropertyList &propList, const RVNGBinaryData & /*binaryData*/)
+void RVNGRawPresentationGenerator::drawGraphicObject(const RVNGPropertyList &propList)
 {
 	printf("RVNGRawPresentationGenerator::drawGraphicObject (%s)\n", getPropString(propList).cstr());
 }

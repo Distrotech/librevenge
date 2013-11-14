@@ -694,11 +694,12 @@ void RVNGSVGDrawingGenerator::drawPath(const RVNGPropertyListVector &path)
 	m_pImpl->m_outputSink << "/>\n";
 }
 
-void RVNGSVGDrawingGenerator::drawGraphicObject(const RVNGPropertyList &propList, const RVNGBinaryData &binaryData)
+void RVNGSVGDrawingGenerator::drawGraphicObject(const RVNGPropertyList &propList)
 {
 	if (!propList["librevenge:mime-type"] || propList["librevenge:mime-type"]->getStr().len() <= 0)
 		return;
-	RVNGString base64 = binaryData.getBase64Data();
+	if (!propList["office:binary-data"])
+		return;
 	m_pImpl->m_outputSink << "<" << m_pImpl->getNamespaceAndDelim() << "image ";
 	if (propList["svg:x"] && propList["svg:y"] && propList["svg:width"] && propList["svg:height"])
 	{
@@ -733,7 +734,7 @@ void RVNGSVGDrawingGenerator::drawGraphicObject(const RVNGPropertyList &propList
 		}
 	}
 	m_pImpl->m_outputSink << "xlink:href=\"data:" << propList["librevenge:mime-type"]->getStr().cstr() << ";base64,";
-	m_pImpl->m_outputSink << base64.cstr();
+	m_pImpl->m_outputSink << propList["office:binary-data"]->getStr().cstr();
 	m_pImpl->m_outputSink << "\" />\n";
 }
 

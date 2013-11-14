@@ -149,7 +149,7 @@ void RVNGRawDrawingGenerator::drawPath(const RVNGPropertyListVector &path)
 	m_impl->iprintf("drawPath (%s)\n", getPropString(path).cstr());
 }
 
-void RVNGRawDrawingGenerator::drawGraphicObject(const RVNGPropertyList &propList, const RVNGBinaryData & /*binaryData*/)
+void RVNGRawDrawingGenerator::drawGraphicObject(const RVNGPropertyList &propList)
 {
 	if (m_impl->m_printCallgraphScore)
 		return;

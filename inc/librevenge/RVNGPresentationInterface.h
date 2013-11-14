@@ -17,7 +17,6 @@
 
 #include "RVNGPropertyList.h"
 #include "RVNGPropertyListVector.h"
-#include "RVNGBinaryData.h"
 
 namespace librevenge
 {
@@ -122,7 +121,7 @@ public:
 	virtual void drawPath(const RVNGPropertyListVector &path) = 0;
 
 	// Embedded binary/raster data
-	virtual void drawGraphicObject(const RVNGPropertyList &propList, const RVNGBinaryData &binaryData) = 0;
+	virtual void drawGraphicObject(const RVNGPropertyList &propList) = 0;
 
 	/** Draw a connector between two objects.
 	  */

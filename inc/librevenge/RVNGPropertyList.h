@@ -44,6 +44,8 @@ public:
 	void insert(const char *name, const bool val);
 	void insert(const char *name, const RVNGString &val);
 	void insert(const char *name, const double val, const RVNGUnit units = RVNG_INCH);
+	void insert(const char *name, const unsigned char *buffer, const unsigned long bufferSize);
+	void insert(const char *name, const RVNGBinaryData &data);
 
 	void insert(const char *name, const RVNGPropertyListVector &vec);
 

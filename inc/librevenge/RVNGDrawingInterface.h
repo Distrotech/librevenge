@@ -122,7 +122,7 @@ public:
 	virtual void drawPath(const RVNGPropertyListVector &path) = 0;
 
 	// Embedded binary/raster data
-	virtual void drawGraphicObject(const RVNGPropertyList &propList, const RVNGBinaryData &binaryData) = 0;
+	virtual void drawGraphicObject(const RVNGPropertyList &propList) = 0;
 
 	// Embedded text object
 	virtual void startTextObject(const RVNGPropertyList &propList, const RVNGPropertyListVector &path) = 0;

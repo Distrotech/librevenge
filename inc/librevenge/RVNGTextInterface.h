@@ -24,7 +24,6 @@
 
 #include "RVNGPropertyList.h"
 #include "RVNGPropertyListVector.h"
-#include "RVNGBinaryData.h"
 
 namespace librevenge
 {
@@ -434,9 +433,9 @@ public:
 	Called when a binary object should be inserted
 	\param propList Defines a set of properties for the object. May contain:
 	\li \c librevenge:mime-type The mimetype of the object
-	\param data Reference to the binary object
+	\li \c office:binary-data The object data
 	*/
-	virtual void insertBinaryObject(const RVNGPropertyList &propList, const RVNGBinaryData &data) = 0;
+	virtual void insertBinaryObject(const RVNGPropertyList &propList) = 0;
 	/**
 	Called when a mathml object should be inserted
 	\param propList Defines a set of properties for the object.

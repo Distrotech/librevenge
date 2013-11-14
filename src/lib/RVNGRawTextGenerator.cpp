@@ -344,7 +344,7 @@ void RVNGRawTextGenerator::closeFrame()
 	RVNG_CALLGRAPH_LEAVE(("closeFrame()\n"), LC_OPEN_FRAME);
 }
 
-void RVNGRawTextGenerator::insertBinaryObject(const RVNGPropertyList &propList, const RVNGBinaryData & /* data */)
+void RVNGRawTextGenerator::insertBinaryObject(const RVNGPropertyList &propList)
 {
 	m_impl->iprintf("insertBinaryObject(%s)\n", getPropString(propList).cstr());
 }

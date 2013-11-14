@@ -52,7 +52,7 @@ public:
 	void drawPolyline(const RVNGPropertyListVector &vertices);
 	void drawPolygon(const RVNGPropertyListVector &vertices);
 	void drawPath(const RVNGPropertyListVector &path);
-	void drawGraphicObject(const RVNGPropertyList &propList, const RVNGBinaryData &binaryData);
+	void drawGraphicObject(const RVNGPropertyList &propList);
 	void startTextObject(const RVNGPropertyList &propList, const RVNGPropertyListVector &path);
 	void endTextObject();
 

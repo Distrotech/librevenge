@@ -57,7 +57,7 @@ public:
 	virtual void drawPolyline(const RVNGPropertyListVector &vertices);
 	virtual void drawPolygon(const RVNGPropertyListVector &vertices);
 	virtual void drawPath(const RVNGPropertyListVector &path);
-	virtual void drawGraphicObject(const RVNGPropertyList &propList, const RVNGBinaryData &binaryData);
+	virtual void drawGraphicObject(const RVNGPropertyList &propList);
 
 	virtual void drawConnector(const RVNGPropertyList &propList, const RVNGPropertyListVector &path);
 

@@ -282,6 +282,16 @@ void RVNGPropertyList::insert(const char *name, const RVNGString &val)
 	m_impl->insert(name, RVNGPropertyFactory::newStringProp(val));
 }
 
+void RVNGPropertyList::insert(const char *name, const unsigned char *buffer, const unsigned long bufferSize)
+{
+	m_impl->insert(name, RVNGPropertyFactory::newBinaryDataProp(buffer, bufferSize));
+}
+
+void RVNGPropertyList::insert(const char *name, const RVNGBinaryData &data)
+{
+	m_impl->insert(name, RVNGPropertyFactory::newBinaryDataProp(data));
+}
+
 void RVNGPropertyList::insert(const char *name, const double val, const RVNGUnit units)
 {
 	if (units == RVNG_INCH)

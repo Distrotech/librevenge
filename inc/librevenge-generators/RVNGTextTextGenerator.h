@@ -99,7 +99,7 @@ public:
 	virtual void openFrame(const RVNGPropertyList &propList);
 	virtual void closeFrame();
 
-	virtual void insertBinaryObject(const RVNGPropertyList &propList, const RVNGBinaryData &object);
+	virtual void insertBinaryObject(const RVNGPropertyList &propList);
 	virtual void insertEquation(const RVNGPropertyList &propList, const RVNGString &data);
 
 private:

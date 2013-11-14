@@ -510,17 +510,18 @@ void RVNGSVGPresentationGenerator::drawPath(const RVNGPropertyListVector &path)
 	m_impl->m_outputSink << "/>\n";
 }
 
-void RVNGSVGPresentationGenerator::drawGraphicObject(const RVNGPropertyList &propList, const RVNGBinaryData &binaryData)
+void RVNGSVGPresentationGenerator::drawGraphicObject(const RVNGPropertyList &propList)
 {
 	if (!propList["libwpg:mime-type"] || propList["libwpg:mime-type"]->getStr().len() <= 0)
 		return;
-	RVNGString base64 = binaryData.getBase64Data();
+	if (!propList["office:binary-data"])
+		return;
 	m_impl->m_outputSink << "<svg:image ";
 	if (propList["svg:x"] && propList["svg:y"] && propList["svg:width"] && propList["svg:height"])
 		m_impl->m_outputSink << "x=\"" << doubleToString(72*(propList["svg:x"]->getDouble())) << "\" y=\"" << doubleToString(72*(propList["svg:y"]->getDouble())) << "\" ";
 	m_impl->m_outputSink << "width=\"" << doubleToString(72*(propList["svg:width"]->getDouble())) << "\" height=\"" << doubleToString(72*(propList["svg:height"]->getDouble())) << "\" ";
 	m_impl->m_outputSink << "xlink:href=\"data:" << propList["libwpg:mime-type"]->getStr().cstr() << ";base64,";
-	m_impl->m_outputSink << base64.cstr();
+	m_impl->m_outputSink << propList["office:binary-data"]->getStr().cstr();
 	m_impl->m_outputSink << "\" />\n";
 }
 

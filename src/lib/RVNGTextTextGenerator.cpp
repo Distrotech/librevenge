@@ -156,7 +156,7 @@ void RVNGTextTextGenerator::closeTable() {}
 void RVNGTextTextGenerator::openFrame(const RVNGPropertyList & /* propList */) {}
 void RVNGTextTextGenerator::closeFrame() {}
 
-void RVNGTextTextGenerator::insertBinaryObject(const RVNGPropertyList & /* propList */, const RVNGBinaryData & /* object */) {}
+void RVNGTextTextGenerator::insertBinaryObject(const RVNGPropertyList & /* propList */) {}
 void RVNGTextTextGenerator::insertEquation(const RVNGPropertyList & /* propList */, const RVNGString & /* data */) {}
 
 }

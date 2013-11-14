@@ -67,7 +67,7 @@ void RVNGTextDrawingGenerator::drawEllipse(const RVNGPropertyList &) {}
 void RVNGTextDrawingGenerator::drawPolyline(const RVNGPropertyListVector &) {}
 void RVNGTextDrawingGenerator::drawPolygon(const RVNGPropertyListVector &) {}
 void RVNGTextDrawingGenerator::drawPath(const RVNGPropertyListVector &) {}
-void RVNGTextDrawingGenerator::drawGraphicObject(const RVNGPropertyList &, const RVNGBinaryData &) {}
+void RVNGTextDrawingGenerator::drawGraphicObject(const RVNGPropertyList &) {}
 void RVNGTextDrawingGenerator::startTextObject(const RVNGPropertyList &, const RVNGPropertyListVector &) {}
 void RVNGTextDrawingGenerator::endTextObject() {}
 

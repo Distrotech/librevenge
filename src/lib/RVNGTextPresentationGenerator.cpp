@@ -113,7 +113,7 @@ void RVNGTextPresentationGenerator::drawPath(const RVNGPropertyListVector &)
 {
 }
 
-void RVNGTextPresentationGenerator::drawGraphicObject(const RVNGPropertyList &, const RVNGBinaryData &)
+void RVNGTextPresentationGenerator::drawGraphicObject(const RVNGPropertyList &)
 {
 }
 
