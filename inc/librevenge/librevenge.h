@@ -27,6 +27,7 @@
 #include "RVNGProperty.h"
 #include "RVNGPropertyList.h"
 #include "RVNGPropertyListVector.h"
+#include "RVNGSpreadsheetInterface.h"
 #include "RVNGSVGDrawingGenerator.h"
 #include "RVNGString.h"
 #include "RVNGStringVector.h"

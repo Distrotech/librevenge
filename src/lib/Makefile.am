@@ -25,6 +25,7 @@ librevenge_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_include_HEADERS = \
 	$(top_srcdir)/inc/librevenge/RVNGProperty.h \
 	$(top_srcdir)/inc/librevenge/RVNGPropertyList.h \
 	$(top_srcdir)/inc/librevenge/RVNGPropertyListVector.h \
+	$(top_srcdir)/inc/librevenge/RVNGSpreadsheetInterface.h \
 	$(top_srcdir)/inc/librevenge/RVNGString.h \
 	$(top_srcdir)/inc/librevenge/RVNGStringVector.h \
 	$(top_srcdir)/inc/librevenge/RVNGSVGDrawingGenerator.h \
@@ -70,6 +71,7 @@ librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_include_HEADERS 
 	$(top_srcdir)/inc/librevenge-generators/RVNGHTMLTextGenerator.h \
 	$(top_srcdir)/inc/librevenge-generators/RVNGRawDrawingGenerator.h \
 	$(top_srcdir)/inc/librevenge-generators/RVNGRawPresentationGenerator.h \
+	$(top_srcdir)/inc/librevenge-generators/RVNGRawSpreadsheetGenerator.h \
 	$(top_srcdir)/inc/librevenge-generators/RVNGRawTextGenerator.h \
 	$(top_srcdir)/inc/librevenge-generators/RVNGSVGPresentationGenerator.h \
 	$(top_srcdir)/inc/librevenge-generators/RVNGTextDrawingGenerator.h \
@@ -89,6 +91,7 @@ librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_SOURCES = \
 	RVNGRawGeneratorBase.h \
 	RVNGRawDrawingGenerator.cpp \
 	RVNGRawPresentationGenerator.cpp \
+	RVNGRawSpreadsheetGenerator.cpp \
 	RVNGRawTextGenerator.cpp \
 	RVNGSVGPresentationGenerator.cpp \
 	RVNGTextDrawingGenerator.cpp \

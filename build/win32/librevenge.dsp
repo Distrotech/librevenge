@@ -155,6 +155,10 @@ SOURCE=..\..\inc\librevenge\RVNGPropertyListVector.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\inc\librevenge\RVNGSpreadsheetInterface.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\inc\librevenge\RVNGString.h
 # End Source File
 # Begin Source File

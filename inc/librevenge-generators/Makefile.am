@@ -3,6 +3,7 @@ EXTRA_DIST = \
 	RVNGHTMLTextGenerator.h \
 	RVNGRawDrawingGenerator.h \
 	RVNGRawPresentationGenerator.h \
+	RVNGRawSpreadsheetGenerator.h \
 	RVNGRawTextGenerator.h \
 	RVNGSVGPresentationGenerator.h \
 	RVNGTextDrawingGenerator.h \

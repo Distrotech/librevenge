@@ -2,10 +2,11 @@ EXTRA_DIST = \
 	librevenge.h \
 	RVNGBinaryData.h \
 	RVNGDrawingInterface.h \
+	RVNGPresentationInterface.h \
 	RVNGProperty.h \
 	RVNGPropertyList.h \
 	RVNGPropertyListVector.h \
-	RVNGPresentationInterface.h \
+	RVNGSpreadsheetInterface.h \
 	RVNGString.h \
 	RVNGStringVector.h \
 	RVNGSVGDrawingGenerator.h \

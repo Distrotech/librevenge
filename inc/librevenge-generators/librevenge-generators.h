@@ -18,6 +18,7 @@
 #include "RVNGHTMLTextGenerator.h"
 #include "RVNGRawDrawingGenerator.h"
 #include "RVNGRawPresentationGenerator.h"
+#include "RVNGRawSpreadsheetGenerator.h"
 #include "RVNGRawTextGenerator.h"
 #include "RVNGSVGPresentationGenerator.h"
 #include "RVNGTextDrawingGenerator.h"
