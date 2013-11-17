@@ -157,7 +157,8 @@ public:
 		\param propList must contains:
 		\li \c librevenge:formula-name The formula name
 		\li \c librevenge:type The formula type: cell-formula ( for cell formula ), numbering-condition ( for a numbering condition )
-		\param formula must contains the list of instruction to build the formula. Each instruction must contain \librevenge:type with:
+		\li \c librevenge:value_type the numbering type
+		\param formula must contains the list of instruction to build the formula. Each instruction must contain \c librevenge:type with:
 		\li \c librevenge:operator with the operator "(", "+", .... must be in propList[librevenge:operator]
 		\li \c librevenge:function with the function in propList[librevenge:function]
 		\li \c librevenge:number with the number in propList[librevenge:number]
@@ -167,8 +168,6 @@ public:
 		\li \c librevenge:cells with the coordinate in propList[librevenge:start-row],propList[librevenge:start-column]
 		    and propList[librevenge:end-row], propList[librevenge:end-column]
 			if neededlibrevenge:name the numbering style name
-	 \li \c librevenge:value_type the numbering type
-	 \param formats The list of format instruction
 	 */
 	virtual void defineSheetFormula(const RVNGPropertyList &propList, const RVNGPropertyListVector &formula) = 0;
 
@@ -458,7 +457,7 @@ public:
 	Called when a binary object should be inserted
 	\param propList Defines a set of properties for the object. May contain:
 	\li \c librevenge:mimetype The mimetype of the object
-	\param data Reference to the binary object
+	\li \c office:binary-data The object data
 	*/
 	virtual void insertBinaryObject(const RVNGPropertyList &propList) = 0;
 
