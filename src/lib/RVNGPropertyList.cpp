@@ -308,7 +308,7 @@ void RVNGPropertyList::insert(const char *name, const double val, const RVNGUnit
 
 void RVNGPropertyList::insert(const char *name, const RVNGPropertyListVector &vec)
 {
-	m_impl->insert(name, vec.clone());
+	m_impl->insert(name, static_cast<RVNGPropertyListVector *>(vec.clone()));
 }
 
 void RVNGPropertyList::remove(const char *name)
