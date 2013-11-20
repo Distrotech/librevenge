@@ -253,9 +253,6 @@ static bool areHeadersConsistent(const LocalFileHeader &header, const CentralDir
 
 static bool findCentralDirectoryEnd(RVNGInputStream *input)
 {
-	if (input->seek(-1024, RVNG_SEEK_END))
-		input->seek(0, RVNG_SEEK_SET);
-
 	try
 	{
 		input->seek(0, RVNG_SEEK_END);

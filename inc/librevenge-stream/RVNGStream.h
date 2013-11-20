@@ -25,9 +25,9 @@ namespace librevenge
 
 enum RVNG_SEEK_TYPE
 {
-    RVNG_SEEK_CUR,
-    RVNG_SEEK_SET,
-    RVNG_SEEK_END
+	RVNG_SEEK_CUR,
+	RVNG_SEEK_SET,
+	RVNG_SEEK_END
 };
 
 class RVNGInputStream

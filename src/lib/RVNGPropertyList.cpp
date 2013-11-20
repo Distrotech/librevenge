@@ -114,7 +114,7 @@ public:
 	RVNGPropertyListElement() : m_prop(0), m_vec(0) {}
 	RVNGPropertyListElement(const RVNGPropertyListElement &elem)
 		: m_prop(elem.m_prop ? elem.m_prop->clone() : 0),
-		  m_vec(elem.m_vec ? elem.m_vec->clone() : 0) {}
+		  m_vec(elem.m_vec ? static_cast<RVNGPropertyListVector *>(elem.m_vec->clone()) : 0) {}
 	/*
 	 * Caution, following constructor does not allocate memory but takes as
 	 * arguments pre-allocated memory that this class takes ownership of.
@@ -130,7 +130,7 @@ public:
 	RVNGPropertyListElement &operator=(const RVNGPropertyListElement &elem)
 	{
 		m_prop = elem.m_prop ? elem.m_prop->clone() : 0;
-		m_vec = elem.m_vec ? elem.m_vec->clone() : 0;
+		m_vec = elem.m_vec ? static_cast<RVNGPropertyListVector *>(elem.m_vec->clone()) : 0;
 		return *this;
 	}
 	RVNGProperty *m_prop;
@@ -147,7 +147,7 @@ public:
 	void insert(const char *name, RVNGProperty *prop);
 	void insert(const char *name, RVNGPropertyListVector *vec);
 	const RVNGProperty *operator[](const char *name) const;
-	const RVNGPropertyListVector *get(const char *name) const;
+	const RVNGPropertyListVector *child(const char *name) const;
 	void remove(const char *name);
 	void clear();
 
@@ -168,7 +168,7 @@ const RVNGProperty *RVNGPropertyListImpl::operator[](const char *name) const
 	return 0;
 }
 
-const RVNGPropertyListVector *RVNGPropertyListImpl::get(const char *name) const
+const RVNGPropertyListVector *RVNGPropertyListImpl::child(const char *name) const
 {
 	std::map<std::string, RVNGPropertyListElement>::iterator i = m_map.find(name);
 	if (i != m_map.end())
@@ -328,9 +328,9 @@ const RVNGProperty *RVNGPropertyList::operator[](const char *name) const
 	return (*m_impl)[name];
 }
 
-const RVNGPropertyListVector *RVNGPropertyList::get(const char *name) const
+const RVNGPropertyListVector *RVNGPropertyList::child(const char *name) const
 {
-	return m_impl->get(name);
+	return m_impl->child(name);
 }
 
 void RVNGPropertyList::clear()
@@ -353,7 +353,8 @@ public:
 	bool next();
 	bool last();
 	const RVNGProperty *operator()() const;
-	const char *key();
+	const RVNGPropertyListVector *child() const;
+	const char *key() const;
 
 private:
 	// not implemented
@@ -402,10 +403,21 @@ bool RVNGPropertyListIterImpl::last()
 
 const RVNGProperty *RVNGPropertyListIterImpl::operator()() const
 {
-	return m_iter->second.m_prop;
+	if (m_iter->second.m_prop)
+		return m_iter->second.m_prop;
+	if (m_iter->second.m_vec)
+		return m_iter->second.m_vec;
+	return 0;
 }
 
-const char *RVNGPropertyListIterImpl::key()
+const RVNGPropertyListVector *RVNGPropertyListIterImpl::child() const
+{
+	if (m_iter->second.m_vec)
+		return m_iter->second.m_vec;
+	return 0;
+}
+
+const char *RVNGPropertyListIterImpl::key() const
 {
 	return m_iter->first.c_str();
 }
@@ -441,7 +453,12 @@ const RVNGProperty *RVNGPropertyList::Iter::operator()() const
 	return (*m_iterImpl)();
 }
 
-const char *RVNGPropertyList::Iter::key()
+const RVNGPropertyListVector *RVNGPropertyList::Iter::child() const
+{
+	return m_iterImpl->child();
+}
+
+const char *RVNGPropertyList::Iter::key() const
 {
 	return m_iterImpl->key();
 }

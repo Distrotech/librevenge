@@ -51,7 +51,7 @@ public:
 
 	void remove(const char *name);
 	const RVNGProperty *operator[](const char *name) const;
-	const RVNGPropertyListVector *get(const char *name) const;
+	const RVNGPropertyListVector *child(const char *name) const;
 	const RVNGPropertyList &operator=(const RVNGPropertyList &propList);
 	void clear();
 
@@ -64,7 +64,8 @@ public:
 		bool next();
 		bool last();
 		const RVNGProperty *operator()() const;
-		const char *key();
+		const char *key() const;
+		const RVNGPropertyListVector *child() const;
 	private:
 		RVNGPropertyListIterImpl *m_iterImpl;
 		Iter(const Iter &);

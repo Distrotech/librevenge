@@ -102,6 +102,31 @@ RVNGPropertyListVector::~RVNGPropertyListVector()
 		delete m_impl;
 }
 
+int RVNGPropertyListVector::getInt() const
+{
+	return 0;
+}
+
+double RVNGPropertyListVector::getDouble() const
+{
+	return 0.0;
+}
+
+RVNGUnit RVNGPropertyListVector::getUnit() const
+{
+	return RVNG_UNIT_ERROR;
+}
+
+RVNGString RVNGPropertyListVector::getStr() const
+{
+	return RVNGString();
+}
+
+RVNGProperty *RVNGPropertyListVector::clone() const
+{
+	return new RVNGPropertyListVector(*this);
+}
+
 void RVNGPropertyListVector::append(const RVNGPropertyList &elem)
 {
 	m_impl->append(elem);
@@ -117,11 +142,6 @@ void RVNGPropertyListVector::append(const RVNGPropertyListVector &vec)
 unsigned long RVNGPropertyListVector::count() const
 {
 	return m_impl->count();
-}
-
-RVNGPropertyListVector *RVNGPropertyListVector::clone() const
-{
-	return new RVNGPropertyListVector(*this);
 }
 
 void RVNGPropertyListVector::clear()

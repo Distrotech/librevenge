@@ -29,16 +29,23 @@ namespace librevenge
 class RVNGPropertyListVectorImpl;
 class RVNGPropertyListVectorIterImpl;
 
-class RVNGPropertyListVector
+class RVNGPropertyListVector : public RVNGProperty
 {
 public:
 	RVNGPropertyListVector(const RVNGPropertyListVector &);
 	RVNGPropertyListVector();
 	virtual ~RVNGPropertyListVector();
+
+	// RVNGProperty methods
+	int getInt() const;
+	double getDouble() const;
+	RVNGUnit getUnit() const;
+	RVNGString getStr() const;
+	RVNGProperty *clone() const;
+
 	void append(const RVNGPropertyList &elem);
 	void append(const RVNGPropertyListVector &vec);
 	unsigned long count() const;
-	RVNGPropertyListVector *clone() const;
 	void clear();
 	const RVNGPropertyList &operator[](unsigned long index) const;
 	RVNGPropertyListVector &operator=(const RVNGPropertyListVector &vect);
