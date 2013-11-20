@@ -45,7 +45,6 @@ public:
 	virtual void endDocument();
 
 	// sheet
-	virtual void defineSheetFormula(const RVNGPropertyList &propList, const RVNGPropertyListVector &formula);
 	virtual void defineSheetNumberingStyle(const RVNGPropertyList &propList, const RVNGPropertyListVector &formats);
 	virtual void insertSheetConditionInNumberingStyle(const RVNGPropertyList &propList);
 	virtual void openSheet(const RVNGPropertyList &propList, const RVNGPropertyListVector &columns);

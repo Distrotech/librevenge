@@ -104,11 +104,6 @@ void RVNGRawSpreadsheetGenerator::endDocument()
 //
 // Sheet
 //
-void RVNGRawSpreadsheetGenerator::defineSheetFormula(const RVNGPropertyList &propList, const RVNGPropertyListVector &formula)
-{
-	m_impl->iprintf("defineSheetFormula(%s,formula=%s)\n", getPropString(propList).cstr(), getPropString(formula).cstr());
-}
-
 void RVNGRawSpreadsheetGenerator::insertSheetConditionInNumberingStyle(const RVNGPropertyList &propList)
 {
 	m_impl->iprintf("insertSheetConditionInNumberingStyle(%s)\n", getPropString(propList).cstr());

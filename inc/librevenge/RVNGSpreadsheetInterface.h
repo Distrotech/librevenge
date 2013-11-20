@@ -33,6 +33,17 @@ namespace librevenge
 Pure virtual class containing all the callback functions that can be made by
 a spreadsheet parser. An application using this library should implement all the function
 definitions listed here.
+
+\note in the following, the formula are defined using RVNGPropertyListVector which must contains the list of instruction to build the formula. Each instruction must contain \c librevenge:type with:
+		- \c librevenge:operator with the operator "(", "+", .... must be in propList[librevenge:operator]
+		- \c librevenge:function with the function in propList[librevenge:function]
+		- \c librevenge:number with the number in propList[librevenge:number]
+		- \c librevenge:text with the text in propList[librevenge:text]
+		- \c librevenge:cell with the coordinate in propList[librevenge:row] and propList[librevenge:column] ;
+		   if needed the sheet name must be in propList[librevenge:sheet-name]
+		- \c librevenge:cells with the coordinate in propList[librevenge:start-row],propList[librevenge:start-column]
+		    and propList[librevenge:end-row], propList[librevenge:end-column]
+			if neededlibrevenge:name the numbering style name
 */
 
 class RVNGSpreadsheetInterface
@@ -153,23 +164,6 @@ public:
 	*/
 	virtual void closeFooter() = 0;
 
-	/** Called when we need to define a formula.
-		\param propList must contains:
-		\li \c librevenge:formula-name The formula name
-		\li \c librevenge:type The formula type: cell-formula ( for cell formula ), numbering-condition ( for a numbering condition )
-		\li \c librevenge:value_type the numbering type
-		\param formula must contains the list of instruction to build the formula. Each instruction must contain \c librevenge:type with:
-		\li \c librevenge:operator with the operator "(", "+", .... must be in propList[librevenge:operator]
-		\li \c librevenge:function with the function in propList[librevenge:function]
-		\li \c librevenge:number with the number in propList[librevenge:number]
-		\li \c librevenge:text with the text in propList[librevenge:text]
-		\li \c librevenge:cell with the coordinate in propList[librevenge:row] and propList[librevenge:column] ;
-		   if needed the sheet name must be in propList[librevenge:sheet-name]
-		\li \c librevenge:cells with the coordinate in propList[librevenge:start-row],propList[librevenge:start-column]
-		    and propList[librevenge:end-row], propList[librevenge:end-column]
-			if neededlibrevenge:name the numbering style name
-	 */
-	virtual void defineSheetFormula(const RVNGPropertyList &propList, const RVNGPropertyListVector &formula) = 0;
 
 	/**
 	 Called when a numbering style must be defined
@@ -183,7 +177,7 @@ public:
 	 Called when a condition must be added to a style
 	 \param propList Property list for the style. Must contain:
 	 \li \c librevenge:name the local numbering style name
-	 \li \c librevenge:formula-name the condition
+	 \li \c librevenge:formula the condition
 	 \li \c librevenge:apply-name the style to apply when the condition is done
 	 */
 	virtual void insertSheetConditionInNumberingStyle(const RVNGPropertyList &propList) = 0;
@@ -218,6 +212,7 @@ public:
 	\li \c librevenge:column the cell column (between 0 and ... )
 	\li \c librevenge:row the cell row (between 0 and ... )
 
+	\li \c librevenge:formula a formula
 	\li \c librevenge:numbering-name a numbering style name
 	\li \c librevenge:double for a number cell
 	\li \c librevenge:bool for a boolean cell
