@@ -56,12 +56,12 @@ public:
 	virtual void drawEllipse(const RVNGPropertyList &propList);
 	virtual void drawPolyline(const RVNGPropertyListVector &vertices);
 	virtual void drawPolygon(const RVNGPropertyListVector &vertices);
-	virtual void drawPath(const RVNGPropertyListVector &path);
+	virtual void drawPath(const RVNGPropertyList &propList);
 	virtual void drawGraphicObject(const RVNGPropertyList &propList);
 
-	virtual void drawConnector(const RVNGPropertyList &propList, const RVNGPropertyListVector &path);
+	virtual void drawConnector(const RVNGPropertyList &propList);
 
-	virtual void startTextObject(const RVNGPropertyList &propList, const RVNGPropertyListVector &path);
+	virtual void startTextObject(const RVNGPropertyList &propList);
 	virtual void endTextObject();
 	virtual void insertTab();
 	virtual void insertSpace();

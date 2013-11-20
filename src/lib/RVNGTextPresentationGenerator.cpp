@@ -109,7 +109,7 @@ void RVNGTextPresentationGenerator::drawPolygon(const RVNGPropertyListVector &)
 {
 }
 
-void RVNGTextPresentationGenerator::drawPath(const RVNGPropertyListVector &)
+void RVNGTextPresentationGenerator::drawPath(const RVNGPropertyList &)
 {
 }
 
@@ -117,11 +117,11 @@ void RVNGTextPresentationGenerator::drawGraphicObject(const RVNGPropertyList &)
 {
 }
 
-void RVNGTextPresentationGenerator::drawConnector(const RVNGPropertyList &, const RVNGPropertyListVector &)
+void RVNGTextPresentationGenerator::drawConnector(const RVNGPropertyList &)
 {
 }
 
-void RVNGTextPresentationGenerator::startTextObject(const RVNGPropertyList &, const RVNGPropertyListVector &)
+void RVNGTextPresentationGenerator::startTextObject(const RVNGPropertyList &)
 {
 }
 

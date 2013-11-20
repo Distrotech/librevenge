@@ -637,50 +637,53 @@ void RVNGSVGDrawingGenerator::drawPolygon(const RVNGPropertyListVector &vertices
 	m_pImpl->drawPolySomething(vertices, true);
 }
 
-void RVNGSVGDrawingGenerator::drawPath(const RVNGPropertyListVector &path)
+void RVNGSVGDrawingGenerator::drawPath(const RVNGPropertyList &propList)
 {
+	const RVNGPropertyListVector *path = propList.child("svg:d");
+	if (!path)
+		return;
 	m_pImpl->m_outputSink << "<" << m_pImpl->getNamespaceAndDelim() << "path d=\" ";
 	bool isClosed = false;
 	unsigned i=0;
-	for(i=0; i < path.count(); i++)
+	for(i=0; i < path->count(); i++)
 	{
-		RVNGPropertyList propList = path[i];
-		if (!propList["librevenge:path-action"]) continue;
-		std::string action=propList["librevenge:path-action"]->getStr().cstr();
+		RVNGPropertyList pList((*path)[i]);
+		if (!pList["librevenge:path-action"]) continue;
+		std::string action=pList["librevenge:path-action"]->getStr().cstr();
 		if (action.length()!=1) continue;
-		bool coordOk=propList["svg:x"]&&propList["svg:y"];
-		bool coord1Ok=coordOk && propList["svg:x1"]&&propList["svg:y1"];
-		bool coord2Ok=coord1Ok && propList["svg:x2"]&&propList["svg:y2"];
-		if (propList["svg:x"] && action[0] == 'H')
-			m_pImpl->m_outputSink << "\nH" << doubleToString(72*(propList["svg:x"]->getDouble()));
-		else if (propList["svg:y"] && action[0] == 'V')
-			m_pImpl->m_outputSink << "\nV" << doubleToString(72*(propList["svg:y"]->getDouble()));
+		bool coordOk=pList["svg:x"]&&pList["svg:y"];
+		bool coord1Ok=coordOk && pList["svg:x1"]&&pList["svg:y1"];
+		bool coord2Ok=coord1Ok && pList["svg:x2"]&&pList["svg:y2"];
+		if (pList["svg:x"] && action[0] == 'H')
+			m_pImpl->m_outputSink << "\nH" << doubleToString(72*(pList["svg:x"]->getDouble()));
+		else if (pList["svg:y"] && action[0] == 'V')
+			m_pImpl->m_outputSink << "\nV" << doubleToString(72*(pList["svg:y"]->getDouble()));
 		else if (coordOk && (action[0] == 'M' || action[0] == 'L' || action[0] == 'T'))
 		{
 			m_pImpl->m_outputSink << "\n" << action;
-			m_pImpl->m_outputSink << doubleToString(72*(propList["svg:x"]->getDouble())) << "," << doubleToString(72*(propList["svg:y"]->getDouble()));
+			m_pImpl->m_outputSink << doubleToString(72*(pList["svg:x"]->getDouble())) << "," << doubleToString(72*(pList["svg:y"]->getDouble()));
 		}
 		else if (coord1Ok && (action[0] == 'Q' || action[0] == 'S'))
 		{
 			m_pImpl->m_outputSink << "\n" << action;
-			m_pImpl->m_outputSink << doubleToString(72*(propList["svg:x1"]->getDouble())) << "," << doubleToString(72*(propList["svg:y1"]->getDouble())) << " ";
-			m_pImpl->m_outputSink << doubleToString(72*(propList["svg:x"]->getDouble())) << "," << doubleToString(72*(propList["svg:y"]->getDouble()));
+			m_pImpl->m_outputSink << doubleToString(72*(pList["svg:x1"]->getDouble())) << "," << doubleToString(72*(pList["svg:y1"]->getDouble())) << " ";
+			m_pImpl->m_outputSink << doubleToString(72*(pList["svg:x"]->getDouble())) << "," << doubleToString(72*(pList["svg:y"]->getDouble()));
 		}
 		else if (coord2Ok && action[0] == 'C')
 		{
 			m_pImpl->m_outputSink << "\nC";
-			m_pImpl->m_outputSink << doubleToString(72*(propList["svg:x1"]->getDouble())) << "," << doubleToString(72*(propList["svg:y1"]->getDouble())) << " ";
-			m_pImpl->m_outputSink << doubleToString(72*(propList["svg:x2"]->getDouble())) << "," << doubleToString(72*(propList["svg:y2"]->getDouble())) << " ";
-			m_pImpl->m_outputSink << doubleToString(72*(propList["svg:x"]->getDouble())) << "," << doubleToString(72*(propList["svg:y"]->getDouble()));
+			m_pImpl->m_outputSink << doubleToString(72*(pList["svg:x1"]->getDouble())) << "," << doubleToString(72*(pList["svg:y1"]->getDouble())) << " ";
+			m_pImpl->m_outputSink << doubleToString(72*(pList["svg:x2"]->getDouble())) << "," << doubleToString(72*(pList["svg:y2"]->getDouble())) << " ";
+			m_pImpl->m_outputSink << doubleToString(72*(pList["svg:x"]->getDouble())) << "," << doubleToString(72*(pList["svg:y"]->getDouble()));
 		}
-		else if (coordOk && propList["svg:rx"] && propList["svg:ry"] && action[0] == 'A')
+		else if (coordOk && pList["svg:rx"] && pList["svg:ry"] && action[0] == 'A')
 		{
 			m_pImpl->m_outputSink << "\nA";
-			m_pImpl->m_outputSink << doubleToString(72*(propList["svg:rx"]->getDouble())) << "," << doubleToString(72*(propList["svg:ry"]->getDouble())) << " ";
-			m_pImpl->m_outputSink << doubleToString(propList["librevenge:rotate"] ? propList["librevenge:rotate"]->getDouble() : 0) << " ";
-			m_pImpl->m_outputSink << (propList["librevenge:large-arc"] ? propList["librevenge:large-arc"]->getInt() : 1) << ",";
-			m_pImpl->m_outputSink << (propList["librevenge:sweep"] ? propList["librevenge:sweep"]->getInt() : 1) << " ";
-			m_pImpl->m_outputSink << doubleToString(72*(propList["svg:x"]->getDouble())) << "," << doubleToString(72*(propList["svg:y"]->getDouble()));
+			m_pImpl->m_outputSink << doubleToString(72*(pList["svg:rx"]->getDouble())) << "," << doubleToString(72*(pList["svg:ry"]->getDouble())) << " ";
+			m_pImpl->m_outputSink << doubleToString(pList["librevenge:rotate"] ? pList["librevenge:rotate"]->getDouble() : 0) << " ";
+			m_pImpl->m_outputSink << (pList["librevenge:large-arc"] ? pList["librevenge:large-arc"]->getInt() : 1) << ",";
+			m_pImpl->m_outputSink << (pList["librevenge:sweep"] ? pList["librevenge:sweep"]->getInt() : 1) << " ";
+			m_pImpl->m_outputSink << doubleToString(72*(pList["svg:x"]->getDouble())) << "," << doubleToString(72*(pList["svg:y"]->getDouble()));
 		}
 		else if (action[0] == 'Z' )
 		{
@@ -738,7 +741,7 @@ void RVNGSVGDrawingGenerator::drawGraphicObject(const RVNGPropertyList &propList
 	m_pImpl->m_outputSink << "\" />\n";
 }
 
-void RVNGSVGDrawingGenerator::startTextObject(const RVNGPropertyList &propList, const RVNGPropertyListVector & /* path */)
+void RVNGSVGDrawingGenerator::startTextObject(const RVNGPropertyList &propList)
 {
 	double x = 0.0;
 	double y = 0.0;

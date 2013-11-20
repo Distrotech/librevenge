@@ -51,9 +51,9 @@ public:
 	void drawEllipse(const RVNGPropertyList &propList);
 	void drawPolyline(const RVNGPropertyListVector &vertices);
 	void drawPolygon(const RVNGPropertyListVector &vertices);
-	void drawPath(const RVNGPropertyListVector &path);
+	void drawPath(const RVNGPropertyList &propList);
 	void drawGraphicObject(const RVNGPropertyList &propList);
-	void startTextObject(const RVNGPropertyList &propList, const RVNGPropertyListVector &path);
+	void startTextObject(const RVNGPropertyList &propList);
 	void endTextObject();
 
 	void openOrderedListLevel(const RVNGPropertyList &propList);

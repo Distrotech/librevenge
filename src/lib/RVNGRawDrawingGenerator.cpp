@@ -141,12 +141,12 @@ void RVNGRawDrawingGenerator::drawPolygon(const RVNGPropertyListVector &vertices
 	m_impl->iprintf("drawPolygon (%s)\n", getPropString(vertices).cstr());
 }
 
-void RVNGRawDrawingGenerator::drawPath(const RVNGPropertyListVector &path)
+void RVNGRawDrawingGenerator::drawPath(const RVNGPropertyList &propList)
 {
 	if (m_impl->m_printCallgraphScore)
 		return;
 
-	m_impl->iprintf("drawPath (%s)\n", getPropString(path).cstr());
+	m_impl->iprintf("drawPath (%s)\n", getPropString(propList).cstr());
 }
 
 void RVNGRawDrawingGenerator::drawGraphicObject(const RVNGPropertyList &propList)
@@ -157,9 +157,9 @@ void RVNGRawDrawingGenerator::drawGraphicObject(const RVNGPropertyList &propList
 	m_impl->iprintf("drawGraphicObject (%s)\n", getPropString(propList).cstr());
 }
 
-void RVNGRawDrawingGenerator::startTextObject(const RVNGPropertyList &propList, const RVNGPropertyListVector &path)
+void RVNGRawDrawingGenerator::startTextObject(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("startTextObject (%s, path: (%s))\n", getPropString(propList).cstr(), getPropString(path).cstr()), PC_START_TEXT_OBJECT);
+	RVNG_CALLGRAPH_ENTER(("startTextObject (%s)\n", getPropString(propList).cstr()), PC_START_TEXT_OBJECT);
 }
 
 void RVNGRawDrawingGenerator::endTextObject()
