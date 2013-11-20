@@ -130,7 +130,7 @@ public:
 	virtual void drawEllipse(const RVNGPropertyList &propList);
 	virtual void drawPolygon(const RVNGPropertyListVector &vertices);
 	virtual void drawPolyline(const RVNGPropertyListVector &vertices);
-	virtual void drawPath(const RVNGPropertyListVector &path);
+	virtual void drawPath(const RVNGPropertyList &propList);
 
 	virtual void insertEquation(const RVNGPropertyList &propList, const RVNGString &data);
 

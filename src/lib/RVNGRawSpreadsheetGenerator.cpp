@@ -232,9 +232,9 @@ void RVNGRawSpreadsheetGenerator::drawPolyline(const RVNGPropertyListVector &ver
 	m_impl->iprintf("drawPolyline(%s)\n", getPropString(vertices).cstr());
 }
 
-void RVNGRawSpreadsheetGenerator::drawPath(const RVNGPropertyListVector &path)
+void RVNGRawSpreadsheetGenerator::drawPath(const RVNGPropertyList &propList)
 {
-	m_impl->iprintf("drawPath(%s)\n", getPropString(path).cstr());
+	m_impl->iprintf("drawPath(%s)\n", getPropString(propList).cstr());
 }
 
 //
