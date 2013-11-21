@@ -812,10 +812,10 @@ void RVNGSVGDrawingGenerator::closeOrderedListLevel() {}
 void RVNGSVGDrawingGenerator::openUnorderedListLevel(const RVNGPropertyList & /*propList*/) {}
 void RVNGSVGDrawingGenerator::closeUnorderedListLevel() {}
 
-void RVNGSVGDrawingGenerator::openListElement(const RVNGPropertyList & /*propList*/, const RVNGPropertyListVector & /* tabStops */) {}
+void RVNGSVGDrawingGenerator::openListElement(const RVNGPropertyList & /*propList*/) {}
 void RVNGSVGDrawingGenerator::closeListElement() {}
 
-void RVNGSVGDrawingGenerator::openParagraph(const RVNGPropertyList & /*propList*/, const RVNGPropertyListVector & /* tabStops */) {}
+void RVNGSVGDrawingGenerator::openParagraph(const RVNGPropertyList & /*propList*/) {}
 void RVNGSVGDrawingGenerator::closeParagraph() {}
 
 void RVNGSVGDrawingGenerator::openSpan(const RVNGPropertyList &propList)

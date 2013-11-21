@@ -173,12 +173,12 @@ void RVNGRawDrawingGenerator::closeOrderedListLevel() {}
 void RVNGRawDrawingGenerator::openUnorderedListLevel(const librevenge::RVNGPropertyList & /*propList*/) {}
 void RVNGRawDrawingGenerator::closeUnorderedListLevel() {}
 
-void RVNGRawDrawingGenerator::openListElement(const librevenge::RVNGPropertyList & /*propList*/, const librevenge::RVNGPropertyListVector & /* tabStops */) {}
+void RVNGRawDrawingGenerator::openListElement(const librevenge::RVNGPropertyList & /*propList*/) {}
 void RVNGRawDrawingGenerator::closeListElement() {}
 
-void RVNGRawDrawingGenerator::openParagraph(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops)
+void RVNGRawDrawingGenerator::openParagraph(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("openParagraph (%s, tabStops: (%s))\n", propList.getPropString().cstr(), tabStops.getPropString().cstr()), PC_START_TEXT_LINE);
+	RVNG_CALLGRAPH_ENTER(("openParagraph (%s)\n", propList.getPropString().cstr()), PC_START_TEXT_LINE);
 }
 
 void RVNGRawDrawingGenerator::closeParagraph()

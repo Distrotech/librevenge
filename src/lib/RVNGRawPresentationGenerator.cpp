@@ -176,11 +176,9 @@ void RVNGRawPresentationGenerator::endTextObject()
 	RVNG_CALLGRAPH_LEAVE(("endTextObject\n"), CALLBACK_START_TEXT_OBJECT);
 }
 
-void RVNGRawPresentationGenerator::openParagraph(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops)
+void RVNGRawPresentationGenerator::openParagraph(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("openParagraph (%s, tabStops: (%s))\n",
-	                      propList.getPropString().cstr(), tabStops.getPropString().cstr()),
-	                     CALLBACK_OPEN_PARAGRAPH);
+	RVNG_CALLGRAPH_ENTER(("openParagraph (%s)\n", propList.getPropString().cstr()), CALLBACK_OPEN_PARAGRAPH);
 }
 
 void RVNGRawPresentationGenerator::closeParagraph()
@@ -248,11 +246,9 @@ void RVNGRawPresentationGenerator::closeUnorderedListLevel()
 	                     CALLBACK_OPEN_UNORDERED_LIST_LEVEL);
 }
 
-void RVNGRawPresentationGenerator::openListElement(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops)
+void RVNGRawPresentationGenerator::openListElement(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("openListElement(%s, tabStops: (%s))\n",
-	                      propList.getPropString().cstr(), tabStops.getPropString().cstr()),
-	                     CALLBACK_OPEN_LIST_ELEMENT);
+	RVNG_CALLGRAPH_ENTER(("openListElement(%s)\n", propList.getPropString().cstr()), CALLBACK_OPEN_LIST_ELEMENT);
 }
 
 void RVNGRawPresentationGenerator::closeListElement()

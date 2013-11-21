@@ -151,7 +151,7 @@ public:
 	*/
 	virtual void closeFooter() = 0;
 
-	virtual void defineParagraphStyle(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops) = 0;
+	virtual void defineParagraphStyle(const RVNGPropertyList &propList) = 0;
 
 	/**
 	Called when a new paragraph is opened. This (or openListElement) will always be called before any text or span is placed into the document.
@@ -170,7 +170,7 @@ public:
 	\li \c style:leader-text The leader character
 	\li \c style:position Position of the tab
 	*/
-	virtual void openParagraph(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops) = 0;
+	virtual void openParagraph(const RVNGPropertyList &propList) = 0;
 	/**
 	Called when a paragraph is closed.
 	*/
@@ -307,7 +307,7 @@ public:
 	\li \c style:leader-text The leader character
 	\li \c style:position Position of the tab
 	*/
-	virtual void openListElement(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops) = 0;
+	virtual void openListElement(const RVNGPropertyList &propList) = 0;
 	/**
 	Called when a list element should be closed
 	*/

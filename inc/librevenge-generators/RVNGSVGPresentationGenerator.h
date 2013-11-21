@@ -74,10 +74,10 @@ public:
 	virtual void openUnorderedListLevel(const RVNGPropertyList &propList);
 	virtual void closeOrderedListLevel();
 	virtual void closeUnorderedListLevel();
-	virtual void openListElement(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops);
+	virtual void openListElement(const RVNGPropertyList &propList);
 	virtual void closeListElement();
 
-	virtual void openParagraph(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops);
+	virtual void openParagraph(const RVNGPropertyList &propList);
 	virtual void closeParagraph();
 	virtual void openSpan(const RVNGPropertyList &propList);
 	virtual void closeSpan();

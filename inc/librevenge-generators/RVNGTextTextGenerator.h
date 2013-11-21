@@ -56,8 +56,8 @@ public:
 	virtual void openSection(const RVNGPropertyList &propList, const RVNGPropertyListVector &columns);
 	virtual void closeSection();
 
-	virtual void defineParagraphStyle(const RVNGPropertyList &, const RVNGPropertyListVector &);
-	virtual void openParagraph(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops);
+	virtual void defineParagraphStyle(const RVNGPropertyList &);
+	virtual void openParagraph(const RVNGPropertyList &propList);
 	virtual void closeParagraph();
 
 	virtual void defineCharacterStyle(const RVNGPropertyList &);
@@ -76,7 +76,7 @@ public:
 	virtual void openUnorderedListLevel(const RVNGPropertyList &propList);
 	virtual void closeOrderedListLevel();
 	virtual void closeUnorderedListLevel();
-	virtual void openListElement(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops);
+	virtual void openListElement(const RVNGPropertyList &propList);
 	virtual void closeListElement();
 
 	virtual void openFootnote(const RVNGPropertyList &propList);

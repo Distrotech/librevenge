@@ -442,14 +442,14 @@ void RVNGHTMLTextGenerator::defineSectionStyle(const RVNGPropertyList &, const R
 void RVNGHTMLTextGenerator::openSection(const RVNGPropertyList & /* propList */, const RVNGPropertyListVector & /* columns */) {}
 void RVNGHTMLTextGenerator::closeSection() {}
 
-void RVNGHTMLTextGenerator::defineParagraphStyle(const RVNGPropertyList &, const RVNGPropertyListVector &) {}
+void RVNGHTMLTextGenerator::defineParagraphStyle(const RVNGPropertyList &) {}
 
-void RVNGHTMLTextGenerator::openParagraph(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops)
+void RVNGHTMLTextGenerator::openParagraph(const RVNGPropertyList &propList)
 {
 	if (m_impl->m_ignore)
 		return;
 
-	m_impl->output(false) << "<p class=\"" << m_impl->m_paragraphManager.getClass(propList, tabStops) << "\">";
+	m_impl->output(false) << "<p class=\"" << m_impl->m_paragraphManager.getClass(propList) << "\">";
 }
 
 void RVNGHTMLTextGenerator::closeParagraph()
@@ -557,11 +557,11 @@ void RVNGHTMLTextGenerator::closeUnorderedListLevel()
 }
 
 
-void RVNGHTMLTextGenerator::openListElement(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops)
+void RVNGHTMLTextGenerator::openListElement(const RVNGPropertyList &propList)
 {
 	if (m_impl->m_ignore)
 		return;
-	m_impl->output(false) << "<li class=\"" << m_impl->m_listManager.getClass(propList, tabStops) << "\">";
+	m_impl->output(false) << "<li class=\"" << m_impl->m_listManager.getClass(propList) << "\">";
 }
 
 void RVNGHTMLTextGenerator::closeListElement()

@@ -83,8 +83,8 @@ void RVNGTextTextGenerator::defineSectionStyle(const RVNGPropertyList &, const R
 void RVNGTextTextGenerator::openSection(const RVNGPropertyList & /* propList */, const RVNGPropertyListVector & /* columns */) {}
 void RVNGTextTextGenerator::closeSection() {}
 
-void RVNGTextTextGenerator::defineParagraphStyle(const RVNGPropertyList &, const RVNGPropertyListVector &) {}
-void RVNGTextTextGenerator::openParagraph(const RVNGPropertyList & /* propList */, const RVNGPropertyListVector & /* tabStops */) {}
+void RVNGTextTextGenerator::defineParagraphStyle(const RVNGPropertyList &) {}
+void RVNGTextTextGenerator::openParagraph(const RVNGPropertyList & /* propList */) {}
 
 void RVNGTextTextGenerator::closeParagraph()
 {
@@ -133,7 +133,7 @@ void RVNGTextTextGenerator::openOrderedListLevel(const RVNGPropertyList & /* pro
 void RVNGTextTextGenerator::openUnorderedListLevel(const RVNGPropertyList & /* propList */) {}
 void RVNGTextTextGenerator::closeOrderedListLevel() {}
 void RVNGTextTextGenerator::closeUnorderedListLevel() {}
-void RVNGTextTextGenerator::openListElement(const RVNGPropertyList & /* propList */, const RVNGPropertyListVector & /* tabStops */) {}
+void RVNGTextTextGenerator::openListElement(const RVNGPropertyList & /* propList */) {}
 void RVNGTextTextGenerator::closeListElement() {}
 
 void RVNGTextTextGenerator::openFootnote(const RVNGPropertyList & /* propList */) {}

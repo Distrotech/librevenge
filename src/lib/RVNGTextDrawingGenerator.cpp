@@ -78,10 +78,10 @@ void RVNGTextDrawingGenerator::closeOrderedListLevel() {}
 void RVNGTextDrawingGenerator::openUnorderedListLevel(const RVNGPropertyList & /*propList*/) {}
 void RVNGTextDrawingGenerator::closeUnorderedListLevel() {}
 
-void RVNGTextDrawingGenerator::openListElement(const RVNGPropertyList & /*propList*/, const RVNGPropertyListVector & /* tabStops */) {}
+void RVNGTextDrawingGenerator::openListElement(const RVNGPropertyList & /*propList*/) {}
 void RVNGTextDrawingGenerator::closeListElement() {}
 
-void RVNGTextDrawingGenerator::openParagraph(const RVNGPropertyList & /*propList*/, const RVNGPropertyListVector & /* tabStops */) {}
+void RVNGTextDrawingGenerator::openParagraph(const RVNGPropertyList & /*propList*/) {}
 
 void RVNGTextDrawingGenerator::closeParagraph()
 {

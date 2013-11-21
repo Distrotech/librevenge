@@ -100,7 +100,7 @@ void RVNGHTMLTextListStyleManager::send(std::ostream &out)
 	}
 }
 
-std::string RVNGHTMLTextListStyleManager::getClass(RVNGPropertyList const &pList, RVNGPropertyListVector const &)
+std::string RVNGHTMLTextListStyleManager::getClass(RVNGPropertyList const &pList)
 {
 	std::string content=getContent(pList, true);
 	std::map<std::string, std::string>::iterator it=m_contentNameMap.find(content);
@@ -175,7 +175,7 @@ void RVNGHTMLTextListStyleManager::closeLevel()
 ////////////////////////////////////////////////////////////
 // paragraph manager
 ////////////////////////////////////////////////////////////
-std::string RVNGHTMLTextParagraphStyleManager::getClass(RVNGPropertyList const &pList, RVNGPropertyListVector const &)
+std::string RVNGHTMLTextParagraphStyleManager::getClass(RVNGPropertyList const &pList)
 {
 	std::string content=getContent(pList, false);
 	std::map<std::string, std::string>::iterator it=m_contentNameMap.find(content);

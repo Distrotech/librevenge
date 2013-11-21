@@ -45,7 +45,7 @@ public:
 	{
 	}
 	//! returns the class name corresponding to a propertylist
-	std::string getClass(RVNGPropertyList const &pList, RVNGPropertyListVector const &tabsStop);
+	std::string getClass(RVNGPropertyList const &pList);
 	//! send the data to the stream
 	void send(std::ostream &out);
 protected:
@@ -113,7 +113,7 @@ public:
 	//! close a level
 	void closeLevel();
 	//! returns the classname corresponding to a list element
-	std::string getClass(RVNGPropertyList const &pList, RVNGPropertyListVector const &tabsStop);
+	std::string getClass(RVNGPropertyList const &pList);
 
 	//! send the data to the stream
 	void send(std::ostream &out);

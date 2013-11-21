@@ -130,7 +130,7 @@ void RVNGTextPresentationGenerator::endTextObject()
 	m_impl->m_stream << '\n';
 }
 
-void RVNGTextPresentationGenerator::openParagraph(const RVNGPropertyList &, const RVNGPropertyListVector &)
+void RVNGTextPresentationGenerator::openParagraph(const RVNGPropertyList &)
 {
 }
 
@@ -187,9 +187,9 @@ void RVNGTextPresentationGenerator::closeUnorderedListLevel()
 {
 }
 
-void RVNGTextPresentationGenerator::openListElement(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops)
+void RVNGTextPresentationGenerator::openListElement(const RVNGPropertyList &propList)
 {
-	openParagraph(propList, tabStops);
+	openParagraph(propList);
 }
 
 void RVNGTextPresentationGenerator::closeListElement()

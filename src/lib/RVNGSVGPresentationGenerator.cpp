@@ -624,9 +624,9 @@ void RVNGSVGPresentationGenerator::closeUnorderedListLevel()
 {
 }
 
-void RVNGSVGPresentationGenerator::openListElement(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops)
+void RVNGSVGPresentationGenerator::openListElement(const RVNGPropertyList &propList)
 {
-	openParagraph(propList, tabStops);
+	openParagraph(propList);
 }
 
 void RVNGSVGPresentationGenerator::closeListElement()
@@ -634,7 +634,7 @@ void RVNGSVGPresentationGenerator::closeListElement()
 	closeParagraph();
 }
 
-void RVNGSVGPresentationGenerator::openParagraph(const RVNGPropertyList &, const RVNGPropertyListVector &)
+void RVNGSVGPresentationGenerator::openParagraph(const RVNGPropertyList &)
 {
 }
 

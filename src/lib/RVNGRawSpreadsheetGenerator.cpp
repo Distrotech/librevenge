@@ -279,14 +279,14 @@ void RVNGRawSpreadsheetGenerator::closeFooter()
 	                     LC_OPEN_HEADER_FOOTER);
 }
 
-void RVNGRawSpreadsheetGenerator::defineParagraphStyle(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops)
+void RVNGRawSpreadsheetGenerator::defineParagraphStyle(const RVNGPropertyList &propList)
 {
-	m_impl->iprintf("defineParagraphStyle(%s, tab-stops: %s)\n", propList.getPropString().cstr(), tabStops.getPropString().cstr());
+	m_impl->iprintf("defineParagraphStyle(%s)\n", propList.getPropString().cstr());
 }
 
-void RVNGRawSpreadsheetGenerator::openParagraph(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops)
+void RVNGRawSpreadsheetGenerator::openParagraph(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("openParagraph(%s, tab-stops: %s)\n", propList.getPropString().cstr(), tabStops.getPropString().cstr()),
+	RVNG_CALLGRAPH_ENTER(("openParagraph(%s)\n", propList.getPropString().cstr()),
 	                     LC_OPEN_PARAGRAPH);
 }
 
@@ -383,9 +383,9 @@ void RVNGRawSpreadsheetGenerator::closeUnorderedListLevel()
 	RVNG_CALLGRAPH_LEAVE(("closeUnorderedListLevel()\n"), LC_OPEN_UNORDERED_LIST_LEVEL);
 }
 
-void RVNGRawSpreadsheetGenerator::openListElement(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops)
+void RVNGRawSpreadsheetGenerator::openListElement(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("openListElement(%s, tab-stops: %s)\n", propList.getPropString().cstr(), tabStops.getPropString().cstr()),
+	RVNG_CALLGRAPH_ENTER(("openListElement(%s)\n", propList.getPropString().cstr()),
 	                     LC_OPEN_LIST_ELEMENT);
 }
 
