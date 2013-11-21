@@ -119,13 +119,13 @@ public:
 
 	virtual void drawPolyline(const RVNGPropertyListVector &vertices) = 0;
 
-	virtual void drawPath(const RVNGPropertyListVector &path) = 0;
+	virtual void drawPath(const RVNGPropertyList &propList) = 0;
 
 	// Embedded binary/raster data
 	virtual void drawGraphicObject(const RVNGPropertyList &propList) = 0;
 
 	// Embedded text object
-	virtual void startTextObject(const RVNGPropertyList &propList, const RVNGPropertyListVector &path) = 0;
+	virtual void startTextObject(const RVNGPropertyList &propList) = 0;
 	virtual void endTextObject() = 0;
 
 	/**

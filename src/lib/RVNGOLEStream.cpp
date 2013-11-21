@@ -182,8 +182,8 @@ public:
 	}
 private:
 	std::vector<unsigned long> m_data;
-	AllocTable( const AllocTable & );
-	AllocTable &operator=( const AllocTable & );
+	AllocTable( const AllocTable &);
+	AllocTable &operator=( const AllocTable &);
 };
 
 class DirInfo
@@ -437,8 +437,8 @@ protected:
 
 private:
 	std::vector<DirEntry> m_entries;
-	DirTree( const DirTree & );
-	DirTree &operator=( const DirTree & );
+	DirTree( const DirTree &);
+	DirTree &operator=( const DirTree &);
 };
 
 class IStorage
@@ -516,8 +516,8 @@ protected:
 	bool m_isLoad;
 private:
 	// no copy or assign
-	IStorage( const IStorage & );
-	IStorage &operator=( const IStorage & );
+	IStorage( const IStorage &);
+	IStorage &operator=( const IStorage &);
 
 };
 
@@ -654,8 +654,8 @@ protected:
 	std::vector<unsigned char> m_data;
 private:
 	// no copy or assign
-	OStorage( const OStorage & );
-	OStorage &operator=( const OStorage & );
+	OStorage( const OStorage &);
+	OStorage &operator=( const OStorage &);
 };
 
 class IStream
@@ -703,8 +703,8 @@ private:
 	std::vector<unsigned long> m_blocks;
 
 	// no copy or assign
-	IStream( const IStream & );
-	IStream &operator=( const IStream & );
+	IStream( const IStream &);
+	IStream &operator=( const IStream &);
 
 	// pointer for read
 	unsigned long m_pos;

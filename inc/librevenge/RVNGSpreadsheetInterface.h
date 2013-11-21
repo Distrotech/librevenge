@@ -551,7 +551,7 @@ public:
 
 	virtual void drawPolyline(const RVNGPropertyListVector &vertices) = 0;
 
-	virtual void drawPath(const RVNGPropertyListVector &path) = 0;
+	virtual void drawPath(const RVNGPropertyList &propList) = 0;
 
 	//
 	// Equation

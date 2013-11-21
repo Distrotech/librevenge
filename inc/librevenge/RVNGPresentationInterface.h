@@ -118,18 +118,18 @@ public:
 
 	virtual void drawPolyline(const RVNGPropertyListVector &vertices) = 0;
 
-	virtual void drawPath(const RVNGPropertyListVector &path) = 0;
+	virtual void drawPath(const RVNGPropertyList &propList) = 0;
 
 	// Embedded binary/raster data
 	virtual void drawGraphicObject(const RVNGPropertyList &propList) = 0;
 
 	/** Draw a connector between two objects.
 	  */
-	virtual void drawConnector(const RVNGPropertyList &propList, const RVNGPropertyListVector &path) = 0;
+	virtual void drawConnector(const RVNGPropertyList &propList) = 0;
 
 	/** Start a text object.
 	  */
-	virtual void startTextObject(const RVNGPropertyList &propList, const RVNGPropertyListVector &path) = 0;
+	virtual void startTextObject(const RVNGPropertyList &propList) = 0;
 
 	/** End a text object.
 	  */

@@ -82,8 +82,8 @@ private:
 	IStorage *m_io;
 
 	// no copy or assign
-	Storage( const Storage & );
-	Storage &operator=( const Storage & );
+	Storage( const Storage &);
+	Storage &operator=( const Storage &);
 
 };
 
@@ -118,8 +118,8 @@ private:
 	IStream *m_io;
 
 	// no copy or assign
-	Stream( const Stream & );
-	Stream &operator=( const Stream & );
+	Stream( const Stream &);
+	Stream &operator=( const Stream &);
 };
 
 }  // namespace librevenge

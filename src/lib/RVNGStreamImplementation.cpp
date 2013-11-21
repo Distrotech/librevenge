@@ -282,6 +282,7 @@ bool RVNGFileStream::isStructured()
 		{
 			d->streamType = OLE2;
 			d->streamNameList = tmpStorage.getSubStreamNamesList();
+			seek(0, RVNG_SEEK_SET);
 			return true;
 		}
 		seek(0, RVNG_SEEK_SET);
@@ -289,6 +290,7 @@ bool RVNGFileStream::isStructured()
 		{
 			d->streamType = ZIP;
 			d->streamNameList = RVNGZipStream::getSubStreamNamesList(this);
+			seek(0, RVNG_SEEK_SET);
 			return true;
 		}
 		d->streamType = FLAT;
@@ -347,7 +349,10 @@ RVNGInputStream *RVNGFileStream::getSubStreamByName(const char *name)
 		return new RVNGStringStream(&buf[0], (unsigned)tmpLength);
 	}
 	else if (d->streamType == ZIP)
+	{
+		seek(0, RVNG_SEEK_SET);
 		return RVNGZipStream::getSubstream(this, name);
+	}
 	return 0;
 }
 

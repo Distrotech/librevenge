@@ -26,22 +26,22 @@ namespace
 
 enum Callback
 {
-    CALLBACK_START_DOCUMENT = 0,
-    CALLBACK_START_SLIDE,
-    CALLBACK_START_LAYER,
-    CALLBACK_START_EMBEDDED_GRAPHICS,
-    CALLBACK_START_GROUP,
-    CALLBACK_START_TEXT_OBJECT,
-    CALLBACK_OPEN_PARAGRAPH,
-    CALLBACK_OPEN_SPAN,
-    CALLBACK_OPEN_ORDERED_LIST_LEVEL,
-    CALLBACK_OPEN_UNORDERED_LIST_LEVEL,
-    CALLBACK_OPEN_LIST_ELEMENT,
-    CALLBACK_OPEN_TABLE,
-    CALLBACK_OPEN_TABLE_ROW,
-    CALLBACK_OPEN_TABLE_CELL,
-    CALLBACK_START_COMMENT,
-    CALLBACK_START_NOTES
+	CALLBACK_START_DOCUMENT = 0,
+	CALLBACK_START_SLIDE,
+	CALLBACK_START_LAYER,
+	CALLBACK_START_EMBEDDED_GRAPHICS,
+	CALLBACK_START_GROUP,
+	CALLBACK_START_TEXT_OBJECT,
+	CALLBACK_OPEN_PARAGRAPH,
+	CALLBACK_OPEN_SPAN,
+	CALLBACK_OPEN_ORDERED_LIST_LEVEL,
+	CALLBACK_OPEN_UNORDERED_LIST_LEVEL,
+	CALLBACK_OPEN_LIST_ELEMENT,
+	CALLBACK_OPEN_TABLE,
+	CALLBACK_OPEN_TABLE_ROW,
+	CALLBACK_OPEN_TABLE_CELL,
+	CALLBACK_START_COMMENT,
+	CALLBACK_START_NOTES
 };
 
 }
@@ -151,9 +151,9 @@ void RVNGRawPresentationGenerator::drawPolygon(const RVNGPropertyListVector &ver
 	printf("RVNGRawPresentationGenerator::drawPolygon (%s)\n", getPropString(vertices).cstr());
 }
 
-void RVNGRawPresentationGenerator::drawPath(const RVNGPropertyListVector &path)
+void RVNGRawPresentationGenerator::drawPath(const RVNGPropertyList &propList)
 {
-	printf("RVNGRawPresentationGenerator::drawPath (%s)\n", getPropString(path).cstr());
+	printf("RVNGRawPresentationGenerator::drawPath (%s)\n", getPropString(propList).cstr());
 }
 
 void RVNGRawPresentationGenerator::drawGraphicObject(const RVNGPropertyList &propList)
@@ -161,16 +161,14 @@ void RVNGRawPresentationGenerator::drawGraphicObject(const RVNGPropertyList &pro
 	printf("RVNGRawPresentationGenerator::drawGraphicObject (%s)\n", getPropString(propList).cstr());
 }
 
-void RVNGRawPresentationGenerator::drawConnector(const RVNGPropertyList &propList, const RVNGPropertyListVector &path)
+void RVNGRawPresentationGenerator::drawConnector(const RVNGPropertyList &propList)
 {
-	printf("RVNGRawPresentationGenerator::drawConnector(%s, path: (%s))\n", getPropString(propList).cstr(), getPropString(path).cstr());
+	printf("RVNGRawPresentationGenerator::drawConnector(%s)\n", getPropString(propList).cstr());
 }
 
-void RVNGRawPresentationGenerator::startTextObject(const RVNGPropertyList &propList, const RVNGPropertyListVector &path)
+void RVNGRawPresentationGenerator::startTextObject(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("startTextObject (%s, path: (%s))\n",
-	                      getPropString(propList).cstr(), getPropString(path).cstr()),
-	                     CALLBACK_START_TEXT_OBJECT);
+	RVNG_CALLGRAPH_ENTER(("startTextObject (%s)\n", getPropString(propList).cstr()), CALLBACK_START_TEXT_OBJECT);
 }
 
 void RVNGRawPresentationGenerator::endTextObject()

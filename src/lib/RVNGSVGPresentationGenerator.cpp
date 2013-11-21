@@ -458,47 +458,50 @@ void RVNGSVGPresentationGeneratorImpl::drawPolySomething(const RVNGPropertyListV
 	}
 }
 
-void RVNGSVGPresentationGenerator::drawPath(const RVNGPropertyListVector &path)
+void RVNGSVGPresentationGenerator::drawPath(const RVNGPropertyList &propList)
 {
+	const RVNGPropertyListVector *path = propList.child("svg:d");
+	if (!path)
+		return;
 	m_impl->m_outputSink << "<svg:path d=\" ";
 	bool isClosed = false;
 	unsigned i=0;
-	for(i=0; i < path.count(); i++)
+	for(i=0; i < path->count(); i++)
 	{
-		RVNGPropertyList propList = path[i];
-		if (propList["libwpg:path-action"] && propList["libwpg:path-action"]->getStr() == "M")
+		RVNGPropertyList pList((*path)[i]);
+		if (pList["libwpg:path-action"] && pList["libwpg:path-action"]->getStr() == "M")
 		{
 			m_impl->m_outputSink << "\nM";
-			m_impl->m_outputSink << doubleToString(72*(propList["svg:x"]->getDouble())) << "," << doubleToString(72*(propList["svg:y"]->getDouble()));
+			m_impl->m_outputSink << doubleToString(72*(pList["svg:x"]->getDouble())) << "," << doubleToString(72*(pList["svg:y"]->getDouble()));
 		}
-		else if (propList["libwpg:path-action"] && propList["libwpg:path-action"]->getStr() == "L")
+		else if (pList["libwpg:path-action"] && pList["libwpg:path-action"]->getStr() == "L")
 		{
 			m_impl->m_outputSink << "\nL";
-			m_impl->m_outputSink << doubleToString(72*(propList["svg:x"]->getDouble())) << "," << doubleToString(72*(propList["svg:y"]->getDouble()));
+			m_impl->m_outputSink << doubleToString(72*(pList["svg:x"]->getDouble())) << "," << doubleToString(72*(pList["svg:y"]->getDouble()));
 		}
-		else if (propList["libwpg:path-action"] && propList["libwpg:path-action"]->getStr() == "C")
+		else if (pList["libwpg:path-action"] && pList["libwpg:path-action"]->getStr() == "C")
 		{
 			m_impl->m_outputSink << "\nC";
-			m_impl->m_outputSink << doubleToString(72*(propList["svg:x1"]->getDouble())) << "," << doubleToString(72*(propList["svg:y1"]->getDouble())) << " ";
-			m_impl->m_outputSink << doubleToString(72*(propList["svg:x2"]->getDouble())) << "," << doubleToString(72*(propList["svg:y2"]->getDouble())) << " ";
-			m_impl->m_outputSink << doubleToString(72*(propList["svg:x"]->getDouble())) << "," << doubleToString(72*(propList["svg:y"]->getDouble()));
+			m_impl->m_outputSink << doubleToString(72*(pList["svg:x1"]->getDouble())) << "," << doubleToString(72*(pList["svg:y1"]->getDouble())) << " ";
+			m_impl->m_outputSink << doubleToString(72*(pList["svg:x2"]->getDouble())) << "," << doubleToString(72*(pList["svg:y2"]->getDouble())) << " ";
+			m_impl->m_outputSink << doubleToString(72*(pList["svg:x"]->getDouble())) << "," << doubleToString(72*(pList["svg:y"]->getDouble()));
 		}
-		else if (propList["libwpg:path-action"] && propList["libwpg:path-action"]->getStr() == "Q")
+		else if (pList["libwpg:path-action"] && pList["libwpg:path-action"]->getStr() == "Q")
 		{
 			m_impl->m_outputSink << "\nQ";
-			m_impl->m_outputSink << doubleToString(72*(propList["svg:x1"]->getDouble())) << "," << doubleToString(72*(propList["svg:y1"]->getDouble())) << " ";
-			m_impl->m_outputSink << doubleToString(72*(propList["svg:x"]->getDouble())) << "," << doubleToString(72*(propList["svg:y"]->getDouble()));
+			m_impl->m_outputSink << doubleToString(72*(pList["svg:x1"]->getDouble())) << "," << doubleToString(72*(pList["svg:y1"]->getDouble())) << " ";
+			m_impl->m_outputSink << doubleToString(72*(pList["svg:x"]->getDouble())) << "," << doubleToString(72*(pList["svg:y"]->getDouble()));
 		}
-		else if (propList["libwpg:path-action"] && propList["libwpg:path-action"]->getStr() == "A")
+		else if (pList["libwpg:path-action"] && pList["libwpg:path-action"]->getStr() == "A")
 		{
 			m_impl->m_outputSink << "\nA";
-			m_impl->m_outputSink << doubleToString(72*(propList["svg:rx"]->getDouble())) << "," << doubleToString(72*(propList["svg:ry"]->getDouble())) << " ";
-			m_impl->m_outputSink << doubleToString(propList["libwpg:rotate"] ? propList["libwpg:rotate"]->getDouble() : 0) << " ";
-			m_impl->m_outputSink << (propList["libwpg:large-arc"] ? propList["libwpg:large-arc"]->getInt() : 1) << ",";
-			m_impl->m_outputSink << (propList["libwpg:sweep"] ? propList["libwpg:sweep"]->getInt() : 1) << " ";
-			m_impl->m_outputSink << doubleToString(72*(propList["svg:x"]->getDouble())) << "," << doubleToString(72*(propList["svg:y"]->getDouble()));
+			m_impl->m_outputSink << doubleToString(72*(pList["svg:rx"]->getDouble())) << "," << doubleToString(72*(pList["svg:ry"]->getDouble())) << " ";
+			m_impl->m_outputSink << doubleToString(pList["libwpg:rotate"] ? pList["libwpg:rotate"]->getDouble() : 0) << " ";
+			m_impl->m_outputSink << (pList["libwpg:large-arc"] ? pList["libwpg:large-arc"]->getInt() : 1) << ",";
+			m_impl->m_outputSink << (pList["libwpg:sweep"] ? pList["libwpg:sweep"]->getInt() : 1) << " ";
+			m_impl->m_outputSink << doubleToString(72*(pList["svg:x"]->getDouble())) << "," << doubleToString(72*(pList["svg:y"]->getDouble()));
 		}
-		else if ((i >= path.count()-1 && i > 2) && propList["libwpg:path-action"] && propList["libwpg:path-action"]->getStr() == "Z" )
+		else if ((i >= path->count()-1 && i > 2) && pList["libwpg:path-action"] && pList["libwpg:path-action"]->getStr() == "Z" )
 		{
 			isClosed = true;
 			m_impl->m_outputSink << "\nZ";
@@ -525,12 +528,12 @@ void RVNGSVGPresentationGenerator::drawGraphicObject(const RVNGPropertyList &pro
 	m_impl->m_outputSink << "\" />\n";
 }
 
-void RVNGSVGPresentationGenerator::drawConnector(const RVNGPropertyList &/*propList*/, const RVNGPropertyListVector &/*path*/)
+void RVNGSVGPresentationGenerator::drawConnector(const RVNGPropertyList &/*propList*/)
 {
 	// TODO: implement me
 }
 
-void RVNGSVGPresentationGenerator::startTextObject(const RVNGPropertyList &propList, const RVNGPropertyListVector & /* path */)
+void RVNGSVGPresentationGenerator::startTextObject(const RVNGPropertyList &propList)
 {
 	m_impl->m_outputSink << "<svg:text ";
 	if (propList["svg:x"] && propList["svg:y"])
