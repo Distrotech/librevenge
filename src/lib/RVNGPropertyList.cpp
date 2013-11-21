@@ -338,6 +338,33 @@ void RVNGPropertyList::clear()
 	m_impl->clear();
 }
 
+
+RVNGString RVNGPropertyList::getPropString() const
+{
+	RVNGString propString;
+	RVNGPropertyList::Iter i(*this);
+	if (!i.last())
+	{
+		propString.append(i.key());
+		propString.append(": ");
+		if (i.child())
+			propString.append(i.child()->getPropString().cstr());
+		else
+			propString.append(i()->getStr().cstr());
+		for (; i.next(); )
+		{
+			propString.append(", ");
+			propString.append(i.key());
+			propString.append(": ");
+			if (i.child())
+				propString.append(i.child()->getPropString().cstr());
+			else
+				propString.append(i()->getStr().cstr());
+		}
+	}
+	return propString;
+}
+
 #if 0
 void RVNGPropertyList::swap(RVNGPropertyList &other)
 {

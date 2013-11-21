@@ -46,14 +46,15 @@ public:
 	void insert(const char *name, const double val, const RVNGUnit units = RVNG_INCH);
 	void insert(const char *name, const unsigned char *buffer, const unsigned long bufferSize);
 	void insert(const char *name, const RVNGBinaryData &data);
-
 	void insert(const char *name, const RVNGPropertyListVector &vec);
-
 	void remove(const char *name);
+	void clear();
+
 	const RVNGProperty *operator[](const char *name) const;
 	const RVNGPropertyListVector *child(const char *name) const;
 	const RVNGPropertyList &operator=(const RVNGPropertyList &propList);
-	void clear();
+
+	RVNGString getPropString() const;
 
 	class Iter
 	{

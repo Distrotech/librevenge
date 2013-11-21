@@ -81,10 +81,6 @@ struct RVNGRawGeneratorBase
 	void idprintf(const char *format, ...);
 };
 
-RVNGString getPropString(const RVNGPropertyList &propList);
-
-RVNGString getPropString(const RVNGPropertyListVector &itemList);
-
 } // namespace librevenge
 
 #endif // RVNGRAWGENERATORBASE_H

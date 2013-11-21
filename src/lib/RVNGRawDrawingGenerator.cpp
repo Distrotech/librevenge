@@ -73,7 +73,7 @@ void RVNGRawDrawingGenerator::setDocumentMetaData(const librevenge::RVNGProperty
 
 void RVNGRawDrawingGenerator::startPage(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("startPage(%s)\n", getPropString(propList).cstr()), PC_START_GRAPHICS);
+	RVNG_CALLGRAPH_ENTER(("startPage(%s)\n", propList.getPropString().cstr()), PC_START_GRAPHICS);
 }
 
 void RVNGRawDrawingGenerator::endPage()
@@ -83,7 +83,7 @@ void RVNGRawDrawingGenerator::endPage()
 
 void RVNGRawDrawingGenerator::startLayer(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("startLayer (%s)\n", getPropString(propList).cstr()), PC_START_LAYER);
+	RVNG_CALLGRAPH_ENTER(("startLayer (%s)\n", propList.getPropString().cstr()), PC_START_LAYER);
 }
 
 void RVNGRawDrawingGenerator::endLayer()
@@ -93,7 +93,7 @@ void RVNGRawDrawingGenerator::endLayer()
 
 void RVNGRawDrawingGenerator::startEmbeddedGraphics(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("startEmbeddedGraphics (%s)\n", getPropString(propList).cstr()), PC_START_EMBEDDED_GRAPHICS);
+	RVNG_CALLGRAPH_ENTER(("startEmbeddedGraphics (%s)\n", propList.getPropString().cstr()), PC_START_EMBEDDED_GRAPHICS);
 }
 
 void RVNGRawDrawingGenerator::endEmbeddedGraphics()
@@ -106,7 +106,7 @@ void RVNGRawDrawingGenerator::setStyle(const RVNGPropertyList &propList, const R
 	if (m_impl->m_printCallgraphScore)
 		return;
 
-	m_impl->iprintf("setStyle(%s, gradient: (%s))\n", getPropString(propList).cstr(), getPropString(gradient).cstr());
+	m_impl->iprintf("setStyle(%s, gradient: (%s))\n", propList.getPropString().cstr(), gradient.getPropString().cstr());
 }
 
 void RVNGRawDrawingGenerator::drawRectangle(const RVNGPropertyList &propList)
@@ -114,7 +114,7 @@ void RVNGRawDrawingGenerator::drawRectangle(const RVNGPropertyList &propList)
 	if (m_impl->m_printCallgraphScore)
 		return;
 
-	m_impl->iprintf("drawRectangle (%s)\n", getPropString(propList).cstr());
+	m_impl->iprintf("drawRectangle (%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawDrawingGenerator::drawEllipse(const RVNGPropertyList &propList)
@@ -122,7 +122,7 @@ void RVNGRawDrawingGenerator::drawEllipse(const RVNGPropertyList &propList)
 	if (m_impl->m_printCallgraphScore)
 		return;
 
-	m_impl->iprintf("drawEllipse (%s)\n", getPropString(propList).cstr());
+	m_impl->iprintf("drawEllipse (%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawDrawingGenerator::drawPolyline(const RVNGPropertyListVector &vertices)
@@ -130,7 +130,7 @@ void RVNGRawDrawingGenerator::drawPolyline(const RVNGPropertyListVector &vertice
 	if (m_impl->m_printCallgraphScore)
 		return;
 
-	m_impl->iprintf("drawPolyline (%s)\n", getPropString(vertices).cstr());
+	m_impl->iprintf("drawPolyline (%s)\n", vertices.getPropString().cstr());
 }
 
 void RVNGRawDrawingGenerator::drawPolygon(const RVNGPropertyListVector &vertices)
@@ -138,7 +138,7 @@ void RVNGRawDrawingGenerator::drawPolygon(const RVNGPropertyListVector &vertices
 	if (m_impl->m_printCallgraphScore)
 		return;
 
-	m_impl->iprintf("drawPolygon (%s)\n", getPropString(vertices).cstr());
+	m_impl->iprintf("drawPolygon (%s)\n", vertices.getPropString().cstr());
 }
 
 void RVNGRawDrawingGenerator::drawPath(const RVNGPropertyList &propList)
@@ -146,7 +146,7 @@ void RVNGRawDrawingGenerator::drawPath(const RVNGPropertyList &propList)
 	if (m_impl->m_printCallgraphScore)
 		return;
 
-	m_impl->iprintf("drawPath (%s)\n", getPropString(propList).cstr());
+	m_impl->iprintf("drawPath (%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawDrawingGenerator::drawGraphicObject(const RVNGPropertyList &propList)
@@ -154,12 +154,12 @@ void RVNGRawDrawingGenerator::drawGraphicObject(const RVNGPropertyList &propList
 	if (m_impl->m_printCallgraphScore)
 		return;
 
-	m_impl->iprintf("drawGraphicObject (%s)\n", getPropString(propList).cstr());
+	m_impl->iprintf("drawGraphicObject (%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawDrawingGenerator::startTextObject(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("startTextObject (%s)\n", getPropString(propList).cstr()), PC_START_TEXT_OBJECT);
+	RVNG_CALLGRAPH_ENTER(("startTextObject (%s)\n", propList.getPropString().cstr()), PC_START_TEXT_OBJECT);
 }
 
 void RVNGRawDrawingGenerator::endTextObject()
@@ -178,7 +178,7 @@ void RVNGRawDrawingGenerator::closeListElement() {}
 
 void RVNGRawDrawingGenerator::openParagraph(const RVNGPropertyList &propList, const RVNGPropertyListVector &tabStops)
 {
-	RVNG_CALLGRAPH_ENTER(("openParagraph (%s, tabStops: (%s))\n", getPropString(propList).cstr(), getPropString(tabStops).cstr()), PC_START_TEXT_LINE);
+	RVNG_CALLGRAPH_ENTER(("openParagraph (%s, tabStops: (%s))\n", propList.getPropString().cstr(), tabStops.getPropString().cstr()), PC_START_TEXT_LINE);
 }
 
 void RVNGRawDrawingGenerator::closeParagraph()
@@ -188,7 +188,7 @@ void RVNGRawDrawingGenerator::closeParagraph()
 
 void RVNGRawDrawingGenerator::openSpan(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("openSpan (%s)\n", getPropString(propList).cstr()), PC_START_TEXT_SPAN);
+	RVNG_CALLGRAPH_ENTER(("openSpan (%s)\n", propList.getPropString().cstr()), PC_START_TEXT_SPAN);
 }
 
 void RVNGRawDrawingGenerator::closeSpan()

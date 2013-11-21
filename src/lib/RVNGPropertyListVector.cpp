@@ -165,6 +165,31 @@ RVNGPropertyListVector::Iter::Iter(const RVNGPropertyListVector &vect) :
 {
 }
 
+RVNGString RVNGPropertyListVector::getPropString() const
+{
+	RVNGString propString;
+
+	propString.append("(");
+	RVNGPropertyListVector::Iter i(*this);
+
+	if (!i.last())
+	{
+		propString.append("(");
+		propString.append(i().getPropString());
+		propString.append(")");
+
+		for (; i.next();)
+		{
+			propString.append(", (");
+			propString.append(i().getPropString());
+			propString.append(")");
+		}
+
+	}
+	propString.append(")");
+	return propString;
+}
+
 RVNGPropertyListVector::Iter::~Iter()
 {
 	delete m_iterImpl;

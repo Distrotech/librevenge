@@ -50,6 +50,8 @@ public:
 	const RVNGPropertyList &operator[](unsigned long index) const;
 	RVNGPropertyListVector &operator=(const RVNGPropertyListVector &vect);
 
+	RVNGString getPropString() const;
+
 	class Iter
 	{
 	public:
