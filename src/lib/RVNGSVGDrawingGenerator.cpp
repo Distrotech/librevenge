@@ -868,7 +868,7 @@ void RVNGSVGDrawingGenerator::insertLineBreak()
 	m_pImpl->m_outputSink << "<tbreak/>";
 }
 
-void RVNGSVGDrawingGenerator::insertField(const RVNGString & /* type */, const RVNGPropertyList & /*propList*/) {}
+void RVNGSVGDrawingGenerator::insertField(const RVNGPropertyList & /*propList*/) {}
 
 }
 

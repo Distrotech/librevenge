@@ -75,7 +75,7 @@ public:
 	void insertSpace();
 	void insertText(const RVNGString &text);
 	void insertLineBreak();
-	void insertField(const RVNGString &type, const RVNGPropertyList &propList);
+	void insertField(const RVNGPropertyList &propList);
 
 private:
 	RVNGSVGDrawingGenerator(const RVNGSVGDrawingGenerator &);
