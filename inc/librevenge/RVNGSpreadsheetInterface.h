@@ -293,7 +293,7 @@ public:
 	*/
 	virtual void closeSpan() = 0;
 
-	virtual void defineSectionStyle(const RVNGPropertyList &propList, const RVNGPropertyListVector &columns) = 0;
+	virtual void defineSectionStyle(const RVNGPropertyList &propList) = 0;
 
 	/**
 	Called when a new section is opened
@@ -307,7 +307,7 @@ public:
 	\li \c fo:start-indent The left indentation of the margin, in inches
 	\li \c fo:end-indent The right indentation of the margin, in inches
 	*/
-	virtual void openSection(const RVNGPropertyList &propList, const RVNGPropertyListVector &columns) = 0;
+	virtual void openSection(const RVNGPropertyList &propList) = 0;
 	/**
 	Called when a section is closed
 	*/

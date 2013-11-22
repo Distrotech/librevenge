@@ -438,8 +438,8 @@ void RVNGHTMLTextGenerator::closeFooter()
 	m_impl->m_ignore = false;
 }
 
-void RVNGHTMLTextGenerator::defineSectionStyle(const RVNGPropertyList &, const RVNGPropertyListVector &) {}
-void RVNGHTMLTextGenerator::openSection(const RVNGPropertyList & /* propList */, const RVNGPropertyListVector & /* columns */) {}
+void RVNGHTMLTextGenerator::defineSectionStyle(const RVNGPropertyList &) {}
+void RVNGHTMLTextGenerator::openSection(const RVNGPropertyList & /* propList */) {}
 void RVNGHTMLTextGenerator::closeSection() {}
 
 void RVNGHTMLTextGenerator::defineParagraphStyle(const RVNGPropertyList &) {}

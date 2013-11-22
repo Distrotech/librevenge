@@ -48,8 +48,8 @@ public:
 	virtual void openFooter(const RVNGPropertyList &propList);
 	virtual void closeFooter();
 
-	virtual void defineSectionStyle(const RVNGPropertyList &, const RVNGPropertyListVector &);
-	virtual void openSection(const RVNGPropertyList &propList, const RVNGPropertyListVector &columns);
+	virtual void defineSectionStyle(const RVNGPropertyList &);
+	virtual void openSection(const RVNGPropertyList &propList);
 	virtual void closeSection();
 
 	virtual void defineParagraphStyle(const RVNGPropertyList &);

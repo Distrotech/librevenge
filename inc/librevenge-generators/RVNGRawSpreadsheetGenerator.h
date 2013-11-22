@@ -75,8 +75,8 @@ public:
 	virtual void openSpan(const RVNGPropertyList &propList);
 	virtual void closeSpan();
 
-	virtual void defineSectionStyle(const RVNGPropertyList &propList, const RVNGPropertyListVector &columns);
-	virtual void openSection(const RVNGPropertyList &propList, const RVNGPropertyListVector &columns);
+	virtual void defineSectionStyle(const RVNGPropertyList &propList);
+	virtual void openSection(const RVNGPropertyList &propList);
 	virtual void closeSection();
 
 	virtual void insertTab();

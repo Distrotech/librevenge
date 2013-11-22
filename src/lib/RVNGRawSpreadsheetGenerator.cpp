@@ -309,14 +309,14 @@ void RVNGRawSpreadsheetGenerator::closeSpan()
 	RVNG_CALLGRAPH_LEAVE(("closeSpan()\n"), LC_OPEN_SPAN);
 }
 
-void RVNGRawSpreadsheetGenerator::defineSectionStyle(const RVNGPropertyList &propList, const RVNGPropertyListVector &columns)
+void RVNGRawSpreadsheetGenerator::defineSectionStyle(const RVNGPropertyList &propList)
 {
-	m_impl->iprintf("defineSectionStyle(%s, columns: %s)\n", propList.getPropString().cstr(), columns.getPropString().cstr());
+	m_impl->iprintf("defineSectionStyle(%s)\n", propList.getPropString().cstr());
 }
 
-void RVNGRawSpreadsheetGenerator::openSection(const RVNGPropertyList &propList, const RVNGPropertyListVector &columns)
+void RVNGRawSpreadsheetGenerator::openSection(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("openSection(%s, columns: %s)\n", propList.getPropString().cstr(), columns.getPropString().cstr()), LC_OPEN_SECTION);
+	RVNG_CALLGRAPH_ENTER(("openSection(%s)\n", propList.getPropString().cstr()), LC_OPEN_SECTION);
 }
 
 void RVNGRawSpreadsheetGenerator::closeSection()

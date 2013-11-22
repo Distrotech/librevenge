@@ -79,8 +79,8 @@ void RVNGTextTextGenerator::closeHeader() {}
 void RVNGTextTextGenerator::openFooter(const RVNGPropertyList & /* propList */) {}
 void RVNGTextTextGenerator::closeFooter() {}
 
-void RVNGTextTextGenerator::defineSectionStyle(const RVNGPropertyList &, const RVNGPropertyListVector &) {}
-void RVNGTextTextGenerator::openSection(const RVNGPropertyList & /* propList */, const RVNGPropertyListVector & /* columns */) {}
+void RVNGTextTextGenerator::defineSectionStyle(const RVNGPropertyList &) {}
+void RVNGTextTextGenerator::openSection(const RVNGPropertyList & /* propList */) {}
 void RVNGTextTextGenerator::closeSection() {}
 
 void RVNGTextTextGenerator::defineParagraphStyle(const RVNGPropertyList &) {}
