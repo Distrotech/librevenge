@@ -197,7 +197,7 @@ void RVNGTextPresentationGenerator::closeListElement()
 	closeParagraph();
 }
 
-void RVNGTextPresentationGenerator::openTable(const RVNGPropertyList &, const RVNGPropertyListVector &)
+void RVNGTextPresentationGenerator::openTable(const RVNGPropertyList &)
 {
 }
 

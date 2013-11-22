@@ -145,7 +145,7 @@ void RVNGTextTextGenerator::closeComment() {}
 void RVNGTextTextGenerator::openTextBox(const RVNGPropertyList & /* propList */) {}
 void RVNGTextTextGenerator::closeTextBox() {}
 
-void RVNGTextTextGenerator::openTable(const RVNGPropertyList & /* propList */, const RVNGPropertyListVector & /* columns */) {}
+void RVNGTextTextGenerator::openTable(const RVNGPropertyList & /* propList */) {}
 void RVNGTextTextGenerator::openTableRow(const RVNGPropertyList & /* propList */) {}
 void RVNGTextTextGenerator::closeTableRow() {}
 void RVNGTextTextGenerator::openTableCell(const RVNGPropertyList & /* propList */) {}
@@ -157,7 +157,7 @@ void RVNGTextTextGenerator::openFrame(const RVNGPropertyList & /* propList */) {
 void RVNGTextTextGenerator::closeFrame() {}
 
 void RVNGTextTextGenerator::insertBinaryObject(const RVNGPropertyList & /* propList */) {}
-void RVNGTextTextGenerator::insertEquation(const RVNGPropertyList & /* propList */, const RVNGString & /* data */) {}
+void RVNGTextTextGenerator::insertEquation(const RVNGPropertyList & /* propList */) {}
 
 }
 

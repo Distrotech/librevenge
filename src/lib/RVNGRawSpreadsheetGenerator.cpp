@@ -436,9 +436,9 @@ void RVNGRawSpreadsheetGenerator::closeTextBox()
 	RVNG_CALLGRAPH_LEAVE(("closeTextBox()\n"), LC_OPEN_TEXT_BOX);
 }
 
-void RVNGRawSpreadsheetGenerator::openTable(const RVNGPropertyList &propList, const RVNGPropertyListVector &columns)
+void RVNGRawSpreadsheetGenerator::openTable(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("openTable(%s, columns: %s)\n", propList.getPropString().cstr(), columns.getPropString().cstr()), LC_OPEN_TABLE);
+	RVNG_CALLGRAPH_ENTER(("openTable(%s)\n", propList.getPropString().cstr()), LC_OPEN_TABLE);
 }
 
 void RVNGRawSpreadsheetGenerator::openTableRow(const RVNGPropertyList &propList)
@@ -489,9 +489,9 @@ void RVNGRawSpreadsheetGenerator::insertBinaryObject(const RVNGPropertyList &pro
 	m_impl->iprintf("insertBinaryObject(%s)\n", propList.getPropString().cstr());
 }
 
-void RVNGRawSpreadsheetGenerator::insertEquation(const RVNGPropertyList &propList, const RVNGString &data)
+void RVNGRawSpreadsheetGenerator::insertEquation(const RVNGPropertyList &propList)
 {
-	m_impl->iprintf("insertEquation(%s, spreadsheet: %s)\n", propList.getPropString().cstr(), data.cstr());
+	m_impl->iprintf("insertEquation(%s)\n", propList.getPropString().cstr());
 }
 
 }

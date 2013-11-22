@@ -635,11 +635,14 @@ void RVNGHTMLTextGenerator::closeTextBox()
 	m_impl->pop();
 }
 
-void RVNGHTMLTextGenerator::openTable(const RVNGPropertyList & /* propList */, const RVNGPropertyListVector &columns)
+void RVNGHTMLTextGenerator::openTable(const RVNGPropertyList &propList)
 {
 	if (m_impl->m_ignore)
 		return;
-	m_impl->m_tableManager.openTable(columns);
+
+	const librevenge::RVNGPropertyListVector *columns = propList.child("librevenge:table-columns");
+	if (columns)
+		m_impl->m_tableManager.openTable(*columns);
 	m_impl->output() << "<table>" << std::endl;
 	m_impl->output() << "<tbody>" << std::endl;
 }
@@ -693,7 +696,7 @@ void RVNGHTMLTextGenerator::closeTable()
 void RVNGHTMLTextGenerator::openFrame(const RVNGPropertyList & /* propList */) {}
 void RVNGHTMLTextGenerator::closeFrame() {}
 void RVNGHTMLTextGenerator::insertBinaryObject(const RVNGPropertyList & /* propList */) {}
-void RVNGHTMLTextGenerator::insertEquation(const RVNGPropertyList & /* propList */, const RVNGString & /* data */) {}
+void RVNGHTMLTextGenerator::insertEquation(const RVNGPropertyList & /* propList */) {}
 
 }
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

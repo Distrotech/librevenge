@@ -481,7 +481,7 @@ public:
 	\param columns Column definitions for the table. May contain
 	\li \c style:column-width Width of a column, in inches
 	*/
-	virtual void openTable(const RVNGPropertyList &propList, const RVNGPropertyListVector &columns) = 0;
+	virtual void openTable(const RVNGPropertyList &propList) = 0;
 	/**
 	Called when a new table row is opened
 	\param propList Defines a set of properties for the table row. May contain:
@@ -563,7 +563,7 @@ public:
 	\li \c librevenge:mimetype The mimetype of the object
 	\param data Reference to the string containing the equation representation
 	*/
-	virtual void insertEquation(const RVNGPropertyList &propList, const RVNGString &data) = 0;
+	virtual void insertEquation(const RVNGPropertyList &propList) = 0;
 };
 }
 

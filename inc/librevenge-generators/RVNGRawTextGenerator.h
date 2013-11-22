@@ -88,7 +88,7 @@ public:
 	virtual void openTextBox(const RVNGPropertyList &propList);
 	virtual void closeTextBox();
 
-	virtual void openTable(const RVNGPropertyList &propList, const RVNGPropertyListVector &columns);
+	virtual void openTable(const RVNGPropertyList &propList);
 	virtual void openTableRow(const RVNGPropertyList &propList);
 	virtual void closeTableRow();
 	virtual void openTableCell(const RVNGPropertyList &propList);
@@ -100,7 +100,7 @@ public:
 	virtual void closeFrame();
 
 	virtual void insertBinaryObject(const RVNGPropertyList &propList);
-	virtual void insertEquation(const RVNGPropertyList &propList, const RVNGString &data);
+	virtual void insertEquation(const RVNGPropertyList &propList);
 
 private:
 	RVNGRawTextGeneratorImpl *m_impl;

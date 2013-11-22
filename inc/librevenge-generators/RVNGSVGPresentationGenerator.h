@@ -82,7 +82,7 @@ public:
 	virtual void openSpan(const RVNGPropertyList &propList);
 	virtual void closeSpan();
 
-	virtual void openTable(const RVNGPropertyList &propList, const RVNGPropertyListVector &columns);
+	virtual void openTable(const RVNGPropertyList &propList);
 	virtual void openTableRow(const RVNGPropertyList &propList);
 	virtual void closeTableRow();
 	virtual void openTableCell(const RVNGPropertyList &propList);

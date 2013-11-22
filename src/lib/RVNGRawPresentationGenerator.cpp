@@ -256,11 +256,9 @@ void RVNGRawPresentationGenerator::closeListElement()
 	RVNG_CALLGRAPH_LEAVE(("closeListElement\n"), CALLBACK_OPEN_LIST_ELEMENT);
 }
 
-void RVNGRawPresentationGenerator::openTable(const RVNGPropertyList &propList, const RVNGPropertyListVector &columns)
+void RVNGRawPresentationGenerator::openTable(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("openTable(%s, columns: (%s))\n",
-	                      propList.getPropString().cstr(), columns.getPropString().cstr()),
-	                     CALLBACK_OPEN_TABLE);
+	RVNG_CALLGRAPH_ENTER(("openTable(%s)\n", propList.getPropString().cstr()), CALLBACK_OPEN_TABLE);
 }
 
 void RVNGRawPresentationGenerator::openTableRow(const RVNGPropertyList &propList)

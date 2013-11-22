@@ -643,7 +643,7 @@ void RVNGSVGPresentationGenerator::closeParagraph()
 	m_impl->m_outputSink << '\n';
 }
 
-void RVNGSVGPresentationGenerator::openTable(const RVNGPropertyList &/*propList*/, const RVNGPropertyListVector &/*columns*/)
+void RVNGSVGPresentationGenerator::openTable(const RVNGPropertyList &/*propList*/)
 {
 	// TODO: implement me
 }
