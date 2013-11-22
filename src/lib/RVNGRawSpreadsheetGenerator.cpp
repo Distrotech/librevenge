@@ -32,30 +32,30 @@ namespace
 
 enum RVNGRawSpreadsheetGeneratorCallback
 {
-	LC_START_DOCUMENT = 0,
-	LC_OPEN_PAGE_SPAN,
-	LC_OPEN_HEADER_FOOTER,
-	LC_OPEN_PARAGRAPH,
-	LC_OPEN_SPAN,
-	LC_OPEN_SECTION,
-	LC_OPEN_ORDERED_LIST_LEVEL,
-	LC_OPEN_UNORDERED_LIST_LEVEL,
-	LC_OPEN_LIST_ELEMENT,
-	LC_OPEN_FOOTNOTE,
-	LC_OPEN_ENDNOTE,
-	LC_OPEN_TEXT_BOX,
-	LC_OPEN_TABLE,
-	LC_OPEN_TABLE_ROW,
-	LC_OPEN_TABLE_CELL,
-	LC_OPEN_COMMENT,
-	LC_OPEN_FRAME,
-	LC_OPEN_SHEET,
-	LC_OPEN_SHEET_ROW,
-	LC_OPEN_SHEET_CELL,
-	LC_OPEN_CHART,
-	LC_OPEN_GRAPHIC,
-	LC_OPEN_GRAPHIC_PAGE,
-	LC_OPEN_GRAPHIC_LAYER
+    LC_START_DOCUMENT = 0,
+    LC_OPEN_PAGE_SPAN,
+    LC_OPEN_HEADER_FOOTER,
+    LC_OPEN_PARAGRAPH,
+    LC_OPEN_SPAN,
+    LC_OPEN_SECTION,
+    LC_OPEN_ORDERED_LIST_LEVEL,
+    LC_OPEN_UNORDERED_LIST_LEVEL,
+    LC_OPEN_LIST_ELEMENT,
+    LC_OPEN_FOOTNOTE,
+    LC_OPEN_ENDNOTE,
+    LC_OPEN_TEXT_BOX,
+    LC_OPEN_TABLE,
+    LC_OPEN_TABLE_ROW,
+    LC_OPEN_TABLE_CELL,
+    LC_OPEN_COMMENT,
+    LC_OPEN_FRAME,
+    LC_OPEN_SHEET,
+    LC_OPEN_SHEET_ROW,
+    LC_OPEN_SHEET_CELL,
+    LC_OPEN_CHART,
+    LC_OPEN_GRAPHIC,
+    LC_OPEN_GRAPHIC_PAGE,
+    LC_OPEN_GRAPHIC_LAYER
 };
 
 }
@@ -109,15 +109,14 @@ void RVNGRawSpreadsheetGenerator::insertSheetConditionInNumberingStyle(const RVN
 	m_impl->iprintf("insertSheetConditionInNumberingStyle(%s)\n", propList.getPropString().cstr());
 }
 
-void RVNGRawSpreadsheetGenerator::defineSheetNumberingStyle(const RVNGPropertyList &propList, const RVNGPropertyListVector &formats)
+void RVNGRawSpreadsheetGenerator::defineSheetNumberingStyle(const RVNGPropertyList &propList)
 {
-	m_impl->iprintf("defineSheetNumberingStyle(%s, formats: %s)\n", propList.getPropString().cstr(), formats.getPropString().cstr());
+	m_impl->iprintf("defineSheetNumberingStyle(%s)\n", propList.getPropString().cstr());
 }
 
-void RVNGRawSpreadsheetGenerator::openSheet(const RVNGPropertyList &propList, const RVNGPropertyListVector &columns)
+void RVNGRawSpreadsheetGenerator::openSheet(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("openSheet(%s, columns: %s)\n", propList.getPropString().cstr(), columns.getPropString().cstr()),
-	                     LC_OPEN_SHEET);
+	RVNG_CALLGRAPH_ENTER(("openSheet(%s)\n", propList.getPropString().cstr()), LC_OPEN_SHEET);
 }
 
 void RVNGRawSpreadsheetGenerator::closeSheet()

@@ -170,9 +170,9 @@ public:
 	 \param propList Property list for the style. Must contain:
 	 \li \c librevenge:name the numbering style name
 	 \li \c librevenge:value_type the numbering type
-	 \param formats The list of format instruction
+	 \li \c librevenge:format a vector containing a list of format instructions
 	 */
-	virtual void defineSheetNumberingStyle(const RVNGPropertyList &propList, const RVNGPropertyListVector &formats) = 0;
+	virtual void defineSheetNumberingStyle(const RVNGPropertyList &propList) = 0;
 	/**
 	 Called when a condition must be added to a style
 	 \param propList Property list for the style. Must contain:
@@ -185,11 +185,11 @@ public:
 	/**
 	Called when a sheet should be opened
 	\param propList Property list for the sheet. May contain:
-	\li \c librevenge:name Determines the sheet name
-	\param columns Column definitions for the table. May contain
-	\li \c style:column-width Width of a column, in inches
+	- \c librevenge:name Determines the sheet name
+	- \c librevenge:columns a vector of property list which must contain:
+	    -# style:column-width: the width of a column, in inches
 	*/
-	virtual void openSheet(const RVNGPropertyList &propList, const RVNGPropertyListVector &columns) = 0;
+	virtual void openSheet(const RVNGPropertyList &propList) = 0;
 	/**
 	Called when a sheet should be closed.
 	*/
