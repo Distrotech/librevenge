@@ -82,7 +82,7 @@ public:
 	void insertSpace();
 	void insertText(const librevenge::RVNGString &text);
 	void insertLineBreak();
-	void insertField(const librevenge::RVNGString &type, const librevenge::RVNGPropertyList &propList);
+	void insertField(const librevenge::RVNGPropertyList &propList);
 
 private:
 	RVNGRawDrawingGeneratorImpl *m_impl;

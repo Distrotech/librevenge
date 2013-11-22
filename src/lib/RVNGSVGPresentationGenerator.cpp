@@ -603,7 +603,7 @@ void RVNGSVGPresentationGenerator::insertLineBreak()
 	m_impl->m_outputSink << '\n';
 }
 
-void RVNGSVGPresentationGenerator::insertField(const RVNGString &/*type*/, const RVNGPropertyList &/*propList*/)
+void RVNGSVGPresentationGenerator::insertField(const RVNGPropertyList &/*propList*/)
 {
 	// TODO: implement me
 }

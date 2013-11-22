@@ -66,7 +66,7 @@ public:
 	virtual void insertText(const RVNGString &str);
 	virtual void insertLineBreak();
 
-	virtual void insertField(const RVNGString &type, const RVNGPropertyList &propList);
+	virtual void insertField(const RVNGPropertyList &propList);
 
 	virtual void openOrderedListLevel(const RVNGPropertyList &propList);
 	virtual void openUnorderedListLevel(const RVNGPropertyList &propList);

@@ -100,7 +100,7 @@ void RVNGTextDrawingGenerator::insertText(const RVNGString &str)
 }
 
 void RVNGTextDrawingGenerator::insertLineBreak() {}
-void RVNGTextDrawingGenerator::insertField(const RVNGString & /* type */, const RVNGPropertyList & /*propList*/) {}
+void RVNGTextDrawingGenerator::insertField(const RVNGPropertyList & /*propList*/) {}
 
 }
 

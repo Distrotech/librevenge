@@ -33,12 +33,12 @@ namespace
 
 enum RVNGRawDrawingGeneratorCallback
 {
-    PC_START_GRAPHICS = 0,
-    PC_START_LAYER,
-    PC_START_EMBEDDED_GRAPHICS,
-    PC_START_TEXT_OBJECT,
-    PC_START_TEXT_LINE,
-    PC_START_TEXT_SPAN
+	PC_START_GRAPHICS = 0,
+	PC_START_LAYER,
+	PC_START_EMBEDDED_GRAPHICS,
+	PC_START_TEXT_OBJECT,
+	PC_START_TEXT_LINE,
+	PC_START_TEXT_SPAN
 };
 
 } // anonymous namespace
@@ -208,7 +208,7 @@ void RVNGRawDrawingGenerator::insertText(const RVNGString &str)
 }
 
 void RVNGRawDrawingGenerator::insertLineBreak() {}
-void RVNGRawDrawingGenerator::insertField(const librevenge::RVNGString & /* type */, const librevenge::RVNGPropertyList & /*propList*/) {}
+void RVNGRawDrawingGenerator::insertField(const librevenge::RVNGPropertyList & /*propList*/) {}
 
 }
 

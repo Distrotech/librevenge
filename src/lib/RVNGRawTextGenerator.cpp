@@ -32,23 +32,23 @@ namespace
 
 enum RVNGRawTextGeneratorCallback
 {
-    LC_START_DOCUMENT = 0,
-    LC_OPEN_PAGE_SPAN,
-    LC_OPEN_HEADER_FOOTER,
-    LC_OPEN_PARAGRAPH,
-    LC_OPEN_SPAN,
-    LC_OPEN_SECTION,
-    LC_OPEN_ORDERED_LIST_LEVEL,
-    LC_OPEN_UNORDERED_LIST_LEVEL,
-    LC_OPEN_LIST_ELEMENT,
-    LC_OPEN_FOOTNOTE,
-    LC_OPEN_ENDNOTE,
-    LC_OPEN_TABLE,
-    LC_OPEN_TABLE_ROW,
-    LC_OPEN_TABLE_CELL,
-    LC_OPEN_COMMENT,
-    LC_OPEN_TEXT_BOX,
-    LC_OPEN_FRAME
+	LC_START_DOCUMENT = 0,
+	LC_OPEN_PAGE_SPAN,
+	LC_OPEN_HEADER_FOOTER,
+	LC_OPEN_PARAGRAPH,
+	LC_OPEN_SPAN,
+	LC_OPEN_SECTION,
+	LC_OPEN_ORDERED_LIST_LEVEL,
+	LC_OPEN_UNORDERED_LIST_LEVEL,
+	LC_OPEN_LIST_ELEMENT,
+	LC_OPEN_FOOTNOTE,
+	LC_OPEN_ENDNOTE,
+	LC_OPEN_TABLE,
+	LC_OPEN_TABLE_ROW,
+	LC_OPEN_TABLE_CELL,
+	LC_OPEN_COMMENT,
+	LC_OPEN_TEXT_BOX,
+	LC_OPEN_FRAME
 };
 
 }
@@ -203,9 +203,9 @@ void RVNGRawTextGenerator::insertLineBreak()
 	m_impl->iprintf("insertLineBreak()\n");
 }
 
-void RVNGRawTextGenerator::insertField(const RVNGString &type, const RVNGPropertyList &propList)
+void RVNGRawTextGenerator::insertField(const RVNGPropertyList &propList)
 {
-	m_impl->iprintf("insertField(type: %s, %s)\n", type.cstr(), propList.getPropString().cstr());
+	m_impl->iprintf("insertField(%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawTextGenerator::defineOrderedListLevel(const RVNGPropertyList &propList)

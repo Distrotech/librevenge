@@ -156,7 +156,7 @@ public:
 	\param propList Defines a set of properties for the field. May contain:
 	\li \c style:num-format Type of page number (for page number)
 	*/
-	virtual void insertField(const RVNGString &type, const RVNGPropertyList &propList) = 0;
+	virtual void insertField(const RVNGPropertyList &propList) = 0;
 
 	/**
 	Called when a new ordered list level should be opened

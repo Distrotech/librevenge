@@ -125,7 +125,7 @@ void RVNGTextTextGenerator::insertLineBreak()
 	m_impl->m_stream << '\n';
 }
 
-void RVNGTextTextGenerator::insertField(const RVNGString & /* type */, const RVNGPropertyList & /* propList */) {}
+void RVNGTextTextGenerator::insertField(const RVNGPropertyList & /* propList */) {}
 
 void RVNGTextTextGenerator::defineOrderedListLevel(const RVNGPropertyList & /* propList */) {}
 void RVNGTextTextGenerator::defineUnorderedListLevel(const RVNGPropertyList & /* propList */) {}

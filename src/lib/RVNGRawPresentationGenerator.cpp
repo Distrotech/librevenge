@@ -26,22 +26,22 @@ namespace
 
 enum Callback
 {
-    CALLBACK_START_DOCUMENT = 0,
-    CALLBACK_START_SLIDE,
-    CALLBACK_START_LAYER,
-    CALLBACK_START_EMBEDDED_GRAPHICS,
-    CALLBACK_START_GROUP,
-    CALLBACK_START_TEXT_OBJECT,
-    CALLBACK_OPEN_PARAGRAPH,
-    CALLBACK_OPEN_SPAN,
-    CALLBACK_OPEN_ORDERED_LIST_LEVEL,
-    CALLBACK_OPEN_UNORDERED_LIST_LEVEL,
-    CALLBACK_OPEN_LIST_ELEMENT,
-    CALLBACK_OPEN_TABLE,
-    CALLBACK_OPEN_TABLE_ROW,
-    CALLBACK_OPEN_TABLE_CELL,
-    CALLBACK_START_COMMENT,
-    CALLBACK_START_NOTES
+	CALLBACK_START_DOCUMENT = 0,
+	CALLBACK_START_SLIDE,
+	CALLBACK_START_LAYER,
+	CALLBACK_START_EMBEDDED_GRAPHICS,
+	CALLBACK_START_GROUP,
+	CALLBACK_START_TEXT_OBJECT,
+	CALLBACK_OPEN_PARAGRAPH,
+	CALLBACK_OPEN_SPAN,
+	CALLBACK_OPEN_ORDERED_LIST_LEVEL,
+	CALLBACK_OPEN_UNORDERED_LIST_LEVEL,
+	CALLBACK_OPEN_LIST_ELEMENT,
+	CALLBACK_OPEN_TABLE,
+	CALLBACK_OPEN_TABLE_ROW,
+	CALLBACK_OPEN_TABLE_CELL,
+	CALLBACK_START_COMMENT,
+	CALLBACK_START_NOTES
 };
 
 }
@@ -217,9 +217,9 @@ void RVNGRawPresentationGenerator::insertLineBreak()
 	printf("RVNGRawPresentationGenerator::insertLineBreak\n");
 }
 
-void RVNGRawPresentationGenerator::insertField(const RVNGString &type, const RVNGPropertyList &propList)
+void RVNGRawPresentationGenerator::insertField(const RVNGPropertyList &propList)
 {
-	printf("RVNGRawPresentationGenerator::insertField(%s, %s)\n", type.cstr(), propList.getPropString().cstr());
+	printf("RVNGRawPresentationGenerator::insertField(%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawPresentationGenerator::openOrderedListLevel(const RVNGPropertyList &propList)

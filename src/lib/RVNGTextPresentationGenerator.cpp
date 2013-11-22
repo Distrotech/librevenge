@@ -167,7 +167,7 @@ void RVNGTextPresentationGenerator::insertLineBreak()
 	m_impl->m_stream << '\n';
 }
 
-void RVNGTextPresentationGenerator::insertField(const RVNGString &, const RVNGPropertyList &)
+void RVNGTextPresentationGenerator::insertField(const RVNGPropertyList &)
 {
 }
 

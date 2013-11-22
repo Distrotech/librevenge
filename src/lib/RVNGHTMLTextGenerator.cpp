@@ -493,7 +493,7 @@ void RVNGHTMLTextGenerator::insertLineBreak()
 	m_impl->output() << "<br>" << std::endl;
 }
 
-void RVNGHTMLTextGenerator::insertField(const RVNGString & /* type */, const RVNGPropertyList & /* propList */) {}
+void RVNGHTMLTextGenerator::insertField(const RVNGPropertyList & /* propList */) {}
 
 void RVNGHTMLTextGenerator::insertText(const RVNGString &text)
 {
