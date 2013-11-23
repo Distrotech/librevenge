@@ -47,8 +47,8 @@ public:
 
 	void drawRectangle(const RVNGPropertyList &);
 	void drawEllipse(const RVNGPropertyList &);
-	void drawPolyline(const RVNGPropertyListVector &);
-	void drawPolygon(const RVNGPropertyListVector &);
+	void drawPolyline(const RVNGPropertyList &);
+	void drawPolygon(const RVNGPropertyList &);
 	void drawPath(const RVNGPropertyList &);
 	void drawGraphicObject(const RVNGPropertyList &);
 	void startTextObject(const RVNGPropertyList &);

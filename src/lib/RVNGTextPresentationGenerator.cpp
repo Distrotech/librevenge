@@ -101,11 +101,11 @@ void RVNGTextPresentationGenerator::drawEllipse(const RVNGPropertyList &)
 {
 }
 
-void RVNGTextPresentationGenerator::drawPolyline(const RVNGPropertyListVector &)
+void RVNGTextPresentationGenerator::drawPolyline(const RVNGPropertyList &)
 {
 }
 
-void RVNGTextPresentationGenerator::drawPolygon(const RVNGPropertyListVector &)
+void RVNGTextPresentationGenerator::drawPolygon(const RVNGPropertyList &)
 {
 }
 

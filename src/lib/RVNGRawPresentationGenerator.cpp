@@ -141,14 +141,14 @@ void RVNGRawPresentationGenerator::drawEllipse(const RVNGPropertyList &propList)
 	printf("RVNGRawPresentationGenerator::drawEllipse (%s)\n", propList.getPropString().cstr());
 }
 
-void RVNGRawPresentationGenerator::drawPolyline(const RVNGPropertyListVector &vertices)
+void RVNGRawPresentationGenerator::drawPolyline(const RVNGPropertyList &propList)
 {
-	printf("RVNGRawPresentationGenerator::drawPolyline (%s)\n", vertices.getPropString().cstr());
+	printf("RVNGRawPresentationGenerator::drawPolyline (%s)\n", propList.getPropString().cstr());
 }
 
-void RVNGRawPresentationGenerator::drawPolygon(const RVNGPropertyListVector &vertices)
+void RVNGRawPresentationGenerator::drawPolygon(const RVNGPropertyList &propList)
 {
-	printf("RVNGRawPresentationGenerator::drawPolygon (%s)\n", vertices.getPropString().cstr());
+	printf("RVNGRawPresentationGenerator::drawPolygon (%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawPresentationGenerator::drawPath(const RVNGPropertyList &propList)

@@ -216,14 +216,14 @@ void RVNGRawSpreadsheetGenerator::drawEllipse(const RVNGPropertyList &propList)
 	m_impl->iprintf("drawEllipse(%s)\n", propList.getPropString().cstr());
 }
 
-void RVNGRawSpreadsheetGenerator::drawPolygon(const RVNGPropertyListVector &vertices)
+void RVNGRawSpreadsheetGenerator::drawPolygon(const RVNGPropertyList &propList)
 {
-	m_impl->iprintf("drawPolygon(%s)\n", vertices.getPropString().cstr());
+	m_impl->iprintf("drawPolygon(%s)\n", propList.getPropString().cstr());
 }
 
-void RVNGRawSpreadsheetGenerator::drawPolyline(const RVNGPropertyListVector &vertices)
+void RVNGRawSpreadsheetGenerator::drawPolyline(const RVNGPropertyList &propList)
 {
-	m_impl->iprintf("drawPolyline(%s)\n", vertices.getPropString().cstr());
+	m_impl->iprintf("drawPolyline(%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawSpreadsheetGenerator::drawPath(const RVNGPropertyList &propList)

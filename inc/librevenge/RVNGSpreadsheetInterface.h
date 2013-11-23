@@ -547,9 +547,9 @@ public:
 
 	virtual void drawEllipse(const RVNGPropertyList &propList) = 0;
 
-	virtual void drawPolygon(const RVNGPropertyListVector &vertices) = 0;
+	virtual void drawPolygon(const RVNGPropertyList &propList) = 0;
 
-	virtual void drawPolyline(const RVNGPropertyListVector &vertices) = 0;
+	virtual void drawPolyline(const RVNGPropertyList &propList) = 0;
 
 	virtual void drawPath(const RVNGPropertyList &propList) = 0;
 

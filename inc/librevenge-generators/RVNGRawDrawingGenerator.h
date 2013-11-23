@@ -41,55 +41,54 @@ public:
 
 	~RVNGRawDrawingGenerator();
 
-	void startDocument(const librevenge::RVNGPropertyList &propList);
+	void startDocument(const RVNGPropertyList &propList);
 	void endDocument();
-	void setDocumentMetaData(const librevenge::RVNGPropertyList &propList);
-	void startPage(const librevenge::RVNGPropertyList &propList);
+	void setDocumentMetaData(const RVNGPropertyList &propList);
+	void startPage(const RVNGPropertyList &propList);
 	void endPage();
-	void startLayer(const librevenge::RVNGPropertyList &propList);
+	void startLayer(const RVNGPropertyList &propList);
 	void endLayer();
-	void startEmbeddedGraphics(const librevenge::RVNGPropertyList &propList);
+	void startEmbeddedGraphics(const RVNGPropertyList &propList);
 	void endEmbeddedGraphics();
 
-	void setStyle(const librevenge::RVNGPropertyList &propList);
+	void setStyle(const RVNGPropertyList &propList);
 
-	void drawRectangle(const librevenge::RVNGPropertyList &propList);
-	void drawEllipse(const librevenge::RVNGPropertyList &propList);
-	void drawPolyline(const librevenge::RVNGPropertyListVector &vertices);
-	void drawPolygon(const librevenge::RVNGPropertyListVector &vertices);
-	void drawPath(const librevenge::RVNGPropertyList &propList);
-	void drawGraphicObject(const librevenge::RVNGPropertyList &propList);
-	void startTextObject(const librevenge::RVNGPropertyList &propList);
+	void drawRectangle(const RVNGPropertyList &propList);
+	void drawEllipse(const RVNGPropertyList &propList);
+	void drawPolyline(const RVNGPropertyList &propList);
+	void drawPolygon(const RVNGPropertyList &propList);
+	void drawPath(const RVNGPropertyList &propList);
+	void drawGraphicObject(const RVNGPropertyList &propList);
+	void startTextObject(const RVNGPropertyList &propList);
 	void endTextObject();
 
 
-	void openOrderedListLevel(const librevenge::RVNGPropertyList &propList);
+	void openOrderedListLevel(const RVNGPropertyList &propList);
 	void closeOrderedListLevel();
 
-	void openUnorderedListLevel(const librevenge::RVNGPropertyList &propList);
+	void openUnorderedListLevel(const RVNGPropertyList &propList);
 	void closeUnorderedListLevel();
 
-	void openListElement(const librevenge::RVNGPropertyList &propList);
+	void openListElement(const RVNGPropertyList &propList);
 	void closeListElement();
 
-	void openParagraph(const librevenge::RVNGPropertyList &propList);
+	void openParagraph(const RVNGPropertyList &propList);
 	void closeParagraph();
 
-	void openSpan(const librevenge::RVNGPropertyList &propList);
+	void openSpan(const RVNGPropertyList &propList);
 	void closeSpan();
 
 	void insertTab();
 	void insertSpace();
-	void insertText(const librevenge::RVNGString &text);
+	void insertText(const RVNGString &text);
 	void insertLineBreak();
-	void insertField(const librevenge::RVNGPropertyList &propList);
+	void insertField(const RVNGPropertyList &propList);
 
 private:
 	RVNGRawDrawingGeneratorImpl *m_impl;
 };
 
-
-}
+} // namespace librevenge
 
 #endif // RVNGRAWDRAWINGGENERATOR_H
 

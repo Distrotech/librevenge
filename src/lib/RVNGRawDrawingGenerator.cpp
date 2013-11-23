@@ -125,20 +125,20 @@ void RVNGRawDrawingGenerator::drawEllipse(const RVNGPropertyList &propList)
 	m_impl->iprintf("drawEllipse (%s)\n", propList.getPropString().cstr());
 }
 
-void RVNGRawDrawingGenerator::drawPolyline(const RVNGPropertyListVector &vertices)
+void RVNGRawDrawingGenerator::drawPolyline(const RVNGPropertyList &propList)
 {
 	if (m_impl->m_printCallgraphScore)
 		return;
 
-	m_impl->iprintf("drawPolyline (%s)\n", vertices.getPropString().cstr());
+	m_impl->iprintf("drawPolyline (%s)\n", propList.getPropString().cstr());
 }
 
-void RVNGRawDrawingGenerator::drawPolygon(const RVNGPropertyListVector &vertices)
+void RVNGRawDrawingGenerator::drawPolygon(const RVNGPropertyList &propList)
 {
 	if (m_impl->m_printCallgraphScore)
 		return;
 
-	m_impl->iprintf("drawPolygon (%s)\n", vertices.getPropString().cstr());
+	m_impl->iprintf("drawPolygon (%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawDrawingGenerator::drawPath(const RVNGPropertyList &propList)

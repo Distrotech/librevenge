@@ -630,14 +630,18 @@ void RVNGSVGDrawingGenerator::drawEllipse(const RVNGPropertyList &propList)
 	m_pImpl->m_outputSink << "/>\n";
 }
 
-void RVNGSVGDrawingGenerator::drawPolyline(const RVNGPropertyListVector &vertices)
+void RVNGSVGDrawingGenerator::drawPolyline(const RVNGPropertyList &propList)
 {
-	m_pImpl->drawPolySomething(vertices, false);
+	const RVNGPropertyListVector *vertices = propList.child("svg:points");
+	if (vertices && vertices->count())
+		m_pImpl->drawPolySomething(*vertices, false);
 }
 
-void RVNGSVGDrawingGenerator::drawPolygon(const RVNGPropertyListVector &vertices)
+void RVNGSVGDrawingGenerator::drawPolygon(const RVNGPropertyList &propList)
 {
-	m_pImpl->drawPolySomething(vertices, true);
+	const RVNGPropertyListVector *vertices = propList.child("svg:points");
+	if (vertices && vertices->count())
+		m_pImpl->drawPolySomething(*vertices, true);
 }
 
 void RVNGSVGDrawingGenerator::drawPath(const RVNGPropertyList &propList)
