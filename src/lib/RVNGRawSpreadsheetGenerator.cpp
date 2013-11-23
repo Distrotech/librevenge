@@ -201,9 +201,9 @@ void RVNGRawSpreadsheetGenerator::endGraphicLayer()
 	RVNG_CALLGRAPH_LEAVE(("endGraphicLayer()\n"), LC_OPEN_GRAPHIC_LAYER);
 }
 
-void RVNGRawSpreadsheetGenerator::setGraphicStyle(const RVNGPropertyList &propList, const RVNGPropertyListVector &gradient)
+void RVNGRawSpreadsheetGenerator::setGraphicStyle(const RVNGPropertyList &propList)
 {
-	m_impl->iprintf("setGraphicStyle(%s, gradient: %s)\n", propList.getPropString().cstr(), gradient.getPropString().cstr());
+	m_impl->iprintf("setGraphicStyle(%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawSpreadsheetGenerator::drawRectangle(const RVNGPropertyList &propList)

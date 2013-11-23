@@ -89,7 +89,7 @@ void RVNGTextPresentationGenerator::endGroup()
 {
 }
 
-void RVNGTextPresentationGenerator::setStyle(const RVNGPropertyList &, const RVNGPropertyListVector &)
+void RVNGTextPresentationGenerator::setStyle(const RVNGPropertyList &)
 {
 }
 

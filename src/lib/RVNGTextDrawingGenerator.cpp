@@ -60,7 +60,7 @@ void RVNGTextDrawingGenerator::endLayer() {}
 void RVNGTextDrawingGenerator::startEmbeddedGraphics(const RVNGPropertyList &) {}
 void RVNGTextDrawingGenerator::endEmbeddedGraphics() {}
 
-void RVNGTextDrawingGenerator::setStyle(const RVNGPropertyList &, const RVNGPropertyListVector &) {}
+void RVNGTextDrawingGenerator::setStyle(const RVNGPropertyList &) {}
 
 void RVNGTextDrawingGenerator::drawRectangle(const RVNGPropertyList &) {}
 void RVNGTextDrawingGenerator::drawEllipse(const RVNGPropertyList &) {}

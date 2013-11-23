@@ -95,7 +95,7 @@ public:
 
 	virtual void endSlide() = 0;
 
-	virtual void setStyle(const RVNGPropertyList &propList, const RVNGPropertyListVector &gradient) = 0;
+	virtual void setStyle(const RVNGPropertyList &propList) = 0;
 
 	virtual void startLayer(const RVNGPropertyList &propList) = 0;
 

@@ -126,9 +126,9 @@ void RVNGRawPresentationGenerator::endGroup()
 	RVNG_CALLGRAPH_LEAVE(("endGroup\n"), CALLBACK_START_GROUP);
 }
 
-void RVNGRawPresentationGenerator::setStyle(const RVNGPropertyList &propList, const RVNGPropertyListVector &gradient)
+void RVNGRawPresentationGenerator::setStyle(const RVNGPropertyList &propList)
 {
-	printf("RVNGRawPresentationGenerator::setStyle(%s, gradient: (%s))\n", propList.getPropString().cstr(), gradient.getPropString().cstr());
+	printf("RVNGRawPresentationGenerator::setStyle(%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawPresentationGenerator::drawRectangle(const RVNGPropertyList &propList)

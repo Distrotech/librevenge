@@ -51,7 +51,7 @@ public:
 	void startEmbeddedGraphics(const librevenge::RVNGPropertyList &propList);
 	void endEmbeddedGraphics();
 
-	void setStyle(const librevenge::RVNGPropertyList &propList, const librevenge::RVNGPropertyListVector &gradient);
+	void setStyle(const librevenge::RVNGPropertyList &propList);
 
 	void drawRectangle(const librevenge::RVNGPropertyList &propList);
 	void drawEllipse(const librevenge::RVNGPropertyList &propList);

@@ -45,7 +45,7 @@ public:
 	void startEmbeddedGraphics(const RVNGPropertyList &propList);
 	void endEmbeddedGraphics();
 
-	void setStyle(const RVNGPropertyList &propList, const RVNGPropertyListVector &gradient);
+	void setStyle(const RVNGPropertyList &propList);
 
 	void drawRectangle(const RVNGPropertyList &propList);
 	void drawEllipse(const RVNGPropertyList &propList);

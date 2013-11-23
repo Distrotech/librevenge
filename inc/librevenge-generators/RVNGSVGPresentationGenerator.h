@@ -41,7 +41,7 @@ public:
 	virtual void startSlide(const RVNGPropertyList &propList);
 	virtual void endSlide();
 
-	virtual void setStyle(const RVNGPropertyList &propList, const RVNGPropertyListVector &gradient);
+	virtual void setStyle(const RVNGPropertyList &propList);
 
 	virtual void startLayer(const RVNGPropertyList &propList);
 	virtual void endLayer();

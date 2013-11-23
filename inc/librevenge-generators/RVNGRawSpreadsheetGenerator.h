@@ -122,7 +122,7 @@ public:
 	virtual void endGraphic();
 	virtual void startGraphicPage(const RVNGPropertyList &propList);
 	virtual void endGraphicPage();
-	virtual void setGraphicStyle(const RVNGPropertyList &propList, const RVNGPropertyListVector &gradient);
+	virtual void setGraphicStyle(const RVNGPropertyList &propList);
 	virtual void startGraphicLayer(const RVNGPropertyList &propList);
 	virtual void endGraphicLayer();
 	virtual void drawRectangle(const RVNGPropertyList &propList);

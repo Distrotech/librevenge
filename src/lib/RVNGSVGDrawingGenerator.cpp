@@ -64,7 +64,7 @@ struct RVNGSVGDrawingGeneratorPrivate
 {
 	RVNGSVGDrawingGeneratorPrivate(RVNGStringVector &vec, const RVNGString &nmSpace);
 
-	void setStyle(const RVNGPropertyList &propList, const RVNGPropertyListVector &gradient);
+	void setStyle(const RVNGPropertyList &propList);
 	void writeStyle(bool isClosed=true);
 	void drawPolySomething(const RVNGPropertyListVector &vertices, bool isClosed);
 
@@ -144,12 +144,15 @@ void RVNGSVGDrawingGeneratorPrivate::drawPolySomething(const RVNGPropertyListVec
 	}
 }
 
-void RVNGSVGDrawingGeneratorPrivate::setStyle(const RVNGPropertyList &propList, const RVNGPropertyListVector &gradient)
+void RVNGSVGDrawingGeneratorPrivate::setStyle(const RVNGPropertyList &propList)
 {
 	m_style.clear();
 	m_style = propList;
 
-	m_gradient = gradient;
+	const librevenge::RVNGPropertyListVector *gradient = propList.child("svg:linearGradient");
+	if (!gradient)
+		gradient = propList.child("svg:radialGradient");
+	m_gradient = gradient ? *gradient : librevenge::RVNGPropertyListVector();
 	if(m_style["draw:shadow"] && m_style["draw:shadow"]->getStr() == "visible" && m_style["draw:shadow-opacity"])
 	{
 		double shadowRed = 0.0;
@@ -593,9 +596,9 @@ void RVNGSVGDrawingGenerator::endLayer()
 void RVNGSVGDrawingGenerator::startEmbeddedGraphics(const RVNGPropertyList & /*propList*/) {}
 void RVNGSVGDrawingGenerator::endEmbeddedGraphics() {}
 
-void RVNGSVGDrawingGenerator::setStyle(const RVNGPropertyList &propList, const RVNGPropertyListVector &gradient)
+void RVNGSVGDrawingGenerator::setStyle(const RVNGPropertyList &propList)
 {
-	m_pImpl->setStyle(propList, gradient);
+	m_pImpl->setStyle(propList);
 }
 
 void RVNGSVGDrawingGenerator::drawRectangle(const RVNGPropertyList &propList)

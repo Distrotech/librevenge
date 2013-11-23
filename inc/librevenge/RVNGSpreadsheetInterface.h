@@ -537,7 +537,7 @@ public:
 	virtual void startGraphicPage(const RVNGPropertyList &propList) = 0;
 	virtual void endGraphicPage() = 0;
 
-	virtual void setGraphicStyle(const RVNGPropertyList &propList, const RVNGPropertyListVector &gradient) = 0;
+	virtual void setGraphicStyle(const RVNGPropertyList &propList) = 0;
 
 	virtual void startGraphicLayer(const RVNGPropertyList &propList) = 0;
 	virtual void endGraphicLayer() = 0;

@@ -101,12 +101,12 @@ void RVNGRawDrawingGenerator::endEmbeddedGraphics()
 	RVNG_CALLGRAPH_LEAVE(("endEmbeddedGraphics \n"), PC_START_EMBEDDED_GRAPHICS);
 }
 
-void RVNGRawDrawingGenerator::setStyle(const RVNGPropertyList &propList, const RVNGPropertyListVector &gradient)
+void RVNGRawDrawingGenerator::setStyle(const RVNGPropertyList &propList)
 {
 	if (m_impl->m_printCallgraphScore)
 		return;
 
-	m_impl->iprintf("setStyle(%s, gradient: (%s))\n", propList.getPropString().cstr(), gradient.getPropString().cstr());
+	m_impl->iprintf("setStyle(%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawDrawingGenerator::drawRectangle(const RVNGPropertyList &propList)

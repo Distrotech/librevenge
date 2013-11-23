@@ -120,12 +120,15 @@ void RVNGSVGPresentationGenerator::endSlide()
 	m_impl->m_outputSink.str("");
 }
 
-void RVNGSVGPresentationGenerator::setStyle(const RVNGPropertyList &propList, const RVNGPropertyListVector &gradient)
+void RVNGSVGPresentationGenerator::setStyle(const RVNGPropertyList &propList)
 {
 	m_impl->m_style.clear();
 	m_impl->m_style = propList;
 
-	m_impl->m_gradient = gradient;
+	const librevenge::RVNGPropertyListVector *gradient = propList.child("svg:linearGradient");
+	if (!gradient)
+		gradient = propList.child("svg:radialGradient");
+	m_impl->m_gradient = gradient ? *gradient : librevenge::RVNGPropertyListVector();
 	if(m_impl->m_style["draw:shadow"] && m_impl->m_style["draw:shadow"]->getStr() == "visible")
 	{
 		unsigned shadowColour = 0;

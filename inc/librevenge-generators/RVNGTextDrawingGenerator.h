@@ -43,7 +43,7 @@ public:
 	void startEmbeddedGraphics(const RVNGPropertyList &);
 	void endEmbeddedGraphics();
 
-	void setStyle(const RVNGPropertyList &, const RVNGPropertyListVector &);
+	void setStyle(const RVNGPropertyList &);
 
 	void drawRectangle(const RVNGPropertyList &);
 	void drawEllipse(const RVNGPropertyList &);

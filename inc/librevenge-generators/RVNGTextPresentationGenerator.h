@@ -42,7 +42,7 @@ public:
 	virtual void startGroup(const RVNGPropertyList &propList);
 	virtual void endGroup();
 
-	virtual void setStyle(const RVNGPropertyList &propList, const RVNGPropertyListVector &gradient);
+	virtual void setStyle(const RVNGPropertyList &propList);
 
 	virtual void drawRectangle(const RVNGPropertyList &propList);
 	virtual void drawEllipse(const RVNGPropertyList &propList);
