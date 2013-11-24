@@ -351,7 +351,7 @@ RVNGString RVNGPropertyList::getPropString() const
 			propString.append(i.child()->getPropString().cstr());
 		else
 			propString.append(i()->getStr().cstr());
-		for (; i.next(); )
+		for (; i.next();)
 		{
 			propString.append(", ");
 			propString.append(i.key());

@@ -62,23 +62,23 @@ namespace librevenge
 {
 enum { Avail = 0xffffffff, Eof = 0xfffffffe, Bat = 0xfffffffd, MetaBat = 0xfffffffc, NotFound=0xfffffff0 };
 
-static inline unsigned short readU16( const unsigned char *ptr )
+static inline unsigned short readU16(const unsigned char *ptr)
 {
 	return (unsigned short)(ptr[0]+(ptr[1]<<8));
 }
 
-static inline unsigned readU32( const unsigned char *ptr )
+static inline unsigned readU32(const unsigned char *ptr)
 {
 	return (unsigned)(ptr[0]+(ptr[1]<<8)+(ptr[2]<<16)+(ptr[3]<<24));
 }
 
-static inline void writeU16( unsigned char *ptr, unsigned long data )
+static inline void writeU16(unsigned char *ptr, unsigned long data)
 {
 	ptr[0] = (unsigned char)(data & 0xff);
 	ptr[1] = (unsigned char)((data >> 8) & 0xff);
 }
 
-static inline void writeU32( unsigned char *ptr, unsigned long data )
+static inline void writeU32(unsigned char *ptr, unsigned long data)
 {
 	ptr[0] = (unsigned char)(data & 0xff);
 	ptr[1] = (unsigned char)((data >> 8) & 0xff);
@@ -112,13 +112,13 @@ public:
 	}
 	bool valid_signature() const
 	{
-		for( unsigned i = 0; i < 8; i++ )
+		for (unsigned i = 0; i < 8; i++)
 			if (m_magic[i] != s_ole_magic[i]) return false;
 		return true;
 	}
 	bool valid();
-	void load( const unsigned char *buffer, unsigned long size );
-	void save( unsigned char *buffer );
+	void load(const unsigned char *buffer, unsigned long size);
+	void save(unsigned char *buffer);
 protected:
 	static const unsigned char s_ole_magic[];
 };
@@ -139,51 +139,51 @@ public:
 	{
 		return (unsigned long) m_data.size();
 	}
-	void resize( unsigned long newsize )
+	void resize(unsigned long newsize)
 	{
 		m_data.resize(size_t(newsize), Avail);
 	}
-	void set( unsigned long index, unsigned long val )
+	void set(unsigned long index, unsigned long val)
 	{
 		if (index >= count())
 			resize(index+1);
 		m_data[size_t(index)] = val;
 	}
-	std::vector<unsigned long> follow( unsigned long start ) const;
-	unsigned long operator[](unsigned long index ) const
+	std::vector<unsigned long> follow(unsigned long start) const;
+	unsigned long operator[](unsigned long index) const
 	{
 		return m_data[size_t(index)];
 	}
-	void load( const unsigned char *buffer, unsigned len )
+	void load(const unsigned char *buffer, unsigned len)
 	{
-		resize( len / 4 );
-		for( unsigned i = 0; i < count(); i++ )
-			set( i, readU32( buffer + i*4 ) );
+		resize(len / 4);
+		for (unsigned i = 0; i < count(); i++)
+			set(i, readU32(buffer + i*4));
 	}
 
 	// write part
-	void setChain( std::vector<unsigned long> chain, unsigned end);
-	void save( unsigned char *buffer ) const
+	void setChain(std::vector<unsigned long> chain, unsigned end);
+	void save(unsigned char *buffer) const
 	{
 		unsigned cnt=(unsigned) count();
 		unsigned i = 0;
-		for(i = 0; i < cnt; i++ )
-			writeU32( buffer + i*4, m_data[i] );
+		for (i = 0; i < cnt; i++)
+			writeU32(buffer + i*4, m_data[i]);
 		unsigned lastFree = 128-(cnt%128);
 		if (lastFree==128) return;
 		for (i = 0; i < lastFree; i++)
-			writeU32( buffer + (cnt+i)*4, Avail);
+			writeU32(buffer + (cnt+i)*4, Avail);
 	}
 	// return space required to save the allocation table
 	unsigned saveSize() const
 	{
-		unsigned cnt=(unsigned) (((count()+127)/128)*128);
+		unsigned cnt=(unsigned)(((count()+127)/128)*128);
 		return cnt * 4;
 	}
 private:
 	std::vector<unsigned long> m_data;
-	AllocTable( const AllocTable &);
-	AllocTable &operator=( const AllocTable &);
+	AllocTable(const AllocTable &);
+	AllocTable &operator=(const AllocTable &);
 };
 
 class DirInfo
@@ -245,9 +245,9 @@ public:
 		m_name=nm;
 	}
 	/** reads a entry content in buffer */
-	void load( unsigned char *buffer, unsigned len );
+	void load(unsigned char *buffer, unsigned len);
 	//! saves a entry content in buffer */
-	void save( unsigned char *buffer ) const;
+	void save(unsigned char *buffer) const;
 	//! returns space required to save a dir entry
 	static unsigned saveSize()
 	{
@@ -292,33 +292,33 @@ public:
 		return unsigned(m_entries.size());
 	}
 	/** returns the entry with a given index */
-	DirEntry const *entry( unsigned ind ) const
+	DirEntry const *entry(unsigned ind) const
 	{
-		if( ind >= count() ) return 0;
+		if (ind >= count()) return 0;
 		return &m_entries[ size_t(ind) ];
 	}
 	/** returns the entry with a given index */
-	DirEntry *entry( unsigned ind )
+	DirEntry *entry(unsigned ind)
 	{
-		if( ind >= count() ) return  0;
+		if (ind >= count()) return  0;
 		return &m_entries[ size_t(ind) ];
 	}
 	/** returns the entry with a given name */
-	DirEntry *entry( const std::string &name )
+	DirEntry *entry(const std::string &name)
 	{
 		return entry(index(name));
 	}
 	/** given a fullname (e.g "/ObjectPool/_1020961869"), find the entry */
-	unsigned index( const std::string &name, bool create=false );
+	unsigned index(const std::string &name, bool create=false);
 	/** tries to find a child of ind with a given name */
-	unsigned find_child( unsigned ind, const std::string &name ) const
+	unsigned find_child(unsigned ind, const std::string &name) const
 	{
-		DirEntry const *p = entry( ind );
+		DirEntry const *p = entry(ind);
 		if (!p || !p->m_valid) return 0;
 		std::vector<unsigned> siblingsList = get_siblings(p->m_child);
 		for (size_t s=0; s < siblingsList.size(); s++)
 		{
-			p  = entry( siblingsList[s] );
+			p  = entry(siblingsList[s]);
 			if (!p) continue;
 			if (p->name()==name)
 				return siblingsList[s];
@@ -334,7 +334,7 @@ public:
 		return res;
 	}
 	/** tries to read the different entries */
-	void load( unsigned char *buffer, unsigned len );
+	void load(unsigned char *buffer, unsigned len);
 
 	// write part:
 	//! check/update so that the sibling are store with a red black tree
@@ -351,7 +351,7 @@ public:
 		return cnt*DirEntry::saveSize();
 	}
 	//! save the list of direntry in buffer
-	void save( unsigned char *buffer ) const
+	void save(unsigned char *buffer) const
 	{
 		unsigned entrySize=DirEntry::saveSize();
 		size_t cnt = count();
@@ -380,7 +380,7 @@ protected:
 		if (seens.find(ind) != seens.end())
 			return;
 		seens.insert(ind);
-		DirEntry const *e = entry( ind );
+		DirEntry const *e = entry(ind);
 		if (!e) return;
 		unsigned cnt = count();
 		if (e->m_left>0&& e->m_left < cnt)
@@ -437,8 +437,8 @@ protected:
 
 private:
 	std::vector<DirEntry> m_entries;
-	DirTree( const DirTree &);
-	DirTree &operator=( const DirTree &);
+	DirTree(const DirTree &);
+	DirTree &operator=(const DirTree &);
 };
 
 class IStorage
@@ -454,7 +454,7 @@ public:
 
 	std::vector<unsigned long> m_sb_blocks; // blocks for "small" files
 
-	IStorage( RVNGInputStream *is );
+	IStorage(RVNGInputStream *is);
 	~IStorage() {}
 
 	//! returns a directory entry corresponding to a index
@@ -466,16 +466,16 @@ public:
 	//! returns a directory entry corresponding to a name
 	DirEntry *entry(const std::string &name)
 	{
-		if( !name.length() ) return 0;
+		if (!name.length()) return 0;
 		load();
 		return m_dirtree.entry(name);
 	}
 	//! returns a directory entry corresponding to a index
 	unsigned index(const std::string &name)
 	{
-		if( !name.length() ) return NotFound;
+		if (!name.length()) return NotFound;
 		load();
-		return m_dirtree.index( name );
+		return m_dirtree.index(name);
 	}
 	/** returns the OLE revision */
 	unsigned revision() const
@@ -504,20 +504,20 @@ public:
 	{
 		return size >= m_header.m_threshold;
 	}
-	unsigned long loadBigBlocks( std::vector<unsigned long> const &blocks, unsigned char *buffer, unsigned long maxlen );
+	unsigned long loadBigBlocks(std::vector<unsigned long> const &blocks, unsigned char *buffer, unsigned long maxlen);
 
-	unsigned long loadBigBlock( unsigned long block, unsigned char *buffer, unsigned long maxlen );
+	unsigned long loadBigBlock(unsigned long block, unsigned char *buffer, unsigned long maxlen);
 
-	unsigned long loadSmallBlocks( std::vector<unsigned long> const &blocks, unsigned char *buffer, unsigned long maxlen );
+	unsigned long loadSmallBlocks(std::vector<unsigned long> const &blocks, unsigned char *buffer, unsigned long maxlen);
 
-	unsigned long loadSmallBlock( unsigned long block, unsigned char *buffer, unsigned long maxlen );
+	unsigned long loadSmallBlock(unsigned long block, unsigned char *buffer, unsigned long maxlen);
 
 protected:
 	bool m_isLoad;
 private:
 	// no copy or assign
-	IStorage( const IStorage &);
-	IStorage &operator=( const IStorage &);
+	IStorage(const IStorage &);
+	IStorage &operator=(const IStorage &);
 
 };
 
@@ -654,8 +654,8 @@ protected:
 	std::vector<unsigned char> m_data;
 private:
 	// no copy or assign
-	OStorage( const OStorage &);
-	OStorage &operator=( const OStorage &);
+	OStorage(const OStorage &);
+	OStorage &operator=(const OStorage &);
 };
 
 class IStream
@@ -666,7 +666,7 @@ public:
 	unsigned long m_size;
 	std::string m_name;
 
-	IStream( IStorage *io, std::string const &name );
+	IStream(IStorage *io, std::string const &name);
 	~IStream()
 	{
 	}
@@ -678,33 +678,33 @@ public:
 	{
 		return m_pos;
 	}
-	unsigned long read( unsigned char *data, unsigned long maxlen )
+	unsigned long read(unsigned char *data, unsigned long maxlen)
 	{
 		if (!m_size)
 			return 0;
 		unsigned long bytes;
 		if (m_data.size())
-			bytes = readData( tell(), data, maxlen );
+			bytes = readData(tell(), data, maxlen);
 		else
-			bytes = readUsingStorage( tell(), data, maxlen );
+			bytes = readUsingStorage(tell(), data, maxlen);
 		m_pos += bytes;
 		return bytes;
 	}
 
 protected:
 	//! create the data corresponding to a directory
-	bool createOleFromDirectory( IStorage *io, std::string const &name );
+	bool createOleFromDirectory(IStorage *io, std::string const &name);
 	//! try to read maxlen data using m_iStorage
-	unsigned long readUsingStorage( unsigned long pos, unsigned char *data, unsigned long maxlen );
+	unsigned long readUsingStorage(unsigned long pos, unsigned char *data, unsigned long maxlen);
 	//! try to read maxlen data using m_data
-	unsigned long readData( unsigned long pos, unsigned char *data, unsigned long maxlen );
+	unsigned long readData(unsigned long pos, unsigned char *data, unsigned long maxlen);
 
 private:
 	std::vector<unsigned long> m_blocks;
 
 	// no copy or assign
-	IStream( const IStream &);
-	IStream &operator=( const IStream &);
+	IStream(const IStream &);
+	IStream &operator=(const IStream &);
 
 	// pointer for read
 	unsigned long m_pos;
@@ -722,105 +722,105 @@ librevenge::Header::Header() :
 	m_shift_bbat(9), m_size_bbat(0),
 	m_start_mbat(Eof), m_num_mbat(0)
 {
-	for( unsigned i = 0; i < 8; i++ )
+	for (unsigned i = 0; i < 8; i++)
 		m_magic[i] = s_ole_magic[i];
-	for( unsigned j=0; j<109; j++ )
+	for (unsigned j=0; j<109; j++)
 		m_blocks_bbat[j] = Avail;
 	compute_block_size();
 }
 
 bool librevenge::Header::valid()
 {
-	if( m_threshold != 4096 ) return false;
-	if( m_num_bat == 0 ) return false;
-	if( (m_num_bat > 109) && (m_num_bat > (m_num_mbat * (m_size_bbat/4-1)) + 109)) return false;
-	if( (m_num_bat < 109) && (m_num_mbat != 0) ) return false;
-	if( m_shift_sbat > m_shift_bbat ) return false;
-	if( m_shift_bbat <= 6 ) return false;
-	if( m_shift_bbat >=31 ) return false;
+	if (m_threshold != 4096) return false;
+	if (m_num_bat == 0) return false;
+	if ((m_num_bat > 109) && (m_num_bat > (m_num_mbat * (m_size_bbat/4-1)) + 109)) return false;
+	if ((m_num_bat < 109) && (m_num_mbat != 0)) return false;
+	if (m_shift_sbat > m_shift_bbat) return false;
+	if (m_shift_bbat <= 6) return false;
+	if (m_shift_bbat >=31) return false;
 
 	return true;
 }
 
-void librevenge::Header::load( const unsigned char *buffer, unsigned long size )
+void librevenge::Header::load(const unsigned char *buffer, unsigned long size)
 {
 	if (size < 512)
 		return;
 	m_revision = (unsigned) readU16(buffer+0x18);
-	m_shift_bbat      = (unsigned int) readU16( buffer + 0x1e );
-	m_shift_sbat      = (unsigned int) readU16( buffer + 0x20 );
-	m_num_bat      = (unsigned int) readU32( buffer + 0x2c );
-	m_start_dirent = (unsigned int) readU32( buffer + 0x30 );
-	m_threshold    = (unsigned int) readU32( buffer + 0x38 );
-	m_start_sbat   = (unsigned int) readU32( buffer + 0x3c );
-	m_num_sbat     = (unsigned int) readU32( buffer + 0x40 );
-	m_start_mbat   = (unsigned int) readU32( buffer + 0x44 );
-	m_num_mbat     = (unsigned int) readU32( buffer + 0x48 );
+	m_shift_bbat      = (unsigned int) readU16(buffer + 0x1e);
+	m_shift_sbat      = (unsigned int) readU16(buffer + 0x20);
+	m_num_bat      = (unsigned int) readU32(buffer + 0x2c);
+	m_start_dirent = (unsigned int) readU32(buffer + 0x30);
+	m_threshold    = (unsigned int) readU32(buffer + 0x38);
+	m_start_sbat   = (unsigned int) readU32(buffer + 0x3c);
+	m_num_sbat     = (unsigned int) readU32(buffer + 0x40);
+	m_start_mbat   = (unsigned int) readU32(buffer + 0x44);
+	m_num_mbat     = (unsigned int) readU32(buffer + 0x48);
 
-	for( unsigned i = 0; i < 8; i++ )
+	for (unsigned i = 0; i < 8; i++)
 		m_magic[i] = buffer[i];
-	for( unsigned j=0; j<109; j++ )
-		m_blocks_bbat[j] = readU32( buffer + 0x4C+j*4 );
+	for (unsigned j=0; j<109; j++)
+		m_blocks_bbat[j] = readU32(buffer + 0x4C+j*4);
 	compute_block_size();
 }
 
-void librevenge::Header::save( unsigned char *buffer )
+void librevenge::Header::save(unsigned char *buffer)
 {
-	memset( buffer, 0, 0x4c );
-	memcpy( buffer, s_ole_magic, 8 );        // ole signature
-	writeU32( buffer + 8, 0 );              // unknown
-	writeU32( buffer + 12, 0 );             // unknown
-	writeU32( buffer + 16, 0 );             // unknown
-	writeU16( buffer + 24, m_revision);
-	writeU16( buffer + 26, 3 );             // version ?
-	writeU16( buffer + 28, 0xfffe );        // unknown
-	writeU16( buffer + 0x1e, m_shift_bbat );
-	writeU16( buffer + 0x20, m_shift_sbat );
-	writeU32( buffer + 0x2c, m_num_bat );
-	writeU32( buffer + 0x30, m_start_dirent );
-	writeU32( buffer + 0x38, m_threshold );
-	writeU32( buffer + 0x3c, m_start_sbat );
-	writeU32( buffer + 0x40, m_num_sbat );
-	writeU32( buffer + 0x44, m_start_mbat );
-	writeU32( buffer + 0x48, m_num_mbat );
+	memset(buffer, 0, 0x4c);
+	memcpy(buffer, s_ole_magic, 8);          // ole signature
+	writeU32(buffer + 8, 0);                // unknown
+	writeU32(buffer + 12, 0);               // unknown
+	writeU32(buffer + 16, 0);               // unknown
+	writeU16(buffer + 24, m_revision);
+	writeU16(buffer + 26, 3);               // version ?
+	writeU16(buffer + 28, 0xfffe);          // unknown
+	writeU16(buffer + 0x1e, m_shift_bbat);
+	writeU16(buffer + 0x20, m_shift_sbat);
+	writeU32(buffer + 0x2c, m_num_bat);
+	writeU32(buffer + 0x30, m_start_dirent);
+	writeU32(buffer + 0x38, m_threshold);
+	writeU32(buffer + 0x3c, m_start_sbat);
+	writeU32(buffer + 0x40, m_num_sbat);
+	writeU32(buffer + 0x44, m_start_mbat);
+	writeU32(buffer + 0x48, m_num_mbat);
 
-	for( unsigned i=0; i<109; i++ )
-		writeU32( buffer + 0x4C+i*4, m_blocks_bbat[i] );
+	for (unsigned i=0; i<109; i++)
+		writeU32(buffer + 0x4C+i*4, m_blocks_bbat[i]);
 }
 
 
 // =========== AllocTable ==========
 
-std::vector<unsigned long> librevenge::AllocTable::follow( unsigned long start ) const
+std::vector<unsigned long> librevenge::AllocTable::follow(unsigned long start) const
 {
 	std::vector<unsigned long> chain;
-	if( start >= count() ) return chain;
+	if (start >= count()) return chain;
 
 	std::set<unsigned long> seens;
 	unsigned long p = start;
-	while( p < count() )
+	while (p < count())
 	{
-		if( p == Eof || p == Bat || p == MetaBat) break;
+		if (p == Eof || p == Bat || p == MetaBat) break;
 		if (seens.find(p) != seens.end()) break;
 		seens.insert(p);
-		chain.push_back( p );
+		chain.push_back(p);
 		p = m_data[ p ];
 	}
 
 	return chain;
 }
 
-void librevenge::AllocTable::setChain( std::vector<unsigned long> chain, unsigned end )
+void librevenge::AllocTable::setChain(std::vector<unsigned long> chain, unsigned end)
 {
-	if(!chain.size() ) return;
+	if (!chain.size()) return;
 
-	for( unsigned i=0; i<chain.size()-1; i++ )
-		set( chain[i], chain[i+1] );
-	set( chain[ chain.size()-1 ], end );
+	for (unsigned i=0; i<chain.size()-1; i++)
+		set(chain[i], chain[i+1]);
+	set(chain[ chain.size()-1 ], end);
 }
 
 // =========== DirEntry ==========
-void librevenge::DirEntry::load( unsigned char *buffer, unsigned len )
+void librevenge::DirEntry::load(unsigned char *buffer, unsigned len)
 {
 	if (len != 128)
 	{
@@ -834,8 +834,8 @@ void librevenge::DirEntry::load( unsigned char *buffer, unsigned len )
 
 	// parse name of this entry, which stored as Unicode 16-bit
 	m_name=std::string("");
-	unsigned name_len = (unsigned) readU16( buffer + 0x40 );
-	if( name_len > 64 ) name_len = 64;
+	unsigned name_len = (unsigned) readU16(buffer + 0x40);
+	if (name_len > 64) name_len = 64;
 	if (name_len==2 && m_type==5 && readU16(buffer)==0x5200)
 	{
 		// find in some mswork mac 4.0 file
@@ -844,29 +844,29 @@ void librevenge::DirEntry::load( unsigned char *buffer, unsigned len )
 	}
 	else
 	{
-		for( unsigned j=0; ( buffer[j]) && (j<name_len); j+= 2 )
-			m_name.append( 1, char(buffer[j]) );
+		for (unsigned j=0; (buffer[j]) && (j<name_len); j+= 2)
+			m_name.append(1, char(buffer[j]));
 	}
 
 	int i = 0;
 	for (i = 0; i < 4; i++)
-		m_info.m_clsid[i]=(unsigned) readU32( buffer + 0x50 + 4*i);
+		m_info.m_clsid[i]=(unsigned) readU32(buffer + 0x50 + 4*i);
 	for (i = 0; i < 4; i++)
-		m_info.m_time[i]=(unsigned) readU32( buffer + 0x64 + 4*i);
+		m_info.m_time[i]=(unsigned) readU32(buffer + 0x64 + 4*i);
 
 	m_valid = true;
-	m_start = (unsigned int) readU32( buffer + 0x74 );
-	m_size = (unsigned int) readU32( buffer + 0x78 );
-	m_left = (unsigned int) readU32( buffer + 0x44 );
-	m_right = (unsigned int) readU32( buffer + 0x48 );
-	m_child = (unsigned int) readU32( buffer + 0x4C );
+	m_start = (unsigned int) readU32(buffer + 0x74);
+	m_size = (unsigned int) readU32(buffer + 0x78);
+	m_left = (unsigned int) readU32(buffer + 0x44);
+	m_right = (unsigned int) readU32(buffer + 0x48);
+	m_child = (unsigned int) readU32(buffer + 0x4C);
 
 	// sanity checks
-	if( (m_type != 2) && (m_type != 1 ) && (m_type != 5 ) ) m_valid = false;
-	if( name_len < 1 ) m_valid = false;
+	if ((m_type != 2) && (m_type != 1) && (m_type != 5)) m_valid = false;
+	if (name_len < 1) m_valid = false;
 }
 
-void librevenge::DirEntry::save( unsigned char *buffer ) const
+void librevenge::DirEntry::save(unsigned char *buffer) const
 {
 	int i = 0;
 	for (i = 0; i < 128; i++) buffer[i]=0;
@@ -898,7 +898,7 @@ void librevenge::DirEntry::save( unsigned char *buffer ) const
 
 void librevenge::DirTree::clear()
 {
-	m_entries.resize( 0 );
+	m_entries.resize(0);
 	setRootType(true);
 }
 
@@ -906,7 +906,7 @@ void librevenge::DirTree::setRootType(bool pc)
 {
 	if (!m_entries.size())
 	{
-		m_entries.resize( 1 );
+		m_entries.resize(1);
 		m_entries[0]=DirEntry();
 		m_entries[0].m_valid = true;
 		m_entries[0].setName("Root Entry");
@@ -921,24 +921,24 @@ void librevenge::DirTree::setRootType(bool pc)
 	}
 }
 
-unsigned librevenge::DirTree::index( const std::string &name, bool create )
+unsigned librevenge::DirTree::index(const std::string &name, bool create)
 {
 
-	if( name.length()==0 ) return NotFound;
+	if (name.length()==0) return NotFound;
 
 	// quick check for "/" (that's root)
-	if( name == "/" ) return 0;
+	if (name == "/") return 0;
 
 	// split the names, e.g  "/ObjectPool/_1020961869" will become:
 	// "ObjectPool" and "_1020961869"
 	std::list<std::string> names;
 	std::string::size_type start = 0, end = 0;
-	if( name[0] == '/' ) start++;
-	while( start < name.length() )
+	if (name[0] == '/') start++;
+	while (start < name.length())
 	{
-		end = name.find_first_of( '/', start );
-		if( end == std::string::npos ) end = name.length();
-		names.push_back( name.substr( start, end-start ) );
+		end = name.find_first_of('/', start);
+		if (end == std::string::npos) end = name.length();
+		names.push_back(name.substr(start, end-start));
 		start = end+1;
 	}
 
@@ -949,26 +949,26 @@ unsigned librevenge::DirTree::index( const std::string &name, bool create )
 	std::list<std::string>::const_iterator it;
 	size_t depth = 0;
 
-	for( it = names.begin(); it != names.end(); ++it, ++depth)
+	for (it = names.begin(); it != names.end(); ++it, ++depth)
 	{
 		std::string childName(*it);
 		if (childName.length() && childName[0]<32)
 			childName= it->substr(1);
 
-		unsigned child = find_child( ind, childName );
+		unsigned child = find_child(ind, childName);
 		// traverse to the child
-		if( child > 0 )
+		if (child > 0)
 		{
 			ind = child;
 			continue;
 		}
-		else if( !create ) return NotFound;
+		else if (!create) return NotFound;
 
 		// create a new entry
 		unsigned parent = ind;
-		m_entries.push_back( DirEntry() );
+		m_entries.push_back(DirEntry());
 		ind = count()-1;
-		DirEntry *e = entry( ind );
+		DirEntry *e = entry(ind);
 		e->m_valid = true;
 		e->setName(*it);
 		e->m_type = depth+1==names.size() ? 2 : 1;
@@ -980,15 +980,15 @@ unsigned librevenge::DirTree::index( const std::string &name, bool create )
 	return ind;
 }
 
-void librevenge::DirTree::load( unsigned char *buffer, unsigned size )
+void librevenge::DirTree::load(unsigned char *buffer, unsigned size)
 {
 	m_entries.clear();
 
-	for( unsigned i = 0; i < size/128; i++ )
+	for (unsigned i = 0; i < size/128; i++)
 	{
 		DirEntry e;
 		e.load(buffer+i*128, 128);
-		m_entries.push_back( e );
+		m_entries.push_back(e);
 	}
 }
 
@@ -1001,7 +1001,7 @@ void librevenge::DirTree::getSubStreamList(unsigned ind, bool all, const std::st
 		return;
 	seen.insert(ind);
 	unsigned cnt = count();
-	DirEntry const *p = entry( ind );
+	DirEntry const *p = entry(ind);
 	if (!p || !p->m_valid)
 		return;
 	std::string name(prefix);
@@ -1039,7 +1039,7 @@ void librevenge::DirTree::setInRedBlackTreeForm(unsigned ind, std::set<unsigned>
 		return;
 	seen.insert(ind);
 
-	DirEntry *p = entry( ind );
+	DirEntry *p = entry(ind);
 	if (!p || !p->m_valid)
 		return;
 
@@ -1077,7 +1077,7 @@ unsigned librevenge::DirTree::setInRBTForm(std::vector<unsigned> const &childs,
 {
 	unsigned middle = (firstInd+lastInd)/2;
 	unsigned ind=childs[middle];
-	DirEntry *p = entry( ind );
+	DirEntry *p = entry(ind);
 	if (!p)
 	{
 		RVNG_DEBUG_MSG(("DirTree::setInRedBlackTreeForm: OOPS can not find tree to modified\n"));
@@ -1106,8 +1106,8 @@ unsigned librevenge::DirTree::setInRBTForm(std::vector<unsigned> const &childs,
 
 // =========== IStorage ==========
 
-librevenge::IStorage::IStorage( RVNGInputStream *is ) :
-	m_input( is ),
+librevenge::IStorage::IStorage(RVNGInputStream *is) :
+	m_input(is),
 	m_result(librevenge::Storage::Ok),
 	m_header(), m_dirtree(),
 	m_bbat(), m_sbat(), m_sb_blocks(),
@@ -1137,7 +1137,7 @@ bool librevenge::IStorage::isSubStream(const std::string &name, bool &isDir)
 	load();
 	// search in the entries
 	DirEntry *e = m_dirtree.entry(name);
-	if( !e) return false;
+	if (!e) return false;
 	isDir = e->is_dir();
 	return true;
 }
@@ -1161,7 +1161,7 @@ void librevenge::IStorage::load()
 	if (numBytesRead < 512)
 		return;
 
-	m_header.load( buf, numBytesRead );
+	m_header.load(buf, numBytesRead);
 
 	// check OLE magic id
 	if (!m_header.valid_signature())
@@ -1169,8 +1169,8 @@ void librevenge::IStorage::load()
 
 	// sanity checks
 	m_result = librevenge::Storage::BadOLE;
-	if( !m_header.valid() ) return;
-	if( m_header.m_threshold != 4096 ) return;
+	if (!m_header.valid()) return;
+	if (m_header.m_threshold != 4096) return;
 
 	// important block size
 	m_bbat.m_blockSize = m_header.m_size_bbat;
@@ -1179,62 +1179,62 @@ void librevenge::IStorage::load()
 	// find blocks allocated to store big bat
 	// the first 109 blocks are in header, the rest in meta bat
 	blocks.clear();
-	blocks.resize( m_header.m_num_bat );
-	for( unsigned j = 0; j < 109; j++ )
-		if( j >= m_header.m_num_bat ) break;
+	blocks.resize(m_header.m_num_bat);
+	for (unsigned j = 0; j < 109; j++)
+		if (j >= m_header.m_num_bat) break;
 		else blocks[j] = m_header.m_blocks_bbat[j];
-	if( (m_header.m_num_bat > 109) && (m_header.m_num_mbat > 0) )
+	if ((m_header.m_num_bat > 109) && (m_header.m_num_mbat > 0))
 	{
-		std::vector<unsigned char> buffer2( m_bbat.m_blockSize );
+		std::vector<unsigned char> buffer2(m_bbat.m_blockSize);
 		unsigned k = 109;
 		unsigned long sector;
-		for( unsigned r = 0; r < m_header.m_num_mbat; r++ )
+		for (unsigned r = 0; r < m_header.m_num_mbat; r++)
 		{
-			if(r == 0) // 1st meta bat location is in file header.
+			if (r == 0) // 1st meta bat location is in file header.
 				sector = m_header.m_start_mbat;
 			else      // next meta bat location is the last current block value.
 				sector = blocks[--k];
-			loadBigBlock( sector, &buffer2[0], m_bbat.m_blockSize );
-			for( unsigned s=0; s < m_bbat.m_blockSize; s+=4 )
+			loadBigBlock(sector, &buffer2[0], m_bbat.m_blockSize);
+			for (unsigned s=0; s < m_bbat.m_blockSize; s+=4)
 			{
-				if( k >= m_header.m_num_bat ) break;
-				else  blocks[k++] = readU32( &buffer2[s] );
+				if (k >= m_header.m_num_bat) break;
+				else  blocks[k++] = readU32(&buffer2[s]);
 			}
 		}
 	}
 
 	// load big bat
-	if( blocks.size()*m_bbat.m_blockSize > 0 )
+	if (blocks.size()*m_bbat.m_blockSize > 0)
 	{
-		std::vector<unsigned char> buffer( blocks.size()*m_bbat.m_blockSize );
-		loadBigBlocks( blocks, &buffer[0], buffer.size() );
-		m_bbat.load( &buffer[0], (unsigned)buffer.size() );
+		std::vector<unsigned char> buffer(blocks.size()*m_bbat.m_blockSize);
+		loadBigBlocks(blocks, &buffer[0], buffer.size());
+		m_bbat.load(&buffer[0], (unsigned)buffer.size());
 	}
 
 	// load small bat
 	blocks.clear();
-	blocks = m_bbat.follow( m_header.m_start_sbat );
-	if( blocks.size()*m_bbat.m_blockSize > 0 )
+	blocks = m_bbat.follow(m_header.m_start_sbat);
+	if (blocks.size()*m_bbat.m_blockSize > 0)
 	{
-		std::vector<unsigned char> buffer( blocks.size()*m_bbat.m_blockSize );
-		loadBigBlocks( blocks, &buffer[0], buffer.size() );
-		m_sbat.load( &buffer[0], (unsigned)buffer.size() );
+		std::vector<unsigned char> buffer(blocks.size()*m_bbat.m_blockSize);
+		loadBigBlocks(blocks, &buffer[0], buffer.size());
+		m_sbat.load(&buffer[0], (unsigned)buffer.size());
 	}
 
 	// load directory tree
 	blocks.clear();
-	blocks = m_bbat.follow( m_header.m_start_dirent );
-	if( blocks.size()*m_bbat.m_blockSize > 0 )
+	blocks = m_bbat.follow(m_header.m_start_dirent);
+	if (blocks.size()*m_bbat.m_blockSize > 0)
 	{
 		std::vector<unsigned char> buffer(blocks.size()*m_bbat.m_blockSize);
-		loadBigBlocks( blocks, &buffer[0], buffer.size() );
-		m_dirtree.load( &buffer[0], (unsigned)buffer.size() );
-		if( buffer.size() >= 0x74 + 4 )
+		loadBigBlocks(blocks, &buffer[0], buffer.size());
+		m_dirtree.load(&buffer[0], (unsigned)buffer.size());
+		if (buffer.size() >= 0x74 + 4)
 		{
-			unsigned sb_start = readU32( &buffer[0x74] );
+			unsigned sb_start = readU32(&buffer[0x74]);
 
 			// fetch block chain as data for small-files
-			m_sb_blocks = m_bbat.follow( sb_start ); // small files
+			m_sb_blocks = m_bbat.follow(sb_start);   // small files
 
 			// so far so good
 			m_result = librevenge::Storage::Ok;
@@ -1242,20 +1242,20 @@ void librevenge::IStorage::load()
 	}
 }
 
-unsigned long librevenge::IStorage::loadBigBlocks( std::vector<unsigned long> const &blocks,
-        unsigned char *data, unsigned long maxlen )
+unsigned long librevenge::IStorage::loadBigBlocks(std::vector<unsigned long> const &blocks,
+        unsigned char *data, unsigned long maxlen)
 {
 	// sentinel
-	if( !data ) return 0;
-	if( blocks.size() < 1 ) return 0;
-	if( maxlen == 0 ) return 0;
+	if (!data) return 0;
+	if (blocks.size() < 1) return 0;
+	if (maxlen == 0) return 0;
 
 	// read block one by one, seems fast enough
 	unsigned long bytes = 0;
-	for( unsigned long i=0; (i < blocks.size() ) & ( bytes<maxlen ); i++ )
+	for (unsigned long i=0; (i < blocks.size()) & (bytes<maxlen); i++)
 	{
 		unsigned long block = blocks[i];
-		unsigned long pos =  m_bbat.m_blockSize * ( block+1 );
+		unsigned long pos =  m_bbat.m_blockSize * (block+1);
 		unsigned long p = (m_bbat.m_blockSize < maxlen-bytes) ? m_bbat.m_blockSize : maxlen-bytes;
 
 		m_input->seek(long(pos), RVNG_SEEK_SET);
@@ -1268,66 +1268,66 @@ unsigned long librevenge::IStorage::loadBigBlocks( std::vector<unsigned long> co
 	return bytes;
 }
 
-unsigned long librevenge::IStorage::loadBigBlock( unsigned long block,
-        unsigned char *data, unsigned long maxlen )
+unsigned long librevenge::IStorage::loadBigBlock(unsigned long block,
+        unsigned char *data, unsigned long maxlen)
 {
 	// sentinel
-	if( !data ) return 0;
+	if (!data) return 0;
 
 	// wraps call for loadBigBlocks
 	std::vector<unsigned long> blocks;
-	blocks.resize( 1 );
+	blocks.resize(1);
 	blocks[ 0 ] = block;
 
-	return loadBigBlocks( blocks, data, maxlen );
+	return loadBigBlocks(blocks, data, maxlen);
 }
 
 // return number of bytes which has been read
-unsigned long librevenge::IStorage::loadSmallBlocks( std::vector<unsigned long> const &blocks,
-        unsigned char *data, unsigned long maxlen )
+unsigned long librevenge::IStorage::loadSmallBlocks(std::vector<unsigned long> const &blocks,
+        unsigned char *data, unsigned long maxlen)
 {
 	// sentinel
-	if( !data  || blocks.size() < 1 ||  maxlen == 0 ) return 0;
+	if (!data  || blocks.size() < 1 ||  maxlen == 0) return 0;
 
 	// our own local buffer
-	std::vector<unsigned char> tmpBuf( m_bbat.m_blockSize );
+	std::vector<unsigned char> tmpBuf(m_bbat.m_blockSize);
 
 	// read small block one by one
 	unsigned long bytes = 0;
-	for( unsigned long i=0; ( i<blocks.size() ) & ( bytes<maxlen ); i++ )
+	for (unsigned long i=0; (i<blocks.size()) & (bytes<maxlen); i++)
 	{
 		unsigned long block = blocks[i];
 
 		// find where the small-block exactly is
 		unsigned long pos = block * m_sbat.m_blockSize;
 		unsigned long bbindex = pos / m_bbat.m_blockSize;
-		if( bbindex >= m_sb_blocks.size() ) break;
+		if (bbindex >= m_sb_blocks.size()) break;
 
-		loadBigBlock( m_sb_blocks[ bbindex ], &tmpBuf[0], m_bbat.m_blockSize );
+		loadBigBlock(m_sb_blocks[ bbindex ], &tmpBuf[0], m_bbat.m_blockSize);
 
 		// copy the data
 		unsigned long offset = pos % m_bbat.m_blockSize;
-		unsigned long p = (maxlen-bytes < m_bbat.m_blockSize-offset ) ? maxlen-bytes :  m_bbat.m_blockSize-offset;
-		p = (m_sbat.m_blockSize<p ) ? m_sbat.m_blockSize : p;
-		memcpy( data + bytes, &tmpBuf[offset], p );
+		unsigned long p = (maxlen-bytes < m_bbat.m_blockSize-offset) ? maxlen-bytes :  m_bbat.m_blockSize-offset;
+		p = (m_sbat.m_blockSize<p) ? m_sbat.m_blockSize : p;
+		memcpy(data + bytes, &tmpBuf[offset], p);
 		bytes += p;
 	}
 
 	return bytes;
 }
 
-unsigned long librevenge::IStorage::loadSmallBlock( unsigned long block,
-        unsigned char *data, unsigned long maxlen )
+unsigned long librevenge::IStorage::loadSmallBlock(unsigned long block,
+        unsigned char *data, unsigned long maxlen)
 {
 	// sentinel
-	if( !data ) return 0;
+	if (!data) return 0;
 
 	// wraps call for loadSmallBlocks
 	std::vector<unsigned long> blocks;
-	blocks.resize( 1 );
-	blocks.assign( 1, block );
+	blocks.resize(1);
+	blocks.assign(1, block);
 
-	return loadSmallBlocks( blocks, data, maxlen );
+	return loadSmallBlocks(blocks, data, maxlen);
 }
 
 // =========== OStorage ==========
@@ -1376,7 +1376,7 @@ bool librevenge::OStorage::updateToSave()
 		// FIXME: set m_header.m_start_sbat
 		buffer.resize(sbatSize);
 		m_sbat.save(&buffer[0]);
-		m_header.m_num_sbat = (unsigned) (sbatSize+511)/512;
+		m_header.m_num_sbat = (unsigned)(sbatSize+511)/512;
 		m_header.m_start_sbat = insertData(&buffer[0], sbatSize, true, unsigned(Eof));
 		if (m_sb_blocks.size())
 		{
@@ -1494,7 +1494,7 @@ unsigned librevenge::OStorage::insertData(unsigned char const *buffer, unsigned 
 
 // =========== IStream ==========
 
-librevenge::IStream::IStream( librevenge::IStorage *s, std::string const &name) :
+librevenge::IStream::IStream(librevenge::IStorage *s, std::string const &name) :
 	m_iStorage(s),
 	m_size(0),
 	m_name(name),
@@ -1502,9 +1502,9 @@ librevenge::IStream::IStream( librevenge::IStorage *s, std::string const &name) 
 	m_pos(0),
 	m_data()
 {
-	if( !name.length() || !m_iStorage) return;
+	if (!name.length() || !m_iStorage) return;
 	m_iStorage->load();
-	DirEntry *entry = m_iStorage->entry( name );
+	DirEntry *entry = m_iStorage->entry(name);
 	if (!entry)
 		return;
 	if (entry->is_dir())
@@ -1515,50 +1515,50 @@ librevenge::IStream::IStream( librevenge::IStorage *s, std::string const &name) 
 
 	m_size = entry->m_size;
 
-	if( m_iStorage->use_big_block_for(entry->m_size) )
-		m_blocks = m_iStorage->m_bbat.follow( entry->m_start );
+	if (m_iStorage->use_big_block_for(entry->m_size))
+		m_blocks = m_iStorage->m_bbat.follow(entry->m_start);
 	else
-		m_blocks = m_iStorage->m_sbat.follow( entry->m_start );
+		m_blocks = m_iStorage->m_sbat.follow(entry->m_start);
 }
 
-unsigned long librevenge::IStream::readData( unsigned long pos, unsigned char *data, unsigned long maxlen)
+unsigned long librevenge::IStream::readData(unsigned long pos, unsigned char *data, unsigned long maxlen)
 {
 	// sanity checks
-	if( !data || maxlen <= 0 || (unsigned long)m_data.size() != m_size || !m_size)
+	if (!data || maxlen <= 0 || (unsigned long)m_data.size() != m_size || !m_size)
 		return 0;
 
 	if (pos >= m_size)
 		return 0;
 	unsigned long count = m_size - pos;
-	if( count > maxlen ) count = maxlen;
-	memcpy( data, &m_data[size_t(pos)], count );
+	if (count > maxlen) count = maxlen;
+	memcpy(data, &m_data[size_t(pos)], count);
 	return count;
 }
 
-unsigned long librevenge::IStream::readUsingStorage( unsigned long pos, unsigned char *data, unsigned long maxlen )
+unsigned long librevenge::IStream::readUsingStorage(unsigned long pos, unsigned char *data, unsigned long maxlen)
 {
 	// sanity checks
-	if( !data || maxlen <= 0 || !m_iStorage || !m_size) return 0;
+	if (!data || maxlen <= 0 || !m_iStorage || !m_size) return 0;
 
 	unsigned long totalbytes = 0;
 
-	if ( !m_iStorage->use_big_block_for(size()) )
+	if (!m_iStorage->use_big_block_for(size()))
 	{
 		// small file
 		unsigned sBlockSize = m_iStorage->m_sbat.m_blockSize;
 		unsigned long index = pos / sBlockSize;
 
-		if( index >= m_blocks.size() ) return 0;
+		if (index >= m_blocks.size()) return 0;
 
-		std::vector<unsigned char> buf( sBlockSize );
+		std::vector<unsigned char> buf(sBlockSize);
 		unsigned long offset = pos % sBlockSize;
-		while( totalbytes < maxlen )
+		while (totalbytes < maxlen)
 		{
-			if( index >= m_blocks.size() ) break;
-			m_iStorage->loadSmallBlock( m_blocks[index], &buf[0], m_iStorage->m_bbat.m_blockSize );
+			if (index >= m_blocks.size()) break;
+			m_iStorage->loadSmallBlock(m_blocks[index], &buf[0], m_iStorage->m_bbat.m_blockSize);
 			unsigned long count = sBlockSize - offset;
-			if( count > maxlen-totalbytes ) count = maxlen-totalbytes;
-			memcpy( data+totalbytes, &buf[offset], count );
+			if (count > maxlen-totalbytes) count = maxlen-totalbytes;
+			memcpy(data+totalbytes, &buf[offset], count);
 			totalbytes += count;
 			offset = 0;
 			index++;
@@ -1570,17 +1570,17 @@ unsigned long librevenge::IStream::readUsingStorage( unsigned long pos, unsigned
 		unsigned bBlockSize = m_iStorage->m_bbat.m_blockSize;
 		unsigned long index = pos / bBlockSize;
 
-		if( index >= m_blocks.size() ) return 0;
+		if (index >= m_blocks.size()) return 0;
 
-		std::vector<unsigned char> buf( bBlockSize );
+		std::vector<unsigned char> buf(bBlockSize);
 		unsigned long offset = pos % bBlockSize;
-		while( totalbytes < maxlen )
+		while (totalbytes < maxlen)
 		{
-			if( index >= m_blocks.size() ) break;
-			m_iStorage->loadBigBlock( m_blocks[index], &buf[0], bBlockSize );
+			if (index >= m_blocks.size()) break;
+			m_iStorage->loadBigBlock(m_blocks[index], &buf[0], bBlockSize);
 			unsigned long count = bBlockSize - offset;
-			if( count > maxlen-totalbytes ) count = maxlen-totalbytes;
-			memcpy( data+totalbytes, &buf[offset], count );
+			if (count > maxlen-totalbytes) count = maxlen-totalbytes;
+			memcpy(data+totalbytes, &buf[offset], count);
 			totalbytes += count;
 			index++;
 			offset = 0;
@@ -1590,12 +1590,12 @@ unsigned long librevenge::IStream::readUsingStorage( unsigned long pos, unsigned
 	return totalbytes;
 }
 
-bool librevenge::IStream::createOleFromDirectory( IStorage *io, std::string const &name )
+bool librevenge::IStream::createOleFromDirectory(IStorage *io, std::string const &name)
 {
 	// sanety check
-	if( !name.length() || !io) return false;
+	if (!name.length() || !io) return false;
 	m_iStorage->load();
-	DirEntry *entry = io->entry( name );
+	DirEntry *entry = io->entry(name);
 	if (!entry || !entry->is_dir()) return false;
 
 	unsigned index = io->index(name);
@@ -1684,7 +1684,7 @@ bool librevenge::IStream::createOleFromDirectory( IStorage *io, std::string cons
 		m_size = (unsigned long) m_data.size();
 		return true;
 	}
-	catch(...)
+	catch (...)
 	{
 	}
 	return false;
@@ -1692,10 +1692,10 @@ bool librevenge::IStream::createOleFromDirectory( IStorage *io, std::string cons
 
 // =========== Storage ==========
 
-librevenge::Storage::Storage( RVNGInputStream *is ) :
+librevenge::Storage::Storage(RVNGInputStream *is) :
 	m_io(0)
 {
-	m_io = new IStorage( is );
+	m_io = new IStorage(is);
 }
 
 librevenge::Storage::~Storage()
@@ -1731,7 +1731,7 @@ std::vector<std::string> librevenge::Storage::getSubStreamNamesList()
 
 // =========== Stream ==========
 
-librevenge::Stream::Stream( librevenge::Storage *storage, const std::string &name ) :
+librevenge::Stream::Stream(librevenge::Storage *storage, const std::string &name) :
 	m_io(0)
 {
 	m_io = new librevenge::IStream(storage->m_io, name);
@@ -1748,8 +1748,8 @@ unsigned long librevenge::Stream::size()
 	return m_io ? m_io->size() : 0;
 }
 
-unsigned long librevenge::Stream::read( unsigned char *data, unsigned long maxlen )
+unsigned long librevenge::Stream::read(unsigned char *data, unsigned long maxlen)
 {
-	return m_io ? m_io->read( data, maxlen ) : 0;
+	return m_io ? m_io->read(data, maxlen) : 0;
 }
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

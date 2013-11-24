@@ -56,7 +56,7 @@ public:
 	/**
 	 * Constructs a storage with data.
 	 **/
-	Storage( RVNGInputStream *is );
+	Storage(RVNGInputStream *is);
 
 	/**
 	 * Destroys the storage.
@@ -82,8 +82,8 @@ private:
 	IStorage *m_io;
 
 	// no copy or assign
-	Storage( const Storage &);
-	Storage &operator=( const Storage &);
+	Storage(const Storage &);
+	Storage &operator=(const Storage &);
 
 };
 
@@ -97,7 +97,7 @@ public:
 	/**
 	 * Creates a new stream.
 	 */
-	Stream( Storage *storage, const std::string &name );
+	Stream(Storage *storage, const std::string &name);
 
 	/**
 	 * Destroys the stream.
@@ -112,14 +112,14 @@ public:
 	/**
 	 * Reads a block of data.
 	 **/
-	unsigned long read( unsigned char *data, unsigned long maxlen );
+	unsigned long read(unsigned char *data, unsigned long maxlen);
 
 private:
 	IStream *m_io;
 
 	// no copy or assign
-	Stream( const Stream &);
-	Stream &operator=( const Stream &);
+	Stream(const Stream &);
+	Stream &operator=(const Stream &);
 };
 
 }  // namespace librevenge

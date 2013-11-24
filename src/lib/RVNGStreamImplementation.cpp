@@ -108,7 +108,7 @@ RVNGFileStream::RVNGFileStream(const char *filename) :
 	RVNGInputStream(),
 	d(new RVNGFileStreamPrivate())
 {
-	d->file = fopen( filename, "rb" );
+	d->file = fopen(filename, "rb");
 	if (!d->file || ferror(d->file))
 	{
 		delete d;
@@ -117,8 +117,8 @@ RVNGFileStream::RVNGFileStream(const char *filename) :
 	}
 
 	struct stat status;
-	const int retval = stat( filename, &status );
-	if ( (0 != retval) || !S_ISREG(status.st_mode) )
+	const int retval = stat(filename, &status);
+	if ((0 != retval) || !S_ISREG(status.st_mode))
 	{
 		delete d;
 		d = 0;
@@ -133,7 +133,7 @@ RVNGFileStream::RVNGFileStream(const char *filename) :
 	// preventing possible unsigned/signed issues later by truncating the file
 	if (d->streamSize > (std::numeric_limits<unsigned long>::max)() / 2)
 		d->streamSize = (std::numeric_limits<unsigned long>::max)() / 2;
-	fseek(d->file, 0, SEEK_SET );
+	fseek(d->file, 0, SEEK_SET);
 }
 
 RVNGFileStream::~RVNGFileStream()
@@ -179,8 +179,8 @@ const unsigned char *RVNGFileStream::read(unsigned long numBytes, unsigned long 
 	if (curpos == (unsigned long)-1)  // tellg() returned ERROR
 		return 0;
 
-	if ( (curpos + numBytes < curpos) /*overflow*/ ||
-	        (curpos + numBytes >= d->streamSize) ) /*reading more than available*/
+	if ((curpos + numBytes < curpos) /*overflow*/ ||
+	        (curpos + numBytes >= d->streamSize))  /*reading more than available*/
 	{
 		numBytes = d->streamSize - curpos;
 	}
@@ -210,7 +210,7 @@ const unsigned char *RVNGFileStream::read(unsigned long numBytes, unsigned long 
 	numBytesRead = numBytes;
 
 	d->readBufferPos += numBytesRead;
-	return const_cast<const unsigned char *>( d->readBuffer );
+	return const_cast<const unsigned char *>(d->readBuffer);
 }
 
 long RVNGFileStream::tell()
@@ -236,7 +236,7 @@ int RVNGFileStream::seek(long offset, RVNG_SEEK_TYPE seekType)
 
 	if (!ferror(d->file) && offset < ftell(d->file) && (unsigned long)offset >= (unsigned long)ftell(d->file) - d->readBufferLength)
 	{
-		d->readBufferPos = (unsigned long) (offset + (long) d->readBufferLength - (long) ftell(d->file));
+		d->readBufferPos = (unsigned long)(offset + (long) d->readBufferLength - (long) ftell(d->file));
 		return 0;
 	}
 
@@ -250,10 +250,10 @@ int RVNGFileStream::seek(long offset, RVNG_SEEK_TYPE seekType)
 		d->readBufferLength = 0;
 	}
 
-	if(!ferror(d->file))
+	if (!ferror(d->file))
 	{
 		fseek(d->file, offset, SEEK_SET);
-		return (int) ((long)ftell(d->file) == -1) ;
+		return (int)((long)ftell(d->file) == -1) ;
 	}
 	else
 		return -1;
@@ -277,7 +277,7 @@ bool RVNGFileStream::isStructured()
 		seek(0, RVNG_SEEK_SET);
 
 		// Check whether it is OLE2 storage
-		Storage tmpStorage( this );
+		Storage tmpStorage(this);
 		if (tmpStorage.isStructured())
 		{
 			d->streamType = OLE2;
@@ -331,8 +331,8 @@ RVNGInputStream *RVNGFileStream::getSubStreamByName(const char *name)
 	if (d->streamType == OLE2)
 	{
 		seek(0, RVNG_SEEK_SET);
-		Storage tmpStorage( this );
-		Stream tmpStream( &tmpStorage, name );
+		Storage tmpStorage(this);
+		Stream tmpStream(&tmpStorage, name);
 		if (tmpStorage.result() != Storage::Ok  || !tmpStream.size())
 			return (RVNGInputStream *)0;
 
@@ -439,7 +439,7 @@ bool RVNGStringStream::isStructured()
 		seek(0, RVNG_SEEK_SET);
 
 		// Check whether it is OLE2 storage
-		Storage tmpStorage( this );
+		Storage tmpStorage(this);
 		if (tmpStorage.isStructured())
 		{
 			d->streamType = OLE2;
@@ -490,8 +490,8 @@ RVNGInputStream *RVNGStringStream::getSubStreamByName(const char *name)
 	if (d->streamType == OLE2)
 	{
 		seek(0, RVNG_SEEK_SET);
-		Storage tmpStorage( this );
-		Stream tmpStream( &tmpStorage, name );
+		Storage tmpStorage(this);
+		Stream tmpStream(&tmpStorage, name);
 		if (tmpStorage.result() != Storage::Ok  || !tmpStream.size())
 			return (RVNGInputStream *)0;
 

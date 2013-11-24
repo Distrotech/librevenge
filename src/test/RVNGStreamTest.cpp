@@ -56,40 +56,40 @@ void RVNGStreamTest::testFileStream()
 	scoped_ptr<RVNGInputStream> input(new RVNGFileStream(TMP_FILENAME));
 	unsigned long numBytesRead = 0;
 
-	CPPUNIT_ASSERT_EQUAL ( false, input->isStructured() );
-	CPPUNIT_ASSERT_EQUAL ( (RVNGInputStream *) NULL, input->getSubStreamByName("foo") );
+	CPPUNIT_ASSERT_EQUAL(false, input->isStructured());
+	CPPUNIT_ASSERT_EQUAL((RVNGInputStream *) NULL, input->getSubStreamByName("foo"));
 
 	// test read()
 	input->seek(0, RVNG_SEEK_SET);
-	CPPUNIT_ASSERT ( NULL == input->read(0, numBytesRead)  );
-	CPPUNIT_ASSERT_EQUAL ( (unsigned long)0, numBytesRead );
-	CPPUNIT_ASSERT_EQUAL ( (long) 0 , input->tell() );
-	CPPUNIT_ASSERT ( NULL != input->read(1, numBytesRead)  );
-	CPPUNIT_ASSERT_EQUAL ( (long) 1 , input->tell() );
+	CPPUNIT_ASSERT(NULL == input->read(0, numBytesRead));
+	CPPUNIT_ASSERT_EQUAL((unsigned long)0, numBytesRead);
+	CPPUNIT_ASSERT_EQUAL((long) 0 , input->tell());
+	CPPUNIT_ASSERT(NULL != input->read(1, numBytesRead));
+	CPPUNIT_ASSERT_EQUAL((long) 1 , input->tell());
 
 	input->seek(0, RVNG_SEEK_SET);
-	CPPUNIT_ASSERT ( NULL != input->read(50, numBytesRead)  );
-	CPPUNIT_ASSERT_EQUAL ( (long) 8 , input->tell() );
+	CPPUNIT_ASSERT(NULL != input->read(50, numBytesRead));
+	CPPUNIT_ASSERT_EQUAL((long) 8 , input->tell());
 
 	// test seek(), tell(), isEnd()
 	input->seek(1, RVNG_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL ( (long) 1 , input->tell() );
+	CPPUNIT_ASSERT_EQUAL((long) 1 , input->tell());
 
 	input->seek(0, RVNG_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL ( (long) 0 , input->tell() );
+	CPPUNIT_ASSERT_EQUAL((long) 0 , input->tell());
 
 	input->seek(8, RVNG_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL ( (long) 8 , input->tell() );
+	CPPUNIT_ASSERT_EQUAL((long) 8 , input->tell());
 
 	input->seek(-1, RVNG_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL ( (long) 0, input->tell() );
+	CPPUNIT_ASSERT_EQUAL((long) 0, input->tell());
 
 	input->seek(8, RVNG_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL ( true, input->isEnd() );
+	CPPUNIT_ASSERT_EQUAL(true, input->isEnd());
 
 	input->seek(10000, RVNG_SEEK_SET);
-	CPPUNIT_ASSERT( 10000 != input->tell() );
-	CPPUNIT_ASSERT( input->isEnd() );
+	CPPUNIT_ASSERT(10000 != input->tell());
+	CPPUNIT_ASSERT(input->isEnd());
 }
 
 void RVNGStreamTest::testMemoryInputStream()
@@ -97,40 +97,40 @@ void RVNGStreamTest::testMemoryInputStream()
 	scoped_ptr<RVNGInputStream> input(new RVNGMemoryInputStream((unsigned char *)("\1\2\3\4\0\5\6\7"), 8));
 	unsigned long numBytesRead = 0;
 
-	CPPUNIT_ASSERT_EQUAL ( false, input->isStructured() );
-	CPPUNIT_ASSERT_EQUAL ( (RVNGInputStream *) NULL, input->getSubStreamByName("foo") );
+	CPPUNIT_ASSERT_EQUAL(false, input->isStructured());
+	CPPUNIT_ASSERT_EQUAL((RVNGInputStream *) NULL, input->getSubStreamByName("foo"));
 
 	// test read()
 	input->seek(0, RVNG_SEEK_SET);
-	CPPUNIT_ASSERT ( NULL == input->read(0, numBytesRead)  );
-	CPPUNIT_ASSERT_EQUAL ( (unsigned long) 0, numBytesRead );
-	CPPUNIT_ASSERT_EQUAL ( (long) 0 , input->tell() );
-	CPPUNIT_ASSERT ( NULL != input->read(1, numBytesRead)  );
-	CPPUNIT_ASSERT_EQUAL ( (long) 1 , input->tell() );
+	CPPUNIT_ASSERT(NULL == input->read(0, numBytesRead));
+	CPPUNIT_ASSERT_EQUAL((unsigned long) 0, numBytesRead);
+	CPPUNIT_ASSERT_EQUAL((long) 0 , input->tell());
+	CPPUNIT_ASSERT(NULL != input->read(1, numBytesRead));
+	CPPUNIT_ASSERT_EQUAL((long) 1 , input->tell());
 
 	input->seek(0, RVNG_SEEK_SET);
-	CPPUNIT_ASSERT ( NULL != input->read(50, numBytesRead)  );
-	CPPUNIT_ASSERT_EQUAL ( (long) 8 , input->tell() );
+	CPPUNIT_ASSERT(NULL != input->read(50, numBytesRead));
+	CPPUNIT_ASSERT_EQUAL((long) 8 , input->tell());
 
 	// test seek(), tell(), isEnd()
 	input->seek(1, RVNG_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL ( (long) 1 , input->tell() );
+	CPPUNIT_ASSERT_EQUAL((long) 1 , input->tell());
 
 	input->seek(0, RVNG_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL ( (long) 0 , input->tell() );
+	CPPUNIT_ASSERT_EQUAL((long) 0 , input->tell());
 
 	input->seek(8, RVNG_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL ( (long) 8 , input->tell() );
+	CPPUNIT_ASSERT_EQUAL((long) 8 , input->tell());
 
 	input->seek(-1, RVNG_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL ( (long) 0, input->tell() );
+	CPPUNIT_ASSERT_EQUAL((long) 0, input->tell());
 
 	input->seek(8, RVNG_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL ( true, input->isEnd() );
+	CPPUNIT_ASSERT_EQUAL(true, input->isEnd());
 
 	input->seek(10000, RVNG_SEEK_SET);
-	CPPUNIT_ASSERT( 10000 != input->tell() );
-	CPPUNIT_ASSERT( input->isEnd() );
+	CPPUNIT_ASSERT(10000 != input->tell());
+	CPPUNIT_ASSERT(input->isEnd());
 }
 
 void RVNGStreamTest::testStringStream()
@@ -138,40 +138,40 @@ void RVNGStreamTest::testStringStream()
 	scoped_ptr<RVNGInputStream> input(new RVNGStringStream((const unsigned char *)"\1\2\3\4\0\5\6\7", 8));
 	unsigned long numBytesRead = 0;
 
-	CPPUNIT_ASSERT_EQUAL ( false, input->isStructured() );
-	CPPUNIT_ASSERT_EQUAL ( (RVNGInputStream *) NULL, input->getSubStreamByName("foo") );
+	CPPUNIT_ASSERT_EQUAL(false, input->isStructured());
+	CPPUNIT_ASSERT_EQUAL((RVNGInputStream *) NULL, input->getSubStreamByName("foo"));
 
 	// test read()
 	input->seek(0, RVNG_SEEK_SET);
-	CPPUNIT_ASSERT ( NULL == input->read(0, numBytesRead)  );
-	CPPUNIT_ASSERT_EQUAL ( (unsigned long) 0, numBytesRead );
-	CPPUNIT_ASSERT_EQUAL ( (long) 0 , input->tell() );
-	CPPUNIT_ASSERT ( NULL != input->read(1, numBytesRead)  );
-	CPPUNIT_ASSERT_EQUAL ( (long) 1 , input->tell() );
+	CPPUNIT_ASSERT(NULL == input->read(0, numBytesRead));
+	CPPUNIT_ASSERT_EQUAL((unsigned long) 0, numBytesRead);
+	CPPUNIT_ASSERT_EQUAL((long) 0 , input->tell());
+	CPPUNIT_ASSERT(NULL != input->read(1, numBytesRead));
+	CPPUNIT_ASSERT_EQUAL((long) 1 , input->tell());
 
 	input->seek(0, RVNG_SEEK_SET);
-	CPPUNIT_ASSERT ( NULL != input->read(50, numBytesRead)  );
-	CPPUNIT_ASSERT_EQUAL ( (long) 8 , input->tell() );
+	CPPUNIT_ASSERT(NULL != input->read(50, numBytesRead));
+	CPPUNIT_ASSERT_EQUAL((long) 8 , input->tell());
 
 	// test seek(), tell(), isEnd()
 	input->seek(1, RVNG_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL ( (long) 1 , input->tell() );
+	CPPUNIT_ASSERT_EQUAL((long) 1 , input->tell());
 
 	input->seek(0, RVNG_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL ( (long) 0 , input->tell() );
+	CPPUNIT_ASSERT_EQUAL((long) 0 , input->tell());
 
 	input->seek(8, RVNG_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL ( (long) 8 , input->tell() );
+	CPPUNIT_ASSERT_EQUAL((long) 8 , input->tell());
 
 	input->seek(-1, RVNG_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL ( (long) 0, input->tell() );
+	CPPUNIT_ASSERT_EQUAL((long) 0, input->tell());
 
 	input->seek(8, RVNG_SEEK_SET);
-	CPPUNIT_ASSERT_EQUAL ( true, input->isEnd() );
+	CPPUNIT_ASSERT_EQUAL(true, input->isEnd());
 
 	input->seek(10000, RVNG_SEEK_SET);
-	CPPUNIT_ASSERT( 10000 != input->tell() );
-	CPPUNIT_ASSERT( input->isEnd() );
+	CPPUNIT_ASSERT(10000 != input->tell());
+	CPPUNIT_ASSERT(input->isEnd());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RVNGStreamTest);

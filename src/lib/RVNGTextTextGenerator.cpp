@@ -59,7 +59,7 @@ void RVNGTextTextGenerator::setDocumentMetaData(const RVNGPropertyList &propList
 	if (!m_impl->m_isInfo)
 		return;
 	RVNGPropertyList::Iter propIter(propList);
-	for (propIter.rewind(); propIter.next(); )
+	for (propIter.rewind(); propIter.next();)
 	{
 		m_impl->m_stream << propIter.key() << ' ' << propIter()->getStr().cstr() << '\n';
 	}

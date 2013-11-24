@@ -170,7 +170,7 @@ void RVNGBinaryData::appendBase64Data(const char *base64)
 		append(&buffer[0], buffer.size());
 }
 
-void RVNGBinaryData::append(const unsigned char *buffer, const unsigned long bufferSize )
+void RVNGBinaryData::append(const unsigned char *buffer, const unsigned long bufferSize)
 {
 	m_binaryDataImpl->makeUnique();
 

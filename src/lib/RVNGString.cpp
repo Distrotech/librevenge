@@ -49,7 +49,7 @@ static const unsigned char librvng_utf8_skip_data[256] =
 
 #define librvng_utf8_next_char(p) (char *)((p) + librvng_utf8_skip_data[*((unsigned char *)p)])
 
-static int librvng_utf8_strlen (const char *p, const char *end)
+static int librvng_utf8_strlen(const char *p, const char *end)
 {
 	if (!p)
 		return 0;
@@ -57,7 +57,7 @@ static int librvng_utf8_strlen (const char *p, const char *end)
 	int len = 0;
 	while (p < end && *p)
 	{
-		p = librvng_utf8_next_char (p);
+		p = librvng_utf8_next_char(p);
 		++len;
 	}
 
@@ -166,7 +166,7 @@ void RVNGString::sprintf(const char *format, ...)
 	char firstBuffer[FIRST_BUF_SIZE];
 	char *buf = firstBuffer;
 
-	while(true)
+	while (true)
 	{
 		va_start(args, format);
 		int outsize = vsnprintf(buf, size_t(bufsize), format, args);
@@ -279,8 +279,8 @@ bool RVNGString::Iter::next()
 		m_pos++;
 	else if (m_pos < len)
 	{
-		m_pos+=(int) (librvng_utf8_next_char(&(m_stringImpl->m_buf.c_str()[m_pos])) -
-		              &(m_stringImpl->m_buf.c_str()[m_pos]));
+		m_pos+=(int)(librvng_utf8_next_char(&(m_stringImpl->m_buf.c_str()[m_pos])) -
+		             &(m_stringImpl->m_buf.c_str()[m_pos]));
 	}
 
 	if (m_pos < len)
@@ -301,8 +301,8 @@ const char *RVNGString::Iter::operator()() const
 
 	if (m_curChar) delete [] m_curChar;
 	m_curChar = 0;
-	int charLength =(int) (librvng_utf8_next_char(&(m_stringImpl->m_buf.c_str()[m_pos])) -
-	                       &(m_stringImpl->m_buf.c_str()[m_pos]));
+	int charLength =(int)(librvng_utf8_next_char(&(m_stringImpl->m_buf.c_str()[m_pos])) -
+	                      &(m_stringImpl->m_buf.c_str()[m_pos]));
 	m_curChar = new char[charLength+1];
 	for (int i=0; i<charLength; i++)
 		m_curChar[i] = m_stringImpl->m_buf[size_t(m_pos+i)];

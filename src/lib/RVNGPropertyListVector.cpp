@@ -135,7 +135,7 @@ void RVNGPropertyListVector::append(const RVNGPropertyList &elem)
 void RVNGPropertyListVector::append(const RVNGPropertyListVector &vec)
 {
 	RVNGPropertyListVector::Iter i(vec);
-	for (i.rewind(); i.next(); )
+	for (i.rewind(); i.next();)
 		m_impl->append(i());
 }
 

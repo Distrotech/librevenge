@@ -109,10 +109,10 @@ RVNGSVGDrawingGeneratorPrivate::RVNGSVGDrawingGeneratorPrivate(RVNGStringVector 
 
 void RVNGSVGDrawingGeneratorPrivate::drawPolySomething(const RVNGPropertyListVector &vertices, bool isClosed)
 {
-	if(vertices.count() < 2)
+	if (vertices.count() < 2)
 		return;
 
-	if(vertices.count() == 2)
+	if (vertices.count() == 2)
 	{
 		if (!vertices[0]["svg:x"]||!vertices[0]["svg:y"]||!vertices[1]["svg:x"]||!vertices[1]["svg:y"])
 			return;
@@ -130,7 +130,7 @@ void RVNGSVGDrawingGeneratorPrivate::drawPolySomething(const RVNGPropertyListVec
 			m_outputSink << "<" << getNamespaceAndDelim() << "polyline ";
 
 		m_outputSink << "points=\"";
-		for(unsigned i = 0; i < vertices.count(); i++)
+		for (unsigned i = 0; i < vertices.count(); i++)
 		{
 			if (!vertices[i]["svg:x"]||!vertices[i]["svg:y"])
 				continue;
@@ -153,7 +153,7 @@ void RVNGSVGDrawingGeneratorPrivate::setStyle(const RVNGPropertyList &propList)
 	if (!gradient)
 		gradient = propList.child("svg:radialGradient");
 	m_gradient = gradient ? *gradient : librevenge::RVNGPropertyListVector();
-	if(m_style["draw:shadow"] && m_style["draw:shadow"]->getStr() == "visible" && m_style["draw:shadow-opacity"])
+	if (m_style["draw:shadow"] && m_style["draw:shadow"]->getStr() == "visible" && m_style["draw:shadow-opacity"])
 	{
 		double shadowRed = 0.0;
 		double shadowGreen = 0.0;
@@ -177,7 +177,7 @@ void RVNGSVGDrawingGeneratorPrivate::setStyle(const RVNGPropertyList &propList)
 		m_outputSink << "0 0 0 0 " << doubleToString(shadowRed) ;
 		m_outputSink << " 0 0 0 0 " << doubleToString(shadowGreen);
 		m_outputSink << " 0 0 0 0 " << doubleToString(shadowBlue);
-		if(m_style["draw:opacity"] && m_style["draw:opacity"]->getDouble() < 1)
+		if (m_style["draw:opacity"] && m_style["draw:opacity"]->getDouble() < 1)
 			m_outputSink << " 0 0 0 "   << doubleToString(m_style["draw:shadow-opacity"]->getDouble()/m_style["draw:opacity"]->getDouble()) << " 0\"/>";
 		else
 			m_outputSink << " 0 0 0 "   << doubleToString(m_style["draw:shadow-opacity"]->getDouble()) << " 0\"/>";
@@ -190,13 +190,13 @@ void RVNGSVGDrawingGeneratorPrivate::setStyle(const RVNGPropertyList &propList)
 		m_outputSink << "</" << getNamespaceAndDelim() << "defs>";
 	}
 
-	if(m_style["draw:fill"] && m_style["draw:fill"]->getStr() == "gradient")
+	if (m_style["draw:fill"] && m_style["draw:fill"]->getStr() == "gradient")
 	{
 		double angle = (m_style["draw:angle"] ? m_style["draw:angle"]->getDouble() : 0.0);
 		angle *= -1.0;
-		while(angle < 0)
+		while (angle < 0)
 			angle += 360;
-		while(angle > 360)
+		while (angle > 360)
 			angle -= 360;
 
 		if (m_style["draw:style"] && (m_style["draw:style"]->getStr() == "radial" || m_style["draw:style"]->getStr() == "rectangular" ||
@@ -223,7 +223,7 @@ void RVNGSVGDrawingGeneratorPrivate::setStyle(const RVNGPropertyList &propList)
 			m_outputSink << " >\n";
 			if (m_gradient.count())
 			{
-				for(unsigned c = 0; c < m_gradient.count(); c++)
+				for (unsigned c = 0; c < m_gradient.count(); c++)
 				{
 					RVNGPropertyList const &grad=m_gradient[c];
 					m_outputSink << "    <" << getNamespaceAndDelim() << "stop";
@@ -261,7 +261,7 @@ void RVNGSVGDrawingGeneratorPrivate::setStyle(const RVNGPropertyList &propList)
 				{
 					// check if we can reconstruct the linear offset, ie. if each offset is a valid percent%
 					canBuildAxial = true;
-					for(unsigned c = 0; c < m_gradient.count(); ++c)
+					for (unsigned c = 0; c < m_gradient.count(); ++c)
 					{
 						RVNGPropertyList const &grad=m_gradient[c];
 						if (!grad["svg:offset"] || grad["svg:offset"]->getDouble()<0 || grad["svg:offset"]->getDouble() > 1)
@@ -280,7 +280,7 @@ void RVNGSVGDrawingGeneratorPrivate::setStyle(const RVNGPropertyList &propList)
 				}
 				if (canBuildAxial)
 				{
-					for(unsigned long c = m_gradient.count(); c>0 ; )
+					for (unsigned long c = m_gradient.count(); c>0 ;)
 					{
 						RVNGPropertyList const &grad=m_gradient[--c];
 						m_outputSink << "    <" << getNamespaceAndDelim() << "stop ";
@@ -292,7 +292,7 @@ void RVNGSVGDrawingGeneratorPrivate::setStyle(const RVNGPropertyList &propList)
 							m_outputSink << " stop-opacity=\"" << doubleToString(grad["svg:stop-opacity"]->getDouble()) << "\"";
 						m_outputSink << "/>" << std::endl;
 					}
-					for(unsigned long c = 0; c < m_gradient.count(); ++c)
+					for (unsigned long c = 0; c < m_gradient.count(); ++c)
 					{
 						RVNGPropertyList const &grad=m_gradient[c];
 						if (c==0 && grad["svg:offset"] && grad["svg:offset"]->getDouble() <= 0)
@@ -309,7 +309,7 @@ void RVNGSVGDrawingGeneratorPrivate::setStyle(const RVNGPropertyList &propList)
 				}
 				else
 				{
-					for(unsigned c = 0; c < m_gradient.count(); c++)
+					for (unsigned c = 0; c < m_gradient.count(); c++)
 					{
 						RVNGPropertyList const &grad=m_gradient[c];
 						m_outputSink << "    <" << getNamespaceAndDelim() << "stop";
@@ -353,7 +353,7 @@ void RVNGSVGDrawingGeneratorPrivate::setStyle(const RVNGPropertyList &propList)
 			m_outputSink << "  </" << getNamespaceAndDelim() << "linearGradient>\n";
 
 			// not a simple horizontal gradient
-			if(angle<270 || angle>270)
+			if (angle<270 || angle>270)
 			{
 				m_outputSink << "  <" << getNamespaceAndDelim() << "linearGradient xlink:href=\"#grad" << m_gradientIndex-1 << "\"";
 				m_outputSink << " id=\"grad" << m_gradientIndex++ << "\" ";
@@ -366,7 +366,7 @@ void RVNGSVGDrawingGeneratorPrivate::setStyle(const RVNGPropertyList &propList)
 			m_outputSink << "</" << getNamespaceAndDelim() << "defs>\n";
 		}
 	}
-	else if(m_style["draw:fill"] && m_style["draw:fill"]->getStr() == "bitmap" && m_style["draw:fill-image"] && m_style["librevenge:mime-type"])
+	else if (m_style["draw:fill"] && m_style["draw:fill"]->getStr() == "bitmap" && m_style["draw:fill-image"] && m_style["librevenge:mime-type"])
 	{
 		m_outputSink << "<" << getNamespaceAndDelim() << "defs>\n";
 		m_outputSink << "  <" << getNamespaceAndDelim() << "pattern id=\"img" << m_patternIndex++ << "\" patternUnits=\"userSpaceOnUse\" ";
@@ -452,7 +452,7 @@ void RVNGSVGDrawingGeneratorPrivate::writeStyle(bool /* isClosed */)
 	{
 		if (m_style["svg:stroke-color"])
 			m_outputSink << "stroke: " << m_style["svg:stroke-color"]->getStr().cstr()  << "; ";
-		if(m_style["svg:stroke-opacity"] &&  m_style["svg:stroke-opacity"]->getInt()!= 1)
+		if (m_style["svg:stroke-opacity"] &&  m_style["svg:stroke-opacity"]->getInt()!= 1)
 			m_outputSink << "stroke-opacity: " << doubleToString(m_style["svg:stroke-opacity"]->getDouble()) << "; ";
 	}
 
@@ -509,23 +509,23 @@ void RVNGSVGDrawingGeneratorPrivate::writeStyle(bool /* isClosed */)
 	if (m_style["svg:stroke-linejoin"])
 		m_outputSink << "stroke-linejoin: " << m_style["svg:stroke-linejoin"]->getStr().cstr() << "; ";
 
-	if(m_style["draw:fill"] && m_style["draw:fill"]->getStr() == "none")
+	if (m_style["draw:fill"] && m_style["draw:fill"]->getStr() == "none")
 		m_outputSink << "fill: none; ";
-	else if(m_style["svg:fill-rule"])
+	else if (m_style["svg:fill-rule"])
 		m_outputSink << "fill-rule: " << m_style["svg:fill-rule"]->getStr().cstr() << "; ";
 
-	if(m_style["draw:fill"] && m_style["draw:fill"]->getStr() == "gradient")
+	if (m_style["draw:fill"] && m_style["draw:fill"]->getStr() == "gradient")
 		m_outputSink << "fill: url(#grad" << m_gradientIndex-1 << "); ";
-	else if(m_style["draw:fill"] && m_style["draw:fill"]->getStr() == "bitmap")
+	else if (m_style["draw:fill"] && m_style["draw:fill"]->getStr() == "bitmap")
 		m_outputSink << "fill: url(#img" << m_patternIndex-1 << "); ";
 
-	if(m_style["draw:shadow"] && m_style["draw:shadow"]->getStr() == "visible")
+	if (m_style["draw:shadow"] && m_style["draw:shadow"]->getStr() == "visible")
 		m_outputSink << "filter:url(#shadow" << m_shadowIndex-1 << "); ";
 
-	if(m_style["draw:fill"] && m_style["draw:fill"]->getStr() == "solid")
+	if (m_style["draw:fill"] && m_style["draw:fill"]->getStr() == "solid")
 		if (m_style["draw:fill-color"])
 			m_outputSink << "fill: " << m_style["draw:fill-color"]->getStr().cstr() << "; ";
-	if(m_style["draw:opacity"] && m_style["draw:opacity"]->getDouble() < 1)
+	if (m_style["draw:opacity"] && m_style["draw:opacity"]->getDouble() < 1)
 		m_outputSink << "fill-opacity: " << doubleToString(m_style["draw:opacity"]->getDouble()) << "; ";
 
 	if (m_style["draw:marker-start-path"])
@@ -608,7 +608,7 @@ void RVNGSVGDrawingGenerator::drawRectangle(const RVNGPropertyList &propList)
 	m_pImpl->m_outputSink << "<" << m_pImpl->getNamespaceAndDelim() << "rect ";
 	m_pImpl->m_outputSink << "x=\"" << doubleToString(72*propList["svg:x"]->getDouble()) << "\" y=\"" << doubleToString(72*propList["svg:y"]->getDouble()) << "\" ";
 	m_pImpl->m_outputSink << "width=\"" << doubleToString(72*propList["svg:width"]->getDouble()) << "\" height=\"" << doubleToString(72*propList["svg:height"]->getDouble()) << "\" ";
-	if(propList["svg:rx"] && propList["svg:rx"]->getDouble() > 0 && propList["svg:ry"] && propList["svg:ry"]->getDouble()>0)
+	if (propList["svg:rx"] && propList["svg:rx"]->getDouble() > 0 && propList["svg:ry"] && propList["svg:ry"]->getDouble()>0)
 		m_pImpl->m_outputSink << "rx=\"" << doubleToString(72*propList["svg:rx"]->getDouble()) << "\" ry=\"" << doubleToString(72*propList["svg:ry"]->getDouble()) << "\" ";
 	m_pImpl->writeStyle();
 	m_pImpl->m_outputSink << "/>\n";
@@ -652,7 +652,7 @@ void RVNGSVGDrawingGenerator::drawPath(const RVNGPropertyList &propList)
 	m_pImpl->m_outputSink << "<" << m_pImpl->getNamespaceAndDelim() << "path d=\" ";
 	bool isClosed = false;
 	unsigned i=0;
-	for(i=0; i < path->count(); i++)
+	for (i=0; i < path->count(); i++)
 	{
 		RVNGPropertyList pList((*path)[i]);
 		if (!pList["librevenge:path-action"]) continue;
@@ -692,7 +692,7 @@ void RVNGSVGDrawingGenerator::drawPath(const RVNGPropertyList &propList)
 			m_pImpl->m_outputSink << (pList["librevenge:sweep"] ? pList["librevenge:sweep"]->getInt() : 1) << " ";
 			m_pImpl->m_outputSink << doubleToString(72*(pList["svg:x"]->getDouble())) << "," << doubleToString(72*(pList["svg:y"]->getDouble()));
 		}
-		else if (action[0] == 'Z' )
+		else if (action[0] == 'Z')
 		{
 			isClosed = true;
 			m_pImpl->m_outputSink << "\nZ";
@@ -727,7 +727,7 @@ void RVNGSVGDrawingGenerator::drawGraphicObject(const RVNGPropertyList &propList
 			double xmiddle = x + width / 2.0;
 			double ymiddle = y + height / 2.0;
 			m_pImpl->m_outputSink << "transform=\"";
-			m_pImpl->m_outputSink << " translate(" << doubleToString(72*xmiddle) << ", " << doubleToString (72*ymiddle) << ") ";
+			m_pImpl->m_outputSink << " translate(" << doubleToString(72*xmiddle) << ", " << doubleToString(72*ymiddle) << ") ";
 			m_pImpl->m_outputSink << " scale(" << (flipX ? "-1" : "1") << ", " << (flipY ? "-1" : "1") << ") ";
 			// rotation is around the center of the object's bounding box
 			if (propList["librevenge:rotate"])
@@ -739,7 +739,7 @@ void RVNGSVGDrawingGenerator::drawGraphicObject(const RVNGPropertyList &propList
 					angle += 360.0;
 				m_pImpl->m_outputSink << " rotate(" << doubleToString(angle) << ") ";
 			}
-			m_pImpl->m_outputSink << " translate(" << doubleToString(-72*xmiddle) << ", " << doubleToString (-72*ymiddle) << ") ";
+			m_pImpl->m_outputSink << " translate(" << doubleToString(-72*xmiddle) << ", " << doubleToString(-72*ymiddle) << ") ";
 			m_pImpl->m_outputSink << "\" ";
 		}
 	}
