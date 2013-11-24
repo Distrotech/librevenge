@@ -164,11 +164,11 @@ public:
 	\li \c fo:text-indent The indentation of first line, in inches (difference relative to margin-left)
 	\li \c fo:line-height The amount of spacing between lines, in number of lines (1.0 is single spacing)
 	\li \c fo:break-before Whether this paragraph should be placed in a new column or page (the value is set to column or page if so)
-	\param tabStops List of tabstop definitions for the paragraph. If the list is empty, default tabstop definition should be used. Each tab stop may contain:
-	\li \c style:type Type of tab (left, right, center, or char)
-	\li \c style:char Alingnment character for char aligned tabs
-	\li \c style:leader-text The leader character
-	\li \c style:position Position of the tab
+	\li \c librevenge:tab-stops List of tabstop definitions for the paragraph. If the list is empty, default tabstop definition should be used. Each tab stop may contain:
+	    -# \c style:type Type of tab (left, right, center, or char)
+	    -# \c style:char Alingnment character for char aligned tabs
+	    -# \c style:leader-text The leader character
+	    -# \c style:position Position of the tab
 	*/
 	virtual void openParagraph(const RVNGPropertyList &propList) = 0;
 	/**
@@ -209,10 +209,10 @@ public:
 	\li \c fo:margin-right The right indentation of this section, in inches
 	\li \c librevenge:margin-bottom  Extra space to add after the section, in inches
 	\li \c text:dont-balance-text-columns Whether or not to balance text columns
-	\param columns List of definitions of each column: left gutter, right gutter, and width (includes the gutters). Empty if there is only one column in the section. Each column may contain:
-	\li \c style:rel-width
-	\li \c fo:start-indent The left indentation of the margin, in inches
-	\li \c fo:end-indent The right indentation of the margin, in inches
+	\li \c style:columns List of definitions of each column: left gutter, right gutter, and width (includes the gutters). Empty if there is only one column in the section. Each column may contain:
+		-# \c style:rel-width
+		-# \c fo:start-indent The left indentation of the margin, in inches
+		-# \c fo:end-indent The right indentation of the margin, in inches
 	*/
 	virtual void openSection(const RVNGPropertyList &propList) = 0;
 	/**
@@ -240,10 +240,10 @@ public:
 
 	/**
 	Called when a field should be inserted. Field types may include:
-	\li \c text:page-number Current page number
-	\li \c text:page-count Total # of pages in document
-	\param propList Defines a set of properties for the field. May contain:
-	\li \c style:num-format Type of page number (for page number)
+	- \c librevenge:field-type field types may include:
+	   -# \c text:page-number Current page number
+	   -# \c text:page-count Total # of pages in document
+	- \c style:num-format Type of page number (for page number)
 	*/
 	virtual void insertField(const RVNGPropertyList &propList) = 0;
 
@@ -301,11 +301,11 @@ public:
 	\li \c fo:text-indent The indentation of first line, in inches (difference relative to margin-left)
 	\li \c fo:line-height The amount of spacing between lines, in number of lines (1.0 is single spacing)
 	\li \c fo:break-before Whether this paragraph should be placed in a new column or page (the value is set to column or page if so)
-	\param tabStops List of tabstop definitions for the paragraph. If the list is empty, default tabstop definition should be used. Each tab stop may contain:
-	\li \c style:type Type of tab (left, right, center, or char)
-	\li \c style:char Alingnment character for char aligned tabs
-	\li \c style:leader-text The leader character
-	\li \c style:position Position of the tab
+	\li \c librevenge:tab-stops List of tabstop definitions for the paragraph. If the list is empty, default tabstop definition should be used. Each tab stop may contain:
+	    -# \c style:type Type of tab (left, right, center, or char)
+	    -# \c style:char Alingnment character for char aligned tabs
+	    -# \c style:leader-text The leader character
+	    -# \c style:position Position of the tab
 	*/
 	virtual void openListElement(const RVNGPropertyList &propList) = 0;
 	/**
@@ -363,8 +363,8 @@ public:
 	\li \c fo:margin-right The right indentation of the table, in inches
 	\li \c style:width Total width of the table, in inches
 	\li \c fo:break-before Whether this table should be placed in a new column or page (the value is set to column or page if so)
-	\param columns Column definitions for the table. May contain
-	\li \c style:column-width Width of a column, in inches
+	\li \c librevenge:table-columns Column definitions for the table. May contain
+	    -# \c style:column-width Width of a column, in inches
 	*/
 	virtual void openTable(const RVNGPropertyList &propList) = 0;
 	/**
@@ -439,8 +439,8 @@ public:
 	/**
 	Called when a mathml object should be inserted
 	\param propList Defines a set of properties for the object.
-	\li \c librevenge:mime-type The mimetype of the object
-	\param data Reference to the string containing the equation representation
+	\li \c librevenge:mimetype The mimetype of the object
+	\li \c librevenge:data reference to the string containing the equation representation
 	*/
 	virtual void insertEquation(const RVNGPropertyList &propList) = 0;
 };

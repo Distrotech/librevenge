@@ -158,10 +158,10 @@ public:
 
 	/**
 	Called when a field should be inserted. Field types may include:
-	\li \c text:page-number Current page number
-	\li \c text:page-count Total # of pages in document
-	\param propList Defines a set of properties for the field. May contain:
-	\li \c style:num-format Type of page number (for page number)
+	- \c librevenge:field-type field types may include:
+	   -# \c text:page-number Current page number
+	   -# \c text:page-count Total # of pages in document
+	- \c style:num-format Type of page number (for page number)
 	*/
 	virtual void insertField(const RVNGPropertyList &propList) = 0;
 
@@ -209,11 +209,11 @@ public:
 	\li \c fo:text-indent The indentation of first line, in inches (difference relative to margin-left)
 	\li \c fo:line-height The amount of spacing between lines, in number of lines (1.0 is single spacing)
 	\li \c fo:break-before Whether this paragraph should be placed in a new column or page (the value is set to column or page if so)
-	\param tabStops List of tabstop definitions for the paragraph. If the list is empty, default tabstop definition should be used. Each tab stop may contain:
-	\li \c style:type Type of tab (left, right, center, or char)
-	\li \c style:char Alingnment character for char aligned tabs
-	\li \c style:leader-text The leader character
-	\li \c style:position Position of the tab
+	\li \c librevenge:tab-stops List of tabstop definitions for the paragraph. If the list is empty, default tabstop definition should be used. Each tab stop may contain:
+	    -# \c style:type Type of tab (left, right, center, or char)
+	    -# \c style:char Alingnment character for char aligned tabs
+	    -# \c style:leader-text The leader character
+	    -# \c style:position Position of the tab
 	*/
 	virtual void openListElement(const RVNGPropertyList &propList) = 0;
 
@@ -233,11 +233,11 @@ public:
 	\li \c fo:text-indent The indentation of first line, in inches (difference relative to margin-left)
 	\li \c fo:line-height The amount of spacing between lines, in number of lines (1.0 is single spacing)
 	\li \c fo:break-before Whether this paragraph should be placed in a new column or page (the value is set to column or page if so)
-	\param tabStops List of tabstop definitions for the paragraph. If the list is empty, default tabstop definition should be used. Each tab stop may contain:
-	\li \c style:type Type of tab (left, right, center, or char)
-	\li \c style:char Alingnment character for char aligned tabs
-	\li \c style:leader-text The leader character
-	\li \c style:position Position of the tab
+	\li \c librevenge:tab-stops List of tabstop definitions for the paragraph. If the list is empty, default tabstop definition should be used. Each tab stop may contain:
+	    -# \c style:type Type of tab (left, right, center, or char)
+	    -# \c style:char Alingnment character for char aligned tabs
+	    -# \c style:leader-text The leader character
+	    -# \c style:position Position of the tab
 	*/
 	virtual void openParagraph(const RVNGPropertyList &propList) = 0;
 
@@ -277,8 +277,8 @@ public:
 	\li \c fo:margin-right The right indentation of the table, in inches
 	\li \c style:width Total width of the table, in inches
 	\li \c fo:break-before Whether this table should be placed in a new column or page (the value is set to column or page if so)
-	\param columns Column definitions for the table. May contain
-	\li \c style:column-width Width of a column, in inches
+	\li \c librevenge:table-columns Column definitions for the table. May contain
+	    -# \c style:column-width Width of a column, in inches
 	*/
 	virtual void openTable(const RVNGPropertyList &propList) = 0;
 	/**

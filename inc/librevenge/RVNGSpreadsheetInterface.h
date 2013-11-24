@@ -471,8 +471,8 @@ public:
 	\li \c fo:margin-right The right indentation of the table, in inches
 	\li \c style:width Total width of the table, in inches
 	\li \c fo:break-before Whether this table should be placed in a new column or page (the value is set to column or page if so)
-	\param columns Column definitions for the table. May contain
-	\li \c style:column-width Width of a column, in inches
+	\li \c librevenge:table-columns Column definitions for the table. May contain
+	    -# \c style:column-width Width of a column, in inches
 	*/
 	virtual void openTable(const RVNGPropertyList &propList) = 0;
 	/**
