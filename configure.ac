@@ -195,6 +195,7 @@ AC_SUBST(ZLIB_LIBS)
 # Find boost headers
 # ==================
 AC_CHECK_HEADERS(
+		boost/archive/iterators/base64_from_binary.hpp \
 		boost/archive/iterators/binary_from_base64.hpp \
 		boost/archive/iterators/remove_whitespace.hpp \
 		boost/archive/iterators/transform_width.hpp \

@@ -18,6 +18,7 @@
  */
 
 #include <boost/archive/iterators/binary_from_base64.hpp>
+#include <boost/archive/iterators/base64_from_binary.hpp>
 #include <boost/archive/iterators/remove_whitespace.hpp>
 #include <boost/archive/iterators/transform_width.hpp>
 #include <boost/range/iterator_range.hpp>
@@ -37,7 +38,6 @@ namespace librevenge
 {
 
 namespace
-
 {
 
 struct DataImpl
@@ -63,7 +63,22 @@ void convertFromBase64(std::vector<unsigned char> &result, std::string &source)
 	}
 }
 
+void convertToBase64(std::string &result, const std::vector<unsigned char> &source)
+{
+	unsigned numPadding = (3-source.size() %3) %3;
+
+	typedef boost::archive::iterators::base64_from_binary<
+	boost::archive::iterators::transform_width<std::vector<unsigned char>::const_iterator, 6, 8 > > base64_encoder;
+
+	// Encode the buffer and create a string
+	std::copy(
+	    base64_encoder(source.begin()),
+	    base64_encoder(source.end()), std::back_inserter(result));
+
+	result.append(numPadding, '=');  // add '=' for each padded character
 }
+
+} // anonymous namespace
 
 struct RVNGBinaryDataImpl
 {
@@ -199,59 +214,9 @@ const unsigned char *RVNGBinaryData::getDataBuffer() const
 
 const RVNGString RVNGBinaryData::getBase64Data() const
 {
-	static const char *base64Chars =
-	    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-	unsigned char tempCharsToEncode[3];
-	const unsigned long len = size();
-	unsigned long i = 0;
-	unsigned j = 0;
-	unsigned long modifiedLen;
-	if (len % 3)
-		modifiedLen = 3 * ((len / 3) + 1);
-	else
-		modifiedLen = len;
-
-	bool shouldIexit = false;
-	RVNGString base64;
-	for (; i < modifiedLen; i++)
-	{
-		if (i < len)
-			tempCharsToEncode[j++] = m_binaryDataImpl->m_ptr->m_buf[i];
-		else
-		{
-			tempCharsToEncode[j++] = '\0';
-			shouldIexit = true;
-		}
-
-		if (shouldIexit)
-		{
-			if (j == 3)
-			{
-				base64.append(base64Chars[(tempCharsToEncode[0] & 0xfc) >> 2]);
-				base64.append(base64Chars[((tempCharsToEncode[0] & 0x03) << 4) | ((tempCharsToEncode[1] & 0xf0) >> 4)]);
-				base64.append(base64Chars[((tempCharsToEncode[1] & 0x0f) << 2) | ((tempCharsToEncode[2] & 0xc0) >> 6)]);
-				base64.append('=');
-				break;
-			}
-			if (j == 2)
-			{
-				base64.append(base64Chars[(tempCharsToEncode[0] & 0xfc) >> 2]);
-				base64.append(base64Chars[((tempCharsToEncode[0] & 0x03) << 4) | ((tempCharsToEncode[1] & 0xf0) >> 4)]);
-				base64.append('=');
-				base64.append('=');
-				break;
-			}
-		}
-		else if (j == 3)
-		{
-			base64.append(base64Chars[(tempCharsToEncode[0] & 0xfc) >> 2]);
-			base64.append(base64Chars[((tempCharsToEncode[0] & 0x03) << 4) | ((tempCharsToEncode[1] & 0xf0) >> 4)]);
-			base64.append(base64Chars[((tempCharsToEncode[1] & 0x0f) << 2) | ((tempCharsToEncode[2] & 0xc0) >> 6)]);
-			base64.append(base64Chars[tempCharsToEncode[2] & 0x3f]);
-			j = 0;
-		}
-	}
-	return base64;
+	std::string base64;
+	convertToBase64(base64, m_binaryDataImpl->m_ptr->m_buf);
+	return RVNGString(base64.c_str());
 }
 
 const RVNGInputStream *RVNGBinaryData::getDataStream() const
