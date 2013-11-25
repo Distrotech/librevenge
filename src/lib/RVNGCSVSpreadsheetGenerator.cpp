@@ -215,15 +215,15 @@ void RVNGCSVSpreadsheetGenerator::openSheetCell(const RVNGPropertyList &propList
 		struct tm time;
 		time.tm_sec=time.tm_min=time.tm_hour=0;
 		time.tm_mday=time.tm_mon=1;
-		time.tm_year=2000;
+		time.tm_year=100;
 		time.tm_wday=time.tm_yday=time.tm_isdst=-1;
 		time.tm_zone=0;
 		char buf[256];
 		if (valueType=="date")
 		{
 			time.tm_mday=propList["librevenge:day"] ? propList["librevenge:day"]->getInt() : 1;
-			time.tm_mon=propList["librevenge:month"] ? propList["librevenge:month"]->getInt() : 1;
-			time.tm_year=propList["librevenge:year"] ? propList["librevenge:year"]->getInt() : 2000;
+			time.tm_mon=propList["librevenge:month"] ? propList["librevenge:month"]->getInt()-1 : 0;
+			time.tm_year=propList["librevenge:year"] ? propList["librevenge:year"]->getInt()-1900 : 100;
 			if (mktime(&time)!=-1 && strftime(buf, 256, m_impl->m_dateFormat.c_str(), &time))
 				m_impl->m_stream << buf;
 		}
