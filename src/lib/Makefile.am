@@ -68,6 +68,7 @@ lib_LTLIBRARIES += librevenge-generators-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSIO
 librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_includedir = $(includedir)/librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@/librevenge-generators
 librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_include_HEADERS = \
 	$(top_srcdir)/inc/librevenge-generators/librevenge-generators.h \
+	$(top_srcdir)/inc/librevenge-generators/RVNGCSVSpreadsheetGenerator.h \
 	$(top_srcdir)/inc/librevenge-generators/RVNGHTMLTextGenerator.h \
 	$(top_srcdir)/inc/librevenge-generators/RVNGRawDrawingGenerator.h \
 	$(top_srcdir)/inc/librevenge-generators/RVNGRawPresentationGenerator.h \
@@ -82,6 +83,7 @@ librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_LIBADD  = ./l
 librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_DEPENDENCIES = ./librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.la @LIBREVENGE_GENERATORS_WIN32_RESOURCE@
 librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic $(no_undefined)
 librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_SOURCES = \
+	RVNGCSVSpreadsheetGenerator.cpp \
 	RVNGHTMLTextGenerator.cpp \
 	RVNGHTMLTextTextStyle.cpp \
 	RVNGHTMLTextTextStyle.h \
