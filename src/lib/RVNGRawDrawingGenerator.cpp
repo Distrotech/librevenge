@@ -28,25 +28,6 @@
 namespace librevenge
 {
 
-namespace
-{
-
-enum RVNGRawDrawingGeneratorCallback
-{
-	PC_START_DOCUMENT = 0,
-	PC_START_PAGE,
-	PC_START_LAYER,
-	PC_START_EMBEDDED_GRAPHICS,
-	PC_START_TEXT_OBJECT,
-	PC_OPEN_ORDERED_LIST_LEVEL,
-	PC_OPEN_UNORDERED_LIST_LEVEL,
-	PC_OPEN_LIST_ELEMENT,
-	PC_OPEN_PARAGRAPH,
-	PC_OPEN_SPAN
-};
-
-} // anonymous namespace
-
 struct RVNGRawDrawingGeneratorImpl : RVNGRawGeneratorBase
 {
 	explicit RVNGRawDrawingGeneratorImpl(bool printCallgraphScore);
@@ -73,12 +54,12 @@ RVNGRawDrawingGenerator::~RVNGRawDrawingGenerator()
 
 void RVNGRawDrawingGenerator::startDocument(const librevenge::RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("startDocument(%s)\n", propList.getPropString().cstr()), PC_START_DOCUMENT);
+	RVNG_CALLGRAPH_ENTER(("startDocument(%s)\n", propList.getPropString().cstr()), CALLBACK_START_DOCUMENT);
 }
 
 void RVNGRawDrawingGenerator::endDocument()
 {
-	RVNG_CALLGRAPH_LEAVE(("endDocument\n"), PC_START_DOCUMENT);
+	RVNG_CALLGRAPH_LEAVE(("endDocument\n"), CALLBACK_START_DOCUMENT);
 }
 
 void RVNGRawDrawingGenerator::setDocumentMetaData(const librevenge::RVNGPropertyList &propList)
@@ -91,32 +72,32 @@ void RVNGRawDrawingGenerator::setDocumentMetaData(const librevenge::RVNGProperty
 
 void RVNGRawDrawingGenerator::startPage(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("startPage(%s)\n", propList.getPropString().cstr()), PC_START_PAGE);
+	RVNG_CALLGRAPH_ENTER(("startPage(%s)\n", propList.getPropString().cstr()), CALLBACK_START_PAGE);
 }
 
 void RVNGRawDrawingGenerator::endPage()
 {
-	RVNG_CALLGRAPH_LEAVE(("endPage\n"), PC_START_PAGE);
+	RVNG_CALLGRAPH_LEAVE(("endPage\n"), CALLBACK_START_PAGE);
 }
 
 void RVNGRawDrawingGenerator::startLayer(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("startLayer (%s)\n", propList.getPropString().cstr()), PC_START_LAYER);
+	RVNG_CALLGRAPH_ENTER(("startLayer (%s)\n", propList.getPropString().cstr()), CALLBACK_START_LAYER);
 }
 
 void RVNGRawDrawingGenerator::endLayer()
 {
-	RVNG_CALLGRAPH_LEAVE(("endLayer\n"), PC_START_LAYER);
+	RVNG_CALLGRAPH_LEAVE(("endLayer\n"), CALLBACK_START_LAYER);
 }
 
 void RVNGRawDrawingGenerator::startEmbeddedGraphics(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("startEmbeddedGraphics (%s)\n", propList.getPropString().cstr()), PC_START_EMBEDDED_GRAPHICS);
+	RVNG_CALLGRAPH_ENTER(("startEmbeddedGraphics (%s)\n", propList.getPropString().cstr()), CALLBACK_START_EMBEDDED_GRAPHICS);
 }
 
 void RVNGRawDrawingGenerator::endEmbeddedGraphics()
 {
-	RVNG_CALLGRAPH_LEAVE(("endEmbeddedGraphics \n"), PC_START_EMBEDDED_GRAPHICS);
+	RVNG_CALLGRAPH_LEAVE(("endEmbeddedGraphics \n"), CALLBACK_START_EMBEDDED_GRAPHICS);
 }
 
 void RVNGRawDrawingGenerator::setStyle(const RVNGPropertyList &propList)
@@ -177,62 +158,62 @@ void RVNGRawDrawingGenerator::drawGraphicObject(const RVNGPropertyList &propList
 
 void RVNGRawDrawingGenerator::startTextObject(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("startTextObject (%s)\n", propList.getPropString().cstr()), PC_START_TEXT_OBJECT);
+	RVNG_CALLGRAPH_ENTER(("startTextObject (%s)\n", propList.getPropString().cstr()), CALLBACK_START_TEXT_OBJECT);
 }
 
 void RVNGRawDrawingGenerator::endTextObject()
 {
-	RVNG_CALLGRAPH_LEAVE(("endTextObject\n"), PC_START_TEXT_OBJECT);
+	RVNG_CALLGRAPH_LEAVE(("endTextObject\n"), CALLBACK_START_TEXT_OBJECT);
 }
 
 void RVNGRawDrawingGenerator::openOrderedListLevel(const librevenge::RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("openOrderedListLevel(%s)\n", propList.getPropString().cstr()), PC_OPEN_ORDERED_LIST_LEVEL);
+	RVNG_CALLGRAPH_ENTER(("openOrderedListLevel(%s)\n", propList.getPropString().cstr()), CALLBACK_OPEN_ORDERED_LIST_LEVEL);
 }
 
 void RVNGRawDrawingGenerator::closeOrderedListLevel()
 {
-	RVNG_CALLGRAPH_LEAVE(("closeOrderedListLevel\n"), PC_OPEN_ORDERED_LIST_LEVEL);
+	RVNG_CALLGRAPH_LEAVE(("closeOrderedListLevel\n"), CALLBACK_OPEN_ORDERED_LIST_LEVEL);
 }
 
 void RVNGRawDrawingGenerator::openUnorderedListLevel(const librevenge::RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("openUnorderedListLevel(%s)\n", propList.getPropString().cstr()), PC_OPEN_UNORDERED_LIST_LEVEL);
+	RVNG_CALLGRAPH_ENTER(("openUnorderedListLevel(%s)\n", propList.getPropString().cstr()), CALLBACK_OPEN_UNORDERED_LIST_LEVEL);
 }
 
 void RVNGRawDrawingGenerator::closeUnorderedListLevel()
 {
-	RVNG_CALLGRAPH_LEAVE(("closeUnorderedListLevel\n"), PC_OPEN_UNORDERED_LIST_LEVEL);
+	RVNG_CALLGRAPH_LEAVE(("closeUnorderedListLevel\n"), CALLBACK_OPEN_UNORDERED_LIST_LEVEL);
 }
 
 void RVNGRawDrawingGenerator::openListElement(const librevenge::RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("openListElement(%s)\n", propList.getPropString().cstr()), PC_OPEN_LIST_ELEMENT);
+	RVNG_CALLGRAPH_ENTER(("openListElement(%s)\n", propList.getPropString().cstr()), CALLBACK_OPEN_LIST_ELEMENT);
 }
 
 void RVNGRawDrawingGenerator::closeListElement()
 {
-	RVNG_CALLGRAPH_LEAVE(("closeListElement\n"), PC_OPEN_LIST_ELEMENT);
+	RVNG_CALLGRAPH_LEAVE(("closeListElement\n"), CALLBACK_OPEN_LIST_ELEMENT);
 }
 
 void RVNGRawDrawingGenerator::openParagraph(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("openParagraph (%s)\n", propList.getPropString().cstr()), PC_OPEN_PARAGRAPH);
+	RVNG_CALLGRAPH_ENTER(("openParagraph (%s)\n", propList.getPropString().cstr()), CALLBACK_OPEN_PARAGRAPH);
 }
 
 void RVNGRawDrawingGenerator::closeParagraph()
 {
-	RVNG_CALLGRAPH_LEAVE(("closeParagraph\n"), PC_OPEN_PARAGRAPH);
+	RVNG_CALLGRAPH_LEAVE(("closeParagraph\n"), CALLBACK_OPEN_PARAGRAPH);
 }
 
 void RVNGRawDrawingGenerator::openSpan(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("openSpan(%s)\n", propList.getPropString().cstr()), PC_OPEN_SPAN);
+	RVNG_CALLGRAPH_ENTER(("openSpan(%s)\n", propList.getPropString().cstr()), CALLBACK_OPEN_SPAN);
 }
 
 void RVNGRawDrawingGenerator::closeSpan()
 {
-	RVNG_CALLGRAPH_LEAVE(("closeSpan\n"), PC_OPEN_SPAN);
+	RVNG_CALLGRAPH_LEAVE(("closeSpan\n"), CALLBACK_OPEN_SPAN);
 }
 
 void RVNGRawDrawingGenerator::insertTab()
