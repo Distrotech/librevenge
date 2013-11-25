@@ -33,12 +33,16 @@ namespace
 
 enum RVNGRawDrawingGeneratorCallback
 {
-	PC_START_GRAPHICS = 0,
+	PC_START_DOCUMENT = 0,
+	PC_START_PAGE,
 	PC_START_LAYER,
 	PC_START_EMBEDDED_GRAPHICS,
 	PC_START_TEXT_OBJECT,
-	PC_START_TEXT_LINE,
-	PC_START_TEXT_SPAN
+	PC_OPEN_ORDERED_LIST_LEVEL,
+	PC_OPEN_UNORDERED_LIST_LEVEL,
+	PC_OPEN_LIST_ELEMENT,
+	PC_OPEN_PARAGRAPH,
+	PC_OPEN_SPAN
 };
 
 } // anonymous namespace
@@ -67,18 +71,32 @@ RVNGRawDrawingGenerator::~RVNGRawDrawingGenerator()
 	delete m_impl;
 }
 
-void RVNGRawDrawingGenerator::startDocument(const librevenge::RVNGPropertyList & /*propList*/) {}
-void RVNGRawDrawingGenerator::endDocument() {}
-void RVNGRawDrawingGenerator::setDocumentMetaData(const librevenge::RVNGPropertyList & /*propList*/) {}
+void RVNGRawDrawingGenerator::startDocument(const librevenge::RVNGPropertyList &propList)
+{
+	RVNG_CALLGRAPH_ENTER(("startDocument(%s)\n", propList.getPropString().cstr()), PC_START_DOCUMENT);
+}
+
+void RVNGRawDrawingGenerator::endDocument()
+{
+	RVNG_CALLGRAPH_LEAVE(("endDocument\n"), PC_START_DOCUMENT);
+}
+
+void RVNGRawDrawingGenerator::setDocumentMetaData(const librevenge::RVNGPropertyList &propList)
+{
+	if (m_impl->m_printCallgraphScore)
+		return;
+
+	m_impl->iprintf("setDocumentMetaData(%s)\n", propList.getPropString().cstr());
+}
 
 void RVNGRawDrawingGenerator::startPage(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("startPage(%s)\n", propList.getPropString().cstr()), PC_START_GRAPHICS);
+	RVNG_CALLGRAPH_ENTER(("startPage(%s)\n", propList.getPropString().cstr()), PC_START_PAGE);
 }
 
 void RVNGRawDrawingGenerator::endPage()
 {
-	RVNG_CALLGRAPH_LEAVE(("endPage\n"), PC_START_GRAPHICS);
+	RVNG_CALLGRAPH_LEAVE(("endPage\n"), PC_START_PAGE);
 }
 
 void RVNGRawDrawingGenerator::startLayer(const RVNGPropertyList &propList)
@@ -167,37 +185,71 @@ void RVNGRawDrawingGenerator::endTextObject()
 	RVNG_CALLGRAPH_LEAVE(("endTextObject\n"), PC_START_TEXT_OBJECT);
 }
 
-void RVNGRawDrawingGenerator::openOrderedListLevel(const librevenge::RVNGPropertyList & /*propList*/) {}
-void RVNGRawDrawingGenerator::closeOrderedListLevel() {}
+void RVNGRawDrawingGenerator::openOrderedListLevel(const librevenge::RVNGPropertyList &propList)
+{
+	RVNG_CALLGRAPH_ENTER(("openOrderedListLevel(%s)\n", propList.getPropString().cstr()), PC_OPEN_ORDERED_LIST_LEVEL);
+}
 
-void RVNGRawDrawingGenerator::openUnorderedListLevel(const librevenge::RVNGPropertyList & /*propList*/) {}
-void RVNGRawDrawingGenerator::closeUnorderedListLevel() {}
+void RVNGRawDrawingGenerator::closeOrderedListLevel()
+{
+	RVNG_CALLGRAPH_LEAVE(("closeOrderedListLevel\n"), PC_OPEN_ORDERED_LIST_LEVEL);
+}
 
-void RVNGRawDrawingGenerator::openListElement(const librevenge::RVNGPropertyList & /*propList*/) {}
-void RVNGRawDrawingGenerator::closeListElement() {}
+void RVNGRawDrawingGenerator::openUnorderedListLevel(const librevenge::RVNGPropertyList &propList)
+{
+	RVNG_CALLGRAPH_ENTER(("openUnorderedListLevel(%s)\n", propList.getPropString().cstr()), PC_OPEN_UNORDERED_LIST_LEVEL);
+}
+
+void RVNGRawDrawingGenerator::closeUnorderedListLevel()
+{
+	RVNG_CALLGRAPH_LEAVE(("closeUnorderedListLevel\n"), PC_OPEN_UNORDERED_LIST_LEVEL);
+}
+
+void RVNGRawDrawingGenerator::openListElement(const librevenge::RVNGPropertyList &propList)
+{
+	RVNG_CALLGRAPH_ENTER(("openListElement(%s)\n", propList.getPropString().cstr()), PC_OPEN_LIST_ELEMENT);
+}
+
+void RVNGRawDrawingGenerator::closeListElement()
+{
+	RVNG_CALLGRAPH_LEAVE(("closeListElement\n"), PC_OPEN_LIST_ELEMENT);
+}
 
 void RVNGRawDrawingGenerator::openParagraph(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("openParagraph (%s)\n", propList.getPropString().cstr()), PC_START_TEXT_LINE);
+	RVNG_CALLGRAPH_ENTER(("openParagraph (%s)\n", propList.getPropString().cstr()), PC_OPEN_PARAGRAPH);
 }
 
 void RVNGRawDrawingGenerator::closeParagraph()
 {
-	RVNG_CALLGRAPH_LEAVE(("closeParagraph\n"), PC_START_TEXT_LINE);
+	RVNG_CALLGRAPH_LEAVE(("closeParagraph\n"), PC_OPEN_PARAGRAPH);
 }
 
 void RVNGRawDrawingGenerator::openSpan(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("openSpan (%s)\n", propList.getPropString().cstr()), PC_START_TEXT_SPAN);
+	RVNG_CALLGRAPH_ENTER(("openSpan(%s)\n", propList.getPropString().cstr()), PC_OPEN_SPAN);
 }
 
 void RVNGRawDrawingGenerator::closeSpan()
 {
-	RVNG_CALLGRAPH_LEAVE(("closeSpan\n"), PC_START_TEXT_SPAN);
+	RVNG_CALLGRAPH_LEAVE(("closeSpan\n"), PC_OPEN_SPAN);
 }
 
-void RVNGRawDrawingGenerator::insertTab() {}
-void RVNGRawDrawingGenerator::insertSpace() {}
+void RVNGRawDrawingGenerator::insertTab()
+{
+	if (m_impl->m_printCallgraphScore)
+		return;
+
+	m_impl->iprintf("insertTab\n");
+}
+
+void RVNGRawDrawingGenerator::insertSpace()
+{
+	if (m_impl->m_printCallgraphScore)
+		return;
+
+	m_impl->iprintf("insertSpace\n");
+}
 
 void RVNGRawDrawingGenerator::insertText(const RVNGString &str)
 {
@@ -207,8 +259,21 @@ void RVNGRawDrawingGenerator::insertText(const RVNGString &str)
 	m_impl->iprintf("insertText (%s)\n", str.cstr());
 }
 
-void RVNGRawDrawingGenerator::insertLineBreak() {}
-void RVNGRawDrawingGenerator::insertField(const librevenge::RVNGPropertyList & /*propList*/) {}
+void RVNGRawDrawingGenerator::insertLineBreak()
+{
+	if (m_impl->m_printCallgraphScore)
+		return;
+
+	m_impl->iprintf("insertLineBreak\n");
+}
+
+void RVNGRawDrawingGenerator::insertField(const librevenge::RVNGPropertyList &propList)
+{
+	if (m_impl->m_printCallgraphScore)
+		return;
+
+	m_impl->iprintf("insertField(%s)\n", propList.getPropString().cstr());
+}
 
 }
 
