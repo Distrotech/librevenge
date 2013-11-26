@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * Major Contributor(s):
- * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
- * Copyright (C) 2002-2004 Marc Maurer (uwog@uwog.net)
+* Copyright (C) 2002 William Lachance (wrlach@gmail.com)
+* Copyright (C) 2002-2003 Marc Maurer (uwog@uwog.net)
  *
  * For minor contributions see the git repository.
  *
@@ -16,10 +16,10 @@
  * of the GNU Lesser General Public License Version 2.1 or later
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
- */
+*/
 
-#ifndef RVNGCSVSPREADSHEETGENERATOR_H
-#define RVNGCSVSPREADSHEETGENERATOR_H
+#ifndef RVNGTEXTSPREADSHEETGENERATOR_H
+#define RVNGTEXTSPREADSHEETGENERATOR_H
 
 #include <librevenge/librevenge.h>
 #include <librevenge-stream/librevenge-stream.h>
@@ -27,38 +27,22 @@
 namespace librevenge
 {
 
-struct RVNGCSVSpreadsheetGeneratorImpl;
-/** A CSV generator for spreadsheet documents.
+struct RVNGTextSpreadsheetGeneratorImpl;
+/** A text generator for spreadsheet documents.
   *
   * See \c ::librevenge::RVNGSpreadsheetInterface for documentation of the basic interface.
   */
-class RVNGCSVSpreadsheetGenerator : public RVNGSpreadsheetInterface
+class RVNGTextSpreadsheetGenerator : public RVNGSpreadsheetInterface
 {
 	//! unimplemented copy constructor to prevent copy
-	RVNGCSVSpreadsheetGenerator(const RVNGCSVSpreadsheetGenerator &other);
+	RVNGTextSpreadsheetGenerator(const RVNGTextSpreadsheetGenerator &other);
 	//! unimplemented copy operator to prevent copy
-	RVNGCSVSpreadsheetGenerator &operator=(const RVNGCSVSpreadsheetGenerator &other);
+	RVNGTextSpreadsheetGenerator &operator=(const RVNGTextSpreadsheetGenerator &other);
 
 public:
-	/** constructor given:
-		\li \c sheets a vector of string to fill
-		\li \c generateFormula a flag to known if we need to generate the formula or not
+	explicit RVNGTextSpreadsheetGenerator(RVNGStringVector &sheets, const bool isInfo=false);
+	virtual ~RVNGTextSpreadsheetGenerator();
 
-		\note if generateFormula is true, the formula will be
-		generated with english name, so a localized version of Excel,
-		... will not recognize them
-	*/
-	explicit RVNGCSVSpreadsheetGenerator(RVNGStringVector &sheets, bool generateFormula=false);
-	//! destructor
-	virtual ~RVNGCSVSpreadsheetGenerator();
-	/** set the separators:
-		- \c fieldSep the field separator, default: ,
-		- \c textSep the text separator, default: "
-		- \c decimalSep the decimal separator, default: .
-	 */
-	void setSeparators(char fieldSep=',', char textSep='"', char decimalSep='.');
-	//! defines the format used to export the date and the time (see strftime)
-	void setDTFormats(RVNGString const &date="%m/%d/%y", RVNGString const &time="%H:%M:%S");
 	virtual void setDocumentMetaData(const RVNGPropertyList &propList);
 
 	virtual void startDocument();
@@ -86,6 +70,10 @@ public:
 	virtual void openFooter(const RVNGPropertyList &propList);
 	virtual void closeFooter();
 
+	virtual void defineSectionStyle(const RVNGPropertyList &propList);
+	virtual void openSection(const RVNGPropertyList &propList);
+	virtual void closeSection();
+
 	virtual void defineParagraphStyle(const RVNGPropertyList &propList);
 	virtual void openParagraph(const RVNGPropertyList &propList);
 	virtual void closeParagraph();
@@ -93,10 +81,6 @@ public:
 	virtual void defineCharacterStyle(const RVNGPropertyList &propList);
 	virtual void openSpan(const RVNGPropertyList &propList);
 	virtual void closeSpan();
-
-	virtual void defineSectionStyle(const RVNGPropertyList &propList);
-	virtual void openSection(const RVNGPropertyList &propList);
-	virtual void closeSection();
 
 	virtual void insertTab();
 	virtual void insertSpace();
@@ -151,14 +135,12 @@ public:
 	virtual void drawPath(const RVNGPropertyList &propList);
 
 	virtual void insertEquation(const RVNGPropertyList &propList);
-
 private:
-	//! the internal storage data
-	RVNGCSVSpreadsheetGeneratorImpl *m_impl;
+	RVNGTextSpreadsheetGeneratorImpl *m_impl;
 };
 
 }
 
-#endif /* RVNGCSVSPREADSHEETGENERATOR_H */
+#endif /* RVNGTEXTSPREADSHEETGENERATOR_H */
 
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

@@ -32,8 +32,9 @@ namespace librevenge
 
 struct RVNGCSVSpreadsheetGeneratorImpl
 {
-	explicit RVNGCSVSpreadsheetGeneratorImpl(RVNGStringVector &sheets) :
+	explicit RVNGCSVSpreadsheetGeneratorImpl(RVNGStringVector &sheets, bool useFormula) :
 		m_sheets(sheets), m_stream(),
+		m_useFormula(useFormula),
 		m_fieldSeparator(','), m_textSeparator('"'), m_decimalSeparator('.'),
 		m_dateFormat("%m/%d/%y"), m_timeFormat("%H:%M:%S"),
 		m_inSheet(false), m_inSheetRow(false), m_inSheetCell(false),
@@ -51,8 +52,22 @@ struct RVNGCSVSpreadsheetGeneratorImpl
 			m_stream << m_textSeparator;
 		m_stream << c;
 	}
+	void insertDouble(double val)
+	{
+		std::stringstream s;
+		s << val;
+		std::string res=s.str();
+		if (m_decimalSeparator!='.')
+		{
+			std::string::size_type pos = res.find_last_of('.');
+			if (pos != std::string::npos) res[pos]=m_decimalSeparator;
+		}
+		m_stream << res;
+	}
+	void insertInstruction(librevenge::RVNGPropertyList const &instruction);
 	RVNGStringVector &m_sheets;
 	std::ostringstream m_stream;
+	bool m_useFormula;
 	char m_fieldSeparator, m_textSeparator, m_decimalSeparator;
 	std::string m_dateFormat, m_timeFormat;
 	bool m_inSheet, m_inSheetRow, m_inSheetCell;
@@ -60,9 +75,119 @@ struct RVNGCSVSpreadsheetGeneratorImpl
 	int m_column, m_row, m_numColumns;
 };
 
+void RVNGCSVSpreadsheetGeneratorImpl::insertInstruction(librevenge::RVNGPropertyList const &instr)
+{
+	if (!instr["librevenge:type"])
+	{
+		RVNG_DEBUG_MSG(("RVNGCSVSpreadsheetGeneratorImpl::insertInstruction can not find formula type !!!\n"));
+		return;
+	}
+	std::string type(instr["librevenge:type"]->getStr().cstr());
+	if (type=="librevenge-operator")
+	{
+		if (!instr["librevenge:operator"])
+		{
+			RVNG_DEBUG_MSG(("RVNGCSVSpreadsheetGeneratorImpl::insertInstruction can not find operator for formula!!!\n"));
+			return;
+		}
+		m_stream << instr["librevenge:operator"]->getStr().cstr();
+		return;
+	}
+	if (type=="librevenge-function")
+	{
+		if (!instr["librevenge:function"])
+		{
+			RVNG_DEBUG_MSG(("RVNGCSVSpreadsheetGeneratorImpl::insertInstruction can not find function for formula!!!\n"));
+			return;
+		}
+		m_stream << instr["librevenge:function"]->getStr().cstr();
+		return;
+	}
+	if (type=="librevenge-number")
+	{
+		if (!instr["librevenge:number"])
+		{
+			RVNG_DEBUG_MSG(("RVNGCSVSpreadsheetGeneratorImpl::insertInstruction can not find value for formula!!!\n"));
+			return;
+		}
+		insertDouble(instr["librevenge:number"]->getDouble());
+		return;
+	}
+	if (type=="librevenge-text")
+	{
+		if (!instr["librevenge:text"])
+		{
+			RVNG_DEBUG_MSG(("RVNGCSVSpreadsheetGeneratorImpl::insertInstruction can not find text for formula!!!\n"));
+			return;
+		}
+		std::string text(instr["librevenge:text"]->getStr().cstr());
+		insertCharacter('"');
+		for (size_t t=0; t < text.length(); ++t)
+			insertCharacter((char) text[t]);
+		insertCharacter('"');
+		return;
+	}
+	if (type=="librevenge-cell")
+	{
+		if (!instr["librevenge:row"]||!instr["librevenge:column"])
+		{
+			RVNG_DEBUG_MSG(("RVNGCSVSpreadsheetGeneratorImpl::insertInstruction can not find formula cordinate!!!\n"));
+			return;
+		}
+		int column=instr["librevenge:column"]->getInt();
+		int row=instr["librevenge:row"]->getInt();
+		if (column<0 || row<0)
+		{
+			RVNG_DEBUG_MSG(("RVNGCSVSpreadsheetGeneratorImpl::insertInstruction: find bad coordinate for formula!!!\n"));
+			return;
+		}
+		if (instr["librevenge:column-absolute"] && instr["librevenge:column-absolute"]->getInt()) m_stream << "$";
+		if (column>=26) m_stream << char('A'+(column/26-1));
+		m_stream << char('A'+(column%26));
+		if (instr["librevenge:row-absolute"] && instr["librevenge:row-absolute"]->getInt()) m_stream << "$";
+		m_stream << row+1;
+		return;
+	}
+	if (type=="librevenge-cells")
+	{
+		if (!instr["librevenge:start-row"]||!instr["librevenge:start-column"])
+		{
+			RVNG_DEBUG_MSG(("RVNGCSVSpreadsheetGeneratorImpl::insertInstruction can not find formula cordinate!!!\n"));
+			return;
+		}
+		int column=instr["librevenge:start-column"]->getInt();
+		int row=instr["librevenge:start-row"]->getInt();
+		if (column<0 || row<0)
+		{
+			RVNG_DEBUG_MSG(("RVNGCSVSpreadsheetGeneratorImpl::insertInstruction: find bad coordinate1 for formula!!!\n"));
+			return;
+		}
+		if (instr["librevenge:start-column-absolute"] && instr["librevenge:start-column-absolute"]->getInt()) m_stream << "$";
+		if (column>=26) m_stream << char('A'+(column/26-1));
+		m_stream << char('A'+(column%26));
+		if (instr["librevenge:start-row-absolute"] && instr["librevenge:start-row-absolute"]->getInt()) m_stream << "$";
+		m_stream << row+1 << ":";
+		if (instr["librevenge:end-column"])
+			column=instr["librevenge:end-column"]->getInt();
+		if (instr["librevenge:end-row"])
+			row=instr["librevenge:end-row"]->getInt();
+		if (column<0 || row<0)
+		{
+			RVNG_DEBUG_MSG(("RVNGCSVSpreadsheetGeneratorImpl::insertInstruction: find bad coordinate2 for formula!!!\n"));
+			return;
+		}
+		if (instr["librevenge:end-column-absolute"] && instr["librevenge:end-column-absolute"]->getInt()) m_stream << "$";
+		if (column>=26) m_stream << char('A'+(column/26-1));
+		m_stream << char('A'+(column%26));
+		if (instr["librevenge:end-row-absolute"] && instr["librevenge:end-row-absolute"]->getInt()) m_stream << "$";
+		m_stream << row+1;
+		return;
+	}
+	RVNG_DEBUG_MSG(("RVNGCSVSpreadsheetGeneratorImpl::insertInstruction find unknown type %s!!!\n", type.c_str()));
+}
 
-RVNGCSVSpreadsheetGenerator::RVNGCSVSpreadsheetGenerator(RVNGStringVector &sheets) :
-	m_impl(new RVNGCSVSpreadsheetGeneratorImpl(sheets))
+RVNGCSVSpreadsheetGenerator::RVNGCSVSpreadsheetGenerator(RVNGStringVector &sheets, bool generateFormula) :
+	m_impl(new RVNGCSVSpreadsheetGeneratorImpl(sheets,generateFormula))
 {
 }
 
@@ -183,6 +308,17 @@ void RVNGCSVSpreadsheetGenerator::openSheetCell(const RVNGPropertyList &propList
 	if (column) m_impl->m_stream << m_impl->m_fieldSeparator;
 	m_impl->m_stream << m_impl->m_textSeparator;
 
+	if (m_impl->m_useFormula)
+	{
+		librevenge::RVNGPropertyListVector const *formula=propList.child("librevenge:formula");
+		if (formula && formula->count())
+		{
+			m_impl->insertCharacter('=');
+			for (unsigned long s=0; s<formula->count(); ++s)
+				m_impl->insertInstruction((*formula)[s]);
+			return;
+		}
+	}
 	if (!propList["librevenge:value-type"]) return;
 
 	// now we need to retrieve the value in proplist
@@ -192,23 +328,24 @@ void RVNGCSVSpreadsheetGenerator::openSheetCell(const RVNGPropertyList &propList
 
 	if (propList["librevenge:value"] && (valueType=="float" || valueType=="percentage" || valueType=="currency"))
 	{
-		std::stringstream s;
-		if (valueType=="percentage") s << 100. * propList["librevenge:value"]->getDouble() << "%";
+		if (valueType=="percentage")
+		{
+			m_impl->insertDouble(100. * propList["librevenge:value"]->getDouble());
+			m_impl->m_stream << "%";
+		}
 		else
 		{
-			s << propList["librevenge:value"]->getDouble();
-			if (valueType=="currency") s << "$";
+			// if (valueType=="currency") m_impl->m_stream << "$";
+			m_impl->insertDouble(propList["librevenge:value"]->getDouble());
 		}
-		std::string res=s.str();
-		if (m_impl->m_decimalSeparator!='.')
-		{
-			std::string::size_type pos = res.find_last_of('.');
-			if (pos != std::string::npos) res[pos]=m_impl->m_decimalSeparator;
-		}
-		m_impl->m_stream << res;
 	}
 	else if (propList["librevenge:value"] && (valueType=="bool" || valueType=="boolean"))
-		m_impl->m_stream << (propList["librevenge:value"]->getInt() ? "true" : "false");
+	{
+		if (propList["librevenge:value"]->getDouble()<0||propList["librevenge:value"]->getDouble()>0)
+			m_impl->m_stream << "true";
+		else
+			m_impl->m_stream << "false";
+	}
 	else if (valueType=="date" || valueType=="time")
 	{
 		// checkme

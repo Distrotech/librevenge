@@ -24,6 +24,7 @@
 #include "RVNGSVGPresentationGenerator.h"
 #include "RVNGTextDrawingGenerator.h"
 #include "RVNGTextPresentationGenerator.h"
+#include "RVNGTextSpreadsheetGenerator.h"
 #include "RVNGTextTextGenerator.h"
 
 #endif // LIBREVENGE_GENERATORS_H
