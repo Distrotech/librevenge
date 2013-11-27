@@ -304,7 +304,7 @@ void RVNGCSVSpreadsheetGenerator::openSheetCell(const RVNGPropertyList &propList
 		m_impl->m_stream << m_impl->m_textSeparator << m_impl->m_textSeparator;
 	}
 	m_impl->m_column=column;
-	m_impl->m_inSheetCell=false;
+	m_impl->m_inSheetCell=true;
 	if (column) m_impl->m_stream << m_impl->m_fieldSeparator;
 	m_impl->m_stream << m_impl->m_textSeparator;
 
@@ -445,7 +445,7 @@ void RVNGCSVSpreadsheetGenerator::insertTab()
 
 void RVNGCSVSpreadsheetGenerator::insertText(const RVNGString &text)
 {
-	if (m_impl->canWriteData())
+	if (!m_impl->canWriteData())
 		return;
 	char const *data=text.cstr();
 	for (unsigned long c=0; c<text.size(); ++c)
@@ -454,16 +454,16 @@ void RVNGCSVSpreadsheetGenerator::insertText(const RVNGString &text)
 
 void RVNGCSVSpreadsheetGenerator::insertSpace()
 {
-	if (m_impl->canWriteData())
+	if (!m_impl->canWriteData())
 		return;
 	m_impl->insertCharacter(' ');
 }
 
 void RVNGCSVSpreadsheetGenerator::insertLineBreak()
 {
-	if (m_impl->canWriteData())
+	if (!m_impl->canWriteData())
 		return;
-	m_impl->insertCharacter('\n');
+	m_impl->insertCharacter(' ');
 }
 
 void RVNGCSVSpreadsheetGenerator::insertField(const RVNGPropertyList &) {}
