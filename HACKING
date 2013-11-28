@@ -3,7 +3,11 @@ librevenge coding style
 
 Indentation/spacing: We indent with tabs. Not spaces. This decision is, of
 course, rather contentious, but it does have the force of inertia going for
-it. Try to keep lines less than 120 columns wide.
+it. Try to keep lines less than 120 columns wide. Please run
+
+    astyle -HU -k3 -y -n -t -r \*.h \*.cpp
+
+before committing.
 
 Naming: Version-specific classes, enumerations, and defines should be prefixed 
 with 'WP', followed by the version number (e.g.: WP6, WP5, WP51, etc.). 
