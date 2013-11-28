@@ -19,6 +19,7 @@ EXTRA_DIST = \
 	librevenge.pc.in \
 	librevenge-generators.pc.in \
 	librevenge-stream.pc.in \
+	AUTHORS \
 	COPYING.LGPL \
 	COPYING.MPL \
 	HACKING \
