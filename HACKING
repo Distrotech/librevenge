@@ -5,7 +5,7 @@ Indentation/spacing: We indent with tabs. Not spaces. This decision is, of
 course, rather contentious, but it does have the force of inertia going for
 it. Try to keep lines less than 120 columns wide. Please run
 
-    astyle -HU -k3 -y -n -t -r \*.h \*.cpp
+    astyle -A1 -HU -k3 -y -n -t -r \*.h \*.cpp
 
 before committing.
 
