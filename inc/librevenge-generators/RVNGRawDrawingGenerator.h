@@ -37,7 +37,7 @@ class RVNGRawDrawingGenerator : public RVNGDrawingInterface
 	RVNGRawDrawingGenerator &operator=(const RVNGRawDrawingGenerator &other);
 
 public:
-	RVNGRawDrawingGenerator(bool printCallgraphScore = false);
+	RVNGRawDrawingGenerator(bool printCallgraphScore);
 
 	~RVNGRawDrawingGenerator();
 
