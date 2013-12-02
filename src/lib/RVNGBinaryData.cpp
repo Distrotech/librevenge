@@ -48,19 +48,14 @@ struct DataImpl
 	boost::scoped_ptr<RVNGMemoryInputStream> m_stream;
 };
 
-void convertFromBase64(std::vector<unsigned char> &result, std::string &source)
+void convertFromBase64(std::vector<unsigned char> &result, const std::string &source)
 {
-	unsigned numPadding = std::count(source.begin(), source.end(), '=');
-	std::replace(source.begin(),source.end(),'=','A'); // replace '=' by base64 encoding of '\0'
+	std::string::const_iterator paddingIter = std::find(source.begin(), source.end(), '=');
 	typedef boost::archive::iterators::transform_width<
 	boost::archive::iterators::binary_from_base64<
 	boost::archive::iterators::remove_whitespace< std::string::const_iterator > >, 8, 6 > base64_decoder;
 
-	std::copy(base64_decoder(source.begin()), base64_decoder(source.end()), std::back_inserter(result));
-	if (!result.empty())
-	{
-		result.erase(result.end()-numPadding,result.end());  // erase padding '\0' characters
-	}
+	std::copy(base64_decoder(source.begin()), base64_decoder(paddingIter), std::back_inserter(result));
 }
 
 void convertToBase64(std::string &result, const std::vector<unsigned char> &source)
