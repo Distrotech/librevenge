@@ -862,17 +862,17 @@ void RVNGSVGDrawingGenerator::insertText(const RVNGString &str)
 
 void RVNGSVGDrawingGenerator::insertTab()
 {
-	m_pImpl->m_outputSink << "&nbsp;";
+	m_pImpl->m_outputSink << "\t";
 }
 
 void RVNGSVGDrawingGenerator::insertSpace()
 {
-	m_pImpl->m_outputSink << "&nbsp;";
+	m_pImpl->m_outputSink << " ";
 }
 
 void RVNGSVGDrawingGenerator::insertLineBreak()
 {
-	m_pImpl->m_outputSink << "<tbreak/>";
+	m_pImpl->m_outputSink << "\n";
 }
 
 void RVNGSVGDrawingGenerator::insertField(const RVNGPropertyList & /*propList*/) {}
