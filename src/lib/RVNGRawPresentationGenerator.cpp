@@ -172,6 +172,17 @@ void RVNGRawPresentationGenerator::closeSpan()
 	RVNG_CALLGRAPH_LEAVE(("closeSpan\n"), CALLBACK_OPEN_SPAN);
 }
 
+void RVNGRawPresentationGenerator::openLink(const RVNGPropertyList &propList)
+{
+	RVNG_CALLGRAPH_ENTER(("openLink (%s)\n", propList.getPropString().cstr()),
+	                     CALLBACK_OPEN_LINK);
+}
+
+void RVNGRawPresentationGenerator::closeLink()
+{
+	RVNG_CALLGRAPH_LEAVE(("closeLink\n"), CALLBACK_OPEN_LINK);
+}
+
 void RVNGRawPresentationGenerator::insertText(const RVNGString &str)
 {
 	printf("RVNGRawPresentationGenerator::insertText (%s)\n", str.cstr());

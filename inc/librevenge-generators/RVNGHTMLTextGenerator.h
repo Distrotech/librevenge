@@ -33,70 +33,73 @@ class RVNGHTMLTextGenerator : public RVNGTextInterface
 {
 public:
 	explicit RVNGHTMLTextGenerator(RVNGString &document);
-	virtual ~RVNGHTMLTextGenerator();
+	~RVNGHTMLTextGenerator();
 
-	virtual void setDocumentMetaData(const RVNGPropertyList &propList);
+	void setDocumentMetaData(const RVNGPropertyList &propList);
 
-	virtual void startDocument();
-	virtual void endDocument();
+	void startDocument();
+	void endDocument();
 
-	virtual void definePageStyle(const RVNGPropertyList &);
-	virtual void openPageSpan(const RVNGPropertyList &propList);
-	virtual void closePageSpan();
-	virtual void openHeader(const RVNGPropertyList &propList);
-	virtual void closeHeader();
-	virtual void openFooter(const RVNGPropertyList &propList);
-	virtual void closeFooter();
+	void definePageStyle(const RVNGPropertyList &);
+	void openPageSpan(const RVNGPropertyList &propList);
+	void closePageSpan();
+	void openHeader(const RVNGPropertyList &propList);
+	void closeHeader();
+	void openFooter(const RVNGPropertyList &propList);
+	void closeFooter();
 
-	virtual void defineSectionStyle(const RVNGPropertyList &);
-	virtual void openSection(const RVNGPropertyList &propList);
-	virtual void closeSection();
+	void defineSectionStyle(const RVNGPropertyList &);
+	void openSection(const RVNGPropertyList &propList);
+	void closeSection();
 
-	virtual void defineParagraphStyle(const RVNGPropertyList &);
-	virtual void openParagraph(const RVNGPropertyList &propList);
-	virtual void closeParagraph();
+	void defineParagraphStyle(const RVNGPropertyList &);
+	void openParagraph(const RVNGPropertyList &propList);
+	void closeParagraph();
 
-	virtual void defineCharacterStyle(const RVNGPropertyList &);
-	virtual void openSpan(const RVNGPropertyList &propList);
-	virtual void closeSpan();
+	void defineCharacterStyle(const RVNGPropertyList &);
+	void openSpan(const RVNGPropertyList &propList);
+	void closeSpan();
 
-	virtual void insertTab();
-	virtual void insertText(const RVNGString &text);
-	virtual void insertSpace();
-	virtual void insertLineBreak();
-	virtual void insertField(const RVNGPropertyList &propList);
+	void openLink(const RVNGPropertyList &propList);
+	void closeLink();
 
-	virtual void defineOrderedListLevel(const RVNGPropertyList &propList);
-	virtual void defineUnorderedListLevel(const RVNGPropertyList &propList);
-	virtual void openOrderedListLevel(const RVNGPropertyList &propList);
-	virtual void openUnorderedListLevel(const RVNGPropertyList &propList);
-	virtual void closeOrderedListLevel();
-	virtual void closeUnorderedListLevel();
-	virtual void openListElement(const RVNGPropertyList &propList);
-	virtual void closeListElement();
+	void insertTab();
+	void insertText(const RVNGString &text);
+	void insertSpace();
+	void insertLineBreak();
+	void insertField(const RVNGPropertyList &propList);
 
-	virtual void openFootnote(const RVNGPropertyList &propList);
-	virtual void closeFootnote();
-	virtual void openEndnote(const RVNGPropertyList &propList);
-	virtual void closeEndnote();
-	virtual void openComment(const RVNGPropertyList &propList);
-	virtual void closeComment();
-	virtual void openTextBox(const RVNGPropertyList &propList);
-	virtual void closeTextBox();
+	void defineOrderedListLevel(const RVNGPropertyList &propList);
+	void defineUnorderedListLevel(const RVNGPropertyList &propList);
+	void openOrderedListLevel(const RVNGPropertyList &propList);
+	void openUnorderedListLevel(const RVNGPropertyList &propList);
+	void closeOrderedListLevel();
+	void closeUnorderedListLevel();
+	void openListElement(const RVNGPropertyList &propList);
+	void closeListElement();
 
-	virtual void openTable(const RVNGPropertyList &propList);
-	virtual void openTableRow(const RVNGPropertyList &propList);
-	virtual void closeTableRow();
-	virtual void openTableCell(const RVNGPropertyList &propList);
-	virtual void closeTableCell();
-	virtual void insertCoveredTableCell(const RVNGPropertyList &propList);
-	virtual void closeTable();
+	void openFootnote(const RVNGPropertyList &propList);
+	void closeFootnote();
+	void openEndnote(const RVNGPropertyList &propList);
+	void closeEndnote();
+	void openComment(const RVNGPropertyList &propList);
+	void closeComment();
+	void openTextBox(const RVNGPropertyList &propList);
+	void closeTextBox();
 
-	virtual void openFrame(const RVNGPropertyList &propList);
-	virtual void closeFrame();
+	void openTable(const RVNGPropertyList &propList);
+	void openTableRow(const RVNGPropertyList &propList);
+	void closeTableRow();
+	void openTableCell(const RVNGPropertyList &propList);
+	void closeTableCell();
+	void insertCoveredTableCell(const RVNGPropertyList &propList);
+	void closeTable();
 
-	virtual void insertBinaryObject(const RVNGPropertyList &propList);
-	virtual void insertEquation(const RVNGPropertyList &propList);
+	void openFrame(const RVNGPropertyList &propList);
+	void closeFrame();
+
+	void insertBinaryObject(const RVNGPropertyList &propList);
+	void insertEquation(const RVNGPropertyList &propList);
 
 private:
 	RVNGHTMLTextGeneratorImpl *m_impl;

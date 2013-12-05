@@ -41,100 +41,103 @@ class RVNGTextSpreadsheetGenerator : public RVNGSpreadsheetInterface
 
 public:
 	explicit RVNGTextSpreadsheetGenerator(RVNGStringVector &sheets, const bool isInfo=false);
-	virtual ~RVNGTextSpreadsheetGenerator();
+	~RVNGTextSpreadsheetGenerator();
 
-	virtual void setDocumentMetaData(const RVNGPropertyList &propList);
+	void setDocumentMetaData(const RVNGPropertyList &propList);
 
-	virtual void startDocument();
-	virtual void endDocument();
+	void startDocument();
+	void endDocument();
 
 	// sheet
-	virtual void defineSheetNumberingStyle(const RVNGPropertyList &propList);
-	virtual void openSheet(const RVNGPropertyList &propList);
-	virtual void closeSheet();
-	virtual void openSheetRow(const RVNGPropertyList &propList);
-	virtual void closeSheetRow();
-	virtual void openSheetCell(const RVNGPropertyList &propList);
-	virtual void closeSheetCell();
+	void defineSheetNumberingStyle(const RVNGPropertyList &propList);
+	void openSheet(const RVNGPropertyList &propList);
+	void closeSheet();
+	void openSheetRow(const RVNGPropertyList &propList);
+	void closeSheetRow();
+	void openSheetCell(const RVNGPropertyList &propList);
+	void closeSheetCell();
 
 	// chart
-	virtual void openChart(const RVNGPropertyList &propList);
-	virtual void closeChart();
-	virtual void insertChartSerie(const RVNGPropertyList &series);
+	void openChart(const RVNGPropertyList &propList);
+	void closeChart();
+	void insertChartSerie(const RVNGPropertyList &series);
 
-	virtual void definePageStyle(const RVNGPropertyList &propList);
-	virtual void openPageSpan(const RVNGPropertyList &propList);
-	virtual void closePageSpan();
-	virtual void openHeader(const RVNGPropertyList &propList);
-	virtual void closeHeader();
-	virtual void openFooter(const RVNGPropertyList &propList);
-	virtual void closeFooter();
+	void definePageStyle(const RVNGPropertyList &propList);
+	void openPageSpan(const RVNGPropertyList &propList);
+	void closePageSpan();
+	void openHeader(const RVNGPropertyList &propList);
+	void closeHeader();
+	void openFooter(const RVNGPropertyList &propList);
+	void closeFooter();
 
-	virtual void defineSectionStyle(const RVNGPropertyList &propList);
-	virtual void openSection(const RVNGPropertyList &propList);
-	virtual void closeSection();
+	void defineSectionStyle(const RVNGPropertyList &propList);
+	void openSection(const RVNGPropertyList &propList);
+	void closeSection();
 
-	virtual void defineParagraphStyle(const RVNGPropertyList &propList);
-	virtual void openParagraph(const RVNGPropertyList &propList);
-	virtual void closeParagraph();
+	void defineParagraphStyle(const RVNGPropertyList &propList);
+	void openParagraph(const RVNGPropertyList &propList);
+	void closeParagraph();
 
-	virtual void defineCharacterStyle(const RVNGPropertyList &propList);
-	virtual void openSpan(const RVNGPropertyList &propList);
-	virtual void closeSpan();
+	void defineCharacterStyle(const RVNGPropertyList &propList);
+	void openSpan(const RVNGPropertyList &propList);
+	void closeSpan();
 
-	virtual void insertTab();
-	virtual void insertSpace();
-	virtual void insertText(const RVNGString &text);
-	virtual void insertLineBreak();
-	virtual void insertField(const RVNGPropertyList &propList);
+	void openLink(const RVNGPropertyList &propList);
+	void closeLink();
 
-	virtual void defineOrderedListLevel(const RVNGPropertyList &propList);
-	virtual void defineUnorderedListLevel(const RVNGPropertyList &propList);
-	virtual void openOrderedListLevel(const RVNGPropertyList &propList);
-	virtual void openUnorderedListLevel(const RVNGPropertyList &propList);
-	virtual void closeOrderedListLevel();
-	virtual void closeUnorderedListLevel();
-	virtual void openListElement(const RVNGPropertyList &propList);
-	virtual void closeListElement();
+	void insertTab();
+	void insertSpace();
+	void insertText(const RVNGString &text);
+	void insertLineBreak();
+	void insertField(const RVNGPropertyList &propList);
 
-	virtual void openFootnote(const RVNGPropertyList &propList);
-	virtual void closeFootnote();
-	virtual void openEndnote(const RVNGPropertyList &propList);
-	virtual void closeEndnote();
-	virtual void openComment(const RVNGPropertyList &propList);
-	virtual void closeComment();
+	void defineOrderedListLevel(const RVNGPropertyList &propList);
+	void defineUnorderedListLevel(const RVNGPropertyList &propList);
+	void openOrderedListLevel(const RVNGPropertyList &propList);
+	void openUnorderedListLevel(const RVNGPropertyList &propList);
+	void closeOrderedListLevel();
+	void closeUnorderedListLevel();
+	void openListElement(const RVNGPropertyList &propList);
+	void closeListElement();
 
-	virtual void openTextBox(const RVNGPropertyList &propList);
-	virtual void closeTextBox();
+	void openFootnote(const RVNGPropertyList &propList);
+	void closeFootnote();
+	void openEndnote(const RVNGPropertyList &propList);
+	void closeEndnote();
+	void openComment(const RVNGPropertyList &propList);
+	void closeComment();
 
-	virtual void openTable(const RVNGPropertyList &propList);
-	virtual void openTableRow(const RVNGPropertyList &propList);
-	virtual void closeTableRow();
-	virtual void openTableCell(const RVNGPropertyList &propList);
-	virtual void closeTableCell();
-	virtual void insertCoveredTableCell(const RVNGPropertyList &propList);
-	virtual void closeTable();
+	void openTextBox(const RVNGPropertyList &propList);
+	void closeTextBox();
 
-	virtual void openFrame(const RVNGPropertyList &propList);
-	virtual void closeFrame();
+	void openTable(const RVNGPropertyList &propList);
+	void openTableRow(const RVNGPropertyList &propList);
+	void closeTableRow();
+	void openTableCell(const RVNGPropertyList &propList);
+	void closeTableCell();
+	void insertCoveredTableCell(const RVNGPropertyList &propList);
+	void closeTable();
 
-	virtual void insertBinaryObject(const RVNGPropertyList &propList);
+	void openFrame(const RVNGPropertyList &propList);
+	void closeFrame();
+
+	void insertBinaryObject(const RVNGPropertyList &propList);
 
 	// drawing function
-	virtual void startGraphic(const RVNGPropertyList &propList);
-	virtual void endGraphic();
-	virtual void startGraphicPage(const RVNGPropertyList &propList);
-	virtual void endGraphicPage();
-	virtual void setGraphicStyle(const RVNGPropertyList &propList);
-	virtual void startGraphicLayer(const RVNGPropertyList &propList);
-	virtual void endGraphicLayer();
-	virtual void drawRectangle(const RVNGPropertyList &propList);
-	virtual void drawEllipse(const RVNGPropertyList &propList);
-	virtual void drawPolygon(const RVNGPropertyList &propList);
-	virtual void drawPolyline(const RVNGPropertyList &propList);
-	virtual void drawPath(const RVNGPropertyList &propList);
+	void startGraphic(const RVNGPropertyList &propList);
+	void endGraphic();
+	void startGraphicPage(const RVNGPropertyList &propList);
+	void endGraphicPage();
+	void setGraphicStyle(const RVNGPropertyList &propList);
+	void startGraphicLayer(const RVNGPropertyList &propList);
+	void endGraphicLayer();
+	void drawRectangle(const RVNGPropertyList &propList);
+	void drawEllipse(const RVNGPropertyList &propList);
+	void drawPolygon(const RVNGPropertyList &propList);
+	void drawPolyline(const RVNGPropertyList &propList);
+	void drawPath(const RVNGPropertyList &propList);
 
-	virtual void insertEquation(const RVNGPropertyList &propList);
+	void insertEquation(const RVNGPropertyList &propList);
 private:
 	RVNGTextSpreadsheetGeneratorImpl *m_impl;
 };

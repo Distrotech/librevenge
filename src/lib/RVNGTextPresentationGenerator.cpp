@@ -147,6 +147,14 @@ void RVNGTextPresentationGenerator::closeSpan()
 {
 }
 
+void RVNGTextPresentationGenerator::openLink(const RVNGPropertyList &)
+{
+}
+
+void RVNGTextPresentationGenerator::closeLink()
+{
+}
+
 void RVNGTextPresentationGenerator::insertText(const RVNGString &str)
 {
 	m_impl->m_stream << str.cstr();

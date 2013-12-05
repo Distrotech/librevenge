@@ -71,6 +71,9 @@ public:
 	void openSpan(const RVNGPropertyList &propList);
 	void closeSpan();
 
+	void openLink(const RVNGPropertyList &propList);
+	void closeLink();
+
 	void insertTab();
 	void insertSpace();
 	void insertText(const RVNGString &text);

@@ -589,6 +589,14 @@ void RVNGSVGPresentationGenerator::closeSpan()
 	m_impl->m_outputSink << "</svg:tspan>\n";
 }
 
+void RVNGSVGPresentationGenerator::openLink(const RVNGPropertyList & /* propList */)
+{
+}
+
+void RVNGSVGPresentationGenerator::closeLink()
+{
+}
+
 void RVNGSVGPresentationGenerator::insertTab()
 {
 	m_impl->m_outputSink << '\t';

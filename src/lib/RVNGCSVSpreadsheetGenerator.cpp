@@ -436,6 +436,9 @@ void RVNGCSVSpreadsheetGenerator::defineCharacterStyle(const RVNGPropertyList &)
 void RVNGCSVSpreadsheetGenerator::openSpan(const RVNGPropertyList &) {}
 void RVNGCSVSpreadsheetGenerator::closeSpan() {}
 
+void RVNGCSVSpreadsheetGenerator::openLink(const RVNGPropertyList &) {}
+void RVNGCSVSpreadsheetGenerator::closeLink() {}
+
 void RVNGCSVSpreadsheetGenerator::insertTab()
 {
 	if (!m_impl->canWriteData())

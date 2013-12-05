@@ -175,6 +175,9 @@ void RVNGTextSpreadsheetGenerator::defineCharacterStyle(const RVNGPropertyList &
 void RVNGTextSpreadsheetGenerator::openSpan(const RVNGPropertyList & /* propList */) {}
 void RVNGTextSpreadsheetGenerator::closeSpan() {}
 
+void RVNGTextSpreadsheetGenerator::openLink(const RVNGPropertyList & /* propList */) {}
+void RVNGTextSpreadsheetGenerator::closeLink() {}
+
 void RVNGTextSpreadsheetGenerator::insertTab()
 {
 	if (m_impl->m_isInfo)

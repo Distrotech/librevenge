@@ -854,6 +854,9 @@ void RVNGSVGDrawingGenerator::closeSpan()
 	m_pImpl->m_outputSink << "</" << m_pImpl->getNamespaceAndDelim() << "tspan>\n";
 }
 
+void RVNGSVGDrawingGenerator::openLink(const RVNGPropertyList & /*propList*/) {}
+void RVNGSVGDrawingGenerator::closeLink() {}
+
 void RVNGSVGDrawingGenerator::insertText(const RVNGString &str)
 {
 	RVNGString tempUTF8(str, true);

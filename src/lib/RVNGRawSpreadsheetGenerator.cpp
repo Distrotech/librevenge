@@ -271,6 +271,16 @@ void RVNGRawSpreadsheetGenerator::closeSpan()
 	RVNG_CALLGRAPH_LEAVE(("closeSpan()\n"), CALLBACK_OPEN_SPAN);
 }
 
+void RVNGRawSpreadsheetGenerator::openLink(const RVNGPropertyList &propList)
+{
+	RVNG_CALLGRAPH_ENTER(("openLink(%s)\n", propList.getPropString().cstr()), CALLBACK_OPEN_LINK);
+}
+
+void RVNGRawSpreadsheetGenerator::closeLink()
+{
+	RVNG_CALLGRAPH_LEAVE(("closeLink()\n"), CALLBACK_OPEN_LINK);
+}
+
 void RVNGRawSpreadsheetGenerator::defineSectionStyle(const RVNGPropertyList &propList)
 {
 	m_impl->iprintf("defineSectionStyle(%s)\n", propList.getPropString().cstr());

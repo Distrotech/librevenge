@@ -97,6 +97,9 @@ void RVNGTextTextGenerator::defineCharacterStyle(const RVNGPropertyList &) {}
 void RVNGTextTextGenerator::openSpan(const RVNGPropertyList & /* propList */) {}
 void RVNGTextTextGenerator::closeSpan() {}
 
+void RVNGTextTextGenerator::openLink(const RVNGPropertyList & /* propList */) {}
+void RVNGTextTextGenerator::closeLink() {}
+
 void RVNGTextTextGenerator::insertTab()
 {
 	if (m_impl->m_isInfo)

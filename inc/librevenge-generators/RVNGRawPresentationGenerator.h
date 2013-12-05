@@ -33,61 +33,65 @@ public:
 	explicit RVNGRawPresentationGenerator(bool printCallgraphScore);
 	~RVNGRawPresentationGenerator();
 
-	virtual void startDocument(const RVNGPropertyList &propList);
-	virtual void endDocument();
-	virtual void setDocumentMetaData(const RVNGPropertyList &propList);
-	virtual void startSlide(const RVNGPropertyList &propList);
-	virtual void endSlide();
-	virtual void startLayer(const RVNGPropertyList &propList);
-	virtual void endLayer();
-	virtual void startEmbeddedGraphics(const RVNGPropertyList &propList);
-	virtual void endEmbeddedGraphics();
-	virtual void startGroup(const RVNGPropertyList &propList);
-	virtual void endGroup();
+	void startDocument(const RVNGPropertyList &propList);
+	void endDocument();
+	void setDocumentMetaData(const RVNGPropertyList &propList);
+	void startSlide(const RVNGPropertyList &propList);
+	void endSlide();
+	void startLayer(const RVNGPropertyList &propList);
+	void endLayer();
+	void startEmbeddedGraphics(const RVNGPropertyList &propList);
+	void endEmbeddedGraphics();
+	void startGroup(const RVNGPropertyList &propList);
+	void endGroup();
 
-	virtual void setStyle(const RVNGPropertyList &propList);
+	void setStyle(const RVNGPropertyList &propList);
 
-	virtual void drawRectangle(const RVNGPropertyList &propList);
-	virtual void drawEllipse(const RVNGPropertyList &propList);
-	virtual void drawPolyline(const RVNGPropertyList &propList);
-	virtual void drawPolygon(const RVNGPropertyList &propList);
-	virtual void drawPath(const RVNGPropertyList &propList);
-	virtual void drawGraphicObject(const RVNGPropertyList &propList);
-	virtual void drawConnector(const RVNGPropertyList &propList);
+	void drawRectangle(const RVNGPropertyList &propList);
+	void drawEllipse(const RVNGPropertyList &propList);
+	void drawPolyline(const RVNGPropertyList &propList);
+	void drawPolygon(const RVNGPropertyList &propList);
+	void drawPath(const RVNGPropertyList &propList);
+	void drawGraphicObject(const RVNGPropertyList &propList);
+	void drawConnector(const RVNGPropertyList &propList);
 
-	virtual void startTextObject(const RVNGPropertyList &propList);
-	virtual void endTextObject();
-	virtual void openParagraph(const RVNGPropertyList &propList);
-	virtual void closeParagraph();
-	virtual void openSpan(const RVNGPropertyList &propList);
-	virtual void closeSpan();
-	virtual void insertTab();
-	virtual void insertSpace();
-	virtual void insertText(const RVNGString &str);
-	virtual void insertLineBreak();
+	void startTextObject(const RVNGPropertyList &propList);
+	void endTextObject();
+	void openParagraph(const RVNGPropertyList &propList);
+	void closeParagraph();
+	void openSpan(const RVNGPropertyList &propList);
+	void closeSpan();
 
-	virtual void insertField(const RVNGPropertyList &propList);
+	void openLink(const RVNGPropertyList &propList);
+	void closeLink();
 
-	virtual void openOrderedListLevel(const RVNGPropertyList &propList);
-	virtual void openUnorderedListLevel(const RVNGPropertyList &propList);
-	virtual void closeOrderedListLevel();
-	virtual void closeUnorderedListLevel();
-	virtual void openListElement(const RVNGPropertyList &propList);
-	virtual void closeListElement();
+	void insertTab();
+	void insertSpace();
+	void insertText(const RVNGString &str);
+	void insertLineBreak();
 
-	virtual void openTable(const RVNGPropertyList &propList);
-	virtual void openTableRow(const RVNGPropertyList &propList);
-	virtual void closeTableRow();
-	virtual void openTableCell(const RVNGPropertyList &propList);
-	virtual void closeTableCell();
-	virtual void insertCoveredTableCell(const RVNGPropertyList &propList);
-	virtual void closeTable();
+	void insertField(const RVNGPropertyList &propList);
 
-	virtual void startComment(const RVNGPropertyList &propList);
-	virtual void endComment();
+	void openOrderedListLevel(const RVNGPropertyList &propList);
+	void openUnorderedListLevel(const RVNGPropertyList &propList);
+	void closeOrderedListLevel();
+	void closeUnorderedListLevel();
+	void openListElement(const RVNGPropertyList &propList);
+	void closeListElement();
 
-	virtual void startNotes(const RVNGPropertyList &propList);
-	virtual void endNotes();
+	void openTable(const RVNGPropertyList &propList);
+	void openTableRow(const RVNGPropertyList &propList);
+	void closeTableRow();
+	void openTableCell(const RVNGPropertyList &propList);
+	void closeTableCell();
+	void insertCoveredTableCell(const RVNGPropertyList &propList);
+	void closeTable();
+
+	void startComment(const RVNGPropertyList &propList);
+	void endComment();
+
+	void startNotes(const RVNGPropertyList &propList);
+	void endNotes();
 
 private:
 	RVNGRawPresentationGeneratorImpl *m_impl;

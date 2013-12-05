@@ -286,6 +286,17 @@ public:
 	Called when a text span is closed
 	*/
 	virtual void closeSpan() = 0;
+	/**
+	Called when a link should be opened
+	\param propList Defines a set of properties for the link. May contain:
+	\li \c xlink:type .
+	\li \c xlink:href .
+	*/
+	virtual void openLink(const RVNGPropertyList &propList) = 0;
+	/**
+	Called when the current link is closed
+	*/
+	virtual void closeLink() = 0;
 
 	virtual void defineSectionStyle(const RVNGPropertyList &propList) = 0;
 

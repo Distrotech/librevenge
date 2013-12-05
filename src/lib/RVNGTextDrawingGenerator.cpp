@@ -91,6 +91,9 @@ void RVNGTextDrawingGenerator::closeParagraph()
 void RVNGTextDrawingGenerator::openSpan(const RVNGPropertyList & /* propList */) {}
 void RVNGTextDrawingGenerator::closeSpan() {}
 
+void RVNGTextDrawingGenerator::openLink(const RVNGPropertyList & /* propList */) {}
+void RVNGTextDrawingGenerator::closeLink() {}
+
 void RVNGTextDrawingGenerator::insertTab() {}
 void RVNGTextDrawingGenerator::insertSpace() {}
 

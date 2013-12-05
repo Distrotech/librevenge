@@ -142,6 +142,16 @@ void RVNGRawTextGenerator::closeSpan()
 	RVNG_CALLGRAPH_LEAVE(("closeSpan()\n"), CALLBACK_OPEN_SPAN);
 }
 
+void RVNGRawTextGenerator::openLink(const RVNGPropertyList &propList)
+{
+	RVNG_CALLGRAPH_ENTER(("openLink(%s)\n", propList.getPropString().cstr()), CALLBACK_OPEN_LINK);
+}
+
+void RVNGRawTextGenerator::closeLink()
+{
+	RVNG_CALLGRAPH_LEAVE(("closeLink()\n"), CALLBACK_OPEN_LINK);
+}
+
 void RVNGRawTextGenerator::defineSectionStyle(const RVNGPropertyList &propList)
 {
 	m_impl->iprintf("defineSectionStyle(%s)\n", propList.getPropString().cstr());

@@ -216,6 +216,16 @@ void RVNGRawDrawingGenerator::closeSpan()
 	RVNG_CALLGRAPH_LEAVE(("closeSpan\n"), CALLBACK_OPEN_SPAN);
 }
 
+void RVNGRawDrawingGenerator::openLink(const RVNGPropertyList &propList)
+{
+	RVNG_CALLGRAPH_ENTER(("openLink(%s)\n", propList.getPropString().cstr()), CALLBACK_OPEN_LINK);
+}
+
+void RVNGRawDrawingGenerator::closeLink()
+{
+	RVNG_CALLGRAPH_LEAVE(("closeLink\n"), CALLBACK_OPEN_LINK);
+}
+
 void RVNGRawDrawingGenerator::insertTab()
 {
 	if (m_impl->m_printCallgraphScore)

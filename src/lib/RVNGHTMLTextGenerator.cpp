@@ -477,6 +477,24 @@ void RVNGHTMLTextGenerator::closeSpan()
 	m_impl->output() << "</span>" << std::endl;
 }
 
+void RVNGHTMLTextGenerator::openLink(const RVNGPropertyList &propList)
+{
+	if (m_impl->m_ignore)
+		return;
+
+	m_impl->output() << "<a ";
+	if (propList["xlink:href"])
+		m_impl->output() << "href=\"" << propList["xlink:href"]->getStr().cstr() << "\"";
+	m_impl->output() << ">";
+}
+
+void RVNGHTMLTextGenerator::closeLink()
+{
+	if (m_impl->m_ignore)
+		return;
+	m_impl->output() << "</a>" << std::endl;
+}
+
 void RVNGHTMLTextGenerator::insertTab()
 {
 	if (m_impl->m_ignore)
