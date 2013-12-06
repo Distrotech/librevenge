@@ -114,12 +114,16 @@ std::string RVNGHTMLTextListStyleManager::getClass(RVNGPropertyList const &pList
 
 void RVNGHTMLTextListStyleManager::defineLevel(RVNGPropertyList const &pList, bool ordered)
 {
-	if (!pList["librevenge:id"])
+	int id=-1;
+	if (pList["librevenge:list-id"])
+		id=pList["librevenge:list-id"]->getInt();
+	else if (pList["librevenge:id"])
+		id=pList["librevenge:id"]->getInt();
+	else
 	{
 		RVNG_DEBUG_MSG(("RVNGHTMLTextListStyleManager::defineLevel: can not find list id\n"));
 		return;
 	}
-	int id = pList["librevenge:id"]->getInt();
 	if (m_idListMap.find(id)==m_idListMap.end())
 		m_idListMap[id]=List();
 	if (!pList["librevenge:level"])
@@ -133,12 +137,14 @@ void RVNGHTMLTextListStyleManager::defineLevel(RVNGPropertyList const &pList, bo
 std::string RVNGHTMLTextListStyleManager::openLevel(RVNGPropertyList const &pList, bool /*ordered*/)
 {
 	int id = -1;
-	if (!pList["librevenge:id"])
+	if (pList["librevenge:list-id"])
+		id=pList["librevenge:list-id"]->getInt();
+	else if (pList["librevenge:id"])
+		id=pList["librevenge:id"]->getInt();
+	else
 	{
 		RVNG_DEBUG_MSG(("RVNGHTMLTextListStyleManager::openLevel: can not find list id\n"));
 	}
-	else
-		id = pList["librevenge:id"]->getInt();
 	m_actualIdStack.push_back(id);
 
 	std::string content=getContent(pList, true);
