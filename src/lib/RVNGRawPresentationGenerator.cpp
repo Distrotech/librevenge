@@ -54,7 +54,7 @@ void RVNGRawPresentationGenerator::endDocument()
 
 void RVNGRawPresentationGenerator::setDocumentMetaData(const RVNGPropertyList &propList)
 {
-	printf("RVNGRawPresentationGenerator::setDocumentMetaData(%s)\n", propList.getPropString().cstr());
+	printf("setDocumentMetaData(%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawPresentationGenerator::startSlide(const RVNGPropertyList &propList)
@@ -103,42 +103,42 @@ void RVNGRawPresentationGenerator::endGroup()
 
 void RVNGRawPresentationGenerator::setStyle(const RVNGPropertyList &propList)
 {
-	printf("RVNGRawPresentationGenerator::setStyle(%s)\n", propList.getPropString().cstr());
+	printf("setStyle(%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawPresentationGenerator::drawRectangle(const RVNGPropertyList &propList)
 {
-	printf("RVNGRawPresentationGenerator::drawRectangle (%s)\n", propList.getPropString().cstr());
+	printf("drawRectangle (%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawPresentationGenerator::drawEllipse(const RVNGPropertyList &propList)
 {
-	printf("RVNGRawPresentationGenerator::drawEllipse (%s)\n", propList.getPropString().cstr());
+	printf("drawEllipse (%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawPresentationGenerator::drawPolyline(const RVNGPropertyList &propList)
 {
-	printf("RVNGRawPresentationGenerator::drawPolyline (%s)\n", propList.getPropString().cstr());
+	printf("drawPolyline (%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawPresentationGenerator::drawPolygon(const RVNGPropertyList &propList)
 {
-	printf("RVNGRawPresentationGenerator::drawPolygon (%s)\n", propList.getPropString().cstr());
+	printf("drawPolygon (%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawPresentationGenerator::drawPath(const RVNGPropertyList &propList)
 {
-	printf("RVNGRawPresentationGenerator::drawPath (%s)\n", propList.getPropString().cstr());
+	printf("drawPath (%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawPresentationGenerator::drawGraphicObject(const RVNGPropertyList &propList)
 {
-	printf("RVNGRawPresentationGenerator::drawGraphicObject (%s)\n", propList.getPropString().cstr());
+	printf("drawGraphicObject (%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawPresentationGenerator::drawConnector(const RVNGPropertyList &propList)
 {
-	printf("RVNGRawPresentationGenerator::drawConnector(%s)\n", propList.getPropString().cstr());
+	printf("drawConnector(%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawPresentationGenerator::startTextObject(const RVNGPropertyList &propList)
@@ -185,27 +185,27 @@ void RVNGRawPresentationGenerator::closeLink()
 
 void RVNGRawPresentationGenerator::insertText(const RVNGString &str)
 {
-	printf("RVNGRawPresentationGenerator::insertText (%s)\n", str.cstr());
+	printf("insertText (%s)\n", str.cstr());
 }
 
 void RVNGRawPresentationGenerator::insertTab()
 {
-	printf("RVNGRawPresentationGenerator::insertTab\n");
+	printf("insertTab\n");
 }
 
 void RVNGRawPresentationGenerator::insertSpace()
 {
-	printf("RVNGRawPresentationGenerator::insertSpace\n");
+	printf("insertSpace\n");
 }
 
 void RVNGRawPresentationGenerator::insertLineBreak()
 {
-	printf("RVNGRawPresentationGenerator::insertLineBreak\n");
+	printf("insertLineBreak\n");
 }
 
 void RVNGRawPresentationGenerator::insertField(const RVNGPropertyList &propList)
 {
-	printf("RVNGRawPresentationGenerator::insertField(%s)\n", propList.getPropString().cstr());
+	printf("insertField(%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawPresentationGenerator::openOrderedListLevel(const RVNGPropertyList &propList)
@@ -271,7 +271,7 @@ void RVNGRawPresentationGenerator::closeTableCell()
 
 void RVNGRawPresentationGenerator::insertCoveredTableCell(const RVNGPropertyList &propList)
 {
-	printf("RVNGRawPresentationGenerator::insertCoveredTableCell(%s)\n", propList.getPropString().cstr());
+	printf("insertCoveredTableCell(%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawPresentationGenerator::closeTable()
