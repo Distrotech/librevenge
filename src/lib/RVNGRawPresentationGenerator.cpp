@@ -54,7 +54,10 @@ void RVNGRawPresentationGenerator::endDocument()
 
 void RVNGRawPresentationGenerator::setDocumentMetaData(const RVNGPropertyList &propList)
 {
-	printf("setDocumentMetaData(%s)\n", propList.getPropString().cstr());
+	if (m_impl->m_printCallgraphScore)
+		return;
+
+	m_impl->iprintf("setDocumentMetaData(%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawPresentationGenerator::startSlide(const RVNGPropertyList &propList)
@@ -103,42 +106,66 @@ void RVNGRawPresentationGenerator::endGroup()
 
 void RVNGRawPresentationGenerator::setStyle(const RVNGPropertyList &propList)
 {
-	printf("setStyle(%s)\n", propList.getPropString().cstr());
+	if (m_impl->m_printCallgraphScore)
+		return;
+
+	m_impl->iprintf("setStyle(%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawPresentationGenerator::drawRectangle(const RVNGPropertyList &propList)
 {
-	printf("drawRectangle (%s)\n", propList.getPropString().cstr());
+	if (m_impl->m_printCallgraphScore)
+		return;
+
+	m_impl->iprintf("drawRectangle (%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawPresentationGenerator::drawEllipse(const RVNGPropertyList &propList)
 {
-	printf("drawEllipse (%s)\n", propList.getPropString().cstr());
+	if (m_impl->m_printCallgraphScore)
+		return;
+
+	m_impl->iprintf("drawEllipse (%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawPresentationGenerator::drawPolyline(const RVNGPropertyList &propList)
 {
-	printf("drawPolyline (%s)\n", propList.getPropString().cstr());
+	if (m_impl->m_printCallgraphScore)
+		return;
+
+	m_impl->iprintf("drawPolyline (%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawPresentationGenerator::drawPolygon(const RVNGPropertyList &propList)
 {
-	printf("drawPolygon (%s)\n", propList.getPropString().cstr());
+	if (m_impl->m_printCallgraphScore)
+		return;
+
+	m_impl->iprintf("drawPolygon (%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawPresentationGenerator::drawPath(const RVNGPropertyList &propList)
 {
-	printf("drawPath (%s)\n", propList.getPropString().cstr());
+	if (m_impl->m_printCallgraphScore)
+		return;
+
+	m_impl->iprintf("drawPath (%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawPresentationGenerator::drawGraphicObject(const RVNGPropertyList &propList)
 {
-	printf("drawGraphicObject (%s)\n", propList.getPropString().cstr());
+	if (m_impl->m_printCallgraphScore)
+		return;
+
+	m_impl->iprintf("drawGraphicObject (%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawPresentationGenerator::drawConnector(const RVNGPropertyList &propList)
 {
-	printf("drawConnector(%s)\n", propList.getPropString().cstr());
+	if (m_impl->m_printCallgraphScore)
+		return;
+
+	m_impl->iprintf("drawConnector(%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawPresentationGenerator::startTextObject(const RVNGPropertyList &propList)
@@ -185,27 +212,42 @@ void RVNGRawPresentationGenerator::closeLink()
 
 void RVNGRawPresentationGenerator::insertText(const RVNGString &str)
 {
-	printf("insertText (%s)\n", str.cstr());
+	if (m_impl->m_printCallgraphScore)
+		return;
+
+	m_impl->iprintf("insertText (%s)\n", str.cstr());
 }
 
 void RVNGRawPresentationGenerator::insertTab()
 {
-	printf("insertTab\n");
+	if (m_impl->m_printCallgraphScore)
+		return;
+
+	m_impl->iprintf("insertTab\n");
 }
 
 void RVNGRawPresentationGenerator::insertSpace()
 {
-	printf("insertSpace\n");
+	if (m_impl->m_printCallgraphScore)
+		return;
+
+	m_impl->iprintf("insertSpace\n");
 }
 
 void RVNGRawPresentationGenerator::insertLineBreak()
 {
-	printf("insertLineBreak\n");
+	if (m_impl->m_printCallgraphScore)
+		return;
+
+	m_impl->iprintf("insertLineBreak\n");
 }
 
 void RVNGRawPresentationGenerator::insertField(const RVNGPropertyList &propList)
 {
-	printf("insertField(%s)\n", propList.getPropString().cstr());
+	if (m_impl->m_printCallgraphScore)
+		return;
+
+	m_impl->iprintf("insertField(%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawPresentationGenerator::openOrderedListLevel(const RVNGPropertyList &propList)
@@ -271,7 +313,10 @@ void RVNGRawPresentationGenerator::closeTableCell()
 
 void RVNGRawPresentationGenerator::insertCoveredTableCell(const RVNGPropertyList &propList)
 {
-	printf("insertCoveredTableCell(%s)\n", propList.getPropString().cstr());
+	if (m_impl->m_printCallgraphScore)
+		return;
+
+	m_impl->iprintf("insertCoveredTableCell(%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawPresentationGenerator::closeTable()
