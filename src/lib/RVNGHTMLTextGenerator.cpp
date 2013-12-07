@@ -484,7 +484,7 @@ void RVNGHTMLTextGenerator::openLink(const RVNGPropertyList &propList)
 
 	m_impl->output() << "<a ";
 	if (propList["xlink:href"])
-		m_impl->output() << "href=\"" << propList["xlink:href"]->getStr().cstr() << "\"";
+		m_impl->output() << "href=\"" << librevenge::RVNGString(propList["xlink:href"]->getStr(), true).cstr() << "\"";
 	m_impl->output() << ">";
 }
 
