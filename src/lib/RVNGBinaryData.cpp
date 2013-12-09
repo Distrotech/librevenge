@@ -118,9 +118,12 @@ RVNGBinaryData::RVNGBinaryData(const RVNGBinaryData &data) :
 RVNGBinaryData::RVNGBinaryData(const unsigned char *buffer, const unsigned long bufferSize) :
 	m_binaryDataImpl(new RVNGBinaryDataImpl)
 {
-	m_binaryDataImpl->m_ptr->m_buf = std::vector<unsigned char> (bufferSize);
-	for (unsigned long i = 0; i < bufferSize; i++)
-		m_binaryDataImpl->m_ptr->m_buf[i] = buffer[i];
+	if (buffer)
+	{
+		m_binaryDataImpl->m_ptr->m_buf = std::vector<unsigned char> (bufferSize);
+		for (unsigned long i = 0; i < bufferSize; i++)
+			m_binaryDataImpl->m_ptr->m_buf[i] = buffer[i];
+	}
 }
 
 RVNGBinaryData::RVNGBinaryData(const RVNGString &base64) :
@@ -133,8 +136,11 @@ RVNGBinaryData::RVNGBinaryData(const RVNGString &base64) :
 RVNGBinaryData::RVNGBinaryData(const char *base64) :
 	m_binaryDataImpl(new RVNGBinaryDataImpl)
 {
-	std::string base64String(base64);
-	convertFromBase64(m_binaryDataImpl->m_ptr->m_buf, base64String);
+	if (base64)
+	{
+		std::string base64String(base64);
+		convertFromBase64(m_binaryDataImpl->m_ptr->m_buf, base64String);
+	}
 }
 
 void RVNGBinaryData::append(const RVNGBinaryData &data)
@@ -158,21 +164,27 @@ void RVNGBinaryData::appendBase64Data(const RVNGString &base64)
 
 void RVNGBinaryData::appendBase64Data(const char *base64)
 {
-	std::string base64String(base64);
-	std::vector<unsigned char> buffer;
-	convertFromBase64(buffer, base64String);
-	if (!buffer.empty())
-		append(&buffer[0], buffer.size());
+	if (base64)
+	{
+		std::string base64String(base64);
+		std::vector<unsigned char> buffer;
+		convertFromBase64(buffer, base64String);
+		if (!buffer.empty())
+			append(&buffer[0], buffer.size());
+	}
 }
 
 void RVNGBinaryData::append(const unsigned char *buffer, const unsigned long bufferSize)
 {
-	m_binaryDataImpl->makeUnique();
+	if (buffer)
+	{
+		m_binaryDataImpl->makeUnique();
 
-	unsigned long previousSize = m_binaryDataImpl->m_ptr->m_buf.size();
-	m_binaryDataImpl->m_ptr->m_buf.reserve(previousSize + bufferSize);
-	for (unsigned long i = 0; i < bufferSize; i++)
-		m_binaryDataImpl->m_ptr->m_buf.push_back(buffer[i]);
+		unsigned long previousSize = m_binaryDataImpl->m_ptr->m_buf.size();
+		m_binaryDataImpl->m_ptr->m_buf.reserve(previousSize + bufferSize);
+		for (unsigned long i = 0; i < bufferSize; i++)
+			m_binaryDataImpl->m_ptr->m_buf.push_back(buffer[i]);
+	}
 }
 
 void RVNGBinaryData::append(const unsigned char c)
