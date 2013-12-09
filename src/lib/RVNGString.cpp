@@ -150,7 +150,8 @@ RVNGString::RVNGString(const RVNGString &stringBuf, bool escapeXML) :
 RVNGString::RVNGString(const char *str) :
 	m_stringImpl(new RVNGStringImpl)
 {
-	m_stringImpl->m_buf = std::string(str);
+	if (str)
+		m_stringImpl->m_buf = str;
 }
 
 const char *RVNGString::cstr() const
@@ -197,7 +198,8 @@ void RVNGString::append(const RVNGString &s)
 
 void RVNGString::append(const char *s)
 {
-	m_stringImpl->m_buf.append(s);
+	if (s)
+		m_stringImpl->m_buf.append(s);
 }
 
 void RVNGString::append(const char c)
@@ -233,12 +235,17 @@ RVNGString &RVNGString::operator=(const RVNGString &stringBuf)
 
 RVNGString &RVNGString::operator=(const char *s)
 {
-	m_stringImpl->m_buf = std::string(s);
+	if (s)
+		m_stringImpl->m_buf = s;
+	else
+		clear();
 	return *this;
 }
 
 bool RVNGString::operator==(const char *str) const
 {
+	if (!str)
+		return false;
 	return (m_stringImpl->m_buf == str);
 }
 
