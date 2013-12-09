@@ -17,6 +17,7 @@
  * applicable instead of those above.
  */
 
+#include <boost/algorithm/string.hpp>
 #include <boost/archive/iterators/binary_from_base64.hpp>
 #include <boost/archive/iterators/base64_from_binary.hpp>
 #include <boost/archive/iterators/remove_whitespace.hpp>
@@ -130,6 +131,7 @@ RVNGBinaryData::RVNGBinaryData(const RVNGString &base64) :
 	m_binaryDataImpl(new RVNGBinaryDataImpl)
 {
 	std::string base64String(base64.cstr(), base64.size());
+	boost::trim(base64String);
 	convertFromBase64(m_binaryDataImpl->m_ptr->m_buf, base64String);
 }
 
@@ -139,6 +141,7 @@ RVNGBinaryData::RVNGBinaryData(const char *base64) :
 	if (base64)
 	{
 		std::string base64String(base64);
+		boost::trim(base64String);
 		convertFromBase64(m_binaryDataImpl->m_ptr->m_buf, base64String);
 	}
 }
@@ -156,6 +159,7 @@ void RVNGBinaryData::append(const RVNGBinaryData &data)
 void RVNGBinaryData::appendBase64Data(const RVNGString &base64)
 {
 	std::string base64String(base64.cstr(), base64.size());
+	boost::trim(base64String);
 	std::vector<unsigned char> buffer;
 	convertFromBase64(buffer, base64String);
 	if (!buffer.empty())
@@ -167,6 +171,7 @@ void RVNGBinaryData::appendBase64Data(const char *base64)
 	if (base64)
 	{
 		std::string base64String(base64);
+		boost::trim(base64String);
 		std::vector<unsigned char> buffer;
 		convertFromBase64(buffer, base64String);
 		if (!buffer.empty())
