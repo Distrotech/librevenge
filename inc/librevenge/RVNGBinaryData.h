@@ -46,6 +46,7 @@ public:
 	void clear();
 
 	unsigned long size() const;
+	bool empty() const;
 	const unsigned char *getDataBuffer() const;
 	const RVNGString getBase64Data() const;
 	const RVNGInputStream *getDataStream() const;

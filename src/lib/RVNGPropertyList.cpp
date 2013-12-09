@@ -150,6 +150,7 @@ public:
 	const RVNGPropertyListVector *child(const char *name) const;
 	void remove(const char *name);
 	void clear();
+	bool empty() const;
 
 	mutable std::map<std::string, RVNGPropertyListElement> m_map;
 };
@@ -221,6 +222,11 @@ void RVNGPropertyListImpl::remove(const char *name)
 void RVNGPropertyListImpl::clear()
 {
 	m_map.clear();
+}
+
+bool RVNGPropertyListImpl::empty() const
+{
+	return m_map.empty();
 }
 
 RVNGPropertyList::RVNGPropertyList() :
@@ -336,6 +342,11 @@ const RVNGPropertyListVector *RVNGPropertyList::child(const char *name) const
 void RVNGPropertyList::clear()
 {
 	m_impl->clear();
+}
+
+bool RVNGPropertyList::empty() const
+{
+	return m_impl->empty();
 }
 
 

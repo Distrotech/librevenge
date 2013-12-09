@@ -38,6 +38,10 @@ public:
 	{
 		return m_vector.size();
 	}
+	bool empty() const
+	{
+		return m_vector.empty();
+	}
 	void clear()
 	{
 		m_vector.clear();
@@ -142,6 +146,11 @@ void RVNGPropertyListVector::append(const RVNGPropertyListVector &vec)
 unsigned long RVNGPropertyListVector::count() const
 {
 	return m_impl->count();
+}
+
+bool RVNGPropertyListVector::empty() const
+{
+	return m_impl->empty();
 }
 
 void RVNGPropertyListVector::clear()

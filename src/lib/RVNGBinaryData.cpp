@@ -193,6 +193,10 @@ unsigned long RVNGBinaryData::size() const
 {
 	return (unsigned long)m_binaryDataImpl->m_ptr->m_buf.size();
 }
+bool RVNGBinaryData::empty() const
+{
+	return (unsigned long)m_binaryDataImpl->m_ptr->m_buf.empty();
+}
 
 RVNGBinaryData &RVNGBinaryData::operator=(const RVNGBinaryData &dataBuf)
 {

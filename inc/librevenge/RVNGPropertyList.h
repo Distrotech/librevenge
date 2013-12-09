@@ -49,6 +49,7 @@ public:
 	void insert(const char *name, const RVNGPropertyListVector &vec);
 	void remove(const char *name);
 	void clear();
+	bool empty() const;
 
 	const RVNGProperty *operator[](const char *name) const;
 	const RVNGPropertyListVector *child(const char *name) const;
