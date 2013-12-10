@@ -123,14 +123,17 @@ lib_LTLIBRARIES += librevenge-stream-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.l
 librevenge_stream_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_includedir = $(includedir)/librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@/librevenge-stream
 librevenge_stream_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_include_HEADERS = \
 	$(top_srcdir)/inc/librevenge-stream/librevenge-stream.h \
+	$(top_srcdir)/inc/librevenge-stream/RVNGDirectoryStream.h \
 	$(top_srcdir)/inc/librevenge-stream/RVNGStream.h \
 	$(top_srcdir)/inc/librevenge-stream/RVNGStreamImplementation.h
 
-librevenge_stream_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_LIBADD  = $(ZLIB_LIBS) @LIBREVENGE_STREAM_WIN32_RESOURCE@
+librevenge_stream_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_CPPFLAGS =$(BOOST_CFLAGS)
+librevenge_stream_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_LIBADD  = $(ZLIB_LIBS) $(BOOST_FILESYSTEM_LIB) @LIBREVENGE_STREAM_WIN32_RESOURCE@
 librevenge_stream_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_DEPENDENCIES = @LIBREVENGE_STREAM_WIN32_RESOURCE@
-librevenge_stream_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic $(no_undefined)
+librevenge_stream_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_LDFLAGS = $(BOOST_LDGFLAGS) $(version_info) -export-dynamic $(no_undefined)
 librevenge_stream_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_SOURCES = \
 	RVNGStreamImplementation.cpp \
+	RVNGDirectoryStream.cpp \
 	RVNGOLEStream.cpp \
 	RVNGZipStream.cpp \
 	RVNGOLEStream.h \

@@ -17,6 +17,8 @@ librevenge.spec
 librevenge-zip
 ltmain.sh
 m4
+# FIXME: this does not work, I must have misunderstood the man page...
+!m4/ax*.m4
 missing
 mkinstalldirs
 stamp-h1

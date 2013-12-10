@@ -236,6 +236,11 @@ AC_ARG_ENABLE(streams,
 )
 AM_CONDITIONAL([BUILD_STREAMS], [test "x$enable_streams" != "xno"])
 
+AS_IF([test "x$enable_streams" != "xno"], [
+	AX_BOOST_BASE
+	AX_BOOST_FILESYSTEM
+])
+
 # ==========
 # Generators
 # ==========
