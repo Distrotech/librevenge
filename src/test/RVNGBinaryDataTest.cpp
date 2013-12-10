@@ -13,6 +13,8 @@
  */
 
 #include <algorithm>
+#include <cstring>
+#include <string>
 
 #include <librevenge/librevenge.h>
 
@@ -21,11 +23,64 @@
 #include "RVNGBinaryDataTest.h"
 
 using librevenge::RVNGBinaryData;
+using librevenge::RVNGString;
 
 using std::equal;
+using std::strlen;
 
 namespace test
 {
+
+namespace
+{
+
+bool equalBinaryData(const RVNGBinaryData &binaryData, const char *const str)
+{
+	const unsigned len = strlen(str);
+	if (binaryData.size() != len)
+		return false;
+
+	if (0 == len) // there is nothing to compare here
+		return true;
+
+	return equal(str, str + len, reinterpret_cast<const char *>(binaryData.getDataBuffer()));
+}
+
+void implTestBase64(const char *const plain, const char *const base64)
+{
+	const std::string msg(std::string("plain text: '") + plain + '\'');
+	// construct (decode)
+	{
+		const RVNGBinaryData data(base64);
+		CPPUNIT_ASSERT_MESSAGE(msg, equalBinaryData(data, plain));
+	}
+	{
+		const RVNGString base64Str(base64);
+		const RVNGBinaryData data(base64Str);
+		CPPUNIT_ASSERT_MESSAGE(msg, equalBinaryData(data, plain));
+	}
+
+	// append (decode)
+	{
+		RVNGBinaryData data;
+		data.appendBase64Data(base64);
+		CPPUNIT_ASSERT_MESSAGE(msg, equalBinaryData(data, plain));
+	}
+	{
+		RVNGBinaryData data;
+		const RVNGString base64Str(base64);
+		data.appendBase64Data(base64Str);
+		CPPUNIT_ASSERT_MESSAGE(msg, equalBinaryData(data, plain));
+	}
+
+	// encode
+	{
+		const RVNGBinaryData data(reinterpret_cast<const unsigned char *>(plain), strlen(plain));
+		CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, 0, std::strcmp(base64, data.getBase64Data().cstr()));
+	}
+}
+
+}
 
 void RVNGBinaryDataTest::setUp()
 {
@@ -119,7 +174,17 @@ void RVNGBinaryDataTest::testClear()
 
 void RVNGBinaryDataTest::testBase64()
 {
-	// TODO: implement me
+	// NOTE: these patterns come from http://www.ietf.org/rfc/rfc4648.txt
+	implTestBase64("", "");
+	implTestBase64("f", "Zg==");
+	implTestBase64("fo", "Zm8=");
+	implTestBase64("foo", "Zm9v");
+	implTestBase64("foob", "Zm9vYg==");
+	implTestBase64("fooba", "Zm9vYmE=");
+	implTestBase64("foobar", "Zm9vYmFy");
+
+	// more test patterns
+	implTestBase64("e=mc^2", "ZT1tY14y");
 }
 
 void RVNGBinaryDataTest::testStream()
