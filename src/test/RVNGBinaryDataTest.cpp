@@ -40,12 +40,14 @@ void RVNGBinaryDataTest::testConstruction()
 	// default ctor creates empty data
 	RVNGBinaryData empty;
 	CPPUNIT_ASSERT_EQUAL(0ul, empty.size());
+	CPPUNIT_ASSERT(empty.empty());
 
 	// construction from a buffer
 	const unsigned char input[] = "hello world";
 	const size_t len = RVNG_NUM_ELEMENTS(input);
 	RVNGBinaryData data(input, len);
 	CPPUNIT_ASSERT_EQUAL(len, data.size());
+	CPPUNIT_ASSERT(!data.empty());
 	CPPUNIT_ASSERT(equal(input, input + len, data.getDataBuffer()));
 
 	{
@@ -62,8 +64,10 @@ void RVNGBinaryDataTest::testConstruction()
 	// assignment
 	RVNGBinaryData assign;
 	CPPUNIT_ASSERT_EQUAL(0ul, assign.size());
+	CPPUNIT_ASSERT(assign.empty());
 	assign = data;
 	CPPUNIT_ASSERT_EQUAL(len, assign.size());
+	CPPUNIT_ASSERT(!assign.empty());
 	CPPUNIT_ASSERT(equal(input, input + len, assign.getDataBuffer()));
 
 }
