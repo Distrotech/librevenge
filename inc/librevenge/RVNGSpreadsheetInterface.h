@@ -348,7 +348,7 @@ public:
 	/**
 	Defines an ordered (enumerated) list level
 	\param propList Defines a set of properties for the list. May contain:
-	\li \c librevenge:id A unique integer identifier for the list
+	\li \c librevenge:list-id A unique integer identifier for the list
 	\li \c librevenge:level The level of the list in the hierarchy
 	\li \c style:num-format Type of list
 	\li \c style:num-prefix Text that comes before the number in the list
@@ -361,7 +361,7 @@ public:
 	/**
 	Defines an unordered (unenumerated) list level
 	\param propList Defines a set of properties for the list level. May contain:
-	\li \c librevenge:id A unique integer identifier for the list
+	\li \c librevenge:list-id A unique integer identifier for the list
 	\li \c librevenge:level The level of the list in the hierarchy
 	\li \c text:bullet-char The string that should be used as a bullet
 	\li \c text:min-label-width The distance between the bullet and the actual text, stored in inches

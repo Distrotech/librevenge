@@ -166,6 +166,29 @@ public:
 	virtual void insertField(const RVNGPropertyList &propList) = 0;
 
 	/**
+	Defines an ordered (enumerated) list level
+	\param propList Defines a set of properties for the list. May contain:
+	\li \c librevenge:list-id A unique integer identifier for the list
+	\li \c librevenge:level The level of the list in the hierarchy
+	\li \c style:num-format Type of list
+	\li \c style:num-prefix Text that comes before the number in the list
+	\li \c style:num-suffix Text that comes after the number in the list
+	\li \c text:start-value The starting number of the list
+	\li \c text:min-label-width The distance between the list label and the actual text, stored in inches
+	\li \c text:space-before The indentation level of the lists, stored in inches
+	*/
+	virtual void defineOrderedListLevel(const RVNGPropertyList &propList) = 0;
+	/**
+	Defines an unordered (unenumerated) list level
+	\param propList Defines a set of properties for the list level. May contain:
+	\li \c librevenge:list-id A unique integer identifier for the list
+	\li \c librevenge:level The level of the list in the hierarchy
+	\li \c text:bullet-char The string that should be used as a bullet
+	\li \c text:min-label-width The distance between the bullet and the actual text, stored in inches
+	\li \c text:space-before The indentation level of the lists, stored in inches
+	*/
+	virtual void defineUnorderedListLevel(const RVNGPropertyList &propList) = 0;
+	/**
 	Called when a new ordered list level should be opened
 	\param propList Defines a set of properties for the list. May contain:
 	\li \c librevenge:level The level of the list in the hierarchy
@@ -222,6 +245,8 @@ public:
 	*/
 	virtual void closeListElement() = 0;
 
+	virtual void defineParagraphStyle(const RVNGPropertyList &propList) = 0;
+
 	/**
 	Called when a new paragraph is opened. This (or openListElement) will always be called before any text or span is placed into the document.
 	\param propList Property list for the paragraph. May contain:
@@ -245,6 +270,8 @@ public:
 	Called when a paragraph is closed.
 	*/
 	virtual void closeParagraph() = 0;
+
+	virtual void defineCharacterStyle(const RVNGPropertyList &propList) = 0;
 
 	/**
 	Called when a text span is opened
