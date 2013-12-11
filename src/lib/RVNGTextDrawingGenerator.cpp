@@ -71,16 +71,18 @@ void RVNGTextDrawingGenerator::drawGraphicObject(const RVNGPropertyList &) {}
 void RVNGTextDrawingGenerator::startTextObject(const RVNGPropertyList &) {}
 void RVNGTextDrawingGenerator::endTextObject() {}
 
-
+void RVNGTextDrawingGenerator::defineOrderedListLevel(const RVNGPropertyList & /*propList*/) {}
 void RVNGTextDrawingGenerator::openOrderedListLevel(const RVNGPropertyList & /*propList*/) {}
 void RVNGTextDrawingGenerator::closeOrderedListLevel() {}
 
+void RVNGTextDrawingGenerator::defineUnorderedListLevel(const RVNGPropertyList & /*propList*/) {}
 void RVNGTextDrawingGenerator::openUnorderedListLevel(const RVNGPropertyList & /*propList*/) {}
 void RVNGTextDrawingGenerator::closeUnorderedListLevel() {}
 
 void RVNGTextDrawingGenerator::openListElement(const RVNGPropertyList & /*propList*/) {}
 void RVNGTextDrawingGenerator::closeListElement() {}
 
+void RVNGTextDrawingGenerator::defineParagraphStyle(const RVNGPropertyList & /*propList*/) {}
 void RVNGTextDrawingGenerator::openParagraph(const RVNGPropertyList & /*propList*/) {}
 
 void RVNGTextDrawingGenerator::closeParagraph()
@@ -88,6 +90,7 @@ void RVNGTextDrawingGenerator::closeParagraph()
 	m_impl->m_stream << "\n";
 }
 
+void RVNGTextDrawingGenerator::defineCharacterStyle(const RVNGPropertyList & /* propList */) {}
 void RVNGTextDrawingGenerator::openSpan(const RVNGPropertyList & /* propList */) {}
 void RVNGTextDrawingGenerator::closeSpan() {}
 
