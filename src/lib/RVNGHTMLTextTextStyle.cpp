@@ -119,11 +119,6 @@ void RVNGHTMLTextListStyleManager::defineLevel(RVNGPropertyList const &pList, bo
 		id=pList["librevenge:list-id"]->getInt();
 	else if (pList["librevenge:id"])
 		id=pList["librevenge:id"]->getInt();
-	else
-	{
-		RVNG_DEBUG_MSG(("RVNGHTMLTextListStyleManager::defineLevel: can not find list id\n"));
-		return;
-	}
 	if (m_idListMap.find(id)==m_idListMap.end())
 		m_idListMap[id]=List();
 	if (!pList["librevenge:level"])
@@ -134,17 +129,15 @@ void RVNGHTMLTextListStyleManager::defineLevel(RVNGPropertyList const &pList, bo
 	m_idListMap.find(id)->second.setLevel(pList["librevenge:level"]->getInt(), pList, ordered);
 }
 
-std::string RVNGHTMLTextListStyleManager::openLevel(RVNGPropertyList const &pList, bool /*ordered*/)
+std::string RVNGHTMLTextListStyleManager::openLevel(RVNGPropertyList const &pList, bool ordered)
 {
 	int id = -1;
 	if (pList["librevenge:list-id"])
 		id=pList["librevenge:list-id"]->getInt();
 	else if (pList["librevenge:id"])
 		id=pList["librevenge:id"]->getInt();
-	else
-	{
-		RVNG_DEBUG_MSG(("RVNGHTMLTextListStyleManager::openLevel: can not find list id\n"));
-	}
+	else // anomynous list
+		defineLevel(pList, ordered);
 	m_actualIdStack.push_back(id);
 
 	std::string content=getContent(pList, true);
@@ -183,6 +176,12 @@ void RVNGHTMLTextListStyleManager::closeLevel()
 ////////////////////////////////////////////////////////////
 std::string RVNGHTMLTextParagraphStyleManager::getClass(RVNGPropertyList const &pList)
 {
+	if (pList["librevenge:paragraph-id"])
+	{
+		int id=pList["librevenge:paragraph-id"]->getInt();
+		if (m_idNameMap.find(id)!=m_idNameMap.end())
+			return m_idNameMap.find(id)->second;
+	}
 	std::string content=getContent(pList, false);
 	std::map<std::string, std::string>::iterator it=m_contentNameMap.find(content);
 	if (it != m_contentNameMap.end())
@@ -191,6 +190,19 @@ std::string RVNGHTMLTextParagraphStyleManager::getClass(RVNGPropertyList const &
 	s << "para" << m_contentNameMap.size();
 	m_contentNameMap[content]=s.str();
 	return s.str();
+}
+
+void RVNGHTMLTextParagraphStyleManager::defineParagraph(RVNGPropertyList const &propList)
+{
+	if (!propList["librevenge:paragraph-id"])
+	{
+		RVNG_DEBUG_MSG(("RVNGHTMLTextParagraphStyleManager::defineStyle: can not find the paragraph id\n"));
+		return;
+	}
+	int id=propList["librevenge:paragraph-id"]->getInt();
+	RVNGPropertyList pList(propList);
+	pList.remove("librevenge:paragraph-id");
+	m_idNameMap[id]=getClass(pList);
 }
 
 void RVNGHTMLTextParagraphStyleManager::send(std::ostream &out)
@@ -294,6 +306,13 @@ void RVNGHTMLTextParagraphStyleManager::parseBorders(RVNGPropertyList const &pLi
 ////////////////////////////////////////////////////////////
 std::string RVNGHTMLTextSpanStyleManager::getClass(RVNGPropertyList const &pList)
 {
+	if (pList["librevenge:span-id"])
+	{
+		int id=pList["librevenge:span-id"]->getInt();
+		if (m_idNameMap.find(id)!=m_idNameMap.end())
+			return m_idNameMap.find(id)->second;
+	}
+
 	std::string content=getContent(pList);
 	std::map<std::string, std::string>::iterator it=m_contentNameMap.find(content);
 	if (it != m_contentNameMap.end())
@@ -302,6 +321,19 @@ std::string RVNGHTMLTextSpanStyleManager::getClass(RVNGPropertyList const &pList
 	s << "span" << m_contentNameMap.size();
 	m_contentNameMap[content]=s.str();
 	return s.str();
+}
+
+void RVNGHTMLTextSpanStyleManager::defineSpan(RVNGPropertyList const &propList)
+{
+	if (!propList["librevenge:span-id"])
+	{
+		RVNG_DEBUG_MSG(("RVNGHTMLTextSpanStyleManager::defineStyle: can not find the span id\n"));
+		return;
+	}
+	int id=propList["librevenge:span-id"]->getInt();
+	RVNGPropertyList pList(propList);
+	pList.remove("librevenge:span-id");
+	m_idNameMap[id]=getClass(pList);
 }
 
 void RVNGHTMLTextSpanStyleManager::send(std::ostream &out)

@@ -442,7 +442,10 @@ void RVNGHTMLTextGenerator::defineSectionStyle(const RVNGPropertyList &) {}
 void RVNGHTMLTextGenerator::openSection(const RVNGPropertyList & /* propList */) {}
 void RVNGHTMLTextGenerator::closeSection() {}
 
-void RVNGHTMLTextGenerator::defineParagraphStyle(const RVNGPropertyList &) {}
+void RVNGHTMLTextGenerator::defineParagraphStyle(const RVNGPropertyList &propList)
+{
+	m_impl->m_paragraphManager.defineParagraph(propList);
+}
 
 void RVNGHTMLTextGenerator::openParagraph(const RVNGPropertyList &propList)
 {
@@ -460,7 +463,10 @@ void RVNGHTMLTextGenerator::closeParagraph()
 	m_impl->output() << "</p>" << std::endl;
 }
 
-void RVNGHTMLTextGenerator::defineCharacterStyle(const RVNGPropertyList &) {}
+void RVNGHTMLTextGenerator::defineCharacterStyle(const RVNGPropertyList &propList)
+{
+	m_impl->m_spanManager.defineSpan(propList);
+}
 
 void RVNGHTMLTextGenerator::openSpan(const RVNGPropertyList &propList)
 {
@@ -482,6 +488,10 @@ void RVNGHTMLTextGenerator::openLink(const RVNGPropertyList &propList)
 	if (m_impl->m_ignore)
 		return;
 
+	if (!propList["librevenge:type"])
+	{
+		RVNG_DEBUG_MSG(("RVNGHTMLTextGenerator::openLink: librevenge:type: not filled, suppose link\n"));
+	}
 	m_impl->output() << "<a ";
 	if (propList["xlink:href"])
 		m_impl->output() << "href=\"" << librevenge::RVNGString(propList["xlink:href"]->getStr(), true).cstr() << "\"";
@@ -511,7 +521,12 @@ void RVNGHTMLTextGenerator::insertLineBreak()
 	m_impl->output() << "<br>" << std::endl;
 }
 
-void RVNGHTMLTextGenerator::insertField(const RVNGPropertyList & /* propList */) {}
+void RVNGHTMLTextGenerator::insertField(const RVNGPropertyList & /* propList */)
+{
+	if (m_impl->m_ignore)
+		return;
+	m_impl->output() << "#" << std::endl;
+}
 
 void RVNGHTMLTextGenerator::insertText(const RVNGString &text)
 {

@@ -37,13 +37,15 @@ class RVNGHTMLTextParagraphStyleManager
 {
 public:
 	//! constructor
-	RVNGHTMLTextParagraphStyleManager() : m_contentNameMap()
+	RVNGHTMLTextParagraphStyleManager() : m_contentNameMap(), m_idNameMap()
 	{
 	}
 	//! destructor
 	virtual ~RVNGHTMLTextParagraphStyleManager()
 	{
 	}
+	//! define a paragraph style
+	void defineParagraph(RVNGPropertyList const &pList);
 	//! returns the class name corresponding to a propertylist
 	std::string getClass(RVNGPropertyList const &pList);
 	//! send the data to the stream
@@ -53,6 +55,8 @@ protected:
 	std::string getContent(RVNGPropertyList const &pList, bool isList) const;
 	//! a map content -> name
 	std::map<std::string, std::string> m_contentNameMap;
+	//! a map id -> name
+	std::map<int, std::string> m_idNameMap;
 	//! add data corresponding to the border
 	void parseBorders(RVNGPropertyList const &pList, std::ostream &out) const;
 private:
@@ -134,13 +138,15 @@ class RVNGHTMLTextSpanStyleManager
 {
 public:
 	//! constructor
-	RVNGHTMLTextSpanStyleManager() : m_contentNameMap()
+	RVNGHTMLTextSpanStyleManager() : m_contentNameMap(), m_idNameMap()
 	{
 	}
 	//! destructor
 	~RVNGHTMLTextSpanStyleManager()
 	{
 	}
+	//! define a span style
+	void defineSpan(RVNGPropertyList const &pList);
 	//! returns the class name corresponding to a propertylist
 	std::string getClass(RVNGPropertyList const &pList);
 	//! send the data to the stream
@@ -154,6 +160,9 @@ protected:
 	void parseDecorations(RVNGPropertyList const &pList, std::ostream &out) const;
 	//! a map content -> name
 	std::map<std::string, std::string> m_contentNameMap;
+	//! a map id -> name
+	std::map<int, std::string> m_idNameMap;
+
 private:
 	RVNGHTMLTextSpanStyleManager(RVNGHTMLTextSpanStyleManager const &orig);
 	RVNGHTMLTextSpanStyleManager operator=(RVNGHTMLTextSpanStyleManager const &orig);
