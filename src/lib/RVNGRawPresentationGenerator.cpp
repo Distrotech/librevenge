@@ -178,6 +178,11 @@ void RVNGRawPresentationGenerator::endTextObject()
 	RVNG_CALLGRAPH_LEAVE(("endTextObject()\n"), CALLBACK_START_TEXT_OBJECT);
 }
 
+void RVNGRawPresentationGenerator::defineParagraphStyle(const RVNGPropertyList &propList)
+{
+	m_impl->iprintf("defineParagraphStyle(%s)\n", propList.getPropString().cstr());
+}
+
 void RVNGRawPresentationGenerator::openParagraph(const RVNGPropertyList &propList)
 {
 	RVNG_CALLGRAPH_ENTER(("openParagraph(%s)\n", propList.getPropString().cstr()), CALLBACK_OPEN_PARAGRAPH);
@@ -186,6 +191,11 @@ void RVNGRawPresentationGenerator::openParagraph(const RVNGPropertyList &propLis
 void RVNGRawPresentationGenerator::closeParagraph()
 {
 	RVNG_CALLGRAPH_LEAVE(("closeParagraph()\n"), CALLBACK_OPEN_PARAGRAPH);
+}
+
+void RVNGRawPresentationGenerator::defineCharacterStyle(const RVNGPropertyList &propList)
+{
+	m_impl->iprintf("defineCharacterStyle(%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawPresentationGenerator::openSpan(const RVNGPropertyList &propList)
@@ -248,6 +258,16 @@ void RVNGRawPresentationGenerator::insertField(const RVNGPropertyList &propList)
 		return;
 
 	m_impl->iprintf("insertField(%s)\n", propList.getPropString().cstr());
+}
+
+void RVNGRawPresentationGenerator::defineOrderedListLevel(const RVNGPropertyList &propList)
+{
+	m_impl->iprintf("defineOrderedListLevel(%s)\n", propList.getPropString().cstr());
+}
+
+void RVNGRawPresentationGenerator::defineUnorderedListLevel(const RVNGPropertyList &propList)
+{
+	m_impl->iprintf("defineUnorderedListLevel(%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawPresentationGenerator::openOrderedListLevel(const RVNGPropertyList &propList)

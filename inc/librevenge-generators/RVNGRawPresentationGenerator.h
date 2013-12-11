@@ -57,8 +57,10 @@ public:
 
 	void startTextObject(const RVNGPropertyList &propList);
 	void endTextObject();
+	void defineParagraphStyle(const RVNGPropertyList &propList);
 	void openParagraph(const RVNGPropertyList &propList);
 	void closeParagraph();
+	void defineCharacterStyle(const RVNGPropertyList &propList);
 	void openSpan(const RVNGPropertyList &propList);
 	void closeSpan();
 
@@ -72,6 +74,8 @@ public:
 
 	void insertField(const RVNGPropertyList &propList);
 
+	void defineOrderedListLevel(const RVNGPropertyList &propList);
+	void defineUnorderedListLevel(const RVNGPropertyList &propList);
 	void openOrderedListLevel(const RVNGPropertyList &propList);
 	void openUnorderedListLevel(const RVNGPropertyList &propList);
 	void closeOrderedListLevel();
