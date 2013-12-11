@@ -993,9 +993,9 @@ void librevenge::DirTree::load(unsigned char *buffer, unsigned size)
 }
 
 void librevenge::DirTree::getSubStreamList(unsigned ind, bool all, const std::string &prefix,
-        std::vector<std::string> &res,
-        std::set<unsigned> &seen,
-        bool isRoot) const
+                                           std::vector<std::string> &res,
+                                           std::set<unsigned> &seen,
+                                           bool isRoot) const
 {
 	if (seen.find(ind) != seen.end())
 		return;
@@ -1072,8 +1072,8 @@ void librevenge::DirTree::setInRedBlackTreeForm(unsigned ind, std::set<unsigned>
 }
 
 unsigned librevenge::DirTree::setInRBTForm(std::vector<unsigned> const &childs,
-        unsigned firstInd, unsigned lastInd,
-        unsigned height)
+                                           unsigned firstInd, unsigned lastInd,
+                                           unsigned height)
 {
 	unsigned middle = (firstInd+lastInd)/2;
 	unsigned ind=childs[middle];
@@ -1243,7 +1243,7 @@ void librevenge::IStorage::load()
 }
 
 unsigned long librevenge::IStorage::loadBigBlocks(std::vector<unsigned long> const &blocks,
-        unsigned char *data, unsigned long maxlen)
+                                                  unsigned char *data, unsigned long maxlen)
 {
 	// sentinel
 	if (!data) return 0;
@@ -1269,7 +1269,7 @@ unsigned long librevenge::IStorage::loadBigBlocks(std::vector<unsigned long> con
 }
 
 unsigned long librevenge::IStorage::loadBigBlock(unsigned long block,
-        unsigned char *data, unsigned long maxlen)
+                                                 unsigned char *data, unsigned long maxlen)
 {
 	// sentinel
 	if (!data) return 0;
@@ -1284,7 +1284,7 @@ unsigned long librevenge::IStorage::loadBigBlock(unsigned long block,
 
 // return number of bytes which has been read
 unsigned long librevenge::IStorage::loadSmallBlocks(std::vector<unsigned long> const &blocks,
-        unsigned char *data, unsigned long maxlen)
+                                                    unsigned char *data, unsigned long maxlen)
 {
 	// sentinel
 	if (!data  || blocks.size() < 1 ||  maxlen == 0) return 0;
@@ -1317,7 +1317,7 @@ unsigned long librevenge::IStorage::loadSmallBlocks(std::vector<unsigned long> c
 }
 
 unsigned long librevenge::IStorage::loadSmallBlock(unsigned long block,
-        unsigned char *data, unsigned long maxlen)
+                                                   unsigned char *data, unsigned long maxlen)
 {
 	// sentinel
 	if (!data) return 0;
