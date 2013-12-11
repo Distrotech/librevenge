@@ -130,6 +130,10 @@ void RVNGTextPresentationGenerator::endTextObject()
 	m_impl->m_stream << '\n';
 }
 
+void RVNGTextPresentationGenerator::defineParagraphStyle(const RVNGPropertyList &)
+{
+}
+
 void RVNGTextPresentationGenerator::openParagraph(const RVNGPropertyList &)
 {
 }
@@ -137,6 +141,10 @@ void RVNGTextPresentationGenerator::openParagraph(const RVNGPropertyList &)
 void RVNGTextPresentationGenerator::closeParagraph()
 {
 	m_impl->m_stream << '\n';
+}
+
+void RVNGTextPresentationGenerator::defineCharacterStyle(const RVNGPropertyList &)
+{
 }
 
 void RVNGTextPresentationGenerator::openSpan(const RVNGPropertyList &)
@@ -176,6 +184,14 @@ void RVNGTextPresentationGenerator::insertLineBreak()
 }
 
 void RVNGTextPresentationGenerator::insertField(const RVNGPropertyList &)
+{
+}
+
+void RVNGTextPresentationGenerator::defineOrderedListLevel(const RVNGPropertyList &)
+{
+}
+
+void RVNGTextPresentationGenerator::defineUnorderedListLevel(const RVNGPropertyList &)
 {
 }
 
