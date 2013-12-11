@@ -166,6 +166,16 @@ void RVNGRawDrawingGenerator::endTextObject()
 	RVNG_CALLGRAPH_LEAVE(("endTextObject\n"), CALLBACK_START_TEXT_OBJECT);
 }
 
+void RVNGRawDrawingGenerator::defineOrderedListLevel(const RVNGPropertyList &propList)
+{
+	m_impl->iprintf("defineOrderedListLevel(%s)\n", propList.getPropString().cstr());
+}
+
+void RVNGRawDrawingGenerator::defineUnorderedListLevel(const RVNGPropertyList &propList)
+{
+	m_impl->iprintf("defineUnorderedListLevel(%s)\n", propList.getPropString().cstr());
+}
+
 void RVNGRawDrawingGenerator::openOrderedListLevel(const librevenge::RVNGPropertyList &propList)
 {
 	RVNG_CALLGRAPH_ENTER(("openOrderedListLevel(%s)\n", propList.getPropString().cstr()), CALLBACK_OPEN_ORDERED_LIST_LEVEL);
@@ -196,6 +206,11 @@ void RVNGRawDrawingGenerator::closeListElement()
 	RVNG_CALLGRAPH_LEAVE(("closeListElement\n"), CALLBACK_OPEN_LIST_ELEMENT);
 }
 
+void RVNGRawDrawingGenerator::defineParagraphStyle(const RVNGPropertyList &propList)
+{
+	m_impl->iprintf("defineParagraphStyle(%s)\n", propList.getPropString().cstr());
+}
+
 void RVNGRawDrawingGenerator::openParagraph(const RVNGPropertyList &propList)
 {
 	RVNG_CALLGRAPH_ENTER(("openParagraph (%s)\n", propList.getPropString().cstr()), CALLBACK_OPEN_PARAGRAPH);
@@ -204,6 +219,11 @@ void RVNGRawDrawingGenerator::openParagraph(const RVNGPropertyList &propList)
 void RVNGRawDrawingGenerator::closeParagraph()
 {
 	RVNG_CALLGRAPH_LEAVE(("closeParagraph\n"), CALLBACK_OPEN_PARAGRAPH);
+}
+
+void RVNGRawDrawingGenerator::defineCharacterStyle(const RVNGPropertyList &propList)
+{
+	m_impl->iprintf("defineCharacterStyle(%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawDrawingGenerator::openSpan(const RVNGPropertyList &propList)
