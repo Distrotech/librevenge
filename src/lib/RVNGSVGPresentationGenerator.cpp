@@ -13,10 +13,14 @@
  */
 
 #include <locale.h>
+
+#include <map>
 #include <sstream>
 #include <string>
 
 #include <librevenge-generators/librevenge-generators.h>
+
+#include "librevenge_internal.h"
 
 namespace librevenge
 {
@@ -57,6 +61,8 @@ struct RVNGSVGPresentationGeneratorImpl
 {
 	RVNGSVGPresentationGeneratorImpl(RVNGStringVector &m_vec);
 
+	std::map<int, RVNGPropertyList> m_idSpanMap;
+
 	RVNGPropertyListVector m_gradient;
 	RVNGPropertyList m_style;
 	int m_gradientIndex;
@@ -71,7 +77,8 @@ struct RVNGSVGPresentationGeneratorImpl
 };
 
 RVNGSVGPresentationGeneratorImpl::RVNGSVGPresentationGeneratorImpl(RVNGStringVector &vec)
-	: m_gradient()
+	: m_idSpanMap()
+	, m_gradient()
 	, m_style()
 	, m_gradientIndex(1)
 	, m_patternIndex(1)
@@ -560,27 +567,42 @@ void RVNGSVGPresentationGenerator::endTextObject()
 	m_impl->m_outputSink << "</svg:text>\n";
 }
 
+void RVNGSVGPresentationGenerator::defineCharacterStyle(const RVNGPropertyList &propList)
+{
+	if (!propList["librevenge:span-id"])
+	{
+		RVNG_DEBUG_MSG(("RVNGSVGPresentationGenerator::defineCharacterStyle: can not find the span-id\n"));
+		return;
+	}
+	m_impl->m_idSpanMap[propList["librevenge:span-id"]->getInt()]=propList;
+}
+
 void RVNGSVGPresentationGenerator::openSpan(const RVNGPropertyList &propList)
 {
+	RVNGPropertyList pList(propList);
+	if (propList["librevenge:span-id"] &&
+	        m_impl->m_idSpanMap.find(propList["librevenge:span-id"]->getInt())!=m_impl->m_idSpanMap.end())
+		pList=m_impl->m_idSpanMap.find(propList["librevenge:span-id"]->getInt())->second;
+
 	m_impl->m_outputSink << "<svg:tspan ";
-	if (propList["style:font-name"])
-		m_impl->m_outputSink << "font-family=\"" << propList["style:font-name"]->getStr().cstr() << "\" ";
-	if (propList["fo:font-style"])
-		m_impl->m_outputSink << "font-style=\"" << propList["fo:font-style"]->getStr().cstr() << "\" ";
-	if (propList["fo:font-weight"])
-		m_impl->m_outputSink << "font-weight=\"" << propList["fo:font-weight"]->getStr().cstr() << "\" ";
-	if (propList["fo:font-variant"])
-		m_impl->m_outputSink << "font-variant=\"" << propList["fo:font-variant"]->getStr().cstr() << "\" ";
-	if (propList["fo:font-size"])
-		m_impl->m_outputSink << "font-size=\"" << doubleToString(propList["fo:font-size"]->getDouble()) << "\" ";
-	if (propList["fo:color"])
-		m_impl->m_outputSink << "fill=\"" << propList["fo:color"]->getStr().cstr() << "\" ";
-	if (propList["fo:text-transform"])
-		m_impl->m_outputSink << "text-transform=\"" << propList["fo:text-transform"]->getStr().cstr() << "\" ";
-	if (propList["svg:fill-opacity"])
-		m_impl->m_outputSink << "fill-opacity=\"" << doubleToString(propList["svg:fill-opacity"]->getDouble()) << "\" ";
-	if (propList["svg:stroke-opacity"])
-		m_impl->m_outputSink << "stroke-opacity=\"" << doubleToString(propList["svg:stroke-opacity"]->getDouble()) << "\" ";
+	if (pList["style:font-name"])
+		m_impl->m_outputSink << "font-family=\"" << pList["style:font-name"]->getStr().cstr() << "\" ";
+	if (pList["fo:font-style"])
+		m_impl->m_outputSink << "font-style=\"" << pList["fo:font-style"]->getStr().cstr() << "\" ";
+	if (pList["fo:font-weight"])
+		m_impl->m_outputSink << "font-weight=\"" << pList["fo:font-weight"]->getStr().cstr() << "\" ";
+	if (pList["fo:font-variant"])
+		m_impl->m_outputSink << "font-variant=\"" << pList["fo:font-variant"]->getStr().cstr() << "\" ";
+	if (pList["fo:font-size"])
+		m_impl->m_outputSink << "font-size=\"" << doubleToString(pList["fo:font-size"]->getDouble()) << "\" ";
+	if (pList["fo:color"])
+		m_impl->m_outputSink << "fill=\"" << pList["fo:color"]->getStr().cstr() << "\" ";
+	if (pList["fo:text-transform"])
+		m_impl->m_outputSink << "text-transform=\"" << pList["fo:text-transform"]->getStr().cstr() << "\" ";
+	if (pList["svg:fill-opacity"])
+		m_impl->m_outputSink << "fill-opacity=\"" << doubleToString(pList["svg:fill-opacity"]->getDouble()) << "\" ";
+	if (pList["svg:stroke-opacity"])
+		m_impl->m_outputSink << "stroke-opacity=\"" << doubleToString(pList["svg:stroke-opacity"]->getDouble()) << "\" ";
 	m_impl->m_outputSink << ">\n";
 }
 
@@ -623,6 +645,14 @@ void RVNGSVGPresentationGenerator::insertField(const RVNGPropertyList &/*propLis
 	// TODO: implement me
 }
 
+void RVNGSVGPresentationGenerator::defineOrderedListLevel(const RVNGPropertyList &)
+{
+}
+
+void RVNGSVGPresentationGenerator::defineUnorderedListLevel(const RVNGPropertyList &)
+{
+}
+
 void RVNGSVGPresentationGenerator::openOrderedListLevel(const RVNGPropertyList &)
 {
 }
@@ -647,6 +677,10 @@ void RVNGSVGPresentationGenerator::openListElement(const RVNGPropertyList &propL
 void RVNGSVGPresentationGenerator::closeListElement()
 {
 	closeParagraph();
+}
+
+void RVNGSVGPresentationGenerator::defineParagraphStyle(const RVNGPropertyList &)
+{
 }
 
 void RVNGSVGPresentationGenerator::openParagraph(const RVNGPropertyList &)
