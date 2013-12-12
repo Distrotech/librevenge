@@ -320,7 +320,7 @@ public:
 	\li \c librevenge:table-columns Column definitions for the table. May contain
 	    -# \c style:column-width Width of a column, in inches
 	*/
-	virtual void openTable(const RVNGPropertyList &propList) = 0;
+	virtual void startTableObject(const RVNGPropertyList &propList) = 0;
 	/**
 	Called when a new table row is opened
 	\param propList Defines a set of properties for the table row. May contain:
@@ -362,7 +362,7 @@ public:
 	/**
 	Called when the current table is closed
 	*/
-	virtual void closeTable() = 0;
+	virtual void endTableObject() = 0;
 
 	/** Start a comment.
 	  */

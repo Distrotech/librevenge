@@ -83,13 +83,13 @@ public:
 	void openListElement(const RVNGPropertyList &propList);
 	void closeListElement();
 
-	void openTable(const RVNGPropertyList &propList);
+	void startTableObject(const RVNGPropertyList &propList);
 	void openTableRow(const RVNGPropertyList &propList);
 	void closeTableRow();
 	void openTableCell(const RVNGPropertyList &propList);
 	void closeTableCell();
 	void insertCoveredTableCell(const RVNGPropertyList &propList);
-	void closeTable();
+	void endTableObject();
 
 	void startComment(const RVNGPropertyList &propList);
 	void endComment();

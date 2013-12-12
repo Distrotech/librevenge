@@ -221,7 +221,7 @@ void RVNGTextPresentationGenerator::closeListElement()
 	closeParagraph();
 }
 
-void RVNGTextPresentationGenerator::openTable(const RVNGPropertyList &)
+void RVNGTextPresentationGenerator::startTableObject(const RVNGPropertyList &)
 {
 }
 
@@ -245,7 +245,7 @@ void RVNGTextPresentationGenerator::insertCoveredTableCell(const RVNGPropertyLis
 {
 }
 
-void RVNGTextPresentationGenerator::closeTable()
+void RVNGTextPresentationGenerator::endTableObject()
 {
 }
 

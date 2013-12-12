@@ -692,7 +692,7 @@ void RVNGSVGPresentationGenerator::closeParagraph()
 	m_impl->m_outputSink << '\n';
 }
 
-void RVNGSVGPresentationGenerator::openTable(const RVNGPropertyList &/*propList*/)
+void RVNGSVGPresentationGenerator::startTableObject(const RVNGPropertyList &/*propList*/)
 {
 	// TODO: implement me
 }
@@ -722,7 +722,7 @@ void RVNGSVGPresentationGenerator::insertCoveredTableCell(const RVNGPropertyList
 	// TODO: implement me
 }
 
-void RVNGSVGPresentationGenerator::closeTable()
+void RVNGSVGPresentationGenerator::endTableObject()
 {
 	// TODO: implement me
 }

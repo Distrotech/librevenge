@@ -304,9 +304,9 @@ void RVNGRawPresentationGenerator::closeListElement()
 	RVNG_CALLGRAPH_LEAVE(("closeListElement()\n"), CALLBACK_OPEN_LIST_ELEMENT);
 }
 
-void RVNGRawPresentationGenerator::openTable(const RVNGPropertyList &propList)
+void RVNGRawPresentationGenerator::startTableObject(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("openTable(%s)\n", propList.getPropString().cstr()), CALLBACK_OPEN_TABLE);
+	RVNG_CALLGRAPH_ENTER(("startTableObject(%s)\n", propList.getPropString().cstr()), CALLBACK_OPEN_TABLE);
 }
 
 void RVNGRawPresentationGenerator::openTableRow(const RVNGPropertyList &propList)
@@ -339,9 +339,9 @@ void RVNGRawPresentationGenerator::insertCoveredTableCell(const RVNGPropertyList
 	m_impl->iprintf("insertCoveredTableCell(%s)\n", propList.getPropString().cstr());
 }
 
-void RVNGRawPresentationGenerator::closeTable()
+void RVNGRawPresentationGenerator::endTableObject()
 {
-	RVNG_CALLGRAPH_LEAVE(("closeTable()\n"), CALLBACK_OPEN_TABLE);
+	RVNG_CALLGRAPH_LEAVE(("endTableObject()\n"), CALLBACK_OPEN_TABLE);
 }
 
 void RVNGRawPresentationGenerator::startComment(const RVNGPropertyList &propList)
