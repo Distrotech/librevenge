@@ -102,11 +102,7 @@ public:
 	Called at the start of the parsing process. This is always the second callback made.
 	*/
 	virtual void startDocument(const RVNGPropertyList &propList) = 0;
-	/// REMOVE: wrapper to obsolete call
-	void startDocument()
-	{
-		startDocument(RVNGPropertyList());
-	}
+
 	/**
 	    Called at the end of the parsing process. This is always the last callback made.
 	*/
