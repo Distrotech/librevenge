@@ -58,9 +58,9 @@ void RVNGRawTextGenerator::setDocumentMetaData(const RVNGPropertyList &propList)
 	m_impl->iprintf("setDocumentMetaData(%s)\n", propList.getPropString().cstr());
 }
 
-void RVNGRawTextGenerator::startDocument()
+void RVNGRawTextGenerator::startDocument(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("startDocument()\n"), CALLBACK_START_DOCUMENT);
+	RVNG_CALLGRAPH_ENTER(("startDocument()\n", propList.getPropString().cstr()), CALLBACK_START_DOCUMENT);
 }
 
 void RVNGRawTextGenerator::endDocument()

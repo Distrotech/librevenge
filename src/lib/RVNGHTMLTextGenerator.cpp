@@ -379,7 +379,7 @@ void RVNGHTMLTextGenerator::setDocumentMetaData(const RVNGPropertyList &propList
 	m_impl->pop();
 }
 
-void RVNGHTMLTextGenerator::startDocument()
+void RVNGHTMLTextGenerator::startDocument(const RVNGPropertyList &)
 {
 }
 

@@ -37,7 +37,7 @@ public:
 
 	void setDocumentMetaData(const RVNGPropertyList &propList);
 
-	void startDocument();
+	void startDocument(const RVNGPropertyList &propList);
 	void endDocument();
 
 	void definePageStyle(const RVNGPropertyList &);

@@ -65,7 +65,7 @@ void RVNGTextTextGenerator::setDocumentMetaData(const RVNGPropertyList &propList
 	}
 }
 
-void RVNGTextTextGenerator::startDocument() {}
+void RVNGTextTextGenerator::startDocument(const RVNGPropertyList &) {}
 void RVNGTextTextGenerator::endDocument()
 {
 	m_impl->m_document=m_impl->m_stream.str().c_str();

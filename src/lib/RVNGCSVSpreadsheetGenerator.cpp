@@ -210,7 +210,7 @@ void RVNGCSVSpreadsheetGenerator::setDTFormats(RVNGString const &date, RVNGStrin
 }
 
 void RVNGCSVSpreadsheetGenerator::setDocumentMetaData(const RVNGPropertyList &) {}
-void RVNGCSVSpreadsheetGenerator::startDocument() {}
+void RVNGCSVSpreadsheetGenerator::startDocument(const RVNGPropertyList &) {}
 void RVNGCSVSpreadsheetGenerator::endDocument() {}
 
 void RVNGCSVSpreadsheetGenerator::defineSheetNumberingStyle(const RVNGPropertyList &) {}

@@ -61,7 +61,7 @@ public:
 	void setDTFormats(RVNGString const &date="%m/%d/%y", RVNGString const &time="%H:%M:%S");
 	void setDocumentMetaData(const RVNGPropertyList &propList);
 
-	void startDocument();
+	void startDocument(const RVNGPropertyList &propList);
 	void endDocument();
 
 	// sheet
