@@ -278,8 +278,10 @@ public:
 	\param propList Property list for the span. May contain:
 	\li \c fo:font-style Font style (italic or normal)
 	\li \c fo:font-weight Font style (bold or normal)
-	\li \c style:text-line-through-type (double or single, if present)
-	\li \c style:text-underline-type (double or single, if present)
+	\li \c style:text-line-through-type (none, double or single, if present)
+	\li \c style:text-line-through-style (solid, dotted, dash, long-dash, dot-dash, dot-dot-dash or wave, if present)
+	\li \c style:text-underline-type (none, double or single, if present)
+	\li \c style:text-underline-style (solid, dotted, dash, long-dash, dot-dash, dot-dot-dash or wave, if present)
 	\li \c style:text-outline (true or false)
 	\li \c fo:font-variant (small-caps, if present)
 	\li \c style:font-name The name of the font used in the span, a text string in ascii
