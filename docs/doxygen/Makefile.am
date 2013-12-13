@@ -1,6 +1,9 @@
-EXTRA_DIST =	doxygen.cfg \
-		footer.html.in \
-		header.html.in
+EXTRA_DIST = \
+	doxygen.cfg \
+	style_paragraph_properties.cfg \
+	style_text_properties.cfg \
+	footer.html.in \
+	header.html.in
 
 if WITH_LIBREVENGE_DOCS
 
@@ -16,6 +19,8 @@ uninstall-am:
 all:
 	test -f header.html.in || $(LN_S) $(srcdir)/header.html.in ./
 	test -f footer.html.in || $(LN_S) $(srcdir)/footer.html.in ./
+	test -f style_paragraph_properties.cfg || $(LN_S) $(srcdir)/style_paragraph_properties.cfg ./
+	test -f style_text_properties.cfg || $(LN_S) $(srcdir)/style_text_properties.cfg ./
 	doxygen $(srcdir)/doxygen.cfg
 
 else
