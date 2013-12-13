@@ -243,14 +243,7 @@ public:
 	/**
 	Called when a new paragraph is opened. This (or openListElement) will always be called before any text or span is placed into the document.
 	\param propList Property list for the paragraph. May contain:
-	\li \c fo:text-align The justification of this paragraph (left, center, end, full, or justify)
-	\li \c fo:margin-left The left indentation of this paragraph, in inches
-	\li \c fo:margin-right The right indentation of this paragraph, in inches
-	\li \c fo:margin-top The amount of extra spacing to be placed before the paragraph, in inches
-	\li \c fo:margin-bottom The amount of extra spacing to be placed after the paragraph, in inches
-	\li \c fo:text-indent The indentation of first line, in inches (difference relative to margin-left)
-	\li \c fo:line-height The amount of spacing between lines, in number of lines (1.0 is single spacing)
-	\li \c fo:break-before Whether this paragraph should be placed in a new column or page (the value is set to column or page if so)
+	\paragraphproperties
 	\li \c librevenge:tab-stops List of tabstop definitions for the paragraph. If the list is empty, default tabstop definition should be used. Each tab stop may contain:
 	    -# \c style:type Type of tab (left, right, center, or char)
 	    -# \c style:char Alingnment character for char aligned tabs
@@ -268,19 +261,7 @@ public:
 	/**
 	Called when a text span is opened
 	\param propList Property list for the span. May contain:
-	\li \c fo:font-style Font style (italic or normal)
-	\li \c fo:font-weight Font style (bold or normal)
-	\li \c style:text-line-through-type (none, double or single, if present)
-	\li \c style:text-line-through-style (solid, dotted, dash, long-dash, dot-dash, dot-dot-dash or wave, if present)
-	\li \c style:text-underline-type (none, double or single, if present)
-	\li \c style:text-underline-style (solid, dotted, dash, long-dash, dot-dash, dot-dot-dash or wave, if present)
-	\li \c style:text-outline (true or false)
-	\li \c fo:font-variant (small-caps, if present)
-	\li \c style:font-name The name of the font used in the span, a text string in ascii
-	\li \c fo:font-size The size of the font used in the span, in points (72 points per inch)
-	\li \c fo:color The color of the font used in the span (encoded in hex: \#RRGGBB)
-	\li \c fo:background-color The background color of the text in the span (encoded in hex: \#RRGGBB)
-	\li \c style:text-blinking Whether the text should blink (true or false)
+	\textproperties
 	\li \c fo:text-shadow
 	*/
 	virtual void openSpan(const RVNGPropertyList &propList) = 0;
