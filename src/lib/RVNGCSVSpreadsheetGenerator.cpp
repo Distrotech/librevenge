@@ -536,25 +536,16 @@ void RVNGCSVSpreadsheetGenerator::closeFrame()
 	--m_impl->m_numberSubForm;
 }
 
-void RVNGCSVSpreadsheetGenerator::startGraphic(const RVNGPropertyList &)
+void RVNGCSVSpreadsheetGenerator::openGroup(const RVNGPropertyList &)
 {
 	++m_impl->m_numberSubForm;
 }
-void RVNGCSVSpreadsheetGenerator::endGraphic()
+void RVNGCSVSpreadsheetGenerator::closeGroup()
 {
 	--m_impl->m_numberSubForm;
 }
-void RVNGCSVSpreadsheetGenerator::startGraphicPage(const RVNGPropertyList &)
-{
-	++m_impl->m_numberSubForm;
-}
-void RVNGCSVSpreadsheetGenerator::endGraphicPage()
-{
-	--m_impl->m_numberSubForm;
-}
-void RVNGCSVSpreadsheetGenerator::setGraphicStyle(const RVNGPropertyList &) {}
-void RVNGCSVSpreadsheetGenerator::startGraphicLayer(const RVNGPropertyList &) {}
-void RVNGCSVSpreadsheetGenerator::endGraphicLayer() {}
+
+void RVNGCSVSpreadsheetGenerator::defineGraphicStyle(const RVNGPropertyList &) {}
 void RVNGCSVSpreadsheetGenerator::drawRectangle(const RVNGPropertyList &) {}
 void RVNGCSVSpreadsheetGenerator::drawEllipse(const RVNGPropertyList &) {}
 void RVNGCSVSpreadsheetGenerator::drawPolygon(const RVNGPropertyList &) {}

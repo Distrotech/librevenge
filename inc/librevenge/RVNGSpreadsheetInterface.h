@@ -533,18 +533,10 @@ public:
 	// simple Graphic
 	//
 
-	// none of the other callback functions will be called before this function is called
-	virtual void startGraphic(const RVNGPropertyList &propList) = 0;
-	// none of the other callback functions will be called after this function is called
-	virtual void endGraphic() = 0;
+	virtual void openGroup(const RVNGPropertyList &propList) = 0;
+	virtual void closeGroup() = 0;
 
-	virtual void startGraphicPage(const RVNGPropertyList &propList) = 0;
-	virtual void endGraphicPage() = 0;
-
-	virtual void setGraphicStyle(const RVNGPropertyList &propList) = 0;
-
-	virtual void startGraphicLayer(const RVNGPropertyList &propList) = 0;
-	virtual void endGraphicLayer() = 0;
+	virtual void defineGraphicStyle(const RVNGPropertyList &propList) = 0;
 
 	// Different primitive shapes
 	virtual void drawRectangle(const RVNGPropertyList &propList) = 0;

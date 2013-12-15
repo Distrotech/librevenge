@@ -258,14 +258,10 @@ void RVNGTextSpreadsheetGenerator::insertCoveredTableCell(const RVNGPropertyList
 void RVNGTextSpreadsheetGenerator::openFrame(const RVNGPropertyList & /* propList */) {}
 void RVNGTextSpreadsheetGenerator::closeFrame() {}
 
-void RVNGTextSpreadsheetGenerator::startGraphic(const RVNGPropertyList &) {}
-void RVNGTextSpreadsheetGenerator::endGraphic() {}
-void RVNGTextSpreadsheetGenerator::startGraphicPage(const RVNGPropertyList &) {}
-void RVNGTextSpreadsheetGenerator::endGraphicPage() {}
+void RVNGTextSpreadsheetGenerator::openGroup(const RVNGPropertyList &) {}
+void RVNGTextSpreadsheetGenerator::closeGroup() {}
 
-void RVNGTextSpreadsheetGenerator::setGraphicStyle(const RVNGPropertyList &) {}
-void RVNGTextSpreadsheetGenerator::startGraphicLayer(const RVNGPropertyList &) {}
-void RVNGTextSpreadsheetGenerator::endGraphicLayer() {}
+void RVNGTextSpreadsheetGenerator::defineGraphicStyle(const RVNGPropertyList &) {}
 void RVNGTextSpreadsheetGenerator::drawRectangle(const RVNGPropertyList &) {}
 void RVNGTextSpreadsheetGenerator::drawEllipse(const RVNGPropertyList &) {}
 void RVNGTextSpreadsheetGenerator::drawPolygon(const RVNGPropertyList &) {}

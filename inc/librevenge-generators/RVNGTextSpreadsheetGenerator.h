@@ -124,13 +124,10 @@ public:
 	void insertBinaryObject(const RVNGPropertyList &propList);
 
 	// drawing function
-	void startGraphic(const RVNGPropertyList &propList);
-	void endGraphic();
-	void startGraphicPage(const RVNGPropertyList &propList);
-	void endGraphicPage();
-	void setGraphicStyle(const RVNGPropertyList &propList);
-	void startGraphicLayer(const RVNGPropertyList &propList);
-	void endGraphicLayer();
+	void openGroup(const RVNGPropertyList &propList);
+	void closeGroup();
+
+	void defineGraphicStyle(const RVNGPropertyList &propList);
 	void drawRectangle(const RVNGPropertyList &propList);
 	void drawEllipse(const RVNGPropertyList &propList);
 	void drawPolygon(const RVNGPropertyList &propList);

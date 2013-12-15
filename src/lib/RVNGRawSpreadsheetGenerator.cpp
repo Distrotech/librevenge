@@ -130,42 +130,20 @@ void RVNGRawSpreadsheetGenerator::insertChartSerie(const RVNGPropertyList &serie
 //
 // Graphic
 //
-void RVNGRawSpreadsheetGenerator::startGraphic(const RVNGPropertyList &propList)
+void RVNGRawSpreadsheetGenerator::openGroup(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("startGraphic(%s)\n", propList.getPropString().cstr()),
-	                     CALLBACK_OPEN_GRAPHIC);
-}
-
-void RVNGRawSpreadsheetGenerator::endGraphic()
-{
-	RVNG_CALLGRAPH_LEAVE(("endGraphic()\n"), CALLBACK_OPEN_GRAPHIC);
-}
-
-void RVNGRawSpreadsheetGenerator::startGraphicPage(const RVNGPropertyList &propList)
-{
-	RVNG_CALLGRAPH_ENTER(("startGraphicPage(%s)\n", propList.getPropString().cstr()),
-	                     CALLBACK_OPEN_GRAPHIC_PAGE);
-}
-
-void RVNGRawSpreadsheetGenerator::endGraphicPage()
-{
-	RVNG_CALLGRAPH_LEAVE(("endGraphicPage()\n"), CALLBACK_OPEN_GRAPHIC_PAGE);
-}
-
-void RVNGRawSpreadsheetGenerator::startGraphicLayer(const RVNGPropertyList &propList)
-{
-	RVNG_CALLGRAPH_ENTER(("startGraphicLayer(%s)\n", propList.getPropString().cstr()),
+	RVNG_CALLGRAPH_ENTER(("openGroup(%s)\n", propList.getPropString().cstr()),
 	                     CALLBACK_OPEN_GRAPHIC_LAYER);
 }
 
-void RVNGRawSpreadsheetGenerator::endGraphicLayer()
+void RVNGRawSpreadsheetGenerator::closeGroup()
 {
-	RVNG_CALLGRAPH_LEAVE(("endGraphicLayer()\n"), CALLBACK_OPEN_GRAPHIC_LAYER);
+	RVNG_CALLGRAPH_LEAVE(("closeGroup()\n"), CALLBACK_OPEN_GRAPHIC_LAYER);
 }
 
-void RVNGRawSpreadsheetGenerator::setGraphicStyle(const RVNGPropertyList &propList)
+void RVNGRawSpreadsheetGenerator::defineGraphicStyle(const RVNGPropertyList &propList)
 {
-	m_impl->iprintf("setGraphicStyle(%s)\n", propList.getPropString().cstr());
+	m_impl->iprintf("defineGraphicStyle(%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawSpreadsheetGenerator::drawRectangle(const RVNGPropertyList &propList)
