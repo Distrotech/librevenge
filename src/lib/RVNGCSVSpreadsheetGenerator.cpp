@@ -354,7 +354,6 @@ void RVNGCSVSpreadsheetGenerator::openSheetCell(const RVNGPropertyList &propList
 		time.tm_mday=time.tm_mon=1;
 		time.tm_year=100;
 		time.tm_wday=time.tm_yday=time.tm_isdst=-1;
-		time.tm_zone=0;
 		char buf[256];
 		if (valueType=="date")
 		{
