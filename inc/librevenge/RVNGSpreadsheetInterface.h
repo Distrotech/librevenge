@@ -354,13 +354,13 @@ public:
 	/**
 	Called when a new ordered list level should be opened
 	\param propList Defines a set of properties for the list level. May contain:
-	\li \c librevenge:id Which list level definition should be used
+	\li \c librevenge:list-id Which list level definition should be used
 	*/
 	virtual void openOrderedListLevel(const RVNGPropertyList &propList) = 0;
 	/**
 	Called when a new unordered list level should be opened
 	\param propList Defines a set of properties for the list level. May contain:
-	\li \c librevenge:id Which list level definition should be used
+	\li \c librevenge:list-id Which list level definition should be used
 	*/
 	virtual void openUnorderedListLevel(const RVNGPropertyList &propList) = 0;
 	/**

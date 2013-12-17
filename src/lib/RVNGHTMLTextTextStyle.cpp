@@ -117,8 +117,8 @@ void RVNGHTMLTextListStyleManager::defineLevel(RVNGPropertyList const &pList, bo
 	int id=-1;
 	if (pList["librevenge:list-id"])
 		id=pList["librevenge:list-id"]->getInt();
-	else if (pList["librevenge:id"])
-		id=pList["librevenge:id"]->getInt();
+	else if (pList["librevenge:list-id"])
+		id=pList["librevenge:list-id"]->getInt();
 	if (m_idListMap.find(id)==m_idListMap.end())
 		m_idListMap[id]=List();
 	if (!pList["librevenge:level"])
@@ -134,8 +134,8 @@ std::string RVNGHTMLTextListStyleManager::openLevel(RVNGPropertyList const &pLis
 	int id = -1;
 	if (pList["librevenge:list-id"])
 		id=pList["librevenge:list-id"]->getInt();
-	else if (pList["librevenge:id"])
-		id=pList["librevenge:id"]->getInt();
+	else if (pList["librevenge:list-id"])
+		id=pList["librevenge:list-id"]->getInt();
 	else // anomynous list
 		defineLevel(pList, ordered);
 	m_actualIdStack.push_back(id);
