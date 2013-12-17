@@ -71,11 +71,9 @@ void RVNGTextDrawingGenerator::drawGraphicObject(const RVNGPropertyList &) {}
 void RVNGTextDrawingGenerator::startTextObject(const RVNGPropertyList &) {}
 void RVNGTextDrawingGenerator::endTextObject() {}
 
-void RVNGTextDrawingGenerator::defineOrderedListLevel(const RVNGPropertyList & /*propList*/) {}
 void RVNGTextDrawingGenerator::openOrderedListLevel(const RVNGPropertyList & /*propList*/) {}
 void RVNGTextDrawingGenerator::closeOrderedListLevel() {}
 
-void RVNGTextDrawingGenerator::defineUnorderedListLevel(const RVNGPropertyList & /*propList*/) {}
 void RVNGTextDrawingGenerator::openUnorderedListLevel(const RVNGPropertyList & /*propList*/) {}
 void RVNGTextDrawingGenerator::closeUnorderedListLevel() {}
 

@@ -59,10 +59,8 @@ public:
 	void openOrderedListLevel(const RVNGPropertyList &propList);
 	void closeOrderedListLevel();
 
-	void defineOrderedListLevel(const RVNGPropertyList &propList);
 	void openUnorderedListLevel(const RVNGPropertyList &propList);
 	void closeUnorderedListLevel();
-	void defineUnorderedListLevel(const RVNGPropertyList &propList);
 	void openListElement(const RVNGPropertyList &propList);
 	void closeListElement();
 

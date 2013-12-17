@@ -470,8 +470,6 @@ void RVNGCSVSpreadsheetGenerator::insertLineBreak()
 
 void RVNGCSVSpreadsheetGenerator::insertField(const RVNGPropertyList &) {}
 
-void RVNGCSVSpreadsheetGenerator::defineOrderedListLevel(const RVNGPropertyList &) {}
-void RVNGCSVSpreadsheetGenerator::defineUnorderedListLevel(const RVNGPropertyList &) {}
 void RVNGCSVSpreadsheetGenerator::openOrderedListLevel(const RVNGPropertyList &) {}
 void RVNGCSVSpreadsheetGenerator::openUnorderedListLevel(const RVNGPropertyList &) {}
 void RVNGCSVSpreadsheetGenerator::closeOrderedListLevel() {}

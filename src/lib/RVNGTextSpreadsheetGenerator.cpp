@@ -208,8 +208,6 @@ void RVNGTextSpreadsheetGenerator::insertLineBreak()
 
 void RVNGTextSpreadsheetGenerator::insertField(const RVNGPropertyList & /* propList */) {}
 
-void RVNGTextSpreadsheetGenerator::defineOrderedListLevel(const RVNGPropertyList & /* propList */) {}
-void RVNGTextSpreadsheetGenerator::defineUnorderedListLevel(const RVNGPropertyList & /* propList */) {}
 void RVNGTextSpreadsheetGenerator::openOrderedListLevel(const RVNGPropertyList & /* propList */) {}
 void RVNGTextSpreadsheetGenerator::openUnorderedListLevel(const RVNGPropertyList & /* propList */) {}
 void RVNGTextSpreadsheetGenerator::closeOrderedListLevel() {}

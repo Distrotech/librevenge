@@ -329,8 +329,8 @@ public:
 	virtual void insertField(const RVNGPropertyList &propList) = 0;
 
 	/**
-	Defines an ordered (enumerated) list level
-	\param propList Defines a set of properties for the list. May contain:
+	Called when a new ordered list level should be opened
+	\param propList Defines a set of properties for the list level. May contain:
 	\li \c librevenge:list-id A unique integer identifier for the list
 	\li \c librevenge:level The level of the list in the hierarchy
 	\li \c style:num-format Type of list
@@ -340,27 +340,15 @@ public:
 	\li \c text:min-label-width The distance between the list label and the actual text, stored in inches
 	\li \c text:space-before The indentation level of the lists, stored in inches
 	*/
-	virtual void defineOrderedListLevel(const RVNGPropertyList &propList) = 0;
+	virtual void openOrderedListLevel(const RVNGPropertyList &propList) = 0;
 	/**
-	Defines an unordered (unenumerated) list level
+	Called when a new unordered list level should be opened
 	\param propList Defines a set of properties for the list level. May contain:
 	\li \c librevenge:list-id A unique integer identifier for the list
 	\li \c librevenge:level The level of the list in the hierarchy
 	\li \c text:bullet-char The string that should be used as a bullet
 	\li \c text:min-label-width The distance between the bullet and the actual text, stored in inches
 	\li \c text:space-before The indentation level of the lists, stored in inches
-	*/
-	virtual void defineUnorderedListLevel(const RVNGPropertyList &propList) = 0;
-	/**
-	Called when a new ordered list level should be opened
-	\param propList Defines a set of properties for the list level. May contain:
-	\li \c librevenge:list-id Which list level definition should be used
-	*/
-	virtual void openOrderedListLevel(const RVNGPropertyList &propList) = 0;
-	/**
-	Called when a new unordered list level should be opened
-	\param propList Defines a set of properties for the list level. May contain:
-	\li \c librevenge:list-id Which list level definition should be used
 	*/
 	virtual void openUnorderedListLevel(const RVNGPropertyList &propList) = 0;
 	/**

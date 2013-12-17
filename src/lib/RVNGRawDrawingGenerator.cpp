@@ -166,16 +166,6 @@ void RVNGRawDrawingGenerator::endTextObject()
 	RVNG_CALLGRAPH_LEAVE(("endTextObject\n"), CALLBACK_START_TEXT_OBJECT);
 }
 
-void RVNGRawDrawingGenerator::defineOrderedListLevel(const RVNGPropertyList &propList)
-{
-	m_impl->iprintf("defineOrderedListLevel(%s)\n", propList.getPropString().cstr());
-}
-
-void RVNGRawDrawingGenerator::defineUnorderedListLevel(const RVNGPropertyList &propList)
-{
-	m_impl->iprintf("defineUnorderedListLevel(%s)\n", propList.getPropString().cstr());
-}
-
 void RVNGRawDrawingGenerator::openOrderedListLevel(const librevenge::RVNGPropertyList &propList)
 {
 	RVNG_CALLGRAPH_ENTER(("openOrderedListLevel(%s)\n", propList.getPropString().cstr()), CALLBACK_OPEN_ORDERED_LIST_LEVEL);

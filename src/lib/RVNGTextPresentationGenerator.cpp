@@ -187,14 +187,6 @@ void RVNGTextPresentationGenerator::insertField(const RVNGPropertyList &)
 {
 }
 
-void RVNGTextPresentationGenerator::defineOrderedListLevel(const RVNGPropertyList &)
-{
-}
-
-void RVNGTextPresentationGenerator::defineUnorderedListLevel(const RVNGPropertyList &)
-{
-}
-
 void RVNGTextPresentationGenerator::openOrderedListLevel(const RVNGPropertyList &)
 {
 }

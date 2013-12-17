@@ -73,8 +73,6 @@ public:
 	void insertLineBreak();
 	void insertField(const RVNGPropertyList &propList);
 
-	void defineOrderedListLevel(const RVNGPropertyList &propList);
-	void defineUnorderedListLevel(const RVNGPropertyList &propList);
 	void openOrderedListLevel(const RVNGPropertyList &propList);
 	void openUnorderedListLevel(const RVNGPropertyList &propList);
 	void closeOrderedListLevel();

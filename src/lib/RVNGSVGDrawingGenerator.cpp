@@ -820,11 +820,9 @@ void RVNGSVGDrawingGenerator::endTextObject()
 	m_pImpl->m_outputSink << "</" << m_pImpl->getNamespaceAndDelim() << "text>\n";
 }
 
-void RVNGSVGDrawingGenerator::defineOrderedListLevel(const RVNGPropertyList & /*propList*/) {}
 void RVNGSVGDrawingGenerator::openOrderedListLevel(const RVNGPropertyList & /*propList*/) {}
 void RVNGSVGDrawingGenerator::closeOrderedListLevel() {}
 
-void RVNGSVGDrawingGenerator::defineUnorderedListLevel(const RVNGPropertyList & /*propList*/) {}
 void RVNGSVGDrawingGenerator::openUnorderedListLevel(const RVNGPropertyList & /*propList*/) {}
 void RVNGSVGDrawingGenerator::closeUnorderedListLevel() {}
 

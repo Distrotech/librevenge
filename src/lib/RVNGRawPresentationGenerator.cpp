@@ -260,16 +260,6 @@ void RVNGRawPresentationGenerator::insertField(const RVNGPropertyList &propList)
 	m_impl->iprintf("insertField(%s)\n", propList.getPropString().cstr());
 }
 
-void RVNGRawPresentationGenerator::defineOrderedListLevel(const RVNGPropertyList &propList)
-{
-	m_impl->iprintf("defineOrderedListLevel(%s)\n", propList.getPropString().cstr());
-}
-
-void RVNGRawPresentationGenerator::defineUnorderedListLevel(const RVNGPropertyList &propList)
-{
-	m_impl->iprintf("defineUnorderedListLevel(%s)\n", propList.getPropString().cstr());
-}
-
 void RVNGRawPresentationGenerator::openOrderedListLevel(const RVNGPropertyList &propList)
 {
 	RVNG_CALLGRAPH_ENTER(("openOrderedListLevel(%s)\n", propList.getPropString().cstr()),

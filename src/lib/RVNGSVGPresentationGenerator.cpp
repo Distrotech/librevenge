@@ -645,14 +645,6 @@ void RVNGSVGPresentationGenerator::insertField(const RVNGPropertyList &/*propLis
 	// TODO: implement me
 }
 
-void RVNGSVGPresentationGenerator::defineOrderedListLevel(const RVNGPropertyList &)
-{
-}
-
-void RVNGSVGPresentationGenerator::defineUnorderedListLevel(const RVNGPropertyList &)
-{
-}
-
 void RVNGSVGPresentationGenerator::openOrderedListLevel(const RVNGPropertyList &)
 {
 }

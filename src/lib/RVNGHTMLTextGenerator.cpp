@@ -543,24 +543,11 @@ void RVNGHTMLTextGenerator::insertSpace()
 	m_impl->output() << "&nbsp;";
 }
 
-void RVNGHTMLTextGenerator::defineOrderedListLevel(const RVNGPropertyList &propList)
-{
-	if (m_impl->m_ignore)
-		return;
-	m_impl->m_listManager.defineLevel(propList, true);
-}
-
-void RVNGHTMLTextGenerator::defineUnorderedListLevel(const RVNGPropertyList &propList)
-{
-	if (m_impl->m_ignore)
-		return;
-	m_impl->m_listManager.defineLevel(propList, false);
-}
-
 void RVNGHTMLTextGenerator::openOrderedListLevel(const RVNGPropertyList &propList)
 {
 	if (m_impl->m_ignore)
 		return;
+	m_impl->m_listManager.defineLevel(propList, true);
 	// fixme: if level is > 1, we must first insert a div here
 	m_impl->output(false) << "<ol class=\"" << m_impl->m_listManager.openLevel(propList, true) << "\">\n";
 }
@@ -577,6 +564,7 @@ void RVNGHTMLTextGenerator::openUnorderedListLevel(const RVNGPropertyList &propL
 {
 	if (m_impl->m_ignore)
 		return;
+	m_impl->m_listManager.defineLevel(propList, false);
 	// fixme: if level is > 1, we must first insert a div here
 	m_impl->output(false) << "<ul class=\"" << m_impl->m_listManager.openLevel(propList, false) << "\">\n";
 }

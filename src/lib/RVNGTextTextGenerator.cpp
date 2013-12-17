@@ -130,8 +130,6 @@ void RVNGTextTextGenerator::insertLineBreak()
 
 void RVNGTextTextGenerator::insertField(const RVNGPropertyList & /* propList */) {}
 
-void RVNGTextTextGenerator::defineOrderedListLevel(const RVNGPropertyList & /* propList */) {}
-void RVNGTextTextGenerator::defineUnorderedListLevel(const RVNGPropertyList & /* propList */) {}
 void RVNGTextTextGenerator::openOrderedListLevel(const RVNGPropertyList & /* propList */) {}
 void RVNGTextTextGenerator::openUnorderedListLevel(const RVNGPropertyList & /* propList */) {}
 void RVNGTextTextGenerator::closeOrderedListLevel() {}

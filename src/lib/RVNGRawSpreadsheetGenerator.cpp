@@ -299,16 +299,6 @@ void RVNGRawSpreadsheetGenerator::insertField(const RVNGPropertyList &propList)
 	m_impl->iprintf("insertField(%s)\n", propList.getPropString().cstr());
 }
 
-void RVNGRawSpreadsheetGenerator::defineOrderedListLevel(const RVNGPropertyList &propList)
-{
-	m_impl->iprintf("defineOrderedListLevel(%s)\n", propList.getPropString().cstr());
-}
-
-void RVNGRawSpreadsheetGenerator::defineUnorderedListLevel(const RVNGPropertyList &propList)
-{
-	m_impl->iprintf("defineUnorderedListLevel(%s)\n", propList.getPropString().cstr());
-}
-
 void RVNGRawSpreadsheetGenerator::openOrderedListLevel(const RVNGPropertyList &propList)
 {
 	RVNG_CALLGRAPH_ENTER(("openOrderedListLevel(%s)\n", propList.getPropString().cstr()),
