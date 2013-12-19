@@ -157,6 +157,16 @@ void RVNGTextTextGenerator::closeTable() {}
 void RVNGTextTextGenerator::openFrame(const RVNGPropertyList & /* propList */) {}
 void RVNGTextTextGenerator::closeFrame() {}
 
+void RVNGTextTextGenerator::openGroup(const librevenge::RVNGPropertyList & /* propList */) {}
+void RVNGTextTextGenerator::closeGroup() {}
+
+void RVNGTextTextGenerator::defineGraphicStyle(const librevenge::RVNGPropertyList & /* propList */) {}
+void RVNGTextTextGenerator::drawRectangle(const librevenge::RVNGPropertyList & /* propList */) {}
+void RVNGTextTextGenerator::drawEllipse(const librevenge::RVNGPropertyList & /* propList */) {}
+void RVNGTextTextGenerator::drawPolygon(const librevenge::RVNGPropertyList & /* propList */) {}
+void RVNGTextTextGenerator::drawPolyline(const librevenge::RVNGPropertyList & /* propList */) {}
+void RVNGTextTextGenerator::drawPath(const librevenge::RVNGPropertyList & /* propList */) {}
+
 void RVNGTextTextGenerator::insertBinaryObject(const RVNGPropertyList & /* propList */) {}
 void RVNGTextTextGenerator::insertEquation(const RVNGPropertyList & /* propList */) {}
 

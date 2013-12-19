@@ -96,6 +96,16 @@ public:
 	void openFrame(const RVNGPropertyList &propList);
 	void closeFrame();
 
+	void openGroup(const librevenge::RVNGPropertyList &propList);
+	void closeGroup();
+
+	void defineGraphicStyle(const librevenge::RVNGPropertyList &propList);
+	void drawRectangle(const librevenge::RVNGPropertyList &propList);
+	void drawEllipse(const librevenge::RVNGPropertyList &propList);
+	void drawPolygon(const librevenge::RVNGPropertyList &propList);
+	void drawPolyline(const librevenge::RVNGPropertyList &propList);
+	void drawPath(const librevenge::RVNGPropertyList &propList);
+
 	void insertBinaryObject(const RVNGPropertyList &propList);
 	void insertEquation(const RVNGPropertyList &propList);
 

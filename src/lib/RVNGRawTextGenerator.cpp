@@ -318,6 +318,48 @@ void RVNGRawTextGenerator::closeFrame()
 	RVNG_CALLGRAPH_LEAVE(("closeFrame()\n"), CALLBACK_OPEN_FRAME);
 }
 
+void RVNGRawTextGenerator::openGroup(const librevenge::RVNGPropertyList &propList)
+{
+	RVNG_CALLGRAPH_ENTER(("openGroup(%s)\n", propList.getPropString().cstr()),
+	                     CALLBACK_START_GROUP);
+}
+
+void RVNGRawTextGenerator::closeGroup()
+{
+	RVNG_CALLGRAPH_LEAVE(("close()\n"), CALLBACK_START_GROUP);
+}
+
+void RVNGRawTextGenerator::defineGraphicStyle(const librevenge::RVNGPropertyList &propList)
+{
+	m_impl->iprintf("defineGraphicStyle(%s)\n", propList.getPropString().cstr());
+}
+
+void RVNGRawTextGenerator::drawRectangle(const librevenge::RVNGPropertyList &propList)
+{
+	m_impl->iprintf("drawRectangle(%s)\n", propList.getPropString().cstr());
+}
+
+void RVNGRawTextGenerator::drawEllipse(const librevenge::RVNGPropertyList &propList)
+{
+	m_impl->iprintf("drawEllipse(%s)\n", propList.getPropString().cstr());
+}
+
+void RVNGRawTextGenerator::drawPolygon(const librevenge::RVNGPropertyList &propList)
+{
+	m_impl->iprintf("drawPolygon(%s)\n", propList.getPropString().cstr());
+}
+
+void RVNGRawTextGenerator::drawPolyline(const librevenge::RVNGPropertyList &propList)
+{
+	m_impl->iprintf("drawPolyline(%s)\n", propList.getPropString().cstr());
+}
+
+void RVNGRawTextGenerator::drawPath(const librevenge::RVNGPropertyList &propList)
+{
+	m_impl->iprintf("drawPath(%s)\n", propList.getPropString().cstr());
+}
+
+
 void RVNGRawTextGenerator::insertBinaryObject(const RVNGPropertyList &propList)
 {
 	m_impl->iprintf("insertBinaryObject(%s)\n", propList.getPropString().cstr());

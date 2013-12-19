@@ -425,6 +425,20 @@ public:
 	\li \c librevenge:data reference to the string containing the equation representation
 	*/
 	virtual void insertEquation(const RVNGPropertyList &propList) = 0;
+
+	// group
+	virtual void openGroup(const librevenge::RVNGPropertyList &propList) = 0;
+	virtual void closeGroup() = 0;
+
+	// Different primitive shapes
+	virtual void defineGraphicStyle(const librevenge::RVNGPropertyList &propList) = 0;
+
+	virtual void drawRectangle(const RVNGPropertyList &propList) = 0;
+	virtual void drawEllipse(const RVNGPropertyList &propList) = 0;
+	virtual void drawPolygon(const RVNGPropertyList &propList) = 0;
+	virtual void drawPolyline(const RVNGPropertyList &propList) = 0;
+	virtual void drawPath(const RVNGPropertyList &propList) = 0;
+
 };
 
 }

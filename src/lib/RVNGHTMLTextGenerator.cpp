@@ -716,6 +716,17 @@ void RVNGHTMLTextGenerator::closeTable()
 
 void RVNGHTMLTextGenerator::openFrame(const RVNGPropertyList & /* propList */) {}
 void RVNGHTMLTextGenerator::closeFrame() {}
+
+void RVNGHTMLTextGenerator::openGroup(const librevenge::RVNGPropertyList & /* propList */) {}
+void RVNGHTMLTextGenerator::closeGroup() {}
+
+void RVNGHTMLTextGenerator::defineGraphicStyle(const librevenge::RVNGPropertyList & /* propList */) {}
+void RVNGHTMLTextGenerator::drawRectangle(const librevenge::RVNGPropertyList & /* propList */) {}
+void RVNGHTMLTextGenerator::drawEllipse(const librevenge::RVNGPropertyList & /* propList */) {}
+void RVNGHTMLTextGenerator::drawPolygon(const librevenge::RVNGPropertyList & /* propList */) {}
+void RVNGHTMLTextGenerator::drawPolyline(const librevenge::RVNGPropertyList & /* propList */) {}
+void RVNGHTMLTextGenerator::drawPath(const librevenge::RVNGPropertyList & /* propList */) {}
+
 void RVNGHTMLTextGenerator::insertBinaryObject(const RVNGPropertyList & /* propList */) {}
 void RVNGHTMLTextGenerator::insertEquation(const RVNGPropertyList & /* propList */) {}
 
