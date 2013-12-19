@@ -254,9 +254,16 @@ bool RVNGString::operator==(const RVNGString &str) const
 	return (m_stringImpl->m_buf == str.m_stringImpl->m_buf);
 }
 
-bool RVNGString::operator!() const
+bool RVNGString::operator<(const char *str) const
 {
-	return (m_stringImpl->m_buf.length() == 0);
+	if (!str)
+		return false;
+	return (m_stringImpl->m_buf < str);
+}
+
+bool RVNGString::operator<(const RVNGString &str) const
+{
+	return (m_stringImpl->m_buf < str.m_stringImpl->m_buf);
 }
 
 RVNGString::Iter::Iter(const RVNGString &str) :

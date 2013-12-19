@@ -46,9 +46,10 @@ public:
 	void clear();
 	RVNGString &operator=(const RVNGString &str);
 	RVNGString &operator=(const char *s);
+
+	// Comparison
 	bool operator==(const char *s) const;
 	bool operator==(const RVNGString &str) const;
-	bool operator!() const;
 	inline bool operator!=(const char *s) const
 	{
 		return !operator==(s);
@@ -56,6 +57,32 @@ public:
 	inline bool operator!=(const RVNGString &str) const
 	{
 		return !operator==(str);
+	}
+	bool operator<(const char *s) const;
+	bool operator<(const RVNGString &str) const;
+	inline bool operator<=(const char *s) const
+	{
+		return operator==(s) || operator<(s);
+	}
+	inline bool operator<=(const RVNGString &str) const
+	{
+		return operator==(str) || operator<(str);
+	}
+	inline bool operator>=(const char *s) const
+	{
+		return !operator<(s);
+	}
+	inline bool operator>=(const RVNGString &str) const
+	{
+		return !operator<(str);
+	}
+	inline bool operator>(const char *s) const
+	{
+		return !operator<=(s);
+	}
+	inline bool operator>(const RVNGString &str) const
+	{
+		return !operator<=(str);
 	}
 
 	class Iter
