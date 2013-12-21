@@ -95,6 +95,15 @@ const char *RVNGDirectoryStream::subStreamName(unsigned id)
 	return 0;
 }
 
+bool RVNGDirectoryStream::existsSubStream(const char *name)
+{
+	const fs::path path = m_impl->path / name;
+
+	if (is_regular_file(path))
+		return true;
+	return false;
+}
+
 RVNGInputStream *RVNGDirectoryStream::getSubStreamByName(const char *const name)
 {
 	const fs::path path = m_impl->path / name;

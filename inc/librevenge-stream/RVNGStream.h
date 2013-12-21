@@ -47,6 +47,8 @@ public:
 
 	virtual const char *subStreamName(unsigned id) = 0;
 
+	virtual bool existsSubStream(const char *name) = 0;
+
 	/**
 	Extracts a \c named stream from an OLE2 storage.
 	\return Should be a pointer to RVNGInputStream constructed from the \c named stream if it exists.

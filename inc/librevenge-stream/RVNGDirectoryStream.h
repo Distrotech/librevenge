@@ -45,6 +45,7 @@ public:
 	virtual bool isStructured();
 	virtual unsigned subStreamCount();
 	virtual const char *subStreamName(unsigned id);
+	virtual bool existsSubStream(const char *name);
 	virtual RVNGInputStream *getSubStreamByName(const char *name);
 	virtual RVNGInputStream *getSubStreamById(unsigned id);
 

@@ -29,32 +29,36 @@ class RVNGMemoryInputStream : public RVNGInputStream
 {
 public:
 	RVNGMemoryInputStream(unsigned char *data, unsigned long size);
-	virtual ~RVNGMemoryInputStream();
-	virtual bool isStructured()
+	~RVNGMemoryInputStream();
+	bool isStructured()
 	{
 		return false;
 	}
-	virtual unsigned subStreamCount()
+	unsigned subStreamCount()
 	{
 		return 0;
 	}
-	virtual const char *subStreamName(unsigned)
+	const char *subStreamName(unsigned)
 	{
 		return 0;
 	}
-	virtual RVNGInputStream *getSubStreamByName(const char *)
+	bool existsSubStream(const char *)
+	{
+		return false;
+	}
+	RVNGInputStream *getSubStreamByName(const char *)
 	{
 		return 0;
 	}
-	virtual RVNGInputStream *getSubStreamById(unsigned)
+	RVNGInputStream *getSubStreamById(unsigned)
 	{
 		return 0;
 	}
-	virtual const unsigned char *read(unsigned long numBytes, unsigned long &numBytesRead);
-	virtual int seek(long offset, RVNG_SEEK_TYPE seekType);
-	virtual long tell();
-	virtual bool isEnd();
-	virtual unsigned long getSize() const
+	const unsigned char *read(unsigned long numBytes, unsigned long &numBytesRead);
+	int seek(long offset, RVNG_SEEK_TYPE seekType);
+	long tell();
+	bool isEnd();
+	unsigned long getSize() const
 	{
 		return m_size;
 	}

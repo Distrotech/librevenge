@@ -315,6 +315,24 @@ const char *RVNGFileStream::subStreamName(unsigned id)
 	return d->streamNameList[size_t(id)].c_str();
 }
 
+bool RVNGFileStream::existsSubStream(const char *name)
+{
+	if (!name || !d)
+		return false;
+	if (ferror(d->file))
+		return false;
+	if (d->streamType == UNKNOWN && !isStructured())
+		return false;
+	if (d->streamType == FLAT)
+		return false;
+	for (std::vector<std::string>::size_type i = 0; i < d->streamNameList.size(); ++i)
+	{
+		if (d->streamNameList[i] == name)
+			return true;
+	}
+	return false;
+}
+
 RVNGInputStream *RVNGFileStream::getSubStreamById(unsigned id)
 {
 	return getSubStreamByName(subStreamName(id));
@@ -473,6 +491,24 @@ const char *RVNGStringStream::subStreamName(unsigned id)
 	if (!isStructured() ||!d || id>=(unsigned) d->streamNameList.size())
 		return 0;
 	return d->streamNameList[size_t(id)].c_str();
+}
+
+bool RVNGStringStream::existsSubStream(const char *name)
+{
+	if (!name || !d)
+		return false;
+	if (d->buffer.empty())
+		return false;
+	if (d->streamType == UNKNOWN && !isStructured())
+		return false;
+	if (d->streamType == FLAT)
+		return false;
+	for (std::vector<std::string>::size_type i = 0; i < d->streamNameList.size(); ++i)
+	{
+		if (d->streamNameList[i] == name)
+			return true;
+	}
+	return false;
 }
 
 RVNGInputStream *RVNGStringStream::getSubStreamById(unsigned id)

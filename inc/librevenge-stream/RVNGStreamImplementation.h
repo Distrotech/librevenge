@@ -41,6 +41,7 @@ public:
 	bool isStructured();
 	unsigned subStreamCount();
 	const char *subStreamName(unsigned id);
+	bool existsSubStream(const char *name);
 	RVNGInputStream *getSubStreamById(unsigned id);
 	RVNGInputStream *getSubStreamByName(const char *name);
 
@@ -66,6 +67,7 @@ public:
 	bool isStructured();
 	unsigned subStreamCount();
 	const char *subStreamName(unsigned);
+	bool existsSubStream(const char *name);
 	RVNGInputStream *getSubStreamByName(const char *name);
 	RVNGInputStream *getSubStreamById(unsigned);
 
