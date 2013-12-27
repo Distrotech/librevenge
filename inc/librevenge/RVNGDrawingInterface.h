@@ -127,6 +127,60 @@ public:
 	// Embedded text object
 	virtual void startTextObject(const RVNGPropertyList &propList) = 0;
 	virtual void endTextObject() = 0;
+	/**
+	Called when a table should be opened
+	\param propList Defines a set of properties for the table. May contain:
+	\li \c table:align The alignment (left, right, center, or margins)
+	\li \c fo:margin-left The left indentation of the table, in inches
+	\li \c fo:margin-right The right indentation of the table, in inches
+	\li \c style:width Total width of the table, in inches
+	\li \c fo:break-before Whether this table should be placed in a new column or page (the value is set to column or page if so)
+	\li \c librevenge:table-columns Column definitions for the table. May contain
+	    -# \c style:column-width Width of a column, in inches
+	*/
+	virtual void startTableObject(const RVNGPropertyList &propList) = 0;
+	/**
+	Called when a new table row is opened
+	\param propList Defines a set of properties for the table row. May contain:
+	\li \c style:row-height The row's height, in inches
+	\li \c style:min-row-height The row's minimum height, in inches
+	\li \c librevenge:is-header-row This row contains headings of columns and should repeat at every page (for tables that span several pages)
+	*/
+	virtual void openTableRow(const RVNGPropertyList &propList) = 0;
+	/**
+	Called when the current table row is closed
+	*/
+	virtual void closeTableRow() = 0;
+	/**
+	Called when a new table cell is opened
+	\param propList Property list for the table cell. May contain:
+	\li \c librevenge:column Number of the column in which the cell is positioned
+	\li \c librevenge:row Number of the row in which the cell is positioned
+	\li \c table:number-columns-spanned Number of columns that the cell spans
+	\li \c table:number-rows-spanned Number of rows that the cell spans
+	\li \c fo:border-left Properties of the left border of the cell
+	\li \c fo:border-right Properties of the right border of the cell
+	\li \c fo:border-top Properties of the top border of the cell
+	\li \c fo:border-bottom Properties of the bottom border of the cell
+	\li \c fo:background-color Color of the cell (encoded in hex: \#RRGGBB)
+	\li \c style:vertical-align Vertical alignment of the content in the cell (top, middle, or bottom)
+	*/
+	virtual void openTableCell(const RVNGPropertyList &propList) = 0;
+	/**
+	Called when the current table cell is closed
+	*/
+	virtual void closeTableCell() = 0;
+	/**
+	Called when a covered (spanned by another cell in the table) table cell is opened
+	\param propList Property list for the table cell. May contain:
+	\li \c librevenge:column Number of the column in which the cell is positioned
+	\li \c librevenge:row Number of the row in which the cell is positioned
+	*/
+	virtual void insertCoveredTableCell(const RVNGPropertyList &propList) = 0;
+	/**
+	Called when the current table is closed
+	*/
+	virtual void endTableObject() = 0;
 
 	/**
 	Called when a TAB character should be inserted

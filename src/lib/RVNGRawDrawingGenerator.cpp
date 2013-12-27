@@ -276,6 +276,45 @@ void RVNGRawDrawingGenerator::insertField(const librevenge::RVNGPropertyList &pr
 	m_impl->iprintf("insertField(%s)\n", propList.getPropString().cstr());
 }
 
+void RVNGRawDrawingGenerator::startTableObject(const RVNGPropertyList &propList)
+{
+	RVNG_CALLGRAPH_ENTER(("startTableObject(%s)\n", propList.getPropString().cstr()), CALLBACK_OPEN_TABLE);
+}
+
+void RVNGRawDrawingGenerator::openTableRow(const RVNGPropertyList &propList)
+{
+	RVNG_CALLGRAPH_ENTER(("openTableRow(%s)\n", propList.getPropString().cstr()),
+	                     CALLBACK_OPEN_TABLE_ROW);
+}
+
+void RVNGRawDrawingGenerator::closeTableRow()
+{
+	RVNG_CALLGRAPH_LEAVE(("closeTableRow()\n"), CALLBACK_OPEN_TABLE_ROW);
+}
+
+void RVNGRawDrawingGenerator::openTableCell(const RVNGPropertyList &propList)
+{
+	RVNG_CALLGRAPH_ENTER(("openTableCell(%s)\n", propList.getPropString().cstr()),
+	                     CALLBACK_OPEN_TABLE_CELL);
+}
+
+void RVNGRawDrawingGenerator::closeTableCell()
+{
+	RVNG_CALLGRAPH_LEAVE(("closeTableCell()\n"), CALLBACK_OPEN_TABLE_CELL);
+}
+
+void RVNGRawDrawingGenerator::insertCoveredTableCell(const RVNGPropertyList &propList)
+{
+	if (m_impl->m_printCallgraphScore)
+		return;
+
+	m_impl->iprintf("insertCoveredTableCell(%s)\n", propList.getPropString().cstr());
+}
+
+void RVNGRawDrawingGenerator::endTableObject()
+{
+	RVNG_CALLGRAPH_LEAVE(("endTableObject()\n"), CALLBACK_OPEN_TABLE);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

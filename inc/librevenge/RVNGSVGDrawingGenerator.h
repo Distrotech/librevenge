@@ -56,6 +56,14 @@ public:
 	void startTextObject(const RVNGPropertyList &propList);
 	void endTextObject();
 
+	void startTableObject(const RVNGPropertyList &propList);
+	void openTableRow(const RVNGPropertyList &propList);
+	void closeTableRow();
+	void openTableCell(const RVNGPropertyList &propList);
+	void closeTableCell();
+	void insertCoveredTableCell(const RVNGPropertyList &propList);
+	void endTableObject();
+
 	void openOrderedListLevel(const RVNGPropertyList &propList);
 	void closeOrderedListLevel();
 

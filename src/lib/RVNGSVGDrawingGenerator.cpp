@@ -903,6 +903,41 @@ void RVNGSVGDrawingGenerator::insertLineBreak()
 
 void RVNGSVGDrawingGenerator::insertField(const RVNGPropertyList & /*propList*/) {}
 
+void RVNGSVGDrawingGenerator::startTableObject(const RVNGPropertyList &/*propList*/)
+{
+	// TODO: implement me
+}
+
+void RVNGSVGDrawingGenerator::openTableRow(const RVNGPropertyList &/*propList*/)
+{
+	// TODO: implement me
+}
+
+void RVNGSVGDrawingGenerator::closeTableRow()
+{
+	// TODO: implement me
+}
+
+void RVNGSVGDrawingGenerator::openTableCell(const RVNGPropertyList &/*propList*/)
+{
+	// TODO: implement me
+}
+
+void RVNGSVGDrawingGenerator::closeTableCell()
+{
+	// TODO: implement me
+}
+
+void RVNGSVGDrawingGenerator::insertCoveredTableCell(const RVNGPropertyList &/*propList*/)
+{
+	// TODO: implement me
+}
+
+void RVNGSVGDrawingGenerator::endTableObject()
+{
+	// TODO: implement me
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

@@ -106,6 +106,13 @@ void RVNGTextDrawingGenerator::insertText(const RVNGString &str)
 void RVNGTextDrawingGenerator::insertLineBreak() {}
 void RVNGTextDrawingGenerator::insertField(const RVNGPropertyList & /*propList*/) {}
 
+void RVNGTextDrawingGenerator::startTableObject(const RVNGPropertyList &) {}
+void RVNGTextDrawingGenerator::openTableRow(const RVNGPropertyList &) {}
+void RVNGTextDrawingGenerator::closeTableRow() {}
+void RVNGTextDrawingGenerator::openTableCell(const RVNGPropertyList &) {}
+void RVNGTextDrawingGenerator::closeTableCell() {}
+void RVNGTextDrawingGenerator::insertCoveredTableCell(const RVNGPropertyList &) {}
+void RVNGTextDrawingGenerator::endTableObject() {}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */
