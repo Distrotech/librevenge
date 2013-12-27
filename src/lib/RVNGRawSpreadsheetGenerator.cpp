@@ -116,12 +116,32 @@ void RVNGRawSpreadsheetGenerator::openChart(const RVNGPropertyList &propList)
 	RVNG_CALLGRAPH_ENTER(("openChart(%s)\n", propList.getPropString().cstr()),
 	                     CALLBACK_OPEN_CHART);
 }
-
 void RVNGRawSpreadsheetGenerator::closeChart()
 {
 	RVNG_CALLGRAPH_LEAVE(("closeChart()\n"), CALLBACK_OPEN_CHART);
 }
-
+void RVNGRawSpreadsheetGenerator::openChartTextZone(const RVNGPropertyList &propList)
+{
+	RVNG_CALLGRAPH_ENTER(("openChartTextZone(%s)\n", propList.getPropString().cstr()),
+	                     CALLBACK_OPEN_CHART_TEXTZONE);
+}
+void RVNGRawSpreadsheetGenerator::closeChartTextZone()
+{
+	RVNG_CALLGRAPH_LEAVE(("closeChartTextZone()\n"), CALLBACK_OPEN_CHART_TEXTZONE);
+}
+void RVNGRawSpreadsheetGenerator::openChartPlotArea(const RVNGPropertyList &propList)
+{
+	RVNG_CALLGRAPH_ENTER(("openChartPlotArea(%s)\n", propList.getPropString().cstr()),
+	                     CALLBACK_OPEN_CHART_PLOTAREA);
+}
+void RVNGRawSpreadsheetGenerator::closeChartPlotArea()
+{
+	RVNG_CALLGRAPH_LEAVE(("closeChartPlotArea()\n"), CALLBACK_OPEN_CHART_PLOTAREA);
+}
+void RVNGRawSpreadsheetGenerator::insertChartAxis(const RVNGPropertyList &axis)
+{
+	m_impl->iprintf("insertChartAxis(%s)\n", axis.getPropString().cstr());
+}
 void RVNGRawSpreadsheetGenerator::insertChartSerie(const RVNGPropertyList &serie)
 {
 	m_impl->iprintf("insertChartSerie(%s)\n", serie.getPropString().cstr());

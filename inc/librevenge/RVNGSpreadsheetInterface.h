@@ -233,8 +233,30 @@ public:
 	Called when a chart should be closed.
 	*/
 	virtual void closeChart() = 0;
+
 	/**
-	 Called when a serie is add to a chart.
+	Called when a chart text zone:legend/title/subtitle/footer should be opened.
+	*/
+	virtual void openChartTextZone(const RVNGPropertyList &propList) = 0;
+	/**
+	Called when a chart text zone:legend/title/subtitle/footer should be closed.
+	*/
+	virtual void closeChartTextZone() = 0;
+
+	/**
+	Called when a chart plot area should be opened.
+	*/
+	virtual void openChartPlotArea(const RVNGPropertyList &propList) = 0;
+	/**
+	Called when a chart plot arre should be closed.
+	*/
+	virtual void closeChartPlotArea() = 0;
+	/**
+	 Called when a axis should be add in a plot area
+	 */
+	virtual void insertChartAxis(const RVNGPropertyList &axis) = 0;
+	/**
+	 Called when a serie should be add in a plot area
 	 */
 	virtual void insertChartSerie(const RVNGPropertyList &series) = 0;
 

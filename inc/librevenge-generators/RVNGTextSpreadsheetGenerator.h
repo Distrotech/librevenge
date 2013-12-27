@@ -60,6 +60,11 @@ public:
 	// chart
 	void openChart(const RVNGPropertyList &propList);
 	void closeChart();
+	void openChartTextZone(const RVNGPropertyList &propList);
+	void closeChartTextZone();
+	void openChartPlotArea(const RVNGPropertyList &propList);
+	void closeChartPlotArea();
+	void insertChartAxis(const RVNGPropertyList &axis);
 	void insertChartSerie(const RVNGPropertyList &series);
 
 	void definePageStyle(const RVNGPropertyList &propList);

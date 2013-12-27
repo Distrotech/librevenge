@@ -144,6 +144,11 @@ void RVNGTextSpreadsheetGenerator::closeSheetCell() {}
 
 void RVNGTextSpreadsheetGenerator::openChart(const RVNGPropertyList &) {}
 void RVNGTextSpreadsheetGenerator::closeChart() {}
+void RVNGTextSpreadsheetGenerator::openChartTextZone(const RVNGPropertyList &) {}
+void RVNGTextSpreadsheetGenerator::closeChartTextZone() {}
+void RVNGTextSpreadsheetGenerator::openChartPlotArea(const RVNGPropertyList &) {}
+void RVNGTextSpreadsheetGenerator::closeChartPlotArea() {}
+void RVNGTextSpreadsheetGenerator::insertChartAxis(const RVNGPropertyList &) {}
 void RVNGTextSpreadsheetGenerator::insertChartSerie(const RVNGPropertyList &) {}
 
 void RVNGTextSpreadsheetGenerator::definePageStyle(const RVNGPropertyList &) {}

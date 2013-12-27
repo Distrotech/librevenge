@@ -399,7 +399,11 @@ void RVNGCSVSpreadsheetGenerator::closeChart()
 {
 	--m_impl->m_numberSubForm;
 }
-
+void RVNGCSVSpreadsheetGenerator::openChartTextZone(const RVNGPropertyList &) {}
+void RVNGCSVSpreadsheetGenerator::closeChartTextZone() {}
+void RVNGCSVSpreadsheetGenerator::openChartPlotArea(const RVNGPropertyList &) {}
+void RVNGCSVSpreadsheetGenerator::closeChartPlotArea() {}
+void RVNGCSVSpreadsheetGenerator::insertChartAxis(const RVNGPropertyList &) {}
 void RVNGCSVSpreadsheetGenerator::insertChartSerie(const RVNGPropertyList &) {}
 
 void RVNGCSVSpreadsheetGenerator::definePageStyle(const RVNGPropertyList &) {}
