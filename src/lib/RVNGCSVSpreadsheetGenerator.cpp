@@ -391,6 +391,7 @@ void RVNGCSVSpreadsheetGenerator::closeSheetCell()
 	++m_impl->m_column;
 }
 
+void RVNGCSVSpreadsheetGenerator::defineChartStyle(const RVNGPropertyList &) {}
 void RVNGCSVSpreadsheetGenerator::openChart(const RVNGPropertyList &)
 {
 	++m_impl->m_numberSubForm;
@@ -399,12 +400,13 @@ void RVNGCSVSpreadsheetGenerator::closeChart()
 {
 	--m_impl->m_numberSubForm;
 }
-void RVNGCSVSpreadsheetGenerator::openChartTextZone(const RVNGPropertyList &) {}
-void RVNGCSVSpreadsheetGenerator::closeChartTextZone() {}
+void RVNGCSVSpreadsheetGenerator::openChartTextObject(const RVNGPropertyList &) {}
+void RVNGCSVSpreadsheetGenerator::closeChartTextObject() {}
 void RVNGCSVSpreadsheetGenerator::openChartPlotArea(const RVNGPropertyList &) {}
 void RVNGCSVSpreadsheetGenerator::closeChartPlotArea() {}
 void RVNGCSVSpreadsheetGenerator::insertChartAxis(const RVNGPropertyList &) {}
-void RVNGCSVSpreadsheetGenerator::insertChartSerie(const RVNGPropertyList &) {}
+void RVNGCSVSpreadsheetGenerator::openChartSerie(const RVNGPropertyList &) {}
+void RVNGCSVSpreadsheetGenerator::closeChartSerie() {}
 
 void RVNGCSVSpreadsheetGenerator::definePageStyle(const RVNGPropertyList &) {}
 void RVNGCSVSpreadsheetGenerator::openPageSpan(const RVNGPropertyList &) {}

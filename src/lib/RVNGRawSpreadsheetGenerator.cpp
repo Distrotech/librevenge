@@ -111,6 +111,10 @@ void RVNGRawSpreadsheetGenerator::closeSheetCell()
 //
 // Chart
 //
+void RVNGRawSpreadsheetGenerator::defineChartStyle(const RVNGPropertyList &axis)
+{
+	m_impl->iprintf("defineChartStyle(%s)\n", axis.getPropString().cstr());
+}
 void RVNGRawSpreadsheetGenerator::openChart(const RVNGPropertyList &propList)
 {
 	RVNG_CALLGRAPH_ENTER(("openChart(%s)\n", propList.getPropString().cstr()),
@@ -120,14 +124,14 @@ void RVNGRawSpreadsheetGenerator::closeChart()
 {
 	RVNG_CALLGRAPH_LEAVE(("closeChart()\n"), CALLBACK_OPEN_CHART);
 }
-void RVNGRawSpreadsheetGenerator::openChartTextZone(const RVNGPropertyList &propList)
+void RVNGRawSpreadsheetGenerator::openChartTextObject(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("openChartTextZone(%s)\n", propList.getPropString().cstr()),
-	                     CALLBACK_OPEN_CHART_TEXTZONE);
+	RVNG_CALLGRAPH_ENTER(("openChartTextObject(%s)\n", propList.getPropString().cstr()),
+	                     CALLBACK_OPEN_CHART_TEXTOBJECT);
 }
-void RVNGRawSpreadsheetGenerator::closeChartTextZone()
+void RVNGRawSpreadsheetGenerator::closeChartTextObject()
 {
-	RVNG_CALLGRAPH_LEAVE(("closeChartTextZone()\n"), CALLBACK_OPEN_CHART_TEXTZONE);
+	RVNG_CALLGRAPH_LEAVE(("closeChartTextObject()\n"), CALLBACK_OPEN_CHART_TEXTOBJECT);
 }
 void RVNGRawSpreadsheetGenerator::openChartPlotArea(const RVNGPropertyList &propList)
 {
@@ -142,9 +146,14 @@ void RVNGRawSpreadsheetGenerator::insertChartAxis(const RVNGPropertyList &axis)
 {
 	m_impl->iprintf("insertChartAxis(%s)\n", axis.getPropString().cstr());
 }
-void RVNGRawSpreadsheetGenerator::insertChartSerie(const RVNGPropertyList &serie)
+void RVNGRawSpreadsheetGenerator::openChartSerie(const RVNGPropertyList &propList)
 {
-	m_impl->iprintf("insertChartSerie(%s)\n", serie.getPropString().cstr());
+	RVNG_CALLGRAPH_ENTER(("openChartSerie(%s)\n", propList.getPropString().cstr()),
+	                     CALLBACK_OPEN_CHART_SERIE);
+}
+void RVNGRawSpreadsheetGenerator::closeChartSerie()
+{
+	RVNG_CALLGRAPH_LEAVE(("closeChartSerie()\n"), CALLBACK_OPEN_CHART_SERIE);
 }
 
 //

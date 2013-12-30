@@ -58,14 +58,16 @@ public:
 	void closeSheetCell();
 
 	// chart
+	void defineChartStyle(const RVNGPropertyList &propList);
 	void openChart(const RVNGPropertyList &propList);
 	void closeChart();
-	void openChartTextZone(const RVNGPropertyList &propList);
-	void closeChartTextZone();
+	void openChartTextObject(const RVNGPropertyList &propList);
+	void closeChartTextObject();
 	void openChartPlotArea(const RVNGPropertyList &propList);
 	void closeChartPlotArea();
 	void insertChartAxis(const RVNGPropertyList &axis);
-	void insertChartSerie(const RVNGPropertyList &series);
+	void openChartSerie(const librevenge::RVNGPropertyList &series);
+	void closeChartSerie();
 
 	void definePageStyle(const RVNGPropertyList &propList);
 	void openPageSpan(const RVNGPropertyList &propList);

@@ -219,9 +219,7 @@ public:
 	*/
 	virtual void closeSheetCell() = 0;
 
-	//
-	// CHECKME: WHICH INTERFACE FOR CHART ?
-	//
+	virtual void defineChartStyle(const RVNGPropertyList &propList) = 0;
 
 	/**
 	Called when a chart should be opened
@@ -235,13 +233,13 @@ public:
 	virtual void closeChart() = 0;
 
 	/**
-	Called when a chart text zone:legend/title/subtitle/footer should be opened.
+	Called when a chart text zone:label/legend/title/subtitle/footer should be opened.
 	*/
-	virtual void openChartTextZone(const RVNGPropertyList &propList) = 0;
+	virtual void openChartTextObject(const RVNGPropertyList &propList) = 0;
 	/**
 	Called when a chart text zone:legend/title/subtitle/footer should be closed.
 	*/
-	virtual void closeChartTextZone() = 0;
+	virtual void closeChartTextObject() = 0;
 
 	/**
 	Called when a chart plot area should be opened.
@@ -256,9 +254,13 @@ public:
 	 */
 	virtual void insertChartAxis(const RVNGPropertyList &axis) = 0;
 	/**
-	 Called when a serie should be add in a plot area
+	 Called when a serie should be opened (in a plot area)
 	 */
-	virtual void insertChartSerie(const RVNGPropertyList &series) = 0;
+	virtual void openChartSerie(const librevenge::RVNGPropertyList &series) = 0;
+	/**
+	 Called when a serie should be closed (in a plot area)
+	 */
+	virtual void closeChartSerie() = 0;
 
 	virtual void defineParagraphStyle(const RVNGPropertyList &propList) = 0;
 

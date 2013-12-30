@@ -142,14 +142,16 @@ void RVNGTextSpreadsheetGenerator::openSheetCell(const RVNGPropertyList &propLis
 }
 void RVNGTextSpreadsheetGenerator::closeSheetCell() {}
 
+void RVNGTextSpreadsheetGenerator::defineChartStyle(const RVNGPropertyList &) {}
 void RVNGTextSpreadsheetGenerator::openChart(const RVNGPropertyList &) {}
 void RVNGTextSpreadsheetGenerator::closeChart() {}
-void RVNGTextSpreadsheetGenerator::openChartTextZone(const RVNGPropertyList &) {}
-void RVNGTextSpreadsheetGenerator::closeChartTextZone() {}
+void RVNGTextSpreadsheetGenerator::openChartTextObject(const RVNGPropertyList &) {}
+void RVNGTextSpreadsheetGenerator::closeChartTextObject() {}
 void RVNGTextSpreadsheetGenerator::openChartPlotArea(const RVNGPropertyList &) {}
 void RVNGTextSpreadsheetGenerator::closeChartPlotArea() {}
 void RVNGTextSpreadsheetGenerator::insertChartAxis(const RVNGPropertyList &) {}
-void RVNGTextSpreadsheetGenerator::insertChartSerie(const RVNGPropertyList &) {}
+void RVNGTextSpreadsheetGenerator::openChartSerie(const RVNGPropertyList &) {}
+void RVNGTextSpreadsheetGenerator::closeChartSerie() {}
 
 void RVNGTextSpreadsheetGenerator::definePageStyle(const RVNGPropertyList &) {}
 void RVNGTextSpreadsheetGenerator::openPageSpan(const RVNGPropertyList & /* propList */) {}
