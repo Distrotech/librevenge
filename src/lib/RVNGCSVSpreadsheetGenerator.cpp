@@ -37,14 +37,14 @@ struct RVNGCSVSpreadsheetGeneratorImpl
 		m_useFormula(useFormula),
 		m_fieldSeparator(','), m_textSeparator('"'), m_decimalSeparator('.'),
 		m_dateFormat("%m/%d/%y"), m_timeFormat("%H:%M:%S"),
-		m_inSheet(false), m_inSheetRow(false), m_inSheetCell(false),
+		m_inSheet(false), m_inSheetRow(false), m_inSheetCell(false), m_sheetCellHasFormula(false),
 		m_numberSubForm(0),
 		m_column(0), m_row(0), m_numColumns(0) {}
 	bool canWriteData(bool newCell=false) const
 	{
 		if (!m_inSheet || !m_inSheetRow || m_numberSubForm) return false;
 		if (newCell) return true;
-		return m_inSheetCell;
+		return m_inSheetCell && !m_sheetCellHasFormula;
 	}
 	void insertCharacter(char c)
 	{
@@ -70,7 +70,7 @@ struct RVNGCSVSpreadsheetGeneratorImpl
 	bool m_useFormula;
 	char m_fieldSeparator, m_textSeparator, m_decimalSeparator;
 	std::string m_dateFormat, m_timeFormat;
-	bool m_inSheet, m_inSheetRow, m_inSheetCell;
+	bool m_inSheet, m_inSheetRow, m_inSheetCell, m_sheetCellHasFormula;
 	int m_numberSubForm;
 	int m_column, m_row, m_numColumns;
 };
@@ -135,7 +135,8 @@ void RVNGCSVSpreadsheetGeneratorImpl::insertInstruction(librevenge::RVNGProperty
 			return;
 		}
 		int column=instr["librevenge:column"]->getInt();
-		int row=instr["librevenge:row"]->getInt();
+		// we need to add 1 because we have added an header row
+		int row=instr["librevenge:row"]->getInt()+1;
 		if (column<0 || row<0)
 		{
 			RVNG_DEBUG_MSG(("RVNGCSVSpreadsheetGeneratorImpl::insertInstruction: find bad coordinate for formula!!!\n"));
@@ -156,7 +157,8 @@ void RVNGCSVSpreadsheetGeneratorImpl::insertInstruction(librevenge::RVNGProperty
 			return;
 		}
 		int column=instr["librevenge:start-column"]->getInt();
-		int row=instr["librevenge:start-row"]->getInt();
+		// we need to add 1 because we have added an header row
+		int row=instr["librevenge:start-row"]->getInt()+1;
 		if (column<0 || row<0)
 		{
 			RVNG_DEBUG_MSG(("RVNGCSVSpreadsheetGeneratorImpl::insertInstruction: find bad coordinate1 for formula!!!\n"));
@@ -169,8 +171,9 @@ void RVNGCSVSpreadsheetGeneratorImpl::insertInstruction(librevenge::RVNGProperty
 		m_stream << row+1 << ":";
 		if (instr["librevenge:end-column"])
 			column=instr["librevenge:end-column"]->getInt();
+		// we need to add 1 because we have added an header row
 		if (instr["librevenge:end-row"])
-			row=instr["librevenge:end-row"]->getInt();
+			row=instr["librevenge:end-row"]->getInt()+1;
 		if (column<0 || row<0)
 		{
 			RVNG_DEBUG_MSG(("RVNGCSVSpreadsheetGeneratorImpl::insertInstruction: find bad coordinate2 for formula!!!\n"));
@@ -305,6 +308,7 @@ void RVNGCSVSpreadsheetGenerator::openSheetCell(const RVNGPropertyList &propList
 	}
 	m_impl->m_column=column;
 	m_impl->m_inSheetCell=true;
+	m_impl->m_sheetCellHasFormula=false;
 	if (column) m_impl->m_stream << m_impl->m_fieldSeparator;
 	m_impl->m_stream << m_impl->m_textSeparator;
 
@@ -313,6 +317,7 @@ void RVNGCSVSpreadsheetGenerator::openSheetCell(const RVNGPropertyList &propList
 		librevenge::RVNGPropertyListVector const *formula=propList.child("librevenge:formula");
 		if (formula && formula->count())
 		{
+			m_impl->m_sheetCellHasFormula=true;
 			m_impl->insertCharacter('=');
 			for (unsigned long s=0; s<formula->count(); ++s)
 				m_impl->insertInstruction((*formula)[s]);
