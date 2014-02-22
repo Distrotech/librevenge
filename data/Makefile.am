@@ -1,0 +1,5 @@
+SUBDIRS =
+
+if BUILD_PRETTY_PRINTERS
+SUBDIRS += gdb
+endif

@@ -251,11 +251,39 @@ AC_ARG_ENABLE(generators,
 )
 AM_CONDITIONAL([BUILD_GENERATORS], [test "x$enable_generators" != "xno"])
 
+# ===================
+# gdb pretty printers
+# ===================
+AC_ARG_ENABLE([pretty-printers],
+	[AS_HELP_STRING([--enable-pretty-printers], [Install gdb pretty printers])],
+	[enable_pretty_printers="$withval"],
+	[enable_pretty_printers=no]
+)
+AC_ARG_WITH([gdb-data-dir],
+	[AS_HELP_STRING([--with-gdb-data-dir], [Specify gdb data dir])],
+	[gdb_data_dir="$withval"],
+	[gdb_data_dir="/usr/share/gdb"]
+)
+AM_CONDITIONAL([BUILD_PRETTY_PRINTERS], [test "x$enable_pretty_printers" != "xno"])
+
+AS_IF([test "x$enable_pretty_printers" != "xno"],
+    [dnl
+		GDBDATADIR="$gdb_data_dir"
+		AC_PATH_PROG([GDB], [gdb])dnl
+    ]
+)
+AC_SUBST([GDBDATADIR])
+
 # =====================
 # Prepare all .in files
 # =====================
 AC_CONFIG_FILES([
 Makefile
+data/Makefile
+data/gdb/Makefile
+data/gdb/auto-load/Makefile
+data/gdb/auto-load/librevenge-$RVNG_MAJOR_VERSION.$RVNG_MINOR_VERSION.py:data/gdb/auto-load/librevenge.py.in
+data/gdb/auto-load/librevenge-stream-$RVNG_MAJOR_VERSION.$RVNG_MINOR_VERSION.py:data/gdb/auto-load/librevenge-stream.py.in
 src/Makefile
 src/lib/Makefile
 src/lib/librevenge.rc
@@ -287,5 +315,6 @@ Build configuration:
 	generators:      ${enable_generators}
 	streams:         ${enable_streams}
 	werror:          ${enable_werror}
+	pretty printers: ${enable_pretty_printers}
 ==============================================================================
 ])

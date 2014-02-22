@@ -12,7 +12,7 @@ if BUILD_STREAMS
 pkgconf_DATA += librevenge-stream-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.pc
 endif
 
-SUBDIRS = build inc src docs
+SUBDIRS = build inc src data docs
 
 EXTRA_DIST = \
 	autogen.sh \
