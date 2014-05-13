@@ -321,12 +321,12 @@ void RVNGRawTextGenerator::closeFrame()
 void RVNGRawTextGenerator::openGroup(const librevenge::RVNGPropertyList &propList)
 {
 	RVNG_CALLGRAPH_ENTER(("openGroup(%s)\n", propList.getPropString().cstr()),
-	                     CALLBACK_START_GROUP);
+	                     CALLBACK_OPEN_GROUP);
 }
 
 void RVNGRawTextGenerator::closeGroup()
 {
-	RVNG_CALLGRAPH_LEAVE(("close()\n"), CALLBACK_START_GROUP);
+	RVNG_CALLGRAPH_LEAVE(("closeGroup()\n"), CALLBACK_OPEN_GROUP);
 }
 
 void RVNGRawTextGenerator::defineGraphicStyle(const librevenge::RVNGPropertyList &propList)

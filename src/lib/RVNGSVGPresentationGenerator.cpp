@@ -388,13 +388,13 @@ void RVNGSVGPresentationGenerator::endEmbeddedGraphics()
 {
 }
 
-void RVNGSVGPresentationGenerator::startGroup(const RVNGPropertyList &/*propList*/)
+void RVNGSVGPresentationGenerator::openGroup(const RVNGPropertyList &/*propList*/)
 {
 	// TODO: handle svg:id
 	m_impl->m_outputSink << "<svg:g>\n";
 }
 
-void RVNGSVGPresentationGenerator::endGroup()
+void RVNGSVGPresentationGenerator::closeGroup()
 {
 	m_impl->m_outputSink << "</svg:g>\n";
 }

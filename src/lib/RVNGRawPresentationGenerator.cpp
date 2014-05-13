@@ -93,15 +93,15 @@ void RVNGRawPresentationGenerator::endEmbeddedGraphics()
 	RVNG_CALLGRAPH_LEAVE(("endEmbeddedGraphics \n"), CALLBACK_START_EMBEDDED_GRAPHICS);
 }
 
-void RVNGRawPresentationGenerator::startGroup(const RVNGPropertyList &propList)
+void RVNGRawPresentationGenerator::openGroup(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("startGroup(%s)\n", propList.getPropString().cstr()),
-	                     CALLBACK_START_GROUP);
+	RVNG_CALLGRAPH_ENTER(("openGroup(%s)\n", propList.getPropString().cstr()),
+	                     CALLBACK_OPEN_GROUP);
 }
 
-void RVNGRawPresentationGenerator::endGroup()
+void RVNGRawPresentationGenerator::closeGroup()
 {
-	RVNG_CALLGRAPH_LEAVE(("endGroup()\n"), CALLBACK_START_GROUP);
+	RVNG_CALLGRAPH_LEAVE(("closeGroup()\n"), CALLBACK_OPEN_GROUP);
 }
 
 void RVNGRawPresentationGenerator::setStyle(const RVNGPropertyList &propList)

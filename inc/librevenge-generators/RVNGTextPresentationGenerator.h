@@ -39,8 +39,8 @@ public:
 	void endLayer();
 	void startEmbeddedGraphics(const RVNGPropertyList &propList);
 	void endEmbeddedGraphics();
-	void startGroup(const RVNGPropertyList &propList);
-	void endGroup();
+	void openGroup(const RVNGPropertyList &propList);
+	void closeGroup();
 
 	void setStyle(const RVNGPropertyList &propList);
 

@@ -49,8 +49,8 @@ public:
 	void startEmbeddedGraphics(const RVNGPropertyList &propList);
 	void endEmbeddedGraphics();
 
-	void startGroup(const RVNGPropertyList &propList);
-	void endGroup();
+	void openGroup(const RVNGPropertyList &propList);
+	void closeGroup();
 
 	void drawRectangle(const RVNGPropertyList &propList);
 	void drawEllipse(const RVNGPropertyList &propList);

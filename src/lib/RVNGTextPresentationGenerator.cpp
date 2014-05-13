@@ -81,11 +81,11 @@ void RVNGTextPresentationGenerator::endEmbeddedGraphics()
 {
 }
 
-void RVNGTextPresentationGenerator::startGroup(const RVNGPropertyList &)
+void RVNGTextPresentationGenerator::openGroup(const RVNGPropertyList &)
 {
 }
 
-void RVNGTextPresentationGenerator::endGroup()
+void RVNGTextPresentationGenerator::closeGroup()
 {
 }
 
