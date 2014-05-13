@@ -110,6 +110,10 @@ public:
 
 	virtual void endEmbeddedGraphics() = 0;
 
+	virtual void openGroup(const RVNGPropertyList &propList) = 0;
+
+	virtual void closeGroup() = 0;
+
 	// Different primitive shapes
 	virtual void drawRectangle(const RVNGPropertyList &propList) = 0;
 

@@ -603,6 +603,9 @@ void RVNGSVGDrawingGenerator::endLayer()
 void RVNGSVGDrawingGenerator::startEmbeddedGraphics(const RVNGPropertyList & /*propList*/) {}
 void RVNGSVGDrawingGenerator::endEmbeddedGraphics() {}
 
+void RVNGSVGDrawingGenerator::openGroup(const RVNGPropertyList & /*propList*/) {}
+void RVNGSVGDrawingGenerator::closeGroup() {}
+
 void RVNGSVGDrawingGenerator::setStyle(const RVNGPropertyList &propList)
 {
 	m_pImpl->setStyle(propList);

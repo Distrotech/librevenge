@@ -100,6 +100,16 @@ void RVNGRawDrawingGenerator::endEmbeddedGraphics()
 	RVNG_CALLGRAPH_LEAVE(("endEmbeddedGraphics \n"), CALLBACK_START_EMBEDDED_GRAPHICS);
 }
 
+void RVNGRawDrawingGenerator::openGroup(const RVNGPropertyList &propList)
+{
+	RVNG_CALLGRAPH_ENTER(("openGroup(%s)\n", propList.getPropString().cstr()), CALLBACK_OPEN_GROUP);
+}
+
+void RVNGRawDrawingGenerator::closeGroup()
+{
+	RVNG_CALLGRAPH_LEAVE(("closeGroup\n"), CALLBACK_OPEN_GROUP);
+}
+
 void RVNGRawDrawingGenerator::setStyle(const RVNGPropertyList &propList)
 {
 	if (m_impl->m_printCallgraphScore)

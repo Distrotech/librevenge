@@ -43,6 +43,9 @@ public:
 	void startEmbeddedGraphics(const RVNGPropertyList &);
 	void endEmbeddedGraphics();
 
+	void openGroup(const RVNGPropertyList &propList);
+	void closeGroup();
+
 	void setStyle(const RVNGPropertyList &);
 
 	void drawRectangle(const RVNGPropertyList &);

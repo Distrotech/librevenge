@@ -60,6 +60,9 @@ void RVNGTextDrawingGenerator::endLayer() {}
 void RVNGTextDrawingGenerator::startEmbeddedGraphics(const RVNGPropertyList &) {}
 void RVNGTextDrawingGenerator::endEmbeddedGraphics() {}
 
+void RVNGTextDrawingGenerator::openGroup(const RVNGPropertyList & /*propList*/) {}
+void RVNGTextDrawingGenerator::closeGroup() {}
+
 void RVNGTextDrawingGenerator::setStyle(const RVNGPropertyList &) {}
 
 void RVNGTextDrawingGenerator::drawRectangle(const RVNGPropertyList &) {}
