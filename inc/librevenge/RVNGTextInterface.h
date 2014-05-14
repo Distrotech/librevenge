@@ -443,6 +443,18 @@ public:
 	virtual void drawPolyline(const RVNGPropertyList &propList) = 0;
 	virtual void drawPath(const RVNGPropertyList &propList) = 0;
 
+	/** Draw a connector.
+	  The connector will be typically between two shapes, but free-standing connectors are allowed too.
+	  \param propList Defines a set of properties for the object. May contain:
+	  \li \c draw:end-shape The \c ID of the shape attached at the end. Should not be present if the connector's end is not attached to any object.
+	  \li \c draw:start-shape The \c ID of the shape attached at the beginning. Should not be present if the connector's start is not attached to any object.
+	  \li \c svg:d The connector's geometric path. This is optional; if missing, the consumer is free to render it any way it likes.
+	  \li \c svg:x1 The \c X coordinate of the start point.
+	  \li \c svg:y1 The \c Y coordinate of the start point.
+	  \li \c svg:x2 The \c X coordinate of the end point.
+	  \li \c svg:y2 The \c Y coordinate of the end point.
+	  */
+	virtual void drawConnector(const RVNGPropertyList &propList) = 0;
 };
 
 }

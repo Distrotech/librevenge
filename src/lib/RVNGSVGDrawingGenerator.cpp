@@ -758,6 +758,11 @@ void RVNGSVGDrawingGenerator::drawGraphicObject(const RVNGPropertyList &propList
 	m_pImpl->m_outputSink << "\" />\n";
 }
 
+void RVNGSVGDrawingGenerator::drawConnector(const RVNGPropertyList &/*propList*/)
+{
+	// TODO: implement me
+}
+
 void RVNGSVGDrawingGenerator::startTextObject(const RVNGPropertyList &propList)
 {
 	double x = 0.0;

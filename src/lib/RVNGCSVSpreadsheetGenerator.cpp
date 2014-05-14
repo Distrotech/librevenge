@@ -559,6 +559,7 @@ void RVNGCSVSpreadsheetGenerator::drawEllipse(const RVNGPropertyList &) {}
 void RVNGCSVSpreadsheetGenerator::drawPolygon(const RVNGPropertyList &) {}
 void RVNGCSVSpreadsheetGenerator::drawPolyline(const RVNGPropertyList &) {}
 void RVNGCSVSpreadsheetGenerator::drawPath(const RVNGPropertyList &) {}
+void RVNGCSVSpreadsheetGenerator::drawConnector(const RVNGPropertyList &) {}
 
 void RVNGCSVSpreadsheetGenerator::insertBinaryObject(const RVNGPropertyList &) {}
 void RVNGCSVSpreadsheetGenerator::insertEquation(const RVNGPropertyList &) {}

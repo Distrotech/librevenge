@@ -200,6 +200,11 @@ void RVNGRawSpreadsheetGenerator::drawPath(const RVNGPropertyList &propList)
 	m_impl->iprintf("drawPath(%s)\n", propList.getPropString().cstr());
 }
 
+void RVNGRawSpreadsheetGenerator::drawConnector(const RVNGPropertyList &propList)
+{
+	m_impl->iprintf("drawConnector(%s)\n", propList.getPropString().cstr());
+}
+
 //
 //
 //

@@ -359,6 +359,10 @@ void RVNGRawTextGenerator::drawPath(const librevenge::RVNGPropertyList &propList
 	m_impl->iprintf("drawPath(%s)\n", propList.getPropString().cstr());
 }
 
+void RVNGRawTextGenerator::drawConnector(const librevenge::RVNGPropertyList &propList)
+{
+	m_impl->iprintf("drawConnector(%s)\n", propList.getPropString().cstr());
+}
 
 void RVNGRawTextGenerator::insertBinaryObject(const RVNGPropertyList &propList)
 {

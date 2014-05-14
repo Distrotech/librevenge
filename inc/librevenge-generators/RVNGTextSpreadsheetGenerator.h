@@ -138,6 +138,7 @@ public:
 	void drawPolygon(const RVNGPropertyList &propList);
 	void drawPolyline(const RVNGPropertyList &propList);
 	void drawPath(const RVNGPropertyList &propList);
+	void drawConnector(const RVNGPropertyList &propList);
 
 	void insertEquation(const RVNGPropertyList &propList);
 private:

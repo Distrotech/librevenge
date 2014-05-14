@@ -71,6 +71,7 @@ void RVNGTextDrawingGenerator::drawPolyline(const RVNGPropertyList &) {}
 void RVNGTextDrawingGenerator::drawPolygon(const RVNGPropertyList &) {}
 void RVNGTextDrawingGenerator::drawPath(const RVNGPropertyList &) {}
 void RVNGTextDrawingGenerator::drawGraphicObject(const RVNGPropertyList &) {}
+void RVNGTextDrawingGenerator::drawConnector(const RVNGPropertyList &) {}
 void RVNGTextDrawingGenerator::startTextObject(const RVNGPropertyList &) {}
 void RVNGTextDrawingGenerator::endTextObject() {}
 

@@ -166,6 +166,14 @@ void RVNGRawDrawingGenerator::drawGraphicObject(const RVNGPropertyList &propList
 	m_impl->iprintf("drawGraphicObject (%s)\n", propList.getPropString().cstr());
 }
 
+void RVNGRawDrawingGenerator::drawConnector(const RVNGPropertyList &propList)
+{
+	if (m_impl->m_printCallgraphScore)
+		return;
+
+	m_impl->iprintf("drawConnector(%s)\n", propList.getPropString().cstr());
+}
+
 void RVNGRawDrawingGenerator::startTextObject(const RVNGPropertyList &propList)
 {
 	RVNG_CALLGRAPH_ENTER(("startTextObject (%s)\n", propList.getPropString().cstr()), CALLBACK_START_TEXT_OBJECT);

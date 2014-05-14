@@ -62,6 +62,7 @@ public:
 	void drawPolygon(const RVNGPropertyList &propList);
 	void drawPath(const RVNGPropertyList &propList);
 	void drawGraphicObject(const RVNGPropertyList &propList);
+	void drawConnector(const RVNGPropertyList &propList);
 	void startTextObject(const RVNGPropertyList &propList);
 	void endTextObject();
 

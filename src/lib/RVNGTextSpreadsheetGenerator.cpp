@@ -272,6 +272,7 @@ void RVNGTextSpreadsheetGenerator::drawEllipse(const RVNGPropertyList &) {}
 void RVNGTextSpreadsheetGenerator::drawPolygon(const RVNGPropertyList &) {}
 void RVNGTextSpreadsheetGenerator::drawPolyline(const RVNGPropertyList &) {}
 void RVNGTextSpreadsheetGenerator::drawPath(const RVNGPropertyList &) {}
+void RVNGTextSpreadsheetGenerator::drawConnector(const RVNGPropertyList &) {}
 
 void RVNGTextSpreadsheetGenerator::insertBinaryObject(const RVNGPropertyList & /* propList */) {}
 void RVNGTextSpreadsheetGenerator::insertEquation(const RVNGPropertyList & /* propList */) {}

@@ -109,6 +109,7 @@ public:
 	void drawPolygon(const librevenge::RVNGPropertyList &propList);
 	void drawPolyline(const librevenge::RVNGPropertyList &propList);
 	void drawPath(const librevenge::RVNGPropertyList &propList);
+	void drawConnector(const RVNGPropertyList &propList);
 
 	void insertBinaryObject(const RVNGPropertyList &propList);
 	void insertEquation(const RVNGPropertyList &propList);
