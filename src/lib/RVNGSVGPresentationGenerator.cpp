@@ -127,6 +127,10 @@ void RVNGSVGPresentationGenerator::endSlide()
 	m_impl->m_outputSink.str("");
 }
 
+void RVNGSVGPresentationGenerator::setSlideTransition(const RVNGPropertyList &)
+{
+}
+
 void RVNGSVGPresentationGenerator::setStyle(const RVNGPropertyList &propList)
 {
 	m_impl->m_style.clear();

@@ -65,6 +65,10 @@ void RVNGTextPresentationGenerator::endSlide()
 	m_impl->m_stream.str("");
 }
 
+void RVNGTextPresentationGenerator::setSlideTransition(const RVNGPropertyList &)
+{
+}
+
 void RVNGTextPresentationGenerator::startLayer(const RVNGPropertyList &)
 {
 }

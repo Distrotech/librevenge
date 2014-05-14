@@ -35,6 +35,7 @@ public:
 	void setDocumentMetaData(const RVNGPropertyList &propList);
 	void startSlide(const RVNGPropertyList &propList);
 	void endSlide();
+	void setSlideTransition(const RVNGPropertyList &propList);
 	void startLayer(const RVNGPropertyList &propList);
 	void endLayer();
 	void startEmbeddedGraphics(const RVNGPropertyList &propList);

@@ -43,6 +43,8 @@ public:
 
 	void setStyle(const RVNGPropertyList &propList);
 
+	void setSlideTransition(const RVNGPropertyList &propList);
+
 	void startLayer(const RVNGPropertyList &propList);
 	void endLayer();
 

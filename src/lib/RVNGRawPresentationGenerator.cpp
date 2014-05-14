@@ -71,6 +71,14 @@ void RVNGRawPresentationGenerator::endSlide()
 	RVNG_CALLGRAPH_LEAVE(("endSlide()\n"), CALLBACK_START_SLIDE);
 }
 
+void RVNGRawPresentationGenerator::setSlideTransition(const RVNGPropertyList &propList)
+{
+	if (m_impl->m_printCallgraphScore)
+		return;
+
+	m_impl->iprintf("setSlideTransition(%s)\n", propList.getPropString().cstr());
+}
+
 void RVNGRawPresentationGenerator::startLayer(const RVNGPropertyList &propList)
 {
 	RVNG_CALLGRAPH_ENTER(("startLayer(%s)\n", propList.getPropString().cstr()),
