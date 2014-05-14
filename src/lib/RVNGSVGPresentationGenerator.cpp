@@ -741,6 +741,46 @@ void RVNGSVGPresentationGenerator::endNotes()
 	// TODO: implement me
 }
 
+void RVNGSVGPresentationGenerator::defineChartStyle(const RVNGPropertyList &)
+{
+}
+
+void RVNGSVGPresentationGenerator::openChart(const RVNGPropertyList &)
+{
+}
+
+void RVNGSVGPresentationGenerator::closeChart()
+{
+}
+
+void RVNGSVGPresentationGenerator::openChartTextObject(const RVNGPropertyList &)
+{
+}
+
+void RVNGSVGPresentationGenerator::closeChartTextObject()
+{
+}
+
+void RVNGSVGPresentationGenerator::openChartPlotArea(const RVNGPropertyList &)
+{
+}
+
+void RVNGSVGPresentationGenerator::closeChartPlotArea()
+{
+}
+
+void RVNGSVGPresentationGenerator::insertChartAxis(const RVNGPropertyList &)
+{
+}
+
+void RVNGSVGPresentationGenerator::openChartSeries(const librevenge::RVNGPropertyList &)
+{
+}
+
+void RVNGSVGPresentationGenerator::closeChartSeries()
+{
+}
+
 // create "style" attribute based on current pen and brush
 void RVNGSVGPresentationGeneratorImpl::writeStyle(bool /* isClosed */)
 {

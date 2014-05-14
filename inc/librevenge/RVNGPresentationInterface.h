@@ -358,6 +358,52 @@ public:
 	/** End slide notes.
 	  */
 	virtual void endNotes() = 0;
+
+	// Charts
+
+	virtual void defineChartStyle(const RVNGPropertyList &propList) = 0;
+
+	/**
+	Called when a chart should be opened
+	\param propList Property list for the sheet. May contain:
+	\li \c librevenge:name Determines the sheet name
+	*/
+	virtual void openChart(const RVNGPropertyList &propList) = 0;
+	/**
+	Called when a chart should be closed.
+	*/
+	virtual void closeChart() = 0;
+
+	/**
+	Called when a chart text zone:label/legend/title/subtitle/footer should be opened.
+	*/
+	virtual void openChartTextObject(const RVNGPropertyList &propList) = 0;
+	/**
+	Called when a chart text zone:legend/title/subtitle/footer should be closed.
+	*/
+	virtual void closeChartTextObject() = 0;
+
+	/**
+	Called when a chart plot area should be opened.
+	*/
+	virtual void openChartPlotArea(const RVNGPropertyList &propList) = 0;
+	/**
+	Called when a chart plot arre should be closed.
+	*/
+	virtual void closeChartPlotArea() = 0;
+	/**
+	 Called when a axis should be add in a plot area
+	 */
+	virtual void insertChartAxis(const RVNGPropertyList &propList) = 0;
+	/**
+	 Called when a serie should be opened (in a plot area)
+	 */
+	virtual void openChartSeries(const librevenge::RVNGPropertyList &propList) = 0;
+	/**
+	 Called when a serie should be closed (in a plot area)
+	 */
+	virtual void closeChartSeries() = 0;
+
 };
 
 }

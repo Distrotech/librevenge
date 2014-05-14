@@ -95,6 +95,17 @@ public:
 	void startNotes(const RVNGPropertyList &propList);
 	void endNotes();
 
+	virtual void defineChartStyle(const RVNGPropertyList &propList);
+	virtual void openChart(const RVNGPropertyList &propList);
+	virtual void closeChart();
+	virtual void openChartTextObject(const RVNGPropertyList &propList);
+	virtual void closeChartTextObject();
+	virtual void openChartPlotArea(const RVNGPropertyList &propList);
+	virtual void closeChartPlotArea();
+	virtual void insertChartAxis(const RVNGPropertyList &propList);
+	virtual void openChartSeries(const librevenge::RVNGPropertyList &propList);
+	virtual void closeChartSeries();
+
 private:
 	RVNGRawPresentationGeneratorImpl *m_impl;
 };

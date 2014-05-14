@@ -257,6 +257,46 @@ void RVNGTextPresentationGenerator::endNotes()
 {
 }
 
+void RVNGTextPresentationGenerator::defineChartStyle(const RVNGPropertyList &)
+{
+}
+
+void RVNGTextPresentationGenerator::openChart(const RVNGPropertyList &)
+{
+}
+
+void RVNGTextPresentationGenerator::closeChart()
+{
+}
+
+void RVNGTextPresentationGenerator::openChartTextObject(const RVNGPropertyList &)
+{
+}
+
+void RVNGTextPresentationGenerator::closeChartTextObject()
+{
+}
+
+void RVNGTextPresentationGenerator::openChartPlotArea(const RVNGPropertyList &)
+{
+}
+
+void RVNGTextPresentationGenerator::closeChartPlotArea()
+{
+}
+
+void RVNGTextPresentationGenerator::insertChartAxis(const RVNGPropertyList &)
+{
+}
+
+void RVNGTextPresentationGenerator::openChartSeries(const librevenge::RVNGPropertyList &)
+{
+}
+
+void RVNGTextPresentationGenerator::closeChartSeries()
+{
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

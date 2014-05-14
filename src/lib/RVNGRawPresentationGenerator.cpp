@@ -356,6 +356,66 @@ void RVNGRawPresentationGenerator::endNotes()
 	RVNG_CALLGRAPH_LEAVE(("endNotes()\n"), CALLBACK_START_NOTES);
 }
 
+void RVNGRawPresentationGenerator::defineChartStyle(const RVNGPropertyList &propList)
+{
+	if (m_impl->m_printCallgraphScore)
+		return;
+
+	m_impl->iprintf("defineChartStyle(%s)\n", propList.getPropString().cstr());
+}
+
+void RVNGRawPresentationGenerator::openChart(const RVNGPropertyList &propList)
+{
+	RVNG_CALLGRAPH_ENTER(("openChart(%s)\n", propList.getPropString().cstr()),
+	                     CALLBACK_OPEN_CHART);
+}
+
+void RVNGRawPresentationGenerator::closeChart()
+{
+	RVNG_CALLGRAPH_LEAVE(("closeChart()\n"), CALLBACK_OPEN_CHART);
+}
+
+void RVNGRawPresentationGenerator::openChartTextObject(const RVNGPropertyList &propList)
+{
+	RVNG_CALLGRAPH_ENTER(("openChartTextObject(%s)\n", propList.getPropString().cstr()),
+	                     CALLBACK_OPEN_CHART_TEXTOBJECT);
+}
+
+void RVNGRawPresentationGenerator::closeChartTextObject()
+{
+	RVNG_CALLGRAPH_LEAVE(("closeChartTextObject()\n"), CALLBACK_OPEN_CHART_TEXTOBJECT);
+}
+
+void RVNGRawPresentationGenerator::openChartPlotArea(const RVNGPropertyList &propList)
+{
+	RVNG_CALLGRAPH_ENTER(("openChartPlotArea(%s)\n", propList.getPropString().cstr()),
+	                     CALLBACK_OPEN_CHART_PLOTAREA);
+}
+
+void RVNGRawPresentationGenerator::closeChartPlotArea()
+{
+	RVNG_CALLGRAPH_LEAVE(("closeChartPlotArea()\n"), CALLBACK_OPEN_CHART_PLOTAREA);
+}
+
+void RVNGRawPresentationGenerator::insertChartAxis(const RVNGPropertyList &propList)
+{
+	if (m_impl->m_printCallgraphScore)
+		return;
+
+	m_impl->iprintf("insertChartAxis(%s)\n", propList.getPropString().cstr());
+}
+
+void RVNGRawPresentationGenerator::openChartSeries(const librevenge::RVNGPropertyList &propList)
+{
+	RVNG_CALLGRAPH_ENTER(("openChartSeries(%s)\n", propList.getPropString().cstr()),
+	                     CALLBACK_OPEN_CHART_SERIE);
+}
+
+void RVNGRawPresentationGenerator::closeChartSeries()
+{
+	RVNG_CALLGRAPH_LEAVE(("closeChartSeries()\n"), CALLBACK_OPEN_CHART_SERIE);
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */
