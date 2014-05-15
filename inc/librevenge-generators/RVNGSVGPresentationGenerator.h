@@ -103,16 +103,16 @@ public:
 	void startNotes(const RVNGPropertyList &propList);
 	void endNotes();
 
-	virtual void defineChartStyle(const RVNGPropertyList &propList);
-	virtual void openChart(const RVNGPropertyList &propList);
-	virtual void closeChart();
-	virtual void openChartTextObject(const RVNGPropertyList &propList);
-	virtual void closeChartTextObject();
-	virtual void openChartPlotArea(const RVNGPropertyList &propList);
-	virtual void closeChartPlotArea();
-	virtual void insertChartAxis(const RVNGPropertyList &propList);
-	virtual void openChartSeries(const librevenge::RVNGPropertyList &propList);
-	virtual void closeChartSeries();
+	void defineChartStyle(const RVNGPropertyList &propList);
+	void openChart(const RVNGPropertyList &propList);
+	void closeChart();
+	void openChartTextObject(const RVNGPropertyList &propList);
+	void closeChartTextObject();
+	void openChartPlotArea(const RVNGPropertyList &propList);
+	void closeChartPlotArea();
+	void insertChartAxis(const RVNGPropertyList &propList);
+	void openChartSeries(const librevenge::RVNGPropertyList &propList);
+	void closeChartSeries();
 
 	void openAnimationSequence(const RVNGPropertyList &propList);
 	void closeAnimationSequence();
