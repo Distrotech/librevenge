@@ -861,6 +861,46 @@ void RVNGSVGPresentationGeneratorImpl::writeStyle(bool /* isClosed */)
 	m_outputSink << "\""; // style
 }
 
+void RVNGSVGPresentationGenerator::openAnimationSequence(const RVNGPropertyList &)
+{
+}
+
+void RVNGSVGPresentationGenerator::closeAnimationSequence()
+{
+}
+
+void RVNGSVGPresentationGenerator::openAnimationGroup(const RVNGPropertyList &)
+{
+}
+
+void RVNGSVGPresentationGenerator::closeAnimationGroup()
+{
+}
+
+void RVNGSVGPresentationGenerator::openAnimationIteration(const RVNGPropertyList &)
+{
+}
+
+void RVNGSVGPresentationGenerator::closeAnimationIteration()
+{
+}
+
+void RVNGSVGPresentationGenerator::insertMotionAnimation(const RVNGPropertyList &)
+{
+}
+
+void RVNGSVGPresentationGenerator::insertColorAnimation(const RVNGPropertyList &)
+{
+}
+
+void RVNGSVGPresentationGenerator::insertAnimation(const RVNGPropertyList &)
+{
+}
+
+void RVNGSVGPresentationGenerator::insertEffect(const RVNGPropertyList &)
+{
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

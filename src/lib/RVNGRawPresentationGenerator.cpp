@@ -424,6 +424,72 @@ void RVNGRawPresentationGenerator::closeChartSeries()
 	RVNG_CALLGRAPH_LEAVE(("closeChartSeries()\n"), CALLBACK_OPEN_CHART_SERIE);
 }
 
+void RVNGRawPresentationGenerator::openAnimationSequence(const RVNGPropertyList &propList)
+{
+	RVNG_CALLGRAPH_ENTER(("openAnimationSequence(%s)\n", propList.getPropString().cstr()),
+	                     CALLBACK_OPEN_ANIMATION_SEQUENCE);
+}
+
+void RVNGRawPresentationGenerator::closeAnimationSequence()
+{
+	RVNG_CALLGRAPH_LEAVE(("closeAnimationSequence()\n"), CALLBACK_OPEN_ANIMATION_SEQUENCE);
+}
+
+void RVNGRawPresentationGenerator::openAnimationGroup(const RVNGPropertyList &propList)
+{
+	RVNG_CALLGRAPH_ENTER(("openAnimationGroup(%s)\n", propList.getPropString().cstr()),
+	                     CALLBACK_OPEN_ANIMATION_GROUP);
+}
+
+void RVNGRawPresentationGenerator::closeAnimationGroup()
+{
+	RVNG_CALLGRAPH_LEAVE(("closeAnimationGroup()\n"), CALLBACK_OPEN_ANIMATION_GROUP);
+}
+
+void RVNGRawPresentationGenerator::openAnimationIteration(const RVNGPropertyList &propList)
+{
+	RVNG_CALLGRAPH_ENTER(("openAnimationIteration(%s)\n", propList.getPropString().cstr()),
+	                     CALLBACK_OPEN_ANIMATION_ITERATION);
+}
+
+void RVNGRawPresentationGenerator::closeAnimationIteration()
+{
+	RVNG_CALLGRAPH_LEAVE(("closeAnimationIteration()\n"), CALLBACK_OPEN_ANIMATION_ITERATION);
+}
+
+void RVNGRawPresentationGenerator::insertMotionAnimation(const RVNGPropertyList &propList)
+{
+	if (m_impl->m_printCallgraphScore)
+		return;
+
+	m_impl->iprintf("insertMotionAnimation(%s)\n", propList.getPropString().cstr());
+}
+
+void RVNGRawPresentationGenerator::insertColorAnimation(const RVNGPropertyList &propList)
+{
+	if (m_impl->m_printCallgraphScore)
+		return;
+
+	m_impl->iprintf("insertColorAnimation(%s)\n", propList.getPropString().cstr());
+}
+
+void RVNGRawPresentationGenerator::insertAnimation(const RVNGPropertyList &propList)
+{
+	if (m_impl->m_printCallgraphScore)
+		return;
+
+	m_impl->iprintf("insertAnimation(%s)\n", propList.getPropString().cstr());
+}
+
+void RVNGRawPresentationGenerator::insertEffect(const RVNGPropertyList &propList)
+{
+	if (m_impl->m_printCallgraphScore)
+		return;
+
+	m_impl->iprintf("insertEffect(%s)\n", propList.getPropString().cstr());
+}
+
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

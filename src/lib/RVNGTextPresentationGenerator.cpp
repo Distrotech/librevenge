@@ -301,6 +301,46 @@ void RVNGTextPresentationGenerator::closeChartSeries()
 {
 }
 
+void RVNGTextPresentationGenerator::openAnimationSequence(const RVNGPropertyList &)
+{
+}
+
+void RVNGTextPresentationGenerator::closeAnimationSequence()
+{
+}
+
+void RVNGTextPresentationGenerator::openAnimationGroup(const RVNGPropertyList &)
+{
+}
+
+void RVNGTextPresentationGenerator::closeAnimationGroup()
+{
+}
+
+void RVNGTextPresentationGenerator::openAnimationIteration(const RVNGPropertyList &)
+{
+}
+
+void RVNGTextPresentationGenerator::closeAnimationIteration()
+{
+}
+
+void RVNGTextPresentationGenerator::insertMotionAnimation(const RVNGPropertyList &)
+{
+}
+
+void RVNGTextPresentationGenerator::insertColorAnimation(const RVNGPropertyList &)
+{
+}
+
+void RVNGTextPresentationGenerator::insertAnimation(const RVNGPropertyList &)
+{
+}
+
+void RVNGTextPresentationGenerator::insertEffect(const RVNGPropertyList &)
+{
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

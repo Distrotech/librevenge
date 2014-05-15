@@ -415,6 +415,39 @@ public:
 	 */
 	virtual void closeChartSeries() = 0;
 
+	// Animations
+
+	/**
+	  Called when a set of animations should be applied one after another.
+	  */
+	virtual void openAnimationSequence(const RVNGPropertyList &propList) = 0;
+	virtual void closeAnimationSequence() = 0;
+
+	/**
+	  Called when a set of animations should be applied in parallel.
+	  */
+	virtual void openAnimationGroup(const RVNGPropertyList &propList) = 0;
+	virtual void closeAnimationGroup() = 0;
+
+	virtual void openAnimationIteration(const RVNGPropertyList &propList) = 0;
+	virtual void closeAnimationIteration() = 0;
+
+	/**
+	  Insert an animation that moves the target object along a specified path.
+	  */
+	virtual void insertMotionAnimation(const RVNGPropertyList &propList) = 0;
+	/**
+	  Insert an animation that changes color of the target object.
+	  */
+	virtual void insertColorAnimation(const RVNGPropertyList &propList) = 0;
+	/**
+	  Insert a generic animation.
+	  */
+	virtual void insertAnimation(const RVNGPropertyList &propList) = 0;
+	/**
+	  Set one-time animation effect on the target object.
+	  */
+	virtual void insertEffect(const RVNGPropertyList &propList) = 0;
 };
 
 }

@@ -107,6 +107,17 @@ public:
 	virtual void openChartSeries(const librevenge::RVNGPropertyList &propList);
 	virtual void closeChartSeries();
 
+	void openAnimationSequence(const RVNGPropertyList &propList);
+	void closeAnimationSequence();
+	void openAnimationGroup(const RVNGPropertyList &propList);
+	void closeAnimationGroup();
+	void openAnimationIteration(const RVNGPropertyList &propList);
+	void closeAnimationIteration();
+	void insertMotionAnimation(const RVNGPropertyList &propList);
+	void insertColorAnimation(const RVNGPropertyList &propList);
+	void insertAnimation(const RVNGPropertyList &propList);
+	void insertEffect(const RVNGPropertyList &propList);
+
 private:
 	RVNGRawPresentationGeneratorImpl *m_impl;
 };
