@@ -726,6 +726,7 @@ void RVNGHTMLTextGenerator::drawEllipse(const librevenge::RVNGPropertyList & /* 
 void RVNGHTMLTextGenerator::drawPolygon(const librevenge::RVNGPropertyList & /* propList */) {}
 void RVNGHTMLTextGenerator::drawPolyline(const librevenge::RVNGPropertyList & /* propList */) {}
 void RVNGHTMLTextGenerator::drawPath(const librevenge::RVNGPropertyList & /* propList */) {}
+void RVNGHTMLTextGenerator::drawConnector(const librevenge::RVNGPropertyList & /* propList */) {}
 
 void RVNGHTMLTextGenerator::insertBinaryObject(const RVNGPropertyList & /* propList */) {}
 void RVNGHTMLTextGenerator::insertEquation(const RVNGPropertyList & /* propList */) {}

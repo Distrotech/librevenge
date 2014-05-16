@@ -166,6 +166,7 @@ void RVNGTextTextGenerator::drawEllipse(const librevenge::RVNGPropertyList & /* 
 void RVNGTextTextGenerator::drawPolygon(const librevenge::RVNGPropertyList & /* propList */) {}
 void RVNGTextTextGenerator::drawPolyline(const librevenge::RVNGPropertyList & /* propList */) {}
 void RVNGTextTextGenerator::drawPath(const librevenge::RVNGPropertyList & /* propList */) {}
+void RVNGTextTextGenerator::drawConnector(const librevenge::RVNGPropertyList & /* propList */) {}
 
 void RVNGTextTextGenerator::insertBinaryObject(const RVNGPropertyList & /* propList */) {}
 void RVNGTextTextGenerator::insertEquation(const RVNGPropertyList & /* propList */) {}
