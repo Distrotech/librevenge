@@ -70,6 +70,9 @@ void RVNGRawTextGenerator::endDocument()
 
 void RVNGRawTextGenerator::definePageStyle(const RVNGPropertyList &propList)
 {
+	if (m_impl->m_printCallgraphScore)
+		return;
+
 	m_impl->iprintf("definePageStyle(%s)\n", propList.getPropString().cstr());
 }
 
@@ -121,6 +124,9 @@ void RVNGRawTextGenerator::closeFooter()
 
 void RVNGRawTextGenerator::defineParagraphStyle(const RVNGPropertyList &propList)
 {
+	if (m_impl->m_printCallgraphScore)
+		return;
+
 	m_impl->iprintf("defineParagraphStyle(%s)\n", propList.getPropString().cstr());
 }
 
@@ -137,6 +143,9 @@ void RVNGRawTextGenerator::closeParagraph()
 
 void RVNGRawTextGenerator::defineCharacterStyle(const RVNGPropertyList &propList)
 {
+	if (m_impl->m_printCallgraphScore)
+		return;
+
 	m_impl->iprintf("defineCharacterStyle(%s)\n", propList.getPropString().cstr());
 }
 
@@ -162,6 +171,9 @@ void RVNGRawTextGenerator::closeLink()
 
 void RVNGRawTextGenerator::defineSectionStyle(const RVNGPropertyList &propList)
 {
+	if (m_impl->m_printCallgraphScore)
+		return;
+
 	m_impl->iprintf("defineSectionStyle(%s)\n", propList.getPropString().cstr());
 }
 
@@ -177,26 +189,41 @@ void RVNGRawTextGenerator::closeSection()
 
 void RVNGRawTextGenerator::insertTab()
 {
+	if (m_impl->m_printCallgraphScore)
+		return;
+
 	m_impl->iprintf("insertTab()\n");
 }
 
 void RVNGRawTextGenerator::insertSpace()
 {
+	if (m_impl->m_printCallgraphScore)
+		return;
+
 	m_impl->iprintf("insertSpace()\n");
 }
 
 void RVNGRawTextGenerator::insertText(const RVNGString &text)
 {
+	if (m_impl->m_printCallgraphScore)
+		return;
+
 	m_impl->iprintf("insertText(text: %s)\n", text.cstr());
 }
 
 void RVNGRawTextGenerator::insertLineBreak()
 {
+	if (m_impl->m_printCallgraphScore)
+		return;
+
 	m_impl->iprintf("insertLineBreak()\n");
 }
 
 void RVNGRawTextGenerator::insertField(const RVNGPropertyList &propList)
 {
+	if (m_impl->m_printCallgraphScore)
+		return;
+
 	m_impl->iprintf("insertField(%s)\n", propList.getPropString().cstr());
 }
 
@@ -307,6 +334,9 @@ void RVNGRawTextGenerator::closeTableCell()
 
 void RVNGRawTextGenerator::insertCoveredTableCell(const RVNGPropertyList &propList)
 {
+	if (m_impl->m_printCallgraphScore)
+		return;
+
 	m_impl->iprintf("insertCoveredTableCell(%s)\n", propList.getPropString().cstr());
 }
 
@@ -339,46 +369,73 @@ void RVNGRawTextGenerator::closeGroup()
 
 void RVNGRawTextGenerator::defineGraphicStyle(const librevenge::RVNGPropertyList &propList)
 {
+	if (m_impl->m_printCallgraphScore)
+		return;
+
 	m_impl->iprintf("defineGraphicStyle(%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawTextGenerator::drawRectangle(const librevenge::RVNGPropertyList &propList)
 {
+	if (m_impl->m_printCallgraphScore)
+		return;
+
 	m_impl->iprintf("drawRectangle(%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawTextGenerator::drawEllipse(const librevenge::RVNGPropertyList &propList)
 {
+	if (m_impl->m_printCallgraphScore)
+		return;
+
 	m_impl->iprintf("drawEllipse(%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawTextGenerator::drawPolygon(const librevenge::RVNGPropertyList &propList)
 {
+	if (m_impl->m_printCallgraphScore)
+		return;
+
 	m_impl->iprintf("drawPolygon(%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawTextGenerator::drawPolyline(const librevenge::RVNGPropertyList &propList)
 {
+	if (m_impl->m_printCallgraphScore)
+		return;
+
 	m_impl->iprintf("drawPolyline(%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawTextGenerator::drawPath(const librevenge::RVNGPropertyList &propList)
 {
+	if (m_impl->m_printCallgraphScore)
+		return;
+
 	m_impl->iprintf("drawPath(%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawTextGenerator::drawConnector(const librevenge::RVNGPropertyList &propList)
 {
+	if (m_impl->m_printCallgraphScore)
+		return;
+
 	m_impl->iprintf("drawConnector(%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawTextGenerator::insertBinaryObject(const RVNGPropertyList &propList)
 {
+	if (m_impl->m_printCallgraphScore)
+		return;
+
 	m_impl->iprintf("insertBinaryObject(%s)\n", propList.getPropString().cstr());
 }
 
 void RVNGRawTextGenerator::insertEquation(const RVNGPropertyList &propList)
 {
+	if (m_impl->m_printCallgraphScore)
+		return;
+
 	m_impl->iprintf("insertEquation(%s)\n", propList.getPropString().cstr());
 }
 
