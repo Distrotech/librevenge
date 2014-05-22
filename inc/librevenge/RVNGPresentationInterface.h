@@ -115,8 +115,8 @@ public:
 	\li \c smil:type Type of the transition.
 	\li \c smil:subtype Subtype of the transition.
 	\li \c smil:dur Duration of the transition.
-	\li \c smil:start-progress The amount of progress through the transition at which to begin execution. Value must be in the range [0.0, 1.0].
-	\li \c smil:end-progress The amount of progress through the transition at which to end execution. Value must be in the range [0.0, 1.0].
+	\li \c smil:startProgress The amount of progress through the transition at which to begin execution. Value must be in the range [0.0, 1.0].
+	\li \c smil:endProgress The amount of progress through the transition at which to end execution. Value must be in the range [0.0, 1.0].
 	  */
 	virtual void setSlideTransition(const RVNGPropertyList &propList) = 0;
 
