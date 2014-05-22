@@ -19,6 +19,7 @@ test_SOURCES = \
 	RVNGDirectoryStreamTest.h \
 	RVNGStreamTest.cpp \
 	RVNGStreamTest.h \
+	RVNGStringTest.cpp \
 	test.cpp
 
 TESTS = $(target_test)
