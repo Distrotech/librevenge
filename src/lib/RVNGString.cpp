@@ -20,6 +20,7 @@
 
 #include "librevenge_internal.h"
 
+#include <cstring>
 #include <string>
 #include <stdarg.h>
 #include <stdio.h>
@@ -83,8 +84,52 @@ public:
 	{
 		return (unsigned long)m_buf.size();
 	}
+	void appendEscapedXML(const char *s, const unsigned long sz);
 	std::string m_buf;
 };
+
+void RVNGStringImpl::appendEscapedXML(const char *s, const unsigned long sz)
+{
+	m_buf.reserve(m_buf.size() + 2 * sz);
+	const char *p = s;
+	const char *const end = p + sz;
+	while (p != end)
+	{
+		const char *const next = librvng_utf8_next_char(p);
+		if (next > end)
+		{
+			RVNG_DEBUG_MSG(("RVNGStringImpl::appendEscapedXML: oops, we have a problem\n"));
+			break;
+		}
+		switch (*p)
+		{
+		case '&':
+			m_buf.append("&amp;");
+			break;
+		case '<':
+			m_buf.append("&lt;");
+			break;
+		case '>':
+			m_buf.append("&gt;");
+			break;
+		case '\'':
+			m_buf.append("&apos;");
+			break;
+		case '"':
+			m_buf.append("&quot;");
+			break;
+		default:
+			while (p != next)
+			{
+				m_buf.append(1, *p);
+				++p;
+			}
+			break;
+		}
+
+		p = next;
+	}
+}
 
 RVNGString::~RVNGString()
 {
@@ -97,54 +142,10 @@ RVNGString::RVNGString() :
 	m_stringImpl->m_buf.reserve(FIRST_BUF_SIZE);
 }
 
-RVNGString::RVNGString(const RVNGString &stringBuf, bool escapeXML) :
+RVNGString::RVNGString(const RVNGString &other) :
 	m_stringImpl(new RVNGStringImpl)
 {
-	if (escapeXML)
-	{
-		size_t tmpLen = stringBuf.m_stringImpl->m_buf.length();
-		m_stringImpl->m_buf.reserve(2*tmpLen);
-		const char *p = stringBuf.cstr();
-		const char *end = p + tmpLen;
-		while (p != end)
-		{
-			const char *next = librvng_utf8_next_char(p);
-			if (next > end)
-			{
-				RVNG_DEBUG_MSG(("RVNGString::RVNGString: oops, we have a problem\n"));
-				break;
-			}
-			switch (*p)
-			{
-			case '&':
-				append("&amp;");
-				break;
-			case '<':
-				append("&lt;");
-				break;
-			case '>':
-				append("&gt;");
-				break;
-			case '\'':
-				append("&apos;");
-				break;
-			case '"':
-				append("&quot;");
-				break;
-			default:
-				while (p != next)
-				{
-					append((*p));
-					p++;
-				}
-				break;
-			}
-
-			p = next;
-		}
-	}
-	else
-		m_stringImpl->m_buf = stringBuf.m_stringImpl->m_buf;
+	m_stringImpl->m_buf = other.m_stringImpl->m_buf;
 }
 
 RVNGString::RVNGString(const char *str) :
@@ -152,6 +153,13 @@ RVNGString::RVNGString(const char *str) :
 {
 	if (str)
 		m_stringImpl->m_buf = str;
+}
+
+RVNGString RVNGString::escapeXML(const RVNGString &s)
+{
+	RVNGString escaped;
+	escaped.appendEscapedXML(s);
+	return escaped;
 }
 
 const char *RVNGString::cstr() const
@@ -205,6 +213,16 @@ void RVNGString::append(const char *s)
 void RVNGString::append(const char c)
 {
 	m_stringImpl->m_buf.append(1, c);
+}
+
+void RVNGString::appendEscapedXML(const RVNGString &s)
+{
+	m_stringImpl->appendEscapedXML(s.cstr(), s.size());
+}
+
+void RVNGString::appendEscapedXML(const char *const s)
+{
+	m_stringImpl->appendEscapedXML(s, std::strlen(s));
 }
 
 void RVNGString::clear()

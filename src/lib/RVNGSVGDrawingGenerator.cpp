@@ -890,8 +890,7 @@ void RVNGSVGDrawingGenerator::closeLink() {}
 
 void RVNGSVGDrawingGenerator::insertText(const RVNGString &str)
 {
-	RVNGString tempUTF8(str, true);
-	m_pImpl->m_outputSink << tempUTF8.cstr();
+	m_pImpl->m_outputSink << RVNGString::escapeXML(str).cstr();
 }
 
 void RVNGSVGDrawingGenerator::insertTab()

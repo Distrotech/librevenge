@@ -635,8 +635,7 @@ void RVNGSVGPresentationGenerator::insertSpace()
 
 void RVNGSVGPresentationGenerator::insertText(const RVNGString &str)
 {
-	RVNGString tempUTF8(str, true);
-	m_impl->m_outputSink << tempUTF8.cstr() << "\n";
+	m_impl->m_outputSink << RVNGString::escapeXML(str).cstr() << "\n";
 }
 
 void RVNGSVGPresentationGenerator::insertLineBreak()

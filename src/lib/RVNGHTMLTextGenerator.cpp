@@ -494,7 +494,7 @@ void RVNGHTMLTextGenerator::openLink(const RVNGPropertyList &propList)
 	}
 	m_impl->output() << "<a ";
 	if (propList["xlink:href"])
-		m_impl->output() << "href=\"" << librevenge::RVNGString(propList["xlink:href"]->getStr(), true).cstr() << "\"";
+		m_impl->output() << "href=\"" << RVNGString::escapeXML(propList["xlink:href"]->getStr()).cstr() << "\"";
 	m_impl->output() << ">";
 }
 
@@ -532,8 +532,7 @@ void RVNGHTMLTextGenerator::insertText(const RVNGString &text)
 {
 	if (m_impl->m_ignore)
 		return;
-	RVNGString tempUTF8(text, true);
-	m_impl->output() << tempUTF8.cstr();
+	m_impl->output() << RVNGString::escapeXML(text).cstr();
 }
 
 void RVNGHTMLTextGenerator::insertSpace()
