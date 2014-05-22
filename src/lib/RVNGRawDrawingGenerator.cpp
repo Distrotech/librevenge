@@ -70,6 +70,14 @@ void RVNGRawDrawingGenerator::setDocumentMetaData(const librevenge::RVNGProperty
 	m_impl->iprintf("setDocumentMetaData(%s)\n", propList.getPropString().cstr());
 }
 
+void RVNGRawDrawingGenerator::defineEmbeddedFont(const librevenge::RVNGPropertyList &propList)
+{
+	if (m_impl->m_printCallgraphScore)
+		return;
+
+	m_impl->iprintf("defineEmbeddedFont(%s)\n", propList.getPropString().cstr());
+}
+
 void RVNGRawDrawingGenerator::startPage(const RVNGPropertyList &propList)
 {
 	RVNG_CALLGRAPH_ENTER(("startPage(%s)\n", propList.getPropString().cstr()), CALLBACK_START_PAGE);

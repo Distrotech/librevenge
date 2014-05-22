@@ -73,6 +73,14 @@ void RVNGRawTextGenerator::definePageStyle(const RVNGPropertyList &propList)
 	m_impl->iprintf("definePageStyle(%s)\n", propList.getPropString().cstr());
 }
 
+void RVNGRawTextGenerator::defineEmbeddedFont(const RVNGPropertyList &propList)
+{
+	if (m_impl->m_printCallgraphScore)
+		return;
+
+	m_impl->iprintf("defineEmbeddedFont(%s)\n", propList.getPropString().cstr());
+}
+
 void RVNGRawTextGenerator::openPageSpan(const RVNGPropertyList &propList)
 {
 	RVNG_CALLGRAPH_ENTER(("openPageSpan(%s)\n", propList.getPropString().cstr()),

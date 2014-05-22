@@ -44,6 +44,8 @@ public:
 	void startDocument(const RVNGPropertyList &propList);
 	void endDocument();
 
+	void defineEmbeddedFont(const RVNGPropertyList &propList);
+
 	void definePageStyle(const RVNGPropertyList &);
 	void openPageSpan(const RVNGPropertyList &propList);
 	void closePageSpan();

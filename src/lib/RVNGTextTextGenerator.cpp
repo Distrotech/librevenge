@@ -72,6 +72,7 @@ void RVNGTextTextGenerator::endDocument()
 }
 
 void RVNGTextTextGenerator::definePageStyle(const RVNGPropertyList &) {}
+void RVNGTextTextGenerator::defineEmbeddedFont(const RVNGPropertyList &) {}
 void RVNGTextTextGenerator::openPageSpan(const RVNGPropertyList & /* propList */) {}
 void RVNGTextTextGenerator::closePageSpan() {}
 void RVNGTextTextGenerator::openHeader(const RVNGPropertyList & /* propList */) {}

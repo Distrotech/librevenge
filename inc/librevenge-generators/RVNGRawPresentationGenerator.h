@@ -36,6 +36,7 @@ public:
 	void startDocument(const RVNGPropertyList &propList);
 	void endDocument();
 	void setDocumentMetaData(const RVNGPropertyList &propList);
+	void defineEmbeddedFont(const RVNGPropertyList &propList);
 	void startSlide(const RVNGPropertyList &propList);
 	void endSlide();
 	void setSlideTransition(const RVNGPropertyList &propList);

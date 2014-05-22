@@ -36,6 +36,7 @@ public:
 	void startDocument(const RVNGPropertyList &propList);
 	void endDocument();
 	void setDocumentMetaData(const RVNGPropertyList &propList);
+	void defineEmbeddedFont(const RVNGPropertyList &propList);
 	void startPage(const RVNGPropertyList &);
 	void endPage();
 	void startLayer(const RVNGPropertyList &);

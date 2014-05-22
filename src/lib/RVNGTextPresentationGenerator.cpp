@@ -55,6 +55,10 @@ void RVNGTextPresentationGenerator::setDocumentMetaData(const RVNGPropertyList &
 {
 }
 
+void RVNGTextPresentationGenerator::defineEmbeddedFont(const RVNGPropertyList &)
+{
+}
+
 void RVNGTextPresentationGenerator::startSlide(const RVNGPropertyList &)
 {
 }

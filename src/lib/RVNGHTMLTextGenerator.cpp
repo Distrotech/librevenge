@@ -406,6 +406,10 @@ void RVNGHTMLTextGenerator::endDocument()
 	m_impl->m_document.append(out.str().c_str());
 }
 
+void RVNGHTMLTextGenerator::defineEmbeddedFont(const RVNGPropertyList &/*propList*/)
+{
+}
+
 void RVNGHTMLTextGenerator::openPageSpan(const RVNGPropertyList & /* propList */)
 {
 	m_impl->m_actualPage++;

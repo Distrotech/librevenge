@@ -213,6 +213,7 @@ void RVNGCSVSpreadsheetGenerator::setDTFormats(RVNGString const &date, RVNGStrin
 }
 
 void RVNGCSVSpreadsheetGenerator::setDocumentMetaData(const RVNGPropertyList &) {}
+void RVNGCSVSpreadsheetGenerator::defineEmbeddedFont(const RVNGPropertyList &) {}
 void RVNGCSVSpreadsheetGenerator::startDocument(const RVNGPropertyList &) {}
 void RVNGCSVSpreadsheetGenerator::endDocument() {}
 

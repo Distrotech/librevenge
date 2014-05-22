@@ -58,6 +58,14 @@ void RVNGRawSpreadsheetGenerator::setDocumentMetaData(const RVNGPropertyList &pr
 	m_impl->iprintf("setDocumentMetaData(%s)\n", propList.getPropString().cstr());
 }
 
+void RVNGRawSpreadsheetGenerator::defineEmbeddedFont(const RVNGPropertyList &propList)
+{
+	if (m_impl->m_printCallgraphScore)
+		return;
+
+	m_impl->iprintf("defineEmbeddedFont(%s)\n", propList.getPropString().cstr());
+}
+
 void RVNGRawSpreadsheetGenerator::startDocument(const RVNGPropertyList &propList)
 {
 	RVNG_CALLGRAPH_ENTER(("startDocument(%s)\n", propList.getPropString().cstr()), CALLBACK_START_DOCUMENT);

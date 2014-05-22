@@ -74,6 +74,7 @@ void RVNGTextSpreadsheetGenerator::setDocumentMetaData(const RVNGPropertyList &p
 void RVNGTextSpreadsheetGenerator::startDocument(const RVNGPropertyList &) {}
 void RVNGTextSpreadsheetGenerator::endDocument() {}
 
+void RVNGTextSpreadsheetGenerator::defineEmbeddedFont(const RVNGPropertyList &) {}
 void RVNGTextSpreadsheetGenerator::defineSheetNumberingStyle(const RVNGPropertyList &) {}
 void RVNGTextSpreadsheetGenerator::openSheet(const RVNGPropertyList &)
 {

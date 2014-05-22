@@ -110,6 +110,10 @@ void RVNGSVGPresentationGenerator::setDocumentMetaData(const RVNGPropertyList &)
 {
 }
 
+void RVNGSVGPresentationGenerator::defineEmbeddedFont(const RVNGPropertyList &)
+{
+}
+
 void RVNGSVGPresentationGenerator::startSlide(const RVNGPropertyList &propList)
 {
 	m_impl->m_outputSink << "<svg:svg version=\"1.1\" xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" ";

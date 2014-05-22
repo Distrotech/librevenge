@@ -48,6 +48,8 @@ public:
 	void startDocument(const RVNGPropertyList &propList);
 	void endDocument();
 
+	void defineEmbeddedFont(const RVNGPropertyList &propList);
+
 	// sheet
 	void defineSheetNumberingStyle(const RVNGPropertyList &propList);
 	void openSheet(const RVNGPropertyList &propList);

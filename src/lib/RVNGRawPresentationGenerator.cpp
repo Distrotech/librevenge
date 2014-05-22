@@ -60,6 +60,14 @@ void RVNGRawPresentationGenerator::setDocumentMetaData(const RVNGPropertyList &p
 	m_impl->iprintf("setDocumentMetaData(%s)\n", propList.getPropString().cstr());
 }
 
+void RVNGRawPresentationGenerator::defineEmbeddedFont(const RVNGPropertyList &propList)
+{
+	if (m_impl->m_printCallgraphScore)
+		return;
+
+	m_impl->iprintf("defineEmbeddedFont(%s)\n", propList.getPropString().cstr());
+}
+
 void RVNGRawPresentationGenerator::startSlide(const RVNGPropertyList &propList)
 {
 	RVNG_CALLGRAPH_ENTER(("startSlide(%s)\n", propList.getPropString().cstr()),

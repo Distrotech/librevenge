@@ -91,6 +91,18 @@ public:
 	*/
 	virtual void setDocumentMetaData(const RVNGPropertyList &propList) = 0;
 
+	/**
+	Called when an embedded font should be defined
+	\param propList A set of properties that specify the font. May contain:
+	\li \c librevenge:name The name of the font
+	\li \c librevenge:mime-type The mimetype of the font
+	\li \c office:binary-data The font data
+	\li \c librevenge:replacement-objects A property list vector containing alternative formats of the font. Every element is a property list containing:
+	    -# \c librevenge:mime-type The mimetype of the replacement object
+	    -# \c office:binary-data The replacement object data
+	*/
+	virtual void defineEmbeddedFont(const RVNGPropertyList &propList) = 0;
+
 	virtual void startSlide(const RVNGPropertyList &propList) = 0;
 
 	virtual void endSlide() = 0;

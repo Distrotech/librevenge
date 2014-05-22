@@ -47,6 +47,7 @@ RVNGTextDrawingGenerator::~RVNGTextDrawingGenerator()
 void RVNGTextDrawingGenerator::startDocument(const RVNGPropertyList & /*propList*/) {}
 void RVNGTextDrawingGenerator::endDocument() {}
 void RVNGTextDrawingGenerator::setDocumentMetaData(const RVNGPropertyList & /*propList*/) {}
+void RVNGTextDrawingGenerator::defineEmbeddedFont(const RVNGPropertyList & /*propList*/) {}
 void RVNGTextDrawingGenerator::startPage(const RVNGPropertyList &) {}
 
 void RVNGTextDrawingGenerator::endPage()

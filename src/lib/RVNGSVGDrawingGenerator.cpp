@@ -557,6 +557,7 @@ RVNGSVGDrawingGenerator::~RVNGSVGDrawingGenerator()
 void RVNGSVGDrawingGenerator::startDocument(const RVNGPropertyList & /*propList*/) {}
 void RVNGSVGDrawingGenerator::endDocument() {}
 void RVNGSVGDrawingGenerator::setDocumentMetaData(const RVNGPropertyList & /*propList*/) {}
+void RVNGSVGDrawingGenerator::defineEmbeddedFont(const RVNGPropertyList & /*propList*/) {}
 
 void RVNGSVGDrawingGenerator::startPage(const RVNGPropertyList &propList)
 {

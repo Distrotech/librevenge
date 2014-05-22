@@ -60,6 +60,7 @@ public:
 	//! defines the format used to export the date and the time (see strftime)
 	void setDTFormats(RVNGString const &date="%m/%d/%y", RVNGString const &time="%H:%M:%S");
 	void setDocumentMetaData(const RVNGPropertyList &propList);
+	void defineEmbeddedFont(const RVNGPropertyList &propList);
 
 	void startDocument(const RVNGPropertyList &propList);
 	void endDocument();
