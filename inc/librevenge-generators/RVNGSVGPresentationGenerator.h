@@ -43,6 +43,9 @@ public:
 	void startSlide(const RVNGPropertyList &propList);
 	void endSlide();
 
+	void startMasterSlide(const RVNGPropertyList &propList);
+	void endMasterSlide();
+
 	void setStyle(const RVNGPropertyList &propList);
 
 	void setSlideTransition(const RVNGPropertyList &propList);

@@ -39,6 +39,8 @@ public:
 	void defineEmbeddedFont(const RVNGPropertyList &propList);
 	void startPage(const RVNGPropertyList &);
 	void endPage();
+	void startMasterPage(const RVNGPropertyList &propList);
+	void endMasterPage();
 	void startLayer(const RVNGPropertyList &);
 	void endLayer();
 	void startEmbeddedGraphics(const RVNGPropertyList &);

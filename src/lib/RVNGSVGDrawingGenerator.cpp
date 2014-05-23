@@ -583,6 +583,15 @@ void RVNGSVGDrawingGenerator::endPage()
 	m_pImpl->m_outputSink.str("");
 }
 
+void RVNGSVGDrawingGenerator::startMasterPage(const RVNGPropertyList &)
+{
+}
+
+void RVNGSVGDrawingGenerator::endMasterPage()
+{
+	// we don't do anything with master pages yet, so just reset the content
+	m_pImpl->m_outputSink.str("");
+}
 
 void RVNGSVGDrawingGenerator::startLayer(const RVNGPropertyList &propList)
 {

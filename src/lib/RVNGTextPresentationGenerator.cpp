@@ -69,6 +69,16 @@ void RVNGTextPresentationGenerator::endSlide()
 	m_impl->m_stream.str("");
 }
 
+void RVNGTextPresentationGenerator::startMasterSlide(const RVNGPropertyList &)
+{
+}
+
+void RVNGTextPresentationGenerator::endMasterSlide()
+{
+	// we don't do anything with master slides yet, so just reset the content
+	m_impl->m_stream.str("");
+}
+
 void RVNGTextPresentationGenerator::setSlideTransition(const RVNGPropertyList &)
 {
 }

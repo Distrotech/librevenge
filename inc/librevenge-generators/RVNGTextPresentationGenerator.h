@@ -36,6 +36,8 @@ public:
 	void defineEmbeddedFont(const RVNGPropertyList &propList);
 	void startSlide(const RVNGPropertyList &propList);
 	void endSlide();
+	void startMasterSlide(const RVNGPropertyList &propList);
+	void endMasterSlide();
 	void setSlideTransition(const RVNGPropertyList &propList);
 	void startLayer(const RVNGPropertyList &propList);
 	void endLayer();

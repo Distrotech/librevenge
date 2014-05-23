@@ -79,6 +79,17 @@ void RVNGRawPresentationGenerator::endSlide()
 	RVNG_CALLGRAPH_LEAVE(("endSlide()\n"), CALLBACK_START_SLIDE);
 }
 
+void RVNGRawPresentationGenerator::startMasterSlide(const RVNGPropertyList &propList)
+{
+	RVNG_CALLGRAPH_ENTER(("startMasterSlide(%s)\n", propList.getPropString().cstr()),
+	                     CALLBACK_START_MASTER_SLIDE);
+}
+
+void RVNGRawPresentationGenerator::endMasterSlide()
+{
+	RVNG_CALLGRAPH_LEAVE(("endMasterSlide()\n"), CALLBACK_START_MASTER_SLIDE);
+}
+
 void RVNGRawPresentationGenerator::setSlideTransition(const RVNGPropertyList &propList)
 {
 	if (m_impl->m_printCallgraphScore)

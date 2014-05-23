@@ -131,6 +131,16 @@ void RVNGSVGPresentationGenerator::endSlide()
 	m_impl->m_outputSink.str("");
 }
 
+void RVNGSVGPresentationGenerator::startMasterSlide(const RVNGPropertyList &)
+{
+}
+
+void RVNGSVGPresentationGenerator::endMasterSlide()
+{
+	// we don't do anything with master slides yet, so just reset the content
+	m_impl->m_outputSink.str("");
+}
+
 void RVNGSVGPresentationGenerator::setSlideTransition(const RVNGPropertyList &)
 {
 }

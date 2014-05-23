@@ -112,6 +112,10 @@ public:
 
 	virtual void endPage() = 0;
 
+	virtual void startMasterPage(const RVNGPropertyList &propList) = 0;
+
+	virtual void endMasterPage() = 0;
+
 	virtual void setStyle(const RVNGPropertyList &propList) = 0;
 
 	virtual void startLayer(const RVNGPropertyList &propList) = 0;

@@ -88,6 +88,16 @@ void RVNGRawDrawingGenerator::endPage()
 	RVNG_CALLGRAPH_LEAVE(("endPage\n"), CALLBACK_START_PAGE);
 }
 
+void RVNGRawDrawingGenerator::startMasterPage(const RVNGPropertyList &propList)
+{
+	RVNG_CALLGRAPH_ENTER(("startMasterPage(%s)\n", propList.getPropString().cstr()), CALLBACK_START_MASTER_PAGE);
+}
+
+void RVNGRawDrawingGenerator::endMasterPage()
+{
+	RVNG_CALLGRAPH_LEAVE(("endMasterPage\n"), CALLBACK_START_MASTER_PAGE);
+}
+
 void RVNGRawDrawingGenerator::startLayer(const RVNGPropertyList &propList)
 {
 	RVNG_CALLGRAPH_ENTER(("startLayer (%s)\n", propList.getPropString().cstr()), CALLBACK_START_LAYER);

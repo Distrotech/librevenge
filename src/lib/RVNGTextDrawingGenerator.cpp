@@ -56,6 +56,14 @@ void RVNGTextDrawingGenerator::endPage()
 	m_impl->m_stream.str("");
 }
 
+void RVNGTextDrawingGenerator::startMasterPage(const RVNGPropertyList &) {}
+
+void RVNGTextDrawingGenerator::endMasterPage()
+{
+	// we don't do anything with master pages yet, so just reset the content
+	m_impl->m_stream.str("");
+}
+
 void RVNGTextDrawingGenerator::startLayer(const RVNGPropertyList &) {}
 void RVNGTextDrawingGenerator::endLayer() {}
 void RVNGTextDrawingGenerator::startEmbeddedGraphics(const RVNGPropertyList &) {}

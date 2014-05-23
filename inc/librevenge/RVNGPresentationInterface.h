@@ -107,6 +107,10 @@ public:
 
 	virtual void endSlide() = 0;
 
+	virtual void startMasterSlide(const RVNGPropertyList &propList) = 0;
+
+	virtual void endMasterSlide() = 0;
+
 	virtual void setStyle(const RVNGPropertyList &propList) = 0;
 
 	/**
