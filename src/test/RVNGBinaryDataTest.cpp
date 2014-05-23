@@ -101,19 +101,19 @@ void RVNGBinaryDataTest::testConstruction()
 	const unsigned char input[] = "hello world";
 	const size_t len = RVNG_NUM_ELEMENTS(input);
 	RVNGBinaryData data(input, len);
-	CPPUNIT_ASSERT_EQUAL(len, data.size());
+	CPPUNIT_ASSERT_EQUAL(static_cast<unsigned long>(len), data.size());
 	CPPUNIT_ASSERT(!data.empty());
 	CPPUNIT_ASSERT(equal(input, input + len, data.getDataBuffer()));
 
 	{
 		// copy construction
 		RVNGBinaryData copy(data);
-		CPPUNIT_ASSERT_EQUAL(len, copy.size());
+		CPPUNIT_ASSERT_EQUAL(static_cast<unsigned long>(len), copy.size());
 		CPPUNIT_ASSERT(equal(input, input + len, copy.getDataBuffer()));
 	}
 	// COW: destruction of a copy does not touch the original
 	// this should be tested under valgrind
-	CPPUNIT_ASSERT_EQUAL(len, data.size());
+	CPPUNIT_ASSERT_EQUAL(static_cast<unsigned long>(len), data.size());
 	CPPUNIT_ASSERT(equal(input, input + len, data.getDataBuffer()));
 
 	// assignment
@@ -121,7 +121,7 @@ void RVNGBinaryDataTest::testConstruction()
 	CPPUNIT_ASSERT_EQUAL(0ul, assign.size());
 	CPPUNIT_ASSERT(assign.empty());
 	assign = data;
-	CPPUNIT_ASSERT_EQUAL(len, assign.size());
+	CPPUNIT_ASSERT_EQUAL(static_cast<unsigned long>(len), assign.size());
 	CPPUNIT_ASSERT(!assign.empty());
 	CPPUNIT_ASSERT(equal(input, input + len, assign.getDataBuffer()));
 
@@ -148,7 +148,7 @@ void RVNGBinaryDataTest::testAppend()
 	CPPUNIT_ASSERT_EQUAL(static_cast<unsigned char>('h'), data.getDataBuffer()[0]);
 
 	data2.append(input + 1, len - 1);
-	CPPUNIT_ASSERT_EQUAL(len, data2.size());
+	CPPUNIT_ASSERT_EQUAL(static_cast<unsigned long>(len), data2.size());
 	CPPUNIT_ASSERT(equal(input, input + len, data2.getDataBuffer()));
 	// again, the original is unchanged
 	CPPUNIT_ASSERT_EQUAL(1ul, data.size());

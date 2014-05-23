@@ -118,27 +118,27 @@ void RVNGStringTest::testConstruction()
 	const char input[] = "hello world";
 	const size_t len = RVNG_NUM_ELEMENTS(input) - 1;
 	RVNGString str(input);
-	CPPUNIT_ASSERT_EQUAL(len, str.size());
+	CPPUNIT_ASSERT_EQUAL(static_cast<unsigned long>(len), str.size());
 	CPPUNIT_ASSERT_EQUAL(int(len), str.len());
 	CPPUNIT_ASSERT(equal(input, input + len, str.cstr()));
 
 	// copy construction
 	RVNGString copy(str);
-	CPPUNIT_ASSERT_EQUAL(len, copy.size());
+	CPPUNIT_ASSERT_EQUAL(static_cast<unsigned long>(len), copy.size());
 	CPPUNIT_ASSERT_EQUAL(int(len), copy.len());
 	CPPUNIT_ASSERT(equal(input, input + len, copy.cstr()));
 
 	// assignment
 	RVNGString assign;
 	assign = str;
-	CPPUNIT_ASSERT_EQUAL(len, assign.size());
+	CPPUNIT_ASSERT_EQUAL(static_cast<unsigned long>(len), assign.size());
 	CPPUNIT_ASSERT_EQUAL(int(len), assign.len());
 	CPPUNIT_ASSERT(equal(input, input + len, assign.cstr()));
 
 	// assignment from C string
 	RVNGString assign2;
 	assign2 = input;
-	CPPUNIT_ASSERT_EQUAL(len, assign.size());
+	CPPUNIT_ASSERT_EQUAL(static_cast<unsigned long>(len), assign.size());
 	CPPUNIT_ASSERT_EQUAL(int(len), assign.len());
 	CPPUNIT_ASSERT(equal(input, input + len, assign.cstr()));
 }
@@ -164,7 +164,7 @@ void RVNGStringTest::testAppend()
 
 	// appending a C string
 	str2.append(input + 1);
-	CPPUNIT_ASSERT_EQUAL(len, str2.size());
+	CPPUNIT_ASSERT_EQUAL(static_cast<unsigned long>(len), str2.size());
 	CPPUNIT_ASSERT_EQUAL(int(len), str2.len());
 	CPPUNIT_ASSERT(equal(input, input + len, str2.cstr()));
 }
