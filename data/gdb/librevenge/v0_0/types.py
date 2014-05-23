@@ -6,11 +6,6 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
-# Major Contributor(s):
-# Copyright (C) 2014 David Tardon (dtardon@redhat.com)
-#
-# For minor contributions see the git repository.
-#
 # Alternatively, the contents of this file may be used under the terms
 # of the GNU Lesser General Public License Version 2.1 or later
 # (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are

@@ -1,23 +1,18 @@
 # -*- tab-width: 4; indent-tabs-mode: nil; py-indent-offset: 4 -*-
-# Printer interface adaptor.
+# librevenge
+# Version: MPL 2.0 / LGPLv2.1+
 #
-# Copyright (C) 2012 Red Hat, Inc., David Tardon <dtardon@redhat.com>
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
-# This file is part of boost-gdb-printers.
+# Alternatively, the contents of this file may be used under the terms
+# of the GNU Lesser General Public License Version 2.1 or later
+# (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
+# applicable instead of those above.
 #
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Printer interface adaptor.
 
 from collections import Mapping
 import gdb
