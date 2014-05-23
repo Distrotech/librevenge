@@ -41,19 +41,39 @@ void implTestEscapeXML(const char *const input, const char *const expected)
 {
 	const size_t len = strlen(expected);
 
-	// appending a C string
-	RVNGString str;
-	str.appendEscapedXML(input);
-	CPPUNIT_ASSERT_EQUAL(static_cast<unsigned long>(len), str.size());
-	CPPUNIT_ASSERT_EQUAL(int(len), str.len());
-	CPPUNIT_ASSERT(equal(expected, expected + len, str.cstr()));
+	{
+		// appending a C string
+		RVNGString str;
+		str.appendEscapedXML(input);
+		CPPUNIT_ASSERT_EQUAL(static_cast<unsigned long>(len), str.size());
+		CPPUNIT_ASSERT_EQUAL(int(len), str.len());
+		CPPUNIT_ASSERT(equal(expected, expected + len, str.cstr()));
+	}
 
-	// appending a RVNGString
-	RVNGString str2;
-	str2.appendEscapedXML(RVNGString(input));
-	CPPUNIT_ASSERT_EQUAL(static_cast<unsigned long>(len), str2.size());
-	CPPUNIT_ASSERT_EQUAL(int(len), str2.len());
-	CPPUNIT_ASSERT(equal(expected, expected + len, str2.cstr()));
+	{
+		// appending a RVNGString
+		RVNGString str;
+		str.appendEscapedXML(RVNGString(input));
+		CPPUNIT_ASSERT_EQUAL(static_cast<unsigned long>(len), str.size());
+		CPPUNIT_ASSERT_EQUAL(int(len), str.len());
+		CPPUNIT_ASSERT(equal(expected, expected + len, str.cstr()));
+	}
+
+	{
+		// creating from a C string
+		RVNGString str(RVNGString::escapeXML(input));
+		CPPUNIT_ASSERT_EQUAL(static_cast<unsigned long>(len), str.size());
+		CPPUNIT_ASSERT_EQUAL(int(len), str.len());
+		CPPUNIT_ASSERT(equal(expected, expected + len, str.cstr()));
+	}
+
+	{
+		// creating from a RVNGString
+		RVNGString str(RVNGString::escapeXML(RVNGString(input)));
+		CPPUNIT_ASSERT_EQUAL(static_cast<unsigned long>(len), str.size());
+		CPPUNIT_ASSERT_EQUAL(int(len), str.len());
+		CPPUNIT_ASSERT(equal(expected, expected + len, str.cstr()));
+	}
 }
 
 }
