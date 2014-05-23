@@ -162,6 +162,13 @@ RVNGString RVNGString::escapeXML(const RVNGString &s)
 	return escaped;
 }
 
+RVNGString RVNGString::escapeXML(const char *const s)
+{
+	RVNGString escaped;
+	escaped.appendEscapedXML(s);
+	return escaped;
+}
+
 const char *RVNGString::cstr() const
 {
 	return m_stringImpl->m_buf.c_str();
