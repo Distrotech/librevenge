@@ -1,8 +1,9 @@
 librevenge is a base library for writing document import filters. It has
 interfaces for text documents, vector graphics, spreadsheets and presentations.
 
-librevenge requires boost, zlib and doxygen (optional) to build. Most up to date
-code is available from Git repository at sourceforge.net
+librevenge requires boost, zlib (optional, for the stream library) and
+doxygen (optional) to build. Most up to date code is available from Git
+repository at sourceforge.net
 (https://sourceforge.net/p/libwpd/librevenge/). See
 https://sourceforge.net/p/libwpd/wiki/librevenge/ for more information.
 
