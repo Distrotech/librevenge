@@ -20,6 +20,8 @@
 #ifndef RVNGSTREAMIMPLEMENTATION_H
 #define RVNGSTREAMIMPLEMENTATION_H
 
+#include "librevenge-stream-api.h"
+
 #include "RVNGStream.h"
 
 namespace librevenge
@@ -27,7 +29,7 @@ namespace librevenge
 
 class RVNGFileStreamPrivate;
 
-class RVNGFileStream: public RVNGInputStream
+class REVENGE_STREAM_API RVNGFileStream: public RVNGInputStream
 {
 public:
 	explicit RVNGFileStream(const char *filename);
@@ -53,7 +55,7 @@ private:
 
 class RVNGStringStreamPrivate;
 
-class RVNGStringStream: public RVNGInputStream
+class REVENGE_STREAM_API RVNGStringStream: public RVNGInputStream
 {
 public:
 	RVNGStringStream(const unsigned char *data, const unsigned int dataSize);

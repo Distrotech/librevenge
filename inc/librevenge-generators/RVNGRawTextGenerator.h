@@ -21,6 +21,8 @@
 #ifndef RVNGRAWTEXTGENERATOR_H
 #define RVNGRAWTEXTGENERATOR_H
 
+#include "librevenge-generators-api.h"
+
 #include <librevenge/librevenge.h>
 #include <librevenge-stream/librevenge-stream.h>
 
@@ -29,7 +31,7 @@ namespace librevenge
 
 struct RVNGRawTextGeneratorImpl;
 
-class RVNGRawTextGenerator : public RVNGTextInterface
+class REVENGE_GENERATORS_API RVNGRawTextGenerator : public RVNGTextInterface
 {
 	// disable copying
 	RVNGRawTextGenerator(const RVNGRawTextGenerator &other);

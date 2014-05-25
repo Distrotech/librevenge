@@ -19,6 +19,9 @@
 
 #ifndef RVNGPROPERTY_H
 #define RVNGPROPERTY_H
+
+#include "librevenge-api.h"
+
 #include "RVNGString.h"
 
 namespace librevenge
@@ -26,7 +29,7 @@ namespace librevenge
 
 enum RVNGUnit { RVNG_INCH, RVNG_PERCENT, RVNG_POINT, RVNG_TWIP, RVNG_GENERIC, RVNG_UNIT_ERROR };
 
-class RVNGProperty
+class REVENGE_API RVNGProperty
 {
 public:
 	virtual ~RVNGProperty();
@@ -38,7 +41,7 @@ public:
 	virtual RVNGProperty *clone() const = 0;
 };
 
-class RVNGPropertyFactory
+class REVENGE_API RVNGPropertyFactory
 {
 public:
 	static RVNGProperty *newStringProp(const RVNGString &str);

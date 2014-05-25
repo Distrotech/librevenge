@@ -20,6 +20,9 @@
 
 #ifndef RVNGPROPERTYLIST_H
 #define RVNGPROPERTYLIST_H
+
+#include "librevenge-api.h"
+
 #include "RVNGProperty.h"
 
 namespace librevenge
@@ -32,7 +35,7 @@ class RVNGPropertyListImpl;
 class RVNGPropertyListIterImpl;
 class RVNGPropertyListVector;
 
-class RVNGPropertyList
+class REVENGE_API RVNGPropertyList
 {
 public:
 	RVNGPropertyList();

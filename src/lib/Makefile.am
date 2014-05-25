@@ -19,6 +19,7 @@ lib_LTLIBRARIES = librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.la
 librevenge_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_includedir = $(includedir)/librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@/librevenge
 librevenge_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_include_HEADERS = \
 	$(top_srcdir)/inc/librevenge/librevenge.h \
+	$(top_srcdir)/inc/librevenge/librevenge-api.h \
 	$(top_srcdir)/inc/librevenge/RVNGBinaryData.h \
 	$(top_srcdir)/inc/librevenge/RVNGDrawingInterface.h \
 	$(top_srcdir)/inc/librevenge/RVNGPresentationInterface.h \
@@ -33,6 +34,7 @@ librevenge_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_include_HEADERS = \
 
 AM_CXXFLAGS = -I$(top_srcdir)/inc $(DEBUG_CXXFLAGS) $(ZLIB_CFLAGS) $(BOOST_CFLAGS)
 
+librevenge_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_CPPFLAGS = -DLIBREVENGE_BUILD
 librevenge_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_LIBADD  = @LIBREVENGE_WIN32_RESOURCE@
 librevenge_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_DEPENDENCIES = @LIBREVENGE_WIN32_RESOURCE@
 librevenge_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic $(no_undefined)
@@ -68,6 +70,7 @@ lib_LTLIBRARIES += librevenge-generators-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSIO
 librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_includedir = $(includedir)/librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@/librevenge-generators
 librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_include_HEADERS = \
 	$(top_srcdir)/inc/librevenge-generators/librevenge-generators.h \
+	$(top_srcdir)/inc/librevenge-generators/librevenge-generators-api.h \
 	$(top_srcdir)/inc/librevenge-generators/RVNGCSVSpreadsheetGenerator.h \
 	$(top_srcdir)/inc/librevenge-generators/RVNGHTMLTextGenerator.h \
 	$(top_srcdir)/inc/librevenge-generators/RVNGRawDrawingGenerator.h \
@@ -80,6 +83,7 @@ librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_include_HEADERS 
 	$(top_srcdir)/inc/librevenge-generators/RVNGTextSpreadsheetGenerator.h \
 	$(top_srcdir)/inc/librevenge-generators/RVNGTextTextGenerator.h
 
+librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_CPPFLAGS = -DLIBREVENGE_GENERATORS_BUILD
 librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_LIBADD  = ./librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.la @LIBREVENGE_GENERATORS_WIN32_RESOURCE@
 librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_DEPENDENCIES = ./librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.la @LIBREVENGE_GENERATORS_WIN32_RESOURCE@
 librevenge_generators_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_LDFLAGS = $(version_info) -export-dynamic $(no_undefined)
@@ -123,10 +127,12 @@ lib_LTLIBRARIES += librevenge-stream-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.l
 librevenge_stream_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_includedir = $(includedir)/librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@/librevenge-stream
 librevenge_stream_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_include_HEADERS = \
 	$(top_srcdir)/inc/librevenge-stream/librevenge-stream.h \
+	$(top_srcdir)/inc/librevenge-stream/librevenge-stream-api.h \
 	$(top_srcdir)/inc/librevenge-stream/RVNGDirectoryStream.h \
 	$(top_srcdir)/inc/librevenge-stream/RVNGStream.h \
 	$(top_srcdir)/inc/librevenge-stream/RVNGStreamImplementation.h
 
+librevenge_stream_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_CPPFLAGS  = -DLIBREVENGE_STREAM_BUILD
 librevenge_stream_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_LIBADD  = $(ZLIB_LIBS) $(BOOST_FILESYSTEM_LIB) @LIBREVENGE_STREAM_WIN32_RESOURCE@
 librevenge_stream_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_DEPENDENCIES = @LIBREVENGE_STREAM_WIN32_RESOURCE@
 librevenge_stream_@RVNG_MAJOR_VERSION@_@RVNG_MINOR_VERSION@_la_LDFLAGS = $(BOOST_LDGFLAGS) $(version_info) -export-dynamic $(no_undefined)

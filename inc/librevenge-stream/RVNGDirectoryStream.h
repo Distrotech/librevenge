@@ -22,6 +22,8 @@
 #ifndef RVNGDIRECTORYSTREAM_H_INCLUDED
 #define RVNGDIRECTORYSTREAM_H_INCLUDED
 
+#include "librevenge-stream-api.h"
+
 #include "RVNGStream.h"
 
 namespace librevenge
@@ -29,7 +31,7 @@ namespace librevenge
 
 struct RVNGDirectoryStreamImpl;
 
-class RVNGDirectoryStream : public RVNGInputStream
+class REVENGE_STREAM_API RVNGDirectoryStream : public RVNGInputStream
 {
 	// disable copying
 	RVNGDirectoryStream(const RVNGDirectoryStream &);

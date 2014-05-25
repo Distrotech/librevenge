@@ -21,6 +21,8 @@
 #ifndef RVNGTEXTSPREADSHEETGENERATOR_H
 #define RVNGTEXTSPREADSHEETGENERATOR_H
 
+#include "librevenge-generators-api.h"
+
 #include <librevenge/librevenge.h>
 #include <librevenge-stream/librevenge-stream.h>
 
@@ -32,7 +34,7 @@ struct RVNGTextSpreadsheetGeneratorImpl;
   *
   * See \c ::librevenge::RVNGSpreadsheetInterface for documentation of the basic interface.
   */
-class RVNGTextSpreadsheetGenerator : public RVNGSpreadsheetInterface
+class REVENGE_GENERATORS_API RVNGTextSpreadsheetGenerator : public RVNGSpreadsheetInterface
 {
 	//! unimplemented copy constructor to prevent copy
 	RVNGTextSpreadsheetGenerator(const RVNGTextSpreadsheetGenerator &other);

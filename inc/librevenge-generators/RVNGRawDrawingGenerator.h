@@ -22,6 +22,8 @@
 #ifndef RVNGRAWDRAWINGGENERATOR_H
 #define RVNGRAWDRAWINGGENERATOR_H
 
+#include "librevenge-generators-api.h"
+
 #include <librevenge-stream/librevenge-stream.h>
 #include <librevenge/librevenge.h>
 
@@ -30,7 +32,7 @@ namespace librevenge
 
 struct RVNGRawDrawingGeneratorImpl;
 
-class RVNGRawDrawingGenerator : public RVNGDrawingInterface
+class REVENGE_GENERATORS_API RVNGRawDrawingGenerator : public RVNGDrawingInterface
 {
 	// disable copying
 	RVNGRawDrawingGenerator(const RVNGRawDrawingGenerator &other);

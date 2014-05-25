@@ -20,7 +20,10 @@
 #ifndef RVNGBINARYDATA_H
 #define RVNGBINARYDATA_H
 
+#include "librevenge-api.h"
+
 #include <librevenge-stream/librevenge-stream.h>
+
 #include "RVNGString.h"
 
 namespace librevenge
@@ -28,7 +31,7 @@ namespace librevenge
 
 struct RVNGBinaryDataImpl;
 
-class RVNGBinaryData
+class REVENGE_API RVNGBinaryData
 {
 public:
 	RVNGBinaryData();

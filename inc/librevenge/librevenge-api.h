@@ -7,7 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * Major Contributor(s):
- * Copyright (C) 2012 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * Copyright (C) 2002 William Lachance (wrlach@gmail.com)
+ * Copyright (C) 2002 Marc Maurer (uwog@uwog.net)
  *
  * For minor contributions see the git repository.
  *
@@ -17,38 +18,19 @@
  * applicable instead of those above.
  */
 
-#ifndef RVNGSTRINGVECTOR_H
-#define RVNGSTRINGVECTOR_H
+#ifndef INCLUDED_LIBREVENGE_LIBREVENGE_API_H
+#define INCLUDED_LIBREVENGE_LIBREVENGE_API_H
 
-#include "librevenge-api.h"
+#ifdef DLL_EXPORT
+#ifdef LIBREVENGE_BUILD
+#define REVENGE_API __declspec(dllexport)
+#else
+#define REVENGE_API __declspec(dllimport)
+#endif
+#else
+#define REVENGE_API
+#endif
 
-#include "RVNGString.h"
+#endif /* INCLUDED_LIBREVENGE_LIBREVENGE_API_H */
 
-namespace librevenge
-{
-
-class RVNGStringVectorImpl;
-
-class REVENGE_API RVNGStringVector
-{
-public:
-	RVNGStringVector();
-	RVNGStringVector(const RVNGStringVector &vec);
-	~RVNGStringVector();
-
-	RVNGStringVector &operator=(const RVNGStringVector &vec);
-
-	unsigned size() const;
-	bool empty() const;
-	const RVNGString &operator[](unsigned idx) const;
-	void append(const RVNGString &str);
-	void clear();
-
-private:
-	RVNGStringVectorImpl *m_pImpl;
-};
-
-}
-
-#endif /* RVNGSTRINGVECTOR_H */
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

@@ -15,6 +15,8 @@
 #ifndef RVNGTEXTDRAWINGGENERATOR_H
 #define RVNGTEXTDRAWINGGENERATOR_H
 
+#include "librevenge-generators-api.h"
+
 #include <librevenge-stream/librevenge-stream.h>
 #include <librevenge/librevenge.h>
 
@@ -23,7 +25,7 @@ namespace librevenge
 
 struct RVNGTextDrawingGeneratorImpl;
 
-class RVNGTextDrawingGenerator : public RVNGDrawingInterface
+class REVENGE_GENERATORS_API RVNGTextDrawingGenerator : public RVNGDrawingInterface
 {
 	// disable copying
 	RVNGTextDrawingGenerator(const RVNGTextDrawingGenerator &other);

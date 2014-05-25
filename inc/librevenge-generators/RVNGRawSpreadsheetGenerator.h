@@ -21,6 +21,8 @@
 #ifndef RVNGRAWSPREADSHEETGENERATOR_H
 #define RVNGRAWSPREADSHEETGENERATOR_H
 
+#include "librevenge-generators-api.h"
+
 #include <librevenge/librevenge.h>
 #include <librevenge-stream/librevenge-stream.h>
 
@@ -29,7 +31,7 @@ namespace librevenge
 
 struct RVNGRawSpreadsheetGeneratorImpl;
 
-class RVNGRawSpreadsheetGenerator : public RVNGSpreadsheetInterface
+class REVENGE_GENERATORS_API RVNGRawSpreadsheetGenerator : public RVNGSpreadsheetInterface
 {
 	// disable copying
 	RVNGRawSpreadsheetGenerator(const RVNGRawSpreadsheetGenerator &other);

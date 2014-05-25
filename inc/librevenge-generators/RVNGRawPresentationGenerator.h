@@ -15,6 +15,8 @@
 #ifndef RVNGRAWPRESENTATIONGENERATOR_H
 #define RVNGRAWPRESENTATIONGENERATOR_H
 
+#include "librevenge-generators-api.h"
+
 #include <librevenge/librevenge.h>
 #include <librevenge-stream/librevenge-stream.h>
 
@@ -23,7 +25,7 @@ namespace librevenge
 
 struct RVNGRawPresentationGeneratorImpl;
 
-class RVNGRawPresentationGenerator : public RVNGPresentationInterface
+class REVENGE_GENERATORS_API RVNGRawPresentationGenerator : public RVNGPresentationInterface
 {
 	// disable copying
 	RVNGRawPresentationGenerator(const RVNGRawPresentationGenerator &other);

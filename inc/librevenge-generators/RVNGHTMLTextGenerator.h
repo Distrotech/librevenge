@@ -21,6 +21,8 @@
 #ifndef RVNGHTMLTEXTGENERATOR_H
 #define RVNGHTMLTEXTGENERATOR_H
 
+#include "librevenge-generators-api.h"
+
 #include <librevenge/librevenge.h>
 #include <librevenge-stream/librevenge-stream.h>
 
@@ -29,7 +31,7 @@ namespace librevenge
 
 struct RVNGHTMLTextGeneratorImpl;
 
-class RVNGHTMLTextGenerator : public RVNGTextInterface
+class REVENGE_GENERATORS_API RVNGHTMLTextGenerator : public RVNGTextInterface
 {
 public:
 	explicit RVNGHTMLTextGenerator(RVNGString &document);

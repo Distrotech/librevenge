@@ -21,6 +21,8 @@
 #ifndef RVNGCSVSPREADSHEETGENERATOR_H
 #define RVNGCSVSPREADSHEETGENERATOR_H
 
+#include "librevenge-generators-api.h"
+
 #include <librevenge/librevenge.h>
 #include <librevenge-stream/librevenge-stream.h>
 
@@ -32,7 +34,7 @@ struct RVNGCSVSpreadsheetGeneratorImpl;
   *
   * See \c ::librevenge::RVNGSpreadsheetInterface for documentation of the basic interface.
   */
-class RVNGCSVSpreadsheetGenerator : public RVNGSpreadsheetInterface
+class REVENGE_GENERATORS_API RVNGCSVSpreadsheetGenerator : public RVNGSpreadsheetInterface
 {
 	//! unimplemented copy constructor to prevent copy
 	RVNGCSVSpreadsheetGenerator(const RVNGCSVSpreadsheetGenerator &other);

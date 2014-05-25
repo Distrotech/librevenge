@@ -21,6 +21,8 @@
 #ifndef RVNGSVGDRAWINGGENERATOR_H
 #define RVNGSVGDRAWINGGENERATOR_H
 
+#include "librevenge-api.h"
+
 #include "RVNGDrawingInterface.h"
 #include "RVNGStringVector.h"
 
@@ -29,7 +31,7 @@ namespace librevenge
 
 struct RVNGSVGDrawingGeneratorPrivate;
 
-class RVNGSVGDrawingGenerator : public RVNGDrawingInterface
+class REVENGE_API RVNGSVGDrawingGenerator : public RVNGDrawingInterface
 {
 public:
 	RVNGSVGDrawingGenerator(RVNGStringVector &vec, const RVNGString &nmspace);

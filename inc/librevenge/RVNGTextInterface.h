@@ -22,6 +22,8 @@
 #ifndef RVNGTEXTINTERFACE_H
 #define RVNGTEXTINTERFACE_H
 
+#include "librevenge-api.h"
+
 #include "RVNGPropertyList.h"
 #include "RVNGPropertyListVector.h"
 
@@ -36,7 +38,7 @@ definitions listed here.
 
 class RVNGInputStream;
 
-class RVNGTextInterface
+class REVENGE_API RVNGTextInterface
 {
 public:
 	virtual ~RVNGTextInterface() {}

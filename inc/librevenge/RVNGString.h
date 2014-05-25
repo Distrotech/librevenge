@@ -21,12 +21,14 @@
 #ifndef RVNGSTRING_H
 #define RVNGSTRING_H
 
+#include "librevenge-api.h"
+
 namespace librevenge
 {
 
 class RVNGStringImpl;
 
-class RVNGString
+class REVENGE_API RVNGString
 {
 public:
 	RVNGString();

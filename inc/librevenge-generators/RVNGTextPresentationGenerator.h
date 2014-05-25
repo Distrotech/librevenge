@@ -12,6 +12,11 @@
  * applicable instead of those above.
  */
 
+#ifndef RVNGTEXTPRESENTATIONGENERATOR_H
+#define RVNGTEXTPRESENTATIONGENERATOR_H
+
+#include "librevenge-generators-api.h"
+
 #include <librevenge/librevenge.h>
 #include <librevenge-stream/librevenge-stream.h>
 
@@ -20,7 +25,7 @@ namespace librevenge
 
 struct RVNGTextPresentationGeneratorImpl;
 
-class RVNGTextPresentationGenerator : public RVNGPresentationInterface
+class REVENGE_GENERATORS_API RVNGTextPresentationGenerator : public RVNGPresentationInterface
 {
 	// disable copying
 	RVNGTextPresentationGenerator(const RVNGTextPresentationGenerator &other);
@@ -123,5 +128,7 @@ private:
 };
 
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

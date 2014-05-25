@@ -20,6 +20,8 @@
 #ifndef RVNGSTREAM_H
 #define RVNGSTREAM_H
 
+#include "librevenge-stream-api.h"
+
 namespace librevenge
 {
 
@@ -30,7 +32,7 @@ enum RVNG_SEEK_TYPE
 	RVNG_SEEK_END
 };
 
-class RVNGInputStream
+class REVENGE_STREAM_API RVNGInputStream
 {
 public:
 	RVNGInputStream() {}

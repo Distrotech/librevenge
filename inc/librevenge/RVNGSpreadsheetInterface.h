@@ -22,6 +22,8 @@
 #ifndef RVNGSPREADSHEETINTERFACE_H
 #define RVNGSPREADSHEETINTERFACE_H
 
+#include "librevenge-api.h"
+
 #include "RVNGString.h"
 #include "RVNGPropertyList.h"
 #include "RVNGPropertyListVector.h"
@@ -46,7 +48,7 @@ definitions listed here.
 			if neededlibrevenge:name the numbering style name
 */
 
-class RVNGSpreadsheetInterface
+class REVENGE_API RVNGSpreadsheetInterface
 {
 public:
 

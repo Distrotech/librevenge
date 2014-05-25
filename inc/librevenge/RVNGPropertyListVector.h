@@ -21,6 +21,8 @@
 #ifndef RVNGPROPERTYLISTVECTOR_H
 #define RVNGPROPERTYLISTVECTOR_H
 
+#include "librevenge-api.h"
+
 #include "RVNGPropertyList.h"
 
 namespace librevenge
@@ -29,7 +31,7 @@ namespace librevenge
 class RVNGPropertyListVectorImpl;
 class RVNGPropertyListVectorIterImpl;
 
-class RVNGPropertyListVector : public RVNGProperty
+class REVENGE_API RVNGPropertyListVector : public RVNGProperty
 {
 public:
 	RVNGPropertyListVector(const RVNGPropertyListVector &);
