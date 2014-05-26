@@ -118,7 +118,7 @@ public:
 		return !operator<=(str);
 	}
 
-	class Iter
+	class REVENGE_API Iter
 	{
 	public:
 		Iter(const RVNGString &str);

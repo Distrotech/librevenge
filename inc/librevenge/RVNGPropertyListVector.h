@@ -55,7 +55,7 @@ public:
 
 	RVNGString getPropString() const;
 
-	class Iter
+	class REVENGE_API Iter
 	{
 	public:
 		Iter(const RVNGPropertyListVector &vect);
