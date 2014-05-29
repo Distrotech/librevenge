@@ -19,6 +19,8 @@
  * applicable instead of those above.
  */
 
+#ifdef BUILD_DIRECTORYSTREAM
+
 #ifndef BOOST_SYSTEM_NO_DEPRECATED
 #define BOOST_SYSTEM_NO_DEPRECATED 1
 #endif
@@ -132,5 +134,7 @@ bool RVNGDirectoryStream::isEnd()
 }
 
 }
+
+#endif /* BUILD_DIRECTORY_STREAM */
 
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

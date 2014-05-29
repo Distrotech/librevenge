@@ -224,9 +224,18 @@ AC_ARG_ENABLE(streams,
 )
 AM_CONDITIONAL([BUILD_STREAMS], [test "x$enable_streams" != "xno"])
 
+AC_ARG_ENABLE(directorystream,
+	[AS_HELP_STRING([--disable-directorystream], [Do not build RVNGDirectoryStream implementation])],
+	[enable_directorystream="$enableval"],
+	[enable_directorystream=yes]
+)
+
 AS_IF([test "x$enable_streams" != "xno"], [
-	AX_BOOST_BASE
-	AX_BOOST_FILESYSTEM
+	AS_IF([test "x$enable_directorystream" != "xno"], [
+		AX_BOOST_BASE
+		AX_BOOST_FILESYSTEM
+		AC_DEFINE([BUILD_DIRECTORYSTREAM],[1],[Build RVNGDirectoryStream implementation])
+	])
 
 	# =========
 	# Find zlib
