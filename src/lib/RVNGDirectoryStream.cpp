@@ -19,6 +19,10 @@
  * applicable instead of those above.
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #ifdef BUILD_DIRECTORYSTREAM
 
 #ifndef BOOST_SYSTEM_NO_DEPRECATED
