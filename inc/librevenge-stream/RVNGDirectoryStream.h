@@ -41,6 +41,9 @@ public:
 	explicit RVNGDirectoryStream(const char *path);
 	virtual ~RVNGDirectoryStream();
 
+	static RVNGDirectoryStream *createForParent(const char *path);
+	static bool isDirectory(const char *path);
+
 	virtual bool isStructured();
 	virtual unsigned subStreamCount();
 	virtual const char *subStreamName(unsigned id);

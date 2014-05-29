@@ -66,6 +66,19 @@ RVNGDirectoryStream::~RVNGDirectoryStream()
 	delete m_impl;
 }
 
+RVNGDirectoryStream *RVNGDirectoryStream::createForParent(const char *const path)
+{
+	fs::path parent(path);
+	parent.remove_filename();
+
+	return new RVNGDirectoryStream(parent.string().c_str());
+}
+
+bool RVNGDirectoryStream::isDirectory(const char *const path)
+{
+	return fs::is_directory(path);
+}
+
 bool RVNGDirectoryStream::isStructured()
 {
 	return true;
