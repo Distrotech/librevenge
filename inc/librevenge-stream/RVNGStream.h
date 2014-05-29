@@ -32,7 +32,7 @@ enum RVNG_SEEK_TYPE
 	RVNG_SEEK_END
 };
 
-class REVENGE_STREAM_API RVNGInputStream
+class RVNGInputStream
 {
 public:
 	RVNGInputStream() {}
