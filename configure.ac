@@ -219,7 +219,7 @@ AM_CONDITIONAL([WITH_LIBREVENGE_DOCS], [test "x$build_docs" != "xno"])
 # =======
 AC_ARG_ENABLE(streams,
 	[AS_HELP_STRING([--disable-streams], [Do not build librevenge-stream library])],
-	[enable_streams="$withval"],
+	[enable_streams="$enableval"],
 	[enable_streams=yes]
 )
 AM_CONDITIONAL([BUILD_STREAMS], [test "x$enable_streams" != "xno"])
@@ -246,7 +246,7 @@ AS_IF([test "x$enable_streams" != "xno"], [
 # ==========
 AC_ARG_ENABLE(generators,
 	[AS_HELP_STRING([--disable-generators], [Do not build librevenge-generators library])],
-	[enable_generators="$withval"],
+	[enable_generators="$enableval"],
 	[enable_generators=yes]
 )
 AM_CONDITIONAL([BUILD_GENERATORS], [test "x$enable_generators" != "xno"])
