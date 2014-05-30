@@ -25,14 +25,11 @@
 
 #ifdef BUILD_DIRECTORYSTREAM
 
-#ifndef BOOST_SYSTEM_NO_DEPRECATED
-#define BOOST_SYSTEM_NO_DEPRECATED 1
-#endif
-#include <boost/filesystem.hpp>
-
+#include <sys/stat.h>
+#include <string>
+#include <vector>
+#include <boost/algorithm/string.hpp>
 #include <librevenge-stream/librevenge-stream.h>
-
-namespace fs = boost::filesystem;
 
 namespace librevenge
 {
@@ -44,24 +41,82 @@ struct NotADirectoryException
 {
 };
 
+void sanitizePath(std::string &str)
+{
+	boost::algorithm::replace_all(str, "\\", "/");
+	boost::algorithm::trim_left_if(str, boost::is_any_of("/ "));
+}
+
+std::string composePath(const std::vector<std::string> &splitPath, std::vector<std::string>::size_type elementCount)
+{
+	std::string path;
+	for (std::vector<std::string>::size_type i=0; i < splitPath.size() && i < elementCount; ++i)
+	{
+		path.append(splitPath[i]);
+		path.append("/");
+	}
+	return path;
+}
+
+bool isReg(const char *const path)
+{
+	struct stat statBuf;
+	stat(path, &statBuf);
+	if (S_ISREG(statBuf.st_mode))
+		return true;
+#ifndef _WIN32
+	else if (S_ISLNK(statBuf.st_mode))
+	{
+		lstat(path, &statBuf);
+		if (S_ISREG(statBuf.st_mode))
+			return true;
+	}
+#endif
+	return false;
+}
+
+bool isDir(const char *const path)
+{
+	struct stat statBuf;
+	stat(path, &statBuf);
+	if (S_ISDIR(statBuf.st_mode))
+		return true;
+#ifndef _WIN32
+	else if (S_ISLNK(statBuf.st_mode))
+	{
+		lstat(path, &statBuf);
+		if (S_ISDIR(statBuf.st_mode))
+			return true;
+	}
+#endif
+	return false;
+}
+
 }
 
 struct RVNGDirectoryStreamImpl
 {
-	fs::path path;
+	std::vector<std::string> m_splitPath;
+	bool m_isDir;
 
-	RVNGDirectoryStreamImpl(const char *path_);
+	RVNGDirectoryStreamImpl(const char *path);
 };
 
-RVNGDirectoryStreamImpl::RVNGDirectoryStreamImpl(const char *const path_)
-	: path(path_)
+RVNGDirectoryStreamImpl::RVNGDirectoryStreamImpl(const char *const path)
+	: m_splitPath(), m_isDir(isDir(path))
 {
+	if (m_isDir)
+	{
+		std::string pathName(path);
+		sanitizePath(pathName);
+		boost::algorithm::split(m_splitPath, pathName, boost::is_any_of("/"));
+	}
 }
 
 RVNGDirectoryStream::RVNGDirectoryStream(const char *const path)
 	: m_impl(new RVNGDirectoryStreamImpl(path))
 {
-	if (!is_directory(m_impl->path))
+	if (!m_impl->m_isDir)
 		throw NotADirectoryException();
 }
 
@@ -72,15 +127,18 @@ RVNGDirectoryStream::~RVNGDirectoryStream()
 
 RVNGDirectoryStream *RVNGDirectoryStream::createForParent(const char *const path)
 {
-	fs::path parent(path);
-	parent.remove_filename();
+	std::string parent(path);
+	sanitizePath(parent);
+	std::vector<std::string> splitParent;
+	boost::algorithm::split(splitParent, parent, boost::is_any_of("/"));
+	parent = composePath(splitParent, splitParent.size() ? splitParent.size() - 1 : 0);
 
-	return new RVNGDirectoryStream(parent.string().c_str());
+	return new RVNGDirectoryStream(parent.c_str());
 }
 
 bool RVNGDirectoryStream::isDirectory(const char *const path)
 {
-	return fs::is_directory(path);
+	return isDir(path);
 }
 
 bool RVNGDirectoryStream::isStructured()
@@ -103,21 +161,29 @@ const char *RVNGDirectoryStream::subStreamName(unsigned id)
 
 bool RVNGDirectoryStream::existsSubStream(const char *name)
 {
-	const fs::path path = m_impl->path / name;
+	std::string path(name);
+	sanitizePath(path);
+	std::vector<std::string> splitPath;
+	boost::algorithm::split(splitPath, path, boost::is_any_of("/"));
+	splitPath.insert(splitPath.begin(), m_impl->m_splitPath.begin(), m_impl->m_splitPath.end());
+	path = composePath(splitPath, splitPath.size());
+	return isReg(path.c_str());
 
-	if (is_regular_file(path))
-		return true;
-	return false;
 }
 
 RVNGInputStream *RVNGDirectoryStream::getSubStreamByName(const char *const name)
 {
-	const fs::path path = m_impl->path / name;
+	std::string path(name);
+	sanitizePath(path);
+	std::vector<std::string> splitPath;
+	boost::algorithm::split(splitPath, path, boost::is_any_of("/"));
+	splitPath.insert(splitPath.begin(), m_impl->m_splitPath.begin(), m_impl->m_splitPath.end());
+	path = composePath(splitPath, splitPath.size());
 
-	if (is_regular_file(path))
-		return new RVNGFileStream(path.string().c_str());
-	else if (is_directory(path))
-		return new RVNGDirectoryStream(path.string().c_str());
+	if (isReg(path.c_str()))
+		return new RVNGFileStream(path.c_str());
+	else if (isDir(path.c_str()))
+		return new RVNGDirectoryStream(path.c_str());
 
 	return 0;
 }
