@@ -23,8 +23,6 @@
 #include <config.h>
 #endif
 
-#ifdef BUILD_DIRECTORYSTREAM
-
 #include <sys/stat.h>
 #include <string>
 #include <vector>
@@ -41,13 +39,13 @@ struct NotADirectoryException
 {
 };
 
-void sanitizePath(std::string &str)
+static void sanitizePath(std::string &str)
 {
 	boost::algorithm::replace_all(str, "\\", "/");
-	boost::algorithm::trim_left_if(str, boost::is_any_of("/ "));
+	boost::algorithm::trim_right_if(str, boost::is_any_of("/ "));
 }
 
-std::string composePath(const std::vector<std::string> &splitPath, std::vector<std::string>::size_type elementCount)
+static std::string composePath(const std::vector<std::string> &splitPath, std::vector<std::string>::size_type elementCount)
 {
 	std::string path;
 	for (std::vector<std::string>::size_type i=0; i < splitPath.size() && i < elementCount; ++i)
@@ -55,19 +53,22 @@ std::string composePath(const std::vector<std::string> &splitPath, std::vector<s
 		path.append("/");
 		path.append(splitPath[i]);
 	}
+	sanitizePath(path);
 	return path;
 }
 
-bool isReg(const char *const path)
+static bool isReg(const char *const path)
 {
 	struct stat statBuf;
-	stat(path, &statBuf);
+	if (stat(path, &statBuf))
+		return false;
 	if (S_ISREG(statBuf.st_mode))
 		return true;
 #ifndef _WIN32
 	else if (S_ISLNK(statBuf.st_mode))
 	{
-		lstat(path, &statBuf);
+		if (lstat(path, &statBuf))
+			return false;
 		if (S_ISREG(statBuf.st_mode))
 			return true;
 	}
@@ -75,16 +76,18 @@ bool isReg(const char *const path)
 	return false;
 }
 
-bool isDir(const char *const path)
+static bool isDir(const char *const path)
 {
 	struct stat statBuf;
-	stat(path, &statBuf);
+	if (stat(path, &statBuf))
+		return false;
 	if (S_ISDIR(statBuf.st_mode))
 		return true;
 #ifndef _WIN32
 	else if (S_ISLNK(statBuf.st_mode))
 	{
-		lstat(path, &statBuf);
+		if (lstat(path, &statBuf))
+			return false;
 		if (S_ISDIR(statBuf.st_mode))
 			return true;
 	}
@@ -217,7 +220,5 @@ bool RVNGDirectoryStream::isEnd()
 }
 
 }
-
-#endif /* BUILD_DIRECTORY_STREAM */
 
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */
