@@ -52,8 +52,8 @@ std::string composePath(const std::vector<std::string> &splitPath, std::vector<s
 	std::string path;
 	for (std::vector<std::string>::size_type i=0; i < splitPath.size() && i < elementCount; ++i)
 	{
-		path.append(splitPath[i]);
 		path.append("/");
+		path.append(splitPath[i]);
 	}
 	return path;
 }
