@@ -108,8 +108,10 @@ RVNGDirectoryStreamTest::RVNGDirectoryStreamTest()
 	, m_file(TEST_DIR)
 	, m_nonexistent(TEST_DIR)
 {
-	m_file.append("/"); m_file.append(TEST_FILENAME);
-	m_nonexistent.append("/"); m_nonexistent.append(TEST_NONEXISTENT);
+	m_file.append("/");
+	m_file.append(TEST_FILENAME);
+	m_nonexistent.append("/");
+	m_nonexistent.append(TEST_NONEXISTENT);
 	// sanity check
 	assert(isDir(m_dir.c_str()));
 	assert(isReg(m_file.c_str()));

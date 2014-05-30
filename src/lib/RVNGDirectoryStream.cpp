@@ -100,15 +100,14 @@ static bool isDir(const char *const path)
 struct RVNGDirectoryStreamImpl
 {
 	std::vector<std::string> m_splitPath;
-	bool m_isDir;
 
 	RVNGDirectoryStreamImpl(const char *path);
 };
 
 RVNGDirectoryStreamImpl::RVNGDirectoryStreamImpl(const char *const path)
-	: m_splitPath(), m_isDir(isDir(path))
+	: m_splitPath()
 {
-	if (m_isDir)
+	if (isDir(path))
 	{
 		std::string pathName(path);
 		sanitizePath(pathName);
@@ -119,7 +118,7 @@ RVNGDirectoryStreamImpl::RVNGDirectoryStreamImpl(const char *const path)
 RVNGDirectoryStream::RVNGDirectoryStream(const char *const path)
 	: m_impl(new RVNGDirectoryStreamImpl(path))
 {
-	if (!m_impl->m_isDir)
+	if (!isDir(path))
 		throw NotADirectoryException();
 }
 
