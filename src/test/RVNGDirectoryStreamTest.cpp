@@ -12,10 +12,10 @@
  * applicable instead of those above.
  */
 
-#ifndef BOOST_SYSTEM_NO_DEPRECATED
-#define BOOST_SYSTEM_NO_DEPRECATED 1
-#endif
-#include <boost/filesystem.hpp>
+#include <sys/stat.h>
+#include <string>
+#include <vector>
+
 #include <boost/scoped_ptr.hpp>
 
 #include <librevenge-stream/librevenge-stream.h>
@@ -40,8 +40,6 @@
     CPPUNIT_ASSERT_MESSAGE(#expression " did not throw an exception", thrown); \
 }
 
-namespace fs = boost::filesystem;
-
 using boost::scoped_ptr;
 
 using librevenge::RVNGDirectoryStream;
@@ -57,17 +55,65 @@ static const char TEST_DIR[] = RVNG_DIRECTORY_STREAM_TEST_DIR;
 static const char TEST_FILENAME[] = "RVNGDirectoryStream.h";
 static const char TEST_NONEXISTENT[] = "foobar";
 
+bool isReg(const char *const path)
+{
+	struct stat statBuf;
+	if (stat(path, &statBuf))
+		return false;
+	if (S_ISREG(statBuf.st_mode))
+		return true;
+#ifndef _WIN32
+	else if (S_ISLNK(statBuf.st_mode))
+	{
+		if (lstat(path, &statBuf))
+			return false;
+		if (S_ISREG(statBuf.st_mode))
+			return true;
+	}
+#endif
+	return false;
+}
+
+bool isDir(const char *const path)
+{
+	struct stat statBuf;
+	if (stat(path, &statBuf))
+		return false;
+	if (S_ISDIR(statBuf.st_mode))
+		return true;
+#ifndef _WIN32
+	else if (S_ISLNK(statBuf.st_mode))
+	{
+		if (lstat(path, &statBuf))
+			return false;
+		if (S_ISDIR(statBuf.st_mode))
+			return true;
+	}
+#endif
+	return false;
+}
+
+bool exists(const char *const path)
+{
+	struct stat statBuf;
+	if (stat(path, &statBuf))
+		return false;
+	return true;
+}
+
 }
 
 RVNGDirectoryStreamTest::RVNGDirectoryStreamTest()
 	: m_dir(TEST_DIR)
-	, m_file((fs::path(m_dir) / TEST_FILENAME).string())
-	, m_nonexistent((fs::path(m_dir) / TEST_NONEXISTENT).string())
+	, m_file(TEST_DIR)
+	, m_nonexistent(TEST_DIR)
 {
+	m_file.append("/"); m_file.append(TEST_FILENAME);
+	m_nonexistent.append("/"); m_nonexistent.append(TEST_NONEXISTENT);
 	// sanity check
-	assert(fs::is_directory(m_dir));
-	assert(fs::is_regular_file(m_file));
-	assert(!fs::exists(m_nonexistent));
+	assert(isDir(m_dir.c_str()));
+	assert(isReg(m_file.c_str()));
+	assert(!exists(m_nonexistent.c_str()));
 }
 
 void RVNGDirectoryStreamTest::setUp()
