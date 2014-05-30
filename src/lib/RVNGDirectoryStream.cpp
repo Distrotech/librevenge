@@ -19,10 +19,6 @@
  * applicable instead of those above.
  */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <sys/stat.h>
 #include <string>
 #include <vector>
@@ -107,18 +103,17 @@ struct RVNGDirectoryStreamImpl
 RVNGDirectoryStreamImpl::RVNGDirectoryStreamImpl(const char *const path)
 	: m_splitPath()
 {
-	if (isDir(path))
-	{
-		std::string pathName(path);
-		sanitizePath(pathName);
-		boost::algorithm::split(m_splitPath, pathName, boost::is_any_of("/"));
-	}
+	std::string pathName(path);
+	sanitizePath(pathName);
+	boost::algorithm::split(m_splitPath, pathName, boost::is_any_of("/"));
 }
 
 RVNGDirectoryStream::RVNGDirectoryStream(const char *const path)
-	: m_impl(new RVNGDirectoryStreamImpl(path))
+	: m_impl(0)
 {
-	if (!isDir(path))
+	if (isDir(path))
+		m_impl = new RVNGDirectoryStreamImpl(path);
+	else
 		throw NotADirectoryException();
 }
 
