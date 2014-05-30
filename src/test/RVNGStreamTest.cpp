@@ -94,6 +94,7 @@ void RVNGStreamTest::testFileStream()
 
 void RVNGStreamTest::testMemoryInputStream()
 {
+#ifndef _WIN32
 	scoped_ptr<RVNGInputStream> input(new RVNGMemoryInputStream((unsigned char *)("\1\2\3\4\0\5\6\7"), 8));
 	unsigned long numBytesRead = 0;
 
@@ -131,6 +132,7 @@ void RVNGStreamTest::testMemoryInputStream()
 	input->seek(10000, RVNG_SEEK_SET);
 	CPPUNIT_ASSERT(10000 != input->tell());
 	CPPUNIT_ASSERT(input->isEnd());
+#endif
 }
 
 void RVNGStreamTest::testStringStream()
