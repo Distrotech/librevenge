@@ -31,10 +31,6 @@ namespace librevenge
 namespace
 {
 
-struct NotADirectoryException
-{
-};
-
 static void sanitizePath(std::string &str)
 {
 	boost::algorithm::replace_all(str, "\\", "/");
@@ -113,8 +109,10 @@ RVNGDirectoryStream::RVNGDirectoryStream(const char *const path)
 {
 	if (isDir(path))
 		m_impl = new RVNGDirectoryStreamImpl(path);
+#if 0
 	else
 		throw NotADirectoryException();
+#endif
 }
 
 RVNGDirectoryStream::~RVNGDirectoryStream()
@@ -158,6 +156,8 @@ const char *RVNGDirectoryStream::subStreamName(unsigned id)
 
 bool RVNGDirectoryStream::existsSubStream(const char *name)
 {
+	if (!m_impl)
+		return false;
 	std::string path(name);
 	sanitizePath(path);
 	std::vector<std::string> splitPath;
@@ -170,6 +170,8 @@ bool RVNGDirectoryStream::existsSubStream(const char *name)
 
 RVNGInputStream *RVNGDirectoryStream::getSubStreamByName(const char *const name)
 {
+	if (!m_impl)
+		return 0;
 	std::string path(name);
 	sanitizePath(path);
 	std::vector<std::string> splitPath;
