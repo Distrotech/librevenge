@@ -30,7 +30,6 @@ public:
 private:
 	CPPUNIT_TEST_SUITE(RVNGStreamTest);
 	CPPUNIT_TEST(testFileStream);
-	CPPUNIT_TEST(testMemoryInputStream);
 	CPPUNIT_TEST(testStringStream);
 	CPPUNIT_TEST_SUITE_END();
 
