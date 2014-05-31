@@ -15,8 +15,6 @@
 #ifndef RVNGPRESENTATIONINTERFACE_H
 #define RVNGPRESENTATIONINTERFACE_H
 
-#include "librevenge-api.h"
-
 #include "RVNGPropertyList.h"
 #include "RVNGPropertyListVector.h"
 
@@ -25,7 +23,7 @@ namespace librevenge
 
 /** Interface for import of presentations.
   */
-class REVENGE_API RVNGPresentationInterface
+class RVNGPresentationInterface
 {
 public:
 	virtual ~RVNGPresentationInterface() {}

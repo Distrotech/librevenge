@@ -20,8 +20,6 @@
 #ifndef RVNGSTREAM_H
 #define RVNGSTREAM_H
 
-#include "librevenge-stream-api.h"
-
 namespace librevenge
 {
 

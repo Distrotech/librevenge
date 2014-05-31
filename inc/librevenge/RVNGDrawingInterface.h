@@ -21,8 +21,6 @@
 #ifndef RVNGDRAWINGINTERFACE_H
 #define RVNGDRAWINGINTERFACE_H
 
-#include "librevenge-api.h"
-
 #include "RVNGPropertyList.h"
 #include "RVNGPropertyListVector.h"
 #include "RVNGBinaryData.h"
@@ -30,7 +28,7 @@
 namespace librevenge
 {
 
-class REVENGE_API RVNGDrawingInterface
+class RVNGDrawingInterface
 {
 public:
 	virtual ~RVNGDrawingInterface() {}
