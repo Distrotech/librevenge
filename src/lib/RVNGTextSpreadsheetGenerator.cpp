@@ -127,7 +127,7 @@ void RVNGTextSpreadsheetGenerator::openSheetCell(const RVNGPropertyList &propLis
 		                 << std::setfill('0') << std::setw(2) << day << "/"
 		                 << std::setfill('0') << std::setw(2) << year;
 	}
-	else if (valueType=="date")
+	else if (valueType=="time")
 	{
 		int hour=propList["librevenge:hours"] ? propList["librevenge:hours"]->getInt() : 0;
 		int minute=propList["librevenge:minutes"] ? propList["librevenge:minutes"]->getInt() : 0;
