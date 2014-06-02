@@ -26,20 +26,6 @@
 #error RVNG_DIRECTORY_STREAM_TEST_DIR not defined, cannot test
 #endif
 
-#define ASSERT_THROW_ANY(expression) \
-{ \
-    bool thrown = false; \
-    try \
-    { \
-        expression; \
-    } \
-    catch (...) \
-    { \
-        thrown = true; \
-    } \
-    CPPUNIT_ASSERT_MESSAGE(#expression " did not throw an exception", thrown); \
-}
-
 using boost::scoped_ptr;
 
 using librevenge::RVNGDirectoryStream;
@@ -111,7 +97,9 @@ RVNGDirectoryStreamTest::RVNGDirectoryStreamTest()
 	m_file.append("/");
 	m_file.append(TEST_FILENAME);
 	m_nonexistent.append("/");
-	m_nonexistent.append(TEST_NONEXISTENT);
+	m_nonexistent.append(TEST_NONEXISTENT); // dir
+	m_nonexistent.append("/");
+	m_nonexistent.append(TEST_NONEXISTENT); // file
 	// sanity check
 	assert(isDir(m_dir.c_str()));
 	assert(isReg(m_file.c_str()));
@@ -128,14 +116,16 @@ void RVNGDirectoryStreamTest::tearDown()
 
 void RVNGDirectoryStreamTest::testConstruction()
 {
-	CPPUNIT_ASSERT_NO_THROW(RVNGDirectoryStream(m_dir.c_str()));
-	ASSERT_THROW_ANY(RVNGDirectoryStream(m_file.c_str()));
-	ASSERT_THROW_ANY(RVNGDirectoryStream(m_nonexistent.c_str()));
+	const scoped_ptr<RVNGDirectoryStream> dir(RVNGDirectoryStream::createForParent(m_file.c_str()));
+	CPPUNIT_ASSERT(dir->isStructured());
 
-	{
-		scoped_ptr<RVNGDirectoryStream> parent;
-		CPPUNIT_ASSERT_NO_THROW(parent.reset(RVNGDirectoryStream::createForParent(m_file.c_str())));
-	}
+	// this should work for dirs too
+	const scoped_ptr<RVNGDirectoryStream> dir2(RVNGDirectoryStream::createForParent(m_dir.c_str()));
+	CPPUNIT_ASSERT(dir2->isStructured());
+
+	// for nonexistent files a stream is created, but is empty
+	const scoped_ptr<RVNGDirectoryStream> nondir(RVNGDirectoryStream::createForParent(m_nonexistent.c_str()));
+	CPPUNIT_ASSERT(!nondir->isStructured());
 }
 
 void RVNGDirectoryStreamTest::testDetection()
