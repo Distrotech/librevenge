@@ -235,7 +235,7 @@ const RVNGString RVNGBinaryData::getBase64Data() const
 	return RVNGString(base64.c_str());
 }
 
-const RVNGInputStream *RVNGBinaryData::getDataStream() const
+RVNGInputStream *RVNGBinaryData::getDataStream() const
 {
 	if (m_binaryDataImpl->m_ptr->m_stream)
 	{
