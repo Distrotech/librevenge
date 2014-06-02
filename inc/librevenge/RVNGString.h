@@ -37,12 +37,12 @@ public:
 	~RVNGString();
 
 	/** Create a new string from @s as escaped XML.
-	  *
-	  * This function can be used instead of @f appendEscapedXML in contexts
-	  * where only a temporary string is needed.
-	  *
-	  * @sa appendEscapedXML
-	  */
+
+	This function can be used instead of @f appendEscapedXML in contexts
+	where only a temporary string is needed.
+
+	@sa appendEscapedXML
+	*/
 	static RVNGString escapeXML(const RVNGString &s);
 
 	/** Create a new string from @s as escaped XML.
@@ -65,15 +65,15 @@ public:
 	void append(const char c);
 
 	/** Append the content of @a s as escaped XML.
-	  *
-	  * @sa escapeXML
-	  */
+
+	@sa escapeXML
+	*/
 	void appendEscapedXML(const RVNGString &s);
 
 	/** Append the content of @a s as escaped XML.
-	  *
-	  * @sa escapeXML
-	  */
+
+	@sa escapeXML
+	*/
 	void appendEscapedXML(const char *s);
 
 	void clear();
