@@ -844,7 +844,7 @@ void librevenge::DirEntry::load(unsigned char *buffer, unsigned len)
 	}
 	else
 	{
-		for (unsigned j=0; (buffer[j]) && (j<name_len); j+= 2)
+		for (unsigned j=0; (j < name_len) && buffer[j]; j+= 2)
 			m_name.append(1, char(buffer[j]));
 	}
 
