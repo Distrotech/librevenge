@@ -156,13 +156,12 @@ void RVNGSVGPresentationGenerator::setStyle(const RVNGPropertyList &propList)
 	m_impl->m_gradient = gradient ? *gradient : librevenge::RVNGPropertyListVector();
 	if (m_impl->m_style["draw:shadow"] && m_impl->m_style["draw:shadow"]->getStr() == "visible")
 	{
-		unsigned shadowColour = 0;
 		double shadowRed = 0.0;
 		double shadowGreen = 0.0;
 		double shadowBlue = 0.0;
 		if (m_impl->m_style["draw:shadow-color"])
 		{
-			shadowColour = stringToColour(m_impl->m_style["draw:shadow-color"]->getStr());
+			const unsigned shadowColour = stringToColour(m_impl->m_style["draw:shadow-color"]->getStr());
 			shadowRed = (double)((shadowColour & 0x00ff0000) >> 16)/255.0;
 			shadowGreen = (double)((shadowColour & 0x0000ff00) >> 8)/255.0;
 			shadowBlue = (double)(shadowColour & 0x000000ff)/255.0;
