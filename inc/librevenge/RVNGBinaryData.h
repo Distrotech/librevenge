@@ -50,8 +50,28 @@ public:
 
 	unsigned long size() const;
 	bool empty() const;
+
+	/** Get the data buffer.
+
+	The buffer is managed internally, so it shall not be deleted.
+	If this object is empty, 0 is returned.
+
+	@returns the data buffer or 0 if emtpy
+	*/
 	const unsigned char *getDataBuffer() const;
+
 	const RVNGString getBase64Data() const;
+
+	/** Create a stream for the data.
+
+	The stream is managed internally, so it shall not be deleted.
+	If this object is empty, 0 is returned.
+
+	@warning The stream is destroyed (and the pointer thus becomes
+	invalid) when this object is either deleted or changed.
+
+	@returns a stream or 0
+	*/
 	RVNGInputStream *getDataStream() const;
 
 	RVNGBinaryData &operator=(const RVNGBinaryData &);
