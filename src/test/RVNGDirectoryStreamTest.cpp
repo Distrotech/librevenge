@@ -41,9 +41,9 @@ static const char TEST_DIR[] = RVNG_DIRECTORY_STREAM_TEST_DIR;
 static const char TEST_FILENAME[] = "RVNGDirectoryStream.h";
 static const char TEST_NONEXISTENT[] = "foobar";
 
-#if !defined NDEBUG
+#ifdef DEBUG
 
-bool isReg(const char *const path)
+static bool isReg(const char *const path)
 {
 	struct stat statBuf;
 	if (stat(path, &statBuf))
@@ -62,7 +62,7 @@ bool isReg(const char *const path)
 	return false;
 }
 
-bool isDir(const char *const path)
+static bool isDir(const char *const path)
 {
 	struct stat statBuf;
 	if (stat(path, &statBuf))
@@ -81,7 +81,7 @@ bool isDir(const char *const path)
 	return false;
 }
 
-bool exists(const char *const path)
+static bool exists(const char *const path)
 {
 	struct stat statBuf;
 	if (stat(path, &statBuf))
