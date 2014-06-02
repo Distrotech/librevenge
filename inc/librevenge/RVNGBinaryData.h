@@ -31,6 +31,8 @@ namespace librevenge
 
 struct RVNGBinaryDataImpl;
 
+/** A representation of arbitrary binary data.
+*/
 class REVENGE_API RVNGBinaryData
 {
 public:
@@ -46,9 +48,21 @@ public:
 	void append(const unsigned char c);
 	void appendBase64Data(const RVNGString &base64);
 	void appendBase64Data(const char *base64);
+
+	/** Remove current content.
+	*/
 	void clear();
 
+	/** Get the size of the content in bytes.
+
+	@returns the size of the content.
+	*/
 	unsigned long size() const;
+
+	/** Test if the content is empty.
+
+	@returns @c true if the content is emtpy, @c false otherwise.
+	*/
 	bool empty() const;
 
 	/** Get the data buffer.
@@ -60,6 +74,10 @@ public:
 	*/
 	const unsigned char *getDataBuffer() const;
 
+	/** Get the content encoded as base64.
+
+	@returns a string containing a base64 representation of the content
+	*/
 	const RVNGString getBase64Data() const;
 
 	/** Create a stream for the data.
@@ -74,6 +92,10 @@ public:
 	*/
 	RVNGInputStream *getDataStream() const;
 
+	/** Assign the content of another @c RVNGBinaryData object.
+
+	@returns @c this object
+	*/
 	RVNGBinaryData &operator=(const RVNGBinaryData &);
 
 private:
