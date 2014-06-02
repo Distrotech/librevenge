@@ -165,8 +165,15 @@ public:
 
 	unsigned long size() const
 	{
+		if (m_empty)
+			return 0;
 		unsigned long s;
 		return s;
+	}
+
+	bool empty() const
+	{
+		return m_empty;
 	}
 
 	void append(const RVNGBinaryData &data)
