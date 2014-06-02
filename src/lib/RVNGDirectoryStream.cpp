@@ -109,10 +109,6 @@ RVNGDirectoryStream::RVNGDirectoryStream(const char *const path)
 {
 	if (isDir(path))
 		m_impl = new RVNGDirectoryStreamImpl(path);
-#if 0
-	else
-		throw NotADirectoryException();
-#endif
 }
 
 RVNGDirectoryStream::~RVNGDirectoryStream()
@@ -138,11 +134,15 @@ bool RVNGDirectoryStream::isDirectory(const char *const path)
 
 bool RVNGDirectoryStream::isStructured()
 {
+	if (!m_impl)
+		return false;
 	return true;
 }
 
 unsigned RVNGDirectoryStream::subStreamCount()
 {
+	if (!m_impl)
+		return 0;
 	// TODO: implement me
 	return 1;
 }
@@ -207,6 +207,8 @@ int RVNGDirectoryStream::seek(const long, const RVNG_SEEK_TYPE)
 
 long RVNGDirectoryStream::tell()
 {
+	if (!m_impl)
+		return -1L;
 	return 0;
 }
 
