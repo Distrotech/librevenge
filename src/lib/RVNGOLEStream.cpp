@@ -1524,7 +1524,7 @@ librevenge::IStream::IStream(librevenge::IStorage *s, std::string const &name) :
 unsigned long librevenge::IStream::readData(unsigned long pos, unsigned char *data, unsigned long maxlen)
 {
 	// sanity checks
-	if (!data || maxlen <= 0 || (unsigned long)m_data.size() != m_size || !m_size)
+	if (!data || (maxlen == 0) || (unsigned long)m_data.size() != m_size || !m_size)
 		return 0;
 
 	if (pos >= m_size)
@@ -1538,7 +1538,7 @@ unsigned long librevenge::IStream::readData(unsigned long pos, unsigned char *da
 unsigned long librevenge::IStream::readUsingStorage(unsigned long pos, unsigned char *data, unsigned long maxlen)
 {
 	// sanity checks
-	if (!data || maxlen <= 0 || !m_iStorage || !m_size) return 0;
+	if (!data || (maxlen == 0) || !m_iStorage || !m_size) return 0;
 
 	unsigned long totalbytes = 0;
 
