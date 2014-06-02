@@ -766,8 +766,8 @@ void librevenge::Header::load(const unsigned char *buffer, unsigned long size)
 
 void librevenge::Header::save(unsigned char *buffer)
 {
-	memset(buffer, 0, 0x4c);
 	memcpy(buffer, s_ole_magic, 8);          // ole signature
+	memset(buffer + 8, 0, 0x4c - 8);
 	writeU32(buffer + 8, 0);                // unknown
 	writeU32(buffer + 12, 0);               // unknown
 	writeU32(buffer + 16, 0);               // unknown
