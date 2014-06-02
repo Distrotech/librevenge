@@ -7,7 +7,7 @@ AC_PREREQ([2.65])
 # ====================
 m4_define([librevenge_version_major],[0])
 m4_define([librevenge_version_minor],[0])
-m4_define([librevenge_version_micro],[0])
+m4_define([librevenge_version_micro],[1])
 m4_define([librevenge_version],[librevenge_version_major.librevenge_version_minor.librevenge_version_micro])
 
 # =============

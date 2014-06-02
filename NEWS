@@ -1,3 +1,20 @@
+librevenge 0.0.1
+
+- Fix license headers in some files.
+- Export API symbols on windows.
+- Really allow to disable build without streams and generators.
+- Detect CppUnit in configure already.
+- Drop dependency of librevenge-stream to Boost.Filesystem.
+- Do not throw exception when constructing RVNGDirectoryStream for an unexistent
+  directory. Instead, create a valid dummy stream that will respond negatively
+  to all operations (for consistency with RVNGFileStream).
+- Fix return type of RVNGBinaryData::getDataStream(). This change does affect
+  neither API nor ABI.
+- Add some documentation for RVNGBinaryData.
+- Create a Coverity model covering the majority of librevenge data types, for
+  the benefit of projects that use librevenge.
+- Several minor improvements and fixes.
+
 librevenge 0.0.0
 
 - first release
