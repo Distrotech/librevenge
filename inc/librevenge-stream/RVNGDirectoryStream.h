@@ -31,6 +31,12 @@ namespace librevenge
 
 struct RVNGDirectoryStreamImpl;
 
+/** A stream representation of a directory.
+
+A valid stream (i.e., one created for an existing directory) is always
+structured. The content handling operations (@c read, @c seek, @c tell, @c
+isEnd) are always empty.
+*/
 class REVENGE_STREAM_API RVNGDirectoryStream : public RVNGInputStream
 {
 	// disable copying
@@ -38,6 +44,11 @@ class REVENGE_STREAM_API RVNGDirectoryStream : public RVNGInputStream
 	RVNGDirectoryStream &operator=(const RVNGDirectoryStream &);
 
 public:
+	/** Construct a stream for directory @c path.
+
+	If @c path is not a directory, only an empty shell is constructed and @c
+	isStructured() returns @c false.
+	*/
 	explicit RVNGDirectoryStream(const char *path);
 
 	virtual ~RVNGDirectoryStream();
