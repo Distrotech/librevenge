@@ -417,14 +417,23 @@ namespace librevenge
 
 class RVNGInputStream
 {
-	const unsigned char *read(unsigned long numBytes, unsigned long &numBytesRead)
+	bool isStructured()
 	{
-		__coverity_writeall__(&numBytesRead);
-		return reinterpret_cast<unsigned char *>(__coverity_tainted_string_return_content__());
+		return m_structured;
+	}
+
+	unsigned subStreamCount()
+	{
+		if (!m_structured)
+			return 0;
+		unsigned count;
+		return count;
 	}
 
 	const char *subStreamName(unsigned id)
 	{
+		if (!m_structured)
+			return 0;
 		bool valid;
 		if (valid)
 			return reinterpret_cast<char *>(__coverity_tainted_string_return_content__());
@@ -432,8 +441,18 @@ class RVNGInputStream
 			return 0;
 	}
 
+	virtual bool existsSubStream(const char *name)
+	{
+		if (!m_structured)
+			return false;
+		bool exists;
+		return exists;
+	}
+
 	RVNGInputStream *getSubStreamById(unsigned id)
 	{
+		if (!m_structured)
+			return 0;
 		bool valid;
 		if (valid)
 			return reinterpret_cast<RVNGInputStream *>(__coverity_new__(sizeof(RVNGInputStream)));
@@ -443,12 +462,49 @@ class RVNGInputStream
 
 	RVNGInputStream *getSubStreamByName(const char *name)
 	{
+		if (!m_structured)
+			return false;
 		bool valid;
 		if (valid)
 			return reinterpret_cast<RVNGInputStream *>(__coverity_new__(sizeof(RVNGInputStream)));
 		else
 			return 0;
 	}
+
+	const unsigned char *read(unsigned long numBytes, unsigned long &numBytesRead)
+	{
+		if (m_structured)
+			return 0;
+		__coverity_writeall__(&numBytesRead);
+		return reinterpret_cast<unsigned char *>(__coverity_tainted_string_return_content__());
+	}
+
+	virtual int seek(long offset, RVNG_SEEK_TYPE seekType)
+	{
+		if (m_structured)
+			return -1;
+		int r;
+		return r;
+	}
+
+	virtual long tell()
+	{
+		if (m_structured)
+			return -1;
+		long r;
+		return r;
+	}
+
+	virtual bool isEnd()
+	{
+		if (m_structured)
+			return true;
+		bool end;
+		return end;
+	}
+
+private:
+	const bool m_structured;
 };
 
 class RVNGDirectoryStream : public RVNGInputStream
