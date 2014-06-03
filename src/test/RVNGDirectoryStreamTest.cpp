@@ -121,15 +121,21 @@ void RVNGDirectoryStreamTest::tearDown()
 void RVNGDirectoryStreamTest::testConstruction()
 {
 	const scoped_ptr<RVNGDirectoryStream> dir(RVNGDirectoryStream::createForParent(m_file.c_str()));
+	CPPUNIT_ASSERT(bool(dir));
 	CPPUNIT_ASSERT(dir->isStructured());
 
 	// this should work for dirs too
 	const scoped_ptr<RVNGDirectoryStream> dir2(RVNGDirectoryStream::createForParent(m_dir.c_str()));
+	CPPUNIT_ASSERT(bool(dir2));
 	CPPUNIT_ASSERT(dir2->isStructured());
 
-	// for nonexistent files a stream is created, but is empty
+	// for nonexistent dirs nothing is created
 	const scoped_ptr<RVNGDirectoryStream> nondir(RVNGDirectoryStream::createForParent(m_nonexistent.c_str()));
-	CPPUNIT_ASSERT(!nondir->isStructured());
+	CPPUNIT_ASSERT(!nondir);
+
+	// even if try harder, just an empty shell is created
+	RVNGDirectoryStream nondir2(m_nonexistent.c_str());
+	CPPUNIT_ASSERT(!nondir2.isStructured());
 }
 
 void RVNGDirectoryStreamTest::testDetection()

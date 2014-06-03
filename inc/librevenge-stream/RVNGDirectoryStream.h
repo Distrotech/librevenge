@@ -39,9 +39,22 @@ class REVENGE_STREAM_API RVNGDirectoryStream : public RVNGInputStream
 
 public:
 	explicit RVNGDirectoryStream(const char *path);
+
 	virtual ~RVNGDirectoryStream();
 
+	/** Create a stream for parent directory of @c path.
+
+	The stream is always structured. If the parent directory does not exist,
+	0 is returned.
+
+	@returns a structured stream or 0
+	*/
 	static RVNGDirectoryStream *createForParent(const char *path);
+
+	/** Test whether @c path is a directory.
+
+	@returns @c true if @path is a directory, @c false otherwise.
+	*/
 	static bool isDirectory(const char *path);
 
 	virtual bool isStructured();
