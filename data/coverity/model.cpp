@@ -419,12 +419,14 @@ class RVNGInputStream
 {
 	bool isStructured()
 	{
+		if (!m_valid)
+			return false;
 		return m_structured;
 	}
 
 	unsigned subStreamCount()
 	{
-		if (!m_structured)
+		if (!m_valid || !m_structured)
 			return 0;
 		unsigned count;
 		return count;
@@ -432,10 +434,10 @@ class RVNGInputStream
 
 	const char *subStreamName(unsigned id)
 	{
-		if (!m_structured)
+		if (!m_valid || !m_structured)
 			return 0;
-		bool valid;
-		if (valid)
+		bool existing;
+		if (existing)
 			return reinterpret_cast<char *>(__coverity_tainted_string_return_content__());
 		else
 			return 0;
@@ -443,18 +445,18 @@ class RVNGInputStream
 
 	virtual bool existsSubStream(const char *name)
 	{
-		if (!m_structured)
+		if (!m_valid || !m_structured)
 			return false;
-		bool exists;
-		return exists;
+		bool existing;
+		return existing;
 	}
 
 	RVNGInputStream *getSubStreamById(unsigned id)
 	{
-		if (!m_structured)
+		if (!m_valid || !m_structured)
 			return 0;
-		bool valid;
-		if (valid)
+		bool existing;
+		if (existing)
 			return reinterpret_cast<RVNGInputStream *>(__coverity_new__(sizeof(RVNGInputStream)));
 		else
 			return 0;
@@ -462,10 +464,10 @@ class RVNGInputStream
 
 	RVNGInputStream *getSubStreamByName(const char *name)
 	{
-		if (!m_structured)
+		if (!m_valid || !m_structured)
 			return false;
-		bool valid;
-		if (valid)
+		bool existing;
+		if (existing)
 			return reinterpret_cast<RVNGInputStream *>(__coverity_new__(sizeof(RVNGInputStream)));
 		else
 			return 0;
@@ -473,7 +475,7 @@ class RVNGInputStream
 
 	const unsigned char *read(unsigned long numBytes, unsigned long &numBytesRead)
 	{
-		if (m_structured)
+		if (!m_valid || m_structured)
 			return 0;
 		__coverity_writeall__(&numBytesRead);
 		return reinterpret_cast<unsigned char *>(__coverity_tainted_string_return_content__());
@@ -481,7 +483,7 @@ class RVNGInputStream
 
 	virtual int seek(long offset, RVNG_SEEK_TYPE seekType)
 	{
-		if (m_structured)
+		if (!m_valid || m_structured)
 			return -1;
 		int r;
 		return r;
@@ -489,7 +491,7 @@ class RVNGInputStream
 
 	virtual long tell()
 	{
-		if (m_structured)
+		if (!m_valid || m_structured)
 			return -1;
 		long r;
 		return r;
@@ -497,7 +499,7 @@ class RVNGInputStream
 
 	virtual bool isEnd()
 	{
-		if (m_structured)
+		if (!m_valid || m_structured)
 			return true;
 		bool end;
 		return end;
@@ -505,6 +507,7 @@ class RVNGInputStream
 
 private:
 	const bool m_structured;
+	const bool m_valid;
 };
 
 class RVNGDirectoryStream : public RVNGInputStream
