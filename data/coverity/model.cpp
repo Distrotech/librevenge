@@ -29,6 +29,13 @@ enum RVNGUnit
 	RVNG_UNIT_DUMMY
 };
 
+enum RVNG_SEEK_TYPE
+{
+	RVNG_SEEK_CUR,
+	RVNG_SEEK_SET,
+	RVNG_SEEK_END
+};
+
 }
 
 // librevenge
@@ -417,6 +424,11 @@ namespace librevenge
 
 class RVNGInputStream
 {
+	RVNGInputStream()
+	{
+		m_pos = 0;
+	}
+
 	bool isStructured()
 	{
 		if (!m_valid)
@@ -469,11 +481,15 @@ class RVNGInputStream
 	const unsigned char *read(unsigned long numBytes, unsigned long &numBytesRead)
 	{
 		__coverity_writeall__(&numBytesRead);
-		if (!m_valid || m_structured)
+		if (!m_valid || m_structured || isEnd())
 		{
 			numBytesRead = 0;
 			return 0;
 		}
+		if ((static_cast<long>(m_size) - m_pos) > static_cast<long>(numBytes))
+			m_pos += static_cast<long>(numBytes);
+		else
+			m_pos = static_cast<long>(m_size);
 		return reinterpret_cast<unsigned char *>(__coverity_tainted_string_return_content__());
 	}
 
@@ -481,30 +497,76 @@ class RVNGInputStream
 	{
 		if (!m_valid || m_structured)
 			return -1;
-		int r;
-		return r;
+		switch (seekType)
+		{
+		case RVNG_SEEK_SET :
+			if (0 > offset)
+				return -1;
+			m_pos = offset;
+			if (static_cast<long>(m_size) < m_pos)
+			{
+				m_pos = static_cast<long>(m_size);
+				return 1;
+			}
+			return 0;
+		case RVNG_SEEK_CUR :
+			if (0 >= offset)
+			{
+				m_pos += offset;
+				if (0 > m_pos)
+				{
+					m_pos = 0;
+					return -1;
+				}
+				return 0;
+			}
+			else
+			{
+				if ((static_cast<long>(m_size) - m_pos) >= offset)
+				{
+					m_pos += offset;
+					return 0;
+				}
+				else
+				{
+					m_pos = static_cast<long>(m_size);
+					return 1;
+				}
+			}
+		case RVNG_SEEK_END :
+			if (0 < offset)
+				return 1;
+			m_pos = static_cast<long>(m_size) + offset;
+			if (0 > m_pos)
+			{
+				m_pos = 0;
+				return -1;
+			}
+			return 0;
+		}
+		return -1;
 	}
 
 	virtual long tell()
 	{
 		if (!m_valid || m_structured)
 			return -1;
-		long r;
-		return r;
+		return m_pos;
 	}
 
 	virtual bool isEnd()
 	{
 		if (!m_valid || m_structured)
 			return true;
-		bool end;
-		return end;
+		return static_cast<long>(m_size) == m_pos;
 	}
 
 private:
 	const bool m_structured;
 	const bool m_valid;
 	const unsigned m_substreams;
+	const unsigned long m_size;
+	long m_pos;
 };
 
 class RVNGDirectoryStream : public RVNGInputStream
