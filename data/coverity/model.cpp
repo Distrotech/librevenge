@@ -461,10 +461,9 @@ class RVNGInputStream
 	{
 		if (!m_valid || !m_structured)
 			return false;
-		if (existsSubStream(name))
-			return reinterpret_cast<RVNGInputStream *>(__coverity_new__(sizeof(RVNGInputStream)));
-		else
+		if (!existsSubStream(name))
 			return 0;
+		return reinterpret_cast<RVNGInputStream *>(__coverity_new__(sizeof(RVNGInputStream)));
 	}
 
 	const unsigned char *read(unsigned long numBytes, unsigned long &numBytesRead)
@@ -513,10 +512,9 @@ class RVNGDirectoryStream : public RVNGInputStream
 public:
 	static RVNGDirectoryStream *createForParent(const char *path)
 	{
-		if (isDirectory(path))
-			return reinterpret_cast<RVNGDirectoryStream *>(__coverity_new__(sizeof(RVNGDirectoryStream)));
-		else
+		if (!isDirectory(path))
 			return 0;
+		return reinterpret_cast<RVNGDirectoryStream *>(__coverity_new__(sizeof(RVNGDirectoryStream)));
 	}
 
 	static bool isDirectory(const char *path)
