@@ -435,11 +435,9 @@ class RVNGInputStream
 	{
 		if (!m_valid || !m_structured)
 			return 0;
-		bool existing;
-		if (existing)
-			return reinterpret_cast<char *>(__coverity_tainted_string_return_content__());
-		else
+		if (m_substreams <= id)
 			return 0;
+		return reinterpret_cast<char *>(__coverity_tainted_string_return_content__());
 	}
 
 	virtual bool existsSubStream(const char *name)
@@ -454,11 +452,9 @@ class RVNGInputStream
 	{
 		if (!m_valid || !m_structured)
 			return 0;
-		bool existing;
-		if (existing)
-			return reinterpret_cast<RVNGInputStream *>(__coverity_new__(sizeof(RVNGInputStream)));
-		else
+		if (m_substreams <= id)
 			return 0;
+		return reinterpret_cast<RVNGInputStream *>(__coverity_new__(sizeof(RVNGInputStream)));
 	}
 
 	RVNGInputStream *getSubStreamByName(const char *name)
