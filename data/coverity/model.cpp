@@ -456,11 +456,16 @@ class RVNGDirectoryStream : public RVNGInputStream
 public:
 	static RVNGDirectoryStream *createForParent(const char *path)
 	{
-		bool valid;
-		if (valid)
+		if (isDirectory(path))
 			return reinterpret_cast<RVNGDirectoryStream *>(__coverity_new__(sizeof(RVNGDirectoryStream)));
 		else
 			return 0;
+	}
+
+	static bool isDirectory(const char *path)
+	{
+		bool test;
+		return test;
 	}
 };
 
