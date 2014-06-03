@@ -428,8 +428,7 @@ class RVNGInputStream
 	{
 		if (!m_valid || !m_structured)
 			return 0;
-		unsigned count;
-		return count;
+		return m_substreams;
 	}
 
 	const char *subStreamName(unsigned id)
@@ -510,6 +509,7 @@ class RVNGInputStream
 private:
 	const bool m_structured;
 	const bool m_valid;
+	const unsigned m_substreams;
 };
 
 class RVNGDirectoryStream : public RVNGInputStream
