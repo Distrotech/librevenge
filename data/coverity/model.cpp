@@ -466,8 +466,7 @@ class RVNGInputStream
 	{
 		if (!m_valid || !m_structured)
 			return false;
-		bool existing;
-		if (existing)
+		if (existsSubStream(name))
 			return reinterpret_cast<RVNGInputStream *>(__coverity_new__(sizeof(RVNGInputStream)));
 		else
 			return 0;
