@@ -475,9 +475,12 @@ class RVNGInputStream
 
 	const unsigned char *read(unsigned long numBytes, unsigned long &numBytesRead)
 	{
-		if (!m_valid || m_structured)
-			return 0;
 		__coverity_writeall__(&numBytesRead);
+		if (!m_valid || m_structured)
+		{
+			numBytesRead = 0;
+			return 0;
+		}
 		return reinterpret_cast<unsigned char *>(__coverity_tainted_string_return_content__());
 	}
 
