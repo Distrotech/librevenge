@@ -425,19 +425,29 @@ class RVNGInputStream
 
 	const char *subStreamName(unsigned id)
 	{
-		return reinterpret_cast<char *>(__coverity_tainted_string_return_content__());
+		bool valid;
+		if (valid)
+			return reinterpret_cast<char *>(__coverity_tainted_string_return_content__());
+		else
+			return 0;
 	}
 
 	RVNGInputStream *getSubStreamById(unsigned id)
 	{
-		RVNGInputStream *r = reinterpret_cast<RVNGInputStream *>(__coverity_new__(sizeof(RVNGInputStream)));
-		return r;
+		bool valid;
+		if (valid)
+			return reinterpret_cast<RVNGInputStream *>(__coverity_new__(sizeof(RVNGInputStream)));
+		else
+			return 0;
 	}
 
 	RVNGInputStream *getSubStreamByName(const char *name)
 	{
-		RVNGInputStream *r = reinterpret_cast<RVNGInputStream *>(__coverity_new__(sizeof(RVNGInputStream)));
-		return r;
+		bool valid;
+		if (valid)
+			return reinterpret_cast<RVNGInputStream *>(__coverity_new__(sizeof(RVNGInputStream)));
+		else
+			return 0;
 	}
 };
 
@@ -446,8 +456,11 @@ class RVNGDirectoryStream : public RVNGInputStream
 public:
 	static RVNGDirectoryStream *createForParent(const char *path)
 	{
-		RVNGDirectoryStream *r = reinterpret_cast<RVNGDirectoryStream *>(__coverity_new__(sizeof(RVNGDirectoryStream)));
-		return r;
+		bool valid;
+		if (valid)
+			return reinterpret_cast<RVNGDirectoryStream *>(__coverity_new__(sizeof(RVNGDirectoryStream)));
+		else
+			return 0;
 	}
 };
 
