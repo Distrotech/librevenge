@@ -170,6 +170,7 @@ public:
 	Called when a new paragraph is opened. This (or openListElement) will always be called before any text or span is placed into the document.
 	\param propList Property list for the paragraph. May contain:
 	\paragraphproperties
+	\li \c text:outline-level The level of a heading represented by this paragraph.
 	\li \c librevenge:tab-stops List of tabstop definitions for the paragraph. If the list is empty, default tabstop definition should be used. Each tab stop may contain:
 	    -# \c style:type Type of tab (left, right, center, or char)
 	    -# \c style:char Alingnment character for char aligned tabs
