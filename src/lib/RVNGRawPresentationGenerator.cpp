@@ -38,6 +38,9 @@ RVNGRawPresentationGenerator::RVNGRawPresentationGenerator(const bool printCallg
 
 RVNGRawPresentationGenerator::~RVNGRawPresentationGenerator()
 {
+	if (m_impl->m_printCallgraphScore)
+		printf("%d\n", m_impl->m_atLeastOneCallback ? (int)m_impl->m_callStack.size() + m_impl->m_callbackMisses : -1);
+
 	delete m_impl;
 }
 

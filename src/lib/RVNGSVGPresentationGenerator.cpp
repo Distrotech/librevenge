@@ -433,7 +433,8 @@ void RVNGSVGPresentationGenerator::drawEllipse(const RVNGPropertyList &propList)
 	m_impl->m_outputSink << "cx=\"" << doubleToString(72*propList["svg:cx"]->getDouble()) << "\" cy=\"" << doubleToString(72*propList["svg:cy"]->getDouble()) << "\" ";
 	m_impl->m_outputSink << "rx=\"" << doubleToString(72*propList["svg:rx"]->getDouble()) << "\" ry=\"" << doubleToString(72*propList["svg:ry"]->getDouble()) << "\" ";
 	m_impl->writeStyle();
-	if (propList["libwpg:rotate"] && propList["libwpg:rotate"]->getDouble() != 0.0)
+	if (propList["libwpg:rotate"] &&
+	        (propList["libwpg:rotate"]->getDouble() < 0.0 || propList["libwpg:rotate"]->getDouble() > 0.0))
 		m_impl->m_outputSink << " transform=\" translate(" << doubleToString(72*propList["svg:cx"]->getDouble()) << ", " << doubleToString(72*propList["svg:cy"]->getDouble())
 		                     << ") rotate(" << doubleToString(-propList["libwpg:rotate"]->getDouble())
 		                     << ") translate(" << doubleToString(-72*propList["svg:cx"]->getDouble())
@@ -569,7 +570,8 @@ void RVNGSVGPresentationGenerator::startTextObject(const RVNGPropertyList &propL
 	m_impl->m_outputSink << "<svg:text ";
 	if (propList["svg:x"] && propList["svg:y"])
 		m_impl->m_outputSink << "x=\"" << doubleToString(72*(propList["svg:x"]->getDouble())) << "\" y=\"" << doubleToString(72*(propList["svg:y"]->getDouble())) << "\"";
-	if (propList["libwpg:rotate"] && propList["libwpg:rotate"]->getDouble() != 0.0)
+	if (propList["libwpg:rotate"] &&
+	        (propList["libwpg:rotate"]->getDouble() < 0.0 || propList["libwpg:rotate"]->getDouble() > 0.0))
 		m_impl->m_outputSink << " transform=\"translate(" << doubleToString(72*propList["svg:x"]->getDouble()) << ", " << doubleToString(72*propList["svg:y"]->getDouble())
 		                     << ") rotate(" << doubleToString(-propList["libwpg:rotate"]->getDouble())
 		                     << ") translate(" << doubleToString(-72*propList["svg:x"]->getDouble())
@@ -805,7 +807,7 @@ void RVNGSVGPresentationGeneratorImpl::writeStyle(bool /* isClosed */)
 	if (m_style["svg:stroke-width"])
 	{
 		double width = m_style["svg:stroke-width"]->getDouble();
-		if (width == 0.0 && m_style["draw:stroke"] && m_style["draw:stroke"]->getStr() != "none")
+		if (width <= 0.0 && m_style["draw:stroke"] && m_style["draw:stroke"]->getStr() != "none")
 			width = 0.2 / 72.0; // reasonable hairline
 		m_outputSink << "stroke-width: " << doubleToString(72*width) << "; ";
 	}

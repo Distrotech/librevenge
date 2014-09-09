@@ -61,7 +61,7 @@ void convertFromBase64(std::vector<unsigned char> &result, const std::string &so
 
 void convertToBase64(std::string &result, const std::vector<unsigned char> &source)
 {
-	unsigned numPadding = (3-source.size() %3) %3;
+	unsigned numPadding = unsigned((3- (source.size()%3)) %3);
 
 	typedef boost::archive::iterators::base64_from_binary<
 	boost::archive::iterators::transform_width<std::vector<unsigned char>::const_iterator, 6, 8 > > base64_encoder;
