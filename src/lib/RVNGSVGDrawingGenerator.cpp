@@ -34,7 +34,7 @@ namespace librevenge
 namespace
 {
 
-double getInchValue(librevenge::RVNGProperty const &prop)
+static double getInchValue(librevenge::RVNGProperty const &prop)
 {
 	double value=prop.getDouble();
 	switch (prop.getUnit())

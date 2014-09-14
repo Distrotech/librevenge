@@ -28,6 +28,36 @@ namespace librevenge
 namespace
 {
 
+static double getInchValue(librevenge::RVNGProperty const &prop)
+{
+	double value=prop.getDouble();
+	switch (prop.getUnit())
+	{
+	case librevenge::RVNG_GENERIC: // assume inch
+	case librevenge::RVNG_INCH:
+		return value;
+	case librevenge::RVNG_POINT:
+		value /= 72.;
+		return value;
+	case librevenge::RVNG_TWIP:
+		value /= 1440.;
+		return value;
+	case librevenge::RVNG_PERCENT:
+	case librevenge::RVNG_UNIT_ERROR:
+	default:
+	{
+		static bool first=true;
+		if (first)
+		{
+			RVNG_DEBUG_MSG(("librevenge::getInchValue: call with no double value\n"));
+			first=false;
+		}
+		break;
+	}
+	}
+	return value;
+}
+
 static std::string doubleToString(const double value)
 {
 	RVNGProperty *prop = RVNGPropertyFactory::newDoubleProp(value);
@@ -67,6 +97,7 @@ struct RVNGSVGPresentationGeneratorImpl
 	RVNGPropertyList m_style;
 	int m_gradientIndex;
 	int m_patternIndex;
+	int m_arrowStartIndex /** start arrow index*/, m_arrowEndIndex /** end arrow index */;
 	int m_shadowIndex;
 
 	void writeStyle(bool isClosed=true);
@@ -82,6 +113,8 @@ RVNGSVGPresentationGeneratorImpl::RVNGSVGPresentationGeneratorImpl(RVNGStringVec
 	, m_style()
 	, m_gradientIndex(1)
 	, m_patternIndex(1)
+	, m_arrowStartIndex(1)
+	, m_arrowEndIndex(1)
 	, m_shadowIndex(1)
 	, m_outputSink()
 	, m_vec(vec)
@@ -118,9 +151,9 @@ void RVNGSVGPresentationGenerator::startSlide(const RVNGPropertyList &propList)
 {
 	m_impl->m_outputSink << "<svg:svg version=\"1.1\" xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" ";
 	if (propList["svg:width"])
-		m_impl->m_outputSink << "width=\"" << doubleToString(72*(propList["svg:width"]->getDouble())) << "\" ";
+		m_impl->m_outputSink << "width=\"" << doubleToString(72*getInchValue(*propList["svg:width"])) << "\" ";
 	if (propList["svg:height"])
-		m_impl->m_outputSink << "height=\"" << doubleToString(72*(propList["svg:height"]->getDouble())) << "\"";
+		m_impl->m_outputSink << "height=\"" << doubleToString(72*getInchValue(*propList["svg:height"])) << "\"";
 	m_impl->m_outputSink << " >\n";
 }
 
@@ -169,8 +202,11 @@ void RVNGSVGPresentationGenerator::setStyle(const RVNGPropertyList &propList)
 		m_impl->m_outputSink << "<svg:defs>\n";
 		m_impl->m_outputSink << "<svg:filter filterUnits=\"userSpaceOnUse\" id=\"shadow" << m_impl->m_shadowIndex++ << "\">";
 		m_impl->m_outputSink << "<svg:feOffset in=\"SourceGraphic\" result=\"offset\" ";
-		m_impl->m_outputSink << "dx=\"" << doubleToString(72*m_impl->m_style["draw:shadow-offset-x"]->getDouble()) << "\" ";
-		m_impl->m_outputSink << "dy=\"" << doubleToString(72*m_impl->m_style["draw:shadow-offset-y"]->getDouble()) << "\"/>";
+		if (m_impl->m_style["draw:shadow-offset-x"])
+			m_impl->m_outputSink << "dx=\"" << doubleToString(72*getInchValue(*m_impl->m_style["draw:shadow-offset-x"])) << "\" ";
+		if (m_impl->m_style["draw:shadow-offset-y"])
+			m_impl->m_outputSink << "dy=\"" << doubleToString(72*getInchValue(*m_impl->m_style["draw:shadow-offset-y"])) << "\" ";
+		m_impl->m_outputSink << "/>";
 		m_impl->m_outputSink << "<svg:feColorMatrix in=\"offset\" result=\"offset-color\" type=\"matrix\" values=\"";
 		m_impl->m_outputSink << "0 0 0 0 " << doubleToString(shadowRed) ;
 		m_impl->m_outputSink << " 0 0 0 0 " << doubleToString(shadowGreen);
@@ -218,11 +254,11 @@ void RVNGSVGPresentationGenerator::setStyle(const RVNGPropertyList &propList)
 				{
 					m_impl->m_outputSink << "    <svg:stop offset=\"0%\"";
 					m_impl->m_outputSink << " stop-color=\"" << m_impl->m_style["draw:end-color"]->getStr().cstr() << "\"";
-					m_impl->m_outputSink << " stop-opacity=\"" << (m_impl->m_style["libwpg:end-opacity"] ? m_impl->m_style["libwpg:end-opacity"]->getDouble() : 1) << "\" />" << std::endl;
+					m_impl->m_outputSink << " stop-opacity=\"" << (m_impl->m_style["librevenge:end-opacity"] ? m_impl->m_style["librevenge:end-opacity"]->getDouble() : 1) << "\" />" << std::endl;
 
 					m_impl->m_outputSink << "    <svg:stop offset=\"100%\"";
 					m_impl->m_outputSink << " stop-color=\"" << m_impl->m_style["draw:start-color"]->getStr().cstr() << "\"";
-					m_impl->m_outputSink << " stop-opacity=\"" << (m_impl->m_style["libwpg:start-opacity"] ? m_impl->m_style["libwpg:start-opacity"]->getDouble() : 1) << "\" />" << std::endl;
+					m_impl->m_outputSink << " stop-opacity=\"" << (m_impl->m_style["librevenge:start-opacity"] ? m_impl->m_style["librevenge:start-opacity"]->getDouble() : 1) << "\" />" << std::endl;
 				}
 				m_impl->m_outputSink << "  </svg:radialGradient>\n";
 				m_impl->m_outputSink << "</svg:defs>\n";
@@ -236,11 +272,11 @@ void RVNGSVGPresentationGenerator::setStyle(const RVNGPropertyList &propList)
 				{
 					m_impl->m_outputSink << "    <svg:stop offset=\"0%\"";
 					m_impl->m_outputSink << " stop-color=\"" << m_impl->m_style["draw:start-color"]->getStr().cstr() << "\"";
-					m_impl->m_outputSink << " stop-opacity=\"" << (m_impl->m_style["libwpg:start-opacity"] ? m_impl->m_style["libwpg:start-opacity"]->getDouble() : 1) << "\" />" << std::endl;
+					m_impl->m_outputSink << " stop-opacity=\"" << (m_impl->m_style["librevenge:start-opacity"] ? m_impl->m_style["librevenge:start-opacity"]->getDouble() : 1) << "\" />" << std::endl;
 
 					m_impl->m_outputSink << "    <svg:stop offset=\"100%\"";
 					m_impl->m_outputSink << " stop-color=\"" << m_impl->m_style["draw:end-color"]->getStr().cstr() << "\"";
-					m_impl->m_outputSink << " stop-opacity=\"" << (m_impl->m_style["libwpg:end-opacity"] ? m_impl->m_style["libwpg:end-opacity"]->getDouble() : 1) << "\" />" << std::endl;
+					m_impl->m_outputSink << " stop-opacity=\"" << (m_impl->m_style["librevenge:end-opacity"] ? m_impl->m_style["librevenge:end-opacity"]->getDouble() : 1) << "\" />" << std::endl;
 				}
 				m_impl->m_outputSink << "  </svg:linearGradient>\n";
 
@@ -266,15 +302,15 @@ void RVNGSVGPresentationGenerator::setStyle(const RVNGPropertyList &propList)
 				{
 					m_impl->m_outputSink << "    <svg:stop offset=\"0%\"";
 					m_impl->m_outputSink << " stop-color=\"" << m_impl->m_style["draw:end-color"]->getStr().cstr() << "\"";
-					m_impl->m_outputSink << " stop-opacity=\"" << (m_impl->m_style["libwpg:end-opacity"] ? m_impl->m_style["libwpg:end-opacity"]->getDouble() : 1) << "\" />" << std::endl;
+					m_impl->m_outputSink << " stop-opacity=\"" << (m_impl->m_style["librevenge:end-opacity"] ? m_impl->m_style["librevenge:end-opacity"]->getDouble() : 1) << "\" />" << std::endl;
 
 					m_impl->m_outputSink << "    <svg:stop offset=\"50%\"";
 					m_impl->m_outputSink << " stop-color=\"" << m_impl->m_style["draw:start-color"]->getStr().cstr() << "\"";
-					m_impl->m_outputSink << " stop-opacity=\"" << (m_impl->m_style["libwpg:start-opacity"] ? m_impl->m_style["libwpg:start-opacity"]->getDouble() : 1) << "\" />" << std::endl;
+					m_impl->m_outputSink << " stop-opacity=\"" << (m_impl->m_style["librevenge:start-opacity"] ? m_impl->m_style["librevenge:start-opacity"]->getDouble() : 1) << "\" />" << std::endl;
 
 					m_impl->m_outputSink << "    <svg:stop offset=\"100%\"";
 					m_impl->m_outputSink << " stop-color=\"" << m_impl->m_style["draw:end-color"]->getStr().cstr() << "\"";
-					m_impl->m_outputSink << " stop-opacity=\"" << (m_impl->m_style["libwpg:end-opacity"] ? m_impl->m_style["libwpg:end-opacity"]->getDouble() : 1) << "\" />" << std::endl;
+					m_impl->m_outputSink << " stop-opacity=\"" << (m_impl->m_style["librevenge:end-opacity"] ? m_impl->m_style["librevenge:end-opacity"]->getDouble() : 1) << "\" />" << std::endl;
 				}
 				m_impl->m_outputSink << "  </svg:linearGradient>\n";
 
@@ -340,42 +376,42 @@ void RVNGSVGPresentationGenerator::setStyle(const RVNGPropertyList &propList)
 	}
 	else if (m_impl->m_style["draw:fill"] && m_impl->m_style["draw:fill"]->getStr() == "bitmap")
 	{
-		if (m_impl->m_style["draw:fill-image"] && m_impl->m_style["libwpg:mime-type"])
+		if (m_impl->m_style["draw:fill-image"] && m_impl->m_style["librevenge:mime-type"])
 		{
 			m_impl->m_outputSink << "<svg:defs>\n";
 			m_impl->m_outputSink << "  <svg:pattern id=\"img" << m_impl->m_patternIndex++ << "\" patternUnits=\"userSpaceOnUse\" ";
 			if (m_impl->m_style["svg:width"])
-				m_impl->m_outputSink << "width=\"" << doubleToString(72*(m_impl->m_style["svg:width"]->getDouble())) << "\" ";
+				m_impl->m_outputSink << "width=\"" << doubleToString(72*getInchValue(*m_impl->m_style["svg:width"])) << "\" ";
 			else
 				m_impl->m_outputSink << "width=\"100\" ";
 
 			if (m_impl->m_style["svg:height"])
-				m_impl->m_outputSink << "height=\"" << doubleToString(72*(m_impl->m_style["svg:height"]->getDouble())) << "\">" << std::endl;
+				m_impl->m_outputSink << "height=\"" << doubleToString(72*getInchValue(*m_impl->m_style["svg:height"])) << "\">" << std::endl;
 			else
 				m_impl->m_outputSink << "height=\"100\">" << std::endl;
 			m_impl->m_outputSink << "<svg:image ";
 
 			if (m_impl->m_style["svg:x"])
-				m_impl->m_outputSink << "x=\"" << doubleToString(72*(m_impl->m_style["svg:x"]->getDouble())) << "\" ";
+				m_impl->m_outputSink << "x=\"" << doubleToString(72*getInchValue(*m_impl->m_style["svg:x"])) << "\" ";
 			else
 				m_impl->m_outputSink << "x=\"0\" ";
 
 			if (m_impl->m_style["svg:y"])
-				m_impl->m_outputSink << "y=\"" << doubleToString(72*(m_impl->m_style["svg:y"]->getDouble())) << "\" ";
+				m_impl->m_outputSink << "y=\"" << doubleToString(72*getInchValue(*m_impl->m_style["svg:y"])) << "\" ";
 			else
 				m_impl->m_outputSink << "y=\"0\" ";
 
 			if (m_impl->m_style["svg:width"])
-				m_impl->m_outputSink << "width=\"" << doubleToString(72*(m_impl->m_style["svg:width"]->getDouble())) << "\" ";
+				m_impl->m_outputSink << "width=\"" << doubleToString(72*getInchValue(*m_impl->m_style["svg:width"])) << "\" ";
 			else
 				m_impl->m_outputSink << "width=\"100\" ";
 
 			if (m_impl->m_style["svg:height"])
-				m_impl->m_outputSink << "height=\"" << doubleToString(72*(m_impl->m_style["svg:height"]->getDouble())) << "\" ";
+				m_impl->m_outputSink << "height=\"" << doubleToString(72*getInchValue(*m_impl->m_style["svg:height"])) << "\" ";
 			else
 				m_impl->m_outputSink << "height=\"100\" ";
 
-			m_impl->m_outputSink << "xlink:href=\"data:" << m_impl->m_style["libwpg:mime-type"]->getStr().cstr() << ";base64,";
+			m_impl->m_outputSink << "xlink:href=\"data:" << m_impl->m_style["librevenge:mime-type"]->getStr().cstr() << ";base64,";
 			m_impl->m_outputSink << m_impl->m_style["draw:fill-image"]->getStr().cstr();
 			m_impl->m_outputSink << "\" />\n";
 			m_impl->m_outputSink << "  </svg:pattern>\n";
@@ -418,27 +454,29 @@ void RVNGSVGPresentationGenerator::closeGroup()
 
 void RVNGSVGPresentationGenerator::drawRectangle(const RVNGPropertyList &propList)
 {
+	if (!propList["svg:x"] || !propList["svg:y"] || !propList["svg:width"] || !propList["svg:height"])
+		return;
 	m_impl->m_outputSink << "<svg:rect ";
-	m_impl->m_outputSink << "x=\"" << doubleToString(72*propList["svg:x"]->getDouble()) << "\" y=\"" << doubleToString(72*propList["svg:y"]->getDouble()) << "\" ";
-	m_impl->m_outputSink << "width=\"" << doubleToString(72*propList["svg:width"]->getDouble()) << "\" height=\"" << doubleToString(72*propList["svg:height"]->getDouble()) << "\" ";
+	m_impl->m_outputSink << "x=\"" << doubleToString(72*getInchValue(*propList["svg:x"])) << "\" y=\"" << doubleToString(72*getInchValue(*propList["svg:y"])) << "\" ";
+	m_impl->m_outputSink << "width=\"" << doubleToString(72*getInchValue(*propList["svg:width"])) << "\" height=\"" << doubleToString(72*getInchValue(*propList["svg:height"])) << "\" ";
 	if ((propList["svg:rx"] && propList["svg:rx"]->getInt() !=0) || (propList["svg:ry"] && propList["svg:ry"]->getInt() !=0))
-		m_impl->m_outputSink << "rx=\"" << doubleToString(72*propList["svg:rx"]->getDouble()) << "\" ry=\"" << doubleToString(72*propList["svg:ry"]->getDouble()) << "\" ";
+		m_impl->m_outputSink << "rx=\"" << doubleToString(72*getInchValue(*propList["svg:rx"])) << "\" ry=\"" << doubleToString(72*getInchValue(*propList["svg:ry"])) << "\" ";
 	m_impl->writeStyle();
 	m_impl->m_outputSink << "/>\n";
 }
 
 void RVNGSVGPresentationGenerator::drawEllipse(const RVNGPropertyList &propList)
 {
+	if (!propList["svg:cx"] || !propList["svg:cy"] || !propList["svg:rx"] || !propList["svg:ry"])
+		return;
 	m_impl->m_outputSink << "<svg:ellipse ";
-	m_impl->m_outputSink << "cx=\"" << doubleToString(72*propList["svg:cx"]->getDouble()) << "\" cy=\"" << doubleToString(72*propList["svg:cy"]->getDouble()) << "\" ";
-	m_impl->m_outputSink << "rx=\"" << doubleToString(72*propList["svg:rx"]->getDouble()) << "\" ry=\"" << doubleToString(72*propList["svg:ry"]->getDouble()) << "\" ";
+	m_impl->m_outputSink << "cx=\"" << doubleToString(72*getInchValue(*propList["svg:cx"])) << "\" cy=\"" << doubleToString(72*getInchValue(*propList["svg:cy"])) << "\" ";
+	m_impl->m_outputSink << "rx=\"" << doubleToString(72*getInchValue(*propList["svg:rx"])) << "\" ry=\"" << doubleToString(72*getInchValue(*propList["svg:ry"])) << "\" ";
 	m_impl->writeStyle();
-	if (propList["libwpg:rotate"] &&
-	        (propList["libwpg:rotate"]->getDouble() < 0.0 || propList["libwpg:rotate"]->getDouble() > 0.0))
-		m_impl->m_outputSink << " transform=\" translate(" << doubleToString(72*propList["svg:cx"]->getDouble()) << ", " << doubleToString(72*propList["svg:cy"]->getDouble())
-		                     << ") rotate(" << doubleToString(-propList["libwpg:rotate"]->getDouble())
-		                     << ") translate(" << doubleToString(-72*propList["svg:cx"]->getDouble())
-		                     << ", " << doubleToString(-72*propList["svg:cy"]->getDouble())
+	if (propList["librevenge:rotate"] && (propList["librevenge:rotate"]->getDouble()<0||propList["librevenge:rotate"]->getDouble()>0))
+		m_impl->m_outputSink << " transform=\" rotate(" << doubleToString(-propList["librevenge:rotate"]->getDouble())
+		                     << ", " << doubleToString(72*getInchValue(*propList["svg:cy"]))
+		                     << ", " << doubleToString(72*getInchValue(*propList["svg:cy"]))
 		                     << ")\" ";
 	m_impl->m_outputSink << "/>\n";
 }
@@ -464,9 +502,11 @@ void RVNGSVGPresentationGeneratorImpl::drawPolySomething(const RVNGPropertyListV
 
 	if (vertices.count() == 2)
 	{
+		if (!vertices[0]["svg:x"]||!vertices[0]["svg:y"]||!vertices[1]["svg:x"]||!vertices[1]["svg:y"])
+			return;
 		m_outputSink << "<svg:line ";
-		m_outputSink << "x1=\"" << doubleToString(72*(vertices[0]["svg:x"]->getDouble())) << "\"  y1=\"" << doubleToString(72*(vertices[0]["svg:y"]->getDouble())) << "\" ";
-		m_outputSink << "x2=\"" << doubleToString(72*(vertices[1]["svg:x"]->getDouble())) << "\"  y2=\"" << doubleToString(72*(vertices[1]["svg:y"]->getDouble())) << "\"\n";
+		m_outputSink << "x1=\"" << doubleToString(72*getInchValue(*vertices[0]["svg:x"])) << "\"  y1=\"" << doubleToString(72*getInchValue(*vertices[0]["svg:y"])) << "\" ";
+		m_outputSink << "x2=\"" << doubleToString(72*getInchValue(*vertices[1]["svg:x"])) << "\"  y2=\"" << doubleToString(72*getInchValue(*vertices[1]["svg:y"])) << "\"\n";
 		writeStyle();
 		m_outputSink << "/>\n";
 	}
@@ -480,7 +520,9 @@ void RVNGSVGPresentationGeneratorImpl::drawPolySomething(const RVNGPropertyListV
 		m_outputSink << "points=\"";
 		for (unsigned i = 0; i < vertices.count(); i++)
 		{
-			m_outputSink << doubleToString(72*(vertices[i]["svg:x"]->getDouble())) << " " << doubleToString(72*(vertices[i]["svg:y"]->getDouble()));
+			if (!vertices[i]["svg:x"]||!vertices[i]["svg:y"])
+				continue;
+			m_outputSink << doubleToString(72*getInchValue(*vertices[i]["svg:x"])) << " " << doubleToString(72*getInchValue(*vertices[i]["svg:y"]));
 			if (i < vertices.count()-1)
 				m_outputSink << ", ";
 		}
@@ -501,39 +543,44 @@ void RVNGSVGPresentationGenerator::drawPath(const RVNGPropertyList &propList)
 	for (i=0; i < path->count(); i++)
 	{
 		RVNGPropertyList pList((*path)[i]);
-		if (pList["libwpg:path-action"] && pList["libwpg:path-action"]->getStr() == "M")
+		if (!pList["librevenge:path-action"]) continue;
+		std::string action=pList["librevenge:path-action"]->getStr().cstr();
+		if (action.length()!=1) continue;
+		bool coordOk=pList["svg:x"]&&pList["svg:y"];
+		bool coord1Ok=coordOk && pList["svg:x1"]&&pList["svg:y1"];
+		bool coord2Ok=coord1Ok && pList["svg:x2"]&&pList["svg:y2"];
+		if (pList["svg:x"] && action[0] == 'H')
+			m_impl->m_outputSink << "\nH" << doubleToString(72*getInchValue(*pList["svg:x"]));
+		else if (pList["svg:y"] && action[0] == 'V')
+			m_impl->m_outputSink << "\nV" << doubleToString(72*getInchValue(*pList["svg:y"]));
+		else if (coordOk && (action[0] == 'M' || action[0] == 'L' || action[0] == 'T'))
 		{
-			m_impl->m_outputSink << "\nM";
-			m_impl->m_outputSink << doubleToString(72*(pList["svg:x"]->getDouble())) << "," << doubleToString(72*(pList["svg:y"]->getDouble()));
+			m_impl->m_outputSink << "\n" << action;
+			m_impl->m_outputSink << doubleToString(72*getInchValue(*pList["svg:x"])) << "," << doubleToString(72*getInchValue(*pList["svg:y"]));
 		}
-		else if (pList["libwpg:path-action"] && pList["libwpg:path-action"]->getStr() == "L")
+		else if (coord1Ok && (action[0] == 'Q' || action[0] == 'S'))
 		{
-			m_impl->m_outputSink << "\nL";
-			m_impl->m_outputSink << doubleToString(72*(pList["svg:x"]->getDouble())) << "," << doubleToString(72*(pList["svg:y"]->getDouble()));
+			m_impl->m_outputSink << "\n" << action;
+			m_impl->m_outputSink << doubleToString(72*getInchValue(*pList["svg:x1"])) << "," << doubleToString(72*getInchValue(*pList["svg:y1"])) << " ";
+			m_impl->m_outputSink << doubleToString(72*getInchValue(*pList["svg:x"])) << "," << doubleToString(72*getInchValue(*pList["svg:y"]));
 		}
-		else if (pList["libwpg:path-action"] && pList["libwpg:path-action"]->getStr() == "C")
+		else if (coord2Ok && action[0] == 'C')
 		{
 			m_impl->m_outputSink << "\nC";
-			m_impl->m_outputSink << doubleToString(72*(pList["svg:x1"]->getDouble())) << "," << doubleToString(72*(pList["svg:y1"]->getDouble())) << " ";
-			m_impl->m_outputSink << doubleToString(72*(pList["svg:x2"]->getDouble())) << "," << doubleToString(72*(pList["svg:y2"]->getDouble())) << " ";
-			m_impl->m_outputSink << doubleToString(72*(pList["svg:x"]->getDouble())) << "," << doubleToString(72*(pList["svg:y"]->getDouble()));
+			m_impl->m_outputSink << doubleToString(72*getInchValue(*pList["svg:x1"])) << "," << doubleToString(72*getInchValue(*pList["svg:y1"])) << " ";
+			m_impl->m_outputSink << doubleToString(72*getInchValue(*pList["svg:x2"])) << "," << doubleToString(72*getInchValue(*pList["svg:y2"])) << " ";
+			m_impl->m_outputSink << doubleToString(72*getInchValue(*pList["svg:x"])) << "," << doubleToString(72*getInchValue(*pList["svg:y"]));
 		}
-		else if (pList["libwpg:path-action"] && pList["libwpg:path-action"]->getStr() == "Q")
-		{
-			m_impl->m_outputSink << "\nQ";
-			m_impl->m_outputSink << doubleToString(72*(pList["svg:x1"]->getDouble())) << "," << doubleToString(72*(pList["svg:y1"]->getDouble())) << " ";
-			m_impl->m_outputSink << doubleToString(72*(pList["svg:x"]->getDouble())) << "," << doubleToString(72*(pList["svg:y"]->getDouble()));
-		}
-		else if (pList["libwpg:path-action"] && pList["libwpg:path-action"]->getStr() == "A")
+		else if (coordOk && pList["svg:rx"] && pList["svg:ry"] && action[0] == 'A')
 		{
 			m_impl->m_outputSink << "\nA";
-			m_impl->m_outputSink << doubleToString(72*(pList["svg:rx"]->getDouble())) << "," << doubleToString(72*(pList["svg:ry"]->getDouble())) << " ";
-			m_impl->m_outputSink << doubleToString(pList["libwpg:rotate"] ? pList["libwpg:rotate"]->getDouble() : 0) << " ";
-			m_impl->m_outputSink << (pList["libwpg:large-arc"] ? pList["libwpg:large-arc"]->getInt() : 1) << ",";
-			m_impl->m_outputSink << (pList["libwpg:sweep"] ? pList["libwpg:sweep"]->getInt() : 1) << " ";
-			m_impl->m_outputSink << doubleToString(72*(pList["svg:x"]->getDouble())) << "," << doubleToString(72*(pList["svg:y"]->getDouble()));
+			m_impl->m_outputSink << doubleToString(72*getInchValue(*pList["svg:rx"])) << "," << doubleToString(72*getInchValue(*pList["svg:ry"])) << " ";
+			m_impl->m_outputSink << doubleToString(pList["librevenge:rotate"] ? pList["librevenge:rotate"]->getDouble() : 0) << " ";
+			m_impl->m_outputSink << (pList["librevenge:large-arc"] ? pList["librevenge:large-arc"]->getInt() : 1) << ",";
+			m_impl->m_outputSink << (pList["librevenge:sweep"] ? pList["librevenge:sweep"]->getInt() : 1) << " ";
+			m_impl->m_outputSink << doubleToString(72*getInchValue(*pList["svg:x"])) << "," << doubleToString(72*getInchValue(*pList["svg:y"]));
 		}
-		else if ((i >= path->count()-1 && i > 2) && pList["libwpg:path-action"] && pList["libwpg:path-action"]->getStr() == "Z")
+		else if (action[0] == 'Z')
 		{
 			isClosed = true;
 			m_impl->m_outputSink << "\nZ";
@@ -547,15 +594,44 @@ void RVNGSVGPresentationGenerator::drawPath(const RVNGPropertyList &propList)
 
 void RVNGSVGPresentationGenerator::drawGraphicObject(const RVNGPropertyList &propList)
 {
-	if (!propList["libwpg:mime-type"] || propList["libwpg:mime-type"]->getStr().len() <= 0)
+	if (!propList["librevenge:mime-type"] || propList["librevenge:mime-type"]->getStr().len() <= 0)
 		return;
 	if (!propList["office:binary-data"])
 		return;
 	m_impl->m_outputSink << "<svg:image ";
 	if (propList["svg:x"] && propList["svg:y"] && propList["svg:width"] && propList["svg:height"])
-		m_impl->m_outputSink << "x=\"" << doubleToString(72*(propList["svg:x"]->getDouble())) << "\" y=\"" << doubleToString(72*(propList["svg:y"]->getDouble())) << "\" ";
-	m_impl->m_outputSink << "width=\"" << doubleToString(72*(propList["svg:width"]->getDouble())) << "\" height=\"" << doubleToString(72*(propList["svg:height"]->getDouble())) << "\" ";
-	m_impl->m_outputSink << "xlink:href=\"data:" << propList["libwpg:mime-type"]->getStr().cstr() << ";base64,";
+	{
+		double x=getInchValue(*propList["svg:x"]);
+		double y=getInchValue(*propList["svg:y"]);
+		double width=getInchValue(*propList["svg:width"]);
+		double height=getInchValue(*propList["svg:height"]);
+		bool flipX(propList["draw:mirror-horizontal"] && propList["draw:mirror-horizontal"]->getInt());
+		bool flipY(propList["draw:mirror-vertical"] && propList["draw:mirror-vertical"]->getInt());
+
+		m_impl->m_outputSink << "x=\"" << doubleToString(72*x) << "\" y=\"" << doubleToString(72*y) << "\" ";
+		m_impl->m_outputSink << "width=\"" << doubleToString(72*width) << "\" height=\"" << doubleToString(72*height) << "\" ";
+		if (flipX || flipY || propList["librevenge:rotate"])
+		{
+			double xmiddle = x + width / 2.0;
+			double ymiddle = y + height / 2.0;
+			m_impl->m_outputSink << "transform=\"";
+			m_impl->m_outputSink << " translate(" << doubleToString(72*xmiddle) << ", " << doubleToString(72*ymiddle) << ") ";
+			m_impl->m_outputSink << " scale(" << (flipX ? "-1" : "1") << ", " << (flipY ? "-1" : "1") << ") ";
+			// rotation is around the center of the object's bounding box
+			if (propList["librevenge:rotate"])
+			{
+				double angle(propList["librevenge:rotate"]->getDouble());
+				while (angle > 180.0)
+					angle -= 360.0;
+				while (angle < -180.0)
+					angle += 360.0;
+				m_impl->m_outputSink << " rotate(" << doubleToString(angle) << ") ";
+			}
+			m_impl->m_outputSink << " translate(" << doubleToString(-72*xmiddle) << ", " << doubleToString(-72*ymiddle) << ") ";
+			m_impl->m_outputSink << "\" ";
+		}
+	}
+	m_impl->m_outputSink << "xlink:href=\"data:" << propList["librevenge:mime-type"]->getStr().cstr() << ";base64,";
 	m_impl->m_outputSink << propList["office:binary-data"]->getStr().cstr();
 	m_impl->m_outputSink << "\" />\n";
 }
@@ -567,18 +643,61 @@ void RVNGSVGPresentationGenerator::drawConnector(const RVNGPropertyList &/*propL
 
 void RVNGSVGPresentationGenerator::startTextObject(const RVNGPropertyList &propList)
 {
+	double x = 0.0;
+	double y = 0.0;
+	double height = 0.0;
 	m_impl->m_outputSink << "<svg:text ";
 	if (propList["svg:x"] && propList["svg:y"])
-		m_impl->m_outputSink << "x=\"" << doubleToString(72*(propList["svg:x"]->getDouble())) << "\" y=\"" << doubleToString(72*(propList["svg:y"]->getDouble())) << "\"";
-	if (propList["libwpg:rotate"] &&
-	        (propList["libwpg:rotate"]->getDouble() < 0.0 || propList["libwpg:rotate"]->getDouble() > 0.0))
-		m_impl->m_outputSink << " transform=\"translate(" << doubleToString(72*propList["svg:x"]->getDouble()) << ", " << doubleToString(72*propList["svg:y"]->getDouble())
-		                     << ") rotate(" << doubleToString(-propList["libwpg:rotate"]->getDouble())
-		                     << ") translate(" << doubleToString(-72*propList["svg:x"]->getDouble())
-		                     << ", " << doubleToString(-72*propList["svg:y"]->getDouble())
-		                     << ")\"";
-	m_impl->m_outputSink << ">\n";
+	{
+		x = getInchValue(*propList["svg:x"]);
+		y = getInchValue(*propList["svg:y"]);
+	}
 
+	double xmiddle = x;
+	double ymiddle = y;
+
+	if (propList["svg:width"])
+	{
+		double width = getInchValue(*propList["svg:width"]);
+		xmiddle += width / 2.0;
+	}
+
+	if (propList["svg:height"])
+	{
+		height = getInchValue(*propList["svg:height"]);
+		ymiddle += height / 2.0;
+	}
+
+	if (propList["draw:textarea-vertical-align"])
+	{
+		if (propList["draw:textarea-vertical-align"]->getStr() == "middle")
+			y = ymiddle;
+		if (propList["draw:textarea-vertical-align"]->getStr() == "bottom")
+		{
+			y += height;
+			if (propList["fo:padding-bottom"])
+				y -= propList["fo:padding-bottom"]->getDouble();
+		}
+	}
+	else
+		y += height;
+
+	if (propList["fo:padding-left"])
+		x += propList["fo:padding-left"]->getDouble();
+
+	m_impl->m_outputSink << "x=\"" << doubleToString(72*x) << "\" y=\"" << doubleToString(72*y) << "\"";
+
+	// rotation is around the center of the object's bounding box
+	if (propList["librevenge:rotate"] && (propList["librevenge:rotate"]->getDouble()<0||propList["librevenge:rotate"]->getDouble()>0))
+	{
+		double angle(propList["librevenge:rotate"]->getDouble());
+		while (angle > 180.0)
+			angle -= 360.0;
+		while (angle < -180.0)
+			angle += 360.0;
+		m_impl->m_outputSink << " transform=\"rotate(" << doubleToString(angle) << ", " << doubleToString(72*xmiddle) << ", " << doubleToString(72*ymiddle) << ")\" ";
+	}
+	m_impl->m_outputSink << ">\n";
 }
 
 void RVNGSVGPresentationGenerator::endTextObject()
@@ -804,14 +923,16 @@ void RVNGSVGPresentationGeneratorImpl::writeStyle(bool /* isClosed */)
 {
 	m_outputSink << "style=\"";
 
+	double width = 1.0 / 72.0;
 	if (m_style["svg:stroke-width"])
 	{
-		double width = m_style["svg:stroke-width"]->getDouble();
+		width = getInchValue(*m_style["svg:stroke-width"]);
 		if (width <= 0.0 && m_style["draw:stroke"] && m_style["draw:stroke"]->getStr() != "none")
 			width = 0.2 / 72.0; // reasonable hairline
 		m_outputSink << "stroke-width: " << doubleToString(72*width) << "; ";
 	}
-	if ((m_style["draw:stroke"] && m_style["draw:stroke"]->getStr() != "none"))
+
+	if (m_style["draw:stroke"] && m_style["draw:stroke"]->getStr() != "none")
 	{
 		if (m_style["svg:stroke-color"])
 			m_outputSink << "stroke: " << m_style["svg:stroke-color"]->getStr().cstr()  << "; ";
@@ -820,29 +941,48 @@ void RVNGSVGPresentationGeneratorImpl::writeStyle(bool /* isClosed */)
 	}
 
 	if (m_style["draw:stroke"] && m_style["draw:stroke"]->getStr() == "solid")
-		m_outputSink << "stroke-dasharray:  solid; ";
+		m_outputSink << "stroke-dasharray: none; ";
 	else if (m_style["draw:stroke"] && m_style["draw:stroke"]->getStr() == "dash")
 	{
-		int dots1 = m_style["draw:dots1"]->getInt();
-		int dots2 = m_style["draw:dots2"]->getInt();
-		double dots1len = m_style["draw:dots1-length"]->getDouble();
-		double dots2len = m_style["draw:dots2-length"]->getDouble();
-		double gap = m_style["draw:distance"]->getDouble();
+		int dots1 = m_style["draw:dots1"] ? m_style["draw:dots1"]->getInt() : 0;
+		int dots2 = m_style["draw:dots2"] ? m_style["draw:dots2"]->getInt() : 0;
+		double dots1len = 72.*width, dots2len = 72.*width, gap = 72.*width;
+		if (m_style["draw:dots1-length"])
+		{
+			if (m_style["draw:dots1-length"]->getUnit()==librevenge::RVNG_PERCENT)
+				dots1len=72*m_style["draw:dots1-length"]->getDouble()*width;
+			else
+				dots1len=72*getInchValue(*m_style["draw:dots1-length"]);
+		}
+		if (m_style["draw:dots2-length"])
+		{
+			if (m_style["draw:dots2-length"]->getUnit()==librevenge::RVNG_PERCENT)
+				dots2len=72*m_style["draw:dots2-length"]->getDouble()*width;
+			else
+				dots2len=72*getInchValue(*m_style["draw:dots2-length"]);
+		}
+		if (m_style["draw:distance"])
+		{
+			if (m_style["draw:distance"]->getUnit()==librevenge::RVNG_PERCENT)
+				gap=72*m_style["draw:distance"]->getDouble()*width;
+			else
+				gap=72*getInchValue(*m_style["draw:distance"]);
+		}
 		m_outputSink << "stroke-dasharray: ";
 		for (int i = 0; i < dots1; i++)
 		{
 			if (i)
 				m_outputSink << ", ";
-			m_outputSink << (int)dots1len;
+			m_outputSink << doubleToString(dots1len);
 			m_outputSink << ", ";
-			m_outputSink << (int)gap;
+			m_outputSink << doubleToString(gap);
 		}
 		for (int j = 0; j < dots2; j++)
 		{
 			m_outputSink << ", ";
-			m_outputSink << (int)dots2len;
+			m_outputSink << doubleToString(dots2len);
 			m_outputSink << ", ";
-			m_outputSink << (int)gap;
+			m_outputSink << doubleToString(gap);
 		}
 		m_outputSink << "; ";
 	}
@@ -860,8 +1000,7 @@ void RVNGSVGPresentationGeneratorImpl::writeStyle(bool /* isClosed */)
 
 	if (m_style["draw:fill"] && m_style["draw:fill"]->getStr() == "gradient")
 		m_outputSink << "fill: url(#grad" << m_gradientIndex-1 << "); ";
-
-	if (m_style["draw:fill"] && m_style["draw:fill"]->getStr() == "bitmap")
+	else if (m_style["draw:fill"] && m_style["draw:fill"]->getStr() == "bitmap")
 		m_outputSink << "fill: url(#img" << m_patternIndex-1 << "); ";
 
 	if (m_style["draw:shadow"] && m_style["draw:shadow"]->getStr() == "visible")
@@ -872,6 +1011,12 @@ void RVNGSVGPresentationGeneratorImpl::writeStyle(bool /* isClosed */)
 			m_outputSink << "fill: " << m_style["draw:fill-color"]->getStr().cstr() << "; ";
 	if (m_style["draw:opacity"] && m_style["draw:opacity"]->getDouble() < 1)
 		m_outputSink << "fill-opacity: " << doubleToString(m_style["draw:opacity"]->getDouble()) << "; ";
+
+	if (m_style["draw:marker-start-path"])
+		m_outputSink << "marker-start: url(#startMarker" << m_arrowStartIndex-1 << "); ";
+	if (m_style["draw:marker-end-path"])
+		m_outputSink << "marker-end: url(#endMarker" << m_arrowEndIndex-1 << "); ";
+
 	m_outputSink << "\""; // style
 }
 
