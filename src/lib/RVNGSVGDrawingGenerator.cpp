@@ -34,6 +34,36 @@ namespace librevenge
 namespace
 {
 
+double getInchValue(librevenge::RVNGProperty const &prop)
+{
+	double value=prop.getDouble();
+	switch (prop.getUnit())
+	{
+	case librevenge::RVNG_GENERIC: // assume inch
+	case librevenge::RVNG_INCH:
+		return value;
+	case librevenge::RVNG_POINT:
+		value /= 72.;
+		return value;
+	case librevenge::RVNG_TWIP:
+		value /= 1440.;
+		return value;
+	case librevenge::RVNG_PERCENT:
+	case librevenge::RVNG_UNIT_ERROR:
+	default:
+	{
+		static bool first=true;
+		if (first)
+		{
+			RVNG_DEBUG_MSG(("librevenge::getInchValue: call with no double value\n"));
+			first=false;
+		}
+		break;
+	}
+	}
+	return value;
+}
+
 static std::string doubleToString(const double value)
 {
 	RVNGProperty *prop = RVNGPropertyFactory::newDoubleProp(value);
@@ -124,8 +154,8 @@ void RVNGSVGDrawingGeneratorPrivate::drawPolySomething(const RVNGPropertyListVec
 		if (!vertices[0]["svg:x"]||!vertices[0]["svg:y"]||!vertices[1]["svg:x"]||!vertices[1]["svg:y"])
 			return;
 		m_outputSink << "<" << getNamespaceAndDelim() << "line ";
-		m_outputSink << "x1=\"" << doubleToString(72*(vertices[0]["svg:x"]->getDouble())) << "\"  y1=\"" << doubleToString(72*(vertices[0]["svg:y"]->getDouble())) << "\" ";
-		m_outputSink << "x2=\"" << doubleToString(72*(vertices[1]["svg:x"]->getDouble())) << "\"  y2=\"" << doubleToString(72*(vertices[1]["svg:y"]->getDouble())) << "\"\n";
+		m_outputSink << "x1=\"" << doubleToString(72*getInchValue(*vertices[0]["svg:x"])) << "\"  y1=\"" << doubleToString(72*getInchValue(*vertices[0]["svg:y"])) << "\" ";
+		m_outputSink << "x2=\"" << doubleToString(72*getInchValue(*vertices[1]["svg:x"])) << "\"  y2=\"" << doubleToString(72*getInchValue(*vertices[1]["svg:y"])) << "\"\n";
 		writeStyle();
 		m_outputSink << "/>\n";
 	}
@@ -141,7 +171,7 @@ void RVNGSVGDrawingGeneratorPrivate::drawPolySomething(const RVNGPropertyListVec
 		{
 			if (!vertices[i]["svg:x"]||!vertices[i]["svg:y"])
 				continue;
-			m_outputSink << doubleToString(72*(vertices[i]["svg:x"]->getDouble())) << " " << doubleToString(72*(vertices[i]["svg:y"]->getDouble()));
+			m_outputSink << doubleToString(72*getInchValue(*vertices[i]["svg:x"])) << " " << doubleToString(72*getInchValue(*vertices[i]["svg:y"]));
 			if (i < vertices.count()-1)
 				m_outputSink << ", ";
 		}
@@ -176,9 +206,9 @@ void RVNGSVGDrawingGeneratorPrivate::setStyle(const RVNGPropertyList &propList)
 		m_outputSink << "<" << getNamespaceAndDelim() << "filter filterUnits=\"userSpaceOnUse\" id=\"shadow" << m_shadowIndex++ << "\">";
 		m_outputSink << "<" << getNamespaceAndDelim() << "feOffset in=\"SourceGraphic\" result=\"offset\" ";
 		if (m_style["draw:shadow-offset-x"])
-			m_outputSink << "dx=\"" << doubleToString(72*m_style["draw:shadow-offset-x"]->getDouble()) << "\" ";
+			m_outputSink << "dx=\"" << doubleToString(72*getInchValue(*m_style["draw:shadow-offset-x"])) << "\" ";
 		if (m_style["draw:shadow-offset-y"])
-			m_outputSink << "dy=\"" << doubleToString(72*m_style["draw:shadow-offset-y"]->getDouble()) << "\" ";
+			m_outputSink << "dy=\"" << doubleToString(72*getInchValue(*m_style["draw:shadow-offset-y"])) << "\" ";
 		m_outputSink << "/>";
 		m_outputSink << "<" << getNamespaceAndDelim() << "feColorMatrix in=\"offset\" result=\"offset-color\" type=\"matrix\" values=\"";
 		m_outputSink << "0 0 0 0 " << doubleToString(shadowRed) ;
@@ -378,33 +408,33 @@ void RVNGSVGDrawingGeneratorPrivate::setStyle(const RVNGPropertyList &propList)
 		m_outputSink << "<" << getNamespaceAndDelim() << "defs>\n";
 		m_outputSink << "  <" << getNamespaceAndDelim() << "pattern id=\"img" << m_patternIndex++ << "\" patternUnits=\"userSpaceOnUse\" ";
 		if (m_style["svg:width"])
-			m_outputSink << "width=\"" << doubleToString(72*(m_style["svg:width"]->getDouble())) << "\" ";
+			m_outputSink << "width=\"" << doubleToString(72*getInchValue(*m_style["svg:width"])) << "\" ";
 		else
 			m_outputSink << "width=\"100\" ";
 
 		if (m_style["svg:height"])
-			m_outputSink << "height=\"" << doubleToString(72*(m_style["svg:height"]->getDouble())) << "\">" << std::endl;
+			m_outputSink << "height=\"" << doubleToString(72*getInchValue(*m_style["svg:height"])) << "\">" << std::endl;
 		else
 			m_outputSink << "height=\"100\">" << std::endl;
 		m_outputSink << "<" << getNamespaceAndDelim() << "image ";
 
 		if (m_style["svg:x"])
-			m_outputSink << "x=\"" << doubleToString(72*(m_style["svg:x"]->getDouble())) << "\" ";
+			m_outputSink << "x=\"" << doubleToString(72*getInchValue(*m_style["svg:x"])) << "\" ";
 		else
 			m_outputSink << "x=\"0\" ";
 
 		if (m_style["svg:y"])
-			m_outputSink << "y=\"" << doubleToString(72*(m_style["svg:y"]->getDouble())) << "\" ";
+			m_outputSink << "y=\"" << doubleToString(72*getInchValue(*m_style["svg:y"])) << "\" ";
 		else
 			m_outputSink << "y=\"0\" ";
 
 		if (m_style["svg:width"])
-			m_outputSink << "width=\"" << doubleToString(72*(m_style["svg:width"]->getDouble())) << "\" ";
+			m_outputSink << "width=\"" << doubleToString(72*getInchValue(*m_style["svg:width"])) << "\" ";
 		else
 			m_outputSink << "width=\"100\" ";
 
 		if (m_style["svg:height"])
-			m_outputSink << "height=\"" << doubleToString(72*(m_style["svg:height"]->getDouble())) << "\" ";
+			m_outputSink << "height=\"" << doubleToString(72*getInchValue(*m_style["svg:height"])) << "\" ";
 		else
 			m_outputSink << "height=\"100\" ";
 
@@ -446,7 +476,7 @@ void RVNGSVGDrawingGeneratorPrivate::writeStyle(bool /* isClosed */)
 	double width = 1.0 / 72.0;
 	if (m_style["svg:stroke-width"])
 	{
-		width = m_style["svg:stroke-width"]->getDouble();
+		width = getInchValue(*m_style["svg:stroke-width"]);
 #if 0
 		// add me in libmspub and libcdr
 		if (width <= 0.0 && m_style["draw:stroke"] && m_style["draw:stroke"]->getStr() != "none")
@@ -472,24 +502,24 @@ void RVNGSVGDrawingGeneratorPrivate::writeStyle(bool /* isClosed */)
 		double dots1len = 72.*width, dots2len = 72.*width, gap = 72.*width;
 		if (m_style["draw:dots1-length"])
 		{
-			dots1len = 72.*m_style["draw:dots1-length"]->getDouble();
-			std::string str = m_style["draw:dots1-length"]->getStr().cstr();
-			if (str.size() > 1 && str[str.size()-1]=='%')
-				dots1len *=width;
+			if (m_style["draw:dots1-length"]->getUnit()==librevenge::RVNG_PERCENT)
+				dots1len=72*m_style["draw:dots1-length"]->getDouble()*width;
+			else
+				dots1len=72*getInchValue(*m_style["draw:dots1-length"]);
 		}
 		if (m_style["draw:dots2-length"])
 		{
-			dots2len = 72.*m_style["draw:dots2-length"]->getDouble();
-			std::string str = m_style["draw:dots2-length"]->getStr().cstr();
-			if (str.size() > 1 && str[str.size()-1]=='%')
-				dots2len *=width;
+			if (m_style["draw:dots2-length"]->getUnit()==librevenge::RVNG_PERCENT)
+				dots2len=72*m_style["draw:dots2-length"]->getDouble()*width;
+			else
+				dots2len=72*getInchValue(*m_style["draw:dots2-length"]);
 		}
 		if (m_style["draw:distance"])
 		{
-			gap = 72.*m_style["draw:distance"]->getDouble();
-			std::string str = m_style["draw:distance"]->getStr().cstr();
-			if (str.size() > 1 && str[str.size()-1]=='%')
-				gap *=width;
+			if (m_style["draw:distance"]->getUnit()==librevenge::RVNG_PERCENT)
+				gap=72*m_style["draw:distance"]->getDouble()*width;
+			else
+				gap=72*getInchValue(*m_style["draw:distance"]);
 		}
 		m_outputSink << "stroke-dasharray: ";
 		for (int i = 0; i < dots1; i++)
@@ -570,9 +600,9 @@ void RVNGSVGDrawingGenerator::startPage(const RVNGPropertyList &propList)
 	m_pImpl->m_outputSink << (m_pImpl->m_nmSpace.empty() ? "" : ":") << m_pImpl->m_nmSpace << "=\"http://www.w3.org/2000/svg\" ";
 	m_pImpl->m_outputSink << "xmlns:xlink=\"http://www.w3.org/1999/xlink\" ";
 	if (propList["svg:width"])
-		m_pImpl->m_outputSink << "width=\"" << doubleToString(72*(propList["svg:width"]->getDouble())) << "\" ";
+		m_pImpl->m_outputSink << "width=\"" << doubleToString(72*getInchValue(*propList["svg:width"])) << "\" ";
 	if (propList["svg:height"])
-		m_pImpl->m_outputSink << "height=\"" << doubleToString(72*(propList["svg:height"]->getDouble())) << "\"";
+		m_pImpl->m_outputSink << "height=\"" << doubleToString(72*getInchValue(*propList["svg:height"])) << "\"";
 	m_pImpl->m_outputSink << " >\n";
 }
 
@@ -626,10 +656,10 @@ void RVNGSVGDrawingGenerator::drawRectangle(const RVNGPropertyList &propList)
 	if (!propList["svg:x"] || !propList["svg:y"] || !propList["svg:width"] || !propList["svg:height"])
 		return;
 	m_pImpl->m_outputSink << "<" << m_pImpl->getNamespaceAndDelim() << "rect ";
-	m_pImpl->m_outputSink << "x=\"" << doubleToString(72*propList["svg:x"]->getDouble()) << "\" y=\"" << doubleToString(72*propList["svg:y"]->getDouble()) << "\" ";
-	m_pImpl->m_outputSink << "width=\"" << doubleToString(72*propList["svg:width"]->getDouble()) << "\" height=\"" << doubleToString(72*propList["svg:height"]->getDouble()) << "\" ";
+	m_pImpl->m_outputSink << "x=\"" << doubleToString(72*getInchValue(*propList["svg:x"])) << "\" y=\"" << doubleToString(72*getInchValue(*propList["svg:y"])) << "\" ";
+	m_pImpl->m_outputSink << "width=\"" << doubleToString(72*getInchValue(*propList["svg:width"])) << "\" height=\"" << doubleToString(72*getInchValue(*propList["svg:height"])) << "\" ";
 	if (propList["svg:rx"] && propList["svg:rx"]->getDouble() > 0 && propList["svg:ry"] && propList["svg:ry"]->getDouble()>0)
-		m_pImpl->m_outputSink << "rx=\"" << doubleToString(72*propList["svg:rx"]->getDouble()) << "\" ry=\"" << doubleToString(72*propList["svg:ry"]->getDouble()) << "\" ";
+		m_pImpl->m_outputSink << "rx=\"" << doubleToString(72*getInchValue(*propList["svg:rx"])) << "\" ry=\"" << doubleToString(72*getInchValue(*propList["svg:ry"])) << "\" ";
 	m_pImpl->writeStyle();
 	m_pImpl->m_outputSink << "/>\n";
 }
@@ -639,13 +669,13 @@ void RVNGSVGDrawingGenerator::drawEllipse(const RVNGPropertyList &propList)
 	if (!propList["svg:cx"] || !propList["svg:cy"] || !propList["svg:rx"] || !propList["svg:ry"])
 		return;
 	m_pImpl->m_outputSink << "<" << m_pImpl->getNamespaceAndDelim() << "ellipse ";
-	m_pImpl->m_outputSink << "cx=\"" << doubleToString(72*propList["svg:cx"]->getDouble()) << "\" cy=\"" << doubleToString(72*propList["svg:cy"]->getDouble()) << "\" ";
-	m_pImpl->m_outputSink << "rx=\"" << doubleToString(72*propList["svg:rx"]->getDouble()) << "\" ry=\"" << doubleToString(72*propList["svg:ry"]->getDouble()) << "\" ";
+	m_pImpl->m_outputSink << "cx=\"" << doubleToString(72*getInchValue(*propList["svg:cx"])) << "\" cy=\"" << doubleToString(72*getInchValue(*propList["svg:cy"])) << "\" ";
+	m_pImpl->m_outputSink << "rx=\"" << doubleToString(72*getInchValue(*propList["svg:rx"])) << "\" ry=\"" << doubleToString(72*getInchValue(*propList["svg:ry"])) << "\" ";
 	m_pImpl->writeStyle();
 	if (propList["librevenge:rotate"] && (propList["librevenge:rotate"]->getDouble()<0||propList["librevenge:rotate"]->getDouble()>0))
 		m_pImpl->m_outputSink << " transform=\" rotate(" << doubleToString(-propList["librevenge:rotate"]->getDouble())
-		                      << ", " << doubleToString(72*propList["svg:cy"]->getDouble())
-		                      << ", " << doubleToString(72*propList["svg:cy"]->getDouble())
+		                      << ", " << doubleToString(72*getInchValue(*propList["svg:cy"]))
+		                      << ", " << doubleToString(72*getInchValue(*propList["svg:cy"]))
 		                      << ")\" ";
 	m_pImpl->m_outputSink << "/>\n";
 }
@@ -682,35 +712,35 @@ void RVNGSVGDrawingGenerator::drawPath(const RVNGPropertyList &propList)
 		bool coord1Ok=coordOk && pList["svg:x1"]&&pList["svg:y1"];
 		bool coord2Ok=coord1Ok && pList["svg:x2"]&&pList["svg:y2"];
 		if (pList["svg:x"] && action[0] == 'H')
-			m_pImpl->m_outputSink << "\nH" << doubleToString(72*(pList["svg:x"]->getDouble()));
+			m_pImpl->m_outputSink << "\nH" << doubleToString(72*getInchValue(*pList["svg:x"]));
 		else if (pList["svg:y"] && action[0] == 'V')
-			m_pImpl->m_outputSink << "\nV" << doubleToString(72*(pList["svg:y"]->getDouble()));
+			m_pImpl->m_outputSink << "\nV" << doubleToString(72*getInchValue(*pList["svg:y"]));
 		else if (coordOk && (action[0] == 'M' || action[0] == 'L' || action[0] == 'T'))
 		{
 			m_pImpl->m_outputSink << "\n" << action;
-			m_pImpl->m_outputSink << doubleToString(72*(pList["svg:x"]->getDouble())) << "," << doubleToString(72*(pList["svg:y"]->getDouble()));
+			m_pImpl->m_outputSink << doubleToString(72*getInchValue(*pList["svg:x"])) << "," << doubleToString(72*getInchValue(*pList["svg:y"]));
 		}
 		else if (coord1Ok && (action[0] == 'Q' || action[0] == 'S'))
 		{
 			m_pImpl->m_outputSink << "\n" << action;
-			m_pImpl->m_outputSink << doubleToString(72*(pList["svg:x1"]->getDouble())) << "," << doubleToString(72*(pList["svg:y1"]->getDouble())) << " ";
-			m_pImpl->m_outputSink << doubleToString(72*(pList["svg:x"]->getDouble())) << "," << doubleToString(72*(pList["svg:y"]->getDouble()));
+			m_pImpl->m_outputSink << doubleToString(72*getInchValue(*pList["svg:x1"])) << "," << doubleToString(72*getInchValue(*pList["svg:y1"])) << " ";
+			m_pImpl->m_outputSink << doubleToString(72*getInchValue(*pList["svg:x"])) << "," << doubleToString(72*getInchValue(*pList["svg:y"]));
 		}
 		else if (coord2Ok && action[0] == 'C')
 		{
 			m_pImpl->m_outputSink << "\nC";
-			m_pImpl->m_outputSink << doubleToString(72*(pList["svg:x1"]->getDouble())) << "," << doubleToString(72*(pList["svg:y1"]->getDouble())) << " ";
-			m_pImpl->m_outputSink << doubleToString(72*(pList["svg:x2"]->getDouble())) << "," << doubleToString(72*(pList["svg:y2"]->getDouble())) << " ";
-			m_pImpl->m_outputSink << doubleToString(72*(pList["svg:x"]->getDouble())) << "," << doubleToString(72*(pList["svg:y"]->getDouble()));
+			m_pImpl->m_outputSink << doubleToString(72*getInchValue(*pList["svg:x1"])) << "," << doubleToString(72*getInchValue(*pList["svg:y1"])) << " ";
+			m_pImpl->m_outputSink << doubleToString(72*getInchValue(*pList["svg:x2"])) << "," << doubleToString(72*getInchValue(*pList["svg:y2"])) << " ";
+			m_pImpl->m_outputSink << doubleToString(72*getInchValue(*pList["svg:x"])) << "," << doubleToString(72*getInchValue(*pList["svg:y"]));
 		}
 		else if (coordOk && pList["svg:rx"] && pList["svg:ry"] && action[0] == 'A')
 		{
 			m_pImpl->m_outputSink << "\nA";
-			m_pImpl->m_outputSink << doubleToString(72*(pList["svg:rx"]->getDouble())) << "," << doubleToString(72*(pList["svg:ry"]->getDouble())) << " ";
+			m_pImpl->m_outputSink << doubleToString(72*getInchValue(*pList["svg:rx"])) << "," << doubleToString(72*getInchValue(*pList["svg:ry"])) << " ";
 			m_pImpl->m_outputSink << doubleToString(pList["librevenge:rotate"] ? pList["librevenge:rotate"]->getDouble() : 0) << " ";
 			m_pImpl->m_outputSink << (pList["librevenge:large-arc"] ? pList["librevenge:large-arc"]->getInt() : 1) << ",";
 			m_pImpl->m_outputSink << (pList["librevenge:sweep"] ? pList["librevenge:sweep"]->getInt() : 1) << " ";
-			m_pImpl->m_outputSink << doubleToString(72*(pList["svg:x"]->getDouble())) << "," << doubleToString(72*(pList["svg:y"]->getDouble()));
+			m_pImpl->m_outputSink << doubleToString(72*getInchValue(*pList["svg:x"])) << "," << doubleToString(72*getInchValue(*pList["svg:y"]));
 		}
 		else if (action[0] == 'Z')
 		{
@@ -733,10 +763,10 @@ void RVNGSVGDrawingGenerator::drawGraphicObject(const RVNGPropertyList &propList
 	m_pImpl->m_outputSink << "<" << m_pImpl->getNamespaceAndDelim() << "image ";
 	if (propList["svg:x"] && propList["svg:y"] && propList["svg:width"] && propList["svg:height"])
 	{
-		double x(propList["svg:x"]->getDouble());
-		double y(propList["svg:y"]->getDouble());
-		double width(propList["svg:width"]->getDouble());
-		double height(propList["svg:height"]->getDouble());
+		double x=getInchValue(*propList["svg:x"]);
+		double y=getInchValue(*propList["svg:y"]);
+		double width=getInchValue(*propList["svg:width"]);
+		double height=getInchValue(*propList["svg:height"]);
 		bool flipX(propList["draw:mirror-horizontal"] && propList["draw:mirror-horizontal"]->getInt());
 		bool flipY(propList["draw:mirror-vertical"] && propList["draw:mirror-vertical"]->getInt());
 
@@ -781,8 +811,8 @@ void RVNGSVGDrawingGenerator::startTextObject(const RVNGPropertyList &propList)
 	m_pImpl->m_outputSink << "<" << m_pImpl->getNamespaceAndDelim() << "text ";
 	if (propList["svg:x"] && propList["svg:y"])
 	{
-		x = propList["svg:x"]->getDouble();
-		y = propList["svg:y"]->getDouble();
+		x = getInchValue(*propList["svg:x"]);
+		y = getInchValue(*propList["svg:y"]);
 	}
 
 	double xmiddle = x;
@@ -790,13 +820,13 @@ void RVNGSVGDrawingGenerator::startTextObject(const RVNGPropertyList &propList)
 
 	if (propList["svg:width"])
 	{
-		double width = propList["svg:width"]->getDouble();
+		double width = getInchValue(*propList["svg:width"]);
 		xmiddle += width / 2.0;
 	}
 
 	if (propList["svg:height"])
 	{
-		height = propList["svg:height"]->getDouble();
+		height = getInchValue(*propList["svg:height"]);
 		ymiddle += height / 2.0;
 	}
 
