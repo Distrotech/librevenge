@@ -98,6 +98,8 @@ struct RVNGSVGPresentationGeneratorImpl
 	int m_gradientIndex;
 	int m_patternIndex;
 	int m_arrowStartIndex /** start arrow index*/, m_arrowEndIndex /** end arrow index */;
+	//! layerId used if svg:id is not defined when calling startLayer
+	int m_layerId;
 	int m_shadowIndex;
 
 	void writeStyle(bool isClosed=true);
@@ -115,6 +117,7 @@ RVNGSVGPresentationGeneratorImpl::RVNGSVGPresentationGeneratorImpl(RVNGStringVec
 	, m_patternIndex(1)
 	, m_arrowStartIndex(1)
 	, m_arrowEndIndex(1)
+	, m_layerId(1000)
 	, m_shadowIndex(1)
 	, m_outputSink()
 	, m_vec(vec)
@@ -422,7 +425,17 @@ void RVNGSVGPresentationGenerator::setStyle(const RVNGPropertyList &propList)
 
 void RVNGSVGPresentationGenerator::startLayer(const RVNGPropertyList &propList)
 {
-	m_impl->m_outputSink << "<svg:g id=\"Layer" << propList["svg:id"]->getInt() << "\"";
+	m_impl->m_outputSink << "<svg:g";
+	librevenge::RVNGString layer("Layer");
+	if (propList["draw:layer"])
+		layer.append(propList["draw:layer"]->getStr());
+	else if (propList["svg:id"])
+		layer.append(propList["svg:id"]->getStr());
+	else
+		layer.sprintf("Layer%d", m_impl->m_layerId++);
+	librevenge::RVNGString finalName("");
+	finalName.appendEscapedXML(layer);
+	m_impl->m_outputSink << " id=\"" << finalName.cstr() << "\"";
 	if (propList["svg:fill-rule"])
 		m_impl->m_outputSink << " fill-rule=\"" << propList["svg:fill-rule"]->getStr().cstr() << "\"";
 	m_impl->m_outputSink << " >\n";

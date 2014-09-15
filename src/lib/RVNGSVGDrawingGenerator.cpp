@@ -115,6 +115,8 @@ struct RVNGSVGDrawingGeneratorPrivate
 	//! index uses when fill=bitmap
 	int m_patternIndex;
 	int m_arrowStartIndex /** start arrow index*/, m_arrowEndIndex /** end arrow index */;
+	//! groupId used if svg:id is not defined when calling openGroup
+	int m_groupId;
 	//! layerId used if svg:id is not defined when calling startLayer
 	int m_layerId;
 	//! a prefix used to define the svg namespace
@@ -134,7 +136,7 @@ RVNGSVGDrawingGeneratorPrivate::RVNGSVGDrawingGeneratorPrivate(RVNGStringVector 
 	m_patternIndex(1),
 	m_arrowStartIndex(1),
 	m_arrowEndIndex(1),
-	m_layerId(1000),
+	m_groupId(1000), m_layerId(1000),
 	m_nmSpace(nmSpace.cstr()),
 	m_nmSpaceAndDelim(""),
 	m_outputSink(),
@@ -626,10 +628,16 @@ void RVNGSVGDrawingGenerator::endMasterPage()
 void RVNGSVGDrawingGenerator::startLayer(const RVNGPropertyList &propList)
 {
 	m_pImpl->m_outputSink << "<" << m_pImpl->getNamespaceAndDelim() << "g";
-	if (propList["svg:id"])
-		m_pImpl->m_outputSink << " id=\"Layer" << propList["svg:id"]->getStr().cstr() << "\"";
+	librevenge::RVNGString layer("Layer");
+	if (propList["draw:layer"])
+		layer.append(propList["draw:layer"]->getStr());
+	else if (propList["svg:id"])
+		layer.append(propList["svg:id"]->getStr());
 	else
-		m_pImpl->m_outputSink << " id=\"Layer" << m_pImpl->m_layerId++ << "\"";
+		layer.sprintf("Layer%d", m_pImpl->m_layerId++);
+	librevenge::RVNGString finalName("");
+	finalName.appendEscapedXML(layer);
+	m_pImpl->m_outputSink << " id=\"" << finalName.cstr() << "\"";
 	if (propList["svg:fill-rule"])
 		m_pImpl->m_outputSink << " fill-rule=\"" << propList["svg:fill-rule"]->getStr().cstr() << "\"";
 	m_pImpl->m_outputSink << " >\n";
@@ -643,8 +651,19 @@ void RVNGSVGDrawingGenerator::endLayer()
 void RVNGSVGDrawingGenerator::startEmbeddedGraphics(const RVNGPropertyList & /*propList*/) {}
 void RVNGSVGDrawingGenerator::endEmbeddedGraphics() {}
 
-void RVNGSVGDrawingGenerator::openGroup(const RVNGPropertyList & /*propList*/) {}
-void RVNGSVGDrawingGenerator::closeGroup() {}
+void RVNGSVGDrawingGenerator::openGroup(const RVNGPropertyList & /*propList*/)
+{
+	m_pImpl->m_outputSink << "<" << m_pImpl->getNamespaceAndDelim() << "g";
+	librevenge::RVNGString group;
+	group.sprintf("Group%d", m_pImpl->m_groupId++);
+	m_pImpl->m_outputSink << " id=\"" << group.cstr() << "\"";
+	m_pImpl->m_outputSink << " >\n";
+}
+
+void RVNGSVGDrawingGenerator::closeGroup()
+{
+	m_pImpl->m_outputSink << "</" << m_pImpl->getNamespaceAndDelim() << "g>\n";
+}
 
 void RVNGSVGDrawingGenerator::setStyle(const RVNGPropertyList &propList)
 {
