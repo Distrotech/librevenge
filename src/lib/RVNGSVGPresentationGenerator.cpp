@@ -107,6 +107,10 @@ struct RVNGSVGPresentationGeneratorImpl
 
 	std::ostringstream m_outputSink;
 	RVNGStringVector &m_vec;
+	//! the actual master name
+	RVNGString m_masterName;
+	//! a map master name to master content
+	std::map<RVNGString, std::string> m_masterNameToContentMap;
 };
 
 RVNGSVGPresentationGeneratorImpl::RVNGSVGPresentationGeneratorImpl(RVNGStringVector &vec)
@@ -121,6 +125,7 @@ RVNGSVGPresentationGeneratorImpl::RVNGSVGPresentationGeneratorImpl(RVNGStringVec
 	, m_shadowIndex(1)
 	, m_outputSink()
 	, m_vec(vec)
+	, m_masterName(), m_masterNameToContentMap()
 {
 }
 
@@ -152,6 +157,17 @@ void RVNGSVGPresentationGenerator::defineEmbeddedFont(const RVNGPropertyList &)
 
 void RVNGSVGPresentationGenerator::startSlide(const RVNGPropertyList &propList)
 {
+	if (propList["librevenge:master-page-name"])
+	{
+		if (m_impl->m_masterNameToContentMap.find(propList["librevenge:master-page-name"]->getStr())!=
+		        m_impl->m_masterNameToContentMap.end())
+		{
+			m_impl->m_outputSink << m_impl->m_masterNameToContentMap.find(propList["librevenge:master-page-name"]->getStr())->second;
+			return;
+		}
+		RVNG_DEBUG_MSG(("RVNGSVGPresentationGenerator::startSlide: can not find master slide with given master name\n"));
+	}
+
 	m_impl->m_outputSink << "<svg:svg version=\"1.1\" xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" ";
 	if (propList["svg:width"])
 		m_impl->m_outputSink << "width=\"" << doubleToString(72*getInchValue(*propList["svg:width"])) << "\" ";
@@ -167,13 +183,43 @@ void RVNGSVGPresentationGenerator::endSlide()
 	m_impl->m_outputSink.str("");
 }
 
-void RVNGSVGPresentationGenerator::startMasterSlide(const RVNGPropertyList &)
+void RVNGSVGPresentationGenerator::startMasterSlide(const RVNGPropertyList &propList)
 {
+	if (!m_impl->m_masterName.empty())
+	{
+		RVNG_DEBUG_MSG(("RVNGSVGPresentationGenerator::startMasterSlide: a master slide is already opened\n"));
+	}
+	else if (propList["librevenge:master-page-name"])
+	{
+		m_impl->m_masterName=propList["librevenge:master-page-name"]->getStr();
+		RVNGPropertyList pList(propList);
+		pList.remove("librevenge:master-page-name");
+		startSlide(pList);
+	}
+	else
+	{
+		RVNG_DEBUG_MSG(("RVNGSVGPresentationGenerator::startMasterSlide: can not find the master name\n"));
+	}
 }
 
 void RVNGSVGPresentationGenerator::endMasterSlide()
 {
-	// we don't do anything with master slides yet, so just reset the content
+	if (m_impl->m_masterName.empty())
+	{
+		RVNG_DEBUG_MSG(("RVNGSVGPresentationGenerator::endMasterSlide: no master slides are opened\n"));
+	}
+	else
+	{
+		if (m_impl->m_masterNameToContentMap.find(m_impl->m_masterName)!=m_impl->m_masterNameToContentMap.end())
+		{
+			RVNG_DEBUG_MSG(("RVNGSVGPresentationGenerator::endMasterSlide: a master slide with name %s already exists\n",
+			                m_impl->m_masterName.cstr()));
+		}
+		// no need to close the page, this will be done when the master page will be used
+		m_impl->m_masterNameToContentMap[m_impl->m_masterName]=m_impl->m_outputSink.str();
+		m_impl->m_masterName.clear();
+	}
+	// reset the content
 	m_impl->m_outputSink.str("");
 }
 

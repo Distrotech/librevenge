@@ -125,6 +125,10 @@ struct RVNGSVGDrawingGeneratorPrivate
 	std::string m_nmSpaceAndDelim;
 	std::ostringstream m_outputSink;
 	RVNGStringVector &m_vec;
+	//! the actual master name
+	RVNGString m_masterName;
+	//! a map master name to master content
+	std::map<RVNGString, std::string> m_masterNameToContentMap;
 };
 
 RVNGSVGDrawingGeneratorPrivate::RVNGSVGDrawingGeneratorPrivate(RVNGStringVector &vec, const RVNGString &nmSpace) :
@@ -140,7 +144,8 @@ RVNGSVGDrawingGeneratorPrivate::RVNGSVGDrawingGeneratorPrivate(RVNGStringVector 
 	m_nmSpace(nmSpace.cstr()),
 	m_nmSpaceAndDelim(""),
 	m_outputSink(),
-	m_vec(vec)
+	m_vec(vec),
+	m_masterName(), m_masterNameToContentMap()
 {
 	if (!m_nmSpace.empty())
 		m_nmSpaceAndDelim = m_nmSpace+":";
@@ -593,11 +598,17 @@ void RVNGSVGDrawingGenerator::defineEmbeddedFont(const RVNGPropertyList & /*prop
 
 void RVNGSVGDrawingGenerator::startPage(const RVNGPropertyList &propList)
 {
-#if 0
-	m_pImpl->m_outputSink << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n";
-	m_pImpl->m_outputSink << "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\"";
-	m_pImpl->m_outputSink << " \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n";
-#endif
+	if (propList["librevenge:master-page-name"])
+	{
+		if (m_pImpl->m_masterNameToContentMap.find(propList["librevenge:master-page-name"]->getStr())!=
+		        m_pImpl->m_masterNameToContentMap.end())
+		{
+			m_pImpl->m_outputSink << m_pImpl->m_masterNameToContentMap.find(propList["librevenge:master-page-name"]->getStr())->second;
+			return;
+		}
+		RVNG_DEBUG_MSG(("RVNGSVGDrawingGenerator::startPage: can not find page with given master name\n"));
+	}
+
 	m_pImpl->m_outputSink << "<" << m_pImpl->getNamespaceAndDelim() << "svg version=\"1.1\" xmlns";
 	m_pImpl->m_outputSink << (m_pImpl->m_nmSpace.empty() ? "" : ":") << m_pImpl->m_nmSpace << "=\"http://www.w3.org/2000/svg\" ";
 	m_pImpl->m_outputSink << "xmlns:xlink=\"http://www.w3.org/1999/xlink\" ";
@@ -615,13 +626,43 @@ void RVNGSVGDrawingGenerator::endPage()
 	m_pImpl->m_outputSink.str("");
 }
 
-void RVNGSVGDrawingGenerator::startMasterPage(const RVNGPropertyList &)
+void RVNGSVGDrawingGenerator::startMasterPage(const RVNGPropertyList &propList)
 {
+	if (!m_pImpl->m_masterName.empty())
+	{
+		RVNG_DEBUG_MSG(("RVNGSVGDrawingGenerator::startMasterPage: a master page is already opened\n"));
+	}
+	else if (propList["librevenge:master-page-name"])
+	{
+		m_pImpl->m_masterName=propList["librevenge:master-page-name"]->getStr();
+		RVNGPropertyList pList(propList);
+		pList.remove("librevenge:master-page-name");
+		startPage(pList);
+	}
+	else
+	{
+		RVNG_DEBUG_MSG(("RVNGSVGDrawingGenerator::startMasterPage: can not find the master name\n"));
+	}
 }
 
 void RVNGSVGDrawingGenerator::endMasterPage()
 {
-	// we don't do anything with master pages yet, so just reset the content
+	if (m_pImpl->m_masterName.empty())
+	{
+		RVNG_DEBUG_MSG(("RVNGSVGDrawingGenerator::endMasterPage: no master pages are opened\n"));
+	}
+	else
+	{
+		if (m_pImpl->m_masterNameToContentMap.find(m_pImpl->m_masterName)!=m_pImpl->m_masterNameToContentMap.end())
+		{
+			RVNG_DEBUG_MSG(("RVNGSVGDrawingGenerator::endMasterPage: a master page with name %s already exists\n",
+			                m_pImpl->m_masterName.cstr()));
+		}
+		// no need to close the page, this will be done when the master page will be used
+		m_pImpl->m_masterNameToContentMap[m_pImpl->m_masterName]=m_pImpl->m_outputSink.str();
+		m_pImpl->m_masterName.clear();
+	}
+	// reset the content
 	m_pImpl->m_outputSink.str("");
 }
 
