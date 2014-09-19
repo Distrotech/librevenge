@@ -14,9 +14,13 @@
 
 #include <locale.h>
 
+#include <iostream>
 #include <map>
 #include <sstream>
 #include <string>
+#include <vector>
+
+#include <boost/shared_ptr.hpp>
 
 #include <librevenge-generators/librevenge-generators.h>
 
@@ -25,7 +29,7 @@
 namespace librevenge
 {
 
-namespace
+namespace PresentationSVG
 {
 
 static double getInchValue(librevenge::RVNGProperty const &prop)
@@ -85,7 +89,94 @@ static unsigned stringToColour(const RVNGString &s)
 	return val;
 }
 
-}
+//! basic class used to store table information
+struct Table
+{
+	//! constructor
+	Table(const RVNGPropertyList &propList) : m_column(0), m_row(0), m_x(0), m_y(0), m_columnsDistanceFromOrigin(), m_rowsDistanceFromOrigin()
+	{
+		if (propList["svg:x"])
+			m_x=getInchValue(*propList["svg:x"]);
+		if (propList["svg:y"])
+			m_y=getInchValue(*propList["svg:y"]);
+		// we do not actually use height/width, so...
+
+		m_columnsDistanceFromOrigin.push_back(0);
+		m_rowsDistanceFromOrigin.push_back(0);
+
+		const librevenge::RVNGPropertyListVector *columns = propList.child("librevenge:table-columns");
+		if (columns)
+		{
+			double actDist=0;
+			for (unsigned long i=0; i<columns->count(); ++i)
+			{
+				if ((*columns)[i]["style:column-width"])
+					actDist+=getInchValue(*(*columns)[i]["style:column-width"]);
+				m_columnsDistanceFromOrigin.push_back(actDist);
+			}
+		}
+		else
+		{
+			RVNG_DEBUG_MSG(("librevenge::DrawingSVG::Table::Table: can not find any columns\n"));
+		}
+	}
+	//! calls to open a row
+	void openRow(const RVNGPropertyList &propList)
+	{
+		double height=0;
+		if (propList["style:row-height"])
+			height=getInchValue(*propList["style:row-height"]);
+		// changeme
+		else if (propList["style:min-row-height"])
+			height=getInchValue(*propList["style:min-row-height"]);
+		else
+		{
+			RVNG_DEBUG_MSG(("librevenge::DrawingSVG::Table::openRow: can not determine row height\n"));
+		}
+		m_rowsDistanceFromOrigin.push_back(m_rowsDistanceFromOrigin.back()+height);
+	}
+	//! call to close a row
+	void closeRow()
+	{
+		++m_row;
+	}
+	//! returns the position of a cellule
+	bool getPosition(int column, int row, double &x, double &y) const
+	{
+		bool ok=true;
+		if (column>=0 && column <int(m_columnsDistanceFromOrigin.size()))
+			x=m_x+m_columnsDistanceFromOrigin[size_t(column)];
+		else
+		{
+			ok=false;
+			RVNG_DEBUG_MSG(("librevenge::DrawingSVG::Table::getPosition: the column %d seems bad\n", column));
+			x=(column<0 || m_columnsDistanceFromOrigin.empty()) ? m_x : m_x + m_columnsDistanceFromOrigin.back();
+		}
+		if (row>=0 && row <int(m_rowsDistanceFromOrigin.size()))
+			y=m_y+m_rowsDistanceFromOrigin[size_t(row)];
+		else
+		{
+			ok=false;
+			RVNG_DEBUG_MSG(("librevenge::DrawingSVG::Table::getPosition: the row %d seems bad\n", row));
+			y=(row<0 || m_rowsDistanceFromOrigin.empty()) ? m_y : m_y + m_rowsDistanceFromOrigin.back();
+		}
+		return ok;
+	}
+	//! the actual column
+	int m_column;
+	//! the actual row
+	int m_row;
+	//! the origin table position in inches
+	double m_x, m_y;
+	//! the distance of each begin column in inches from origin
+	std::vector<double> m_columnsDistanceFromOrigin;
+	//! the distance of each begin row in inches from origin
+	std::vector<double> m_rowsDistanceFromOrigin;
+};
+
+} // PresentationSVG namespace
+
+using namespace PresentationSVG;
 
 struct RVNGSVGPresentationGeneratorImpl
 {
@@ -111,6 +202,8 @@ struct RVNGSVGPresentationGeneratorImpl
 	RVNGString m_masterName;
 	//! a map master name to master content
 	std::map<RVNGString, std::string> m_masterNameToContentMap;
+	//! the actual opened table
+	boost::shared_ptr<Table> m_table;
 };
 
 RVNGSVGPresentationGeneratorImpl::RVNGSVGPresentationGeneratorImpl(RVNGStringVector &vec)
@@ -126,6 +219,7 @@ RVNGSVGPresentationGeneratorImpl::RVNGSVGPresentationGeneratorImpl(RVNGStringVec
 	, m_outputSink()
 	, m_vec(vec)
 	, m_masterName(), m_masterNameToContentMap()
+	, m_table()
 {
 }
 
@@ -880,41 +974,71 @@ void RVNGSVGPresentationGenerator::closeParagraph()
 	m_impl->m_outputSink << '\n';
 }
 
-void RVNGSVGPresentationGenerator::startTableObject(const RVNGPropertyList &/*propList*/)
+void RVNGSVGPresentationGenerator::startTableObject(const RVNGPropertyList &propList)
 {
-	// TODO: implement me
+	if (m_impl->m_table)
+	{
+		RVNG_DEBUG_MSG(("RVNGSVGPresentationGenerator::startTableObject: a table is already opened\n"));
+		return;
+	}
+	m_impl->m_table.reset(new Table(propList));
 }
 
-void RVNGSVGPresentationGenerator::openTableRow(const RVNGPropertyList &/*propList*/)
+void RVNGSVGPresentationGenerator::openTableRow(const RVNGPropertyList &propList)
 {
-	// TODO: implement me
+	if (!m_impl->m_table) return;
+	m_impl->m_table->openRow(propList);
 }
 
 void RVNGSVGPresentationGenerator::closeTableRow()
 {
-	// TODO: implement me
+	if (!m_impl->m_table) return;
+	m_impl->m_table->closeRow();
 }
 
-void RVNGSVGPresentationGenerator::openTableCell(const RVNGPropertyList &/*propList*/)
+void RVNGSVGPresentationGenerator::openTableCell(const RVNGPropertyList &propList)
 {
-	// TODO: implement me
+	if (!m_impl->m_table) return;
+
+	if (propList["librevenge:column"])
+		m_impl->m_table->m_column=propList["librevenge:column"]->getInt();
+	if (propList["librevenge:row"])
+		m_impl->m_table->m_row=propList["librevenge:row"]->getInt();
+
+	double x = 0, y=0;
+	m_impl->m_table->getPosition(m_impl->m_table->m_column, m_impl->m_table->m_row, x, y);
+	m_impl->m_outputSink << "<svg:text ";
+	m_impl->m_outputSink << "x=\"" << doubleToString(72*x) << "\" y=\"" << doubleToString(72*y) << "\" ";
+	m_impl->m_outputSink << ">\n";
+
+	// time to update the next cell's column
+	if (propList["table:number-columns-spanned"])
+		m_impl->m_table->m_column += propList["librevenge:column"]->getInt();
+	else
+		++m_impl->m_table->m_column;
 }
 
 void RVNGSVGPresentationGenerator::closeTableCell()
 {
-	// TODO: implement me
+	if (!m_impl->m_table) return;
+	m_impl->m_outputSink << "</svg:text>\n";
 }
 
 void RVNGSVGPresentationGenerator::insertCoveredTableCell(const RVNGPropertyList &/*propList*/)
 {
+	if (!m_impl->m_table) return;
 	// TODO: implement me
 }
 
 void RVNGSVGPresentationGenerator::endTableObject()
 {
-	// TODO: implement me
+	if (!m_impl->m_table)
+	{
+		RVNG_DEBUG_MSG(("RVNGSVGDrawingGenerator::endTableObject: no table is already opened\n"));
+		return;
+	}
+	m_impl->m_table.reset();
 }
-
 
 void RVNGSVGPresentationGenerator::startComment(const RVNGPropertyList &/*propList*/)
 {
