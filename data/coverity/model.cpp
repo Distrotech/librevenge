@@ -449,7 +449,7 @@ class RVNGInputStream
 			return 0;
 		if (m_substreams <= id)
 			return 0;
-		const char *const val;
+		const char *val;
 		return val;
 	}
 
@@ -491,7 +491,7 @@ class RVNGInputStream
 			m_pos += static_cast<long>(numBytes);
 		else
 			m_pos = static_cast<long>(m_size);
-		const char *const val;
+		const unsigned char *val;
 		return val;
 	}
 
