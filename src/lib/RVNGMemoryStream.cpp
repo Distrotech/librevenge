@@ -72,12 +72,12 @@ int RVNGMemoryInputStream::seek(long offset, RVNG_SEEK_TYPE seekType)
 	if (m_offset < 0)
 	{
 		m_offset = 0;
-		return 1;
+		return -1;
 	}
 	if ((long)m_offset > (long)m_size)
 	{
 		m_offset = (long) m_size;
-		return 1;
+		return -1;
 	}
 
 	return 0;

@@ -424,17 +424,17 @@ int RVNGStringStream::seek(long offset, RVNG_SEEK_TYPE seekType)
 	else if (seekType == RVNG_SEEK_SET)
 		d->offset = offset;
 	else if (seekType == RVNG_SEEK_END)
-		d->offset += d->buffer.size();
+		d->offset = offset+(long) d->buffer.size();
 
 	if (d->offset < 0)
 	{
 		d->offset = 0;
-		return 1;
+		return -1;
 	}
 	if ((long)d->offset > (long)d->buffer.size())
 	{
 		d->offset = (long) d->buffer.size();
-		return 1;
+		return -1;
 	}
 
 	return 0;
