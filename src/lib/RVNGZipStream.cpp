@@ -103,15 +103,6 @@ struct CentralDirectoryEnd
 #define LOC_FILE_HEADER_SIG 0x04034b50
 #define CDIR_END_SIG 0x06054b50
 
-static unsigned char getByte(RVNGInputStream *input)
-{
-	unsigned long numBytesRead = 0;
-	const unsigned char *ret = input->read(1, numBytesRead);
-	if (numBytesRead != 1)
-		throw StreamException();
-	return ret[0];
-}
-
 static unsigned short getShort(RVNGInputStream *input)
 {
 	unsigned long numBytesRead = 0;
@@ -145,9 +136,22 @@ static bool readCentralDirectoryEnd(RVNGInputStream *input, CentralDirectoryEnd 
 		end.cdir_size = getInt(input);
 		end.cdir_offset = getInt(input);
 		end.comment_size = getShort(input);
+
 		end.comment.clear();
-		for (unsigned short i = 0; i < end.comment_size; i++)
-			end.comment.append(1, (char)getByte(input));
+		if (end.comment_size)
+		{
+			// check if the comment field size seems coherent
+			long pos=input->tell();
+			if (input->seek(long(end.comment_size), librevenge::RVNG_SEEK_CUR)!=0)
+				return false;
+			input->seek(pos, librevenge::RVNG_SEEK_SET);
+
+			unsigned long read;
+			const unsigned char *data=input->read((unsigned long) end.comment_size, read);
+			if (!data || read!=(unsigned long) end.comment_size)
+				return false;
+			end.comment.append((const char *) data, size_t(end.comment_size));
+		}
 	}
 	catch (...)
 	{
@@ -180,16 +184,41 @@ static bool readCentralDirectoryEntry(RVNGInputStream *input, CentralDirectoryEn
 		entry.internal_attr = getShort(input);
 		entry.external_attr = getInt(input);
 		entry.offset = getInt(input);
-		unsigned short i = 0;
+
+		// check if the field sizes seem coherent
+		long pos=input->tell();
+		if (input->seek(long(entry.filename_size+entry.extra_field_size+entry.file_comment_size),
+		                librevenge::RVNG_SEEK_CUR)!=0)
+			return false;
+		input->seek(pos, librevenge::RVNG_SEEK_SET);
+
 		entry.filename.clear();
-		for (i=0; i < entry.filename_size; i++)
-			entry.filename.append(1, (char)getByte(input));
+		if (entry.filename_size)
+		{
+			unsigned long read;
+			const unsigned char *data=input->read((unsigned long) entry.filename_size, read);
+			if (!data || read!=(unsigned long) entry.filename_size)
+				return false;
+			entry.filename.append((const char *) data, size_t(entry.filename_size));
+		}
 		entry.extra_field.clear();
-		for (i=0; i < entry.extra_field_size; i++)
-			entry.extra_field.append(1, (char)getByte(input));
+		if (entry.extra_field_size)
+		{
+			unsigned long read;
+			const unsigned char *data=input->read((unsigned long) entry.extra_field_size, read);
+			if (!data || read!=(unsigned long) entry.extra_field_size)
+				return false;
+			entry.extra_field.append((const char *) data, size_t(entry.extra_field_size));
+		}
 		entry.file_comment.clear();
-		for (i=0; i < entry.file_comment_size; i++)
-			entry.file_comment.append(1, (char)getByte(input));
+		if (entry.file_comment_size)
+		{
+			unsigned long read;
+			const unsigned char *data=input->read((unsigned long) entry.file_comment_size, read);
+			if (!data || read!=(unsigned long) entry.file_comment_size)
+				return false;
+			entry.file_comment.append((const char *) data, size_t(entry.file_comment_size));
+		}
 	}
 	catch (...)
 	{
@@ -216,13 +245,29 @@ static bool readLocalFileHeader(RVNGInputStream *input, LocalFileHeader &header)
 		header.uncompressed_size = getInt(input);
 		header.filename_size = getShort(input);
 		header.extra_field_size = getShort(input);
-		unsigned short i = 0;
+		// check if the field sizes seem coherent
+		long pos=input->tell();
+		if (input->seek(long(header.filename_size+header.extra_field_size), librevenge::RVNG_SEEK_CUR)!=0)
+			return false;
+		input->seek(pos, librevenge::RVNG_SEEK_SET);
 		header.filename.clear();
-		for (i=0; i < header.filename_size; i++)
-			header.filename.append(1, (char)getByte(input));
+		if (header.filename_size)
+		{
+			unsigned long read;
+			const unsigned char *data=input->read((unsigned long) header.filename_size, read);
+			if (!data || read!=(unsigned long) header.filename_size)
+				return false;
+			header.filename.append((const char *) data, size_t(header.filename_size));
+		}
 		header.extra_field.clear();
-		for (i=0; i < header.extra_field_size; i++)
-			header.extra_field.append(1, (char)getByte(input));
+		if (header.extra_field_size)
+		{
+			unsigned long read;
+			const unsigned char *data=input->read((unsigned long) header.extra_field_size, read);
+			if (!data || read!=(unsigned long) header.extra_field_size)
+				return false;
+			header.extra_field.append((const char *) data, size_t(header.extra_field_size));
+		}
 	}
 	catch (...)
 	{
