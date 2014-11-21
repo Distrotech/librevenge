@@ -449,8 +449,7 @@ class RVNGInputStream
 			return 0;
 		if (m_substreams <= id)
 			return 0;
-		const char *val;
-		return val;
+		return reinterpret_cast<char *>(__coverity_tainted_string_return_content__());
 	}
 
 	virtual bool existsSubStream(const char *name)
@@ -491,8 +490,7 @@ class RVNGInputStream
 			m_pos += static_cast<long>(numBytes);
 		else
 			m_pos = static_cast<long>(m_size);
-		const unsigned char *val;
-		return val;
+		return reinterpret_cast<unsigned char *>(__coverity_tainted_string_return_content__());
 	}
 
 	virtual int seek(long offset, RVNG_SEEK_TYPE seekType)
