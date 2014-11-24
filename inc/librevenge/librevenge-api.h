@@ -27,8 +27,12 @@
 #else
 #define REVENGE_API __declspec(dllimport)
 #endif
+#else // !DLL_EXPORT
+#ifdef LIBREVENGE_VISIBILITY
+#define REVENGE_API __attribute__((visibility("default")))
 #else
 #define REVENGE_API
+#endif
 #endif
 
 #endif /* INCLUDED_LIBREVENGE_LIBREVENGE_API_H */

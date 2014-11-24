@@ -80,6 +80,19 @@ AS_CASE([$host],
 AC_MSG_RESULT([$platform_win32])
 AM_CONDITIONAL([PLATFORM_WIN32], [test "x$platform_win32" = "xyes"])
 
+AS_IF([test "x$platform_win32" == "xyes"],
+    [],
+    [
+        AC_MSG_CHECKING([for -fvisibility=hidden compiler flag])
+        saved_CPPFLAGS="$CPPFLAGS"
+        CPPFLAGS="$CPPFLAGS -fvisibility=hidden"
+        AC_TRY_COMPILE([], [], [have_visibility=yes], [have_visibility=no])
+        AC_MSG_RESULT([$have_visibility])
+        CPPFLAGS="$saved_CPPFLAGS"
+    ]
+)
+AM_CONDITIONAL([HAVE_VISIBILITY], [test "x$have_visibility" = "xyes"])
+
 # =========================
 # Platform check for darwin
 # =========================

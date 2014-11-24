@@ -27,8 +27,12 @@
 #else
 #define REVENGE_GENERATORS_API __declspec(dllimport)
 #endif
+#else // !DLL_EXPORT
+#ifdef LIBREVENGE_GENERATORS_VISIBILITY
+#define REVENGE_GENERATORS_API __attribute__((visibility("default")))
 #else
 #define REVENGE_GENERATORS_API
+#endif
 #endif
 
 #endif /* INCLUDED_LIBREVENGE_GENERATORS_LIBREVENGE_GENERATORS_API_H */
