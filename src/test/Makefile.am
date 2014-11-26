@@ -1,6 +1,6 @@
 target_test = test
 
-check_PROGRAMS = $(target_test)
+check_PROGRAMS = $(target_test) testfileinfo
 
 AM_CXXFLAGS = -I$(top_srcdir)/inc -I$(top_srcdir)/src/lib $(CPPUNIT_CFLAGS) $(DEBUG_CXXFLAGS)
 
@@ -21,5 +21,17 @@ test_SOURCES = \
 	RVNGStreamTest.h \
 	RVNGStringTest.cpp \
 	test.cpp
+	
+
+testfileinfo_LDFLAGS = -L../lib
+testfileinfo_LDADD = \
+	../lib/librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.la \
+	../lib/librevenge-stream-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.la \
+	$(LIBREVENGE_LIBS)
+
+testfileinfo_SOURCES = \
+	RVNGFileInfo.cpp
+	
+
 
 TESTS = $(target_test)
