@@ -1654,9 +1654,13 @@ bool librevenge::IStream::createOleFromDirectory(IStorage *io, std::string const
 				// a test because empty file are rare but seems to exists
 				buffer.resize(sz);
 				ok = leafStream.read(&buffer[0], sz) == sz;
+				if (ok)
+					ok=storage.addStream(nodes[l], &buffer[0], sz);
 			}
-			if (ok)
-				ok=storage.addStream(nodes[l], &buffer[0], sz);
+			else
+			{
+				ok=storage.addStream(nodes[l], 0, 0);
+			}
 			if (!ok)
 			{
 				RVNG_DEBUG_MSG(("librevenge::IStream::createOleFromDirectory: can not read %s\n", fullName.c_str()));
