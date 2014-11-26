@@ -1,5 +1,7 @@
 
+#include <assert.h>
 #include <stdio.h>
+#include <boost/scoped_ptr.hpp>
 #include <librevenge-stream/librevenge-stream.h>
 
 int main(int argc, char *argv[])
@@ -22,7 +24,19 @@ int main(int argc, char *argv[])
 	}
 	for (unsigned i = 0; i < ssc; ++i)
 	{
-		printf("--> Stream %i: %s\n", i, input.subStreamName(i));
+		const char *const name = input.subStreamName(i);
+		assert(input.existsSubStream(name));
+		printf("--> Stream %i: %s\n", i, name);
+
+		boost::scoped_ptr<librevenge::RVNGInputStream> subStream(input.getSubStreamById(i));
+		if (!subStream)
+			printf("Failed to get the substream by id\n");
+
+		boost::scoped_ptr<librevenge::RVNGInputStream> namedSubStream(input.getSubStreamByName(name));
+		if (!namedSubStream)
+			printf("Failed to get the substream by name\n");
+
+		assert((bool(subStream) && bool(namedSubStream)) || (!subStream && !namedSubStream));
 	}
 	return 0;
 }
