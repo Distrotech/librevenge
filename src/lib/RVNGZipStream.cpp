@@ -382,6 +382,10 @@ static std::vector<std::string> getSubStreamNamesInZip(RVNGInputStream *input, b
 		if (!readCentralDirectoryEntry(input, entry))
 			break;
 		if (!entry.filename_size || (!all && entry.filename[entry.filename.size()-1]=='/')) continue;
+		// A file name with a \0 char in it is likely broken. Anyway, our char*-based
+		// interface cannot handle such names, so we just ignore them.
+		if (entry.filename.find('\0') != std::string::npos)
+			continue;
 		res.push_back(entry.filename);
 	}
 	return res;
