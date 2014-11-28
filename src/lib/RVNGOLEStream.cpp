@@ -44,6 +44,7 @@
 #include <string.h>
 #include <ctype.h>
 
+#include <cassert>
 #include <sstream>
 #include <iostream>
 #include <list>
@@ -86,6 +87,26 @@ static inline void writeU32(unsigned char *ptr, unsigned long data)
 	ptr[3] = (unsigned char)((data >> 24) & 0xff);
 }
 
+static unsigned long getLength(RVNGInputStream *const input)
+{
+	assert(input);
+
+	const long begin = input->tell();
+	if (0 > begin)
+		return 0;
+
+	long end = begin;
+
+	if (0 == input->seek(0, librevenge::RVNG_SEEK_END))
+		end = input->tell();
+	if ((0 != input->seek(begin, librevenge::RVNG_SEEK_SET)) || (0 > end))
+		return 0;
+
+	assert(begin <= end);
+
+	return static_cast<unsigned long>(end - begin);
+}
+
 class Header
 {
 public:
@@ -116,7 +137,7 @@ public:
 			if (m_magic[i] != s_ole_magic[i]) return false;
 		return true;
 	}
-	bool valid();
+	bool valid(unsigned long maxSize);
 	void load(const unsigned char *buffer, unsigned long size);
 	void save(unsigned char *buffer);
 protected:
@@ -729,7 +750,7 @@ librevenge::Header::Header() :
 	compute_block_size();
 }
 
-bool librevenge::Header::valid()
+bool librevenge::Header::valid(const unsigned long maxSize)
 {
 	if (m_threshold != 4096) return false;
 	if (m_num_bat == 0) return false;
@@ -738,6 +759,7 @@ bool librevenge::Header::valid()
 	if (m_shift_sbat > m_shift_bbat) return false;
 	if (m_shift_bbat <= 6) return false;
 	if (m_shift_bbat >=31) return false;
+	if (m_size_bbat >= maxSize) return false;
 
 	return true;
 }
@@ -1169,7 +1191,7 @@ void librevenge::IStorage::load()
 
 	// sanity checks
 	m_result = librevenge::Storage::BadOLE;
-	if (!m_header.valid()) return;
+	if (!m_header.valid(getLength(m_input))) return;
 	if (m_header.m_threshold != 4096) return;
 
 	// important block size
