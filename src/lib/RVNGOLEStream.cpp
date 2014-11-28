@@ -1515,10 +1515,27 @@ librevenge::IStream::IStream(librevenge::IStorage *s, std::string const &name) :
 
 	m_size = entry->m_size;
 
+	unsigned blockSize = 0;
+
 	if (m_iStorage->use_big_block_for(entry->m_size))
+	{
 		m_blocks = m_iStorage->m_bbat.follow(entry->m_start);
+		blockSize = m_iStorage->m_bbat.m_blockSize;
+	}
 	else
+	{
 		m_blocks = m_iStorage->m_sbat.follow(entry->m_start);
+		blockSize = m_iStorage->m_sbat.m_blockSize;
+	}
+
+	// sanity check of stream size
+	const unsigned maxSize = blockSize * m_blocks.size();
+	if (m_size > maxSize)
+	{
+		RVNG_DEBUG_MSG(("librevenge::IStream::IStream: size %lu is wrong, using an approximated value %u\n", m_size, maxSize));
+		m_size = maxSize;
+		entry->m_size = m_size;
+	}
 }
 
 unsigned long librevenge::IStream::readData(unsigned long pos, unsigned char *data, unsigned long maxlen)
