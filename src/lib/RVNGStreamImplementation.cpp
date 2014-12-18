@@ -186,6 +186,9 @@ const unsigned char *RVNGFileStream::read(unsigned long numBytes, unsigned long 
 		numBytes = d->streamSize - curpos;
 	}
 
+	if (numBytes == 0)
+		return 0;
+
 	if (numBytes < BUFFER_MAX)
 	{
 		if (BUFFER_MAX < d->streamSize - curpos)
