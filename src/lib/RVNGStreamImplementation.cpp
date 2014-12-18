@@ -151,7 +151,7 @@ const unsigned char *RVNGFileStream::read(unsigned long numBytes, unsigned long 
 	if (!d)
 		return 0;
 
-	if (numBytes == 0 || /* isEnd() || */ numBytes > (std::numeric_limits<unsigned long>::max)()/2
+	if (numBytes == 0 || numBytes > (std::numeric_limits<unsigned long>::max)()/2
 	        || ferror(d->file))
 		return 0;
 
