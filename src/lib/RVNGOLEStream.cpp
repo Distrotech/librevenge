@@ -762,7 +762,6 @@ bool librevenge::Header::valid(const unsigned long fileSize)
 	if (m_shift_sbat > m_shift_bbat) return false;
 	if (m_shift_bbat <= 6) return false;
 	if (m_shift_bbat >=31) return false;
-	if (m_size_bbat >= fileSize) return false;
 
 	return true;
 }
