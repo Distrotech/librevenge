@@ -91,20 +91,20 @@ static unsigned long getLength(RVNGInputStream *const input)
 {
 	assert(input);
 
-	const long begin = input->tell();
-	if (0 > begin)
+	const long pos = input->tell();
+	if (0 > pos)
 		return 0;
 
-	long end = begin;
+	long end = 0;
 
 	if (0 == input->seek(0, librevenge::RVNG_SEEK_END))
 		end = input->tell();
-	if ((0 != input->seek(begin, librevenge::RVNG_SEEK_SET)) || (0 > end))
+	if ((0 != input->seek(pos, librevenge::RVNG_SEEK_SET)) || (0 > end))
 		return 0;
 
-	assert(begin <= end);
+	assert(pos <= end);
 
-	return static_cast<unsigned long>(end - begin);
+	return static_cast<unsigned long>(end);
 }
 
 class Header
