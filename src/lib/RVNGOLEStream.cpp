@@ -137,7 +137,7 @@ public:
 			if (m_magic[i] != s_ole_magic[i]) return false;
 		return true;
 	}
-	bool valid(unsigned long maxSize);
+	bool valid(unsigned long fileSize);
 	void load(const unsigned char *buffer, unsigned long size);
 	void save(unsigned char *buffer);
 protected:
@@ -750,16 +750,17 @@ librevenge::Header::Header() :
 	compute_block_size();
 }
 
-bool librevenge::Header::valid(const unsigned long maxSize)
+bool librevenge::Header::valid(const unsigned long fileSize)
 {
 	if (m_threshold != 4096) return false;
+	if ((fileSize % m_size_bbat) != 0) return false;
 	if (m_num_bat == 0) return false;
 	if ((m_num_bat > 109) && (m_num_bat > (m_num_mbat * (m_size_bbat/4-1)) + 109)) return false;
 	if ((m_num_bat < 109) && (m_num_mbat != 0)) return false;
 	if (m_shift_sbat > m_shift_bbat) return false;
 	if (m_shift_bbat <= 6) return false;
 	if (m_shift_bbat >=31) return false;
-	if (m_size_bbat >= maxSize) return false;
+	if (m_size_bbat >= fileSize) return false;
 
 	return true;
 }
