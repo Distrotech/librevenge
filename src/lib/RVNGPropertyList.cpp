@@ -36,7 +36,7 @@ bool findDouble(const librevenge::RVNGString &str, double &res, librevenge::RVNG
 		return false;
 
 	unit = librevenge::RVNG_GENERIC;
-
+	bool unitIsCM=false, unitIsMM=false;
 	if (!parse(str.cstr(),
 	           //  Begin grammar
 	           (
@@ -50,6 +50,10 @@ bool findDouble(const librevenge::RVNGString &str, double &res, librevenge::RVNG
 	                   |
 	                   str_p("*")[assign_a(unit,librevenge::RVNG_TWIP)]
 	                   |
+	                   str_p("cm")[assign_a(unitIsCM,true)]
+	                   |
+	                   str_p("mm")[assign_a(unitIsMM,true)]
+	                   |
 	                   eps_p
 	               )
 	           ) >> end_p,
@@ -61,7 +65,16 @@ bool findDouble(const librevenge::RVNGString &str, double &res, librevenge::RVNG
 
 	if (unit == librevenge::RVNG_PERCENT)
 		res /= 100.0;
-
+	else if (unitIsCM)
+	{
+		res *= 0.393700787;
+		unit=librevenge::RVNG_INCH;
+	}
+	else if (unitIsMM)
+	{
+		res *= 0.0393700787;
+		unit=librevenge::RVNG_INCH;
+	}
 	return true;
 }
 

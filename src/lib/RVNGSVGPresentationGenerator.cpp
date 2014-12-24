@@ -628,7 +628,7 @@ void RVNGSVGPresentationGenerator::drawEllipse(const RVNGPropertyList &propList)
 	m_impl->writeStyle();
 	if (propList["librevenge:rotate"] && (propList["librevenge:rotate"]->getDouble()<0||propList["librevenge:rotate"]->getDouble()>0))
 		m_impl->m_outputSink << " transform=\" rotate(" << doubleToString(-propList["librevenge:rotate"]->getDouble())
-		                     << ", " << doubleToString(72*getInchValue(*propList["svg:cy"]))
+		                     << ", " << doubleToString(72*getInchValue(*propList["svg:cx"]))
 		                     << ", " << doubleToString(72*getInchValue(*propList["svg:cy"]))
 		                     << ")\" ";
 	m_impl->m_outputSink << "/>\n";
