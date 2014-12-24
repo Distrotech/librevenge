@@ -1,3 +1,26 @@
+librevenge 0.0.2
+
+- Better handling of invalid input in RVNGDirectoryStream functions.
+- Add documentation for RVNGDirectoryStream.
+- Add text:outline-level to allowed paragraph properties. This is to allow
+  import libraries to handle headings properly.
+- Properly handle units in all generators, instead of expecting everything is
+  in inches.
+- Implement open/closeGroup for RVNGSVGDrawingGenerator.
+- Improve handling of layers in RVNGSVGPresentationGenerator.
+- Handle master pages in RVNGSVGDrawingGenerator and
+  RVNGSVGPresentationGenerator.
+- Simple handling of tables in RVNGSVGDrawingGenerator and
+  RVNGSVGPresentationGenerator: just create a text box for each cell.
+- Fix return value of RVNGStringStream::seek when seeking to end.
+- Fix some warnings found by Coverity.
+- Use symbol visibility on Linux. The library only exports public functions
+  now.
+- Fix several crashes or hangs when reading broken OLE2 or Zip files, found
+  with the help of american-fuzzy-lop.
+- Add fo:language, fo:country and fo:script to allowed span properties.
+- Handle headings in RVNGHTMLTextGenerator.
+
 librevenge 0.0.1
 
 - Fix license headers in some files.
