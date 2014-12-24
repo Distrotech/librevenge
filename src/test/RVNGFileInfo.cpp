@@ -71,6 +71,8 @@ int main(int argc, char *argv[])
 			namedSubStreamIsStructured = namedSubStream->isStructured();
 			namedSubStreamSize = getLength(namedSubStream.get());
 		}
+		(void) namedSubStreamIsStructured;
+		(void) namedSubStreamSize;
 
 		if (subStreamIsStructured)
 			printf("--> Stream %i: %s\n", i, name);
