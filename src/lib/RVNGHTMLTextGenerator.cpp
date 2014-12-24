@@ -20,10 +20,13 @@
  * applicable instead of those above.
  */
 
+#include <cassert>
 #include <cstring>
 #include <fstream>
 #include <sstream>
 #include <vector>
+
+#include <boost/lexical_cast.hpp>
 
 #include "RVNGHTMLTextTableStyle.h"
 #include "RVNGHTMLTextTextStyle.h"
@@ -246,7 +249,7 @@ std::string RVNGHTMLTextZone::label(int id) const
 struct RVNGHTMLTextGeneratorImpl
 {
 	//! constructor
-	RVNGHTMLTextGeneratorImpl(RVNGString &document) : m_document(document), m_actualPage(0), m_ignore(false), m_listManager(), m_paragraphManager(), m_spanManager(), m_tableManager(), m_actualStream(), m_streamStack()
+	RVNGHTMLTextGeneratorImpl(RVNGString &document) : m_document(document), m_actualPage(0), m_ignore(false), m_listManager(), m_paragraphManager(), m_spanManager(), m_tableManager(), m_currentParaElement(), m_actualStream(), m_streamStack()
 	{
 		for (int i = 0; i < RVNGHTMLTextZone::Z_NumZones; ++i)
 			m_zones[i].setType(RVNGHTMLTextZone::Type(i));
@@ -333,6 +336,9 @@ struct RVNGHTMLTextGeneratorImpl
 	RVNGHTMLTextParagraphStyleManager m_paragraphManager;
 	RVNGHTMLTextSpanStyleManager m_spanManager;
 	RVNGHTMLTextTableStyleManager m_tableManager;
+
+	std::string m_currentParaElement;
+
 protected:
 	RVNGHTMLTextStream *m_actualStream;
 	std::vector<RVNGHTMLTextStream *> m_streamStack;
@@ -448,7 +454,10 @@ void RVNGHTMLTextGenerator::closeSection() {}
 
 void RVNGHTMLTextGenerator::defineParagraphStyle(const RVNGPropertyList &propList)
 {
-	m_impl->m_paragraphManager.defineParagraph(propList);
+	RVNGPropertyList pList(propList);
+	if (pList["text:outline-level"])
+		pList.remove("text:outline-level");
+	m_impl->m_paragraphManager.defineParagraph(pList);
 }
 
 void RVNGHTMLTextGenerator::openParagraph(const RVNGPropertyList &propList)
@@ -456,7 +465,18 @@ void RVNGHTMLTextGenerator::openParagraph(const RVNGPropertyList &propList)
 	if (m_impl->m_ignore)
 		return;
 
-	m_impl->output(false) << "<p class=\"" << m_impl->m_paragraphManager.getClass(propList) << "\">";
+	m_impl->m_currentParaElement = "p";
+
+	const RVNGProperty *const outlineLevel = propList["text:outline-level"];
+	if (outlineLevel)
+	{
+		const int level = outlineLevel->getInt();
+		if ((0 < level) && (7 > level))
+			m_impl->m_currentParaElement = "h" + boost::lexical_cast<std::string>(level);
+	}
+
+	m_impl->output(false) << "<" << m_impl->m_currentParaElement
+	                      << " class=\"" << m_impl->m_paragraphManager.getClass(propList) << "\">";
 }
 
 void RVNGHTMLTextGenerator::closeParagraph()
@@ -464,7 +484,8 @@ void RVNGHTMLTextGenerator::closeParagraph()
 	if (m_impl->m_ignore)
 		return;
 
-	m_impl->output() << "</p>" << std::endl;
+	assert(!m_impl->m_currentParaElement.empty());
+	m_impl->output() << "</" << m_impl->m_currentParaElement << ">" << std::endl;
 }
 
 void RVNGHTMLTextGenerator::defineCharacterStyle(const RVNGPropertyList &propList)
