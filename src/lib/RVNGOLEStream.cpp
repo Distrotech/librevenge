@@ -753,7 +753,6 @@ librevenge::Header::Header() :
 bool librevenge::Header::valid(const unsigned long fileSize)
 {
 	if (m_threshold != 4096) return false;
-	if ((fileSize % m_size_bbat) != 0) return false;
 	// there must be at least the header, one bat sector and one dirent sector in the file
 	if ((fileSize / m_size_bbat) < 3) return false;
 	if (m_num_bat == 0) return false;
@@ -762,7 +761,6 @@ bool librevenge::Header::valid(const unsigned long fileSize)
 	if (m_shift_sbat > m_shift_bbat) return false;
 	if (m_shift_bbat <= 6) return false;
 	if (m_shift_bbat >=31) return false;
-
 	return true;
 }
 
@@ -1218,10 +1216,11 @@ void librevenge::IStorage::load()
 				sector = m_header.m_start_mbat;
 			else      // next meta bat location is the last current block value.
 				sector = blocks[--k];
-			loadBigBlock(sector, &buffer2[0], m_bbat.m_blockSize);
+			unsigned long readData=loadBigBlock(sector, &buffer2[0], m_bbat.m_blockSize);
 			for (unsigned s=0; s < m_bbat.m_blockSize; s+=4)
 			{
-				if (k >= m_header.m_num_bat) break;
+				// check that for maximum block and that the data are correctly read
+				if (k >= m_header.m_num_bat || s>=readData) break;
 				else  blocks[k++] = readU32(&buffer2[s]);
 			}
 		}
@@ -1231,8 +1230,8 @@ void librevenge::IStorage::load()
 	if (blocks.size()*m_bbat.m_blockSize > 0)
 	{
 		std::vector<unsigned char> buffer(blocks.size()*m_bbat.m_blockSize);
-		loadBigBlocks(blocks, &buffer[0], buffer.size());
-		m_bbat.load(&buffer[0], (unsigned)buffer.size());
+		unsigned long readData=loadBigBlocks(blocks, &buffer[0], buffer.size());
+		m_bbat.load(&buffer[0], (unsigned)readData);
 	}
 
 	// load small bat
@@ -1241,8 +1240,8 @@ void librevenge::IStorage::load()
 	if (blocks.size()*m_bbat.m_blockSize > 0)
 	{
 		std::vector<unsigned char> buffer(blocks.size()*m_bbat.m_blockSize);
-		loadBigBlocks(blocks, &buffer[0], buffer.size());
-		m_sbat.load(&buffer[0], (unsigned)buffer.size());
+		unsigned long readData=loadBigBlocks(blocks, &buffer[0], buffer.size());
+		m_sbat.load(&buffer[0], (unsigned)readData);
 	}
 
 	// load directory tree
@@ -1251,9 +1250,9 @@ void librevenge::IStorage::load()
 	if (blocks.size()*m_bbat.m_blockSize > 0)
 	{
 		std::vector<unsigned char> buffer(blocks.size()*m_bbat.m_blockSize);
-		loadBigBlocks(blocks, &buffer[0], buffer.size());
-		m_dirtree.load(&buffer[0], (unsigned)buffer.size());
-		if (buffer.size() >= 0x74 + 4)
+		unsigned long readData=loadBigBlocks(blocks, &buffer[0], buffer.size());
+		m_dirtree.load(&buffer[0], (unsigned)readData);
+		if (readData >= 0x74 + 4)
 		{
 			unsigned sb_start = readU32(&buffer[0x74]);
 
@@ -1282,7 +1281,8 @@ unsigned long librevenge::IStorage::loadBigBlocks(std::vector<unsigned long> con
 		unsigned long pos =  m_bbat.m_blockSize * (block+1);
 		unsigned long p = (m_bbat.m_blockSize < maxlen-bytes) ? m_bbat.m_blockSize : maxlen-bytes;
 
-		m_input->seek(long(pos), RVNG_SEEK_SET);
+		if (m_input->seek(long(pos), RVNG_SEEK_SET)!=0)
+			continue;
 		unsigned long numBytesRead = 0;
 		const unsigned char *buf = m_input->read(p, numBytesRead);
 		memcpy(data+bytes, buf, numBytesRead);
@@ -1327,12 +1327,14 @@ unsigned long librevenge::IStorage::loadSmallBlocks(std::vector<unsigned long> c
 		unsigned long bbindex = pos / m_bbat.m_blockSize;
 		if (bbindex >= m_sb_blocks.size()) break;
 
-		loadBigBlock(m_sb_blocks[ bbindex ], &tmpBuf[0], m_bbat.m_blockSize);
+		unsigned long readData=loadBigBlock(m_sb_blocks[ bbindex ], &tmpBuf[0], m_bbat.m_blockSize);
 
 		// copy the data
 		unsigned long offset = pos % m_bbat.m_blockSize;
 		unsigned long p = (maxlen-bytes < m_bbat.m_blockSize-offset) ? maxlen-bytes :  m_bbat.m_blockSize-offset;
-		p = (m_sbat.m_blockSize<p) ? m_sbat.m_blockSize : p;
+		// sanety check
+		if (m_sbat.m_blockSize<p) p=m_sbat.m_blockSize;
+		if (readData < p) p = readData;
 		memcpy(data + bytes, &tmpBuf[offset], p);
 		bytes += p;
 	}
@@ -1553,7 +1555,7 @@ librevenge::IStream::IStream(librevenge::IStorage *s, std::string const &name) :
 	}
 
 	// sanity check of stream size
-	const unsigned maxSize = blockSize * m_blocks.size();
+	const unsigned maxSize = unsigned(blockSize * m_blocks.size());
 	if (m_size > maxSize)
 	{
 		RVNG_DEBUG_MSG(("librevenge::IStream::IStream: size %lu is wrong, using an approximated value %u\n", m_size, maxSize));
