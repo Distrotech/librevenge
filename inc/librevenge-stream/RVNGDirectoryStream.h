@@ -64,7 +64,7 @@ public:
 
 	/** Test whether @c path is a directory.
 
-	@returns @c true if @path is a directory, @c false otherwise.
+	@returns @c true if @a path is a directory, @c false otherwise.
 	*/
 	static bool isDirectory(const char *path);
 
