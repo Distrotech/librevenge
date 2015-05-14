@@ -36,7 +36,7 @@ namespace
 
 bool equalBinaryData(const RVNGBinaryData &binaryData, const char *const str)
 {
-	const unsigned len = strlen(str);
+	const size_t len = strlen(str);
 	if (binaryData.size() != len)
 		return false;
 
