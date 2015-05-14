@@ -279,20 +279,20 @@ void RVNGPropertyList::insert(const char *name, const char *val)
 
 void RVNGPropertyList::insert(const char *name, const RVNGString &val)
 {
-	int valInt;
+	int valInt = 0;
 	if (findInt(val, valInt))
 	{
 		insert(name, valInt);
 		return;
 	}
-	double valDouble;
+	double valDouble = 0.0;
 	RVNGUnit valUnit;
 	if (findDouble(val, valDouble, valUnit))
 	{
 		insert(name, valDouble, valUnit);
 		return;
 	}
-	bool valBool;
+	bool valBool = false;
 	if (findBool(val, valBool))
 	{
 		insert(name, valBool);
