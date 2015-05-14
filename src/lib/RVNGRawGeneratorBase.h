@@ -126,9 +126,9 @@ struct RVNGRawGeneratorBase
 		if (m_indent > 0) m_indent--;
 	}
 
-	void iprintf(const char *format, ...);
-	void iuprintf(const char *format, ...);
-	void idprintf(const char *format, ...);
+	void iprintf(const char *format, ...) REVENGE_ATTRIBUTE_PRINTF(2, 3);
+	void iuprintf(const char *format, ...) REVENGE_ATTRIBUTE_PRINTF(2, 3);
+	void idprintf(const char *format, ...) REVENGE_ATTRIBUTE_PRINTF(2, 3);
 };
 
 } // namespace librevenge
