@@ -59,7 +59,7 @@ public:
 	unsigned long size() const;
 	bool empty() const;
 
-	void sprintf(const char *format, ...);
+	void sprintf(const char *format, ...) REVENGE_ATTRIBUTE_PRINTF(2, 3);
 	void append(const RVNGString &s);
 	void append(const char *s);
 	void append(const char c);

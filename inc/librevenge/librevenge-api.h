@@ -35,6 +35,12 @@
 #endif
 #endif
 
+#ifdef __GNUC__
+#define REVENGE_ATTRIBUTE_PRINTF(fmt, arg) __attribute__((format(printf, fmt, arg)))
+#else
+#define REVENGE_ATTRIBUTE_PRINTF(fmt, arg)
+#endif
+
 #endif /* INCLUDED_LIBREVENGE_LIBREVENGE_API_H */
 
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */
