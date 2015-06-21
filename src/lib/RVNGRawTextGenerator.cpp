@@ -274,7 +274,7 @@ void RVNGRawTextGenerator::closeFootnote()
 
 void RVNGRawTextGenerator::openEndnote(const RVNGPropertyList &propList)
 {
-	RVNG_CALLGRAPH_ENTER(("openEndnote(number: %s)\n", propList.getPropString().cstr()),
+	RVNG_CALLGRAPH_ENTER(("openEndnote(%s)\n", propList.getPropString().cstr()),
 	                     CALLBACK_OPEN_ENDNOTE);
 }
 
