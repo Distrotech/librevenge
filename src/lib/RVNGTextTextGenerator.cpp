@@ -28,18 +28,70 @@
 namespace librevenge
 {
 
+namespace
+{
+
+const RVNGString getNoteMark(const RVNGPropertyList &propList, int &nextNote)
+{
+	RVNGString mark;
+
+	if (propList["text:label"])
+	{
+		mark = propList["text:label"]->getStr();
+	}
+	else if (propList["librevenge:number"])
+	{
+		const RVNGProperty *const number = propList["librevenge:number"];
+		if (number->getInt() >= nextNote)
+		{
+			mark = number->getStr();
+			nextNote = number->getInt() + 1;
+		}
+		else
+		{
+			mark.sprintf("%d", nextNote);
+			++nextNote;
+		}
+	}
+	else
+	{
+		mark.sprintf("%d", nextNote);
+		++nextNote;
+	}
+
+	return mark;
+}
+
+}
+
 struct RVNGTextTextGeneratorImpl
 {
 	explicit RVNGTextTextGeneratorImpl(RVNGString &document, bool isInfo);
 
 	RVNGString &m_document;
-	std::ostringstream m_stream;
+	std::ostringstream m_text;
+	std::ostringstream *m_stream;
+	std::ostringstream m_footnote;
+	std::ostringstream m_endnotes;
+	int m_nextFootnote;
+	int m_nextEndnote;
+	bool m_inFootnote;
 	bool m_isInfo;
+
+	// disable copying
+	RVNGTextTextGeneratorImpl(const RVNGTextTextGeneratorImpl &);
+	RVNGTextTextGeneratorImpl &operator=(const RVNGTextTextGeneratorImpl &);
 };
 
 RVNGTextTextGeneratorImpl::RVNGTextTextGeneratorImpl(RVNGString &document, const bool isInfo)
 	: m_document(document)
-	, m_stream()
+	, m_text()
+	, m_stream(&m_text)
+	, m_footnote()
+	, m_endnotes()
+	, m_nextFootnote(1)
+	, m_nextEndnote(1)
+	, m_inFootnote(false)
 	, m_isInfo(isInfo)
 {
 }
@@ -61,14 +113,19 @@ void RVNGTextTextGenerator::setDocumentMetaData(const RVNGPropertyList &propList
 	RVNGPropertyList::Iter propIter(propList);
 	for (propIter.rewind(); propIter.next();)
 	{
-		m_impl->m_stream << propIter.key() << ' ' << propIter()->getStr().cstr() << '\n';
+		*m_impl->m_stream << propIter.key() << ' ' << propIter()->getStr().cstr() << '\n';
 	}
 }
 
 void RVNGTextTextGenerator::startDocument(const RVNGPropertyList &) {}
 void RVNGTextTextGenerator::endDocument()
 {
-	m_impl->m_document=m_impl->m_stream.str().c_str();
+	if (!m_impl->m_endnotes.str().empty())
+	{
+		*m_impl->m_stream << '\n';
+		*m_impl->m_stream << m_impl->m_endnotes;
+	}
+	m_impl->m_document=m_impl->m_stream->str().c_str();
 }
 
 void RVNGTextTextGenerator::definePageStyle(const RVNGPropertyList &) {}
@@ -91,7 +148,14 @@ void RVNGTextTextGenerator::closeParagraph()
 {
 	if (m_impl->m_isInfo)
 		return;
-	m_impl->m_stream << '\n';
+	*m_impl->m_stream << '\n';
+	if (!m_impl->m_inFootnote && !m_impl->m_footnote.str().empty())
+	{
+		*m_impl->m_stream << '\n';
+		*m_impl->m_stream << m_impl->m_footnote.str();
+		*m_impl->m_stream << '\n';
+		m_impl->m_footnote.str("");
+	}
 }
 
 void RVNGTextTextGenerator::defineCharacterStyle(const RVNGPropertyList &) {}
@@ -105,28 +169,28 @@ void RVNGTextTextGenerator::insertTab()
 {
 	if (m_impl->m_isInfo)
 		return;
-	m_impl->m_stream << static_cast<char>(UCS_TAB);
+	*m_impl->m_stream << static_cast<char>(UCS_TAB);
 }
 
 void RVNGTextTextGenerator::insertText(const RVNGString &text)
 {
 	if (m_impl->m_isInfo)
 		return;
-	m_impl->m_stream << text.cstr();
+	*m_impl->m_stream << text.cstr();
 }
 
 void RVNGTextTextGenerator::insertSpace()
 {
 	if (m_impl->m_isInfo)
 		return;
-	m_impl->m_stream << ' ';
+	*m_impl->m_stream << ' ';
 }
 
 void RVNGTextTextGenerator::insertLineBreak()
 {
 	if (m_impl->m_isInfo)
 		return;
-	m_impl->m_stream << '\n';
+	*m_impl->m_stream << '\n';
 }
 
 void RVNGTextTextGenerator::insertField(const RVNGPropertyList & /* propList */) {}
@@ -138,10 +202,38 @@ void RVNGTextTextGenerator::closeUnorderedListLevel() {}
 void RVNGTextTextGenerator::openListElement(const RVNGPropertyList & /* propList */) {}
 void RVNGTextTextGenerator::closeListElement() {}
 
-void RVNGTextTextGenerator::openFootnote(const RVNGPropertyList & /* propList */) {}
-void RVNGTextTextGenerator::closeFootnote() {}
-void RVNGTextTextGenerator::openEndnote(const RVNGPropertyList & /* propList */) {}
-void RVNGTextTextGenerator::closeEndnote() {}
+void RVNGTextTextGenerator::openFootnote(const RVNGPropertyList &propList)
+{
+	const RVNGString mark = getNoteMark(propList, m_impl->m_nextFootnote);
+
+	*m_impl->m_stream << '[' << mark.cstr() << ']';
+	m_impl->m_stream = &m_impl->m_footnote;
+	*m_impl->m_stream << '[' << mark.cstr() << "] ";
+
+	m_impl->m_inFootnote = true;
+}
+
+void RVNGTextTextGenerator::closeFootnote()
+{
+	// TODO: I am not sure if we allow nested footnotes
+	m_impl->m_stream = &m_impl->m_text;
+	m_impl->m_inFootnote = false;
+}
+
+void RVNGTextTextGenerator::openEndnote(const RVNGPropertyList &propList)
+{
+	const RVNGString mark = getNoteMark(propList, m_impl->m_nextEndnote);
+
+	*m_impl->m_stream << '[' << mark.cstr() << ']';
+	m_impl->m_stream = &m_impl->m_endnotes;
+	*m_impl->m_stream << '[' << mark.cstr() << "] ";
+}
+
+void RVNGTextTextGenerator::closeEndnote()
+{
+	m_impl->m_stream = &m_impl->m_text;
+}
+
 void RVNGTextTextGenerator::openComment(const RVNGPropertyList & /* propList */) {}
 void RVNGTextTextGenerator::closeComment() {}
 void RVNGTextTextGenerator::openTextBox(const RVNGPropertyList & /* propList */) {}
