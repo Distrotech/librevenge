@@ -755,6 +755,8 @@ bool librevenge::Header::valid(const unsigned long fileSize)
 	if (m_threshold != 4096) return false;
 	// there must be at least the header, one bat sector and one dirent sector in the file
 	if ((fileSize / m_size_bbat) < 3) return false;
+	// sectors must fit into the file
+	if ((fileSize / m_size_bbat) < m_num_mbat) return false;
 	if (m_num_bat == 0) return false;
 	if ((m_num_bat > 109) && (m_num_bat > (m_num_mbat * (m_size_bbat/4-1)) + 109)) return false;
 	if ((m_num_bat < 109) && (m_num_mbat != 0)) return false;
