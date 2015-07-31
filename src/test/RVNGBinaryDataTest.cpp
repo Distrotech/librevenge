@@ -16,12 +16,13 @@
 #include <cstring>
 #include <string>
 
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+
 #include <librevenge/librevenge.h>
 #include <librevenge-stream/librevenge-stream.h>
 
 #include "librevenge_internal.h"
-
-#include "RVNGBinaryDataTest.h"
 
 using namespace librevenge;
 
@@ -81,6 +82,29 @@ void implTestBase64(const char *const plain, const char *const base64)
 }
 
 }
+
+class RVNGBinaryDataTest : public CPPUNIT_NS::TestFixture
+{
+public:
+	virtual void setUp();
+	virtual void tearDown();
+
+private:
+	CPPUNIT_TEST_SUITE(RVNGBinaryDataTest);
+	CPPUNIT_TEST(testConstruction);
+	CPPUNIT_TEST(testAppend);
+	CPPUNIT_TEST(testClear);
+	CPPUNIT_TEST(testBase64);
+	CPPUNIT_TEST(testStream);
+	CPPUNIT_TEST_SUITE_END();
+
+private:
+	void testConstruction();
+	void testAppend();
+	void testClear();
+	void testBase64();
+	void testStream();
+};
 
 void RVNGBinaryDataTest::setUp()
 {

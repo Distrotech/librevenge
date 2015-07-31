@@ -22,12 +22,13 @@
 #include <stdio.h>
 #include <unistd.h>
 
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+
 #include <librevenge/librevenge.h>
 
 #include "librevenge_internal.h"
 #include "RVNGMemoryStream.h"
-
-#include "RVNGStreamTest.h"
 
 using boost::scoped_ptr;
 
@@ -37,6 +38,24 @@ using namespace librevenge;
 
 namespace test
 {
+
+class RVNGStreamTest : public CPPUNIT_NS::TestFixture
+{
+public:
+	virtual void setUp();
+	virtual void tearDown();
+
+private:
+	CPPUNIT_TEST_SUITE(RVNGStreamTest);
+	CPPUNIT_TEST(testFileStream);
+	CPPUNIT_TEST(testStringStream);
+	CPPUNIT_TEST_SUITE_END();
+
+private:
+	void testFileStream();
+	void testMemoryInputStream();
+	void testStringStream();
+};
 
 void RVNGStreamTest::setUp()
 {

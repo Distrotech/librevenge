@@ -18,9 +18,10 @@
 
 #include <boost/scoped_ptr.hpp>
 
-#include <librevenge-stream/librevenge-stream.h>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
 
-#include "RVNGDirectoryStreamTest.h"
+#include <librevenge-stream/librevenge-stream.h>
 
 #if !defined RVNG_DIRECTORY_STREAM_TEST_DIR
 #error RVNG_DIRECTORY_STREAM_TEST_DIR not defined, cannot test
@@ -92,6 +93,34 @@ static bool exists(const char *const path)
 #endif
 
 }
+
+class RVNGDirectoryStreamTest : public CPPUNIT_NS::TestFixture
+{
+public:
+	RVNGDirectoryStreamTest();
+
+	virtual void setUp();
+	virtual void tearDown();
+
+private:
+	CPPUNIT_TEST_SUITE(RVNGDirectoryStreamTest);
+	CPPUNIT_TEST(testConstruction);
+	CPPUNIT_TEST(testDetection);
+	CPPUNIT_TEST(testDataOperations);
+	CPPUNIT_TEST(testStructuredOperations);
+	CPPUNIT_TEST_SUITE_END();
+
+private:
+	void testConstruction();
+	void testDetection();
+	void testDataOperations();
+	void testStructuredOperations();
+
+private:
+	std::string m_dir;
+	std::string m_file;
+	std::string m_nonexistent;
+};
 
 RVNGDirectoryStreamTest::RVNGDirectoryStreamTest()
 	: m_dir(TEST_DIR)

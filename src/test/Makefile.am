@@ -16,12 +16,9 @@ test_LDADD = \
 
 test_SOURCES = \
 	RVNGBinaryDataTest.cpp \
-	RVNGBinaryDataTest.h \
 	RVNGDirectoryStreamTest.cpp \
-	RVNGDirectoryStreamTest.h \
 	RVNGOLEStreamTest.cpp \
 	RVNGStreamTest.cpp \
-	RVNGStreamTest.h \
 	RVNGStringTest.cpp \
 	test.cpp
 	
