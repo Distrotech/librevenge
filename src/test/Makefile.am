@@ -4,7 +4,9 @@ check_PROGRAMS = $(target_test) testfileinfo
 
 AM_CXXFLAGS = -I$(top_srcdir)/inc -I$(top_srcdir)/src/lib $(CPPUNIT_CFLAGS) $(DEBUG_CXXFLAGS)
 
-test_CPPFLAGS = -DRVNG_DIRECTORY_STREAM_TEST_DIR=\"$(top_srcdir)/inc/librevenge-stream\"
+test_CPPFLAGS = \
+	-DRVNG_DATA_DIR=\"$(top_srcdir)/src/test/data\" \
+	-DRVNG_DIRECTORY_STREAM_TEST_DIR=\"$(top_srcdir)/inc/librevenge-stream\"
 test_LDFLAGS = -L../lib
 test_LDADD = \
 	../lib/librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.la \
@@ -17,6 +19,7 @@ test_SOURCES = \
 	RVNGBinaryDataTest.h \
 	RVNGDirectoryStreamTest.cpp \
 	RVNGDirectoryStreamTest.h \
+	RVNGOLEStreamTest.cpp \
 	RVNGStreamTest.cpp \
 	RVNGStreamTest.h \
 	RVNGStringTest.cpp \
