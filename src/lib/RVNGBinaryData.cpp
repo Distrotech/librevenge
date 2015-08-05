@@ -185,9 +185,9 @@ void RVNGBinaryData::append(const unsigned char *buffer, const unsigned long buf
 	{
 		m_binaryDataImpl->makeUnique();
 
-		unsigned long previousSize = m_binaryDataImpl->m_ptr->m_buf.size();
-		m_binaryDataImpl->m_ptr->m_buf.reserve(previousSize + bufferSize);
-		m_binaryDataImpl->m_ptr->m_buf.insert(m_binaryDataImpl->m_ptr->m_buf.end(), buffer, buffer + bufferSize);
+		std::vector<unsigned char> &buf = m_binaryDataImpl->m_ptr->m_buf;
+		buf.reserve(buf.size() + bufferSize);
+		buf.insert(buf.end(), buffer, buffer + bufferSize);
 	}
 }
 
