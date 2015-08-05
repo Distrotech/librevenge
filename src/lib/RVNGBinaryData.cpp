@@ -236,14 +236,15 @@ const RVNGString RVNGBinaryData::getBase64Data() const
 
 RVNGInputStream *RVNGBinaryData::getDataStream() const
 {
-	if (m_binaryDataImpl->m_ptr->m_stream)
+	boost::shared_ptr<DataImpl> data = m_binaryDataImpl->m_ptr;
+	if (data->m_stream)
 	{
-		m_binaryDataImpl->m_ptr->m_stream.reset();
+		data->m_stream.reset();
 	}
-	if (m_binaryDataImpl->m_ptr->m_buf.empty())
+	if (data->m_buf.empty())
 		return 0;
-	m_binaryDataImpl->m_ptr->m_stream.reset(new RVNGMemoryInputStream(&(m_binaryDataImpl->m_ptr->m_buf[0]), m_binaryDataImpl->m_ptr->m_buf.size()));
-	return m_binaryDataImpl->m_ptr->m_stream.get();
+	data->m_stream.reset(new RVNGMemoryInputStream(&(data->m_buf[0]), data->m_buf.size()));
+	return data->m_stream.get();
 }
 
 }
