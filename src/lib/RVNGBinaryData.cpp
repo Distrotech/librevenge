@@ -202,7 +202,8 @@ void RVNGBinaryData::clear()
 {
 	m_binaryDataImpl->makeUnique();
 
-	m_binaryDataImpl->m_ptr->m_buf.clear();
+	// clear and return allocated memory
+	std::vector<unsigned char>().swap(m_binaryDataImpl->m_ptr->m_buf);
 }
 
 unsigned long RVNGBinaryData::size() const
