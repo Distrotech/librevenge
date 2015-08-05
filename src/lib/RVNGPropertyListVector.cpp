@@ -138,9 +138,9 @@ void RVNGPropertyListVector::append(const RVNGPropertyList &elem)
 
 void RVNGPropertyListVector::append(const RVNGPropertyListVector &vec)
 {
-	RVNGPropertyListVector::Iter i(vec);
-	for (i.rewind(); i.next();)
-		m_impl->append(i());
+	std::vector<RVNGPropertyList> &other = vec.m_impl->m_vector;
+	m_impl->m_vector.reserve(m_impl->m_vector.size() + other.size());
+	m_impl->m_vector.insert(m_impl->m_vector.end(), other.begin(), other.end());
 }
 
 unsigned long RVNGPropertyListVector::count() const
