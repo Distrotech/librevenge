@@ -187,8 +187,7 @@ void RVNGBinaryData::append(const unsigned char *buffer, const unsigned long buf
 
 		unsigned long previousSize = m_binaryDataImpl->m_ptr->m_buf.size();
 		m_binaryDataImpl->m_ptr->m_buf.reserve(previousSize + bufferSize);
-		for (unsigned long i = 0; i < bufferSize; i++)
-			m_binaryDataImpl->m_ptr->m_buf.push_back(buffer[i]);
+		m_binaryDataImpl->m_ptr->m_buf.insert(m_binaryDataImpl->m_ptr->m_buf.end(), buffer, buffer + bufferSize);
 	}
 }
 
