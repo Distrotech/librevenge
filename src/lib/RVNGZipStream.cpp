@@ -17,9 +17,12 @@
  * applicable instead of those above.
  */
 
+#include <cassert>
 #include <string>
 #include <string.h>
 #include <stdio.h>
+#include <utility>
+
 #include <zlib.h>
 #include "RVNGZipStream.h"
 #include <librevenge-stream/librevenge-stream.h>
@@ -448,27 +451,45 @@ RVNGInputStream *RVNGZipStream::getSubstream(RVNGInputStream *input, const char 
 		if (ret != Z_OK)
 			return 0;
 
+		const unsigned long blockSize = (std::max)(4096ul, 2 * numBytesRead);
+
+		std::vector<unsigned char> data(blockSize);
+
 		strm.avail_in = (unsigned)numBytesRead;
 		strm.next_in = (Bytef *)compressedData;
+		strm.next_out = &data[0];
 
-		std::vector<unsigned char>data(entry.uncompressed_size);
-
-		strm.avail_out = entry.uncompressed_size;
-		strm.next_out = reinterpret_cast<Bytef *>(&data[0]);
-		ret = inflate(&strm, Z_FINISH);
-		switch (ret)
+		bool done = false;
+		while (!done)
 		{
-		case Z_NEED_DICT:
-		case Z_DATA_ERROR:
-		case Z_MEM_ERROR:
-			(void)inflateEnd(&strm);
-			data.clear();
-			return 0;
-		default:
-			break;
+			const std::ptrdiff_t nextOutIndex = strm.next_out - &data[0];
+			assert(nextOutIndex >= 0);
+			data.resize(data.size() + blockSize);
+			assert(data.size() > std::size_t(nextOutIndex));
+			strm.avail_out = unsigned(data.size() - std::size_t(nextOutIndex));
+			strm.next_out = reinterpret_cast<Bytef *>(&data[nextOutIndex]);
+
+			ret = inflate(&strm, Z_SYNC_FLUSH);
+
+			switch (ret)
+			{
+			case Z_OK:
+				break;
+			// TODO: return partial result on Z_BUF_ERROR/Z_DATA_ERROR?
+			default:
+				data.clear();
+			// fall-through intended
+			case Z_STREAM_END:
+				done = true;
+				break;
+			}
 		}
+
 		(void)inflateEnd(&strm);
-		return new RVNGStringStream(&data[0], (unsigned)data.size());
+
+		if (data.empty())
+			return 0;
+		return new RVNGStringStream(&data[0], strm.total_out);
 	}
 }
 
