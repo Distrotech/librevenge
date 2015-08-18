@@ -128,6 +128,8 @@ public:
 	Header();
 	void compute_block_size()
 	{
+		assert(m_shift_bbat < 31);
+		assert(m_shift_sbat < 31);
 		m_size_bbat = 1 << m_shift_bbat;
 		m_size_sbat = 1 << m_shift_sbat;
 	}
@@ -785,7 +787,6 @@ void librevenge::Header::load(const unsigned char *buffer, unsigned long size)
 		m_magic[i] = buffer[i];
 	for (unsigned j=0; j<109; j++)
 		m_blocks_bbat[j] = readU32(buffer + 0x4C+j*4);
-	compute_block_size();
 }
 
 void librevenge::Header::save(unsigned char *buffer)
@@ -1197,6 +1198,7 @@ void librevenge::IStorage::load()
 	if (m_header.m_threshold != 4096) return;
 
 	// important block size
+	m_header.compute_block_size();
 	m_bbat.m_blockSize = m_header.m_size_bbat;
 	m_sbat.m_blockSize = m_header.m_size_sbat;
 
