@@ -487,7 +487,7 @@ RVNGInputStream *RVNGZipStream::getSubstream(RVNGInputStream *input, const char 
 
 		(void)inflateEnd(&strm);
 
-		if (data.empty())
+		if (strm.total_out == 0)
 			return 0;
 		return new RVNGStringStream(&data[0], strm.total_out);
 	}
