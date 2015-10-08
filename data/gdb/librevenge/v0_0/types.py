@@ -211,8 +211,8 @@ class RVNGDoublePropertyPrinter:
         self.unit = unit
 
     def to_string(self):
-        if self.unit():
-            return '%s %s' % (self.value['m_val'], self.unit())
+        if self.unit:
+            return '%s%s' % (self.value['m_val'], self.unit)
         else:
             return self.value['m_val']
 
