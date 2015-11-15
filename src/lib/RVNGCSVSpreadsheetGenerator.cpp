@@ -22,6 +22,7 @@
 
 #include <string>
 #include <sstream>
+#include <vector>
 
 #include <librevenge-generators/librevenge-generators.h>
 
@@ -30,16 +31,31 @@
 namespace librevenge
 {
 
+struct RVNGCSVSpreadsheetRowContent
+{
+	//!constructor
+	RVNGCSVSpreadsheetRowContent() : m_content(""), m_numFields(0), m_numRepeated(1)
+	{
+	}
+	//! the content
+	std::string m_content;
+	//! the number of fields
+	int m_numFields;
+	//! the number of repetition
+	int m_numRepeated;
+};
+
 struct RVNGCSVSpreadsheetGeneratorImpl
 {
 	explicit RVNGCSVSpreadsheetGeneratorImpl(RVNGStringVector &sheets, bool useFormula) :
-		m_sheets(sheets), m_stream(),
+		m_sheets(sheets), m_rowStream(), m_cellStream(), m_rowContentsList(),
+		m_numRowRepeated(0), m_numCellRepeated(0), m_numCellToSkip(0),
 		m_useFormula(useFormula),
 		m_fieldSeparator(','), m_textSeparator('"'), m_decimalSeparator('.'),
 		m_dateFormat("%m/%d/%y"), m_timeFormat("%H:%M:%S"),
 		m_inSheet(false), m_inSheetRow(false), m_inSheetCell(false), m_sheetCellHasFormula(false),
 		m_numberSubForm(0),
-		m_column(0), m_row(0), m_numColumns(0) {}
+		m_column(0), m_row(0), m_numColumns(0), m_numColumnsInRowStream(0) {}
 	bool canWriteData(bool newCell=false) const
 	{
 		if (!m_inSheet || !m_inSheetRow || m_numberSubForm) return false;
@@ -49,8 +65,8 @@ struct RVNGCSVSpreadsheetGeneratorImpl
 	void insertCharacter(char c)
 	{
 		if (c==m_textSeparator)
-			m_stream << m_textSeparator;
-		m_stream << c;
+			m_cellStream << m_textSeparator;
+		m_cellStream << c;
 	}
 	void insertDouble(double val)
 	{
@@ -62,17 +78,30 @@ struct RVNGCSVSpreadsheetGeneratorImpl
 			std::string::size_type pos = res.find_last_of('.');
 			if (pos != std::string::npos) res[pos]=m_decimalSeparator;
 		}
-		m_stream << res;
+		m_cellStream << res;
 	}
 	void insertInstruction(librevenge::RVNGPropertyList const &instruction);
+	void storeActualSpreadsheet();
 	RVNGStringVector &m_sheets;
-	std::ostringstream m_stream;
+	//! the actual row stream
+	std::ostringstream m_rowStream;
+	//! the actual cell stream
+	std::ostringstream m_cellStream;
+	//! the content of each row
+	std::vector<RVNGCSVSpreadsheetRowContent> m_rowContentsList;
+	//! the number of repetition of the actual row
+	int m_numRowRepeated;
+	//! the number of repetition of the actual cell
+	int m_numCellRepeated;
+	//! the number of empty cell which follow current cell
+	int m_numCellToSkip;
 	bool m_useFormula;
 	char m_fieldSeparator, m_textSeparator, m_decimalSeparator;
 	std::string m_dateFormat, m_timeFormat;
 	bool m_inSheet, m_inSheetRow, m_inSheetCell, m_sheetCellHasFormula;
 	int m_numberSubForm;
-	int m_column, m_row, m_numColumns;
+	int m_column/** the current column*/, m_row/*the current row*/, m_numColumns/**the total number of column*/;
+	int m_numColumnsInRowStream/** the number of column written in rowStream*/;
 };
 
 void RVNGCSVSpreadsheetGeneratorImpl::insertInstruction(librevenge::RVNGPropertyList const &instr)
@@ -90,7 +119,7 @@ void RVNGCSVSpreadsheetGeneratorImpl::insertInstruction(librevenge::RVNGProperty
 			RVNG_DEBUG_MSG(("RVNGCSVSpreadsheetGeneratorImpl::insertInstruction can not find operator for formula!!!\n"));
 			return;
 		}
-		m_stream << instr["librevenge:operator"]->getStr().cstr();
+		m_cellStream << instr["librevenge:operator"]->getStr().cstr();
 		return;
 	}
 	if (type=="librevenge-function")
@@ -100,7 +129,7 @@ void RVNGCSVSpreadsheetGeneratorImpl::insertInstruction(librevenge::RVNGProperty
 			RVNG_DEBUG_MSG(("RVNGCSVSpreadsheetGeneratorImpl::insertInstruction can not find function for formula!!!\n"));
 			return;
 		}
-		m_stream << instr["librevenge:function"]->getStr().cstr();
+		m_cellStream << instr["librevenge:function"]->getStr().cstr();
 		return;
 	}
 	if (type=="librevenge-number")
@@ -142,11 +171,11 @@ void RVNGCSVSpreadsheetGeneratorImpl::insertInstruction(librevenge::RVNGProperty
 			RVNG_DEBUG_MSG(("RVNGCSVSpreadsheetGeneratorImpl::insertInstruction: find bad coordinate for formula!!!\n"));
 			return;
 		}
-		if (instr["librevenge:column-absolute"] && instr["librevenge:column-absolute"]->getInt()) m_stream << "$";
-		if (column>=26) m_stream << char('A'+(column/26-1));
-		m_stream << char('A'+(column%26));
-		if (instr["librevenge:row-absolute"] && instr["librevenge:row-absolute"]->getInt()) m_stream << "$";
-		m_stream << row+1;
+		if (instr["librevenge:column-absolute"] && instr["librevenge:column-absolute"]->getInt()) m_cellStream << "$";
+		if (column>=26) m_cellStream << char('A'+(column/26-1));
+		m_cellStream << char('A'+(column%26));
+		if (instr["librevenge:row-absolute"] && instr["librevenge:row-absolute"]->getInt()) m_cellStream << "$";
+		m_cellStream << row+1;
 		return;
 	}
 	if (type=="librevenge-cells")
@@ -164,11 +193,11 @@ void RVNGCSVSpreadsheetGeneratorImpl::insertInstruction(librevenge::RVNGProperty
 			RVNG_DEBUG_MSG(("RVNGCSVSpreadsheetGeneratorImpl::insertInstruction: find bad coordinate1 for formula!!!\n"));
 			return;
 		}
-		if (instr["librevenge:start-column-absolute"] && instr["librevenge:start-column-absolute"]->getInt()) m_stream << "$";
-		if (column>=26) m_stream << char('A'+(column/26-1));
-		m_stream << char('A'+(column%26));
-		if (instr["librevenge:start-row-absolute"] && instr["librevenge:start-row-absolute"]->getInt()) m_stream << "$";
-		m_stream << row+1 << ":";
+		if (instr["librevenge:start-column-absolute"] && instr["librevenge:start-column-absolute"]->getInt()) m_cellStream << "$";
+		if (column>=26) m_cellStream << char('A'+(column/26-1));
+		m_cellStream << char('A'+(column%26));
+		if (instr["librevenge:start-row-absolute"] && instr["librevenge:start-row-absolute"]->getInt()) m_cellStream << "$";
+		m_cellStream << row+1 << ":";
 		if (instr["librevenge:end-column"])
 			column=instr["librevenge:end-column"]->getInt();
 		// we need to add 1 because we have added an header row
@@ -179,14 +208,45 @@ void RVNGCSVSpreadsheetGeneratorImpl::insertInstruction(librevenge::RVNGProperty
 			RVNG_DEBUG_MSG(("RVNGCSVSpreadsheetGeneratorImpl::insertInstruction: find bad coordinate2 for formula!!!\n"));
 			return;
 		}
-		if (instr["librevenge:end-column-absolute"] && instr["librevenge:end-column-absolute"]->getInt()) m_stream << "$";
-		if (column>=26) m_stream << char('A'+(column/26-1));
-		m_stream << char('A'+(column%26));
-		if (instr["librevenge:end-row-absolute"] && instr["librevenge:end-row-absolute"]->getInt()) m_stream << "$";
-		m_stream << row+1;
+		if (instr["librevenge:end-column-absolute"] && instr["librevenge:end-column-absolute"]->getInt()) m_cellStream << "$";
+		if (column>=26) m_cellStream << char('A'+(column/26-1));
+		m_cellStream << char('A'+(column%26));
+		if (instr["librevenge:end-row-absolute"] && instr["librevenge:end-row-absolute"]->getInt()) m_cellStream << "$";
+		m_cellStream << row+1;
 		return;
 	}
 	RVNG_DEBUG_MSG(("RVNGCSVSpreadsheetGeneratorImpl::insertInstruction find unknown type %s!!!\n", type.c_str()));
+}
+
+void RVNGCSVSpreadsheetGeneratorImpl::storeActualSpreadsheet()
+{
+	std::stringstream stream;
+	for (int i=0; i < m_numColumns; ++i)
+	{
+		if (i)
+			stream << m_fieldSeparator;
+		stream << "Col" << i+1;
+	}
+	stream << "\n";
+
+	for (size_t i=0; i<m_rowContentsList.size(); ++i)
+	{
+		RVNGCSVSpreadsheetRowContent const &row=m_rowContentsList[i];
+		if (row.m_numRepeated<=0) continue;
+		m_rowStream.str("");
+		m_rowStream << row.m_content;
+		// add empty cells
+		for (int c=row.m_numFields; c < m_numColumns; ++c)
+		{
+			if (c)
+				m_rowStream << m_fieldSeparator;
+			m_rowStream << m_textSeparator << m_textSeparator;
+		}
+		m_rowStream << "\n";
+		for (int r=0; r<row.m_numRepeated; ++r)
+			stream << m_rowStream.str();
+	}
+	m_sheets.append(stream.str().c_str());
 }
 
 RVNGCSVSpreadsheetGenerator::RVNGCSVSpreadsheetGenerator(RVNGStringVector &sheets, bool generateFormula) :
@@ -219,24 +279,16 @@ void RVNGCSVSpreadsheetGenerator::endDocument() {}
 
 void RVNGCSVSpreadsheetGenerator::defineSheetNumberingStyle(const RVNGPropertyList &) {}
 
-void RVNGCSVSpreadsheetGenerator::openSheet(const RVNGPropertyList &propList)
+void RVNGCSVSpreadsheetGenerator::openSheet(const RVNGPropertyList &)
 {
 	if (m_impl->m_numberSubForm || m_impl->m_inSheet)
 	{
 		++m_impl->m_numberSubForm;
 		return;
 	}
-	RVNGPropertyListVector const *columns = propList.child("librevenge:columns");
 	m_impl->m_inSheet=true;
 	m_impl->m_row = m_impl->m_column = 0;
-	m_impl->m_numColumns = columns ? (int) columns->count() : 0;
-	for (int i=0; i < m_impl->m_numColumns; ++i)
-	{
-		if (i)
-			m_impl->m_stream << m_impl->m_fieldSeparator;
-		m_impl->m_stream << "Col" << i+1;
-	}
-	m_impl->m_stream << "\n";
+	m_impl->m_numColumns = 0;
 }
 
 void RVNGCSVSpreadsheetGenerator::closeSheet()
@@ -246,8 +298,7 @@ void RVNGCSVSpreadsheetGenerator::closeSheet()
 		--m_impl->m_numberSubForm;
 		return;
 	}
-	m_impl->m_sheets.append(m_impl->m_stream.str().c_str());
-	m_impl->m_stream.str("");
+	m_impl->storeActualSpreadsheet();
 	m_impl->m_inSheet=false;
 }
 
@@ -259,19 +310,19 @@ void RVNGCSVSpreadsheetGenerator::openSheetRow(const RVNGPropertyList &propList)
 		return;
 	}
 	int row = propList["librevenge:row"] ? propList["librevenge:row"]->getInt() : m_impl->m_row;
-	for (int r=m_impl->m_row; r < row; r++)
+	if (m_impl->m_row < row)
 	{
-		for (int i=0; i < m_impl->m_numColumns; ++i)
-		{
-			if (i)
-				m_impl->m_stream << m_impl->m_fieldSeparator;
-			m_impl->m_stream << m_impl->m_textSeparator << m_impl->m_textSeparator;
-		}
-		m_impl->m_stream << "\n";
+		m_impl->m_rowContentsList.push_back(RVNGCSVSpreadsheetRowContent());
+		m_impl->m_rowContentsList.back().m_numRepeated=row-m_impl->m_row;
 	}
+	m_impl->m_rowStream.str("");
+	if (propList["table:number-rows-repeated"] && propList["table:number-rows-repeated"]->getInt()>1)
+		m_impl->m_numRowRepeated=propList["table:number-rows-repeated"]->getInt();
+	else
+		m_impl->m_numRowRepeated=1;
 	m_impl->m_inSheetRow=true;
 	m_impl->m_row = row;
-	m_impl->m_column = 0;
+	m_impl->m_column = m_impl->m_numColumnsInRowStream = 0;
 }
 
 void RVNGCSVSpreadsheetGenerator::closeSheetRow()
@@ -281,15 +332,16 @@ void RVNGCSVSpreadsheetGenerator::closeSheetRow()
 		--m_impl->m_numberSubForm;
 		return;
 	}
-	for (int i=m_impl->m_column; i < m_impl->m_numColumns; ++i)
-	{
-		if (i)
-			m_impl->m_stream << m_impl->m_fieldSeparator;
-		m_impl->m_stream << m_impl->m_textSeparator << m_impl->m_textSeparator;
-	}
-	m_impl->m_stream << "\n";
+	m_impl->m_rowContentsList.push_back(RVNGCSVSpreadsheetRowContent());
+	RVNGCSVSpreadsheetRowContent &row=m_impl->m_rowContentsList.back();
+	row.m_content=m_impl->m_rowStream.str();
+	row.m_numFields=m_impl->m_numColumnsInRowStream;
+	row.m_numRepeated=m_impl->m_numRowRepeated;
+	if (m_impl->m_numColumnsInRowStream>m_impl->m_numColumns)
+		m_impl->m_numColumns=m_impl->m_numColumnsInRowStream;
+	m_impl->m_row+=m_impl->m_numRowRepeated;
+	m_impl->m_numRowRepeated=0;
 	m_impl->m_inSheetRow=false;
-	++m_impl->m_row;
 }
 
 void RVNGCSVSpreadsheetGenerator::openSheetCell(const RVNGPropertyList &propList)
@@ -299,20 +351,21 @@ void RVNGCSVSpreadsheetGenerator::openSheetCell(const RVNGPropertyList &propList
 		++m_impl->m_numberSubForm;
 		return;
 	}
-
 	int column = propList["librevenge:column"] ? propList["librevenge:column"]->getInt() : m_impl->m_column;
-	for (int i=m_impl->m_column; i < column; ++i)
-	{
-		if (i)
-			m_impl->m_stream << m_impl->m_fieldSeparator;
-		m_impl->m_stream << m_impl->m_textSeparator << m_impl->m_textSeparator;
-	}
 	m_impl->m_column=column;
 	m_impl->m_inSheetCell=true;
 	m_impl->m_sheetCellHasFormula=false;
-	if (column) m_impl->m_stream << m_impl->m_fieldSeparator;
-	m_impl->m_stream << m_impl->m_textSeparator;
-
+	m_impl->m_cellStream.str("");
+	if (propList["table:number-columns-repeated"] && propList["table:number-columns-repeated"]->getInt()>1)
+		m_impl->m_numCellRepeated=propList["table:number-columns-repeated"]->getInt();
+	else
+		m_impl->m_numCellRepeated=1;
+	if (propList["table:number-columns-spanned"] && propList["table:number-columns-spanned"]->getInt()>1)
+		m_impl->m_numCellToSkip=propList["table:number-columns-spanned"]->getInt()-1;
+	else
+		m_impl->m_numCellToSkip=0;
+	if (propList["table:number-matrix-columns-spanned"] && propList["table:number-matrix-columns-spanned"]->getInt()>1)
+		m_impl->m_numCellToSkip+=propList["table:number-matrix-columns-spanned"]->getInt()-1;
 	if (m_impl->m_useFormula)
 	{
 		librevenge::RVNGPropertyListVector const *formula=propList.child("librevenge:formula");
@@ -337,20 +390,20 @@ void RVNGCSVSpreadsheetGenerator::openSheetCell(const RVNGPropertyList &propList
 		if (valueType=="percentage")
 		{
 			m_impl->insertDouble(100. * propList["librevenge:value"]->getDouble());
-			m_impl->m_stream << "%";
+			m_impl->m_cellStream << "%";
 		}
 		else
 		{
-			// if (valueType=="currency") m_impl->m_stream << "$";
+			// if (valueType=="currency") m_impl->m_cellStream << "$";
 			m_impl->insertDouble(propList["librevenge:value"]->getDouble());
 		}
 	}
 	else if (propList["librevenge:value"] && (valueType=="bool" || valueType=="boolean"))
 	{
 		if (propList["librevenge:value"]->getDouble()<0||propList["librevenge:value"]->getDouble()>0)
-			m_impl->m_stream << "true";
+			m_impl->m_cellStream << "true";
 		else
-			m_impl->m_stream << "false";
+			m_impl->m_cellStream << "false";
 	}
 	else if (valueType=="date" || valueType=="time")
 	{
@@ -367,7 +420,7 @@ void RVNGCSVSpreadsheetGenerator::openSheetCell(const RVNGPropertyList &propList
 			time.tm_mon=propList["librevenge:month"] ? propList["librevenge:month"]->getInt()-1 : 0;
 			time.tm_year=propList["librevenge:year"] ? propList["librevenge:year"]->getInt()-1900 : 100;
 			if (mktime(&time)!=-1 && strftime(buf, 256, m_impl->m_dateFormat.c_str(), &time))
-				m_impl->m_stream << buf;
+				m_impl->m_cellStream << buf;
 		}
 		else
 		{
@@ -375,7 +428,7 @@ void RVNGCSVSpreadsheetGenerator::openSheetCell(const RVNGPropertyList &propList
 			time.tm_min=propList["librevenge:minutes"] ? propList["librevenge:minutes"]->getInt() : 0;
 			time.tm_sec=propList["librevenge:seconds"] ? propList["librevenge:seconds"]->getInt() : 0;
 			if (mktime(&time)!=-1 && strftime(buf, 256, m_impl->m_timeFormat.c_str(), &time))
-				m_impl->m_stream << buf;
+				m_impl->m_cellStream << buf;
 		}
 	}
 	else if (valueType!="string" && valueType!="text")
@@ -392,9 +445,28 @@ void RVNGCSVSpreadsheetGenerator::closeSheetCell()
 		return;
 	}
 
-	m_impl->m_stream << m_impl->m_textSeparator;
 	m_impl->m_inSheetCell=false;
-	++m_impl->m_column;
+	if (m_impl->m_cellStream.str().empty())
+	{
+		m_impl->m_column+=m_impl->m_numCellRepeated+m_impl->m_numCellToSkip;
+		return;
+	}
+	// time to add the empty cell
+	for (int i=m_impl->m_numColumnsInRowStream; i < m_impl->m_column; ++i)
+	{
+		if (i)
+			m_impl->m_rowStream << m_impl->m_fieldSeparator;
+		m_impl->m_rowStream << m_impl->m_textSeparator << m_impl->m_textSeparator;
+	}
+	// add the current cell
+	for (int i=0; i<m_impl->m_numCellRepeated; ++i)
+	{
+		if (i || m_impl->m_column)
+			m_impl->m_rowStream << m_impl->m_fieldSeparator;
+		m_impl->m_rowStream << m_impl->m_textSeparator << m_impl->m_cellStream.str() << m_impl->m_textSeparator;
+	}
+	m_impl->m_numColumnsInRowStream = m_impl->m_column+m_impl->m_numCellRepeated;
+	m_impl->m_column=m_impl->m_numColumnsInRowStream+m_impl->m_numCellToSkip;
 }
 
 void RVNGCSVSpreadsheetGenerator::defineChartStyle(const RVNGPropertyList &) {}

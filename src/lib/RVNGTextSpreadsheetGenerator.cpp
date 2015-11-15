@@ -35,17 +35,37 @@ struct RVNGTextSpreadsheetGeneratorImpl
 {
 	explicit RVNGTextSpreadsheetGeneratorImpl(RVNGStringVector &sheets, bool isInfo);
 
+	//! list of final string corresponding to each sheet
 	RVNGStringVector &m_sheets;
+	//! the file stream
 	std::ostringstream m_stream;
-	bool m_isInfo, m_isFirstCell;
-	int m_sheetLevel;
+	//! the actual row stream
+	std::ostringstream m_rowStream;
+	//! the actual cell stream
+	std::ostringstream m_cellStream;
+	//! the number of repetition of the actual row
+	int m_numRowRepeated;
+	//! the number of repetition of the actual cell
+	int m_numCellRepeated;
+	//! the number of empty cell which follow current cell
+	int m_numCellToSkip;
+	int m_column/** the current column*/, m_row/*the current row*/;
+	int m_numColumnsInRow/** the number of column written in the current row*/;
+	bool m_isInfo /** if set, do not generate output*/;
+	int m_sheetLevel /** the number of opened sheet, to avoid recursion*/;
 };
 
 RVNGTextSpreadsheetGeneratorImpl::RVNGTextSpreadsheetGeneratorImpl(RVNGStringVector &sheets, const bool isInfo)
 	: m_sheets(sheets)
 	, m_stream()
+	, m_rowStream()
+	, m_cellStream()
+	, m_numRowRepeated(0)
+	, m_numCellRepeated(0)
+	, m_numCellToSkip(0)
+	, m_column(0), m_row(0)
+	, m_numColumnsInRow(0)
 	, m_isInfo(isInfo)
-	, m_isFirstCell(false)
 	, m_sheetLevel(0)
 {
 }
@@ -79,6 +99,7 @@ void RVNGTextSpreadsheetGenerator::defineSheetNumberingStyle(const RVNGPropertyL
 void RVNGTextSpreadsheetGenerator::openSheet(const RVNGPropertyList &)
 {
 	++m_impl->m_sheetLevel;
+	m_impl->m_row = m_impl->m_column = 0;
 }
 void RVNGTextSpreadsheetGenerator::closeSheet()
 {
@@ -86,20 +107,50 @@ void RVNGTextSpreadsheetGenerator::closeSheet()
 	m_impl->m_sheets.append(m_impl->m_stream.str().c_str());
 	m_impl->m_stream.str("");
 }
-void RVNGTextSpreadsheetGenerator::openSheetRow(const RVNGPropertyList & /* propList */)
+
+void RVNGTextSpreadsheetGenerator::openSheetRow(const RVNGPropertyList &propList)
 {
-	m_impl->m_isFirstCell=true;
+	if (m_impl->m_sheetLevel!=1) return;
+	m_impl->m_rowStream.str("");
+	int row = propList["librevenge:row"] ? propList["librevenge:row"]->getInt() : m_impl->m_row;
+	// check for unseen rows but bound them to 10
+	for (int r=m_impl->m_row; r<row && r<m_impl->m_row+10; ++r)
+		m_impl->m_stream << '\n';
+
+	if (propList["table:number-rows-repeated"] && propList["table:number-rows-repeated"]->getInt()>1)
+		m_impl->m_numRowRepeated=propList["table:number-rows-repeated"]->getInt();
+	else
+		m_impl->m_numRowRepeated=1;
+	m_impl->m_row = row;
+	m_impl->m_column = m_impl->m_numColumnsInRow = 0;
 }
 void RVNGTextSpreadsheetGenerator::closeSheetRow()
 {
-	insertLineBreak();
+	if (m_impl->m_isInfo || m_impl->m_sheetLevel!=1) return;
+	// in general, repeated value is used to repeat empty rows, so bound it to 10
+	for (int r=0; r<m_impl->m_numRowRepeated && r<10; ++r)
+		m_impl->m_stream << m_impl->m_rowStream.str() << '\n';
+	m_impl->m_row+=m_impl->m_numRowRepeated;
+	m_impl->m_numRowRepeated=0;
 }
+
 void RVNGTextSpreadsheetGenerator::openSheetCell(const RVNGPropertyList &propList)
 {
-	if (m_impl->m_isFirstCell)
-		m_impl->m_isFirstCell=false;
+	if (m_impl->m_isInfo || m_impl->m_sheetLevel!=1) return;
+	m_impl->m_cellStream.str("");
+	int column = propList["librevenge:column"] ? propList["librevenge:column"]->getInt() : m_impl->m_column;
+	m_impl->m_column=column;
+	if (propList["table:number-columns-repeated"] && propList["table:number-columns-repeated"]->getInt()>1)
+		m_impl->m_numCellRepeated=propList["table:number-columns-repeated"]->getInt();
 	else
-		insertTab();
+		m_impl->m_numCellRepeated=1;
+	if (propList["table:number-columns-spanned"] && propList["table:number-columns-spanned"]->getInt()>1)
+		m_impl->m_numCellToSkip=propList["table:number-columns-spanned"]->getInt()-1;
+	else
+		m_impl->m_numCellToSkip=0;
+	if (propList["table:number-matrix-columns-spanned"] && propList["table:number-matrix-columns-spanned"]->getInt()>1)
+		m_impl->m_numCellToSkip+=propList["table:number-matrix-columns-spanned"]->getInt()-1;
+
 	if (!propList["librevenge:value-type"])
 		return;
 	// now we need to retrieve the value in proplist
@@ -109,39 +160,61 @@ void RVNGTextSpreadsheetGenerator::openSheetCell(const RVNGPropertyList &propLis
 
 	if (propList["librevenge:value"] && (valueType=="float" || valueType=="percentage" || valueType=="currency"))
 	{
-		if (valueType=="percentage") m_impl->m_stream << 100. * propList["librevenge:value"]->getDouble() << "%";
+		if (valueType=="percentage") m_impl->m_cellStream << 100. * propList["librevenge:value"]->getDouble() << "%";
 		else
 		{
-			m_impl->m_stream << propList["librevenge:value"]->getDouble();
-			if (valueType=="currency") m_impl->m_stream << "$";
+			m_impl->m_cellStream << propList["librevenge:value"]->getDouble();
+			if (valueType=="currency") m_impl->m_cellStream << "$";
 		}
 	}
 	else if (propList["librevenge:value"] && (valueType=="bool" || valueType=="boolean"))
-		m_impl->m_stream << (propList["librevenge:value"]->getInt() ? "true" : "false");
+		m_impl->m_cellStream << (propList["librevenge:value"]->getInt() ? "true" : "false");
 	else if (valueType=="date")
 	{
 		int day=propList["librevenge:day"] ? propList["librevenge:day"]->getInt() : 1;
 		int month=propList["librevenge:month"] ? propList["librevenge:month"]->getInt() : 1;
 		int year=propList["librevenge:year"] ? propList["librevenge:year"]->getInt() : 2000;
-		m_impl->m_stream << std::setfill('0') << std::setw(2) << month << "/"
-		                 << std::setfill('0') << std::setw(2) << day << "/"
-		                 << std::setfill('0') << std::setw(2) << year;
+		m_impl->m_cellStream << std::setfill('0') << std::setw(2) << month << "/"
+		                     << std::setfill('0') << std::setw(2) << day << "/"
+		                     << std::setfill('0') << std::setw(2) << year;
 	}
 	else if (valueType=="time")
 	{
 		int hour=propList["librevenge:hours"] ? propList["librevenge:hours"]->getInt() : 0;
 		int minute=propList["librevenge:minutes"] ? propList["librevenge:minutes"]->getInt() : 0;
 		int second=propList["librevenge:seconds"] ? propList["librevenge:seconds"]->getInt() : 0;
-		m_impl->m_stream << std::setfill('0') << std::setw(2) << hour << ":"
-		                 << std::setfill('0') << std::setw(2) << minute << ":"
-		                 << std::setfill('0') << std::setw(2) << second;
+		m_impl->m_cellStream << std::setfill('0') << std::setw(2) << hour << ":"
+		                     << std::setfill('0') << std::setw(2) << minute << ":"
+		                     << std::setfill('0') << std::setw(2) << second;
 	}
 	else if (valueType!="string" && valueType!="text")
 	{
 		RVNG_DEBUG_MSG(("RVNGTextSpreadsheetGenerator::openSheetCell: unexpected value type: %s\n", valueType.c_str()));
 	}
 }
-void RVNGTextSpreadsheetGenerator::closeSheetCell() {}
+void RVNGTextSpreadsheetGenerator::closeSheetCell()
+{
+	if (m_impl->m_isInfo || m_impl->m_sheetLevel!=1) return;
+
+	bool isEmpty=m_impl->m_cellStream.str().empty();
+	if (isEmpty)
+	{
+		m_impl->m_column+=m_impl->m_numCellRepeated+m_impl->m_numCellToSkip;
+		return;
+	}
+	// time to add the empty cell
+	for (int i=m_impl->m_numColumnsInRow; i < m_impl->m_column; ++i)
+	{
+		if (i)
+			m_impl->m_rowStream << static_cast<char>(UCS_TAB);
+	}
+	if (m_impl->m_column)
+		m_impl->m_rowStream << static_cast<char>(UCS_TAB);
+	for (int i=0; i<m_impl->m_numCellRepeated; ++i)
+		m_impl->m_rowStream << m_impl->m_cellStream.str();
+	m_impl->m_numColumnsInRow = m_impl->m_column+m_impl->m_numCellRepeated;
+	m_impl->m_column=m_impl->m_numColumnsInRow+m_impl->m_numCellToSkip;
+}
 
 void RVNGTextSpreadsheetGenerator::defineChartStyle(const RVNGPropertyList &) {}
 void RVNGTextSpreadsheetGenerator::openChart(const RVNGPropertyList &) {}
@@ -171,12 +244,9 @@ void RVNGTextSpreadsheetGenerator::openParagraph(const RVNGPropertyList & /* pro
 
 void RVNGTextSpreadsheetGenerator::closeParagraph()
 {
-	if (m_impl->m_isInfo)
+	if (m_impl->m_isInfo || m_impl->m_sheetLevel!=1)
 		return;
-	if (m_impl->m_sheetLevel)
-		m_impl->m_stream << ' ';
-	else
-		m_impl->m_stream << '\n';
+	m_impl->m_cellStream << ' ';
 }
 
 void RVNGTextSpreadsheetGenerator::defineCharacterStyle(const RVNGPropertyList &) {}
@@ -188,30 +258,30 @@ void RVNGTextSpreadsheetGenerator::closeLink() {}
 
 void RVNGTextSpreadsheetGenerator::insertTab()
 {
-	if (m_impl->m_isInfo)
+	if (m_impl->m_isInfo || m_impl->m_sheetLevel!=1)
 		return;
-	m_impl->m_stream << static_cast<char>(UCS_TAB);
+	m_impl->m_cellStream << static_cast<char>(UCS_TAB);
 }
 
 void RVNGTextSpreadsheetGenerator::insertText(const RVNGString &text)
 {
-	if (m_impl->m_isInfo)
+	if (m_impl->m_isInfo || m_impl->m_sheetLevel!=1)
 		return;
-	m_impl->m_stream << text.cstr();
+	m_impl->m_cellStream << text.cstr();
 }
 
 void RVNGTextSpreadsheetGenerator::insertSpace()
 {
-	if (m_impl->m_isInfo)
+	if (m_impl->m_isInfo || m_impl->m_sheetLevel!=1)
 		return;
-	m_impl->m_stream << ' ';
+	m_impl->m_cellStream << ' ';
 }
 
 void RVNGTextSpreadsheetGenerator::insertLineBreak()
 {
-	if (m_impl->m_isInfo)
+	if (m_impl->m_isInfo || m_impl->m_sheetLevel!=1)
 		return;
-	m_impl->m_stream << '\n';
+	m_impl->m_cellStream << ' ';
 }
 
 void RVNGTextSpreadsheetGenerator::insertField(const RVNGPropertyList & /* propList */) {}
@@ -235,31 +305,36 @@ void RVNGTextSpreadsheetGenerator::closeTextBox() {}
 void RVNGTextSpreadsheetGenerator::openTable(const RVNGPropertyList & /* propList */)
 {
 	++m_impl->m_sheetLevel;
+	m_impl->m_row = m_impl->m_column = 0;
 }
 void RVNGTextSpreadsheetGenerator::closeTable()
 {
 	--m_impl->m_sheetLevel;
 }
-void RVNGTextSpreadsheetGenerator::openTableRow(const RVNGPropertyList & /* propList */)
+void RVNGTextSpreadsheetGenerator::openTableRow(const RVNGPropertyList &propList)
 {
-	m_impl->m_isFirstCell=true;
+	openSheetRow(propList);
 }
 void RVNGTextSpreadsheetGenerator::closeTableRow()
 {
-	insertLineBreak();
+	closeSheetRow();
 }
-void RVNGTextSpreadsheetGenerator::openTableCell(const RVNGPropertyList & /* propList */)
+void RVNGTextSpreadsheetGenerator::openTableCell(const RVNGPropertyList &propList)
 {
-	if (m_impl->m_isFirstCell)
-		m_impl->m_isFirstCell=false;
-	else
-		insertTab();
+	openSheetCell(propList);
 }
 void RVNGTextSpreadsheetGenerator::closeTableCell()
 {
-	m_impl->m_sheetLevel=false;
+	closeSheetCell();
 }
-void RVNGTextSpreadsheetGenerator::insertCoveredTableCell(const RVNGPropertyList & /* propList */) {}
+void RVNGTextSpreadsheetGenerator::insertCoveredTableCell(const RVNGPropertyList &propList)
+{
+	if (m_impl->m_sheetLevel!=1) return;
+	if (propList["table:number-columns-repeated"] && propList["table:number-columns-repeated"]->getInt()>1)
+		m_impl->m_column+=propList["table:number-columns-repeated"]->getInt();
+	else
+		++m_impl->m_column;
+}
 
 void RVNGTextSpreadsheetGenerator::openFrame(const RVNGPropertyList & /* propList */) {}
 void RVNGTextSpreadsheetGenerator::closeFrame() {}
