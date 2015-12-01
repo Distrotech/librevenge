@@ -229,7 +229,17 @@ void RVNGCSVSpreadsheetGeneratorImpl::storeActualSpreadsheet()
 	}
 	stream << "\n";
 
-	for (size_t i=0; i<m_rowContentsList.size(); ++i)
+	// first find the last row which contains some data
+	size_t numNotEmptyRow=0;
+	for (size_t i=m_rowContentsList.size(); i>0; --i)
+	{
+		if (m_rowContentsList[i-1].m_numFields)
+		{
+			numNotEmptyRow=i;
+			break;
+		}
+	}
+	for (size_t i=0; i<numNotEmptyRow; ++i)
 	{
 		RVNGCSVSpreadsheetRowContent const &row=m_rowContentsList[i];
 		if (row.m_numRepeated<=0) continue;
