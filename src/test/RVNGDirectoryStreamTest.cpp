@@ -42,7 +42,7 @@ static const char TEST_DIR[] = RVNG_DIRECTORY_STREAM_TEST_DIR;
 static const char TEST_FILENAME[] = "RVNGDirectoryStream.h";
 static const char TEST_NONEXISTENT[] = "foobar";
 
-#ifdef DEBUG
+#ifndef NDEBUG
 
 static bool isReg(const char *const path)
 {
