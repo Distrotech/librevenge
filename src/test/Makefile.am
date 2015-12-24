@@ -32,6 +32,7 @@ testfileinfo_LDADD = \
 testfileinfo_SOURCES = \
 	RVNGFileInfo.cpp
 	
-
+EXTRA_DIST = \
+	data/test.ole
 
 TESTS = $(target_test)
