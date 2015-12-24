@@ -7,7 +7,6 @@ AM_CXXFLAGS = -I$(top_srcdir)/inc -I$(top_srcdir)/src/lib $(CPPUNIT_CFLAGS) $(DE
 test_CPPFLAGS = \
 	-DRVNG_DATA_DIR=\"$(top_srcdir)/src/test/data\" \
 	-DRVNG_DIRECTORY_STREAM_TEST_DIR=\"$(top_srcdir)/inc/librevenge-stream\"
-test_LDFLAGS = -L$(top_builddir)/src/lib
 test_LDADD = \
 	$(top_builddir)/src/lib/librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.la \
 	$(top_builddir)/src/lib/librevenge-stream-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.la \
@@ -23,7 +22,6 @@ test_SOURCES = \
 	test.cpp
 	
 
-testfileinfo_LDFLAGS = -L$(top_builddir)/src/lib
 testfileinfo_LDADD = \
 	$(top_builddir)/src/lib/librevenge-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.la \
 	$(top_builddir)/src/lib/librevenge-stream-@RVNG_MAJOR_VERSION@.@RVNG_MINOR_VERSION@.la \
