@@ -1,3 +1,20 @@
+librevenge 0.0.3
+
+- SVG generator: fix the center of rotation.
+- Remove bashism in configure (libwpd#5).
+- Fix some syntax errors in documentation.
+- Text generator: handle footnotes and endnotes.
+- Improve performance of RVNGPropertyListVector::append() and
+  RVNGBinaryData::append().
+- Fix several crashes or hangs when reading broken OLE2 or Zip files, found
+  with the help of american-fuzzy-lop.
+- Fix build with boost 1.59 (libwpd#6).
+- Handle table:number-columns-repeated and table:number-rows-repeated in
+  all spreadsheet generators.
+- CSV generator: handle rows with uneven number of columns correctly.
+- CSV generator: ignore empty rows at the end.
+- Several minor improvements and fixes.
+
 librevenge 0.0.2
 
 - Better handling of invalid input in RVNGDirectoryStream functions.
