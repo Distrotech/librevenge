@@ -18,7 +18,7 @@ from collections import Mapping
 import gdb
 import re
 
-from compatibility import use_gdb_printing
+from librevenge.util.compatibility import use_gdb_printing
 
 class SimplePrinter(object):
 
