@@ -47,10 +47,17 @@
 			m_impl->idprintf M; \
 	else \
 	{ \
-		const int lc = m_impl->m_callStack.top(); \
-		if (lc != L) \
+		if (m_impl->m_callStack.empty()) \
+		{ \
 			m_impl->m_callbackMisses++; \
-		m_impl->m_callStack.pop(); \
+		} \
+		else \
+		{ \
+			const int lc = m_impl->m_callStack.top(); \
+			if (lc != L) \
+				m_impl->m_callbackMisses++; \
+			m_impl->m_callStack.pop(); \
+		} \
 	}
 
 namespace librevenge
