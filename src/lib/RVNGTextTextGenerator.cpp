@@ -123,7 +123,7 @@ void RVNGTextTextGenerator::endDocument()
 	if (!m_impl->m_endnotes.str().empty())
 	{
 		*m_impl->m_stream << '\n';
-		*m_impl->m_stream << m_impl->m_endnotes;
+		*m_impl->m_stream << m_impl->m_endnotes.str();
 	}
 	m_impl->m_document=m_impl->m_stream->str().c_str();
 }
