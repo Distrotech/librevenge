@@ -329,7 +329,7 @@ bool RVNGString::Iter::next()
 
 bool RVNGString::Iter::last()
 {
-	if (m_pos >= m_stringImpl->len())
+	if (m_pos >= std::ptrdiff_t(m_stringImpl->m_buf.length()))
 		return true;
 	return false;
 }
