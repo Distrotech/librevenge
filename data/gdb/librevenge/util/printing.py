@@ -18,6 +18,8 @@ from collections import Mapping
 import gdb
 import re
 
+from six import iteritems
+
 from librevenge.util.compatibility import use_gdb_printing
 
 class SimplePrinter(object):
@@ -80,7 +82,7 @@ class FunctionLookup(Mapping):
         return len(self.map)
 
     def __getitem__(self, type):
-        for (test, printer) in self.map.iteritems():
+        for (test, printer) in iteritems(self.map):
             if test(type):
                 return printer
         return None
