@@ -20,6 +20,7 @@
 
 #include "librevenge_internal.h"
 
+#include <cassert>
 #include <cstring>
 #include <string>
 #include <stdarg.h>
@@ -329,9 +330,10 @@ bool RVNGString::Iter::next()
 
 bool RVNGString::Iter::last()
 {
-	if (m_pos >= std::ptrdiff_t(m_stringImpl->m_buf.length()))
-		return true;
-	return false;
+	assert(m_pos >= -1);
+	if (m_pos == -1)
+		return false;
+	return unsigned(m_pos) >= m_stringImpl->m_buf.length();
 }
 
 const char *RVNGString::Iter::operator()() const
