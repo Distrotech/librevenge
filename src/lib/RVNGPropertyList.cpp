@@ -446,10 +446,7 @@ bool RVNGPropertyListIterImpl::next()
 
 bool RVNGPropertyListIterImpl::last()
 {
-	if (m_iter == m_map->end())
-		return true;
-
-	return false;
+	return m_iter == m_map->end();
 }
 
 const RVNGProperty *RVNGPropertyListIterImpl::operator()() const
