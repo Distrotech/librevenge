@@ -18,6 +18,7 @@ test_SOURCES = \
 	RVNGDirectoryStreamTest.cpp \
 	RVNGOLEStreamTest.cpp \
 	RVNGStreamTest.cpp \
+	RVNGStringIterTest.cpp \
 	RVNGStringTest.cpp \
 	test.cpp
 	
