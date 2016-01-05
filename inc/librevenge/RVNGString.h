@@ -28,6 +28,8 @@ namespace librevenge
 
 class RVNGStringImpl;
 
+/** UTF-8 string.
+  */
 class REVENGE_API RVNGString
 {
 public:
@@ -55,8 +57,20 @@ public:
 	static RVNGString escapeXML(const char *s);
 
 	const char *cstr() const;
+
+	/** Return the number of UTF-8 characters.
+	  *
+	  * @sa size()
+	  */
 	int len() const;
+	/** Return the size in bytes of the data buffer.
+	  *
+	  * This is equivalent to <code>strlen(str.cstr())</code>
+	  *
+	  * @sa len()
+	  */
 	unsigned long size() const;
+
 	bool empty() const;
 
 	void sprintf(const char *format, ...) REVENGE_ATTRIBUTE_PRINTF(2, 3);
