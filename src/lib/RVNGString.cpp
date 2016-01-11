@@ -25,6 +25,7 @@
 #include <string>
 #include <stdarg.h>
 #include <stdio.h>
+#include <utility>
 
 #define FIRST_BUF_SIZE 128
 #ifdef _MSC_VER
@@ -340,11 +341,15 @@ const char *RVNGString::Iter::operator()() const
 {
 	if (m_pos == (-1)) return 0;
 
-	if (m_curChar) delete [] m_curChar;
-	m_curChar = 0;
 	int charLength =(int)(librvng_utf8_next_char(&(m_stringImpl->m_buf.c_str()[m_pos])) -
 	                      &(m_stringImpl->m_buf.c_str()[m_pos]));
-	m_curChar = new char[charLength+1];
+	const int curCharLength = m_curChar ? int(unsigned(std::strlen(m_curChar))) : 0;
+	if (curCharLength < charLength)
+	{
+		char *newChar = new char[charLength+1];
+		std::swap(m_curChar, newChar);
+		delete[] newChar;
+	}
 	for (int i=0; i<charLength; i++)
 		m_curChar[i] = m_stringImpl->m_buf[size_t(m_pos+i)];
 	m_curChar[charLength]='\0';
