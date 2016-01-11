@@ -1,3 +1,12 @@
+librevenge 0.0.4
+
+- Fix possible crash in raw generators for unbalanced open/close calls.
+- Fix build in C++11 mode.
+- Fix gdb pretty printers and make them compatible with Python 3.
+- Fix RVNGString::Iter::last(), which only worked correctly for strings
+  containing only ASCII characters.
+- Document the difference between RVNGString::len() and RVNGString::size().
+
 librevenge 0.0.3
 
 - SVG generator: fix the center of rotation.
