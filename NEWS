@@ -6,6 +6,8 @@ librevenge 0.0.4
 - Fix RVNGString::Iter::last(), which only worked correctly for strings
   containing only ASCII characters.
 - Document the difference between RVNGString::len() and RVNGString::size().
+- Considerably improve performance of RVNGString iterator (a crude
+  measurement shows at least 45% improvement).
 
 librevenge 0.0.3
 
